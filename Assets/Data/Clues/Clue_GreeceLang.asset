@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce61959297b925b46bc7fcad3e98dc38, type: 3}
+  m_Name: Clue_GreeceLang
+  m_EditorClassIdentifier: Assembly-CSharp::ClueSO
+  text: I speak Greek
+  category: 0
+  strength: 1
+  supports:
+  - {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
+  contradicts: []
+  requiresUpgradeToReveal: {fileID: 0}

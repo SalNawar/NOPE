@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
+  m_Name: CaseBlueprint_Basic
+  m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
+  difficulty: 1
+  documentTemplates:
+  - {fileID: 11400000, guid: 9b0f27395e5521c4f951c079b8874138, type: 2}
+  - {fileID: 11400000, guid: a3667e29ab3e5e44a8f7f5ef6411a078, type: 2}
+  totalCluesMin: 2
+  totalCluesMax: 4
+  contradictionChance: 0
+  redHerringChance: 0
