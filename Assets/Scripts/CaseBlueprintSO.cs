@@ -32,6 +32,19 @@ public sealed class CaseBlueprintSO : ScriptableObject
     /// <summary>Chance per clue line to be a red herring (plausible but irrelevant).</summary>
     [SerializeField, Range(0f, 1f)] private float redHerringChance = 0.10f;
 
+    /// <summary>Optional archetype pool for this blueprint (empty = pick from library).</summary>
+    [Header("Timeline")]
+    [SerializeField] private ArchetypeSO[] archetypePool;
+
+    /// <summary>Authored timeline impacts added to every case from this blueprint.</summary>
+    [SerializeField] private TimelineImpact[] authoredImpacts;
+
+    /// <summary>Public read-only archetype pool.</summary>
+    public ArchetypeSO[] ArchetypePool => archetypePool;
+
+    /// <summary>Public read-only authored impacts.</summary>
+    public TimelineImpact[] AuthoredImpacts => authoredImpacts;
+
     /// <summary>Public read-only difficulty.</summary>
     public int Difficulty => difficulty;
 
@@ -39,23 +52,4 @@ public sealed class CaseBlueprintSO : ScriptableObject
     public DocumentTemplateSO[] DocumentTemplates => documentTemplates;
 
     /// <summary>Public read-only min clues.</summary>
-    public int TotalCluesMin => totalCluesMin;
-
-    /// <summary>Public read-only max clues.</summary>
-    public int TotalCluesMax => totalCluesMax;
-
-    /// <summary>Public read-only contradiction chance.</summary>
-    public float ContradictionChance => contradictionChance;
-
-    /// <summary>Public read-only red herring chance.</summary>
-    public float RedHerringChance => redHerringChance;
-
-    /// <summary>
-    /// Ensures min/max are sensible at edit-time.
-    /// </summary>
-    private void OnValidate()
-    {
-        if (totalCluesMax < totalCluesMin)
-            totalCluesMax = totalCluesMin;
-    }
-}
+    public int TotalCluesMin => totalC

@@ -61,13 +61,22 @@ public sealed class CaseFactory
         // 3) Decide true era.
         EraSO trueEra = legendary != null ? legendary.trueEra : PickEraFromPlan(plan);
 
-        // 4) Decide blueprint (forced > legendary override > weighted pick).
+        // 4) Decide blueprint (forced > legendary override > weighted pick,
+        //    with active-effect weight multipliers applied).
         CaseBlueprintSO blueprint =
             forcedBlueprint != null ? forcedBlueprint :
             legendary != null && legendary.blueprintOverride != null ? legendary.blueprintOverride :
-            WeightedRandom.Pick(plan.PossibleBlueprints, b => b != null ? b.Difficulty : 0f);
+            WeightedRandom.Pick(plan.PossibleBlueprints, b => b != null
+                ? b.Difficulty * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, b.name)
+                : 0f);
 
-                if (blueprint == null)
+        // 4.5) Timeline identity: archetype, destination nation, visitor name.
+        ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
+        NationSO nation = PickNation(legendary, trueEra);
+        string visitorName = ResolveVisitorName(legendary, archetype, caseIndex1Based);
+        string intro = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
+
+        if (blueprint == null)
         {
             Debug.LogError($"CaseFactory generated a case with a null blueprint (Day {plan.DayNumber}, slot {caseIndex1Based}). Check DayPlanSO.possibleBlueprints / forcedCases.");
             return new CaseInstance
@@ -76,25 +85,104 @@ public sealed class CaseFactory
                 trueEra = trueEra,
                 isLegendary = legendary != null,
                 legendarySource = legendary,
-                visitorDisplayName = legendary != null ? legendary.displayName : $"Subject #{caseIndex1Based}",
-                introLine = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment."
+                archetype = archetype,
+                nation = nation,
+                visitorDisplayName = visitorName,
+                introLine = intro
             };
         }
 
-// 5) Build instance.
+        // 5) Build instance.
         var inst = new CaseInstance
         {
             caseIndex = index0Based,
             trueEra = trueEra,
             isLegendary = legendary != null,
             legendarySource = legendary,
-            visitorDisplayName = legendary != null ? legendary.displayName : $"Subject #{caseIndex1Based}",
-            introLine = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment."
+            archetype = archetype,
+            nation = nation,
+            visitorDisplayName = visitorName,
+            introLine = intro
         };
+
+        // 5.5) Merge authored timeline impacts (blueprint + legendary).
+        if (blueprint.AuthoredImpacts != null)
+            inst.authoredImpacts.AddRange(blueprint.AuthoredImpacts);
+
+        if (legendary != null && legendary.authoredImpacts != null)
+            inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
         // 6) Build documents + inject clues.
         BuildDocumentsAndClues(inst, trueEra, blueprint, state);
         return inst;
+    }
+
+    /// <summary>
+    /// Picks the visitor archetype: legendary override > blueprint pool > library pool.
+    /// Weights = baseWeight * active VisitorTagWeight effect multipliers, so
+    /// "more scientists for 3 days" style effects bias generation automatically.
+    /// </summary>
+    private ArchetypeSO PickArchetype(CaseBlueprintSO blueprint, LegendarySO legendary, WorldState state)
+    {
+        if (legendary != null && legendary.archetype != null)
+            return legendary.archetype;
+
+        IReadOnlyList<ArchetypeSO> pool =
+            blueprint != null && blueprint.ArchetypePool != null && blueprint.ArchetypePool.Length > 0
+                ? blueprint.ArchetypePool
+                : _lib.Archetypes;
+
+        if (pool == null || pool.Count == 0)
+            return null;
+
+        return WeightedRandom.Pick(pool, a => a != null
+            ? Mathf.Max(0f, a.baseWeight) * TimelineEffects.GetVisitorTagWeightMultiplier(state, _lib, a.tags)
+            : 0f);
+    }
+
+    /// <summary>
+    /// Picks the destination nation: legendary override > uniform pick among
+    /// authored profiles for the true era > null (era has no nations yet).
+    /// </summary>
+    private NationSO PickNation(LegendarySO legendary, EraSO trueEra)
+    {
+        if (legendary != null && legendary.nation != null)
+            return legendary.nation;
+
+        if (trueEra == null || _lib.Profiles == null)
+            return null;
+
+        var candidates = new List<NationEraProfileSO>();
+
+        foreach (NationEraProfileSO p in _lib.Profiles)
+            if (p != null && p.era == trueEra && p.nation != null)
+                candidates.Add(p);
+
+        if (candidates.Count == 0)
+            return null;
+
+        return candidates[Random.Range(0, candidates.Count)].nation;
+    }
+
+    /// <summary>
+    /// Resolves the visitor display name: legendary name > archetype name pool > generic subject.
+    /// </summary>
+    private static string ResolveVisitorName(LegendarySO legendary, ArchetypeSO archetype, int caseIndex1Based)
+    {
+        if (legendary != null)
+            return legendary.displayName;
+
+        if (archetype != null && archetype.namePool != null && archetype.namePool.Length > 0)
+        {
+            string picked = archetype.namePool[Random.Range(0, archetype.namePool.Length)];
+
+            if (!string.IsNullOrWhiteSpace(picked))
+                return $"{picked} ({archetype.displayName})";
+        }
+
+        return archetype != null
+            ? $"Subject #{caseIndex1Based} ({archetype.displayName})"
+            : $"Subject #{caseIndex1Based}";
     }
 
     /// <summary>
@@ -130,7 +218,10 @@ public sealed class CaseFactory
         if (plan.AvailableLegendaries == null || plan.AvailableLegendaries.Count == 0)
             return null;
 
-        float chance = Mathf.Clamp01(plan.LegendaryBaseChance + state.legendaryChanceBonus);
+        float chance = Mathf.Clamp01(
+            plan.LegendaryBaseChance +
+            state.legendaryChanceBonus +
+            TimelineEffects.SumFloat(state, _lib, EffectOpType.LegendaryChanceBonus));
 
         // Random roll: if above chance, no legendary this case.
         if (Random.value > chance)
@@ -207,10 +298,17 @@ public sealed class CaseFactory
             (c.contradicts == null || !c.contradicts.Contains(trueEra))
         ).ToList();
 
+        // Effective contradiction chance: blueprint base + tomorrow modifier
+        // (slot machine) + stacked ForgeryChanceBonus effects.
+        float effectiveContradictionChance = Mathf.Clamp01(
+            blueprint.ContradictionChance +
+            state.forgeryChanceModifier +
+            TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
+
         // Decide counts: how many contradictions and red herrings to inject.
         int contradictions = 0;
         for (int i = 0; i < totalCluesTarget; i++)
-            if (Random.value < blueprint.ContradictionChance) contradictions++;
+            if (Random.value < effectiveContradictionChance) contradictions++;
 
         int herrings = 0;
         for (int i = 0; i < totalCluesTarget; i++)
@@ -225,119 +323,4 @@ public sealed class CaseFactory
         var picked = new List<ClueSO>();
         picked.AddRange(PickUnique(supportsTrueEra, supports));
         picked.AddRange(PickUnique(contradictsTrueEra, contradictions));
-        picked.AddRange(PickUnique(redHerrings, herrings));
-
-        // Store global clue list on the case.
-        inst.usedClues.AddRange(picked);
-
-        // Distribute each clue into an appropriate document.
-        foreach (ClueSO clue in picked)
-        {
-            DocumentInstance doc = PickDocForClue(docInstances, clue);
-            if (doc == null)
-                continue;
-
-            doc.cluesInDoc.Add(clue);
-        }
-
-        // Render simple text for each document (prototype-friendly).
-        foreach (DocumentInstance doc in docInstances)
-        {
-            doc.renderedText = RenderDocText(doc);
-            inst.documents.Add(doc);
-        }
-    }
-
-    /// <summary>
-    /// Determines whether a clue is allowed to appear based on unlocked upgrades.
-    /// If a clue requires an upgrade (e.g., scanner), it won't be generated until unlocked.
-    /// </summary>
-    private static bool IsClueAllowedByUpgrades(ClueSO clue, WorldState state)
-    {
-        // If no upgrade is required, the clue is always eligible.
-        if (clue.requiresUpgradeToReveal == null)
-            return true;
-
-        // If state is missing, treat gated clues as unavailable.
-        if (state == null)
-            return false;
-
-        return state.unlockedUpgradeIds.Contains(clue.requiresUpgradeToReveal.id);
-    }
-
-    /// <summary>
-    /// Randomly picks up to 'count' unique items from a pool.
-    /// </summary>
-    private static List<ClueSO> PickUnique(List<ClueSO> pool, int count)
-    {
-        var result = new List<ClueSO>();
-
-        if (pool == null || pool.Count == 0 || count <= 0)
-            return result;
-
-        var temp = new List<ClueSO>(pool);
-
-        for (int i = 0; i < count && temp.Count > 0; i++)
-        {
-            int idx = Random.Range(0, temp.Count);
-            result.Add(temp[idx]);
-            temp.RemoveAt(idx);
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Chooses which document should contain a given clue.
-    /// Prefers templates whose preferredCategories include the clue’s category,
-    /// and respects each template’s maxClues limit when possible.
-    /// </summary>
-    private static DocumentInstance PickDocForClue(List<DocumentInstance> docs, ClueSO clue)
-    {
-        if (docs == null || docs.Count == 0 || clue == null)
-            return null;
-
-        // Prefer docs that want this clue category and have room.
-        var preferred = docs.Where(d =>
-            d != null &&
-            d.template != null &&
-            d.template.preferredCategories != null &&
-            d.template.preferredCategories.Contains(clue.category) &&
-            d.cluesInDoc.Count < d.template.maxClues
-        ).ToList();
-
-        if (preferred.Count > 0)
-            return preferred[Random.Range(0, preferred.Count)];
-
-        // Otherwise choose any doc that still has room.
-        var any = docs.Where(d =>
-            d != null &&
-            d.template != null &&
-            d.cluesInDoc.Count < d.template.maxClues
-        ).ToList();
-
-        if (any.Count > 0)
-            return any[Random.Range(0, any.Count)];
-
-        // Worst case: all docs are "full" -> dump into a random doc anyway.
-        return docs[Random.Range(0, docs.Count)];
-    }
-
-    /// <summary>
-    /// Produces a simple, readable document string from its clues.
-    /// This keeps the prototype UI trivial (just show a block of text).
-    /// </summary>
-    private static string RenderDocText(DocumentInstance doc)
-    {
-        string header = doc.template != null ? doc.template.displayName : "Document";
-
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine(header);
-        sb.AppendLine("----------------");
-
-        foreach (ClueSO clue in doc.cluesInDoc)
-            sb.AppendLine("• " + clue.text);
-
-        return sb.ToString();
-    }
-}
+        picked.AddRange(PickUnique(r

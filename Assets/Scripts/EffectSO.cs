@@ -1,12 +1,13 @@
 // ReSharper disable InconsistentNaming
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Simple effect definition (placeholder for later rule changes / rewards / penalties).
+/// Channel an effect broadcasts on. Receivers (visuals, music, UI, visitor pool,
+/// shop, newsletter, tech tree, chatter...) query the active-effect registry for
+/// their channel and react. New systems = new channel or new receiver, no core changes.
 /// </summary>
-[CreateAssetMenu(fileName = "Effect_", menuName = "TimeDesk/Effect", order = 14)]
-public sealed class EffectSO : ScriptableObject
+public enum EffectChannel
 {
-    /// <summary>Display name for debugging/UI lists.</summary>
-    public string displayName;
-}
+ 

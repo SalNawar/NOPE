@@ -1,17 +1,19 @@
+using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// Persistent run/session state (save/load later).
-/// Keep it simple and serializable.
+/// Persistent run state. Fully serializable via JsonUtility (see SaveSystem).
+/// Everything that must survive sleep/quit lives here — nothing else should
+/// hold cross-day state.
 /// </summary>
+[Serializable]
 public sealed class WorldState
 {
+    // -----------------------------
+    // Run identity
+    // -----------------------------
+
     /// <summary>Current day number (1-based).</summary>
     public int day = 1;
 
-    /// <summary>Bonus added to legendary chance per case (0..1).</summary>
-    public float legendaryChanceBonus = 0f;
-
-    /// <summary>Unlocked upgrade IDs for gating clue generation.</summary>
-    public readonly HashSet<string> unlockedUpgradeIds = new();
-}
+    /// <summary>Seed for this run; per-day seeds derive from

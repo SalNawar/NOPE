@@ -46,6 +46,12 @@ public sealed class DayOrchestrator : MonoBehaviour
     public event Action<int> OnCaseSlotEnded;
 
     /// <summary>
+    /// Fired once after the last case slot of the day resolves.
+    /// GameManager uses this to start the end-of-day flow.
+    /// </summary>
+    public event Action OnDayCompleted;
+
+    /// <summary>
     /// Starts a day using a plan and world state.
     /// Provide a seed to make random events deterministic.
     /// </summary>
@@ -147,6 +153,9 @@ public sealed class DayOrchestrator : MonoBehaviour
             // 6) Advance
             _caseIndex1Based++;
         }
+
+        // All case slots resolved: the shift is over.
+        OnDayCompleted?.Invoke();
     }
 
     /// <summary>
@@ -154,14 +163,4 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     private IEnumerator RunScheduledEvents(DayEventTrigger trigger, int slotIndex1Based)
     {
-        if (_resolvedSchedule == null || eventDirector == null)
-            yield break;
-
-        var events = _resolvedSchedule.Get(trigger, slotIndex1Based);
-
-        if (events == null || events.Count == 0)
-            yield break;
-
-        yield return eventDirector.RunEvents(events);
-    }
-}
+       

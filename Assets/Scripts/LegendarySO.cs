@@ -23,4 +23,5 @@ public sealed class LegendarySO : ScriptableObject
 
     /// <summary>If set, forces this blueprint when the legendary appears.</summary>
     public CaseBlueprintSO blueprintOverride;
-}
+
+ 

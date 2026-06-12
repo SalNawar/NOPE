@@ -18,6 +18,15 @@ public sealed class CaseInstance
     /// <summary>Reference to the legendary source asset (if legendary).</summary>
     public LegendarySO legendarySource;
 
+    /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
+    public ArchetypeSO archetype;
+
+    /// <summary>Destination nation within the era (timeline impacts land here).</summary>
+    public NationSO nation;
+
+    /// <summary>Authored impact overrides from the blueprint/legendary (may be empty).</summary>
+    public readonly List<TimelineImpact> authoredImpacts = new();
+
     /// <summary>Display name for the visitor.</summary>
     public string visitorDisplayName;
 
@@ -32,16 +41,4 @@ public sealed class CaseInstance
 }
 
 /// <summary>
-/// A runtime document assembled from a template, containing clue lines.
-/// </summary>
-public sealed class DocumentInstance
-{
-    /// <summary>Template this document was built from.</summary>
-    public DocumentTemplateSO template;
-
-    /// <summary>Pre-rendered text for quick prototype UI display.</summary>
-    public string renderedText;
-
-    /// <summary>Raw clue references inside this document.</summary>
-    public readonly List<ClueSO> cluesInDoc = new();
-}
+/// A runtime document assembled from a template, containing clue

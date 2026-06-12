@@ -35,19 +35,61 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Currently active case slot (1-based).</summary>
     private int _activeCaseIndex1Based;
 
+    /// <summary>Verdict record for the current shift (results screen reads this).</summary>
+    private ShiftLedger _ledger;
+
+    /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
+    private GameConfigSO _gameConfig;
+
+    /// <summary>Read-only access to the current shift's ledger.</summary>
+    public ShiftLedger Ledger => _ledger;
+
     /// <summary>
     /// Initializes systems, generates cases once, and starts the day loop.
     /// </summary>
     private void Start()
     {
-        if (orchestrator == null || contentLibrary == null || dayPlan == null || officeUI == null)
+        if (orchestrator == null || contentLibrary == null || officeUI == null)
         {
-            Debug.LogError("GameManager missing references (orchestrator/contentLibrary/dayPlan/officeUI).");
+            Debug.LogError("GameManager missing references (orchestrator/contentLibrary/officeUI).");
             return;
         }
 
-        // Create world state for this run.
-        _worldState = new WorldState { day = dayPlan.DayNumber };
+        // Acquire the run (creates RunManager + loads save/new run on first scene).
+        RunManager run = RunManager.GetOrCreate();
+
+        if (run != null)
+        {
+            _worldState = run.World;
+
+            // Prefer the library's plan for the current day; keep the inspector
+            // value as a fallback so test scenes still work.
+            DayPlanSO planForToday = run.GetCurrentDayPlan();
+            if (planForToday != null)
+                dayPlan = planForToday;
+
+            seed = run.GetDaySeed();
+        }
+        else
+        {
+            // No RunConfig in Resources: degrade to a local, session-only state.
+            _worldState = new WorldState { day = dayPlan != null ? dayPlan.DayNumber : 1 };
+        }
+
+        if (dayPlan == null)
+        {
+            Debug.LogError($"GameManager has no DayPlan for day {_worldState.day} (none in ContentLibrary, none assigned in inspector).");
+            return;
+        }
+
+        // Tuning config (citations/pay disabled gracefully if missing).
+        _gameConfig = run != null && run.Config != null ? run.Config.gameConfig : null;
+
+        if (_gameConfig == null)
+            Debug.LogWarning("GameManager: no GameConfigSO assigned in RunConfig — pay/citations/stability will not be applied.");
+
+        // Fresh ledger for this shift.
+        _ledger = new ShiftLedger();
 
         // Create the case factory from the content library.
         _caseFactory = new CaseFactory(contentLibrary);
@@ -55,9 +97,13 @@ public sealed class GameManager : MonoBehaviour
         // Generate all cases up-front.
         _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState);
 
+        // Initial HUD state.
+        officeUI.UpdateHud(_worldState);
+
         // Subscribe to orchestrator callbacks.
         orchestrator.OnCaseSlotStarted += HandleCaseSlotStarted;
         orchestrator.OnCaseSlotEnded += HandleCaseSlotEnded;
+        orchestrator.OnDayCompleted += HandleDayCompleted;
 
         // Start the day loop.
         orchestrator.StartDay(_worldState, dayPlan, seed);
@@ -73,71 +119,16 @@ public sealed class GameManager : MonoBehaviour
 
         orchestrator.OnCaseSlotStarted -= HandleCaseSlotStarted;
         orchestrator.OnCaseSlotEnded -= HandleCaseSlotEnded;
+        orchestrator.OnDayCompleted -= HandleDayCompleted;
     }
 
     /// <summary>
-    /// Called when the orchestrator starts case slot #N (1-based).
-    /// Displays the generated case in the UI.
+    /// Called when the last case of the day resolves. Saves the run.
+    /// Phase 3 replaces the log with the results screen; Phase 4 leads into the Home scene.
     /// </summary>
-    private void HandleCaseSlotStarted(int caseIndex1Based)
+    private void HandleDayCompleted()
     {
-        _activeCaseIndex1Based = caseIndex1Based;
+        Debug.Log($"[GameManager] Day {_worldState.day} shift complete.");
 
-        int idx = caseIndex1Based - 1;
-
-        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
-        {
-            Debug.LogError($"GameManager could not find case for slot {caseIndex1Based}.");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        CaseInstance inst = _dayCases[idx];
-
-        // Show UI and wait for the player's selection.
-        officeUI.ShowCase(inst, contentLibrary.Eras, HandlePlayerChoseEra);
-    }
-
-    /// <summary>
-    /// Called when the orchestrator ends case slot #N (1-based).
-    /// </summary>
-    private void HandleCaseSlotEnded(int caseIndex1Based)
-    {
-        // Optional: hide UI between cases, or keep it visible and overwrite contents.
-        // officeUI.Hide();
-    }
-
-    /// <summary>
-    /// Validates the player's choice, shows result, then advances the day.
-    /// </summary>
-    private void HandlePlayerChoseEra(EraSO chosenEra)
-    {
-        int idx = _activeCaseIndex1Based - 1;
-
-        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
-        {
-            Debug.LogError("Player chose an era but the active case index is invalid.");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        CaseInstance inst = _dayCases[idx];
-
-        bool correct = inst.trueEra == chosenEra;
-
-        officeUI.SetResultText(correct ? "✅ Correct" : "❌ Wrong");
-
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: chose '{chosenEra.displayName}', true = '{inst.trueEra.displayName}', correct={correct}");
-        Debug.Log("Resolving case and moving to next subject...");
-        orchestrator.MarkCaseResolved();
-
-    }
-
-    /// <summary>
-    /// Marks the current case as resolved so the orchestrator advances to the next slot.
-    /// </summary>
-    private void ResolveCurrentCase()
-    {
-        orchestrator.MarkCaseResolved();
-    }
-}
+        if (officeUI != null)
+            officeUI.SetRes
