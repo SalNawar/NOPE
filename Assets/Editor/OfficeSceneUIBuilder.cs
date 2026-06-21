@@ -165,6 +165,10 @@ public static class OfficeSceneUIBuilder
         // the Monitor-Focus desktop, hidden until the CRT is focused.
         OfficeViewController officeView = BuildBooth(canvas);
 
+        // Fake-OS desktop shell: icon set (+ unlock-gating), windows with
+        // min/max/close chrome, and a Start menu (Settings + Power).
+        BuildDesktopShell(canvas);
+
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
         SetRef(soOffice, "moneyText", moneyText);
@@ -762,9 +766,141 @@ public static class OfficeSceneUIBuilder
     /// <summary>Adds a visible "Back to Office" button to the desktop canvas.</summary>
     private static void BuildBackToOfficeButton(Canvas desktopCanvas, OfficeViewController view)
     {
-        Button back = MakeButton(desktopCanvas.transform, "BackToOfficeButton", "← Office",
+        Button back = MakeButton(desktopCanvas.transform, "BackToOfficeButton", "< Office",
             new Vector2(0.005f, 0.93f), new Vector2(0.105f, 0.99f), new Color(0.2f, 0.3f, 0.5f, 0.95f));
         WirePersistentVoid(back, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
+    }
+
+    /// <summary>
+    /// Builds the fake-OS desktop shell: a left column of icons (some unlock-gated)
+    /// that open placeholder windows with min/max/close chrome, plus a Start menu
+    /// (Settings + Power) wired to a DesktopShell on the canvas. Idempotent.
+    /// </summary>
+    private static void BuildDesktopShell(Canvas canvas)
+    {
+        Transform root = canvas.transform;
+
+        Transform windowLayer = Panel(root, "DesktopWindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform iconGrid = Panel(root, "DesktopIcons", new Vector2(0.01f, 0.1f), new Vector2(0.14f, 0.9f), Vector2.zero, Vector2.zero, null);
+        AddVLayout(iconGrid, 5f);
+
+        var icons = new (string name, string label, string title, string body, string upgrade)[]
+        {
+            ("IconPassport",  "Passport",   "Passport",            "The visitor's passport. (The desk shows live documents during a case.)", ""),
+            ("IconPermit",    "Permit",     "Permit",              "The visitor's travel permit.", ""),
+            ("IconCurrency",  "Currency",   "Currency Reference",  "Currency lookups per era.", ""),
+            ("IconLanguage",  "Language",   "Language Reference",  "Language / dialect lookups per era.", ""),
+            ("IconTechnology","Technology", "Technology Reference","Tech-level lookups per era.", ""),
+            ("IconRules",     "Rules",      "Travel Rules",        "Today's active travel rules to enforce.", ""),
+            ("IconCompare",   "Compare",    "Compare Tool",        "Cross-check two document fields side by side.", ""),
+            ("IconScanner",   "Scanner",    "Scanner",             "Scanned Time File submitted by the traveller.", ""),
+            ("IconInternet",  "Internet",   "Internet - News",     "Today's news feed. (placeholder)", ""),
+            ("IconLexicon",   "Lexicon",    "Lexicon",             "Wikipedia-style era glossary. (placeholder)", "ArchiveAccess"),
+            ("IconDialect",   "Dialect",    "Dialect Filter",      "Highlights anachronistic phrases. (upgrade)", "DialectFilter"),
+            ("IconMaterial",  "Material",   "Material Scanner",    "Flags tech/materials beyond the claimed era. (upgrade)", "AdvancedScanner"),
+            ("IconClueLog",   "Clue Log",   "Case Notes",          "Clues & contradictions for the current case.", ""),
+            ("IconNotes",     "Notes",      "Sticky Notes",        "Your notes. (placeholder)", ""),
+        };
+
+        foreach (var s in icons)
+        {
+            OSWindowChrome w = BuildOSWindow(windowLayer, s.name + "Window", s.title, s.body);
+            BuildDesktopIcon(iconGrid, s.name, s.label, w, s.upgrade);
+        }
+
+        OSWindowChrome settings = BuildOSWindow(windowLayer, "SettingsWindow", "Settings", "Settings (empty for now).");
+
+        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.14f, 0f), new Vector2(0f, 150f), new Vector2(0f, 120f), new Color(0.1f, 0.12f, 0.18f, 0.97f));
+        AddVLayout(startMenu, 4f);
+        Button settingsEntry = MakeButton(startMenu, "SettingsEntry", "Settings", Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f));
+        Button powerEntry = MakeButton(startMenu, "PowerEntry", "Power", Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f));
+        startMenu.gameObject.SetActive(false);
+
+        Button startBtn = null;
+        Transform taskbarStart = root.Find("Taskbar/StartButton");
+        if (taskbarStart != null)
+        {
+            startBtn = taskbarStart.GetComponent<Button>();
+            if (startBtn == null)
+                startBtn = taskbarStart.gameObject.AddComponent<Button>();
+            Image img = taskbarStart.GetComponent<Image>();
+            if (img != null)
+                startBtn.targetGraphic = img;
+        }
+
+        DesktopShell shell = root.GetComponent<DesktopShell>();
+        if (shell == null)
+            shell = root.gameObject.AddComponent<DesktopShell>();
+        var soShell = new SerializedObject(shell);
+        SetRef(soShell, "startButton", startBtn);
+        SetRef(soShell, "startMenu", startMenu.gameObject);
+        SetRef(soShell, "settingsButton", settingsEntry);
+        SetRef(soShell, "powerButton", powerEntry);
+        SetRef(soShell, "settingsWindow", settings);
+        soShell.ApplyModifiedProperties();
+    }
+
+    /// <summary>Builds a placeholder desktop window with a draggable title bar and min/max/close chrome.</summary>
+    private static OSWindowChrome BuildOSWindow(Transform layer, string name, string title, string body)
+    {
+        Transform win = Panel(layer, name, Center, Center, Vector2.zero, new Vector2(580f, 400f), Paper);
+
+        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -15f), new Vector2(0f, 30f), HeaderBar);
+        DraggableWindow drag = header.GetComponent<DraggableWindow>();
+        if (drag == null)
+            drag = header.gameObject.AddComponent<DraggableWindow>();
+        var soDrag = new SerializedObject(drag);
+        SetRef(soDrag, "windowRoot", (RectTransform)win);
+        soDrag.ApplyModifiedProperties();
+
+        TMP_Text titleText = Text(header, "TitleText", title, 15, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.7f, 1f), Color.white);
+        titleText.fontStyle = FontStyles.Bold;
+
+        Button minB = MakeButton(header, "MinBtn", "_", new Vector2(0.74f, 0.16f), new Vector2(0.8f, 0.86f), XpFace);
+        Button maxB = MakeButton(header, "MaxBtn", "[]", new Vector2(0.805f, 0.16f), new Vector2(0.87f, 0.86f), XpFace);
+        Button closeB = MakeButton(header, "CloseBtn", "X", new Vector2(0.875f, 0.16f), new Vector2(0.96f, 0.86f), XpRed);
+
+        Text(win, "Body", body, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink);
+
+        OSWindowChrome chrome = win.GetComponent<OSWindowChrome>();
+        if (chrome == null)
+            chrome = win.gameObject.AddComponent<OSWindowChrome>();
+        var so = new SerializedObject(chrome);
+        SetRef(so, "window", (RectTransform)win);
+        SetRef(so, "minimizeButton", minB);
+        SetRef(so, "maximizeButton", maxB);
+        SetRef(so, "closeButton", closeB);
+        so.ApplyModifiedProperties();
+
+        win.gameObject.SetActive(false); // opened by its icon
+        return chrome;
+    }
+
+    /// <summary>Builds a desktop icon button bound to a window, with optional unlock-gating.</summary>
+    private static void BuildDesktopIcon(Transform grid, string name, string label, OSWindowChrome window, string upgradeId)
+    {
+        Button btn = MakeButton(grid, name, label, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.45f, 0.85f));
+        LayoutElement le = btn.GetComponent<LayoutElement>();
+        if (le == null)
+            le = btn.gameObject.AddComponent<LayoutElement>();
+        le.minHeight = 40f;
+        le.preferredHeight = 40f;
+
+        CanvasGroup cg = btn.GetComponent<CanvasGroup>();
+        if (cg == null)
+            cg = btn.gameObject.AddComponent<CanvasGroup>();
+
+        DesktopIcon icon = btn.GetComponent<DesktopIcon>();
+        if (icon == null)
+            icon = btn.gameObject.AddComponent<DesktopIcon>();
+        var so = new SerializedObject(icon);
+        SetRef(so, "targetWindow", window);
+        SetRef(so, "button", btn);
+        SetRef(so, "canvasGroup", cg);
+        SerializedProperty up = so.FindProperty("requiredUpgradeId");
+        if (up != null)
+            up.stringValue = upgradeId ?? string.Empty;
+        so.ApplyModifiedProperties();
     }
 
     private static Clickable EnsureClickable(GameObject go)
