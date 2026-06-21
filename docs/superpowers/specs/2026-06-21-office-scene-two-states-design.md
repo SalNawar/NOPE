@@ -106,11 +106,27 @@ placeholder sprite under `Assets/Art/Office/Placeholder/`.
   | Technology | Reference window | `RefBook_Technology` |
   | Travel Rules | Rules window | day's active `TravelRuleSO`s |
   | Compare | Compare tool window | `CompareController` |
-  | Scanner | Scanned-document window | the document(s) submitted by the current traveller |
+  | Scanner | Scanned-document window | the document(s)/Time File submitted by the current traveller |
   | Internet | News window (placeholder) | news lines via `TimelineEffects.GetLines(..., NewsLine)` |
+  | Lexicon / Glossary | Wikipedia-style reference app *(placeholder — built later)* | **unlock-gated** (`Upgrade_ArchiveAccess`) |
+  | Dialect Filter | Highlights anachronistic phrases in documents/testimony | **unlock-gated** upgrade |
+  | Material Scanner | Flags tech/materials beyond the claimed era | **unlock-gated** (`Upgrade_AdvancedScanner`); distinct from the document Scanner |
+  | Clue Log / Case Notes | Logs discovered clues & contradictions for the current case | |
+  | Sticky Notes | Player-created notes pinned to the desktop *(placeholder — fleshed out later)* | |
 
   > The single "Reference Book" is **split by function** into Currency / Language / Technology icons.
   > Internet/News is a placeholder shell now; content wires to the existing newsletter/news lines.
+  >
+  > **Unlock-gating:** Lexicon, Dialect Filter, and Material Scanner are tool upgrades — their
+  > desktop icons appear **disabled/greyed until the matching `UpgradeSO` is purchased** (checked via
+  > `WorldState`/owned upgrades). `DesktopController` reads upgrade ownership to enable them.
+  >
+  > **Document types:** the design's submitted-document types (Time ID, Artifact Receipt, Testimony Page,
+  > Bio Scan, Timeline Permit) surface **inside the Scanner window** as the Time File, not as separate
+  > icons. Passport/Permit remain their own icons (what's built today).
+  >
+  > **Sticky Notes & Lexicon** are placeholder shells now (icon + empty/simple window); full behavior is a
+  > later pass.
 
 The desktop **re-hosts** the existing `InvestigationUIController` window set; it does not replace the
 verdict flow. Era-choice / verdict submission remains driven by the existing controllers.
