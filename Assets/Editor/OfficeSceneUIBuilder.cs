@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -160,6 +161,10 @@ public static class OfficeSceneUIBuilder
         GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
         if (gameManager == null) gameManager = new GameObject("GameManager").AddComponent<GameManager>();
 
+        // Booth + cameras + view controller (new). The existing Canvas becomes
+        // the Monitor-Focus desktop, hidden until the CRT is focused.
+        OfficeViewController officeView = BuildBooth(canvas);
+
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
         SetRef(soOffice, "moneyText", moneyText);
@@ -216,6 +221,8 @@ public static class OfficeSceneUIBuilder
         SetRef(soGm, "officeUI", officeUI);
         SetRef(soGm, "investigationUI", invest);
         SetRef(soGm, "dayFlowUI", dayFlow);
+        SetRef(soGm, "officeView", officeView);
+        SetRef(soGm, "readySign", GameObject.Find("OfficeRoot")?.transform.Find("ReadySign")?.GetComponent<Clickable>());
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
@@ -573,6 +580,156 @@ public static class OfficeSceneUIBuilder
     {
         float dx = (fx - cx) / rx, dy = (fy - cy) / ry;
         return Mathf.Clamp01(1f - (dx * dx + dy * dy)) * 0.85f;
+    }
+
+    // ----------------------------- Office booth (world-space) -----------------------------
+
+    /// <summary>
+    /// Returns a flat-color placeholder Sprite at Assets/Art/Office/Placeholder/{name}.png,
+    /// creating it if missing. Swap the PNG later for final art (same path/name).
+    /// </summary>
+    private static Sprite EnsureOfficeSprite(string name, Color color, int w, int h)
+    {
+        string folder = "Assets/Art/Office/Placeholder";
+        string assetPath = $"{folder}/{name}.png";
+        Sprite existing = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+        if (existing != null)
+            return existing;
+
+        EnsureFolderTree(folder);
+
+        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        var pixels = new Color32[w * h];
+        Color32 c32 = color;
+        for (int i = 0; i < pixels.Length; i++)
+            pixels[i] = c32;
+        tex.SetPixels32(pixels);
+        tex.Apply();
+
+        string abs = System.IO.Path.Combine(Application.dataPath, $"Art/Office/Placeholder/{name}.png");
+        System.IO.File.WriteAllBytes(abs, tex.EncodeToPNG());
+        Object.DestroyImmediate(tex);
+
+        AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
+        {
+            imp.textureType = TextureImporterType.Sprite;
+            imp.spriteImportMode = SpriteImportMode.Single;
+            imp.spritePixelsPerUnit = 100f;
+            imp.mipmapEnabled = false;
+            imp.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+    }
+
+    /// <summary>Creates (or finds) a world-space sprite GameObject under a parent.</summary>
+    private static SpriteRenderer EnsureSprite(Transform parent, string name, Sprite sprite, Vector3 localPos, int sortingOrder)
+    {
+        Transform existing = parent.Find(name);
+        GameObject go = existing != null ? existing.gameObject : new GameObject(name);
+        if (existing == null)
+            go.transform.SetParent(parent, false);
+        go.transform.localPosition = localPos;
+        var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
+        sr.sprite = sprite;
+        sr.sortingOrder = sortingOrder;
+        return sr;
+    }
+
+    /// <summary>
+    /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster,
+    /// and wires OfficeViewController + the CRT/READY clickables. Idempotent.
+    /// </summary>
+    private static OfficeViewController BuildBooth(Canvas desktopCanvas)
+    {
+        // Root for all booth world objects.
+        GameObject root = GameObject.Find("OfficeRoot") ?? new GameObject("OfficeRoot");
+
+        // Set dressing (flat placeholder sprites; swap later).
+        EnsureSprite(root.transform, "BackWall",       EnsureOfficeSprite("backwall",  new Color(0.17f, 0.17f, 0.22f), 400, 240), new Vector3(0f, 0f, 10f), -100);
+        EnsureSprite(root.transform, "LeftPartition",  EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3(-6.5f, 0f, 5f), -50);
+        EnsureSprite(root.transform, "RightPartition", EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3( 6.5f, 0f, 5f), -50);
+        EnsureSprite(root.transform, "Desk",           EnsureOfficeSprite("desk",      new Color(0.26f, 0.20f, 0.15f), 400, 90),  new Vector3(0f, -3.6f, 0f), -10);
+        EnsureSprite(root.transform, "Traveller",      EnsureOfficeSprite("traveller", new Color(0.49f, 0.42f, 0.86f), 60, 110),  new Vector3(0f, 0.4f, 2f), -20);
+
+        // Interactables: CRT (right of desk) and READY sign (center).
+        SpriteRenderer crt = EnsureSprite(root.transform, "CRTMonitor", EnsureOfficeSprite("crt", new Color(0.85f, 0.81f, 0.65f), 150, 130), new Vector3(3.4f, -1.8f, 0f), 0);
+        Clickable crtClick = EnsureClickable(crt.gameObject);
+
+        SpriteRenderer sign = EnsureSprite(root.transform, "ReadySign", EnsureOfficeSprite("sign", new Color(0.79f, 0.76f, 0.58f), 96, 50), new Vector3(0f, -2.4f, 0f), 0);
+        Clickable signClick = EnsureClickable(sign.gameObject);
+
+        // Cameras.
+        GameObject camsRoot = GameObject.Find("Cameras") ?? new GameObject("Cameras");
+        CinemachineCamera officeCam = EnsureVcam(camsRoot.transform, "OfficeVCam", new Vector3(0f, -1f, -10f), 6f);
+        CinemachineCamera monitorCam = EnsureVcam(camsRoot.transform, "MonitorVCam", new Vector3(3.4f, -1.8f, -10f), 1.4f);
+
+        // Brain + 2D raycaster on the Main Camera.
+        Camera main = Camera.main;
+        if (main == null)
+        {
+            var mc = new GameObject("Main Camera", typeof(Camera));
+            mc.tag = "MainCamera";
+            main = mc.GetComponent<Camera>();
+        }
+        main.orthographic = true;
+        if (main.GetComponent<CinemachineBrain>() == null) main.gameObject.AddComponent<CinemachineBrain>();
+        if (main.GetComponent<Physics2DRaycaster>() == null)
+            main.gameObject.AddComponent<Physics2DRaycaster>();
+
+        // Camera rig + view controller on OfficeRoot.
+        CinemachineCameraRig rig = root.GetComponent<CinemachineCameraRig>() ?? root.AddComponent<CinemachineCameraRig>();
+        var soRig = new SerializedObject(rig);
+        SetRef(soRig, "officeCam", officeCam);
+        SetRef(soRig, "monitorCam", monitorCam);
+        soRig.ApplyModifiedProperties();
+
+        OfficeViewController view = root.GetComponent<OfficeViewController>() ?? root.AddComponent<OfficeViewController>();
+        var soView = new SerializedObject(view);
+        SetRef(soView, "cameraRigBehaviour", rig);
+        SetRef(soView, "desktopRoot", desktopCanvas.gameObject);
+        soView.ApplyModifiedProperties();
+
+        // CRT click -> focus monitor; READY click is wired to GameManager's gate,
+        // but also focuses the monitor so the player lands on the desktop.
+        WireClickToFocusMonitor(crtClick, view);
+        WireClickToFocusMonitor(signClick, view);
+
+        return view;
+    }
+
+    private static Clickable EnsureClickable(GameObject go)
+    {
+        if (go.GetComponent<Collider2D>() == null)
+            go.AddComponent<BoxCollider2D>();
+        return go.GetComponent<Clickable>() ?? go.AddComponent<Clickable>();
+    }
+
+    private static CinemachineCamera EnsureVcam(Transform parent, string name, Vector3 pos, float orthoSize)
+    {
+        Transform existing = parent.Find(name);
+        GameObject go = existing != null ? existing.gameObject : new GameObject(name);
+        if (existing == null) go.transform.SetParent(parent, false);
+        go.transform.position = pos;
+        var cam = go.GetComponent<CinemachineCamera>() ?? go.AddComponent<CinemachineCamera>();
+        cam.Lens.OrthographicSize = orthoSize;
+        return cam;
+    }
+
+    private static void WireClickToFocusMonitor(Clickable clickable, OfficeViewController view)
+    {
+        var so = new SerializedObject(clickable);
+        SerializedProperty calls = so.FindProperty("onClick.m_PersistentCalls.m_Calls");
+        // Reset to a single persistent call to OfficeViewController.FocusMonitor.
+        calls.ClearArray();
+        calls.InsertArrayElementAtIndex(0);
+        SerializedProperty call = calls.GetArrayElementAtIndex(0);
+        call.FindPropertyRelative("m_Target").objectReferenceValue = view;
+        call.FindPropertyRelative("m_TargetAssemblyTypeName").stringValue = typeof(OfficeViewController).AssemblyQualifiedName;
+        call.FindPropertyRelative("m_MethodName").stringValue = nameof(OfficeViewController.FocusMonitor);
+        call.FindPropertyRelative("m_Mode").enumValueIndex = 1; // Void
+        call.FindPropertyRelative("m_CallState").enumValueIndex = 2; // RuntimeOnly
+        so.ApplyModifiedProperties();
     }
 
     private static void EnsureFolderTree(string path)
