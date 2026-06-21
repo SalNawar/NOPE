@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>The two camera states of the office scene.</summary>
 public enum OfficeView
@@ -39,6 +40,20 @@ public sealed class OfficeViewController : MonoBehaviour
             _rig = cameraRigBehaviour as ICameraRig;
 
         ApplyState(force: true);
+    }
+
+    /// <summary>
+    /// Escape pulls back to the booth from the monitor (temporary "back"
+    /// affordance until the desktop has a dedicated minimize-to-office control).
+    /// </summary>
+    private void Update()
+    {
+        if (Current != OfficeView.MonitorFocus)
+            return;
+
+        Keyboard kb = Keyboard.current;
+        if (kb != null && kb.escapeKey.wasPressedThisFrame)
+            FocusOffice();
     }
 
     /// <summary>Test seam: inject a fake rig + desktop and apply the default state.</summary>
