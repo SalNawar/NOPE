@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+// Office two-state view controller (booth <-> monitor).
 /// <summary>The two camera states of the office scene.</summary>
 public enum OfficeView
 {

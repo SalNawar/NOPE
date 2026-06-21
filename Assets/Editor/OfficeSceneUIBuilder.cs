@@ -630,7 +630,9 @@ public static class OfficeSceneUIBuilder
         if (existing == null)
             go.transform.SetParent(parent, false);
         go.transform.localPosition = localPos;
-        var sr = go.GetComponent<SpriteRenderer>() ?? go.AddComponent<SpriteRenderer>();
+        var sr = go.GetComponent<SpriteRenderer>();
+        if (sr == null)
+            sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = sprite;
         sr.sortingOrder = sortingOrder;
         return sr;
@@ -678,13 +680,17 @@ public static class OfficeSceneUIBuilder
             main.gameObject.AddComponent<Physics2DRaycaster>();
 
         // Camera rig + view controller on OfficeRoot.
-        CinemachineCameraRig rig = root.GetComponent<CinemachineCameraRig>() ?? root.AddComponent<CinemachineCameraRig>();
+        CinemachineCameraRig rig = root.GetComponent<CinemachineCameraRig>();
+        if (rig == null)
+            rig = root.AddComponent<CinemachineCameraRig>();
         var soRig = new SerializedObject(rig);
         SetRef(soRig, "officeCam", officeCam);
         SetRef(soRig, "monitorCam", monitorCam);
         soRig.ApplyModifiedProperties();
 
-        OfficeViewController view = root.GetComponent<OfficeViewController>() ?? root.AddComponent<OfficeViewController>();
+        OfficeViewController view = root.GetComponent<OfficeViewController>();
+        if (view == null)
+            view = root.AddComponent<OfficeViewController>();
         var soView = new SerializedObject(view);
         SetRef(soView, "cameraRigBehaviour", rig);
         SetRef(soView, "desktopRoot", desktopCanvas.gameObject);
@@ -702,7 +708,10 @@ public static class OfficeSceneUIBuilder
     {
         if (go.GetComponent<Collider2D>() == null)
             go.AddComponent<BoxCollider2D>();
-        return go.GetComponent<Clickable>() ?? go.AddComponent<Clickable>();
+        Clickable c = go.GetComponent<Clickable>();
+        if (c == null)
+            c = go.AddComponent<Clickable>();
+        return c;
     }
 
     private static CinemachineCamera EnsureVcam(Transform parent, string name, Vector3 pos, float orthoSize)
@@ -711,7 +720,9 @@ public static class OfficeSceneUIBuilder
         GameObject go = existing != null ? existing.gameObject : new GameObject(name);
         if (existing == null) go.transform.SetParent(parent, false);
         go.transform.position = pos;
-        var cam = go.GetComponent<CinemachineCamera>() ?? go.AddComponent<CinemachineCamera>();
+        var cam = go.GetComponent<CinemachineCamera>();
+        if (cam == null)
+            cam = go.AddComponent<CinemachineCamera>();
         cam.Lens.OrthographicSize = orthoSize;
         return cam;
     }
