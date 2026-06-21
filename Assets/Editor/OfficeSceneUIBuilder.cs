@@ -701,7 +701,70 @@ public static class OfficeSceneUIBuilder
         WireClickToFocusMonitor(crtClick, view);
         WireClickToFocusMonitor(signClick, view);
 
+        // Diegetic readouts + a timeline-reactive poster + the desktop Back button.
+        BuildReadouts(root.transform);
+        BuildReactiveProp(root.transform);
+        BuildBackToOfficeButton(desktopCanvas, view);
+
         return view;
+    }
+
+    /// <summary>
+    /// Builds the in-world Day calendar, Stability monitor, and Credits till, and
+    /// wires an OfficeReadouts component on OfficeRoot. Idempotent.
+    /// </summary>
+    private static void BuildReadouts(Transform root)
+    {
+        // Day — wall calendar on the left partition.
+        SpriteRenderer cal = EnsureSprite(root, "DayCalendar", EnsureOfficeSprite("calendar", new Color(0.93f, 0.91f, 0.85f), 80, 100), new Vector3(-6.2f, 1.6f, 4.5f), -40);
+        TextMeshPro dayText = WorldText(cal.transform, "DayNumber", "01", 6f, new Color(0.15f, 0.13f, 0.1f), new Vector3(0f, -0.1f, -0.1f), new Vector2(2f, 2f), -39);
+
+        // Stability — TVA-style monitor on the right partition (the sprite is the lamp).
+        SpriteRenderer lamp = EnsureSprite(root, "StabilityMonitor", EnsureOfficeSprite("stabilitymonitor", Color.white, 110, 80), new Vector3(6.2f, 1.6f, 4.5f), -40);
+        TextMeshPro stabText = WorldText(lamp.transform, "StabilityPercent", "100%", 4.5f, new Color(0.05f, 0.1f, 0.07f), new Vector3(0f, 0f, -0.1f), new Vector2(2.4f, 1f), -39);
+
+        // Credits — cash till on the desk (with an AudioSource for the ding).
+        SpriteRenderer till = EnsureSprite(root, "CreditsTill", EnsureOfficeSprite("till", new Color(0.55f, 0.5f, 0.42f), 110, 80), new Vector3(-2.6f, -2.7f, -1f), 5);
+        TextMeshPro creditsText = WorldText(till.transform, "CreditsNumber", "0", 4.5f, new Color(0.1f, 0.9f, 0.5f), new Vector3(0f, 0.1f, -0.1f), new Vector2(2.4f, 1f), 6);
+        AudioSource ding = till.GetComponent<AudioSource>();
+        if (ding == null)
+            ding = till.gameObject.AddComponent<AudioSource>();
+        ding.playOnAwake = false;
+
+        // OfficeReadouts on the root, wired to all three.
+        OfficeReadouts readouts = root.GetComponent<OfficeReadouts>();
+        if (readouts == null)
+            readouts = root.gameObject.AddComponent<OfficeReadouts>();
+        var so = new SerializedObject(readouts);
+        SetRef(so, "dayText", dayText);
+        SetRef(so, "stabilityText", stabText);
+        SetRef(so, "stabilityLamp", lamp);
+        SetRef(so, "creditsText", creditsText);
+        SetRef(so, "creditsDing", ding);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>
+    /// Adds a booth poster that reacts to the timeline (Visuals cue channel).
+    /// Ships with a default sprite and an empty mapping list for the designer.
+    /// </summary>
+    private static void BuildReactiveProp(Transform root)
+    {
+        SpriteRenderer poster = EnsureSprite(root, "ReactivePoster", EnsureOfficeSprite("poster", new Color(0.5f, 0.45f, 0.6f), 80, 110), new Vector3(-6.2f, -0.6f, 4.5f), -40);
+        TimelineReactiveSprite reactive = poster.GetComponent<TimelineReactiveSprite>();
+        if (reactive == null)
+            reactive = poster.gameObject.AddComponent<TimelineReactiveSprite>();
+        var so = new SerializedObject(reactive);
+        SetRef(so, "target", poster);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>Adds a visible "Back to Office" button to the desktop canvas.</summary>
+    private static void BuildBackToOfficeButton(Canvas desktopCanvas, OfficeViewController view)
+    {
+        Button back = MakeButton(desktopCanvas.transform, "BackToOfficeButton", "← Office",
+            new Vector2(0.005f, 0.93f), new Vector2(0.105f, 0.99f), new Color(0.2f, 0.3f, 0.5f, 0.95f));
+        WirePersistentVoid(back, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
     }
 
     private static Clickable EnsureClickable(GameObject go)
@@ -728,19 +791,55 @@ public static class OfficeSceneUIBuilder
     }
 
     private static void WireClickToFocusMonitor(Clickable clickable, OfficeViewController view)
+        => WirePersistentVoid(clickable, "onClick", view, nameof(OfficeViewController.FocusMonitor));
+
+    /// <summary>
+    /// Wires a single persistent, parameterless (Void) call on a UnityEvent
+    /// serialized property (e.g. Clickable "onClick" or Button "m_OnClick").
+    /// </summary>
+    private static void WirePersistentVoid(Object host, string eventProp, Object target, string method)
     {
-        var so = new SerializedObject(clickable);
-        SerializedProperty calls = so.FindProperty("onClick.m_PersistentCalls.m_Calls");
-        // Reset to a single persistent call to OfficeViewController.FocusMonitor.
+        var so = new SerializedObject(host);
+        SerializedProperty calls = so.FindProperty(eventProp + ".m_PersistentCalls.m_Calls");
+        if (calls == null)
+            return;
+
         calls.ClearArray();
         calls.InsertArrayElementAtIndex(0);
         SerializedProperty call = calls.GetArrayElementAtIndex(0);
-        call.FindPropertyRelative("m_Target").objectReferenceValue = view;
-        call.FindPropertyRelative("m_TargetAssemblyTypeName").stringValue = typeof(OfficeViewController).AssemblyQualifiedName;
-        call.FindPropertyRelative("m_MethodName").stringValue = nameof(OfficeViewController.FocusMonitor);
+        call.FindPropertyRelative("m_Target").objectReferenceValue = target;
+        call.FindPropertyRelative("m_TargetAssemblyTypeName").stringValue = target.GetType().AssemblyQualifiedName;
+        call.FindPropertyRelative("m_MethodName").stringValue = method;
         call.FindPropertyRelative("m_Mode").enumValueIndex = 1; // Void
         call.FindPropertyRelative("m_CallState").enumValueIndex = 2; // RuntimeOnly
         so.ApplyModifiedProperties();
+    }
+
+    /// <summary>Creates (or finds) a world-space TextMeshPro label under a parent.</summary>
+    private static TextMeshPro WorldText(Transform parent, string name, string content, float fontSize, Color color, Vector3 localPos, Vector2 size, int sortingOrder)
+    {
+        Transform existing = parent.Find(name);
+        GameObject go = existing != null ? existing.gameObject : new GameObject(name, typeof(TextMeshPro));
+        if (existing == null)
+            go.transform.SetParent(parent, false);
+        go.transform.localPosition = localPos;
+
+        TextMeshPro tmp = go.GetComponent<TextMeshPro>();
+        if (tmp == null)
+            tmp = go.AddComponent<TextMeshPro>();
+        tmp.text = content;
+        tmp.fontSize = fontSize;
+        tmp.color = color;
+        tmp.alignment = TextAlignmentOptions.Center;
+
+        if (go.transform is RectTransform rt)
+            rt.sizeDelta = size;
+
+        MeshRenderer mr = go.GetComponent<MeshRenderer>();
+        if (mr != null)
+            mr.sortingOrder = sortingOrder;
+
+        return tmp;
     }
 
     private static void EnsureFolderTree(string path)
