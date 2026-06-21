@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Profile_Helios_Fut
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: helios_fut
+  displayName: Helios (Future)
+  nation: {fileID: 11400000, guid: 97dbccdd0e63fc243b694c74f359dbdb, type: 2}
+  era: {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
+  baselines:
+  - attribute: {fileID: 11400000, guid: ddecce0363fd06a4db7de634dfd00dc8, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 8742e5c7a4b6fc642b8f5b740b3ecdd8, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

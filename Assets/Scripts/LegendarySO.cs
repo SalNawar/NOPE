@@ -24,4 +24,13 @@ public sealed class LegendarySO : ScriptableObject
     /// <summary>If set, forces this blueprint when the legendary appears.</summary>
     public CaseBlueprintSO blueprintOverride;
 
- 
+    [Header("Timeline")]
+    /// <summary>Archetype for this legendary (tags + default impacts).</summary>
+    public ArchetypeSO archetype;
+
+    /// <summary>Destination nation for timeline impacts (e.g., Tesla -> Germany).</summary>
+    public NationSO nation;
+
+    /// <summary>Authored timeline impacts (added on top of archetype defaults).</summary>
+    public System.Collections.Generic.List<TimelineImpact> authoredImpacts = new();
+}

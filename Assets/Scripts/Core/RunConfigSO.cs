@@ -1,4 +1,5 @@
 // ReSharper disable InconsistentNaming
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -33,5 +34,14 @@ public sealed class RunConfigSO : ScriptableObject
     /// <summary>Scene containing the home phase (expenses/shop/slot).</summary>
     public string homeSceneName = "HomeScene";
 
+    /// <summary>Scene containing the title screen (Continue/New Run + ending display).</summary>
+    public string titleSceneName = "TitleScene";
+
     [Header("Determinism")]
-    /// <summary>If non-zero,
+    /// <summary>If non-zero, every new run uses this seed (useful for testing). 0 = random.</summary>
+    public int fixedRunSeed = 0;
+
+    [Header("Home / Family")]
+    /// <summary>Family member names seeded into a new run (condition starts at 0).</summary>
+    public List<string> startingFamilyMembers = new() { "Partner", "Kid" };
+}

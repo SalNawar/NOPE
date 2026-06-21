@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Legendary_Wanderer_Visionary
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  displayName: The Visionary
+  minDay: 1
+  maxDay: 999
+  trueEra: {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
+  blueprintOverride: {fileID: 0}
+  archetype: {fileID: 11400000, guid: da73973847718a44bae58351b1e5ec41, type: 2}
+  nation: {fileID: 0}
+  authoredImpacts:
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    deltaOnCorrect: 4
+    deltaOnWrong: -2
+    alsoAffectsNationScore: 0

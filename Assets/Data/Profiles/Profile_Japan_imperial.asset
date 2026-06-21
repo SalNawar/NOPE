@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Profile_Japan_imperial
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: japan_imperial
+  displayName: Imperial Japan
+  nation: {fileID: 11400000, guid: 123086b691b7d0a44a04746ef5ef5dbf, type: 2}
+  era: {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 45
+    dominantEffect: {fileID: 11400000, guid: 59b6ed2f6363f4b49ac0d0ea6a4fee9f, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 6caf1a628e612604ab8aaf51b93e084b, type: 2}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 70
+    dominantEffect: {fileID: 11400000, guid: 54452ea4f70505c448a772141763fac1, type: 2}
+    supportingEffect: {fileID: 11400000, guid: f19c5d70a19c29d4ea83cd427b5f5873, type: 2}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 85
+    dominantEffect: {fileID: 11400000, guid: af62ac4295b0c7c4fbec4e8cf9b0c0dc, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 3d8426f7562ca624fb2827cd1e15fa64, type: 2}

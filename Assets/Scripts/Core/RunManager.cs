@@ -35,6 +35,8 @@ public sealed class RunManager : MonoBehaviour
         if (Instance != null)
             return Instance;
 
+        Debug.Log("[RunManager] >>> Entering GetOrCreate (no instance yet, bootstrapping).");
+
         var config = Resources.Load<RunConfigSO>(ConfigResourcePath);
 
         if (config == null)
@@ -50,9 +52,15 @@ public sealed class RunManager : MonoBehaviour
         mgr.Config = config;
         Instance = mgr;
 
+        // Phase 6: dev overlay (cheats + timeline inspector), toggled with '~'.
+        // Editor/dev-build only — DebugPanelController.OnGUI() no-ops otherwise.
+        go.AddComponent<DebugPanelController>();
+
         // Default boot behavior: continue an existing run, otherwise start fresh.
         if (!mgr.ContinueRun())
             mgr.NewRun();
+
+        Debug.Log($"[RunManager] <<< Exiting GetOrCreate (day {mgr.World?.day}, money={mgr.World?.money}, stability={mgr.World?.timelineStability:0.#}).");
 
         return mgr;
     }
@@ -73,6 +81,9 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void NewRun()
     {
+        Debug.Log("[RunManager] >>> Entering NewRun.");
+
+        DevToolsState.ResetAll();
         SaveSystem.Delete();
 
         World = new WorldState
@@ -85,6 +96,17 @@ public sealed class RunManager : MonoBehaviour
                 : Random.Range(int.MinValue, int.MaxValue)
         };
 
+        if (Config.startingFamilyMembers != null)
+        {
+            foreach (string name in Config.startingFamilyMembers)
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                    continue;
+
+                World.family.members.Add(new FamilyMemberData { name = name, condition = 0 });
+            }
+        }
+
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
     }
 
@@ -93,12 +115,18 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public bool ContinueRun()
     {
+        Debug.Log("[RunManager] >>> Entering ContinueRun.");
+
         WorldState loaded = SaveSystem.Load();
 
         if (loaded == null)
+        {
+            Debug.Log("[RunManager] <<< Exiting ContinueRun — no save found.");
             return false;
+        }
 
         World = loaded;
+        DevToolsState.ResetAll();
         Debug.Log($"[RunManager] Continued run (day {World.day}).");
         return true;
     }
@@ -106,6 +134,8 @@ public sealed class RunManager : MonoBehaviour
     /// <summary>Writes the current world state to disk.</summary>
     public void SaveNow()
     {
+        Debug.Log("[RunManager] >>> Entering SaveNow.");
+
         if (World == null)
         {
             Debug.LogError("RunManager.SaveNow called with no active run.");
@@ -114,6 +144,8 @@ public sealed class RunManager : MonoBehaviour
 
         if (SaveSystem.Save(World))
             Debug.Log($"[RunManager] Saved (day {World.day}).");
+        else
+            Debug.LogWarning("[RunManager] SaveNow: SaveSystem.Save reported failure.");
     }
 
     // -----------------------------
@@ -146,11 +178,15 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void AdvanceToNextDay()
     {
+        Debug.Log($"[RunManager] >>> Entering AdvanceToNextDay (day {World.day} -> {World.day + 1}).");
+
         // Nightly resolve runs BEFORE day++ so trigger conditions read "today".
         TimelineService.NightlyResolve(World, Library, Config != null ? Config.gameConfig : null);
 
         World.day++;
         World.citationsToday = 0;
+
+        Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.#}; saving and loading Office).");
 
         SaveNow();
         LoadOfficeScene();
@@ -158,4 +194,63 @@ public sealed class RunManager : MonoBehaviour
 
     /// <summary>
     /// Call at end of shift: one-day "tomorrow modifiers" (set by yesterday's
-    /// slot machine) have been consumed
+    /// slot machine) have been consumed by today's generation — reset them
+    /// before the Home phase sets new ones for tomorrow.
+    /// </summary>
+    public void ResetTomorrowModifiers()
+    {
+        Debug.Log("[RunManager] ResetTomorrowModifiers (legendaryChanceBonus, forgeryChanceModifier reset to 0; payRateMultiplier reset to 1).");
+
+        World.legendaryChanceBonus = 0f;
+        World.forgeryChanceModifier = 0f;
+        World.payRateMultiplier = 1f;
+    }
+
+    // -----------------------------
+    // Scene transitions
+    // -----------------------------
+
+    /// <summary>Loads the office scene.</summary>
+    public void LoadOfficeScene()
+    {
+        Debug.Log($"[RunManager] LoadOfficeScene -> '{Config.officeSceneName}'.");
+        SceneManager.LoadScene(Config.officeSceneName);
+    }
+
+    /// <summary>Loads the home scene.</summary>
+    public void LoadHomeScene()
+    {
+        Debug.Log($"[RunManager] LoadHomeScene -> '{Config.homeSceneName}'.");
+        SceneManager.LoadScene(Config.homeSceneName);
+    }
+
+    /// <summary>Loads the title scene (run ended — ending display, Continue/New Run).</summary>
+    public void LoadTitleScene()
+    {
+        Debug.Log($"[RunManager] LoadTitleScene -> '{Config.titleSceneName}'.");
+        SceneManager.LoadScene(Config.titleSceneName);
+    }
+
+    /// <summary>
+    /// End-of-shift handoff: goes to the Home scene if it's in Build Settings,
+    /// otherwise (Home not built yet) advances straight to the next day so the
+    /// core loop stays playable.
+    /// </summary>
+    public void GoHomeOrAdvance()
+    {
+        Debug.Log($"[RunManager] >>> Entering GoHomeOrAdvance (day {World.day}).");
+
+        if (Application.CanStreamedLevelBeLoaded(Config.homeSceneName))
+        {
+            Debug.Log($"[RunManager] <<< Exiting GoHomeOrAdvance (going to Home scene '{Config.homeSceneName}').");
+
+            SaveNow();
+            LoadHomeScene();
+        }
+        else
+        {
+            Debug.LogWarning($"[RunManager] Scene '{Config.homeSceneName}' not in Build Settings — skipping Home phase and advancing to day {World.day + 1}.");
+            AdvanceToNextDay();
+        }
+    }
+}

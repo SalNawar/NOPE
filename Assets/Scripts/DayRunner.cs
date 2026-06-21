@@ -18,6 +18,8 @@ public sealed class DayRunner : MonoBehaviour
     /// </summary>
     private void Start()
     {
+        Debug.Log("[DayRunner] >>> Entering Start (standalone test harness).");
+
         if (orchestrator == null || dayPlan == null)
         {
             Debug.LogError("DayRunner missing references (orchestrator/dayPlan).");
@@ -28,6 +30,8 @@ public sealed class DayRunner : MonoBehaviour
 
         orchestrator.OnCaseSlotStarted += HandleCaseStarted;
         orchestrator.OnCaseSlotEnded += HandleCaseEnded;
+
+        Debug.Log($"[DayRunner] <<< Exiting Start (day {_worldState.day}, seed={seed}, starting day loop).");
 
         orchestrator.StartDay(_worldState, dayPlan, seed);
     }

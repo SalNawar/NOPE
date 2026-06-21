@@ -49,6 +49,9 @@ public sealed class DayPlanSO : ScriptableObject
     // Scripted overrides
     // -----------------------------
 
+    /// <summary>Travel restrictions active this day (announced in the briefing).</summary>
+    [SerializeField] private TravelRuleSO[] activeTravelRules;
+
     /// <summary>Forced case blueprints by slot index (1-based).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
@@ -72,6 +75,24 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Public read-only legendaries list.</summary>
     public IReadOnlyList<LegendarySO> AvailableLegendaries => availableLegendaries;
+
+    /// <summary>Public read-only travel rules active this day.</summary>
+    public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
+
+    /// <summary>
+    /// Returns true if every active rule permits travel to the claimed nation+era.
+    /// </summary>
+    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra)
+    {
+        if (activeTravelRules == null)
+            return true;
+
+        foreach (TravelRuleSO rule in activeTravelRules)
+            if (rule != null && !rule.Allows(claimNation, claimEra))
+                return false;
+
+        return true;
+    }
 
     /// <summary>
     /// Tries to get a forced blueprint for the given case slot (1-based).

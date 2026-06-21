@@ -52,4 +52,23 @@ public sealed class CaseBlueprintSO : ScriptableObject
     public DocumentTemplateSO[] DocumentTemplates => documentTemplates;
 
     /// <summary>Public read-only min clues.</summary>
-    public int TotalCluesMin => totalC
+    public int TotalCluesMin => totalCluesMin;
+
+    /// <summary>Public read-only max clues.</summary>
+    public int TotalCluesMax => totalCluesMax;
+
+    /// <summary>Public read-only contradiction chance.</summary>
+    public float ContradictionChance => contradictionChance;
+
+    /// <summary>Public read-only red herring chance.</summary>
+    public float RedHerringChance => redHerringChance;
+
+    /// <summary>
+    /// Ensures min/max are sensible at edit-time.
+    /// </summary>
+    private void OnValidate()
+    {
+        if (totalCluesMax < totalCluesMin)
+            totalCluesMax = totalCluesMin;
+    }
+}

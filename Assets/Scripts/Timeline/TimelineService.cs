@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -134,6 +135,8 @@ public static class TimelineService
             return;
         }
 
+        Debug.Log($"[TimelineService] >>> Entering NightlyResolve (day {world.day} -> {world.day + 1}).");
+
         int tomorrow = world.day + 1;
         var news = new List<string>();
 
@@ -142,6 +145,8 @@ public static class TimelineService
         EvaluateTriggers(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news);
+
+        Debug.Log($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
     }
 
     /// <summary>
@@ -150,6 +155,8 @@ public static class TimelineService
     /// </summary>
     private static void RecomputeDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config, List<string> news)
     {
+        Debug.Log("[TimelineService] >>> Entering RecomputeDominance.");
+
         int dominantCount = config != null ? config.dominantPerProfile : 1;
         int supportingCount = config != null ? config.supportingPerProfile : 2;
 
@@ -174,6 +181,8 @@ public static class TimelineService
 
             ranked.Sort((a, b) => b.score.CompareTo(a.score));
 
+            Debug.Log($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", ranked.Select(r => $"{r.attr.displayName}={r.score:0.#}"))}.");
+
             for (int i = 0; i < ranked.Count; i++)
             {
                 string key = TimelineKeys.Dominance(profile, ranked[i].attr);
@@ -197,6 +206,8 @@ public static class TimelineService
 
         world.timeline.dominantKeys = newDominant;
         world.timeline.supportingKeys = newSupporting;
+
+        Debug.Log($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, newsAdded={news.Count}).");
     }
 
     /// <summary>
@@ -206,8 +217,12 @@ public static class TimelineService
     /// </summary>
     private static void RebuildTierEffects(WorldState world, ContentLibrarySO lib, int startDay)
     {
-        world.timeline.activeEffects.RemoveAll(e =>
+        Debug.Log("[TimelineService] >>> Entering RebuildTierEffects.");
+
+        int removed = world.timeline.activeEffects.RemoveAll(e =>
             e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(TierSourcePrefix));
+
+        int activated = 0;
 
         foreach (NationEraProfileSO profile in lib.Profiles)
         {
@@ -226,15 +241,19 @@ public static class TimelineService
                     ActivateEffect(world, b.dominantEffect,
                         $"{TierSourcePrefix}Dominant {b.attribute.displayName} ({profile.displayName})",
                         startDay, 1, applyInstantOps: false);
+                    activated++;
                 }
                 else if (world.timeline.supportingKeys.Contains(key) && b.supportingEffect != null)
                 {
                     ActivateEffect(world, b.supportingEffect,
                         $"{TierSourcePrefix}Supporting {b.attribute.displayName} ({profile.displayName})",
                         startDay, 1, applyInstantOps: false);
+                    activated++;
                 }
             }
         }
+
+        Debug.Log($"[TimelineService] <<< Exiting RebuildTierEffects (removed {removed} old tier effect(s), activated {activated} new).");
     }
 
     /// <summary>
@@ -242,18 +261,27 @@ public static class TimelineService
     /// </summary>
     private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news)
     {
+        int total = lib.Triggers != null ? lib.Triggers.Count : 0;
+        int fired = 0;
+
+        Debug.Log($"[TimelineService] >>> Entering EvaluateTriggers ({total} trigger(s) to check).");
+
         foreach (TimelineTriggerSO trigger in lib.Triggers)
         {
             if (trigger == null)
                 continue;
 
             if (trigger.oneShot && world.HasFlag(trigger.FiredFlag))
+            {
+                Debug.Log($"[TimelineService] Trigger '{trigger.displayName}' skipped (already fired, one-shot).");
                 continue;
+            }
 
             if (!AllConditionsPass(trigger, world))
                 continue;
 
             Debug.Log($"[Timeline] Trigger fired: {trigger.displayName}");
+            fired++;
 
             if (!string.IsNullOrEmpty(trigger.newsLineOnFire))
                 news.Add(trigger.newsLineOnFire);
@@ -273,6 +301,8 @@ public static class TimelineService
             if (trigger.oneShot)
                 world.SetFlag(trigger.FiredFlag);
         }
+
+        Debug.Log($"[TimelineService] <<< Exiting EvaluateTriggers ({fired}/{total} fired).");
     }
 
     /// <summary>Returns true if every condition on the trigger passes.</summary>
@@ -362,12 +392,20 @@ public static class TimelineService
             startDay = startDay,
             durationDays = durationDays
         });
+
+        Debug.Log($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
     }
 
     /// <summary>Removes effects that are no longer active on the given day.</summary>
     private static void ExpireEffects(WorldState world, int day)
     {
+        int before = world.timeline.activeEffects.Count;
+
         world.timeline.activeEffects.RemoveAll(e => e == null || !e.IsActiveOnDay(day));
+
+        int removed = before - world.timeline.activeEffects.Count;
+
+        Debug.Log($"[TimelineService] ExpireEffects (day {day}): removed {removed} effect(s), {world.timeline.activeEffects.Count} remain active.");
     }
 
     /// <summary>
@@ -376,6 +414,8 @@ public static class TimelineService
     /// </summary>
     private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news)
     {
+        Debug.Log("[TimelineService] >>> Entering BuildTomorrowPackage.");
+
         world.tomorrow.briefingLines.Clear();
         world.tomorrow.newsLines.Clear();
 
@@ -385,5 +425,7 @@ public static class TimelineService
         // expiry has already removed everything not active tomorrow).
         world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine));
         world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine));
+
+        Debug.Log($"[TimelineService] <<< Exiting BuildTomorrowPackage (briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count} [{news.Count} from dominance/triggers]).");
     }
 }

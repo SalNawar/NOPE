@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ee77e7c5fed0f4399e2829b953deec, type: 3}
+  m_Name: Archetype_Artist
+  m_EditorClassIdentifier: Assembly-CSharp::ArchetypeSO
+  id: artist
+  displayName: Artist
+  tags:
+  - artist
+  - art
+  - culture
+  namePool:
+  - Painter Yuki Saemon
+  - Sculptor Demos Kallis
+  - Calligrapher Mei Lan
+  - Muralist Anwar Sett
+  - Illustrator Greta Holm
+  baseWeight: 1
+  defaultImpacts:
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    deltaOnCorrect: 2
+    deltaOnWrong: -1
+    alsoAffectsNationScore: 1

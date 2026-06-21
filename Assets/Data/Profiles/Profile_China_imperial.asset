@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Profile_China_imperial
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: china_imperial
+  displayName: Imperial China
+  nation: {fileID: 11400000, guid: 48e27bc8d747c164c9769dba812b62e6, type: 2}
+  era: {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 14
+    dominantEffect: {fileID: 11400000, guid: e2ad388d56d78ff47bfe0648c14393d4, type: 2}
+    supportingEffect: {fileID: 11400000, guid: df72751bcf32ad34b92179f336da5eb2, type: 2}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 60
+    dominantEffect: {fileID: 11400000, guid: 5e8707bb7824bc04897f50345abbd106, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 0c5cd184a2d519844bf5b39ef86390c9, type: 2}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 80
+    dominantEffect: {fileID: 11400000, guid: 4477dd037b40e3c4295b67ff8c46993a, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 5b309929d0a26d14dbeaad56fa9a4964, type: 2}

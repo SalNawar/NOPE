@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ee77e7c5fed0f4399e2829b953deec, type: 3}
+  m_Name: Archetype_Soldier
+  m_EditorClassIdentifier: Assembly-CSharp::ArchetypeSO
+  id: soldier
+  displayName: Soldier
+  tags:
+  - soldier
+  - military
+  - authority
+  namePool:
+  - Captain Olen Brask
+  - Commander Hideo Mura
+  - Officer Karim Nazari
+  - Sergeant Liu Bo
+  - Colonel Greta Vance
+  baseWeight: 1
+  defaultImpacts:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    deltaOnCorrect: -1.5
+    deltaOnWrong: 0.5
+    alsoAffectsNationScore: 1

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Profile_Germany_n
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: germany_n
+  displayName: Nazi Germany
+  nation: {fileID: 11400000, guid: a298490feda01eb48a907b7a053264d3, type: 2}
+  era: {fileID: 11400000, guid: 2661fc4b2d99029488f87620a9c2783c, type: 2}
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 8
+    dominantEffect: {fileID: 11400000, guid: d7b261f98c8402b4283ad46492724ce3, type: 2}
+    supportingEffect: {fileID: 11400000, guid: d0e60f5ddbe51834aafa4f7d0d23e1cd, type: 2}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 82
+    dominantEffect: {fileID: 11400000, guid: a688bf46ea8a0474abdc122c71af8ab9, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 82d0b65f74d50c34397b01b113ebd1d3, type: 2}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 55
+    dominantEffect: {fileID: 11400000, guid: 60c2f60d7240d3741aa180f32eeb0af7, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 2b4e7226074b11a4a8e6ff4466ebc932, type: 2}

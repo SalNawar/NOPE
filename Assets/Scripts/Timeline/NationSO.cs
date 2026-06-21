@@ -13,4 +13,11 @@ public sealed class NationSO : ScriptableObject
 
     /// <summary>Display name shown in UI/news.</summary>
     public string displayName;
+
+    /// <summary>
+    /// Era-appropriate given names for visitors from this nation. Used by the
+    /// case factory so a Roman traveler reads "Marcus", a Norse one "Bjorn", etc.
+    /// Falls back to the archetype pool / a generic subject id when empty.
+    /// </summary>
+    public string[] namePool;
 }

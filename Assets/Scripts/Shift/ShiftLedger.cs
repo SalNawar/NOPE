@@ -105,4 +105,23 @@ public sealed class CaseVerdict
 
     /// <summary>Citation slip text shown to the player (empty if none).</summary>
     public string citationText = string.Empty;
+
+    // -----------------------------
+    // Investigation (accept/deny)
+    // -----------------------------
+
+    /// <summary>True if the player accepted (approved travel); false = denied.</summary>
+    public bool accepted;
+
+    /// <summary>True if accepting was the correct call (genuine + allowed).</summary>
+    public bool shouldAccept;
+
+    /// <summary>True if the case's documents were forged (had an anachronism).</summary>
+    public bool wasForged;
+
+    /// <summary>True if the claimed destination was permitted by today's rules.</summary>
+    public bool claimAllowed = true;
+
+    /// <summary>The visitor's stated travel claim, for the report.</summary>
+    public string claimSummary = string.Empty;
 }

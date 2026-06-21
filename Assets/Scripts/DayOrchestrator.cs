@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -57,6 +58,8 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     public void StartDay(WorldState worldState, DayPlanSO plan, int seed)
     {
+        Debug.Log($"[DayOrchestrator] >>> Entering StartDay (day {worldState?.day}, plan='{plan?.name}', seed={seed}).");
+
         // Stop an earlier day loop if this orchestrator is reused.
         if (_dayLoopRoutine != null)
         {
@@ -95,6 +98,8 @@ public sealed class DayOrchestrator : MonoBehaviour
         if (eventDirector != null && _worldState != null)
             eventDirector.Init(new DayEventContext(this, _worldState));
 
+        Debug.Log($"[DayOrchestrator] <<< Exiting StartDay (starting day loop with {Mathf.Max(1, dayPlan.VisitorsCount)} case slot(s)).");
+
         // Start the day loop.
         _dayLoopRoutine = StartCoroutine(DayLoop());
     }
@@ -118,8 +123,12 @@ public sealed class DayOrchestrator : MonoBehaviour
 
         int total = Mathf.Max(1, dayPlan.VisitorsCount);
 
+        Debug.Log($"[DayOrchestrator] >>> Entering DayLoop (day {_worldState?.day}, {total} case slot(s)).");
+
         while (_caseIndex1Based <= total)
         {
+            Debug.Log($"[DayOrchestrator] >>> Entering case slot {_caseIndex1Based}/{total}.");
+
             // 1) BeforeCase events
             yield return RunScheduledEvents(DayEventTrigger.BeforeCase, _caseIndex1Based);
 
@@ -150,9 +159,13 @@ public sealed class DayOrchestrator : MonoBehaviour
             // 5) AfterCase events
             yield return RunScheduledEvents(DayEventTrigger.AfterCase, _caseIndex1Based);
 
+            Debug.Log($"[DayOrchestrator] <<< Exiting case slot {_caseIndex1Based}/{total}.");
+
             // 6) Advance
             _caseIndex1Based++;
         }
+
+        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, invoking OnDayCompleted).");
 
         // All case slots resolved: the shift is over.
         OnDayCompleted?.Invoke();
@@ -163,4 +176,16 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     private IEnumerator RunScheduledEvents(DayEventTrigger trigger, int slotIndex1Based)
     {
-       
+        if (_resolvedSchedule == null || eventDirector == null)
+            yield break;
+
+        var events = _resolvedSchedule.Get(trigger, slotIndex1Based);
+
+        if (events == null || events.Count == 0)
+            yield break;
+
+        Debug.Log($"[DayOrchestrator] Running {events.Count} scheduled event(s) for trigger={trigger}, slot={slotIndex1Based}: {string.Join(", ", events.Select(e => e != null ? e.name : "<null>"))}.");
+
+        yield return eventDirector.RunEvents(events);
+    }
+}

@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Profile_Greece_classical
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: greece_classical
+  displayName: Classical Greece
+  nation: {fileID: 11400000, guid: 7c13f4721332a834c885a38fe7073d35, type: 2}
+  era: {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 75
+    dominantEffect: {fileID: 11400000, guid: 74a022e3a8d184141823ff418a6dacd8, type: 2}
+    supportingEffect: {fileID: 11400000, guid: b403f4f77cbd66540893156074fe1fcb, type: 2}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 40
+    dominantEffect: {fileID: 11400000, guid: afd305280edd66b4eaf1000a53de2343, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 1348549e3557a7e4f8b5876821845137, type: 2}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 60
+    dominantEffect: {fileID: 11400000, guid: 693845529befc20499e51c97c3371737, type: 2}
+    supportingEffect: {fileID: 11400000, guid: a8e5652a001d2a749b671ebe48f7947c, type: 2}

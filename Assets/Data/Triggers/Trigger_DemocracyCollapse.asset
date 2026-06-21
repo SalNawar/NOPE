@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5c29680f95ee1428d9fa9fb2d8790e, type: 3}
+  m_Name: Trigger_DemocracyCollapse
+  m_EditorClassIdentifier: Assembly-CSharp::TimelineTriggerSO
+  id: democracy_collapse
+  displayName: Democratic Collapse
+  description: Fires when the global Democracy attribute total falls to a low threshold,
+    increasing forgery risk.
+  oneShot: 1
+  newsLineOnFire: Reports indicate democratic institutions are crumbling across the
+    timeline.
+  conditions:
+  - type: 4
+    key: 
+    threshold: 20
+    attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
+  outcomes:
+  - effect: {fileID: 11400000, guid: 0305c253639018445aab40a9a8999063, type: 2}
+    durationDaysOverride: 3

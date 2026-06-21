@@ -28,13 +28,20 @@ public static class SaveSystem
     }
 
     /// <summary>Returns true if a save file exists.</summary>
-    public static bool HasSave() => File.Exists(SavePath);
+    public static bool HasSave()
+    {
+        bool exists = File.Exists(SavePath);
+        Debug.Log($"[SaveSystem] HasSave: {exists} ('{SavePath}').");
+        return exists;
+    }
 
     /// <summary>
     /// Writes the world state to disk. Returns true on success.
     /// </summary>
     public static bool Save(WorldState world)
     {
+        Debug.Log($"[SaveSystem] >>> Entering Save (day {world?.day}).");
+
         if (world == null)
         {
             Debug.LogError("SaveSystem.Save called with null WorldState.");
@@ -54,6 +61,9 @@ public static class SaveSystem
                 File.Delete(SavePath);
 
             File.Move(tmp, SavePath);
+
+            Debug.Log($"[SaveSystem] <<< Exiting Save (success, day {world.day}, money={world.money}, path='{SavePath}').");
+
             return true;
         }
         catch (Exception e)
@@ -68,8 +78,13 @@ public static class SaveSystem
     /// </summary>
     public static WorldState Load()
     {
+        Debug.Log("[SaveSystem] >>> Entering Load.");
+
         if (!HasSave())
+        {
+            Debug.Log("[SaveSystem] <<< Exiting Load — no save file present.");
             return null;
+        }
 
         try
         {
@@ -85,6 +100,8 @@ public static class SaveSystem
             if (file.version != SaveVersion)
                 Debug.LogWarning($"SaveSystem.Load: save version {file.version} != current {SaveVersion}. Loading with defaults for new fields.");
 
+            Debug.Log($"[SaveSystem] <<< Exiting Load (success, day {file.world.day}, money={file.world.money}, version={file.version}).");
+
             return file.world;
         }
         catch (Exception e)
@@ -97,10 +114,19 @@ public static class SaveSystem
     /// <summary>Deletes the save file (used by "New Run").</summary>
     public static void Delete()
     {
+        Debug.Log("[SaveSystem] >>> Entering Delete.");
+
         try
         {
             if (File.Exists(SavePath))
+            {
                 File.Delete(SavePath);
+                Debug.Log("[SaveSystem] <<< Exiting Delete (save file removed).");
+            }
+            else
+            {
+                Debug.Log("[SaveSystem] <<< Exiting Delete (no save file to remove).");
+            }
         }
         catch (Exception e)
         {

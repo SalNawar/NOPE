@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Test_DayLoop.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Scenes/OfficeScene.unity
+    guid: a3e1026fd346f294488b7b14e7bdd08e
+  - enabled: 1
+    path: Assets/Scenes/HomeScene.unity
+    guid: b41047f6ce494153ad374bba51f434f3
+  - enabled: 1
+    path: Assets/Scenes/TitleScene.unity
+    guid: c7a2f0d8e4b94c5ea1f6d9b3c2e5a708
   m_configObjects:
+    com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  m_UseUCBPForAssetBundles: 0

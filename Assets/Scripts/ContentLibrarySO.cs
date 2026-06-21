@@ -45,11 +45,57 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>All timeline triggers (special conditions).</summary>
     [SerializeField] private TimelineTriggerSO[] timelineTriggers;
 
+    [Header("Home (Phase 4)")]
+    /// <summary>All slot machine outcomes available at Home.</summary>
+    [SerializeField] private SlotOutcomeSO[] slotOutcomes;
+
+    [Header("Endings (Phase 5)")]
+    /// <summary>All possible run endings (fired, bankrupt, score/day thresholds).</summary>
+    [SerializeField] private EndingSO[] endings;
+
+    [Header("Investigation")]
+    /// <summary>Reference books the player consults (one per clue category).</summary>
+    [SerializeField] private ReferenceBookSO[] referenceBooks;
+
+    /// <summary>Public read-only access to reference books.</summary>
+    public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
+
+    /// <summary>Returns the first reference book for a category, or null.</summary>
+    public ReferenceBookSO GetReferenceBook(ClueCategory category)
+    {
+        if (referenceBooks == null)
+            return null;
+
+        foreach (ReferenceBookSO book in referenceBooks)
+            if (book != null && book.category == category)
+                return book;
+
+        return null;
+    }
+
+    /// <summary>Public read-only access to day plans.</summary>
+    public IReadOnlyList<DayPlanSO> DayPlans => dayPlans ?? System.Array.Empty<DayPlanSO>();
+
     /// <summary>Public read-only access to eras.</summary>
     public IReadOnlyList<EraSO> Eras => eras;
 
     /// <summary>Public read-only access to clues.</summary>
     public IReadOnlyList<ClueSO> Clues => clues;
+
+    /// <summary>Public read-only access to legendaries.</summary>
+    public IReadOnlyList<LegendarySO> Legendaries => legendaries ?? System.Array.Empty<LegendarySO>();
+
+    /// <summary>Public read-only access to effects.</summary>
+    public IReadOnlyList<EffectSO> Effects => effects ?? System.Array.Empty<EffectSO>();
+
+    /// <summary>Public read-only access to upgrades (Home shop).</summary>
+    public IReadOnlyList<UpgradeSO> Upgrades => upgrades ?? System.Array.Empty<UpgradeSO>();
+
+    /// <summary>Public read-only access to slot machine outcomes (Home).</summary>
+    public IReadOnlyList<SlotOutcomeSO> SlotOutcomes => slotOutcomes ?? System.Array.Empty<SlotOutcomeSO>();
+
+    /// <summary>Public read-only access to endings.</summary>
+    public IReadOnlyList<EndingSO> Endings => endings ?? System.Array.Empty<EndingSO>();
 
     /// <summary>Public read-only access to attributes.</summary>
     public IReadOnlyList<AttributeSO> Attributes => attributes ?? System.Array.Empty<AttributeSO>();
@@ -90,6 +136,9 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Cached lookup: upgrade id -> upgrade asset.</summary>
     private Dictionary<string, UpgradeSO> _upgradeById;
 
+    /// <summary>Cached lookup: ending id -> ending asset.</summary>
+    private Dictionary<string, EndingSO> _endingById;
+
     /// <summary>
     /// Clears cached lookups when the asset is loaded/reloaded.
     /// This prevents stale dictionaries after domain reloads or inspector edits.
@@ -99,6 +148,7 @@ public sealed class ContentLibrarySO : ScriptableObject
         _eraById = null;
         _effectByName = null;
         _upgradeById = null;
+        _endingById = null;
     }
 
     /// <summary>
@@ -128,5 +178,104 @@ public sealed class ContentLibrarySO : ScriptableObject
     }
 
     /// <summary>
+    /// Returns an Ending by its string ID (e.g., "fired", "bankrupt").
+    /// Used by the title scene to display WorldState.endingId.
+    /// </summary>
+    public EndingSO GetEndingById(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        EnsureLookups();
+        return _endingById.TryGetValue(id, out EndingSO ending) ? ending : null;
+    }
+
+    /// <summary>
     /// Returns an Effect by its asset name (effect.name).
-    /// If you later add a stable id f
+    /// If you later add a stable id field to EffectSO, switch to that.
+    /// </summary>
+    public EffectSO GetEffectByAssetName(string assetName)
+    {
+        if (string.IsNullOrWhiteSpace(assetName))
+            return null;
+
+        EnsureLookups();
+        return _effectByName.TryGetValue(assetName, out EffectSO effect) ? effect : null;
+    }
+
+    /// <summary>
+    /// Finds the DayPlan matching a given dayNumber.
+    /// Keeps day progression data-driven (D1..D7...).
+    /// </summary>
+    public DayPlanSO GetDayPlan(int dayNumber)
+    {
+        if (dayPlans == null)
+            return null;
+
+        foreach (DayPlanSO plan in dayPlans)
+        {
+            if (plan != null && plan.DayNumber == dayNumber)
+                return plan;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Builds internal dictionaries the first time they are needed.
+    /// </summary>
+    private void EnsureLookups()
+    {
+        if (_eraById != null)
+            return;
+
+        _eraById = new Dictionary<string, EraSO>(StringComparer.OrdinalIgnoreCase);
+        _effectByName = new Dictionary<string, EffectSO>(StringComparer.OrdinalIgnoreCase);
+        _upgradeById = new Dictionary<string, UpgradeSO>(StringComparer.OrdinalIgnoreCase);
+        _endingById = new Dictionary<string, EndingSO>(StringComparer.OrdinalIgnoreCase);
+
+        if (eras != null)
+        {
+            foreach (EraSO e in eras)
+            {
+                if (e == null || string.IsNullOrWhiteSpace(e.id))
+                    continue;
+
+                _eraById.TryAdd(e.id, e);
+            }
+        }
+
+        if (effects != null)
+        {
+            foreach (EffectSO fx in effects)
+            {
+                if (fx == null)
+                    continue;
+
+                _effectByName.TryAdd(fx.name, fx);
+            }
+        }
+
+        if (upgrades != null)
+        {
+            foreach (UpgradeSO u in upgrades)
+            {
+                if (u == null || string.IsNullOrWhiteSpace(u.id))
+                    continue;
+
+                _upgradeById.TryAdd(u.id, u);
+            }
+        }
+
+        if (endings != null)
+        {
+            foreach (EndingSO e in endings)
+            {
+                if (e == null || string.IsNullOrWhiteSpace(e.id))
+                    continue;
+
+                _endingById.TryAdd(e.id, e);
+            }
+        }
+    }
+}

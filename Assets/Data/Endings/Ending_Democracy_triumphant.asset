@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a706d7e07e9a2b449b2f33d3766ff7f, type: 3}
+  m_Name: Ending_Democracy_triumphant
+  m_EditorClassIdentifier: Assembly-CSharp::EndingSO
+  id: democracy_triumphant
+  displayName: Democracy Triumphant
+  bodyText: Era after era, you tipped the balance toward open assemblies and free
+    voices. Democratic ideals now ripple across the whole timeline.
+  conditionType: 2
+  attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+  threshold: 200
+  priority: 50

@@ -25,18 +25,27 @@ public sealed class CaseFactory
     /// </summary>
     public List<CaseInstance> GenerateDayCases(DayPlanSO plan, WorldState state)
     {
+        Debug.Log($"[CaseFactory] >>> Entering GenerateDayCases (day {state?.day}, plan='{plan?.name}').");
+
         var results = new List<CaseInstance>();
 
         if (plan == null || state == null || _lib == null)
+        {
+            Debug.LogWarning("[CaseFactory] <<< Exiting GenerateDayCases early — null plan/state/library.");
             return results;
+        }
 
         int total = Mathf.Max(1, plan.VisitorsCount);
+
+        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day}.");
 
         for (int i = 0; i < total; i++)
         {
             int caseIndex1Based = i + 1;
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
+
+        Debug.Log($"[CaseFactory] <<< Exiting GenerateDayCases ({results.Count} case(s) generated for day {state.day}).");
 
         return results;
     }
@@ -73,7 +82,7 @@ public sealed class CaseFactory
         // 4.5) Timeline identity: archetype, destination nation, visitor name.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
         NationSO nation = PickNation(legendary, trueEra);
-        string visitorName = ResolveVisitorName(legendary, archetype, caseIndex1Based);
+        string visitorName = ResolveVisitorName(legendary, archetype, nation, caseIndex1Based);
         string intro = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
 
         if (blueprint == null)
@@ -114,7 +123,105 @@ public sealed class CaseFactory
 
         // 6) Build documents + inject clues.
         BuildDocumentsAndClues(inst, trueEra, blueprint, state);
+
+        // 7) Investigation layer: stated claim, structured fields + forgery, daily rules.
+        inst.claimedNation = nation;
+        inst.claimedEra = trueEra;
+        inst.claimLine = BuildClaimLine(nation, trueEra);
+        inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
+        PopulateDocumentFields(inst, blueprint, state);
+
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', trueEra='{trueEra?.id}', archetype='{archetype?.displayName}', nation='{nation?.displayName}', legendary={legendary != null}, visitor='{visitorName}', forged={inst.isForged}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
+
         return inst;
+    }
+
+    /// <summary>Builds the visitor's stated travel claim line for the UI banner.</summary>
+    private static string BuildClaimLine(NationSO nation, EraSO era)
+    {
+        string when = era != null ? era.displayName : "an unlisted era";
+
+        return nation != null
+            ? $"I request passage to {nation.displayName} during {when}."
+            : $"I request passage to {when}.";
+    }
+
+    /// <summary>
+    /// Fills each document's structured fields from the reference data for the
+    /// case's claimed nation+era, then (with the blueprint's contradiction
+    /// chance) forges exactly one field into an anachronism, flagging the case.
+    /// </summary>
+    private void PopulateDocumentFields(CaseInstance inst, CaseBlueprintSO blueprint, WorldState state)
+    {
+        if (inst == null || _lib == null)
+            return;
+
+        var allFields = new List<DocumentField>();
+
+        foreach (DocumentInstance doc in inst.documents)
+        {
+            if (doc == null || doc.template == null || doc.template.fieldSpecs == null)
+                continue;
+
+            foreach (DocumentFieldSpec spec in doc.template.fieldSpecs)
+            {
+                if (spec == null)
+                    continue;
+
+                var field = new DocumentField
+                {
+                    category = spec.category,
+                    label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
+                    value = ResolveFieldValue(spec.category, inst.claimedNation, inst.claimedEra),
+                    page = Mathf.Max(0, spec.page)
+                };
+
+                doc.fields.Add(field);
+                allFields.Add(field);
+            }
+        }
+
+        if (allFields.Count == 0)
+            return;
+
+        // Chance for this case to carry a forged field (reuses the economy knobs).
+        float forgeChance = Mathf.Clamp01(
+            blueprint.ContradictionChance +
+            (state != null ? state.forgeryChanceModifier : 0f) +
+            TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
+
+        if (Random.value >= forgeChance)
+            return;
+
+        // Forge one field: replace its value with one valid for a DIFFERENT context.
+        DocumentField target = allFields[Random.Range(0, allFields.Count)];
+        ReferenceBookSO book = _lib.GetReferenceBook(target.category);
+        string wrong = book != null ? book.GetAnyOtherValue(target.value) : null;
+
+        if (!string.IsNullOrEmpty(wrong) && wrong != target.value)
+        {
+            target.value = wrong;
+            target.isAnachronism = true;
+            inst.isForged = true;
+        }
+    }
+
+    /// <summary>
+    /// Looks up the historically consistent value for a category at the claimed
+    /// nation+era from the reference books; falls back to a readable placeholder.
+    /// </summary>
+    private string ResolveFieldValue(ClueCategory category, NationSO nation, EraSO era)
+    {
+        ReferenceBookSO book = _lib != null ? _lib.GetReferenceBook(category) : null;
+        string value = book != null ? book.GetValue(nation, era) : null;
+
+        if (!string.IsNullOrEmpty(value))
+            return value;
+
+        // No authored reference: synthesize a stable placeholder so the field
+        // still renders (and is internally consistent = not a forgery).
+        string e = era != null ? era.id : "unknown";
+        return $"{category}:{e}";
     }
 
     /// <summary>
@@ -165,23 +272,33 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Resolves the visitor display name: legendary name > archetype name pool > generic subject.
+    /// Resolves the visitor display name: legendary name > nation name pool
+    /// (era-appropriate) > archetype name pool > generic subject.
     /// </summary>
-    private static string ResolveVisitorName(LegendarySO legendary, ArchetypeSO archetype, int caseIndex1Based)
+    private static string ResolveVisitorName(LegendarySO legendary, ArchetypeSO archetype, NationSO nation, int caseIndex1Based)
     {
         if (legendary != null)
             return legendary.displayName;
 
+        string role = archetype != null ? archetype.displayName : "Traveler";
+
+        // Prefer a name themed to the visitor's nation/era.
+        if (nation != null && nation.namePool != null && nation.namePool.Length > 0)
+        {
+            string picked = nation.namePool[Random.Range(0, nation.namePool.Length)];
+            if (!string.IsNullOrWhiteSpace(picked))
+                return $"{picked} ({role})";
+        }
+
         if (archetype != null && archetype.namePool != null && archetype.namePool.Length > 0)
         {
             string picked = archetype.namePool[Random.Range(0, archetype.namePool.Length)];
-
             if (!string.IsNullOrWhiteSpace(picked))
-                return $"{picked} ({archetype.displayName})";
+                return $"{picked} ({role})";
         }
 
         return archetype != null
-            ? $"Subject #{caseIndex1Based} ({archetype.displayName})"
+            ? $"Subject #{caseIndex1Based} ({role})"
             : $"Subject #{caseIndex1Based}";
     }
 
@@ -215,17 +332,15 @@ public sealed class CaseFactory
     /// </summary>
     private LegendarySO TryRollLegendary(DayPlanSO plan, WorldState state)
     {
+        bool forced = DevToolsState.ForceLegendaryNextCase;
+
         if (plan.AvailableLegendaries == null || plan.AvailableLegendaries.Count == 0)
-            return null;
+        {
+            if (forced)
+                Debug.LogWarning("[CaseFactory] TryRollLegendary: ForceLegendaryNextCase is set but this day has no AvailableLegendaries — flag left active for a later day.");
 
-        float chance = Mathf.Clamp01(
-            plan.LegendaryBaseChance +
-            state.legendaryChanceBonus +
-            TimelineEffects.SumFloat(state, _lib, EffectOpType.LegendaryChanceBonus));
-
-        // Random roll: if above chance, no legendary this case.
-        if (Random.value > chance)
             return null;
+        }
 
         int day = state.day;
 
@@ -235,7 +350,29 @@ public sealed class CaseFactory
             .ToList();
 
         if (valid.Count == 0)
+        {
+            if (forced)
+                Debug.LogWarning($"[CaseFactory] TryRollLegendary: ForceLegendaryNextCase is set but no legendary is valid for day {day} — flag left active.");
+
             return null;
+        }
+
+        if (forced)
+        {
+            Debug.Log($"[CaseFactory] TryRollLegendary: ForceLegendaryNextCase consumed (day {day}, {valid.Count} candidate(s)).");
+            DevToolsState.ForceLegendaryNextCase = false;
+        }
+        else
+        {
+            float chance = Mathf.Clamp01(
+                plan.LegendaryBaseChance +
+                state.legendaryChanceBonus +
+                TimelineEffects.SumFloat(state, _lib, EffectOpType.LegendaryChanceBonus));
+
+            // Random roll: if above chance, no legendary this case.
+            if (Random.value > chance)
+                return null;
+        }
 
         // Uniform pick among valid legendaries (add weights later if needed).
         return valid[Random.Range(0, valid.Count)];
@@ -323,4 +460,121 @@ public sealed class CaseFactory
         var picked = new List<ClueSO>();
         picked.AddRange(PickUnique(supportsTrueEra, supports));
         picked.AddRange(PickUnique(contradictsTrueEra, contradictions));
-        picked.AddRange(PickUnique(r
+        picked.AddRange(PickUnique(redHerrings, herrings));
+
+        Debug.Log($"[CaseFactory] Case {inst.caseIndex + 1}: clue selection — target={totalCluesTarget}, supports={supports}/{supportsTrueEra.Count} pool, contradicts={contradictions}/{contradictsTrueEra.Count} pool, redHerrings={herrings}/{redHerrings.Count} pool, picked={picked.Count}.");
+
+        // Store global clue list on the case.
+        inst.usedClues.AddRange(picked);
+
+        // Distribute each clue into an appropriate document.
+        foreach (ClueSO clue in picked)
+        {
+            DocumentInstance doc = PickDocForClue(docInstances, clue);
+            if (doc == null)
+                continue;
+
+            doc.cluesInDoc.Add(clue);
+        }
+
+        // Render simple text for each document (prototype-friendly).
+        foreach (DocumentInstance doc in docInstances)
+        {
+            doc.renderedText = RenderDocText(doc);
+            inst.documents.Add(doc);
+        }
+    }
+
+    /// <summary>
+    /// Determines whether a clue is allowed to appear based on unlocked upgrades.
+    /// If a clue requires an upgrade (e.g., scanner), it won't be generated until unlocked.
+    /// </summary>
+    private static bool IsClueAllowedByUpgrades(ClueSO clue, WorldState state)
+    {
+        // If no upgrade is required, the clue is always eligible.
+        if (clue.requiresUpgradeToReveal == null)
+            return true;
+
+        // If state is missing, treat gated clues as unavailable.
+        if (state == null)
+            return false;
+
+        return state.unlockedUpgradeIds.Contains(clue.requiresUpgradeToReveal.id);
+    }
+
+    /// <summary>
+    /// Randomly picks up to 'count' unique items from a pool.
+    /// </summary>
+    private static List<ClueSO> PickUnique(List<ClueSO> pool, int count)
+    {
+        var result = new List<ClueSO>();
+
+        if (pool == null || pool.Count == 0 || count <= 0)
+            return result;
+
+        var temp = new List<ClueSO>(pool);
+
+        for (int i = 0; i < count && temp.Count > 0; i++)
+        {
+            int idx = Random.Range(0, temp.Count);
+            result.Add(temp[idx]);
+            temp.RemoveAt(idx);
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Chooses which document should contain a given clue.
+    /// Prefers templates whose preferredCategories include the clue’s category,
+    /// and respects each template’s maxClues limit when possible.
+    /// </summary>
+    private static DocumentInstance PickDocForClue(List<DocumentInstance> docs, ClueSO clue)
+    {
+        if (docs == null || docs.Count == 0 || clue == null)
+            return null;
+
+        // Prefer docs that want this clue category and have room.
+        var preferred = docs.Where(d =>
+            d != null &&
+            d.template != null &&
+            d.template.preferredCategories != null &&
+            d.template.preferredCategories.Contains(clue.category) &&
+            d.cluesInDoc.Count < d.template.maxClues
+        ).ToList();
+
+        if (preferred.Count > 0)
+            return preferred[Random.Range(0, preferred.Count)];
+
+        // Otherwise choose any doc that still has room.
+        var any = docs.Where(d =>
+            d != null &&
+            d.template != null &&
+            d.cluesInDoc.Count < d.template.maxClues
+        ).ToList();
+
+        if (any.Count > 0)
+            return any[Random.Range(0, any.Count)];
+
+        // Worst case: all docs are "full" -> dump into a random doc anyway.
+        return docs[Random.Range(0, docs.Count)];
+    }
+
+    /// <summary>
+    /// Produces a simple, readable document string from its clues.
+    /// This keeps the prototype UI trivial (just show a block of text).
+    /// </summary>
+    private static string RenderDocText(DocumentInstance doc)
+    {
+        string header = doc.template != null ? doc.template.displayName : "Document";
+
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine(header);
+        sb.AppendLine("----------------");
+
+        foreach (ClueSO clue in doc.cluesInDoc)
+            sb.AppendLine("• " + clue.text);
+
+        return sb.ToString();
+    }
+}

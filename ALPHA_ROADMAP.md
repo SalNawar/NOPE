@@ -43,29 +43,67 @@ This doc is the handoff state for any work session. Update the checkboxes as pha
       TimelineService (impacts + nightly resolve), TimelineEffects (stacking queries),
       TimelineCueReceiver, CaseFactory archetype/nation/effect-modifier integration,
       ContentLibrary timeline arrays.
-- [ ] Phase 3 — End-of-day results screen (ledger breakdown) + morning briefing panel
-      (TomorrowPackage lines) in OfficeScene; "go home" button -> HomeScene.
-- [ ] Phase 4 — HomeScene: expenses sheet (family conditions), upgrade shop
-      (UpgradeSO needs cost field; use TimelineEffects.GetShopDiscountPercent),
-      slot machine (SlotOutcomeSO -> tomorrow modifiers and/or effects),
-      sleep -> RunManager.AdvanceToNextDay().
-- [ ] Phase 5 — Progression & endings: fired/bankrupt game-over screen, ending
-      conditions from timeline scores (e.g., attrTotal threshold), title scene
-      (Continue/New Run), scene flow polish.
+- [x] Phase 3 — DayFlowUIController (briefing panel from TomorrowPackage, results
+      panel from ShiftLedger), GameManager flow (briefing -> shift -> results -> home),
+      RunManager.GoHomeOrAdvance (skips missing HomeScene), editor tool
+      Tools > TimeDesk > Build Office UI (creates + wires HUD/citation/briefing/results).
+- [x] Phase 4 — HomeScene: GameConfigSO Home/Family + Home/Slot Machine fields
+      (expense rates, condition care, slot spin cost), UpgradeSO (description/cost/
+      unlockEffect), SlotOutcomeSO (weighted outcomes -> money/tomorrow modifiers/
+      effects), ContentLibrarySO.Upgrades + SlotOutcomes accessors, RunConfigSO
+      startingFamilyMembers (seeded by RunManager.NewRun), HomeEconomy (expenses,
+      family condition drift, Treat), HomeUIController (HUD + Expenses/Shop/Slot/
+      Sleep panels, optional + runtime-spawned rows), HomeManager (Expenses -> Shop
+      -> Slot -> Sleep -> RunManager.AdvanceToNextDay), HomeScene.unity + editor tool
+      Tools > TimeDesk > Build Home UI (creates Canvas/EventSystem/HomeManager/
+      HomeUI and wires every panel), both OfficeScene and HomeScene registered in
+      Build Settings.
+- [x] Phase 5 — Progression & endings: WorldState.endingId, GameConfigSO.
+      bankruptcyMoneyThreshold, EndingSO (TimeDesk/Endings/Ending — Fired/
+      Bankrupt/AttrTotalAtLeast/DayAtLeast conditions + priority),
+      ContentLibrarySO.Endings + GetEndingById, EndingService.Evaluate
+      (highest-priority match). GameManager checks for an ending after each
+      verdict (catches Fired) and HomeManager checks before sleep (catches
+      Bankrupt/score/day endings); a match sets WorldState.endingId, saves,
+      and loads TitleScene. RunConfigSO.titleSceneName + RunManager.
+      LoadTitleScene(). TitleScene.unity (registered in Build Settings),
+      TitleSceneController (ending display + Continue/New Run via
+      SaveSystem.HasSave()/RunManager.NewRun()), TitleUIController (optional
+      title/ending panels), editor tool Tools > TimeDesk > Build Title UI.
 - [ ] Phase 6 — Dev tools: in-game debug panel (skip day, +money, set flags,
       force legendary, unlock upgrades), timeline inspector (live scores/dominance/
       active effects), editor ContentLibrary validator menu item.
-- [ ] Phase 7 — Content pass: Day 1-3 plans, 3+ archetypes, 2 nations x profiles,
-      4+ attributes, 2-3 triggers (e.g., scientists->discount), 3 upgrades with costs,
-      slot outcomes, Tesla-style legendary with authored impacts, briefing/news copy.
+- [x] Phase 7 — Content pass: editor tool Tools > TimeDesk > Generate Phase 7 Content
+      (Assets/Editor/Phase7ContentGenerator.cs) authors Day 2-3 plans, 6 archetypes,
+      5 nations x era profiles (Greece/NGermany/Japan/Egypt/China) with 3 attributes
+      (Democracy, Science, Art) and 30 dominant/supporting BriefingLine effects,
+      21 nation legendaries (3 per nation) + 6 unaffiliated "famous" legendaries
+      (2 per attribute), 3 timeline triggers (science boom/democracy collapse/art
+      renaissance), 3 upgrades with costs, 5 slot outcomes, 6 endings (Fired/
+      Bankrupt/3x AttrTotalAtLeast/DayAtLeast retirement), all wired into
+      ContentLibrary_Main. Run the menu item once in the Unity Editor to materialize
+      the ~92 new ScriptableObject assets under Assets/Data/.
+      KNOWN GAP: Japan/Egypt/China have no dedicated ClueSO/DocTemplateSO assets yet —
+      cases set in these eras draw red-herring clues from the existing Greece/NGermany
+      pool (CaseFactory degrades gracefully). Author era-specific clues in a future pass.
 
 ## Scene wiring still needed (user, in editor)
 
-- OfficeScene: wire OfficeUIController new fields — moneyText, stabilityText, dayText,
-  citationPanel, citationText, citationContinueButton.
+- OfficeScene: open the scene and run Tools > TimeDesk > Build Office UI to create
+  and wire HUD/citation/briefing/results (OfficeUIController new fields — moneyText,
+  stabilityText, dayText, citationPanel, citationText, citationContinueButton).
+- HomeScene: open the scene and run Tools > TimeDesk > Build Home UI to create
+  Canvas/EventSystem/HomeManager/HomeUIController and wire all four panels
+  (Expenses/Shop/Slot/Sleep) + HUD. Re-running is safe (finds existing pieces by name).
+- TitleScene: open the scene and run Tools > TimeDesk > Build Title UI to create
+  Canvas/EventSystem/TitleSceneController/TitleUIController and wire the Title
+  panel (Continue/New Run) and Ending panel (display name + body + New Run).
+  Re-running is safe (finds existing pieces by name).
 - ContentLibrary_Main: assign new arrays (attributes, nations, nationEraProfiles,
-  archetypes, timelineTriggers) as content gets authored.
-- HomeScene does not exist yet (Phase 4 creates it; add to Build Settings).
+  archetypes, timelineTriggers, upgrades, slotOutcomes, endings) as content
+  gets authored. No EndingSO assets exist yet — until Phase 7 authors at least
+  a "Fired" ending, EndingService.Evaluate always returns null and
+  verdict.firedNow only logs a warning (run continues).
 
 ## Conventions
 

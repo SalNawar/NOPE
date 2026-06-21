@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4ee77e7c5fed0f4399e2829b953deec, type: 3}
+  m_Name: Archetype_Merchant
+  m_EditorClassIdentifier: Assembly-CSharp::ArchetypeSO
+  id: merchant
+  displayName: Merchant
+  tags:
+  - merchant
+  namePool: []
+  baseWeight: 1
+  defaultImpacts:
+  - attribute: {fileID: 11400000, guid: 8742e5c7a4b6fc642b8f5b740b3ecdd8, type: 2}
+    deltaOnCorrect: 1
+    deltaOnWrong: -1
+    alsoAffectsNationScore: 1

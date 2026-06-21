@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
+  m_Name: CaseBlueprint_Investigation
+  m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
+  difficulty: 2
+  documentTemplates:
+  - {fileID: 11400000, guid: 7115ffb801437e74e952901ce77709be, type: 2}
+  - {fileID: 11400000, guid: cefbe7bd13caed14ba317cb4ca9e160f, type: 2}
+  totalCluesMin: 0
+  totalCluesMax: 0
+  contradictionChance: 0.5
+  redHerringChance: 0.1
+  archetypePool:
+  - {fileID: 11400000, guid: 2b72306525545af429d4406d35b8117a, type: 2}
+  - {fileID: 11400000, guid: 037a374c8da872c49927573b142f5a02, type: 2}
+  - {fileID: 11400000, guid: 640e3d609c682ef45b7db445a250b559, type: 2}
+  - {fileID: 11400000, guid: e6fa9a09c04b5424ab8c6b60aea01d66, type: 2}
+  authoredImpacts: []

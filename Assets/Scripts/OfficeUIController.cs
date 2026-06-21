@@ -163,4 +163,123 @@ public sealed class OfficeUIController : MonoBehaviour
         if (!_isAwaitingChoice)
             return;
 
-        _isAwaitingChoice = fa
+        _isAwaitingChoice = false;
+        SetEraButtonsInteractable(false);
+
+        _onEraChosen?.Invoke(chosenEra);
+    }
+
+    /// <summary>
+    /// Enables/disables all spawned buttons.
+    /// </summary>
+    private void SetEraButtonsInteractable(bool interactable)
+    {
+        for (int i = 0; i < _spawnedButtons.Count; i++)
+        {
+            if (_spawnedButtons[i] != null)
+                _spawnedButtons[i].interactable = interactable;
+        }
+    }
+
+    /// <summary>
+    /// Destroys any previously spawned era buttons (keeps the template).
+    /// </summary>
+    private void ClearEraButtons()
+    {
+        for (int i = 0; i < _spawnedButtons.Count; i++)
+        {
+            if (_spawnedButtons[i] != null)
+                Destroy(_spawnedButtons[i].gameObject);
+        }
+
+        _spawnedButtons.Clear();
+    }
+
+    /// <summary>
+    /// Updates the result label (call from GameManager after validation).
+    /// </summary>
+    public void SetResultText(string text)
+    {
+        if (resultText != null)
+            resultText.text = text;
+    }
+
+    /// <summary>
+    /// Refreshes the money/stability/day HUD from world state.
+    /// Safe to call with unwired HUD fields.
+    /// </summary>
+    public void UpdateHud(WorldState world)
+    {
+        if (world == null)
+            return;
+
+        if (moneyText != null)
+            moneyText.text = $"Credits: {world.money}";
+
+        if (stabilityText != null)
+            stabilityText.text = $"Stability: {world.timelineStability:0}%";
+
+        if (dayText != null)
+            dayText.text = $"Day {world.day}";
+    }
+
+    /// <summary>
+    /// Shows a verdict: result line, plus a citation slip when issued.
+    /// If the citation panel is wired, the day pauses until the player dismisses it;
+    /// otherwise onContinue is invoked immediately.
+    /// </summary>
+    public void ShowVerdict(CaseVerdict verdict, Action onContinue)
+    {
+        if (verdict == null)
+        {
+            onContinue?.Invoke();
+            return;
+        }
+
+        if (resultText != null)
+        {
+            resultText.text = verdict.correct
+                ? $"CORRECT  (+{verdict.payAwarded} credits)"
+                : $"WRONG  ({verdict.stabilityDelta:+0.#;-0.#} stability{(verdict.moneyPenalty > 0 ? $", -{verdict.moneyPenalty} credits" : string.Empty)})";
+        }
+
+        bool canShowSlip = verdict.citationIssued && citationPanel != null && citationText != null;
+
+        if (!canShowSlip)
+        {
+            onContinue?.Invoke();
+            return;
+        }
+
+        // Open the slip and hold the day until dismissed.
+        _onCitationDismissed = onContinue;
+        citationText.text = verdict.citationText;
+        citationPanel.SetActive(true);
+
+        if (citationContinueButton != null)
+        {
+            citationContinueButton.onClick.RemoveListener(HandleCitationDismissed);
+            citationContinueButton.onClick.AddListener(HandleCitationDismissed);
+        }
+        else
+        {
+            // No button wired: leave the slip visible (next case hides it)
+            // but don't block the day.
+            _onCitationDismissed = null;
+            onContinue?.Invoke();
+        }
+    }
+
+    /// <summary>
+    /// Closes the citation slip and resumes the day.
+    /// </summary>
+    private void HandleCitationDismissed()
+    {
+        if (citationPanel != null)
+            citationPanel.SetActive(false);
+
+        Action cb = _onCitationDismissed;
+        _onCitationDismissed = null;
+        cb?.Invoke();
+    }
+}

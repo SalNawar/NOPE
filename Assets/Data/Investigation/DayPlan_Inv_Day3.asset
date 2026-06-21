@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceffdf2085ba5d54684633fc38a393f9, type: 3}
+  m_Name: DayPlan_Inv_Day3
+  m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
+  dayNumber: 3
+  visitorsCount: 7
+  possibleBlueprints:
+  - {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
+  eraWeights:
+  - era: {fileID: 11400000, guid: 534846cde921ef949a1905cece8a8d6f, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: a66b025b152f6e048b2667fbc96ec12e, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
+    weight: 1
+  legendaryBaseChance: 0.05
+  availableLegendaries: []
+  activeTravelRules:
+  - {fileID: 11400000, guid: 579af5ca677572f4c83671ef19cc7271, type: 2}
+  - {fileID: 11400000, guid: 8ee68e8e7b7192f41bef5023d1eddc4b, type: 2}
+  forcedCases: []
+  eventRules: []

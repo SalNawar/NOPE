@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Legendary_Egypt_Painter
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  displayName: Amara Sett
+  minDay: 1
+  maxDay: 999
+  trueEra: {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
+  blueprintOverride: {fileID: 0}
+  archetype: {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
+  nation: {fileID: 11400000, guid: c759b5e80745f6c4fba1ea24dd7b2d76, type: 2}
+  authoredImpacts:
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    deltaOnCorrect: 3
+    deltaOnWrong: -1
+    alsoAffectsNationScore: 1

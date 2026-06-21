@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5c29680f95ee1428d9fa9fb2d8790e, type: 3}
+  m_Name: Trigger_ArtRenaissance
+  m_EditorClassIdentifier: Assembly-CSharp::TimelineTriggerSO
+  id: art_renaissance
+  displayName: Art Renaissance
+  description: Fires when the global Art attribute total reaches a high threshold,
+    boosting legendary visitor chance.
+  oneShot: 1
+  newsLineOnFire: A renaissance of artistic movements ripples through every era.
+  conditions:
+  - type: 3
+    key: 
+    threshold: 150
+    attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
+  outcomes:
+  - effect: {fileID: 11400000, guid: 0ccbbc48b44738946aa53c9ba0b76dcd, type: 2}
+    durationDaysOverride: 3

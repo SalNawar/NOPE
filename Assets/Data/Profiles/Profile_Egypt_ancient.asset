@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Profile_Egypt_ancient
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: egypt_ancient
+  displayName: Ancient Egypt
+  nation: {fileID: 11400000, guid: c759b5e80745f6c4fba1ea24dd7b2d76, type: 2}
+  era: {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 18
+    dominantEffect: {fileID: 11400000, guid: d75fc26e9a8769546b0ce8c54ec03ba4, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 5e0172ae36c156d429a2917710c9a31e, type: 2}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 35
+    dominantEffect: {fileID: 11400000, guid: 88afb86db7d34fd49ae581f426a8190c, type: 2}
+    supportingEffect: {fileID: 11400000, guid: 063645ae28f737b48940d3131953d056, type: 2}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 78
+    dominantEffect: {fileID: 11400000, guid: a044b71064a91fa4397e94c9199c301c, type: 2}
+    supportingEffect: {fileID: 11400000, guid: d879ab0741e9cf843b4ff51f7c19acd7, type: 2}
