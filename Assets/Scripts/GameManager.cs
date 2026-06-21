@@ -30,6 +30,12 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Briefing + end-of-day panels (optional; flow skips if unassigned).</summary>
     [SerializeField] private DayFlowUIController dayFlowUI;
 
+    /// <summary>Optional: pulls back to the booth and arms the READY sign per case.</summary>
+    [SerializeField] private OfficeViewController officeView;
+
+    /// <summary>Optional: the READY sign that releases the per-case gate.</summary>
+    [SerializeField] private Clickable readySign;
+
     /// <summary>Seed for deterministic day schedule randomness.</summary>
     [SerializeField] private int seed = 12345;
 
@@ -47,6 +53,9 @@ public sealed class GameManager : MonoBehaviour
 
     /// <summary>Verdict record for the current shift (results screen reads this).</summary>
     private ShiftLedger _ledger;
+
+    /// <summary>Per-case readiness gate, released by the READY sign.</summary>
+    private readonly ReadyGate _readyGate = new ReadyGate();
 
     /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
     private GameConfigSO _gameConfig;
@@ -120,6 +129,10 @@ public sealed class GameManager : MonoBehaviour
         orchestrator.OnCaseSlotStarted += HandleCaseSlotStarted;
         orchestrator.OnCaseSlotEnded += HandleCaseSlotEnded;
         orchestrator.OnDayCompleted += HandleDayCompleted;
+
+        // READY sign releases the per-case gate (only meaningful when wired).
+        if (readySign != null)
+            readySign.onClick.AddListener(() => _readyGate.Release());
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}.");
 
@@ -247,13 +260,45 @@ public sealed class GameManager : MonoBehaviour
         if (officeUI != null)
             officeUI.SetResultText(string.Empty);
 
-        // Show UI and wait for the player's decision.
+        // Return to the booth and wait for the player to tap READY before
+        // presenting the visitor. With no view/sign wired, show immediately.
+        if (officeView != null && readySign != null)
+        {
+            officeView.FocusOffice();
+            readySign.Interactable = true;
+            _readyGate.Arm();
+            _readyGate.Released += ShowActiveCaseOnce;
+        }
+        else
+        {
+            ShowActiveCase(inst);
+        }
+
+        Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
+    }
+
+    /// <summary>One-shot handler so the gate shows the case a single time.</summary>
+    private void ShowActiveCaseOnce()
+    {
+        _readyGate.Released -= ShowActiveCaseOnce;
+
+        int idx = _activeCaseIndex1Based - 1;
+        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
+            return;
+
+        if (readySign != null)
+            readySign.Interactable = false;
+
+        ShowActiveCase(_dayCases[idx]);
+    }
+
+    /// <summary>Presents a case via the investigation UI (or legacy era UI).</summary>
+    private void ShowActiveCase(CaseInstance inst)
+    {
         if (investigationUI != null)
             investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
         else
             officeUI.ShowCase(inst, contentLibrary.Eras, HandlePlayerChoseEra);
-
-        Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
     }
 
     /// <summary>
