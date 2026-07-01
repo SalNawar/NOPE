@@ -36,6 +36,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
+    private readonly List<GameObject> _docIcons = new();
     private bool _booksBuilt;
     private string _directives = "Directives: all destinations cleared.";
 
@@ -114,17 +115,25 @@ public sealed class InvestigationUIController : MonoBehaviour
                 Destroy(w);
         _docWindows.Clear();
 
+        foreach (GameObject ic in _docIcons)
+            if (ic != null)
+                Destroy(ic);
+        _docIcons.Clear();
+
         if (inst != null)
         {
             int i = 0;
             foreach (DocumentInstance doc in inst.documents)
             {
                 DocumentWindowController clone = Instantiate(documentWindowTemplate, windowLayer);
-                clone.gameObject.SetActive(true);
+                clone.gameObject.SetActive(false); // opened from its desktop icon
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
                 clone.SetDocument(doc, compareController);
                 _docWindows.Add(clone.gameObject);
+
+                string docName = doc != null && doc.template != null ? doc.template.displayName : "Document";
+                AddDesktopIcon(docName, clone.gameObject, true);
                 i++;
             }
         }
@@ -161,23 +170,41 @@ public sealed class InvestigationUIController : MonoBehaviour
             GameObject winGo = win.gameObject;
             winGo.SetActive(false);
 
-            Button btn = Instantiate(bookShelfButtonTemplate, bookShelfRoot);
-            btn.gameObject.SetActive(true);
-            TMP_Text label = btn.GetComponentInChildren<TMP_Text>(true);
-            if (label != null)
-                label.text = book.displayName;
-
-            GameObject captured = winGo;
-            btn.onClick.AddListener(() =>
-            {
-                bool now = !captured.activeSelf;
-                captured.SetActive(now);
-                if (now)
-                    captured.transform.SetAsLastSibling();
-            });
-
+            AddDesktopIcon(book.displayName, winGo, false);
             i++;
         }
+    }
+
+    /// <summary>
+    /// Adds a desktop icon tile (in the icon grid) that toggles a window's
+    /// visibility. Document icons are tracked so they can be cleared per case and
+    /// sit at the top of the grid.
+    /// </summary>
+    private void AddDesktopIcon(string label, GameObject window, bool isDocument)
+    {
+        if (bookShelfButtonTemplate == null || bookShelfRoot == null || window == null)
+            return;
+
+        Button btn = Instantiate(bookShelfButtonTemplate, bookShelfRoot);
+        btn.gameObject.SetActive(true);
+        if (isDocument)
+            btn.transform.SetAsFirstSibling();
+
+        TMP_Text text = btn.GetComponentInChildren<TMP_Text>(true);
+        if (text != null)
+            text.text = label;
+
+        GameObject captured = window;
+        btn.onClick.AddListener(() =>
+        {
+            bool now = !captured.activeSelf;
+            captured.SetActive(now);
+            if (now)
+                captured.transform.SetAsLastSibling();
+        });
+
+        if (isDocument)
+            _docIcons.Add(btn.gameObject);
     }
 
     private void WireDecisionButtons(Button accept, Button deny)

@@ -50,57 +50,67 @@
     <Analyzer Include="E:\unity\NOPE\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d\Runtime\MVVM\SourceGenerators\netstandard2.0\MVVMSourceGenerators.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\DayOrchestrator.cs" />
-    <Compile Include="Assets\Scripts\Investigation\ReferenceBookSO.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineTriggerSO.cs" />
+    <Compile Include="Assets\Scripts\DayOrchestrator.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineCueReceiver.cs" />
     <Compile Include="Assets\Scripts\DevTools\DevToolsState.cs" />
+    <Compile Include="Assets\Scripts\UI\InvestigationUIController.cs" />
+    <Compile Include="Assets\Scripts\Home\SlotOutcomeSO.cs" />
+    <Compile Include="Assets\Scripts\Timeline\AttributeSO.cs" />
+    <Compile Include="Assets\Scripts\UI\DocumentWindowController.cs" />
+    <Compile Include="Assets\Scripts\WorldState.cs" />
+    <Compile Include="Assets\Scripts\UpgradeSO.cs" />
+    <Compile Include="Assets\Scripts\Investigation\TravelRuleSO.cs" />
+    <Compile Include="Assets\Scripts\UI\DayFlowUIController.cs" />
+    <Compile Include="Assets\Scripts\Endings\EndingSO.cs" />
+    <Compile Include="Assets\Scripts\Timeline\TimelineReactiveSprite.cs" />
+    <Compile Include="Assets\Scripts\Office\ICameraRig.cs" />
+    <Compile Include="Assets\Scripts\Endings\EndingService.cs" />
+    <Compile Include="Assets\Scripts\Timeline\NationEraProfileSO.cs" />
+    <Compile Include="Assets\Scripts\DayEventDirector.cs" />
+    <Compile Include="Assets\Scripts\Timeline\ArchetypeSO.cs" />
+    <Compile Include="Assets\Scripts\Office\OfficeReadouts.cs" />
+    <Compile Include="Assets\Scripts\UI\TitleUIController.cs" />
+    <Compile Include="Assets\Scripts\UI\OSWindowChrome.cs" />
+    <Compile Include="Assets\Scripts\DayRunner.cs" />
+    <Compile Include="Assets\Scripts\DocumentTemplateSO.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Scripts\DayEventSO.cs" />
+    <Compile Include="Assets\Scripts\WeightedRandom.cs" />
+    <Compile Include="Assets\Scripts\DevTools\DebugPanelController.cs" />
+    <Compile Include="Assets\Scripts\ClueSO.cs" />
+    <Compile Include="Assets\Scripts\UI\CompareController.cs" />
+    <Compile Include="Assets\Scripts\UI\DesktopIcon.cs" />
+    <Compile Include="Assets\Scripts\Investigation\ReferenceBookSO.cs" />
     <Compile Include="Assets\Scripts\Home\HomeManager.cs" />
     <Compile Include="Assets\Scripts\LegendarySO.cs" />
-    <Compile Include="Assets\Scripts\UI\InvestigationUIController.cs" />
     <Compile Include="Assets\Scripts\Shift\ShiftScoring.cs" />
     <Compile Include="Assets\Scripts\CaseFactory.cs" />
-    <Compile Include="Assets\Scripts\Home\SlotOutcomeSO.cs" />
     <Compile Include="Assets\Scripts\ResolvedDaySchedule.cs" />
+    <Compile Include="Assets\Scripts\Office\OfficeViewController.cs" />
     <Compile Include="Assets\Scripts\ContentLibrarySO.cs" />
     <Compile Include="Assets\Scripts\OfficeUIController.cs" />
     <Compile Include="Assets\Scripts\UI\DraggableWindow.cs" />
     <Compile Include="Assets\Scripts\Core\SaveSystem.cs" />
     <Compile Include="Assets\Scripts\Investigation\DocumentField.cs" />
-    <Compile Include="Assets\Scripts\Timeline\AttributeSO.cs" />
-    <Compile Include="Assets\Scripts\UI\DocumentWindowController.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineEffects.cs" />
-    <Compile Include="Assets\Scripts\WorldState.cs" />
     <Compile Include="Assets\Scripts\CaseInstance.cs" />
-    <Compile Include="Assets\Scripts\UpgradeSO.cs" />
-    <Compile Include="Assets\Scripts\Investigation\TravelRuleSO.cs" />
     <Compile Include="Assets\Scripts\EffectSO.cs" />
-    <Compile Include="Assets\Scripts\UI\DayFlowUIController.cs" />
-    <Compile Include="Assets\Scripts\Endings\EndingSO.cs" />
+    <Compile Include="Assets\Scripts\UI\DesktopShell.cs" />
+    <Compile Include="Assets\Scripts\UI\Clickable.cs" />
     <Compile Include="Assets\Scripts\UI\HomeUIController.cs" />
     <Compile Include="Assets\Scripts\Timeline\NationSO.cs" />
     <Compile Include="Assets\Scripts\EraSO.cs" />
-    <Compile Include="Assets\Scripts\Endings\EndingService.cs" />
+    <Compile Include="Assets\Scripts\Office\ReadyGate.cs" />
     <Compile Include="Assets\Scripts\Core\RunManager.cs" />
-    <Compile Include="Assets\Scripts\Timeline\NationEraProfileSO.cs" />
-    <Compile Include="Assets\Scripts\DayEventDirector.cs" />
-    <Compile Include="Assets\Scripts\Timeline\ArchetypeSO.cs" />
-    <Compile Include="Assets\Scripts\UI\TitleUIController.cs" />
+    <Compile Include="Assets\Scripts\Office\CinemachineCameraRig.cs" />
     <Compile Include="Assets\Scripts\Shift\ShiftLedger.cs" />
-    <Compile Include="Assets\Scripts\DocumentTemplateSO.cs" />
-    <Compile Include="Assets\Scripts\DayRunner.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineService.cs" />
     <Compile Include="Assets\Scripts\UI\ReferenceBookWindowController.cs" />
     <Compile Include="Assets\Scripts\DayPlanSO.cs" />
     <Compile Include="Assets\Scripts\Home\HomeEconomy.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\DayEventSO.cs" />
-    <Compile Include="Assets\Scripts\WeightedRandom.cs" />
     <Compile Include="Assets\Scripts\TitleSceneController.cs" />
-    <Compile Include="Assets\Scripts\DevTools\DebugPanelController.cs" />
     <Compile Include="Assets\Scripts\Core\RunConfigSO.cs" />
-    <Compile Include="Assets\Scripts\ClueSO.cs" />
-    <Compile Include="Assets\Scripts\UI\CompareController.cs" />
     <Compile Include="Assets\Scripts\CaseBlueprintSO.cs" />
     <Compile Include="Assets\Scripts\Core\GameConfigSO.cs" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -952,6 +962,9 @@
     <Reference Include="Unity.InternalAPIEditorBridge.001">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Splines.Editor">
+      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
     </Reference>
@@ -1057,6 +1070,9 @@
     <Reference Include="Unity.InputSystem">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.Splines">
+      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.AppUI.Redux">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Redux.dll</HintPath>
     </Reference>
@@ -1116,6 +1132,12 @@
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Cinemachine.Editor">
+      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Cinemachine">
+      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.ShaderGraph.Editor">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.ShaderGraph.Editor.dll</HintPath>
@@ -1209,6 +1231,9 @@
     </Reference>
     <Reference Include="Unity.InferenceEngine.iOSBLAS">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.iOSBLAS.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Settings.Editor">
+      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Settings.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>

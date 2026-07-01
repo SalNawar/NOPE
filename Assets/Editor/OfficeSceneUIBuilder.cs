@@ -118,12 +118,14 @@ public static class OfficeSceneUIBuilder
         // Claim on a translucent XP-blue strip; directives as a yellow sticky note.
         Panel(investRoot, "ClaimStrip", new Vector2(0.06f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, new Color(0.06f, 0.18f, 0.42f, 0.8f));
         TMP_Text claimText = Text(investRoot, "ClaimBanner", "Visitor", 26, TextAlignmentOptions.Center, new Vector2(0.1f, 0.88f), new Vector2(0.9f, 0.99f), Color.white);
-        Transform note = Panel(investRoot, "DirectivesNote", new Vector2(0.01f, 0.52f), new Vector2(0.235f, 0.86f), Vector2.zero, Vector2.zero, new Color(1f, 0.96f, 0.6f, 0.97f));
+        Transform note = Panel(investRoot, "DirectivesNote", new Vector2(0.78f, 0.5f), new Vector2(0.99f, 0.85f), Vector2.zero, Vector2.zero, new Color(1f, 0.96f, 0.6f, 0.97f));
         TMP_Text directivesText = Text(note, "Directives", "Directives:", 18, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.95f), new Color(0.16f, 0.13f, 0.03f, 1f));
 
         // Book shelf (above the taskbar)
-        Transform bookShelf = Panel(investRoot, "BookShelf", new Vector2(0.01f, 0.17f), new Vector2(0.4f, 0.25f), Vector2.zero, Vector2.zero, null);
-        AddHLayout(bookShelf, 8f);
+        // Left-edge desktop icon grid (OS-style tiles). Investigation documents +
+        // reference books + the new desktop apps all register their launch tiles here.
+        Transform bookShelf = Panel(investRoot, "BookShelf", new Vector2(0.008f, 0.16f), new Vector2(0.16f, 0.9f), Vector2.zero, Vector2.zero, null);
+        AddGridLayout(bookShelf, new Vector2(82f, 60f), new Vector2(6f, 6f));
         Button shelfButtonTemplate = MakeButton(bookShelf, "BookShelfButtonTemplate", "Book", Vector2.zero, Vector2.one);
         shelfButtonTemplate.gameObject.SetActive(false);
 
@@ -165,9 +167,9 @@ public static class OfficeSceneUIBuilder
         // the Monitor-Focus desktop, hidden until the CRT is focused.
         OfficeViewController officeView = BuildBooth(canvas);
 
-        // Fake-OS desktop shell: icon set (+ unlock-gating), windows with
-        // min/max/close chrome, and a Start menu (Settings + Power).
-        BuildDesktopShell(canvas);
+        // Fake-OS desktop shell: NEW apps only (existing document/reference/compare
+        // windows are launched by the investigation icon grid), plus a Start menu.
+        BuildDesktopShell(canvas, bookShelf, windowLayer);
 
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
@@ -405,6 +407,29 @@ public static class OfficeSceneUIBuilder
         l.childForceExpandHeight = true;
         l.childControlWidth = true;
         l.childControlHeight = true;
+    }
+
+    private static void AddGridLayout(Transform t, Vector2 cell, Vector2 spacing)
+    {
+        // A GameObject can only host one layout group — drop any conflicting one.
+        HorizontalLayoutGroup h = t.GetComponent<HorizontalLayoutGroup>();
+        if (h != null)
+            Object.DestroyImmediate(h);
+        VerticalLayoutGroup v = t.GetComponent<VerticalLayoutGroup>();
+        if (v != null)
+            Object.DestroyImmediate(v);
+
+        GridLayoutGroup l = t.GetComponent<GridLayoutGroup>();
+        if (l == null)
+            l = t.gameObject.AddComponent<GridLayoutGroup>();
+        l.cellSize = cell;
+        l.spacing = spacing;
+        l.padding = new RectOffset(4, 4, 4, 4);
+        l.startCorner = GridLayoutGroup.Corner.UpperLeft;
+        l.startAxis = GridLayoutGroup.Axis.Horizontal;
+        l.childAlignment = TextAnchor.UpperLeft;
+        l.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+        l.constraintCount = 2;
     }
 
     private static Transform Panel(Transform parent, string name, Vector2 aMin, Vector2 aMax, Vector2 pos, Vector2 size, Color? bg)
@@ -776,36 +801,33 @@ public static class OfficeSceneUIBuilder
     /// that open placeholder windows with min/max/close chrome, plus a Start menu
     /// (Settings + Power) wired to a DesktopShell on the canvas. Idempotent.
     /// </summary>
-    private static void BuildDesktopShell(Canvas canvas)
+    private static void BuildDesktopShell(Canvas canvas, Transform iconGrid, Transform windowLayer)
     {
         Transform root = canvas.transform;
 
-        Transform windowLayer = Panel(root, "DesktopWindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        Transform iconGrid = Panel(root, "DesktopIcons", new Vector2(0.01f, 0.1f), new Vector2(0.14f, 0.9f), Vector2.zero, Vector2.zero, null);
-        AddVLayout(iconGrid, 5f);
+        // Remove the earlier redundant placeholder shell (parallel desktop) from
+        // prior builds so it no longer overlaps the real investigation desk.
+        DestroyChildIfPresent(root, "DesktopIcons");
+        DestroyChildIfPresent(root, "DesktopWindowLayer");
 
-        var icons = new (string name, string label, string title, string body, string upgrade)[]
+        // Only genuinely-new apps get placeholder windows; existing
+        // Passport/Permit documents, reference books, and Compare are launched by
+        // the investigation icon grid (real windows with real data).
+        var apps = new (string name, string label, string title, string body, string upgrade)[]
         {
-            ("IconPassport",  "Passport",   "Passport",            "The visitor's passport. (The desk shows live documents during a case.)", ""),
-            ("IconPermit",    "Permit",     "Permit",              "The visitor's travel permit.", ""),
-            ("IconCurrency",  "Currency",   "Currency Reference",  "Currency lookups per era.", ""),
-            ("IconLanguage",  "Language",   "Language Reference",  "Language / dialect lookups per era.", ""),
-            ("IconTechnology","Technology", "Technology Reference","Tech-level lookups per era.", ""),
-            ("IconRules",     "Rules",      "Travel Rules",        "Today's active travel rules to enforce.", ""),
-            ("IconCompare",   "Compare",    "Compare Tool",        "Cross-check two document fields side by side.", ""),
-            ("IconScanner",   "Scanner",    "Scanner",             "Scanned Time File submitted by the traveller.", ""),
-            ("IconInternet",  "Internet",   "Internet - News",     "Today's news feed. (placeholder)", ""),
-            ("IconLexicon",   "Lexicon",    "Lexicon",             "Wikipedia-style era glossary. (placeholder)", "ArchiveAccess"),
-            ("IconDialect",   "Dialect",    "Dialect Filter",      "Highlights anachronistic phrases. (upgrade)", "DialectFilter"),
-            ("IconMaterial",  "Material",   "Material Scanner",    "Flags tech/materials beyond the claimed era. (upgrade)", "AdvancedScanner"),
-            ("IconClueLog",   "Clue Log",   "Case Notes",          "Clues & contradictions for the current case.", ""),
-            ("IconNotes",     "Notes",      "Sticky Notes",        "Your notes. (placeholder)", ""),
+            ("IconScanner",  "Scanner",  "Scanner",          "Scanned Time File submitted by the traveller. (placeholder)", ""),
+            ("IconInternet", "Internet", "Internet - News",  "Today's news feed. (placeholder)", ""),
+            ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (placeholder)", "ArchiveAccess"),
+            ("IconDialect",  "Dialect",  "Dialect Filter",   "Highlights anachronistic phrases. (upgrade)", "DialectFilter"),
+            ("IconMaterial", "Material", "Material Scanner", "Flags tech/materials beyond the claimed era. (upgrade)", "AdvancedScanner"),
+            ("IconClueLog",  "Clue Log", "Case Notes",       "Clues & contradictions for the current case. (placeholder)", ""),
+            ("IconNotes",    "Notes",    "Sticky Notes",     "Your notes. (placeholder)", ""),
         };
 
-        foreach (var s in icons)
+        foreach (var a in apps)
         {
-            OSWindowChrome w = BuildOSWindow(windowLayer, s.name + "Window", s.title, s.body);
-            BuildDesktopIcon(iconGrid, s.name, s.label, w, s.upgrade);
+            OSWindowChrome w = BuildOSWindow(windowLayer, a.name + "Window", a.title, a.body);
+            BuildDesktopIcon(iconGrid, a.name, a.label, w, a.upgrade);
         }
 
         OSWindowChrome settings = BuildOSWindow(windowLayer, "SettingsWindow", "Settings", "Settings (empty for now).");
@@ -976,6 +998,13 @@ public static class OfficeSceneUIBuilder
             mr.sortingOrder = sortingOrder;
 
         return tmp;
+    }
+
+    private static void DestroyChildIfPresent(Transform parent, string name)
+    {
+        Transform t = parent.Find(name);
+        if (t != null)
+            Object.DestroyImmediate(t.gameObject);
     }
 
     private static void EnsureFolderTree(string path)
