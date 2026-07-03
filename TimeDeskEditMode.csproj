@@ -48,7 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Tests\EditMode\ReadyGateTests.cs" />
-    <Compile Include="Assets\Tests\EditMode\ClickableTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\DiscrepancyLogTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ShiftLedgerTests.cs" />
     <None Include="Assets\Tests\EditMode\TimeDeskEditMode.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -868,6 +869,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="TimeDesk.Domain.csproj">
+      <Project>{07f1fae5-9363-3bf3-8705-90744a60f216}</Project>
+      <Name>TimeDesk.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

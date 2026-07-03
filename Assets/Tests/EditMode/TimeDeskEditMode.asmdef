@@ -2,6 +2,7 @@
     "name": "TimeDeskEditMode",
     "rootNamespace": "",
     "references": [
+        "TimeDesk.Domain",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

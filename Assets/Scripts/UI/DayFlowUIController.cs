@@ -143,6 +143,9 @@ public sealed class DayFlowUIController : MonoBehaviour
             if (world.citationsToday > 0)
                 sb.AppendLine($"Citations today: {world.citationsToday}");
 
+            if (ledger.UnprovenDenialCount > 0)
+                sb.AppendLine($"Undocumented denials: {ledger.UnprovenDenialCount} (scan the evidence before denying)");
+
             resultsBodyText.text = sb.ToString();
         }
 

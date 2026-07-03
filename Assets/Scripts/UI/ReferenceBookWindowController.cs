@@ -115,9 +115,15 @@ public sealed class ReferenceBookWindowController : MonoBehaviour
             string bookName = _book != null ? _book.displayName : "Reference";
             string label = $"{bookName}: {nation}/{era}";
             string value = e.value;
+            CompareEvidence evidence = CompareEvidence.ForReferenceEntry(
+                _book.category,
+                e.value,
+                e.nation != null ? e.nation.id : null,
+                e.era != null ? e.era.id : null,
+                $"{nation} — {era}");
 
             if (btn != null && _compare != null)
-                btn.onClick.AddListener(() => _compare.Select(label, value, bg));
+                btn.onClick.AddListener(() => _compare.Select(label, value, bg, evidence));
         }
     }
 }

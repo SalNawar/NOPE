@@ -198,9 +198,13 @@ public sealed class GameManager : MonoBehaviour
             RunManager.Instance.SaveNow();
         }
 
-        // Show the shift report, then hand off to the home phase.
+        // Show the shift report, then hand off to the home phase. The report is
+        // read in the booth (like the morning briefing), so pull back first.
         if (dayFlowUI != null)
         {
+            if (officeView != null)
+                officeView.FocusOffice();
+
             Debug.Log("[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then Home).");
             dayFlowUI.ShowResults(_worldState, _ledger, HandleGoHome);
         }
@@ -420,7 +424,13 @@ public sealed class GameManager : MonoBehaviour
         float stabilityBefore = _worldState.timelineStability;
         int moneyBefore = _worldState.money;
 
-        CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accepted, _activeCaseIndex1Based, _worldState, _gameConfig, contentLibrary);
+        // Evidence documented in the scanner gates deny decisions (-1 = the
+        // evidence system is not active in this scene, gate skipped).
+        int evidenceCount = investigationUI != null && investigationUI.EvidenceSystemActive
+            ? investigationUI.EvidenceCount
+            : -1;
+
+        CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accepted, _activeCaseIndex1Based, _worldState, _gameConfig, contentLibrary, evidenceCount);
         _ledger.verdicts.Add(verdict);
 
         // The traveler is only dispatched (and the timeline moved) when accepted.

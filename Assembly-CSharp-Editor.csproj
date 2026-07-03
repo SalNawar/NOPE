@@ -1232,6 +1232,10 @@
       <Project>{725fda2a-d219-eaf2-30a8-18c390e9a76f}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
+    <ProjectReference Include="TimeDesk.Domain.csproj">
+      <Project>{07f1fae5-9363-3bf3-8705-90744a60f216}</Project>
+      <Name>TimeDesk.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

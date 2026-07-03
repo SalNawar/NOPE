@@ -85,18 +85,19 @@ public static class OfficeSceneUIBuilder
         Button citationContinue = MakeButton(citation, "ContinueButton", "Acknowledge", new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.24f));
         citation.gameObject.SetActive(false);
 
-        // Briefing + Results
-        Transform briefing = Panel(root, "BriefingPanel", Center, Center, Vector2.zero, new Vector2(760f, 560f), PanelNavy);
-        TMP_Text briefingTitle = Text(briefing, "TitleText", "Day 1 — Morning Briefing", 34, TextAlignmentOptions.Center, new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.98f), Color.white);
-        TMP_Text briefingBody = Text(briefing, "BodyText", "...", 22, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.18f), new Vector2(0.94f, 0.82f), Color.white);
-        Button startShift = MakeButton(briefing, "StartShiftButton", "Start Shift", new Vector2(0.35f, 0.04f), new Vector2(0.65f, 0.14f));
-        briefing.gameObject.SetActive(false);
+        // Briefing + Results — newsletter panels on the office overlay canvas so
+        // they read in the booth view, not inside the PC desktop (which is hidden
+        // outside MonitorFocus).
+        Canvas officeCanvas = EnsureOfficeOverlayCanvas();
+        DestroyChildIfPresent(root, "BriefingPanel");
+        DestroyChildIfPresent(root, "ResultsPanel");
+        DestroyChildIfPresent(officeCanvas.transform, "BriefingPanel");
+        DestroyChildIfPresent(officeCanvas.transform, "ResultsPanel");
 
-        Transform results = Panel(root, "ResultsPanel", Center, Center, Vector2.zero, new Vector2(760f, 560f), new Color(0.08f, 0.18f, 0.12f, 0.97f));
-        TMP_Text resultsTitle = Text(results, "TitleText", "Day 1 — Shift Report", 34, TextAlignmentOptions.Center, new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.98f), Color.white);
-        TMP_Text resultsBody = Text(results, "BodyText", "...", 22, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.18f), new Vector2(0.94f, 0.82f), Color.white);
-        Button goHome = MakeButton(results, "GoHomeButton", "Go Home", new Vector2(0.35f, 0.04f), new Vector2(0.65f, 0.14f));
-        results.gameObject.SetActive(false);
+        Transform briefing = BuildNewsletter(officeCanvas.transform, "BriefingPanel", "THE TEMPORAL TIMES",
+            "START SHIFT", out TMP_Text briefingTitle, out TMP_Text briefingBody, out Button startShift);
+        Transform results = BuildNewsletter(officeCanvas.transform, "ResultsPanel", "SHIFT LEDGER — EVENING EDITION",
+            "GO HOME", out TMP_Text resultsTitle, out TMP_Text resultsBody, out Button goHome);
 
         DayFlowUIController dayFlow = Object.FindFirstObjectByType<DayFlowUIController>();
         if (dayFlow == null)
@@ -115,19 +116,37 @@ public static class OfficeSceneUIBuilder
         Transform investRoot = Panel(investHost, "InvestigationRoot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         Transform windowLayer = Panel(investRoot, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
-        // Claim on a translucent XP-blue strip; directives as a yellow sticky note.
+        // Claim on a translucent XP-blue strip.
         Panel(investRoot, "ClaimStrip", new Vector2(0.06f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, new Color(0.06f, 0.18f, 0.42f, 0.8f));
         TMP_Text claimText = Text(investRoot, "ClaimBanner", "Visitor", 26, TextAlignmentOptions.Center, new Vector2(0.1f, 0.88f), new Vector2(0.9f, 0.99f), Color.white);
-        Transform note = Panel(investRoot, "DirectivesNote", new Vector2(0.78f, 0.5f), new Vector2(0.99f, 0.85f), Vector2.zero, Vector2.zero, new Color(1f, 0.96f, 0.6f, 0.97f));
-        TMP_Text directivesText = Text(note, "Directives", "Directives:", 18, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.95f), new Color(0.16f, 0.13f, 0.03f, 1f));
 
-        // Book shelf (above the taskbar)
-        // Left-edge desktop icon grid (OS-style tiles). Investigation documents +
-        // reference books + the new desktop apps all register their launch tiles here.
-        Transform bookShelf = Panel(investRoot, "BookShelf", new Vector2(0.008f, 0.16f), new Vector2(0.16f, 0.9f), Vector2.zero, Vector2.zero, null);
+        // Desktop icon grid pinned to the top-left of the screen (like a real
+        // OS). Investigation documents + reference books + the desktop apps all
+        // register their launch tiles here, filling top-left downward.
+        Transform bookShelf = Panel(investRoot, "BookShelf", new Vector2(0.005f, 0.06f), new Vector2(0.17f, 0.855f), Vector2.zero, Vector2.zero, null);
         AddGridLayout(bookShelf, new Vector2(82f, 60f), new Vector2(6f, 6f));
         Button shelfButtonTemplate = MakeButton(bookShelf, "BookShelfButtonTemplate", "Book", Vector2.zero, Vector2.one);
         shelfButtonTemplate.gameObject.SetActive(false);
+
+        // Directives live in a sticky-note window (closed by default) opened
+        // from a desktop icon, instead of a note that is always open.
+        DestroyChildIfPresent(investRoot, "DirectivesNote");
+        DestroyChildIfPresent(investRoot, "Directives"); // stray text from older builds
+        OSWindowChrome directivesWindow = BuildOSWindow(windowLayer, "DirectivesWindow", "Directives",
+            "Directives: all destinations cleared today.", new Vector2(430f, 360f));
+        Image directivesImg = directivesWindow.GetComponent<Image>();
+        if (directivesImg != null)
+            directivesImg.color = new Color(1f, 0.96f, 0.6f, 0.97f);
+        TMP_Text directivesText = directivesWindow.transform.Find("Body").GetComponent<TMP_Text>();
+        BuildDesktopIcon(bookShelf, "IconDirectives", "Directives", directivesWindow, "");
+
+        // Scanner is the deviation report: its body lists the discrepancies the
+        // player has documented for the current case (drives deny gating).
+        DestroyChildIfPresent(windowLayer, "IconScannerWindow");
+        OSWindowChrome scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "Scanner — Deviation Report",
+            "No deviations documented.", new Vector2(560f, 420f));
+        TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
+        BuildDesktopIcon(bookShelf, "IconScanner", "Scanner", scannerWindow, "");
 
         // Compare bar (XP tooltip-yellow, above the shelf)
         Transform compareBar = Panel(investRoot, "CompareBar", new Vector2(0.1f, 0.27f), new Vector2(0.9f, 0.34f), Vector2.zero, Vector2.zero, Tooltip);
@@ -213,6 +232,8 @@ public static class OfficeSceneUIBuilder
         SetRef(soInvest, "bookWindowTemplate", bookTemplate);
         SetRef(soInvest, "bookShelfRoot", bookShelf);
         SetRef(soInvest, "bookShelfButtonTemplate", shelfButtonTemplate);
+        SetRef(soInvest, "scannerText", scannerText);
+        SetRef(soInvest, "scannerWindow", scannerWindow);
         soInvest.ApplyModifiedProperties();
 
         var soOrch = new SerializedObject(orchestrator);
@@ -294,7 +315,7 @@ public static class OfficeSceneUIBuilder
         soDrag.ApplyModifiedProperties();
         TMP_Text title = Text(header, "TitleText", titleLabel, 15, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.76f, 1f), Color.white);
         title.fontStyle = FontStyles.Bold;
-        BuildWinControls(header);
+        BuildWinControls(win, header);
 
         // Rows container (scroll-free vertical list)
         Transform rowsRoot = Panel(win, "Rows", new Vector2(0.04f, 0.12f), new Vector2(0.96f, 0.84f), Vector2.zero, Vector2.zero, null);
@@ -344,7 +365,16 @@ public static class OfficeSceneUIBuilder
 
     private static Canvas EnsureCanvas()
     {
-        Canvas canvas = Object.FindFirstObjectByType<Canvas>();
+        // The desktop canvas — never the office overlay canvas, which hosts the
+        // briefing/results newsletters and stays visible outside MonitorFocus.
+        Canvas canvas = null;
+        foreach (Canvas c in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+        {
+            if (c.gameObject.name == "OfficeOverlayCanvas")
+                continue;
+            canvas = c;
+            break;
+        }
         if (canvas == null)
         {
             var go = new GameObject("Canvas", typeof(RectTransform));
@@ -435,18 +465,24 @@ public static class OfficeSceneUIBuilder
     private static Transform Panel(Transform parent, string name, Vector2 aMin, Vector2 aMax, Vector2 pos, Vector2 size, Color? bg)
     {
         Transform existing = parent.Find(name);
-        if (existing != null)
-            return existing;
+        GameObject go = existing != null ? existing.gameObject : new GameObject(name, typeof(RectTransform));
+        if (existing == null)
+            go.transform.SetParent(parent, false);
 
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
+        // Geometry is re-applied on every build so layout fixes reach scenes
+        // that were built with an older version of this tool.
         var rt = (RectTransform)go.transform;
         rt.anchorMin = aMin;
         rt.anchorMax = aMax;
         rt.anchoredPosition = pos;
         rt.sizeDelta = size;
         if (bg.HasValue)
-            go.AddComponent<Image>().color = bg.Value;
+        {
+            Image img = go.GetComponent<Image>();
+            if (img == null)
+                img = go.AddComponent<Image>();
+            img.color = bg.Value;
+        }
         return go.transform;
     }
 
@@ -457,6 +493,8 @@ public static class OfficeSceneUIBuilder
         {
             var et = existing.GetComponent<TMP_Text>();
             if (et != null) return et;
+            // Same-named non-text leftover from an older build: replace it.
+            Object.DestroyImmediate(existing.gameObject);
         }
 
         var go = new GameObject(name, typeof(RectTransform));
@@ -481,6 +519,9 @@ public static class OfficeSceneUIBuilder
         {
             var eb = existing.GetComponent<Button>();
             if (eb != null) return eb;
+            // Same-named non-button leftover from an older build: replace it
+            // instead of silently creating a duplicate sibling.
+            Object.DestroyImmediate(existing.gameObject);
         }
 
         var go = new GameObject(name, typeof(RectTransform));
@@ -512,8 +553,71 @@ public static class OfficeSceneUIBuilder
             img.sprite = wall;
             img.type = Image.Type.Simple;
             img.preserveAspect = false;
+            img.color = Color.white; // don't tint the wallpaper with the fallback color
         }
         desk.SetAsFirstSibling();
+    }
+
+    /// <summary>Pins a layout-group child to a fixed height.</summary>
+    private static void SetLayoutHeight(Component c, float height)
+    {
+        LayoutElement le = c.GetComponent<LayoutElement>();
+        if (le == null)
+            le = c.gameObject.AddComponent<LayoutElement>();
+        le.minHeight = height;
+        le.preferredHeight = height;
+    }
+
+    // ----------------------------- Office newsletter panels -----------------------------
+
+    /// <summary>
+    /// Overlay canvas for office-view UI (the briefing/results newsletters).
+    /// Separate from the desktop canvas, which OfficeViewController hides
+    /// outside MonitorFocus.
+    /// </summary>
+    private static Canvas EnsureOfficeOverlayCanvas()
+    {
+        GameObject go = GameObject.Find("OfficeOverlayCanvas");
+        if (go == null)
+            go = new GameObject("OfficeOverlayCanvas", typeof(RectTransform));
+
+        Canvas canvas = go.GetComponent<Canvas>();
+        if (canvas == null)
+            canvas = go.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 10; // above the desktop canvas
+
+        CanvasScaler scaler = go.GetComponent<CanvasScaler>();
+        if (scaler == null)
+            scaler = go.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+
+        if (go.GetComponent<GraphicRaycaster>() == null)
+            go.AddComponent<GraphicRaycaster>();
+        return canvas;
+    }
+
+    /// <summary>
+    /// Builds a newsletter-styled panel (masthead + rule + dateline title + body
+    /// + one action button) for the office view. Hidden by default.
+    /// </summary>
+    private static Transform BuildNewsletter(Transform parent, string name, string masthead, string buttonLabel,
+        out TMP_Text title, out TMP_Text body, out Button action)
+    {
+        Transform panel = Panel(parent, name, Center, Center, Vector2.zero, new Vector2(700f, 780f), Ink);
+        Transform paper = Panel(panel, "Paper", Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-10f, -10f), Paper);
+
+        TMP_Text head = Text(paper, "Masthead", masthead, 38, TextAlignmentOptions.Center, new Vector2(0.04f, 0.9f), new Vector2(0.96f, 0.99f), Ink);
+        head.fontStyle = FontStyles.Bold;
+        Panel(paper, "Rule", new Vector2(0.06f, 0.885f), new Vector2(0.94f, 0.889f), Vector2.zero, Vector2.zero, Ink);
+
+        title = Text(paper, "TitleText", "", 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.82f), new Vector2(0.95f, 0.875f), Ink);
+        body = Text(paper, "BodyText", "...", 21, TextAlignmentOptions.TopLeft, new Vector2(0.08f, 0.14f), new Vector2(0.92f, 0.8f), Ink);
+        action = MakeButton(paper, "ActionButton", buttonLabel, new Vector2(0.3f, 0.03f), new Vector2(0.7f, 0.11f), new Color(0.16f, 0.15f, 0.13f, 1f));
+
+        panel.gameObject.SetActive(false);
+        return panel;
     }
 
     private static void BuildTaskbar(Transform root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText)
@@ -534,18 +638,32 @@ public static class OfficeSceneUIBuilder
         bar.SetAsLastSibling();
     }
 
-    private static void BuildWinControls(Transform header)
+    /// <summary>
+    /// Builds WORKING min/max/close buttons on a window header and wires an
+    /// OSWindowChrome on the window root. Shared by every window type so the
+    /// chrome behaves identically everywhere. Destroys older decorative
+    /// controls (pre-chrome builds used plain panels) before rebuilding.
+    /// </summary>
+    private static OSWindowChrome BuildWinControls(Transform win, Transform header)
     {
-        MakeCtl(header, "MinBtn", "_", new Vector2(0.79f, 0.18f), new Vector2(0.85f, 0.84f), XpFace, Color.black);
-        MakeCtl(header, "MaxBtn", string.Empty, new Vector2(0.855f, 0.18f), new Vector2(0.915f, 0.84f), XpFace, Color.black);
-        MakeCtl(header, "CloseBtn", "X", new Vector2(0.925f, 0.18f), new Vector2(0.985f, 0.84f), XpRed, Color.white);
-    }
+        DestroyChildIfPresent(header, "MinBtn");
+        DestroyChildIfPresent(header, "MaxBtn");
+        DestroyChildIfPresent(header, "CloseBtn");
 
-    private static void MakeCtl(Transform parent, string name, string glyph, Vector2 min, Vector2 max, Color bg, Color fg)
-    {
-        Transform t = Panel(parent, name, min, max, Vector2.zero, Vector2.zero, bg);
-        if (!string.IsNullOrEmpty(glyph))
-            Text(t, "G", glyph, 14, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, fg);
+        Button minB = MakeButton(header, "MinBtn", "_", new Vector2(0.79f, 0.16f), new Vector2(0.85f, 0.86f));
+        Button maxB = MakeButton(header, "MaxBtn", "[]", new Vector2(0.855f, 0.16f), new Vector2(0.915f, 0.86f));
+        Button closeB = MakeButton(header, "CloseBtn", "X", new Vector2(0.925f, 0.16f), new Vector2(0.985f, 0.86f), XpRed);
+
+        OSWindowChrome chrome = win.GetComponent<OSWindowChrome>();
+        if (chrome == null)
+            chrome = win.gameObject.AddComponent<OSWindowChrome>();
+        var so = new SerializedObject(chrome);
+        SetRef(so, "window", (RectTransform)win);
+        SetRef(so, "minimizeButton", minB);
+        SetRef(so, "maximizeButton", maxB);
+        SetRef(so, "closeButton", closeB);
+        so.ApplyModifiedProperties();
+        return chrome;
     }
 
     private static Sprite EnsureWallpaper()
@@ -812,10 +930,10 @@ public static class OfficeSceneUIBuilder
 
         // Only genuinely-new apps get placeholder windows; existing
         // Passport/Permit documents, reference books, and Compare are launched by
-        // the investigation icon grid (real windows with real data).
+        // the investigation icon grid (real windows with real data). Scanner and
+        // Directives are built separately in Build() and wired to controllers.
         var apps = new (string name, string label, string title, string body, string upgrade)[]
         {
-            ("IconScanner",  "Scanner",  "Scanner",          "Scanned Time File submitted by the traveller. (placeholder)", ""),
             ("IconInternet", "Internet", "Internet - News",  "Today's news feed. (placeholder)", ""),
             ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (placeholder)", "ArchiveAccess"),
             ("IconDialect",  "Dialect",  "Dialect Filter",   "Highlights anachronistic phrases. (upgrade)", "DialectFilter"),
@@ -832,10 +950,15 @@ public static class OfficeSceneUIBuilder
 
         OSWindowChrome settings = BuildOSWindow(windowLayer, "SettingsWindow", "Settings", "Settings (empty for now).");
 
-        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.14f, 0f), new Vector2(0f, 150f), new Vector2(0f, 120f), new Color(0.1f, 0.12f, 0.18f, 0.97f));
+        // Rebuilt from scratch each run: the entries need fixed LayoutElement
+        // heights or the vertical layout collapses them on top of each other.
+        DestroyChildIfPresent(root, "StartMenu");
+        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.14f, 0f), new Vector2(0f, 96f), new Vector2(0f, 112f), new Color(0.1f, 0.12f, 0.18f, 0.97f));
         AddVLayout(startMenu, 4f);
         Button settingsEntry = MakeButton(startMenu, "SettingsEntry", "Settings", Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f));
+        SetLayoutHeight(settingsEntry, 46f);
         Button powerEntry = MakeButton(startMenu, "PowerEntry", "Power", Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f));
+        SetLayoutHeight(powerEntry, 46f);
         startMenu.gameObject.SetActive(false);
 
         Button startBtn = null;
@@ -863,9 +986,9 @@ public static class OfficeSceneUIBuilder
     }
 
     /// <summary>Builds a placeholder desktop window with a draggable title bar and min/max/close chrome.</summary>
-    private static OSWindowChrome BuildOSWindow(Transform layer, string name, string title, string body)
+    private static OSWindowChrome BuildOSWindow(Transform layer, string name, string title, string body, Vector2? size = null)
     {
-        Transform win = Panel(layer, name, Center, Center, Vector2.zero, new Vector2(580f, 400f), Paper);
+        Transform win = Panel(layer, name, Center, Center, Vector2.zero, size ?? new Vector2(580f, 400f), Paper);
 
         Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -15f), new Vector2(0f, 30f), HeaderBar);
         DraggableWindow drag = header.GetComponent<DraggableWindow>();
@@ -878,21 +1001,9 @@ public static class OfficeSceneUIBuilder
         TMP_Text titleText = Text(header, "TitleText", title, 15, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.7f, 1f), Color.white);
         titleText.fontStyle = FontStyles.Bold;
 
-        Button minB = MakeButton(header, "MinBtn", "_", new Vector2(0.74f, 0.16f), new Vector2(0.8f, 0.86f), XpFace);
-        Button maxB = MakeButton(header, "MaxBtn", "[]", new Vector2(0.805f, 0.16f), new Vector2(0.87f, 0.86f), XpFace);
-        Button closeB = MakeButton(header, "CloseBtn", "X", new Vector2(0.875f, 0.16f), new Vector2(0.96f, 0.86f), XpRed);
-
         Text(win, "Body", body, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink);
 
-        OSWindowChrome chrome = win.GetComponent<OSWindowChrome>();
-        if (chrome == null)
-            chrome = win.gameObject.AddComponent<OSWindowChrome>();
-        var so = new SerializedObject(chrome);
-        SetRef(so, "window", (RectTransform)win);
-        SetRef(so, "minimizeButton", minB);
-        SetRef(so, "maximizeButton", maxB);
-        SetRef(so, "closeButton", closeB);
-        so.ApplyModifiedProperties();
+        OSWindowChrome chrome = BuildWinControls(win, header);
 
         win.gameObject.SetActive(false); // opened by its icon
         return chrome;

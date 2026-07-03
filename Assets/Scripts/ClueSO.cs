@@ -2,20 +2,6 @@
 using UnityEngine;
 
 /// <summary>
-/// Category used to route clues into the “right kind” of document.
-/// </summary>
-public enum ClueCategory
-{
-    Language,
-    Material,
-    Politics,
-    Technology,
-    Currency,
-    Geography,
-    Culture
-}
-
-/// <summary>
 /// A single clue line that can be injected into documents.
 /// Supports era logic (supports/contradicts) + optional upgrade gating.
 /// </summary>

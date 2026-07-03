@@ -28,6 +28,13 @@ public sealed class GameConfigSO : ScriptableObject
     /// </summary>
     public int[] citationPenalties = { 5, 10, 20 };
 
+    [Header("Evidence (deny gating)")]
+    /// <summary>
+    /// When true, denying a forger without documented scanner evidence earns a
+    /// citation + deduction even though the visitor really was lying.
+    /// </summary>
+    public bool requireEvidenceToDeny = true;
+
     [Header("Timeline stability")]
     /// <summary>Stability lost per wrong send (0..100 scale).</summary>
     [Min(0f)]

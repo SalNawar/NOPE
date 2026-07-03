@@ -36,10 +36,17 @@ public sealed class CompareController : MonoBehaviour
         public Image graphic;
         public Color original;
         public bool set;
+        public CompareEvidence evidence;
     }
 
     private Slot _a;
     private Slot _b;
+
+    /// <summary>
+    /// Raised when the second slot fills, with both sides' typed evidence.
+    /// The discrepancy system listens to auto-register true contradictions.
+    /// </summary>
+    public event System.Action<CompareEvidence, CompareEvidence> PairCompared;
 
     private void Awake()
     {
@@ -47,8 +54,12 @@ public sealed class CompareController : MonoBehaviour
             compareBar.SetActive(false);
     }
 
-    /// <summary>Registers a clicked value for comparison.</summary>
-    public void Select(string label, string value, Image highlight)
+    /// <summary>Registers a clicked value for comparison (no typed evidence).</summary>
+    public void Select(string label, string value, Image highlight) =>
+        Select(label, value, highlight, default);
+
+    /// <summary>Registers a clicked value for comparison, with typed evidence.</summary>
+    public void Select(string label, string value, Image highlight, CompareEvidence evidence)
     {
         // Clicking the same row again clears the comparison.
         if ((_a.set && highlight != null && highlight == _a.graphic) ||
@@ -62,16 +73,26 @@ public sealed class CompareController : MonoBehaviour
             Clear();
 
         if (!_a.set)
-            _a = Fill(label, value, highlight);
+            _a = Fill(label, value, highlight, evidence);
         else
-            _b = Fill(label, value, highlight);
+            _b = Fill(label, value, highlight, evidence);
 
         Refresh();
+
+        if (_a.set && _b.set)
+            PairCompared?.Invoke(_a.evidence, _b.evidence);
     }
 
-    private Slot Fill(string label, string value, Image g)
+    /// <summary>Appends a confirmation to the compare bar after a discrepancy registers.</summary>
+    public void ShowLoggedNotice()
     {
-        var s = new Slot { label = label, value = value, graphic = g, set = true };
+        if (compareText != null && _a.set && _b.set)
+            compareText.text += "    ●  DEVIATION LOGGED";
+    }
+
+    private Slot Fill(string label, string value, Image g, CompareEvidence evidence)
+    {
+        var s = new Slot { label = label, value = value, graphic = g, set = true, evidence = evidence };
 
         if (g != null)
         {

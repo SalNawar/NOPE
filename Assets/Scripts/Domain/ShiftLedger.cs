@@ -49,6 +49,17 @@ public sealed class ShiftLedger
     /// <summary>Number of wrong sends.</summary>
     public int WrongCount => verdicts.Count - CorrectCount;
 
+    /// <summary>Denials of real forgers made without documented evidence.</summary>
+    public int UnprovenDenialCount
+    {
+        get
+        {
+            int n = 0;
+            foreach (CaseVerdict v in verdicts) if (v.unprovenDenial) n++;
+            return n;
+        }
+    }
+
     /// <summary>Total stability change across the shift (signed).</summary>
     public float TotalStabilityDelta
     {
@@ -124,4 +135,10 @@ public sealed class CaseVerdict
 
     /// <summary>The visitor's stated travel claim, for the report.</summary>
     public string claimSummary = string.Empty;
+
+    /// <summary>Discrepancies documented in the scanner when the decision was made.</summary>
+    public int evidenceCount;
+
+    /// <summary>True if a real forger was denied without documented evidence.</summary>
+    public bool unprovenDenial;
 }

@@ -92,7 +92,6 @@
     <Compile Include="Assets\Scripts\OfficeUIController.cs" />
     <Compile Include="Assets\Scripts\UI\DraggableWindow.cs" />
     <Compile Include="Assets\Scripts\Core\SaveSystem.cs" />
-    <Compile Include="Assets\Scripts\Investigation\DocumentField.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineEffects.cs" />
     <Compile Include="Assets\Scripts\CaseInstance.cs" />
     <Compile Include="Assets\Scripts\EffectSO.cs" />
@@ -101,10 +100,8 @@
     <Compile Include="Assets\Scripts\UI\HomeUIController.cs" />
     <Compile Include="Assets\Scripts\Timeline\NationSO.cs" />
     <Compile Include="Assets\Scripts\EraSO.cs" />
-    <Compile Include="Assets\Scripts\Office\ReadyGate.cs" />
     <Compile Include="Assets\Scripts\Core\RunManager.cs" />
     <Compile Include="Assets\Scripts\Office\CinemachineCameraRig.cs" />
-    <Compile Include="Assets\Scripts\Shift\ShiftLedger.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineService.cs" />
     <Compile Include="Assets\Scripts\UI\ReferenceBookWindowController.cs" />
     <Compile Include="Assets\Scripts\DayPlanSO.cs" />
@@ -1243,6 +1240,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="TimeDesk.Domain.csproj">
+      <Project>{07f1fae5-9363-3bf3-8705-90744a60f216}</Project>
+      <Name>TimeDesk.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

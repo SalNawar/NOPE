@@ -34,11 +34,33 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private Transform bookShelfRoot;
     [SerializeField] private Button bookShelfButtonTemplate;
 
+    [Header("Scanner (deviation report)")]
+    /// <summary>Body text of the Scanner window; lists documented discrepancies.</summary>
+    [SerializeField] private TMP_Text scannerText;
+
+    /// <summary>Scanner window chrome; opened when the first discrepancy registers.</summary>
+    [SerializeField] private OSWindowChrome scannerWindow;
+
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
     private bool _booksBuilt;
     private string _directives = "Directives: all destinations cleared.";
+
+    /// <summary>Documented contradictions for the current case.</summary>
+    private readonly DiscrepancyLog _discrepancies = new();
+
+    /// <summary>The case currently on the desk (null between cases).</summary>
+    private CaseInstance _currentCase;
+
+    /// <summary>Number of discrepancies documented for the current case.</summary>
+    public int EvidenceCount => _discrepancies.Count;
+
+    /// <summary>
+    /// True when the evidence loop is playable (rich desk + compare wired), so
+    /// scoring may gate denials on documented evidence.
+    /// </summary>
+    public bool EvidenceSystemActive => RichMode && compareController != null;
 
     // Fallback state
     private bool _fallbackBuilt;
@@ -56,6 +78,63 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (bookWindowTemplate != null) bookWindowTemplate.gameObject.SetActive(false);
         if (bookShelfButtonTemplate != null) bookShelfButtonTemplate.gameObject.SetActive(false);
         if (root != null) root.SetActive(false);
+
+        if (compareController != null)
+            compareController.PairCompared += HandlePairCompared;
+    }
+
+    private void OnDestroy()
+    {
+        if (compareController != null)
+            compareController.PairCompared -= HandlePairCompared;
+    }
+
+    /// <summary>
+    /// Auto-registers a true contradiction when the player compares a forged
+    /// document field against the reference entry that disproves it.
+    /// </summary>
+    private void HandlePairCompared(CompareEvidence a, CompareEvidence b)
+    {
+        if (_currentCase == null)
+            return;
+
+        Discrepancy found = _discrepancies.TryRegister(a, b,
+            _currentCase.claimedNation != null ? _currentCase.claimedNation.id : null,
+            _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null);
+        if (found == null)
+            return;
+
+        RefreshScannerText();
+
+        if (compareController != null)
+            compareController.ShowLoggedNotice();
+
+        if (scannerWindow != null)
+            scannerWindow.Open();
+    }
+
+    /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
+    private void RefreshScannerText()
+    {
+        if (scannerText == null)
+            return;
+
+        if (_discrepancies.Count == 0)
+        {
+            scannerText.text =
+                "No deviations documented.\n\n" +
+                "Compare a document field against the matching reference entry " +
+                "for the claimed era to log evidence.";
+            return;
+        }
+
+        var sb = new StringBuilder();
+        foreach (Discrepancy d in _discrepancies.Items)
+            sb.AppendLine("• " + d.Summary);
+
+        sb.AppendLine();
+        sb.AppendLine($"{_discrepancies.Count} deviation(s) documented. Denial is justified.");
+        scannerText.text = sb.ToString();
     }
 
     /// <summary>Sets the day's travel directives (shown during every case).</summary>
@@ -82,6 +161,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<bool> onDecision)
     {
         _onDecision = onDecision;
+        _currentCase = inst;
+        _discrepancies.Clear();
+        RefreshScannerText();
 
         if (RichMode)
             ShowRich(inst, lib);

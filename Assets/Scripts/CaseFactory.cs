@@ -193,10 +193,37 @@ public sealed class CaseFactory
         if (Random.value >= forgeChance)
             return;
 
-        // Forge one field: replace its value with one valid for a DIFFERENT context.
-        DocumentField target = allFields[Random.Range(0, allFields.Count)];
+        // Forge one PROVABLE field: the reference book must contain the truth
+        // for the claimed nation+era (so the player can document the
+        // contradiction in the scanner) plus at least one different value to
+        // forge with. Unprovable forgeries would make every deny "unproven".
+        var provable = new List<DocumentField>();
+
+        foreach (DocumentField f in allFields)
+        {
+            ReferenceBookSO b = _lib.GetReferenceBook(f.category);
+            if (b == null)
+                continue;
+
+            string truth = b.GetValue(inst.claimedNation, inst.claimedEra);
+            if (string.IsNullOrEmpty(truth))
+                continue;
+
+            if (string.IsNullOrEmpty(b.GetAnyOtherValue(truth)))
+                continue;
+
+            provable.Add(f);
+        }
+
+        if (provable.Count == 0)
+        {
+            Debug.LogWarning($"[CaseFactory] No provable field to forge for claim '{inst.claimedNation?.displayName}/{inst.claimedEra?.id}' — case stays genuine. Author reference-book entries for this era to enable forgeries.");
+            return;
+        }
+
+        DocumentField target = provable[Random.Range(0, provable.Count)];
         ReferenceBookSO book = _lib.GetReferenceBook(target.category);
-        string wrong = book != null ? book.GetAnyOtherValue(target.value) : null;
+        string wrong = book.GetAnyOtherValue(book.GetValue(inst.claimedNation, inst.claimedEra));
 
         if (!string.IsNullOrEmpty(wrong) && wrong != target.value)
         {

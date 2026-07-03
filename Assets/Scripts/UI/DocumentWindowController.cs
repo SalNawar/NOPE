@@ -101,9 +101,10 @@ public sealed class DocumentWindowController : MonoBehaviour
             string docName = _doc.template != null ? _doc.template.displayName : "Document";
             string label = $"{docName} · {f.label}";
             string value = f.value;
+            DocumentField field = f;
 
             if (btn != null && _compare != null)
-                btn.onClick.AddListener(() => _compare.Select(label, value, bg));
+                btn.onClick.AddListener(() => _compare.Select(label, value, bg, CompareEvidence.FromDocumentField(field)));
         }
     }
 }

@@ -6,9 +6,6 @@ using UnityEngine;
 /// </summary>
 public static class ShiftScoring
 {
-    /// <summary>Library used to resolve active pay-rate effects (set per Resolve call).</summary>
-    private static ContentLibrarySO _lib;
-
     /// <summary>
     /// Resolves a player decision into a CaseVerdict and applies its
     /// money/stability/citation consequences to the world state.
@@ -21,8 +18,6 @@ public static class ShiftScoring
         GameConfigSO config,
         ContentLibrarySO lib = null)
     {
-        _lib = lib;
-
         Debug.Log($"[ShiftScoring] >>> Entering Resolve (case {caseIndex1Based}, chosenEra='{chosenEra?.id}', trueEra='{inst?.trueEra?.id}').");
 
         var verdict = new CaseVerdict
@@ -42,7 +37,7 @@ public static class ShiftScoring
         }
 
         if (verdict.correct)
-            ApplyCorrect(verdict, world, config);
+            ApplyCorrect(verdict, world, config, lib);
         else
             ApplyWrong(verdict, world, config);
 
@@ -71,13 +66,12 @@ public static class ShiftScoring
         int caseIndex1Based,
         WorldState world,
         GameConfigSO config,
-        ContentLibrarySO lib = null)
+        ContentLibrarySO lib = null,
+        int evidenceCount = -1)
     {
-        _lib = lib;
-
         bool shouldAccept = inst != null && inst.ShouldAccept;
 
-        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, forged={inst?.isForged}, claimAllowed={inst?.claimAllowedByRules}).");
+        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, forged={inst?.isForged}, claimAllowed={inst?.claimAllowedByRules}, evidence={evidenceCount}).");
 
         var verdict = new CaseVerdict
         {
@@ -91,6 +85,7 @@ public static class ShiftScoring
             wasForged = inst != null && inst.isForged,
             claimAllowed = inst == null || inst.claimAllowedByRules,
             claimSummary = inst != null ? inst.claimLine : string.Empty,
+            evidenceCount = Mathf.Max(0, evidenceCount),
             correct = inst != null && accepted == shouldAccept
         };
 
@@ -100,8 +95,20 @@ public static class ShiftScoring
             return verdict;
         }
 
+        // Evidence gate: denying a forger must be backed by documented scanner
+        // evidence. Directive violations are exempt (the daily rules are public
+        // knowledge), and evidenceCount < 0 means the evidence system is not
+        // active in this scene (fallback UI) so the gate is skipped.
+        if (config.requireEvidenceToDeny && evidenceCount == 0 &&
+            !accepted && inst != null && inst.isForged && inst.claimAllowedByRules)
+        {
+            verdict.correct = false;
+            verdict.unprovenDenial = true;
+            Debug.Log($"[ShiftScoring] Case {caseIndex1Based}: deny was factually right but had no documented evidence — treating as unproven denial.");
+        }
+
         if (verdict.correct)
-            ApplyCorrect(verdict, world, config);
+            ApplyCorrect(verdict, world, config, lib);
         else
             ApplyWrongDecision(verdict, world, config);
 
@@ -131,9 +138,11 @@ public static class ShiftScoring
         v.stabilityDelta = -stabilityLoss;
         world.timelineStability += v.stabilityDelta;
 
-        string mistake = v.accepted
-            ? "Approved travel on forged or forbidden papers."
-            : "Denied a legitimate, permitted traveler.";
+        string mistake = v.unprovenDenial
+            ? "Deviation denied without documented evidence. Scan the papers next time."
+            : v.accepted
+                ? "Approved travel on forged or forbidden papers."
+                : "Denied a legitimate, permitted traveler.";
 
         if (world.citationsToday <= config.freeWarningsPerDay)
         {
@@ -158,11 +167,11 @@ public static class ShiftScoring
     }
 
     /// <summary>Pay + optional stability gain for a correct send.</summary>
-    private static void ApplyCorrect(CaseVerdict v, WorldState world, GameConfigSO config)
+    private static void ApplyCorrect(CaseVerdict v, WorldState world, GameConfigSO config, ContentLibrarySO lib)
     {
         // Pay rate = base multiplier (slot machine) + stacked PayRateBonus effects.
         float payRate = Mathf.Max(0f, world.payRateMultiplier)
-                        + (_lib != null ? TimelineEffects.SumFloat(world, _lib, EffectOpType.PayRateBonus) : 0f);
+                        + (lib != null ? TimelineEffects.SumFloat(world, lib, EffectOpType.PayRateBonus) : 0f);
 
         float pay = config.basePayPerCorrect * Mathf.Max(0f, payRate);
 
