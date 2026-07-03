@@ -83,11 +83,17 @@ public sealed class CompareController : MonoBehaviour
             PairCompared?.Invoke(_a.evidence, _b.evidence);
     }
 
-    /// <summary>Appends a confirmation to the compare bar after a discrepancy registers.</summary>
-    public void ShowLoggedNotice()
+    /// <summary>
+    /// Replaces the compare bar verdict after a discrepancy registers, so an
+    /// origin-proof never reads as a friendly green MATCH.
+    /// </summary>
+    public void ShowDeviation(string summary)
     {
-        if (compareText != null && _a.set && _b.set)
-            compareText.text += "    ●  DEVIATION LOGGED";
+        if (compareText == null)
+            return;
+
+        compareText.color = mismatchColor;
+        compareText.text = $"●  DEVIATION LOGGED — {summary}";
     }
 
     private Slot Fill(string label, string value, Image g, CompareEvidence evidence)

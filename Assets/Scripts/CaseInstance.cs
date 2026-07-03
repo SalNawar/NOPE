@@ -27,8 +27,14 @@ public sealed class CaseInstance
     /// <summary>Authored impact overrides from the blueprint/legendary (may be empty).</summary>
     public readonly List<TimelineImpact> authoredImpacts = new();
 
-    /// <summary>Display name for the visitor.</summary>
+    /// <summary>Display name for the visitor (given name + role suffix).</summary>
     public string visitorDisplayName;
+
+    /// <summary>The visitor's true given name (citizen-records lookup key).</summary>
+    public string visitorGivenName;
+
+    /// <summary>The visitor's TRUE date of birth (what the agency has on file).</summary>
+    public string trueBirthDate;
 
     /// <summary>Short intro line for the case.</summary>
     public string introLine;

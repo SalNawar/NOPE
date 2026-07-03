@@ -79,10 +79,13 @@ public sealed class CaseFactory
                 ? b.Difficulty * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, b.name)
                 : 0f);
 
-        // 4.5) Timeline identity: archetype, destination nation, visitor name.
+        // 4.5) Timeline identity: archetype, destination nation, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
         NationSO nation = PickNation(legendary, trueEra);
-        string visitorName = ResolveVisitorName(legendary, archetype, nation, caseIndex1Based);
+        string givenName = ResolveGivenName(legendary, archetype, nation, caseIndex1Based);
+        string role = archetype != null ? archetype.displayName : "Traveler";
+        string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
+        string birthDate = GenerateBirthDate(trueEra);
         string intro = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
 
         if (blueprint == null)
@@ -97,6 +100,8 @@ public sealed class CaseFactory
                 archetype = archetype,
                 nation = nation,
                 visitorDisplayName = visitorName,
+                visitorGivenName = givenName,
+                trueBirthDate = birthDate,
                 introLine = intro
             };
         }
@@ -111,6 +116,8 @@ public sealed class CaseFactory
             archetype = archetype,
             nation = nation,
             visitorDisplayName = visitorName,
+            visitorGivenName = givenName,
+            trueBirthDate = birthDate,
             introLine = intro
         };
 
@@ -172,7 +179,7 @@ public sealed class CaseFactory
                 {
                     category = spec.category,
                     label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
-                    value = ResolveFieldValue(spec.category, inst.claimedNation, inst.claimedEra),
+                    value = ResolveFieldValue(spec.category, inst),
                     page = Mathf.Max(0, spec.page)
                 };
 
@@ -193,14 +200,25 @@ public sealed class CaseFactory
         if (Random.value >= forgeChance)
             return;
 
-        // Forge one PROVABLE field: the reference book must contain the truth
-        // for the claimed nation+era (so the player can document the
-        // contradiction in the scanner) plus at least one different value to
-        // forge with. Unprovable forgeries would make every deny "unproven".
+        // Forge one PROVABLE field. Era fields are provable when the reference
+        // book contains the truth for the claimed nation+era plus a different
+        // value to forge with; birth dates are provable against the citizen
+        // records (which always carry the true identity). Names stay honest
+        // for now — forged names pair with the future missing-record mechanic.
         var provable = new List<DocumentField>();
 
         foreach (DocumentField f in allFields)
         {
+            if (f.category == ClueCategory.Name)
+                continue;
+
+            if (f.category == ClueCategory.BirthDate)
+            {
+                if (!string.IsNullOrEmpty(inst.trueBirthDate))
+                    provable.Add(f);
+                continue;
+            }
+
             ReferenceBookSO b = _lib.GetReferenceBook(f.category);
             if (b == null)
                 continue;
@@ -222,8 +240,17 @@ public sealed class CaseFactory
         }
 
         DocumentField target = provable[Random.Range(0, provable.Count)];
-        ReferenceBookSO book = _lib.GetReferenceBook(target.category);
-        string wrong = book.GetAnyOtherValue(book.GetValue(inst.claimedNation, inst.claimedEra));
+
+        string wrong;
+        if (target.category == ClueCategory.BirthDate)
+        {
+            wrong = ForgeBirthDate(inst.trueBirthDate);
+        }
+        else
+        {
+            ReferenceBookSO book = _lib.GetReferenceBook(target.category);
+            wrong = book.GetAnyOtherValue(book.GetValue(inst.claimedNation, inst.claimedEra));
+        }
 
         if (!string.IsNullOrEmpty(wrong) && wrong != target.value)
         {
@@ -234,20 +261,27 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Looks up the historically consistent value for a category at the claimed
-    /// nation+era from the reference books; falls back to a readable placeholder.
+    /// Resolves a field's true value: identity fields come from the visitor's
+    /// identity; era fields come from the reference books for the claimed
+    /// nation+era, with a readable placeholder fallback.
     /// </summary>
-    private string ResolveFieldValue(ClueCategory category, NationSO nation, EraSO era)
+    private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
     {
+        if (category == ClueCategory.Name)
+            return inst.visitorGivenName;
+
+        if (category == ClueCategory.BirthDate)
+            return inst.trueBirthDate;
+
         ReferenceBookSO book = _lib != null ? _lib.GetReferenceBook(category) : null;
-        string value = book != null ? book.GetValue(nation, era) : null;
+        string value = book != null ? book.GetValue(inst.claimedNation, inst.claimedEra) : null;
 
         if (!string.IsNullOrEmpty(value))
             return value;
 
         // No authored reference: synthesize a stable placeholder so the field
         // still renders (and is internally consistent = not a forgery).
-        string e = era != null ? era.id : "unknown";
+        string e = inst.claimedEra != null ? inst.claimedEra.id : "unknown";
         return $"{category}:{e}";
     }
 
@@ -302,31 +336,97 @@ public sealed class CaseFactory
     /// Resolves the visitor display name: legendary name > nation name pool
     /// (era-appropriate) > archetype name pool > generic subject.
     /// </summary>
-    private static string ResolveVisitorName(LegendarySO legendary, ArchetypeSO archetype, NationSO nation, int caseIndex1Based)
+    /// <summary>The visitor's given name (no role suffix; records lookup key).</summary>
+    private static string ResolveGivenName(LegendarySO legendary, ArchetypeSO archetype, NationSO nation, int caseIndex1Based)
     {
         if (legendary != null)
             return legendary.displayName;
-
-        string role = archetype != null ? archetype.displayName : "Traveler";
 
         // Prefer a name themed to the visitor's nation/era.
         if (nation != null && nation.namePool != null && nation.namePool.Length > 0)
         {
             string picked = nation.namePool[Random.Range(0, nation.namePool.Length)];
             if (!string.IsNullOrWhiteSpace(picked))
-                return $"{picked} ({role})";
+                return picked;
         }
 
         if (archetype != null && archetype.namePool != null && archetype.namePool.Length > 0)
         {
             string picked = archetype.namePool[Random.Range(0, archetype.namePool.Length)];
             if (!string.IsNullOrWhiteSpace(picked))
-                return $"{picked} ({role})";
+                return picked;
         }
 
-        return archetype != null
-            ? $"Subject #{caseIndex1Based} ({role})"
-            : $"Subject #{caseIndex1Based}";
+        return $"Subject #{caseIndex1Based}";
+    }
+
+    private static readonly string[] Months =
+        { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+    /// <summary>A plausible birth date for the visitor's true era.</summary>
+    private static string GenerateBirthDate(EraSO era)
+    {
+        int year;
+        switch (era != null ? era.id : string.Empty)
+        {
+            case "rome": year = Random.Range(10, 90); break;
+            case "medieval": year = Random.Range(1030, 1190); break;
+            case "future": year = Random.Range(2380, 2440); break;
+            default: year = Random.Range(1900, 2000); break;
+        }
+
+        int day = Random.Range(1, 29);
+        string month = Months[Random.Range(0, Months.Length)];
+        return $"{day} {month} {year}";
+    }
+
+    /// <summary>
+    /// Shifts a birth date's year so the forged value stays plausible but wrong.
+    /// </summary>
+    private static string ForgeBirthDate(string trueDate)
+    {
+        string[] parts = (trueDate ?? string.Empty).Split(' ');
+        if (parts.Length == 3 && int.TryParse(parts[2], out int year))
+        {
+            int offset = Random.Range(2, 25) * (Random.value < 0.5f ? -1 : 1);
+            return $"{parts[0]} {parts[1]} {year + offset}";
+        }
+
+        return trueDate + " (?)";
+    }
+
+    /// <summary>
+    /// Builds the agency's citizen master record for a day's visitors. Records
+    /// always carry the TRUE identity, so forged papers can be caught against
+    /// them. (Future: deliberately missing/corrupted records + family history.)
+    /// </summary>
+    public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases)
+    {
+        var registry = new CitizenRegistry();
+
+        if (cases == null)
+            return registry;
+
+        foreach (CaseInstance inst in cases)
+        {
+            if (inst == null || string.IsNullOrWhiteSpace(inst.visitorGivenName))
+                continue;
+
+            string nation = inst.nation != null ? inst.nation.displayName : "Unregistered";
+            string era = inst.trueEra != null ? inst.trueEra.displayName : "Unknown Era";
+
+            registry.Add(new CitizenRecord
+            {
+                fullName = inst.visitorGivenName,
+                birthDate = inst.trueBirthDate,
+                origin = $"{nation} — {era}",
+                note = inst.isLegendary
+                    ? "Priority subject. Records sealed above your clearance."
+                    : "No remarks on file."
+            });
+        }
+
+        return registry;
     }
 
     /// <summary>

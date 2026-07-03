@@ -29,6 +29,82 @@ public class DiscrepancyLogTests
     private static CompareEvidence Entry(string nationId, string eraId, string value, ClueCategory category = ClueCategory.Technology) =>
         CompareEvidence.ForReferenceEntry(category, value, nationId, eraId, $"{nationId} — {eraId}");
 
+    private static CompareEvidence ForgedIdentityField(ClueCategory category, string value) => new CompareEvidence
+    {
+        kind = EvidenceKind.DocumentField,
+        category = category,
+        value = value,
+        isAnachronism = true
+    };
+
+    // -----------------------------
+    // Record proof (identity)
+    // -----------------------------
+
+    [Test]
+    public void ForgedBirthDate_VsRecord_Registers_AsRecordMismatch()
+    {
+        var log = new DiscrepancyLog();
+        Discrepancy d = log.TryRegister(
+            ForgedIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            ClaimNation, ClaimEra);
+
+        Assert.NotNull(d);
+        Assert.AreEqual(DiscrepancyProof.RecordMismatch, d.provedBy);
+        Assert.AreEqual("3 May 1131", d.expectedValue);
+        StringAssert.Contains("BIRTH DATE", d.Summary);
+        StringAssert.Contains("agency records", d.Summary);
+    }
+
+    [Test]
+    public void HonestBirthDate_MatchingRecord_DoesNotRegister()
+    {
+        var log = new DiscrepancyLog();
+        var honest = new CompareEvidence
+        {
+            kind = EvidenceKind.DocumentField,
+            category = ClueCategory.BirthDate,
+            value = "3 May 1131",
+            isAnachronism = false
+        };
+
+        Assert.IsNull(log.TryRegister(honest, CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"), ClaimNation, ClaimEra));
+    }
+
+    [Test]
+    public void RecordField_VsDifferentCategoryDoc_DoesNotRegister()
+    {
+        var log = new DiscrepancyLog();
+        Assert.IsNull(log.TryRegister(
+            ForgedDocField(), // Technology
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            ClaimNation, ClaimEra));
+    }
+
+    [Test]
+    public void TwoRecordFields_DoNotRegister()
+    {
+        var log = new DiscrepancyLog();
+        Assert.IsNull(log.TryRegister(
+            CompareEvidence.ForRecordField(ClueCategory.Name, "Bjorn"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            ClaimNation, ClaimEra));
+    }
+
+    [Test]
+    public void RecordProof_WorksEvenWithoutClaimEra()
+    {
+        // Identity has nothing to do with the travel claim.
+        var log = new DiscrepancyLog();
+        Discrepancy d = log.TryRegister(
+            ForgedIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            null, null);
+
+        Assert.NotNull(d);
+    }
+
     // -----------------------------
     // Proof modalities
     // -----------------------------

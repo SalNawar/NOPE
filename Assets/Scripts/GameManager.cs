@@ -118,9 +118,13 @@ public sealed class GameManager : MonoBehaviour
         // Generate all cases up-front.
         _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState);
 
-        // Investigation: surface today's travel directives (rules to deny).
+        // Investigation: surface today's travel directives (rules to deny) and
+        // the agency's citizen records for today's visitors.
         if (investigationUI != null)
+        {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
+            investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
+        }
 
         // Initial HUD state.
         officeUI.UpdateHud(_worldState);

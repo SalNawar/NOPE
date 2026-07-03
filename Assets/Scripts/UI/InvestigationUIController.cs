@@ -41,6 +41,13 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Scanner window chrome; opened when the first discrepancy registers.</summary>
     [SerializeField] private OSWindowChrome scannerWindow;
 
+    [Header("Interaction / records")]
+    /// <summary>Intercom panel listing per-case traveller actions.</summary>
+    [SerializeField] private InteractionPanelController interactionPanel;
+
+    /// <summary>Citizen Records app (registry injected per day).</summary>
+    [SerializeField] private CitizenRecordsWindowController recordsWindow;
+
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
@@ -107,10 +114,17 @@ public sealed class InvestigationUIController : MonoBehaviour
         RefreshScannerText();
 
         if (compareController != null)
-            compareController.ShowLoggedNotice();
+            compareController.ShowDeviation(found.Summary);
 
         if (scannerWindow != null)
             scannerWindow.Open();
+    }
+
+    /// <summary>Injects the day's citizen registry into the Records app.</summary>
+    public void SetCitizenRegistry(CitizenRegistry registry)
+    {
+        if (recordsWindow != null)
+            recordsWindow.SetRegistry(registry);
     }
 
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
@@ -192,6 +206,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (directivesText != null)
             directivesText.text = _directives;
 
+        // A new visitor clears the desk: every open window closes.
+        // (A pin system will later let the player keep chosen windows open.)
+        CloseAllWindows();
+
         foreach (GameObject w in _docWindows)
             if (w != null)
                 Destroy(w);
@@ -202,23 +220,41 @@ public sealed class InvestigationUIController : MonoBehaviour
                 Destroy(ic);
         _docIcons.Clear();
 
+        // Documents are handed over via intercom actions ("Request Passport"),
+        // not desktop icons: the windows spawn hidden and open on request.
+        var actions = new List<InteractionAction>();
+
         if (inst != null)
         {
             int i = 0;
             foreach (DocumentInstance doc in inst.documents)
             {
                 DocumentWindowController clone = Instantiate(documentWindowTemplate, windowLayer);
-                clone.gameObject.SetActive(false); // opened from its desktop icon
+                clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
                 clone.SetDocument(doc, compareController);
                 _docWindows.Add(clone.gameObject);
 
                 string docName = doc != null && doc.template != null ? doc.template.displayName : "Document";
-                AddDesktopIcon(docName, clone.gameObject, true);
+                GameObject window = clone.gameObject;
+                actions.Add(new InteractionAction
+                {
+                    label = $"Request {docName}",
+                    execute = () =>
+                    {
+                        if (window == null)
+                            return;
+                        window.SetActive(true);
+                        window.transform.SetAsLastSibling();
+                    }
+                });
                 i++;
             }
         }
+
+        if (interactionPanel != null)
+            interactionPanel.SetActions(actions);
 
         BuildBookShelf(lib);
 
@@ -226,6 +262,23 @@ public sealed class InvestigationUIController : MonoBehaviour
             compareController.Clear();
 
         WireDecisionButtons(acceptButton, denyButton);
+    }
+
+    /// <summary>
+    /// Closes every window on the window layer (templates are already
+    /// inactive; per-case document clones are destroyed separately).
+    /// </summary>
+    private void CloseAllWindows()
+    {
+        if (windowLayer == null)
+            return;
+
+        for (int i = 0; i < windowLayer.childCount; i++)
+        {
+            GameObject child = windowLayer.GetChild(i).gameObject;
+            if (child.activeSelf)
+                child.SetActive(false);
+        }
     }
 
     private void BuildBookShelf(ContentLibrarySO lib)

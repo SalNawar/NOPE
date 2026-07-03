@@ -11,5 +11,10 @@ public enum ClueCategory
     Technology,
     Currency,
     Geography,
-    Culture
+    Culture,
+
+    // Identity fields — validated against the agency's citizen records,
+    // not the era reference books.
+    Name,
+    BirthDate
 }

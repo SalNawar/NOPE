@@ -16,6 +16,12 @@ MonoBehaviour:
   preferredCategories: 
   maxClues: 3
   fieldSpecs:
+  - category: 7
+    label: Full Name
+    page: 0
+  - category: 8
+    label: Date of Birth
+    page: 0
   - category: 4
     label: Coin of Issue
     page: 0

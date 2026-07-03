@@ -63,6 +63,7 @@
     <Compile Include="Assets\Scripts\Investigation\TravelRuleSO.cs" />
     <Compile Include="Assets\Scripts\UI\DayFlowUIController.cs" />
     <Compile Include="Assets\Scripts\Endings\EndingSO.cs" />
+    <Compile Include="Assets\Scripts\UI\CitizenRecordsWindowController.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineReactiveSprite.cs" />
     <Compile Include="Assets\Scripts\Office\ICameraRig.cs" />
     <Compile Include="Assets\Scripts\Endings\EndingService.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Assets\Scripts\UI\ReferenceBookWindowController.cs" />
     <Compile Include="Assets\Scripts\DayPlanSO.cs" />
     <Compile Include="Assets\Scripts\Home\HomeEconomy.cs" />
+    <Compile Include="Assets\Scripts\UI\InteractionPanelController.cs" />
     <Compile Include="Assets\Scripts\TitleSceneController.cs" />
     <Compile Include="Assets\Scripts\Core\RunConfigSO.cs" />
     <Compile Include="Assets\Scripts\CaseBlueprintSO.cs" />

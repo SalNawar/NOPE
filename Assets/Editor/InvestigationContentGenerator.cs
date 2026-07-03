@@ -78,6 +78,8 @@ public static class InvestigationContentGenerator
         // --- Document templates ---
         DocumentTemplateSO passport = MakeTemplate("DocTemplate_Passport", "Travel Passport", new[]
         {
+            (ClueCategory.Name, "Full Name", 0),
+            (ClueCategory.BirthDate, "Date of Birth", 0),
             (ClueCategory.Currency, "Coin of Issue", 0),
             (ClueCategory.Language, "Native Tongue", 0)
         });

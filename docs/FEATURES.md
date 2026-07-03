@@ -26,23 +26,29 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability)
 - [ ] Start menu: Settings (stub window) + Power (quit); fixed-height entries
-- [ ] Desktop icon grid top-left; per-case document icons + reference book icons + app icons
+- [ ] Desktop icon grid top-left; reference book icons + app icons (documents come via the intercom, not icons)
 - [ ] Upgrade-gated icons (Lexicon/Dialect/Material) dim until the upgrade is owned
 - [ ] Draggable windows; min/max/close chrome on ALL windows (app, document, reference)
 - [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Clue Log, Notes
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)
+- [ ] Every new case closes all open windows (pin system planned to override)
+- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note)
 
 ## Investigation loop
 
 - [ ] Claim banner (visitor name + stated destination/era)
-- [ ] Multi-page document windows built from templates with structured fields
+- [ ] Intercom interaction panel: per-case traveller actions — "Request Travel Passport", "Request Transit Permit" (more actions planned: interrogation, photo capture)
+- [ ] Documents render as SCANNED pages (white page + photo placeholder on dark scanner backing), multi-page, structured fields
+- [ ] Passport carries identity fields: Full Name + Date of Birth (checked against Citizen Records)
 - [ ] Reference book windows (category ground truth per nation+era, paged)
-- [ ] Click-to-compare any two values; MATCH/MISMATCH bar (visual, no auto-verdict)
+- [ ] Click-to-compare any two values; MATCH/MISMATCH bar (visual, no auto-verdict); auto-sized text
 - [ ] Scanner = Deviation Report: true contradictions auto-register (tested: `DiscrepancyLogTests`)
   - [ ] Mismatch proof: forged field ≠ claimed-era reference entry
   - [ ] Match proof: forged field = a *different* era/nation's entry (origin proof)
+  - [ ] Record proof: forged identity field ≠ agency citizen record (tested)
   - [ ] Junk comparisons never register (wrong category, foreign-era mismatch, honest fields)
   - [ ] One discrepancy per category; cleared per case; window auto-opens on first find
+  - [ ] Compare bar flips to a red "DEVIATION LOGGED — …" verdict when evidence registers (never a green MATCH)
 - [ ] Accept / Deny decision buttons
 - [ ] Fallback text-mode investigation when the rich desk isn't built
 
@@ -52,7 +58,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Wrong decision: citation (free warnings, then escalating penalties), stability loss
 - [ ] Evidence-gated denial: denying a forger with **zero** documented discrepancies = citation + deduction even though the visitor lied (`requireEvidenceToDeny` toggle)
 - [ ] Directive-violation denials never need scanned evidence
-- [ ] Only provable forgeries are generated (reference book must contain the claim's truth)
+- [ ] Only provable forgeries are generated (reference book must contain the claim's truth; birth dates provable via citizen records; names never forged until the missing-record mechanic lands)
 - [ ] Timeline impacts apply only on ACCEPT; sends tracked per era
 - [ ] Shift ledger (tested: `ShiftLedgerTests`); citation slip pauses the day until acknowledged
 

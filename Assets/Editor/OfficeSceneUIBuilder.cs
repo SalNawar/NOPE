@@ -148,9 +148,65 @@ public static class OfficeSceneUIBuilder
         TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
         BuildDesktopIcon(bookShelf, "IconScanner", "Scanner", scannerWindow, "");
 
-        // Compare bar (XP tooltip-yellow, above the shelf)
+        // Intercom: per-case traveller actions ("Request Passport", ...); the
+        // action list is provided at runtime by InvestigationUIController.
+        Transform intercom = Panel(investRoot, "IntercomPanel", new Vector2(0.79f, 0.36f), new Vector2(0.995f, 0.85f), Vector2.zero, Vector2.zero, new Color(0.07f, 0.1f, 0.16f, 0.92f));
+        TMP_Text intercomTitle = Text(intercom, "Title", "INTERCOM", 20, TextAlignmentOptions.Center, new Vector2(0.05f, 0.88f), new Vector2(0.95f, 0.99f), new Color(0.7f, 0.85f, 1f, 1f));
+        intercomTitle.fontStyle = FontStyles.Bold;
+        Transform intercomActions = Panel(intercom, "Actions", new Vector2(0.04f, 0.02f), new Vector2(0.96f, 0.86f), Vector2.zero, Vector2.zero, null);
+        AddVLayout(intercomActions, 6f);
+        Button actionTemplate = MakeButton(intercomActions, "ActionButtonTemplate", "Request", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 1f));
+        SetLayoutHeight(actionTemplate, 44f);
+        actionTemplate.gameObject.SetActive(false);
+        InteractionPanelController interaction = intercom.GetComponent<InteractionPanelController>();
+        if (interaction == null)
+            interaction = intercom.gameObject.AddComponent<InteractionPanelController>();
+        var soInteract = new SerializedObject(interaction);
+        SetRef(soInteract, "actionsRoot", intercomActions);
+        SetRef(soInteract, "actionButtonTemplate", actionTemplate);
+        soInteract.ApplyModifiedProperties();
+
+        // Citizen Records app: the agency's master record of every (fake)
+        // human. Registry content is injected per day by GameManager.
+        DestroyChildIfPresent(windowLayer, "RecordsWindow");
+        OSWindowChrome recordsChrome = BuildOSWindow(windowLayer, "RecordsWindow", "Citizen Records",
+            "Type a citizen's name and press SEARCH.", new Vector2(520f, 430f));
+        Transform recWin = recordsChrome.transform;
+        TMP_Text recStatus = recWin.Find("Body").GetComponent<TMP_Text>();
+        var recStatusRt = (RectTransform)recStatus.transform;
+        recStatusRt.anchorMin = new Vector2(0.05f, 0.6f);
+        recStatusRt.anchorMax = new Vector2(0.95f, 0.7f);
+        TMP_InputField recSearchInput = BuildInputField(recWin, "SearchInput", "Type a full name…", new Vector2(0.05f, 0.74f), new Vector2(0.68f, 0.86f));
+        Button recSearchButton = MakeButton(recWin, "SearchButton", "SEARCH", new Vector2(0.71f, 0.74f), new Vector2(0.95f, 0.86f), new Color(0.15f, 0.3f, 0.5f, 1f));
+        (GameObject recNameRow, TMP_Text recNameValue) = BuildRecordRow(recWin, "NameRow", "Name", new Vector2(0.05f, 0.46f), new Vector2(0.95f, 0.56f));
+        (GameObject recBornRow, TMP_Text recBornValue) = BuildRecordRow(recWin, "BornRow", "Born", new Vector2(0.05f, 0.34f), new Vector2(0.95f, 0.44f));
+        TMP_Text recOrigin = Text(recWin, "OriginText", "", 17, TextAlignmentOptions.Left, new Vector2(0.06f, 0.24f), new Vector2(0.95f, 0.32f), Ink);
+        TMP_Text recNote = Text(recWin, "NoteText", "", 15, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.05f), new Vector2(0.95f, 0.22f), new Color(0.35f, 0.3f, 0.2f, 1f));
+        recNote.fontStyle = FontStyles.Italic;
+        CitizenRecordsWindowController records = recWin.GetComponent<CitizenRecordsWindowController>();
+        if (records == null)
+            records = recWin.gameObject.AddComponent<CitizenRecordsWindowController>();
+        var soRecords = new SerializedObject(records);
+        SetRef(soRecords, "searchInput", recSearchInput);
+        SetRef(soRecords, "searchButton", recSearchButton);
+        SetRef(soRecords, "statusText", recStatus);
+        SetRef(soRecords, "nameRow", recNameRow);
+        SetRef(soRecords, "nameValueText", recNameValue);
+        SetRef(soRecords, "bornRow", recBornRow);
+        SetRef(soRecords, "bornValueText", recBornValue);
+        SetRef(soRecords, "originText", recOrigin);
+        SetRef(soRecords, "noteText", recNote);
+        SetRef(soRecords, "compareController", compare);
+        soRecords.ApplyModifiedProperties();
+        BuildDesktopIcon(bookShelf, "IconRecords", "Records", recordsChrome, "");
+
+        // Compare bar (XP tooltip-yellow, above the shelf). Auto-sizing keeps
+        // long verdict lines inside the bar.
         Transform compareBar = Panel(investRoot, "CompareBar", new Vector2(0.1f, 0.27f), new Vector2(0.9f, 0.34f), Vector2.zero, Vector2.zero, Tooltip);
         TMP_Text compareText = Text(compareBar, "CompareText", "", 22, TextAlignmentOptions.Center, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink);
+        compareText.enableAutoSizing = true;
+        compareText.fontSizeMin = 11f;
+        compareText.fontSizeMax = 22f;
         compareBar.gameObject.SetActive(false);
 
         // Accept / Deny (above the taskbar)
@@ -234,6 +290,8 @@ public static class OfficeSceneUIBuilder
         SetRef(soInvest, "bookShelfButtonTemplate", shelfButtonTemplate);
         SetRef(soInvest, "scannerText", scannerText);
         SetRef(soInvest, "scannerWindow", scannerWindow);
+        SetRef(soInvest, "interactionPanel", interaction);
+        SetRef(soInvest, "recordsWindow", records);
         soInvest.ApplyModifiedProperties();
 
         var soOrch = new SerializedObject(orchestrator);
@@ -262,8 +320,21 @@ public static class OfficeSceneUIBuilder
 
     private static DocumentWindowController BuildDocumentWindow(Transform layer)
     {
-        Transform win = Panel(layer, "DocumentWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), Paper);
+        // Rebuilt fresh each run: visitor papers read as SCANNED documents —
+        // a white page with a photo corner on a dark scanner backing — so they
+        // never look like just another OS window.
+        DestroyChildIfPresent(layer, "DocumentWindowTemplate");
+        Transform win = Panel(layer, "DocumentWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), new Color(0.13f, 0.14f, 0.17f, 1f));
         WindowShell s = BuildWindowShell(win, "Document");
+
+        Transform page = Panel(win, "ScanPage", new Vector2(0.025f, 0.115f), new Vector2(0.975f, 0.85f), Vector2.zero, Vector2.zero, new Color(0.97f, 0.96f, 0.92f, 1f));
+        page.SetSiblingIndex(1); // render after the header, behind the rows
+        Transform photo = Panel(page, "PhotoBox", new Vector2(0.76f, 0.66f), new Vector2(0.96f, 0.96f), Vector2.zero, Vector2.zero, new Color(0.55f, 0.56f, 0.58f, 1f));
+        Text(photo, "Label", "PHOTO", 13, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, new Color(0.25f, 0.26f, 0.28f, 1f));
+
+        // Footer page label needs light ink on the dark backing.
+        s.page.color = new Color(0.85f, 0.86f, 0.88f, 1f);
+
         DocumentWindowController c = win.GetComponent<DocumentWindowController>() ?? win.gameObject.AddComponent<DocumentWindowController>();
         var so = new SerializedObject(c);
         SetRef(so, "titleText", s.title);
@@ -1001,12 +1072,49 @@ public static class OfficeSceneUIBuilder
         TMP_Text titleText = Text(header, "TitleText", title, 15, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.7f, 1f), Color.white);
         titleText.fontStyle = FontStyles.Bold;
 
-        Text(win, "Body", body, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink);
+        TMP_Text bodyText = Text(win, "Body", body, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink);
+        bodyText.textWrappingMode = TextWrappingModes.Normal;
+        bodyText.overflowMode = TextOverflowModes.Truncate;
+        if (win.GetComponent<RectMask2D>() == null)
+            win.gameObject.AddComponent<RectMask2D>(); // nothing bleeds outside the window
 
         OSWindowChrome chrome = BuildWinControls(win, header);
 
         win.gameObject.SetActive(false); // opened by its icon
         return chrome;
+    }
+
+    /// <summary>Builds a TMP input field (box + masked viewport + placeholder + text).</summary>
+    private static TMP_InputField BuildInputField(Transform parent, string name, string placeholder, Vector2 aMin, Vector2 aMax)
+    {
+        DestroyChildIfPresent(parent, name);
+        Transform box = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, Color.white);
+
+        Transform area = Panel(box, "TextArea", Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-14f, -8f), null);
+        area.gameObject.AddComponent<RectMask2D>();
+        TMP_Text ph = Text(area, "Placeholder", placeholder, 17, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, new Color(0.45f, 0.45f, 0.45f, 0.8f));
+        ph.fontStyle = FontStyles.Italic;
+        TMP_Text text = Text(area, "Text", "", 17, TextAlignmentOptions.Left, Vector2.zero, Vector2.one, Ink);
+
+        TMP_InputField input = box.gameObject.AddComponent<TMP_InputField>();
+        input.textViewport = (RectTransform)area;
+        input.textComponent = text;
+        input.placeholder = ph;
+        input.targetGraphic = box.GetComponent<Image>();
+        return input;
+    }
+
+    /// <summary>Builds a compare-clickable label/value record row; returns row + value text.</summary>
+    private static (GameObject row, TMP_Text value) BuildRecordRow(Transform parent, string name, string label, Vector2 aMin, Vector2 aMax)
+    {
+        DestroyChildIfPresent(parent, name);
+        Transform row = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.7f));
+        Button btn = row.gameObject.AddComponent<Button>();
+        btn.targetGraphic = row.GetComponent<Image>();
+
+        Text(row, "Label", label, 17, TextAlignmentOptions.Left, new Vector2(0.03f, 0f), new Vector2(0.3f, 1f), new Color(0.35f, 0.32f, 0.25f, 1f));
+        TMP_Text value = Text(row, "Value", "", 17, TextAlignmentOptions.Left, new Vector2(0.33f, 0f), new Vector2(0.97f, 1f), Ink);
+        return (row.gameObject, value);
     }
 
     /// <summary>Builds a desktop icon button bound to a window, with optional unlock-gating.</summary>

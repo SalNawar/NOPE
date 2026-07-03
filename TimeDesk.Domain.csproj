@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Domain\DiscrepancyLog.cs" />
+    <Compile Include="Assets\Scripts\Domain\CitizenRegistry.cs" />
     <Compile Include="Assets\Scripts\Domain\DocumentField.cs" />
     <Compile Include="Assets\Scripts\Domain\ClueCategory.cs" />
     <Compile Include="Assets\Scripts\Domain\ReadyGate.cs" />

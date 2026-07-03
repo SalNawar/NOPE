@@ -11,7 +11,23 @@ public enum EvidenceKind
     DocumentField,
 
     /// <summary>A reference-book truth entry.</summary>
-    ReferenceEntry
+    ReferenceEntry,
+
+    /// <summary>A field from the agency's citizen records.</summary>
+    RecordField
+}
+
+/// <summary>How a discrepancy was proved.</summary>
+public enum DiscrepancyProof
+{
+    /// <summary>Papers differ from the claimed era's reference entry.</summary>
+    ClaimMismatch,
+
+    /// <summary>Papers match a reference entry that belongs to a different origin.</summary>
+    ForeignOrigin,
+
+    /// <summary>Papers differ from the agency's citizen record.</summary>
+    RecordMismatch
 }
 
 /// <summary>
@@ -62,6 +78,15 @@ public struct CompareEvidence
         entryEraId = eraId,
         entryOriginLabel = originLabel
     };
+
+    /// <summary>Evidence for a clicked citizen-record field.</summary>
+    public static CompareEvidence ForRecordField(ClueCategory category, string value) => new CompareEvidence
+    {
+        kind = EvidenceKind.RecordField,
+        category = category,
+        value = value,
+        entryOriginLabel = "agency records"
+    };
 }
 
 /// <summary>One documented contradiction on the current case.</summary>
@@ -85,10 +110,30 @@ public sealed class Discrepancy
     /// </summary>
     public string actualOrigin;
 
+    /// <summary>How this contradiction was proved.</summary>
+    public DiscrepancyProof provedBy;
+
     /// <summary>Player-facing report line ("LANGUAGE INCORRECT — ...").</summary>
-    public string Summary => actualOrigin != null
-        ? $"{category.ToString().ToUpperInvariant()} INCORRECT — papers show \"{documentValue}\", which belongs to {actualOrigin}"
-        : $"{category.ToString().ToUpperInvariant()} INCORRECT — papers: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
+    public string Summary
+    {
+        get
+        {
+            string what = CategoryLabel(category);
+            switch (provedBy)
+            {
+                case DiscrepancyProof.ForeignOrigin:
+                    return $"{what} INCORRECT — papers show \"{documentValue}\", which belongs to {actualOrigin}";
+                case DiscrepancyProof.RecordMismatch:
+                    return $"{what} INCORRECT — papers: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
+                default:
+                    return $"{what} INCORRECT — papers: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
+            }
+        }
+    }
+
+    /// <summary>Report label for a category ("BIRTH DATE", "LANGUAGE", ...).</summary>
+    private static string CategoryLabel(ClueCategory c) =>
+        c == ClueCategory.BirthDate ? "BIRTH DATE" : c.ToString().ToUpperInvariant();
 }
 
 /// <summary>
@@ -121,19 +166,26 @@ public sealed class DiscrepancyLog
     /// </summary>
     public Discrepancy TryRegister(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId)
     {
-        CompareEvidence doc = a.kind == EvidenceKind.DocumentField ? a : b;
-        CompareEvidence book = b.kind == EvidenceKind.ReferenceEntry ? b : a;
+        CompareEvidence doc, truth;
+        if (a.kind == EvidenceKind.DocumentField)
+        {
+            doc = a;
+            truth = b;
+        }
+        else
+        {
+            doc = b;
+            truth = a;
+        }
 
-        // Must be one document field against one reference entry.
-        if (doc.kind != EvidenceKind.DocumentField || book.kind != EvidenceKind.ReferenceEntry)
+        // Must be one document field against one truth source (book or records).
+        if (doc.kind != EvidenceKind.DocumentField)
+            return null;
+        if (truth.kind != EvidenceKind.ReferenceEntry && truth.kind != EvidenceKind.RecordField)
             return null;
 
         // Same category — comparing Language against Currency proves nothing.
-        if (doc.category != book.category)
-            return null;
-
-        // Without a claim there is nothing to contradict.
-        if (string.IsNullOrEmpty(claimedEraId))
+        if (doc.category != truth.category)
             return null;
 
         // Only a genuinely forged field is a contradiction; a coincidental
@@ -141,33 +193,57 @@ public sealed class DiscrepancyLog
         if (!doc.isAnachronism)
             return null;
 
-        bool entryAppliesToClaim =
-            !string.IsNullOrEmpty(book.entryEraId) && book.entryEraId == claimedEraId &&
-            (string.IsNullOrEmpty(book.entryNationId) || book.entryNationId == claimedNationId);
-
-        bool valuesMatch = ValuesMatch(doc.value, book.value);
-
         Discrepancy found = null;
 
-        if (entryAppliesToClaim && !valuesMatch)
+        if (truth.kind == EvidenceKind.RecordField)
         {
-            // Mismatch proof: the claim's reference disagrees with the papers.
-            found = new Discrepancy
+            // Record proof: the papers disagree with the agency's own records
+            // about who this person is. No era claim involved.
+            if (!ValuesMatch(doc.value, truth.value))
             {
-                category = doc.category,
-                documentValue = doc.value,
-                expectedValue = book.value
-            };
+                found = new Discrepancy
+                {
+                    category = doc.category,
+                    documentValue = doc.value,
+                    expectedValue = truth.value,
+                    provedBy = DiscrepancyProof.RecordMismatch
+                };
+            }
         }
-        else if (!entryAppliesToClaim && valuesMatch)
+        else
         {
-            // Match proof: the papers' value belongs to a different origin.
-            found = new Discrepancy
+            // Without a claim there is nothing to contradict.
+            if (string.IsNullOrEmpty(claimedEraId))
+                return null;
+
+            bool entryAppliesToClaim =
+                !string.IsNullOrEmpty(truth.entryEraId) && truth.entryEraId == claimedEraId &&
+                (string.IsNullOrEmpty(truth.entryNationId) || truth.entryNationId == claimedNationId);
+
+            bool valuesMatch = ValuesMatch(doc.value, truth.value);
+
+            if (entryAppliesToClaim && !valuesMatch)
             {
-                category = doc.category,
-                documentValue = doc.value,
-                actualOrigin = string.IsNullOrEmpty(book.entryOriginLabel) ? "a different era" : book.entryOriginLabel
-            };
+                // Mismatch proof: the claim's reference disagrees with the papers.
+                found = new Discrepancy
+                {
+                    category = doc.category,
+                    documentValue = doc.value,
+                    expectedValue = truth.value,
+                    provedBy = DiscrepancyProof.ClaimMismatch
+                };
+            }
+            else if (!entryAppliesToClaim && valuesMatch)
+            {
+                // Match proof: the papers' value belongs to a different origin.
+                found = new Discrepancy
+                {
+                    category = doc.category,
+                    documentValue = doc.value,
+                    actualOrigin = string.IsNullOrEmpty(truth.entryOriginLabel) ? "a different era" : truth.entryOriginLabel,
+                    provedBy = DiscrepancyProof.ForeignOrigin
+                };
+            }
         }
 
         if (found == null)
