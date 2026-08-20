@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEditor;
@@ -34,6 +35,48 @@ public static class OfficeSceneUIBuilder
     private static readonly Color HeaderBar = new Color(0.13f, 0.34f, 0.86f, 1f); // XP title bar
     private static readonly Color RowBg = new Color(1f, 1f, 1f, 0.7f);            // near-white field row
     private static readonly Color Ink = new Color(0.1f, 0.09f, 0.08f, 1f);
+
+    // --- Ranked-layer art palette -------------------------------------------------
+    // Seeds the one-time placeholder-PNG bootstrap for the timeline-ranked office
+    // layers. NO runtime code reads these: the generator early-outs on an existing
+    // file, so the designer-facing knob is the PNG itself — dropping real art over
+    // Assets/Art/Office/Ranked/ranked_nation_latia.png is the supported path, exactly
+    // as the Art Direction Bible prescribes ("final art = replace the sprite asset").
+    // Ids without an entry here fall back to a deterministic hash colour
+    // (RankedArtNaming.HsvFor), so new content still gets distinct art automatically.
+    private static readonly Dictionary<string, Color> RankedArtPalette = new Dictionary<string, Color>
+    {
+        // Nations. These take each nation's Art Bible CHARACTER (Latia warm/oxide,
+        // Norvik cold, Solaris clean) but not its literal document-stock colour: the
+        // Bible's stock palette is deliberately all aged-paper tones because documents
+        // are compared side by side on a desk. Filling a whole back wall with those put
+        // latia/aegyptus/helios within 0.09 of each other — indistinguishable at a
+        // glance. These are spaced to a minimum separation of 0.15 instead.
+        { "latia",      new Color(0.62f, 0.32f, 0.26f) }, // oxide red
+        { "helios",     new Color(0.74f, 0.58f, 0.24f) }, // gold
+        { "aegyptus",   new Color(0.55f, 0.55f, 0.28f) }, // olive ochre
+        { "solaris",    new Color(0.80f, 0.84f, 0.87f) }, // clean near-white
+        { "norvik",     new Color(0.36f, 0.56f, 0.70f) }, // ice blue
+        { "albion",     new Color(0.32f, 0.37f, 0.56f) }, // indigo slate
+        { "greece",     new Color(0.28f, 0.58f, 0.54f) }, // aegean teal
+        { "egypt",      new Color(0.72f, 0.62f, 0.42f) }, // sand tan
+        { "china",      new Color(0.70f, 0.20f, 0.30f) }, // imperial red
+        { "japan",      new Color(0.58f, 0.30f, 0.48f) }, // plum
+        { "germany",    new Color(0.44f, 0.46f, 0.48f) }, // steel grey
+
+        // Attributes of the playable (Investigation) set — authored deliberately
+        // because the hash fallback put mysticism and philosophy within 0.007 hue
+        // of each other, which would have read as the same colour on the mid layer.
+        { "militarism", new Color(0.72f, 0.33f, 0.27f) }, // oxide red
+        { "philosophy", new Color(0.36f, 0.45f, 0.68f) }, // ink blue
+        { "industry",   new Color(0.55f, 0.48f, 0.36f) }, // soot / brass
+        { "mysticism",  new Color(0.55f, 0.38f, 0.66f) }, // violet
+        // democracy / science / art keep their hash colours — verified clear of the
+        // authored four at >= 0.129 separation.
+    };
+
+    /// <summary>Folder for generated ranked-layer art (separate from the hand-placed placeholders).</summary>
+    private const string RankedArtFolder = "Assets/Art/Office/Ranked";
 
     [MenuItem("Tools/TimeDesk/Build Office UI (HUD + Panels)")]
     public static void Build()
@@ -240,7 +283,7 @@ public static class OfficeSceneUIBuilder
 
         // Booth + cameras + view controller (new). The existing Canvas becomes
         // the Monitor-Focus desktop, hidden until the CRT is focused.
-        OfficeViewController officeView = BuildBooth(canvas);
+        OfficeViewController officeView = BuildBooth(canvas, library);
 
         // Fake-OS desktop shell: NEW apps only (existing document/reference/compare
         // windows are launched by the investigation icon grid), plus a Start menu.
@@ -840,6 +883,101 @@ public static class OfficeSceneUIBuilder
         return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
     }
 
+    /// <summary>
+    /// Colour for a ranked-art id: the authored palette entry when one exists,
+    /// otherwise a deterministic hash-derived colour so new content still gets
+    /// distinct art with no code change.
+    /// </summary>
+    private static Color RankedArtColor(string id)
+    {
+        if (!string.IsNullOrEmpty(id) && RankedArtPalette.TryGetValue(id, out Color authored))
+            return authored;
+
+        RankedArtNaming.HsvFor(id, out float h, out float s, out float v);
+        return Color.HSVToRGB(h, s, v);
+    }
+
+    /// <summary>
+    /// Pushes an accent colour away from the body colour when the two are too close
+    /// to tell apart, so the pair sprite's band stays visible. Keeps the accent's hue
+    /// (militarism still reads red) and moves only its brightness — otherwise e.g.
+    /// Latia's oxide-red body under a militarism oxide-red band renders as a flat block.
+    /// </summary>
+    private static Color ContrastAccent(Color body, Color accent)
+    {
+        const float minDistance = 0.12f;
+        const float valueShift = 0.28f;
+
+        float d = Mathf.Sqrt((body.r - accent.r) * (body.r - accent.r)
+                           + (body.g - accent.g) * (body.g - accent.g)
+                           + (body.b - accent.b) * (body.b - accent.b));
+
+        if (d >= minDistance)
+            return accent;
+
+        Color.RGBToHSV(accent, out float h, out float s, out float v);
+
+        // Move away from the body's brightness, staying inside a readable range.
+        float bodyValue = Mathf.Max(body.r, Mathf.Max(body.g, body.b));
+        v = bodyValue > 0.5f
+            ? Mathf.Clamp(v - valueShift, 0.12f, 1f)
+            : Mathf.Clamp(v + valueShift, 0f, 0.95f);
+
+        return Color.HSVToRGB(h, s, v);
+    }
+
+    /// <summary>
+    /// Generates (once) a ranked-layer placeholder PNG: a flat body colour, plus an
+    /// optional accent band across the bottom third for nation+attribute pairs.
+    /// Mirrors EnsureOfficeSprite's write/import/load shape, but derives the absolute
+    /// path from assetPath rather than a second hardcoded folder string.
+    /// </summary>
+    private static Sprite EnsureRankedArtSprite(string name, Color body, Color? accent, int w, int h)
+    {
+        string assetPath = $"{RankedArtFolder}/{name}.png";
+        Sprite existing = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+        if (existing != null)
+            return existing;
+
+        EnsureFolderTree(RankedArtFolder);
+
+        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        var pixels = new Color32[w * h];
+
+        Color32 bodyC = body;
+        Color32 accentC = accent ?? body;
+        int bandHeight = accent.HasValue ? Mathf.Max(1, Mathf.RoundToInt(h * 0.35f)) : 0;
+
+        // Texture rows run bottom-up, so rows [0, bandHeight) are the bottom band.
+        for (int y = 0; y < h; y++)
+        {
+            Color32 rowColor = y < bandHeight ? accentC : bodyC;
+            int rowStart = y * w;
+
+            for (int x = 0; x < w; x++)
+                pixels[rowStart + x] = rowColor;
+        }
+
+        tex.SetPixels32(pixels);
+        tex.Apply();
+
+        string abs = Application.dataPath + assetPath.Substring("Assets".Length);
+        System.IO.File.WriteAllBytes(abs, tex.EncodeToPNG());
+        Object.DestroyImmediate(tex);
+
+        AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
+        {
+            imp.textureType = TextureImporterType.Sprite;
+            imp.spriteImportMode = SpriteImportMode.Single;
+            imp.spritePixelsPerUnit = 100f;
+            imp.mipmapEnabled = false;
+            imp.SaveAndReimport();
+        }
+
+        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+    }
+
     /// <summary>Creates (or finds) a world-space sprite GameObject under a parent.</summary>
     private static SpriteRenderer EnsureSprite(Transform parent, string name, Sprite sprite, Vector3 localPos, int sortingOrder)
     {
@@ -860,13 +998,13 @@ public static class OfficeSceneUIBuilder
     /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster,
     /// and wires OfficeViewController + the CRT/READY clickables. Idempotent.
     /// </summary>
-    private static OfficeViewController BuildBooth(Canvas desktopCanvas)
+    private static OfficeViewController BuildBooth(Canvas desktopCanvas, ContentLibrarySO library)
     {
         // Root for all booth world objects.
         GameObject root = GameObject.Find("OfficeRoot") ?? new GameObject("OfficeRoot");
 
         // Set dressing (flat placeholder sprites; swap later).
-        EnsureSprite(root.transform, "BackWall",       EnsureOfficeSprite("backwall",  new Color(0.17f, 0.17f, 0.22f), 400, 240), new Vector3(0f, 0f, 10f), -100);
+        SpriteRenderer backWall = EnsureSprite(root.transform, "BackWall", EnsureOfficeSprite("backwall", new Color(0.17f, 0.17f, 0.22f), 400, 240), new Vector3(0f, 0f, 10f), -100);
         EnsureSprite(root.transform, "LeftPartition",  EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3(-6.5f, 0f, 5f), -50);
         EnsureSprite(root.transform, "RightPartition", EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3( 6.5f, 0f, 5f), -50);
         EnsureSprite(root.transform, "Desk",           EnsureOfficeSprite("desk",      new Color(0.26f, 0.20f, 0.15f), 400, 90),  new Vector3(0f, -3.6f, 0f), -10);
@@ -922,6 +1060,7 @@ public static class OfficeSceneUIBuilder
         // Diegetic readouts + a timeline-reactive poster + the desktop Back button.
         BuildReadouts(root.transform);
         BuildReactiveProp(root.transform);
+        BuildRankedLayers(root.transform, backWall, library);
         BuildBackToOfficeButton(desktopCanvas, view);
 
         return view;
@@ -974,6 +1113,223 @@ public static class OfficeSceneUIBuilder
             reactive = poster.gameObject.AddComponent<TimelineReactiveSprite>();
         var so = new SerializedObject(reactive);
         SetRef(so, "target", poster);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>
+    /// Wires the three ranked office layers: the back wall follows the winning
+    /// nation, a mid decor panel follows the winning attribute, and a desk piece
+    /// follows the winning nation-at-an-era + attribute pairing. Generates one themed
+    /// placeholder sprite per id in the content library and maps them, so the booth
+    /// visibly changes as the timeline shifts.
+    /// </summary>
+    private static void BuildRankedLayers(Transform root, SpriteRenderer backWall, ContentLibrarySO library)
+    {
+        SpriteRenderer midDecor = EnsureSprite(root, "RankedMidDecor",
+            EnsureOfficeSprite("rankedmid", new Color(0.38f, 0.36f, 0.46f), 110, 90), new Vector3(6.2f, -0.6f, 4.5f), -40);
+
+        SpriteRenderer deskDecor = EnsureSprite(root, "RankedDeskDecor",
+            EnsureOfficeSprite("rankeddesk", new Color(0.46f, 0.42f, 0.34f), 70, 60), new Vector3(2f, -2.7f, -1f), 5);
+
+        if (library == null)
+        {
+            Debug.LogWarning("[TimeDesk] No ContentLibrarySO — ranked office layers wired but left unmapped. " +
+                             "Assign ContentLibrary_Main and re-run Tools > TimeDesk > Build Office UI to generate their art.");
+            EnsureRanked(backWall, RankCategory.TopNation, null);
+            EnsureRanked(midDecor, RankCategory.TopAttribute, null);
+            EnsureRanked(deskDecor, RankCategory.TopProfileAttribute, null);
+            return;
+        }
+
+        // Variant sizes must match each layer's existing placeholder: at 100 PPU with a
+        // centre pivot, a different size would visibly resize AND shift the layer every
+        // time the winner changed.
+        List<RankedArtEntry> nations = BuildRankedMappings(library, RankCategory.TopNation, 400, 240);
+        List<RankedArtEntry> attributes = BuildRankedMappings(library, RankCategory.TopAttribute, 110, 90);
+        List<RankedArtEntry> pairs = BuildRankedMappings(library, RankCategory.TopProfileAttribute, 70, 60);
+
+        EnsureRanked(backWall, RankCategory.TopNation, nations);
+        EnsureRanked(midDecor, RankCategory.TopAttribute, attributes);
+        EnsureRanked(deskDecor, RankCategory.TopProfileAttribute, pairs);
+
+        WarnOnNearDuplicateColors(nations, "nations");
+        WarnOnNearDuplicateColors(attributes, "attributes");
+
+        Debug.Log($"[TimeDesk] Ranked office layers mapped: {nations.Count} nations, " +
+                  $"{attributes.Count} attributes, {pairs.Count} nation+attribute pairs " +
+                  $"(art in {RankedArtFolder}).");
+    }
+
+    /// <summary>One generated ranked-art variant: the winning id, its sprite, and the colour used.</summary>
+    private readonly struct RankedArtEntry
+    {
+        public readonly string Id;
+        public readonly Sprite Sprite;
+        public readonly Color Color;
+
+        public RankedArtEntry(string id, Sprite sprite, Color color)
+        {
+            Id = id;
+            Sprite = sprite;
+            Color = color;
+        }
+    }
+
+    /// <summary>
+    /// Enumerates the ids that can win a category from the content library and ensures
+    /// a themed sprite for each. Enumerating (rather than hardcoding a list) means new
+    /// content automatically gets art on the next build instead of going unmapped.
+    /// </summary>
+    private static List<RankedArtEntry> BuildRankedMappings(ContentLibrarySO library, RankCategory category, int w, int h)
+    {
+        var entries = new List<RankedArtEntry>();
+        var seen = new HashSet<string>();
+
+        switch (category)
+        {
+            case RankCategory.TopNation:
+                foreach (NationSO nation in library.Nations)
+                {
+                    if (nation == null || string.IsNullOrEmpty(nation.id) || !seen.Add(nation.id))
+                        continue;
+
+                    AddRankedEntry(entries, category, nation.id, RankedArtColor(nation.id), null, w, h);
+                }
+                break;
+
+            case RankCategory.TopAttribute:
+                foreach (AttributeSO attr in library.Attributes)
+                {
+                    if (attr == null || string.IsNullOrEmpty(attr.id) || !seen.Add(attr.id))
+                        continue;
+
+                    AddRankedEntry(entries, category, attr.id, RankedArtColor(attr.id), null, w, h);
+                }
+                break;
+
+            case RankCategory.TopProfileAttribute:
+                // Only authored (profile, attribute) baselines can ever win — ScoreRanking
+                // matches ProfileAttr keys only, so ad-hoc nation@era destinations are
+                // excluded from this category by design and need no art.
+                foreach (NationEraProfileSO profile in library.Profiles)
+                {
+                    if (profile == null || string.IsNullOrEmpty(profile.id))
+                        continue;
+
+                    Color body = RankedArtColor(profile.nation != null ? profile.nation.id : profile.id);
+
+                    foreach (AttributeBaseline baseline in profile.baselines)
+                    {
+                        if (baseline == null || baseline.attribute == null || string.IsNullOrEmpty(baseline.attribute.id))
+                            continue;
+
+                        string id = $"{profile.id}:{baseline.attribute.id}";
+                        if (!seen.Add(id))
+                            continue;
+
+                        // Two-tone: nation body + attribute band. Blending the two would
+                        // just make mud; a band keeps both halves independently readable.
+                        Color band = ContrastAccent(body, RankedArtColor(baseline.attribute.id));
+                        AddRankedEntry(entries, category, id, body, band, w, h);
+                    }
+                }
+                break;
+        }
+
+        return entries;
+    }
+
+    /// <summary>Ensures the sprite for one id and appends it, skipping entries whose art failed to import.</summary>
+    private static void AddRankedEntry(List<RankedArtEntry> entries, RankCategory category, string id, Color body, Color? accent, int w, int h)
+    {
+        string fileName = RankedArtNaming.FileNameFor(category, id);
+        Sprite sprite = EnsureRankedArtSprite(fileName, body, accent, w, h);
+
+        if (sprite == null)
+        {
+            Debug.LogWarning($"[TimeDesk] Could not generate or load ranked art '{fileName}.png' for id '{id}' — layer will fall back to its default sprite.");
+            return;
+        }
+
+        entries.Add(new RankedArtEntry(id, sprite, body));
+    }
+
+    /// <summary>
+    /// Flags ids whose generated colours are too close to tell apart on the same layer,
+    /// so a collision surfaces in the log instead of silently reading as one colour.
+    /// </summary>
+    private static void WarnOnNearDuplicateColors(List<RankedArtEntry> entries, string label)
+    {
+        const float minDistance = 0.12f;
+
+        for (int i = 0; i < entries.Count; i++)
+        {
+            for (int j = i + 1; j < entries.Count; j++)
+            {
+                Color a = entries[i].Color;
+                Color b = entries[j].Color;
+                float d = Mathf.Sqrt((a.r - b.r) * (a.r - b.r) + (a.g - b.g) * (a.g - b.g) + (a.b - b.b) * (a.b - b.b));
+
+                if (d < minDistance)
+                {
+                    Debug.LogWarning($"[TimeDesk] Ranked art for {label} '{entries[i].Id}' and '{entries[j].Id}' are nearly the same colour " +
+                                     $"(distance {d:0.###}). Add an explicit entry to RankedArtPalette, or replace one of the generated PNGs with distinct art.");
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Adds/points a TimelineRankedSprite at a renderer for one category and rewrites
+    /// its mappings. Assets are ensured once, but mappings are rebuilt from scratch on
+    /// every run so the builder stays authoritative over what it owns.
+    /// </summary>
+    private static void EnsureRanked(SpriteRenderer renderer, RankCategory category, List<RankedArtEntry> entries)
+    {
+        if (renderer == null)
+            return;
+
+        TimelineRankedSprite ranked = renderer.GetComponent<TimelineRankedSprite>();
+        if (ranked == null)
+            ranked = renderer.gameObject.AddComponent<TimelineRankedSprite>();
+
+        var so = new SerializedObject(ranked);
+        SetRef(so, "target", renderer);
+
+        SerializedProperty cat = so.FindProperty("category");
+        if (cat != null)
+            cat.enumValueIndex = (int)category;
+
+        // Keep the neutral placeholder as the fallback so an unmapped winner still renders.
+        SerializedProperty fallback = so.FindProperty("defaultSprite");
+        if (fallback != null && fallback.objectReferenceValue == null)
+            fallback.objectReferenceValue = renderer.sprite;
+
+        if (entries != null)
+        {
+            SerializedProperty list = so.FindProperty("mappings");
+
+            if (list == null)
+            {
+                Debug.LogWarning($"[TimeDesk] TimelineRankedSprite on '{renderer.name}' has no 'mappings' field — was it renamed? Layer left unmapped.");
+            }
+            else
+            {
+                list.ClearArray();
+
+                for (int i = 0; i < entries.Count; i++)
+                {
+                    list.InsertArrayElementAtIndex(i);
+                    SerializedProperty element = list.GetArrayElementAtIndex(i);
+
+                    // InsertArrayElementAtIndex copies its neighbour, so BOTH fields must
+                    // be written every iteration — never rely on defaults here.
+                    element.FindPropertyRelative("id").stringValue = entries[i].Id;
+                    element.FindPropertyRelative("sprite").objectReferenceValue = entries[i].Sprite;
+                }
+            }
+        }
+
         so.ApplyModifiedProperties();
     }
 

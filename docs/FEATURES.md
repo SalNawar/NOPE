@@ -18,6 +18,10 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Click CRT or READY sign → zoom into monitor (desktop UI); Escape or "< Office" button → pull back
 - [ ] Diegetic readouts: wall calendar (day), stability monitor (percent + lamp tint), credits till (with ding)
 - [ ] Timeline-reactive poster (sprite swaps driven by timeline cues)
+- [ ] Ranked office layers: back wall follows the top-scoring nation, mid decor the top attribute, desk decor the top profile+attribute pairing — sprite swaps driven by raw timeline scores, with a per-layer debug label showing the current winner (tested: `ScoreRankingTests`, `ScoreKeyTests`)
+- [ ] Ranked-layer art is generated per content id into `Assets/Art/Office/Ranked/` — Art Bible colours for authored nations/attributes, deterministic hash colours otherwise; pair sprites are two-tone (nation body + attribute band). Replacing a generated PNG with real art needs no code change (tested: `RankedArtNamingTests`)
+- [ ] A ranked layer only reacts to a score above `GameConfigSO.rankedLayerMinScore` (default 0, strict) — an all-negative or zero category shows the neutral sprite and reports "no clear leader" rather than presenting a least-bad score as dominant (tested: `ScoreRankingTests`)
+- [ ] Ranked-layer debug labels are gated to editor / development builds, so they can never render in a player build regardless of the per-layer `showDebugLabel` toggle
 - [ ] Morning briefing as "THE TEMPORAL TIMES" newsletter over the booth (Start Shift)
 - [ ] End-of-day "SHIFT LEDGER" newsletter over the booth (Go Home), incl. undocumented-denials line
 - [ ] Per-case READY gate: visitor is presented only after the player taps READY (tested: `ReadyGateTests`)
@@ -70,3 +74,4 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Day events system (before/after-case scheduled events; no event types authored yet)
 - [ ] Legendary encounters (bonus pay, extra stability risk)
 - [ ] Debug panel (dev tools)
+- [ ] Timeline Inspector prints scores grouped by nation with authored display names instead of raw keys, marking `[dominant]`/`[supporting]` (tested: `ScoreKeyTests`)
