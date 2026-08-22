@@ -50,6 +50,7 @@ and EditMode tests (`-runTests -testPlatform EditMode -testResults results.xml`)
 
 ## Known traps
 
+- Entering play mode via the bridge (editor_play) CONTINUES the user's real save (RunManager.GetOrCreate loads it) — smoke tests boot the actual run. Never complete days/verdicts in bridge play sessions; check `nope_save.json` (LocalLow/DefaultCompany/NOPE) when diagnosing "wrong day" reports.
 - A successful `asset_refresh` + menu execution does NOT prove the new code compiled: Unity defers script recompiles until the editor is focused, and menu items keep running the last-good assembly. After editing scripts via the bridge, verify compilation explicitly (bridge restart after domain reload, or check for CS errors on a cleared console) before trusting any tool run or telling the director it works.
 - Scene builders (Tools → TimeDesk) mark scenes dirty but NEVER save them. After driving a builder through the bridge, explicitly `scene_save` the target scene path — otherwise the build lives only in the editor's memory and silently vanishes from disk.
 - ~~`DayPlan_1/2/3` (fictional nations) share day numbers with

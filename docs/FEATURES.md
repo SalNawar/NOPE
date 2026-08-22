@@ -7,6 +7,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 ## Run & meta
 
 - [ ] Title scene → new run / continue via `RunManager` (+ `SaveSystem` persistence)
+- [ ] Morning-boundary saving: the run saves at run start and at sleep (post-nightly-resolve morning state) only — quitting mid-shift or mid-evening replays that day from its clean pre-verdict morning, so continued days never double-apply pay, citations, or timeline impacts. Ended runs are never resumed from the office directly (a saved ending triggers a fresh run with a loud warning); the title scene owns ended-run presentation
 - [ ] Day plans per day number from `ContentLibrary_Main` (fallback: inspector plan); day numbers are unique across the library — the fictional `DayPlan_4/5/6` set was renumbered off days 1–3 so the real-world investigation plans own days 1–3
 - [ ] Deterministic per-day seed for case generation
 - [ ] Endings evaluated after every verdict (`EndingService`); firing threshold on stability; bankruptcy threshold — **gated by `GameConfigSO.endingsMinDay` (default 2 — Day 1 cannot end the run)** (tested: `EndingGateTests`)

@@ -81,6 +81,15 @@ public sealed class GameManager : MonoBehaviour
 
         if (run != null)
         {
+            // Never resume a dead run directly from the office — the title
+            // scene owns ended-run presentation. A saved ending here means the
+            // scene was played directly (editor/dev habit): start fresh.
+            if (run.World != null && !string.IsNullOrEmpty(run.World.endingId))
+            {
+                Debug.LogWarning($"[GameManager] Loaded run already ended ('{run.World.endingId}') — starting a fresh run instead of resuming a dead save.");
+                run.NewRun();
+            }
+
             _worldState = run.World;
 
             // Prefer the library's plan for the current day; keep the inspector

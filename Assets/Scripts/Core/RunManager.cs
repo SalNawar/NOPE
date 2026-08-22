@@ -107,6 +107,10 @@ public sealed class RunManager : MonoBehaviour
             }
         }
 
+        // Persist the day-1 morning immediately: it is the resume point. Quitting
+        // mid-day then always replays from a clean pre-verdict morning.
+        SaveNow();
+
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
     }
 
