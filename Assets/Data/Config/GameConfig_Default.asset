@@ -14,9 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConfigSO
   basePayPerCorrect: 10
   legendaryBonusPay: 15
-  freeWarningsPerDay: 1
-  citationPenalties: 050000000a00000014000000
+  freeWarningsPerDay: 2
+  citationPenalties: 0a0000000f00000014000000
   stabilityLossPerWrong: 5
   extraStabilityLossLegendary: 10
   stabilityGainPerCorrect: 0
   firedAtStability: 0
+  baseDailyExpense: 20
+  expensePerFamilyMember: 5
+  expensePerConditionPoint: 1
+  conditionCareCost: 8
+  conditionWorsenChance: 0.25
+  maxFamilyCondition: 10
+  slotSpinCost: 3
+  endingsMinDay: 2

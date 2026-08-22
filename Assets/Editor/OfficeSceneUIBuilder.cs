@@ -73,6 +73,10 @@ public static class OfficeSceneUIBuilder
         { "mysticism",  new Color(0.55f, 0.38f, 0.66f) }, // violet
         // democracy / science / art keep their hash colours — verified clear of the
         // authored four at >= 0.129 separation.
+        // Kinship (Day One mercy trace): warm rose gold, authored because the hash
+        // fallback landed 0.12 from democracy. The mercy wall must read unmistakably
+        // different from any honest-accept leader.
+        { "kinship",    new Color(0.86f, 0.55f, 0.42f) }, // warm rose copper
     };
 
     /// <summary>Folder for generated ranked-layer art (separate from the hand-placed placeholders).</summary>
@@ -243,6 +247,48 @@ public static class OfficeSceneUIBuilder
         soRecords.ApplyModifiedProperties();
         BuildDesktopIcon(bookShelf, "IconRecords", "Records", recordsChrome, "");
 
+        // Chrono Converter app: translates era-native dates to the modern
+        // calendar and back, with a plausible-span check per era. Era list is
+        // injected per case by InvestigationUIController; clicked date fields
+        // on papers/records drop straight into the input (OfferDate).
+        DestroyChildIfPresent(windowLayer, "CalendarWindow");
+        OSWindowChrome calChrome = BuildOSWindow(windowLayer, "CalendarWindow", "Chrono Converter — Bureau Issue",
+            "Click a date on any paper, or type it.", new Vector2(520f, 400f));
+        Transform calWin = calChrome.transform;
+        // The OS-window body spans the whole panel by default — re-anchor it
+        // into a compact instruction strip so it cannot sit under the rows.
+        TMP_Text calBody = calWin.Find("Body").GetComponent<TMP_Text>();
+        calBody.fontSize = 14;
+        var calBodyRt = (RectTransform)calBody.transform;
+        calBodyRt.anchorMin = new Vector2(0.05f, 0.885f);
+        calBodyRt.anchorMax = new Vector2(0.95f, 0.965f);
+        TMP_InputField calInput = BuildInputField(calWin, "DateInput", "click a date, or type it", new Vector2(0.05f, 0.75f), new Vector2(0.60f, 0.86f));
+        Button calEraButton = MakeButton(calWin, "EraButton", "ERA: —", new Vector2(0.63f, 0.75f), new Vector2(0.95f, 0.86f), new Color(0.2f, 0.24f, 0.4f, 1f));
+        TMP_Text calEraBtnLabel = calEraButton.GetComponentInChildren<TMP_Text>(true);
+        if (calEraBtnLabel != null)
+        {
+            calEraBtnLabel.enableAutoSizing = true;
+            calEraBtnLabel.fontSizeMin = 9f;
+            calEraBtnLabel.fontSizeMax = 16f;
+        }
+        Button calConvertButton = MakeButton(calWin, "ConvertButton", "CONVERT", new Vector2(0.05f, 0.61f), new Vector2(0.95f, 0.72f), new Color(0.15f, 0.3f, 0.5f, 1f));
+        TMP_Text calOutput = Text(calWin, "OutputText", "", 16, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.59f), Ink);
+        CalendarConverterWindowController converter = calWin.GetComponent<CalendarConverterWindowController>();
+        if (converter == null)
+            converter = calWin.gameObject.AddComponent<CalendarConverterWindowController>();
+        var soCal = new SerializedObject(converter);
+        SetRef(soCal, "dateInput", calInput);
+        SetRef(soCal, "eraButton", calEraButton);
+        SetRef(soCal, "convertButton", calConvertButton);
+        SetRef(soCal, "outputText", calOutput);
+        soCal.ApplyModifiedProperties();
+        BuildDesktopIcon(bookShelf, "IconCalendar", "Calendar", calChrome, "");
+
+        // Records' Born rows also feed the converter.
+        var soRecords2 = new SerializedObject(records);
+        SetRef(soRecords2, "calendarConverter", converter);
+        soRecords2.ApplyModifiedProperties();
+
         // Compare bar (XP tooltip-yellow, above the shelf). Auto-sizing keeps
         // long verdict lines inside the bar.
         Transform compareBar = Panel(investRoot, "CompareBar", new Vector2(0.1f, 0.27f), new Vector2(0.9f, 0.34f), Vector2.zero, Vector2.zero, Tooltip);
@@ -335,6 +381,7 @@ public static class OfficeSceneUIBuilder
         SetRef(soInvest, "scannerWindow", scannerWindow);
         SetRef(soInvest, "interactionPanel", interaction);
         SetRef(soInvest, "recordsWindow", records);
+        SetRef(soInvest, "calendarConverter", converter);
         soInvest.ApplyModifiedProperties();
 
         var soOrch = new SerializedObject(orchestrator);
@@ -1103,7 +1150,10 @@ public static class OfficeSceneUIBuilder
 
     /// <summary>
     /// Adds a booth poster that reacts to the timeline (Visuals cue channel).
-    /// Ships with a default sprite and an empty mapping list for the designer.
+    /// Ships with a default sprite and one placeholder variant: the wanted-notice
+    /// ("CHRONONAUT") tease, mapped to the poster_wanted_notice cue. The cue is
+    /// broadcast by legendary-encounter content (Day 3+); the mapping waits
+    /// ready until then, per the Day One design.
     /// </summary>
     private static void BuildReactiveProp(Transform root)
     {
@@ -1113,6 +1163,32 @@ public static class OfficeSceneUIBuilder
             reactive = poster.gameObject.AddComponent<TimelineReactiveSprite>();
         var so = new SerializedObject(reactive);
         SetRef(so, "target", poster);
+
+        // Wanted-notice placeholder variant (small, pinned to the poster's corner
+        // register): aged paper with a dark stamp block. Same 80x110 canvas so
+        // the swap never resizes the poster.
+        Sprite wanted = EnsureOfficeSprite("poster_wanted_notice", new Color(0.82f, 0.76f, 0.62f), 80, 110);
+
+        SerializedProperty mappings = so.FindProperty("mappings");
+        if (mappings != null)
+        {
+            bool hasWanted = false;
+            for (int i = 0; i < mappings.arraySize; i++)
+            {
+                SerializedProperty cue = mappings.GetArrayElementAtIndex(i).FindPropertyRelative("cueId");
+                if (cue != null && cue.stringValue == "poster_wanted_notice")
+                    hasWanted = true;
+            }
+
+            if (!hasWanted)
+            {
+                mappings.InsertArrayElementAtIndex(mappings.arraySize);
+                SerializedProperty entry = mappings.GetArrayElementAtIndex(mappings.arraySize - 1);
+                entry.FindPropertyRelative("cueId").stringValue = "poster_wanted_notice";
+                entry.FindPropertyRelative("sprite").objectReferenceValue = wanted;
+            }
+        }
+
         so.ApplyModifiedProperties();
     }
 
@@ -1362,7 +1438,7 @@ public static class OfficeSceneUIBuilder
         var apps = new (string name, string label, string title, string body, string upgrade)[]
         {
             ("IconInternet", "Internet", "Internet - News",  "Today's news feed. (placeholder)", ""),
-            ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (placeholder)", "ArchiveAccess"),
+            ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (upgrade)", "lexicon"),
             ("IconDialect",  "Dialect",  "Dialect Filter",   "Highlights anachronistic phrases. (upgrade)", "DialectFilter"),
             ("IconMaterial", "Material", "Material Scanner", "Flags tech/materials beyond the claimed era. (upgrade)", "AdvancedScanner"),
             ("IconClueLog",  "Clue Log", "Case Notes",       "Clues & contradictions for the current case. (placeholder)", ""),

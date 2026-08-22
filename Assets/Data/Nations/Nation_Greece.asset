@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NationSO
   id: greece
   displayName: Greece
-  namePool: []
+  namePool:
+  - Nikandros Aetos
+  - Philia Stratou
+  - Kleon Mikkos
+  - Thaleia Rallis
+  - Aristion Vela
+  - Melissa Kouris
+  - Damon Petrou
+  - Ismene Farros

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlotOutcomeSO
   id: jackpot_cash
   displayName: Jackpot
-  resultLine: "The reels align \u2014 a windfall of credits!"
-  weight: 1
+  resultLine: The reels align - a windfall of credits!
+  weight: 0
   moneyDelta: 500
   legendaryChanceBonus: 0
   forgeryChanceModifier: 0

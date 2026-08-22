@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: rome
   displayName: Ancient Rome
+  calendarMonths: []
+  calendarYearsAreBCE: 0
+  calendarSpanStart: 10
+  calendarSpanEnd: 90

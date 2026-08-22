@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e9840781084ea47a862fa8258cd099, type: 3}
   m_Name: Era_NGermany
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
-  id: NGerrmany
-  displayName: Nazi Germany
+  id: NGermany
+  displayName: Imperial Germany
+  calendarMonths: []
+  calendarYearsAreBCE: 0
+  calendarSpanStart: 1871
+  calendarSpanEnd: 1918

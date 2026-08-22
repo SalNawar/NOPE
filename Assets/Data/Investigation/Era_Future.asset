@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: future
   displayName: The Future
+  calendarMonths: []
+  calendarYearsAreBCE: 0
+  calendarSpanStart: 2380
+  calendarSpanEnd: 2440

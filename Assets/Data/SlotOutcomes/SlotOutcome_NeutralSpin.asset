@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3c010d2eecc01384b91b71c65a5ad715, type: 3}
-  m_Name: SlotOutcome_Forgery_warning
+  m_Name: SlotOutcome_NeutralSpin
   m_EditorClassIdentifier: Assembly-CSharp::SlotOutcomeSO
-  id: forgery_warning
-  displayName: Forgery Warning
-  resultLine: "Static crackles across the line \u2014 forgeries may slip through
-    tomorrow."
-  weight: 2
+  id: neutral_spin
+  displayName: Quiet Reels
+  resultLine: The reels settle into silence. The house thanks you for your patronage.
+  weight: 55
   moneyDelta: 0
   legendaryChanceBonus: 0
-  forgeryChanceModifier: 0.1
+  forgeryChanceModifier: 0
   payRateMultiplierDelta: 0
   effect: {fileID: 0}
   durationDaysOverride: 0

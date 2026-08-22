@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
+  m_Name: CaseBlueprint_V3_FirstForger
+  difficulty: 3
+  documentTemplates:
+  - {fileID: 11400000, guid: 7115ffb801437e74e952901ce77709be, type: 2}
+  totalCluesMin: 0
+  totalCluesMax: 0
+  contradictionChance: 0
+  redHerringChance: 0
+  archetypePool:
+  - {fileID: 11400000, guid: 4ecaec54e9ac6c64588519617bd49e3b, type: 2}
+  authoredImpacts:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    deltaOnCorrect: 0
+    deltaOnWrong: -3
+    alsoAffectsNationScore: 1
+  pinnedEras:
+  - {fileID: 11400000, guid: 2661fc4b2d99029488f87620a9c2783c, type: 2}
+  pinnedNation: {fileID: 11400000, guid: a298490feda01eb48a907b7a053264d3, type: 2}
+  pinnedGivenName: Klaus Reinhardt
+  pinnedBirthDate: 2 Nov 1878
+  pinnedIntroLine: 
+  forceForgery: 1
+  forcedForgeryCategory: 4
+  forcedForgeryValue: Drachma

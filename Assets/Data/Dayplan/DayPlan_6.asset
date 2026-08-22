@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceffdf2085ba5d54684633fc38a393f9, type: 3}
-  m_Name: DayPlan_2
+  m_Name: DayPlan_6
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
-  dayNumber: 2
-  visitorsCount: 6
+  dayNumber: 6
+  visitorsCount: 7
   possibleBlueprints:
   - {fileID: 11400000, guid: c860725dc629ec440927c479028fb262, type: 2}
   eraWeights:
@@ -24,10 +24,10 @@ MonoBehaviour:
   - era: {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
     weight: 1
   - era: {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
-    weight: 0.5
+    weight: 1
   - era: {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
-    weight: 0.5
-  legendaryBaseChance: 0.08
+    weight: 1
+  legendaryBaseChance: 0.1
   availableLegendaries:
   - {fileID: 11400000, guid: c9383b92271c3f64e93056a31290854f, type: 2}
   - {fileID: 11400000, guid: 7100ab66fe9b22e47be46fa4cb614979, type: 2}
@@ -38,8 +38,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7a0c210e3baa49442a18808174405150, type: 2}
   - {fileID: 11400000, guid: a303a57081222b14fad2e330477fc217, type: 2}
   - {fileID: 11400000, guid: 17fef6f8808b3764691a730154d7aee8, type: 2}
+  - {fileID: 11400000, guid: d588e1cfebd2f504b95055eb9e198fdd, type: 2}
+  - {fileID: 11400000, guid: 7d855b29216cf7e42967a5c3814d909c, type: 2}
+  - {fileID: 11400000, guid: e4afcd1b9fa19aa409195f763e4f52ea, type: 2}
+  - {fileID: 11400000, guid: aa1366f2779d7ca42bfd4653c09fe0aa, type: 2}
+  - {fileID: 11400000, guid: 6e654aac532d18d4098e94ad281f7a9f, type: 2}
+  - {fileID: 11400000, guid: e73e305a7a8b09e4080ba2f63b7aa532, type: 2}
   - {fileID: 11400000, guid: 286813f188c601942b058a01f3730d1b, type: 2}
+  - {fileID: 11400000, guid: 5f4d79b91bbb3ea44b985a4a675068a5, type: 2}
   - {fileID: 11400000, guid: d1ced6199db1f404da4573565bac51d5, type: 2}
+  - {fileID: 11400000, guid: 8af025f41e1564645999c4bdeda3c9f4, type: 2}
+  - {fileID: 11400000, guid: 9d900551242d7a74f91fca47ee710830, type: 2}
+  - {fileID: 11400000, guid: c4860477026abe147b084204949db31b, type: 2}
   activeTravelRules: []
   forcedCases: []
   eventRules: []

@@ -55,6 +55,14 @@ public sealed class GameConfigSO : ScriptableObject
     /// <summary>At or below this money total, the player goes bankrupt (run over).</summary>
     public int bankruptcyMoneyThreshold = -100;
 
+    /// <summary>
+    /// Endings (fired, bankrupt, score thresholds) cannot fire before this day.
+    /// Day 1 is cushioned by design: mistakes cost pay and stability, but the
+    /// run cannot end on the first impression.
+    /// </summary>
+    [Min(1)]
+    public int endingsMinDay = 2;
+
     [Header("Timeline dominance")]
     /// <summary>Top N attributes per profile counted as DOMINANT (big effects).</summary>
     [Min(0)]

@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: China
   displayName: Imperial China
+  calendarMonths: []
+  calendarYearsAreBCE: 0
+  calendarSpanStart: 1850
+  calendarSpanEnd: 1910

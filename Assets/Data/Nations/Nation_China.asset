@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NationSO
   id: china
   displayName: China
-  namePool: []
+  namePool:
+  - Lin Wenzhao
+  - Shen Rulong
+  - Mei Xiulan
+  - Zhang Qiuyue
+  - Chen Jiahao
+  - Bai Shuwen
+  - Huang Renjie
+  - Xu Danfeng

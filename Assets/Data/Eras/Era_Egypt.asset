@@ -14,3 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: Egypt
   displayName: Ancient Egypt
+  calendarMonths:
+  - Thoth
+  - Phaophi
+  - Athyr
+  - Choiak
+  - Tybi
+  - Mechir
+  - Phamenoth
+  - Pharmuthi
+  - Pachons
+  - Payni
+  - Epiphi
+  - Mesore
+  calendarYearsAreBCE: 1
+  calendarSpanStart: -1290
+  calendarSpanEnd: -1150

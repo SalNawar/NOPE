@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4ee77e7c5fed0f4399e2829b953deec, type: 3}
   m_Name: Archetype_Diplomat
   m_EditorClassIdentifier: Assembly-CSharp::ArchetypeSO
-  id: diplomat
+  id: envoy
   displayName: Diplomat
   tags:
   - diplomat
