@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
+  m_Name: CaseBlueprint_V6_Sibling
+  difficulty: 4
+  documentTemplates:
+  - {fileID: 11400000, guid: 7115ffb801437e74e952901ce77709be, type: 2}
+  totalCluesMin: 1
+  totalCluesMax: 1
+  contradictionChance: 0
+  redHerringChance: 0
+  archetypePool:
+  - {fileID: 11400000, guid: d67376525db84d05802fa77e415643e3, type: 2}
+  authoredImpacts:
+  - attribute: {fileID: 11400000, guid: d3c8ca7c550c4d558015bf09a79149ec, type: 2}
+    deltaOnCorrect: 0
+    deltaOnWrong: 8
+    alsoAffectsNationScore: 1
+  pinnedEras:
+  - {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
+  pinnedNation: {fileID: 11400000, guid: 123086b691b7d0a44a04746ef5ef5dbf, type: 2}
+  pinnedGivenName: Emi Asakura
+  pinnedBirthDate: 3 Mar 1908
+  pinnedIntroLine: Her name is on the passport. That is her name.
+  forceForgery: 1
+  forcedForgeryCategory: 8
+  forcedForgeryValue: 3 Mar 1899

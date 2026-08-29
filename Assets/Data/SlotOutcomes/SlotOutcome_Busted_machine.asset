@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: SlotOutcome_Busted_machine
   m_EditorClassIdentifier: Assembly-CSharp::SlotOutcomeSO
   id: busted_machine
-  displayName: Busted Machine
-  resultLine: The machine sputters and eats your credits.
-  weight: 3
-  moneyDelta: -50
+  displayName: Sputter
+  resultLine: The machine sputters and swallows two more credits.
+  weight: 20
+  moneyDelta: -2
   legendaryChanceBonus: 0
   forgeryChanceModifier: 0
   payRateMultiplierDelta: 0

@@ -20,6 +20,8 @@ public sealed class DocumentWindowController : MonoBehaviour
 
     private DocumentInstance _doc;
     private CompareController _compare;
+    private CalendarConverterWindowController _converter;
+    private EraSO _contextEra;
     private int _page;
     private readonly List<GameObject> _rows = new();
 
@@ -36,10 +38,20 @@ public sealed class DocumentWindowController : MonoBehaviour
     }
 
     /// <summary>Binds a document and renders its first page.</summary>
-    public void SetDocument(DocumentInstance doc, CompareController compare)
+    public void SetDocument(DocumentInstance doc, CompareController compare) =>
+        SetDocument(doc, compare, null);
+
+    /// <summary>
+    /// Binds a document, renders its first page, and optionally hooks the
+    /// Chrono Converter so clicked date fields drop straight into it. The
+    /// context era (the visitor's claim) pre-selects in the converter.
+    /// </summary>
+    public void SetDocument(DocumentInstance doc, CompareController compare, CalendarConverterWindowController converter, EraSO contextEra = null)
     {
         _doc = doc;
         _compare = compare;
+        _converter = converter;
+        _contextEra = contextEra;
         _page = 0;
 
         if (titleText != null)
@@ -104,7 +116,15 @@ public sealed class DocumentWindowController : MonoBehaviour
             DocumentField field = f;
 
             if (btn != null && _compare != null)
+            {
                 btn.onClick.AddListener(() => _compare.Select(label, value, bg, CompareEvidence.FromDocumentField(field)));
+
+                // Date fields also drop into the Chrono Converter when it is
+                // wired — one click selects for compare AND loads the tool,
+                // pre-selecting the visitor's claimed era.
+                if (field.category == ClueCategory.BirthDate && _converter != null)
+                    btn.onClick.AddListener(() => _converter.OfferDate(value, _contextEra));
+            }
         }
     }
 }

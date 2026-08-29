@@ -28,6 +28,9 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
     [Header("Compare")]
     [SerializeField] private CompareController compareController;
 
+    /// <summary>Chrono Converter (clicked Born rows drop straight into it).</summary>
+    [SerializeField] private CalendarConverterWindowController calendarConverter;
+
     private CitizenRegistry _registry;
     private CitizenRecord _current;
 
@@ -118,6 +121,10 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
                 return;
 
             compareController.Select(label, value, bg, CompareEvidence.ForRecordField(category, value));
+
+            // A clicked Born row is also a date for the Chrono Converter.
+            if (category == ClueCategory.BirthDate && calendarConverter != null)
+                calendarConverter.OfferDate(value, null);
         });
     }
 }

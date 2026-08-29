@@ -21,6 +21,14 @@ public static class EndingService
             return null;
         }
 
+        // Cushioning gate: before endingsMinDay, no ending may fire at all.
+        // Both check sites (after verdict, before sleep) flow through here.
+        if (config != null && !EndingGate.EvaluationAllowed(world.day, config.endingsMinDay))
+        {
+            Debug.Log($"[EndingService] <<< Exiting Evaluate — day {world.day} is below endingsMinDay={config.endingsMinDay}; run is cushioned.");
+            return null;
+        }
+
         EndingSO best = null;
 
         foreach (EndingSO ending in lib.Endings)

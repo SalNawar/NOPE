@@ -67,11 +67,9 @@ public sealed class CaseFactory
         // 2) Legendary roll.
         LegendarySO legendary = TryRollLegendary(plan, state);
 
-        // 3) Decide true era.
-        EraSO trueEra = legendary != null ? legendary.trueEra : PickEraFromPlan(plan);
-
-        // 4) Decide blueprint (forced > legendary override > weighted pick,
-        //    with active-effect weight multipliers applied).
+        // 3) Decide blueprint (forced > legendary override > weighted pick,
+        //    with active-effect weight multipliers applied). Resolved before
+        //    the era so pinned eras on the blueprint can drive the case.
         CaseBlueprintSO blueprint =
             forcedBlueprint != null ? forcedBlueprint :
             legendary != null && legendary.blueprintOverride != null ? legendary.blueprintOverride :
@@ -79,14 +77,39 @@ public sealed class CaseFactory
                 ? b.Difficulty * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, b.name)
                 : 0f);
 
+        // 4) Decide true era: legendary truth > blueprint pinned pool > day weights.
+        EraSO trueEra;
+        if (legendary != null && legendary.trueEra != null)
+        {
+            trueEra = legendary.trueEra;
+        }
+        else if (blueprint != null && blueprint.PinnedEras != null && blueprint.PinnedEras.Length > 0)
+        {
+            trueEra = blueprint.PinnedEras[Random.Range(0, blueprint.PinnedEras.Length)];
+        }
+        else
+        {
+            trueEra = PickEraFromPlan(plan);
+        }
+
         // 4.5) Timeline identity: archetype, destination nation, visitor identity.
+        // Pinned fields on the blueprint override the procedural picks so a
+        // forced-case anchor is exactly the visitor it was authored to be.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationSO nation = PickNation(legendary, trueEra);
-        string givenName = ResolveGivenName(legendary, archetype, nation, caseIndex1Based);
+        NationSO nation = blueprint != null && blueprint.PinnedNation != null
+            ? blueprint.PinnedNation
+            : PickNation(legendary, trueEra);
+        string givenName = blueprint != null && !string.IsNullOrEmpty(blueprint.PinnedGivenName)
+            ? blueprint.PinnedGivenName
+            : ResolveGivenName(legendary, archetype, nation, caseIndex1Based);
         string role = archetype != null ? archetype.displayName : "Traveler";
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
-        string birthDate = GenerateBirthDate(trueEra);
-        string intro = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
+        string birthDate = blueprint != null && !string.IsNullOrEmpty(blueprint.PinnedBirthDate)
+            ? blueprint.PinnedBirthDate
+            : GenerateBirthDate(trueEra);
+        string intro = blueprint != null && !string.IsNullOrEmpty(blueprint.PinnedIntroLine)
+            ? blueprint.PinnedIntroLine
+            : legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
 
         if (blueprint == null)
         {
@@ -191,6 +214,13 @@ public sealed class CaseFactory
         if (allFields.Count == 0)
             return;
 
+        // Authored forgery: exactly one field, exactly this value, no roll.
+        if (blueprint != null && blueprint.ForceForgery)
+        {
+            ApplyForcedForgery(inst, blueprint, allFields);
+            return;
+        }
+
         // Chance for this case to carry a forged field (reuses the economy knobs).
         float forgeChance = Mathf.Clamp01(
             blueprint.ContradictionChance +
@@ -261,6 +291,66 @@ public sealed class CaseFactory
     }
 
     /// <summary>
+    /// Applies a blueprint's authored forgery: finds the pinned category's
+    /// field and stamps the pinned value. Fails loudly (manifesto rule) when
+    /// the category is missing from the documents or the value is empty —
+    /// a silent no-op would quietly turn an anchor case honest.
+    /// </summary>
+    private void ApplyForcedForgery(CaseInstance inst, CaseBlueprintSO blueprint, List<DocumentField> allFields)
+    {
+        ClueCategory category = blueprint.ForcedForgeryCategory;
+
+        DocumentField target = null;
+        foreach (DocumentField f in allFields)
+        {
+            if (f != null && f.category == category)
+            {
+                target = f;
+                break;
+            }
+        }
+
+        if (target == null)
+        {
+            Debug.LogWarning($"[CaseFactory] Blueprint '{blueprint.name}' forces a {category} forgery, but no document template presents a {category} field. Add it to a fieldSpec or the anchor silently stays honest.");
+            return;
+        }
+
+        string wrong = blueprint.ForcedForgeryValue;
+
+        if (string.IsNullOrEmpty(wrong))
+        {
+            if (category == ClueCategory.BirthDate)
+            {
+                wrong = ForgeBirthDate(inst.trueBirthDate);
+            }
+            else
+            {
+                ReferenceBookSO book = _lib.GetReferenceBook(category);
+                wrong = book != null
+                    ? book.GetAnyOtherValue(book.GetValue(inst.claimedNation, inst.claimedEra))
+                    : null;
+            }
+        }
+
+        if (string.IsNullOrEmpty(wrong))
+        {
+            Debug.LogWarning($"[CaseFactory] Blueprint '{blueprint.name}' forces a {category} forgery but no provable value exists for claim '{inst.claimedNation?.displayName}/{inst.claimedEra?.id}'. Author the reference-book entry (provable-only rule).");
+            return;
+        }
+
+        if (wrong == target.value)
+        {
+            Debug.LogWarning($"[CaseFactory] Blueprint '{blueprint.name}' forged value '{wrong}' equals the honest {category} value — nothing to forge.");
+            return;
+        }
+
+        target.value = wrong;
+        target.isAnachronism = true;
+        inst.isForged = true;
+    }
+
+    /// <summary>
     /// Resolves a field's true value: identity fields come from the visitor's
     /// identity; era fields come from the reference books for the claimed
     /// nation+era, with a readable placeholder fallback.
@@ -303,9 +393,28 @@ public sealed class CaseFactory
         if (pool == null || pool.Count == 0)
             return null;
 
-        return WeightedRandom.Pick(pool, a => a != null
+        ArchetypeSO picked = WeightedRandom.Pick(pool, a => a != null
             ? Mathf.Max(0f, a.baseWeight) * TimelineEffects.GetVisitorTagWeightMultiplier(state, _lib, a.tags)
             : 0f);
+
+        if (picked == null)
+        {
+            // A hand-authored pool whose weights are all zero (e.g. anchor-only
+            // archetypes like the Guardian) must not silently degrade to a
+            // nameless "Traveler" — fall back to a uniform pick. A single-entry
+            // pool is a deliberate pin and stays quiet; larger pools warn.
+            if (pool.Count > 1)
+                Debug.LogWarning($"[CaseFactory] Blueprint archetype pool has {pool.Count} entries but no positive weight; falling back to a uniform pick.");
+
+            var nonNull = new List<ArchetypeSO>();
+            foreach (ArchetypeSO a in pool)
+                if (a != null)
+                    nonNull.Add(a);
+
+            picked = nonNull.Count > 0 ? nonNull[Random.Range(0, nonNull.Count)] : null;
+        }
+
+        return picked;
     }
 
     /// <summary>
@@ -363,21 +472,32 @@ public sealed class CaseFactory
     private static readonly string[] Months =
         { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-    /// <summary>A plausible birth date for the visitor's true era.</summary>
+    /// <summary>
+    /// A plausible birth date for the visitor's true era, drawn from the era's
+    /// authored calendar (native month names, BCE epochs, plausible year span).
+    /// Eras without calendar data fall back to 20th-century Gregorian. The
+    /// calendar itself is the texture: an ancient Greek reads "Elaphebolion",
+    /// an Egyptian reads "Choiak" — the clerk should believe the paper, not
+    /// quiz it. The desktop Chrono Converter decodes the same data.
+    /// </summary>
     private static string GenerateBirthDate(EraSO era)
     {
-        int year;
-        switch (era != null ? era.id : string.Empty)
+        string[] months = era != null && era.CalendarMonths.Length > 0 ? era.CalendarMonths : Months;
+
+        int spanStart = 1900, spanEnd = 2000;
+        bool bce = false;
+
+        if (era != null && era.CalendarSpanEnd > 0)
         {
-            case "rome": year = Random.Range(10, 90); break;
-            case "medieval": year = Random.Range(1030, 1190); break;
-            case "future": year = Random.Range(2380, 2440); break;
-            default: year = Random.Range(1900, 2000); break;
+            spanStart = era.CalendarSpanStart;
+            spanEnd = era.CalendarSpanEnd;
+            bce = era.CalendarYearsAreBCE;
         }
 
-        int day = Random.Range(1, 29);
-        string month = Months[Random.Range(0, Months.Length)];
-        return $"{day} {month} {year}";
+        int modernYear = Random.Range(spanStart, spanEnd + 1);
+        int eraYear = CalendarConverter.ToEraYear(modernYear, bce);
+
+        return $"{Random.Range(1, 29)} {months[Random.Range(0, months.Length)]} {eraYear}";
     }
 
     /// <summary>
@@ -415,11 +535,17 @@ public sealed class CaseFactory
             string nation = inst.nation != null ? inst.nation.displayName : "Unregistered";
             string era = inst.trueEra != null ? inst.trueEra.displayName : "Unknown Era";
 
+            // "Imperial Japan" already names the nation — don't read
+            // "Japan — Imperial Japan" on an agency record.
+            string origin = era.IndexOf(nation, System.StringComparison.OrdinalIgnoreCase) >= 0
+                ? era
+                : $"{nation} — {era}";
+
             registry.Add(new CitizenRecord
             {
                 fullName = inst.visitorGivenName,
                 birthDate = inst.trueBirthDate,
-                origin = $"{nation} — {era}",
+                origin = origin,
                 note = inst.isLegendary
                     ? "Priority subject. Records sealed above your clearance."
                     : "No remarks on file."

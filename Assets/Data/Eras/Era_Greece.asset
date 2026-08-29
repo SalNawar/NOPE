@@ -13,4 +13,20 @@ MonoBehaviour:
   m_Name: Era_Greece
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: Greece
-  displayName: Ancient Greece
+  displayName: Classical Greece
+  calendarMonths:
+  - Hekatombaion
+  - Metageitnion
+  - Boedromion
+  - Pyanepsion
+  - Maimakterion
+  - Poseideon
+  - Gamelion
+  - Anthesterion
+  - Elaphebolion
+  - Munychion
+  - Thargelion
+  - Skirophorion
+  calendarYearsAreBCE: 1
+  calendarSpanStart: -450
+  calendarSpanEnd: -350

@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NationSO
   id: germany
   displayName: Germany
-  namePool: []
+  namePool:
+  - Johanna Weiss
+  - Heinrich Falk
+  - Greta Lindemann
+  - Oskar Brandt
+  - Frieda Hartmann
+  - Emil Vogel
+  - Klara Stein
+  - Wilhelm Roth

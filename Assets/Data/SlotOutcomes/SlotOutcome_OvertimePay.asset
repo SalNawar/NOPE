@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c010d2eecc01384b91b71c65a5ad715, type: 3}
+  m_Name: SlotOutcome_OvertimePay
+  m_EditorClassIdentifier: Assembly-CSharp::SlotOutcomeSO
+  id: overtime_pay
+  displayName: Overtime Notice
+  resultLine: OVERTIME AUTHORIZED - tomorrow's pay rate rises by a quarter.
+  weight: 5
+  moneyDelta: 0
+  legendaryChanceBonus: 0
+  forgeryChanceModifier: 0
+  payRateMultiplierDelta: 0
+  effect: {fileID: 11400000, guid: 62cc41a28a1840958533e13b5cd96479, type: 2}
+  durationDaysOverride: 1

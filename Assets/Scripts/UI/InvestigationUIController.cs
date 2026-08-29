@@ -48,6 +48,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Citizen Records app (registry injected per day).</summary>
     [SerializeField] private CitizenRecordsWindowController recordsWindow;
 
+    /// <summary>Chrono Converter app (era list injected per day).</summary>
+    [SerializeField] private CalendarConverterWindowController calendarConverter;
+
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
@@ -125,6 +128,13 @@ public sealed class InvestigationUIController : MonoBehaviour
     {
         if (recordsWindow != null)
             recordsWindow.SetRegistry(registry);
+    }
+
+    /// <summary>Injects the library's eras into the Chrono Converter app.</summary>
+    public void SetConverterEras(ContentLibrarySO lib)
+    {
+        if (calendarConverter != null && lib != null)
+            calendarConverter.SetEras(lib.Eras);
     }
 
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
@@ -233,7 +243,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
-                clone.SetDocument(doc, compareController);
+                clone.SetDocument(doc, compareController, calendarConverter, inst.claimedEra);
                 _docWindows.Add(clone.gameObject);
 
                 string docName = doc != null && doc.template != null ? doc.template.displayName : "Document";
@@ -257,6 +267,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             interactionPanel.SetActions(actions);
 
         BuildBookShelf(lib);
+        SetConverterEras(lib);
 
         if (compareController != null)
             compareController.Clear();
@@ -371,6 +382,11 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     private void ShowFallback(CaseInstance inst, ContentLibrarySO lib)
     {
+        // Loud on purpose: the fallback is a degraded mode, not a design choice.
+        // If this fires with the office built, the scene's rich refs are broken —
+        // re-run Tools > TimeDesk > Build Office UI and SAVE the scene.
+        Debug.LogWarning($"[InvestigationUI] Showing FALLBACK investigation panel (rich desk not wired: documentWindowTemplate={documentWindowTemplate != null}, windowLayer={windowLayer != null}, accept={acceptButton != null}, deny={denyButton != null}). If the office was built, rebuild + save the scene.");
+
         EnsureFallback();
 
         _fallbackPanel.SetActive(true);

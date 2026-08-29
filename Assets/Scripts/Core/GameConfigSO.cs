@@ -55,6 +55,14 @@ public sealed class GameConfigSO : ScriptableObject
     /// <summary>At or below this money total, the player goes bankrupt (run over).</summary>
     public int bankruptcyMoneyThreshold = -100;
 
+    /// <summary>
+    /// Endings (fired, bankrupt, score thresholds) cannot fire before this day.
+    /// Day 1 is cushioned by design: mistakes cost pay and stability, but the
+    /// run cannot end on the first impression.
+    /// </summary>
+    [Min(1)]
+    public int endingsMinDay = 2;
+
     [Header("Timeline dominance")]
     /// <summary>Top N attributes per profile counted as DOMINANT (big effects).</summary>
     [Min(0)]
@@ -63,6 +71,14 @@ public sealed class GameConfigSO : ScriptableObject
     /// <summary>Next N attributes per profile counted as SUPPORTING (small effects).</summary>
     [Min(0)]
     public int supportingPerProfile = 2;
+
+    /// <summary>
+    /// Minimum score before a ranked office layer treats an id as winning. The
+    /// comparison is strict, so the default of 0 means a layer reacts only to
+    /// positive influence — without it, a lone attribute sitting at -1 would be
+    /// rendered as "dominant" when nothing has actually taken hold yet.
+    /// </summary>
+    public float rankedLayerMinScore = 0f;
 
     [Header("Home / Expenses")]
     /// <summary>Base daily living expense (rent/utilities) deducted at Home.</summary>

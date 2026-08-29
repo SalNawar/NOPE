@@ -39,11 +39,71 @@ public sealed class CaseBlueprintSO : ScriptableObject
     /// <summary>Authored timeline impacts added to every case from this blueprint.</summary>
     [SerializeField] private TimelineImpact[] authoredImpacts;
 
+    [Header("Scripted identity (optional pins for forced-case anchors)")]
+    /// <summary>
+    /// If set (non-empty), the case's true era is picked uniformly from this
+    /// pool instead of the DayPlan's era weights. A single entry pins the era
+    /// exactly; multiple entries give a blueprint its own candidate set.
+    /// </summary>
+    [SerializeField] private EraSO[] pinnedEras;
+
+    /// <summary>If set, overrides the destination nation derived from the era's profiles.</summary>
+    [SerializeField] private NationSO pinnedNation;
+
+    /// <summary>If set, the visitor's name (and citizen-records key) is exactly this.</summary>
+    [SerializeField] private string pinnedGivenName;
+
+    /// <summary>If set, the visitor's TRUE birth date (what the agency has on file).</summary>
+    [SerializeField] private string pinnedBirthDate;
+
+    /// <summary>If set, replaces the default "Next subject for reassignment." intro.</summary>
+    [SerializeField] private string pinnedIntroLine;
+
+    /// <summary>
+    /// When true, this case ALWAYS carries exactly one forged field, defined by
+    /// the category + value below — no random roll. Use for authored anchors
+    /// whose lie must be provable and specific.
+    /// </summary>
+    [SerializeField] private bool forceForgery;
+
+    /// <summary>Which field category gets the authored forgery.</summary>
+    [SerializeField] private ClueCategory forcedForgeryCategory = ClueCategory.Currency;
+
+    /// <summary>
+    /// The forged value printed on the papers. Leave empty to derive one
+    /// randomly like the procedural path does.
+    /// </summary>
+    [SerializeField] private string forcedForgeryValue;
+
     /// <summary>Public read-only archetype pool.</summary>
     public ArchetypeSO[] ArchetypePool => archetypePool;
 
     /// <summary>Public read-only authored impacts.</summary>
     public TimelineImpact[] AuthoredImpacts => authoredImpacts;
+
+    /// <summary>Public read-only pinned era pool (null/empty = use DayPlan weights).</summary>
+    public EraSO[] PinnedEras => pinnedEras;
+
+    /// <summary>Public read-only pinned nation (null = derive from era profiles).</summary>
+    public NationSO PinnedNation => pinnedNation;
+
+    /// <summary>Public read-only pinned given name (null/empty = generated).</summary>
+    public string PinnedGivenName => pinnedGivenName;
+
+    /// <summary>Public read-only pinned true birth date (null/empty = generated).</summary>
+    public string PinnedBirthDate => pinnedBirthDate;
+
+    /// <summary>Public read-only pinned intro line (null/empty = default).</summary>
+    public string PinnedIntroLine => pinnedIntroLine;
+
+    /// <summary>True when this blueprint carries an authored, guaranteed forgery.</summary>
+    public bool ForceForgery => forceForgery;
+
+    /// <summary>Public read-only forced forgery category.</summary>
+    public ClueCategory ForcedForgeryCategory => forcedForgeryCategory;
+
+    /// <summary>Public read-only forced forgery value (may be empty = derive).</summary>
+    public string ForcedForgeryValue => forcedForgeryValue;
 
     /// <summary>Public read-only difficulty.</summary>
     public int Difficulty => difficulty;

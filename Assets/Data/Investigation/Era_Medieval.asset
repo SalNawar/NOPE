@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: medieval
   displayName: Medieval Era
+  calendarMonths: []
+  calendarYearsAreBCE: 0
+  calendarSpanStart: 1030
+  calendarSpanEnd: 1190

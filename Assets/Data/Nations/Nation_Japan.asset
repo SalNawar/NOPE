@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NationSO
   id: japan
   displayName: Japan
-  namePool: []
+  namePool:
+  - Haruto Sato
+  - Michiko Onda
+  - Ren Ishikawa
+  - Chiyo Fujimoto
+  - Souta Mori
+  - Ayame Kuroda
+  - Takeshi Hino
+  - Sakura Toyama

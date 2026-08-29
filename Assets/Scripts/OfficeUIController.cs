@@ -224,9 +224,11 @@ public sealed class OfficeUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Shows a verdict: result line, plus a citation slip when issued.
-    /// If the citation panel is wired, the day pauses until the player dismisses it;
-    /// otherwise onContinue is invoked immediately.
+    /// Shows a verdict: result line plus a full-screen receipt that holds the
+    /// day until acknowledged — for EVERY verdict, not only citations. The
+    /// pause is the signifier: pay, stability and the bureau's dry reply are
+    /// legible before the next subject arrives. Citations stay red; clean
+    /// verdicts tint the receipt green.
     /// </summary>
     public void ShowVerdict(CaseVerdict verdict, Action onContinue)
     {
@@ -243,7 +245,7 @@ public sealed class OfficeUIController : MonoBehaviour
                 : $"WRONG  ({verdict.stabilityDelta:+0.#;-0.#} stability{(verdict.moneyPenalty > 0 ? $", -{verdict.moneyPenalty} credits" : string.Empty)})";
         }
 
-        bool canShowSlip = verdict.citationIssued && citationPanel != null && citationText != null;
+        bool canShowSlip = citationPanel != null && citationText != null;
 
         if (!canShowSlip)
         {
@@ -251,9 +253,10 @@ public sealed class OfficeUIController : MonoBehaviour
             return;
         }
 
-        // Open the slip and hold the day until dismissed.
+        // Open the receipt and hold the day until dismissed.
         _onCitationDismissed = onContinue;
-        citationText.text = verdict.citationText;
+        citationText.text = verdict.citationIssued ? verdict.citationText : ReceiptText(verdict);
+        StyleReceipt(verdict.citationIssued);
         citationPanel.SetActive(true);
 
         if (citationContinueButton != null)
@@ -268,6 +271,23 @@ public sealed class OfficeUIController : MonoBehaviour
             _onCitationDismissed = null;
             onContinue?.Invoke();
         }
+    }
+
+    /// <summary>The bureau's dry reply to a clean verdict (never moralizes).</summary>
+    private static string ReceiptText(CaseVerdict v) =>
+        v.accepted
+            ? $"TRAVEL AUTHORIZED\n\nSubject cleared for passage.\nPay: +{v.payAwarded} credits.\nStability unchanged."
+            : $"TRAVEL DENIED\n\nAccepted documents returned to bearer; bearer declined.\nPay: +{v.payAwarded} credits.\nStability unchanged.";
+
+    /// <summary>Red for citations, green for clean verdicts.</summary>
+    private void StyleReceipt(bool isCitation)
+    {
+        Image bg = citationPanel != null ? citationPanel.GetComponent<Image>() : null;
+
+        if (bg != null)
+            bg.color = isCitation
+                ? new Color(0.85f, 0.2f, 0.15f, 0.96f)
+                : new Color(0.14f, 0.4f, 0.24f, 0.96f);
     }
 
     /// <summary>

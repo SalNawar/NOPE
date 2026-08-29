@@ -52,6 +52,12 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Travel restrictions active this day (announced in the briefing).</summary>
     [SerializeField] private TravelRuleSO[] activeTravelRules;
 
+    /// <summary>
+    /// THE TEMPORAL TIMES lines for this day's morning briefing — authored,
+    /// per-day copy (protocol reminders, directives in bureau voice, teases).
+    /// </summary>
+    [SerializeField, TextArea] private string[] briefingHeadlines;
+
     /// <summary>Forced case blueprints by slot index (1-based).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
@@ -78,6 +84,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
+
+    /// <summary>Public read-only briefing headlines (THE TEMPORAL TIMES copy).</summary>
+    public IReadOnlyList<string> BriefingHeadlines => briefingHeadlines ?? System.Array.Empty<string>();
 
     /// <summary>
     /// Returns true if every active rule permits travel to the claimed nation+era.

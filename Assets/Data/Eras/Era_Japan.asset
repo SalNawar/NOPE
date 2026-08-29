@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EraSO
   id: Japan
   displayName: Imperial Japan
+  calendarMonths: []
+  calendarYearsAreBCE: 0
+  calendarSpanStart: 1870
+  calendarSpanEnd: 1940

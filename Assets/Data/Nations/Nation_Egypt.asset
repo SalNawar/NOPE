@@ -14,4 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NationSO
   id: egypt
   displayName: Egypt
-  namePool: []
+  namePool:
+  - Meresankh Ibi
+  - Huy Nakht
+  - Neferu Ameni
+  - Ptahhotep
+  - Senet Karo
+  - Djedi Menna
+  - Isetnefret
+  - Ameny Paser

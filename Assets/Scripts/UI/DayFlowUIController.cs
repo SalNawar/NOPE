@@ -66,7 +66,15 @@ public sealed class DayFlowUIController : MonoBehaviour
     /// Shows the morning briefing built from the world's tomorrow package.
     /// Invokes onStartShift when the player clicks Start (or immediately if unwired).
     /// </summary>
-    public void ShowBriefing(WorldState world, Action onStartShift)
+    public void ShowBriefing(WorldState world, Action onStartShift) =>
+        ShowBriefing(world, null, onStartShift);
+
+    /// <summary>
+    /// Shows the morning briefing: THE TEMPORAL TIMES headlines + today's travel
+    /// directives (from the day plan), then the tomorrow-package lines. The plan
+    /// block is skipped when null so older callers keep working.
+    /// </summary>
+    public void ShowBriefing(WorldState world, DayPlanSO plan, Action onStartShift)
     {
         if (!HasBriefingPanel || world == null)
         {
@@ -82,8 +90,33 @@ public sealed class DayFlowUIController : MonoBehaviour
         if (briefingBodyText != null)
         {
             var sb = new System.Text.StringBuilder();
+            bool hasTimes = plan != null && (plan.BriefingHeadlines.Count > 0 || plan.ActiveTravelRules.Count > 0);
 
-            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0)
+            if (hasTimes)
+            {
+                sb.AppendLine("— THE TEMPORAL TIMES —");
+                sb.AppendLine();
+
+                foreach (string line in plan.BriefingHeadlines)
+                    sb.AppendLine(line);
+
+                if (plan.ActiveTravelRules.Count > 0)
+                {
+                    sb.AppendLine();
+                    sb.AppendLine("— DIRECTIVES IN EFFECT —");
+                    sb.AppendLine();
+
+                    foreach (TravelRuleSO rule in plan.ActiveTravelRules)
+                    {
+                        if (rule != null)
+                            sb.AppendLine("• " + rule.Summary());
+                    }
+                }
+
+                sb.AppendLine();
+            }
+
+            if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0 && !hasTimes)
             {
                 sb.AppendLine("No directives. Process subjects accurately.");
             }

@@ -81,6 +81,15 @@ public sealed class GameManager : MonoBehaviour
 
         if (run != null)
         {
+            // Never resume a dead run directly from the office — the title
+            // scene owns ended-run presentation. A saved ending here means the
+            // scene was played directly (editor/dev habit): start fresh.
+            if (run.World != null && !string.IsNullOrEmpty(run.World.endingId))
+            {
+                Debug.LogWarning($"[GameManager] Loaded run already ended ('{run.World.endingId}') — starting a fresh run instead of resuming a dead save.");
+                run.NewRun();
+            }
+
             _worldState = run.World;
 
             // Prefer the library's plan for the current day; keep the inspector
@@ -146,7 +155,7 @@ public sealed class GameManager : MonoBehaviour
             DayPlanSO planToRun = dayPlan;
             int seedToUse = seed;
             Debug.Log("[GameManager] <<< Exiting Start (showing morning briefing before day loop).");
-            dayFlowUI.ShowBriefing(_worldState, () => orchestrator.StartDay(_worldState, planToRun, seedToUse));
+            dayFlowUI.ShowBriefing(_worldState, planToRun, () => orchestrator.StartDay(_worldState, planToRun, seedToUse));
         }
         else
         {
@@ -198,8 +207,12 @@ public sealed class GameManager : MonoBehaviour
         if (RunManager.HasInstance)
         {
             // Yesterday's slot modifiers were consumed by today's shift.
+            // NOTE: no save here — the end-of-shift state must never be the
+            // resume point. Saves happen at morning boundaries only
+            // (NewRun + AdvanceToNextDay), so a continued day always replays
+            // from a clean pre-verdict morning instead of double-applying
+            // pay, citations, and timeline impacts.
             RunManager.Instance.ResetTomorrowModifiers();
-            RunManager.Instance.SaveNow();
         }
 
         // Show the shift report, then hand off to the home phase. The report is
@@ -264,10 +277,6 @@ public sealed class GameManager : MonoBehaviour
 
         Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', trueEra='{inst.trueEra?.id}', archetype='{inst.archetype?.displayName}', nation='{inst.nation?.displayName}', legendary={inst.isLegendary}, documents={inst.documents.Count}, clues={inst.usedClues.Count}.");
 
-        // Clear the previous case's verdict line before showing the new case.
-        if (officeUI != null)
-            officeUI.SetResultText(string.Empty);
-
         // Return to the booth and wait for the player to tap READY before
         // presenting the visitor. With no view/sign wired, show immediately.
         if (officeView != null && readySign != null)
@@ -296,6 +305,11 @@ public sealed class GameManager : MonoBehaviour
 
         if (readySign != null)
             readySign.Interactable = false;
+
+        // The previous verdict line stays on the booth HUD through the whole
+        // READY beat; clear it only when the next visitor is actually presented.
+        if (officeUI != null)
+            officeUI.SetResultText(string.Empty);
 
         ShowActiveCase(_dayCases[idx]);
     }

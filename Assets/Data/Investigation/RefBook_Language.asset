@@ -40,3 +40,23 @@ MonoBehaviour:
     era: {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
     value: Binary Cant
     note: 
+  - nation: {fileID: 11400000, guid: 7c13f4721332a834c885a38fe7073d35, type: 2}
+    era: {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
+    value: Koine Greek
+    note: The common tongue of the harbors.
+  - nation: {fileID: 11400000, guid: a298490feda01eb48a907b7a053264d3, type: 2}
+    era: {fileID: 11400000, guid: 2661fc4b2d99029488f87620a9c2783c, type: 2}
+    value: Hochdeutsch
+    note: Upper German; clerical hand is Kurrent.
+  - nation: {fileID: 11400000, guid: 123086b691b7d0a44a04746ef5ef5dbf, type: 2}
+    era: {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
+    value: Kanji Script
+    note: Literary script; official seals read right to left.
+  - nation: {fileID: 11400000, guid: c759b5e80745f6c4fba1ea24dd7b2d76, type: 2}
+    era: {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
+    value: Hieroglyphs
+    note: Formal registers only; scribes certify.
+  - nation: {fileID: 11400000, guid: 48e27bc8d747c164c9769dba812b62e6, type: 2}
+    era: {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
+    value: Hanzi Script
+    note: Brush-written; stroke order betrays the province.

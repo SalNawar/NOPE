@@ -214,9 +214,7 @@ public sealed class DebugPanelController : MonoBehaviour
 
         GUILayout.Space(6f);
         GUILayout.Label($"Scores ({world.timeline.scores.Count}):");
-
-        foreach (ScoreEntry s in world.timeline.scores)
-            GUILayout.Label($"  {s.key} = {s.value:0.##}");
+        GUILayout.Label(TimelineScoreDisplay.FormatGrouped(world, lib));
 
         GUILayout.Space(6f);
         GUILayout.Label($"Dominant keys ({world.timeline.dominantKeys.Count}):");
@@ -286,8 +284,7 @@ public sealed class DebugPanelController : MonoBehaviour
             sb.AppendLine($"  {c.key} = {c.value}");
 
         sb.AppendLine($"Scores ({world.timeline.scores.Count}):");
-        foreach (ScoreEntry s in world.timeline.scores)
-            sb.AppendLine($"  {s.key} = {s.value:0.##}");
+        sb.AppendLine(TimelineScoreDisplay.FormatGrouped(world, lib));
 
         sb.AppendLine($"Dominant: {string.Join(", ", world.timeline.dominantKeys)}");
         sb.AppendLine($"Supporting: {string.Join(", ", world.timeline.supportingKeys)}");

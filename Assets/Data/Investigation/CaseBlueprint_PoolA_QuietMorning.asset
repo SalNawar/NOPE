@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
+  m_Name: CaseBlueprint_PoolA_QuietMorning
+  difficulty: 1
+  documentTemplates:
+  - {fileID: 11400000, guid: 7115ffb801437e74e952901ce77709be, type: 2}
+  totalCluesMin: 0
+  totalCluesMax: 0
+  contradictionChance: 0
+  redHerringChance: 0
+  archetypePool:
+  - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
+  - {fileID: 11400000, guid: 322dd872b153b1442b6dc557666a1b31, type: 2}
+  - {fileID: 11400000, guid: 4ecaec54e9ac6c64588519617bd49e3b, type: 2}
+  authoredImpacts: []
+  pinnedEras:
+  - {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
+  - {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
+  - {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
+  pinnedNation: {fileID: 0}
+  pinnedGivenName: 
+  pinnedBirthDate: 
+  pinnedIntroLine: 
+  forceForgery: 0
+  forcedForgeryCategory: 4
+  forcedForgeryValue: 

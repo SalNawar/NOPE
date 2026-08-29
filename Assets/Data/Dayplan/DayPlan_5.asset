@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceffdf2085ba5d54684633fc38a393f9, type: 3}
+  m_Name: DayPlan_5
+  m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
+  dayNumber: 5
+  visitorsCount: 6
+  possibleBlueprints:
+  - {fileID: 11400000, guid: c860725dc629ec440927c479028fb262, type: 2}
+  eraWeights:
+  - era: {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 2661fc4b2d99029488f87620a9c2783c, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
+    weight: 0.5
+  - era: {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
+    weight: 0.5
+  legendaryBaseChance: 0.08
+  availableLegendaries:
+  - {fileID: 11400000, guid: c9383b92271c3f64e93056a31290854f, type: 2}
+  - {fileID: 11400000, guid: 7100ab66fe9b22e47be46fa4cb614979, type: 2}
+  - {fileID: 11400000, guid: 7d3bc4919303df2479f533ff0aa22fc6, type: 2}
+  - {fileID: 11400000, guid: bc4efd5aa3132224fa54545c07706c2b, type: 2}
+  - {fileID: 11400000, guid: f014cb42bb6a1984d9ec7a196e85dbbd, type: 2}
+  - {fileID: 11400000, guid: b9c4c1452bcdce44bb387204bc8712bb, type: 2}
+  - {fileID: 11400000, guid: 7a0c210e3baa49442a18808174405150, type: 2}
+  - {fileID: 11400000, guid: a303a57081222b14fad2e330477fc217, type: 2}
+  - {fileID: 11400000, guid: 17fef6f8808b3764691a730154d7aee8, type: 2}
+  - {fileID: 11400000, guid: 286813f188c601942b058a01f3730d1b, type: 2}
+  - {fileID: 11400000, guid: d1ced6199db1f404da4573565bac51d5, type: 2}
+  activeTravelRules: []
+  forcedCases: []
+  eventRules: []

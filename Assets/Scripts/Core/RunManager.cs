@@ -107,6 +107,10 @@ public sealed class RunManager : MonoBehaviour
             }
         }
 
+        // Persist the day-1 morning immediately: it is the resume point. Quitting
+        // mid-day then always replays from a clean pre-verdict morning.
+        SaveNow();
+
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
     }
 
@@ -244,7 +248,9 @@ public sealed class RunManager : MonoBehaviour
         {
             Debug.Log($"[RunManager] <<< Exiting GoHomeOrAdvance (going to Home scene '{Config.homeSceneName}').");
 
-            SaveNow();
+            // No save here: this is still the post-verdict evening state. The
+            // morning save (AdvanceToNextDay, after sleep) is the resume point;
+            // quitting mid-evening simply replays the day from its morning.
             LoadHomeScene();
         }
         else

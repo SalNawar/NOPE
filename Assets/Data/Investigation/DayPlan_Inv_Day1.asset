@@ -10,21 +10,48 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceffdf2085ba5d54684633fc38a393f9, type: 3}
-  m_Name: DayPlan_Inv_Day1
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
+  m_Name: DayPlan_Inv_Day1
   dayNumber: 1
-  visitorsCount: 5
+  visitorsCount: 6
   possibleBlueprints:
-  - {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
+  - {fileID: 11400000, guid: 8dd88c246f9e444f940d448364be369d, type: 2}
+  - {fileID: 11400000, guid: 4ec74d5edf7043fd82e6b520a7ddf600, type: 2}
+  - {fileID: 11400000, guid: 20f62c4be51444b387a5a848f6777e25, type: 2}
   eraWeights:
-  - era: {fileID: 11400000, guid: 534846cde921ef949a1905cece8a8d6f, type: 2}
+  - era: {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
     weight: 1
-  - era: {fileID: 11400000, guid: a66b025b152f6e048b2667fbc96ec12e, type: 2}
+  - era: {fileID: 11400000, guid: 2661fc4b2d99029488f87620a9c2783c, type: 2}
     weight: 1
-  - era: {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
+  - era: {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
     weight: 1
-  legendaryBaseChance: 0.05
+  - era: {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
+    weight: 1
+  legendaryBaseChance: 0
   availableLegendaries: []
-  activeTravelRules: []
-  forcedCases: []
+  activeTravelRules:
+  - {fileID: 11400000, guid: 5f13fef5354b4d388bcd97385750d6d1, type: 2}
+  briefingHeadlines:
+  - 'FIRST SHIFT PROTOCOL REMINDER - Present documents upon request. Deviations must
+    be logged before denial. This office thanks you for your compliance.'
+  - 'TRAVEL DIRECTIVE - Passage to Ancient Egypt is suspended today. Denials under
+    this directive require no documented deviation.'
+  - '"CHRONONAUT" REPORTS DISMISSED - Rumors of a traveler bearing papers from no
+    recorded era were dismissed by this office as clerical error. There is no such
+    file. There is no such traveler.'
+  forcedCases:
+  - caseIndex1Based: 1
+    caseBlueprint: {fileID: 11400000, guid: 383d66c4e8dc4705a44f656549ee47c9, type: 2}
+  - caseIndex1Based: 2
+    caseBlueprint: {fileID: 11400000, guid: 8dd88c246f9e444f940d448364be369d, type: 2}
+  - caseIndex1Based: 3
+    caseBlueprint: {fileID: 11400000, guid: e4378aa732a246aab2d746e6842c8d45, type: 2}
+  - caseIndex1Based: 4
+    caseBlueprint: {fileID: 11400000, guid: 4ec74d5edf7043fd82e6b520a7ddf600, type: 2}
+  - caseIndex1Based: 5
+    caseBlueprint: {fileID: 11400000, guid: 20f62c4be51444b387a5a848f6777e25, type: 2}
+  - caseIndex1Based: 6
+    caseBlueprint: {fileID: 11400000, guid: 2c260a1fc2cf4a5d98a300ae3925a7fd, type: 2}
   eventRules: []
