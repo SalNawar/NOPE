@@ -45,3 +45,21 @@ G1 builds/boots (static) ✓ · G2 tests are genuine decision tables ✓ · G3 f
 
 This lands the same player-visible feature with one ranking truth, one
 reaction mechanism, and less code than the current branch carries.
+
+## Addendum — line-level redundancy audit (2026-08-29, second pass)
+
+Method-by-method sweep against main (d3a9a49). **Rule: code that re-implements
+an existing helper is replaced by a call to ours.** Mandatory on resubmission:
+
+1. **Key-format literals live in two files.** `ScoreKey` re-declares `"nation:"` / `"attr:"` / `"attrTotal:"` as consts while `TimelineKeys` (TimelineService.cs:11–22) builds the same strings from `$"..."` literals; `ScoreKey.DominanceKey` duplicates `TimelineKeys.Dominance`. The PR even adds a comment documenting the split instead of removing it. Fix: string-id key *builders* move into `ScoreKey` (Domain); `TimelineKeys` becomes one-line SO-typed wrappers over them. One grammar, one home.
+2. **`TimelineScoreDisplay.ResolveEraName` re-implements `ContentLibrarySO.GetEraById`** (ContentLibrarySO.cs:158, cached + case-insensitive) as an O(n) case-*sensitive* scan — it can disagree with the library's own contract. Delete; call ours.
+3. **Four copies of one resolver.** `ResolveNationName/AttributeName/EraName/ProfileName` are the same method four times. Delete all; add `GetNationById/GetAttributeById/GetProfileById` beside the existing `GetEraById` in `ContentLibrarySO.EnsureLookups` + one shared name-or-id formatter.
+4. **`EnsureRankedArtSprite` is ~90% a copy of the builder's `EnsureOfficeSprite`** (L809–841): identical LoadAssetAtPath early-out, EnsureFolderTree, Texture2D/SetPixels32/EncodeToPNG/WriteAllBytes, and the whole TextureImporter block — its own comment admits "mirrors EnsureOfficeSprite's shape". Refactor to one shared `EnsurePlaceholderSprite(folder, name, w, h, fill)`.
+5. **`TimelineRankedSprite` is copy-level, not just mechanism-level:** `RankedSprite` struct, `target`/`defaultSprite`/`mappings` fields (identical XML docs), and a byte-identical `Reset()` are cloned from `TimelineReactiveSprite`. Superseded by the main rework (delete the class), recorded here as evidence.
+6. **`BuildLabel` re-implements the builder's `WorldText`** (L1196–1220) at runtime. The builder wires this component; it should create the label via `WorldText`, the component only toggles/sets text.
+7. **Dev-build gate duplicated:** `DebugLabelsAllowed` re-states DebugPanelController.cs:53's expression. Extract one shared helper.
+8. **Self-duplication within the PR:** the `0.12f` color-distance threshold + RGB distance formula appear twice in the builder (ContrastAccent L908/911 vs WarnOnNearDuplicateColors L1263/1271). One named const + one `ColorDistance` helper.
+
+Additional standards hits: `RankedArtPalette` = 18 designer colors hardcoded in an Editor class citing an "Art Direction Bible" that isn't in the repo (Law 3 — move to data); `RankedArtNaming` band constants likewise; label styling literals (fontSize 3f, color, sortingOrder 500); `Refresh()` enumerates + re-parses all scores twice on a miss; `FormatGrouped` allocates inside `OnGUI` every repaint; missing null guard on `scores` in `ToPairs`; `RankedArtNamingTests` hardcodes the live content id list (rots silently when content changes — use arbitrary ids).
+
+**What survives as genuinely new and clean:** `ScoreKey.TryParse` (after fix 1), `RankedArtNaming` Hash/HsvFor/FileNameFor/Sanitize (no counterpart exists), the `rankedLayerMinScore` floor + its decision-table tests, `FormatGrouped`/`DescribeScoreKey` (after fixes 2–3), and the builder orchestration (after fixes 4, 8) — it otherwise reuses `EnsureSprite`, `SetRef`, and the array-write idiom correctly.

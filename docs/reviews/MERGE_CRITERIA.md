@@ -60,6 +60,17 @@ the verdict is final. Two questions, answered with code evidence:
 The burden of proof is on the PR: the plan/spec must name the existing
 mechanism that was tried and why it didn't fit (manifesto, Law 2).
 
+**Zero re-implementation, down to the line.** The intent audit extends to
+method level: every new method is matched against the existing codebase. A
+new helper, lookup, parser, formatter, or constant that already has a home
+(e.g. `ContentLibrarySO` id lookups, `TimelineKeys` key grammar, builder
+sprite/texture helpers, `ShiftScoring` slip composition) is flagged and must
+be replaced by a call to the existing code — including format/grammar
+knowledge duplicated as string literals, and self-duplication *within* the
+PR. Only code that both meets the manifesto and adds something genuinely new
+is merge-eligible; everything else complies with and reuses our code and
+assets.
+
 ## Process
 
 1. Reviewer records verdict (ACCEPT / ACCEPT WITH CONDITIONS / REJECT) in
