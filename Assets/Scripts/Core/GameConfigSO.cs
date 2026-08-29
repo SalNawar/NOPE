@@ -64,6 +64,14 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int supportingPerProfile = 2;
 
+    /// <summary>
+    /// Minimum score before a ranked office layer treats an id as winning. The
+    /// comparison is strict, so the default of 0 means a layer reacts only to
+    /// positive influence — without it, a lone attribute sitting at -1 would be
+    /// rendered as "dominant" when nothing has actually taken hold yet.
+    /// </summary>
+    public float rankedLayerMinScore = 0f;
+
     [Header("Home / Expenses")]
     /// <summary>Base daily living expense (rent/utilities) deducted at Home.</summary>
     [Min(0)]

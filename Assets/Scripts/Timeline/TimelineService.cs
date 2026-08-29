@@ -24,6 +24,9 @@ public static class TimelineKeys
     /// <summary>Dominance bookkeeping key for a profile attribute.</summary>
     public static string Dominance(NationEraProfileSO profile, AttributeSO attr) =>
         $"{profile.id}:{attr.id}";
+
+    // Parsing the keys built above lives in ScoreKey (TimeDesk.Domain) so it is
+    // pure, testable C# — see Assets/Scripts/Domain/ScoreKey.cs.
 }
 
 /// <summary>
