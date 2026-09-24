@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 853cd81a6b9f44929510f6f4fcc60764, type: 3}
+  m_Name: InteractionFeedback_Default
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionFeedbackSO
+  arrowCursor: {fileID: 2800000, guid: 3c79ff86f0f1ab54cb7c7bae6d5c0ce6, type: 3}
+  arrowHotspot: {x: 0, y: 1}
+  handCursor: {fileID: 2800000, guid: 5bf0c774196c9de4e96e375f888d5dc5, type: 3}
+  handHotspot: {x: 11, y: 1}
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  worldOutlineWidth: 0.05
+  uiOutlineColor: {r: 0.98, g: 0.72, b: 0.2, a: 1}
+  uiOutlineDistance: {x: 2, y: -2}
+  outlineMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}

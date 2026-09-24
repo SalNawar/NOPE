@@ -14,9 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RunConfigSO
   contentLibrary: {fileID: 11400000, guid: 64331f3cb4087d54ca99e7a3cca0cd20, type: 2}
   gameConfig: {fileID: 11400000, guid: 4d8c2a6f1e3b49d7a5c0f8b2e6d41a93, type: 2}
+  interactionFeedback: {fileID: 11400000, guid: 8f94ae939f8b3ac4fb3ef352f0b92ce1, type: 2}
   startingMoney: 50
   startingStability: 100
   startingDay: 1
   officeSceneName: OfficeScene
   homeSceneName: HomeScene
+  titleSceneName: TitleScene
   fixedRunSeed: 0
+  startingFamilyMembers:
+  - Partner
+  - Kid
