@@ -4,7 +4,7 @@
 
 The intercom becomes an interview. The player can ask every traveller questions, and the answers appear in a transcript. A liar can now slip in speech as well as on paper: asked about home, they give their true home's value while their papers still show the cover. A spoken slip is proven exactly like a printed one, by comparing the answer with a reference book row (or with the Citizen Record). Questions open up over the first days: the capital on day 2, the ruler on day 3, and the birth date once an upgrade is bought (a hint-only question: it never carries a tell). A small authored dialog system carries narrative conversations, and their consequences apply at the end of the shift. This is Saleh's lie model: "you would know because they would fail one of the questions or because the passport has wrong info".
 
-Line numbers refer to `d7614f0` on `feat/identity-lies`. At that commit, Tasks 1–12 of the piece-2 plan are committed; only Task 13 (Unity verification) is pending. The branch head has since moved to `efe385d` (piece-2 review fixes: the `NoPossibleLie` warning text, `NameRoster.BaseName`, doc wording). Where this spec quotes code changed since `d7614f0`, it quotes `efe385d`. This spec builds on piece 2's names as implemented:
+Piece 2 is complete. `efe385d` holds its final code (the review fixes: the `NoPossibleLie` warning text, `NameRoster.BaseName`, doc wording); Task 13's Unity verification passed there with no product fix (identity-lies spec §8, 216/216 offline, 345 EditMode passes plus the known third-party failure); `15302e1` committed the regenerated day plans and blueprint; `feat/identity-lies` ends at `dc676cd`. Line numbers refer to this branch's files at `8395470`, whose code is unchanged since `efe385d` (the first draft counted from `d7614f0`; Review notes, "Aligned with the code as implemented", lists what moved). This spec builds on piece 2's names as implemented:
 - `CaseInstance.trueHome`/`trueHomeLabel`/`IsLiar`/`HomeLabel`/`gender`;
 - `CaseFactory.Disguise`/`LiarChance`/`PlaceLabel`;
 - `DayPlanSO.tellCount`/`TellCount`;
@@ -12,7 +12,7 @@ Line numbers refer to `d7614f0` on `feat/identity-lies`. At that commit, Tasks 1
 - `CaseVerdict.wasLiar`/`trueHomeLabel`;
 - the fallback agency record and the Records wiring warning.
 
-If piece 2's verification leads to fixes, the piece-3 plan re-reads the affected files before anchoring any edit; the implemented code wins.
+The piece-3 plan still re-reads each file before anchoring an edit; the implemented code wins.
 
 ## 0. Decisions
 
@@ -43,7 +43,7 @@ Claude made these under Saleh's instruction "go with all pieces, don't stop" (20
 | X7 | **Answers are computed at case generation** in `CaseFactory`, from the same `ResolveFieldValue` and `LiePlan` values the papers use, placeholders included. The one seeded variant pick (small talk) uses a new salted stream, `Seeds.ForDialog`. | Papers and speech share one source of truth. `caseSeed` exists only inside generation (`CaseFactory.cs:91`). |
 | X8 | **Flavour placement.** Timeline-reactive flavour lines will come through the existing `EffectChannel.Chatter` cues; piece 3 authors none (R16). Static per-place and per-era flavour lives in `world_source.json`. | The Chatter channel and `TimelineEffects.GetCues` are the designed path (`TimelineCueReceiver.cs:4-11`, `TimelineEffects.cs:123`). |
 | X9 | **Gender gets a reader.** The desk's opener uses an honorific from piece 2's gender: sir, madam or traveller. | Piece 2 D10 justified the field by piece 3's need. |
-| F1 | **Fallback text mode.** The text fallback lists the interview answers and only the claimed place's entry of each book, instead of every row of every book. | Five books × 24 rows would be 120 lines in a roughly 650 px body (`InvestigationUIController.cs:439-451`). |
+| F1 | **Fallback text mode.** The text fallback lists the interview answers and only the claimed place's entry of each book, instead of every row of every book. | Five books × 24 rows would be 120 lines in a body of about 540 px on a 1080 px canvas (anchors 0.16–0.76 of a panel spanning 0.08–0.92, `InvestigationUIController.cs:470-477`; the book loop is 439-451). |
 | C1 | **Copy.** The unproven-denial citation line and the scanner idle hint mention answers. | "Scan the papers next time" is wrong for a liar whose only tell is spoken (`ShiftScoring.cs:142`). |
 | O1 | **Out of scope:** premade and legendary arcs, portraits and speech bubbles (piece 4); history-driven questions (piece 5, although the evaluator already handles score and dominance conditions); UI language (piece 6). | See §4. |
 
@@ -63,7 +63,7 @@ Claude made these under Saleh's instruction "go with all pieces, don't stop" (20
 | R10 | **Transcript layout.** A 620×460 window at anchored position (220, 70) on the 1920×1080 reference canvas, so it clears the intercom (x ≥ +557) and the compare bar (y ≤ −173). Rows keep the book rows' fixed 34 px height, so 8 rows fill the 319 px row area. Each row shows the speaker in a 150 px column and the sentence in the rest (about 400 px). The sentence **wraps** inside the row and auto-sizes 12–18 pt: a sentence of up to about 50 characters stays on one line, and a longer one takes two lines at 12–14 pt (two lines of Liberation Sans at 14 pt are about 32 px high). Two lines at 12 pt hold about 120 characters. A content knob, `interview.maxLineChars` (100), bounds every line's worst-case rendered length, and the generator enforces it (§2.13). Only answer rows are clickable. The paging code moves out of `ReferenceBookWindowController` into a shared base, `PagedRowsWindow`, so books and transcript page with one implementation. | `WindowLayer` renders under `IntercomPanel` and `CompareBar` (`OfficeSceneUIBuilder.cs:117,153,205`). Copying the book paging would be self-duplication. One line would not fit this piece's own content: the rumour lines are 70 and 92 characters, and the claim line reaches 70 ("I request passage home to Ottoman Iraq (Baghdad Vilayet) (Industrial)."), while one line at 12 pt holds about 66. Rows that grow with their text would push the newest rows out of the fixed row area, where the mask would clip them. |
 | R11 | **The fallback's contents (F1).** It prints, in order: the papers; the agency record (piece-2 R15); "INTERVIEW" (each askable question's prompt and the traveller's answer sentence); and "REFERENCE (claimed place)", one line per book with the claim's value. | Five book lines replace up to 120. The evidence gate is off in the fallback, so origin proofs are not needed there. |
 | R12 | **Interview wiring gates the Answer channel.** `InvestigationUIController.InterviewReachable` is true in the text fallback, and true in the rich desk only when the intercom, the transcript window and its chrome are all wired. When it is false, `GameManager` hands the case factory no askable and no tell-carrying categories, so no answer is computed and no Answer tell is generated that day, and the desk offers only the document requests. The rich desk also logs one warning that names the builder. | An OfficeScene that was never rebuilt would otherwise generate liars whose only tell is spoken and can never be proven. |
-| R13 | **One label source.** `ClueLabels.Report` (Domain) gives: Geography → CAPITAL, Politics → RULER, Technology → DEVICE, BirthDate → BIRTH DATE, and every other category its upper-case name. Summaries, the compare-bar notes and transcript compare labels use it. The private `DiscrepancyLog.CategoryLabel` goes. | The paper says "Declared Device", the book "Index of Devices" and the question "Device"; the scanner printed "TECHNOLOGY". |
+| R13 | **One label source.** `ClueLabels.Report` (Domain) gives: Geography → CAPITAL, Politics → RULER, Technology → DEVICE, BirthDate → BIRTH DATE, and every other category its upper-case name. Summaries, the compare-bar notes and transcript compare labels use it. The private `Discrepancy.CategoryLabel` (in `DiscrepancyLog.cs`) goes. | The paper says "Declared Device", the book "Index of Devices" and the question "Device"; the scanner printed "TECHNOLOGY". |
 | R14 | **The id grammar (Q16)** is set by the generator only (§2.13). Every id, generated or authored, is unique across the whole world source, and an authored line id starts with its dialog's id and a dot. At runtime the transcript names each row `Line_{id}`, which the verification uses to find rows. | Ids get a real reader in piece 3 without dead code. Piece 6's string tables will key on these ids, so two strings must never share one. |
 | R15 | **Small talk.** A traveller's small talk comes from their claimed place's lines, or from its era's lines when the place has none (`Interview.PickSmallTalk`). It is one `Range` draw on `Seeds.ForDialog(caseSeed)`, made only when lines exist. It is never evidence and never depends on the true home. | X7's stream. The draw keeps the case and lie streams untouched. |
 | R16 | **No Chatter content yet (X8).** Timeline-reactive lines stay unauthored in piece 3, so no receiver is added: there is nothing to receive. Piece 5 adds them through `EffectChannel.Chatter` cues. | No dead code; the path is named. |
@@ -77,7 +77,7 @@ Claude made these under Saleh's instruction "go with all pieces, don't stop" (20
 | R24 | **What a dialog effect may do.** An effect a dialog names may hold only instant ops (SetFlag, ClearFlag, AddCounter, AddMoney, AddStability, UnlockUpgrade, AddAttributeScore, AddNationScore) and BriefingLine/NewsLine. The continuous ops that change play while active (LegendaryChanceBonus, ForgeryChanceBonus, PayRateBonus, VisitorTagWeight, ShopDiscountPercent, CaseBlueprintWeight, Cue; `EffectOps.ActsWhileActive`) are rejected by the generator and the validator, with a message naming piece 4/5 for timed modifiers. | `ActiveEffectEntry.IsActiveOnDay` has no lower bound (`WorldState.cs:257-258`) and `TimelineEffects.Active` filters on `world.day` (`TimelineEffects.cs:23`), so an entry activated at the end of shift N with start day N+1 already counts in that evening's Home phase (a ShopDiscountPercent would discount tonight's shop) and in a Continue replay of day N (a ForgeryChanceBonus would change the replayed liars). The lower bound cannot be added: `BuildTomorrowPackage` relies on today-filtered `Active()` including entries that start tomorrow. Instant ops apply once at the end of the shift, and lines reach only the next morning's paper, so their timing is what §1.6 promises. |
 | R25 | **Menu capacity.** The intercom's `Actions` list fits 8 buttons (about 432 px after padding; 44 px buttons with 6 px spacing). A content knob, `interview.menuCapacity` (8), is checked three ways: the generator and the validator reject content whose ask menu (back + questions + small talk) or hub (the most document templates of any blueprint the day plans or legendaries use + ask + every dialog) or any authored node exceeds it (`DialogChecks.MenuProblems` and `Problems`), and the builder logs an error when the intercom it lays out fits fewer buttons than the knob. "< Back" is the ask menu's **first** choice and document requests are the hub's first choices, so an overflow clipped by the new `RectMask2D` can hide a question or a dialog but never the way back or a document. | With Interview Protocols the ask menu holds exactly 8 entries. One more question in `world_source.json` would otherwise hide "< Back" without any error, trap the player in the ask menu and make a Papers-tell liar unwinnable (documents open only through the intercom). The hub count is conservative (every dialog counted as offered at once); piece 4 revisits it when arcs outgrow it. |
 | R26 | **The claim line is content.** The traveller's claim "I request passage home to {place}." moves from `CaseFactory.cs:224` into the `interview` section (`interview.claim`, token `{place}`). `CaseFactory` fills it with `Interview.Claim`, and the banner, the shift summary and the transcript's `case.claim` line share it. | Every spoken line has authored wording and a stable id (Q16); piece 6 gets no code string to localize. |
-| R27 | **Source defaults never decide behaviour.** `questions[].fromDay` is required: the generator rejects a value below 1, so a missing key fails loudly whether `JsonUtility` reads it as 0 or not (the `days[].tells` precedent, `WorldContentGenerator.cs:193-194`). A dialog's run-level memory is authored as `repeatable` (default false): a missing key reads false, which is one-shot, and the generator writes `AuthoredDialog.oneShot = !repeatable`. A missing array or string reads as empty. Every piece-3 entry authors `fromDay` explicitly. | The only field initializer the generator relies on today is at the root (`WorldSource.travellerAgeMin = 18`). Whether `JsonUtility` runs initializers on elements of nested arrays does not matter under these rules. |
+| R27 | **Source defaults never decide behaviour.** `questions[].fromDay` is required: the generator rejects a value below 1, so a missing key fails loudly whether `JsonUtility` reads it as 0 or not (the `days[].tells` precedent, `WorldContentGenerator.cs:193-194`). A dialog's run-level memory is authored as `repeatable` (default false): a missing key reads false, which is one-shot, and the generator writes `AuthoredDialog.oneShot = !repeatable`. A missing array or string reads as empty. Every piece-3 entry authors `fromDay` explicitly. | The only field initializers the generator relies on today are at the root (`WorldSource.travellerAgeMin = 18`, `travellerAgeMax = 70`). Whether `JsonUtility` runs initializers on elements of nested arrays does not matter under these rules. |
 
 ## 1. Behaviour
 
@@ -295,7 +295,9 @@ Line endings, to preserve:
 - **Class and member docs:**
   - `LiePlan`: "the true home and the tells the liar leaks, on the papers or in speech";
   - `Lies`: "Who lies about their home, where they really come from, and which tells they leak on their papers or in their answers ... one pick per tell (a category/channel option) ...";
-  - `LieOutcome.Liar` (`Lies.cs:34`): "The traveller comes from another of today's places; their papers or answers leak tells." `NoPossibleLie` keeps its text.
+  - `LieOutcome.Liar` (`Lies.cs:34`): "The traveller comes from another of today's places; their papers or answers leak tells." `NoPossibleLie` keeps its text;
+  - `Plan`'s summary (109-119), which today says a category is eligible "when the papers print it" and counts "that home's eligible categories", describes the options: a (category, channel) option is open when today's channels allow it and `Forgery.IsProvableTell` holds (Papers for a printed category, Answer for one of `answerTellCategories`), and a liar gets max(1, min(`tellCount`, the distinct categories among the home's options)) tells;
+  - `LiePlan._values` (47): "The value of each tell category, printed or spoken (the home's fact, or the tell birth date)".
 - **`Forgery.cs`:**
   - new `public static bool IsProvableCategory(ClueCategory category, ICollection<ClueCategory> bookCategories)`: false for Name; true for BirthDate (the Citizen Record proves it); otherwise true exactly when `bookCategories` is non-null and contains the category. Doc: "Whether any tell in this category could ever be proven: the one rule questions (R20) and tells share."
   - `IsProvableTell` starts with `if (!IsProvableCategory(category, bookCategories)) return false;`, then keeps its BirthDate year test and its place-fact checks. Its results are unchanged for every input (the old switch and `!bookCategories.Contains` test are exactly this rule), which `ForgeryTests` keeps green.
@@ -410,6 +412,7 @@ Line endings, to preserve:
 - `Discrepancy`:
   - gains `public EvidenceKind source;`, "Where the tell was stated: DocumentField (papers) or Answer (the traveller said it)";
   - the `documentValue` doc becomes "The tell's value, as printed or as spoken";
+  - the `actualOrigin` doc (107-110, "where the printed value actually belongs") says "the printed or spoken value";
   - `Summary` uses `ClueLabels.Report(category)` and the source:
     - ClaimMismatch: `papers: "{v}"` or `traveller said: "{v}"`, then `  /  expected: "{e}"`;
     - ForeignOrigin: `papers show "{v}", which belongs to {o}` or `traveller said "{v}", which belongs to {o}`;
@@ -418,7 +421,7 @@ Line endings, to preserve:
 - `DiscrepancyLog`:
   - `public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId)` holds today's rules (167-250). They change in one way: the statement side is the one of kind DocumentField **or** Answer, and it proves something only against exactly one truth source (ReferenceEntry or RecordField). Two statements or two truths give null. It sets `source`.
   - `public bool Add(Discrepancy proof)` adds, or returns false when the proof is null or its category is already documented (252-255 move here).
-  - `TryRegister` (doc and body, 162-259) is removed (R17). Its only production caller, `HandlePairCompared`, calls `Prove` and `Add` (§2.11). Its test callers move to `Prove` and `Add` (§5): `DiscrepancyLogTests` (about 20 calls, through a private helper `Register(log, a, b, nation, era)` that returns `Prove`'s proof when `Add` accepts it, else null), `LiesTests` (the two round-trip calls, which only prove) and `FactTableTests` (two calls, which only prove).
+  - `TryRegister` (doc and body, 162-259) is removed (R17). Its only production caller, `HandlePairCompared`, calls `Prove` and `Add` (§2.11). Its test callers move to `Prove` and `Add` (§5): `DiscrepancyLogTests` (22 calls, through a private helper `Register(log, a, b, nation, era)` that returns `Prove`'s proof when `Add` accepts it, else null), `LiesTests` (the two round-trip calls, which only prove) and `FactTableTests` (two calls, which only prove).
   - The class doc says "Per-case list of documented contradictions (the Deviation Report). `Prove` decides whether a compared pair is a true contradiction: a statement (document field or answer) against one truth source ...; `Add` documents it once per category."
 
 **`ClueLabels.cs`** (new): `public static string Report(ClueCategory category)`, per R13.
@@ -475,6 +478,7 @@ Line endings, to preserve:
 **`CaseInstance`** (CRLF):
 - `introLine` doc: "The desk's opener for this traveller (interview lines, with the traveller's honorific); the transcript's first line."
 - `claimLine` doc: "The traveller's claim sentence (interview.claim with the claimed place's label); the banner, the shift summary and the transcript's second line."
+- `IsLiar` doc (73), "(their papers leak tells)", says "(their papers or answers leak tells)".
 - New `public readonly List<InterviewAnswer> answers = new();`, "The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers)."
 - New `public LineText smallTalk;`, "What the traveller says when asked small talk (their claimed place's or era's flavour; null when none is authored)."
 
@@ -493,7 +497,7 @@ Line endings, to preserve:
 - **After `Disguise`:**
   - new private `AddAnswers(CaseInstance inst, LiePlan lie)`: for each `c` in `_askable`, adds `Interview.Answer(c, ResolveFieldValue(c, inst), lie)`. `ResolveFieldValue` supplies the registered birth date and the placeholder grammar. It is called before or independently of `ApplyTo`: it reads the claim, never the fields;
   - `inst.smallTalk = Interview.PickSmallTalk(place's smallTalk, era's smallTalk, _dialogRng)`, where the era is `place.era`, or `claimedEra` for a place-less traveller (glue: it only resolves the two ScriptableObject lists).
-- **`ResolveFieldValue`** (343-362): its summary adds "also each spoken answer's cover value (AddAnswers)", and its warning (360) becomes "'{origin}' has no {category} fact today; using a placeholder on the papers and in answers. Check the place's facts (Tools > TimeDesk > Validate Content Library)." A missing fact now warns once per printed field and once per askable question; the validator reports the gap before play.
+- **`ResolveFieldValue`** (343-362): its summary (336-342, the `efe385d` text) adds "also each spoken answer's cover value (AddAnswers)", and its last sentence, "A liar's tells overwrite these values afterwards (Disguise).", becomes "A liar's Papers tells overwrite the printed values afterwards (Disguise); an Answer tell replaces only the spoken value (Interview.Answer)." Its warning (360) becomes "'{origin}' has no {category} fact today; using a placeholder on the papers and in answers. Check the place's facts (Tools > TimeDesk > Validate Content Library)." A missing fact now warns once per printed field and once per askable question; the validator reports the gap before play.
 - **Case log (231):** tells print with their channel (`tells=[Geography/Answer]`), plus `answers={inst.answers.Count}`.
 - **Class summary:** mentions answers, the claim and opener wording, and the dialog stream.
 
@@ -552,7 +556,7 @@ Line endings, to preserve:
   - `protected abstract int RowCount { get; }`;
   - `protected abstract void FillRow(int index, GameObject row, TMP_Text[] texts, Image background, Button button)`.
 
-**`ReferenceBookWindowController`** (LF) derives from `PagedRowsWindow`. `SetBook` (42-54) keeps its signature and calls `SetTitle` and `ShowPage(0)`. `Rows()` stays. `PageCount`/`ShowPage`/`Rebuild` (59-124) move to the base, and `FillRow` sets the two texts and the compare click as today.
+**`ReferenceBookWindowController`** (LF) derives from `PagedRowsWindow`. `SetBook` (42-53) keeps its signature and calls `SetTitle` and `ShowPage(0)`. `Rows()` stays. `PageCount`/`ShowPage`/`Rebuild` (59-124) move to the base, and `FillRow` sets the two texts and the compare click as today.
 
 **`TranscriptWindowController`** (new, derives from `PagedRowsWindow`):
 - `public void Bind(IReadOnlyList<DialogLine> transcript, string deskName, string travellerName, CompareController compare)` shows the last page.
@@ -592,7 +596,7 @@ Line endings, to preserve:
   4. CompleteDialog calls `_day.Complete(choice.DialogId, choice.EffectName)`.
   5. `RefreshChoices()`.
 - **`BuildBookShelf`** (321): R21 placement.
-- **Fallback:** `BuildFallbackBody` also takes `_day`. After piece 2's "— AGENCY RECORD —" block it prints "— INTERVIEW —": for each `_day.Questions` entry with an answer, `PromptLine` text and `"    {name}: {AnswerLine text}"`. It replaces the "— REFERENCE BOOKS (cross-check) —" loop (439-452) with "— REFERENCE (claimed place) —": `"{book.displayName}: {facts.Get(claim, book.category) ?? "(no entry)"}"`.
+- **Fallback:** `BuildFallbackBody` (a private static method) also takes `_day`. After piece 2's "— AGENCY RECORD —" block it prints "— INTERVIEW —": for each `_day.Questions` entry with an answer, `PromptLine` text and `"    {name}: {AnswerLine text}"`. It replaces the "— REFERENCE BOOKS (cross-check) —" loop (439-451) with "— REFERENCE (claimed place) —": `"{book.displayName}: {facts.Get(claim, book.category) ?? "(no entry)"}"`. Its summary (405-408, "the papers, the traveller's agency record ... and today's books") lists the papers, the agency record, the interview and the claimed place's book entries.
 - **Docs:** the class summary mentions the interview.
 
 **`InteractionPanelController`** (doc only): "Actions are the current interview node's choices (requests, questions, dialog replies), supplied per step by the investigation controller."
@@ -825,8 +829,8 @@ Both dialogs are one-shot (no `repeatable` key).
 | `Assets/Scripts/Domain/InterviewScript.cs` (+meta) | Domain | new: `InterviewCase`, `InterviewScript`, `DialogChecks` (`Problems`, `MenuProblems`) |
 | `Assets/Scripts/Domain/InterviewDay.cs` (+meta) | Domain | new: `InterviewDay`, `DialogOutcomes` |
 | `Assets/Scripts/Domain/ClueLabels.cs` (+meta) | Domain | new |
-| `Assets/Scripts/Domain/Lies.cs` | Domain | `TellChannel`; `Plan` options (`answerTellCategories`); `LiePlan.ChannelOf`/`TellValue`; `ApplyTo` Papers only; docs, including `LieOutcome.Liar` (34-35) and the `Lies`/`LiePlan` summaries |
-| `Assets/Scripts/Domain/DiscrepancyLog.cs` | Domain | `EvidenceKind.Answer`, `ForAnswer`, `source`, `Summary`, `Prove`/`Add`, `TryRegister` removed; docs, including the `DiscrepancyProof` values (23-30) and the class doc |
+| `Assets/Scripts/Domain/Lies.cs` | Domain | `TellChannel`; `Plan` options (`answerTellCategories`); `LiePlan.ChannelOf`/`TellValue`; `ApplyTo` Papers only; docs, including `LieOutcome.Liar` (34-35), the `Lies`/`LiePlan` summaries, `Plan`'s summary (109-119) and `LiePlan._values` (47) |
+| `Assets/Scripts/Domain/DiscrepancyLog.cs` | Domain | `EvidenceKind.Answer`, `ForAnswer`, `source`, `Summary`, `Prove`/`Add`, `TryRegister` removed; docs, including the `DiscrepancyProof` values (23-30), `Discrepancy.actualOrigin` (107-110) and the class doc |
 | `Assets/Scripts/Domain/Seeds.cs` | Domain | `DialogSalt`, `ForDialog` |
 | `Assets/Scripts/Domain/ShiftLedger.cs` | Domain | `DialogOutcome`, `dialogOutcomes` |
 | `Assets/Scripts/Domain/Forgery.cs` | Domain | `IsProvableCategory` extracted and called by `IsProvableTell`; class doc |
@@ -837,14 +841,14 @@ Both dialogs are one-shot (no `repeatable` key).
 | `Assets/Scripts/ContentLibrarySO.cs` | Assembly-CSharp | `interview`, `questions`, `dialogs`; doc |
 | `Assets/Scripts/DayPlanSO.cs` | Assembly-CSharp | `tellChannels`/`TellChannels`; doc |
 | `Assets/Scripts/EraSO.cs`, `Assets/Scripts/Timeline/NationEraProfileSO.cs` | Assembly-CSharp | `smallTalk` |
-| `Assets/Scripts/CaseInstance.cs` | Assembly-CSharp | `answers`, `smallTalk`; `introLine` and `claimLine` docs |
+| `Assets/Scripts/CaseInstance.cs` | Assembly-CSharp | `answers`, `smallTalk`; `introLine`, `claimLine` and `IsLiar` (73) docs |
 | `Assets/Scripts/CaseFactory.cs` | Assembly-CSharp | §2.9, including the `Disguise` summary (281-287) and the `ResolveFieldValue` summary and warning (336-360) |
 | `Assets/Scripts/GameManager.cs` | Assembly-CSharp | §2.10 |
 | `Assets/Scripts/Shift/ShiftScoring.cs` | Assembly-CSharp | citation text (142) |
 | `Assets/Scripts/UI/PagedRowsWindow.cs` (+meta) | Assembly-CSharp | new |
 | `Assets/Scripts/UI/TranscriptWindowController.cs` (+meta) | Assembly-CSharp | new |
 | `Assets/Scripts/UI/ReferenceBookWindowController.cs` | Assembly-CSharp | derives from `PagedRowsWindow` |
-| `Assets/Scripts/UI/InvestigationUIController.cs` | Assembly-CSharp | §2.11 |
+| `Assets/Scripts/UI/InvestigationUIController.cs` | Assembly-CSharp | §2.11, including the `BuildFallbackBody` summary (405-408) |
 | `Assets/Scripts/UI/CompareController.cs` | Assembly-CSharp | `ShowAlreadyDocumented`; class doc (5-11) |
 | `Assets/Scripts/UI/InteractionPanelController.cs` | Assembly-CSharp | doc |
 | `Assets/Scripts/UpgradeSO.cs`, `Assets/Scripts/WorldState.cs` | Assembly-CSharp | docs |
@@ -865,7 +869,7 @@ Both dialogs are one-shot (no `repeatable` key).
 | `docs/FEATURES.md` | docs | §3.3 |
 | `docs/superpowers/specs/2026-09-24-dialog-questions-design.md` | docs | this spec, committed first |
 
-`SCRATCH/build_world_source.py` is retired: not run again and not committed. The scratchpad `HOUSE_RULES.md` (line 16) still names it as part of the pipeline; whoever runs the piece-3 plan updates that line first.
+`SCRATCH/build_world_source.py` is retired: not run again and not committed. The scratchpad `HOUSE_RULES.md` (line 16) already says so: the JSON is the hand-maintained source and is never regenerated from the script.
 
 The following were checked and do not change: `DocumentWindowController`, `CitizenRecordsWindowController`, `DesktopIcon`, `OSWindowChrome`, `OfficeUIController`, `DayFlowUIController`, `SaveSystem`, `RunManager`, `HomeManager`, `HomeUIController` (the shop still shows no descriptions, §1.3), `TimelineEffects`, `TimelineCueReceiver`, `ShiftClock`, `VerdictRules`, `FactTable`, `BirthDates`, `DocumentField`, `CitizenRegistry`, `WorldState.ActiveEffectEntry.IsActiveOnDay` (R24).
 
@@ -893,7 +897,7 @@ It reads ScriptableObjects or `WorldState`, calls `ActivateEffect`, `EndingServi
 | Menu capacity | the builder's own intercom layout numbers | A content knob the generator and validator can read, checked against the layout by the builder (R25) |
 | Provable question categories | `Forgery.IsProvableTell`'s category switch | Extracted as `IsProvableCategory`, not copied (R20) |
 | Answer evidence | the `DiscrepancyLog` proof branches, `CompareEvidence`, `HandlePairCompared`, the deny gate | One enum value and the statement-side check |
-| Labels | the private `DiscrepancyLog.CategoryLabel` | Made public and complete (R13) |
+| Labels | the private `Discrepancy.CategoryLabel` | Made public and complete (R13) |
 | Answers | `CaseFactory.ResolveFieldValue`, `LiePlan` values | none |
 | Small talk pick | `Seeds`/`SeededRandom` | A salted stream, following the `ForClues`/`ForLies` precedent |
 | Upgrade gate | `WorldState.HasUpgrade`, `UpgradeSO.id`, `ContentLibrarySO.GetUpgradeById` | One enum value |
@@ -912,7 +916,7 @@ It reads ScriptableObjects or `WorldState`, calls `ActivateEffect`, `EndingServi
 - The category switch at the top of `Forgery.IsProvableTell` (24-33) becomes `IsProvableCategory`.
 - `ReferenceBookWindowController`'s serialized fields, `Awake`, `PageCount`, `ShowPage` and `Rebuild` (15-39, 59-124) move to `PagedRowsWindow`.
 - The per-document `InteractionAction` loop (`InvestigationUIController.cs:240-274`) is replaced by the interview hub.
-- The fallback's full book listing (`InvestigationUIController.cs:439-452`) is removed.
+- The fallback's full book listing (`InvestigationUIController.cs:439-451`) is removed.
 - The builder's Clue Log placeholder window and its `apps` row (`OfficeSceneUIBuilder.cs:1280`) are removed.
 - The literal intro "Next subject for reassignment." (`CaseFactory.cs:187`) and the claim template "I request passage home to {originLabel}." (`CaseFactory.cs:224`) become content (R8, R26).
 
@@ -924,16 +928,16 @@ It reads ScriptableObjects or `WorldState`, calls `ActivateEffect`, `EndingServi
 - **§1.1 lines 64-66 and §1.2 lines 84-87:** tells "leak" and are logged from the papers only. They may now be spoken, and they are logged from answers the same way (§1.4).
 - **§1.3 line 98 and R12 (line 48):** the citation text and the scanner idle hint are replaced by §1.7.
 - **§1.4 lines 108-110:** days 2–3 lie draws differ from piece 2's (their day-gated questions add Answer options), and answers also depend on the day's askable questions; lie draws still never depend on purchases or flags (§1.8, R23).
-- **§2.3 lines 214-239:** the `Lies.Plan` signature, candidate step 2, tell step 4 and "`ApplyTo` sets … every field whose category is a tell" are replaced by §2.3 of this spec (options, channels; `ApplyTo` covers Papers tells only).
-- **R15 (line 51) and §2.7 line 389:** the fallback prints only the claimed place's entry per book, plus the interview (R11).
-- **§3.3 lines 491 and 493:** the piece-2 FEATURES rewrites of :62 and :85 (now :63 and :86) are rewritten again (§3.3 below).
-- **§5 line 531** ("an unprinted category is never a tell"): the test stays, renamed `AnUnprintedCategory_IsNeverAPapersTell`, because it runs with Papers only.
-- **§2.6 line 380** ("The scratchpad build script `build_world_source.py` (lines 71-79) gets the same key so a rebuild keeps it"; line 381 at `efe385d`): superseded by X10. `world_source.json` is now the hand-maintained source of truth, and the script is never run again.
+- **§2.3 lines 213-239:** the `LiePlan.ApplyTo` comment (213), the `Lies.Plan` signature, candidate step 2, tell step 4 and "`ApplyTo` sets … every field whose category is a tell" are replaced by §2.3 of this spec (options, channels; `ApplyTo` covers Papers tells only).
+- **R15 (line 51) and §2.7 line 390:** the fallback prints only the claimed place's entry per book, plus the interview (R11).
+- **§3.3 lines 492 and 495:** the piece-2 FEATURES rewrites of :62 and :85 (now :63 and :86) are rewritten again (§3.3 below).
+- **§5 line 533** ("an unprinted category is never a tell"): the test stays, renamed `AnUnprintedCategory_IsNeverAPapersTell`, because it runs with Papers only.
+- **§2.6 line 381** ("The scratchpad build script `build_world_source.py` (lines 71-79) gets the same key so a rebuild keeps it"): superseded by X10. `world_source.json` is now the hand-maintained source of truth, and the script is never run again.
 - **Piece-2 plan (`docs/superpowers/plans/2026-09-24-identity-lies.md`), Task 11:** the "Modify (scratch, not committed): `SCRATCH/build_world_source.py`" file line (2787), the Step 1 `apply(S + r'\build_world_source.py', …)` block (2828-2832) and Step 2 "Prove the build script reproduces the edited source" (2840-2843), as well as the file-table row at line 64. They were right for piece 2 and are superseded from piece 3 on by X10.
-- **§6 step 3.3 (line 593)** ("at least one field has `isAnachronism`"): replaced by "at least one tell on a channel allowed that day" (§6 below).
-- **§7 line 617** ("Cross-piece gate trap"): resolved. Answers are registrable (`EvidenceKind.Answer`) before any Answer tell is generated, and R12 switches the Answer channel off where answers cannot be seen.
-- **§7 line 620** ("Gender is data only"): gender is now read by the opener (X9).
-- **§4 line 500:** the piece-3 list is delivered here. Its "capital and ruler question books" are `RefBook_Capital` and `RefBook_Ruler`.
+- **§6 step 3.3 (line 596)** ("at least one field has `isAnachronism`"): replaced by "at least one tell on a channel allowed that day" (§6 below).
+- **§7 line 620** ("Cross-piece gate trap"): resolved. Answers are registrable (`EvidenceKind.Answer`) before any Answer tell is generated, and R12 switches the Answer channel off where answers cannot be seen.
+- **§7 line 623** ("Gender is data only"): gender is now read by the opener (X9).
+- **§4 line 502:** the piece-3 list is delivered here. Its "capital and ruler question books" are `RefBook_Capital` and `RefBook_Ruler`.
 
 **`docs/superpowers/specs/2026-07-03-scanner-evidence-design.md` (approved by Saleh):**
 - **Rule 1 (lines 14-19):** "Comparing a document field against …" now reads "comparing a *statement* (a document field or a traveller's answer) against …". Saleh's quote asks for a failed question to catch a liar. The proof rules themselves are unchanged: same category, same claim test, same honesty gate on the statement's tell flag, and one discrepancy per category.
@@ -950,7 +954,7 @@ It reads ScriptableObjects or `WorldState`, calls `ActivateEffect`, `EndingServi
 
 ### 3.3 `docs/FEATURES.md` (same commits as the behaviour)
 
-Line numbers are from `d7614f0`, where piece 2's edits are already in; the new text replaces piece 2's text where both touch a line.
+Line numbers are those of the current `FEATURES.md`, with all of piece 2's edits in (the piece-2 review reworded :84-85 in place, so no line has moved since `d7614f0`); the new text replaces piece 2's text where both touch a line.
 
 - **:11:** add "a per-traveller dialog stream (`Seeds.ForDialog`, small-talk pick); the day's lie draws depend only on the run and the day (and the interview wiring), never on purchases or flags" (seeding tested: `SeedsTests`; tell eligibility tested: `InterviewDayTests`).
 - **:12:** "Endings evaluated after every verdict, and at the end of a shift that applied dialog consequences".
@@ -1071,7 +1075,7 @@ Line numbers are from `d7614f0`, where piece 2's edits are already in; the new t
   - `Complete` records `DialogOutcome` in the ledger with the dialog's `oneShot` and the effect name, and returns false for an unknown or repeated id;
   - `DialogOutcomes.FlagsToSet` gives one `dlg:{id}:done` per one-shot outcome, none for a repeatable one, once per dialog id, in ledger order; `EffectsToApply` gives each outcome with an effect once, skips outcomes without one, keeps ledger order; null gives empty.
 - **`DiscrepancyLogTests`** (changed, CRLF):
-  - the header becomes "Decision table for DiscrepancyLog.Prove and Add — the core verification rule". The existing tests' `TryRegister` calls (about 20) go through a private helper `Register(log, a, b, nation, era)`, which returns `Prove`'s proof when `log.Add` accepts it, else null, so every existing assertion stays as it is;
+  - the header becomes "Decision table for DiscrepancyLog.Prove and Add — the core verification rule". The existing tests' `TryRegister` calls (22) go through a private helper `Register(log, a, b, nation, era)`, which returns `Prove`'s proof when `log.Add` accepts it, else null, so every existing assertion stays as it is;
   - an Answer tell against the claim row gives ClaimMismatch with source Answer, and the Summary contains `traveller said: "`;
   - against a foreign row it gives ForeignOrigin, and the Summary contains `traveller said "`, which belongs to;
   - against the record it gives RecordMismatch;
@@ -1087,7 +1091,7 @@ Line numbers are from `d7614f0`, where piece 2's edits are already in; the new t
 
 ## 6. Verification plan
 
-**Offline, after every change:** `compile_check.py` reports 0 errors in every project, and the reflection runner reports every Domain test passing.
+**Offline, after every change:** `compile_check.py` reports 0 errors in every project, and the reflection runner reports every Domain test passing. The baseline at the piece-2 head is `passed 216, failed 0` (re-run at `8395470`); Unity's EditMode run gave 345 passes plus the known third-party failure (identity-lies spec §8). The plan states the expected count after each task.
 
 **In the branch's own Unity 6000.4.11f1**, through temporary `_TimeDesk*` `-executeMethod` scripts. Their pattern comes from the piece-2 plan Task 13 and `SCRATCH/prev__TimeDesk*.cs.txt`. They are never committed, and reports go to the scratchpad.
 
@@ -1123,7 +1127,7 @@ Line numbers are from `d7614f0`, where piece 2's edits are already in; the new t
    - the scene has `TranscriptWindow` with the controller and chrome wired, `IconClueLog` targets it, and no `IconClueLogWindow` remains;
    - `IntercomPanel/Actions` has a `RectMask2D`;
    - the icon ids are Lexicon `archive_access`, Dialect `""`, Material `adv_scanner`; `IconDialectWindow`'s `TitleText` reads "Dialect" and its `Body` "Notes on accents and phrasing. (placeholder)"; the builder logs no error (so the intercom fits the content's menu capacity);
-   - **idempotence, checked semantically:** run Build Office UI a second time and save. After each build a temporary `_TimeDesk` script dumps the scene: every GameObject's hierarchy path and active flag, its component types in order, each `RectTransform`'s anchors, pivot, anchored position and size (rounded to 0.1), every TMP text's string, font-size range, wrapping and overflow mode, and every object reference the builder sets through `SetRef` (the serialized `ObjectReference` properties of the project's own MonoBehaviours), written as the target's hierarchy path. The two dumps must be equal. The YAML itself is not compared: the builder destroys and recreates `MinBtn`/`MaxBtn`/`CloseBtn` on every window (`OfficeSceneUIBuilder.cs:737-743`), the document template (336), the newsletters (92-95), the Start menu (1294), the Records input and rows (1358, 1378) and now `IconDialectWindow` on every run, so Unity gives them new fileIDs (the last rebuild, `002bbfc`, changed about 27k lines of `OfficeScene.unity`).
+   - **idempotence, checked semantically:** run Build Office UI a second time and save. After each build a temporary `_TimeDesk` script dumps the scene: every GameObject's hierarchy path and active flag, its component types in order, each `RectTransform`'s anchors, pivot, anchored position and size (rounded to 0.1), every TMP text's string, font-size range, wrapping and overflow mode, and every object reference the builder sets through `SetRef` (the serialized `ObjectReference` properties of the project's own MonoBehaviours), written as the target's hierarchy path. The two dumps must be equal. The YAML itself is not compared: the builder destroys and recreates `MinBtn`/`MaxBtn`/`CloseBtn` on every window (`OfficeSceneUIBuilder.cs:737-743`), the document template (336), the newsletters (92-95), the Scanner window (145), the whole Citizen Records window (171, including its input and rows, 1358 and 1378), the Start menu (1294) and now `IconDialectWindow` on every run, so Unity gives them new fileIDs (the last rebuild, `002bbfc`, changed about 27k lines of `OfficeScene.unity`).
 6. **Scripted play-through** on the rebuilt OfficeScene (play mode, `[InitializeOnLoad]` + SessionState steps). The script prepares a run at day 2 with a seed whose queue holds three travellers: an honest one, a liar with a Geography Answer tell, and a liar with a Papers tell. It picks the seed with the same `CaseFactory` call. It then drives the real UI:
    - the hub lists the 2 requests, "Ask about home >" and "Any news from home? >". The ask menu lists "< Back", Currency, Language, Device, Capital and Small talk, in that order (no Ruler, no Date of birth);
    - every transcript row the play-through shows, in both texts, reports `isTextOverflowing == false` after `ForceMeshUpdate`. The script also fills a row with the worst-case strings of §2.14 (the 70-character claim, the 92-character rumour line, and a 100-character sentence of ordinary English words, the knob's bound) and checks the same;
@@ -1133,7 +1137,7 @@ Line numbers are from `d7614f0`, where piece 2's edits are already in; the new t
    - the Papers-tell liar: its tell category's answer is the cover and logs nothing. The paper field against the book logs. Deny is correct;
    - "Any news from home? >" → "Tell me more." → "Noted. Thank you.": the entry disappears from the next traveller's hub;
    - Escape and back mid-interview: the transcript and its page are unchanged;
-   - force closing time, then the results panel. The save holds `dlg:dlg_rumour:done` and `rumour_calculators`, and one `ActiveEffectEntry` for `Effect_Dialog_RumourHeard` with `startDay = 3`;
+   - force closing time, then the results panel (the script looks `DayFlowUIController` up including inactive objects: its `DayFlowUI` host sits under the desktop `Canvas`, which `FocusOffice()` turns off at day end; the piece-2 play-through hit this, identity-lies spec §8). The save holds `dlg:dlg_rumour:done` and `rumour_calculators`, and one `ActiveEffectEntry` for `Effect_Dialog_RumourHeard` with `startDay = 3`;
    - `AdvanceToNextDay`: the day-3 briefing shows the rumour tip and the ruler notice. Ruler is askable; "About those calculators... >" is offered and "Any news from home? >" is not;
    - no warnings or errors (the interview wiring warning stays silent).
 7. **Hygiene:**
@@ -1150,13 +1154,13 @@ Line numbers are from `d7614f0`, where piece 2's edits are already in; the new t
 - **Late announcements.** A save from before piece 3 gets the notices whose night has passed on its next morning: a day-2 save gets both notices on day 3 (the capital one a night late); a day-3 save gets both on day 4 (the capital one two nights late). A question whose authored conditions already hold on day 1 would be announced on day 2 (none in piece 3). The notices say "may now ask", so a late one is not wrong. Availability is unaffected (R5).
 - **The upgrade buys only a hint.** Interview Protocols makes the birth date askable and never adds a tell (R23), so its value is a visible disagreement with a passport birth-date tell, which Records already proves. That is modest for 120 credits. It never makes the game harder; playtests may lower the price or give the upgrade more (piece 4/5).
 - **Conservative capacity.** The hub check counts every dialog as offered at once (R25). With piece 4's arcs this will bind early; piece 4 replaces it with paging or a per-day count.
-- **Scene merge.** The main checkout `E:\unity\NOPE` has uncommitted Codex changes to `Assets/Scenes/OfficeScene.unity` (`git status` shows ` M`). This branch commits a rebuilt `OfficeScene.unity`, and every builder run rewrites tens of thousands of YAML lines with new fileIDs (`002bbfc` changed about 27k), so a textual merge is impractical. Mitigation: coordinate with the Codex scene work before merging (ideally Codex commits its scene first). On a conflict, never hand-merge the YAML: take the other side's `OfficeScene.unity`, re-run Build Office UI on the merged branch (the builder is authoritative and idempotent), repeat the §6 step 5 semantic check and the §6 step 6 play-through, and commit the rebuilt scene. The plan's merge step says so.
+- **Scene merge.** `main` (and `origin/main`) has moved to `b7f8671`, Codex's art checkpoint, which changed `Assets/Scenes/OfficeScene.unity` (about 12k lines) and is not in this branch (merge base `413230c`), so the conflict is certain. The main checkout `E:\unity\NOPE` (branch `art`, also at `b7f8671`) still has further uncommitted Codex changes to the scene (`git status` shows ` M`). This branch commits a rebuilt `OfficeScene.unity`, and every builder run rewrites tens of thousands of YAML lines with new fileIDs (`002bbfc` changed about 27k), so a textual merge is impractical. Mitigation: coordinate with the Codex scene work before merging (ideally Codex commits its remaining scene changes first). On a conflict, never hand-merge the YAML: take the other side's `OfficeScene.unity`, re-run Build Office UI on the merged branch (the builder is authoritative and idempotent), repeat the §6 step 5 semantic check and the §6 step 6 play-through, and commit the rebuilt scene. The plan's merge step says so.
 - **Old scenes.** Until the scene is rebuilt, the transcript is missing: questions are hidden, no tell is spoken, and a warning names the builder (R12). The rebuilt scene is committed with this piece.
 - **`PagedRowsWindow` refactor.** A field-name mismatch would empty the book windows. The field names are kept, and the play-through reads the books.
 - **Moving `TriggerConditionType` and `EffectOpType`** changes their assembly, not their values. Assets store ints, and every C# reference is in the global namespace. `GatesTests` and `EffectOpsTests` pin the ints, and the step-0 baseline proves the triggers behave the same.
 - **Layout.** The transcript overlaps documents and books (all draggable). The text column is about 400 px (570 px of rows, minus padding, spacing and the 150 px speaker column). One line at 12 pt holds about 66 characters, but piece 3's own content reaches 92 (the rumour line) and the claim 70, so sentences wrap to two lines inside the fixed 34 px row (12–14 pt), which hold about 120 characters. The generator bounds every line's worst case at 100 (R10), and §6 step 6 checks that no row overflows. A sentence that needs three lines is impossible by construction; if the knob is ever raised past what two lines hold, that check fails.
 - **The TMP atlas (G6).** The ASCII rule (R18) keeps authored text from adding glyphs. The plan still checks and reverts the fallback atlas.
-- **Stacked branches.** Piece 2's Task 13 (Unity verification) is still pending. If it leads to fixes, anchors in `CaseFactory`, `CaseInstance`, `DayPlanSO`, `InvestigationUIController`, `GameManager`, `WorldContentGenerator` and `FEATURES.md` may move, so the plan re-reads them. Never commit in `E:\unity\NOPE`.
+- **Stacked branches.** This branch sits on `feat/identity-lies` (`dc676cd`), which is complete: Task 13 passed at `efe385d` with no product fix, so the anchors here are final. Neither branch contains `main`'s `b7f8671` (see "Scene merge"). The plan still re-reads each file before editing it. Never commit in `E:\unity\NOPE`.
 - **Content depth.** Piece 3 authors two dialogs and minimal small talk. The system is ready for piece 4's arcs, but players will see few narrative lines until then.
 - **English-only wording** (honorifics, labels, `ClueLabels`). Piece 6 moves it into tables keyed by the line ids.
 
@@ -1231,5 +1235,18 @@ Found while verifying, and fixed here:
 - **V2.** The claim line reaches 70 characters ("… Ottoman Iraq (Baghdad Vilayet) (Industrial)."), so F17 affected every traveller from that place, not only the dialog lines. The line-length check covers the claim and every `{token}` fill.
 - **V3.** `TimelineService.ConditionsPass` would have had only a private caller once `InterviewDay` evaluates gates. It is replaced by `ToGates`, which `GameManager` and `AllConditionsPass` both call.
 - **V4.** The `NoPossibleLie` warning changed after `d7614f0` (`f3a68f9`); §2.9 now extends the `efe385d` text.
+
+### Aligned with the code as implemented (2026-09-24)
+
+The spec was drafted while piece 2's Task 13 was pending. Piece 2 has since finished (`efe385d` verified with no product fix, `15302e1` regenerated content, `dc676cd` verification record), so every name, signature, file, line reference, count and content claim above was re-checked against this branch at `8395470` (code unchanged since `efe385d`; offline suite re-run: `passed 216, failed 0`). Names, signatures, file paths, line endings, the content figures of §2.14 and the other line references held. Corrected:
+
+- **A1. Anchors.** The header said line numbers refer to `d7614f0` and Task 13 was pending. It now states that piece 2 is complete and that line numbers refer to `8395470`. §7 "Stacked branches" no longer expects anchors to move.
+- **A2. Piece-2 spec lines (§3.2).** The piece-2 review fixes (`324579b`..`efe385d`) added lines to the identity-lies spec, so the `d7614f0` numbers had moved: §2.6 380 → 381, §2.7 389 → 390, §3.3 491/493 → 492/495, §4 500 → 502, §5 531 → 533, §6 step 3.3 593 → 596, §7 617 → 620 and 620 → 623. §2.3's range now starts at 213, the superseded `ApplyTo` comment. The §3.3 note about `FEATURES.md` line numbers now says they are current (the piece-2 review reworded :84-85 in place).
+- **A3. Code line references.** `ReferenceBookWindowController.SetBook` is 42-53 (not 42-54). The fallback's book loop is 439-451 (§2.11 and §3.1 said 439-452). R13 and §2.19 named `DiscrepancyLog.CategoryLabel`; the private method is `Discrepancy.CategoryLabel` (in `DiscrepancyLog.cs`, as §2.6 and §3.1 already said).
+- **A4. Counts.** `DiscrepancyLogTests` has 22 `TryRegister` calls (§2.6 and §5 said "about 20"). §6 now records the offline baseline (216, re-run here) and Unity's 345 EditMode passes. F1's fallback body is about 540 px on a 1080 px canvas (anchors at `InvestigationUIController.cs:470-477`), not "roughly 650 px". R27: the root has two field initializers (`travellerAgeMin = 18`, `travellerAgeMax = 70`).
+- **A5. Piece-2 review text.** `ResolveFieldValue`'s `efe385d` summary ends "A liar's tells overwrite these values afterwards (Disguise).", which an Answer tell would make false; §2.9 rewrites that sentence too.
+- **A6. Doc comments the spec missed** (same F7 rule): `CaseInstance.IsLiar` (73, "their papers leak tells"), `Lies.Plan`'s summary (109-119, "when the papers print it") and `LiePlan._values` (47, "prints"), `Discrepancy.actualOrigin` (107-110, "the printed value") and `InvestigationUIController.BuildFallbackBody` (405-408, "today's books"). Added to §2.3, §2.6, §2.9, §2.11 and the §2.17 table.
+- **A7. Repository state.** `HOUSE_RULES.md` line 16 already retires `build_world_source.py` (§2.17 said it still named the script). `main` moved to `b7f8671`, Codex's checkpoint with a committed `OfficeScene.unity` change that this branch lacks; §7 "Scene merge" now says the conflict is certain and that the main checkout still has further uncommitted scene changes. The historical F11 and F24 rows above keep their original wording.
+- **A8. Verification gotcha.** The piece-2 play-through found `DayFlowUIController` only when it searched inactive objects (identity-lies spec §8); §6 step 6 says so.
 
 The plan's review should append its findings here.
