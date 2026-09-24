@@ -57,6 +57,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Today's facts (set by GameManager; the books render these rows).</summary>
     private FactTable _facts;
 
+    /// <summary>Today's citizen registry (set by GameManager; the text fallback prints the current traveller's record).</summary>
+    private CitizenRegistry _registry;
+
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new();
 
@@ -91,6 +94,10 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (compareController != null)
             compareController.PairCompared += HandlePairCompared;
+
+        // Birth-date tells are proven only against Citizen Records (RecordMismatch).
+        if (EvidenceSystemActive && recordsWindow == null)
+            Debug.LogWarning("[InvestigationUIController] Citizen Records not wired: birth-date tells cannot be proven. Run Tools > TimeDesk > Build Office UI.", this);
     }
 
     private void OnDestroy()
@@ -100,8 +107,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Auto-registers a true contradiction when the player compares a forged
-    /// document field against the reference entry that disproves it.
+    /// Auto-registers a true contradiction when the player compares a liar's
+    /// tell against the reference entry or record that disproves it.
     /// </summary>
     private void HandlePairCompared(CompareEvidence a, CompareEvidence b)
     {
@@ -123,9 +130,10 @@ public sealed class InvestigationUIController : MonoBehaviour
             scannerWindow.Open();
     }
 
-    /// <summary>Injects the day's citizen registry into the Records app.</summary>
+    /// <summary>Injects the day's citizen registry into the Records app and the text fallback.</summary>
     public void SetCitizenRegistry(CitizenRegistry registry)
     {
+        _registry = registry;
         if (recordsWindow != null)
             recordsWindow.SetRegistry(registry);
     }
@@ -146,8 +154,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         {
             scannerText.text =
                 "No deviations documented.\n\n" +
-                "Compare a document field against the matching reference entry " +
-                "for the claimed era to log evidence.";
+                "Compare a document field against the claimed place's reference entry, " +
+                "the entry it really belongs to, or the Citizen Record to log evidence.";
             return;
         }
 
@@ -391,10 +399,14 @@ public sealed class InvestigationUIController : MonoBehaviour
                 : string.Empty;
 
         if (_fallbackBody != null)
-            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts);
+            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts, _registry);
     }
 
-    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts)
+    /// <summary>
+    /// The text fallback's body: the papers, the traveller's agency record (so
+    /// a birth-date tell can be spotted without the Records app) and today's books.
+    /// </summary>
+    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts, CitizenRegistry registry)
     {
         var sb = new StringBuilder();
 
@@ -406,6 +418,20 @@ public sealed class InvestigationUIController : MonoBehaviour
                 sb.AppendLine($"[{(doc.template != null ? doc.template.displayName : "Document")}]");
                 foreach (DocumentField f in doc.fields)
                     sb.AppendLine($"    {f.label}: {f.value}");
+            }
+            sb.AppendLine();
+
+            sb.AppendLine("— AGENCY RECORD —");
+            CitizenRecord record = registry != null ? registry.Find(inst.visitorGivenName) : null;
+            if (record == null)
+            {
+                sb.AppendLine("    No record on file.");
+            }
+            else
+            {
+                sb.AppendLine($"    Name: {record.fullName}");
+                sb.AppendLine($"    Born: {record.birthDate}");
+                sb.AppendLine($"    Origin: {record.origin}");
             }
             sb.AppendLine();
         }

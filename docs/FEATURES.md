@@ -33,7 +33,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Clue Log, Notes
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)
 - [ ] Every new case closes all open windows (pin system planned to override)
-- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home
+- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it)
 
 ## World
 
@@ -60,7 +60,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
   - [ ] One discrepancy per category; cleared per case; window auto-opens on first find
   - [ ] Compare bar flips to a red "DEVIATION LOGGED — …" verdict when evidence registers (never a green MATCH)
 - [ ] Accept / Deny decision buttons
-- [ ] Fallback text-mode investigation when the rich desk isn't built
+- [ ] Fallback text-mode investigation when the rich desk isn't built (papers, the traveller's agency record and today's books)
 
 ## Shift clock & queue
 
