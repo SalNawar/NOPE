@@ -23,35 +23,6 @@ public enum EffectChannel
 }
 
 /// <summary>
-/// What a single effect operation does.
-/// INSTANT ops run once when the effect activates.
-/// CONTINUOUS ops are aggregated by TimelineEffects queries while the effect is active.
-/// </summary>
-public enum EffectOpType
-{
-    // ---- Instant (applied once on activation) ----
-    SetFlag,                 // stringParam = flag
-    ClearFlag,               // stringParam = flag
-    AddCounter,              // stringParam = counter key, floatParam = amount
-    AddMoney,                // floatParam = credits (can be negative)
-    AddStability,            // floatParam = stability delta
-    UnlockUpgrade,           // stringParam = upgrade id
-    AddAttributeScore,       // profile + attribute + floatParam
-    AddNationScore,          // nation + floatParam
-
-    // ---- Continuous (queried while active) ----
-    LegendaryChanceBonus,    // floatParam = +chance (0..1)
-    ForgeryChanceBonus,      // floatParam = +liar chance (0..1)
-    PayRateBonus,            // floatParam = +multiplier (0.25 = +25% pay)
-    VisitorTagWeight,        // stringParam = archetype tag, floatParam = weight multiplier
-    ShopDiscountPercent,     // stringParam = upgrade id ("" = all), floatParam = percent off
-    CaseBlueprintWeight,     // stringParam = blueprint name, floatParam = weight multiplier
-    Cue,                     // stringParam = cue id, consumed by receivers of this effect's channel
-    BriefingLine,            // stringParam = line added to tomorrow's briefing
-    NewsLine                 // stringParam = line added to tomorrow's newsletter
-}
-
-/// <summary>
 /// A generic, channel-tagged bundle of operations. Activated by dominance tiers,
 /// timeline triggers, slot outcomes, or scripted events; multiple effects stack
 /// freely in WorldState.timeline.activeEffects, each with its own duration.
