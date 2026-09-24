@@ -935,6 +935,8 @@ It reads ScriptableObjects or `WorldState`, calls `ActivateEffect`, `EndingServi
 - **§2.6 line 381** ("The scratchpad build script `build_world_source.py` (lines 71-79) gets the same key so a rebuild keeps it"): superseded by X10. `world_source.json` is now the hand-maintained source of truth, and the script is never run again.
 - **Piece-2 plan (`docs/superpowers/plans/2026-09-24-identity-lies.md`), Task 11:** the "Modify (scratch, not committed): `SCRATCH/build_world_source.py`" file line (2787), the Step 1 `apply(S + r'\build_world_source.py', …)` block (2828-2832) and Step 2 "Prove the build script reproduces the edited source" (2840-2843), as well as the file-table row at line 64. They were right for piece 2 and are superseded from piece 3 on by X10.
 - **§6 step 3.3 (line 596)** ("at least one field has `isAnachronism`"): replaced by "at least one tell on a channel allowed that day" (§6 below).
+- **§2.5 line 332** ("Evidence: no code change. `DiscrepancyLog.TryRegister` … already accepts exactly what a tell is: a document field …"): `TryRegister` is removed (R17). A tell, printed or spoken, is proven by `DiscrepancyLog.Prove` (a statement, a document field or an answer, against one truth source) and documented once per category by `Add`; `HandlePairCompared` calls both (§2.6, §2.11).
+- **§6 step 3.5 (line 598)** ("every liar has at least one tell that `DiscrepancyLog.TryRegister` accepts"): the check reads "… that `DiscrepancyLog.Prove` proves", with the same claim-row, home-row and record expectations; piece 3's world check applies it to spoken tells (§6 step 3.6 below).
 - **§7 line 620** ("Cross-piece gate trap"): resolved. Answers are registrable (`EvidenceKind.Answer`) before any Answer tell is generated, and R12 switches the Answer channel off where answers cannot be seen.
 - **§7 line 623** ("Gender is data only"): gender is now read by the opener (X9).
 - **§4 line 502:** the piece-3 list is delivered here. Its "capital and ruler question books" are `RefBook_Capital` and `RefBook_Ruler`.
@@ -951,6 +953,12 @@ It reads ScriptableObjects or `WorldState`, calls `ActivateEffect`, `EndingServi
 - §6 line 99 (the "Sultan Mustafa II" follow-up) is handled by piece-2 R13 (R3 here).
 - §4 line 70 (saving the day's generation inputs) stays out of scope; its interplay with dialog consequences is described in §1.8.
 - §6 line 94 "owns `Assets/Data/World/{Eras,Nations,Places,Rules}`" gains `Interview`.
+- §5 line 74 ("rows round-tripping through `DiscrepancyLog.TryRegister`"): `FactTableTests` round-trip the rows through `DiscrepancyLog.Prove` (R17, §5); the mismatch and origin proofs are asserted as before.
+
+**`docs/superpowers/specs/2026-06-21-office-scene-two-states-design.md` (approved design):**
+- **Line 112** (the Dialect Filter "Highlights anachronistic phrases in documents/testimony", an **unlock-gated** upgrade): no dialect feature exists, so Dialect is an ungated placeholder app whose window reads "Dialect" / "Notes on accents and phrasing. (placeholder)" (R9, Q18).
+- **Line 114** (Clue Log / Case Notes "Logs discovered clues & contradictions for the current case"): the Clue Log icon opens "Case Notes: Interview", the current traveller's transcript (Q9). Documented contradictions stay in the Scanner's Deviation Report (scanner-evidence spec).
+- **Lines 120-122** ("Lexicon, Dialect Filter, and Material Scanner are tool upgrades … disabled/greyed until the matching `UpgradeSO` is purchased"): Lexicon (`archive_access`) and Material (`adv_scanner`) stay gated, with real upgrade ids the builder checks; Dialect is not gated (R9).
 
 ### 3.3 `docs/FEATURES.md` (same commits as the behaviour)
 
