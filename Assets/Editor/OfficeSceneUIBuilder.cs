@@ -157,6 +157,7 @@ public static class OfficeSceneUIBuilder
         Transform bookShelf = Panel(investRoot, "BookShelf", new Vector2(0.005f, 0.06f), new Vector2(0.17f, 0.855f), Vector2.zero, Vector2.zero, null);
         AddGridLayout(bookShelf, new Vector2(82f, 60f), new Vector2(6f, 6f));
         Button shelfButtonTemplate = MakeButton(bookShelf, "BookShelfButtonTemplate", "Book", Vector2.zero, Vector2.one);
+        FitIconLabel(shelfButtonTemplate);
         shelfButtonTemplate.gameObject.SetActive(false);
 
         // Directives live in a sticky-note window (closed by default) opened
@@ -986,33 +987,106 @@ public static class OfficeSceneUIBuilder
         return sr;
     }
 
+    /// <summary>Where the office camera sits; the booth art is laid out for its view.</summary>
+    private static readonly Vector3 OfficeCamPosition = new Vector3(0f, -1f, -10f);
+
+    /// <summary>Orthographic half-height of the office view (y -7..5 around the camera).</summary>
+    private const float OfficeOrthoSize = 6f;
+
+    /// <summary>Orthographic half-height of the monitor close-up, which frames the CRT's glass.</summary>
+    private const float MonitorOrthoSize = 1.4f;
+
+    /// <summary>Centre of the CRT's glass in the crt sprite's own units (the monitor camera aims at it).</summary>
+    private static readonly Vector2 CrtGlassCentre = new Vector2(-0.15f, 0.05f);
+
+    /// <summary>Booth art beyond the drop-in placeholders: the deep desk, the calendar partition and the desk props.</summary>
+    private const string BoothArtFolder = "Assets/Art/Office/Booth";
+
+    /// <summary>
+    /// Places a booth sprite <paramref name="width"/> world units wide (a uniform
+    /// scale from the sprite's own size, so art of another resolution or pixels
+    /// per unit keeps the layout), centred on <paramref name="centre"/>.
+    /// </summary>
+    private static SpriteRenderer PlaceSprite(Transform parent, string name, Sprite sprite, Vector3 centre, float width, int sortingOrder, bool flipX = false)
+    {
+        SpriteRenderer sr = EnsureSprite(parent, name, sprite, centre, sortingOrder);
+        float scale = sprite != null ? width / sprite.bounds.size.x : 1f;
+        sr.transform.localScale = new Vector3(scale, scale, 1f);
+        sr.flipX = flipX;
+        return sr;
+    }
+
+    /// <summary>
+    /// The width at which a sprite, scaled uniformly and centred on the office
+    /// camera, covers its whole view at the reference aspect (no black edges).
+    /// </summary>
+    private static float OfficeViewCoverWidth(Sprite sprite)
+    {
+        if (sprite == null)
+            return 0f;
+        float viewHeight = 2f * OfficeOrthoSize;
+        float viewWidth = viewHeight * ReferenceResolution.x / ReferenceResolution.y;
+        Vector2 size = sprite.bounds.size;
+        return size.x * Mathf.Max(viewWidth / size.x, viewHeight / size.y);
+    }
+
+    /// <summary>
+    /// Loads booth art from <see cref="BoothArtFolder"/> (no placeholder is made
+    /// for it); warns and returns null when the file is missing, leaving that
+    /// booth sprite empty.
+    /// </summary>
+    private static Sprite BoothArt(string file)
+    {
+        string path = $"{BoothArtFolder}/{file}.png";
+        Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+        if (sprite == null)
+            Debug.LogWarning($"[TimeDesk] Missing booth art {path}; its booth sprite is left empty.");
+        return sprite;
+    }
+
     /// <summary>
     /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster,
-    /// and wires OfficeViewController + the CRT/READY clickables. Idempotent.
+    /// and wires OfficeViewController + the CRT/READY clickables. The painted art
+    /// is laid out as in the art pass's 2D composition: the back wall and the deep
+    /// desk cover the whole office view, partitions frame it, and the props sit on
+    /// the desk and partitions. Idempotent.
     /// </summary>
     private static OfficeViewController BuildBooth(Canvas desktopCanvas)
     {
         // Root for all booth world objects.
         GameObject root = GameObject.Find("OfficeRoot") ?? new GameObject("OfficeRoot");
+        Transform booth = root.transform;
 
-        // Set dressing (flat placeholder sprites; swap later).
-        EnsureSprite(root.transform, "BackWall",       EnsureOfficeSprite("backwall",  new Color(0.17f, 0.17f, 0.22f), 400, 240), new Vector3(0f, 0f, 10f), -100);
-        EnsureSprite(root.transform, "LeftPartition",  EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3(-6.5f, 0f, 5f), -50);
-        EnsureSprite(root.transform, "RightPartition", EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3( 6.5f, 0f, 5f), -50);
-        EnsureSprite(root.transform, "Desk",           EnsureOfficeSprite("desk",      new Color(0.26f, 0.20f, 0.15f), 400, 90),  new Vector3(0f, -3.6f, 0f), -10);
-        EnsureSprite(root.transform, "Traveller",      EnsureOfficeSprite("traveller", new Color(0.49f, 0.42f, 0.86f), 60, 110),  new Vector3(0f, 0.4f, 2f), -20);
+        // Set dressing. The left partition has the day calendar painted on it.
+        Sprite backWall = EnsureOfficeSprite("backwall", new Color(0.17f, 0.17f, 0.22f), 400, 240);
+        PlaceSprite(booth, "BackWall", backWall, new Vector3(0f, OfficeCamPosition.y, 5f), OfficeViewCoverWidth(backWall), -100);
+        SpriteRenderer calendarPartition = PlaceSprite(booth, "LeftPartition", BoothArt("partition_calendar"), new Vector3(-9f, 0f, 5f), 3.8f, -50);
+        PlaceSprite(booth, "RightPartition", EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3(9f, 0f, 5f), 3.4f, -50, flipX: true);
+        Sprite desk = BoothArt("desk_deep");
+        PlaceSprite(booth, "Desk", desk, new Vector3(0f, OfficeCamPosition.y, 0f), OfficeViewCoverWidth(desk), -10);
 
-        // Interactables: CRT (right of desk) and READY sign (center).
-        SpriteRenderer crt = EnsureSprite(root.transform, "CRTMonitor", EnsureOfficeSprite("crt", new Color(0.85f, 0.81f, 0.65f), 150, 130), new Vector3(3.4f, -1.8f, 0f), 0);
-        Clickable crtClick = EnsureClickable(crt.gameObject);
+        // The traveller stands behind the desk, whose far edge hides the placeholder's lower part.
+        PlaceSprite(booth, "Traveller", EnsureOfficeSprite("traveller", new Color(0.49f, 0.42f, 0.86f), 60, 110), new Vector3(0f, 0.5f, 2f), 2f, -20);
 
-        SpriteRenderer sign = EnsureSprite(root.transform, "ReadySign", EnsureOfficeSprite("sign", new Color(0.79f, 0.76f, 0.58f), 96, 50), new Vector3(0f, -2.4f, 0f), 0);
-        Clickable signClick = EnsureClickable(sign.gameObject);
+        // Desk props (decoration only).
+        PlaceSprite(booth, "DeskIntercom", BoothArt("intercom"), new Vector3(-6.3f, -1.8f, 0f), 2.1f, 1);
+        PlaceSprite(booth, "ScannerTray", BoothArt("scanner_tray"), new Vector3(-4.6f, -3.1f, 0f), 3.8f, 2);
+        PlaceSprite(booth, "DeskPlant", BoothArt("desk_plant"), new Vector3(-7.5f, -1.15f, 0f), 1.8f, 3);
+        PlaceSprite(booth, "DeskMug", BoothArt("desk_mug"), new Vector3(-6.5f, -4.8f, 0f), 0.85f, 5);
+        PlaceSprite(booth, "DeskStamp", BoothArt("desk_stamp"), new Vector3(-2.2f, -4.3f, 0f), 0.8f, 5);
 
-        // Cameras.
+        // Interactables: CRT (right of the desk) and READY sign (centre).
+        SpriteRenderer crt = PlaceSprite(booth, "CRTMonitor", EnsureOfficeSprite("crt", new Color(0.85f, 0.81f, 0.65f), 150, 130), new Vector3(6f, -1.7f, 0f), 5.2f, 0);
+        Clickable crtClick = EnsureClickable(crt);
+
+        SpriteRenderer sign = PlaceSprite(booth, "ReadySign", EnsureOfficeSprite("sign", new Color(0.79f, 0.76f, 0.58f), 96, 50), new Vector3(0f, -2f, 0f), 2.3f, 2);
+        Clickable signClick = EnsureClickable(sign);
+
+        // Cameras: the booth view, and a close-up on the CRT's glass.
         GameObject camsRoot = GameObject.Find("Cameras") ?? new GameObject("Cameras");
-        CinemachineCamera officeCam = EnsureVcam(camsRoot.transform, "OfficeVCam", new Vector3(0f, -1f, -10f), 6f);
-        CinemachineCamera monitorCam = EnsureVcam(camsRoot.transform, "MonitorVCam", new Vector3(3.4f, -1.8f, -10f), 1.4f);
+        CinemachineCamera officeCam = EnsureVcam(camsRoot.transform, "OfficeVCam", OfficeCamPosition, OfficeOrthoSize);
+        Vector3 glass = crt.transform.TransformPoint(CrtGlassCentre);
+        CinemachineCamera monitorCam = EnsureVcam(camsRoot.transform, "MonitorVCam", new Vector3(glass.x, glass.y, OfficeCamPosition.z), MonitorOrthoSize);
 
         // Brain + 2D raycaster on the Main Camera.
         Camera main = Camera.main;
@@ -1054,30 +1128,37 @@ public static class OfficeSceneUIBuilder
         WireClickToFocusMonitor(signClick, view);
 
         // Diegetic readouts + a timeline-reactive poster + the desktop Back button.
-        BuildReadouts(root.transform);
-        BuildReactiveProp(root.transform);
+        BuildReadouts(booth, calendarPartition.transform);
+        BuildReactiveProp(booth);
         BuildBackToOfficeButton(desktopCanvas, view);
 
         return view;
     }
 
     /// <summary>
-    /// Builds the in-world Day calendar, Stability monitor, and Credits till, and
-    /// wires an OfficeReadouts component on OfficeRoot. Idempotent.
+    /// Builds the in-world Day calendar (painted on the given partition),
+    /// Stability monitor, and Credits till, and wires an OfficeReadouts component
+    /// on OfficeRoot. Each number auto-sizes inside the blank area of its art.
+    /// Idempotent.
     /// </summary>
-    private static void BuildReadouts(Transform root)
+    private static void BuildReadouts(Transform root, Transform calendarPartition)
     {
-        // Day — wall calendar on the left partition.
-        SpriteRenderer cal = EnsureSprite(root, "DayCalendar", EnsureOfficeSprite("calendar", new Color(0.93f, 0.91f, 0.85f), 80, 100), new Vector3(-6.2f, 1.6f, 4.5f), -40);
-        TextMeshPro dayText = WorldText(cal.transform, "DayNumber", "01", 6f, new Color(0.15f, 0.13f, 0.1f), new Vector3(0f, -0.1f, -0.1f), new Vector2(2f, 2f), -39);
+        // Day — the calendar sheet painted on the left partition, drawn in
+        // perspective, so the number tilts with it. Older builds hung a separate
+        // calendar sprite (with the number) instead.
+        DestroyChildIfPresent(root, "DayCalendar");
+        TextMeshPro dayText = WorldText(calendarPartition, "DayNumber", "01", new Color(0.19f, 0.29f, 0.33f),
+            new Vector2(0.38f, 2.79f), new Vector2(1.9f, 2f), -13f, 16f, -39);
 
         // Stability — TVA-style monitor on the right partition (the sprite is the lamp).
-        SpriteRenderer lamp = EnsureSprite(root, "StabilityMonitor", EnsureOfficeSprite("stabilitymonitor", Color.white, 110, 80), new Vector3(6.2f, 1.6f, 4.5f), -40);
-        TextMeshPro stabText = WorldText(lamp.transform, "StabilityPercent", "100%", 4.5f, new Color(0.05f, 0.1f, 0.07f), new Vector3(0f, 0f, -0.1f), new Vector2(2.4f, 1f), -39);
+        SpriteRenderer lamp = PlaceSprite(root, "StabilityMonitor", EnsureOfficeSprite("stabilitymonitor", Color.white, 110, 80), new Vector3(8.5f, 2f, 5f), 2f, -40);
+        TextMeshPro stabText = WorldText(lamp.transform, "StabilityPercent", "100%", new Color(0.19f, 0.29f, 0.33f),
+            new Vector2(0f, 0.02f), new Vector2(0.6f, 0.36f), 0f, 3f, -39);
 
-        // Credits — cash till on the desk (with an AudioSource for the ding).
-        SpriteRenderer till = EnsureSprite(root, "CreditsTill", EnsureOfficeSprite("till", new Color(0.55f, 0.5f, 0.42f), 110, 80), new Vector3(-2.6f, -2.7f, -1f), 5);
-        TextMeshPro creditsText = WorldText(till.transform, "CreditsNumber", "0", 4.5f, new Color(0.1f, 0.9f, 0.5f), new Vector3(0f, 0.1f, -0.1f), new Vector2(2.4f, 1f), 6);
+        // Credits — cash till on the desk below the CRT (with an AudioSource for the ding).
+        SpriteRenderer till = PlaceSprite(root, "CreditsTill", EnsureOfficeSprite("till", new Color(0.55f, 0.5f, 0.42f), 110, 80), new Vector3(7f, -4.8f, 0f), 2.5f, 5);
+        TextMeshPro creditsText = WorldText(till.transform, "CreditsNumber", "0", new Color(0.8f, 1f, 0.85f),
+            new Vector2(0.05f, 0.19f), new Vector2(0.36f, 0.13f), -3f, 1.4f, 6);
         AudioSource ding = till.GetComponent<AudioSource>();
         if (ding == null)
             ding = till.gameObject.AddComponent<AudioSource>();
@@ -1098,16 +1179,19 @@ public static class OfficeSceneUIBuilder
 
     /// <summary>
     /// Adds a booth poster that reacts to the timeline (Visuals cue channel).
-    /// Ships with a default sprite and an empty mapping list for the designer.
+    /// Ships with a default sprite (poster.png, shown while no mapped cue is
+    /// active) and an empty mapping list for the designer.
     /// </summary>
     private static void BuildReactiveProp(Transform root)
     {
-        SpriteRenderer poster = EnsureSprite(root, "ReactivePoster", EnsureOfficeSprite("poster", new Color(0.5f, 0.45f, 0.6f), 80, 110), new Vector3(-6.2f, -0.6f, 4.5f), -40);
+        // On the back wall's panel left of the traveller, clear of the desk's far edge.
+        SpriteRenderer poster = PlaceSprite(root, "ReactivePoster", EnsureOfficeSprite("poster", new Color(0.5f, 0.45f, 0.6f), 80, 110), new Vector3(-5.6f, 0.08f, 5f), 1.1f, -40);
         TimelineReactiveSprite reactive = poster.GetComponent<TimelineReactiveSprite>();
         if (reactive == null)
             reactive = poster.gameObject.AddComponent<TimelineReactiveSprite>();
         var so = new SerializedObject(reactive);
         SetRef(so, "target", poster);
+        SetRef(so, "defaultSprite", poster.sprite);
         so.ApplyModifiedProperties();
     }
 
@@ -1133,9 +1217,10 @@ public static class OfficeSceneUIBuilder
             return;
         }
 
-        SpriteRenderer face = EnsureSprite(root.transform, "WallClock",
+        // On the back wall's window mullion right of the traveller.
+        SpriteRenderer face = PlaceSprite(root.transform, "WallClock",
             EnsureOfficeShape("clock_face", 100, 100, new Vector2(0.5f, 0.5f), ClockFacePixel),
-            new Vector3(6.2f, 3.3f, 4.5f), -40);
+            new Vector3(4f, 3.2f, 5f), 1.3f, -40);
         SpriteRenderer hourHand = EnsureSprite(face.transform, "HourHand",
             EnsureOfficeShape("clock_hand_hour", 8, 30, new Vector2(0.5f, 0.1f), (x, y) => ClockInk),
             new Vector3(0f, 0f, -0.01f), -39);
@@ -1515,6 +1600,7 @@ public static class OfficeSceneUIBuilder
     private static void BuildDesktopIcon(Transform grid, string name, string label, OSWindowChrome window, string upgradeId)
     {
         Button btn = MakeButton(grid, name, label, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.45f, 0.85f));
+        FitIconLabel(btn);
         LayoutElement le = btn.GetComponent<LayoutElement>();
         if (le == null)
             le = btn.gameObject.AddComponent<LayoutElement>();
@@ -1538,14 +1624,70 @@ public static class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
     }
 
-    private static Clickable EnsureClickable(GameObject go)
+    /// <summary>Largest font size of a desktop icon label.</summary>
+    private const float IconLabelMaxSize = 18f;
+
+    /// <summary>Smallest font size an icon label shrinks to.</summary>
+    private const float IconLabelMinSize = 10f;
+
+    /// <summary>
+    /// Lets a desktop icon's label shrink to fit its tile, wrapping only between
+    /// words: auto-sizing shrinks a word that does not fit the tile's width
+    /// instead of breaking it. Re-applied on every build (MakeButton keeps an
+    /// existing label as it is).
+    /// </summary>
+    private static void FitIconLabel(Button icon)
     {
-        if (go.GetComponent<Collider2D>() == null)
-            go.AddComponent<BoxCollider2D>();
-        Clickable c = go.GetComponent<Clickable>();
+        Transform label = icon.transform.Find("Label");
+        TMP_Text text = label != null ? label.GetComponent<TMP_Text>() : null;
+        if (text == null)
+            return;
+        text.enableAutoSizing = true;
+        text.fontSizeMax = IconLabelMaxSize;
+        text.fontSizeMin = IconLabelMinSize;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.margin = new Vector4(3f, 2f, 3f, 2f);
+    }
+
+    /// <summary>Makes a booth sprite clickable: a Clickable whose click box fits the visible art.</summary>
+    private static Clickable EnsureClickable(SpriteRenderer sr)
+    {
+        BoxCollider2D box = sr.GetComponent<BoxCollider2D>();
+        if (box == null)
+            box = sr.gameObject.AddComponent<BoxCollider2D>();
+        FitColliderToArt(box, sr.sprite);
+        Clickable c = sr.GetComponent<Clickable>();
         if (c == null)
-            c = go.AddComponent<Clickable>();
+            c = sr.gameObject.AddComponent<Clickable>();
         return c;
+    }
+
+    /// <summary>
+    /// Sizes a click box to the visible art: the bounds of the sprite's physics
+    /// shape (traced from its alpha at import), or the whole sprite when it has
+    /// none. Applied on every build, so swapped art never keeps an old hit area.
+    /// </summary>
+    private static void FitColliderToArt(BoxCollider2D box, Sprite sprite)
+    {
+        if (sprite == null)
+            return;
+
+        Bounds bounds = sprite.bounds;
+        bool traced = false;
+        var outline = new System.Collections.Generic.List<Vector2>();
+        for (int i = 0; i < sprite.GetPhysicsShapeCount(); i++)
+        {
+            sprite.GetPhysicsShape(i, outline);
+            foreach (Vector2 p in outline)
+            {
+                if (!traced)
+                    bounds = new Bounds(p, Vector3.zero);
+                bounds.Encapsulate(p);
+                traced = true;
+            }
+        }
+        box.offset = bounds.center;
+        box.size = bounds.size;
     }
 
     private static CinemachineCamera EnsureVcam(Transform parent, string name, Vector3 pos, float orthoSize)
@@ -1586,20 +1728,31 @@ public static class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
     }
 
-    /// <summary>Creates (or finds) a world-space TextMeshPro label under a parent.</summary>
-    private static TextMeshPro WorldText(Transform parent, string name, string content, float fontSize, Color color, Vector3 localPos, Vector2 size, int sortingOrder)
+    /// <summary>
+    /// Creates (or finds) a world-space TextMeshPro readout under a sprite, fitted
+    /// to a blank area of its art: <paramref name="centre"/> and <paramref name="size"/>
+    /// are in the sprite's own units, <paramref name="tilt"/> (degrees) follows the
+    /// art's perspective, and the text auto-sizes on one line, never above
+    /// <paramref name="maxFontSize"/>, so no value spills out of the art.
+    /// </summary>
+    private static TextMeshPro WorldText(Transform parent, string name, string content, Color color, Vector2 centre, Vector2 size, float tilt, float maxFontSize, int sortingOrder)
     {
         Transform existing = parent.Find(name);
         GameObject go = existing != null ? existing.gameObject : new GameObject(name, typeof(TextMeshPro));
         if (existing == null)
             go.transform.SetParent(parent, false);
-        go.transform.localPosition = localPos;
+        go.transform.localPosition = new Vector3(centre.x, centre.y, -0.1f);
+        go.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
 
         TextMeshPro tmp = go.GetComponent<TextMeshPro>();
         if (tmp == null)
             tmp = go.AddComponent<TextMeshPro>();
         tmp.text = content;
-        tmp.fontSize = fontSize;
+        tmp.enableAutoSizing = true;
+        tmp.fontSizeMax = maxFontSize;
+        tmp.fontSizeMin = maxFontSize * 0.1f;
+        tmp.fontSize = maxFontSize;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
         tmp.color = color;
         tmp.alignment = TextAlignmentOptions.Center;
 
