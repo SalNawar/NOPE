@@ -103,6 +103,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 980f3b06ffcb15e4898bbec157072d81, type: 2}
   - {fileID: 11400000, guid: b88af8ce247b44a479d9f321a9b04a5f, type: 2}
   - {fileID: 11400000, guid: 9ff9da122c991fc459d831c09cd523eb, type: 2}
+  - {fileID: 11400000, guid: c3fb011a0dec4c94bb1a24978e1bcf78, type: 2}
+  - {fileID: 11400000, guid: 5b4a14c18c1434d44bc1e220e94d34d2, type: 2}
+  - {fileID: 11400000, guid: e654e3aa0bc6bae449fcdca1aaaef69b, type: 2}
   slotOutcomes:
   - {fileID: 11400000, guid: cb2cd8c5f1c374845a8b2fff345e8611, type: 2}
   - {fileID: 11400000, guid: cea4755b11e6eb9458b38a903853ca50, type: 2}
@@ -120,3 +123,44 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3438e9ab0eb7f3b46a1831faa3e18ff7, type: 2}
   - {fileID: 11400000, guid: 328addec7472ed04f9815f8dff341e86, type: 2}
   - {fileID: 11400000, guid: b398af720f28a704285a043ddd17caac, type: 2}
+  - {fileID: 11400000, guid: f4a8944939c8454f90f50df9a7898f2c, type: 2}
+  - {fileID: 11400000, guid: 2fb3a1caac37490aac9f1df4ff62901a, type: 2}
+  interview:
+    deskName: DESK
+    opener:
+      id: interview.opener
+      text: Next! Step forward, {honorific}.
+    openerLegendary:
+      id: interview.openerLegendary
+      text: 'Priority arrival: {name}.'
+    claim:
+      id: interview.claim
+      text: I request passage home to {place}.
+    honorificMale: sir
+    honorificFemale: madam
+    honorificUnknown: traveller
+    requestLabel: Request {document}
+    requestPrompt:
+      id: interview.requestPrompt
+      text: Your {document}, please.
+    requestReply:
+      id: interview.requestReply
+      text: Here you are.
+    askLabel: Ask about home >
+    backLabel: < Back
+    smallTalkLabel: Small talk
+    smallTalkPrompt:
+      id: interview.smallTalkPrompt
+      text: How is life back home?
+    menuCapacity: 8
+    maxLineChars: 100
+  questions:
+  - {fileID: 11400000, guid: eb47f92eb6aa00d4cb626ee29787a348, type: 2}
+  - {fileID: 11400000, guid: 37fad6847b586444a948159a953fddd5, type: 2}
+  - {fileID: 11400000, guid: 1562f77be6cc1814aaef56e11a8aafc2, type: 2}
+  - {fileID: 11400000, guid: 2fc68eb6daa19434a8bd8e9e0a36ad4a, type: 2}
+  - {fileID: 11400000, guid: 5e062f2ca111eaf42843494b0fa32990, type: 2}
+  - {fileID: 11400000, guid: 4e129f565a2b6744d8a133e8c39bda8f, type: 2}
+  dialogs:
+  - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
+  - {fileID: 11400000, guid: bcda9ea69ca7a6a4ebabdc7ddf5b030a, type: 2}

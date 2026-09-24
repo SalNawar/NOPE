@@ -47,6 +47,7 @@ MonoBehaviour:
   - Osen
   - Oume
   - Okiku
+  smallTalk: []
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

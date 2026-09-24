@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_rumour_followup
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_rumour_followup
+    label: About those calculators... >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_rumour_followup.start.1
+        speaker: 1
+        text: Calculators? I saw nothing. Nothing at all.
+      choices:
+      - id: bye
+        label: Of course. Next!
+        lines: []
+        next: 
+        effect: 
+  conditions:
+  - type: 1
+    key: rumour_calculators
+    threshold: 0
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}

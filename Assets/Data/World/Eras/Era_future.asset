@@ -15,3 +15,4 @@ MonoBehaviour:
   id: future
   displayName: Future
   order: 5
+  smallTalk: []

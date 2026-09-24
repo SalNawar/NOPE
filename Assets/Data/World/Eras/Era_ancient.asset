@@ -15,3 +15,8 @@ MonoBehaviour:
   id: ancient
   displayName: Ancient
   order: 0
+  smallTalk:
+  - id: ancient.smalltalk.1
+    text: The harvest was good this year, thanks be to the gods.
+  - id: ancient.smalltalk.2
+    text: The roads are safe, as long as you travel by day.

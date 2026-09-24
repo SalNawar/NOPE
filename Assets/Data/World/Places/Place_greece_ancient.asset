@@ -47,6 +47,9 @@ MonoBehaviour:
   - Kleito
   - Theano
   - Lysimache
+  smallTalk:
+  - id: greece_ancient.smalltalk.1
+    text: Everyone argues in the agora, and nobody agrees.
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 5

@@ -15,3 +15,8 @@ MonoBehaviour:
   id: industrial
   displayName: Industrial
   order: 3
+  smallTalk:
+  - id: industrial.smalltalk.1
+    text: The smoke never lifts over the mills.
+  - id: industrial.smalltalk.2
+    text: Everyone talks about the railway.

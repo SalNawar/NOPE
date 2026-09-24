@@ -27,6 +27,7 @@ MonoBehaviour:
   legendaryBaseChance: 0.05
   availableLegendaries: []
   tellCount: 1
+  tellChannels: 0000000001000000
   activeTravelRules:
   - {fileID: 11400000, guid: c6838f36d34d76a4ab89183d7ddc67b7, type: 2}
   - {fileID: 11400000, guid: a23d6b403075707429acad1c0d651b50, type: 2}

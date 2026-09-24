@@ -15,3 +15,8 @@ MonoBehaviour:
   id: modern
   displayName: Modern
   order: 4
+  smallTalk:
+  - id: modern.smalltalk.1
+    text: The news never stops, day or night.
+  - id: modern.smalltalk.2
+    text: Everything is on the radio now.

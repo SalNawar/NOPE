@@ -27,6 +27,7 @@ MonoBehaviour:
   legendaryBaseChance: 0.05
   availableLegendaries: []
   tellCount: 1
+  tellChannels: 00000000
   activeTravelRules: []
   guaranteeRuleViolators: 1
   forcedCases: []

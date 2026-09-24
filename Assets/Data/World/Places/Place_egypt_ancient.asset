@@ -47,6 +47,9 @@ MonoBehaviour:
   - Tuya
   - Sitre
   - Senseneb
+  smallTalk:
+  - id: egypt_ancient.smalltalk.1
+    text: The Nile rose right on time; the fields are black and rich.
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 1

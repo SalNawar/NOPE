@@ -15,3 +15,8 @@ MonoBehaviour:
   id: earlymodern
   displayName: Early modern
   order: 2
+  smallTalk:
+  - id: earlymodern.smalltalk.1
+    text: Every week a new pamphlet, every month a new war.
+  - id: earlymodern.smalltalk.2
+    text: The post rides faster than ever.

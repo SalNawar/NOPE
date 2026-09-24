@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 216f58e381e1445588efbd033278b8d9, type: 3}
+  m_Name: Dialog_dlg_rumour
+  m_EditorClassIdentifier: Assembly-CSharp::DialogSO
+  dialog:
+    id: dlg_rumour
+    label: Any news from home? >
+    oneShot: 1
+    nodes:
+    - id: start
+      lines:
+      - id: dlg_rumour.start.1
+        speaker: 1
+        text: 'News? Only a rumour: someone sells pocket calculators to the ancients.'
+      choices:
+      - id: more
+        label: Tell me more.
+        lines: []
+        next: detail
+        effect: 
+      - id: ignore
+        label: Not my business.
+        lines: []
+        next: 
+        effect: 
+    - id: detail
+      lines:
+      - id: dlg_rumour.detail.1
+        speaker: 1
+        text: They say a courier from your own century carries them. Watch for anyone
+          who counts too fast.
+      choices:
+      - id: noted
+        label: Noted. Thank you.
+        lines: []
+        next: 
+        effect: Effect_Dialog_RumourHeard
+  conditions:
+  - type: 8
+    key: 
+    threshold: 2
+    attribute: {fileID: 0}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
