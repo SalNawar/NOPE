@@ -11,6 +11,9 @@ public sealed class CaseFactory
     /// <summary>Content library used as the source of eras, clues, legendaries, etc.</summary>
     private readonly ContentLibrarySO _lib;
 
+    /// <summary>Today's visitor names (unique per generated day; see NameRoster).</summary>
+    private NameRoster _roster = new NameRoster();
+
     /// <summary>
     /// Construct a factory that uses a specific ContentLibrary as its source.
     /// </summary>
@@ -36,6 +39,9 @@ public sealed class CaseFactory
         }
 
         int total = Mathf.Max(1, plan.VisitorsCount);
+
+        // Fresh roster: names are unique within the day (records use first match).
+        _roster = new NameRoster();
 
         Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day}.");
 
@@ -333,31 +339,27 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Resolves the visitor display name: legendary name > nation name pool
-    /// (era-appropriate) > archetype name pool > generic subject.
+    /// The visitor's given name (no role suffix; records lookup key), unique
+    /// within the day: legendary name > nation name pool (era-appropriate) >
+    /// archetype name pool > generic subject.
     /// </summary>
-    /// <summary>The visitor's given name (no role suffix; records lookup key).</summary>
-    private static string ResolveGivenName(LegendarySO legendary, ArchetypeSO archetype, NationSO nation, int caseIndex1Based)
+    private string ResolveGivenName(LegendarySO legendary, ArchetypeSO archetype, NationSO nation, int caseIndex1Based)
     {
         if (legendary != null)
+        {
+            _roster.Reserve(legendary.displayName);
             return legendary.displayName;
-
-        // Prefer a name themed to the visitor's nation/era.
-        if (nation != null && nation.namePool != null && nation.namePool.Length > 0)
-        {
-            string picked = nation.namePool[Random.Range(0, nation.namePool.Length)];
-            if (!string.IsNullOrWhiteSpace(picked))
-                return picked;
         }
 
-        if (archetype != null && archetype.namePool != null && archetype.namePool.Length > 0)
-        {
-            string picked = archetype.namePool[Random.Range(0, archetype.namePool.Length)];
-            if (!string.IsNullOrWhiteSpace(picked))
-                return picked;
-        }
+        // Prefer a name themed to the visitor's nation/era, then the archetype's.
+        string picked = _roster.Take(nation != null ? nation.namePool : null, n => Random.Range(0, n))
+                        ?? _roster.Take(archetype != null ? archetype.namePool : null, n => Random.Range(0, n));
+        if (picked != null)
+            return picked;
 
-        return $"Subject #{caseIndex1Based}";
+        string fallback = $"Subject #{caseIndex1Based}";
+        _roster.Reserve(fallback);
+        return fallback;
     }
 
     private static readonly string[] Months =
