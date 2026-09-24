@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// Records every verdict of the current shift for the end-of-day report.
-/// Pure data — no Unity dependencies. Rebuilt fresh each day.
+/// Records every verdict of the current shift for the end-of-day report, and
+/// every narrative dialog completed this shift. Pure data — no Unity
+/// dependencies. Rebuilt fresh each day.
 /// </summary>
 public sealed class ShiftLedger
 {
     /// <summary>All verdicts issued this shift, in order.</summary>
     public readonly List<CaseVerdict> verdicts = new();
+
+    /// <summary>Narrative dialogs completed this shift, in order (applied at the end of the shift; DialogOutcomes).</summary>
+    public readonly List<DialogOutcome> dialogOutcomes = new();
 
     /// <summary>Total money earned this shift (pay only).</summary>
     public int TotalPay
@@ -70,6 +74,23 @@ public sealed class ShiftLedger
             return sum;
         }
     }
+}
+
+/// <summary>
+/// A narrative dialog completed this shift; its effect is applied at the end
+/// of the shift (DialogOutcomes).
+/// </summary>
+[Serializable]
+public sealed class DialogOutcome
+{
+    /// <summary>The completed dialog's id.</summary>
+    public string dialogId;
+
+    /// <summary>EffectSO asset name the ending choice named (empty = none).</summary>
+    public string effectName;
+
+    /// <summary>True when the dialog is one-shot per run (the end of the shift sets its done flag).</summary>
+    public bool oneShot;
 }
 
 /// <summary>
