@@ -292,7 +292,10 @@ public sealed class GameManager : MonoBehaviour
 
         CaseInstance inst = _dayCases[idx];
 
-        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', trueEra='{inst.trueEra?.id}', archetype='{inst.archetype?.displayName}', nation='{inst.nation?.displayName}', legendary={inst.isLegendary}, documents={inst.documents.Count}, clues={inst.usedClues.Count}.");
+        string claimedEraId = inst.trueEra != null ? inst.trueEra.id : string.Empty;
+        string archetypeName = inst.archetype != null ? inst.archetype.displayName : string.Empty;
+        string nationName = inst.nation != null ? inst.nation.displayName : string.Empty;
+        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}, clues={inst.usedClues.Count}.");
 
         // Clear the previous case's verdict line before showing the new case.
         if (officeUI != null)
@@ -513,7 +516,7 @@ public sealed class GameManager : MonoBehaviour
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
 
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, forged={inst.isForged}, claimAllowed={inst.claimAllowedByRules}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
+        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, liar={verdict.wasLiar}, home='{verdict.trueHomeLabel}', claimAllowed={inst.claimAllowedByRules}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
 
         EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig);
 

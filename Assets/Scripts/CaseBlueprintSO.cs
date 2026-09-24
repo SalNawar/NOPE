@@ -25,18 +25,16 @@ public sealed class CaseBlueprintSO : ScriptableObject
     /// <summary>Maximum number of clue lines to inject into the case.</summary>
     [SerializeField, Min(0)] private int totalCluesMax = 4;
 
-    /// <summary>Chance per clue line to be a contradiction (lie/anachronism).</summary>
+    /// <summary>
+    /// Chance per traveller to be a liar (plus the WorldState and effect
+    /// modifiers). The legacy clue path also reads it as the chance per clue
+    /// line to be a contradiction.
+    /// </summary>
     [Header("Lie / Misdirection")]
     [SerializeField, Range(0f, 1f)] private float contradictionChance = 0.25f;
 
     /// <summary>Chance per clue line to be a red herring (plausible but irrelevant).</summary>
     [SerializeField, Range(0f, 1f)] private float redHerringChance = 0.10f;
-
-    /// <summary>
-    /// How far a forged birth date moves the year (x = min, y = max years,
-    /// either way). The forged year stays inside the place's birth years when it can.
-    /// </summary>
-    [SerializeField] private Vector2Int forgedBirthYearShift = new Vector2Int(2, 24);
 
     /// <summary>Optional archetype pool for this blueprint (empty = pick from library).</summary>
     [Header("Timeline")]
@@ -69,9 +67,6 @@ public sealed class CaseBlueprintSO : ScriptableObject
     /// <summary>Public read-only red herring chance.</summary>
     public float RedHerringChance => redHerringChance;
 
-    /// <summary>Public read-only forged birth-year shift (x = min, y = max years).</summary>
-    public Vector2Int ForgedBirthYearShift => forgedBirthYearShift;
-
     /// <summary>
     /// Ensures min/max are sensible at edit-time.
     /// </summary>
@@ -79,8 +74,5 @@ public sealed class CaseBlueprintSO : ScriptableObject
     {
         if (totalCluesMax < totalCluesMin)
             totalCluesMax = totalCluesMin;
-
-        forgedBirthYearShift.x = Mathf.Max(1, forgedBirthYearShift.x);
-        forgedBirthYearShift.y = Mathf.Max(forgedBirthYearShift.x, forgedBirthYearShift.y);
     }
 }

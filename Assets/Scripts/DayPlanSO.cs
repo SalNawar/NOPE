@@ -36,7 +36,7 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Blueprints available for procedural cases.</summary>
     [SerializeField] private CaseBlueprintSO[] possibleBlueprints;
 
-    /// <summary>Weighted set of eras to pick the TRUE era from (optional).</summary>
+    /// <summary>Weighted set of eras to pick the claimed (home) era from (optional).</summary>
     [SerializeField] private EraWeight[] eraWeights;
 
     /// <summary>Countries travellers may come from today (empty = every country with a place in today's eras).</summary>
@@ -47,6 +47,13 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Legendary candidates available this day (filtered by min/max day).</summary>
     [SerializeField] private LegendarySO[] availableLegendaries;
+
+    /// <summary>
+    /// How many tells each liar's disguise leaks today (at least 1; capped per
+    /// liar at the categories that can carry a tell). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json.
+    /// </summary>
+    [SerializeField, Min(1)] private int tellCount = 1;
 
     // -----------------------------
     // Scripted overrides
@@ -84,6 +91,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Public read-only legendaries list.</summary>
     public IReadOnlyList<LegendarySO> AvailableLegendaries => availableLegendaries;
+
+    /// <summary>Tells each liar leaks today (at least 1).</summary>
+    public int TellCount => tellCount;
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
@@ -248,7 +258,7 @@ public sealed class ForcedCaseSlot
 }
 
 /// <summary>
-/// Weighted era entry used by DayPlanSO to pick the TRUE era.
+/// Weighted era entry used by DayPlanSO to pick the claimed (home) era.
 /// </summary>
 [Serializable]
 public struct EraWeight

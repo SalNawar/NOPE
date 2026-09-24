@@ -4,12 +4,15 @@ using UnityEngine;
 
 /// <summary>
 /// Builds runtime CaseInstance objects from your data:
-/// DayPlanSO -> picks the traveller's place (era by weight, nation among today's
-/// places) -> identity (names and birth years of that place) -> documents whose
-/// fields come from today's FactTable (one field may be forged with another
-/// place's value). Every draw comes from seeded streams (one per traveller,
-/// plus the day's rule-violator stream), so the same run and day always
-/// produce the same travellers.
+/// DayPlanSO -> picks the place the traveller CLAIMS as home (era by weight,
+/// nation among today's places) -> the registered identity every traveller
+/// carries (names and birth years of the claimed place) -> documents whose
+/// fields come from today's FactTable for the claim -> maybe a lie: a liar
+/// really comes from another of today's places and their papers leak tells
+/// carrying that true home's values (Lies). Every draw comes from seeded
+/// streams (per traveller: the case, legacy clue and lie streams; plus the
+/// day's rule-violator stream), so the same run and day always produce the
+/// same travellers.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -28,10 +31,13 @@ public sealed class CaseFactory
     /// <summary>The current traveller's random stream (reset per case).</summary>
     private IRandomSource _rng = new SeededRandom(0);
 
-    /// <summary>The current traveller's legacy clue stream, apart from <see cref="_rng"/> so clue settings never change who forges.</summary>
+    /// <summary>The current traveller's legacy clue stream, apart from <see cref="_rng"/> so clue settings never change who lies.</summary>
     private IRandomSource _clueRng = new SeededRandom(0);
 
-    /// <summary>Categories with a reference book (only these can prove a forged place fact).</summary>
+    /// <summary>The current traveller's lie stream (Seeds.ForLies), apart from <see cref="_rng"/> so lie tuning never changes who travellers are.</summary>
+    private IRandomSource _lieRng = new SeededRandom(0);
+
+    /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
     private readonly HashSet<ClueCategory> _bookCategories;
 
     /// <summary>Guaranteed rule violators for the day being generated, by 1-based slot.</summary>
@@ -85,6 +91,7 @@ public sealed class CaseFactory
             int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
             _rng = new SeededRandom(caseSeed);
             _clueRng = new SeededRandom(Seeds.ForClues(caseSeed));
+            _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
 
@@ -134,9 +141,9 @@ public sealed class CaseFactory
     /// - Forced blueprint for this slot (if defined)
     /// - Maybe legendary (based on chance)
     /// - A guaranteed rule violator's place for this slot (if planned)
-    /// - Otherwise pick the true era from day weights and a place in it
+    /// - Otherwise pick the claimed era from day weights and a place in it
     /// - If blueprint not forced, pick from possibleBlueprints
-    /// - Build documents, then fill and maybe forge their fields
+    /// - Build documents, fill their fields from the claim, then maybe disguise a liar
     /// </summary>
     private CaseInstance GenerateSingleCase(DayPlanSO plan, WorldState state, int index0Based, int caseIndex1Based)
     {
@@ -151,7 +158,7 @@ public sealed class CaseFactory
         if (legendary == null)
             _violators.TryGetValue(caseIndex1Based, out violatorPlace);
 
-        // 3) Decide true era.
+        // 3) Decide the claimed era (the traveller's stated home and destination).
         EraSO trueEra = legendary != null ? legendary.trueEra
             : violatorPlace != null ? violatorPlace.era
             : PickEraFromPlan(plan);
@@ -169,10 +176,11 @@ public sealed class CaseFactory
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
         NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, trueEra);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
-        string originLabel = place != null
-            ? _facts.OriginLabel(place.nation.id, place.era.id) ?? place.OriginLabel
-            : FallbackOriginLabel(nation, trueEra);
+        string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, trueEra);
         string givenName = ResolveGivenName(legendary, place, caseIndex1Based);
+        TravellerGender gender = legendary != null || place == null
+            ? TravellerGender.Unknown
+            : TravellerGenders.FromNameLists(givenName, place.maleNames, place.femaleNames);
         string role = archetype != null ? archetype.displayName : "Traveler";
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
         string birthDate = GenerateBirthDate(place);
@@ -190,6 +198,7 @@ public sealed class CaseFactory
             visitorDisplayName = visitorName,
             visitorGivenName = givenName,
             trueBirthDate = birthDate,
+            gender = gender,
             introLine = intro
         };
 
@@ -209,14 +218,17 @@ public sealed class CaseFactory
         // 6) Build documents + inject (legacy) clues.
         BuildDocumentsAndClues(inst, trueEra, blueprint, state);
 
-        // 7) Investigation layer: stated claim, structured fields + forgery, daily rules.
+        // 7) Investigation layer: stated claim, structured fields, the lie (if any), daily rules.
         inst.claimedNation = nation;
         inst.claimedEra = trueEra;
         inst.claimLine = $"I request passage home to {originLabel}.";
         inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
-        PopulateDocumentFields(inst, place, blueprint, state);
+        List<DocumentField> fields = PopulateDocumentFields(inst);
+        LiePlan lie = Disguise(inst, fields, plan, blueprint, state, caseIndex1Based);
 
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetype?.displayName}', legendary={legendary != null}, visitor='{visitorName}', born='{birthDate}', forged={inst.isForged}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
+        string archetypeName = archetype != null ? archetype.displayName : string.Empty;
+        string tells = lie != null ? string.Join(", ", lie.Tells) : string.Empty;
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetypeName}', legendary={legendary != null}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], gender={inst.gender}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -227,16 +239,15 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Fills each document's structured fields from today's facts for the
-    /// case's claimed place, then (with the blueprint's contradiction chance)
-    /// forges exactly one provable field with another place's value (or a
-    /// shifted birth year inside the place's birth years), flagging the case.
+    /// case's claimed place (identity fields from the registered identity) and
+    /// returns them in paper order. Never null: empty when there are no documents.
     /// </summary>
-    private void PopulateDocumentFields(CaseInstance inst, NationEraProfileSO place, CaseBlueprintSO blueprint, WorldState state)
+    private List<DocumentField> PopulateDocumentFields(CaseInstance inst)
     {
-        if (inst == null || _lib == null)
-            return;
-
         var allFields = new List<DocumentField>();
+
+        if (inst == null || _lib == null)
+            return allFields;
 
         foreach (DocumentInstance doc in inst.documents)
         {
@@ -261,48 +272,66 @@ public sealed class CaseFactory
             }
         }
 
-        if (allFields.Count == 0)
-            return;
+        return allFields;
+    }
 
-        // Chance for this case to carry a forged field (reuses the economy knobs).
-        float forgeChance = Mathf.Clamp01(
+    /// <summary>A place's label as today's FactTable (and so the scanner) prints it; the profile's own label when the place is not in today's table.</summary>
+    private string PlaceLabel(NationEraProfileSO p) => _facts.OriginLabel(p.nation.id, p.era.id) ?? p.OriginLabel;
+
+    /// <summary>
+    /// Rolls the traveller's lie on their lie stream and applies it (Lies.Plan):
+    /// a liar gets a true home among today's other places, and every field of
+    /// each tell category is rewritten with that home's value. Exempt
+    /// travellers (legendaries, a claim a rule forbids, no papers) draw
+    /// nothing. Returns the plan, or null when the traveller is exempt.
+    /// </summary>
+    private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, int caseIndex1Based)
+    {
+        if (!Lies.MayLie(inst.isLegendary, inst.claimAllowedByRules, fields))
+            return null;
+
+        // Today's places as the lie rules see them, in _todays order (HomeIndex indexes both).
+        var todays = new List<HomeCandidate>(_todays.Count);
+        foreach (NationEraProfileSO p in _todays)
+            todays.Add(new HomeCandidate(p.nation.id, p.era.id, p.birthYearMin, p.birthYearMax));
+
+        LiePlan lie = Lies.Plan(
+            LiarChance(blueprint, state),
+            plan.TellCount,
+            inst.claimedNation != null ? inst.claimedNation.id : null,
+            inst.claimedEra != null ? inst.claimedEra.id : null,
+            inst.trueBirthDate,
+            todays,
+            fields,
+            _facts,
+            _bookCategories,
+            _lieRng);
+
+        if (lie.Outcome == LieOutcome.NoPossibleLie)
+        {
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today differs from '{inst.originLabel}' in a printed, book-covered fact or birth year, so the traveller stays honest. Widen the day's eras or countries, or add a reference book for a printed category.");
+        }
+        else if (lie.Outcome == LieOutcome.Liar)
+        {
+            inst.trueHome = _todays[lie.HomeIndex];
+            inst.trueHomeLabel = PlaceLabel(inst.trueHome);
+            lie.ApplyTo(fields);
+        }
+
+        return lie;
+    }
+
+    /// <summary>
+    /// The chance a traveller lies: the blueprint's contradiction chance plus
+    /// tomorrow's slot modifier and active ForgeryChanceBonus effects, clamped
+    /// to 0..1. The legacy clue path reads the same knob as its per-clue
+    /// contradiction chance.
+    /// </summary>
+    private float LiarChance(CaseBlueprintSO blueprint, WorldState state) =>
+        Mathf.Clamp01(
             blueprint.ContradictionChance +
             (state != null ? state.forgeryChanceModifier : 0f) +
             TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
-
-        if (_rng.Value() >= forgeChance)
-            return;
-
-        // Forge one PROVABLE field (see Forgery.IsProvable): the player can
-        // always find the truth and the forged value in the books, or the true
-        // birth date in Citizen Records.
-        string nationId = inst.claimedNation != null ? inst.claimedNation.id : null;
-        string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
-        List<DocumentField> provable = allFields
-            .Where(f => Forgery.IsProvable(f.category, nationId, eraId, _facts, _bookCategories, inst.trueBirthDate))
-            .ToList();
-
-        if (provable.Count == 0)
-        {
-            Debug.LogWarning($"[CaseFactory] No provable field to forge for '{inst.originLabel}' — case stays genuine. Today's world needs a reference book and at least two places with the field's fact.");
-            return;
-        }
-
-        DocumentField target = provable[_rng.Range(0, provable.Count)];
-        Vector2Int shift = blueprint.ForgedBirthYearShift;
-
-        string wrong = target.category == ClueCategory.BirthDate
-            ? BirthDates.Forge(inst.trueBirthDate, shift.x, shift.y,
-                place != null ? place.birthYearMin : int.MinValue, place != null ? place.birthYearMax : int.MaxValue, _rng)
-            : _facts.PickOtherValue(target.category, _facts.Get(nationId, eraId, target.category), _rng);
-
-        if (!string.IsNullOrEmpty(wrong) && wrong != target.value)
-        {
-            target.value = wrong;
-            target.isAnachronism = true;
-            inst.isForged = true;
-        }
-    }
 
     /// <summary>
     /// Resolves a field's true value: identity fields come from the visitor's
@@ -324,7 +353,7 @@ public sealed class CaseFactory
             return value;
 
         // No authored fact: a stable placeholder keeps the field internally
-        // consistent (never a forgery) and the gap visible.
+        // consistent (never a tell: a tell needs the claim's fact) and the gap visible.
         string e = inst.claimedEra != null ? inst.claimedEra.id : "unknown";
         Debug.LogWarning($"[CaseFactory] '{inst.originLabel}' has no {category} fact today; printing a placeholder. Check the place's facts (Tools > TimeDesk > Validate Content Library).");
         return $"{category}:{e}";
@@ -355,7 +384,7 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Picks the traveller's place: the legendary's own place (if authored) >
-    /// uniform pick among today's places in the true era > null (no place).
+    /// uniform pick among today's places in the claimed era > null (no place).
     /// </summary>
     private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO trueEra)
     {
@@ -409,8 +438,9 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Builds the agency's citizen master record for a day's visitors. Records
-    /// always carry the TRUE identity, so forged papers can be caught against
-    /// them. (Future: deliberately missing/corrupted records + family history.)
+    /// carry the registered identity: an honest traveller's, or a liar's cover
+    /// (claimed origin). They never reveal a true home. (Future: deliberately
+    /// missing/corrupted records + family history.)
     /// </summary>
     public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases)
     {
@@ -439,7 +469,7 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Picks the true era by the DayPlan weights. With no weights (or bad
+    /// Picks the claimed era by the DayPlan weights. With no weights (or bad
     /// data), picks uniformly among the eras that have a place today.
     /// </summary>
     private EraSO PickEraFromPlan(DayPlanSO plan)
@@ -566,12 +596,9 @@ public sealed class CaseFactory
             (c.contradicts == null || !c.contradicts.Contains(trueEra))
         ).ToList();
 
-        // Effective contradiction chance: blueprint base + tomorrow modifier
-        // (slot machine) + stacked ForgeryChanceBonus effects.
-        float effectiveContradictionChance = Mathf.Clamp01(
-            blueprint.ContradictionChance +
-            state.forgeryChanceModifier +
-            TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
+        // Effective contradiction chance: the same knob as the liar chance
+        // (blueprint base + tomorrow modifier + stacked ForgeryChanceBonus effects).
+        float effectiveContradictionChance = LiarChance(blueprint, state);
 
         // Decide counts: how many contradictions and red herrings to inject.
         int contradictions = 0;
