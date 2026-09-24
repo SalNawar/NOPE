@@ -24,6 +24,12 @@ public sealed class CaseInstance
     /// <summary>Destination nation within the era (timeline impacts land here).</summary>
     public NationSO nation;
 
+    /// <summary>The traveller's true place (nation at that era); null when content is missing.</summary>
+    public NationEraProfileSO place;
+
+    /// <summary>Human label of the true place, "Abbasid Baghdad (Medieval)" (claims and Citizen Records).</summary>
+    public string originLabel;
+
     /// <summary>Authored impact overrides from the blueprint/legendary (may be empty).</summary>
     public readonly List<TimelineImpact> authoredImpacts = new();
 

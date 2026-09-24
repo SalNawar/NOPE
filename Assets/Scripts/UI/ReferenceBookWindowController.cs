@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Renders a reference book as a flippable window. Each entry (Nation — Era :
-/// value) is a clickable row the player can compare against a document field.
-/// Rows are cloned from <see cref="entryRowTemplate"/> (a disabled row with two
-/// TMP texts — heading then value — an Image background, and a Button).
+/// Renders a reference book as a flippable window. Its rows are today's facts
+/// for the book's category (FactTable.Rows), each a clickable "place : value"
+/// row the player can compare against a document field. Rows are cloned from
+/// <see cref="entryRowTemplate"/> (a disabled row with two TMP texts — heading
+/// then value — an Image background, and a Button).
 /// </summary>
 public sealed class ReferenceBookWindowController : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public sealed class ReferenceBookWindowController : MonoBehaviour
     [SerializeField, Min(1)] private int entriesPerPage = 6;
 
     private ReferenceBookSO _book;
+    private FactTable _facts;
     private CompareController _compare;
     private int _page;
     private readonly List<GameObject> _rows = new();
@@ -36,10 +38,11 @@ public sealed class ReferenceBookWindowController : MonoBehaviour
             entryRowTemplate.SetActive(false);
     }
 
-    /// <summary>Binds a book and renders its first page.</summary>
-    public void SetBook(ReferenceBookSO book, CompareController compare)
+    /// <summary>Binds a book cover to today's facts and renders its first page.</summary>
+    public void SetBook(ReferenceBookSO book, FactTable facts, CompareController compare)
     {
         _book = book;
+        _facts = facts;
         _compare = compare;
         _page = 0;
 
@@ -49,12 +52,14 @@ public sealed class ReferenceBookWindowController : MonoBehaviour
         ShowPage(0);
     }
 
+    /// <summary>Today's rows for this book (empty when unbound).</summary>
+    private IReadOnlyList<FactRow> Rows() =>
+        _book != null && _facts != null ? _facts.Rows(_book.category) : System.Array.Empty<FactRow>();
+
     private int PageCount()
     {
-        if (_book == null || _book.entries == null || _book.entries.Count == 0)
-            return 1;
-
-        return Mathf.Max(1, Mathf.CeilToInt(_book.entries.Count / (float)Mathf.Max(1, entriesPerPage)));
+        int count = Rows().Count;
+        return count == 0 ? 1 : Mathf.Max(1, Mathf.CeilToInt(count / (float)Mathf.Max(1, entriesPerPage)));
     }
 
     /// <summary>Switches to a page (clamped) and rebuilds its rows.</summary>
@@ -83,44 +88,35 @@ public sealed class ReferenceBookWindowController : MonoBehaviour
 
         _rows.Clear();
 
-        if (_book == null || _book.entries == null || entryRowsRoot == null || entryRowTemplate == null)
+        IReadOnlyList<FactRow> rows = Rows();
+        if (rows.Count == 0 || entryRowsRoot == null || entryRowTemplate == null)
             return;
 
         int per = Mathf.Max(1, entriesPerPage);
         int start = _page * per;
-        int end = Mathf.Min(start + per, _book.entries.Count);
+        int end = Mathf.Min(start + per, rows.Count);
+        string bookName = _book != null ? _book.displayName : "Reference";
 
         for (int i = start; i < end; i++)
         {
-            ReferenceEntry e = _book.entries[i];
-            if (e == null)
-                continue;
+            FactRow fact = rows[i];
 
             GameObject row = Instantiate(entryRowTemplate, entryRowsRoot);
             row.SetActive(true);
             _rows.Add(row);
 
-            string nation = e.nation != null ? e.nation.displayName : "Any";
-            string era = e.era != null ? e.era.displayName : "?";
-
             TMP_Text[] texts = row.GetComponentsInChildren<TMP_Text>(true);
             if (texts.Length > 0 && texts[0] != null)
-                texts[0].text = $"{nation} — {era}";
+                texts[0].text = fact.OriginLabel;
             if (texts.Length > 1 && texts[1] != null)
-                texts[1].text = e.value;
+                texts[1].text = fact.Value;
 
             Image bg = row.GetComponent<Image>();
             Button btn = row.GetComponent<Button>();
 
-            string bookName = _book != null ? _book.displayName : "Reference";
-            string label = $"{bookName}: {nation}/{era}";
-            string value = e.value;
-            CompareEvidence evidence = CompareEvidence.ForReferenceEntry(
-                _book.category,
-                e.value,
-                e.nation != null ? e.nation.id : null,
-                e.era != null ? e.era.id : null,
-                $"{nation} — {era}");
+            string label = $"{bookName}: {fact.OriginLabel}";
+            string value = fact.Value;
+            CompareEvidence evidence = fact.ToEvidence();
 
             if (btn != null && _compare != null)
                 btn.onClick.AddListener(() => _compare.Select(label, value, bg, evidence));

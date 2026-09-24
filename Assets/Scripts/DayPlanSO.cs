@@ -39,6 +39,9 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Weighted set of eras to pick the TRUE era from (optional).</summary>
     [SerializeField] private EraWeight[] eraWeights;
 
+    /// <summary>Countries travellers may come from today (empty = every country with a place in today's eras).</summary>
+    [SerializeField] private NationSO[] allowedNations;
+
     /// <summary>Base chance per case to become legendary (0..1).</summary>
     [SerializeField, Range(0f, 1f)] private float legendaryBaseChance = 0.05f;
 
@@ -78,6 +81,29 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
+
+    /// <summary>Countries allowed today (empty = all).</summary>
+    public IReadOnlyList<NationSO> AllowedNations => allowedNations ?? System.Array.Empty<NationSO>();
+
+    /// <summary>True when travellers may come from this country today.</summary>
+    public bool AllowsNation(NationSO nation) =>
+        nation != null && (allowedNations == null || allowedNations.Length == 0 || Array.IndexOf(allowedNations, nation) >= 0);
+
+    /// <summary>True when this era can appear today (a positive era weight, or no weights at all).</summary>
+    public bool IncludesEra(EraSO era)
+    {
+        if (era == null)
+            return false;
+
+        if (eraWeights == null || eraWeights.Length == 0)
+            return true;
+
+        foreach (EraWeight w in eraWeights)
+            if (w.era == era && w.weight > 0f)
+                return true;
+
+        return false;
+    }
 
     /// <summary>
     /// Returns true if every active rule permits travel to the claimed nation+era.

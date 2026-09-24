@@ -4,18 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// A nation at a specific time period — the trackable unit of timeline state
-/// (Victorian England vs Industrial England are two different profiles).
-/// Carries baseline attribute scores and the effects fired when an attribute
-/// reaches dominant or supporting tier here.
+/// A place: a nation at a specific time period ("Abbasid Baghdad", Medieval).
+/// It is the unit of the world model (its facts, names and birth years feed
+/// case generation and the reference books through ContentLibrarySO.BuildFactTable)
+/// and of timeline state (baseline attribute scores and tier effects).
 /// </summary>
 [CreateAssetMenu(fileName = "Profile_", menuName = "TimeDesk/Timeline/Nation-Era Profile", order = 22)]
 public sealed class NationEraProfileSO : ScriptableObject
 {
-    /// <summary>Stable ID used in score keys and saves (e.g., "england_victorian").</summary>
+    /// <summary>Stable ID used in score keys and saves ("{nation}_{era}", e.g. "iraq_medieval").</summary>
     public string id;
 
-    /// <summary>Display name ("Victorian England").</summary>
+    /// <summary>Display name of the place at that moment ("Abbasid Baghdad").</summary>
     public string displayName;
 
     /// <summary>The nation this profile belongs to.</summary>
@@ -24,8 +24,59 @@ public sealed class NationEraProfileSO : ScriptableObject
     /// <summary>The time period (era) this profile covers.</summary>
     public EraSO era;
 
+    [Header("Place (world model)")]
+    /// <summary>The researched moment this place stands for ("Baghdad under the Abbasids, c. 830 CE").</summary>
+    [TextArea] public string moment;
+
+    /// <summary>Representative year of the moment (negative = BCE).</summary>
+    public int year;
+
+    /// <summary>Earliest birth year of a traveller from here (negative = BCE).</summary>
+    public int birthYearMin;
+
+    /// <summary>Latest birth year of a traveller from here (negative = BCE).</summary>
+    public int birthYearMax;
+
+    /// <summary>World facts of this place, one per category (Currency, Language, Technology, Geography = capital, Politics = ruler).</summary>
+    public List<ProfileFact> facts = new();
+
+    /// <summary>Period-appropriate male given names.</summary>
+    public string[] maleNames;
+
+    /// <summary>Period-appropriate female given names.</summary>
+    public string[] femaleNames;
+
+    [Header("Timeline")]
     /// <summary>Baseline attribute scores + tier effects for this profile.</summary>
     public List<AttributeBaseline> baselines = new();
+
+    /// <summary>Label used in books, claims and Citizen Records: "Abbasid Baghdad (Medieval)".</summary>
+    public string OriginLabel => era != null ? $"{displayName} ({era.displayName})" : displayName;
+
+    /// <summary>Every given name of this place (male then female).</summary>
+    public IReadOnlyList<string> AllNames
+    {
+        get
+        {
+            var names = new List<string>();
+            if (maleNames != null) names.AddRange(maleNames);
+            if (femaleNames != null) names.AddRange(femaleNames);
+            return names;
+        }
+    }
+
+    /// <summary>The value of one of this place's facts, or null if not authored.</summary>
+    public string GetFact(ClueCategory category)
+    {
+        if (facts == null)
+            return null;
+
+        foreach (ProfileFact f in facts)
+            if (f != null && f.category == category)
+                return f.value;
+
+        return null;
+    }
 
     /// <summary>
     /// Returns the baseline entry for an attribute (null if not authored here).
@@ -41,6 +92,17 @@ public sealed class NationEraProfileSO : ScriptableObject
 
         return null;
     }
+}
+
+/// <summary>One world fact of a place: in this category, the value is X ("Currency" = "Deben").</summary>
+[Serializable]
+public sealed class ProfileFact
+{
+    /// <summary>Which fact (matches DocumentField and reference-book categories).</summary>
+    public ClueCategory category;
+
+    /// <summary>The fact's value as printed on papers and in books.</summary>
+    public string value;
 }
 
 /// <summary>

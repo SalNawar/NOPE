@@ -54,6 +54,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     private bool _booksBuilt;
     private string _directives = "Directives: all destinations cleared.";
 
+    /// <summary>Today's facts (set by GameManager; the books render these rows).</summary>
+    private FactTable _facts;
+
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new();
 
@@ -125,6 +128,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     {
         if (recordsWindow != null)
             recordsWindow.SetRegistry(registry);
+    }
+
+    /// <summary>Injects today's facts (the reference books render these rows).</summary>
+    public void SetFacts(FactTable facts)
+    {
+        _facts = facts;
     }
 
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
@@ -299,7 +308,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                 continue;
 
             ReferenceBookWindowController win = Instantiate(bookWindowTemplate, windowLayer);
-            win.SetBook(book, compareController);
+            win.SetBook(book, _facts, compareController);
             if (win.transform is RectTransform rt)
                 rt.anchoredPosition = new Vector2(-380f + i * 320f, -150f);
             GameObject winGo = win.gameObject;
@@ -382,10 +391,10 @@ public sealed class InvestigationUIController : MonoBehaviour
                 : string.Empty;
 
         if (_fallbackBody != null)
-            _fallbackBody.text = BuildFallbackBody(inst, lib);
+            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts);
     }
 
-    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib)
+    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts)
     {
         var sb = new StringBuilder();
 
@@ -409,10 +418,9 @@ public sealed class InvestigationUIController : MonoBehaviour
                 if (book == null)
                     continue;
                 sb.AppendLine($"[{book.displayName}]");
-                if (book.entries != null)
-                    foreach (ReferenceEntry e in book.entries)
-                        if (e != null)
-                            sb.AppendLine($"    {(e.nation != null ? e.nation.displayName : "Any")} — {(e.era != null ? e.era.displayName : "?")}: {e.value}");
+                if (facts != null)
+                    foreach (FactRow row in facts.Rows(book.category))
+                        sb.AppendLine($"    {row.OriginLabel}: {row.Value}");
             }
         }
 

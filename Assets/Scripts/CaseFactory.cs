@@ -4,31 +4,48 @@ using UnityEngine;
 
 /// <summary>
 /// Builds runtime CaseInstance objects from your data:
-/// DayPlanSO -> picks blueprint + picks true era -> selects docs -> injects clues.
+/// DayPlanSO -> picks the traveller's place (era by weight, nation among today's
+/// places) -> identity (names and birth years of that place) -> documents whose
+/// fields come from today's FactTable (one field may be forged with another
+/// place's value). Every draw comes from a per-traveller seeded stream, so the
+/// same run and day always produce the same travellers.
 /// </summary>
 public sealed class CaseFactory
 {
-    /// <summary>Content library used as the source of eras, clues, legendaries, etc.</summary>
+    /// <summary>Content library used as the source of eras, places, legendaries, etc.</summary>
     private readonly ContentLibrarySO _lib;
+
+    /// <summary>Today's facts (the same snapshot the reference books show).</summary>
+    private readonly FactTable _facts;
 
     /// <summary>Today's visitor names (unique per generated day; see NameRoster).</summary>
     private NameRoster _roster = new NameRoster();
 
+    /// <summary>Today's places (eras x allowed nations), in book order.</summary>
+    private List<NationEraProfileSO> _todays = new List<NationEraProfileSO>();
+
+    /// <summary>The current traveller's random stream (reset per case).</summary>
+    private IRandomSource _rng = new SeededRandom(0);
+
     /// <summary>
-    /// Construct a factory that uses a specific ContentLibrary as its source.
+    /// Construct a factory over a content library and today's fact snapshot
+    /// (ContentLibrarySO.BuildFactTable for the same day plan).
     /// </summary>
-    public CaseFactory(ContentLibrarySO lib)
+    public CaseFactory(ContentLibrarySO lib, FactTable facts)
     {
         _lib = lib;
+        _facts = facts ?? new FactTable();
     }
 
     /// <summary>
     /// Generates the full list of cases for a day, based on the DayPlan.
-    /// Forced cases override procedural blueprint selection per slot.
+    /// Forced cases override procedural blueprint selection per slot. Each slot
+    /// draws from its own stream (Seeds.ForCase), so one traveller's draws never
+    /// shift the next one's.
     /// </summary>
-    public List<CaseInstance> GenerateDayCases(DayPlanSO plan, WorldState state)
+    public List<CaseInstance> GenerateDayCases(DayPlanSO plan, WorldState state, int daySeed)
     {
-        Debug.Log($"[CaseFactory] >>> Entering GenerateDayCases (day {state?.day}, plan='{plan?.name}').");
+        Debug.Log($"[CaseFactory] >>> Entering GenerateDayCases (day {state?.day}, plan='{plan?.name}', daySeed={daySeed}).");
 
         var results = new List<CaseInstance>();
 
@@ -42,12 +59,17 @@ public sealed class CaseFactory
 
         // Fresh roster: names are unique within the day (records use first match).
         _roster = new NameRoster();
+        _todays = _lib.TodaysProfiles(plan);
 
-        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day}.");
+        if (_todays.Count == 0)
+            Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
+
+        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s).");
 
         for (int i = 0; i < total; i++)
         {
             int caseIndex1Based = i + 1;
+            _rng = new SeededRandom(Seeds.ForCase(daySeed, caseIndex1Based));
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
 
@@ -60,15 +82,14 @@ public sealed class CaseFactory
     /// Generates one case:
     /// - Forced blueprint for this slot (if defined)
     /// - Maybe legendary (based on chance)
-    /// - Otherwise pick true era from day weights
+    /// - Otherwise pick the true era from day weights and a place in it
     /// - If blueprint not forced, pick from possibleBlueprints
-    /// - Build documents and inject clues
+    /// - Build documents, then fill and maybe forge their fields
     /// </summary>
     private CaseInstance GenerateSingleCase(DayPlanSO plan, WorldState state, int index0Based, int caseIndex1Based)
     {
         // 1) Forced blueprint if present.
-        CaseBlueprintSO forcedBlueprint;
-        plan.TryGetForcedCase(caseIndex1Based, out forcedBlueprint);
+        plan.TryGetForcedCase(caseIndex1Based, out CaseBlueprintSO forcedBlueprint);
 
         // 2) Legendary roll.
         LegendarySO legendary = TryRollLegendary(plan, state);
@@ -83,36 +104,19 @@ public sealed class CaseFactory
             legendary != null && legendary.blueprintOverride != null ? legendary.blueprintOverride :
             WeightedRandom.Pick(plan.PossibleBlueprints, b => b != null
                 ? b.Difficulty * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, b.name)
-                : 0f, new UnityRandomSource());
+                : 0f, _rng);
 
-        // 4.5) Timeline identity: archetype, destination nation, visitor identity.
+        // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationSO nation = PickNation(legendary, trueEra);
-        string givenName = ResolveGivenName(legendary, archetype, nation, caseIndex1Based);
+        NationEraProfileSO place = PickPlace(legendary, trueEra);
+        NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
+        string originLabel = place != null ? place.OriginLabel : FallbackOriginLabel(nation, trueEra);
+        string givenName = ResolveGivenName(legendary, archetype, place, nation, caseIndex1Based);
         string role = archetype != null ? archetype.displayName : "Traveler";
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
-        string birthDate = GenerateBirthDate(trueEra);
+        string birthDate = GenerateBirthDate(place);
         string intro = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
 
-        if (blueprint == null)
-        {
-            Debug.LogError($"CaseFactory generated a case with a null blueprint (Day {plan.DayNumber}, slot {caseIndex1Based}). Check DayPlanSO.possibleBlueprints / forcedCases.");
-            return new CaseInstance
-            {
-                caseIndex = index0Based,
-                trueEra = trueEra,
-                isLegendary = legendary != null,
-                legendarySource = legendary,
-                archetype = archetype,
-                nation = nation,
-                visitorDisplayName = visitorName,
-                visitorGivenName = givenName,
-                trueBirthDate = birthDate,
-                introLine = intro
-            };
-        }
-
-        // 5) Build instance.
         var inst = new CaseInstance
         {
             caseIndex = index0Based,
@@ -121,48 +125,53 @@ public sealed class CaseFactory
             legendarySource = legendary,
             archetype = archetype,
             nation = nation,
+            place = place,
+            originLabel = originLabel,
             visitorDisplayName = visitorName,
             visitorGivenName = givenName,
             trueBirthDate = birthDate,
             introLine = intro
         };
 
-        // 5.5) Merge authored timeline impacts (blueprint + legendary).
+        if (blueprint == null)
+        {
+            Debug.LogError($"CaseFactory generated a case with a null blueprint (Day {plan.DayNumber}, slot {caseIndex1Based}). Check DayPlanSO.possibleBlueprints / forcedCases.");
+            return inst;
+        }
+
+        // 5) Merge authored timeline impacts (blueprint + legendary).
         if (blueprint.AuthoredImpacts != null)
             inst.authoredImpacts.AddRange(blueprint.AuthoredImpacts);
 
         if (legendary != null && legendary.authoredImpacts != null)
             inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
-        // 6) Build documents + inject clues.
+        // 6) Build documents + inject (legacy) clues.
         BuildDocumentsAndClues(inst, trueEra, blueprint, state);
 
         // 7) Investigation layer: stated claim, structured fields + forgery, daily rules.
         inst.claimedNation = nation;
         inst.claimedEra = trueEra;
-        inst.claimLine = BuildClaimLine(nation, trueEra);
+        inst.claimLine = $"I request passage home to {originLabel}.";
         inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
         PopulateDocumentFields(inst, blueprint, state);
 
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', trueEra='{trueEra?.id}', archetype='{archetype?.displayName}', nation='{nation?.displayName}', legendary={legendary != null}, visitor='{visitorName}', forged={inst.isForged}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetype?.displayName}', legendary={legendary != null}, visitor='{visitorName}', born='{birthDate}', forged={inst.isForged}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
 
-    /// <summary>Builds the visitor's stated travel claim line for the UI banner.</summary>
-    private static string BuildClaimLine(NationSO nation, EraSO era)
+    /// <summary>Origin label when no place is authored for a nation+era (content gap).</summary>
+    private static string FallbackOriginLabel(NationSO nation, EraSO era)
     {
-        string when = era != null ? era.displayName : "an unlisted era";
-
-        return nation != null
-            ? $"I request passage to {nation.displayName} during {when}."
-            : $"I request passage to {when}.";
+        string where = nation != null ? nation.displayName : "an unlisted land";
+        return era != null ? $"{where} ({era.displayName})" : where;
     }
 
     /// <summary>
-    /// Fills each document's structured fields from the reference data for the
-    /// case's claimed nation+era, then (with the blueprint's contradiction
-    /// chance) forges exactly one field into an anachronism, flagging the case.
+    /// Fills each document's structured fields from today's facts for the
+    /// case's claimed place, then (with the blueprint's contradiction chance)
+    /// forges exactly one provable field with another place's value, flagging the case.
     /// </summary>
     private void PopulateDocumentFields(CaseInstance inst, CaseBlueprintSO blueprint, WorldState state)
     {
@@ -203,14 +212,16 @@ public sealed class CaseFactory
             (state != null ? state.forgeryChanceModifier : 0f) +
             TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
 
-        if (Random.value >= forgeChance)
+        if (_rng.Value() >= forgeChance)
             return;
 
-        // Forge one PROVABLE field. Era fields are provable when the reference
-        // book contains the truth for the claimed nation+era plus a different
-        // value to forge with; birth dates are provable against the citizen
-        // records (which always carry the true identity). Names stay honest
-        // for now — forged names pair with the future missing-record mechanic.
+        // Forge one PROVABLE field. Place facts are provable when today's table
+        // holds the claim's truth plus a different value to forge with (the
+        // player can find both in the books); birth dates are provable against
+        // the citizen records (which always carry the true identity). Names stay
+        // honest for now — forged names pair with the future missing-record mechanic.
+        string nationId = inst.claimedNation != null ? inst.claimedNation.id : null;
+        string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
         var provable = new List<DocumentField>();
 
         foreach (DocumentField f in allFields)
@@ -220,20 +231,13 @@ public sealed class CaseFactory
 
             if (f.category == ClueCategory.BirthDate)
             {
-                if (!string.IsNullOrEmpty(inst.trueBirthDate))
+                if (BirthDates.TryParse(inst.trueBirthDate, out _, out _, out _))
                     provable.Add(f);
                 continue;
             }
 
-            ReferenceBookSO b = _lib.GetReferenceBook(f.category);
-            if (b == null)
-                continue;
-
-            string truth = b.GetValue(inst.claimedNation, inst.claimedEra);
-            if (string.IsNullOrEmpty(truth))
-                continue;
-
-            if (string.IsNullOrEmpty(b.GetAnyOtherValue(truth)))
+            string truth = _facts.Get(nationId, eraId, f.category);
+            if (string.IsNullOrEmpty(truth) || _facts.PickOtherValue(f.category, truth, n => 0) == null)
                 continue;
 
             provable.Add(f);
@@ -241,22 +245,15 @@ public sealed class CaseFactory
 
         if (provable.Count == 0)
         {
-            Debug.LogWarning($"[CaseFactory] No provable field to forge for claim '{inst.claimedNation?.displayName}/{inst.claimedEra?.id}' — case stays genuine. Author reference-book entries for this era to enable forgeries.");
+            Debug.LogWarning($"[CaseFactory] No provable field to forge for '{inst.originLabel}' — case stays genuine. Today's world needs at least two places with this fact.");
             return;
         }
 
-        DocumentField target = provable[Random.Range(0, provable.Count)];
+        DocumentField target = provable[_rng.Range(0, provable.Count)];
 
-        string wrong;
-        if (target.category == ClueCategory.BirthDate)
-        {
-            wrong = ForgeBirthDate(inst.trueBirthDate);
-        }
-        else
-        {
-            ReferenceBookSO book = _lib.GetReferenceBook(target.category);
-            wrong = book.GetAnyOtherValue(book.GetValue(inst.claimedNation, inst.claimedEra));
-        }
+        string wrong = target.category == ClueCategory.BirthDate
+            ? BirthDates.Forge(inst.trueBirthDate, _rng)
+            : _facts.PickOtherValue(target.category, _facts.Get(nationId, eraId, target.category), n => _rng.Range(0, n));
 
         if (!string.IsNullOrEmpty(wrong) && wrong != target.value)
         {
@@ -268,8 +265,8 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Resolves a field's true value: identity fields come from the visitor's
-    /// identity; era fields come from the reference books for the claimed
-    /// nation+era, with a readable placeholder fallback.
+    /// identity; place fields come from today's facts for the claimed place,
+    /// with a readable placeholder (and a warning) when content is missing.
     /// </summary>
     private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
     {
@@ -279,15 +276,16 @@ public sealed class CaseFactory
         if (category == ClueCategory.BirthDate)
             return inst.trueBirthDate;
 
-        ReferenceBookSO book = _lib != null ? _lib.GetReferenceBook(category) : null;
-        string value = book != null ? book.GetValue(inst.claimedNation, inst.claimedEra) : null;
+        string value = _facts.Get(inst.claimedNation != null ? inst.claimedNation.id : null,
+                                  inst.claimedEra != null ? inst.claimedEra.id : null, category);
 
         if (!string.IsNullOrEmpty(value))
             return value;
 
-        // No authored reference: synthesize a stable placeholder so the field
-        // still renders (and is internally consistent = not a forgery).
+        // No authored fact: a stable placeholder keeps the field internally
+        // consistent (never a forgery) and the gap visible.
         string e = inst.claimedEra != null ? inst.claimedEra.id : "unknown";
+        Debug.LogWarning($"[CaseFactory] '{inst.originLabel}' has no {category} fact today; printing a placeholder. Check the place's facts (Tools > TimeDesk > Validate Content Library).");
         return $"{category}:{e}";
     }
 
@@ -311,39 +309,31 @@ public sealed class CaseFactory
 
         return WeightedRandom.Pick(pool, a => a != null
             ? Mathf.Max(0f, a.baseWeight) * TimelineEffects.GetVisitorTagWeightMultiplier(state, _lib, a.tags)
-            : 0f, new UnityRandomSource());
+            : 0f, _rng);
     }
 
     /// <summary>
-    /// Picks the destination nation: legendary override > uniform pick among
-    /// authored profiles for the true era > null (era has no nations yet).
+    /// Picks the traveller's place: the legendary's own place (if authored) >
+    /// uniform pick among today's places in the true era > null (no place).
     /// </summary>
-    private NationSO PickNation(LegendarySO legendary, EraSO trueEra)
+    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO trueEra)
     {
         if (legendary != null && legendary.nation != null)
-            return legendary.nation;
+            return _lib.GetProfile(legendary.nation, trueEra);
 
-        if (trueEra == null || _lib.Profiles == null)
+        if (trueEra == null)
             return null;
 
-        var candidates = new List<NationEraProfileSO>();
-
-        foreach (NationEraProfileSO p in _lib.Profiles)
-            if (p != null && p.era == trueEra && p.nation != null)
-                candidates.Add(p);
-
-        if (candidates.Count == 0)
-            return null;
-
-        return candidates[Random.Range(0, candidates.Count)].nation;
+        var candidates = _todays.Where(p => p.era == trueEra).ToList();
+        return candidates.Count == 0 ? null : candidates[_rng.Range(0, candidates.Count)];
     }
 
     /// <summary>
     /// The visitor's given name (no role suffix; records lookup key), unique
-    /// within the day: legendary name > nation name pool (era-appropriate) >
-    /// archetype name pool > generic subject.
+    /// within the day: legendary name > the place's period names > the nation's
+    /// pool > archetype name pool > generic subject.
     /// </summary>
-    private string ResolveGivenName(LegendarySO legendary, ArchetypeSO archetype, NationSO nation, int caseIndex1Based)
+    private string ResolveGivenName(LegendarySO legendary, ArchetypeSO archetype, NationEraProfileSO place, NationSO nation, int caseIndex1Based)
     {
         if (legendary != null)
         {
@@ -353,9 +343,9 @@ public sealed class CaseFactory
             return legendary.displayName;
         }
 
-        // Prefer a name themed to the visitor's nation/era, then the archetype's.
-        string picked = _roster.Take(nation != null ? nation.namePool : null, n => Random.Range(0, n))
-                        ?? _roster.Take(archetype != null ? archetype.namePool : null, n => Random.Range(0, n));
+        string picked = _roster.Take(place != null ? place.AllNames : null, n => _rng.Range(0, n))
+                        ?? _roster.Take(nation != null ? nation.namePool : null, n => _rng.Range(0, n))
+                        ?? _roster.Take(archetype != null ? archetype.namePool : null, n => _rng.Range(0, n));
         if (picked != null)
             return picked;
 
@@ -364,39 +354,13 @@ public sealed class CaseFactory
         return fallback;
     }
 
-    private static readonly string[] Months =
-        { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
-
-    /// <summary>A plausible birth date for the visitor's true era.</summary>
-    private static string GenerateBirthDate(EraSO era)
+    /// <summary>A birth date within the place's birth-year range ("Unknown" when no place is authored).</summary>
+    private string GenerateBirthDate(NationEraProfileSO place)
     {
-        int year;
-        switch (era != null ? era.id : string.Empty)
-        {
-            case "rome": year = Random.Range(10, 90); break;
-            case "medieval": year = Random.Range(1030, 1190); break;
-            case "future": year = Random.Range(2380, 2440); break;
-            default: year = Random.Range(1900, 2000); break;
-        }
+        if (place == null)
+            return "Unknown";
 
-        int day = Random.Range(1, 29);
-        string month = Months[Random.Range(0, Months.Length)];
-        return $"{day} {month} {year}";
-    }
-
-    /// <summary>
-    /// Shifts a birth date's year so the forged value stays plausible but wrong.
-    /// </summary>
-    private static string ForgeBirthDate(string trueDate)
-    {
-        string[] parts = (trueDate ?? string.Empty).Split(' ');
-        if (parts.Length == 3 && int.TryParse(parts[2], out int year))
-        {
-            int offset = Random.Range(2, 25) * (Random.value < 0.5f ? -1 : 1);
-            return $"{parts[0]} {parts[1]} {year + offset}";
-        }
-
-        return trueDate + " (?)";
+        return BirthDates.Generate(place.birthYearMin, place.birthYearMax, _rng);
     }
 
     /// <summary>
@@ -416,14 +380,11 @@ public sealed class CaseFactory
             if (inst == null || string.IsNullOrWhiteSpace(inst.visitorGivenName))
                 continue;
 
-            string nation = inst.nation != null ? inst.nation.displayName : "Unregistered";
-            string era = inst.trueEra != null ? inst.trueEra.displayName : "Unknown Era";
-
             registry.Add(new CitizenRecord
             {
                 fullName = inst.visitorGivenName,
                 birthDate = inst.trueBirthDate,
-                origin = $"{nation} — {era}",
+                origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.nation, inst.trueEra),
                 note = inst.isLegendary
                     ? "Priority subject. Records sealed above your clearance."
                     : "No remarks on file."
@@ -434,25 +395,26 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Picks an era for the true destination using the DayPlan weights.
-    /// If no weights are defined, falls back to library eras uniformly.
+    /// Picks the true era by the DayPlan weights. With no weights (or bad
+    /// data), picks uniformly among the eras that have a place today.
     /// </summary>
     private EraSO PickEraFromPlan(DayPlanSO plan)
     {
-        // Era generation requires a non-empty library.
-        if (_lib == null || _lib.Eras == null || _lib.Eras.Count == 0)
+        if (plan.EraWeights != null && plan.EraWeights.Count > 0)
         {
-            Debug.LogError("CaseFactory cannot pick an era because ContentLibrarySO has no eras assigned.");
+            EraSO picked = WeightedRandom.Pick(plan.EraWeights, ew => ew.weight, _rng).era;
+            if (picked != null)
+                return picked;
+        }
+
+        var eras = _todays.Select(p => p.era).Distinct().ToList();
+        if (eras.Count == 0)
+        {
+            Debug.LogError("CaseFactory cannot pick an era: today has no places. Check the day plan's era weights and allowed nations.");
             return null;
         }
 
-        // If no weights are defined, pick uniformly from the library.
-        if (plan.EraWeights == null || plan.EraWeights.Count == 0)
-            return _lib.Eras[Random.Range(0, _lib.Eras.Count)];
-
-        // Weighted pick; if the result is null (bad data), fall back to uniform.
-        EraSO picked = WeightedRandom.Pick(plan.EraWeights, ew => ew.weight, new UnityRandomSource()).era;
-        return picked != null ? picked : _lib.Eras[Random.Range(0, _lib.Eras.Count)];
+        return eras[_rng.Range(0, eras.Count)];
     }
 
     /// <summary>
@@ -502,16 +464,16 @@ public sealed class CaseFactory
                 TimelineEffects.SumFloat(state, _lib, EffectOpType.LegendaryChanceBonus));
 
             // Random roll: if above chance, no legendary this case.
-            if (Random.value > chance)
+            if (_rng.Value() >= chance)
                 return null;
         }
 
         // Uniform pick among valid legendaries (add weights later if needed).
-        return valid[Random.Range(0, valid.Count)];
+        return valid[_rng.Range(0, valid.Count)];
     }
 
     /// <summary>
-    /// Creates runtime documents and fills them with clue text.
+    /// Creates runtime documents and fills them with (legacy) clue text.
     /// This is where contradictions and red herrings are injected.
     /// </summary>
     private void BuildDocumentsAndClues(CaseInstance inst, EraSO trueEra, CaseBlueprintSO blueprint, WorldState state)
@@ -523,7 +485,7 @@ public sealed class CaseFactory
             return;
 
         // Decide how many total clue lines this case should contain.
-        int totalCluesTarget = Random.Range(blueprint.TotalCluesMin, blueprint.TotalCluesMax + 1);
+        int totalCluesTarget = _rng.Range(blueprint.TotalCluesMin, blueprint.TotalCluesMax + 1);
 
         // Create runtime document instances from templates.
         var docInstances = new List<DocumentInstance>();
@@ -535,18 +497,11 @@ public sealed class CaseFactory
             docInstances.Add(new DocumentInstance { template = dt });
         }
 
-        // Validate clue library.
-        if (_lib.Clues == null || _lib.Clues.Count == 0)
-        {
-            Debug.LogWarning("ContentLibrarySO has no clues assigned. Case documents will be empty.");
-            // Still render empty documents for UI layout testing.
-        }
-
         // Build clue pools from the library:
         // - supporting clues for the true era
         // - contradicting clues against the true era
         // - red herrings: irrelevant but plausible clues
-        var clueSource = _lib.Clues != null ? _lib.Clues : System.Array.Empty<ClueSO>();
+        IReadOnlyList<ClueSO> clueSource = _lib.Clues != null ? _lib.Clues : System.Array.Empty<ClueSO>();
 
         var supportsTrueEra = clueSource.Where(c =>
             c != null &&
@@ -577,11 +532,11 @@ public sealed class CaseFactory
         // Decide counts: how many contradictions and red herrings to inject.
         int contradictions = 0;
         for (int i = 0; i < totalCluesTarget; i++)
-            if (Random.value < effectiveContradictionChance) contradictions++;
+            if (_rng.Value() < effectiveContradictionChance) contradictions++;
 
         int herrings = 0;
         for (int i = 0; i < totalCluesTarget; i++)
-            if (Random.value < blueprint.RedHerringChance) herrings++;
+            if (_rng.Value() < blueprint.RedHerringChance) herrings++;
 
         contradictions = Mathf.Min(contradictions, totalCluesTarget);
         herrings = Mathf.Min(herrings, totalCluesTarget - contradictions);
@@ -593,8 +548,6 @@ public sealed class CaseFactory
         picked.AddRange(PickUnique(supportsTrueEra, supports));
         picked.AddRange(PickUnique(contradictsTrueEra, contradictions));
         picked.AddRange(PickUnique(redHerrings, herrings));
-
-        Debug.Log($"[CaseFactory] Case {inst.caseIndex + 1}: clue selection — target={totalCluesTarget}, supports={supports}/{supportsTrueEra.Count} pool, contradicts={contradictions}/{contradictsTrueEra.Count} pool, redHerrings={herrings}/{redHerrings.Count} pool, picked={picked.Count}.");
 
         // Store global clue list on the case.
         inst.usedClues.AddRange(picked);
@@ -637,7 +590,7 @@ public sealed class CaseFactory
     /// <summary>
     /// Randomly picks up to 'count' unique items from a pool.
     /// </summary>
-    private static List<ClueSO> PickUnique(List<ClueSO> pool, int count)
+    private List<ClueSO> PickUnique(List<ClueSO> pool, int count)
     {
         var result = new List<ClueSO>();
 
@@ -648,7 +601,7 @@ public sealed class CaseFactory
 
         for (int i = 0; i < count && temp.Count > 0; i++)
         {
-            int idx = Random.Range(0, temp.Count);
+            int idx = _rng.Range(0, temp.Count);
             result.Add(temp[idx]);
             temp.RemoveAt(idx);
         }
@@ -661,7 +614,7 @@ public sealed class CaseFactory
     /// Prefers templates whose preferredCategories include the clue’s category,
     /// and respects each template’s maxClues limit when possible.
     /// </summary>
-    private static DocumentInstance PickDocForClue(List<DocumentInstance> docs, ClueSO clue)
+    private DocumentInstance PickDocForClue(List<DocumentInstance> docs, ClueSO clue)
     {
         if (docs == null || docs.Count == 0 || clue == null)
             return null;
@@ -676,7 +629,7 @@ public sealed class CaseFactory
         ).ToList();
 
         if (preferred.Count > 0)
-            return preferred[Random.Range(0, preferred.Count)];
+            return preferred[_rng.Range(0, preferred.Count)];
 
         // Otherwise choose any doc that still has room.
         var any = docs.Where(d =>
@@ -686,10 +639,10 @@ public sealed class CaseFactory
         ).ToList();
 
         if (any.Count > 0)
-            return any[Random.Range(0, any.Count)];
+            return any[_rng.Range(0, any.Count)];
 
         // Worst case: all docs are "full" -> dump into a random doc anyway.
-        return docs[Random.Range(0, docs.Count)];
+        return docs[_rng.Range(0, docs.Count)];
     }
 
     /// <summary>

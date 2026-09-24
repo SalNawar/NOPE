@@ -60,17 +60,65 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
-    /// <summary>Returns the first reference book for a category, or null.</summary>
-    public ReferenceBookSO GetReferenceBook(ClueCategory category)
+    /// <summary>
+    /// Today's places: profiles whose era the plan includes and whose nation it
+    /// allows, ordered by country (library nation order) then era (chronological).
+    /// A null plan means every authored place.
+    /// </summary>
+    public List<NationEraProfileSO> TodaysProfiles(DayPlanSO plan)
     {
-        if (referenceBooks == null)
-            return null;
+        var result = new List<NationEraProfileSO>();
 
-        foreach (ReferenceBookSO book in referenceBooks)
-            if (book != null && book.category == category)
-                return book;
+        if (nationEraProfiles == null)
+            return result;
 
-        return null;
+        foreach (NationEraProfileSO p in nationEraProfiles)
+        {
+            if (p == null || p.nation == null || p.era == null)
+                continue;
+
+            if (plan != null && (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation)))
+                continue;
+
+            result.Add(p);
+        }
+
+        result.Sort((a, b) =>
+        {
+            int byNation = NationOrder(a.nation).CompareTo(NationOrder(b.nation));
+            return byNation != 0 ? byNation : a.era.order.CompareTo(b.era.order);
+        });
+        return result;
+    }
+
+    /// <summary>
+    /// The day's fact snapshot: every fact of today's places, in book order.
+    /// The only code that turns place data into facts, so the reference books,
+    /// the papers and Citizen Records all read the same values (and
+    /// history-dependent facts have one place to plug in).
+    /// </summary>
+    public FactTable BuildFactTable(DayPlanSO plan)
+    {
+        var table = new FactTable();
+
+        foreach (NationEraProfileSO p in TodaysProfiles(plan))
+        {
+            if (p.facts == null)
+                continue;
+
+            foreach (ProfileFact f in p.facts)
+                if (f != null)
+                    table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, f.value);
+        }
+
+        return table;
+    }
+
+    /// <summary>Position of a nation in the library (unlisted nations sort last).</summary>
+    private int NationOrder(NationSO nation)
+    {
+        int i = nations != null ? Array.IndexOf(nations, nation) : -1;
+        return i < 0 ? int.MaxValue : i;
     }
 
     /// <summary>Public read-only access to day plans.</summary>

@@ -129,18 +129,23 @@ public sealed class GameManager : MonoBehaviour
         // Fresh ledger for this shift.
         _ledger = new ShiftLedger();
 
-        // Create the case factory from the content library.
-        _caseFactory = new CaseFactory(contentLibrary);
+        // Today's facts: one snapshot shared by the case factory and the books,
+        // so papers and reference books can never disagree during the day.
+        FactTable facts = contentLibrary.BuildFactTable(dayPlan);
 
-        // Generate all cases up-front.
-        _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState);
+        // Create the case factory from the content library and today's facts.
+        _caseFactory = new CaseFactory(contentLibrary, facts);
 
-        // Investigation: surface today's travel directives (rules to deny) and
-        // the agency's citizen records for today's visitors.
+        // Generate all cases up-front (seeded: same run + same day = same travellers).
+        _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed);
+
+        // Investigation: surface today's travel directives (rules to deny), the
+        // agency's citizen records for today's visitors, and today's facts.
         if (investigationUI != null)
         {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
             investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
+            investigationUI.SetFacts(facts);
         }
 
         // Initial HUD state.
