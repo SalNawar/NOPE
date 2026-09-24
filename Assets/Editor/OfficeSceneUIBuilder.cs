@@ -19,7 +19,8 @@ using UnityEngine.UI;
 ///   buttons  [InvestigationUIController + CompareController]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
-/// Safe to re-run: finds existing pieces by name and only fills gaps.
+/// Safe to re-run: finds existing pieces by name and only fills gaps. It builds
+/// only Assets/Scenes/OfficeScene.unity and refuses any other active scene.
 /// </summary>
 public static class OfficeSceneUIBuilder
 {
@@ -50,9 +51,24 @@ public static class OfficeSceneUIBuilder
     /// <summary>Transcript rows per page: the book row height (34 px) and spacing fit 8 in the window's row area.</summary>
     private const int TranscriptRowsPerPage = 8;
 
+    /// <summary>
+    /// The one scene this builder owns. Other scenes share its object names
+    /// (OfficeScene_HybridArt keeps its own camera and 3D props), so the builder
+    /// refuses to run anywhere else.
+    /// </summary>
+    private const string OfficeScenePath = "Assets/Scenes/OfficeScene.unity";
+
+    /// <summary>Builds and wires the office in the open scene; refuses (with an error) unless that scene is <see cref="OfficeScenePath"/>.</summary>
     [MenuItem("Tools/TimeDesk/Build Office UI (HUD + Panels)")]
     public static void Build()
     {
+        string activeScene = EditorSceneManager.GetActiveScene().path;
+        if (activeScene != OfficeScenePath)
+        {
+            Debug.LogError($"[TimeDesk] Build Office UI only builds {OfficeScenePath}; the active scene is '{activeScene}'. Open {OfficeScenePath} and run it again. Nothing was changed.");
+            return;
+        }
+
         Canvas canvas = EnsureCanvas();
         Transform root = canvas.transform;
         EnsureEventSystem();
