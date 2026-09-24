@@ -121,6 +121,10 @@ public sealed class GameManager : MonoBehaviour
             shiftClock.Configure(_gameConfig);
             shiftClock.Closed += HandleShiftClosed;
         }
+        else
+        {
+            Debug.LogWarning("GameManager: no ShiftClockDriver wired, so the day ends only when the queue empties (no closing time). Run Tools > TimeDesk > Build Office UI.");
+        }
 
         // Fresh ledger for this shift.
         _ledger = new ShiftLedger();

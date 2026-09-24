@@ -7,7 +7,7 @@ using UnityEngine;
 /// Designer-authored plan for a single day.
 /// Owns:
 /// - Day identity (dayNumber)
-/// - How many cases happen that day (visitorsCount)
+/// - How many travellers queue that day (visitorsCount; the shift clock may close first)
 /// - Procedural generation knobs (blueprints, eras, legendary chance)
 /// - Forced cases (e.g., "3rd case on day 2 is X")
 /// - Event rules (fixed or random placement, including "random but after N cases")
@@ -26,7 +26,7 @@ public sealed class DayPlanSO : ScriptableObject
     // Day flow
     // -----------------------------
 
-    /// <summary>Total number of cases/visitors for this day.</summary>
+    /// <summary>Queue size: most travellers this day can hold. The shift clock usually closes the booth first.</summary>
     [SerializeField, Min(1)] private int visitorsCount = 6;
 
     // -----------------------------
@@ -248,10 +248,10 @@ public enum EventPlacement
     /// <summary>Fixed index (e.g., before case #3).</summary>
     FixedCaseIndex,
 
-    /// <summary>Random index in [1..VisitorsCount].</summary>
+    /// <summary>Random index in [1..VisitorsCount] (slots past closing time are never reached).</summary>
     RandomAny,
 
-    /// <summary>Random index in [minCasesBefore+1..VisitorsCount].</summary>
+    /// <summary>Random index in [minCasesBefore+1..VisitorsCount] (slots past closing time are never reached).</summary>
     RandomAfterMinCases
 }
 
