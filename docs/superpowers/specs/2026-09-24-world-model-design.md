@@ -97,3 +97,17 @@ An independent review (correctness, content pipeline, intent audit) led to these
 - **Why some rules stay outside Domain:** today's place filter (`ContentLibrarySO.TodaysProfiles`: plan eras × allowed nations, ordered country then era) and the violator placement work on ScriptableObject references, so they are glue around tested Domain pieces (`ViolatorSlots`, `FactTable`, `Forgery`); the content validator and the Unity world check cover them. The timeline ranking and the save gate belong to pre-existing non-Domain services; moving them is out of scope here (piece 5 reworks the timeline).
 - **Tests added:** `ForgeryTests`, `ViolatorSlotsTests`, `OriginLabelsTests`, and new cases in `BirthDatesTests` (range clamp, across year 0), `FactTableTests` (`HasOtherValue`) and `SeedsTests` (violator and clue streams).
 - **Known follow-ups (not in this change):** the day event schedule (`DayPlanSO`) and Home family conditions (`HomeEconomy`) still use `System.Random`; on day 3 early-modern Egypt and Greece share the ruler "Sultan Mustafa II" (historically right; matters once ruler questions arrive in piece 3).
+
+## 7. Verification (2026-09-24)
+
+Run in the branch's own Unity 6000.4.11f1 editor through temporary `-executeMethod` scripts (not committed):
+
+- One-time retirement deleted 102 assets. Generate World made 6 eras, 8 nations, 40 places, 3 rules and 3 day plans; a second run changed no file.
+- Validate Content Library: no issues.
+- World check (days 1–3, seeds 12345 and 999): same seed gives the same travellers and a different seed differs. Every forged fact has a book and a value from another of today's places. Forged birth years stay inside the place's range. Each active rule has a violator in the first half of the queue. Names are unique and origin labels match. Timeline: 40 places ranked silently, a quiet night makes no tier news, and +2 Science for New Kingdom Egypt reports "Science is now DOMINANT in New Kingdom Egypt."
+- EditMode suite: 285 passed. The one failure is the known third-party `UnitySkills.Tests.Core.PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly` (scene-dependent, unrelated). Offline Domain run: 156/156.
+- Scripted day-1 play-through on the committed OfficeScene (the builder is unchanged, so the scene was not rebuilt):
+  - The claim line names a real place, and all three books list exactly today's 4 places.
+  - Comparing the forged passport language with the claimed place's row logs a "LANGUAGE INCORRECT" deviation, so the Deny is justified and gives no citation.
+  - Forcing closing time closes the booth and shows the results panel.
+  - No warnings or errors. Continuing the saved run regenerates the same traveller.
