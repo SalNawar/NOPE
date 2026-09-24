@@ -25,4 +25,7 @@ public sealed class ReadyGate
         IsArmed = false;
         Released?.Invoke();
     }
+
+    /// <summary>Cancels a pending wait without firing <see cref="Released"/> (e.g. the booth closed).</summary>
+    public void Disarm() => IsArmed = false;
 }
