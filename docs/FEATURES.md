@@ -21,10 +21,11 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Morning briefing as "THE TEMPORAL TIMES" newsletter over the booth (Start Shift)
 - [ ] End-of-day "SHIFT LEDGER" newsletter over the booth (Go Home), incl. undocumented-denials line
 - [ ] Per-case READY gate: visitor is presented only after the player taps READY (tested: `ReadyGateTests`)
+- [ ] Analog wall clock (placeholder face + hands) driven by the shift clock
 
 ## Fake-OS desktop
 
-- [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability)
+- [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability / Clock)
 - [ ] Start menu: Settings (stub window) + Power (quit); fixed-height entries
 - [ ] Desktop icon grid top-left; reference book icons + app icons (documents come via the intercom, not icons)
 - [ ] Upgrade-gated icons (Lexicon/Dialect/Material) dim until the upgrade is owned
@@ -52,6 +53,19 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Accept / Deny decision buttons
 - [ ] Fallback text-mode investigation when the rich desk isn't built
 
+## Shift clock & queue
+
+- [ ] Papers, Please-style clock: 09:00–17:00 over 8 real minutes (GameConfigSO "Shift clock"); starts at Start Shift (tested: `ShiftClockTests`)
+- [ ] The day plan's visitor count is the queue size (12); the day ends at closing time or when the queue empties
+- [ ] Closing: a traveller at the desk may be finished; one still behind READY is never called (tested: `ShiftFlowTests`, `ReadyGateTests`)
+- [ ] The clock pauses only while a citation slip is shown
+- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out) (tested: `NameRosterTests`)
+
+## Interaction feedback
+
+- [ ] Game cursor: arrow, or a hand over anything clickable (`InteractionFeedbackSO`)
+- [ ] Hover highlight: white outline on booth clickables and desktop UI buttons and icons (tested: `OutlineMaskTests`)
+
 ## Scoring & consequences
 
 - [ ] Correct decision: pay (base × pay-rate multiplier + timeline bonuses; legendary bonus)
@@ -60,7 +74,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Directive-violation denials never need scanned evidence
 - [ ] Only provable forgeries are generated (reference book must contain the claim's truth; birth dates provable via citizen records; names never forged until the missing-record mechanic lands)
 - [ ] Timeline impacts apply only on ACCEPT; sends tracked per era
-- [ ] Shift ledger (tested: `ShiftLedgerTests`); citation slip pauses the day until acknowledged
+- [ ] Shift ledger (tested: `ShiftLedgerTests`); citation slip pauses the day (and the shift clock) until acknowledged
 
 ## Content & tooling
 

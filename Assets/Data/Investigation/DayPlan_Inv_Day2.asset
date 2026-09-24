@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DayPlan_Inv_Day2
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 2
-  visitorsCount: 6
+  visitorsCount: 12
   possibleBlueprints:
   - {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
   eraWeights:
