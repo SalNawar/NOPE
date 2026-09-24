@@ -9,7 +9,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Title scene → new run / continue via `RunManager` (+ `SaveSystem` persistence; save version 2 — version-1 saves from the made-up world are ignored, Title offers New Run)
 - [ ] Day plans per day number from `ContentLibrary_Main` (fallback: inspector plan). Ramp: day 1 Ancient × Egypt/Iraq/Greece/Italy (8); day 2 + Medieval, + China/Britain, no Ancient Egypt (10); day 3 + Early modern, all 8 countries, no Medieval China / Early modern Japan (12)
 - [ ] Deterministic case generation: same run + same day = same travellers; one seeded stream per traveller (`Seeds.ForCase`), plus a day stream for rule violators, a separate stream for legacy clues, a per-traveller lie stream (`Seeds.ForLies`) and a per-traveller dialog stream (`Seeds.ForDialog`, small-talk pick); the day's lie draws depend only on the run and the day (and the interview wiring), never on purchases or flags; day seed formula unchanged (seeding tested: `SeedsTests`, `SeededRandomTests`, `WeightedRandomTests`; tell eligibility tested: `InterviewDayTests`; whole-day determinism is checked in Unity, not by the EditMode suite)
-- [ ] Endings evaluated after every verdict (`EndingService`); firing threshold on stability; bankruptcy threshold
+- [ ] Endings evaluated after every verdict, and at the end of a shift that applied dialog consequences (`EndingService`); firing threshold on stability; bankruptcy threshold
 - [ ] Home phase between days: expenses, family conditions & care, slot machine (pay-rate modifier), upgrades
 
 ## Office scene — two-state booth
@@ -93,6 +93,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] A new run ranks every place's attributes from the baselines silently; each night's news then reports only real tier changes ("Science is now DOMINANT in …", "… is rising in …")
 - [ ] Dominance tiers carry no gameplay effects for now: the Phase 7 tier effects were retired with the made-up world (history reacting to choices is a later piece)
 - [ ] Shift ledger (tested: `ShiftLedgerTests`); citation slip pauses the day (and the shift clock) until acknowledged
+- [ ] Narrative dialogs may carry a consequence: an effect limited to instant ops (flags, counters, money, stability, upgrades, scores) and briefing/news lines; the generator and validator reject timed modifiers (pay, liar, legendary, shop, visitor and blueprint bonuses, cues) in a dialog's effect. A dialog with a consequence is one-shot per run. Consequences apply at the end of the shift, before the save: instant ops at once (the HUD refreshes and endings are checked), briefing and news lines in the next morning's paper. A dialog asset whose structure is broken (a node that cannot reach an ending, an effect on a non-ending choice, too many choices) is never offered and an error is logged (recording, one-shot memory and apply-once tested: `InterviewDayTests`; structure tested: `InterviewScriptTests`; the op rule tested: `EffectOpsTests`; the effect application is Assembly-CSharp and checked in Unity)
 
 ## Content & tooling
 

@@ -218,8 +218,10 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called when the last case of the day resolves. Saves the run.
-    /// Phase 3 replaces the log with the results screen; Phase 4 leads into the Home scene.
+    /// Called when the last case of the day resolves: applies the narrative
+    /// dialogs' consequences (then refreshes the HUD and checks endings), saves
+    /// the run, shows the shift report and leads into the Home scene (or the
+    /// title scene when an ending was reached).
     /// </summary>
     private void HandleDayCompleted()
     {
@@ -249,6 +251,25 @@ public sealed class GameManager : MonoBehaviour
         int totalCases = _ledger != null ? _ledger.verdicts.Count : 0;
         Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}.");
 
+        // Narrative dialogs' consequences apply now, before the save, so a
+        // Continue replay of this day can never apply them twice.
+        EndingSO ending = null;
+        if (ApplyDialogOutcomes())
+        {
+            if (officeUI != null)
+                officeUI.UpdateHud(_worldState);
+
+            if (_gameConfig != null)
+            {
+                ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig);
+                if (ending != null)
+                {
+                    Debug.Log($"[GameManager] Ending check after dialog consequences: matched '{ending.id}' ({ending.displayName}).");
+                    _worldState.endingId = ending.id;
+                }
+            }
+        }
+
         if (RunManager.HasInstance)
         {
             // Yesterday's slot modifiers were consumed by today's shift.
@@ -256,24 +277,59 @@ public sealed class GameManager : MonoBehaviour
             RunManager.Instance.SaveNow();
         }
 
-        // Show the shift report, then hand off to the home phase. The report is
-        // read in the booth (like the morning briefing), so pull back first.
+        System.Action next = ending != null ? new System.Action(HandleEndingReached) : HandleGoHome;
+
+        // Show the shift report, then hand off to the home phase (or the title
+        // scene after an ending). The report is read in the booth (like the
+        // morning briefing), so pull back first.
         if (dayFlowUI != null)
         {
             if (officeView != null)
                 officeView.FocusOffice();
 
-            Debug.Log("[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then Home).");
-            dayFlowUI.ShowResults(_worldState, _ledger, HandleGoHome);
+            Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then {(ending != null ? "the title scene" : "Home")}).");
+            dayFlowUI.ShowResults(_worldState, _ledger, next);
         }
         else
         {
             if (officeUI != null)
                 officeUI.SetResultText($"Day {_worldState.day} complete.");
 
-            Debug.Log("[GameManager] <<< Exiting HandleDayCompleted (no results panel, going Home directly).");
-            HandleGoHome();
+            Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (no results panel, going to {(ending != null ? "the title scene" : "Home")} directly).");
+            next();
         }
+    }
+
+    /// <summary>
+    /// Applies what the shift's completed dialogs decided (DialogOutcomes):
+    /// sets each one-shot dialog's done flag, and activates each named effect
+    /// once, with its instant ops now and a start day of tomorrow (so its
+    /// briefing and news lines reach the next morning's paper). Returns true
+    /// when any effect was applied.
+    /// </summary>
+    private bool ApplyDialogOutcomes()
+    {
+        if (_ledger == null || _worldState == null)
+            return false;
+
+        foreach (string flag in DialogOutcomes.FlagsToSet(_ledger.dialogOutcomes))
+            _worldState.SetFlag(flag);
+
+        bool applied = false;
+        foreach (DialogOutcome outcome in DialogOutcomes.EffectsToApply(_ledger.dialogOutcomes))
+        {
+            EffectSO fx = contentLibrary.GetEffectByAssetName(outcome.effectName);
+            if (fx == null)
+            {
+                Debug.LogWarning($"[GameManager] Dialog '{outcome.dialogId}' names effect '{outcome.effectName}', which ContentLibrary_Main does not list; add it to the library's effects.");
+                continue;
+            }
+
+            TimelineService.ActivateEffect(_worldState, fx, $"Dialog: {outcome.dialogId}", _worldState.day + 1, fx.defaultDurationDays, applyInstantOps: true);
+            applied = true;
+        }
+
+        return applied;
     }
 
     /// <summary>
@@ -585,9 +641,10 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Called once the verdict for a run-ending case has been shown.
-    /// Loads the title scene to display the ending (WorldState.endingId is
-    /// already set and saved).
+    /// Called once the verdict for a run-ending case, or the shift report of a
+    /// day whose dialog consequences reached an ending, has been shown. Loads
+    /// the title scene to display the ending (WorldState.endingId is already
+    /// set and saved).
     /// </summary>
     private void HandleEndingReached()
     {
