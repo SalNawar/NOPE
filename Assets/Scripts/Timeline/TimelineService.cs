@@ -163,6 +163,11 @@ public static class TimelineService
         var newDominant = new List<string>();
         var newSupporting = new List<string>();
 
+        // The very first ranking only seeds the tiers: announcing every place's
+        // starting tiers would flood the morning paper. Later changes come from
+        // the player's sends and are reported.
+        bool firstRanking = world.timeline.dominantKeys.Count == 0 && world.timeline.supportingKeys.Count == 0;
+
         foreach (NationEraProfileSO profile in lib.Profiles)
         {
             if (profile == null || profile.baselines == null || profile.baselines.Count == 0)
@@ -191,14 +196,14 @@ public static class TimelineService
                 {
                     newDominant.Add(key);
 
-                    if (!world.timeline.dominantKeys.Contains(key))
+                    if (!firstRanking && !world.timeline.dominantKeys.Contains(key))
                         news.Add($"{ranked[i].attr.displayName} is now DOMINANT in {profile.displayName}.");
                 }
                 else if (i < dominantCount + supportingCount)
                 {
                     newSupporting.Add(key);
 
-                    if (!world.timeline.supportingKeys.Contains(key) && !world.timeline.dominantKeys.Contains(key))
+                    if (!firstRanking && !world.timeline.supportingKeys.Contains(key) && !world.timeline.dominantKeys.Contains(key))
                         news.Add($"{ranked[i].attr.displayName} is rising in {profile.displayName}.");
                 }
             }

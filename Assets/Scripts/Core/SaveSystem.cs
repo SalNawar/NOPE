@@ -9,7 +9,14 @@ using UnityEngine;
 public static class SaveSystem
 {
     /// <summary>Bump when WorldState shape changes incompatibly.</summary>
-    private const int SaveVersion = 1;
+    private const int SaveVersion = 2;
+
+    /// <summary>
+    /// Oldest save version that can still be continued. Version 2 replaced the
+    /// made-up world with real places (all place and era ids changed), so
+    /// version 1 saves are ignored and the Title offers only New Run.
+    /// </summary>
+    private const int MinCompatibleVersion = 2;
 
     /// <summary>Save file name (single slot).</summary>
     private const string FileName = "nope_save.json";
@@ -27,12 +34,26 @@ public static class SaveSystem
         public WorldState world;
     }
 
-    /// <summary>Returns true if a save file exists.</summary>
+    /// <summary>Returns true if a save file exists that this build can continue.</summary>
     public static bool HasSave()
     {
-        bool exists = File.Exists(SavePath);
+        bool exists = File.Exists(SavePath) && ReadVersion() >= MinCompatibleVersion;
         Debug.Log($"[SaveSystem] HasSave: {exists} ('{SavePath}').");
         return exists;
+    }
+
+    /// <summary>The save file's version, or -1 if it is missing or unreadable.</summary>
+    private static int ReadVersion()
+    {
+        try
+        {
+            SaveFile file = JsonUtility.FromJson<SaveFile>(File.ReadAllText(SavePath));
+            return file != null ? file.version : -1;
+        }
+        catch (Exception)
+        {
+            return -1;
+        }
     }
 
     /// <summary>
@@ -94,6 +115,12 @@ public static class SaveSystem
             if (file == null || file.world == null)
             {
                 Debug.LogError("SaveSystem.Load: save file was empty or malformed.");
+                return null;
+            }
+
+            if (file.version < MinCompatibleVersion)
+            {
+                Debug.LogWarning($"SaveSystem.Load: save version {file.version} predates the real-world content (needs {MinCompatibleVersion}+); ignoring it. Start a new run.");
                 return null;
             }
 
