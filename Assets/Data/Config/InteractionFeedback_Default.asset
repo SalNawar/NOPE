@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 853cd81a6b9f44929510f6f4fcc60764, type: 3}
   m_Name: InteractionFeedback_Default
   m_EditorClassIdentifier: Assembly-CSharp::InteractionFeedbackSO
-  arrowCursor: {fileID: 2800000, guid: 3c79ff86f0f1ab54cb7c7bae6d5c0ce6, type: 3}
-  arrowHotspot: {x: 0, y: 1}
-  handCursor: {fileID: 2800000, guid: 5bf0c774196c9de4e96e375f888d5dc5, type: 3}
-  handHotspot: {x: 11, y: 1}
+  arrowCursor: {fileID: 2800000, guid: 3707fb6a04fa4734f8dac01a7c12933b, type: 3}
+  arrowHotspot: {x: 3, y: 2}
+  handCursor: {fileID: 2800000, guid: 2ea1bf8102771ac4dafd659fe61e0ee4, type: 3}
+  handHotspot: {x: 13, y: 3}
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
   worldOutlineWidth: 0.05
   uiOutlineColor: {r: 0.98, g: 0.72, b: 0.2, a: 1}
