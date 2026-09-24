@@ -760,6 +760,8 @@ Every id in this table, generated or authored, goes into one set; a repeat is a 
 
 Worst-case rendered lengths (the generator's check, R10): the longest answer is Language's at 46 characters ("At home we speak " + a 28-character value + "."); the longest small-talk line is 59; the claim reaches 70; the longest dialog line is 92. All are within 100.
 
+Every fact value is spoken verbatim inside its question's answer (§1.1), so a value must read as the thing the question asks for. Three `world_source.json` values did not, and were reworded (the same string still fills the books and papers, so they stay consistent): Germania's capital "No capital (tribal things)" ("Our capital is No capital …") is now "Semnones' sacred grove", Tacitus' assembly place of the Suebi; Kofun Yamato's currency "Barter: iron ingots & cloth" is now "Iron ingots & cloth (barter)"; Nasser's Egypt's capital "Cairo, United Arab Rep." (which ended the sentence in "..") is now "Cairo (United Arab Republic)". No check can judge how a filled sentence reads, so this stays an authoring rule.
+
 **`dialogs`:**
 
 Both dialogs are one-shot (no `repeatable` key).

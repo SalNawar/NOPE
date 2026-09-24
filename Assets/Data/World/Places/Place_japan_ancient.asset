@@ -20,7 +20,7 @@ MonoBehaviour:
   birthYearMax: 432
   facts:
   - category: 4
-    value: 'Barter: iron ingots & cloth'
+    value: Iron ingots & cloth (barter)
   - category: 0
     value: Pre-Old Japanese (Yamato)
   - category: 3
