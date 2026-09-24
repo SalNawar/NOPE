@@ -96,6 +96,19 @@ public sealed class CompareController : MonoBehaviour
         compareText.text = $"●  DEVIATION LOGGED — {summary}";
     }
 
+    /// <summary>
+    /// Replaces the compare bar verdict when a pair proves a category that is
+    /// already in the Deviation Report, so a second proof visibly adds nothing.
+    /// </summary>
+    public void ShowAlreadyDocumented(string categoryLabel)
+    {
+        if (compareText == null)
+            return;
+
+        compareText.color = neutralColor;
+        compareText.text = $"●  ALREADY DOCUMENTED — {categoryLabel} is in the Deviation Report";
+    }
+
     private Slot Fill(string label, string value, Image g, CompareEvidence evidence)
     {
         var s = new Slot { label = label, value = value, graphic = g, set = true, evidence = evidence };

@@ -107,24 +107,32 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Auto-registers a true contradiction when the player compares a liar's
-    /// tell against the reference entry or record that disproves it.
+    /// Documents a true contradiction when the player compares a liar's tell
+    /// against the reference entry or record that disproves it; proving an
+    /// already documented category again only says so in the compare bar.
     /// </summary>
     private void HandlePairCompared(CompareEvidence a, CompareEvidence b)
     {
         if (_currentCase == null)
             return;
 
-        Discrepancy found = _discrepancies.TryRegister(a, b,
+        Discrepancy proof = DiscrepancyLog.Prove(a, b,
             _currentCase.claimedNation != null ? _currentCase.claimedNation.id : null,
             _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null);
-        if (found == null)
+        if (proof == null)
             return;
+
+        if (!_discrepancies.Add(proof))
+        {
+            if (compareController != null)
+                compareController.ShowAlreadyDocumented(ClueLabels.Report(proof.category));
+            return;
+        }
 
         RefreshScannerText();
 
         if (compareController != null)
-            compareController.ShowDeviation(found.Summary);
+            compareController.ShowDeviation(proof.Summary);
 
         if (scannerWindow != null)
             scannerWindow.Open();

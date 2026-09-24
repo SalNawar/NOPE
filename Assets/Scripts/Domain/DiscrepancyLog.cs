@@ -14,19 +14,22 @@ public enum EvidenceKind
     ReferenceEntry,
 
     /// <summary>A field from the agency's citizen records.</summary>
-    RecordField
+    RecordField,
+
+    /// <summary>A traveller's spoken answer in the interview transcript.</summary>
+    Answer
 }
 
 /// <summary>How a discrepancy was proved.</summary>
 public enum DiscrepancyProof
 {
-    /// <summary>Papers differ from the claimed era's reference entry.</summary>
+    /// <summary>The statement (papers or answer) differs from the claimed place's reference entry.</summary>
     ClaimMismatch,
 
-    /// <summary>Papers match a reference entry that belongs to a different origin.</summary>
+    /// <summary>The statement matches a reference entry that belongs to a different origin.</summary>
     ForeignOrigin,
 
-    /// <summary>Papers differ from the agency's citizen record.</summary>
+    /// <summary>The statement differs from the agency's citizen record.</summary>
     RecordMismatch
 }
 
@@ -47,7 +50,7 @@ public struct CompareEvidence
     /// <summary>The displayed value.</summary>
     public string value;
 
-    /// <summary>Document side: true if the value is a liar's tell (anachronistic for the claim).</summary>
+    /// <summary>Statement side (document field or answer): true if the value is a liar's tell.</summary>
     public bool isAnachronism;
 
     /// <summary>Reference side: nation id the entry applies to (null/empty = any).</summary>
@@ -87,6 +90,15 @@ public struct CompareEvidence
         value = value,
         entryOriginLabel = "agency records"
     };
+
+    /// <summary>Evidence for a clicked interview answer row: the canonical value the traveller said, a tell when <paramref name="isTell"/>.</summary>
+    public static CompareEvidence ForAnswer(ClueCategory category, string value, bool isTell) => new CompareEvidence
+    {
+        kind = EvidenceKind.Answer,
+        category = category,
+        value = value,
+        isAnachronism = isTell
+    };
 }
 
 /// <summary>One documented contradiction on the current case.</summary>
@@ -95,7 +107,7 @@ public sealed class Discrepancy
     /// <summary>Category that was disproved (Language, Currency, ...).</summary>
     public ClueCategory category;
 
-    /// <summary>The tell's value printed on the visitor's papers.</summary>
+    /// <summary>The tell's value, as printed or as spoken.</summary>
     public string documentValue;
 
     /// <summary>
@@ -105,46 +117,54 @@ public sealed class Discrepancy
     public string expectedValue;
 
     /// <summary>
-    /// Match proof: where the printed value actually belongs (a different
-    /// nation/era than claimed). Null when proved by mismatch.
+    /// Match proof: where the printed or spoken value actually belongs (a
+    /// different nation/era than claimed). Null when proved by mismatch.
     /// </summary>
     public string actualOrigin;
 
     /// <summary>How this contradiction was proved.</summary>
     public DiscrepancyProof provedBy;
 
-    /// <summary>Player-facing report line ("LANGUAGE INCORRECT — ...").</summary>
+    /// <summary>Where the tell was stated: DocumentField (papers) or Answer (the traveller said it).</summary>
+    public EvidenceKind source;
+
+    /// <summary>Player-facing report line ("CAPITAL INCORRECT — traveller said: ..."), naming where the tell was stated.</summary>
     public string Summary
     {
         get
         {
-            string what = CategoryLabel(category);
+            string what = ClueLabels.Report(category);
+            bool said = source == EvidenceKind.Answer;
             switch (provedBy)
             {
                 case DiscrepancyProof.ForeignOrigin:
-                    return $"{what} INCORRECT — papers show \"{documentValue}\", which belongs to {actualOrigin}";
+                    return said
+                        ? $"{what} INCORRECT — traveller said \"{documentValue}\", which belongs to {actualOrigin}"
+                        : $"{what} INCORRECT — papers show \"{documentValue}\", which belongs to {actualOrigin}";
                 case DiscrepancyProof.RecordMismatch:
-                    return $"{what} INCORRECT — papers: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
+                    return $"{what} INCORRECT — {Stated(said)}: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
                 default:
-                    return $"{what} INCORRECT — papers: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
+                    return $"{what} INCORRECT — {Stated(said)}: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
             }
         }
     }
 
-    /// <summary>Report label for a category ("BIRTH DATE", "LANGUAGE", ...).</summary>
-    private static string CategoryLabel(ClueCategory c) =>
-        c == ClueCategory.BirthDate ? "BIRTH DATE" : c.ToString().ToUpperInvariant();
+    /// <summary>Who stated the value, as a mismatch line names it.</summary>
+    private static string Stated(bool said) => said ? "traveller said" : "papers";
 }
 
 /// <summary>
-/// Per-case list of documented contradictions (the "Deviation Report").
-/// Pure C# so the registration rules are unit-testable. Registration only
-/// succeeds for TRUE contradictions, proved either way:
-/// - MISMATCH proof: a liar's tell differs from the reference entry
-///   that applies to the CLAIMED nation+era.
+/// Per-case list of documented contradictions (the Deviation Report). Pure C#
+/// so the rules are unit-testable. <see cref="Prove"/> decides whether a
+/// compared pair is a true contradiction: a statement (document field or
+/// answer) against one truth source (a reference entry or the citizen
+/// record), proved either way:
+/// - MISMATCH proof: a liar's tell differs from the reference entry that
+///   applies to the CLAIMED nation+era, or from the agency's record.
 /// - MATCH proof: a liar's tell equals a reference entry that does
 ///   NOT apply to the claim — the value provably belongs somewhere else
 ///   (e.g. papers claim Medieval but the declared device matches Ancient Rome).
+/// <see cref="Add"/> documents it once per category.
 /// </summary>
 public sealed class DiscrepancyLog
 {
@@ -160,103 +180,118 @@ public sealed class DiscrepancyLog
     public void Clear() => _items.Clear();
 
     /// <summary>
-    /// Validates a compared pair against the current claim and registers it if
-    /// it is a true contradiction. Returns the new discrepancy, or null when
-    /// the pair proves nothing (or its category is already documented).
+    /// Whether a compared pair proves a contradiction of the current claim:
+    /// the proof, or null when it proves nothing. The statement side (a
+    /// document field or an answer) must be a liar's tell and face exactly one
+    /// truth source (a reference entry or a record field) of the same
+    /// category; two statements or two truths prove nothing. Pure: no log changes.
     /// </summary>
-    public Discrepancy TryRegister(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId)
+    public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId)
     {
-        CompareEvidence doc, truth;
-        if (a.kind == EvidenceKind.DocumentField)
+        CompareEvidence statement, truth;
+        if (IsStatement(a.kind))
         {
-            doc = a;
+            statement = a;
             truth = b;
         }
         else
         {
-            doc = b;
+            statement = b;
             truth = a;
         }
 
-        // Must be one document field against one truth source (book or records).
-        if (doc.kind != EvidenceKind.DocumentField)
+        // Must be one statement (papers or answer) against one truth source (book or records).
+        if (!IsStatement(statement.kind))
             return null;
         if (truth.kind != EvidenceKind.ReferenceEntry && truth.kind != EvidenceKind.RecordField)
             return null;
 
         // Same category — comparing Language against Currency proves nothing.
-        if (doc.category != truth.category)
+        if (statement.category != truth.category)
             return null;
 
         // Only a liar's tell is a contradiction; a coincidental
-        // mismatch/match on an honest field proves nothing.
-        if (!doc.isAnachronism)
+        // mismatch/match on an honest statement proves nothing.
+        if (!statement.isAnachronism)
             return null;
-
-        Discrepancy found = null;
 
         if (truth.kind == EvidenceKind.RecordField)
         {
-            // Record proof: the papers disagree with the agency's own records
-            // about who this person is. No era claim involved.
-            if (!ValuesMatch(doc.value, truth.value))
-            {
-                found = new Discrepancy
-                {
-                    category = doc.category,
-                    documentValue = doc.value,
-                    expectedValue = truth.value,
-                    provedBy = DiscrepancyProof.RecordMismatch
-                };
-            }
-        }
-        else
-        {
-            // Without a claim there is nothing to contradict.
-            if (string.IsNullOrEmpty(claimedEraId))
+            // Record proof: the statement disagrees with the agency's own
+            // records about who this person is. No era claim involved.
+            if (ValuesMatch(statement.value, truth.value))
                 return null;
 
-            bool entryAppliesToClaim =
-                !string.IsNullOrEmpty(truth.entryEraId) && truth.entryEraId == claimedEraId &&
-                (string.IsNullOrEmpty(truth.entryNationId) || truth.entryNationId == claimedNationId);
-
-            bool valuesMatch = ValuesMatch(doc.value, truth.value);
-
-            if (entryAppliesToClaim && !valuesMatch)
+            return new Discrepancy
             {
-                // Mismatch proof: the claim's reference disagrees with the papers.
-                found = new Discrepancy
-                {
-                    category = doc.category,
-                    documentValue = doc.value,
-                    expectedValue = truth.value,
-                    provedBy = DiscrepancyProof.ClaimMismatch
-                };
-            }
-            else if (!entryAppliesToClaim && valuesMatch)
-            {
-                // Match proof: the papers' value belongs to a different origin.
-                found = new Discrepancy
-                {
-                    category = doc.category,
-                    documentValue = doc.value,
-                    actualOrigin = string.IsNullOrEmpty(truth.entryOriginLabel) ? "a different era" : truth.entryOriginLabel,
-                    provedBy = DiscrepancyProof.ForeignOrigin
-                };
-            }
+                category = statement.category,
+                documentValue = statement.value,
+                expectedValue = truth.value,
+                provedBy = DiscrepancyProof.RecordMismatch,
+                source = statement.kind
+            };
         }
 
-        if (found == null)
+        // Without a claim there is nothing to contradict.
+        if (string.IsNullOrEmpty(claimedEraId))
             return null;
 
-        // One documented discrepancy per category is enough evidence.
-        foreach (Discrepancy existing in _items)
-            if (existing.category == found.category)
-                return null;
+        bool entryAppliesToClaim =
+            !string.IsNullOrEmpty(truth.entryEraId) && truth.entryEraId == claimedEraId &&
+            (string.IsNullOrEmpty(truth.entryNationId) || truth.entryNationId == claimedNationId);
 
-        _items.Add(found);
-        return found;
+        bool valuesMatch = ValuesMatch(statement.value, truth.value);
+
+        if (entryAppliesToClaim && !valuesMatch)
+        {
+            // Mismatch proof: the claim's reference disagrees with the statement.
+            return new Discrepancy
+            {
+                category = statement.category,
+                documentValue = statement.value,
+                expectedValue = truth.value,
+                provedBy = DiscrepancyProof.ClaimMismatch,
+                source = statement.kind
+            };
+        }
+
+        if (!entryAppliesToClaim && valuesMatch)
+        {
+            // Match proof: the stated value belongs to a different origin.
+            return new Discrepancy
+            {
+                category = statement.category,
+                documentValue = statement.value,
+                actualOrigin = string.IsNullOrEmpty(truth.entryOriginLabel) ? "a different era" : truth.entryOriginLabel,
+                provedBy = DiscrepancyProof.ForeignOrigin,
+                source = statement.kind
+            };
+        }
+
+        return null;
     }
+
+    /// <summary>
+    /// Documents a proof. False, with nothing added, when the proof is null or
+    /// its category is already documented: one discrepancy per category is
+    /// enough evidence, whatever its source.
+    /// </summary>
+    public bool Add(Discrepancy proof)
+    {
+        if (proof == null)
+            return false;
+
+        foreach (Discrepancy existing in _items)
+            if (existing.category == proof.category)
+                return false;
+
+        _items.Add(proof);
+        return true;
+    }
+
+    /// <summary>True for a statement row: a document field or a spoken answer.</summary>
+    private static bool IsStatement(EvidenceKind kind) =>
+        kind == EvidenceKind.DocumentField || kind == EvidenceKind.Answer;
 
     /// <summary>Case-insensitive, trimmed equality (mirrors the compare bar; shared with Forgery.IsProvableTell and TravellerGenders.FromNameLists).</summary>
     internal static bool ValuesMatch(string x, string y) =>

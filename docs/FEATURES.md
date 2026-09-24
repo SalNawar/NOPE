@@ -57,8 +57,9 @@ by the EditMode suite in `Assets/Tests/EditMode`.
   - [ ] Match proof: a liar's tell = a *different* era/nation's entry (origin proof); it names the traveller's true home
   - [ ] Record proof: a birth-date tell ≠ agency citizen record (tested)
   - [ ] Junk comparisons never register (wrong category, foreign-era mismatch, honest fields)
-  - [ ] One discrepancy per category; cleared per case; window auto-opens on first find
+  - [ ] One discrepancy per category; a second proof of a documented category shows "ALREADY DOCUMENTED" in the compare bar and adds nothing; cleared per case; window auto-opens on first find
   - [ ] Compare bar flips to a red "DEVIATION LOGGED — …" verdict when evidence registers (never a green MATCH)
+  - [ ] Reports label Geography CAPITAL, Politics RULER, Technology DEVICE and birth dates BIRTH DATE (tested: `DiscrepancyLogTests`)
 - [ ] Accept / Deny decision buttons
 - [ ] Fallback text-mode investigation when the rich desk isn't built (papers, the traveller's agency record and today's books)
 

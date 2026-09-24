@@ -320,14 +320,14 @@ public class LiesTests
             CompareEvidence doc = CompareEvidence.FromDocumentField(f);
             if (f.category == ClueCategory.BirthDate)
             {
-                Discrepancy record = new DiscrepancyLog().TryRegister(doc, CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover), "egypt", "ancient");
+                Discrepancy record = DiscrepancyLog.Prove(doc, CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover), "egypt", "ancient");
                 Assert.AreEqual(DiscrepancyProof.RecordMismatch, record?.provedBy, f.label);
                 continue;
             }
 
             foreach (FactRow row in facts.Rows(f.category))
             {
-                Discrepancy d = new DiscrepancyLog().TryRegister(doc, row.ToEvidence(), "egypt", "ancient");
+                Discrepancy d = DiscrepancyLog.Prove(doc, row.ToEvidence(), "egypt", "ancient");
                 string where = $"{f.label} vs {row.OriginLabel}";
                 if (row.NationId == "egypt")
                 {

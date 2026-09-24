@@ -60,7 +60,7 @@ public class FactTableTests
         FactTable t = Today();
         var tell = new CompareEvidence { kind = EvidenceKind.DocumentField, category = ClueCategory.Currency, value = "Silver shekel", isAnachronism = true };
         FactRow babylon = t.Rows(ClueCategory.Currency)[1];
-        Discrepancy d = new DiscrepancyLog().TryRegister(tell, babylon.ToEvidence(), "egypt", "ancient");
+        Discrepancy d = DiscrepancyLog.Prove(tell, babylon.ToEvidence(), "egypt", "ancient");
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
         Assert.AreEqual("Babylonia (Ancient)", d.actualOrigin);
@@ -72,7 +72,7 @@ public class FactTableTests
         FactTable t = Today();
         var tell = new CompareEvidence { kind = EvidenceKind.DocumentField, category = ClueCategory.Currency, value = "Silver shekel", isAnachronism = true };
         FactRow egypt = t.Rows(ClueCategory.Currency)[0];
-        Discrepancy d = new DiscrepancyLog().TryRegister(tell, egypt.ToEvidence(), "egypt", "ancient");
+        Discrepancy d = DiscrepancyLog.Prove(tell, egypt.ToEvidence(), "egypt", "ancient");
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
     }
