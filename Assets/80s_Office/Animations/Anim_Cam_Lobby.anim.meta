@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 42b5e2f032cf66b4aa27e6401e3cfa3e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Animations/Anim_Cam_Lobby.anim
+  uploadId: 880684

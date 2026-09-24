@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4b542400bc2dd5f4aa82ec9d85e8d061
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Animations/AnimCam_TallRoom.controller
+  uploadId: 880684

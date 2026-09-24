@@ -1,0 +1,18 @@
+fileFormatVersion: 2
+guid: a2ff602803bd6e24cbe2084fe45af61c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Scripts/ReplaceGameObjects.cs
+  uploadId: 880684

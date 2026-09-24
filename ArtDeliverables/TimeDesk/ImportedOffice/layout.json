@@ -1,0 +1,148 @@
+{
+  "items": [
+    {
+      "name": "Clerk hotline",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+      "position": {
+        "x": -1.78,
+        "y": 1.06,
+        "z": 0.42
+      },
+      "yaw": 145,
+      "scale": 0.85
+    },
+    {
+      "name": "Writing tools",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Pen_Holder.prefab",
+      "position": {
+        "x": 1.14,
+        "y": 1.06,
+        "z": 0.35
+      },
+      "yaw": 190,
+      "scale": 1.2
+    },
+    {
+      "name": "Desk calculator",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+      "position": {
+        "x": 2.24,
+        "y": 1.06,
+        "z": 0.02
+      },
+      "yaw": 200,
+      "scale": 1.15
+    },
+    {
+      "name": "Page markers",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Sticky_Note.prefab",
+      "position": {
+        "x": 1.23,
+        "y": 1.06,
+        "z": 0.1
+      },
+      "yaw": 170,
+      "scale": 1.05
+    },
+    {
+      "name": "Clerk pen",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pen.prefab",
+      "position": {
+        "x": 1.02,
+        "y": 1.085,
+        "z": -0.68
+      },
+      "yaw": 135,
+      "scale": 1.05
+    },
+    {
+      "name": "Pending file rack",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_File_Holder_Rack.prefab",
+      "position": {
+        "x": -2.18,
+        "y": 1.06,
+        "z": 0.26
+      },
+      "yaw": 195,
+      "scale": 1.05
+    },
+    {
+      "name": "Pending binder",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_File_V2.prefab",
+      "position": {
+        "x": -2.18,
+        "y": 1.08,
+        "z": 0.26
+      },
+      "yaw": 195,
+      "scale": 0.85
+    },
+    {
+      "name": "Incoming papers",
+      "group": "Clerk desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+      "position": {
+        "x": 2.15,
+        "y": 1.06,
+        "z": 0.48
+      },
+      "yaw": 185,
+      "scale": 1.1
+    },
+    {
+      "name": "Forms stapler",
+      "group": "Clerk desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/Stapler.prefab",
+      "position": {
+        "x": 0.98,
+        "y": 1.06,
+        "z": 0.28
+      },
+      "yaw": -8,
+      "scale": 1.1
+    },
+    {
+      "name": "Cabinet keys",
+      "group": "Clerk desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/OfficeKeys.prefab",
+      "position": {
+        "x": 1.12,
+        "y": 1.066,
+        "z": 0.01
+      },
+      "yaw": 20,
+      "scale": 1
+    },
+    {
+      "name": "Counter plant",
+      "group": "Clerk desk",
+      "prefab": "Assets/80s_Office/Prefabs/Plants/PotA.prefab",
+      "position": {
+        "x": -2.38,
+        "y": 1.06,
+        "z": 0.46
+      },
+      "yaw": 0,
+      "scale": 0.45
+    },
+    {
+      "name": "Clerk desk fan",
+      "group": "Clerk desk",
+      "prefab": "Assets/80s_Office/Prefabs/Electronics/DeskFan.prefab",
+      "position": {
+        "x": 2.42,
+        "y": 1.06,
+        "z": 0.42
+      },
+      "yaw": -15,
+      "scale": 0.7
+    }
+  ]
+}

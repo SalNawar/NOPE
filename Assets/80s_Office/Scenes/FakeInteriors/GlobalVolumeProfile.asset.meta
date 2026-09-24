@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ec7b604d3b798d4429591ad9b4436751
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Scenes/FakeInteriors/GlobalVolumeProfile.asset
+  uploadId: 880684

@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: eff6a629a3e7b7e4b9bf8c52c1a7c894
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/Electronics/Clock.prefab
+  uploadId: 880684

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 7f80c5b85631b8445bb26b2f5404de0b
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Animations/Door_Elevator.controller
+  uploadId: 880684

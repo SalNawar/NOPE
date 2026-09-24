@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f9ca2a4defe30c54c9c107d5fd8a5ed8
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Shaders/FakeVolumetrics.shadergraph
+  uploadId: 880684

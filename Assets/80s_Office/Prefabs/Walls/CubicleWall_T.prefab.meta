@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 967dab07d2aecd64b8c902b90af553ed
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/Walls/CubicleWall_T.prefab
+  uploadId: 880684

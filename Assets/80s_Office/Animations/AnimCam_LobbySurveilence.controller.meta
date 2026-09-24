@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 56b578a02d5df0a438cd3f59808beee3
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 9100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Animations/AnimCam_LobbySurveilence.controller
+  uploadId: 880684

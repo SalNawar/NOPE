@@ -1,0 +1,1300 @@
+{
+    "placed": [
+        {
+            "name": "Forms counter writing desk",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_Table.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -4.183185577392578,
+                "y": 0.0,
+                "z": 5.109398365020752
+            },
+            "max": {
+                "x": -1.9168143272399903,
+                "y": 1.0344595909118653,
+                "z": 6.490602016448975
+            },
+            "triangles": 690
+        },
+        {
+            "name": "Forms counter landline",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -2.6720099449157717,
+                "y": 1.0344595909118653,
+                "z": 5.643753528594971
+            },
+            "max": {
+                "x": -2.2902755737304689,
+                "y": 1.1990594863891602,
+                "z": 5.953771114349365
+            },
+            "triangles": 5718
+        },
+        {
+            "name": "Forms counter pencil organiser",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Pen_Holder.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.646421432495117,
+                "y": 1.0344595909118653,
+                "z": 5.448054313659668
+            },
+            "max": {
+                "x": -3.38629150390625,
+                "y": 1.2645537853240967,
+                "z": 5.682854652404785
+            },
+            "triangles": 1554
+        },
+        {
+            "name": "Forms counter out tray",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Tray.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.411342144012451,
+                "y": 1.0344595909118653,
+                "z": 5.3755693435668949
+            },
+            "max": {
+                "x": -2.9493703842163088,
+                "y": 1.1334080696105958,
+                "z": 5.975374221801758
+            },
+            "triangles": 60
+        },
+        {
+            "name": "Forms counter out forms",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.3360936641693117,
+                "y": 1.0714595317840577,
+                "z": 5.53245210647583
+            },
+            "max": {
+                "x": -3.0246188640594484,
+                "y": 1.133368730545044,
+                "z": 5.818491458892822
+            },
+            "triangles": 154
+        },
+        {
+            "name": "Forms counter incoming stack",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V2.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.1199347972869875,
+                "y": 1.0344595909118653,
+                "z": 5.796050548553467
+            },
+            "max": {
+                "x": -2.736717462539673,
+                "y": 1.112536907196045,
+                "z": 6.151485919952393
+            },
+            "triangles": 144
+        },
+        {
+            "name": "Forms counter calculator",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.766578197479248,
+                "y": 1.0344595909118653,
+                "z": 5.7649149894714359
+            },
+            "max": {
+                "x": -3.5719003677368166,
+                "y": 1.0831401348114014,
+                "z": 6.06349515914917
+            },
+            "triangles": 458
+        },
+        {
+            "name": "Forms counter staff chair",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Retro_Chair.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.497237205505371,
+                "y": 0.0,
+                "z": 6.37873649597168
+            },
+            "max": {
+                "x": -2.613675594329834,
+                "y": 1.315598964691162,
+                "z": 7.324459075927734
+            },
+            "triangles": 3452
+        },
+        {
+            "name": "Forms counter waste bin",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Waste_Bin.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -1.9287956953048707,
+                "y": 0.0,
+                "z": 5.6457648277282719
+            },
+            "max": {
+                "x": -1.411204218864441,
+                "y": 0.4543302655220032,
+                "z": 6.154235363006592
+            },
+            "triangles": 378
+        },
+        {
+            "name": "Forms counter discarded draft",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Ball.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -1.8280322551727296,
+                "y": 0.009999999776482582,
+                "z": 5.9308390617370609
+            },
+            "max": {
+                "x": -1.7719676494598389,
+                "y": 0.050235651433467868,
+                "z": 5.989161014556885
+            },
+            "triangles": 128
+        },
+        {
+            "name": "Processing desk writing desk",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_Table.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.8780364990234379,
+                "y": 0.0,
+                "z": 9.185873031616211
+            },
+            "max": {
+                "x": -4.521963119506836,
+                "y": 1.0344595909118653,
+                "z": 11.014127731323243
+            },
+            "triangles": 690
+        },
+        {
+            "name": "Processing desk landline",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -5.359282970428467,
+                "y": 1.0344595909118653,
+                "z": 10.058340072631836
+            },
+            "max": {
+                "x": -4.941128253936768,
+                "y": 1.1990594863891602,
+                "z": 10.433731079101563
+            },
+            "triangles": 5718
+        },
+        {
+            "name": "Processing desk pencil organiser",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Pen_Holder.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.235477447509766,
+                "y": 1.0344595909118653,
+                "z": 9.614580154418946
+            },
+            "max": {
+                "x": -5.944045066833496,
+                "y": 1.2645537853240967,
+                "z": 9.890909194946289
+            },
+            "triangles": 1554
+        },
+        {
+            "name": "Processing desk out tray",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Tray.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.777642250061035,
+                "y": 1.0344595909118653,
+                "z": 9.62092399597168
+            },
+            "max": {
+                "x": -6.209726333618164,
+                "y": 1.1334080696105958,
+                "z": 10.271028518676758
+            },
+            "triangles": 60
+        },
+        {
+            "name": "Processing desk out forms",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.6688361167907719,
+                "y": 1.0714595317840577,
+                "z": 9.77840805053711
+            },
+            "max": {
+                "x": -6.318532466888428,
+                "y": 1.133368730545044,
+                "z": 10.113544464111329
+            },
+            "triangles": 154
+        },
+        {
+            "name": "Processing desk incoming stack",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V2.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.5434250831604,
+                "y": 1.0344595909118653,
+                "z": 10.091644287109375
+            },
+            "max": {
+                "x": -6.1114678382873539,
+                "y": 1.112536907196045,
+                "z": 10.507034301757813
+            },
+            "triangles": 144
+        },
+        {
+            "name": "Processing desk calculator",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.45366907119751,
+                "y": 1.0344595909118653,
+                "z": 9.893094062805176
+            },
+            "max": {
+                "x": -6.20172643661499,
+                "y": 1.0831401348114014,
+                "z": 10.206992149353028
+            },
+            "triangles": 458
+        },
+        {
+            "name": "Processing desk staff chair",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Retro_Chair.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.220547199249268,
+                "y": 0.0,
+                "z": 10.62099838256836
+            },
+            "max": {
+                "x": -5.20601224899292,
+                "y": 1.315598964691162,
+                "z": 11.686779022216797
+            },
+            "triangles": 3452
+        },
+        {
+            "name": "Processing desk waste bin",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Waste_Bin.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -4.615622520446777,
+                "y": 0.0,
+                "z": 9.907096862792969
+            },
+            "max": {
+                "x": -4.024377822875977,
+                "y": 0.4543302655220032,
+                "z": 10.492902755737305
+            },
+            "triangles": 378
+        },
+        {
+            "name": "Processing desk discarded draft",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Ball.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -4.478032112121582,
+                "y": 0.009999999776482582,
+                "z": 10.230839729309082
+            },
+            "max": {
+                "x": -4.421967506408691,
+                "y": 0.050235651433467868,
+                "z": 10.28916072845459
+            },
+            "triangles": 128
+        },
+        {
+            "name": "Forms counter backing",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Partition_V1.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -4.5674967765808109,
+                "y": 0.0,
+                "z": 6.940317153930664
+            },
+            "max": {
+                "x": -2.4325032234191896,
+                "y": 1.853981852531433,
+                "z": 7.359683036804199
+            },
+            "triangles": 60
+        },
+        {
+            "name": "Forms return side",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Partition_V2.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -4.621068000793457,
+                "y": 0.0,
+                "z": 5.579993724822998
+            },
+            "max": {
+                "x": -4.378931999206543,
+                "y": 1.7767324447631837,
+                "z": 6.720006465911865
+            },
+            "triangles": 60
+        },
+        {
+            "name": "Active case files",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_File_Shelf_V2.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -5.989818096160889,
+                "y": 0.0,
+                "z": 7.648891448974609
+            },
+            "max": {
+                "x": -3.817661762237549,
+                "y": 2.4182851314544679,
+                "z": 8.69352912902832
+            },
+            "triangles": 18372
+        },
+        {
+            "name": "Records return shelf",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_File_Shelf.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -7.82763671875,
+                "y": 0.0,
+                "z": 12.299570083618164
+            },
+            "max": {
+                "x": -5.6357622146606449,
+                "y": 2.7879796028137209,
+                "z": 13.622800827026368
+            },
+            "triangles": 15622
+        },
+        {
+            "name": "Incoming filing cabinet 1",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Filing_Cabinet.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -2.7530713081359865,
+                "y": 0.0,
+                "z": 9.3587646484375
+            },
+            "max": {
+                "x": -1.9612058401107789,
+                "y": 1.6291991472244263,
+                "z": 10.245464324951172
+            },
+            "triangles": 770
+        },
+        {
+            "name": "Sorted cases 1",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -2.5928356647491457,
+                "y": 1.6291999816894532,
+                "z": 9.569381713867188
+            },
+            "max": {
+                "x": -2.107164144515991,
+                "y": 1.716507911682129,
+                "z": 10.030618667602539
+            },
+            "triangles": 154
+        },
+        {
+            "name": "Incoming filing cabinet 2",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Filing_Cabinet.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.533071517944336,
+                "y": 0.0,
+                "z": 9.3587646484375
+            },
+            "max": {
+                "x": -2.741206169128418,
+                "y": 1.6291991472244263,
+                "z": 10.245464324951172
+            },
+            "triangles": 770
+        },
+        {
+            "name": "Sorted cases 2",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.3422789573669435,
+                "y": 1.6291999816894532,
+                "z": 9.606972694396973
+            },
+            "max": {
+                "x": -2.9177212715148927,
+                "y": 1.716507911682129,
+                "z": 9.993027687072754
+            },
+            "triangles": 154
+        },
+        {
+            "name": "Staff emergency handset",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Vintage_Cell_Phone.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -2.3773093223571779,
+                "y": 1.7200000286102296,
+                "z": 9.773346900939942
+            },
+            "max": {
+                "x": -2.322690486907959,
+                "y": 2.0516903400421144,
+                "z": 9.866652488708496
+            },
+            "triangles": 1542
+        },
+        {
+            "name": "Archive air conditioner",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Air_Conditioner.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -7.546115398406982,
+                "y": 2.809999942779541,
+                "z": 12.07956314086914
+            },
+            "max": {
+                "x": -5.853884220123291,
+                "y": 3.0827507972717287,
+                "z": 13.720436096191407
+            },
+            "triangles": 1266
+        },
+        {
+            "name": "Public waiting chair 1",
+            "source": "Assets/80s_Office/Prefabs/Furniture/OfficeChair_Simple.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.0290210247039797,
+                "y": 0.0,
+                "z": 6.407230854034424
+            },
+            "max": {
+                "x": 3.9709789752960207,
+                "y": 0.9962254166603088,
+                "z": 7.3927693367004398
+            },
+            "triangles": 4816
+        },
+        {
+            "name": "Public waiting chair 2",
+            "source": "Assets/80s_Office/Prefabs/Furniture/OfficeChair_Simple.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 4.171829700469971,
+                "y": 0.0,
+                "z": 6.689974784851074
+            },
+            "max": {
+                "x": 5.028170108795166,
+                "y": 0.9962254166603088,
+                "z": 7.610025405883789
+            },
+            "triangles": 4816
+        },
+        {
+            "name": "Public waiting chair 3",
+            "source": "Assets/80s_Office/Prefabs/Furniture/OfficeChair_Simple.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 5.1982102394104,
+                "y": 0.0,
+                "z": 6.961668014526367
+            },
+            "max": {
+                "x": 6.001789569854736,
+                "y": 0.9962254166603088,
+                "z": 7.838332176208496
+            },
+            "triangles": 4816
+        },
+        {
+            "name": "Public waiting chair 4",
+            "source": "Assets/80s_Office/Prefabs/Furniture/OfficeChair_Simple.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 5.2399749755859379,
+                "y": 0.0,
+                "z": 10.071829795837403
+            },
+            "max": {
+                "x": 6.160024642944336,
+                "y": 0.9962254166603088,
+                "z": 10.928170204162598
+            },
+            "triangles": 4816
+        },
+        {
+            "name": "Public forms table",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_Table.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.099940299987793,
+                "y": 0.0,
+                "z": 8.47252368927002
+            },
+            "max": {
+                "x": 4.000059604644775,
+                "y": 0.9051520824432373,
+                "z": 10.327475547790528
+            },
+            "triangles": 690
+        },
+        {
+            "name": "Unfilled forms stack",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.3447346687316896,
+                "y": 0.9052000045776367,
+                "z": 9.624634742736817
+            },
+            "max": {
+                "x": 3.6552653312683107,
+                "y": 0.9845708608627319,
+                "z": 9.97536563873291
+            },
+            "triangles": 154
+        },
+        {
+            "name": "Public pen stand",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pen_Holder.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.391998529434204,
+                "y": 0.9052000045776367,
+                "z": 8.924965858459473
+            },
+            "max": {
+                "x": 3.608001470565796,
+                "y": 1.0244802236557007,
+                "z": 9.175034523010254
+            },
+            "triangles": 428
+        },
+        {
+            "name": "Loose public pencil",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pencil.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.348788022994995,
+                "y": 0.9052000045776367,
+                "z": 9.267244338989258
+            },
+            "max": {
+                "x": 3.5512120723724367,
+                "y": 0.9180960655212402,
+                "z": 9.332756042480469
+            },
+            "triangles": 126
+        },
+        {
+            "name": "Waiting area paper bin",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Waste_Bin.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 4.774012565612793,
+                "y": 0.0,
+                "z": 9.280932426452637
+            },
+            "max": {
+                "x": 5.325987815856934,
+                "y": 0.5591757297515869,
+                "z": 9.81906795501709
+            },
+            "triangles": 378
+        },
+        {
+            "name": "Public information partition",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Partition_V1.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.9250001907348635,
+                "y": 0.0,
+                "z": 12.626578330993653
+            },
+            "max": {
+                "x": 6.175000190734863,
+                "y": 1.9312310218811036,
+                "z": 12.673420906066895
+            },
+            "triangles": 60
+        },
+        {
+            "name": "Information marker",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Sticky_Note.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.323564291000366,
+                "y": 0.9052000045776367,
+                "z": 9.832010269165039
+            },
+            "max": {
+                "x": 3.476435899734497,
+                "y": 0.9281338453292847,
+                "z": 9.967988967895508
+            },
+            "triangles": 122
+        },
+        {
+            "name": "Portal diagnostics console",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Console_01_Half.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -4.65757942199707,
+                "y": -1.1920928955078126e-7,
+                "z": 15.882002830505371
+            },
+            "max": {
+                "x": -2.142420768737793,
+                "y": 2.354332447052002,
+                "z": 17.51799774169922
+            },
+            "triangles": 238
+        },
+        {
+            "name": "Transit controls console",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Console_01_Half.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 2.5924201011657717,
+                "y": -1.1920928955078126e-7,
+                "z": 17.1820011138916
+            },
+            "max": {
+                "x": 5.107579231262207,
+                "y": 2.354332447052002,
+                "z": 18.8179988861084
+            },
+            "triangles": 238
+        },
+        {
+            "name": "Service equipment cupboard",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Gear_01_Half.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -6.904901504516602,
+                "y": -1.1920928955078126e-7,
+                "z": 18.047286987304689
+            },
+            "max": {
+                "x": -4.295098304748535,
+                "y": 2.6313118934631349,
+                "z": 19.75271224975586
+            },
+            "triangles": 372
+        },
+        {
+            "name": "Maintenance supply cupboard",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Gear_03_Half.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 4.445098876953125,
+                "y": -1.1920928955078126e-7,
+                "z": 18.981149673461915
+            },
+            "max": {
+                "x": 7.054902076721191,
+                "y": 2.6313118934631349,
+                "z": 20.21885108947754
+            },
+            "triangles": 96
+        },
+        {
+            "name": "Ventilation column left",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Round.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -8.600000381469727,
+                "y": 0.0,
+                "z": 21.349998474121095
+            },
+            "max": {
+                "x": -6.699999809265137,
+                "y": 3.8000006675720217,
+                "z": 23.25
+            },
+            "triangles": 68
+        },
+        {
+            "name": "Ventilation column right",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Round.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 6.699999809265137,
+                "y": 0.0,
+                "z": 21.349998474121095
+            },
+            "max": {
+                "x": 8.600000381469727,
+                "y": 3.8000006675720217,
+                "z": 23.25
+            },
+            "triangles": 68
+        },
+        {
+            "name": "Portal supply riser left",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_02.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -7.773231029510498,
+                "y": -2.384185791015625e-7,
+                "z": 22.771299362182618
+            },
+            "max": {
+                "x": -6.026769161224365,
+                "y": 4.800090789794922,
+                "z": 23.428701400756837
+            },
+            "triangles": 1306
+        },
+        {
+            "name": "Portal supply riser right",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_03.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 5.898745059967041,
+                "y": 0.0,
+                "z": 22.67577362060547
+            },
+            "max": {
+                "x": 7.901255130767822,
+                "y": 4.8001251220703129,
+                "z": 23.524227142333986
+            },
+            "triangles": 1074
+        },
+        {
+            "name": "Portal coolant manifold",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_01.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -6.482839584350586,
+                "y": 0.0,
+                "z": 23.13922882080078
+            },
+            "max": {
+                "x": -3.1171607971191408,
+                "y": 0.6435456871986389,
+                "z": 23.86077117919922
+            },
+            "triangles": 2042
+        },
+        {
+            "name": "Transit coolant manifold",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_01.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 3.1171607971191408,
+                "y": 0.0,
+                "z": 23.13922882080078
+            },
+            "max": {
+                "x": 6.482839584350586,
+                "y": 0.6435456871986389,
+                "z": 23.86077117919922
+            },
+            "triangles": 2042
+        },
+        {
+            "name": "Single service tool case",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Props/Crate_01.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 5.5165300369262699,
+                "y": 0.0,
+                "z": 17.959999084472658
+            },
+            "max": {
+                "x": 6.683469772338867,
+                "y": 0.43500015139579775,
+                "z": 18.540000915527345
+            },
+            "triangles": 188
+        },
+        {
+            "name": "Calibration workbench",
+            "source": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Table_01.prefab",
+            "group": "Technical support",
+            "min": {
+                "x": 5.978776931762695,
+                "y": -2.9802322387695315e-8,
+                "z": 13.823545455932618
+            },
+            "max": {
+                "x": 8.021223068237305,
+                "y": 0.919548749923706,
+                "z": 15.77645492553711
+            },
+            "triangles": 232
+        },
+        {
+            "name": "Engineer hotline",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+            "group": "Technical support",
+            "min": {
+                "x": 6.5172905921936039,
+                "y": 0.9195000529289246,
+                "z": 14.371162414550782
+            },
+            "max": {
+                "x": 6.78270959854126,
+                "y": 1.0912563800811768,
+                "z": 14.728837966918946
+            },
+            "triangles": 5718
+        },
+        {
+            "name": "Maintenance worksheets",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V2.prefab",
+            "group": "Technical support",
+            "min": {
+                "x": 6.891907215118408,
+                "y": 0.9194999933242798,
+                "z": 14.97858715057373
+            },
+            "max": {
+                "x": 7.3080925941467289,
+                "y": 1.0053850412368775,
+                "z": 15.421412467956543
+            },
+            "triangles": 144
+        },
+        {
+            "name": "Service records cabinet",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Filing_Cabinet.prefab",
+            "group": "Technical support",
+            "min": {
+                "x": 7.889280319213867,
+                "y": 0.0,
+                "z": 15.341211318969727
+            },
+            "max": {
+                "x": 8.817022323608399,
+                "y": 1.6291991472244263,
+                "z": 16.18006706237793
+            },
+            "triangles": 770
+        },
+        {
+            "name": "Engineer chair",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Retro_Chair.prefab",
+            "group": "Technical support",
+            "min": {
+                "x": 5.373177528381348,
+                "y": 0.0,
+                "z": 14.907596588134766
+            },
+            "max": {
+                "x": 6.222460746765137,
+                "y": 1.2583991289138795,
+                "z": 15.697641372680664
+            },
+            "triangles": 3452
+        },
+        {
+            "name": "Clerk hotline",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": -1.9376851320266724,
+                "y": 1.059999942779541,
+                "z": 0.27033883333206179
+            },
+            "max": {
+                "x": -1.6223148107528687,
+                "y": 1.1816606521606446,
+                "z": 0.5696611404418945
+            },
+            "triangles": 5718
+        },
+        {
+            "name": "Writing tools",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Pen_Holder.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 0.9981110095977783,
+                "y": 1.059999942779541,
+                "z": 0.22192728519439698
+            },
+            "max": {
+                "x": 1.2818889617919922,
+                "y": 1.311011791229248,
+                "z": 0.47807270288467409
+            },
+            "triangles": 1554
+        },
+        {
+            "name": "Desk calculator",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 1.7427043914794922,
+                "y": 1.059999942779541,
+                "z": -0.3655737638473511
+            },
+            "max": {
+                "x": 1.9772956371307374,
+                "y": 1.1086804866790772,
+                "z": -0.05442620813846588
+            },
+            "triangles": 458
+        },
+        {
+            "name": "Page markers",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Sticky_Note.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 1.174912452697754,
+                "y": 1.059999942779541,
+                "z": 0.03925945982336998
+            },
+            "max": {
+                "x": 1.2850875854492188,
+                "y": 1.077200174331665,
+                "z": 0.16074053943157197
+            },
+            "triangles": 122
+        },
+        {
+            "name": "Clerk pen",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pen.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 1.1223461627960206,
+                "y": 1.065000057220459,
+                "z": -0.5376539826393127
+            },
+            "max": {
+                "x": 1.2776539325714112,
+                "y": 1.0801570415496827,
+                "z": -0.3823460638523102
+            },
+            "triangles": 376
+        },
+        {
+            "name": "Pending file rack",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_File_Holder_Rack.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": -2.262380361557007,
+                "y": 1.059999942779541,
+                "z": 0.11342082917690277
+            },
+            "max": {
+                "x": -2.0976197719573976,
+                "y": 1.4260926246643067,
+                "z": 0.4065791368484497
+            },
+            "triangles": 108
+        },
+        {
+            "name": "Pending binder",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_File_V2.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": -2.2375261783599855,
+                "y": 1.0800000429153443,
+                "z": 0.1493212878704071
+            },
+            "max": {
+                "x": -2.122473955154419,
+                "y": 1.3570510149002076,
+                "z": 0.37067869305610659
+            },
+            "triangles": 484
+        },
+        {
+            "name": "Incoming papers",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 1.722946047782898,
+                "y": 1.059999942779541,
+                "z": 0.29304546117782595
+            },
+            "max": {
+                "x": 2.1370537281036379,
+                "y": 1.1473078727722169,
+                "z": 0.666954517364502
+            },
+            "triangles": 154
+        },
+        {
+            "name": "Waiting alcove sofa",
+            "source": "Assets/80s_Office/Prefabs/Furniture/Sofa.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.241689682006836,
+                "y": 0.0,
+                "z": 11.431480407714844
+            },
+            "max": {
+                "x": 5.258310317993164,
+                "y": 1.047290563583374,
+                "z": 12.568519592285157
+            },
+            "triangles": 1868
+        },
+        {
+            "name": "Waiting alcove table",
+            "source": "Assets/80s_Office/Prefabs/Furniture/LoungeTable.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 3.6125001907348635,
+                "y": -1.4901161193847657e-8,
+                "z": 10.387499809265137
+            },
+            "max": {
+                "x": 4.987500190734863,
+                "y": 0.33185166120529177,
+                "z": 11.21250057220459
+            },
+            "triangles": 1696
+        },
+        {
+            "name": "Reading forms",
+            "source": "Assets/80s_Office/Prefabs/TableProps/PaperPile.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 4.026901721954346,
+                "y": 0.3319000005722046,
+                "z": 10.64516544342041
+            },
+            "max": {
+                "x": 4.273098468780518,
+                "y": 0.36415064334869387,
+                "z": 10.954834938049317
+            },
+            "triangles": 104
+        },
+        {
+            "name": "Public service information stand",
+            "source": "Assets/80s_Office/Prefabs/Furniture/Whiteboard_Tripod.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 2.2771718502044679,
+                "y": 0.0,
+                "z": 10.841936111450196
+            },
+            "max": {
+                "x": 3.0228283405303957,
+                "y": 1.6694377660751343,
+                "z": 11.558063507080079
+            },
+            "triangles": 388
+        },
+        {
+            "name": "Waiting alcove planter",
+            "source": "Assets/80s_Office/Prefabs/Plants/Plant_1.prefab",
+            "group": "Waiting area",
+            "min": {
+                "x": 5.729892730712891,
+                "y": 0.0,
+                "z": 12.030135154724121
+            },
+            "max": {
+                "x": 6.970107078552246,
+                "y": 1.2524535655975342,
+                "z": 13.169865608215332
+            },
+            "triangles": 1812
+        },
+        {
+            "name": "Reception planter",
+            "source": "Assets/80s_Office/Prefabs/Plants/Plant_2.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -6.623401641845703,
+                "y": 0.0,
+                "z": 14.303556442260743
+            },
+            "max": {
+                "x": -5.676599502563477,
+                "y": 2.5468242168426515,
+                "z": 15.396444320678711
+            },
+            "triangles": 2539
+        },
+        {
+            "name": "Portal routing server",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Server_A.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -4.807736873626709,
+                "y": 0.0,
+                "z": 19.64386558532715
+            },
+            "max": {
+                "x": -3.4922633171081545,
+                "y": 2.340932607650757,
+                "z": 20.956132888793947
+            },
+            "triangles": 1733
+        },
+        {
+            "name": "Arrival records server",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Server_B.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -6.2021803855896,
+                "y": 0.0,
+                "z": 21.194337844848634
+            },
+            "max": {
+                "x": -4.997819423675537,
+                "y": 2.402292013168335,
+                "z": 22.40566062927246
+            },
+            "triangles": 1796
+        },
+        {
+            "name": "Return systems server",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Server_C.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": 3.9974524974823,
+                "y": 0.0,
+                "z": 20.44318962097168
+            },
+            "max": {
+                "x": 5.202547073364258,
+                "y": 2.4022433757781984,
+                "z": 21.55681037902832
+            },
+            "triangles": 31816
+        },
+        {
+            "name": "Incoming fax",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Fax.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -5.72443151473999,
+                "y": 1.034500002861023,
+                "z": 9.912415504455567
+            },
+            "max": {
+                "x": -5.175568103790283,
+                "y": 1.2569106817245484,
+                "z": 10.34758472442627
+            },
+            "triangles": 6065
+        },
+        {
+            "name": "Back office CRT",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Computer.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.438631057739258,
+                "y": 1.0344998836517335,
+                "z": 5.756094455718994
+            },
+            "max": {
+                "x": -2.901369094848633,
+                "y": 1.5499563217163087,
+                "z": 6.143905162811279
+            },
+            "triangles": 4416
+        },
+        {
+            "name": "Back office keyboard",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Keyboard.prefab",
+            "group": "Administration",
+            "min": {
+                "x": -3.436255693435669,
+                "y": 1.034500002861023,
+                "z": 5.427988529205322
+            },
+            "max": {
+                "x": -2.9037444591522219,
+                "y": 1.1047641038894654,
+                "z": 5.632011890411377
+            },
+            "triangles": 4550
+        },
+        {
+            "name": "Forms stapler",
+            "source": "Assets/80s_Office/Prefabs/TableProps/Stapler.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 1.178041696548462,
+                "y": 1.059999942779541,
+                "z": -0.305612176656723
+            },
+            "max": {
+                "x": 1.261958360671997,
+                "y": 1.135716199874878,
+                "z": -0.09438782185316086
+            },
+            "triangles": 1030
+        },
+        {
+            "name": "Cabinet keys",
+            "source": "Assets/80s_Office/Prefabs/TableProps/OfficeKeys.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": 1.140488862991333,
+                "y": 1.0660001039505005,
+                "z": -0.0186451468616724
+            },
+            "max": {
+                "x": 1.2195110321044922,
+                "y": 1.0924893617630005,
+                "z": 0.05864515155553818
+            },
+            "triangles": 1972
+        },
+        {
+            "name": "Counter plant",
+            "source": "Assets/80s_Office/Prefabs/Plants/PotA.prefab",
+            "group": "Clerk desk",
+            "min": {
+                "x": -2.5446460247039797,
+                "y": 1.059999942779541,
+                "z": 0.2953540086746216
+            },
+            "max": {
+                "x": -2.2153542041778566,
+                "y": 1.4277658462524415,
+                "z": 0.624646008014679
+            },
+            "triangles": 1812
+        },
+        {
+            "name": "Portal service extinguisher",
+            "source": "Assets/80s_Office/Prefabs/WallGreebles/FireExtinguisher.prefab",
+            "group": "Portal service",
+            "min": {
+                "x": -6.189681529998779,
+                "y": 0.5499999523162842,
+                "z": 18.03203010559082
+            },
+            "max": {
+                "x": -6.010318279266357,
+                "y": 1.337690830230713,
+                "z": 18.327970504760743
+            },
+            "triangles": 2302
+        }
+    ]
+}
