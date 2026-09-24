@@ -81,8 +81,8 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] Correct decision: pay (base × pay-rate multiplier + timeline bonuses; legendary bonus)
 - [ ] Wrong decision: citation (free warnings, then escalating penalties), stability loss
-- [ ] Evidence-gated denial: denying a liar with **zero** documented discrepancies = citation + deduction even though the visitor lied (`requireEvidenceToDeny` toggle) (tested: `VerdictRulesTests`)
-- [ ] Directive-violation denials never need scanned evidence
+- [ ] Evidence-gated denial: denying a liar with **zero** documented discrepancies counts as a wrong decision (citation and stability loss; a deduction once the free warnings are used) even though the visitor lied (`requireEvidenceToDeny` toggle) (the unproven-denial rule tested: `VerdictRulesTests`; the citation and deduction are Assembly-CSharp (`ShiftScoring`) and checked in Unity, not by the EditMode suite)
+- [ ] Directive-violation denials never need scanned evidence (the gate exemption tested: `VerdictRulesTests`)
 - [ ] Only provable tells are generated (tested: `ForgeryTests`, `BirthDatesTests`): a place fact is a tell only when a reference book covers it and the true home's value differs from the claim's and belongs to no other of today's places (so the books prove it and the origin proof names the home); a birth-date tell keeps day and month and takes a year from the true home's birth years, never the record's (provable via citizen records); names, capitals and rulers are never tells
 - [ ] Every active travel rule gets at least one violator in the first half of the queue (`DayPlanSO` "guarantee rule violators", on by default) (slots tested: `ViolatorSlotsTests`)
 - [ ] Timeline impacts apply only on ACCEPT and land on the claimed place (where the traveller is sent), liar or not; sends tracked per era
