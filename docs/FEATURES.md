@@ -8,7 +8,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] Title scene → new run / continue via `RunManager` (+ `SaveSystem` persistence; save version 2 — version-1 saves from the made-up world are ignored, Title offers New Run)
 - [ ] Day plans per day number from `ContentLibrary_Main` (fallback: inspector plan). Ramp: day 1 Ancient × Egypt/Iraq/Greece/Italy (8); day 2 + Medieval, + China/Britain, no Ancient Egypt (10); day 3 + Early modern, all 8 countries, no Medieval China / Early modern Japan (12)
-- [ ] Deterministic case generation: same run + same day = same travellers; one seeded stream per traveller (`Seeds.ForCase`), day seed formula unchanged (tested: `SeedsTests`, `SeededRandomTests`, `WeightedRandomTests`)
+- [ ] Deterministic case generation: same run + same day = same travellers; one seeded stream per traveller (`Seeds.ForCase`), plus a day stream for rule violators and a separate stream for legacy clues; day seed formula unchanged (seeding tested: `SeedsTests`, `SeededRandomTests`, `WeightedRandomTests`; whole-day determinism is checked in Unity, not by the EditMode suite)
 - [ ] Endings evaluated after every verdict (`EndingService`); firing threshold on stability; bankruptcy threshold
 - [ ] Home phase between days: expenses, family conditions & care, slot machine (pay-rate modifier), upgrades
 
@@ -39,7 +39,8 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] Real countries as lineages: Egypt, Iraq, Greece, Italy, China, Japan, Britain, Germany × Ancient / Medieval / Early modern / Industrial / Modern = 40 places (plus a Future era with no travellers yet)
 - [ ] Each place has a moment and year, five facts (currency, language, technology, capital, ruler) and 8 male + 8 female period names
-- [ ] Travellers are born 18–70 years before their place's year; ancient dates print as BCE (tested: `BirthDatesTests`)
+- [ ] Travellers are born 18–70 years before their place's year (set by the generator); ancient dates print as BCE (dates tested: `BirthDatesTests`)
+- [ ] Visitor roles: Artist, Diplomat, Merchant, Scientist, Soldier, Wanderer (their accepted sends move Democracy / Science / Art); names come only from the place's period names
 - [ ] Every traveller asks to go home to the place they claim; a forger's papers carry values from another of today's places (full disguises come with the identity & lies piece)
 
 ## Investigation loop
@@ -48,7 +49,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Intercom interaction panel: per-case traveller actions — "Request Travel Passport", "Request Transit Permit" (more actions planned: interrogation, photo capture)
 - [ ] Documents render as SCANNED pages (white page + photo placeholder on dark scanner backing), multi-page, structured fields
 - [ ] Passport carries identity fields: Full Name + Date of Birth (checked against Citizen Records)
-- [ ] Reference book windows list TODAY's places only (country then era, paged), read from the day's `FactTable` snapshot — the same values printed on papers (tested: `FactTableTests`)
+- [ ] Reference book windows list TODAY's places only (country then era, paged), read from the day's `FactTable` snapshot — the same values printed on papers (table tested: `FactTableTests`; the day's place filter is covered by the content validator and the Unity world check)
 - [ ] Click-to-compare any two values; MATCH/MISMATCH bar (visual, no auto-verdict); auto-sized text
 - [ ] Scanner = Deviation Report: true contradictions auto-register (tested: `DiscrepancyLogTests`)
   - [ ] Mismatch proof: forged field ≠ claimed-era reference entry
@@ -81,15 +82,17 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Wrong decision: citation (free warnings, then escalating penalties), stability loss
 - [ ] Evidence-gated denial: denying a forger with **zero** documented discrepancies = citation + deduction even though the visitor lied (`requireEvidenceToDeny` toggle)
 - [ ] Directive-violation denials never need scanned evidence
-- [ ] Only provable forgeries are generated: a forged field carries another of today's places' value for that fact (so the books prove it); birth dates are shifted 2–24 years from the true date and provable via citizen records; names never forged until the missing-record mechanic lands
+- [ ] Only provable forgeries are generated (tested: `ForgeryTests`): a place fact is forged only when a reference book covers it, taking another of today's places' value (so the books prove it); birth dates are shifted 2–24 years (blueprint knob) but stay inside the place's birth years, provable via citizen records (tested: `BirthDatesTests`); names never forged until the missing-record mechanic lands
+- [ ] Every active travel rule gets at least one violator in the first half of the queue (`DayPlanSO` "guarantee rule violators", on by default) (slots tested: `ViolatorSlotsTests`)
 - [ ] Timeline impacts apply only on ACCEPT; sends tracked per era
-- [ ] The first nightly dominance ranking of a run is silent (no "rises to dominance" news flood); later changes make the news
+- [ ] A new run ranks every place's attributes from the baselines silently; each night's news then reports only real tier changes ("Science is now DOMINANT in …", "… is rising in …")
+- [ ] Dominance tiers carry no gameplay effects for now: the Phase 7 tier effects were retired with the made-up world (history reacting to choices is a later piece)
 - [ ] Shift ledger (tested: `ShiftLedgerTests`); citation slip pauses the day (and the shift clock) until acknowledged
 
 ## Content & tooling
 
-- [ ] `Tools > TimeDesk > Generate World` — builds the real world from `Assets/Data/World/world_source.json` (eras, countries, 40 places, rules, day plans), wires `ContentLibrary_Main`, and retires the made-up sample world; idempotent
-- [ ] Content validator checks every place (five facts, names, birth years) and every day plan (today has places; every weighted era has one)
+- [ ] `Tools > TimeDesk > Generate World` — builds the real world from `Assets/Data/World/world_source.json` (eras, countries, 40 places, rules, day plans) and wires `ContentLibrary_Main`, the case blueprint and the day plans named in its `content` section; checks every reference before writing anything; idempotent; owns only `Assets/Data/World/{Eras,Nations,Places,Rules}` (unlisted assets there go to the trash) and never removes hand-authored legendaries, effects or triggers
+- [ ] Content validator checks every place (five facts, names, birth years set) and every day plan (today has places; every weighted era has one; every rule can be broken; listed legendaries come from today's places)
 - [ ] `Tools > TimeDesk > Build Office UI` — idempotent, authoritative scene builder
 - [ ] Travel rules: era / nation / nation+era forbidden, shown in briefing + directives
 - [ ] Day events system (before/after-case scheduled events; no event types authored yet; events placed past closing time never run)
