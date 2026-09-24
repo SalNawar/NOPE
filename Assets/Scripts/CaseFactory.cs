@@ -83,7 +83,7 @@ public sealed class CaseFactory
             legendary != null && legendary.blueprintOverride != null ? legendary.blueprintOverride :
             WeightedRandom.Pick(plan.PossibleBlueprints, b => b != null
                 ? b.Difficulty * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, b.name)
-                : 0f);
+                : 0f, new UnityRandomSource());
 
         // 4.5) Timeline identity: archetype, destination nation, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
@@ -311,7 +311,7 @@ public sealed class CaseFactory
 
         return WeightedRandom.Pick(pool, a => a != null
             ? Mathf.Max(0f, a.baseWeight) * TimelineEffects.GetVisitorTagWeightMultiplier(state, _lib, a.tags)
-            : 0f);
+            : 0f, new UnityRandomSource());
     }
 
     /// <summary>
@@ -451,7 +451,7 @@ public sealed class CaseFactory
             return _lib.Eras[Random.Range(0, _lib.Eras.Count)];
 
         // Weighted pick; if the result is null (bad data), fall back to uniform.
-        EraSO picked = WeightedRandom.Pick(plan.EraWeights, ew => ew.weight).era;
+        EraSO picked = WeightedRandom.Pick(plan.EraWeights, ew => ew.weight, new UnityRandomSource()).era;
         return picked != null ? picked : _lib.Eras[Random.Range(0, _lib.Eras.Count)];
     }
 

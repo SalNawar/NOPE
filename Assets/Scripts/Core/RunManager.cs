@@ -154,15 +154,9 @@ public sealed class RunManager : MonoBehaviour
 
     /// <summary>
     /// Deterministic seed for the current day, derived from the run seed.
-    /// Same run + same day = same schedule and cases.
+    /// Same run + same day = same schedule and cases (see Seeds).
     /// </summary>
-    public int GetDaySeed()
-    {
-        unchecked
-        {
-            return World.runSeed * 397 ^ World.day * 7919;
-        }
-    }
+    public int GetDaySeed() => Seeds.Day(World.runSeed, World.day);
 
     /// <summary>
     /// The DayPlan for the current day, from the content library.

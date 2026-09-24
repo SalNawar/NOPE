@@ -1,0 +1,35 @@
+/// <summary>
+/// Seed derivation for a run. <see cref="Day"/> is the original RunManager
+/// formula (unchanged, so existing saves keep their schedules); every other
+/// stream is salted through <see cref="Mix"/> so streams never replay each other.
+/// </summary>
+public static class Seeds
+{
+    /// <summary>Salt for per-traveller case-generation streams ("CASE").</summary>
+    public const int CaseSalt = 0x43415345;
+
+    /// <summary>The day's seed: same run + same day = same seed.</summary>
+    public static int Day(int runSeed, int day)
+    {
+        unchecked
+        {
+            return runSeed * 397 ^ day * 7919;
+        }
+    }
+
+    /// <summary>Avalanche-mixes a seed with a salt (SplitMix64 finaliser).</summary>
+    public static int Mix(int seed, int salt)
+    {
+        unchecked
+        {
+            ulong z = (ulong)(uint)seed * 0x9E3779B97F4A7C15UL + (ulong)(uint)salt;
+            z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9UL;
+            z = (z ^ (z >> 27)) * 0x94D049BB133111EBUL;
+            z ^= z >> 31;
+            return (int)z;
+        }
+    }
+
+    /// <summary>Seed for one traveller's generation stream (independent of the other slots).</summary>
+    public static int ForCase(int daySeed, int caseIndex1Based) => Mix(Mix(daySeed, CaseSalt), caseIndex1Based);
+}

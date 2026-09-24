@@ -191,7 +191,7 @@ public sealed class HomeManager : MonoBehaviour
 
         _world.money -= spinCost;
 
-        SlotOutcomeSO outcome = WeightedRandom.Pick(outcomes, o => o != null ? o.weight : 0f);
+        SlotOutcomeSO outcome = WeightedRandom.Pick(outcomes, o => o != null ? o.weight : 0f, new UnityRandomSource());
 
         if (outcome == null)
         {

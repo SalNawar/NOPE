@@ -258,7 +258,7 @@ public sealed class DiscrepancyLog
         return found;
     }
 
-    /// <summary>Case-insensitive, trimmed equality (mirrors the compare bar).</summary>
-    private static bool ValuesMatch(string x, string y) =>
+    /// <summary>Case-insensitive, trimmed equality (mirrors the compare bar; shared with FactTable).</summary>
+    internal static bool ValuesMatch(string x, string y) =>
         string.Equals((x ?? string.Empty).Trim(), (y ?? string.Empty).Trim(), StringComparison.OrdinalIgnoreCase);
 }
