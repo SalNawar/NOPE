@@ -326,44 +326,95 @@ public static class TimelineService
         Debug.Log($"[TimelineService] <<< Exiting EvaluateTriggers ({fired}/{total} fired).");
     }
 
-    /// <summary>Returns true if every condition on the trigger passes.</summary>
-    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world)
+    /// <summary>
+    /// Returns true if every condition on the trigger passes (Gates.AllPass):
+    /// one snapshot per trigger, so a trigger sees the flags that earlier
+    /// triggers set tonight.
+    /// </summary>
+    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) =>
+        Gates.AllPass(ToGates(trigger.conditions), Snapshot(world, trigger.conditions));
+
+    /// <summary>
+    /// A condition as the Domain gates read it: its type, threshold and plain
+    /// key (the counter, flag or upgrade key; the profile-attribute score key,
+    /// the dominance key or the nation score key for the reference types; null
+    /// when a needed reference is missing, which never passes).
+    /// </summary>
+    private static GateCondition ToGate(TriggerCondition c)
     {
-        foreach (TriggerCondition c in trigger.conditions)
+        string key;
+        switch (c.type)
         {
-            if (c == null)
-                continue;
-
-            bool pass = c.type switch
-            {
-                TriggerConditionType.CounterAtLeast => world.GetCounter(c.key) >= c.threshold,
-                TriggerConditionType.FlagSet => world.HasFlag(c.key),
-                TriggerConditionType.FlagNotSet => !world.HasFlag(c.key),
-                TriggerConditionType.AttributeScoreAtLeast =>
-                    c.profile != null && c.attribute != null &&
-                    GetProfileAttributeScore(world, c.profile, c.attribute) >= c.threshold,
-                TriggerConditionType.AttributeScoreAtMost =>
-                    c.profile != null && c.attribute != null &&
-                    GetProfileAttributeScore(world, c.profile, c.attribute) <= c.threshold,
-                TriggerConditionType.AttributeIsDominant =>
-                    c.profile != null && c.attribute != null &&
-                    world.timeline.dominantKeys.Contains(TimelineKeys.Dominance(c.profile, c.attribute)),
-                TriggerConditionType.AttributeIsSupporting =>
-                    c.profile != null && c.attribute != null &&
-                    world.timeline.supportingKeys.Contains(TimelineKeys.Dominance(c.profile, c.attribute)),
-                TriggerConditionType.NationScoreAtLeast =>
-                    c.nation != null &&
-                    world.timeline.GetScore(TimelineKeys.Nation(c.nation)) >= c.threshold,
-                TriggerConditionType.DayAtLeast => world.day >= c.threshold,
-                TriggerConditionType.StabilityAtMost => world.timelineStability <= c.threshold,
-                _ => false
-            };
-
-            if (!pass)
-                return false;
+            case TriggerConditionType.CounterAtLeast:
+            case TriggerConditionType.FlagSet:
+            case TriggerConditionType.FlagNotSet:
+            case TriggerConditionType.UpgradeOwned:
+                key = c.key;
+                break;
+            case TriggerConditionType.AttributeScoreAtLeast:
+            case TriggerConditionType.AttributeScoreAtMost:
+                key = c.profile != null && c.attribute != null ? TimelineKeys.ProfileAttr(c.profile, c.attribute) : null;
+                break;
+            case TriggerConditionType.AttributeIsDominant:
+            case TriggerConditionType.AttributeIsSupporting:
+                key = c.profile != null && c.attribute != null ? TimelineKeys.Dominance(c.profile, c.attribute) : null;
+                break;
+            case TriggerConditionType.NationScoreAtLeast:
+                key = c.nation != null ? TimelineKeys.Nation(c.nation) : null;
+                break;
+            default:
+                key = null;
+                break;
         }
 
-        return true;
+        return new GateCondition(c.type, key, c.threshold);
+    }
+
+    /// <summary>The non-null conditions projected with <see cref="ToGate"/>, in order (empty for null).</summary>
+    private static List<GateCondition> ToGates(IEnumerable<TriggerCondition> conditions)
+    {
+        var gates = new List<GateCondition>();
+        if (conditions != null)
+            foreach (TriggerCondition c in conditions)
+                if (c != null)
+                    gates.Add(ToGate(c));
+        return gates;
+    }
+
+    /// <summary>
+    /// Copies what gates read from the world: day, stability, flags, owned
+    /// upgrades, counters and dominance tiers, plus the scores the given
+    /// conditions read, each under its gate key with the value it has now
+    /// (GetProfileAttributeScore for profile scores, so the baseline formula
+    /// keeps one home; the timeline score for nations).
+    /// </summary>
+    private static GateSnapshot Snapshot(WorldState world, IEnumerable<TriggerCondition> conditions)
+    {
+        var scores = new List<KeyValuePair<string, float>>();
+        if (conditions != null)
+        {
+            foreach (TriggerCondition c in conditions)
+            {
+                if (c == null)
+                    continue;
+
+                if ((c.type == TriggerConditionType.AttributeScoreAtLeast || c.type == TriggerConditionType.AttributeScoreAtMost) &&
+                    c.profile != null && c.attribute != null)
+                    scores.Add(new KeyValuePair<string, float>(TimelineKeys.ProfileAttr(c.profile, c.attribute), GetProfileAttributeScore(world, c.profile, c.attribute)));
+                else if (c.type == TriggerConditionType.NationScoreAtLeast && c.nation != null)
+                    scores.Add(new KeyValuePair<string, float>(TimelineKeys.Nation(c.nation), world.timeline.GetScore(TimelineKeys.Nation(c.nation))));
+            }
+        }
+
+        return new GateSnapshot(
+            world.day,
+            world.timelineStability,
+            world.flags,
+            world.unlockedUpgradeIds,
+            world.counters.Where(e => e != null).Select(e => new KeyValuePair<string, int>(e.key, e.value)),
+            scores,
+            world.timeline.dominantKeys,
+            world.timeline.supportingKeys);
     }
 
     /// <summary>
