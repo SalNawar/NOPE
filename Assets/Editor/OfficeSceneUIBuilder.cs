@@ -39,7 +39,12 @@ public static class OfficeSceneUIBuilder
     /// <summary>Padding on every side of a vertical list (AddVLayout).</summary>
     private const int VLayoutPadding = 6;
 
-    /// <summary>The reference resolution of both canvas scalers; every layout is authored against it (the intercom's fit reads its height).</summary>
+    /// <summary>
+    /// The reference resolution of both canvas scalers, which never scale a
+    /// canvas below it (ConfigureScaler); every layout is authored against it,
+    /// so what fits at this size (the intercom's fit reads its height) fits on
+    /// every screen.
+    /// </summary>
     private static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
 
     /// <summary>Transcript rows per page: the book row height (34 px) and spacing fit 8 in the window's row area.</summary>
@@ -160,7 +165,8 @@ public static class OfficeSceneUIBuilder
 
         // Intercom: the interview's choices (document requests, questions,
         // dialog replies), provided at runtime by InvestigationUIController.
-        // The layout numbers also give how many choices it shows at once.
+        // The layout numbers also give how many choices it shows at once: at
+        // the reference height, the least height the canvas ever has.
         const float intercomMinY = 0.36f, intercomMaxY = 0.85f;
         const float actionsMinY = 0.02f, actionsMaxY = 0.86f;
         const float actionSpacing = 6f, actionHeight = 44f;
@@ -549,11 +555,23 @@ public static class OfficeSceneUIBuilder
             go.AddComponent<GraphicRaycaster>();
         }
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        var scaler = canvas.GetComponent<CanvasScaler>() ?? canvas.gameObject.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = ReferenceResolution;
+        ConfigureScaler(canvas.GetComponent<CanvasScaler>() ?? canvas.gameObject.AddComponent<CanvasScaler>());
         if (canvas.GetComponent<GraphicRaycaster>() == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
         return canvas;
+    }
+
+    /// <summary>
+    /// Scales a canvas with the screen from the reference resolution, and
+    /// never below it: Expand keeps the canvas at least 1920x1080 in both
+    /// dimensions (a screen wider than 16:9 gets more width, a narrower one
+    /// more height), so a layout that fits at the reference size, such as the
+    /// intercom's choices, fits on every screen.
+    /// </summary>
+    private static void ConfigureScaler(CanvasScaler scaler)
+    {
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = ReferenceResolution;
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
     }
 
     private static void EnsureEventSystem()
@@ -756,8 +774,7 @@ public static class OfficeSceneUIBuilder
         CanvasScaler scaler = go.GetComponent<CanvasScaler>();
         if (scaler == null)
             scaler = go.AddComponent<CanvasScaler>();
-        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = ReferenceResolution;
+        ConfigureScaler(scaler);
 
         if (go.GetComponent<GraphicRaycaster>() == null)
             go.AddComponent<GraphicRaycaster>();
