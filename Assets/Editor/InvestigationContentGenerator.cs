@@ -107,9 +107,9 @@ public static class InvestigationContentGenerator
         TravelRuleSO noHeliosFuture = MakeRule("Rule_NoHeliosFuture", TravelRuleType.NationEraForbidden, future, helios, "Quarantine: no travel to Helios in The Future.");
 
         // --- Day plans (escalating rules) ---
-        DayPlanSO day1 = MakeDay("DayPlan_Inv_Day1", 1, 5, blueprint, new[] { (rome, 1f), (medieval, 1f), (future, 1f) }, new Object[0]);
-        DayPlanSO day2 = MakeDay("DayPlan_Inv_Day2", 2, 6, blueprint, new[] { (rome, 1f), (medieval, 1f), (future, 1f) }, new Object[] { noAegyptus });
-        DayPlanSO day3 = MakeDay("DayPlan_Inv_Day3", 3, 7, blueprint, new[] { (rome, 1f), (medieval, 1f), (future, 1f) }, new Object[] { noFuture, noHeliosFuture });
+        DayPlanSO day1 = MakeDay("DayPlan_Inv_Day1", 1, 8, blueprint, new[] { (rome, 1f), (medieval, 1f), (future, 1f) }, new Object[0]);
+        DayPlanSO day2 = MakeDay("DayPlan_Inv_Day2", 2, 10, blueprint, new[] { (rome, 1f), (medieval, 1f), (future, 1f) }, new Object[] { noAegyptus });
+        DayPlanSO day3 = MakeDay("DayPlan_Inv_Day3", 3, 12, blueprint, new[] { (rome, 1f), (medieval, 1f), (future, 1f) }, new Object[] { noFuture, noHeliosFuture });
 
         // --- Wire into ContentLibrary_Main ---
         ContentLibrarySO lib = FindByName<ContentLibrarySO>("ContentLibrary_Main") ?? FindFirst<ContentLibrarySO>();
