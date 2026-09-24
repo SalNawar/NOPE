@@ -1,0 +1,128 @@
+[
+  {
+    "id": "sky",
+    "source_id": "sky",
+    "title": "Sky",
+    "group": "Exterior",
+    "use": "Neutral sky backplate. Runtime color treatment can follow the shift."
+  },
+  {
+    "id": "far_megacity",
+    "source_id": "far_megacity_flat",
+    "title": "Far megacity",
+    "group": "Exterior",
+    "use": "Wide stepped megablocks, flat roof masses, separate from sky and traffic."
+  },
+  {
+    "id": "near_megablock",
+    "source_id": "near_megablock_flat",
+    "title": "Near megablock study",
+    "group": "Exterior",
+    "use": "Separate building appearance study; use the base mesh for real depth and dynamic lighting."
+  },
+  {
+    "id": "hover_car",
+    "source_id": "hover_car",
+    "title": "Hover car",
+    "group": "Traffic",
+    "use": "Individual traffic sprite. The separate GLB supplies a simple 3D vehicle and traversal clip."
+  },
+  {
+    "id": "mona_lisa",
+    "source_id": "mona_lisa",
+    "title": "Mona Lisa — stylized study",
+    "group": "Paintings",
+    "use": "Individual worn framed painting; proposed left display rail."
+  },
+  {
+    "id": "pearl_earring",
+    "source_id": "pearl_earring",
+    "title": "Girl with a Pearl Earring — stylized study",
+    "group": "Paintings",
+    "use": "Individual worn framed painting; proposed right display rail."
+  },
+  {
+    "id": "starry_night",
+    "source_id": "starry_night",
+    "title": "The Starry Night — stylized study",
+    "group": "Paintings",
+    "use": "Individual damaged framed painting; proposed left rear display."
+  },
+  {
+    "id": "great_wave",
+    "source_id": "great_wave",
+    "title": "The Great Wave — stylized study",
+    "group": "Paintings",
+    "use": "Individual worn print; proposed fallen frame beside right rear display, outside the walking route."
+  },
+  {
+    "id": "milkmaid",
+    "source_id": "milkmaid",
+    "title": "The Milkmaid — stylized study",
+    "group": "Paintings",
+    "use": "Individual worn painting; proposed left middle display."
+  },
+  {
+    "id": "mondrian",
+    "source_id": "mondrian",
+    "title": "Composition after Mondrian",
+    "group": "Paintings",
+    "use": "A reinterpretation, not an exact reproduction of a specific composition. Broken frame corner."
+  },
+  {
+    "id": "thinker",
+    "source_id": "thinker_flat",
+    "title": "The Thinker — stylized study",
+    "group": "Sculptures",
+    "use": "2D exhibit cutout with simplified bronze planes; proposed left front plinth."
+  },
+  {
+    "id": "discobolus",
+    "source_id": "discobolus_flat",
+    "title": "Discobolus — stylized study",
+    "group": "Sculptures",
+    "use": "2D marble exhibit cutout with a chipped discus; proposed right front plinth."
+  },
+  {
+    "id": "nefertiti",
+    "source_id": "nefertiti_final",
+    "title": "Nefertiti bust — stylized study",
+    "group": "Sculptures",
+    "use": "2D bust with simplified crown and shoulder damage; proposed left middle plinth."
+  },
+  {
+    "id": "wright_flyer",
+    "source_id": "wright_flyer",
+    "title": "1903 Wright Flyer — scale exhibit",
+    "group": "Inventions",
+    "use": "Independent aircraft cutout; proposed rear right exhibit. No pilot."
+  },
+  {
+    "id": "printing_press",
+    "source_id": "printing_press",
+    "title": "Early screw printing press — reconstruction",
+    "group": "Inventions",
+    "use": "Individual press cutout with blank paper; proposed right middle display."
+  },
+  {
+    "id": "rocket",
+    "source_id": "rocket_final",
+    "title": "Stephenson's Rocket — scale exhibit",
+    "group": "Inventions",
+    "use": "Individual locomotive cutout with corrected two-axle arrangement; proposed left rear display."
+  },
+  {
+    "id": "voyager_record",
+    "source_id": "voyager_record",
+    "title": "Voyager Golden Record cover — stylized study",
+    "group": "Inventions",
+    "use": "Separate keepsake with simplified diagrams; proposed inner booth panel."
+  },
+  {
+    "id": "floor_paper",
+    "source_id": "floor_paper",
+    "title": "Discarded government form",
+    "group": "Floor clutter",
+    "use": "Independent paper cutout with blank form fields and stain. No changing text baked in."
+  }
+]

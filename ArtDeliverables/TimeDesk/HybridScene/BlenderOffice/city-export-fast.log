@@ -1,0 +1,15 @@
+00:26.344  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+00:26.344  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\City_CivicMegablock.fbx'
+export finished in 0.0260 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\City_TwinMegablock.fbx'
+export finished in 0.0236 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\City_TerracedMegablock.fbx'
+export finished in 0.0244 sec.
+Info: Saved as "City_Collection.blend"
+
+Blender quit

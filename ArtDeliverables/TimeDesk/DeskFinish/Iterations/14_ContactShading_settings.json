@@ -1,0 +1,23 @@
+{
+  "MonoBehaviour": {
+    "m_Enabled": true,
+    "m_EditorHideFlags": 0,
+    "m_Name": "OfficeContactShading",
+    "m_EditorClassIdentifier": "Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.ScreenSpaceAmbientOcclusion",
+    "m_Active": true,
+    "m_Settings": {
+      "AOMethod": 0,
+      "Downsample": false,
+      "AfterOpaque": false,
+      "Source": 1,
+      "NormalSamples": 1,
+      "Intensity": 1.7000000476837158,
+      "DirectLightingStrength": 0.6000000238418579,
+      "Radius": 0.1599999964237213,
+      "Samples": 0,
+      "BlurQuality": 0,
+      "Falloff": 25.0,
+      "SampleCount": -1
+    }
+  }
+}

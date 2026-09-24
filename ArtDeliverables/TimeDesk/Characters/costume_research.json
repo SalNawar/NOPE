@@ -1,0 +1,1467 @@
+{
+ "entries": [
+  {
+   "country": "egypt",
+   "era": "ancient",
+   "displayName": "New Kingdom Egypt",
+   "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+   "year": -1470,
+   "male": {
+    "outfit": "Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen, so the bright beadwork at the neck stands out.",
+    "hair": "Official's bobbed wig: straight black wig cut bluntly at shoulder length with a short straight fringe, falling over the ears or tucked behind them (head shaved underneath)",
+    "facialHair": "none (clean-shaven; the false beard was royal and must not be used)",
+    "headwear": "none",
+    "accessory": "Wesekh broad collar: a flat semicircular collar of many rows of faience beads (turquoise, lapis blue, carnelian red, gold) with a row of teardrop pendants on the outer edge, covering the upper chest and shoulders"
+   },
+   "female": {
+    "outfit": "Ankle-length, close-fitting sheath dress of fine white linen that covers the bust and is held up by two broad shoulder straps; papyrus sandals or barefoot. No overgarment: the sheer pleated over-robes came one or two generations later.",
+    "hair": "Tripartite wig: a long, heavy, straight black wig parted in the centre, with two thick lappets falling in front of the shoulders to the chest and the rest hanging down the back",
+    "facialHair": "none",
+    "headwear": "Thin floral fillet: a narrow band of blue-lotus petals tied round the wig, with a single lotus bud over the forehead",
+    "accessory": "Wesekh broad collar of rows of turquoise, lapis, carnelian and gold faience beads with teardrop pendants"
+   },
+   "signature": "The broad beaded wesekh collar worn over crisp white linen, with a heavy black wig (kohl-winged eyes on the face layer)",
+   "avoid": [
+    "nemes striped headcloth, uraeus cobra, vulture crown, blue khepresh crown (all royal or divine)",
+    "false beard, crook and flail",
+    "Hollywood 'Cleopatra' styling or gold lame",
+    "sheer pleated over-robes, knotted shawls and layered 'duplex' wigs (later 18th-dynasty and Amarna fashion)",
+    "perfume/wax cones on the head (banquet-only, and they read as a hat)",
+    "Greek draped chiton/himation and fibula brooches (reads as Greece-ancient; Ptolemaic Alexandria was largely Greek-dressed)",
+    "coloured or fringed wool wraps and long beards (read as Mesopotamia)",
+    "ankh or god emblems as ornaments",
+    "mummy wrappings, pyramids or sphinx props"
+   ],
+   "notes": "Hatshepsut's Thebes was chosen over Cleopatra's Alexandria because Ptolemaic civilian dress was largely Greek and would blur with Greece-ancient. The look follows early-to-mid 18th-dynasty Theban tomb paintings of officials and scribes (Rekhmire TT100 under Thutmose III; Menna TT69, a 'scribe of the fields' whose tomb shows land surveyors with measuring ropes, is slightly later, c. 1400 BCE) and statues of Senenmut. Men were clean-shaven and wore wigs, and both sexes wore the broad collar. Kohl eyeliner for both sexes goes on the face layer. Correction: the original draft said 'short-sleeved' wig, which is a wrong term. The knotted sheer shawl was removed because sheer pleated overgarments became common only from about Amenhotep II–III onward. Around 1470 BCE the strapped sheath dress was the standard women's garment; it is drawn covering the bust for modesty. The blue lotus fillet comes from banquet scenes and is ornamental, not a cult object."
+  },
+  {
+   "country": "iraq",
+   "era": "ancient",
+   "displayName": "Babylonia",
+   "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+   "year": -1760,
+   "male": {
+    "outfit": "Ankle-length wrap of heavy dyed wool (madder red, blue or yellow) wound round the body and thrown over the left shoulder, leaving the right shoulder and arm bare. Every edge has a thick rolled fringe or tufted border, and a wide cloth belt holds it at the waist. Plain leather sandals.",
+    "hair": "Long hair drawn back into a low, rounded chignon (bun) at the nape",
+    "facialHair": "Full, long beard reaching the upper chest, squared at the bottom, combed into long wavy strands that end in neat rows of small curls, with a moustache",
+    "headwear": "Narrow twisted-wool headband (fillet) circling the head and holding the hair",
+    "accessory": "Lapis-lazuli cylinder seal: a finger-length carved stone cylinder hung on a cord around the neck. It was the owner's signature, rolled onto clay contracts."
+   },
+   "female": {
+    "outfit": "Ankle-length shawl-dress of dyed wool (saffron-yellow, rust or blue), wound round the body with the end thrown over the left shoulder so the right shoulder is bare. A thick contrasting fringe runs along its edges and spirals down the body in one or two bands. It is a fringed wrap, not a tiered flounced robe.",
+    "hair": "Centre-parted hair braided into one thick plait wound round the head like a crown",
+    "facialHair": "none",
+    "headwear": "A wide gold-thread ribbon wound over the coiled braid, hung with small gold ring pendants",
+    "accessory": "A pair of long bronze toggle pins (tudittum) fastening the shawl at the chest, linked by a looping string of carnelian and lapis beads"
+   },
+   "signature": "The heavily fringed, coloured wool wrap draped over the left shoulder with the right shoulder bare; men also have the long chest-length curled beard and the hair bun",
+   "avoid": [
+    "horned crowns (divine) and Hammurabi's royal brimmed cap",
+    "tiered flounced robes (in Old Babylonian art these are goddess dress, e.g. the Lama goddess)",
+    "Assyrian winged bulls (lamassu), Ishtar Gate dragons and other religious motifs",
+    "Sumerian sheepskin kaunakes skirts (an earlier period)",
+    "plain, unfringed Greek-style himation with short hair and a short beard (reads as Greece-ancient)",
+    "white linen, broad bead collars, wigs or clean-shaven faces (read as Egypt)",
+    "maces, weapons, or clay tablets held in the hand"
+   ],
+   "notes": "Sources: the Code of Hammurabi stele in the Louvre (a long robe with a rolled border draped over the left shoulder, a long full beard, hair in a bun), the Mari palace wall paintings (c. 1780 BCE), Old Babylonian terracotta plaques, and the World History Encyclopedia article 'Fashion & Dress in Ancient Mesopotamia' (a fringed shawl over the left shoulder with the right arm free; women's braids wound round the head with ribbons and pendants; fringe and length signalled rank). Correction: the woman's dress was changed from 'several layered bands of fringe', which drifts toward the tiered flounced robe that marks goddesses in Old Babylonian art (a sacred-dress risk), to a single fringed wrap. The beard was changed from strict horizontal rows of tight curls, which is more Neo-Assyrian, to long wavy strands ending in curls, closer to Old Babylonian royal heads. The dye colours are reconstructed from textile terms in the Mari texts and are uncertain. The cylinder seal fits the game's 'records and contracts' theme. The Greek himation also leaves the right shoulder bare, so the thick visible fringe, the chest-length beard and the bun must stay prominent."
+  },
+  {
+   "country": "greece",
+   "era": "ancient",
+   "displayName": "Periclean Athens",
+   "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+   "year": -430,
+   "male": {
+    "outfit": "Short, knee-length wool chiton in undyed cream or saffron, under a large rectangular himation (wool mantle) in a colour such as madder red, blue-grey or saffron. The himation wraps round the body and is thrown over the left shoulder, leaving the right arm and shoulder free (the chiton covers the chest). Its hem has a woven meander (Greek key) border in dark red or black. Simple strapped leather sandals or bare feet.",
+    "hair": "Classical Athenian crop: short-to-medium thick curls brushed forward, half covering the ears",
+    "facialHair": "Full, rounded, neatly trimmed beard with moustache (the norm for an adult Athenian citizen)",
+    "headwear": "Petasos: a flat, wide-brimmed felt traveller's hat with a low crown, worn tilted back on the head with the brim turned up at the front so the face is fully clear, tied under the chin with a thin cord",
+    "accessory": "Pera: a small soft leather traveller's pouch on a thin strap slung diagonally across the body from the left shoulder, over the himation"
+   },
+   "female": {
+    "outfit": "Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms. A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.",
+    "hair": "Centre-parted wavy hair drawn back to a bun at the nape, with a few curls escaping at the temples",
+    "facialHair": "none",
+    "headwear": "Sakkos: a patterned cloth snood that wraps the bun and the back of the head, leaving the forehead and face fully visible",
+    "accessory": "Narrow woven girdle tied at the natural waist, with the chiton bloused over it (kolpos)"
+   },
+   "signature": "The coloured himation with a woven meander (Greek key) border, draped over one shoulder with no curved toga edge; men add a beard and the flat petasos traveller's hat, and women add the patterned sakkos snood",
+   "avoid": [
+    "Roman toga with a curved, rounded edge or a U-shaped front fold, or a tunic with purple stripes (reads as Rome)",
+    "clean-shaven adult men (reads as Roman)",
+    "laurel or olive victory wreaths",
+    "Corinthian helmet from Pericles' busts, hoplite armour, Spartan red cloak (military)",
+    "short chlamys cloak pinned at the shoulder with petasos (the ephebe/cadet and hunting costume)",
+    "all-white marble-statue clothing (real Greek dress was coloured)",
+    "'toga party' bedsheet look",
+    "girdle high under the bust (a Hellenistic fashion, a century later)",
+    "Greek national flag colours or modern symbols",
+    "priestess or temple ritual dress (sacred)"
+   ],
+   "notes": "Sources: Attic red-figure and white-ground vase painting, the Parthenon frieze (c. 440 BCE), Lee, 'Body, Dress and Identity in Ancient Greece' (2015), and Llewellyn-Jones, 'Aphrodite's Tortoise' (2003). Changes: the petasos moved from a hat slung behind the shoulders, which is invisible on a front-facing figure and could read as a halo, to being worn on the head. Travellers wear it in vase painting, which fits a time traveller at a border desk. The freed accessory slot became a pera shoulder pouch. The woman's girdle moved from high under the bust (mostly Hellenistic) to the natural waist, normal c. 430 BCE. The sandal term was simplified because krepides were heavier travelling or military footwear. To tell Greece from Italy in this era: beard, coloured himation with a woven border, petasos and sandals (Greece) against a clean-shaven face, a plain white toga with a curved edge, clavus stripe and closed calcei (Rome). Socrates famously wore only a coarse tribon cloak and went barefoot, so a plainer variant is fine. Archimedes (Syracuse, c. 250 BCE) was culturally Greek: dress him in himation and chiton, never a toga. Respectable Athenian women often pulled the himation over the head outdoors; the sakkos is an equally attested, face-clear option."
+  },
+  {
+   "country": "italy",
+   "era": "ancient",
+   "displayName": "Republican Rome",
+   "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+   "year": -50,
+   "male": {
+    "outfit": "Knee-length white wool tunica with two narrow reddish-purple vertical stripes (angusticlavus, associated with the equestrian business class), under a long, ample, plain off-white wool toga. The toga is draped the late-Republican way: over the left shoulder, round the back, under the right arm and back up across the front to the left shoulder, forming a firm diagonal band across the chest. Its distinctive rounded (curved) lower edge hangs to the ankles and dips lower at the sides. The right-hand clavus stripe shows at the right side of the chest. Closed black leather calcei ankle boots with laced straps, not sandals.",
+    "hair": "Late-Republican short crop, cut close and combed forward onto the brow (Caesar style)",
+    "facialHair": "none (clean-shaven, the Roman norm of the period)",
+    "headwear": "none",
+    "accessory": "Gold signet ring (anulus aureus, the equestrian gold ring) on the left hand"
+   },
+   "female": {
+    "outfit": "A long-sleeved tunica with a sleeveless, floor-length stola over it on narrow shoulder straps (the dress of a respectable married woman). A large plain rectangular palla (mantle) with no patterned border is draped over the left shoulder and around the body. Ochre, rose, sea-green or blue wool, not purple.",
+    "hair": "Nodus hairstyle: a raised roll of hair pushed up and pinned above the forehead, the sides waved back, the rest braided into a small bun at the nape",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Gold earrings with pearl drops (crotalia)"
+   },
+   "signature": "Men: a plain white toga with a curved, rounded edge over a tunic with a narrow purple clavus stripe, worn clean-shaven with calcei boots. Women: the nodus roll of hair above the forehead, with the strapped stola.",
+   "avoid": [
+    "deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late",
+    "laurel wreath (triumphal or imperial)",
+    "toga praetexta or all-purple toga (magistrate or emperor)",
+    "broad senatorial stripe (latus clavus)",
+    "legionary armour, red military cloak, gladiator gear",
+    "beards on men (reads as Greek or later imperial)",
+    "Greek-key or other patterned borders (keep those for Greece)",
+    "sandals worn with the toga",
+    "Vestal or priestly veiling, toga drawn over the head (sacred)",
+    "arm held in a toga sling (a statue pose that fights the layered body rig)"
+   ],
+   "notes": "Sources: Sebesta & Bonfante (eds.), 'The World of Roman Costume' (1994); Rothfus, 'The Gens Togata: Changing Styles and Changing Identities' (AJP 2010, after Goette 1990); the Via Statilia funerary relief and late-Republican togati; and the Tusculum Caesar portrait. Correction: the draft's U-shaped sinus with an umbo pouch is Augustan. Rothfus and Goette date the sinus to the late 1st century BCE–Augustan period and the umbo to around the Ara Pacis (9 BCE), so the Ara Pacis is not a model for 50 BCE. In Caesar's day the toga had become long (ankle-length 'like a Greek pallium') and full, but was still a single-layer drape. Its curved edge was what told a Roman apart from a Greek in the pallium even then, so the curved hem, the plain white colour, the visible clavus, the clean-shaven face and the calcei now carry the tell. Statues often show the right arm in a toga 'sling'; for drawing, the arm is left free, which the Arringatore-type drape also allowed. The toga was formal civic dress, and travellers often wore a hooded paenula instead, but the toga is the clearest tell against Greece. The anulus aureus was loosely rather than strictly equestrian in the Republic. The nodus is best attested in the 40s–30s BCE (Fulvia and Octavia coin portraits), so it is slightly forward-dated for c. 50 BCE; a simple centre-parted nape bun is the conservative fallback. Suetonius records Caesar buying Servilia a costly pearl, and pearls were a Roman status craze."
+  },
+  {
+   "country": "china",
+   "era": "ancient",
+   "displayName": "Eastern Han Luoyang",
+   "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+   "year": 105,
+   "male": {
+    "outfit": "Ankle-length, straight-hemmed wrap robe (zhiju paofu) closed with the wearer's left panel over the right, making a 'y' at the throat, with two or three layered collars (the innermost white). The sleeves are huge, bagging out below the arm and narrowing at the wrist. The ground is black, deep red or brown silk with broad contrasting patterned borders at collar, cuffs and hem, tied at the waist with a cloth sash on a small bronze belt hook. Black cloth shoes with upturned square toes peek from the hem.",
+    "hair": "Han topknot (fa ji): all hair combed smoothly up from forehead and nape into a single knot on the crown, no fringe",
+    "facialHair": "Thin moustache with slightly upturned tips and a short pointed chin beard",
+    "headwear": "Jieze: a close-fitting black cloth cap with a stiff band across the forehead, a raised roof-shaped ridge on top covering the topknot, and two short upright flaps ('ears') standing at the back. No chin ties.",
+    "accessory": "Zanbi: a slim bamboo writing brush tucked upright into the side of the cap, as Han scribes kept brushes in the hair or cap"
+   },
+   "female": {
+    "outfit": "Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.",
+    "hair": "Chuishao ji: centre-parted hair drawn smoothly back into a low looped bun at the nape, with a short tail of hair hanging below it",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Jade bi-disc pendant hanging from the sash on a red silk cord with a tassel"
+   },
+   "signature": "A floor-length cross-collar wrap robe with huge bag-shaped 'ox-dewlap' sleeves and broad dark borders; men add the roof-ridged black jieze cap",
+   "avoid": [
+    "Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow",
+    "jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank",
+    "armour, swords, crossbows",
+    "Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items",
+    "Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee",
+    "conical 'coolie' straw hat, Fu Manchu moustache, any slanted-eye caricature",
+    "robe closed with the right panel over the left (reversed)",
+    "chin ties on the jieze (ties belong to the formal guan hat worn on top of it)"
+   ],
+   "notes": "Sources: Mawangdui Tomb 1 silks and figurines (Western Han, c. 168 BCE); Eastern Han tomb figurines, reliefs and murals (Wu Liang shrines, Holingol, Dahuting); Book of Later Han, 'Treatise on Carriages and Clothing', for the ze and jinxian guan. Correction: the jieze was a band cap (a forehead band called yanti, two upright 'ears' at the back and a roof-like top) and had no chin ribbons. The ties were for the formal guan worn over it, which is left out because its ridges mark official rank. By Eastern Han the ze was worn across social classes, and the roof-topped jieze was the civil (non-military) form. Men's curved-hem robes had largely given way to straight hems (zhiju) by Eastern Han, but women's quju robes continued through Eastern Han into Wei-Jin, so the spiral hem is kept for the woman. Mawangdui is about 270 years earlier, so treat the border patterns as indicative. Cai Lun was a palace eunuch official, so draw a generic Han scribe rather than him. If the brush reads as a plain hairpin at sprite size, swap the accessory for a bronze belt hook with a hanging jade."
+  },
+  {
+   "country": "japan",
+   "era": "ancient",
+   "displayName": "Kofun Yamato",
+   "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+   "year": 450,
+   "male": {
+    "outfit": "Kinu: a hip-length jacket of undyed white hemp with narrow tube sleeves, fastened at the chest with two small cloth bows and belted at the waist. Loose white hakama trousers are gathered and tied just below each knee with cords (ashi-yui), so they balloon above. Bare feet or simple straw sandals; optional simple red triangle or dot trim.",
+    "hair": "Mizura: hair parted in the centre, with each side looped into a figure-eight bundle tied beside the ears and hanging to the jaw",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Necklace of green jade magatama (comma-shaped beads) strung with cylindrical kudatama beads"
+   },
+   "female": {
+    "outfit": "White hemp kinu jacket with narrow sleeves, fastened with small cloth bows and belted at the waist, over a mo: a long wrapped skirt to the ankle, sometimes pleated or striped in red and white.",
+    "hair": "Flat 'board' chignon: hair gathered on top of the head into a long, flat bun lying front to back, tied at its middle, with a small comb at the front",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Multi-strand necklace of green magatama and round blue glass beads"
+   },
+   "signature": "A short belted jacket over knee-tied trousers or a long skirt, with a big green comma-shaped magatama bead necklace; men also wear mizura hair loops beside the ears (the clearest silhouette cue), and women the flat board chignon",
+   "avoid": [
+    "keiko armour, swords, helmets (the famous haniwa warrior)",
+    "shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical",
+    "a single oversized jewel styled as the imperial regalia",
+    "red face paint seen on haniwa (reads as war paint or caricature)",
+    "later kimono with a wide obi, or Heian court robes",
+    "Chinese long robes with huge sleeves, or topknot caps"
+   ],
+   "notes": "Sources: haniwa figures in the Tokyo National Museum and elsewhere (a seated man with mizura; a woman with a flat hair bun and bead necklaces; jackets tied with bows at the chest); Wei Zhi 'Account of the Wa' (3rd c.) for the earlier Yayoi look. Correction: the rule that robes close with the left panel over the right, as in China, came from an edict of 719 CE (Yoro 3, Shoku Nihongi: 'first ordered the common people to wear the right lapel'), not the 718 Yoro Code. Before it, haniwa show the closure both ways, so closure direction was dropped as a tell and the jacket is described as fastened with bows. Japan is instead told apart from Han China by the short jacket with knee-tied trousers or a skirt, the mizura or flat chignon, and the magatama. None of the designer's figures falls in this era. Magatama also occur in Korea, but Korea is not a game nation."
+  },
+  {
+   "country": "britain",
+   "era": "ancient",
+   "displayName": "Iron Age Britain",
+   "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+   "year": 20,
+   "male": {
+    "outfit": "Knee-length belted wool tunic over close-fitting trousers (bracae), both woven in bold multicoloured checks of red, mustard yellow and green. A thick, short rectangular cloak in a contrasting check is pinned at the right shoulder. Soft leather ankle shoes.",
+    "hair": "Long swept-back mane: shoulder-length hair brushed straight back off the forehead, thick and full",
+    "facialHair": "Long drooping moustache that hangs past the corners of the mouth; chin and cheeks clean-shaven",
+    "headwear": "none",
+    "accessory": "Twisted gold torc: a thick, rope-twisted open neck ring with rounded knob ends meeting at the throat"
+   },
+   "female": {
+    "outfit": "Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest with a bronze brooch enamelled in red with swirling La Tene curves.",
+    "hair": "Very long centre-parted hair in two thick braids falling to the waist",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Twisted gold or bronze torc at the neck"
+   },
+   "signature": "The rope-twisted gold torc at the throat, worn with bold multicoloured checked wool",
+   "avoid": [
+    "blue woad body paint or tattoos (skin must never carry the signal)",
+    "horned or winged helmets",
+    "Roman toga, tunic-with-toga or Roman armour",
+    "swords, shields, spears, chariot-warrior gear",
+    "Scottish kilts or clan tartans (anachronistic by 1,500+ years)",
+    "Suebian side-knot hairstyle or full beard (that is Germany-ancient)",
+    "plain undyed or single-colour cloth with amber beads (reads as Germany-ancient)",
+    "fur-loincloth 'savage barbarian' caricature",
+    "druid robes or any religious costume"
+   ],
+   "notes": "Sources: Caesar, Gallic War 5.14 (Britons wore their hair long and shaved everything except the head and upper lip, hence the moustache with a bare chin); Cassius Dio 62.2 (Boudica in a multicoloured tunic, a thick mantle fastened with a brooch and a great gold torc, with very long hair); Diodorus 5.30 (Celtic cloaks woven in close multicoloured checks; hair drawn back from the forehead). The Snettisham Great Torc (c. 75 BCE) and La Tene enamelled brooches are the models for the jewellery. No changes to substance; the entry checks out. Uncertain: no British Iron Age garments survive intact, so cut and colour are reconstructed from Gaulish and continental parallels and classical descriptions. The braids are a reasonable choice, but Dio describes loose hair. Camulodunum fits Britain's trade-network theme. Against Germany-ancient, the checks, the torc and the moustache-only face must stay prominent, because both nations share the tunic, trousers and cloak silhouette."
+  },
+  {
+   "country": "germany",
+   "era": "ancient",
+   "displayName": "Germania",
+   "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+   "year": 98,
+   "male": {
+    "outfit": "Tight-fitting, long-sleeved, knee-length wool tunic and close-fitting long trousers, as in the Thorsberg bog finds, in undyed brown and deep woad blue with a diamond-twill texture. A short, dark rectangular wool cloak with a fringed, tablet-woven border is pinned at the right shoulder. Leather wrap shoes.",
+    "hair": "Suebian knot: hair combed back and to the side and twisted into a tight knot on the right side of the head, above the temple",
+    "facialHair": "Full short beard",
+    "headwear": "none",
+    "accessory": "Bronze bow brooch (eye-fibula) pinning the cloak at the right shoulder"
+   },
+   "female": {
+    "outfit": "Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder with a small bronze brooch, leaving the arms bare, with red-purple bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.",
+    "hair": "Long hair gathered into a low knot at the nape, bound with a narrow woven wool hair-band wound round it",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Necklace of chunky orange Baltic amber and glass beads"
+   },
+   "signature": "For men, the Suebian side-knot hairstyle with a full beard. For women, a chunky Baltic amber necklace over a sleeveless, shoulder-pinned linen dress with red-purple trim.",
+   "avoid": [
+    "horned or winged helmets",
+    "Viking or Wagnerian-opera stereotypes",
+    "fur trims, pelts or fur-loincloth barbarian caricature",
+    "spears, shields or any weapons; Roman armour",
+    "gold torc or bright multicoloured checks (that is Britain-ancient)",
+    "fitted white strapped sheath dress or broad bead collar (reads as Egypt-ancient)",
+    "snood or hairnet over the bun (too close to the Greek sakkos)",
+    "Viking-age oval brooches with bead strings between them (the wrong period)",
+    "Roman toga or Roman-style jewellery"
+   ],
+   "notes": "Sources: Tacitus, Germania 17 (a short cloak fastened with a clasp; wealthy men in tight garments that follow each limb; women in linen trimmed with purple, without sleeves, arms bare) and Germania 38 (the Suebian knot). The Osterby head (Schleswig-Holstein) preserves an actual Suebian knot on the right side. The Thorsberg finds (trousers, tunic, fringed cloak) date to the 2nd-3rd century CE, slightly later than this moment. Changes: the fur collar was removed from the man's cloak. Tacitus mentions pelts, but fur pushes the figure toward the barbarian caricature and Thorsberg shows fringed wool. The woman's sprang hairnet was removed: it is only weakly attested for 1st-century Germania (the secure finds are Danish Bronze Age and some Iron Age bog finds), and at thumbnail size it duplicates the Greek sakkos. She now has a woven hair-band like the one on the Huldremose woman. The dress is now a loose peplos-type dress pinned at both shoulders, to separate it from the Egyptian sheath. Baltic amber was the region's main trade good. Beards follow Roman depictions of Germanic men, such as the Marcus Aurelius column."
+  },
+  {
+   "country": "egypt",
+   "era": "medieval",
+   "displayName": "Mamluk Egypt",
+   "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+   "year": 1340,
+   "male": {
+    "outfit": "Ankle-length pale linen qamis under an open, front-opening farajiyya, the long outer robe of Mamluk scholars, judges and scribes. The farajiyya is deep green, brown or dark blue wool (never black), with very wide, long sleeves that fall well past the fingertips because ample sleeves marked civilian status. No embroidered armbands. Soft leather boots.",
+    "hair": "Short-cropped, hidden under the turban",
+    "facialHair": "Full, rounded, neatly trimmed beard with a moustache",
+    "headwear": "Large, broad, rounded white muslin turban ('imama) wound low and full around a small hidden cap, with no cap showing above it. One loose end (the 'adhaba tail) hangs behind one shoulder.",
+    "accessory": "Broad woven-silk girdle wound at the waist, with long knotted fringe ends"
+   },
+   "female": {
+    "outfit": "Ankle-length silk qamis in saffron, crimson or emerald with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar is draped from the head down to the ankles and hangs open at the front, so a strip of the bright qamis and its big sleeves shows down the middle.",
+    "hair": "Long hair braided and hidden under the izar, with only a thin edge of hair at the brow",
+    "facialHair": "none",
+    "headwear": "The top of the white izar drawn over the head as a soft hood that frames the fully visible face, with no face veil",
+    "accessory": "Gold filigree collar necklace with small hanging pendants"
+   },
+   "signature": "Men: a big, low, round white turban with a hanging tail, worn with very long, wide sleeves. Women: a full-length white izar hooded over the head and hanging open over a brightly coloured gown.",
+   "avoid": [
+    "Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows",
+    "Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval)",
+    "Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects",
+    "face-covering veils (burqu')",
+    "Ottoman tall kavuk turbans",
+    "the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7)",
+    "harem or belly-dance cliches",
+    "Crusader imagery"
+   ],
+   "notes": "Sources: lugatism.com, 'Outer garments' and 'Headwear' in the Mamluk Sultanate. These say the farajiyya was the long-sleeved robe of the learned class and could carry tiraz bands, which are dropped here so it does not echo Iraq. They also say women's izars were typically white for Muslim women, while blue, yellow and red were the colours imposed on Christian, Jewish and Samaritan women, which is why the izar must stay white. Rawi, 'Turbans and Textiles', describes the izar as a large rectangle draped over head and shoulders, long sleeves as normal, and turbans as major status spending. Parani and Stillman (Arab Dress, p. 65) note that in the Mamluk state longer sleeves meant higher status. Removed: the claim that sultans issued decrees shortening women's sleeves. I could not verify it; the decrees I found (1426/7 and 1472) concern women's caps. Blue-and-white checked izar fragments from Quseir al-Qadim were considered and rejected because the blue could read as the colour imposed on Christians. The traveller is a civilian 'man of the pen' in the irrigation or land-survey office. The 'adhaba tail is a scholarly habit and optional."
+  },
+  {
+   "country": "iraq",
+   "era": "medieval",
+   "displayName": "Abbasid Baghdad",
+   "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+   "year": 830,
+   "male": {
+    "outfit": "Ankle-length pale linen qamis and sirwal under a front-opening, calf-length durra'a robe of black wool or silk. Bands of gold-embroidered decorative Arabic-style pseudo-script (tiraz) circle both upper sleeves. The sleeves are moderately wide and end at the wrist. Soft leather khuff boots.",
+    "hair": "Hair to the nape, mostly hidden under the cap and turban",
+    "facialHair": "Full beard, neatly trimmed and rounded, with a moustache",
+    "headwear": "Qalansuwa tawila: a tall, stiff, smooth black cap (a cone or high cylinder about one and a half times the height of the head) with a white turban wound round its base. The tall black top rises clearly above the turban and stays upright, not soft or crumpled.",
+    "accessory": "Taylasan: a dark shawl draped over the shoulders and hanging down the back like a thrown-back hood, the mark of a scholar"
+   },
+   "female": {
+    "outfit": "Long-sleeved, ankle-length qamis in a rich colour (rose, saffron or pistachio) with tiraz script bands at the upper arms, over full sirwal gathered at the ankle. A light mantle (rida') lies over the shoulders only, not over the head.",
+    "hair": "Long hair mostly under the veil, with two glossy S-shaped side-curls (sudgh) combed forward onto the cheeks at the temples",
+    "facialHair": "none",
+    "headwear": "Light, sheer khimar veil over the hair, bound at the brow by an 'isaba: a narrow jewelled and embroidered headband carrying a line of decorative pseudo-script",
+    "accessory": "Choker of large pearls"
+   },
+   "signature": "Men: the tall, stiff black qalansuwa cap rising out of a white turban, with tiraz armbands. Women: the jewelled 'isaba band across the brow, with S-shaped side-curls on the cheeks.",
+   "avoid": [
+    "'Arabian Nights' or Aladdin cliches: curled-toe slippers, genie trousers, onion domes",
+    "harem stereotypes and face-covering veils",
+    "readable Qur'anic text on clothing (use decorative pseudo-script)",
+    "keffiyeh with agal (a later style)",
+    "Ottoman bulbous turbans",
+    "Mamluk very long hanging sleeves, a big round all-white turban, or a full-length white izar wrap (read as Egypt-medieval)",
+    "soft, crumpled or forward-leaning cap (reads as the Japanese eboshi)",
+    "Sasanian royal crowns, black battle banners, weapons"
+   ],
+   "notes": "The entry was sound and I kept it almost unchanged. Sources: abbasidstudies.org (Clothing); lugatism.com on Abbasid headwear and outer garments (the qalansuwa tawila was a court and scholarly cap with a turban wound round it, and the taylasan was a shawl over the shoulders); Wikipedia, 'Durra'ah'; Encyclopedia.com, 'Middle East: History of Islamic Dress'. The women's side-curls come from the Samarra Jawsaq wall paintings (c. 836), and the jewelled 'isaba is traditionally credited to 'Ulayya bint al-Mahdi. Al-Mansur introduced the tall qalansuwa c. 770, and it was shortened only under al-Musta'in in the 860s, so it is correct for 830. Black was the Abbasid court colour, which suits a scholar at court. I tightened the cap wording (stiff, smooth, upright) so it cannot read as Japan's soft black eboshi, and kept the sleeves at wrist length so they do not echo Egypt. 'Isaba headbands were also worn in Mamluk Egypt, so Egypt's women are given the izar hood instead."
+  },
+  {
+   "country": "greece",
+   "era": "medieval",
+   "displayName": "Byzantine Mystras",
+   "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+   "year": 1430,
+   "male": {
+    "outfit": "Ankle-length kabbadion: a caftan-like robe closed down the centre front with a long row of small round buttons, with long narrow sleeves, in deep green, wine or blue silk with a small woven pattern. No overcoat, so the button row stays fully visible. Soft dark boots.",
+    "hair": "Long hair, centre-parted, falling to the shoulders",
+    "facialHair": "Long full beard with moustache (the Byzantine lay norm, noted by Italian observers in 1438)",
+    "headwear": "Tall felt hat with a high rounded crown and a brim turned sharply up all round against it, with a light crown and a darker brim, as Pisanello sketched among the Byzantine delegation. It must not be the emperor's pointed-visor version, an official's skaranikon with a portrait, or a black clerical kalimavkion.",
+    "accessory": "Belt with small gilt metal mounts, worn at the waist over the kabbadion"
+   },
+   "female": {
+    "outfit": "A fitted, sleeveless over-dress of patterned silk damask (for example wine red with a small floral pattern), shaped close at the bust and flaring from just below it to the floor, with braided gold trim at the neckline and armholes. Under it is a long T-shaped under-tunic of lighter patterned silk whose long, fitted sleeves show full-length on the arms.",
+    "hair": "Hair fully covered by the headdress; only a smooth edge shows at the forehead",
+    "facialHair": "none",
+    "headwear": "Turban-style headdress (fakiolion): a long strip of cream silk woven with bands of gold and red, wound high and rounded around the head so it covers all the hair. The neck, ears and face stay open, with no cloth wrapped under the chin.",
+    "accessory": "Large gold crescent-shaped (lunate) earrings edged with pearls, hanging clearly below the headdress"
+   },
+   "signature": "Men: a tall felt hat with a high rounded crown and turned-up brim, a long beard and a button-front robe. Women: a compact, patterned, wound turban-headdress with big crescent earrings, over a fitted sleeveless damask over-dress.",
+   "avoid": [
+    "imperial regalia: loros, crowns, purple silk, double-headed eagle",
+    "emperor's pointed-visor hat (royalty) and the skaranikon official cap bearing the emperor's portrait (regime insignia)",
+    "Orthodox clerical or monastic robes, black kalimavkion, crosses or icons (sacred)",
+    "Virgin Mary (Theotokos) style dark star-marked maphorion veil (sacred)",
+    "plain white headcloth wrapped round the neck and chin (reads as the Britain headrail) or a full-length white wrap (reads Egypt)",
+    "wide bell-sleeved overgown (reads Britain)",
+    "the Byzantine 'head donut' padded ring (unattested, and reads as Italy's ghirlanda)",
+    "Ottoman white turban on men (anachronistic here; reads Egypt or Iraq)",
+    "Italian cappuccio hood-hat, or clean-shaven men (reads Italy)",
+    "armour or weapons, including the sabre in Pisanello's sketches"
+   ],
+   "notes": "Men: Pisanello's drawings of the Byzantine delegation at Ferrara-Florence (1438) and Gozzoli's Magi Chapel (1459). Parani, 'Cultural Identity and Dress: Byzantine Ceremonial Costume', documents the Late Byzantine kabbadion caftan with a button front and a belt with metal attachments (Kastoria donor, c. 1180), the brimmed skiadion hat, and the skaranikon cap bearing imperial portraits, which is avoided as regime insignia. I dropped the hanging-sleeve overcoat because it hid the button row and echoed Egypt's long sleeves. Women: the old bell-sleeved gown with a white wound headcloth was too close to Britain's headrail and Egypt's white izar at thumbnail size. The new over-dress follows the 15th-century silk damask dress excavated at Mystras (FIT Fashion History Timeline): sleeveless, fitted and flaring from below the bust, with braided trim, over a T-shaped patterned under-tunic. A Mystras donor mural also shows under-layers visible at the bust and sleeves. The wound turban (fakiolion/phakeolion) is attested for Byzantine women (archaeology.wiki; annasrome.com, on the Menologion of Basil II and on grammata bands). Uncertain: the exact 1430 form and colours of women's headdresses. Mystras donor portraits also show plain white headcloths, which were rejected for distinctiveness. Lunate earrings are a slightly archaic choice."
+  },
+  {
+   "country": "italy",
+   "era": "medieval",
+   "displayName": "Florentine Republic",
+   "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+   "year": 1439,
+   "male": {
+    "outfit": "Ankle-length lucco, the Florentine citizen's gown, in deep red (rosato or cremisi) wool. It is closed high at the neck with a small standing collar, falls in straight organ-pipe pleats, is fur-lined, has wide open sleeves and is belted with a narrow leather belt. A dark doublet and hose are worn beneath, with soft black shoes.",
+    "hair": "Early-15th-century Florentine crop: short, rounded, cut above the ears",
+    "facialHair": "none (clean-shaven, the Florentine norm)",
+    "headwear": "Cappuccio a mazzocchio: a padded ring sitting on top of the head like a hat, with draped cloth (foggia) falling to one side and a long band (becchetto) hanging over one shoulder, in red or black. Hair shows below the ring, and it does not enclose the neck like a hood.",
+    "accessory": "Scarsella: a leather merchant's purse hanging from the belt at the hip"
+   },
+   "female": {
+    "outfit": "Fitted gamurra gown in plain silk with long, close sleeves, under a giornea: an open-sided, sleeveless overgown of crimson or green silk velvet with the Italian pomegranate pattern, falling from the shoulders to the floor with a short train, edged with fur or brocade at the neck. No trailing sleeves.",
+    "hair": "Fashionably plucked high forehead; hair drawn back smoothly and gathered into a coil at the back of the head, partly visible",
+    "facialHair": "none",
+    "headwear": "Ghirlanda: a thick padded roll, like a fat wreath, covered in crimson silk and studded with pearls, set around the crown of the head. No veil, so the drawn-back hair and the high bare forehead show.",
+    "accessory": "Gold brooch (fermaglio) with a pearl cluster, pinned at the neckline"
+   },
+   "signature": "Men: the cappuccio a mazzocchio (a padded ring-hat with a draped side and a long hanging becchetto) with an ankle-length red lucco. Women: the pearl-studded padded ghirlanda roll over bare, drawn-back hair and a plucked high forehead.",
+   "avoid": [
+    "beards on men (reads Byzantine Greek)",
+    "tall brimmed Byzantine hat",
+    "women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany)",
+    "floor-trailing hanging sleeves (reads Egypt-medieval)",
+    "a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel)",
+    "cardinal's red galero hat, clerical or papal robes (sacred)",
+    "laurel wreath and red-cap 'Dante' costume cliches",
+    "the later balzo headdress (1450s-80s, Ferrara and Milan)",
+    "condottiere armour or weapons",
+    "slashed Renaissance sleeves (too late; reserve for early modern)",
+    "Medici family crest or balls emblem"
+   ],
+   "notes": "Sources: Masaccio and Masolino, Brancacci Chapel (1420s); Fra Angelico; Pisanello; Fra Filippo Lippi, 'Portrait of a Woman with a Man at a Casement' (c. 1440, Met); Carole Collier Frick, 'Dressing Renaissance Florence' (2002); Florentine sumptuary laws; FIT Fashion History Timeline for 1440-49 (Italian women in gamurra and giornea, with the ghirlanda as the Italian padded roll or bourrelet). Changes: the woman's gauzy white veil became the ghirlanda, because the veil was one of five near-identical pale head coverings in this era. The mazzocchio and the ghirlanda also make padded rolls a family resemblance for Florence. The trailing fur-lined cioppa sleeves became a giornea because they clashed with Egypt's sleeve signature. I dropped 'nape shaved high' from the men's hair because it is a Burgundian and English trait. 1439 is the year the Greek and Italian delegates met, so the neighbour contrast is documented: the Italians were clean-shaven with hood-hats, the Byzantines bearded with tall hats. The mazzocchio descends from the same hood as Germany's Gugel, so its drawing must show it as a ring on top of the head."
+  },
+  {
+   "country": "china",
+   "era": "medieval",
+   "displayName": "Northern Song Kaifeng",
+   "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+   "year": 1075,
+   "male": {
+    "outfit": "Ankle-length round-collared robe (yuanling pao) fastened at the right shoulder, with a white inner collar edge at the throat, moderately wide sleeves and a horizontal seam band (lan) across the knees. Plain, unpatterned silk in muted green or blue-grey, the colours of middle-ranking civil officials, not the purple or vermilion of high ranks. Black cloth boots; a long, straight, sober silhouette.",
+    "hair": "Topknot on the crown, fully hidden under the cap; neat hairline",
+    "facialHair": "Long thin moustache and a tapered chin beard, the groomed Song scholar look",
+    "headwear": "Zhijiao futou: a black lacquered-gauze cap with two stiff, straight, flat wings sticking out horizontally from the back. Keep each wing about shoulder-width so the silhouette reads as a 'T'.",
+    "accessory": "Black leather belt worn loose at the hips, set with plain square plaques of black horn or silver"
+   },
+   "female": {
+    "outfit": "Beizi: a long, straight, open-front coat to mid-calf. Its parallel front edges do not overlap and are edged with a narrow contrasting band; it has high side slits and narrow sleeves. It is worn over a moxiong chest wrap and a long pleated skirt, in pale, understated Song colours: celadon green, ivory, pale pink or light blue.",
+    "hair": "Gaoji: a tall bun piled high on the crown in one or two upright loops, with a few small flower pins",
+    "facialHair": "none",
+    "headwear": "Guanshu: a large arched crescent comb of ivory or lacquer, set upright across the front of the high bun",
+    "accessory": "Pearl drop earrings"
+   },
+   "signature": "Men: the black futou cap with long, stiff, horizontal wings. Women: the tall bun crowned by a big upright crescent comb.",
+   "avoid": [
+    "Ming or Qing items: queue, skullcap, standing collars with metal buttons",
+    "official fish pouch (yudai), purple or vermilion high-rank robes, and jade rank belts",
+    "emperor's yellow robe, dragons",
+    "armour or weapons",
+    "Mongol/Yuan-style dress",
+    "Japanese eboshi or hitatare",
+    "coolie hat or any facial caricature",
+    "collar closed right-over-left (zuoren)",
+    "futou wings so long they break the sprite frame"
+   ],
+   "notes": "The entry was sound and I kept it almost unchanged. Sources: Zhang Zeduan, 'Along the River During the Qingming Festival' (early 12th c.); Song imperial and scholar portraits for the futou and round-collar robe; the Huang Sheng tomb (1243) for the beizi and pleated skirts; Song texts and edicts on high buns and crown combs (the court regulated guanshu size in the mid-11th century, which confirms the fashion). Fixes: the Song 'lanshan' was strictly the pale scholar-student robe, so a coloured robe is correctly the round-collared official robe (yuanling pao), in green or blue-grey, the mid-rank colours. Jade belt plaques marked high rank, so they became horn or silver. Shen Kuo's embassy to the Liao in 1075 makes him a fitting 'diplomat'. The straight-winged futou was the civil official's cap, not a military one. Wing length is shortened for gameplay; real wings could be far longer."
+  },
+  {
+   "country": "japan",
+   "era": "medieval",
+   "displayName": "Muromachi Kyoto",
+   "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+   "year": 1400,
+   "male": {
+    "outfit": "Hitatare of hemp: a cross-collared jacket, closed left-over-right, with very wide square sleeves whose cuffs are gathered by a threaded cord. It is tucked into matching ankle-length pleated hakama, with small decorative cord tufts (kikutoji) on the seams and chest ties. Persimmon brown, indigo or olive, with no family crests.",
+    "hair": "Motodori topknot at the crown under a full head of hair (no shaved pate), hidden under the cap",
+    "facialHair": "Short moustache and a small chin tuft",
+    "headwear": "Momi-eboshi: a tall, soft cap of black, lightly lacquered gauze or paper, crumpled and leaning slightly forward",
+    "accessory": "Folding fan (sensu) with black lacquered ribs, closed and tucked into the waist ties at the front"
+   },
+   "female": {
+    "outfit": "Tsubo-shozoku travel dress: an ankle-length patterned kosode, closed left-over-right, under an outer robe hitched up at the hips so its hem ends at mid-calf, tied with a narrow cloth sash. Muted tie-dyed or small-motif patterns in indigo, rust and cream.",
+    "hair": "Long centre-parted hair worn down, tied once loosely at the nape and falling to the waist",
+    "facialHair": "none",
+    "headwear": "Ichime-gasa: a wide-brimmed lacquered sedge hat with a tall knob crown, worn WITHOUT its veil so the face is fully visible",
+    "accessory": "Small tie-dyed drawstring purse (kinchaku) hanging from the sash"
+   },
+   "signature": "Men: a tall, soft, crumpled black eboshi cap with a wide-sleeved hitatare and hakama. Women: the wide, knob-crowned ichime-gasa travel hat.",
+   "avoid": [
+    "armour, katana, samurai helmets, ninja imagery",
+    "Heian junihitoe or court robes (aristocratic and the wrong period)",
+    "Buddhist monk kesa or yamabushi robes (liturgical)",
+    "amulet pendants (kake-mamori), which are religious",
+    "family crests (kamon) on the suo, which can read as a warrior retainer",
+    "wide Edo obi or geisha look (anachronistic)",
+    "Chinese futou with horizontal wings",
+    "a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa)",
+    "collar closed right-over-left (the burial style)",
+    "the hanging veil (mushi-no-tareginu) that hides the face"
+   ],
+   "notes": "The entry was sound, with minor fixes. The momi-eboshi is the soft, crumpled type; stiff, heavily lacquered caps are the tate-eboshi, so 'lacquered paper' became 'lightly lacquered'. 'Commoner's hemp suo' conflated two garments and became 'hitatare of hemp'. I made the collar direction explicit on both garments. Sources: emaki handscrolls (Ippen Hijiri-e, 1299; Kasuga Gongen Genki-e, 1309) and Muromachi genre paintings. The hitatare was general wear across classes by the Muromachi period. Uncertainty: the tsubo-shozoku is best documented for the Heian and Kamakura periods but persists in pilgrim and traveller imagery. The kinchaku pouch is usually dated from the Muromachi period on and became common later. The eboshi's tall, soft, forward-leaning shape contrasts with the Song futou's horizontal wings and with Iraq's stiff black cone in a white turban."
+  },
+  {
+   "country": "britain",
+   "era": "medieval",
+   "displayName": "Anglo-Saxon England",
+   "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+   "year": 1050,
+   "male": {
+    "outfit": "Knee-length wool tunic (cyrtel) in madder red or woad blue, loosely bloused over a belt, with contrasting embroidered or tablet-woven bands at the neckline, cuffs and hem. Loose trousers are wrapped from ankle to knee with linen leg bindings (winingas). A plain rectangular wool cloak is draped over the left shoulder and pinned at the right.",
+    "hair": "Neck-length straight hair, centre-parted and cut evenly at the collar",
+    "facialHair": "Long full moustache with a clean-shaven chin (the English look on the Bayeux Tapestry)",
+    "headwear": "none",
+    "accessory": "Round silver disc brooch with interlace and niello decoration, pinning the cloak at the right shoulder"
+   },
+   "female": {
+    "outfit": "Ankle-length undergown with tight long sleeves, under a slightly shorter overgown with wide bell sleeves, in soft red, blue or green wool with embroidered cuff bands. A plain mantle hangs from the shoulders.",
+    "hair": "Long hair coiled low at the nape, hidden under the headrail",
+    "facialHair": "none",
+    "headwear": "Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.",
+    "accessory": "Small round gilt disc brooch closing the mantle at the throat"
+   },
+   "signature": "Men: bareheaded, in the only knee-length tunic of the era, with leg bindings, a cloak pinned at the right shoulder by a round silver disc brooch, and the long English moustache. Women: a coloured headrail veil wrapped over the head and round the throat, above a bell-sleeved overgown.",
+   "avoid": [
+    "horned or winged helmets and Viking-raider stereotypes",
+    "chainmail, Norman kite shields, any armour or weapons",
+    "crowns or royal regalia",
+    "monks' habits, nuns' wimples or any liturgical vestment",
+    "white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size)",
+    "a compact wound turban-headdress (reads Greece)",
+    "hood with a long tail (Gugel) or long pointed shoes (Germany-medieval)",
+    "frilled Kruseler veil (Germany-medieval)",
+    "tall conical hennin or later Gothic headdresses",
+    "Robin Hood-style feathered cap and Lincoln green"
+   ],
+   "notes": "Sources: the Bayeux Tapestry (1070s), where the English have moustaches and the Normans are clean-shaven; late Anglo-Saxon manuscript illustrations (the Old English Hexateuch, Cotton Claudius B.iv; the Cotton Tiberius B.v calendar; Junius 11), where women's headrails appear in colours; Gale Owen-Crocker, 'Dress in Anglo-Saxon England', for the headrail, leg bindings and gown with overgown; law code IV Aethelred for foreign traders in London. Change: the headrail is now explicitly coloured, because a white one was one of five pale female head coverings in this era. Its wrap round the throat is the shape tell against Greece's open-necked turban and Egypt's full-length izar. The Fuller and Pentney brooches are 9th-century, so the niello disc style is slightly archaic for 1050; later Winchester-style disc brooches are an equally valid reference. The late Anglo-Saxon moment was chosen over Chaucer-era England because the c. 1390 houppelande and hood are too close to Rhineland c. 1440. Uncertain: exact colours, and whether the moustache-only look was universal (older men sometimes wore forked beards)."
+  },
+  {
+   "country": "germany",
+   "era": "medieval",
+   "displayName": "Holy Roman Empire (Rhineland)",
+   "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+   "year": 1440,
+   "male": {
+    "outfit": "Calf-length belted gown (Tappert) in deep blue or green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).",
+    "hair": "Chin-length straight hair with a full fringe, mostly inside the hood",
+    "facialHair": "none (clean-shaven, the 15th-century norm)",
+    "headwear": "Gugel: a close hood enclosing the head and neck, with the face opening fully clear. It has a short shoulder cape cut into scalloped leaf-shaped points (dags) and ends in a long tail (Zipfel) that hangs down the back.",
+    "accessory": "Low-slung leather belt with a hanging leather purse (Guerteltasche)"
+   },
+   "female": {
+    "outfit": "Ankle-length, high-waisted wool gown in deep blue or green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle is held at the chest.",
+    "hair": "Hair plaited and pinned up entirely beneath the headdress",
+    "facialHair": "none",
+    "headwear": "Kruseler: a white linen veil edged with several rows of tightly ruffled frills that frame the forehead and cheeks like a halo, with no chin band",
+    "accessory": "Round gold brooch-clasp (Fuerspan / Heftel) at the neckline"
+   },
+   "signature": "Men: the Gugel hood with its scalloped shoulder cape and long tail, plus pointed Schnabelschuhe. Women: the Kruseler veil with its many-layered frilled edge.",
+   "avoid": [
+    "armour, crowns or noble regalia",
+    "clerical or monastic robes",
+    "the pointed 'Judenhut' or any discriminatory marker or badge",
+    "Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval)",
+    "tall conical hennin (Burgundian)",
+    "Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval)",
+    "an ankle-length red citizen's gown (reads as the Florentine lucco)",
+    "Crusader tabards or crosses"
+   ],
+   "notes": "The entry was sound, with minor fixes. The man's gown moved from 'red or blue' to 'blue or green' so it does not repeat the Florentine red lucco. The shoes are 'moderately' long, because the extreme Schnabelschuh peaked around 1460-80. The woman's 'Kotte' label was dropped: the high-belted gown is the 1430s-40s fashion, while the Kotte is the earlier close-fitting gown. Why this moment: Gutenberg's Strasbourg experiments (c. 1439-44) fall inside the medieval era, which leaves early-modern Germany free for the far more distinctive look of c. 1520. Sources: bloshka.info ('Cruselers'; 'Wulsthaube, Steuchlein') and Wikipedia, '1400-1500 in European fashion'. These show the Kruseler as a Central European frilled veil of the 14th-15th centuries, with the Wulsthaube developing from it only in the second half of the 15th century, so 1440 is late but defensible. Also Hans Multscher's Wurzach Altar (1437), Stefan Lochner (Cologne, 1440s) and the Nuremberg Mendel Housebook (from 1425). Uncertain: dagged Gugel capes peaked in the late 14th century but lasted in German lands well into the 15th."
+  },
+  {
+   "country": "egypt",
+   "era": "earlymodern",
+   "displayName": "Ottoman Egypt",
+   "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+   "year": 1700,
+   "male": {
+    "outfit": "Ankle-length quftan (kaftan) of saffron or rose silk with small woven stripes or motifs, crossed over the chest. Over it a long, wide-sleeved gibba coat of plain dark broadcloth (forest green or deep blue), open at the front. Wide trousers and pointed red leather slippers.",
+    "hair": "Short-cropped or shaved, hidden under the turban",
+    "facialHair": "Full beard, trimmed short and rounded, with a moustache",
+    "headwear": "Crisp white muslin turban wound in smooth, rounded folds around a red felt cap, with a disc of the red crown left showing on top. The turban cloth is pure white.",
+    "accessory": "Patterned Kashmir or Indian wool shawl wound as a broad sash (hizam) at the waist"
+   },
+   "female": {
+    "outfit": "Floor-length entari robe of brocaded silk (for example gold on deep rose). Its long sleeves are slit from the elbow to hang open. It is worn over a sheer gauze chemise and wide shintiyan trousers and belted at the hips with a jewelled belt.",
+    "hair": "Long hair in many thin plaits hanging down the back",
+    "facialHair": "none",
+    "headwear": "Tartur: a tall headdress that is wider at the top than at the base, wrapped in black or brown cloth woven with gold stripes. A light gauze veil hangs down the back from it, and the face is fully uncovered.",
+    "accessory": "Long gold earrings with coin drops"
+   },
+   "signature": "A pure-white muslin turban wound around a red cap, with the red crown showing (women: the tall, gold-striped tartur headdress)",
+   "avoid": [
+    "Istanbul court kavuks and giant ceremonial turbans",
+    "janissary bork caps or any Ottoman military dress",
+    "Mamluk-bey armour and weapons",
+    "fez worn alone without a turban (a 19th-century look)",
+    "coloured or checked turban cloth, striped camel-hair 'aba cloaks, keffiyeh/agal (read as Iraq)",
+    "a small red cap wrapped in a patterned kerchief for the woman (reads as Greece-earlymodern)",
+    "face veils that hide the face",
+    "odalisque or harem imagery",
+    "Mamluk floor-length sleeves (read as Egypt-medieval)"
+   ],
+   "notes": "Egypt was an Ottoman province from 1517, so the entry is named 'Ottoman Egypt' and shows local Cairene civilian dress. Sources: Cornelis de Bruyn's travels (published 1698) describe Cairene women in a tall hat wrapped with black or brown cloth woven with gold or silver stripes. Lugatism.com's 'Female attire in Egypt (Ottoman Egypt)' traces the goblet-shaped tartur from Mamluk Cairo through early-17th-century costume books and lists the chemise, shintiyan, zibin, yelek, entari and ferace. The turban wound over a red cap is established by the Mamluk and Ottoman periods and appears in the 1798-1809 Description de l'Egypte costume plates (see also Wikipedia, 'Al-Azhar attire'). Reviewer check: the tartur is now supported by a c. 1700 eyewitness (de Bruyn), not only by older material. If it reads poorly, do NOT fall back to a small red cap with a kerchief, because that would collide with Greece's woman; use a small round cap with a gold-coin fringe instead. Kashmir and Indian shawls reached Cairo through the Red Sea trade. Their use as sashes is best attested later in the 18th century, so treat the pattern as plausible, not certain. Cairo's merchants controlled the Yemen coffee trade, which fits the resources theme."
+  },
+  {
+   "country": "iraq",
+   "era": "earlymodern",
+   "displayName": "Ottoman Baghdad",
+   "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+   "year": 1720,
+   "male": {
+    "outfit": "Ankle-length zaboun robe of striped cotton-silk (cream with narrow crimson stripes), wrapped across the chest and belted. Over it is an 'aba: a wide, square-shouldered cloak of camel-hair wool with arm slits, woven in broad vertical stripes of dark brown and cream, falling open at the front to mid-calf.",
+    "hair": "Short-cropped, hidden under the turban",
+    "facialHair": "Full beard with a moustache",
+    "headwear": "Loosely wound turban of clearly coloured, patterned cloth (for example cream with fine red-brown checks, or dark indigo with small motifs), with a fringed end tucked in at the side. It is never plain white and never shows a red crown.",
+    "accessory": "Brass qalamdan: a long pen case with an inkwell at one end, tucked upright into the belt"
+   },
+   "female": {
+    "outfit": "Ankle-length, long-sleeved dress of striped silk-cotton (indigo and rose) held by a silver-link belt, over trousers. A dark, sleeveless 'aba cloak is worn open over the shoulders.",
+    "hair": "Long hair in two braids, hidden beneath the head-shawl",
+    "facialHair": "none",
+    "headwear": "Black crepe head-shawl (futa) wrapped over the hair and round the neck, bound at the brow by a narrow black 'asaba band. The face is uncovered.",
+    "accessory": "Gold qilada necklace of small hanging coins and teardrop pendants"
+   },
+   "signature": "The square-shouldered camel-hair 'aba cloak with broad brown-and-cream vertical stripes",
+   "avoid": [
+    "Cairo's pure-white turban over a red cap with a kaftan and gibba (reads as Egypt-earlymodern)",
+    "fez or tarboush",
+    "the Safavid Qizilbash red-staved taj (a sectarian and military emblem)",
+    "janissary or other Ottoman military dress",
+    "face veils that hide the face",
+    "khanjar daggers or any weapons",
+    "Persian royal court dress",
+    "crescent-and-star motifs in jewellery (can read as a later Ottoman state emblem)"
+   ],
+   "notes": "From 1450 to 1750 Baghdad passed between Turkmen, Safavid and Ottoman rule. It was Ottoman from 1638. Hasan Pasha (1704-1723) and his son Ahmad Pasha built the Georgian Mamluk household, and Mamluk pashas ruled in their own right from 1747. The earlier wording 'Mamluk pashas from 1704' was corrected for that reason. The entry shows local Arab townsman dress. Urban dress was broadly shared across the Ottoman Arab provinces, so this design deliberately leans on Iraq-specific elements. One is the striped camel-hair 'aba, an ancient Arab garment still woven in Iraq, for example in Najaf. The other is coloured turban cloths in place of Cairo's white-on-red. The exact turban pattern is the least-attested detail, and no firm local name for it was confirmed. The zaboun, futa and 'asaba are documented in Iraqi traditional dress, but mostly through 19th-century sources, so their use in 1720 is extrapolated. The pen case (Ottoman divit/qalamdan worn in the sash) is well attested for scribes and fits the records theme. Crescents were removed from the necklace as a precaution."
+  },
+  {
+   "country": "greece",
+   "era": "earlymodern",
+   "displayName": "Ottoman Ioannina",
+   "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+   "year": 1700,
+   "male": {
+    "outfit": "Ankle-length anteri (caftan) of striped silk-cotton (alaca) wrapped across the chest. Over it a long dark-blue or black wool overcoat (kavadi/gouna) with loose sleeves, lined and edged with fox or lamb fur at the collar and all down the front. Black leather shoes, the colour prescribed for Christians.",
+    "hair": "Cropped short, mostly hidden under the cap",
+    "facialHair": "Full beard with a moustache",
+    "headwear": "Tall black lambskin kalpak: a brimless, clearly fur-textured cap with a softly rounded top, worn instead of a turban as the typical headgear of Greek Christian merchants",
+    "accessory": "Wide striped silk-cotton sash (zonari) wound several times around the waist"
+   },
+   "female": {
+    "outfit": "Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord.",
+    "hair": "Long hair plaited into two braids hanging down the back",
+    "facialHair": "none",
+    "headwear": "Small red cap wrapped with a patterned silk headscarf (tsemberi) tied at the back. The braids and face stay visible.",
+    "accessory": "Pafti: a large, ornate double-plate silver-filigree belt buckle at the waist (Ioannina silverwork)"
+   },
+   "signature": "Tall, rounded, black lambskin kalpak worn with a long, dark, fur-edged coat (women: the large silver pafti buckle)",
+   "avoid": [
+    "white turban or green garments (Muslim-coded and forbidden to Christians; also reads as Ottoman Egypt or Iraq)",
+    "red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims)",
+    "mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy)",
+    "a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China)",
+    "fustanella kilt or tasselled fez (19th century; reserve for industrial)",
+    "Janissary or Ottoman military uniforms, yataghan or pistols in the sash",
+    "Orthodox clergy robes, priest's hat, crosses (sacred)",
+    "Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy)",
+    "sultan or court dress (royalty)"
+   ],
+   "notes": "Sources: Recueil Ferriol (1714), after Jean-Baptiste Vanmour's paintings of 1707-08, which includes Greek merchants and Greek women of the Levant. Also Tournefort, 'Relation d'un voyage du Levant' (1717), and the Benaki Museum costume collections. Ottoman dress regulations (see History of Istanbul, 'Clothing and fashion in Istanbul 1453-1923') forbade Christians red kalpaks, yellow shoes and luxury materials such as sable. The design therefore uses a black kalpak, black shoes, fox or lamb fur and silk-cotton alaca instead of pure silk. Contemporary sources describe Greek kalpaks in several shapes, including a sable band round a leather cap and a mitre shape. A plain rounded lambskin shape was chosen to avoid any clergy reading and to set it apart from Ming China's square black gauze cap. Ioannina was a major centre of Greek learning and trade (the Maroutsis and Gioumas schools) with semi-autonomous community councils, which fits the citizenship theme. Uncertain: some Greek merchants, especially islanders, wore dark turbans, and the choice between kalpak and turban varied by town and decade. Ioannina women's dress and the pafti are best documented from the 18th-19th centuries, so they are slightly back-projected."
+  },
+  {
+   "country": "italy",
+   "era": "earlymodern",
+   "displayName": "Sforza Milan",
+   "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+   "year": 1495,
+   "male": {
+    "outfit": "Knee-length rose-pink wool pitocco, a short, belted overgown with a full pleated skirt, worn when long gowns were the norm. At the neck the doublet collar shows a finely gathered white linen shirt. Close-fitting dark hose and soft round-toed shoes.",
+    "hair": "Zazzera: straight, chin-to-shoulder-length bob with a blunt fringe across the brow",
+    "facialHair": "none (clean-shaven, the Italian norm c. 1495)",
+    "headwear": "Small, soft, round red berretta cap worn straight on the head, with no brim and no feather",
+    "accessory": "Small leather-bound notebook hanging from the belt on a cord"
+   },
+   "female": {
+    "outfit": "Square-necked gown (gamurra) in deep blue or crimson. Its contrasting sleeves are laced on at the shoulder and elbow, so puffs of the white camicia show through the gaps. A sbernia mantle is draped over one shoulder.",
+    "hair": "Centre-parted, smooth and flat over the ears, with the rest bound into one very long ribbon-wrapped braid down the back (coazzone) and a sheer little cap (trinzale) at the back. No hat.",
+    "facialHair": "none",
+    "headwear": "Lenza: a fine dark cord worn straight across the forehead, with a small jewel at the centre of the brow",
+    "accessory": "Long necklace of dark jet beads looped twice around the neck"
+   },
+   "signature": "Lenza: a fine cord with a small brow jewel worn straight across the forehead over smooth, hatless hair (men: a small soft red berretta over a shoulder-length bob, clean-shaven, with a knee-length pink pitocco)",
+   "avoid": [
+    "Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell)",
+    "any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern)",
+    "any hat on the woman (the German woman wears the Barett)",
+    "Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe)",
+    "Tudor-style flat cap with brim and feather (reads Britain)",
+    "a cloak slung over one shoulder on the man (duplicates Britain)",
+    "Landsknecht slashing and puffing, armour, weapons",
+    "Venetian carnival masks",
+    "clerical or cardinal robes (sacred)",
+    "Sforza or ducal regalia (royalty)"
+   ],
+   "notes": "Sources: the Anonimo Gaddiano records Leonardo wearing a rose-coloured pitocco reaching only to the knee when long gowns were the fashion. The earlier 'pitocco/giornea' was trimmed to 'pitocco', because a giornea is a different, open-sided garment. Leonardo's Portrait of a Musician (c. 1485, Milan) shows the small red berretta and zazzera. His Lady with an Ermine (c. 1489-91) and La Belle Ferronniere show the lenza (with a brow jewel in the latter), the coazzone, the laced sleeves and the dark bead necklace. Beatrice d'Este popularised the coazzone in Milan. The belt notebook is widely repeated in Leonardo lore and fits his own advice to carry a small book, but it is not firmly sourced, so treat it as flavour. The man's shoulder cloak was dropped because it duplicated Britain's man. Galileo (Padua/Florence c. 1610) is the other early-modern figure, but his black Spanish-influenced dress would collide with Britain and Germany, so Leonardo's Milan was kept for distinctiveness. The lenza is thin, so artists should give it the small central jewel so it reads at thumbnail size."
+  },
+  {
+   "country": "china",
+   "era": "earlymodern",
+   "displayName": "Late Ming Suzhou",
+   "moment": "Suzhou and Jiangnan in the late Ming, c. 1635, during the printing and publishing boom that produced Song Yingxing's illustrated technology encyclopedia Tiangong Kaiwu (1637)",
+   "year": 1635,
+   "male": {
+    "outfit": "Daopao: ankle-length cross-collared robe closed left panel over right, with very wide sleeves and a broad white protective strip (huling) along the collar edge. Plain pale blue or light grey silk or cotton; black cloth shoes. A lay scholar's robe, not a priest's vestment.",
+    "hair": "Topknot under the cap, with a black horsehair net headband (wangjin) visible across the forehead below the cap",
+    "facialHair": "Neatly trimmed moustache and a short-to-medium, neat chin beard, as in Ming gentry portraits",
+    "headwear": "Sifang pingding jin: a tall, square, box-like, flat-topped cap of stiff black gauze with visible corners, the Ming scholar's and commoner's 'four-cornered' cap",
+    "accessory": "Sitao: a blue or black silk-cord sash tied at the waist, with long tasselled ends hanging to the knee"
+   },
+   "female": {
+    "outfit": "Long ao jacket reaching the knee, with a standing collar and a centre-front opening fastened at the collar by gold interlocking zimu buttons. Its pipa-shaped sleeves narrow at the cuff. It is worn over a mamianqun, a pleated 'horse-face' skirt with flat front and back panels. Pale blue or apricot jacket; the skirt is plain white or very pale, the Chongzhen-era fashion, with a narrow woven band near the hem.",
+    "hair": "Rounded bun set high and slightly flattened on the crown, held with a few gold hairpins",
+    "facialHair": "none",
+    "headwear": "Baotou (tougu): a broad black satin band worn low across the brow, with a small jade or pearl ornament at the centre",
+    "accessory": "Gold gourd-shaped (hulu) earrings with small pearls"
+   },
+   "signature": "Tall, square, black gauze scholar's cap (women: a knee-length jacket with a standing collar and gold buttons over a pleated horse-face skirt)",
+   "avoid": [
+    "Qing queue, skullcap or horse-hoof cuffs (wrong dynasty)",
+    "Mandarin rank squares (buzi), python or dragon robes, the official winged wusha cap",
+    "Daoist priest vestments. Despite its name the daopao here is a lay robe, so no bagua, taiji or cranes.",
+    "long drooping 'Fu Manchu' moustaches or any caricatured features",
+    "white robes for the man (read as mourning)",
+    "rounded fur-textured caps or dark fur-edged coats (read as Greece-earlymodern)",
+    "jinbu waist pendants hanging to the knee (too close to Japan's tasselled cord belt)",
+    "Japanese chonmage topknot or kamishimo",
+    "Coolie hat",
+    "Collar closed right-over-left",
+    "Qipao (a 20th-century garment)"
+   ],
+   "notes": "Sources: late-Ming portraits of Jiangnan gentry and women; Wanli-to-Chongzhen genre and woodblock illustrations; excavated Ming garments (for example the Wang Xijue family tomb in Suzhou and the Kong family mansion collection); Tiangong Kaiwu illustrations, whose women wear upright-collared, front-opening jackets over skirts. Reviewer fixes: late-Ming sources show women's ao lengthening to knee length, so the earlier 'hip-length' was corrected. Skirts of the early Chongzhen reign were mostly plain white, so the deep red or green skirt was replaced. The standing collar with metal zimu buttons is a well-attested mid-to-late Ming innovation. The forehead band is attested in Ming women's portraits. Its period names vary (baotou, tougu, and wotu for the fur winter version), so treat the name as moderately uncertain. The man's facial hair was toned down to the neat style seen in Ming portraits, to avoid the drooping-moustache caricature. The jinbu pendant was swapped for gourd earrings, which are well attested in Ming tomb finds, because it duplicated Japan's knee-length tassels. None of the designer's figures falls in this era. The late-Ming printing and knowledge moment fits the theme and keeps this entry clearly apart from the Qing industrial one."
+  },
+  {
+   "country": "japan",
+   "era": "earlymodern",
+   "displayName": "Tokugawa Edo",
+   "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+   "year": 1610,
+   "male": {
+    "outfit": "Kataginu and hakama over a kosode. The kataginu is a sleeveless over-vest with straight, squared shoulders that extend a little past the wearer's own. They lie flat, not yet the stiff, flaring wings of later Edo. The matching pleated hakama are in indigo, grey or brown hemp. Under them is a kosode with small sleeve openings and a fine repeating pattern, collar crossing left over right. No crests.",
+    "hair": "Chasen-mage: shaved pate (sakayaki), with the remaining hair gathered at the crown into a short upright topknot bound with white cord like a tea whisk",
+    "facialHair": "Thin moustache and a small chin beard",
+    "headwear": "none",
+    "accessory": "Inro: a small stacked lacquered case hanging from the sash on a silk cord, held by a carved netsuke toggle"
+   },
+   "female": {
+    "outfit": "Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi.",
+    "hair": "Long centre-parted hair drawn to the nape and looped once into a soft tamamusubi fold, tied with white paper cord, with the ends hanging down the back",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Nagoya-obi: a braided silk cord belt wound several times around the hips and tied in front, with long tassels hanging to the knee"
+   },
+   "signature": "Sleeveless kataginu vest over a kosode and pleated hakama, worn bareheaded with the shaved-pate tea-whisk topknot (women: the tasselled Nagoya-obi cord belt on a dark, densely patterned kosode)",
+   "avoid": [
+    "stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development)",
+    "Katana, wakizashi or any sword (samurai wore two; omit them)",
+    "Armour or kabuto helmets",
+    "Tokugawa hollyhock (aoi) crest or any clan crest",
+    "Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo)",
+    "Chinese square cap or cross-collar daopao with huge sleeves",
+    "Collar closed right-over-left",
+    "Late-Edo folded-forward chonmage (use the upright chasen-mage)"
+   ],
+   "notes": "Sources: Keicho- and Kan'ei-era kosode (Tokyo National Museum); Momoyama to early Edo genre screens (Rakuchu-rakugai-zu, the Hikone screen); inro, which appear from the late 16th century. Reviewer fix: Japanese costume histories (Japanese Wiki Corpus, 'Kamishimo') say kataginu shoulders were widened during the Edo period and reached about a foot around the Genroku era (1688-1703), when whale baleen was first inserted to make them stand out. The earlier 'stiff winged shoulders' was therefore about 80 years too late for 1610. The vest is now drawn with modest squared shoulders, and the thumbnail tell rests on the sleeveless vest, the hakama, and the bare shaved-pate topknot (the only hatless man in this era). The kataginu and hakama were the civil formal dress of officials, and townsmen of standing also wore them. This is not military dress. Crests were removed entirely to avoid any real clan or regime emblem. Ieyasu's Spanish clock (Kunozan Toshogu) ties this moment to the precision and automation theme. The Nagoya-obi cord belt belongs to the late 16th and early 17th centuries and disappears by mid-century, which keeps this entry distinct from later Edo. Uncertain: inro were only just coming into use c. 1610; a kinchaku drawstring pouch on a cord is a safe fallback."
+  },
+  {
+   "country": "britain",
+   "era": "earlymodern",
+   "displayName": "Elizabethan England",
+   "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+   "year": 1600,
+   "male": {
+    "outfit": "Close-fitting black doublet with small shoulder wings, a short tabbed skirt and a long row of small buttons. It is worn with padded knee breeches (Venetians), dark stockings and flat shoes, and a short black cloak slung over one shoulder. At the neck is a large starched white cartwheel ruff.",
+    "hair": "Short hair brushed up and back from the forehead",
+    "facialHair": "Pointed 'pick-a-devant' beard with an upturned moustache",
+    "headwear": "Tall-crowned black felt capotain hat with a narrow brim and a plain hatband",
+    "accessory": "A single pearl-drop earring in one ear"
+   },
+   "female": {
+    "outfit": "Black or russet gown with a stiff, long, pointed bodice and a full skirt over a modest hip roll, not a court wheel farthingale. A wide starched white lace-edged ruff sits at the neck, with matching white linen cuffs.",
+    "hair": "Hair drawn up and back under a close white linen coif, with only a smooth front edge showing",
+    "facialHair": "none",
+    "headwear": "Tall-crowned black felt hat with a narrow brim, worn over the white coif (the London citizen's wife's hat)",
+    "accessory": "Silver pomander ball hanging on a chain from the waist girdle"
+   },
+   "signature": "A large starched white cartwheel ruff under a tall-crowned, narrow-brimmed black capotain hat",
+   "avoid": [
+    "royal or court regalia: crowns, jewel-encrusted Elizabeth I gowns, huge wheel farthingales",
+    "Henry VIII-style flat cap and wide fur-collared gown (reads as Germany c. 1525)",
+    "slashed-and-puffed Landsknecht sleeves, a wide flat tilted Barett or heavy gold chains (Germany earlymodern)",
+    "rapiers, swords, armour",
+    "buckle-hat 'Puritan' caricature (buckled hats are a later myth)",
+    "Tudor rose badges or royal livery"
+   ],
+   "notes": "Sources: portraits of London merchants and citizens from the 1590s to the 1610s. Hollar's Ornatus Muliebris Anglicanus (1640) shows the tradition of London citizen wives in tall hats over coifs, and tall-crowned hats on women already appear in portraits of the 1590s-1600s. Janet Arnold, 'Patterns of Fashion' and 'Queen Elizabeth's Wardrobe Unlock'd', cover the doublet, Venetians and ruff construction. Men's pearl earrings are well documented in portraits (for example Drake and Raleigh). They are more courtly than mercantile, but plausible for a prosperous Exchange merchant. Why this moment: the East India Company (1600) and the Royal Exchange (1571) fit Britain's trade-network theme, and none of the designer's British figures falls in this era. Reviewer check: no changes needed for accuracy. The ruff is safe here because Germany is set at c. 1525, before ruffs existed. The tall brimmed hat is distinct from Greece's brimless fur kalpak and China's square gauze cap, because only Britain pairs it with a ruff and visible breeches and stockings."
+  },
+  {
+   "country": "germany",
+   "era": "earlymodern",
+   "displayName": "Renaissance Nuremberg",
+   "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+   "year": 1525,
+   "male": {
+    "outfit": "Knee-length Schaube: a wide, open, pleated overcoat with a broad fur or velvet shawl collar, worn over a doublet whose sleeves are slashed and puffed to show a contrasting lining. Pleated white shirt with an embroidered stand-up neckband. Hose, and wide square-toed 'cow-mouth' shoes (Kuhmaulschuhe).",
+    "hair": "Shortened Kolbe of the 1520s: hair cut short, level with the ear-lobes, with a short straight fringe",
+    "facialHair": "Full, rounded beard with a moustache, trimmed fairly short (the new German fashion of the 1520s)",
+    "headwear": "Wide, flat black velvet Barett with a slashed brim, worn tilted to one side",
+    "accessory": "Heavy gold link chain draped across the shoulders and chest"
+   },
+   "female": {
+    "outfit": "Red or black wool gown with a laced bodice, a full pleated skirt and sleeves banded with horizontal puffs and slashes. It is worn over a high-necked pleated white linen shirt with a gold-embroidered collar band, and a short black velvet shoulder cape (Goller) covers the shoulders.",
+    "hair": "Hair plaited and gathered into a gold-thread hairnet cap (Haarhaube) at the back of the head",
+    "facialHair": "none",
+    "headwear": "Wide, flat Barett tilted to one side over the hairnet, trimmed with a small white feather",
+    "accessory": "Several layered gold chains across the chest"
+   },
+   "signature": "The wide, flat, slashed Barett worn tilted (men: with a broad fur-collared Schaube and a full beard; women: with the black Goller shoulder cape)",
+   "avoid": [
+    "a clean-shaven man with a shoulder-length bob under a small round cap, or a pink knee-length gown (reads as Italy-earlymodern)",
+    "Landsknecht mercenary gear: armour, halberds, two-handed swords, exaggerated codpieces, huge feather plumes",
+    "Luther's black preaching gown or any clerical vestment",
+    "starched cartwheel ruffs or tall capotain hats (Britain earlymodern)",
+    "princely or court regalia",
+    "printing tools, globes or other held props (the theme lives in the notes, not in the hands)"
+   ],
+   "notes": "Sources: Duerer's 1526 Nuremberg portraits of Hieronymus Holzschuher (full beard), Jakob Muffel and Johann Kleberger, and his portrait of Jakob Fugger (c. 1518). Also Lucas Cranach the Elder's portraits of Saxon burghers and their wives, and Hans Holbein the Younger's Georg Gisze (1532, a Hanseatic merchant). The Kolbe haircut, Kuhmaulschuhe, Schaube and Goller are standard German costume-history terms for c. 1500-1540. Reviewer fix: the original man (clean-shaven, chin-length bob with a fringe, cap, knee-length coat) was nearly the same figure as Italy's Leonardo-era man at thumbnail size. The moment was moved to c. 1525, when beards came back into German fashion (Holzschuher 1526; Luther's 1521-22 beard). The man now has a full beard and the shorter 1520s hair, which, with the wide tilted Barett and fur collar, separates him clearly from Italy. 'Early pocket watches' was softened to 'portable spring-driven clocks', because the pocket-watch attribution to Henlein is disputed. Uncertain: married Nuremberg burgher women often wore a white linen Wulsthaube or the large church headdress (Stuerz) instead of a Barett. The Barett over a gold hairnet is better attested for younger women and wealthier burghers, as in Cranach. It was chosen because it reads at thumbnail size and matches the men's signature. A white roll headdress could also be mistaken for a turban next to the Ottoman-era entries."
+  },
+  {
+   "country": "egypt",
+   "era": "industrial",
+   "displayName": "Khedivate of Egypt",
+   "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+   "year": 1869,
+   "male": {
+    "outfit": "Stambouline (istanbuli): a black or dark-navy knee-length frock coat, single-breasted and buttoned right up to a small standing collar, with matching narrow trousers and polished black shoes. A white shirt collar just shows at the neck.",
+    "hair": "Short and neatly trimmed, mostly hidden under the tarboush",
+    "facialHair": "Full, neatly groomed moustache with a clean-shaven chin",
+    "headwear": "Tarboush: a stiff, upright, flat-topped cap of deep-crimson felt, shaped like a truncated cone and set straight and level on the head. A short black silk tassel falls from the centre of the crown toward the back. It is never floppy or tilted.",
+    "accessory": "Gold watch-chain hanging from a coat button to the breast pocket"
+   },
+   "female": {
+    "outfit": "Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with rose and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over a sheer chemise and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.",
+    "hair": "Centre-parted, with long thin plaits falling down the back under the veil, each plait ending in small gold safa ornaments",
+    "facialHair": "none",
+    "headwear": "Tarha: a long white muslin head veil with its ends embroidered in coloured silk and gold thread. It rests on the head and hangs down the back almost to the ground, and the face is fully uncovered. Beneath it is a small cap wound with a printed kerchief (faroodiyeh), which shows only as a coloured band across the top of the forehead.",
+    "accessory": "Kirdan: a gold choker-collar necklace hung with a row of small crescent pendants"
+   },
+   "signature": "Men: the stiff, upright crimson tarboush with a black tassel, over a black stambouline buttoned to the collar. Women: the long white embroidered tarha veil trailing down the back over a striped yelek robe.",
+   "avoid": [
+    "Ottoman or Egyptian military uniforms, epaulettes, medals, the Khedive's orders and sashes",
+    "European top hats",
+    "a soft, drooping, tilted fez with a very long tassel (reads as Greece-industrial)",
+    "a small tilted red cap with a gold tassel on a woman (reads as Greece-industrial)",
+    "keffiyeh with 'igal, 'aba cloaks, or a black 'abaya over the head (read as Iraq-industrial)",
+    "the black habara wrap with burqu' face veil (hides the face)",
+    "pyramid or sphinx props",
+    "Orientalist harem imagery"
+   ],
+   "notes": "FIXED DATE: the Ottoman firman granting Isma'il the title of Khedive is dated 8 June 1867 (Wikipedia, 'Isma'il Pasha of Egypt' and 'Khedive'), so a 'Khedivate' in 1865 was anachronistic. The date is moved to 1869, when the canal opened. Sources: E.W. Lane, 'Manners and Customs of the Modern Egyptians' (1836). Lane describes the tarha as a long white muslin veil embroidered at each end in coloured silks and gold, resting on the head and hanging down behind nearly to the ground, worn over a tarboosh wound with a faroodiyeh kerchief. The kirdan is documented as an Ottoman-type choker worn in gold by urban Cairene women in the 19th century, with crescent pendants ('kirdan hilali'); see bedouinsilver.com and see.news. The effendiya wore the tarboush and stambouline from the 1820s to the 1950s. CHANGED: the women's red tarboush with gold kurs is no longer the visible headwear. It is documented c. 1835 and uncertain for 1869, and a small red cap would clash with the Greek women's fesi. The white tarha is kept as the women's tell. COMPROMISE: this is Cairene indoor or visiting dress. Outdoors she would have worn the habara and burqu', which hide the face and are not allowed in this game. The traveller is a civilian canal or irrigation engineer, which fits the infrastructure theme."
+  },
+  {
+   "country": "iraq",
+   "era": "industrial",
+   "displayName": "Ottoman Iraq (Baghdad Vilayet)",
+   "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+   "year": 1870,
+   "male": {
+    "outfit": "Ankle-length zaboun robe of white cotton with thin blue-black stripes, crossed over at the chest and girdled with a folded patterned shawl. Over it is an 'aba: a wide, sleeveless, open-fronted cloak of fine wool in dark camel-brown, with a band of gold-thread embroidery round the neck and down the front edges.",
+    "hair": "Hidden under the headcloth",
+    "facialHair": "Heavy moustache with a short trimmed beard",
+    "headwear": "Chfiyya (Iraqi keffiyeh): a square headcloth of plain white cotton, folded into a triangle and draped over the head to the shoulders, held in place by a doubled black camel-hair 'igal cord ring. The face is fully visible.",
+    "accessory": "Dawat: a slim brass scribe's pen-case with an attached inkwell, tucked upright into the front of the shawl girdle (the mark of a literate merchant or clerk)"
+   },
+   "female": {
+    "outfit": "Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or green) with a silver-plaque belt. Over everything is a black silk 'abaya, draped from the crown of the head to the ankles and falling open at the front to show the dress.",
+    "hair": "Long hair in braids, hidden beneath the kerchief",
+    "facialHair": "none",
+    "headwear": "Black silk head-kerchief (futa) tied over the hair, with the top edge of the black 'abaya resting on the crown of the head over it. The face is uncovered.",
+    "accessory": "Heavy gold filigree bangles stacked on both wrists"
+   },
+   "signature": "Men: the white chfiyya headcloth held by a black 'igal cord, worn with a gold-trimmed camel 'aba. Women: the black silk 'abaya worn from the crown of the head to the ankles, open over a brocade dress.",
+   "avoid": [
+    "a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it)",
+    "a white veil trailing down the back (reads as Egypt women)",
+    "black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans",
+    "Ottoman military uniforms",
+    "the black horsehair face veil (pushi) or anything else that hides the face",
+    "daggers, rifles or other weapons",
+    "Gulf-style all-white thobe and ghutra (a modern look)"
+   ],
+   "notes": "Sources: Wikipedia, 'Al-Zaura', and the Library of Congress holdings (Midhat Pasha brought a printing press from Paris; al-Zawra was the first Iraqi newspaper, from 1869), which fits the records and knowledge theme. The agal is a doubled black animal-hair cord that holds the keffiyeh (FIT Fashion History Timeline, 'agal'). UNCERTAINTY: Baghdad men c. 1870 wore a mix of turbans (notables and clergy), the fez (effendis and officials) and the headcloth with 'igal (Arab merchants and tribal visitors). The Wikipedia 'Sidara' article does not document pre-1920s Baghdad headwear, and a general source says Levantine townsmen favoured the fez. The headcloth is therefore a plausible, not dominant, townsman look, chosen for distinctiveness because Egypt owns the fez. CHANGED: the headcloth is now plain white, to avoid chequered patterns with modern political associations. The 'aba is now camel-brown, so it cannot be read as Italy's black tabarro and differs from the woman's black 'abaya. The signet ring was replaced by a brass pen-case (dawat). A ring is invisible at thumbnail size, while the pen-case tucked in the girdle was a standard worn item of Ottoman-world scribes and merchants and suits the records theme."
+  },
+  {
+   "country": "greece",
+   "era": "industrial",
+   "displayName": "Athens, Kingdom of Greece",
+   "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+   "year": 1860,
+   "male": {
+    "outfit": "Civilian fustanella: a white, many-pleated linen kilt ending just above the knee, a full-sleeved white shirt, and a dark-crimson sleeveless jacket (fermeli) trimmed with gold braid and worn open over an embroidered waistcoat. Below are knitted white stockings with tasselled garters and plain black leather shoes.",
+    "hair": "Short on top, slightly longer at the nape",
+    "facialHair": "Thick moustache with slightly upturned ends",
+    "headwear": "Fesi: a soft Greek fez of red felt whose limp crown droops to one side, worn tilted, with a very long dark-blue silk tassel falling to the chest. It is clearly floppy, unlike Egypt's stiff, upright tarboush.",
+    "accessory": "Wide red silk sash (zonari) wound around the waist"
+   },
+   "female": {
+    "outfit": "Amalia dress: a floor-length full skirt of pale ivory or rose silk, a white long-sleeved blouse with a lace chemisette front, and a short, fitted, open bolero jacket (kontogouni) of deep-burgundy velvet heavily embroidered with gold braid.",
+    "hair": "Long hair plaited into two braids and wound around the base of the fesi",
+    "facialHair": "none",
+    "headwear": "Small red fesi pinned tilted on the crown, with a long tassel of braided gold thread falling to the shoulder. The face and hairline are fully visible.",
+    "accessory": "Necklace of small gold coins on a chain (dowry flouria)"
+   },
+   "signature": "Men: the white, many-pleated fustanella kilt. Women: the gold-embroidered velvet kontogouni bolero with a small tilted red fesi and a gold tassel.",
+   "avoid": [
+    "Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military)",
+    "silahlik weapon belt, pistols, yataghan, rifles, cartridge belts",
+    "stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt)",
+    "a long white veil trailing down the back (reads as Egypt women)",
+    "Queen Amalia's crown or court jewels (royalty)",
+    "a bright-blue-and-white colour scheme (the Greek flag)",
+    "Orthodox clergy dress (sacred)",
+    "Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)"
+   ],
+   "notes": "Sources: Benaki Museum and Peloponnesian Folklore Foundation collections, and mid-19th-century Athenian photographs. Greek City Times, 'Greek traditional Amalia costume', and the academia.edu article 'Amalia Dress: The Invention of a New Costume Tradition' (Catwalk, 2012) describe the costume: a red fesi with a long tassel of braided gold thread worn at an angle, and a short, close-fitting, gold-embroidered velvet kontogouni. The Amalia dress was promoted by Queen Amalia (1837-1862) but widely adopted as urban bourgeois 'national' dress, so depict it as middle-class civilian wear. CHANGED: the jacket colours are now dark crimson (men) and burgundy (women), and the skirt ivory or rose. Blue velvet over a pale skirt is historical but would read as a flag-colour scheme. The fesi descriptions were sharpened, soft and drooping with a long tassel for men and a gold tassel for women, because Egypt's men wear a red tarboush. The women's signature now leads with the kontogouni, so a red cap is not the only tell. Athenian men of 1860 were split between the fustanella and western frock coats, and the fustanella was chosen as the clear Greek tell. Keep it civilian: no weapons and no pom-pom shoes."
+  },
+  {
+   "country": "italy",
+   "era": "industrial",
+   "displayName": "Bologna, Kingdom of Italy",
+   "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+   "year": 1895,
+   "male": {
+    "outfit": "Dark wool three-piece suit with a white shirt, stiff standing collar and dark cravat. Over it is a full, calf-length circular tabarro cloak in black or midnight-blue wool, with a velvet collar and a metal chain clasp at the throat. One side is flung back over the opposite shoulder, showing the suit.",
+    "hair": "Short, side-parted and pomaded",
+    "facialHair": "Full, thick moustache brushed outward in the 'Umbertine' fashion, not waxed to points",
+    "headwear": "Wide-brimmed soft black felt hat with a low rounded crown and a broad, slightly drooping brim (the hat worn with the tabarro in the Po Valley)",
+    "accessory": "Long white silk scarf hanging loose around the neck under the open cloak, in the style of Verdi"
+   },
+   "female": {
+    "outfit": "Mid-1890s dress in dark wool: a fitted bodice with a high collar, puffed leg-of-mutton sleeves and a smooth, bell-shaped, floor-length skirt. A large black silk scialle (shawl) with a long knotted fringe is draped over the shoulders and crossed at the chest.",
+    "hair": "Swept up into a high chignon with a soft curled fringe",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Multi-strand red coral bead necklace worn over the high collar"
+   },
+   "signature": "Men: the tabarro, a full dark circular cloak with a velvet collar and one side flung over the opposite shoulder, worn with a broad-brimmed black felt hat. Women: the black fringed silk scialle crossed over the chest, with a red coral necklace.",
+   "avoid": [
+    "Garibaldi red shirt (volunteer military uniform)",
+    "Bersaglieri feathered hat, carabinieri, any uniform",
+    "King Umberto I style regalia (royalty)",
+    "mafia, gangster or cloaked-villain caricature",
+    "organ-grinder or peasant caricature",
+    "Greek fustanella or fez (reads as Greece)",
+    "Homburg or dented-crown hat with a narrow curled brim, or pince-nez (reads as Germany-industrial)",
+    "top hat and frock coat without the cloak, or a poke bonnet with a Paisley shawl (reads as Britain-industrial)"
+   ],
+   "notes": "Sources: the tabarro is documented as the cloak of Emilia-Romagna and Veneto landowners and townsmen. Verdi wore it, and Italians were so identified with it that emigrants to America were recognised by it (tabarro.it history, costume references). Coral jewellery (the Torre del Greco industry) was a ubiquitous Italian adornment. The fringed black scialle is best documented for Venetian and north-Italian townswomen c. 1880-1910. Leg-of-mutton sleeves peaked around 1893-97, which fits 1895. CHANGED: the lobbia (a soft felt hat with a lengthwise crown dent and medium brim) was replaced by a broad-brimmed soft felt. At thumbnail size the lobbia is nearly identical to Germany's Homburg, and broad-brimmed felts are the usual companion of the tabarro in Po-Valley imagery; this pairing is a moderate-confidence visual, and a web search did not return a firm source. The moustache is now bushy rather than curled, so it is not mistaken for Germany's waxed style. UNCERTAIN: by 1895 the tabarro was increasingly a provincial or older man's garment; a fashionable 21-year-old like Marconi more often wore an overcoat and bowler. Marconi also falls in the modern era, but 1895 was used here so modern Italy can take a more distinctive 1960 look."
+  },
+  {
+   "country": "china",
+   "era": "industrial",
+   "displayName": "Qing Shanghai",
+   "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+   "year": 1880,
+   "male": {
+    "outfit": "Changshan: an ankle-length gown in dark-blue or grey silk with a small standing collar and a curved diagonal (dajin) opening fastened by cloth knot buttons down the right side. Over it is a magua: a short, hip-length black jacket with a straight centre opening, knot buttons and roomy sleeves. Black cloth shoes with white soles.",
+    "hair": "Queue: the front of the scalp shaved back to the crown and the rest braided into one long, neat plait down the back. Draw it tidily and with dignity, never as a caricature.",
+    "facialHair": "none (clean-shaven; by Qing custom moustaches were usually grown only in middle age)",
+    "headwear": "Guapimao: a rounded black satin skullcap of six segments with a red knotted-silk button on top and no official finial",
+    "accessory": "Hebao: a small embroidered silk purse on a knotted silk cord with a tassel, hanging from the waist belt at the right hip just below the hem of the magua"
+   },
+   "female": {
+    "outfit": "Ao: a loose, knee-length jacket with wide flared sleeves and a curved right-side opening with knot buttons. Its collar edge, front curve, cuffs and hem are covered in several broad bands of contrasting embroidered trim (xianggun). The jacket is lotus-pink or pale blue with black trim, worn over a black pleated mamian skirt.",
+    "hair": "Sleek and centre-parted, combed smoothly back into a flat low bun at the nape and pinned with a silver hairpin",
+    "facialHair": "none",
+    "headwear": "Meile (brow band): a narrow band of black satin worn across the forehead just above the brows and tied at the back. It is embroidered with small flowers and set with a small pearl or jade ornament at centre front, and leaves the face fully visible.",
+    "accessory": "Green jade bangle bracelet"
+   },
+   "signature": "Men: the black six-segment guapimao skullcap with a red knot button, worn with the queue. Women: the broad-trimmed ao jacket with a black embroidered meile band across the forehead.",
+   "avoid": [
+    "19th-century Western 'pigtail' cartoons, Fu Manchu or long drooping moustache, slanted-eye features",
+    "Opium pipes or any opium imagery",
+    "Qing official hat with rank finial or peacock feather, mandarin squares, court beads (chaozhu)",
+    "Boxer, Taiping or military imagery",
+    "Manchu court headdress (liangbatou) or platform shoes on a Han civilian woman",
+    "Any emphasis on bound feet",
+    "Coolie straw hat",
+    "1920s qipao (anachronistic)",
+    "bowler hat, haori or hakama (reads as Japan-industrial)"
+   ],
+   "notes": "Sources: John Thomson's photographs of China (1868-72); Shanghai studio portraits of the 1870s-80s; Dianshizhai Pictorial (1884-98). For the meile: Baidu Baike, 'Forehead Band'; newhanfu.com, 'The Headwear Mo'e'; and the Metropolitan Museum's woman's headdress of the Guangxu period (1875-1908). Forehead bands of silk or satin, embroidered and set with pearls or jade, were worn by Qing women of every rank. The queue was a legally imposed Qing hairstyle for Han men and must be drawn respectfully. The broad multi-band trim on Han women's jackets peaked in the late 19th century. CHANGED: the long, thin moustache drooping past the mouth was removed; it is effectively the 'Fu Manchu' look the avoid list bans. The round spectacles were replaced by a hebao purse so the look does not overlap with Germany's pince-nez. A meile headband was added so the woman has a thumbnail-distinct headwear tell. The short fringe was removed from her hair: bangs became fashionable mainly in the 1890s-1900s and would sit under the band. UNCERTAIN: the meile was worn especially in cooler months. None of the designer's figures falls in this era."
+  },
+  {
+   "country": "japan",
+   "era": "industrial",
+   "displayName": "Meiji Nagoya",
+   "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+   "year": 1899,
+   "male": {
+    "outfit": "Dark kimono under a knee-length black haori with small white generic family crests (never the chrysanthemum), over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right.",
+    "hair": "Zangiri: a short, Western-style, side-parted crop (topknots were abandoned after 1871)",
+    "facialHair": "Neat, trimmed moustache, straight and not waxed to points",
+    "headwear": "Black Western bowler hat (yamataka-bo) with a rigid round dome and a narrow brim",
+    "accessory": "Haori-himo: a thick white braided silk cord tied in a flat knot with two tassels at the centre of the chest, closing the haori"
+   },
+   "female": {
+    "outfit": "Jogakusei (girl student) look: a small-patterned kimono, e.g. with purple-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right.",
+    "hair": "Sokuhatsu: hair swept up and back into a puffed pompadour roll with a bun at the back of the head (Western-inspired, promoted from 1885)",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Large silk ribbon bow tied at the back of the sokuhatsu"
+   },
+   "signature": "Men: a black bowler hat worn with a crested haori, white himo cord and striped hakama, a Western hat over Japanese dress. Women: the maroon hakama tied high over a yagasuri kimono, with sokuhatsu hair and a ribbon bow.",
+   "avoid": [
+    "Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum",
+    "Swords (banned in 1876)",
+    "Samurai topknot (anachronistic by now)",
+    "Geisha makeup or kimono",
+    "Chinese queue, skullcap or changshan",
+    "Collar closed right-over-left (the dressing used for the dead)",
+    "a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)"
+   ],
+   "notes": "Sources: Meiji photography (Felice Beato, Kusakabe Kimbei); Chikanobu's prints of sokuhatsu styles (1880s); the 1871 Danpatsurei; Toyota Industries' history of the 1896 Toyoda power loom. Wikipedia's 'Utako Shimoda' and 'Jissen Women's University' articles confirm her hakama reform and the founding of her girls' school in 1899. CHANGED: the pocket-watch chain was replaced with the haori-himo cord, because Egypt and Britain also wear watch chains; the himo is a distinctly Japanese worn item and reads at thumbnail size. The moustache is now straight, to separate it from Germany's waxed upturned style. The footwear is now a single choice. UNCERTAIN: women students' hakama spread c. 1899-1905, and hair ribbons became a schoolgirl fad mainly c. 1900-05, so both are at the early edge for 1899. Portraits of Sakichi Toyoda show a moustache, but this is unconfirmed by a source. Hokusai (c. 1831) also falls in this era, but a late-Edo look would be hard to tell apart from the earlymodern entry. Toyoda's automatic loom (Type G, 1924) belongs to the modern era if the team prefers him there."
+  },
+  {
+   "country": "britain",
+   "era": "industrial",
+   "displayName": "Victorian Britain",
+   "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+   "year": 1843,
+   "male": {
+    "outfit": "Knee-length black or bottle-green wool frock coat with a nipped waist and full skirt, over a patterned silk waistcoat and narrow fawn or checked trousers. A white shirt with tall collar points, wrapped with a wide black silk neck-stock or cravat.",
+    "hair": "Side-parted hair, full and curled over the ears",
+    "facialHair": "Mutton-chop side-whiskers running down the jaw, with the upper lip and chin clean-shaven",
+    "headwear": "Tall black silk top hat (stovepipe) with a slightly curled brim",
+    "accessory": "Gold pocket-watch chain looped across the waistcoat"
+   },
+   "female": {
+    "outfit": "Day dress with a tight bodice that comes to a point at the waist, low sloping shoulders, narrow long sleeves and a full bell-shaped skirt over layered petticoats. It is made in dark plaid silk or printed cotton, with a small white lace collar.",
+    "hair": "Early-Victorian centre parting: hair smoothed flat over the crown, with clusters of ringlets over each ear and a bun at the back",
+    "facialHair": "none",
+    "headwear": "Deep straw poke ('coal-scuttle') bonnet that frames the face, tied under the chin with a wide ribbon. The face stays fully visible.",
+    "accessory": "Large Paisley shawl, woven in Paisley, Scotland, with the teardrop 'boteh' pattern, draped around the shoulders"
+   },
+   "signature": "Men: a tall black silk top hat with mutton-chop whiskers and a clean upper lip. Women: a coal-scuttle bonnet with a Paisley shawl.",
+   "avoid": [
+    "redcoat, police, guards or any uniform",
+    "Union Jack or royal regalia",
+    "steampunk goggles, gears or other anachronistic gadgets",
+    "Homburg hat or upturned waxed moustache (Germany-industrial)",
+    "loose uncorseted Reformkleid or Jugendstil ornament (Germany-industrial)",
+    "plain black fringed shawl with a bare chignon and coral beads (Italy-industrial)",
+    "bustle silhouette (1870s-80s, the wrong decade)",
+    "Dickensian ragged-urchin or chimney-sweep caricature",
+    "monocle-and-top-hat 'toff' caricature"
+   ],
+   "notes": "Sources: fashion plates and daguerreotypes from 1840-1845, V&A collection day dresses, and C. Willett Cunnington on English women's dress of the 19th century. Paisley shawl production peaked in the 1840s-60s. CHANGED: the moment text said 1843 was 'the height of Railway Mania', but the mania peaked in 1845-47, so it now says 'just before'. In early-Victorian Britain men wore side-whiskers, but civilian moustaches were uncommon (they were associated with the military and with foreigners). That makes the clean upper lip a useful contrast with the German moustache. Lovelace's year was chosen over Watt's Birmingham (c. 1780) because it covers steam, railways, telegraphs and computing together. UNCERTAIN: the name 'Albert chain' for the watch chain probably dates from later in the 1840s, so it is not used. The watch chain overlaps with Egypt's accessory, which is acceptable because the top hat and bonnet are the tells."
+  },
+  {
+   "country": "germany",
+   "era": "industrial",
+   "displayName": "Wilhelmine Germany",
+   "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+   "year": 1899,
+   "male": {
+    "outfit": "Dark charcoal wool frock coat (Gehrock) buttoned high over a matching waistcoat, with narrow dark striped trousers. A very tall, stiff white stand-up collar (Stehkragen) with a narrow dark tie.",
+    "hair": "Short brush cut (Buerstenschnitt): hair cropped close and standing upright",
+    "facialHair": "Moustache with the ends twisted up in the Wilhelmine 'Es ist erreicht' fashion, kept moderate rather than pointed up to the cheekbones",
+    "headwear": "Dark felt Homburg with a single dent down the centre of the crown and a stiff, curled-up, ribbon-bound brim (named after Bad Homburg in Hesse)",
+    "accessory": "Pince-nez (Kneifer) clipped to the nose, on a thin black cord"
+   },
+   "female": {
+    "outfit": "Reformkleid: a loose, uncorseted, floor-length dress hanging straight from a fitted shoulder yoke, with soft full sleeves, in sage-green, cream or dove-grey wool. The yoke and hem are embroidered with flowing Jugendstil plant curves.",
+    "hair": "Soft, loose chignon: hair pinned up low and full at the back, with natural waves at the temples",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Jugendstil silver-and-enamel brooch at the collar in the Pforzheim style, with a curving 'whiplash' leaf motif"
+   },
+   "signature": "Men: a Homburg hat with pince-nez and an upturned moustache. Women: a loose, uncorseted Reformkleid with Jugendstil embroidery on the yoke.",
+   "avoid": [
+    "Pickelhaube or any military or police uniform",
+    "Iron Cross, eagle emblems, black-white-red imperial colours",
+    "student-fraternity caps, sashes or duelling scars",
+    "monocle (Prussian-officer caricature)",
+    "exaggerated needle-point Kaiser moustache (caricature)",
+    "lederhosen, dirndl or Tyrolean hats",
+    "top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial)",
+    "broad-brimmed soft felt hat with a full circular cloak (Italy-industrial)",
+    "a round-domed bowler (the Japan-industrial hat)",
+    "tight wasp-waist corset with a bustle"
+   ],
+   "notes": "Sources: Berliner Zeitung, 'Um des Kaisers Bart', and de.wikipedia 'Schnurrbart'. Court barber Francois Haby's 'Es ist erreicht' moustache band was used across social classes in the Wilhelmine era. Wikipedia, 'Deutscher Verband Frau und Kultur', and LEO-BW on Reformkleidung: the Verein fuer Verbesserung der Frauenkleidung was founded in Berlin in 1896, held its first exhibition in April 1897, and had a permanent exhibition from 1899. The Homburg takes its name from Bad Homburg and was popularised abroad by Edward VII. Theodor Fahrner of Pforzheim made Jugendstil jewellery (c. 1900, so right at the edge of 1899). CHANGED: the moustache was toned down to a moderate twist. The brush cut, pince-nez and extreme Kaiser points together would tip into the 'stern Prussian' caricature; the moustache is a civilian fashion, not insignia. UNCERTAIN: in 1899 the Reformkleid was a progressive minority choice, and a typical Berlin woman wore a corseted skirt suit with leg-of-mutton sleeves. That would collide with Italy's 1895 dress, so the Reformkleid is kept as the distinctly German option. None of the designer's German figures falls in this era; Haber's ammonia work comes in 1909."
+  },
+  {
+   "country": "egypt",
+   "era": "modern",
+   "displayName": "Nasser's Egypt",
+   "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+   "year": 1962,
+   "male": {
+    "outfit": "Ankle-length galabiya of fine pale-grey or finely striped cotton (loose and collarless, with a deep slit neckline and wide sleeves), worn with a tailored dark Western suit jacket open over it; leather shoes.",
+    "hair": "Short hair combed straight back from a high forehead",
+    "facialHair": "Thick, neat moustache, otherwise clean-shaven",
+    "headwear": "none (bareheaded; the tarboush was abandoned after the 1952 revolution)",
+    "accessory": "Shal: a long, plain dark wool scarf (brown, charcoal or camel) with a knotted fringe, draped round the neck so both ends hang straight down the chest outside the jacket. No stripes."
+   },
+   "female": {
+    "outfit": "Village or provincial galabiya: an ankle-length, loose, long-sleeved dress in brightly printed cotton (small flowers on a saturated red, green or blue ground), with a round neck and a gathered yoke, often finished with a gathered flounce at the hem. Flat slippers.",
+    "hair": "Long hair, centre-parted, in one thick plait hanging down the back below the scarf. Only the parting and a little front hair show.",
+    "facialHair": "none",
+    "headwear": "Mandil abu oya: a coloured triangular cotton or chiffon headscarf tied at the back of the head (knot at the nape, point covering the back of the head), its front edge trimmed with a fringe of tiny crocheted flowers or beads that frames the forehead. Face, chin and neck fully visible.",
+    "accessory": "Ghawayesh: a stack of thick gold bangles on each wrist"
+   },
+   "signature": "The galabiya. Men wear a tailored Western jacket over it. Women wear a bright printed galabiya with a flower-edged mandil tied at the nape.",
+   "avoid": [
+    "tarboush or fez (reads as Egypt-industrial)",
+    "military uniforms or Free Officers' khaki",
+    "revolutionary or United Arab Republic emblems, the eagle, flags",
+    "a likeness of Nasser or Umm Kulthum",
+    "keffiyeh with agal, or the sidara cap (read as Iraq)",
+    "black melaya laff wrap over the head (reads as Iraq's 'abaya)",
+    "face veils or the burqu'",
+    "belly-dance costume, coin hip-scarves or any 'harem' caricature",
+    "bouffant hair, sheath dress and big sunglasses (read as 1960 Rome)",
+    "striped scarf (reads as Britain's college scarf)",
+    "pharaonic costume"
+   ],
+   "notes": "The country's official name from 1958 to 1971 was the United Arab Republic, so the entry uses 'Nasser's Egypt'. Sources: Wikipedia, 'Egyptian cultural dress'; the Wikipedia 'Sidara' article (the fez survived among Egypt's effendiya only into the early 1950s). A suit jacket over a galabiya was widely worn by provincial merchants and village notables in mid-century Egypt and reads as Egypt instantly. The female look was REPLACED. The earlier 1960s Cairo look (bouffant, sheath dress, big dark sunglasses) matched Rome 1960 almost item for item. The new look pairs with the provincial man. The mandil abu oya is a triangular kerchief that was a core part of the fellaha dress, worn with the galabiya fellahi in the Delta, Upper Egypt and on the coasts; today it survives mostly in poorer quarters and as fancy dress (Youm7, 17 Apr 2025; al-Ain; elfagr.org). Gold bangles were the traditional form of a village woman's savings. Draw the mandil respectfully: the knot sits at the back, not under the chin, and the face stays uncovered. If an urban Cairo woman is required, she needs a new Egypt-only tell. Do not reuse sunglasses or a bouffant."
+  },
+  {
+   "country": "iraq",
+   "era": "modern",
+   "displayName": "Kingdom of Iraq",
+   "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+   "year": 1956,
+   "male": {
+    "outfit": "Light-grey or tan wool two-piece suit with wide lapels, white shirt, dark tie and polished shoes.",
+    "hair": "Short, neatly combed and side-parted, mostly under the cap",
+    "facialHair": "Neatly trimmed moustache",
+    "headwear": "Sidara (al-Faisaliyya): a soft black felt or velvet civilian cap that folds flat; it is boat-shaped, with a raised point at front and back and a lengthwise crease along the crown, worn straight on the head with no badge",
+    "accessory": "Thick black horn-rimmed glasses with clear lenses"
+   },
+   "female": {
+    "outfit": "Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in a jewel colour, with a black silk 'abaya drawn over the head and falling open at the front to the ankles so the dress shows.",
+    "hair": "Short, softly permed curls, side-parted, visible at the front beneath the edge of the 'abaya",
+    "facialHair": "none",
+    "headwear": "The top edge of the black 'abaya resting on the crown of the head, leaving the face and front hair visible",
+    "accessory": "Gold coin pendant: a single large gold coin (lira) on a short gold chain, visible at the neckline where the 'abaya falls open"
+   },
+   "signature": "The sidara, Iraq's folding boat-shaped national cap, on men. The black 'abaya over the head, worn open over a bright 1950s dress, on women.",
+   "avoid": [
+    "military berets, garrison-cap insignia or any badge on the sidara",
+    "Ba'ath-era imagery, flags, national eagles",
+    "fez or tarboush (Ottoman and Egypt)",
+    "keffiyeh with agal (reserved for Iraq-industrial)",
+    "Gulf-style white thobe and ghutra",
+    "face veils",
+    "pearl strand (Britain modern's 'twinset and pearls')",
+    "a likeness of King Faisal, Zaha Hadid or any real person"
+   ],
+   "notes": "Sources: Wikipedia, 'Sidara'. King Faisal I introduced it after 1921 as national headwear, deliberately distinct from the Ottoman fez and the Arabian ghutra-and-agal. Its popularity declined gradually after the monarchy fell in 1958, and it is now worn mainly at ceremonies and weddings. The moment is set just before 1958 so the sidara is still current. Draw it clearly as a civilian cap: soft black and badge-free. Also IRFAD, 'Iraq Fashion' (1950s Baghdad dress was strongly Western and progressive). Zaha Hadid was born in Baghdad in 1950. Many educated Baghdad women stopped wearing the 'abaya in the 1950s and 60s, but it was still common and is used here as the female tell. It also appears on Iraq-industrial; there the dress underneath differs. CHANGED: the pearl strand became a gold coin pendant, because pearls are Britain's modern tell (twinset and pearls) and a leaked strand would not read as foreign. Uncertain: gold lira pendants are a well-attested regional gift of gold, but I could not find a specific 1950s Baghdad source. If the team objects, a wide gold bracelet is the fallback. Egypt's stacked bangles differ enough to allow it."
+  },
+  {
+   "country": "greece",
+   "era": "modern",
+   "displayName": "Metapolitefsi Athens",
+   "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+   "year": 1975,
+   "male": {
+    "outfit": "Brown corduroy jacket over a thick hand-knit wool sweater or an open-collared patterned shirt, with flared jeans and suede desert boots.",
+    "hair": "Collar-length, slightly shaggy 1970s cut",
+    "facialHair": "Thick full moustache",
+    "headwear": "none",
+    "accessory": "Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body"
+   },
+   "female": {
+    "outfit": "White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.",
+    "hair": "Long, straight, centre-parted and loose",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body"
+   },
+   "signature": "Tagari: a hand-woven striped wool shoulder bag with a fringed bottom, worn crossbody",
+   "avoid": [
+    "junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols)",
+    "any military or police uniform",
+    "Greek flag as clothing",
+    "ancient chiton or Evzone costume on a modern traveller",
+    "Orthodox clergy dress (sacred)",
+    "'Zorba' or taverna-dancer caricature",
+    "komboloi worry beads (held prop, not worn)",
+    "fisherman's or other soft peaked cap (collides with Beijing 1972's cap)",
+    "plain khaki canvas satchel (reads as Beijing 1972)",
+    "slim dark suit and dark sunglasses (reads 1960 Italy)"
+   ],
+   "notes": "Sources: the tagari was the Greek shepherd's woven wool bag (PieceWork, 'From Sheep to Tagari'). In the 1970s it became so emblematic of Athenian students in jeans, boots and wide wool sweaters that 'tagari' was period slang for them (slang.gr). That slang was derogatory, so do not use it as a label in-game. The Polytechnic uprising (Nov 1973) and the Metapolitefsi fit the citizenship and public-debate theme. CHANGED: the man's black fisherman's cap was dropped. At thumbnail size its soft crown and short peak read the same as Beijing 1972's navy cap, and the cap is not Greece-specific anyway (the Breton cap, the Hamburg Elbsegler and the 'Lennon cap' are near-identical). A bareheaded student also fits 1975 better. The tagari now carries Greece for both sexes; keep its stripes bold and its fringe visible so it cannot be mistaken for China's plain satchel. Flat handmade leather sandals were an Athenian craft staple."
+  },
+  {
+   "country": "italy",
+   "era": "modern",
+   "displayName": "Dolce Vita Rome",
+   "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+   "year": 1960,
+   "male": {
+    "outfit": "Slim, sharply tailored single-breasted suit in charcoal or midnight mohair-wool, with a short jacket, narrow lapels and narrow cropped trousers. Worn with a crisp white shirt and thin dark tie (or a fine-knit black turtleneck, the 'dolcevita') and polished slip-on loafers.",
+    "hair": "Short, neatly slicked back with pomade",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Dark sunglasses with solid black lenses and heavy black frames"
+   },
+   "female": {
+    "outfit": "Fitted knee-length sleeveless sheath dress with a narrow waist in a bold, swirling kaleidoscopic silk print (magenta, turquoise, lime) in the 1960s Florentine style, with pointed low-heeled pumps.",
+    "hair": "Short, voluminous backcombed bouffant, left uncovered",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Cat-eye sunglasses with dark lenses"
+   },
+   "signature": "Dark sunglasses: men wear them with a razor-slim tailored suit; women wear cat-eye sunglasses with a swirling kaleidoscopic silk-print sheath and an uncovered bouffant",
+   "avoid": [
+    "Fascist-era black shirt, fasces or any 1920s-40s regime insignia",
+    "military or carabinieri uniforms",
+    "mafia or gangster caricature (pinstripes, fedora, violin case)",
+    "pizza-chef, gondolier striped shirt and straw boater stereotypes",
+    "Vespa or other held or ridden props",
+    "priest's collar or clerical dress (sacred)",
+    "headscarf knotted under the chin (now Britain modern's tell)",
+    "woven crossbody bag or fisherman's cap (reads 1970s Greece)",
+    "orange-padded headphones or lapel badge (reads Japan 1980)"
+   ],
+   "notes": "Sources: Fellini's 'La Dolce Vita' (1960) and Roman street photography of the paparazzi era. Italian tailoring (Brioni, Roman and Neapolitan cut) defined the 'Continental' slim suit. Emilio Pucci's kaleidoscopic Florentine prints were the signature Italian women's print of the 1960s; describe the style without naming the brand. In Italian the turtleneck is called a 'dolcevita' after the film. CHANGED: the woman's headscarf was removed. It duplicated Britain 1950's under-chin headscarf, and it would have flattened and hidden the bouffant, which is the point of the Dolce Vita look. Rome's women now read through the print plus the cat-eye sunglasses. Because Egypt's former look (bouffant, sheath, big sunglasses) has been replaced, sunglasses are now Italy-only in this era. Risk: the man's slim dark suit is close to Japan 1980's salaryman suit, so the black sunglasses must always be drawn. Marconi (d. 1937) also falls in the modern era, but his 1920s-30s moment overlaps the Fascist period and is visually generic, so it was used for the industrial entry instead."
+  },
+  {
+   "country": "china",
+   "era": "modern",
+   "displayName": "Beijing, People's Republic",
+   "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+   "year": 1972,
+   "male": {
+    "outfit": "Zhongshan suit: loose, boxy grey or navy-blue cotton-wool jacket with a closed turn-down collar, five front buttons and four patch pockets with buttoned flaps, worn with matching straight, roomy trousers and black cloth slip-on shoes.",
+    "hair": "Short, neat side-parted crop",
+    "facialHair": "none",
+    "headwear": "Soft navy cotton cap with a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak. It sits high on the head, unlike a low flat cap. Plain, with no badge or star.",
+    "accessory": "Fountain pen clipped in the upper-left chest pocket, the 1970s mark of an educated professional"
+   },
+   "female": {
+    "outfit": "Women's version of the same jacket in pale blue or grey cotton, with turn-down collar and patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.",
+    "hair": "Short, straight, chin-length bob with a side part, held back on one side by a plain black hair clip",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes"
+   },
+   "signature": "Blue-grey Zhongshan (Mao) suit with four patch pockets, worn by men and women alike",
+   "avoid": [
+    "Mao badges or portrait pins",
+    "Red-star cap badge, green PLA uniform, Red Guard armbands",
+    "Little Red Book, slogans, any propaganda text",
+    "1930s qipao or Shanghai glamour (wrong decade)",
+    "White lab coat as the main garment (not culturally distinctive)",
+    "Coolie hat or any caricature",
+    "Japanese salaryman suit and tie",
+    "low flat tweed cap (Britain modern)",
+    "striped or fringed woven bag (Greece modern)"
+   ],
+   "notes": "Sources: 1970s documentary photographs of Beijing street and workplace dress; photos of Tu Youyou in the Project 523 period (short hair, plain cotton jacket). The Zhongshan suit predates the PRC (Sun Yat-sen, 1920s) and is a garment, not an insignia. Keep it completely free of badges, stars and slogans to meet the no-regime-insignia rule. CLARIFIED: the cap's tall rounded crown and high position are now spelled out so it is not drawn like Britain 1950's low tweed flat cap; Greece's former fisherman's cap was dropped for the same reason. The satchel was the ubiquitous plain canvas bag of the time; keep it plain and unstriped so it cannot be mistaken for Greece's tagari. If the team wants a less politically loaded modern China, the alternative is 1930s Shanghai (qipao, changshan and fedora), but that moves away from Tu Youyou's moment."
+  },
+  {
+   "country": "japan",
+   "era": "modern",
+   "displayName": "Showa Tokyo",
+   "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+   "year": 1980,
+   "male": {
+    "outfit": "Salaryman suit: dark navy or charcoal single-breasted two-piece with a white shirt and a narrow dark tie, plus a small round enamel company badge (shasho) with a generic abstract mark on the left lapel; black leather shoes.",
+    "hair": "Short hair neatly combed back with a side part",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "Lightweight silver-and-black headband headphones with round bright-orange foam ear pads worn on the head, a thin cord running to a compact blue-and-silver cassette player in a small tan leather case hooked on the belt; no brand logo"
+   },
+   "female": {
+    "outfit": "Office lady (OL) company uniform: a fitted navy or burgundy waistcoat over a white blouse with a soft ribbon bow at the collar, a matching knee-length pleated skirt, sheer stockings and low pumps.",
+    "hair": "Seiko-chan cut: layered, shoulder-length feathered bob with soft inward flicks at the sides and wispy bangs (the c. 1980 pop-idol trend)",
+    "facialHair": "none",
+    "headwear": "none",
+    "accessory": "The same orange-foam headphones resting around the neck"
+   },
+   "signature": "Orange-foam headphones worn with a portable cassette player",
+   "avoid": [
+    "Rising Sun flag or rays, or a hachimaki headband with the hinomaru",
+    "WWII military uniforms or imagery",
+    "Sony or any real brand logo",
+    "Anime or manga caricature, samurai or geisha cliches",
+    "Kimono (not everyday wear at this moment)",
+    "Chinese Zhongshan suit",
+    "dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)"
+   ],
+   "notes": "Sources: the Sony Walkman TPS-L2 (blue-and-silver metal case, on sale in Japan from 1 July 1979, sold with a leather carry case) and its MDR-3L2 headphones with circular orange foam pads (Cooper Hewitt collection; Walkman Archive). Also 1970s-80s Japanese office uniform photography and the Seiko Matsuda hairstyle craze of 1980. Morita is the designer's figure. The salaryman suit alone is generic worldwide and close to Italy 1960's slim suit, so always draw the orange headphones and the lapel badge. The Walkman spread abroad later in the 1980s, so at c. 1980 the headphones still read as distinctly Japanese. Minor edit: the cassette player now sits in its leather case on the belt rather than being 'clipped' on. The original model shipped with a case, not a belt clip."
+  },
+  {
+   "country": "britain",
+   "era": "modern",
+   "displayName": "Post-war Britain",
+   "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+   "year": 1950,
+   "male": {
+    "outfit": "Brown herringbone tweed sports jacket with leather elbow patches over a Fair Isle-patterned sleeveless knitted pullover, a white shirt and a knitted wool tie. Baggy grey flannel trousers and brown brogues.",
+    "hair": "Short back and sides: neatly cut, side-parted and slicked with hair cream",
+    "facialHair": "none",
+    "headwear": "Tweed flat cap: low, flat crown sloping forward onto a short peak",
+    "accessory": "Long college scarf in broad block stripes of two contrasting colours, wound once round the neck with the ends hanging loose"
+   },
+   "female": {
+    "outfit": "Soft wool twinset (short-sleeved jumper with a matching cardigan) in a pastel or heather tone, tucked into a below-the-knee A-line tweed skirt. Seamed stockings and low-heeled court shoes.",
+    "hair": "Early-1950s 'set': collar-length hair in soft rolled pin-curls framing the face",
+    "facialHair": "none",
+    "headwear": "Printed silk square headscarf folded into a triangle and knotted under the chin, covering the ears, with a roll of curls showing at the forehead; face fully visible",
+    "accessory": "A single strand of pearls (the 'twinset and pearls')"
+   },
+   "signature": "Tweed and knitwear. Men wear an elbow-patched herringbone tweed jacket over a Fair Isle pullover with a flat cap. Women wear a twinset and pearls with a tweed skirt and an under-the-chin headscarf.",
+   "avoid": [
+    "military, Home Guard, ARP or any uniform",
+    "Union Jack, royal regalia, guards' bearskins, police helmets",
+    "1960s Mod or 1970s punk looks (the wrong moment)",
+    "cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern)",
+    "broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern)",
+    "tall-crowned navy peaked cap (China modern)",
+    "kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern)",
+    "a likeness of Alan Turing",
+    "Sherlock-style deerstalker cliche"
+   ],
+   "notes": "Sources: British clothing under rationing and utility schemes around 1946-52, Fair Isle knitwear (Shetland, popular from the 1920s onward), and period photographs of Manchester University computing staff and of northern workers in flat caps. Turing studied at King's College, Cambridge, which inspired the college scarf. The flat cap fits the Manchester and labour theme, though an academic would often have gone bareheaded. Why this moment: Turing c. 1950 was chosen over Pankhurst c. 1910 because it lines up with the computing theme and keeps Britain's modern moment 25 years away from Germany's (1926). RESOLVED: the under-chin headscarf is now Britain-only in this era, because Italy's was removed. Egypt's mandil is also a triangular kerchief, but it is knotted at the nape and edged with crocheted flowers, so keep Britain's knot clearly under the chin. The scarf is now specified as bold block stripes so it cannot be confused with Egypt's plain fringed shal. Pearls are now Britain-only because Iraq's strand was replaced."
+  },
+  {
+   "country": "germany",
+   "era": "modern",
+   "displayName": "Weimar Berlin",
+   "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+   "year": 1926,
+   "male": {
+    "outfit": "Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open.",
+    "hair": "Collar-length hair brushed back from the forehead, a little untidy (not a wild halo)",
+    "facialHair": "Bushy walrus moustache",
+    "headwear": "Broad-brimmed soft black felt hat with a pinched crown",
+    "accessory": "Round wire-rimmed spectacles"
+   },
+   "female": {
+    "outfit": "Straight, loose, knee-length drop-waist dress with a Bauhaus-style geometric pattern of colour blocks (red, ochre, blue and black squares, bars and circles), worn with flat bar-strap shoes.",
+    "hair": "Bubikopf: a sleek chin-length bob with a blunt fringe",
+    "facialHair": "none",
+    "headwear": "Close-fitting felt cloche hat pulled down to the eyebrows, with a small brim so the face stays clear",
+    "accessory": "Geometric chrome-and-brass necklace of circles and bars in the Bauhaus metal-workshop style"
+   },
+   "signature": "For women, Bauhaus colour-block geometry with a Bubikopf bob and cloche. For men, a broad-brimmed soft felt hat, walrus moustache and round wire spectacles.",
+   "avoid": [
+    "ANY uniform, armband, swastika or other regime or military insignia",
+    "brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype)",
+    "Iron Cross, eagles, black-white-red imperial colours",
+    "toothbrush moustache",
+    "monocle or Pickelhaube",
+    "lederhosen, dirndl or beer-hall caricature",
+    "'Cabaret' decadence caricature (fishnets, lingerie)",
+    "a likeness of Einstein (no wild white hair, no famous-portrait pose)",
+    "tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)"
+   ],
+   "notes": "Sources: period photographs of Einstein in Berlin (1917-1932) for the rumpled suit, soft collar and moustache. Bauhaus weaving workshop (Gunta Stoelzl, Anni Albers) for the colour-block textiles. Naum Slutzky's geometric chrome-plated brass jewellery (his best-known necklace dates from c. 1929, a few years after the moment). Bubikopf is the German term for the 1920s bob. Why this moment: Weimar 1926 was chosen deliberately over Sophie Scholl (Munich 1942-43) so the look stays fully clear of 1933-45 regime imagery. It was also chosen over Haber (Karlsruhe 1909), which would repeat the Wilhelmine look. CHANGED: the man's hair was toned down, and 'no Einstein likeness' was added, because unruly swept-back hair plus a bushy moustache is the Einstein caricature. Uncertain: the Bauhaus colour-block dress is a stylisation, because Bauhaus weaving mostly made furnishing fabrics and similar 'simultaneous' dresses came from Sonia Delaunay in Paris. The cloche and bob were international 1920s fashions. Within this era Germany is safe because it is the only 1920s entry (all the others are 1950-1980), so the drop waist, cloche and brimmed felt hat are unique."
+  }
+ ],
+ "futureMotifs": [
+  {
+   "country": "egypt",
+   "motifs": "Crisp white and ecru knife-pleated linen; concentric broad-collar necklines reworked as layered circular yokes in bead-row colours (Nile turquoise, lapis blue, carnelian red, gold); kohl-wing graphic lines as piping along seams; vertical fluting taken from lotus and papyrus columns; Mamluk oversized hanging sleeves as dramatic cape-sleeves; the tarboush's truncated cone as a sleek crimson cap with a single tassel; mashrabiya lattice perforation and irrigation-canal grid quilting. Avoid god emblems, royal crowns and cobra motifs."
+  },
+  {
+   "country": "iraq",
+   "motifs": "Tiered Babylonian fringe as kinetic hem and shoulder fringing; one-shoulder spiral draping; embossed cuneiform-wedge texture and cylinder-seal roll-print bands (decorative, not readable); glazed-brick lapis blue with ochre, date-palm brown, cream and gold; the Abbasid tall-cap silhouette and taylasan shoulder shawl as a high hood-collar; tiraz armbands in pseudo-script; square-shouldered open 'aba cloaks with gold-thread yoke edging; the concentric circles of Baghdad's Round City and muqarnas honeycomb geometry; flowing parametric curves recalling Iraqi-born Zaha Hadid's architecture; the sidara's folded boat-shaped crown. Avoid religious text and deity motifs."
+  },
+  {
+   "country": "greece",
+   "motifs": "Meander (Greek key) and wave-scroll borders as glowing trim lines on hems and cuffs. Asymmetric one-shoulder drapes from the himation and chiton, and crisp accordion pleating from the fustanella. Round fibula-style shoulder clasps, and Byzantine gold roundel (segmenta) inserts as circular panels. Palette of chalk white, Aegean blue, terracotta and black from red-figure pottery, with fine olive-leaf line embroidery. Striped hand-woven crossbody bags echoing the tagari, and tall brimmed crown shapes echoing the Palaiologan hat."
+  },
+  {
+   "country": "italy",
+   "motifs": "Sweeping curved toga-like wraps with slim vertical clavi-stripe accents. Renaissance slashed-and-puffed sleeves with contrasting linings, and pomegranate damask/velvet patterns rendered as cut or iridescent textures. Palette of Florentine crimson, ochre, terracotta, travertine and Carrara-marble veining. Circular tabarro capes with velvet collars, razor-slim 1960s Roman tailoring with dark visor lenses, and kaleidoscopic swirl prints. A thin lenza forehead band reimagined as a light strip, with Vitruvian circle-and-square geometry, arcade arches and Marconi-style concentric radio-wave rings as graphic motifs."
+  },
+  {
+   "country": "china",
+   "motifs": "Diagonal cross-collar (jiaoling) wrap closures and high standing collars fastened with sculpted pankou knot buttons. Deep, flowing sleeves cut as sheer layered panels. Horse-face (mamian) pleated side panels on long coats and skirts. Cloud-scroll (xiangyun) and key-fret (huiwen) borders reworked as glowing circuit-trace trim. Paper-fold pleating and translucent layers like xuan paper pages. Movable-type grids and star-chart or compass-rose line engraving for the navigation and knowledge theme. Jade-like translucent fastenings and lacquer finishes. Palette: ink black, cinnabar lacquer red, celadon, indigo, gold-thread accents. No imperial five-claw dragons, rank squares, flags or political badges."
+  },
+  {
+   "country": "japan",
+   "motifs": "Kimono collar layering (kasane colour stacking) as a signature neckline. Wide, structured obi-style waist cinchers with modular clasps and obijime cord detail. Clean architectural shoulder lines inspired by the haori and kataginu. Hakama pleat geometry in wide trousers and skirts. Precise geometric patterns (asanoha hemp leaf, seigaiha waves, shippo, kikko, yagasuri) rendered as laser-cut or LED line work. Sashiko grid stitching and origami-fold panels. Visible karakuri-style mechanical joints and split-toe tabi footwear. Palette: aizome indigo, sumi black, washi white, vermilion lacquer, Hokusai Prussian blue, soft sakura-pink accents. No rising-sun rays, imperial chrysanthemum, flags or military insignia."
+  },
+  {
+   "country": "britain",
+   "motifs": "Sharp Savile Row-style tailoring stretched into long frock-coat lines with high stand collars. Herringbone tweed, Fair Isle knit bands and bold Iron Age checks re-rendered as fine woven or circuit-trace micro-patterns. An open neck ring inspired by the torc. Pleated translucent collar rings that echo the Elizabethan ruff. Paisley teardrop scrollwork etched into panels. Brass rivets, railway-line pinstripes and punch-card perforation grids that recall steam, the telegraph and the computing of Lovelace and Turing. Palette: racing green, oxblood, slate grey, heather and navy, with brass and copper accents."
+  },
+  {
+   "country": "germany",
+   "motifs": "Bauhaus geometry (circle, square, triangle) in red, yellow, blue and black on graphite. Clean, precision-engineered seams and round lens-like visor or spectacle elements that recall Jena optics. Jugendstil 'whiplash' curves as embroidered or laser-cut trim. Renaissance slashing and puffing reinterpreted as vented panels with contrasting linings. A wide, flat, soft Barett-style cap. Frilled, Kruseler-like pleated collars framing the face. Movable-type grid texture (letterforms used as pattern, never as slogans). Baltic amber and linen-white accents. Avoid black-white-red combinations, eagles, crosses and blackletter lettering."
+  }
+ ],
+ "changes": [
+  "Italy: the U-shaped sinus fold and umbo pouch were anachronistic for 50 BCE. The sinus is late 1st century BCE–Augustan and the umbo appears around the Ara Pacis, 9 BCE (Rothfus 2010, after Goette 1990). The toga is now drawn the late-Republican way: long single layer, rounded curved edge, firm diagonal band across the chest. The signature is now the curved-edged plain white toga with clavus, clean-shaven face and calcei, plus the nodus for women. The deep sinus and umbo, the broad stripe and the toga sling were added to avoid, and the notes were corrected (the Ara Pacis is not a valid model).",
+  "Greece: the petasos moved from 'hanging behind the shoulders' (invisible on a front-facing figure and a halo risk) to headwear worn tilted back with the face clear. The accessory became a pera shoulder pouch, so the Greek accessory no longer collides with the Roman ring. The woman's girdle moved from under the bust (Hellenistic) to the natural waist (Classical). 'Krepides' was replaced with simple strapped sandals. Avoid now also lists the ephebe chlamys-plus-petasos costume and the high girdle.",
+  "Iraq: the woman's 'several layered bands of fringe' drifted toward the tiered flounced robe that marks goddesses in Old Babylonian art (a sacred-dress risk), so it is now a single fringed wrap and flounced robes are in avoid. The man's beard changed from strict horizontal rows of tight curls (Neo-Assyrian) to long wavy strands ending in curls. 'Indigo/saffron' became generic red, blue or yellow dye, noted as uncertain.",
+  "Egypt: fixed the wrong term 'short-sleeved' wig to a shoulder-length bobbed official's wig. Removed the knotted sheer shawl from the woman, because sheer pleated overgarments came later in the 18th dynasty. Simplified the kilt (the stiff triangular apron is more Middle Kingdom). Added later-18th-dynasty fashion and perfume cones to avoid, and noted that Menna TT69 is c. 1400 BCE, so Rekhmire is the closer model.",
+  "China: the jieze had no chin ties (those belong to the formal guan worn over it). It is now a forehead band with a roof ridge and two upright back 'ears'. Confirmed that women's quju robes persisted into Eastern Han, so the woman's spiral hem stays. Added the jinxian guan and seal ribbons (rank markers) and chin ties to avoid.",
+  "Japan: corrected the date of the right-lapel rule from the '718 Yoro Code' to the 719 edict (Shoku Nihongi, Yoro 3). Haniwa show the closure in both directions before it, so closure direction was dropped as a tell and the jacket is now fastened with bows at the chest, as haniwa show. Removed the confusing 'left-over-right' avoid item and added 'Chinese big-sleeved robes' and an imperial-regalia-style single jewel to avoid.",
+  "Germany: removed the fur-edged collar (caricature drift; Thorsberg shows fringed wool). Removed the woman's sprang hairnet (weakly attested for 1st-century Germania, and a thumbnail duplicate of the Greek sakkos); she now has a woven hair-band (Huldremose) and headwear 'none'. The woman's dress is now a loose peplos-type dress pinned at both shoulders, to separate it from the Egyptian sleeveless sheath. Added the Egypt sheath, snood/hairnet and fur to avoid.",
+  "Britain: no substantive changes (checked against Caesar BG 5.14, Dio 62.2 and Diodorus 5.30). Added 'plain undyed cloth with amber' to avoid to protect the distinction from Germany.",
+  "EGYPT (sensitivity + accuracy): Mamluk sources say women's izars were white for Muslim women, and blue, yellow and red were the colours imposed on Christian, Jewish and Samaritan women. The izar is now explicitly white and those colours are on the avoid list. The izar hangs open at the front so the coloured gown shows. I removed the unverified claim that sultans decreed shorter sleeves; the only decrees I found (1426/7, 1472) are about women's caps. The man's outer robe changed from indigo to green/brown/dark blue and loses its tiraz bands, so it is not the same as Abbasid Iraq. The men's sleeves are moderated from knee-length to 'well past the fingertips'. The woman's pearl necklace became a filigree collar so it does not duplicate Iraq's pearl choker.",
+  "GREECE (distinctiveness + accuracy): the woman's white headcloth wound round the head and neck was nearly identical at thumbnail size to Britain's headrail and Egypt's white izar. It is now a compact, patterned cream/gold/red wound turban (fakiolion) with the neck open and big crescent earrings. The bell-sleeved gown (which echoed Britain) became the fitted, sleeveless, flared silk damask over-dress excavated at Mystras (15th c.), worn over a long-sleeved patterned under-tunic. Men: I dropped the hanging-sleeve overcoat because it hid the button-front tell and echoed Egypt's sleeves. The plaque belt became a belt with small gilt mounts, as attested by Parani. The skaranikon, which bears the emperor's portrait, is added to avoid as regime insignia.",
+  "ITALY (distinctiveness + accuracy): the woman's thin white veil was one of five pale female head coverings, and her floor-trailing fur sleeves duplicated Egypt's signature. She now wears the ghirlanda, the Italian padded roll documented for the 1440s, studded with pearls over bare, drawn-back hair and a plucked forehead. Her dress is a gamurra under a sleeveless, open-sided pomegranate-velvet giornea (FIT 1440-49). The man's 'cioppa/lucco with large open sleeves' is clarified as the Florentine lucco. I dropped 'nape shaved high' (a Burgundian/English trait) and state that the mazzocchio sits on top of the head, so it is not read as Germany's Gugel hood.",
+  "BRITAIN (distinctiveness): the headrail is now explicitly coloured (blue, brown-red or ochre), as late Anglo-Saxon manuscripts show, and a white headrail is on the avoid list. Its wrap round the throat is the shape tell against Greece's open-necked turban and Egypt's full-length izar. The woman's brooch is now a small gilt one, and the note flags that the Fuller and Pentney brooches are 9th-century references.",
+  "GERMANY: the man's gown moved from red to blue/green so it does not echo the red Florentine lucco. The shoes are moderated to 'moderately long', since extreme poulaines peaked around 1460-80. I removed the misapplied 'Kotte' label from the high-belted 1440s gown. The Kruseler's 1440 date is kept, with a source (bloshka: the Wulsthaube evolved from the Kruseler only after c. 1450). Avoid now adds the Italian mazzocchio and ghirlanda.",
+  "IRAQ: kept essentially intact. The cap is now specified as stiff, smooth and upright, so it cannot read as Japan's soft black eboshi, and the sleeves end at the wrist so they do not echo Egypt. Avoid now adds Egypt's round all-white turban and white izar.",
+  "CHINA: a coloured robe is the official round-collared robe (yuanling pao); the Song lanshan was the pale scholar-student robe. Its colour is set to the mid-rank green or blue-grey, not the purple or vermilion of high ranks. The jade belt plaques (a high-rank marker) became horn or silver, and jade rank belts are added to avoid.",
+  "JAPAN: the momi-eboshi is soft and lightly lacquered, since stiff lacquered caps are the tate-eboshi. 'Commoner's hemp suo' conflated two garments and became 'hitatare of hemp', with no family crests. The left-over-right collar is stated explicitly. Avoid now adds a stiff upright cap with a turban base, which reads as Iraq.",
+  "Germany male: gave him a full, short-trimmed beard and the shorter 1520s Kolbe haircut, and moved the moment from c. 1520 to c. 1525. Evidence: Duerer's 1526 Holzschuher portrait and the 1520s beard fashion. Why: the old version (clean-shaven, chin-length bob with a fringe, cap, knee-length coat) was nearly the same figure as Italy's Leonardo-era man at thumbnail size, which is the German/Italian doublet clash the brief warned about.",
+  "Germany moment: 'Henlein's early pocket watches' became 'early portable spring-driven clocks', because the pocket-watch attribution is disputed. Added the Nuremberg Reformation (1525) as the anchor for the new year.",
+  "Italy male: removed the shoulder cloak because it duplicated Britain's man. Fixed 'pitocco/giornea' to 'pitocco', which is the Anonimo Gaddiano's word; a giornea is a different, open-sided garment. Made the berretta explicitly small, round and red, after Leonardo's Portrait of a Musician. Added avoid-rules that ban a beard, the Barett, the Schaube and gold chains.",
+  "Italy female: added a small central brow jewel to the lenza (as in La Belle Ferronniere) so the hair-thin cord reads at thumbnail size, and stated she wears no hat, to separate her from Germany's Barett-wearing woman.",
+  "Japan male: replaced 'stiff broad shoulders that flare out like wings' with modest, flat, squared shoulders. Japanese costume histories say the widening came during the Edo period and whale-baleen stiffening around the Genroku era (1688-1703), so winged shoulders were anachronistic for 1610. Removed crests entirely (no real or generic mon). Moved the thumbnail tell onto the sleeveless vest, the hakama and the bareheaded shaved-pate topknot. Added winged shoulders to the avoid list and a kinchaku pouch as a fallback if the inro is too early.",
+  "China female: lengthened the ao from hip to knee length and made it front-opening, per late-Ming paintings and Tiangong Kaiwu. Changed the skirt from deep red or green to plain white or pale, per the Chongzhen-era fashion. Swapped the jinbu knee-length jade-and-tassel pendant for gold gourd earrings, because the pendant duplicated Japan's tasselled Nagoya-obi. Renamed the forehead band 'baotou (tougu)' and specified that it is broad, to set it apart from Italy's hair-thin lenza.",
+  "China male: changed 'long drooping moustache and long thin chin beard' to a neatly trimmed moustache and a neat chin beard, to avoid the Fu Manchu caricature (sensitivity). Dropped white from the robe colours (white reads as mourning). Specified that the cap is box-like with visible corners, and added avoid-rules against fur caps and dark fur-edged coats, to stay apart from Greece.",
+  "Greece male: specified a brimless, fur-textured kalpak with a rounded top. This keeps it apart from China's square gauze cap and avoids the mitre-shaped variant, which reads as clergy. Changed the fur to fox or lamb and the sash to silk-cotton, since Ottoman rules restricted sable and luxury silk for Christians. Added the 1662 ban on red kalpaks to the avoid list. Removed 'dark' from 'full dark beard', because hair colour must never be a tell.",
+  "Egypt: backed the female tartur with Cornelis de Bruyn's 1698 eyewitness description (tall hat wrapped in black or brown cloth with gold or silver stripes). The description now says it widens toward the top and the veil hangs down the back. Changed the fallback so it no longer uses a red cap with a kerchief, which would collide with Greece's woman. Made the male turban explicitly pure white. Softened the Kashmir shawl to 'Kashmir or Indian shawl' and flagged it as plausible, not certain, for 1700.",
+  "Iraq: corrected the moment. Baghdad was under Hasan Pasha (1704-23), whose household later became the Mamluk regime; Mamluk pashas ruled in their own right only from 1747. Made the turban explicitly coloured, never white. Clarified that the 'aba has arm slits. Replaced the crescents in the qilada necklace with coins and teardrops, to avoid any reading as a later Ottoman state emblem. Flagged the turban pattern as the least-attested detail.",
+  "Britain: accuracy unchanged. Updated the avoid list's Germany reference to c. 1525 and added gold chains and the Barett as German tells to avoid. Noted that the pearl earring is more courtly than mercantile but still plausible.",
+  "Checked all 8 countries against each other, male and female. Each now has at least one clear cultural tell at thumbnail size. Men: white turban with a red top (Egypt), coloured turban with a striped 'aba (Iraq), rounded black fur kalpak with a fur-edged coat (Greece), small red cap with a bob and a pink knee gown (Italy), square black gauze cap with a pale wide-sleeved robe (China), bareheaded topknot with a sleeveless vest and hakama (Japan), ruff with a tall brimmed hat (Britain), wide tilted Barett with a beard and fur collar (Germany). Women: tartur (Egypt), black head-shawl with a brow band and dark cloak (Iraq), red cap with a scarf and silver pafti (Greece), hatless hair with a jewelled lenza and white sleeve puffs (Italy), long standing-collar jacket over a horse-face skirt (China), dark patterned kosode with a tasselled cord belt (Japan), ruff with a tall hat over a coif (Britain), tilted Barett with the Goller cape (Germany). No country was missing.",
+  "Egypt: moved the date from 1865 to 1869. The title 'Khedive' was granted by firman on 8 June 1867, so 'Khedivate of Egypt' in 1865 was anachronistic.",
+  "Egypt (women): the visible headwear is now Lane's long white embroidered tarha veil trailing down the back, replacing the red tarboush with gold kurs. The kurs is documented c. 1835 and uncertain for 1869, and a small red cap was confusable with the Greek women's red fesi. The women's signature was updated to match.",
+  "Egypt (men): the tarboush is now described as stiff, upright, level, with a short tassel, to separate it from the Greek fesi, which is floppy and tilted with a long tassel.",
+  "Iraq (men): the headcloth is now plain white, to avoid chequered patterns with modern political associations. The 'aba is now camel-brown, so it cannot be read as Italy's black tabarro and differs from the woman's black 'abaya. The signet ring, which is invisible at thumbnail size, was replaced by a brass dawat pen-case tucked into the girdle.",
+  "Iraq: the notes now state honestly that the headcloth with 'igal was one of several Baghdad townsman looks (with turbans and the fez), chosen for distinctiveness.",
+  "Greece: jackets changed to crimson (men) and burgundy (women) with an ivory or rose skirt, so the look avoids a blue-and-white flag scheme. The fesi is described as soft and drooping. The women's signature now leads with the gold-embroidered kontogouni, not only the red cap. Checked against Amalia-costume sources: red fesi with a long braided-gold tassel worn at an angle, and a short gold-embroidered velvet jacket.",
+  "Italy: the lobbia (dented crown, medium brim) was replaced by a broad-brimmed soft black felt hat, because the lobbia is almost identical to Germany's Homburg at thumbnail size. The moustache is now bushy 'Umbertine' rather than curled, to separate it from Germany's waxed style. Added a note that by 1895 the tabarro was more provincial or old-fashioned.",
+  "China (men): removed the long, thin, drooping moustache, which is effectively the banned 'Fu Manchu' look; he is now clean-shaven, as Qing custom was. The round spectacles were replaced by a hebao purse at the hip to avoid overlap with Germany's pince-nez.",
+  "China (women): added a black embroidered meile forehead band as a thumbnail tell; it was worn by Qing women of all ranks. Removed the short fringe, which is more 1890s-1900s and would sit under the band.",
+  "Japan (men): replaced the pocket-watch chain, which duplicated Egypt and Britain, with the white haori-himo cord knot. The moustache is now straight, not upturned. Footwear reduced to a single choice. Added a note that the kimono collar crosses left over right, with an avoid item explaining why.",
+  "Japan (women): flagged that hair ribbons and women's hakama are at the early edge for 1899 (mostly c. 1900-05).",
+  "Britain: the moment text claimed 1843 was 'the height of Railway Mania', but the mania peaked in 1845-47, so it now says 'just before' and mentions the Cooke-Wheatstone telegraph.",
+  "Germany: toned the 'Es ist erreicht' moustache down to a moderate twist to avoid the stern-Prussian caricature when combined with the brush cut and pince-nez, and added exaggerated Kaiser points to the avoid list.",
+  "All entries: added cross-country avoid items (Egypt/Greece fez, Egypt/Iraq head coverings, Italy/Germany hats, Italy/Britain shawls, Japan/Germany bowler) so the image model does not blur neighbouring looks.",
+  "Egypt female REPLACED: the 1960s Cairo look (bouffant, sheath dress plus bolero, big dark sunglasses) matched Italy 1960 item for item. She now wears a bright printed village galabiya, a mandil abu oya (a triangular kerchief with a crocheted-flower edge, knotted at the nape) and a stack of gold bangles (ghawayesh). This matches the provincial galabiya-and-jacket man. The mandil was verified in Egyptian sources as a core part of the fellaha dress.",
+  "Egypt male: the shal is now a plain dark fringed scarf with no stripes, so an isolated leak cannot be confused with Britain's college scarf. 'Black' was removed from the hair (hair colour must never be a tell). The signature now covers both sexes. Bouffant/sunglasses, the melaya laff (reads as Iraq's 'abaya) and belly-dance caricature were added to the avoid list.",
+  "Italy female: the under-chin headscarf was removed. It duplicated Britain 1950 and would have hidden the bouffant, which is the point of the Dolce Vita look. She now reads by the kaleidoscopic print plus cat-eye sunglasses, and sunglasses are Italy-only in this era. The man's sunglasses are now specified as solid black lenses, because his slim suit is close to Japan's salaryman suit.",
+  "Greece male: the fisherman's cap was dropped. At thumbnail size it read the same as China's navy peaked cap, and it is not Greece-specific (Breton cap, Elbsegler, Lennon cap). The tagari now carries Greece for both sexes, with bold stripes and fringe specified.",
+  "Iraq female: the pearl strand became a gold coin (lira) pendant. Pearls are Britain's 'twinset and pearls' tell, and a leaked pearl strand would not read as foreign. The signature now names the 'abaya for women as well as the sidara for men. The 1958 decline of the sidara was verified (Wikipedia, 'Sidara').",
+  "China male: the cap's shape is now spelled out (tall rounded stiffened crown, sitting high, no badge) to separate it from Britain's low tweed flat cap. The satchel is specified as plain and unstriped to separate it from Greece's tagari.",
+  "Britain: the scarf is now specified as broad block stripes, and the headscarf knot clearly under the chin, to separate them from Egypt's plain shal and nape-knotted mandil. 'A likeness of Alan Turing' and the China and Egypt look-alikes were added to the avoid list. Britain now owns the under-chin headscarf and the pearls alone in this era.",
+  "Japan: the cassette player now sits in its leather carry case on the belt. The TPS-L2 shipped with a case, not a belt clip (verified: Cooper Hewitt, Walkman Archive). The headphones are specified as silver-and-black with orange pads. Dark sunglasses were added to the avoid list.",
+  "Germany: the male hair was toned down, and 'no Einstein likeness' was added to the avoid list, because unruly hair plus a walrus moustache is the Einstein caricature. The notes now say the Slutzky necklace dates from c. 1929 and the Bauhaus dress is a stylisation (Delaunay-style simultaneous dresses were Parisian). The look is safe because Germany is the only 1920s entry in this era.",
+  "All eight countries were already present. No sensitivity breaches were found beyond the caricature risks above. Every head covering is described with the face fully visible."
+ ],
+ "confusable": [
+  "Italy male vs Greece male: the late-Republican toga (c. 50 BCE) is itself a himation-like drape, so the silhouettes are close. The difference rests on the clean-shaven face, plain white curved-edge toga, visible purple clavus and calcei (Rome) against the beard, coloured meander-bordered himation, petasos and pera (Greece). Moving Rome to the Augustan era (c. 10 CE) would restore the unmistakable sinus and umbo, if the Caesar moment is not required.",
+  "Italy female vs Greece female: both wear a long dress under a draped mantle. The tell is the headwear or hair (Greek sakkos snood against the Roman nodus roll) plus the Greek meander hem against the plain palla and visible stola straps.",
+  "Greece male vs Iraq male: both are bearded men in a coloured mantle over the left shoulder. The tell is the Babylonian chest-length curled beard, nape bun, headband and heavy fringe against the Greek short beard, short curls, petasos and woven border.",
+  "Britain male vs Germany male: they share the tunic, trousers and shoulder-pinned cloak silhouette. The difference rests on the multicoloured checks, gold torc and moustache-only face (Britain) against plain brown or blue twill, the Suebian side knot and a full beard (Germany).",
+  "Egypt female vs Germany female: both wear sleeveless ankle-length linen dresses. The difference rests on the heavy tripartite wig, broad bead collar and fitted white sheath (Egypt) against the nape knot, loose shoulder-pinned dress with red trim, wool shawl and amber beads (Germany).",
+  "iraq male vs japan male: both wear tall black caps. They must be drawn differently: Iraq's cap is stiff, smooth and upright, rising out of a white turban band, with tiraz armbands; Japan's is soft, crumpled and forward-leaning, with no turban, and wide square hitatare sleeves with hakama.",
+  "iraq male vs greece male: both are bearded men in tall hats and long robes. The tells are the white turban at the base of Iraq's black cone against Greece's turned-up brim and button-front robe.",
+  "italy male vs germany male: both are clean-shaven, in pleated gowns, with hood-derived headwear that has a tail. Italy wears a padded ring sitting on top of the head, visible hair and an ankle-length red lucco. Germany wears a hood enclosing the head and neck with a scalloped shoulder cape, a calf-length blue or green Tappert and pointed shoes. Artists must not merge the two.",
+  "egypt female vs britain female: both drape the head and shoulders. They differ in colour and shape: Egypt's white izar hangs open to the ankles over a bright gown, while Britain's coloured headrail wraps round the throat and ends at the back. The difference relies partly on garment colour, so the shapes must be exaggerated.",
+  "greece female vs italy female: both have a rounded volume on the head. Greece's is a tall wound turban covering all the hair, with crescent earrings. Italy's is a padded pearl-studded ring with bare hair and a high forehead showing inside and below it.",
+  "China male vs Greece male: both wear a tall black cap over an ankle-length robe. Mitigated by making China's cap square and box-like in stiff gauze over a pale, very wide-sleeved robe with a white collar strip, and Greece's a rounded, fur-textured kalpak over a dark, fur-edged coat. Needs checking at thumbnail after generation.",
+  "Egypt male vs Iraq male: both are bearded, turbaned men in long robes. The tell depends on Egypt's turban staying pure white with the red crown visible, and on Iraq's coloured, patterned turban plus the broad brown-and-cream striped 'aba. If the image model whitens Iraq's turban or drops the 'aba stripes, the two merge.",
+  "Italy female vs Germany female: both gowns show white puffs at the sleeves. The German Barett and black Goller cape against the hatless Italian with a jewelled lenza carry the difference; the German woman must never lose her hat.",
+  "Forehead bands on three women (Iraq's black 'asaba over a head-shawl, Italy's hair-thin lenza with a jewel, China's broad black baotou under a high bun): each is set apart by its context, but none of them should be used as that country's sole tell.",
+  "Egypt men (stiff upright crimson tarboush) vs Greece men (soft, drooping red fesi): both are red fez-type caps. The full outfits are distinct (black stambouline vs white fustanella), but a leaked cap alone could be rendered alike. The image prompts must enforce stiff/level/short tassel vs floppy/tilted/long tassel.",
+  "Japan men (bowler) vs Germany men (Homburg): both are dark Western felt hats. Tell them apart by the haori, himo cord and striped hakama vs the frock coat, tall collar and pince-nez, and by the bowler's round dome vs the Homburg's dented crown and curled brim.",
+  "Italy women (black fringed scialle) vs Britain women (Paisley shawl): both drape a shawl over a long dress. The tells are Britain's poke bonnet and bell skirt with ringlets vs Italy's bare high chignon and red coral necklace.",
+  "Egypt, Britain and Germany men all wear dark frock coats, and Egypt and Britain both wear a gold watch chain. The coats alone do not separate them; the headwear (tarboush, top hat, Homburg) must always be drawn clearly.",
+  "Greece, Italy and Germany men all wear full moustaches with shaped ends. Facial hair should not be relied on as a tell in this era.",
+  "Italy male vs Japan male: near-identical slim dark suits and bare heads. Rome depends on the solid black sunglasses; Tokyo depends on the orange-foam headphones and the lapel badge. Both must always be drawn.",
+  "China male cap vs Britain male flat cap: both are soft peaked caps. They are only separable by the tall, high-sitting navy crown versus the low, sloping brown tweed crown, so the illustrator must keep the silhouettes distinct.",
+  "Egypt female mandil vs Britain female headscarf: both are triangular kerchiefs. They differ in knot position (nape versus under the chin) and in Egypt's crocheted-flower edge, which may blur at thumbnail size.",
+  "China female khaki satchel vs Greece tagari: both are crossbody bags. They differ only in the plain khaki versus bold stripes and fringe.",
+  "Egypt male shal vs Britain male college scarf: both are long wool neck scarves. Plain dark with a fringe versus bold block stripes should hold, but only if the stripes are drawn strongly.",
+  "Iraq male horn-rims vs Germany male round wire spectacles: both are clear-lens glasses. Heavy black rectangular frames versus thin round wire frames are only separable if drawn at sufficient size.",
+  "Egypt female gold bangles vs Iraq female gold coin pendant: both are gold jewellery, told apart only by placement (wrists versus neckline)."
+ ]
+}

@@ -1,0 +1,305 @@
+[
+  {
+    "id": "sky",
+    "source_id": "sky",
+    "title": "Sky",
+    "group": "Exterior",
+    "use": "Neutral sky backplate. Runtime color treatment can follow the shift.",
+    "path": "Images/sky.png",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGB",
+    "alpha_extrema": null,
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Game environment texture: SKY ONLY, no buildings, no hall, no city, no horizon ground, no vehicles. Muted pale blue-gray overcast high sky for dense retro futuristic megacity. Simple flat painted color with very soft broad cloud layers, minimal detail, no sun, no sunbeams, no directional glow, no sunset hues, no stars, no text. Uniform neutral daylight base intended for runtime morning/evening tinting. Full 16:9 opaque seamless-feeling sky backplate, clean understated indie-game style. Do not include any other scene content."
+  },
+  {
+    "id": "far_megacity",
+    "source_id": "far_megacity_flat",
+    "title": "Far megacity",
+    "group": "Exterior",
+    "use": "Wide stepped megablocks, flat roof masses, separate from sky and traffic.",
+    "path": "Images/far_megacity.png",
+    "width": 1672,
+    "height": 941,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Keep this isolated far skyline's enormous overlapping broad concrete megablock silhouettes and same layout. Reduce material detail to flat illustrated anime-game color fields with only two tones per plane. No concrete texture. Widen the thin central tall cores and replace pointed antenna/spire tops with squat flat roof utility blocks. Oppressive enormous inhabited megastructures from a 90s Judge Dredd future. Reinforce some wide dark window bands and muted desaturated teal/rust service bands. Preserve actual alpha transparency above roof silhouettes and gaps, no sky, no haze background, no gradient alpha halos. No vehicles, roads, hall or interior. Entire wide landscape background layer only."
+  },
+  {
+    "id": "near_megablock",
+    "source_id": "near_megablock_flat",
+    "title": "Near megablock study",
+    "group": "Exterior",
+    "use": "Separate building appearance study; use the base mesh for real depth and dynamic lighting.",
+    "path": "Images/near_megablock.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Simplify ONLY the material/art style of this exact massive wide concrete megablock. Preserve bulky broad stepped massing, overhead decks and brutalist buttresses, blank billboard and teal/ochre bands. Redraw as cel-shaded ReStory game architecture, broad flat matte surfaces, only two tones per concrete plane, no photo texture, grain, tiny windows or rendering noise. Make it clearly an enormous inhabited city block in a 90s Judge Dredd megacity. REMOVE all background haze, halo, floor and cast shadows: pure transparent alpha immediately outside building silhouette. No cars, roads, skyline, sky, room, signage text. Entire building with small margin. Don't make a thin skyscraper or art deco spire."
+  },
+  {
+    "id": "hover_car",
+    "source_id": "hover_car",
+    "title": "Hover car",
+    "group": "Traffic",
+    "use": "Individual traffic sprite. The separate GLB supplies a simple 3D vehicle and traversal clip.",
+    "path": "Images/hover_car.png",
+    "width": 1748,
+    "height": 900,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "ONE isolated chunky retro-future HOVER TAXI game sprite on genuine transparent background, no checkerboard. 1990s imagined future, battered ordinary government-city commuter taxi inspired by dense Judge Dredd megacity, not a spacecraft jet. Dull ochre yellow blocky car with dark windows, enclosed wheel-less underside with two simple small lift pods, blunt front, slightly rounded roof, NO text, no logo, no taxi lettering, no lights/emissive effects, no trail. Strict SIDE VIEW facing RIGHT, horizontal silhouette, full object and small transparent margin; animation will move this whole sprite along a lane. Clean simple stylized 3D-game appearance with flat matte colors, 2-tone shading, no tiny texture, neutral diffuse lighting, no cast shadow or ground. Landscape canvas tightly around car."
+  },
+  {
+    "id": "mona_lisa",
+    "source_id": "mona_lisa",
+    "title": "Mona Lisa \u2014 stylized study",
+    "group": "Paintings",
+    "use": "Individual worn framed painting; proposed left display rail.",
+    "path": "Images/mona_lisa.png",
+    "width": 1145,
+    "height": 1374,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "ONE separate wall-art game asset, front view, entire rectangular artwork plus simple frame visible with small margin on GENUINE TRANSPARENT background. Mona Lisa, recognizable dark hair, folded hands and triangular seated silhouette; muted green/brown, minimal face marks. Portrait rectangle. One chipped lower frame corner. The painting itself MUST be a deliberately SIMPLIFIED STYLIZED INTERPRETATION with 8-12 large FLAT color regions, broad 2-tone shading only, same simple-material indie-game language as ReStory. NOT a photograph/reproduction of original painting, not realistic painterly texture or face. Frame plain chunky shapes, no ornate microdetail. Neglected government hall exhibit: dusty colors, 2 broad dirt smudges and readable simple corner damage, not noisy grunge. Blank small plaque integrated below frame if room; absolutely NO letters/digits/logos. No wall, other artworks, room, pedestal, lighting beam or cast shadow. Flat neutral lighting. Object isolated with actual alpha, no checkerboard. One file/one artwork, no contact sheet."
+  },
+  {
+    "id": "pearl_earring",
+    "source_id": "pearl_earring",
+    "title": "Girl with a Pearl Earring \u2014 stylized study",
+    "group": "Paintings",
+    "use": "Individual worn framed painting; proposed right display rail.",
+    "path": "Images/pearl_earring.png",
+    "width": 1024,
+    "height": 1536,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "ONE separate wall-art game asset, front view, entire rectangular artwork plus simple frame visible with small margin on GENUINE TRANSPARENT background. Girl with a Pearl Earring, recognizable blue/yellow headwear and white earring dot, broad simple face profile on dark field. Portrait rectangle. Crooked worn thin ochre frame. The painting itself MUST be a deliberately SIMPLIFIED STYLIZED INTERPRETATION with 8-12 large FLAT color regions, broad 2-tone shading only, same simple-material indie-game language as ReStory. NOT a photograph/reproduction of original painting, not realistic painterly texture or face. Frame plain chunky shapes, no ornate microdetail. Neglected government hall exhibit: dusty colors, 2 broad dirt smudges and readable simple corner damage, not noisy grunge. Blank small plaque integrated below frame if room; absolutely NO letters/digits/logos. No wall, other artworks, room, pedestal, lighting beam or cast shadow. Flat neutral lighting. Object isolated with actual alpha, no checkerboard. One file/one artwork, no contact sheet."
+  },
+  {
+    "id": "starry_night",
+    "source_id": "starry_night",
+    "title": "The Starry Night \u2014 stylized study",
+    "group": "Paintings",
+    "use": "Individual damaged framed painting; proposed left rear display.",
+    "path": "Images/starry_night.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "ONE separate wall-art game asset, front view, entire rectangular artwork plus simple frame visible with small margin on GENUINE TRANSPARENT background. Van Gogh The Starry Night, broad blue swirls, few yellow stars, cypress silhouette and tiny simplified village shapes. Landscape rectangle. Cracked corner frame held with two browned tape strips. The painting itself MUST be a deliberately SIMPLIFIED STYLIZED INTERPRETATION with 8-12 large FLAT color regions, broad 2-tone shading only, same simple-material indie-game language as ReStory. NOT a photograph/reproduction of original painting, not realistic painterly texture or face. Frame plain chunky shapes, no ornate microdetail. Neglected government hall exhibit: dusty colors, 2 broad dirt smudges and readable simple corner damage, not noisy grunge. Blank small plaque integrated below frame if room; absolutely NO letters/digits/logos. No wall, other artworks, room, pedestal, lighting beam or cast shadow. Flat neutral lighting. Object isolated with actual alpha, no checkerboard. One file/one artwork, no contact sheet."
+  },
+  {
+    "id": "great_wave",
+    "source_id": "great_wave",
+    "title": "The Great Wave \u2014 stylized study",
+    "group": "Paintings",
+    "use": "Individual worn print; proposed fallen frame beside right rear display, outside the walking route.",
+    "path": "Images/great_wave.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "ONE separate wall-art game asset, front view, entire rectangular artwork plus simple frame visible with small margin on GENUINE TRANSPARENT background. Hokusai The Great Wave, a bold blue wave crest, white foam, tiny boat and distant triangular mountain. Landscape rectangle. Lower paper corner torn and curling, plain thin wood frame. The painting itself MUST be a deliberately SIMPLIFIED STYLIZED INTERPRETATION with 8-12 large FLAT color regions, broad 2-tone shading only, same simple-material indie-game language as ReStory. NOT a photograph/reproduction of original painting, not realistic painterly texture or face. Frame plain chunky shapes, no ornate microdetail. Neglected government hall exhibit: dusty colors, 2 broad dirt smudges and readable simple corner damage, not noisy grunge. Blank small plaque integrated below frame if room; absolutely NO letters/digits/logos. No wall, other artworks, room, pedestal, lighting beam or cast shadow. Flat neutral lighting. Object isolated with actual alpha, no checkerboard. One file/one artwork, no contact sheet."
+  },
+  {
+    "id": "milkmaid",
+    "source_id": "milkmaid",
+    "title": "The Milkmaid \u2014 stylized study",
+    "group": "Paintings",
+    "use": "Individual worn painting; proposed left middle display.",
+    "path": "Images/milkmaid.png",
+    "width": 1112,
+    "height": 1415,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Standalone separate game sprite on genuine transparent alpha background. A small framed stylized interpretation of Vermeer's Milkmaid: yellow/blue figure pouring milk at table, minimal face, simple block colors, portrait rectangle, faded paint and one tilted/chipped frame edge. Whole object visible. ReStory-like simple-material stylized game art: broad flat colors, minimal clean edges, only2 broad shade values, no photographic texture, no fine grain or realism. Dirt/damage as few simple shapes. Neutral diffuse light, no cast shadows, no environment. No text/logos. One object only, not sheet."
+  },
+  {
+    "id": "mondrian",
+    "source_id": "mondrian",
+    "title": "Composition after Mondrian",
+    "group": "Paintings",
+    "use": "A reinterpretation, not an exact reproduction of a specific composition. Broken frame corner.",
+    "path": "Images/mondrian.png",
+    "width": 1254,
+    "height": 1254,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Standalone separate game sprite on genuine transparent alpha background. One fallen-looking but FRONT VIEW Mondrian-style composition in red blue yellow white rectangles with black grid, square canvas in simple damaged wooden frame with lower corner separated. No setting, just whole frame and flat artwork. Whole object visible. ReStory-like simple-material stylized game art: broad flat colors, minimal clean edges, only2 broad shade values, no photographic texture, no fine grain or realism. Dirt/damage as few simple shapes. Neutral diffuse light, no cast shadows, no environment. No text/logos. One object only, not sheet."
+  },
+  {
+    "id": "thinker",
+    "source_id": "thinker_flat",
+    "title": "The Thinker \u2014 stylized study",
+    "group": "Sculptures",
+    "use": "2D exhibit cutout with simplified bronze planes; proposed left front plinth.",
+    "path": "Images/thinker.png",
+    "width": 1199,
+    "height": 1312,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "STYLE CORRECTION of the supplied isolated museum object. Retain its identity, exact overall pose and silhouette and transparent background, but REBUILD it as an extremely simplified hand-painted low-poly game prop. The current texture is unacceptable: remove ALL fine mottling, realistic marble, realistic bronze patina, grain, pores, individual hair curls and realistic muscle modeling. Use big deliberately simplified angular planes, flat uniform color fills, graphic broad edges, flat shaded 1998 game geometry. A hand has at most a mitten mass with two finger divisions. Hair is three or four solid wedges. Maximum 3 solid tones per material and ONLY THREE large graphic dirty patches total. Exactly one stylized missing chip with sharp angular shape. Not cute chibi, preserve adult artwork proportions. No physically rendered lighting. Output looks like a cel-shaded modest-poly prop in a stylized anime repair-shop game. Entire isolated object on true alpha transparency with generous margin. No extra objects, text, ground, shadows or background."
+  },
+  {
+    "id": "discobolus",
+    "source_id": "discobolus_flat",
+    "title": "Discobolus \u2014 stylized study",
+    "group": "Sculptures",
+    "use": "2D marble exhibit cutout with a chipped discus; proposed right front plinth.",
+    "path": "Images/discobolus.png",
+    "width": 1145,
+    "height": 1374,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "STYLE CORRECTION of the supplied isolated museum object. Retain its identity, exact overall pose and silhouette and transparent background, but REBUILD it as an extremely simplified hand-painted low-poly game prop. The current texture is unacceptable: remove ALL fine mottling, realistic marble, realistic bronze patina, grain, pores, individual hair curls and realistic muscle modeling. Use big deliberately simplified angular planes, flat uniform color fills, graphic broad edges, flat shaded 1998 game geometry. A hand has at most a mitten mass with two finger divisions. Hair is three or four solid wedges. Maximum 3 solid tones per material and ONLY THREE large graphic dirty patches total. Exactly one stylized missing chip with sharp angular shape. Not cute chibi, preserve adult artwork proportions. No physically rendered lighting. Output looks like a cel-shaded modest-poly prop in a stylized anime repair-shop game. Entire isolated object on true alpha transparency with generous margin. No extra objects, text, ground, shadows or background."
+  },
+  {
+    "id": "nefertiti",
+    "source_id": "nefertiti_final",
+    "title": "Nefertiti bust \u2014 stylized study",
+    "group": "Sculptures",
+    "use": "2D bust with simplified crown and shoulder damage; proposed left middle plinth.",
+    "path": "Images/nefertiti.png",
+    "width": 1145,
+    "height": 1374,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Change ONLY the crown decoration: remove the invented gold ankh-shaped loop/cross emblem completely. The crown has a simple straight gold vertical band crossing the horizontal color band, with no symbol or loop. Preserve the exact simplified low-poly flat-color bust, pose, face, damage, whole silhouette and transparent background. No other additions."
+  },
+  {
+    "id": "wright_flyer",
+    "source_id": "wright_flyer",
+    "title": "1903 Wright Flyer \u2014 scale exhibit",
+    "group": "Inventions",
+    "use": "Independent aircraft cutout; proposed rear right exhibit. No pilot.",
+    "path": "Images/wright_flyer.png",
+    "width": 1536,
+    "height": 1024,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      254
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "One isolated stylized game exhibit, true transparent RGBA background. Hand-painted CEL-SHADED low-poly prop, deliberately simple angular geometry and solid color fields like props in an anime repair-shop game. NOT a realistic photograph, NOT a highly detailed museum render. Smooth flat textures, no tiny grain, no tiny scratches, no realistic patina. 2-3 flat tones per material; exactly three broad dirt/scuff shapes and one small damaged edge. Whole object entirely in frame with 10% margin. Three-quarter view, modest perspective, neutral diffuse colors, no cast shadow, no floor, no display case, no labels, no readable text. Recognizable 1903 Wright Flyer biplane: pale linen two parallel long wings, thin simplified timber struts, forward small canard elevator, two pusher propellers at rear, skid landing gear. No wheeled modern airplane, no fuselage cockpit, no pilot. Simplify wires to a few necessary dark straight lines. One small ragged tear in wing fabric near tip; otherwise airframe intact. Object appears as a neglected scale exhibit."
+  },
+  {
+    "id": "printing_press",
+    "source_id": "printing_press",
+    "title": "Early screw printing press \u2014 reconstruction",
+    "group": "Inventions",
+    "use": "Individual press cutout with blank paper; proposed right middle display.",
+    "path": "Images/printing_press.png",
+    "width": 1222,
+    "height": 1287,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "One isolated stylized game exhibit, true transparent RGBA background. Hand-painted CEL-SHADED low-poly prop, deliberately simple angular geometry and solid color fields like props in an anime repair-shop game. NOT a realistic photograph, NOT a highly detailed museum render. Smooth flat textures, no tiny grain, no tiny scratches, no realistic patina. 2-3 flat tones per material; exactly three broad dirt/scuff shapes and one small damaged edge. Whole object entirely in frame with 10% margin. Three-quarter view, modest perspective, neutral diffuse colors, no cast shadow, no floor, no display case, no labels, no readable text. Recognizable early European wooden screw printing press, Gutenberg-type reconstruction: two heavy upright timber posts and crossbeam, large central vertical screw driving a horizontal platen over sliding flat printing bed, long wooden operating lever and broad feet. Blank paper sheet on bed. Keep coherent mechanism. Broad dark brown flat wood surfaces with no woodgrain; chipped foot and paper dust. No religious books, no books at all."
+  },
+  {
+    "id": "rocket",
+    "source_id": "rocket_final",
+    "title": "Stephenson's Rocket \u2014 scale exhibit",
+    "group": "Inventions",
+    "use": "Individual locomotive cutout with corrected two-axle arrangement; proposed left rear display.",
+    "path": "Images/rocket.png",
+    "width": 1374,
+    "height": 1145,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Correct ONLY the wheel arrangement of this stylized 1829 Rocket locomotive. It currently has an incorrect extra small wheel axle. It must have TWO AXLES TOTAL: one front axle with a pair of large driving wheels, and ONE rear axle with a pair of small trailing wheels. Remove the extra pair of small wheels, shorten the rear chassis accordingly. Visible near side must show exactly ONE LARGE wheel and ONE SMALL wheel. Do not merge wheels. Preserve yellow boiler, tall black chimney, overall three-quarter view, simple materials, dirt and transparent background. Simplify render shading to broad flat cel-shaded tones; no fine texture."
+  },
+  {
+    "id": "voyager_record",
+    "source_id": "voyager_record",
+    "title": "Voyager Golden Record cover \u2014 stylized study",
+    "group": "Inventions",
+    "use": "Separate keepsake with simplified diagrams; proposed inner booth panel.",
+    "path": "Images/voyager_record.png",
+    "width": 1310,
+    "height": 1200,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "One isolated stylized game exhibit, true transparent RGBA background. Hand-painted CEL-SHADED low-poly prop, deliberately simple angular geometry and solid color fields like props in an anime repair-shop game. NOT a realistic photograph, NOT a highly detailed museum render. Smooth flat textures, no tiny grain, no tiny scratches, no realistic patina. 2-3 flat tones per material; exactly three broad dirt/scuff shapes and one small damaged edge. Whole object entirely in frame with 10% margin. Three-quarter view, modest perspective, neutral diffuse colors, no cast shadow, no floor, no display case, no labels, no readable text. Voyager Golden Record protective cover, recognizable circular golden metal disc with the iconic sparse playback diagrams in the upper portion and radial pulsar map below, thin rectangular backing mount only if needed. The DIAGRAMS are simplified flat dark line shapes, no written words or digits. Entire round disc in near-frontal three-quarter view. Dull ochre gold, no metallic reflections. A small bent edge and two broad grime patches. No spacecraft, no decorative moon or stars."
+  },
+  {
+    "id": "floor_paper",
+    "source_id": "floor_paper",
+    "title": "Discarded government form",
+    "group": "Floor clutter",
+    "use": "Independent paper cutout with blank form fields and stain. No changing text baked in.",
+    "path": "Images/floor_paper.png",
+    "width": 1223,
+    "height": 1286,
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "representation": "2D raster, not a 3D mesh",
+    "prompt": "Standalone separate game sprite on genuine transparent alpha background. A single loose curled cream government paper form, seen from high 3/4 angle, blank boxes but absolutely NO writing or numbers, one broad coffee stain and torn corner. No other papers or objects, no floor or cast shadow. Whole object visible. ReStory-like simple-material stylized game art: broad flat colors, minimal clean edges, only2 broad shade values, no photographic texture, no fine grain or realism. Dirt/damage as few simple shapes. Neutral diffuse light, no cast shadows, no environment. No text/logos. One object only, not sheet."
+  }
+]

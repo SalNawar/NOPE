@@ -1,0 +1,520 @@
+fileFormatVersion: 2
+guid: a10d7351b692e154193f41a54c7edc98
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1088216086608196957
+    second: temporal_times_masthead_0
+  - first:
+      213: 1829485669832313114
+    second: temporal_times_masthead_1
+  - first:
+      213: -5436639273845041941
+    second: temporal_times_masthead_2
+  - first:
+      213: 5689728746167370616
+    second: temporal_times_masthead_3
+  - first:
+      213: 3403274366759970350
+    second: temporal_times_masthead_4
+  - first:
+      213: -2151862939765286062
+    second: temporal_times_masthead_5
+  - first:
+      213: -824756868845190626
+    second: temporal_times_masthead_6
+  - first:
+      213: -1015127208032127536
+    second: temporal_times_masthead_7
+  - first:
+      213: -2804635478857066667
+    second: temporal_times_masthead_8
+  - first:
+      213: 5042035848398210642
+    second: temporal_times_masthead_9
+  - first:
+      213: 3629183071961820358
+    second: temporal_times_masthead_10
+  - first:
+      213: -1552592619634139280
+    second: temporal_times_masthead_11
+  - first:
+      213: 2293600806767278880
+    second: temporal_times_masthead_12
+  - first:
+      213: -1154288070253904785
+    second: temporal_times_masthead_13
+  - first:
+      213: -5570540872730519016
+    second: temporal_times_masthead_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: temporal_times_masthead_0
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 201
+        width: 1188
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d55b521e3ce1a1f00800000000000000
+      internalID: 1088216086608196957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_1
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 34
+        width: 1188
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a19c5001683a36910800000000000000
+      internalID: 1829485669832313114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_2
+      rect:
+        serializedVersion: 2
+        x: 244
+        y: 103
+        width: 46
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: be4578e826d2d84b0800000000000000
+      internalID: -5436639273845041941
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_3
+      rect:
+        serializedVersion: 2
+        x: 289
+        y: 103
+        width: 45
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 87382af262af5fe40800000000000000
+      internalID: 5689728746167370616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_4
+      rect:
+        serializedVersion: 2
+        x: 338
+        y: 103
+        width: 35
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e26abe7510cda3f20800000000000000
+      internalID: 3403274366759970350
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_5
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 103
+        width: 46
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 25b56fdae0c0322e0800000000000000
+      internalID: -2151862939765286062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_6
+      rect:
+        serializedVersion: 2
+        x: 432
+        y: 103
+        width: 33
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e124b6e5fffdd84f0800000000000000
+      internalID: -824756868845190626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_7
+      rect:
+        serializedVersion: 2
+        x: 465
+        y: 103
+        width: 60
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d53963ce2b89e1f0800000000000000
+      internalID: -1015127208032127536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_8
+      rect:
+        serializedVersion: 2
+        x: 619
+        y: 103
+        width: 92
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 557544e34eee319d0800000000000000
+      internalID: -2804635478857066667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_9
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 103
+        width: 33
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2568f88e3e8e8f540800000000000000
+      internalID: 5042035848398210642
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_10
+      rect:
+        serializedVersion: 2
+        x: 756
+        y: 103
+        width: 46
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6cc252596c27d5230800000000000000
+      internalID: 3629183071961820358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_11
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 103
+        width: 15
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07f50d90d35147ae0800000000000000
+      internalID: -1552592619634139280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_12
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 103
+        width: 60
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02bb9ef18c184df10800000000000000
+      internalID: 2293600806767278880
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_13
+      rect:
+        serializedVersion: 2
+        x: 883
+        y: 105
+        width: 33
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6c7b04ad152bffe0800000000000000
+      internalID: -1154288070253904785
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: temporal_times_masthead_14
+      rect:
+        serializedVersion: 2
+        x: 885
+        y: 102
+        width: 70
+        height: 55
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81a5a1a179671b2b0800000000000000
+      internalID: -5570540872730519016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      temporal_times_masthead_0: 1088216086608196957
+      temporal_times_masthead_1: 1829485669832313114
+      temporal_times_masthead_10: 3629183071961820358
+      temporal_times_masthead_11: -1552592619634139280
+      temporal_times_masthead_12: 2293600806767278880
+      temporal_times_masthead_13: -1154288070253904785
+      temporal_times_masthead_14: -5570540872730519016
+      temporal_times_masthead_2: -5436639273845041941
+      temporal_times_masthead_3: 5689728746167370616
+      temporal_times_masthead_4: 3403274366759970350
+      temporal_times_masthead_5: -2151862939765286062
+      temporal_times_masthead_6: -824756868845190626
+      temporal_times_masthead_7: -1015127208032127536
+      temporal_times_masthead_8: -2804635478857066667
+      temporal_times_masthead_9: 5042035848398210642
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

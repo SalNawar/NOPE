@@ -1,0 +1,417 @@
+{
+  "materials": {
+    "CRT_Terracotta": {
+      "color": [
+        0.7254901960784313,
+        0.7137254901960784,
+        0.6784313725490196
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_BackShell": {
+      "color": [
+        0.6862745098039216,
+        0.6784313725490196,
+        0.6470588235294118
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_Ivory": {
+      "color": [
+        0.7803921568627451,
+        0.7725490196078432,
+        0.7411764705882353
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_WarmGrey": {
+      "color": [
+        0.6,
+        0.611764705882353,
+        0.592156862745098
+      ],
+      "smoothness": 0.16000000000000003,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_DeepGrey": {
+      "color": [
+        0.3843137254901961,
+        0.4196078431372549,
+        0.4117647058823529
+      ],
+      "smoothness": 0.13,
+      "metallic": 0,
+      "texture": null
+    },
+    "Recess_Charcoal": {
+      "color": [
+        0.17254901960784313,
+        0.2,
+        0.20392156862745098
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_Glass": {
+      "color": [
+        0.14901960784313725,
+        0.24313725490196078,
+        0.25882352941176473
+      ],
+      "smoothness": 0.72,
+      "metallic": 0,
+      "texture": null
+    },
+    "Case_Steel": {
+      "color": [
+        0.6705882352941176,
+        0.6862745098039216,
+        0.6627450980392157
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.08,
+      "texture": null
+    },
+    "Power_Amber": {
+      "color": [
+        0.7294117647058823,
+        0.47058823529411764,
+        0.3137254901960784
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "Indicator_Green": {
+      "color": [
+        0.5333333333333333,
+        0.6666666666666666,
+        0.4627450980392157
+      ],
+      "smoothness": 0.37,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Light": {
+      "color": [
+        0.7725490196078432,
+        0.7490196078431373,
+        0.6862745098039216
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Dark": {
+      "color": [
+        0.5607843137254902,
+        0.5372549019607843,
+        0.48627450980392156
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Paper_Label": {
+      "color": [
+        0.7686274509803922,
+        0.7490196078431373,
+        0.6823529411764706
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Cable_Rubber": {
+      "color": [
+        0.2235294117647059,
+        0.24313725490196078,
+        0.21176470588235294
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Edge": {
+      "color": [
+        0.3568627450980392,
+        0.26666666666666666,
+        0.21176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Metal": {
+      "color": [
+        0.2549019607843137,
+        0.30196078431372547,
+        0.28627450980392155
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.05,
+      "texture": null
+    },
+    "Desk_WornEdge": {
+      "color": [
+        0.5529411764705883,
+        0.4196078431372549,
+        0.2980392156862745
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Walnut": {
+      "color": [
+        0.5019607843137255,
+        0.3843137254901961,
+        0.2784313725490196
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderPC\\Textures\\desk_walnut_albedo.png"
+    },
+    "Office_Teal": {
+      "color": [
+        0.3411764705882353,
+        0.45098039215686275,
+        0.43137254901960786
+      ],
+      "smoothness": 0.15000000000000002,
+      "metallic": 0,
+      "texture": null
+    },
+    "Office_TealDark": {
+      "color": [
+        0.20784313725490197,
+        0.3058823529411765,
+        0.30196078431372547
+      ],
+      "smoothness": 0.12,
+      "metallic": 0,
+      "texture": null
+    },
+    "Office_Trim": {
+      "color": [
+        0.5294117647058824,
+        0.5764705882352941,
+        0.5568627450980392
+      ],
+      "smoothness": 0.18000000000000005,
+      "metallic": 0.04,
+      "texture": null
+    },
+    "Office_Paper": {
+      "color": [
+        0.8313725490196079,
+        0.803921568627451,
+        0.7333333333333333
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Office_Brass": {
+      "color": [
+        0.6235294117647059,
+        0.5411764705882353,
+        0.3764705882352941
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0.13,
+      "texture": null
+    },
+    "Stamp_Wood": {
+      "color": [
+        0.5019607843137255,
+        0.3215686274509804,
+        0.2235294117647059
+      ],
+      "smoothness": 0.12,
+      "metallic": 0,
+      "texture": null
+    },
+    "Mat_Fabric": {
+      "color": [
+        0.23137254901960785,
+        0.3333333333333333,
+        0.3176470588235294
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Mat_Stitch": {
+      "color": [
+        0.615686274509804,
+        0.6078431372549019,
+        0.5098039215686274
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": null
+    },
+    "Newspaper_Print": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\Images\\newspaper_print.png"
+    }
+  },
+  "models": [
+    {
+      "name": "Office_Till",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Till.fbx",
+      "nodes": {
+        "Office_Till__Plastic_WarmGrey": "Plastic_WarmGrey",
+        "Office_Till__Plastic_Ivory": "Plastic_Ivory",
+        "Office_Till__Recess_Charcoal": "Recess_Charcoal",
+        "Office_Till__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "Office_Till__CRT_BackShell": "CRT_BackShell",
+        "Office_Till__Office_Teal": "Office_Teal",
+        "Office_Till__CRT_Glass": "CRT_Glass",
+        "Office_Till__Paper_Label": "Paper_Label",
+        "Office_Till__Wear_Light": "Wear_Light"
+      },
+      "triangles": 6677
+    },
+    {
+      "name": "Office_Next",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Next.fbx",
+      "nodes": {
+        "Office_Next__Cable_Rubber": "Cable_Rubber",
+        "Office_Next__Office_TealDark": "Office_TealDark",
+        "Office_Next__CRT_BackShell": "CRT_BackShell",
+        "Office_Next__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "Office_Next__CRT_Glass": "CRT_Glass",
+        "Office_Next__Power_Amber": "Power_Amber"
+      },
+      "triangles": 1408
+    },
+    {
+      "name": "Office_Clock",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Clock.fbx",
+      "nodes": {
+        "Office_Clock__Plastic_WarmGrey": "Plastic_WarmGrey",
+        "Office_Clock__Plastic_Ivory": "Plastic_Ivory",
+        "Office_Clock__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "Office_Clock__CRT_Glass": "CRT_Glass",
+        "Office_Clock__Office_Teal": "Office_Teal"
+      },
+      "triangles": 1972
+    },
+    {
+      "name": "Office_Stability",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Stability.fbx",
+      "nodes": {
+        "Office_Stability__Plastic_WarmGrey": "Plastic_WarmGrey",
+        "Office_Stability__Plastic_Ivory": "Plastic_Ivory",
+        "Office_Stability__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "Office_Stability__CRT_Glass": "CRT_Glass",
+        "Office_Stability__Indicator_Green": "Indicator_Green",
+        "Office_Stability__Power_Amber": "Power_Amber",
+        "Office_Stability__Paper_Label": "Paper_Label"
+      },
+      "triangles": 2444
+    },
+    {
+      "name": "Office_Calendar",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Calendar.fbx",
+      "nodes": {
+        "Office_Calendar__Office_TealDark": "Office_TealDark",
+        "Office_Calendar__Office_Paper": "Office_Paper",
+        "Office_Calendar__Paper_Label": "Paper_Label",
+        "Office_Calendar__Office_Trim": "Office_Trim",
+        "Office_Calendar__Office_Brass": "Office_Brass"
+      },
+      "triangles": 1072
+    },
+    {
+      "name": "Office_Intercom",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Intercom.fbx",
+      "nodes": {
+        "Office_Intercom__Plastic_Ivory": "Plastic_Ivory",
+        "Office_Intercom__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "Office_Intercom__Power_Amber": "Power_Amber",
+        "Office_Intercom__Cable_Rubber": "Cable_Rubber"
+      },
+      "triangles": 2644
+    },
+    {
+      "name": "Office_Tray",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Tray.fbx",
+      "nodes": {
+        "Office_Tray__Office_Trim": "Office_Trim",
+        "Office_Tray__Office_TealDark": "Office_TealDark",
+        "Office_Tray__CRT_BackShell": "CRT_BackShell",
+        "Office_Tray__Office_Brass": "Office_Brass",
+        "Office_Tray__Wear_Light": "Wear_Light"
+      },
+      "triangles": 1413
+    },
+    {
+      "name": "Office_Stamp",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Stamp.fbx",
+      "nodes": {
+        "Office_Stamp__Recess_Charcoal": "Recess_Charcoal",
+        "Office_Stamp__Stamp_Wood": "Stamp_Wood",
+        "Office_Stamp__Office_Brass": "Office_Brass"
+      },
+      "triangles": 1472
+    },
+    {
+      "name": "Office_Partition",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Partition.fbx",
+      "nodes": {
+        "Office_Partition__Office_Teal": "Office_Teal",
+        "Office_Partition__Office_TealDark": "Office_TealDark",
+        "Office_Partition__Office_Trim": "Office_Trim",
+        "Office_Partition__Plastic_DeepGrey": "Plastic_DeepGrey"
+      },
+      "triangles": 1692
+    },
+    {
+      "name": "Office_InstrumentBoard",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_InstrumentBoard.fbx",
+      "nodes": {
+        "Office_InstrumentBoard__Office_Trim": "Office_Trim",
+        "Office_InstrumentBoard__Office_TealDark": "Office_TealDark",
+        "Office_InstrumentBoard__Office_Brass": "Office_Brass"
+      },
+      "triangles": 936
+    },
+    {
+      "name": "Office_Blotter",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Blotter.fbx",
+      "nodes": {
+        "Office_Blotter__Office_TealDark": "Office_TealDark",
+        "Office_Blotter__Mat_Fabric": "Mat_Fabric",
+        "Office_Blotter__Mat_Stitch": "Mat_Stitch"
+      },
+      "triangles": 424
+    },
+    {
+      "name": "Office_Newspaper",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Newspaper.fbx",
+      "nodes": {
+        "Office_Newspaper__Office_Paper": "Office_Paper",
+        "Office_Newspaper__Paper_Label": "Paper_Label",
+        "Office_Newspaper__Newspaper_Print": "Newspaper_Print"
+      },
+      "triangles": 226
+    }
+  ]
+}

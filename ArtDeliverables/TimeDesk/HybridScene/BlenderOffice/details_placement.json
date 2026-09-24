@@ -1,0 +1,307 @@
+[
+  {
+    "old": "Exhibit_PrintingPress3D",
+    "new": "Blender_Exhibit_PrintingPress3D",
+    "model": "Art_PrintingPress",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      8.4,
+      0.0,
+      8.4
+    ],
+    "yaw": 340.0,
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "old": "Exhibit_WrightFlyer3D",
+    "new": "Blender_Exhibit_WrightFlyer3D",
+    "model": "Art_WrightFlyer",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      6.7,
+      4.6,
+      12.5
+    ],
+    "yaw": 344.0,
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "old": "Exhibit_Rocket3D",
+    "new": "Blender_Exhibit_Rocket3D",
+    "model": "Art_Rocket",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -8.7,
+      0.0,
+      17.7
+    ],
+    "yaw": 328.0,
+    "scale": [
+      1.05,
+      1.05,
+      1.05
+    ]
+  },
+  {
+    "old": "Exhibit_VoyagerRecord",
+    "new": "Blender_Exhibit_VoyagerRecord",
+    "model": "Art_VoyagerCover",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -3.7,
+      1.115,
+      6
+    ],
+    "yaw": -12
+  },
+  {
+    "old": "Desk_VoyagerRecord",
+    "new": "Blender_Desk_VoyagerRecord",
+    "model": "Art_VoyagerCover",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      -1.46,
+      1.069,
+      -0.75
+    ],
+    "rx": 90,
+    "yaw": 12,
+    "scale": [
+      0.595,
+      0.595,
+      0.595
+    ]
+  },
+  {
+    "old": "LeftBoardBracket",
+    "new": "Blender_LeftBoardBracket",
+    "model": "Office_BoardBracket",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      -2.68,
+      1.75,
+      0.7
+    ]
+  },
+  {
+    "old": "RightBoardBracket",
+    "new": "Blender_RightBoardBracket",
+    "model": "Office_BoardBracket",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      2.68,
+      1.75,
+      0.7
+    ]
+  },
+  {
+    "new": "Blender_Traffic_Lane1_Car1",
+    "model": "City_AirTaxi",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      -53.625,
+      6.0,
+      36.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane1_Car1"
+  },
+  {
+    "new": "Blender_Traffic_Lane1_Car2",
+    "model": "City_AirSedan",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      -21.125,
+      6.0,
+      36.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane1_Car2"
+  },
+  {
+    "new": "Blender_Traffic_Lane1_Car3",
+    "model": "City_AirVan",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      11.375,
+      6.0,
+      36.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane1_Car3"
+  },
+  {
+    "new": "Blender_Traffic_Lane1_Car4",
+    "model": "City_AirTaxi",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      43.875,
+      6.0,
+      36.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane1_Car4"
+  },
+  {
+    "new": "Blender_Traffic_Lane2_Car1",
+    "model": "City_AirTaxi",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      53.625,
+      11.0,
+      55.0
+    ],
+    "yaw": 90.0,
+    "traffic": "Traffic_Lane2_Car1"
+  },
+  {
+    "new": "Blender_Traffic_Lane2_Car2",
+    "model": "City_AirSedan",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      21.125,
+      11.0,
+      55.0
+    ],
+    "yaw": 90.0,
+    "traffic": "Traffic_Lane2_Car2"
+  },
+  {
+    "new": "Blender_Traffic_Lane2_Car3",
+    "model": "City_AirVan",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      -11.375,
+      11.0,
+      55.0
+    ],
+    "yaw": 90.0,
+    "traffic": "Traffic_Lane2_Car3"
+  },
+  {
+    "new": "Blender_Traffic_Lane2_Car4",
+    "model": "City_AirTaxi",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      -43.875,
+      11.0,
+      55.0
+    ],
+    "yaw": 90.0,
+    "traffic": "Traffic_Lane2_Car4"
+  },
+  {
+    "new": "Blender_Traffic_Lane3_Car1",
+    "model": "City_AirTaxi",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      -53.625,
+      17.0,
+      78.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane3_Car1"
+  },
+  {
+    "new": "Blender_Traffic_Lane3_Car2",
+    "model": "City_AirSedan",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      -21.125,
+      17.0,
+      78.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane3_Car2"
+  },
+  {
+    "new": "Blender_Traffic_Lane3_Car3",
+    "model": "City_AirVan",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      11.375,
+      17.0,
+      78.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane3_Car3"
+  },
+  {
+    "new": "Blender_Traffic_Lane3_Car4",
+    "model": "City_AirTaxi",
+    "parent": "HybridOffice/Traffic",
+    "pos": [
+      43.875,
+      17.0,
+      78.0
+    ],
+    "yaw": 270.0,
+    "traffic": "Traffic_Lane3_Car4"
+  },
+  {
+    "old": "Desk_GreatWavePostcard",
+    "new": "Blender_Desk_GreatWavePostcard",
+    "model": "Art_GreatWave",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      -2.2925,
+      2.155,
+      0.5731
+    ],
+    "yaw": -30,
+    "rz": -7,
+    "scale": [
+      0.135,
+      0.135,
+      0.135
+    ]
+  },
+  {
+    "old": "Desk_MonaLisaPostcard",
+    "new": "Blender_Desk_MonaLisaPostcard",
+    "model": "Art_MonaLisa",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      2.2925,
+      1.53,
+      0.5731
+    ],
+    "yaw": 30,
+    "rz": 8,
+    "scale": [
+      0.17,
+      0.17,
+      0.17
+    ]
+  },
+  {
+    "new": "BoardPicturePin_Left",
+    "model": "Office_Pin",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      -2.269,
+      2.262,
+      0.54
+    ],
+    "yaw": -30
+  },
+  {
+    "new": "BoardPicturePin_Right",
+    "model": "Office_Pin",
+    "parent": "HybridOffice/Booth",
+    "pos": [
+      2.269,
+      1.644,
+      0.54
+    ],
+    "yaw": 30
+  }
+]

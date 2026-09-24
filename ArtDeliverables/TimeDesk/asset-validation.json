@@ -1,0 +1,138 @@
+[
+  {
+    "File": "Characters\\traveller-explorer.png",
+    "Width": 1024,
+    "Height": 1536,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 2862,
+    "PartialAlphaSamples": 3282
+  },
+  {
+    "File": "Concepts\\desktop-direction-v1.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format24bppRgb",
+    "TransparentSamples": 0,
+    "PartialAlphaSamples": 0
+  },
+  {
+    "File": "Concepts\\office-direction-v1.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format24bppRgb",
+    "TransparentSamples": 0,
+    "PartialAlphaSamples": 0
+  },
+  {
+    "File": "Desktop\\icons-4x4.png",
+    "Width": 1254,
+    "Height": 1254,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 3388,
+    "PartialAlphaSamples": 2835
+  },
+  {
+    "File": "Desktop\\wallpaper-orbit-coast.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format24bppRgb",
+    "TransparentSamples": 0,
+    "PartialAlphaSamples": 0
+  },
+  {
+    "File": "Desktop\\window-frame.png",
+    "Width": 1448,
+    "Height": 1086,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 1686,
+    "PartialAlphaSamples": 4502
+  },
+  {
+    "File": "Office\\01-waiting-hall.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format24bppRgb",
+    "TransparentSamples": 0,
+    "PartialAlphaSamples": 0
+  },
+  {
+    "File": "Office\\02-queue.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 4281,
+    "PartialAlphaSamples": 1913
+  },
+  {
+    "File": "Office\\03-partition-frame.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 3589,
+    "PartialAlphaSamples": 2602
+  },
+  {
+    "File": "Office\\05-desk.png",
+    "Width": 1672,
+    "Height": 941,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 3783,
+    "PartialAlphaSamples": 2412
+  },
+  {
+    "File": "Office\\06-crt.png",
+    "Width": 1254,
+    "Height": 1254,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 2245,
+    "PartialAlphaSamples": 3990
+  },
+  {
+    "File": "Office\\07-credits-till.png",
+    "Width": 1254,
+    "Height": 1254,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 2739,
+    "PartialAlphaSamples": 3501
+  },
+  {
+    "File": "Office\\08-intercom.png",
+    "Width": 1254,
+    "Height": 1254,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 4002,
+    "PartialAlphaSamples": 2236
+  },
+  {
+    "File": "Office\\09-ready-sign.png",
+    "Width": 1254,
+    "Height": 1254,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 5221,
+    "PartialAlphaSamples": 1020
+  },
+  {
+    "File": "Office\\10-calendar.png",
+    "Width": 1024,
+    "Height": 1536,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 2425,
+    "PartialAlphaSamples": 3719
+  },
+  {
+    "File": "Office\\11-stability-monitor.png",
+    "Width": 1254,
+    "Height": 1254,
+    "Format": "Format32bppArgb",
+    "TransparentSamples": 4089,
+    "PartialAlphaSamples": 2152
+  },
+  {
+    "File": "Timeline\\poster-neutral.png",
+    "Width": 1024,
+    "Height": 1536,
+    "Format": "Format24bppRgb",
+    "TransparentSamples": 0,
+    "PartialAlphaSamples": 0
+  }
+]

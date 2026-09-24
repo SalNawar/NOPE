@@ -1,0 +1,4521 @@
+{
+  "Hybrid_HallFloor": {
+    "name": "Hybrid_HallFloor",
+    "entityId": "18446744073709548610",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_HallFloor",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 6,
+    "children": [
+      {
+        "name": "floor_inlay",
+        "entityId": "18446744073709548608",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallFloor/floor_inlay"
+      },
+      {
+        "name": "grout_bed",
+        "entityId": "18446744073709548600",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallFloor/grout_bed"
+      },
+      {
+        "name": "tiles_floor_alt",
+        "entityId": "18446744073709548592",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallFloor/tiles_floor_alt"
+      },
+      {
+        "name": "tiles_floor_edge",
+        "entityId": "18446744073709548584",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallFloor/tiles_floor_edge"
+      },
+      {
+        "name": "tiles_floor_main",
+        "entityId": "18446744073709548576",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallFloor/tiles_floor_main"
+      },
+      {
+        "name": "worn_tiles",
+        "entityId": "18446744073709548568",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallFloor/worn_tiles"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_HallStructure": {
+    "name": "Hybrid_HallStructure",
+    "entityId": "18446744073709546630",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_HallStructure",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 24,
+    "children": [
+      {
+        "name": "ceiling",
+        "entityId": "18446744073709546628",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/ceiling"
+      },
+      {
+        "name": "ceiling_beams",
+        "entityId": "18446744073709546620",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/ceiling_beams"
+      },
+      {
+        "name": "ceiling_light_faces",
+        "entityId": "18446744073709546612",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/ceiling_light_faces"
+      },
+      {
+        "name": "chipped_plaster",
+        "entityId": "18446744073709546604",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/chipped_plaster"
+      },
+      {
+        "name": "conduit_clips",
+        "entityId": "18446744073709546596",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/conduit_clips"
+      },
+      {
+        "name": "light_housings",
+        "entityId": "18446744073709546588",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/light_housings"
+      },
+      {
+        "name": "pier_capitals",
+        "entityId": "18446744073709546580",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/pier_capitals"
+      },
+      {
+        "name": "pier_feet",
+        "entityId": "18446744073709546572",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/pier_feet"
+      },
+      {
+        "name": "rear_capitals",
+        "entityId": "18446744073709546564",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_capitals"
+      },
+      {
+        "name": "rear_dado",
+        "entityId": "18446744073709546556",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_dado"
+      },
+      {
+        "name": "rear_mullions",
+        "entityId": "18446744073709546548",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_mullions"
+      },
+      {
+        "name": "rear_pier_feet",
+        "entityId": "18446744073709546540",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_pier_feet"
+      },
+      {
+        "name": "rear_piers",
+        "entityId": "18446744073709546532",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_piers"
+      },
+      {
+        "name": "rear_rails",
+        "entityId": "18446744073709546524",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_rails"
+      },
+      {
+        "name": "rear_sill",
+        "entityId": "18446744073709546516",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_sill"
+      },
+      {
+        "name": "rear_skirting",
+        "entityId": "18446744073709546508",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/rear_skirting"
+      },
+      {
+        "name": "side_dado",
+        "entityId": "18446744073709546500",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_dado"
+      },
+      {
+        "name": "side_header",
+        "entityId": "18446744073709546492",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_header"
+      },
+      {
+        "name": "side_piers",
+        "entityId": "18446744073709546484",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_piers"
+      },
+      {
+        "name": "side_sill",
+        "entityId": "18446744073709546476",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_sill"
+      },
+      {
+        "name": "side_skirting",
+        "entityId": "18446744073709546468",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_skirting"
+      },
+      {
+        "name": "side_window_mullions",
+        "entityId": "18446744073709546460",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_window_mullions"
+      },
+      {
+        "name": "side_window_rails",
+        "entityId": "18446744073709546452",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/side_window_rails"
+      },
+      {
+        "name": "wall_conduit",
+        "entityId": "18446744073709546444",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_HallStructure/wall_conduit"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Banner_-8": {
+    "name": "Hybrid_Banner_-8",
+    "entityId": "18446744073709547482",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Banner_-8",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -8.0,
+      "y": 11.8,
+      "z": 13.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "bottom_hem",
+        "entityId": "18446744073709547480",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-8/bottom_hem"
+      },
+      {
+        "name": "ceiling_suspension",
+        "entityId": "18446744073709547472",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-8/ceiling_suspension"
+      },
+      {
+        "name": "cloth_back",
+        "entityId": "18446744073709547464",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-8/cloth_back"
+      },
+      {
+        "name": "cloth_blank",
+        "entityId": "18446744073709547456",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-8/cloth_blank"
+      },
+      {
+        "name": "top_crossbar",
+        "entityId": "18446744073709547448",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-8/top_crossbar"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Banner_-4.5": {
+    "name": "Hybrid_Banner_-4.5",
+    "entityId": "18446744073709547762",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Banner_-4.5",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -4.5,
+      "y": 11.8,
+      "z": 18.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "bottom_hem",
+        "entityId": "18446744073709547760",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-4.5/bottom_hem"
+      },
+      {
+        "name": "ceiling_suspension",
+        "entityId": "18446744073709547752",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-4.5/ceiling_suspension"
+      },
+      {
+        "name": "cloth_back",
+        "entityId": "18446744073709547744",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-4.5/cloth_back"
+      },
+      {
+        "name": "cloth_blank",
+        "entityId": "18446744073709547736",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-4.5/cloth_blank"
+      },
+      {
+        "name": "top_crossbar",
+        "entityId": "18446744073709547728",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_-4.5/top_crossbar"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Banner_4.5": {
+    "name": "Hybrid_Banner_4.5",
+    "entityId": "18446744073709545834",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Banner_4.5",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 4.5,
+      "y": 11.8,
+      "z": 18.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "bottom_hem",
+        "entityId": "18446744073709545832",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_4.5/bottom_hem"
+      },
+      {
+        "name": "ceiling_suspension",
+        "entityId": "18446744073709545824",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_4.5/ceiling_suspension"
+      },
+      {
+        "name": "cloth_back",
+        "entityId": "18446744073709545816",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_4.5/cloth_back"
+      },
+      {
+        "name": "cloth_blank",
+        "entityId": "18446744073709545808",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_4.5/cloth_blank"
+      },
+      {
+        "name": "top_crossbar",
+        "entityId": "18446744073709545800",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_4.5/top_crossbar"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Banner_8": {
+    "name": "Hybrid_Banner_8",
+    "entityId": "18446744073709549342",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Banner_8",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 8.0,
+      "y": 11.8,
+      "z": 13.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "bottom_hem",
+        "entityId": "18446744073709549340",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_8/bottom_hem"
+      },
+      {
+        "name": "ceiling_suspension",
+        "entityId": "18446744073709549332",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_8/ceiling_suspension"
+      },
+      {
+        "name": "cloth_back",
+        "entityId": "18446744073709549324",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_8/cloth_back"
+      },
+      {
+        "name": "cloth_blank",
+        "entityId": "18446744073709549316",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_8/cloth_blank"
+      },
+      {
+        "name": "top_crossbar",
+        "entityId": "18446744073709549308",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Banner_8/top_crossbar"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Departures": {
+    "name": "Hybrid_Departures",
+    "entityId": "18446744073709546328",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Departures",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 9.1,
+      "z": 19.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 6,
+    "children": [
+      {
+        "name": "bezel",
+        "entityId": "18446744073709546326",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Departures/bezel"
+      },
+      {
+        "name": "board_screws",
+        "entityId": "18446744073709546318",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Departures/board_screws"
+      },
+      {
+        "name": "ceiling_rods",
+        "entityId": "18446744073709546310",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Departures/ceiling_rods"
+      },
+      {
+        "name": "housing",
+        "entityId": "18446744073709546302",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Departures/housing"
+      },
+      {
+        "name": "row_dividers",
+        "entityId": "18446744073709546294",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Departures/row_dividers"
+      },
+      {
+        "name": "runtime_departures",
+        "entityId": "18446744073709546286",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Departures/runtime_departures"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_PortalRing": {
+    "name": "Hybrid_PortalRing",
+    "entityId": "18446744073709546278",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_PortalRing",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 20.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 7,
+    "children": [
+      {
+        "name": "gate_fasteners",
+        "entityId": "18446744073709546276",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/gate_fasteners"
+      },
+      {
+        "name": "joint",
+        "entityId": "18446744073709546268",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/joint"
+      },
+      {
+        "name": "platform",
+        "entityId": "18446744073709546260",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/platform"
+      },
+      {
+        "name": "segment_brass",
+        "entityId": "18446744073709546252",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/segment_brass"
+      },
+      {
+        "name": "segment_ivory",
+        "entityId": "18446744073709546244",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/segment_ivory"
+      },
+      {
+        "name": "segment_ivory_dark",
+        "entityId": "18446744073709546236",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/segment_ivory_dark"
+      },
+      {
+        "name": "support",
+        "entityId": "18446744073709546228",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalRing/support"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_PortalOpening": {
+    "name": "Hybrid_PortalOpening",
+    "entityId": "18446744073709549352",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_PortalOpening",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 20.03
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 1,
+    "children": [
+      {
+        "name": "animated_opening",
+        "entityId": "18446744073709549350",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalOpening/animated_opening"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_PortalCabinet": {
+    "name": "Hybrid_PortalCabinet",
+    "entityId": "18446744073709546394",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_PortalCabinet",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 4.1,
+      "y": 0.0,
+      "z": 20.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 8,
+    "children": [
+      {
+        "name": "blank_diagnostic",
+        "entityId": "18446744073709546392",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/blank_diagnostic"
+      },
+      {
+        "name": "cabinet",
+        "entityId": "18446744073709546384",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/cabinet"
+      },
+      {
+        "name": "door",
+        "entityId": "18446744073709546376",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/door"
+      },
+      {
+        "name": "indicator_green",
+        "entityId": "18446744073709546368",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/indicator_green"
+      },
+      {
+        "name": "indicator_ochre",
+        "entityId": "18446744073709546360",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/indicator_ochre"
+      },
+      {
+        "name": "indicator_red",
+        "entityId": "18446744073709546352",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/indicator_red"
+      },
+      {
+        "name": "service_handle",
+        "entityId": "18446744073709546344",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/service_handle"
+      },
+      {
+        "name": "vent",
+        "entityId": "18446744073709546336",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_PortalCabinet/vent"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Bench_-11.5_9": {
+    "name": "Hybrid_Bench_-11.5_9",
+    "entityId": "18446744073709548288",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -11.5,
+      "y": 0.0,
+      "z": 9.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 8,
+    "children": [
+      {
+        "name": "back_inset",
+        "entityId": "18446744073709548286",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/back_inset"
+      },
+      {
+        "name": "floor_foot",
+        "entityId": "18446744073709548278",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/floor_foot"
+      },
+      {
+        "name": "leg",
+        "entityId": "18446744073709548270",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/leg"
+      },
+      {
+        "name": "rail",
+        "entityId": "18446744073709548262",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/rail"
+      },
+      {
+        "name": "seat",
+        "entityId": "18446744073709548254",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/seat"
+      },
+      {
+        "name": "seat_back",
+        "entityId": "18446744073709548246",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/seat_back"
+      },
+      {
+        "name": "seat_fasteners",
+        "entityId": "18446744073709548238",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/seat_fasteners"
+      },
+      {
+        "name": "seat_wear",
+        "entityId": "18446744073709548230",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_9/seat_wear"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Bench_-11.5_16": {
+    "name": "Hybrid_Bench_-11.5_16",
+    "entityId": "18446744073709546220",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -11.5,
+      "y": 0.0,
+      "z": 16.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 8,
+    "children": [
+      {
+        "name": "back_inset",
+        "entityId": "18446744073709546218",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/back_inset"
+      },
+      {
+        "name": "floor_foot",
+        "entityId": "18446744073709546210",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/floor_foot"
+      },
+      {
+        "name": "leg",
+        "entityId": "18446744073709546202",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/leg"
+      },
+      {
+        "name": "rail",
+        "entityId": "18446744073709546194",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/rail"
+      },
+      {
+        "name": "seat",
+        "entityId": "18446744073709546186",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/seat"
+      },
+      {
+        "name": "seat_back",
+        "entityId": "18446744073709546178",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/seat_back"
+      },
+      {
+        "name": "seat_fasteners",
+        "entityId": "18446744073709546170",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/seat_fasteners"
+      },
+      {
+        "name": "seat_wear",
+        "entityId": "18446744073709546162",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_-11.5_16/seat_wear"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Bench_11.5_9": {
+    "name": "Hybrid_Bench_11.5_9",
+    "entityId": "18446744073709546810",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 11.5,
+      "y": 0.0,
+      "z": 9.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 8,
+    "children": [
+      {
+        "name": "back_inset",
+        "entityId": "18446744073709546808",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/back_inset"
+      },
+      {
+        "name": "floor_foot",
+        "entityId": "18446744073709546800",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/floor_foot"
+      },
+      {
+        "name": "leg",
+        "entityId": "18446744073709546792",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/leg"
+      },
+      {
+        "name": "rail",
+        "entityId": "18446744073709546784",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/rail"
+      },
+      {
+        "name": "seat",
+        "entityId": "18446744073709546776",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/seat"
+      },
+      {
+        "name": "seat_back",
+        "entityId": "18446744073709546768",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/seat_back"
+      },
+      {
+        "name": "seat_fasteners",
+        "entityId": "18446744073709546760",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/seat_fasteners"
+      },
+      {
+        "name": "seat_wear",
+        "entityId": "18446744073709546752",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_9/seat_wear"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Bench_11.5_16": {
+    "name": "Hybrid_Bench_11.5_16",
+    "entityId": "18446744073709547292",
+    "instanceId": 0,
+    "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 11.5,
+      "y": 0.0,
+      "z": 16.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Hall",
+    "parentPath": "HybridOffice/Hall",
+    "childCount": 8,
+    "children": [
+      {
+        "name": "back_inset",
+        "entityId": "18446744073709547290",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/back_inset"
+      },
+      {
+        "name": "floor_foot",
+        "entityId": "18446744073709547282",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/floor_foot"
+      },
+      {
+        "name": "leg",
+        "entityId": "18446744073709547274",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/leg"
+      },
+      {
+        "name": "rail",
+        "entityId": "18446744073709547266",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/rail"
+      },
+      {
+        "name": "seat",
+        "entityId": "18446744073709547258",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/seat"
+      },
+      {
+        "name": "seat_back",
+        "entityId": "18446744073709547250",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/seat_back"
+      },
+      {
+        "name": "seat_fasteners",
+        "entityId": "18446744073709547242",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/seat_fasteners"
+      },
+      {
+        "name": "seat_wear",
+        "entityId": "18446744073709547234",
+        "instanceId": 0,
+        "path": "HybridOffice/Hall/Hybrid_Bench_11.5_16/seat_wear"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Exhibit_MonaLisa": {
+    "name": "Exhibit_MonaLisa",
+    "entityId": "72924",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_MonaLisa",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -4.9,
+      "y": 2.0,
+      "z": 7.9
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 9.999998,
+      "z": 356.0
+    },
+    "scale": {
+      "x": 1.16666663,
+      "y": 1.4,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_PearlEarring": {
+    "name": "Exhibit_PearlEarring",
+    "entityId": "72538",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_PearlEarring",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 7.0,
+      "y": 1.95,
+      "z": 10.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 5.0
+    },
+    "scale": {
+      "x": 0.966666639,
+      "y": 1.45,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_StarryNight": {
+    "name": "Exhibit_StarryNight",
+    "entityId": "71450",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_StarryNight",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -8.5,
+      "y": 2.2,
+      "z": 13.0
+    },
+    "rotation": {
+      "x": -5.33608535e-08,
+      "y": 15.0000019,
+      "z": 355.0
+    },
+    "scale": {
+      "x": 2.625,
+      "y": 1.75,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_GreatWave": {
+    "name": "Exhibit_GreatWave",
+    "entityId": "74322",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_GreatWave",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 5.9,
+      "y": 2.1,
+      "z": 15.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 350.0,
+      "z": 3.00000024
+    },
+    "scale": {
+      "x": 2.55,
+      "y": 1.7,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_Milkmaid": {
+    "name": "Exhibit_Milkmaid",
+    "entityId": "72246",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_Milkmaid",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -6.8,
+      "y": 0.69,
+      "z": 9.0
+    },
+    "rotation": {
+      "x": 348.0,
+      "y": 8.0,
+      "z": 12.0
+    },
+    "scale": {
+      "x": 1.0216254,
+      "y": 1.3,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_Mondrian": {
+    "name": "Exhibit_Mondrian",
+    "entityId": "72530",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_Mondrian",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 8.0,
+      "y": 0.8,
+      "z": 17.0
+    },
+    "rotation": {
+      "x": 352.0,
+      "y": 345.0,
+      "z": 351.0
+    },
+    "scale": {
+      "x": 1.55,
+      "y": 1.55,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_Thinker": {
+    "name": "Exhibit_Thinker",
+    "entityId": "72436",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_Thinker",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -5.8,
+      "y": 1.83,
+      "z": 12.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 9.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.6998018,
+      "y": 1.86,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_Discobolus": {
+    "name": "Exhibit_Discobolus",
+    "entityId": "73008",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_Discobolus",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 4.4,
+      "y": 1.775,
+      "z": 8.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 350.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.45833337,
+      "y": 1.75,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_Nefertiti": {
+    "name": "Exhibit_Nefertiti",
+    "entityId": "72074",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_Nefertiti",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -7.8,
+      "y": 1.24,
+      "z": 6.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 20.0000019,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.566666663,
+      "y": 0.68,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_VoyagerRecord": {
+    "name": "Exhibit_VoyagerRecord",
+    "entityId": "73048",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_VoyagerRecord",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -3.7,
+      "y": 1.11,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 7.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.4585,
+      "y": 0.42,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DroppedPaper_0": {
+    "name": "DroppedPaper_0",
+    "entityId": "74064",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DroppedPaper_0",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -4.3,
+      "y": 0.025,
+      "z": 5.0
+    },
+    "rotation": {
+      "x": 90.0,
+      "y": 20.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.8559098,
+      "y": 0.9,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DroppedPaper_1": {
+    "name": "DroppedPaper_1",
+    "entityId": "74510",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DroppedPaper_1",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 5.3,
+      "y": 0.025,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 90.0,
+      "y": 335.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.7608087,
+      "y": 0.8,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DroppedPaper_2": {
+    "name": "DroppedPaper_2",
+    "entityId": "72522",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DroppedPaper_2",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -7.0,
+      "y": 0.025,
+      "z": 11.0
+    },
+    "rotation": {
+      "x": 90.0,
+      "y": 55.0000038,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.046112,
+      "y": 1.1,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DroppedPaper_3": {
+    "name": "DroppedPaper_3",
+    "entityId": "71596",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DroppedPaper_3",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 4.0,
+      "y": 0.025,
+      "z": 12.0
+    },
+    "rotation": {
+      "x": 90.0,
+      "y": 330.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.8559098,
+      "y": 0.9,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DroppedPaper_4": {
+    "name": "DroppedPaper_4",
+    "entityId": "73902",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DroppedPaper_4",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -2.4,
+      "y": 0.025,
+      "z": 8.0
+    },
+    "rotation": {
+      "x": 90.0,
+      "y": 30.0000019,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.475505441,
+      "y": 0.5,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DroppedPaper_5": {
+    "name": "DroppedPaper_5",
+    "entityId": "74008",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DroppedPaper_5",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 7.8,
+      "y": 0.025,
+      "z": 15.0
+    },
+    "rotation": {
+      "x": 90.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.046112,
+      "y": 1.1,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "ThinkerPlinth": {
+    "name": "ThinkerPlinth",
+    "entityId": "18446744073709547918",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/ThinkerPlinth",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -5.8,
+      "y": 0.0,
+      "z": 12.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "base",
+        "entityId": "18446744073709547916",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/ThinkerPlinth/base"
+      },
+      {
+        "name": "blank_caption",
+        "entityId": "18446744073709547908",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/ThinkerPlinth/blank_caption"
+      },
+      {
+        "name": "plinth_cap",
+        "entityId": "18446744073709547900",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/ThinkerPlinth/plinth_cap"
+      },
+      {
+        "name": "plinth_damage",
+        "entityId": "18446744073709547892",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/ThinkerPlinth/plinth_damage"
+      },
+      {
+        "name": "plinth_foot",
+        "entityId": "18446744073709547884",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/ThinkerPlinth/plinth_foot"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "DiscobolusPlinth": {
+    "name": "DiscobolusPlinth",
+    "entityId": "18446744073709548222",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/DiscobolusPlinth",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 4.4,
+      "y": 0.0,
+      "z": 8.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "base",
+        "entityId": "18446744073709548220",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/DiscobolusPlinth/base"
+      },
+      {
+        "name": "blank_caption",
+        "entityId": "18446744073709548212",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/DiscobolusPlinth/blank_caption"
+      },
+      {
+        "name": "plinth_cap",
+        "entityId": "18446744073709548204",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/DiscobolusPlinth/plinth_cap"
+      },
+      {
+        "name": "plinth_damage",
+        "entityId": "18446744073709548196",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/DiscobolusPlinth/plinth_damage"
+      },
+      {
+        "name": "plinth_foot",
+        "entityId": "18446744073709548188",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/DiscobolusPlinth/plinth_foot"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "NefertitiPlinth": {
+    "name": "NefertitiPlinth",
+    "entityId": "18446744073709548330",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/NefertitiPlinth",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -7.8,
+      "y": 0.0,
+      "z": 6.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.68,
+      "y": 1.0,
+      "z": 0.68
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "base",
+        "entityId": "18446744073709548328",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/NefertitiPlinth/base"
+      },
+      {
+        "name": "blank_caption",
+        "entityId": "18446744073709548320",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/NefertitiPlinth/blank_caption"
+      },
+      {
+        "name": "plinth_cap",
+        "entityId": "18446744073709548312",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/NefertitiPlinth/plinth_cap"
+      },
+      {
+        "name": "plinth_damage",
+        "entityId": "18446744073709548304",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/NefertitiPlinth/plinth_damage"
+      },
+      {
+        "name": "plinth_foot",
+        "entityId": "18446744073709548296",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/NefertitiPlinth/plinth_foot"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "VoyagerPlinth": {
+    "name": "VoyagerPlinth",
+    "entityId": "18446744073709546932",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/VoyagerPlinth",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -3.7,
+      "y": 0.0,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.52,
+      "y": 1.0,
+      "z": 0.52
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "base",
+        "entityId": "18446744073709546930",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/VoyagerPlinth/base"
+      },
+      {
+        "name": "blank_caption",
+        "entityId": "18446744073709546922",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/VoyagerPlinth/blank_caption"
+      },
+      {
+        "name": "plinth_cap",
+        "entityId": "18446744073709546914",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/VoyagerPlinth/plinth_cap"
+      },
+      {
+        "name": "plinth_damage",
+        "entityId": "18446744073709546906",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/VoyagerPlinth/plinth_damage"
+      },
+      {
+        "name": "plinth_foot",
+        "entityId": "18446744073709546898",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/VoyagerPlinth/plinth_foot"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "MonaDisplay": {
+    "name": "MonaDisplay",
+    "entityId": "72368",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/MonaDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -4.9,
+      "y": 2.0,
+      "z": 8.04
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 9.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.9,
+      "y": 1.13,
+      "z": 0.06
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "PearlDisplay": {
+    "name": "PearlDisplay",
+    "entityId": "71646",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/PearlDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 7.0,
+      "y": 1.95,
+      "z": 10.64
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.78,
+      "y": 1.24,
+      "z": 0.06
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "StarryDisplay": {
+    "name": "StarryDisplay",
+    "entityId": "74412",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/StarryDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -8.5,
+      "y": 2.2,
+      "z": 13.14
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 15.000001,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 2.15,
+      "y": 1.34,
+      "z": 0.06
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "WaveDisplay": {
+    "name": "WaveDisplay",
+    "entityId": "73404",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/WaveDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 5.9,
+      "y": 2.1,
+      "z": 15.14
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 350.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 2.08,
+      "y": 1.3,
+      "z": 0.06
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "MonaDisplay_Stem": {
+    "name": "MonaDisplay_Stem",
+    "entityId": "74502",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/MonaDisplay_Stem",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -4.9,
+      "y": 0.68,
+      "z": 8.09
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.07,
+      "y": 1.36,
+      "z": 0.07
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "MonaDisplay_Foot": {
+    "name": "MonaDisplay_Foot",
+    "entityId": "74144",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/MonaDisplay_Foot",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -4.9,
+      "y": 0.045,
+      "z": 8.09
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.65,
+      "y": 0.09,
+      "z": 0.45
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "PearlDisplay_Stem": {
+    "name": "PearlDisplay_Stem",
+    "entityId": "73192",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/PearlDisplay_Stem",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 7.0,
+      "y": 0.68,
+      "z": 10.69
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.07,
+      "y": 1.36,
+      "z": 0.07
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "PearlDisplay_Foot": {
+    "name": "PearlDisplay_Foot",
+    "entityId": "74034",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/PearlDisplay_Foot",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 7.0,
+      "y": 0.045,
+      "z": 10.69
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.65,
+      "y": 0.09,
+      "z": 0.45
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "StarryDisplay_Stem": {
+    "name": "StarryDisplay_Stem",
+    "entityId": "71876",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/StarryDisplay_Stem",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -8.5,
+      "y": 0.68,
+      "z": 13.19
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.07,
+      "y": 1.36,
+      "z": 0.07
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "StarryDisplay_Foot": {
+    "name": "StarryDisplay_Foot",
+    "entityId": "72890",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/StarryDisplay_Foot",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -8.5,
+      "y": 0.045,
+      "z": 13.19
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.65,
+      "y": 0.09,
+      "z": 0.45
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "WaveDisplay_Stem": {
+    "name": "WaveDisplay_Stem",
+    "entityId": "71820",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/WaveDisplay_Stem",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 5.9,
+      "y": 0.68,
+      "z": 15.19
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.07,
+      "y": 1.36,
+      "z": 0.07
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "WaveDisplay_Foot": {
+    "name": "WaveDisplay_Foot",
+    "entityId": "72916",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/WaveDisplay_Foot",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 5.9,
+      "y": 0.045,
+      "z": 15.19
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.65,
+      "y": 0.09,
+      "z": 0.45
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "FlyerSuspension_0": {
+    "name": "FlyerSuspension_0",
+    "entityId": "73640",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/FlyerSuspension_0",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 5.546486,
+      "y": 9.315,
+      "z": 12.1692352
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.013,
+      "y": 7.71,
+      "z": 0.013
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "FlyerSuspension_1": {
+    "name": "FlyerSuspension_1",
+    "entityId": "73346",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/FlyerSuspension_1",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 7.853514,
+      "y": 9.315,
+      "z": 12.8307648
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.013,
+      "y": 7.71,
+      "z": 0.013
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Exhibit_PrintingPress3D": {
+    "name": "Exhibit_PrintingPress3D",
+    "entityId": "18446744073709547226",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 8.4,
+      "y": 0.0,
+      "z": 8.4
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 340.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 17,
+    "children": [
+      {
+        "name": "beam_bolts",
+        "entityId": "18446744073709547224",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/beam_bolts"
+      },
+      {
+        "name": "bottom_tie",
+        "entityId": "18446744073709547216",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/bottom_tie"
+      },
+      {
+        "name": "carriage_bed",
+        "entityId": "18446744073709547208",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/carriage_bed"
+      },
+      {
+        "name": "carriage_rails",
+        "entityId": "18446744073709547200",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/carriage_rails"
+      },
+      {
+        "name": "feet",
+        "entityId": "18446744073709547192",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/feet"
+      },
+      {
+        "name": "iron_straps",
+        "entityId": "18446744073709547184",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/iron_straps"
+      },
+      {
+        "name": "platen",
+        "entityId": "18446744073709547176",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/platen"
+      },
+      {
+        "name": "platen_face",
+        "entityId": "18446744073709547168",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/platen_face"
+      },
+      {
+        "name": "press_lever",
+        "entityId": "18446744073709547160",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/press_lever"
+      },
+      {
+        "name": "screw_collar",
+        "entityId": "18446744073709547152",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/screw_collar"
+      },
+      {
+        "name": "screw_core",
+        "entityId": "18446744073709547144",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/screw_core"
+      },
+      {
+        "name": "screw_thread",
+        "entityId": "18446744073709547136",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/screw_thread"
+      },
+      {
+        "name": "top_crossbeam",
+        "entityId": "18446744073709547128",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/top_crossbeam"
+      },
+      {
+        "name": "type_bed",
+        "entityId": "18446744073709547120",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/type_bed"
+      },
+      {
+        "name": "unprinted_sheet",
+        "entityId": "18446744073709547112",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/unprinted_sheet"
+      },
+      {
+        "name": "uprights",
+        "entityId": "18446744073709547104",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/uprights"
+      },
+      {
+        "name": "wood_chips",
+        "entityId": "18446744073709547096",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_PrintingPress3D/wood_chips"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Exhibit_Rocket3D": {
+    "name": "Exhibit_Rocket3D",
+    "entityId": "18446744073709549072",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_Rocket3D",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -8.7,
+      "y": 0.0,
+      "z": 17.7
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 328.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.05,
+      "y": 1.05,
+      "z": 1.05
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 19,
+    "children": [
+      {
+        "name": "boiler_bands",
+        "entityId": "18446744073709549070",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/boiler_bands"
+      },
+      {
+        "name": "chassis",
+        "entityId": "18446744073709549062",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/chassis"
+      },
+      {
+        "name": "chimney",
+        "entityId": "18446744073709549054",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/chimney"
+      },
+      {
+        "name": "chimney_flare",
+        "entityId": "18446744073709549046",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/chimney_flare"
+      },
+      {
+        "name": "display_base",
+        "entityId": "18446744073709549038",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/display_base"
+      },
+      {
+        "name": "door_latch",
+        "entityId": "18446744073709549030",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/door_latch"
+      },
+      {
+        "name": "firebox",
+        "entityId": "18446744073709549022",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/firebox"
+      },
+      {
+        "name": "inclined_cylinders",
+        "entityId": "18446744073709549014",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/inclined_cylinders"
+      },
+      {
+        "name": "paint_loss",
+        "entityId": "18446744073709549006",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/paint_loss"
+      },
+      {
+        "name": "piston_rods",
+        "entityId": "18446744073709548998",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/piston_rods"
+      },
+      {
+        "name": "rear_step",
+        "entityId": "18446744073709548990",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/rear_step"
+      },
+      {
+        "name": "safety_valve",
+        "entityId": "18446744073709548982",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/safety_valve"
+      },
+      {
+        "name": "short_exhibit_rails",
+        "entityId": "18446744073709548974",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/short_exhibit_rails"
+      },
+      {
+        "name": "smokebox",
+        "entityId": "18446744073709548966",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/smokebox"
+      },
+      {
+        "name": "smokebox_door",
+        "entityId": "18446744073709548958",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/smokebox_door"
+      },
+      {
+        "name": "wheel_hubs",
+        "entityId": "18446744073709548950",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/wheel_hubs"
+      },
+      {
+        "name": "wheel_spokes",
+        "entityId": "18446744073709548942",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/wheel_spokes"
+      },
+      {
+        "name": "wheel_tyres",
+        "entityId": "18446744073709548934",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/wheel_tyres"
+      },
+      {
+        "name": "yellow_boiler",
+        "entityId": "18446744073709548926",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_Rocket3D/yellow_boiler"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Exhibit_WrightFlyer3D": {
+    "name": "Exhibit_WrightFlyer3D",
+    "entityId": "18446744073709547720",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 6.7,
+      "y": 4.6,
+      "z": 12.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 344.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 17,
+    "children": [
+      {
+        "name": "canard_booms",
+        "entityId": "18446744073709547718",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/canard_booms"
+      },
+      {
+        "name": "canard_struts",
+        "entityId": "18446744073709547710",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/canard_struts"
+      },
+      {
+        "name": "drive_chains",
+        "entityId": "18446744073709547702",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/drive_chains"
+      },
+      {
+        "name": "engine_block",
+        "entityId": "18446744073709547694",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/engine_block"
+      },
+      {
+        "name": "fabric_patch",
+        "entityId": "18446744073709547686",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/fabric_patch"
+      },
+      {
+        "name": "fabric_ribs",
+        "entityId": "18446744073709547678",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/fabric_ribs"
+      },
+      {
+        "name": "four_cylinder_engine",
+        "entityId": "18446744073709547670",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/four_cylinder_engine"
+      },
+      {
+        "name": "front_canard",
+        "entityId": "18446744073709547662",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/front_canard"
+      },
+      {
+        "name": "landing_skids",
+        "entityId": "18446744073709547654",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/landing_skids"
+      },
+      {
+        "name": "main_wings",
+        "entityId": "18446744073709547646",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/main_wings"
+      },
+      {
+        "name": "propeller_hubs",
+        "entityId": "18446744073709547638",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/propeller_hubs"
+      },
+      {
+        "name": "propeller_shafts",
+        "entityId": "18446744073709547630",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/propeller_shafts"
+      },
+      {
+        "name": "tail_booms",
+        "entityId": "18446744073709547622",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/tail_booms"
+      },
+      {
+        "name": "twin_rudders",
+        "entityId": "18446744073709547614",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/twin_rudders"
+      },
+      {
+        "name": "two_blade_propellers",
+        "entityId": "18446744073709547606",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/two_blade_propellers"
+      },
+      {
+        "name": "wing_rigging",
+        "entityId": "18446744073709547598",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/wing_rigging"
+      },
+      {
+        "name": "wing_struts",
+        "entityId": "18446744073709547590",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Exhibit_WrightFlyer3D/wing_struts"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "VoyagerRecordSupport": {
+    "name": "VoyagerRecordSupport",
+    "entityId": "72674",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/VoyagerRecordSupport",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -3.7,
+      "y": 1.015,
+      "z": 6.025
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 7.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.04,
+      "y": 0.23,
+      "z": 0.065
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "SkyLayer": {
+    "name": "SkyLayer",
+    "entityId": "72820",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/SkyLayer",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 40.0,
+      "z": 250.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 799.5749,
+      "y": 450.0,
+      "z": 1.0
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "FarMegacityLayer": {
+    "name": "FarMegacityLayer",
+    "entityId": "74254",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/FarMegacityLayer",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 33.0,
+      "z": 120.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 220.327316,
+      "y": 124.0,
+      "z": 1.0
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Megacity_West": {
+    "name": "Megacity_West",
+    "entityId": "18446744073709547046",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/Megacity_West",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -35.0,
+      "y": -15.0,
+      "z": 50.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 353.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.8,
+      "y": 0.8,
+      "z": 0.8
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 14,
+    "children": [
+      {
+        "name": "broad_weathering",
+        "entityId": "18446744073709547044",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/broad_weathering"
+      },
+      {
+        "name": "exhaust_stacks",
+        "entityId": "18446744073709547036",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/exhaust_stacks"
+      },
+      {
+        "name": "facade_billboard",
+        "entityId": "18446744073709547028",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/facade_billboard"
+      },
+      {
+        "name": "pale_window",
+        "entityId": "18446744073709547020",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/pale_window"
+      },
+      {
+        "name": "podium_buttress",
+        "entityId": "18446744073709547012",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/podium_buttress"
+      },
+      {
+        "name": "recessed_front",
+        "entityId": "18446744073709547004",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/recessed_front"
+      },
+      {
+        "name": "recessed_side",
+        "entityId": "18446744073709546996",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/recessed_side"
+      },
+      {
+        "name": "rooftop_equipment",
+        "entityId": "18446744073709546988",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/rooftop_equipment"
+      },
+      {
+        "name": "runtime_billboard",
+        "entityId": "18446744073709546980",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/runtime_billboard"
+      },
+      {
+        "name": "service_band",
+        "entityId": "18446744073709546972",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/service_band"
+      },
+      {
+        "name": "structural_mass",
+        "entityId": "18446744073709546964",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/structural_mass"
+      },
+      {
+        "name": "tier_lip",
+        "entityId": "18446744073709546956",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/tier_lip"
+      },
+      {
+        "name": "vertical_service_spines",
+        "entityId": "18446744073709546948",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/vertical_service_spines"
+      },
+      {
+        "name": "window_separators",
+        "entityId": "18446744073709546940",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_West/window_separators"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Megacity_Rear": {
+    "name": "Megacity_Rear",
+    "entityId": "18446744073709547440",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/Megacity_Rear",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -10.0,
+      "y": -15.0,
+      "z": 95.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 14,
+    "children": [
+      {
+        "name": "broad_weathering",
+        "entityId": "18446744073709547438",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/broad_weathering"
+      },
+      {
+        "name": "exhaust_stacks",
+        "entityId": "18446744073709547430",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/exhaust_stacks"
+      },
+      {
+        "name": "facade_billboard",
+        "entityId": "18446744073709547422",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/facade_billboard"
+      },
+      {
+        "name": "pale_window",
+        "entityId": "18446744073709547414",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/pale_window"
+      },
+      {
+        "name": "podium_buttress",
+        "entityId": "18446744073709547406",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/podium_buttress"
+      },
+      {
+        "name": "recessed_front",
+        "entityId": "18446744073709547398",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/recessed_front"
+      },
+      {
+        "name": "recessed_side",
+        "entityId": "18446744073709547390",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/recessed_side"
+      },
+      {
+        "name": "rooftop_equipment",
+        "entityId": "18446744073709547382",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/rooftop_equipment"
+      },
+      {
+        "name": "runtime_billboard",
+        "entityId": "18446744073709547374",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/runtime_billboard"
+      },
+      {
+        "name": "service_band",
+        "entityId": "18446744073709547366",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/service_band"
+      },
+      {
+        "name": "structural_mass",
+        "entityId": "18446744073709547358",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/structural_mass"
+      },
+      {
+        "name": "tier_lip",
+        "entityId": "18446744073709547350",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/tier_lip"
+      },
+      {
+        "name": "vertical_service_spines",
+        "entityId": "18446744073709547342",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/vertical_service_spines"
+      },
+      {
+        "name": "window_separators",
+        "entityId": "18446744073709547334",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_Rear/window_separators"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Megacity_EastRear": {
+    "name": "Megacity_EastRear",
+    "entityId": "18446744073709548180",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/Megacity_EastRear",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 25.0,
+      "y": -15.0,
+      "z": 80.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 352.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.1,
+      "y": 1.1,
+      "z": 1.1
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 14,
+    "children": [
+      {
+        "name": "broad_weathering",
+        "entityId": "18446744073709548178",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/broad_weathering"
+      },
+      {
+        "name": "exhaust_stacks",
+        "entityId": "18446744073709548170",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/exhaust_stacks"
+      },
+      {
+        "name": "facade_billboard",
+        "entityId": "18446744073709548162",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/facade_billboard"
+      },
+      {
+        "name": "pale_window",
+        "entityId": "18446744073709548154",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/pale_window"
+      },
+      {
+        "name": "podium_buttress",
+        "entityId": "18446744073709548146",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/podium_buttress"
+      },
+      {
+        "name": "recessed_front",
+        "entityId": "18446744073709548138",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/recessed_front"
+      },
+      {
+        "name": "recessed_side",
+        "entityId": "18446744073709548130",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/recessed_side"
+      },
+      {
+        "name": "rooftop_equipment",
+        "entityId": "18446744073709548122",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/rooftop_equipment"
+      },
+      {
+        "name": "runtime_billboard",
+        "entityId": "18446744073709548114",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/runtime_billboard"
+      },
+      {
+        "name": "service_band",
+        "entityId": "18446744073709548106",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/service_band"
+      },
+      {
+        "name": "structural_mass",
+        "entityId": "18446744073709548098",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/structural_mass"
+      },
+      {
+        "name": "tier_lip",
+        "entityId": "18446744073709548090",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/tier_lip"
+      },
+      {
+        "name": "vertical_service_spines",
+        "entityId": "18446744073709548082",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/vertical_service_spines"
+      },
+      {
+        "name": "window_separators",
+        "entityId": "18446744073709548074",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_EastRear/window_separators"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Megacity_East": {
+    "name": "Megacity_East",
+    "entityId": "18446744073709547876",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/Megacity_East",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 45.0,
+      "y": -15.0,
+      "z": 30.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 340.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.8,
+      "y": 0.8,
+      "z": 0.8
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 14,
+    "children": [
+      {
+        "name": "broad_weathering",
+        "entityId": "18446744073709547874",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/broad_weathering"
+      },
+      {
+        "name": "exhaust_stacks",
+        "entityId": "18446744073709547866",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/exhaust_stacks"
+      },
+      {
+        "name": "facade_billboard",
+        "entityId": "18446744073709547858",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/facade_billboard"
+      },
+      {
+        "name": "pale_window",
+        "entityId": "18446744073709547850",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/pale_window"
+      },
+      {
+        "name": "podium_buttress",
+        "entityId": "18446744073709547842",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/podium_buttress"
+      },
+      {
+        "name": "recessed_front",
+        "entityId": "18446744073709547834",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/recessed_front"
+      },
+      {
+        "name": "recessed_side",
+        "entityId": "18446744073709547826",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/recessed_side"
+      },
+      {
+        "name": "rooftop_equipment",
+        "entityId": "18446744073709547818",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/rooftop_equipment"
+      },
+      {
+        "name": "runtime_billboard",
+        "entityId": "18446744073709547810",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/runtime_billboard"
+      },
+      {
+        "name": "service_band",
+        "entityId": "18446744073709547802",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/service_band"
+      },
+      {
+        "name": "structural_mass",
+        "entityId": "18446744073709547794",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/structural_mass"
+      },
+      {
+        "name": "tier_lip",
+        "entityId": "18446744073709547786",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/tier_lip"
+      },
+      {
+        "name": "vertical_service_spines",
+        "entityId": "18446744073709547778",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/vertical_service_spines"
+      },
+      {
+        "name": "window_separators",
+        "entityId": "18446744073709547770",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_East/window_separators"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Megacity_WestNear": {
+    "name": "Megacity_WestNear",
+    "entityId": "18446744073709549186",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/Megacity_WestNear",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -50.0,
+      "y": -15.0,
+      "z": 5.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 20.0000019,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.65,
+      "y": 0.65,
+      "z": 0.65
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 14,
+    "children": [
+      {
+        "name": "broad_weathering",
+        "entityId": "18446744073709549184",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/broad_weathering"
+      },
+      {
+        "name": "exhaust_stacks",
+        "entityId": "18446744073709549176",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/exhaust_stacks"
+      },
+      {
+        "name": "facade_billboard",
+        "entityId": "18446744073709549168",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/facade_billboard"
+      },
+      {
+        "name": "pale_window",
+        "entityId": "18446744073709549160",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/pale_window"
+      },
+      {
+        "name": "podium_buttress",
+        "entityId": "18446744073709549152",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/podium_buttress"
+      },
+      {
+        "name": "recessed_front",
+        "entityId": "18446744073709549144",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/recessed_front"
+      },
+      {
+        "name": "recessed_side",
+        "entityId": "18446744073709549136",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/recessed_side"
+      },
+      {
+        "name": "rooftop_equipment",
+        "entityId": "18446744073709549128",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/rooftop_equipment"
+      },
+      {
+        "name": "runtime_billboard",
+        "entityId": "18446744073709549120",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/runtime_billboard"
+      },
+      {
+        "name": "service_band",
+        "entityId": "18446744073709549112",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/service_band"
+      },
+      {
+        "name": "structural_mass",
+        "entityId": "18446744073709549104",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/structural_mass"
+      },
+      {
+        "name": "tier_lip",
+        "entityId": "18446744073709549096",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/tier_lip"
+      },
+      {
+        "name": "vertical_service_spines",
+        "entityId": "18446744073709549088",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/vertical_service_spines"
+      },
+      {
+        "name": "window_separators",
+        "entityId": "18446744073709549080",
+        "instanceId": 0,
+        "path": "HybridOffice/Exterior/Megacity_WestNear/window_separators"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Traffic_Lane1_Car1": {
+    "name": "Traffic_Lane1_Car1",
+    "entityId": "72396",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane1_Car1",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -53.625,
+      "y": 6.0,
+      "z": 36.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709548876",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709548868",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709548860",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709548852",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709548844",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709548836",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709548828",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709548820",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709548812",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709548804",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car1/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane1_Car2": {
+    "name": "Traffic_Lane1_Car2",
+    "entityId": "72420",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane1_Car2",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -21.125,
+      "y": 6.0,
+      "z": 36.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709546890",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709546882",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709546874",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709546866",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709546858",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709546850",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709546842",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709546834",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709546826",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709546818",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car2/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane1_Car3": {
+    "name": "Traffic_Lane1_Car3",
+    "entityId": "71496",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane1_Car3",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 11.375,
+      "y": 6.0,
+      "z": 36.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709548478",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709548470",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709548462",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709548454",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709548446",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709548438",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709548430",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709548422",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709548414",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709548406",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car3/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane1_Car4": {
+    "name": "Traffic_Lane1_Car4",
+    "entityId": "73446",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane1_Car4",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 43.875,
+      "y": 6.0,
+      "z": 36.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709549266",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709549258",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709549250",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709549242",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709549234",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709549226",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709549218",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709549210",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709549202",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709549194",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane1_Car4/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane2_Car1": {
+    "name": "Traffic_Lane2_Car1",
+    "entityId": "71592",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane2_Car1",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 53.625,
+      "y": 11.0,
+      "z": 55.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709549432",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709549424",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709549416",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709549408",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709549400",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709549392",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709549384",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709549376",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709549368",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709549360",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car1/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane2_Car2": {
+    "name": "Traffic_Lane2_Car2",
+    "entityId": "71504",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane2_Car2",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 21.125,
+      "y": 11.0,
+      "z": 55.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709546154",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709546146",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709546138",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709546130",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709546122",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709546114",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709546106",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709546098",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709546090",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709546082",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car2/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane2_Car3": {
+    "name": "Traffic_Lane2_Car3",
+    "entityId": "73778",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane2_Car3",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -11.375,
+      "y": 11.0,
+      "z": 55.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709546074",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709546066",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709546058",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709546050",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709546042",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709546034",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709546026",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709546018",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709546010",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709546002",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car3/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane2_Car4": {
+    "name": "Traffic_Lane2_Car4",
+    "entityId": "73834",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane2_Car4",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -43.875,
+      "y": 11.0,
+      "z": 55.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709548066",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709548058",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709548050",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709548042",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709548034",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709548026",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709548018",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709548010",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709548002",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709547994",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane2_Car4/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane3_Car1": {
+    "name": "Traffic_Lane3_Car1",
+    "entityId": "72996",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane3_Car1",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -53.625,
+      "y": 17.0,
+      "z": 78.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709545994",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709545986",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709545978",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709545970",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709545962",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709545954",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709545946",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709545938",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709545930",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709545922",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car1/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane3_Car2": {
+    "name": "Traffic_Lane3_Car2",
+    "entityId": "73288",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane3_Car2",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -21.125,
+      "y": 17.0,
+      "z": 78.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709546710",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709546702",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709546694",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709546686",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709546678",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709546670",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709546662",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709546654",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709546646",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709546638",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car2/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane3_Car3": {
+    "name": "Traffic_Lane3_Car3",
+    "entityId": "71556",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane3_Car3",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 11.375,
+      "y": 17.0,
+      "z": 78.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709548796",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709548788",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709548780",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709548772",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709548764",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709548756",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709548748",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709548740",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709548732",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709548724",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car3/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  },
+  "Traffic_Lane3_Car4": {
+    "name": "Traffic_Lane3_Car4",
+    "entityId": "74164",
+    "instanceId": 0,
+    "path": "HybridOffice/Traffic/Traffic_Lane3_Car4",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 43.875,
+      "y": 17.0,
+      "z": 78.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 270.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Traffic",
+    "parentPath": "HybridOffice/Traffic",
+    "childCount": 10,
+    "children": [
+      {
+        "name": "body",
+        "entityId": "18446744073709545914",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/body"
+      },
+      {
+        "name": "cabin",
+        "entityId": "18446744073709545906",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/cabin"
+      },
+      {
+        "name": "front_bumper",
+        "entityId": "18446744073709545898",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/front_bumper"
+      },
+      {
+        "name": "front_glass",
+        "entityId": "18446744073709545890",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/front_glass"
+      },
+      {
+        "name": "headlights",
+        "entityId": "18446744073709545882",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/headlights"
+      },
+      {
+        "name": "lift_core",
+        "entityId": "18446744073709545874",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/lift_core"
+      },
+      {
+        "name": "lift_pods",
+        "entityId": "18446744073709545866",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/lift_pods"
+      },
+      {
+        "name": "rear_glass",
+        "entityId": "18446744073709545858",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/rear_glass"
+      },
+      {
+        "name": "roof_sign",
+        "entityId": "18446744073709545850",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/roof_sign"
+      },
+      {
+        "name": "side_glass",
+        "entityId": "18446744073709545842",
+        "instanceId": 0,
+        "path": "HybridOffice/Traffic/Traffic_Lane3_Car4/side_glass"
+      }
+    ],
+    "components": [
+      "Transform",
+      "OfficeTrafficVehicle"
+    ]
+  }
+}

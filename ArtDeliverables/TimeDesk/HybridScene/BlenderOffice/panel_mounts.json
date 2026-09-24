@@ -1,0 +1,44 @@
+[
+  {
+    "name": "Blender_Clock",
+    "posX": -2.3125,
+    "posY": 1.83,
+    "posZ": 0.6077275866404783
+  },
+  {
+    "name": "Blender_DayCalendar",
+    "posX": -2.34,
+    "posY": 1.32,
+    "posZ": 0.6553589838486225
+  },
+  {
+    "name": "Blender_Stability",
+    "posX": 2.3125,
+    "posY": 2.03,
+    "posZ": 0.6077275866404783
+  },
+  {
+    "name": "Blender_Desk_GreatWavePostcard",
+    "posX": -2.344,
+    "posY": 2.1550000000000002,
+    "posZ": 0.6622871870788979
+  },
+  {
+    "name": "Blender_Desk_MonaLisaPostcard",
+    "posX": 2.3425,
+    "posY": 1.5299999999999998,
+    "posZ": 0.6596891108675446
+  },
+  {
+    "name": "BoardPicturePin_Left",
+    "posX": -2.3375,
+    "posY": 2.262,
+    "posZ": 0.6510288568297002
+  },
+  {
+    "name": "BoardPicturePin_Right",
+    "posX": 2.3354999999999997,
+    "posY": 1.644,
+    "posZ": 0.6475647552145625
+  }
+]

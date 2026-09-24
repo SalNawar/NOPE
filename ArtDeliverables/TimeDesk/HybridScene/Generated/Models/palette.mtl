@@ -1,0 +1,143 @@
+newmtl cream
+Kd 0.6400 0.5900 0.4600
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl cream_light
+Kd 0.7900 0.7400 0.6100
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl teal
+Kd 0.1200 0.2900 0.3000
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl metal
+Kd 0.2200 0.2600 0.2700
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl dark
+Kd 0.0700 0.1100 0.1400
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl screen
+Kd 0.0900 0.1700 0.2200
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl wood
+Kd 0.4300 0.2400 0.1200
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl ochre
+Kd 0.6100 0.3900 0.1200
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl blue
+Kd 0.1400 0.2700 0.3400
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl paper
+Kd 0.7600 0.7200 0.6100
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl floor
+Kd 0.5300 0.5300 0.4600
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl floor_teal
+Kd 0.3500 0.4400 0.4200
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl floor_rust
+Kd 0.5600 0.3600 0.2100
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl concrete
+Kd 0.4900 0.5100 0.4900
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl rust
+Kd 0.4900 0.2500 0.1700
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl glass
+Kd 0.1700 0.2600 0.2900
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl key
+Kd 0.6400 0.6300 0.5600
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2
+
+newmtl green
+Kd 0.2300 0.4200 0.3100
+Ka 0 0 0
+Ks 0 0 0
+Ns 1
+d 1
+illum 2

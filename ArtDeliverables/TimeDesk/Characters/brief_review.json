@@ -1,0 +1,592 @@
+{
+ "fixes": [
+  {
+   "country": "egypt",
+   "era": "ancient",
+   "field": "male.outfit",
+   "newValue": "Calf-length wrap-around kilt of fine bleached white linen, knotted at the waist, with the overlapping front edge falling in a slanting, finely pleated panel. Bare torso; plain papyrus or leather sandals. Everything is white or ecru linen.",
+   "reason": "The outfit prompt mentions 'bright beadwork at the neck', which invites the model to paint the wesekh collar (the accessory layer) onto the outfit layer. The trailing clause was cut so the outfit layer holds only clothing and footwear."
+  },
+  {
+   "country": "egypt",
+   "era": "ancient",
+   "field": "signature",
+   "newValue": "The broad beaded wesekh collar worn over crisp white linen, with a heavy wig",
+   "reason": "The signature relied on kohl-winged eyes, which is face makeup and has no layer. It also named a 'black' wig, and hair colour must never be the tell. Both were removed. The collar (accessory), white linen (outfit) and heavy wig (hair) still carry the tell."
+  },
+  {
+   "country": "iraq",
+   "era": "ancient",
+   "field": "signature",
+   "newValue": "The heavily fringed, coloured wool wrap draped over the left shoulder with the right shoulder bare; men also have the long chest-length curled beard",
+   "reason": "The male hair is a low chignon at the nape, which cannot be seen on a front-facing standing figure, so 'the hair bun' cannot carry a thumbnail tell. It was dropped. The fringed wrap and the chest-length beard are both visible from the front."
+  },
+  {
+   "country": "greece",
+   "era": "ancient",
+   "field": "female.outfit",
+   "newValue": "Ankle-length Ionic chiton of fine crinkled linen, with short sleeves formed by a row of small pins along the upper arms, tied at the natural waist with a narrow woven girdle and bloused over it (kolpos). A himation in saffron, madder red or indigo is wrapped diagonally over one shoulder, with a meander or wave-pattern band at its hem.",
+   "reason": "The woven girdle is clothing, so it belongs on the outfit layer. Its kolpos (the chiton bloused over the girdle) also cannot be drawn when the girdle sits on the accessory layer above the outfit. The girdle moved here unchanged (natural waist, kolpos)."
+  },
+  {
+   "country": "greece",
+   "era": "ancient",
+   "field": "female.accessory",
+   "newValue": "none",
+   "reason": "The only accessory was the woven girdle, which is clothing and has moved into female.outfit. No new historical item was invented. The female signature (himation border plus sakkos) does not depend on the accessory."
+  },
+  {
+   "country": "greece",
+   "era": "ancient",
+   "field": "female.headwear",
+   "newValue": "Sakkos: a patterned cloth snood that covers the crown and back of the head and wraps the bun, leaving the forehead and face fully visible",
+   "reason": "The sakkos is part of the female signature, but 'wraps the bun and the back of the head' puts it almost entirely behind the head on a front-facing figure, where it would not show at thumbnail size. It now also covers the crown, as in vase painting, so it shows from the front while the face stays clear."
+  },
+  {
+   "country": "italy",
+   "era": "ancient",
+   "field": "signature",
+   "newValue": "Men: a plain white toga with a curved, rounded edge over a tunic with a narrow purple clavus stripe, with calcei boots. Women: the nodus roll of hair above the forehead, with the strapped stola.",
+   "reason": "'Worn clean-shaven' relies on facialHair = none: an absence, not an item on any layer, so a disguise cannot leak it. It was removed. The toga, clavus tunic and calcei (outfit) still carry the male tell."
+  },
+  {
+   "country": "china",
+   "era": "ancient",
+   "field": "signature",
+   "newValue": "A long cross-collar wrap robe with huge bag-shaped 'ox-dewlap' sleeves and broad contrasting borders; men add the roof-ridged black jieze cap",
+   "reason": "'Broad dark borders' contradicts the male outfit, which allows a black ground with 'contrasting' borders: dark borders on a black robe would not show. 'Floor-length' also contradicts the man's ankle-length robe. Both were changed to match the layer text."
+  },
+  {
+   "country": "japan",
+   "era": "ancient",
+   "field": "signature",
+   "newValue": "A short belted jacket over knee-tied trousers or a long skirt, with a necklace of green comma-shaped magatama beads; men also wear mizura hair loops beside the ears (the clearest silhouette cue), and women the flat board chignon",
+   "reason": "'A big green comma-shaped magatama bead necklace' can be read as one oversized bead. That contradicts the avoid rule against 'a single oversized jewel styled as the imperial regalia' and the multi-bead necklaces in the accessory slots. The new wording matches the accessory layers."
+  },
+  {
+   "country": "britain",
+   "era": "ancient",
+   "field": "female.outfit",
+   "newValue": "Ankle-length, long-sleeved tunic-dress of bright checked wool in red, yellow and green, cinched with a woven belt. Over it hangs a thick, plain dark-red or ochre wool mantle, fastened at the chest.",
+   "reason": "The red-enamelled La Tene bronze brooch is jewellery written into the outfit. It would be a second accessory beside the torc, which holds the one accessory slot and carries the signature. The brooch was trimmed and the mantle is still fastened at the chest."
+  },
+  {
+   "country": "germany",
+   "era": "ancient",
+   "field": "female.outfit",
+   "newValue": "Loose, sleeveless, ankle-length linen tube dress (peplos type) pinned at each shoulder, leaving the arms bare, with red-purple bands at the neck and hem as Tacitus notes. A plain undyed wool shawl drapes round the shoulders, and the waist is tied with a woven band. Draw it modestly: fuller and draped, not a fitted sheath.",
+   "reason": "'With a small bronze brooch' puts jewellery in the outfit, and the same entry treats a bronze brooch as the male accessory. It was trimmed to 'pinned at each shoulder' so the outfit holds clothing only. The amber necklace stays the one accessory."
+  },
+  {
+   "country": "germany",
+   "era": "ancient",
+   "field": "signature",
+   "newValue": "For men, the Suebian side-knot hairstyle with a full beard. For women, a chunky Baltic amber necklace over a linen dress with red-purple trim.",
+   "reason": "The female outfit drapes a wool shawl round the shoulders, which hides the shoulder pins and the tops of the arms. So 'sleeveless, shoulder-pinned' cannot read on the front-facing figure. The signature now names only visible items: the amber necklace (accessory) and the red-purple-trimmed linen dress (outfit)."
+  },
+  {
+   "country": "egypt",
+   "era": "medieval",
+   "field": "female.outfit",
+   "newValue": "Ankle-length silk qamis in saffron, crimson or emerald with small woven motifs. It has very wide sleeves that hang well below the hands and is worn over full trousers (sirwal) gathered at the ankle. Over it, a large plain WHITE linen izar falls from the shoulders down to the ankles, hanging behind the arms and open at the front, so the bright qamis shows down the middle and its big sleeves show at the sides.",
+   "reason": "Rule 1 (wrong layer): the outfit said the izar was draped 'from the head', but the head part belongs to the headwear layer, which already holds the izar hood. The outfit sits under the head layer, so any cloth drawn over the head there gets covered anyway. Rule 4 (contradiction): with the arms down on a standing figure, the sleeves cannot show 'down the middle' while the izar covers the arms. The model would have to draw the hands clasped in front, which would not match the body layer's pose."
+  },
+  {
+   "country": "egypt",
+   "era": "medieval",
+   "field": "female.headwear",
+   "newValue": "The top of the white izar drawn over the head as a soft hood that frames the fully visible face and falls onto the shoulders to meet the rest of the izar, with no face veil",
+   "reason": "Pairs with the outfit fix: the hood on the headwear layer now carries the head part of the izar alone. It has to reach the shoulders so there is no gap at the neck where it meets the outfit's izar."
+  },
+  {
+   "country": "egypt",
+   "era": "medieval",
+   "field": "male.headwear",
+   "newValue": "Large, broad, rounded white muslin turban ('imama) wound low and full around a small hidden cap, its lower edge just above the eyebrows, with no cap showing above it. One loose end (the 'adhaba tail) hangs behind one shoulder.",
+   "reason": "Rule 3: 'large' plus 'wound low' invites the model to pull the turban down over the brow and eyes. Setting the lower edge just above the eyebrows keeps the eyes visible."
+  },
+  {
+   "country": "egypt",
+   "era": "medieval",
+   "field": "signature",
+   "newValue": "Men: a big, low, round white turban, worn with very long, wide sleeves. Women: a full-length white izar hooded over the head and hanging open over a brightly coloured gown.",
+   "reason": "Rule 2: the 'hanging tail' hangs behind one shoulder, so it cannot be seen on a front-facing figure, and the notes call it optional. The turban and sleeves still carry the tell."
+  },
+  {
+   "country": "iraq",
+   "era": "medieval",
+   "field": "male.accessory",
+   "newValue": "Taylasan: a dark shawl draped over the shoulders and hanging down the back like a thrown-back hood, the mark of a scholar. It stays on top of the shoulders, clear of the tiraz armbands on the upper sleeves",
+   "reason": "The accessory layer is drawn over the outfit. A shawl draped over the shoulders would cover the tiraz bands on the upper sleeves, and those bands are part of the men's signature."
+  },
+  {
+   "country": "iraq",
+   "era": "medieval",
+   "field": "female.headwear",
+   "newValue": "Light khimar veil over the hair, drawn opaque (not sheer or see-through), bound at the brow by an 'isaba: a narrow jewelled and embroidered headband carrying a line of decorative pseudo-script. The veil's sides fall behind the temples so the cheeks and the S-shaped side-curls stay uncovered",
+   "reason": "Rule 4: a sheer veil painted over the flat magenta mannequin comes out pink-tinted, and the cutout script leaves it as an opaque pink veil. Also, the headwear layer sits above the hair layer, so a veil falling down the sides of the face would hide the side-curls on the cheeks, which are half of the women's signature."
+  },
+  {
+   "country": "greece",
+   "era": "medieval",
+   "field": "male.headwear",
+   "newValue": "Tall felt hat with a high rounded crown and a brim turned sharply up all round against it, with a light crown and a darker brim, as Pisanello sketched among the Byzantine delegation.",
+   "reason": "Rule 4: the dropped sentence names three other hats (a pointed visor, a portrait cap, a black kalimavkion) inside the drawing description. Image models tend to draw what a prompt names, even when told not to. All three are already in the avoid list, so no content is lost."
+  },
+  {
+   "country": "china",
+   "era": "medieval",
+   "field": "female.hair",
+   "newValue": "Gaoji: a tall bun piled high on the crown in one or two upright loops",
+   "reason": "Rule 1: decorative flower pins are hair ornaments, not hairstyle. The hair slot allows only functional ties, cords or nets, and the head ornament for this entry is the guanshu comb in the headwear slot."
+  },
+  {
+   "country": "japan",
+   "era": "medieval",
+   "field": "avoid",
+   "newValue": "armour, katana, samurai helmets, ninja imagery ; Heian junihitoe or court robes (aristocratic and the wrong period) ; Buddhist monk kesa or yamabushi robes (liturgical) ; amulet pendants (kake-mamori), which are religious ; family crests (kamon) on the hitatare, which can read as a warrior retainer ; wide Edo obi or geisha look (anachronistic) ; Chinese futou with horizontal wings ; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa) ; collar closed right-over-left (the burial style) ; the hanging veil (mushi-no-tareginu) that hides the face",
+   "reason": "Stale reference: the notes say the outfit changed from a suo to a hitatare, but the crest item still says 'on the suo'. That names a garment that is no longer in the outfit. Only that word changed."
+  },
+  {
+   "country": "britain",
+   "era": "medieval",
+   "field": "signature",
+   "newValue": "Men: the only knee-length tunic of the era, with leg bindings, a cloak pinned at the right shoulder by a round silver disc brooch, and the long English moustache. Women: a coloured headrail veil wrapped over the head and round the throat, above a bell-sleeved overgown.",
+   "reason": "Rule 2: 'bareheaded' relies on headwear marked 'none', which is not an item a disguise can leak. Everything else in the signature sits on real layers."
+  },
+  {
+   "country": "britain",
+   "era": "medieval",
+   "field": "female.accessory",
+   "newValue": "Small round gilt disc brooch closing the mantle at the upper chest, just below the headrail's throat wrap",
+   "reason": "The headrail on the headwear layer wraps round the throat. The accessory layer is drawn on top, so a brooch 'at the throat' would sit on the headrail wrap and seem to pin the veil, not the mantle. Moving it just below the wrap keeps it visible and on the mantle."
+  },
+  {
+   "country": "germany",
+   "era": "medieval",
+   "field": "male.outfit",
+   "newValue": "Calf-length gown (Tappert) in deep blue or green wool with regular organ-pipe pleats, a high standing collar and wide, fur-trimmed sleeves, belted low on the hips with a leather belt, worn over tight hose. Moderately long pointed shoes (Schnabelschuhe).",
+   "reason": "Rule 1: the outfit said 'belted gown' and the accessory added a second, low-slung leather belt, so there were two belts across two slots. The low-slung belt is now the gown's single belt, inside the outfit."
+  },
+  {
+   "country": "germany",
+   "era": "medieval",
+   "field": "male.accessory",
+   "newValue": "Leather purse (Guerteltasche) hanging from the belt at the hip",
+   "reason": "Rule 1: the accessory held two items (a belt and a purse). The belt now lives in the outfit, so the slot holds one worn item."
+  },
+  {
+   "country": "germany",
+   "era": "medieval",
+   "field": "female.outfit",
+   "newValue": "Ankle-length, high-waisted wool gown in deep blue or green with long sleeves fitted tight to the wrist, belted just under the bust with a wide girdle, the skirt trailing on the ground. A dark mantle hangs from the shoulders, closed at the chest by a plain cord (not held in the hands).",
+   "reason": "Rule 3/4: 'a dark mantle is held at the chest' reads as a hand clutching the mantle, as in period paintings. That would need a raised arm that does not match the body layer's pose. A plain cord closes it without hands, and without adding jewellery to the outfit."
+  },
+  {
+   "country": "germany",
+   "era": "medieval",
+   "field": "signature",
+   "newValue": "Men: the Gugel hood with its scalloped shoulder cape, plus pointed Schnabelschuhe. Women: the Kruseler veil with its many-layered frilled edge.",
+   "reason": "Rule 2: the Gugel's long tail (Zipfel) hangs down the back, so it cannot be seen on a front-facing figure. The hood and the dagged shoulder cape still carry the tell."
+  },
+  {
+   "country": "egypt",
+   "era": "earlymodern",
+   "field": "male.headwear",
+   "newValue": "Crisp white muslin turban wound in smooth, rounded folds around a red felt cap, with the domed red crown of the cap rising clearly above the top of the turban so it shows from the front. The turban cloth is pure white.",
+   "reason": "The signature (and Iraq's contrast rule 'never shows a red crown') depends on the red crown. A flat 'disc ... on top' cannot be seen on a front-facing figure at eye level. Making it a raised dome keeps the tell visible at thumbnail size."
+  },
+  {
+   "country": "iraq",
+   "era": "earlymodern",
+   "field": "signature",
+   "newValue": "The square-shouldered camel-hair 'aba cloak with broad brown-and-cream vertical stripes (women: the black crepe head-shawl wrapped over the hair and round the neck, with a dark 'aba worn open over the shoulders)",
+   "reason": "The signature names only the brown-and-cream striped 'aba, which the woman does not have (hers is a dark, sleeveless 'aba). A leaked female item could not carry the tell, so a women's clause is added using items that exist on her headwear and outfit layers. The black-on-black 'asaba band is left out of the tell because it would not show at thumbnail size."
+  },
+  {
+   "country": "greece",
+   "era": "earlymodern",
+   "field": "female.accessory",
+   "newValue": "Pafti: a large, ornate double-plate silver-filigree buckle on a belt at the waist (Ioannina silverwork)",
+   "reason": "The woman's outfit has no belt, so drawing a bare 'belt buckle at the waist' on the mannequin would give a floating buckle. Naming the belt it fastens keeps this as one worn item and keeps the signature buckle."
+  },
+  {
+   "country": "italy",
+   "era": "earlymodern",
+   "field": "female.hair",
+   "newValue": "Centre-parted, smooth and flat over the ears, with the rest bound into one very long ribbon-wrapped braid down the back (coazzone) and a small sheer net (trinzale) over the back of the head. No hat.",
+   "reason": "A cap is not allowed in the hair layer, and the headwear slot is already used by the lenza (the signature). The trinzale is kept as a sheer net (it is attested as a caul or net), which the hair layer allows."
+  },
+  {
+   "country": "italy",
+   "era": "earlymodern",
+   "field": "signature",
+   "newValue": "Lenza: a fine cord with a small brow jewel worn straight across the forehead over smooth, hatless hair (men: a small soft red berretta over a shoulder-length bob, with a knee-length pink pitocco)",
+   "reason": "'Clean-shaven' relies on facialHair being 'none', and a disguise cannot leak an absence. Removed it so the men's tell rests on the berretta, the bob and the pitocco, which exist on the layers."
+  },
+  {
+   "country": "japan",
+   "era": "earlymodern",
+   "field": "signature",
+   "newValue": "Sleeveless kataginu vest over a kosode and pleated hakama, with the shaved-pate tea-whisk topknot (women: the tasselled Nagoya-obi cord belt on a dark, densely patterned kosode)",
+   "reason": "'Worn bareheaded' relies on male headwear being 'none', which is an absence and cannot be leaked. The tell now names only the outfit and hair-layer items."
+  },
+  {
+   "country": "japan",
+   "era": "earlymodern",
+   "field": "male.accessory",
+   "newValue": "Inro: a small stacked lacquered case hanging at the hip on a silk cord, held at the hakama waist ties by a carved netsuke toggle",
+   "reason": "The man's outfit (kataginu, hakama, kosode) has no visible sash, so 'hanging from the sash' invites the model to draw an extra sash into the accessory layer over the hakama. It is re-anchored to the hakama waist ties so the layer holds one item."
+  },
+  {
+   "country": "britain",
+   "era": "earlymodern",
+   "field": "female.hair",
+   "newValue": "Hair drawn up and back, pinned close to the head, with a smooth front edge at the hairline",
+   "reason": "The close white linen coif is a cap, which is not allowed in the hair layer. It moves to headwear. The hair layer (drawn on its own) now describes only the hairstyle, with no reference to what covers it."
+  },
+  {
+   "country": "britain",
+   "era": "earlymodern",
+   "field": "female.headwear",
+   "newValue": "Tall-crowned black felt hat with a narrow brim, worn over a close white linen coif whose edge frames the face (the London citizen's wife's hat)",
+   "reason": "This takes in the coif removed from hair, so the hat-over-coif is drawn as one headdress in the headwear layer, like Egypt's turban over a cap. The white coif edge, which is the historical look, is kept visible."
+  },
+  {
+   "country": "germany",
+   "era": "earlymodern",
+   "field": "female.hair",
+   "newValue": "Hair plaited and gathered into a gold-thread hairnet (Haarhaube) at the back of the head",
+   "reason": "'Hairnet cap' mixes a net, which the hair layer allows, with a cap, which it does not, and could make the model draw a solid cap. It is named as the gold net caul it is."
+  },
+  {
+   "country": "egypt",
+   "era": "industrial",
+   "field": "male.hair",
+   "newValue": "Short and neatly trimmed",
+   "reason": "The hair layer names the tarboush, which is headwear. The model may draw the cap into the hair layer, and 'mostly hidden' gives it nothing clear to draw. The tarboush layer covers the hair anyway."
+  },
+  {
+   "country": "egypt",
+   "era": "industrial",
+   "field": "female.outfit",
+   "newValue": "Yelek: an ankle-length, fitted, long-sleeved robe of striped silk (cream with rose and gold stripes), buttoned from bust to hips and slit open at the sides below. It is worn over an opaque white chemise closed at the neck and full shintiyan trousers gathered at the ankle, and girdled at the hips with a folded Kashmir shawl.",
+   "reason": "A 'sheer chemise' under a robe that is only buttoned from the bust down invites see-through, harem-style drawing. That contradicts the avoid list ('Orientalist harem imagery') and risks an image-model refusal. Only the chemise wording changes."
+  },
+  {
+   "country": "egypt",
+   "era": "industrial",
+   "field": "female.hair",
+   "newValue": "Centre-parted, with long thin plaits falling down the back, each plait ending in small gold safa ornaments",
+   "reason": "'under the veil' names a headwear item in the hair layer, so the model may draw the veil into the hair cut-out. The safa ornaments stay because they are part of the hairstyle."
+  },
+  {
+   "country": "egypt",
+   "era": "industrial",
+   "field": "female.headwear",
+   "newValue": "Tarha: a long white muslin head veil with its ends embroidered in coloured silk and gold thread. It rests on the head, frames the face and falls behind the shoulders, hanging down the back almost to the ground so that its white length shows on both sides of the body from the front. The face is fully uncovered.",
+   "reason": "The headwear slot held two items: the tarha plus a kerchief-wound cap underneath. The cap is dropped because it was hidden apart from a thin band and is not part of the signature. As written, the veil hung only down the back and could barely show on a front-facing figure, so it now frames the face and shows beside the body."
+  },
+  {
+   "country": "egypt",
+   "era": "industrial",
+   "field": "signature",
+   "newValue": "Men: the stiff, upright crimson tarboush with a black tassel, over a black stambouline buttoned to the collar. Women: the long white tarha veil over the head, framing the face and falling behind the shoulders almost to the ground, over a striped yelek robe.",
+   "reason": "The women's tell was the embroidered veil 'trailing down the back'. The embroidery is on the ends near the ground at the back, so it cannot be seen from the front. The new wording names only the parts of the veil that show from the front."
+  },
+  {
+   "country": "iraq",
+   "era": "industrial",
+   "field": "male.hair",
+   "newValue": "Short and close-cropped",
+   "reason": "'Hidden under the headcloth' describes no hairstyle and names a headwear item, so the model may draw the chfiyya into the hair layer. The hair layer needs a drawable style under the headwear layer."
+  },
+  {
+   "country": "iraq",
+   "era": "industrial",
+   "field": "female.outfit",
+   "newValue": "Ankle-length, long-sleeved dress of brocaded silk (gold on crimson or green) with a silver-plaque belt.",
+   "reason": "The outfit layer held an 'abaya draped from the crown of the head. The outfit sits below the head, hair and headwear layers, so the part over the head would be covered by the bald head and hair, and the result would break. A garment worn over the head belongs in headwear, so it moves there."
+  },
+  {
+   "country": "iraq",
+   "era": "industrial",
+   "field": "female.hair",
+   "newValue": "Long hair in braids falling down the back",
+   "reason": "'hidden beneath the kerchief' names a headwear item in the hair layer and gives no drawable style. It is trimmed to the hairstyle only."
+  },
+  {
+   "country": "iraq",
+   "era": "industrial",
+   "field": "female.headwear",
+   "newValue": "Black silk 'abaya worn over the head: draped from the crown of the head, over the hair, down to the ankles, framing the uncovered face and falling open at the front to show the dress.",
+   "reason": "The headwear slot held two items: a futa kerchief plus the top edge of an 'abaya that was in the outfit layer. Now it holds one item, the head-worn 'abaya, which carries the signature. The black futa under the black 'abaya was invisible, so dropping it loses nothing. The signature's 'abaya from crown to ankles, open over a brocade dress' stays valid."
+  },
+  {
+   "country": "greece",
+   "era": "industrial",
+   "field": "female.hair",
+   "newValue": "Long hair plaited into two braids and wound around the crown of the head",
+   "reason": "'wound around the base of the fesi' makes the hair layer depend on the headwear and names it, so the model may draw the fesi into the hair cut-out. The fesi layer still sits on top of the braids."
+  },
+  {
+   "country": "italy",
+   "era": "industrial",
+   "field": "male.headwear",
+   "newValue": "Wide-brimmed soft black felt hat with a low rounded crown and a broad, slightly drooping brim, set level and high enough that the eyes stay clearly visible (the hat worn with the tabarro in the Po Valley)",
+   "reason": "A broad, drooping brim over a full dark cloak is easily drawn pulled low over the eyes, the 'cloaked villain' look the avoid list bans. That breaks the rule that the eyes stay visible. A placement clause fixes it."
+  },
+  {
+   "country": "italy",
+   "era": "industrial",
+   "field": "male.accessory",
+   "newValue": "Long white silk scarf hanging loose around the neck, both ends falling straight down the front of the chest, in the style of Verdi",
+   "reason": "'under the open cloak' contradicts the stack, because the accessory layer is drawn on top of the outfit, which holds the cloak. It also names the cloak in the accessory prompt, so the model may draw the tabarro into the accessory layer."
+  },
+  {
+   "country": "china",
+   "era": "industrial",
+   "field": "male.accessory",
+   "newValue": "Hebao: a small embroidered silk purse on a knotted silk cord with a tassel, hanging at the right hip from just under the hem of the magua",
+   "reason": "The purse hung from a 'waist belt' that is on no layer; the outfit has no belt. Drawn alone, the accessory would add a belt on the top layer, laid over the magua."
+  },
+  {
+   "country": "china",
+   "era": "industrial",
+   "field": "signature",
+   "newValue": "Men: the black six-segment guapimao skullcap with a red knot button, worn with a short black magua jacket over a long changshan gown. Women: the broad-trimmed ao jacket with a black embroidered meile band across the forehead.",
+   "reason": "The men's tell relied on the queue, which hangs down the back and cannot be seen on a front-facing figure; the shaved front is under the skullcap. It is replaced with outfit items that show from the front."
+  },
+  {
+   "country": "japan",
+   "era": "industrial",
+   "field": "male.outfit",
+   "newValue": "Dark kimono under a knee-length black haori with small white generic family crests (never the chrysanthemum), over grey-and-black striped pleated hakama. White tabi socks and zori sandals. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').",
+   "reason": "'left over right' does not say whose left, so an image model often mirrors it. The mirrored version is the right-over-left dressing for the dead that the avoid list bans. The clause fixes the direction."
+  },
+  {
+   "country": "japan",
+   "era": "industrial",
+   "field": "female.outfit",
+   "newValue": "Jogakusei (girl student) look: a small-patterned kimono, e.g. with purple-and-white yagasuri arrow-feather stripes, under a maroon (ebicha) pleated hakama tied high above the waist. Tabi with zori or low boots. The kimono collar crosses left over right (the wearer's left panel on top, so from the front the neckline forms a lowercase 'y').",
+   "reason": "Same problem as the men's outfit: 'left over right' is easily mirrored into the banned right-over-left dressing for the dead. The clause fixes the direction."
+  },
+  {
+   "country": "japan",
+   "era": "industrial",
+   "field": "female.accessory",
+   "newValue": "Large silk ribbon bow tied at the back of the sokuhatsu, with wide loops that stand out on both sides of the head so the bow is visible from the front",
+   "reason": "The signature names the ribbon bow, but a bow tied at the back of the head cannot be seen on a front-facing figure. Keeping the historical position and making the loops show beside the head keeps the signature valid."
+  },
+  {
+   "country": "egypt",
+   "era": "modern",
+   "field": "female.hair",
+   "newValue": "Long hair, centre-parted and smoothed flat to the head, in one thick plait hanging down the back",
+   "reason": "The hair layer is drawn on its own, but it refers to another layer ('below the scarf') and describes the combined figure ('Only the parting and a little front hair show'). That invites the model to draw the mandil into the hair layer or to crop the hair. Keeping the hair flat lets the nape-tied mandil sit cleanly over it."
+  },
+  {
+   "country": "iraq",
+   "era": "modern",
+   "field": "male.hair",
+   "newValue": "Short, neatly combed and side-parted, lying close to the head",
+   "reason": "'mostly under the cap' names the headwear inside the hair layer, which risks the sidara being drawn into the hair cutout or the hair being left partly drawn. 'Close to the head' keeps the hair small enough to sit under the separate cap layer."
+  },
+  {
+   "country": "iraq",
+   "era": "modern",
+   "field": "female.outfit",
+   "newValue": "Tailored 1950s dress (fitted bodice, belted waist, full mid-calf skirt) in a jewel colour, with a black silk 'abaya hanging from the shoulders and falling open at the front to the ankles so the dress shows; low-heeled pumps.",
+   "reason": "The outfit had the 'abaya 'drawn over the head', which puts headwear in the outfit layer and repeats the headwear slot's item. The part over the head now belongs only to headwear, and the body of the 'abaya stays here, so the signature is kept. Footwear was also missing, though the outfit layer must include it."
+  },
+  {
+   "country": "iraq",
+   "era": "modern",
+   "field": "female.headwear",
+   "newValue": "The top of the black 'abaya drawn over the head, its edge resting on the crown and the cloth falling to the shoulders, leaving the face and front hair visible",
+   "reason": "Now that the outfit's 'abaya starts at the shoulders, the headwear has to cover the head itself and fall to the shoulders to meet it. 'Top edge ... resting on the crown' on its own would likely be drawn as a thin strip on top of the head."
+  },
+  {
+   "country": "iraq",
+   "era": "modern",
+   "field": "female.hair",
+   "newValue": "Short, softly permed curls, side-parted, with the front curls framing the forehead",
+   "reason": "'visible at the front beneath the edge of the 'abaya'' names the headwear inside the hair layer, which risks a black 'abaya being drawn into the hair cutout."
+  },
+  {
+   "country": "greece",
+   "era": "modern",
+   "field": "male.accessory",
+   "newValue": "Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body with the bag resting at the front of the hip",
+   "reason": "The tagari is Greece's only tell, but the entry never says where the bag sits. If it is drawn at the side or behind the arm on a front-facing figure, only the strap shows, and a plain strap reads like China's satchel. The stripes and fringe must be visible from the front."
+  },
+  {
+   "country": "greece",
+   "era": "modern",
+   "field": "female.accessory",
+   "newValue": "Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body with the bag resting at the front of the hip",
+   "reason": "Same issue as the man's: the signature bag's position is unspecified, so the stripes and fringe could be hidden behind the arm on a front-facing figure."
+  },
+  {
+   "country": "china",
+   "era": "modern",
+   "field": "female.outfit",
+   "newValue": "Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.",
+   "reason": "The signature is a Zhongshan suit with four patch pockets 'worn by men and women alike', but the woman's outfit never names the Zhongshan jacket or the four pockets. 'The same jacket' only works if the model also reads the man's text. The woman's layer must carry the signature on its own."
+  },
+  {
+   "country": "japan",
+   "era": "modern",
+   "field": "female.accessory",
+   "newValue": "The same silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck; no brand logo",
+   "reason": "'The same orange-foam headphones' depends on the man's text. A model drawing only the woman's accessory layer gets no headband description and no no-logo rule, and this item carries the signature."
+  },
+  {
+   "country": "japan",
+   "era": "modern",
+   "field": "signature",
+   "newValue": "Orange-foam headphones: men wear them on the head with a portable cassette player on the belt; women wear them resting around the neck",
+   "reason": "The signature relied on a cassette player, but the woman's accessory is only the headphones around her neck. For her the player exists on no layer, so the signature now names only items each gender actually has."
+  },
+  {
+   "country": "britain",
+   "era": "modern",
+   "field": "signature",
+   "newValue": "Tweed and knitwear. Men wear a herringbone tweed jacket over a Fair Isle pullover with a flat cap. Women wear a twinset and pearls with a tweed skirt and an under-the-chin headscarf.",
+   "reason": "Elbow patches sit on the back of the arm and cannot be seen on a front-facing standing figure, so they cannot carry an at-a-glance signature. They stay in the outfit description; only the signature line changes."
+  },
+  {
+   "country": "britain",
+   "era": "modern",
+   "field": "female.headwear",
+   "newValue": "Printed silk square headscarf folded into a triangle and knotted under the chin, covering the ears, its front edge set back from the forehead; face fully visible",
+   "reason": "'with a roll of curls showing at the forehead' puts hair into the headwear layer. Curls drawn into the scarf cutout would then sit on top of any leaked hair layer, for example Italy's bouffant under a British disguise. Setting the scarf back keeps the same placement without drawing the curls."
+  },
+  {
+   "country": "germany",
+   "era": "modern",
+   "field": "male.outfit",
+   "newValue": "Loose, slightly rumpled charcoal three-piece wool suit with wide trousers, a white shirt with a soft turn-down collar and a dark knitted tie. A long dark wool overcoat is worn open. Black leather lace-up shoes.",
+   "reason": "The outfit layer must include footwear, and this was the only male outfit with none. The mannequin would otherwise be drawn barefoot or given random shoes."
+  },
+  {
+   "country": "germany",
+   "era": "modern",
+   "field": "female.headwear",
+   "newValue": "Close-fitting felt cloche hat pulled down to just above the eyebrows, with a small brim so the eyes and face stay clear",
+   "reason": "'Pulled down to the eyebrows' plus a brim puts the brim at or below brow level, and image models often draw cloches covering the eyes. Headwear must always leave the eyes visible."
+  }
+ ],
+ "issues": [
+  {
+   "where": "§2 Why green and magenta; Block A MANNEQUIN RULE; §3 setup; §7 Step 1; Checklist line 2",
+   "problem": "The whole method assumes ChatGPT keeps the attached mannequin 'exactly as it is', so each piece comes out 'already in the right place'. GPT-4o and gpt-image never keep pixels. Every reply repaints the whole picture, so the mannequin comes back moved or resized by a few pixels, with new shading and slightly different magenta and green. If Saleh asks ChatGPT to fix a detail in its last image, it repaints everything again and the drift adds up. Nothing in the brief tells him not to do this. The checklist also asks him to confirm the mannequin is 'untouched', which he can't judge by eye. 6.1 asks for exact pixel landmarks (y=260 and y=424), which ChatGPT can't measure. If the base figure comes out too big, every later tall hat (qalansuwa, tartur, top hat) runs out of headroom.",
+   "fix": "(1) §2: replace the last two sentences with: \"Claude's script then lines each image up with the mannequin (ChatGPT always redraws the whole picture, so everything shifts a little), removes the green and magenta, and leaves just the piece in the right place. That's why characters must never use bright green, magenta, pink or purple.\" (2) Add §3 step 6: \"Never ask ChatGPT to fix or tweak an image it made. If something is wrong, press Regenerate, or send the same prompt again with the original mannequin attached. Every edit redraws the whole picture, and the figure drifts further each time.\" (3) §7, after Step 1's 'Send to Claude', add: \"Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre.\" (4) Checklist line 2 becomes: \"The background is one flat green (no checkerboard, floor or shadow), and the magenta figure is still there at the same size and in the same place as in the mannequin file. Open both and flip between them: nothing should jump.\""
+  },
+  {
+   "where": "§3 step 3; intro bullet for mannequin_m/f ('Attach one in every later request')",
+   "problem": "Step 3 says to upload the guide, the mannequins and the approved pilot images to the Project files, and the prompts then say 'Attached: ...'. ChatGPT's image tool does not reliably use pictures stored in Project files. It works from images attached to the current message. Saleh may think uploading once is enough, and get pieces drawn with no mannequin to line up to. Putting the finished Victorian pieces into Project files as a 'style' reference also invites ChatGPT to copy top hats and Paisley into other eras. The intro bullet also clashes with 6.2, which attaches a base figure, and §15, which attaches the guide.",
+   "fix": "Replace step 3 with: \"3. Keep the figure guide, and later the two mannequins, in a folder on your PC. In every message, use the paperclip to attach exactly the file(s) named on the prompt's 'Attached:' line, even if they are also in the Project files. ChatGPT's drawing tool only reliably uses images attached to the message. Don't add finished pieces to the Project files, because ChatGPT copies details from them into other looks.\" Change the intro bullet to: \"`mannequin_m.png` and `mannequin_f.png`: Claude makes these from your approved Batch 1 figures. Attach whatever each prompt's 'Attached:' line names.\""
+  },
+  {
+   "where": "§3 step 5; §6 intro; 'Start a new chat for this era' line in §9 to §13",
+   "problem": "Pasting a PAIR block on its own into a Project whose instructions say 'You are drawing characters' usually makes ChatGPT draw the whole dressed character straight away. That wastes an image and pushes later layers toward a full costume. One chat per era also means 59 to 69 images across 8 countries in a single chat. That is far past the point where GPT-4o drifts, and it starts carrying items from the previous country into the next one (for example Han robes turning up in Kofun Japan).",
+   "fix": "§3 step 5: \"Start a new chat for each PAIR block (each country and era). Long chats drift in style and mix up looks.\" §6 intro: \"For each country and era, start a NEW chat in the Project. Your first message is its PAIR block followed by this line: 'Read this and reply only READY. Do not draw anything yet.' Then use prompts 6.4 to 6.8, one message per file in its list.\" In §9 to §13 replace 'Start a new chat for this era.' with 'Start a new chat for each country.'"
+  },
+  {
+   "where": "Block A CANVAS bullet ('Use muted greens and purples instead'); PAIR lines 288, 300, 395, 400, 963 (purple); 700, 712 (pink); 1098 (magenta/lime); 342, 348, 350 (green jade, part of a MUST READ); 941 (green jade bangle); 426 (emerald); 451 (pistachio); 295 (sea-green); 363, 370 (green checks); 1294 (sakura-pink)",
+   "problem": "The script has to remove the mannequin's darker-magenta face marks and ChatGPT's own shading on the magenta. That means dark magenta must be keyed too, which puts any purple, violet or strong pink in the character at risk of being cut out. Green items get eaten or turned grey by the green-spill clean-up. Block A actively tells ChatGPT to use purples, and several looks demand these colours. The Dolce Vita dress is literally '(magenta, turquoise, lime)'. The Kofun MUST READ is a 'big green' magatama necklace.",
+   "fix": "Block A: replace the bullet with \"- Never use bright green, lime, magenta, pink, purple or violet anywhere in the character, not even muted. Where a look asks for purple, paint deep wine red. Where it asks for pink or rose, paint dusty coral or salmon. Where it asks for green, paint dark olive, moss or bottle green. Paint jade as a dark, dull grey-green stone with a strong dark outline.\" Line 1098: '(magenta, turquoise, lime)' → '(burnt orange, ochre, teal-blue and black)'. Lines 288, 300, 395, 400, 963: 'reddish-purple', 'purple', 'red-purple' → 'deep wine-red'. Line 700: 'rose-pink' → 'dusty-coral'; line 712: 'pink pitocco' → 'dusty-coral pitocco'. Line 342: 'Necklace of dark, dull grey-green jade magatama'; line 348: 'dark grey-green magatama'; line 350: 'big dark-green comma-shaped magatama'. Line 941: 'Thick pale white-jade (mutton-fat jade) bangle'. Line 426: 'emerald' → 'deep bottle green'; line 451: 'pistachio' → 'olive'; line 295: 'sea-green' → 'slate blue'; lines 363 and 370: 'green' → 'dark olive green'; line 1294: 'sakura-pink' → 'pale coral'."
+  },
+  {
+   "where": "Block A (no opacity rule); lines 453 (sheer khimar), 634 (gauze veil), 708 (sheer trinzale), 838 (sheer chemise), 840 (muslin tarha), 1148 (sheer stockings); Future China and Britain ('sheer', 'translucent')",
+   "problem": "Anything drawn see-through over the mannequin comes out tinted pink, and over the background it comes out tinted green. The key can't cleanly remove those pixels, so you get pink stockings, pink veils and holes in the fabric. Several looks ask for sheer fabric.",
+   "fix": "Add to Block A CANVAS: \"- Paint every fabric fully opaque, even veils, gauze, muslin, chiffon and stockings. Magenta, green or skin must never show through anything. Where I say 'sheer', paint a thin, light, solid fabric.\" Line 1148: 'sheer stockings' → 'bare legs (no stockings drawn: leave the legs magenta)'. Line 708: delete 'and a sheer little cap (trinzale) at the back' (it is also a cap in the HAIR layer). Line 453: 'Light, sheer khimar veil' → 'Light, thin khimar veil'. Future China: 'sheer layered panels' → 'layered opaque panels', 'translucent layers like xuan paper pages' → 'layered pale panels like xuan paper pages', 'Jade-like translucent fastenings' → 'dark jade-like stone fastenings'. Future Britain: 'Pleated translucent collar rings' → 'Pleated opaque white collar rings, kept below the chin,'. Add to the checklist: 'No pink or green tint inside white or pale fabric.'"
+  },
+  {
+   "where": "§4 stack order vs lines 426/428 (Mamluk izar), 863/865 (Ottoman Iraq 'abaya), 1048/1050 (Kingdom of Iraq 'abaya); 6.4; line 173 (tall collar points)",
+   "problem": "These three looks put a garment that covers the head in the OUTFIT line ('draped from the head/crown', 'drawn over the head'). The outfit sits under the head, hair and headwear, and 6.4 says 'the head stays magenta and uncovered'. The head part of the garment is therefore either not drawn or hidden, and the hair is drawn on top of it. The headwear lines describe only the top of the hood or its edge on the crown, so the sides of the head (ears and curls) show between a cap-like strip and a cloak that starts at the shoulders. Two MUST READs ('izar hooded over the head', ''abaya over the head') break. The same applies to any collar drawn above the chin, such as the 1843 collar points: the head layer hides it.",
+   "fix": "Line 426: 'a large plain WHITE linen izar is draped from the head down to the ankles and hangs open' → 'a large plain WHITE linen izar hangs from the shoulders to the ankles, open'. Line 428: 'Headwear: The top of the white izar drawn over the head as a soft hood that frames the fully visible face and falls down both sides of the neck onto the shoulders, where it meets the izar. No face veil.' Line 863: 'draped from the crown of the head to the ankles' → 'hanging from the shoulders to the ankles'. Line 865: 'Headwear: Black silk head-kerchief (futa) tied over the hair, with the top of the black 'abaya drawn over it from the crown down both sides of the head and neck to the shoulders. The face is uncovered.' Line 1048: 'drawn over the head and falling open at the front to the ankles' → 'hanging from the shoulders to the ankles, open at the front'. Line 1050: 'Headwear: The top of the black 'abaya drawn over the head, resting on the crown and falling down both sides of the head and neck to the shoulders, leaving the face and front hair visible'. In 6.4, after 'The head stays magenta and uncovered', add: ': keep every collar and garment below the chin line, because anything drawn over the head is hidden by the head layer.'"
+  },
+  {
+   "where": "6.5 Hair; hair lines 420, 427, 445, 452, 520, 545, 595, 626, 651, 658, 676, 839, 864, 1042",
+   "problem": "Many hair lines say the hair is 'hidden under' a turban, cap, veil or kerchief. When the hair is drawn alone, ChatGPT either draws the turban or veil too, which breaks the layer rule and wastes the image, or it draws long loose hair and braids. The hair layer sits above the outfit, so braids that hang below the headwear's reach (for example 658 and 864, 'two braids, hidden beneath the head-shawl') end up on top of the outfit, where they should be hidden.",
+   "fix": "Replace 6.5 with: \"Attached: mannequin_[m / f].png. From the PAIR block, draw ONLY the [man's / woman's] HAIR on the mannequin's bald head, in medium brown (unless the PAIR block says it is a wig). Leave any shaved parts of the scalp magenta. Draw the hair as it looks with any hat or veil taken off. If the PAIR block says the hair is hidden under headwear, draw it short or pinned up close to the head (a neat low bun, or braids pinned up), never hanging below the jaw, and do not draw the headwear. Hair must never cover the eyes, nose or mouth. Draw nothing else.\""
+  },
+  {
+   "where": "§1 stack order / §4; 6.5 ('fall over the shoulders and back'); 6.7; 6.8; lines 422, 448, 840, 843",
+   "problem": "Hair, headwear and accessory are stacked above the outfit. Any part that belongs behind the body therefore gets pasted in front of the outfit wherever the outfit is wider than the bare mannequin (big sleeves, cloaks, full skirts, high collars): hair behind the neck and shoulders, a turban tail 'behind one shoulder', a taylasan 'hanging down the back', a tarha veil 'down the back almost to the ground'. This is the 'hair over the shawl' problem. The Ottoman Egypt women's MUST READ is 'tarha veil trailing down the back', which can't be seen at a glance on a figure facing forward.",
+   "fix": "Add to §1 after the stack bullet: \"Claude's script moves any hair drawn on the green background below the chin (hair hanging behind the neck and shoulders) behind the body, so it never covers a collar, hood or shawl.\" Add to 6.7 and 6.8: \"Draw only what is seen in front of the body. Leave out anything that would hang down the back.\" Line 422: '...hangs behind one shoulder' → '...hangs down in front of one shoulder'. Line 448: 'Taylasan: a dark shawl draped over both shoulders, its ends falling down the front of the chest, the mark of a scholar'. Line 840: 'It rests on the head and falls over both shoulders and down the sides of the body to below the knee, and the face is fully uncovered.' Line 843: 'Women: the long white embroidered tarha veil falling from the head over both shoulders, over a striped yelek robe.'"
+  },
+  {
+   "where": "6.2, 6.3, §8 Batch 2, §4 Body/Head rows",
+   "problem": "6.2 has ChatGPT redraw the whole base figure to change the skin tone. The bodies for tones 2 to 5 will therefore have slightly different outlines and poses from the mannequin that every outfit is fitted to, so body parts show at sleeve and hem edges. 6.3 attaches two images (mannequin plus base figure) and asks ChatGPT to copy skin colour from one onto the other. ChatGPT often blends or redraws both, and it doesn't match skin colour between images. The result is a visible colour seam where head meets neck, and many of the 30 heads get wasted.",
+   "fix": "§8 bullets: \"- **8 base figures** with prompt 6.2: `base_[m/f]_skin[2-5]_facea.png`. Claude keeps only the head from these. Claude makes the bodies for skins 2 to 5 by recolouring your approved skin-1 body, so they match the mannequin exactly. - **30 heads** with prompt 6.3: `head_[m/f]_skin[1-5]_face[b/c/d].png`. Each image shows the whole figure; Claude cuts the head out and matches its colour to the body.\" Replace 6.3 with: \"Attached: my approved base figure base_[m / f]_skin[N]_facea.png. Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [b: a different young adult in their 20s / c: middle-aged, 40s to 50s, a few lines / d: elderly, 60s and up, wrinkles, lighter eyebrows]. Still bald, ears visible, neutral expression, looking at the viewer. Do not move, turn or resize the head.\" §4 Body 'How many': '2 genders x 5 skin tones (tones 2 to 5 recoloured from tone 1 by Claude)'."
+  },
+  {
+   "where": "§14 Batch 8 intro and all eight 'Future shaped by' PAIR blocks",
+   "problem": "(a) Each culture block says 'Take the neutral Future outfits (same practical cut, same fit)', but 6.4 attaches only the mannequin. In a new chat ChatGPT has never seen the neutral outfit, so the cut won't match. (b) The motif lists ask for things that 6.4 and Block A forbid in an outfit: headwear (Egypt tarboush cap, Iraq sidara crown, Greece Palaiologan hat, Italy lenza band, Germany Barett cap), face items (Italy 'visor lenses', Germany 'visor or spectacle elements'), accessories (Greece tagari bags, Britain torc neck ring), glowing or light-emitting parts ('glowing trim', 'LED', 'light strip', against Block A's 'no glow', which also makes halos the key can't remove), robot parts (Japan 'karakuri mechanical joints', against the neutral block's 'robot parts'), letters (Germany 'letterforms', Iraq 'pseudo-script'), and collars or hoods above the chin (Iraq 'high hood-collar', Germany 'collars framing the face') that the head layer hides. (c) The intro says 'Use prompts 6.4 and 6.5', but the culture Futures have no hair.",
+   "fix": "Intro: \"...Folder: `Raw/future/`. Make the neutral Future first with prompts 6.4 and 6.5. Make each culture Future from the approved neutral outfit with prompt 6.9. Culture Futures are outfits only and reuse the neutral hair.\" Add 6.9: \"Attached: my approved outfit_[m / f]_future_neutral.png. Keep the magenta mannequin, the green background and the outfit's cut, fit and outline exactly. Restyle ONLY the [man's / woman's] outfit's fabric, colours, seams, trims and patterns with the motifs in the PAIR block. Clothing and shoes only: no hat, cap, headband, hood, glasses, visor, jewellery, neck ring or bag, nothing above the chin, nothing that glows, nothing see-through, no letters.\" Text edits: Egypt, delete 'the tarboush's truncated cone as a sleek crimson cap with a single tassel;'. Iraq, 'the Abbasid tall-cap silhouette and taylasan shoulder shawl as a high hood-collar' → 'the taylasan shoulder shawl as a draped shoulder panel'; delete 'the sidara's folded boat-shaped crown'; 'tiraz armbands in pseudo-script' → 'tiraz armbands of abstract embroidered bands (no letters)'. Greece, 'glowing trim lines' → 'fine metallic trim lines'; replace the last sentence with 'Striped hand-woven panels echoing the tagari.' Italy, 'iridescent' → 'sheen'; delete 'with dark visor lenses'; 'A thin lenza forehead band reimagined as a light strip, with Vitruvian' → 'Vitruvian'. China, 'glowing circuit-trace trim' → 'fine metallic circuit-trace trim'. Japan, 'laser-cut or LED line work' → 'laser-cut or fine stitched line work'; 'Visible karakuri-style mechanical joints' → 'Karakuri-inspired hinged seam details (fabric, not machinery)'. Britain, 'An open neck ring inspired by the torc.' → 'A torc-inspired twisted collar edge sewn into the neckline.' Germany, 'round lens-like visor or spectacle elements' → 'round lens-like buttons and fastenings'; delete 'A wide, flat, soft Barett-style cap.'; 'collars framing the face' → 'collars kept below the chin'; 'Movable-type grid texture (letterforms used as pattern, never as slogans)' → 'A fine movable-type grid texture (no letters)'."
+  },
+  {
+   "where": "§4 Accessory row; 6.8; lines 317, 835, 910, 966, 1120 (depend on another layer); 292, 298, 529, 735, 779 (too small to see); line 712 MUST READ (lenza)",
+   "problem": "A liar's leak can put any accessory on any other look, and the accessory is always the top layer. Some accessories only exist relative to another layer's item: a brush 'tucked into the side of the cap' (when drawn alone ChatGPT will add the cap, and when leaked the brush floats beside the head), a scarf 'under the open cloak' (impossible when the accessory is on top), a chain 'from a coat button to the breast pocket', a pen 'clipped in the upper-left chest pocket', a bow 'tied at the back of the sokuhatsu' (invisible from the front and needs that hairstyle). Others are a few pixels at thumbnail size: a signet ring, a single pearl earring, small earrings. If they leak, nobody can see them. The Sforza women's MUST READ is a 'fine cord with a small brow jewel', which is also invisible at thumbnail size.",
+   "fix": "§4 Accessory row, 'What it contains': \"One worn item that makes sense on any outfit and hairstyle and reads at thumbnail size: a necklace or collar, a large pendant, a belt, sash or girdle and what hangs from it, a strap bag, a shawl or scarf, glasses, large earrings.\" 'Must NOT contain': \"Anything held in the hands; anything tucked into, clipped to, tied to or hidden under another layer's item (a cap, a pocket, a hairstyle, a cloak); rings, single or small earrings, small pins or badges.\" Line 910: 'Long white silk scarf hung around the neck, both ends falling straight down the front over the cloak, in the style of Verdi'. Line 835: 'Gold watch-chain hanging in a clear loop across the front of the chest'. Line 316: append 'A slim bamboo writing brush (zanbi) is tucked upright into its side.' Line 317 → 'Accessory: A small embroidered silk pouch hanging from the sash on a cord'. Line 964: append 'with a large deep-red silk ribbon bow tied high at the back, its loops standing out on both sides of the head in front view'. Line 966, and lines 292, 298, 529, 735, 779, 1120: replace each with a larger item from costume_research.json that meets the new row. Line 709: 'Lenza: a dark cord worn straight across the forehead, with a clearly visible jewel (a pearl or dark-red stone about the size of an eye) at the centre of the brow'. Line 712: 'Lenza: a dark cord with a large brow jewel...'."
+  },
+  {
+   "where": "6.7 Headwear",
+   "problem": "Headwear is drawn on a bald mannequin 'the way it would sit over hair', but ChatGPT can't see the hair. It sizes hats tight to the bald scalp. Once stacked, full or curled hair, buns, bouffants and pompadours poke out around or through the hat, and the pilot's bonnet over ringlets plus a bun and the top hat over full curled hair are both affected. Leaks make this worse, because any headwear can land on any hairstyle.",
+   "fix": "Replace 6.7 with: \"Attached: mannequin_[m / f].png. From the PAIR block, draw ONLY the [man's / woman's] HEADWEAR on the mannequin's head, sized to sit over a full head of hair: a little larger all round than the bald head, never tight to the scalp. Headwear that covers the head (a hood, veil or head-shawl) continues down the sides of the neck onto the shoulders. The eyes, nose and mouth stay fully visible. Draw only what is seen in front of the body, and leave out anything that would hang down the back. Draw nothing else.\""
+  },
+  {
+   "where": "Block A ('No text, letters...'); lines 444 and 451 (tiraz), 453 ('isaba pseudo-script); Abbasid MUST READ line 456",
+   "problem": "Block A bans all text and letters, but the Abbasid looks require 'Arabic-style pseudo-script' bands, and the men's MUST READ depends on the tiraz armbands. ChatGPT will either leave the bands out or write real Arabic, which can come out as real religious phrases. That is a sensitivity risk, and Block A already forbids it.",
+   "fix": "Block A bullet: \"- No text, letters, numbers, logos, watermarks or frames anywhere. Bands the PAIR block calls 'tiraz' or 'script' are drawn as abstract embroidered patterns, never real or fake letters.\" Line 444: 'Broad bands of gold embroidery (tiraz) circle both upper sleeves, patterned with abstract strokes and knots, not letters.' Line 451: 'with gold-embroidered tiraz bands (abstract pattern, no letters) at the upper arms'. Line 453: 'embroidered with a line of small abstract gold patterns (no letters)'."
+  },
+  {
+   "where": "Line 225, Egypt ancient MUST READ",
+   "problem": "The MUST READ includes '(kohl-winged eyes on the face layer)'. Makeup has no layer: heads are shared across every culture, and 6.3 draws neutral faces. The signature points at something that will never exist, and it could lead Claude or Saleh to ask for kohl on the shared heads, which would then show on every culture.",
+   "fix": "Replace line 225 with: \"MUST READ AT A GLANCE: The broad beaded wesekh collar worn over crisp white linen, with a heavy black wig\""
+  },
+  {
+   "where": "6.1 Base figure clothing; §4 Body row",
+   "problem": "The body layer sits under every outfit, and any skin the outfit leaves uncovered is keyed to show the body. The women's base wears a grey sleeveless top that covers the upper chest. Looks that leave the upper chest bare (Egypt ancient sheath on 'two broad shoulder straps', Germania peplos) will show a modern grey undershirt, a false tell whenever the covering accessory is swapped out by a leak. Knee-length grey shorts can also peek below knee-length chitons and tunics.",
+   "fix": "6.1: 'Clothing: only [plain light-grey fitted shorts ending mid-thigh / a plain light-grey strapless sports bandeau covering only the bust, and plain light-grey fitted shorts ending mid-thigh]. Bare feet.' §4 Body row: '...plain light-grey undergarment (bandeau and mid-thigh shorts)'."
+  },
+  {
+   "where": "Block A HAIR COLOUR; hair lines 346, 396, 527, 708, 726, 733, 751, 758, 808, 839, 939, 1124",
+   "problem": "Claude's script recolours the hair layer. Many hairstyles include ornaments in that layer: a comb, a hair-band, flower pins, a ribbon, gold hairpins, a white cord, a gold hairnet, gold safa ornaments, a silver pin, a black clip or net. Gold is close to brown in hue, so gold ornaments get turned grey or black along with the hair.",
+   "fix": "Add to Block A HAIR COLOUR: \"- Anything in the hair that is not hair (ties, cords, ribbons, pins, combs, nets) must be small and a colour clearly different from brown: white, silver, red or blue. Draw gold ornaments bright and yellow with a dark outline.\" Claude step: before recolouring any of these hair files, mask the ornaments (lines 346, 396, 527, 708, 726, 733, 751, 758, 808, 839, 939, 1124) so only the hair is recoloured."
+  },
+  {
+   "where": "§7 Batch 1 pilot; §9, §10 and Totals counts",
+   "problem": "The pilot (Victorian Britain only) tests none of the risky cases: a hood over the head, hair hidden under a veil, a green item, long hair hanging behind the shoulders. Failures in those would only show up after hundreds of images.",
+   "fix": "Add §7 Step 3: \"**Step 3 (stress test).** In a new chat for each PAIR: paste the Egypt medieval PAIR block (§10) and make `outfit_f_egypt_medieval.png`, `hair_f_egypt_medieval.png`, `headwear_f_egypt_medieval.png`; paste the Japan ancient PAIR block (§9) and make `accessory_m_japan_ancient.png`; paste the Egypt ancient PAIR block (§9) and make `hair_f_egypt_ancient.png`. These count toward their era batches, so skip them there.\" Headings and Totals: Batch 1 = 16, Batch 3 = 57, Batch 4 = 66 (total stays 385)."
+  },
+  {
+   "where": "§15 Batch 9 premade",
+   "problem": "(a) Block A, which applies to every chat in the Project, says 'no likeness of any real person'. The premade characters may be real people (Hatshepsut, Ada Lovelace), so ChatGPT will refuse them or give them different faces. (b) The expression prompt edits the approved neutral image, and ChatGPT redraws the whole figure, so clothes and position change between expressions and the character jumps when the expression changes. (c) Premades are drawn from the rough guide rather than the approved figure, so they won't stand exactly where generated travellers do.",
+   "fix": "Replace the first premade prompt's attachment line with 'Attached: my approved base_[m / f]_skin[N]_facea.png.' and its second sentence with 'Dress this exact figure as a complete PREMADE CHARACTER, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories: [description].' After the expression prompt add: \"Claude takes only the face from each expression image and pastes it onto your approved neutral image. Don't reject an expression because its clothes changed. Reject it only if the head moved or changed shape.\" Add: \"If premades are real historical people, make them in a chat OUTSIDE the Time Sorter Project, paste Block A there without the words 'and no likeness of any real person', and add: 'A respectful portrait based on period descriptions, not a photo likeness.'\""
+  },
+  {
+   "where": "§5 File names vs §14 Future file lists",
+   "problem": "§5's pattern is layer_gender_country_era (for example `outfit_f_china_medieval.png`), and 'neutral' is not a listed country. The Future lists flip the order (`outfit_m_future_egypt.png`, `hair_f_future_neutral.png`). If Saleh follows §5 he will produce `outfit_m_egypt_future.png`, which the script won't find. Heads and premades are also missing from §5.",
+   "fix": "Add to §5: \"- The Future flips the order and uses `neutral` or the country that shaped it: `outfit_m_future_neutral.png`, `hair_f_future_neutral.png`, `outfit_f_future_egypt.png`. - Bases and heads: `base_[m/f]_skin[1-5]_facea.png`, `head_[m/f]_skin[1-5]_face[b/c/d].png`. - Premades: `premade_[character id]_[expression].png`.\""
+  },
+  {
+   "where": "Checklist line 3 ('Nothing crosses the guide's blue safe-area box'); Block A CANVAS",
+   "problem": "After Batch 1, every image is drawn on the mannequin, which has no blue box, so Saleh can't check this line and ChatGPT can't follow 'Keep everything inside the guide's blue safe-area box'. Separately, ChatGPT sometimes paints a fake grey-and-white checkerboard 'transparency' pattern when asked to isolate an item, and nothing forbids it.",
+   "fix": "Checklist line 3: \"Nothing touches or runs off any edge of the image: there is green on all four sides, including above the tallest hat.\" Add to Block A CANVAS: \"- Never draw a checkerboard or 'transparent' pattern. The background is always flat green.\""
+  },
+  {
+   "where": "§4 Outfit row; lines 370 and 1141",
+   "problem": "The outfit layer is meant to hold clothing and footwear only, with no jewellery, but the §4 'must NOT contain' column doesn't say so. Two outfit lines add jewellery or badges: an enamelled La Tene brooch (the woman's torc is already her accessory), and a 'company badge (shasho) with a generic abstract mark'. The badge also clashes with Block A's 'no logos, insignia', so ChatGPT will either draw a logo or leave out part of the prompt.",
+   "fix": "§4 Outfit 'must NOT contain': 'Face, hair, headwear, the accessory, jewellery, badges (plain buttons and clasps are fine)'. Line 370: 'fastened at the chest with a bronze brooch enamelled in red with swirling La Tene curves' → 'fastened at the chest with a plain bronze pin'. Line 1141: delete ', plus a small round enamel company badge (shasho) with a generic abstract mark on the left lapel'."
+  },
+  {
+   "where": "§5 File names / §3 setup",
+   "problem": "Nothing says how to save the images. A screenshot, or a save from the phone app, can produce a JPG or a different size. JPG compression blurs colour at the edges, so the green and magenta borders fringe and the cut-outs get halos.",
+   "fix": "Add to §5: \"Save with ChatGPT's own download button on a computer, so the file is a 1024 x 1536 PNG. Never screenshot, and never save from the phone app, because JPG files blur the green and magenta edges Claude removes.\""
+  }
+ ]
+}

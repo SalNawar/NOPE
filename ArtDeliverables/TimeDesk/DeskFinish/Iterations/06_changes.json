@@ -1,0 +1,47 @@
+[
+  {
+    "path": "HybridOffice/Booth/Finish_PC",
+    "rotY": -56
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Keyboard",
+    "posX": -1.2,
+    "posZ": -0.59,
+    "rotY": -44
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Mat",
+    "scaleX": 0.76
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Tray",
+    "posX": 1.27,
+    "posZ": -0.3,
+    "rotY": 12
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Stamp",
+    "posX": 1.34,
+    "posZ": -0.68
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Inkpad",
+    "posX": 1.09,
+    "posZ": -0.7
+  },
+  {
+    "path": "OfficeRoot/CRTMonitor",
+    "posX": -1.4078000670385769,
+    "posY": 1.548823064830582,
+    "posZ": -0.40916998070847765
+  },
+  {
+    "path": "Cameras/MonitorVCam",
+    "posX": -0.9316377942233741,
+    "posY": 1.62954346338742,
+    "posZ": -0.700345489121379,
+    "rotX": 8,
+    "rotY": -56,
+    "rotZ": 0
+  }
+]

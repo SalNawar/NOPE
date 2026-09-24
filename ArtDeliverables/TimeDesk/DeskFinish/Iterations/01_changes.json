@@ -1,0 +1,16 @@
+[
+  {
+    "path": "HybridOffice/Booth/Finish_Mouse",
+    "posX": 0.85,
+    "posY": 1.07,
+    "posZ": -0.8,
+    "rotY": 0,
+    "scaleX": 0.75,
+    "scaleY": 0.75,
+    "scaleZ": 0.75
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Lamp",
+    "rotY": 270
+  }
+]

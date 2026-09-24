@@ -1,0 +1,65 @@
+00:14.906  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+00:14.906  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+Info: Applied modifier was not first, result may not be as expected
+Info: Applied modifier was not first, result may not be as expected
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Desk.fbx'
+export finished in 0.0088 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_PC.fbx'
+export finished in 0.0335 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Keyboard.fbx'
+export finished in 0.0173 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Till.fbx'
+export finished in 0.0126 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Tray.fbx'
+export finished in 0.0060 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Intercom.fbx'
+export finished in 0.0095 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Mouse.fbx'
+export finished in 0.0077 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Inkpad.fbx'
+export finished in 0.0053 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Lamp.fbx'
+export finished in 0.0117 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_PencilRack.fbx'
+export finished in 0.0089 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Board.fbx'
+export finished in 0.0082 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_Mat.fbx'
+export finished in 0.0046 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_DeskRail.fbx'
+export finished in 0.0054 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_BoothFrame.fbx'
+export finished in 0.0138 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_FormSorter.fbx'
+export finished in 0.0108 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_PaperBundle.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_ComputerMedia.fbx'
+export finished in 0.0100 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_LeftEphemera.fbx'
+export finished in 0.0078 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\DeskFinish\\Exports\\Finish_RightEphemera.fbx'
+export finished in 0.0076 sec.
+Info: Saved as "DeskFinish.blend"
+
+Blender quit

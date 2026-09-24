@@ -1,0 +1,51 @@
+# Current Unity art state — 24 September 2026
+
+## Latest revision: PC corrections and the other office objects
+
+The PC and keyboard now face the clerk with a shared yaw of approximately 31.61
+degrees. The casings use a neutral grey/ivory palette, with orange limited to controls.
+The monitor click proxy and zoom camera follow the screen. Lighting remains realtime,
+with a reduced yellow-green cast. The user requested the same object pass throughout
+the office: 43 additional Blender-authored models and prefabs are installed under
+`Assets/Art/Office/Hybrid/BlenderOffice`. See `BlenderOffice/README.md` for the complete
+asset list and `BlenderPC/README.md` for the PC source. This is an installed revision;
+the user performs the in-game visual review.
+
+The art is saved directly in `Assets/Scenes/OfficeScene.unity`, under `HybridOffice`. Unity is left on the Game tab. No Play-mode run or tests were performed by Codex; the user reviews the rendered scene.
+
+## Scene layers
+
+- **Exterior:** separate sky and far-city images; five 3D megablocks using three distinct stepped silhouettes, wrapped facade windows, service spines and rooftop equipment. Twelve independently moving 3D vehicles remain on three lanes.
+- **Hall:** physical floor, three window walls, piers, low walls, ceiling beams and light housings. Four ceiling banners have shaped cloth and blank faces. The departures board remains blank for runtime content. The portal has a shaped ring and a separate animated opening material.
+- **Exhibits:** thirteen named exhibits listed in `EXHIBIT_INVENTORY.md`. The Wright Flyer, printing press, Rocket and three sculptures use actual 3D geometry. Six paintings use dimensional frames and canvas-only image mapping. Both Voyager covers are physical discs. Displays retain their plinths and suspension, selected frames lean, and paperwork remains scattered around the open central approach.
+- **Booth:** rounded CRT, keyboard, till, NEXT housing, digital clock, calendar, stability device, deep wooden desk, short partitions, scanner tray, intercom and stamp. The newspaper is folded at the side with an obscure image and no readable baked text. No cup, identifiable queue or traveller art was added.
+
+## Rendering and gameplay connections
+
+The office uses perspective and forward renderer index 1. Renderer index 0 remains the pipeline default for the other scenes. The shared pipeline uses 4x MSAA. The office renderer has ambient occlusion, and the scene has editable real-time lighting and shadows. No lightmaps were baked.
+
+The original monitor and ready-sign Clickable objects retain their gameplay references; their old sprites are disabled and their colliders are positioned at the new props. Existing day, credits and stability TMP objects remain linked to world state. The stability device is raised above the monitor.
+
+The only added runtime MonoBehaviour is `OfficeTrafficVehicle`, which moves its own vehicle between serialized lane endpoints. `TimeSorter/OfficePortal` is the opening's animated shader. There are no automatic scene installers.
+
+Still requiring gameplay wiring: clock progression, shift-driven lighting progression, history-dependent banner/departures content and art variants. The clock currently shows a separate `08:00` TMP label. The old stability sprite is disabled; the numerical stability display remains live, while the new mesh indicator does not yet change colour with stability.
+
+## Source assets and cleanup
+
+The 24 September foreground correction is now installed from `Assets/Art/Office/DeskFinish`. See `ArtDeliverables/TimeDesk/DeskFinish/README.md` for the current desk models, texture briefs and installation details. The older desk instances listed below have been superseded; the hall and exterior still use the Hybrid assets.
+
+Active assets are in `Assets/Art/Office/Hybrid`. Superseded building instances and the three machinery cutouts were removed from the scene. Their source artwork remains available in the deliverables. Pre-pass backups are in `BeforeUnityIntegration`, `BeforeSurfaceRefinement` and `BeforeHallRefinement`.
+
+`mesh_authoring.py`, `refine_booth_meshes.py` and `refine_environment_meshes.py` are offline mesh-authoring sources outside Assets. They are not Unity editor callbacks or runtime code. The Unity scene is authoritative for final placements; the original `Generated/scene_layout.json` is an earlier authoring proposal.
+
+## Generated textures and prompts
+
+The built-in image-generation tool produced these project-bound textures. Mesh geometry and the simple animated portal shader were authored directly.
+
+- `Assets/Art/Office/Hybrid/Images/desk_wood_albedo.png`: orthographic caramel wood albedo, broad horizontal grain, sparse scratches and muted brown values; no objects, text, perspective or baked light.
+- `Assets/Art/Office/Hybrid/Images/mona_lisa-flat-v2.png`: edit of the existing framed painting with the supplied ReStory image as style reference; simplified colour regions and wear, recognizable pose, chipped frame, blank plaque and transparent surroundings.
+- `Assets/Art/Office/Hybrid/Images/newspaper_print.png`: orthographic cream paper print texture, blank masthead, low-contrast obscure architecture image, short grey bars and column rules; no words, numbers, logos, perspective or cast shadows.
+
+Identity references are linked in `EXHIBIT_INVENTORY.md`. The three sculpture meshes
+are simplified scan adaptations with source/license details in `BlenderOffice/SOURCES.md`;
+the historical machine models are authored interpretations.

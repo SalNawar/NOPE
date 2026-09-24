@@ -1,0 +1,29 @@
+[
+  {
+    "path": "HybridOffice/Booth/Finish_Tray",
+    "posX": -1.48,
+    "posY": 1.06,
+    "posZ": -0.2,
+    "scaleX": 0.72,
+    "scaleY": 0.72,
+    "scaleZ": 0.72
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Stamp",
+    "posX": -1.48,
+    "posY": 1.06,
+    "posZ": -0.67,
+    "scaleX": 0.72,
+    "scaleY": 0.72,
+    "scaleZ": 0.72
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Inkpad",
+    "posX": -1.22,
+    "posY": 1.06,
+    "posZ": -0.69,
+    "scaleX": 0.8,
+    "scaleY": 0.8,
+    "scaleZ": 0.8
+  }
+]

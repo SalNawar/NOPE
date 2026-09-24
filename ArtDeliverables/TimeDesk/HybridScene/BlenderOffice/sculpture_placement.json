@@ -1,0 +1,38 @@
+[
+  {
+    "old": "Exhibit_Thinker",
+    "new": "Blender_Exhibit_Thinker",
+    "model": "Art_Thinker",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -5.8,
+      0.9,
+      12.0
+    ],
+    "yaw": -15
+  },
+  {
+    "old": "Exhibit_Discobolus",
+    "new": "Blender_Exhibit_Discobolus",
+    "model": "Art_Discobolus",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      4.4,
+      0.9,
+      8.0
+    ],
+    "yaw": 15
+  },
+  {
+    "old": "Exhibit_Nefertiti",
+    "new": "Blender_Exhibit_Nefertiti",
+    "model": "Art_Nefertiti",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -7.8,
+      0.9,
+      6.5
+    ],
+    "yaw": -15
+  }
+]

@@ -65,6 +65,7 @@
     <Compile Include="Assets\Scripts\Endings\EndingSO.cs" />
     <Compile Include="Assets\Scripts\UI\CitizenRecordsWindowController.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineReactiveSprite.cs" />
+    <Compile Include="Assets\Scripts\Office\OfficeTrafficVehicle.cs" />
     <Compile Include="Assets\Scripts\Office\ICameraRig.cs" />
     <Compile Include="Assets\Scripts\Endings\EndingService.cs" />
     <Compile Include="Assets\Scripts\Timeline\NationEraProfileSO.cs" />
@@ -118,6 +119,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
+    <None Include="Assets\Art\Office\Hybrid\Materials\OfficePortal.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />

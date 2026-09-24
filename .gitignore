@@ -14,3 +14,6 @@
 .superpowers/
 .vs/
 _sprite_import/
+*.blend1
+*.blend2
+**/__pycache__/
