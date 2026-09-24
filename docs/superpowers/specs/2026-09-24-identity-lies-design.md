@@ -250,7 +250,7 @@ This is today's gate (`ShiftScoring.cs:102-103`) with `isForged` replaced by `is
 
 The R8 table applies: exact match first, then `NameRoster.BaseName(givenName)`, both compared with `DiscrepancyLog.ValuesMatch`; a null list counts as empty; a null or blank name, or a name in both lists or in neither, is Unknown.
 
-**`NameRoster`** (`NameRoster.cs`, LF): add `public static string BaseName(string name)`. It returns the trimmed name without the " {numeral}" suffix that `Take` adds (`NameRoster.cs:64-69`). The last word counts as a suffix only when it is exactly `Roman(n)` for some n ≥ 2, so "Anna Maria", "Mary Ann" and "Sitt al-Wuzara" keep their full names. The numeral format therefore has one owner.
+**`NameRoster`** (`NameRoster.cs`, LF): add `public static string BaseName(string name)`. It returns the trimmed name without the " {numeral}" suffix that `Take` adds (`NameRoster.cs:64-69`). The last word counts as a suffix only when it is exactly `Roman(n)` for some n ≥ 2, so "Anna Maria", "Mary Ann" and "Sitt al-Wuzara" keep their full names. The check looks the word up in the set of every suffix `Take` can add, which `Roman` itself writes (n = 2..3999, built once on first use); there is no second numeral parser. The numeral format therefore has one owner, `Roman`.
 
 **`CaseVerdict`** (`ShiftLedger.cs`, CRLF):
 - `wasForged` (130-131) becomes `public bool wasLiar;` ("True if the traveller lied about their home").
@@ -570,7 +570,8 @@ The fallback's record block and the Records wiring warning (R15) are UI glue in 
   - a name in both lists → Unknown; "Subject #3" → Unknown; null or blank → Unknown;
   - a null list counts as empty: `FromNameLists("Marcus", null, femaleList)` → Unknown, and a name in `femaleList` with a null male list → Female.
 - **`NameRosterTests`**:
-  - `BaseName` `[TestCase]`s: "Marcus II" → "Marcus"; "Marcus XIV" → "Marcus"; "Marcus" unchanged; "Anna Maria" unchanged; "Mary Ann" unchanged; "Marcus I" unchanged (`Take` never adds I); "Marcus iv" unchanged;
+  - `BaseName` `[TestCase]`s: "Marcus II" → "Marcus"; "Marcus XIV" → "Marcus"; "Marcus" unchanged; "Anna Maria" unchanged; "Mary Ann" unchanged; "Marcus I" unchanged (`Take` never adds I); "Marcus iv" unchanged; "Marcus IIII" and "Marcus MMMM" unchanged (`Roman` never writes them);
+  - every suffix `Roman` writes for 2..3999 is stripped;
   - every name `Take` hands out after the pool is exhausted maps back to a pool name.
 - **`WeightedRandomTests`**: `FixedRolls` is replaced by `ScriptedRandom` with the same rolls; the assertions are unchanged.
 - **`DiscrepancyLogTests`**: vocabulary only (§2.8). The helpers become `TellDocField` and `TellIdentityField`, and `ForgedBirthDate_VsRecord_Registers_AsRecordMismatch` becomes `BirthDateTell_VsRecord_Registers_AsRecordMismatch`. Every assertion and the test count stay the same.

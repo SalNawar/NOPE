@@ -13,6 +13,24 @@ public sealed class NameRoster
     /// <summary>Names already given out today (trimmed, case-insensitive).</summary>
     private readonly HashSet<string> _used = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
+    /// <summary>The first numeral <see cref="Take"/> adds ("Marcus II"); the plain pool name counts as the first.</summary>
+    private const int FirstSuffix = 2;
+
+    /// <summary>The largest number <see cref="Roman"/> can write.</summary>
+    private const int MaxRoman = 3999;
+
+    /// <summary>
+    /// Every suffix <see cref="Take"/> can add, written by <see cref="Roman"/>
+    /// itself so the numeral format has one owner. Built on first use.
+    /// </summary>
+    private static readonly Lazy<HashSet<string>> Suffixes = new Lazy<HashSet<string>>(() =>
+    {
+        var suffixes = new HashSet<string>(StringComparer.Ordinal);
+        for (int n = FirstSuffix; n <= MaxRoman; n++)
+            suffixes.Add(Roman(n));
+        return suffixes;
+    });
+
     /// <summary>Marks a fixed name (e.g. a legendary visitor) as taken today.</summary>
     /// <returns>False when the name is blank or already taken.</returns>
     public bool Reserve(string name)
@@ -62,7 +80,7 @@ public sealed class NameRoster
         }
 
         string baseName = bases[Clamp(randomIndex(bases.Count), bases.Count)];
-        for (int n = 2; ; n++)
+        for (int n = FirstSuffix; ; n++)
         {
             string candidate = $"{baseName} {Roman(n)}";
             if (_used.Add(candidate))
@@ -73,8 +91,8 @@ public sealed class NameRoster
     /// <summary>Roman numeral for 1..3999 (name suffixes).</summary>
     public static string Roman(int number)
     {
-        if (number < 1 || number > 3999)
-            throw new ArgumentOutOfRangeException(nameof(number), number, "Roman numerals cover 1..3999.");
+        if (number < 1 || number > MaxRoman)
+            throw new ArgumentOutOfRangeException(nameof(number), number, $"Roman numerals cover 1..{MaxRoman}.");
 
         int[] values = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
         string[] numerals = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
@@ -108,41 +126,7 @@ public sealed class NameRoster
             return trimmed;
 
         string last = trimmed.Substring(space + 1);
-        int value = ParseRoman(last);
-        return value >= 2 && Roman(value) == last ? trimmed.Substring(0, space).TrimEnd() : trimmed;
-    }
-
-    /// <summary>Value of an upper-case Roman numeral; 0 when it holds another character or exceeds 3999.</summary>
-    private static int ParseRoman(string numeral)
-    {
-        int total = 0;
-        for (int i = 0; i < numeral.Length; i++)
-        {
-            int digit = RomanDigit(numeral[i]);
-            if (digit == 0)
-                return 0;
-
-            int next = i + 1 < numeral.Length ? RomanDigit(numeral[i + 1]) : 0;
-            total += digit < next ? -digit : digit;
-        }
-
-        return total <= 3999 ? total : 0;
-    }
-
-    /// <summary>Value of one upper-case Roman digit (0 for any other character).</summary>
-    private static int RomanDigit(char c)
-    {
-        switch (c)
-        {
-            case 'I': return 1;
-            case 'V': return 5;
-            case 'X': return 10;
-            case 'L': return 50;
-            case 'C': return 100;
-            case 'D': return 500;
-            case 'M': return 1000;
-            default: return 0;
-        }
+        return Suffixes.Value.Contains(last) ? trimmed.Substring(0, space).TrimEnd() : trimmed;
     }
 
     /// <summary>Clamps a random index into [0, count).</summary>

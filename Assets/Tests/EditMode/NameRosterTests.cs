@@ -95,9 +95,21 @@ public class NameRosterTests
     [TestCase("Sitt al-Wuzara", "Sitt al-Wuzara")]
     [TestCase("Marcus I", "Marcus I")]
     [TestCase("Marcus iv", "Marcus iv")]
+    [TestCase("Marcus IIII", "Marcus IIII")]
+    [TestCase("Marcus MMMM", "Marcus MMMM")]
     public void BaseName_StripsOnlyTheSuffixTakeAdds(string name, string expected)
     {
         Assert.AreEqual(expected, NameRoster.BaseName(name));
+    }
+
+    [Test]
+    public void BaseName_StripsEverySuffixRomanWrites()
+    {
+        for (int n = 2; n <= 3999; n++)
+        {
+            string suffix = NameRoster.Roman(n);
+            Assert.AreEqual("Marcus", NameRoster.BaseName("Marcus " + suffix), suffix);
+        }
     }
 
     [Test]
