@@ -190,6 +190,8 @@ public static class WorldContentGenerator
             foreach (string r in d.rules ?? Array.Empty<string>())
                 if (!ruleIds.Contains(r))
                     errors.Add($"Day '{d.asset}' uses unknown rule '{r}'.");
+            if (d.tells < 1)
+                errors.Add($"Day '{d.asset}' needs \"tells\" of at least 1.");
         }
     }
 
@@ -256,8 +258,8 @@ public static class WorldContentGenerator
     }
 
     /// <summary>
-    /// Writes the day's queue, eras, countries and rules. Legendary settings are
-    /// left to their authors (missing legendaries are dropped).
+    /// Writes the day's queue, tell count, eras, countries and rules. Legendary
+    /// settings are left to their authors (missing legendaries are dropped).
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, CaseBlueprintSO blueprint, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules)
@@ -266,6 +268,7 @@ public static class WorldContentGenerator
         var so = new SerializedObject(plan);
         so.FindProperty("dayNumber").intValue = d.day;
         so.FindProperty("visitorsCount").intValue = d.queue;
+        so.FindProperty("tellCount").intValue = d.tells;
         SetArray(so, "possibleBlueprints", new Object[] { blueprint });
         DropMissing(so, "availableLegendaries");
         SetArray(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
@@ -463,6 +466,8 @@ public static class WorldContentGenerator
         public string asset;
         public int day;
         public int queue;
+        /// <summary>Tells each liar leaks this day (at least 1).</summary>
+        public int tells;
         public EraWeightData[] eras;
         public string[] countries;
         public string[] rules;

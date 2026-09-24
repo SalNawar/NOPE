@@ -92,7 +92,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 ## Content & tooling
 
-- [ ] `Tools > TimeDesk > Generate World` — builds the real world from `Assets/Data/World/world_source.json` (eras, countries, 40 places, rules, day plans) and wires `ContentLibrary_Main`, the case blueprint and the day plans named in its `content` section; checks every reference before writing anything; idempotent; owns only `Assets/Data/World/{Eras,Nations,Places,Rules}` (unlisted assets there go to the trash) and never removes hand-authored legendaries, effects or triggers
+- [ ] `Tools > TimeDesk > Generate World` — builds the real world from `Assets/Data/World/world_source.json` (eras, countries, 40 places, rules, day plans with each day's tell count) and wires `ContentLibrary_Main`, the case blueprint and the day plans named in its `content` section; checks every reference before writing anything; idempotent; owns only `Assets/Data/World/{Eras,Nations,Places,Rules}` (unlisted assets there go to the trash) and never removes hand-authored legendaries, effects or triggers
 - [ ] Content validator checks every place (five facts, names, birth years set) and every day plan (today has places; every weighted era has one; every rule can be broken; listed legendaries come from today's places)
 - [ ] `Tools > TimeDesk > Build Office UI` — idempotent, authoritative scene builder
 - [ ] Travel rules: era / nation / nation+era forbidden, shown in briefing + directives

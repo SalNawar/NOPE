@@ -2201,6 +2201,7 @@
       "asset": "DayPlan_Inv_Day1",
       "day": 1,
       "queue": 8,
+      "tells": 1,
       "eras": [
         {
           "era": "ancient",
@@ -2219,6 +2220,7 @@
       "asset": "DayPlan_Inv_Day2",
       "day": 2,
       "queue": 10,
+      "tells": 1,
       "eras": [
         {
           "era": "ancient",
@@ -2245,6 +2247,7 @@
       "asset": "DayPlan_Inv_Day3",
       "day": 3,
       "queue": 12,
+      "tells": 1,
       "eras": [
         {
           "era": "ancient",
