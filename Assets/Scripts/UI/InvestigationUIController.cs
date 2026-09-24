@@ -326,7 +326,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             ReferenceBookWindowController win = Instantiate(bookWindowTemplate, windowLayer);
             win.SetBook(book, _facts, compareController);
             if (win.transform is RectTransform rt)
-                rt.anchoredPosition = new Vector2(-380f + i * 320f, -150f);
+                rt.anchoredPosition = new Vector2(-380f + (i % 3) * 320f + (i / 3) * 40f, -150f + (i / 3) * 40f);
             GameObject winGo = win.gameObject;
             winGo.SetActive(false);
 

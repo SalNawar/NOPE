@@ -30,34 +30,56 @@
     "books": [
       "Assets/Data/Investigation/RefBook_Currency.asset",
       "Assets/Data/Investigation/RefBook_Language.asset",
-      "Assets/Data/Investigation/RefBook_Technology.asset"
+      "Assets/Data/Investigation/RefBook_Technology.asset",
+      "Assets/Data/Investigation/RefBook_Capital.asset",
+      "Assets/Data/Investigation/RefBook_Ruler.asset"
     ]
   },
   "eras": [
     {
       "id": "ancient",
       "displayName": "Ancient",
-      "order": 0
+      "order": 0,
+      "smallTalk": [
+        "The harvest was good this year, thanks be to the gods.",
+        "The roads are safe, as long as you travel by day."
+      ]
     },
     {
       "id": "medieval",
       "displayName": "Medieval",
-      "order": 1
+      "order": 1,
+      "smallTalk": [
+        "The bells rang all week for the feast.",
+        "Taxes again. Always taxes."
+      ]
     },
     {
       "id": "earlymodern",
       "displayName": "Early modern",
-      "order": 2
+      "order": 2,
+      "smallTalk": [
+        "Every week a new pamphlet, every month a new war.",
+        "The post rides faster than ever."
+      ]
     },
     {
       "id": "industrial",
       "displayName": "Industrial",
-      "order": 3
+      "order": 3,
+      "smallTalk": [
+        "The smoke never lifts over the mills.",
+        "Everyone talks about the railway."
+      ]
     },
     {
       "id": "modern",
       "displayName": "Modern",
-      "order": 4
+      "order": 4,
+      "smallTalk": [
+        "The news never stops, day or night.",
+        "Everything is on the radio now."
+      ]
     },
     {
       "id": "future",
@@ -259,6 +281,9 @@
         "Tuya",
         "Sitre",
         "Senseneb"
+      ],
+      "smallTalk": [
+        "The Nile rose right on time; the fields are black and rich."
       ]
     },
     {
@@ -504,6 +529,9 @@
         "Ahatum",
         "Belessunu",
         "Aya-lamassi"
+      ],
+      "smallTalk": [
+        "The scribes are busy; every jar of barley gets its tablet."
       ]
     },
     {
@@ -749,6 +777,9 @@
         "Kleito",
         "Theano",
         "Lysimache"
+      ],
+      "smallTalk": [
+        "Everyone argues in the agora, and nobody agrees."
       ]
     },
     {
@@ -994,6 +1025,9 @@
         "Servilia",
         "Fulvia",
         "Aemilia"
+      ],
+      "smallTalk": [
+        "The Senate talks, the legions march."
       ]
     },
     {
@@ -2202,6 +2236,9 @@
       "day": 1,
       "queue": 8,
       "tells": 1,
+      "channels": [
+        "Papers"
+      ],
       "eras": [
         {
           "era": "ancient",
@@ -2221,6 +2258,10 @@
       "day": 2,
       "queue": 10,
       "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer"
+      ],
       "eras": [
         {
           "era": "ancient",
@@ -2248,6 +2289,10 @@
       "day": 3,
       "queue": 12,
       "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer"
+      ],
       "eras": [
         {
           "era": "ancient",
@@ -2266,6 +2311,196 @@
       "rules": [
         "Rule_NoMedievalChina",
         "Rule_NoEarlyModernJapan"
+      ]
+    }
+  ],
+  "interview": {
+    "deskName": "DESK",
+    "opener": "Next! Step forward, {honorific}.",
+    "openerLegendary": "Priority arrival: {name}.",
+    "claim": "I request passage home to {place}.",
+    "honorificMale": "sir",
+    "honorificFemale": "madam",
+    "honorificUnknown": "traveller",
+    "requestLabel": "Request {document}",
+    "requestPrompt": "Your {document}, please.",
+    "requestReply": "Here you are.",
+    "askLabel": "Ask about home >",
+    "backLabel": "< Back",
+    "smallTalkLabel": "Small talk",
+    "smallTalkPrompt": "How is life back home?",
+    "menuCapacity": 8,
+    "maxLineChars": 100
+  },
+  "questions": [
+    {
+      "id": "q_currency",
+      "category": "Currency",
+      "label": "Currency",
+      "prompt": "What money do you pay with at home?",
+      "answer": "We pay in {value}.",
+      "fromDay": 1,
+      "announce": "",
+      "conditions": [],
+      "overrides": [
+        {
+          "era": "ancient",
+          "prompt": "What do you trade with at home?",
+          "answer": "We trade with {value}."
+        }
+      ]
+    },
+    {
+      "id": "q_language",
+      "category": "Language",
+      "label": "Language",
+      "prompt": "What language do you speak at home?",
+      "answer": "At home we speak {value}.",
+      "fromDay": 1,
+      "announce": "",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_device",
+      "category": "Technology",
+      "label": "Device",
+      "prompt": "What tool do you use every day?",
+      "answer": "Every day I use {value}.",
+      "fromDay": 1,
+      "announce": "",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_capital",
+      "category": "Geography",
+      "label": "Capital",
+      "prompt": "What is the capital of your land?",
+      "answer": "Our capital is {value}.",
+      "fromDay": 2,
+      "announce": "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_ruler",
+      "category": "Politics",
+      "label": "Ruler",
+      "prompt": "Who rules your land?",
+      "answer": "We are ruled by {value}.",
+      "fromDay": 3,
+      "announce": "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_born",
+      "category": "BirthDate",
+      "label": "Date of birth",
+      "prompt": "When were you born?",
+      "answer": "I was born on {value}.",
+      "fromDay": 1,
+      "announce": "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
+      "conditions": [
+        {
+          "type": "UpgradeOwned",
+          "key": "interview_protocols",
+          "threshold": 0
+        }
+      ],
+      "overrides": []
+    }
+  ],
+  "dialogs": [
+    {
+      "id": "dlg_rumour",
+      "label": "Any news from home? >",
+      "conditions": [
+        {
+          "type": "DayAtLeast",
+          "key": "",
+          "threshold": 2
+        }
+      ],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_rumour.start.1",
+              "speaker": "Traveller",
+              "text": "News? Only a rumour: someone sells pocket calculators to the ancients."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more",
+              "label": "Tell me more.",
+              "lines": [],
+              "next": "detail",
+              "effect": ""
+            },
+            {
+              "id": "ignore",
+              "label": "Not my business.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "detail",
+          "lines": [
+            {
+              "id": "dlg_rumour.detail.1",
+              "speaker": "Traveller",
+              "text": "They say a courier from your own century carries them. Watch for anyone who counts too fast."
+            }
+          ],
+          "choices": [
+            {
+              "id": "noted",
+              "label": "Noted. Thank you.",
+              "lines": [],
+              "next": "",
+              "effect": "Effect_Dialog_RumourHeard"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dlg_rumour_followup",
+      "label": "About those calculators... >",
+      "conditions": [
+        {
+          "type": "FlagSet",
+          "key": "rumour_calculators",
+          "threshold": 0
+        }
+      ],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_rumour_followup.start.1",
+              "speaker": "Traveller",
+              "text": "Calculators? I saw nothing. Nothing at all."
+            }
+          ],
+          "choices": [
+            {
+              "id": "bye",
+              "label": "Of course. Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
       ]
     }
   ]

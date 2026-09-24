@@ -58,8 +58,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>
     /// Where today's liars may leak tells: Papers (their documents) and/or
-    /// Answer (their answers to today's questions). The default keeps a day
-    /// plan that does not set it on papers-only tells.
+    /// Answer (their answers to today's questions). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json days[].channels;
+    /// the default keeps a day plan that does not set it on papers-only tells.
     /// </summary>
     [SerializeField] private TellChannel[] tellChannels = { TellChannel.Papers };
 

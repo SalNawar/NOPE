@@ -8,17 +8,20 @@ using Object = UnityEngine.Object;
 
 /// <summary>
 /// Tools > TimeDesk > Generate World. The one authoritative world generator:
-/// reads the researched world (Assets/Data/World/world_source.json) and
-/// creates or updates the eras, nations, places (NationEraProfileSO with facts,
-/// names and birth years), travel rules and day plans, points the case
-/// blueprint at the listed archetypes, then sets every world array of the
-/// content library explicitly. Idempotent: re-running converges to the source
-/// file. It owns the Eras/Nations/Places/Rules folders under Assets/Data/World
+/// reads the hand-maintained world source (Assets/Data/World/world_source.json)
+/// and creates or updates the eras, nations, places (NationEraProfileSO with
+/// facts, names, birth years and small talk), travel rules and day plans (tell
+/// count and tell channels), the interview (its wording and layout limits,
+/// questions, narrative dialogs, and a one-shot unlock-announcement trigger
+/// for every gated question), points the case blueprint at the listed
+/// archetypes, then sets every world array of the content library
+/// explicitly. Idempotent: re-running converges to the source file. It owns
+/// the Eras/Nations/Places/Rules/Interview folders under Assets/Data/World
 /// (assets there that the source no longer lists go to the OS trash) and only
 /// drops missing references elsewhere, so hand-authored content (legendaries,
 /// effects, triggers) survives a re-run. The authored assets the source points
 /// at (library, blueprint, attributes, archetypes, books) must already exist;
-/// every reference is checked before anything is written.
+/// every reference, id and line is checked before anything is written.
 /// </summary>
 public static class WorldContentGenerator
 {
@@ -29,7 +32,10 @@ public static class WorldContentGenerator
     private const string WorldRoot = "Assets/Data/World";
 
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
-    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules" };
+    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview" };
+
+    /// <summary>Folder of the generated interview assets (questions, dialogs, unlock triggers).</summary>
+    private const string InterviewFolder = WorldRoot + "/Interview";
 
     /// <summary>Reads the source, checks every reference, then writes the world. Aborts (writing nothing) on any error.</summary>
     [MenuItem("Tools/TimeDesk/Generate World")]
@@ -42,6 +48,7 @@ public static class WorldContentGenerator
         var errors = new List<string>();
         Authored authored = LoadAuthored(src.content, errors);
         CheckReferences(src, authored, errors);
+        CheckInterview(src, authored, errors);
         if (errors.Count > 0)
         {
             foreach (string e in errors)
@@ -75,19 +82,26 @@ public static class WorldContentGenerator
 
         DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored.blueprint, eras, nations, rules)).ToArray();
 
+        // --- Interview: questions, dialogs, unlock announcements ---
+        QuestionData[] questionData = src.questions ?? Array.Empty<QuestionData>();
+        QuestionSO[] questions = questionData.Select(q => MakeQuestion(q, written)).ToArray();
+        DialogSO[] dialogs = (src.dialogs ?? Array.Empty<DialogData>()).Select(d => MakeDialog(d, written)).ToArray();
+        TimelineTriggerSO[] unlocks = questionData.Where(IsGated).Select(q => MakeUnlockTrigger(q, written)).ToArray();
+
         // Re-saving the book covers keeps their YAML in the current shape.
         foreach (ReferenceBookSO book in authored.books)
             EditorUtility.SetDirty(book);
 
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
-                    places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books);
+                    places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
+                    BuildLines(src.interview), questions, dialogs, unlocks);
 
         int pruned = PruneOwnedFolders(written);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places, {rules.Count} rules, {days.Length} day plans; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places, {rules.Count} rules, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
@@ -195,6 +209,396 @@ public static class WorldContentGenerator
         }
     }
 
+    /// <summary>
+    /// Checks each day's tell channels and the interview sections (wording,
+    /// questions, dialogs, small talk) before anything is written: tokens,
+    /// provable categories, gates and announcements, dialog structure and
+    /// effects, one set of unique line ids, ASCII text, the worst-case length
+    /// of every line the transcript can show, and menu sizes.
+    /// </summary>
+    private static void CheckInterview(WorldSource src, Authored authored, List<string> errors)
+    {
+        foreach (DayData d in src.days)
+        {
+            if (d.channels == null || d.channels.Length == 0)
+                errors.Add($"Day '{d.asset}' needs \"channels\" (Papers and/or Answer).");
+            else
+                foreach (string c in d.channels)
+                    if (!ParseEnum(c, out TellChannel _))
+                        errors.Add($"Day '{d.asset}' has unknown tell channel '{c}' (Papers or Answer).");
+        }
+
+        InterviewData iv = src.interview;
+        if (iv == null)
+        {
+            errors.Add($"'{SourcePath}' has no \"interview\" section (the interview's wording, menuCapacity and maxLineChars).");
+            return;
+        }
+
+        // One id set for every line, generated or authored; it starts with the runtime ids.
+        var ids = new Dictionary<string, string> { ["case.intro"] = "the desk's opener at runtime", ["case.claim"] = "the traveller's claim at runtime" };
+        void Id(string id, string owner)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+                errors.Add($"A line of {owner} has a blank id.");
+            else if (ids.TryGetValue(id, out string first))
+                errors.Add($"Line id '{id}' is used by {first} and by {owner}.");
+            else
+                ids.Add(id, owner);
+        }
+
+        void Ascii(string id, string text)
+        {
+            char bad = (text ?? string.Empty).FirstOrDefault(ch => ch > 127);
+            if (bad != default)
+                errors.Add($"'{id}' holds the non-ASCII character '{bad}'; authored interview text must be ASCII (new glyphs dirty the TMP fallback atlas).");
+        }
+
+        // --- The interview's wording and limits ---
+        var wording = new (string field, string text)[]
+        {
+            ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary), ("claim", iv.claim),
+            ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
+            ("requestLabel", iv.requestLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
+            ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel), ("smallTalkPrompt", iv.smallTalkPrompt)
+        };
+        foreach ((string field, string text) in wording)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                errors.Add($"interview.{field} is blank.");
+            Ascii(InterviewLineId(field), text);
+        }
+
+        foreach ((string field, string text, string token) in new[]
+                 {
+                     ("opener", iv.opener, Interview.HonorificToken), ("openerLegendary", iv.openerLegendary, Interview.NameToken),
+                     ("claim", iv.claim, Interview.PlaceToken), ("requestLabel", iv.requestLabel, Interview.DocumentToken),
+                     ("requestPrompt", iv.requestPrompt, Interview.DocumentToken)
+                 })
+            if (!string.IsNullOrWhiteSpace(text) && !Interview.HoldsToken(text, token))
+                errors.Add($"interview.{field} must hold {Interview.Placeholder(token)}.");
+
+        if (iv.menuCapacity < 1)
+            errors.Add("interview.menuCapacity must be at least 1 (a missing value reads 0).");
+        if (iv.maxLineChars < 1)
+            errors.Add("interview.maxLineChars must be at least 1 (a missing value reads 0).");
+
+        foreach (string field in new[] { "opener", "openerLegendary", "claim", "requestPrompt", "requestReply", "smallTalkPrompt" })
+            Id(InterviewLineId(field), $"interview.{field}");
+
+        // --- Questions ---
+        var bookCategories = new HashSet<ClueCategory>((authored.books ?? Array.Empty<ReferenceBookSO>()).Select(b => b.category));
+        var eraIds = new HashSet<string>(src.eras.Select(e => e.id));
+        var questionIds = new HashSet<string>();
+        var askedCategories = new HashSet<ClueCategory>();
+        QuestionData[] questions = src.questions ?? Array.Empty<QuestionData>();
+        foreach (QuestionData q in questions)
+        {
+            string owner = $"Question '{q.id}'";
+            if (string.IsNullOrWhiteSpace(q.id))
+                errors.Add("A question has a blank id.");
+            else if (!questionIds.Add(q.id))
+                errors.Add($"Question id '{q.id}' is listed twice.");
+
+            if (!ParseEnum(q.category, out ClueCategory category))
+            {
+                errors.Add($"{owner} has unknown category '{q.category}'.");
+            }
+            else
+            {
+                if (!Forgery.IsProvableCategory(category, bookCategories))
+                    errors.Add($"{owner} asks about {category}, which no reference book (or, for a birth date, the Citizen Record) can prove.");
+                if (!askedCategories.Add(category))
+                    errors.Add($"{owner} asks about {category} again (one question per category).");
+            }
+
+            if (string.IsNullOrWhiteSpace(q.label))
+                errors.Add($"{owner} has a blank label.");
+            if (string.IsNullOrWhiteSpace(q.prompt))
+                errors.Add($"{owner} has a blank prompt.");
+            if (!Interview.HoldsToken(q.answer, Interview.ValueToken))
+                errors.Add($"{owner}: its answer must hold {Interview.Placeholder(Interview.ValueToken)}.");
+            if (q.fromDay < 1)
+                errors.Add($"{owner} needs \"fromDay\" of at least 1 (a missing fromDay reads 0).");
+
+            bool gated = IsGated(q);
+            if (gated && string.IsNullOrWhiteSpace(q.announce))
+                errors.Add($"{owner} is gated (from day {q.fromDay}, {(q.conditions != null ? q.conditions.Length : 0)} condition(s)) and needs an \"announce\" line for the morning paper.");
+            else if (!gated && !string.IsNullOrWhiteSpace(q.announce))
+                errors.Add($"{owner} is askable from day 1 without conditions, so nothing announces it; drop its \"announce\" line.");
+
+            CheckConditions(q.conditions, owner, true, authored, errors);
+
+            Ascii($"{q.id}.label", q.label);
+            Ascii($"{q.id}.prompt", q.prompt);
+            Ascii($"{q.id}.answer", q.answer);
+            Ascii($"{q.id}.announce", q.announce);
+            Id($"{q.id}.prompt", $"question '{q.id}'");
+            Id($"{q.id}.answer", $"question '{q.id}'");
+
+            var overridden = new HashSet<string>();
+            foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
+            {
+                string oOwner = $"{owner} override '{o.era}'";
+                if (!eraIds.Contains(o.era ?? string.Empty))
+                    errors.Add($"{oOwner} names an unknown era.");
+                else if (!overridden.Add(o.era))
+                    errors.Add($"{owner} overrides era '{o.era}' twice.");
+                if (string.IsNullOrWhiteSpace(o.prompt))
+                    errors.Add($"{oOwner} has a blank prompt.");
+                if (!Interview.HoldsToken(o.answer, Interview.ValueToken))
+                    errors.Add($"{oOwner}: its answer must hold {Interview.Placeholder(Interview.ValueToken)}.");
+                Ascii($"{q.id}.{o.era}.prompt", o.prompt);
+                Ascii($"{q.id}.{o.era}.answer", o.answer);
+                Id($"{q.id}.{o.era}.prompt", $"question '{q.id}' override '{o.era}'");
+                Id($"{q.id}.{o.era}.answer", $"question '{q.id}' override '{o.era}'");
+            }
+        }
+
+        // --- Dialogs ---
+        var dialogIds = new HashSet<string>();
+        DialogData[] dialogs = src.dialogs ?? Array.Empty<DialogData>();
+        foreach (DialogData d in dialogs)
+        {
+            string owner = $"Dialog '{d.id}'";
+            if (string.IsNullOrWhiteSpace(d.id))
+                errors.Add("A dialog has a blank id.");
+            else if (!dialogIds.Add(d.id))
+                errors.Add($"Dialog id '{d.id}' is listed twice.");
+            if (string.IsNullOrWhiteSpace(d.label))
+                errors.Add($"{owner} has a blank label.");
+            Ascii($"{d.id}.label", d.label);
+            CheckConditions(d.conditions, owner, false, authored, errors);
+
+            void Lines(LineData[] lines, string lineOwner)
+            {
+                foreach (LineData line in lines ?? Array.Empty<LineData>())
+                {
+                    if (!ParseEnum(line.speaker, out DialogSpeaker _))
+                        errors.Add($"{owner} line '{line.id}' has unknown speaker '{line.speaker}' (Desk or Traveller).");
+                    if (line.id == null || !line.id.StartsWith(d.id + "."))
+                        errors.Add($"{owner} line id '{line.id}' must start with '{d.id}.'.");
+                    if (string.IsNullOrWhiteSpace(line.text))
+                        errors.Add($"{owner} line '{line.id}' is blank.");
+                    Ascii(line.id, line.text);
+                    Id(line.id, lineOwner);
+                }
+            }
+
+            foreach (NodeData n in d.nodes ?? Array.Empty<NodeData>())
+            {
+                Lines(n.lines, $"dialog '{d.id}' node '{n.id}'");
+                foreach (ChoiceData c in n.choices ?? Array.Empty<ChoiceData>())
+                {
+                    Id($"{d.id}.{c.id}", $"choice '{c.id}' of dialog '{d.id}'");
+                    Ascii($"{d.id}.{c.id}", c.label);
+                    Lines(c.lines, $"a line of choice '{c.id}' of dialog '{d.id}'");
+
+                    if (string.IsNullOrWhiteSpace(c.effect))
+                        continue;
+
+                    EffectSO fx = authored.library != null ? authored.library.GetEffectByAssetName(c.effect) : null;
+                    if (fx == null)
+                    {
+                        errors.Add($"{owner} choice '{c.id}' names effect '{c.effect}', which ContentLibrary_Main does not list; add it to the library's effects.");
+                        continue;
+                    }
+
+                    foreach (EffectOp op in fx.ops)
+                        if (op != null && EffectOps.ActsWhileActive(op.type))
+                            errors.Add(ContentLibraryValidator.DialogEffectOpError(d.id, c.id, c.effect, op.type) + ".");
+                }
+            }
+
+            foreach (string problem in DialogChecks.Problems(BuildDialog(d), iv.menuCapacity))
+                errors.Add($"{owner}: {problem}.");
+        }
+
+        // --- Small talk ---
+        void SmallTalkLines(string ownerId, string[] lines, string owner)
+        {
+            for (int i = 0; lines != null && i < lines.Length; i++)
+            {
+                string id = SmallTalkId(ownerId, i);
+                if (string.IsNullOrWhiteSpace(lines[i]))
+                    errors.Add($"{owner} has a blank small-talk line ('{id}').");
+                Ascii(id, lines[i]);
+                Id(id, $"the small talk of {owner}");
+            }
+        }
+
+        foreach (EraData e in src.eras)
+            SmallTalkLines(e.id, e.smallTalk, $"era '{e.id}'");
+        foreach (PlaceData p in src.places)
+            SmallTalkLines($"{p.country}_{p.era}", p.smallTalk, $"place '{p.country}_{p.era}'");
+
+        // --- Menus: the intercom must show every choice ---
+        bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
+                            src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
+        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxDocuments(Blueprints(authored)), dialogs.Length, iv.menuCapacity))
+            errors.Add(problem);
+
+        // --- Line length: every line the transcript can show fits two lines of a row ---
+        int max = iv.maxLineChars;
+        if (max < 1)
+            return;
+
+        void Fits(string id, string template, string token, int longestValue)
+        {
+            int length = Interview.WorstCaseLength(template, token, longestValue);
+            if (length > max)
+                errors.Add($"Line '{id}' can render {length} characters; the transcript holds at most {max} (interview.maxLineChars).");
+        }
+
+        int longestHonorific = new[] { iv.honorificMale, iv.honorificFemale, iv.honorificUnknown }.Max(h => (h ?? string.Empty).Length);
+        int longestName = authored.library != null ? authored.library.Legendaries.Where(l => l != null).Select(l => (l.displayName ?? string.Empty).Length).DefaultIfEmpty(0).Max() : 0;
+        int longestDocument = DocumentTemplates(authored).Select(t => (t.displayName ?? string.Empty).Length).DefaultIfEmpty(0).Max();
+        var eraNames = src.eras.ToDictionary(e => e.id, e => e.displayName);
+        int longestPlace = src.places.Select(p => OriginLabels.Format(p.displayName, eraNames.TryGetValue(p.era ?? string.Empty, out string era) ? era : null).Length)
+                              .DefaultIfEmpty(0).Max();
+
+        Fits(InterviewLineId("opener"), iv.opener, Interview.HonorificToken, longestHonorific);
+        Fits(InterviewLineId("openerLegendary"), iv.openerLegendary, Interview.NameToken, longestName);
+        Fits(InterviewLineId("claim"), iv.claim, Interview.PlaceToken, longestPlace);
+        Fits(InterviewLineId("requestPrompt"), iv.requestPrompt, Interview.DocumentToken, longestDocument);
+        Fits(InterviewLineId("requestReply"), iv.requestReply, Interview.ValueToken, 0);
+        Fits(InterviewLineId("smallTalkPrompt"), iv.smallTalkPrompt, Interview.ValueToken, 0);
+
+        foreach (QuestionData q in questions)
+        {
+            int longestValue = ParseEnum(q.category, out ClueCategory category) ? LongestValue(src, category) : 0;
+            Fits($"{q.id}.prompt", q.prompt, Interview.ValueToken, 0);
+            Fits($"{q.id}.answer", q.answer, Interview.ValueToken, longestValue);
+            foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
+            {
+                Fits($"{q.id}.{o.era}.prompt", o.prompt, Interview.ValueToken, 0);
+                Fits($"{q.id}.{o.era}.answer", o.answer, Interview.ValueToken, longestValue);
+            }
+        }
+
+        foreach (DialogData d in dialogs)
+        {
+            foreach (NodeData n in d.nodes ?? Array.Empty<NodeData>())
+            {
+                foreach (LineData line in n.lines ?? Array.Empty<LineData>())
+                    Fits(line.id, line.text, Interview.ValueToken, 0);
+                foreach (ChoiceData c in n.choices ?? Array.Empty<ChoiceData>())
+                {
+                    Fits($"{d.id}.{c.id}", c.label, Interview.ValueToken, 0);
+                    foreach (LineData line in c.lines ?? Array.Empty<LineData>())
+                        Fits(line.id, line.text, Interview.ValueToken, 0);
+                }
+            }
+        }
+
+        foreach (EraData e in src.eras)
+            for (int i = 0; e.smallTalk != null && i < e.smallTalk.Length; i++)
+                Fits(SmallTalkId(e.id, i), e.smallTalk[i], Interview.ValueToken, 0);
+        foreach (PlaceData p in src.places)
+            for (int i = 0; p.smallTalk != null && i < p.smallTalk.Length; i++)
+                Fits(SmallTalkId($"{p.country}_{p.era}", i), p.smallTalk[i], Interview.ValueToken, 0);
+    }
+
+    /// <summary>
+    /// A condition list's problems: an unknown type; a type that needs a
+    /// profile, attribute or nation reference (not nameable in the source yet);
+    /// DayAtLeast inside a question (its day is "fromDay"); an unknown upgrade;
+    /// a blank flag or counter key.
+    /// </summary>
+    private static void CheckConditions(ConditionData[] conditions, string owner, bool isQuestion, Authored authored, List<string> errors)
+    {
+        foreach (ConditionData c in conditions ?? Array.Empty<ConditionData>())
+        {
+            if (!ParseEnum(c.type, out TriggerConditionType type))
+            {
+                errors.Add($"{owner} has unknown condition type '{c.type}'.");
+                continue;
+            }
+
+            switch (type)
+            {
+                case TriggerConditionType.AttributeScoreAtLeast:
+                case TriggerConditionType.AttributeScoreAtMost:
+                case TriggerConditionType.AttributeIsDominant:
+                case TriggerConditionType.AttributeIsSupporting:
+                case TriggerConditionType.NationScoreAtLeast:
+                    errors.Add($"{owner} uses a {type} condition, which needs a profile, attribute or nation reference; world_source.json cannot name those until piece 5 (history) adds id resolution.");
+                    break;
+                case TriggerConditionType.DayAtLeast:
+                    if (isQuestion)
+                        errors.Add($"{owner} gates on DayAtLeast in \"conditions\"; use \"fromDay\" (one day value per question).");
+                    break;
+                case TriggerConditionType.UpgradeOwned:
+                    if (authored.library == null || authored.library.GetUpgradeById(c.key) == null)
+                        errors.Add($"{owner} requires unknown upgrade '{c.key}' (not in the content library's upgrades).");
+                    break;
+                case TriggerConditionType.FlagSet:
+                case TriggerConditionType.FlagNotSet:
+                case TriggerConditionType.CounterAtLeast:
+                    if (string.IsNullOrWhiteSpace(c.key))
+                        errors.Add($"{owner} has a {type} condition with a blank key.");
+                    break;
+            }
+        }
+    }
+
+    /// <summary>The document templates a traveller can carry: the wired blueprint's and every listed legendary's override's.</summary>
+    private static List<DocumentTemplateSO> DocumentTemplates(Authored authored)
+    {
+        var templates = new List<DocumentTemplateSO>();
+        foreach (CaseBlueprintSO blueprint in Blueprints(authored))
+            if (blueprint.DocumentTemplates != null)
+                templates.AddRange(blueprint.DocumentTemplates.Where(t => t != null));
+        return templates;
+    }
+
+    /// <summary>The wired blueprint and the listed legendaries' overrides (non-null).</summary>
+    private static List<CaseBlueprintSO> Blueprints(Authored authored)
+    {
+        var blueprints = new List<CaseBlueprintSO>();
+        if (authored.blueprint != null)
+            blueprints.Add(authored.blueprint);
+        if (authored.library != null)
+            foreach (LegendarySO legend in authored.library.Legendaries)
+                if (legend != null && legend.blueprintOverride != null)
+                    blueprints.Add(legend.blueprintOverride);
+        return blueprints;
+    }
+
+    /// <summary>
+    /// The longest value a {value} of this category can take: the longest fact
+    /// of any place, or for a birth date the longest registered date the
+    /// places' birth years give.
+    /// </summary>
+    private static int LongestValue(WorldSource src, ClueCategory category)
+    {
+        int longest = 0;
+        foreach (PlaceData p in src.places)
+        {
+            if (category == ClueCategory.BirthDate)
+            {
+                (int min, int max) = BirthYears(p, src.travellerAgeMin, src.travellerAgeMax);
+                for (int year = min; year <= max; year++)
+                {
+                    // Only a date BirthDates can read back is ever printed (it owns "no year 0").
+                    string date = BirthDates.Format(28, 0, year);
+                    if (BirthDates.TryParse(date, out _, out _, out _))
+                        longest = Math.Max(longest, date.Length);
+                }
+                continue;
+            }
+
+            foreach (FactData f in p.facts ?? Array.Empty<FactData>())
+                if (f.category == category.ToString())
+                    longest = Math.Max(longest, (f.value ?? string.Empty).Length);
+        }
+
+        return longest;
+    }
+
+    /// <summary>A place's birth-year range: its year minus the oldest and the youngest traveller age (MakePlace writes it, LongestValue measures it).</summary>
+    private static (int min, int max) BirthYears(PlaceData p, int ageMin, int ageMax) => (p.year - ageMax, p.year - ageMin);
+
     // -----------------------------
     // Builders
     // -----------------------------
@@ -205,6 +609,7 @@ public static class WorldContentGenerator
         era.id = e.id;
         era.displayName = e.displayName;
         era.order = e.order;
+        era.smallTalk = SmallTalk(e.id, e.smallTalk);
         EditorUtility.SetDirty(era);
         return era;
     }
@@ -227,10 +632,10 @@ public static class WorldContentGenerator
         place.displayName = p.displayName;
         place.nation = nation;
         place.era = era;
-        place.birthYearMin = p.year - ageMax;
-        place.birthYearMax = p.year - ageMin;
+        (place.birthYearMin, place.birthYearMax) = BirthYears(p, ageMin, ageMax);
         place.maleNames = p.maleNames ?? Array.Empty<string>();
         place.femaleNames = p.femaleNames ?? Array.Empty<string>();
+        place.smallTalk = SmallTalk(place.id, p.smallTalk);
 
         place.facts = (p.facts ?? Array.Empty<FactData>())
             .Select(f => new ProfileFact { category = (ClueCategory)Enum.Parse(typeof(ClueCategory), f.category), value = f.value })
@@ -258,8 +663,9 @@ public static class WorldContentGenerator
     }
 
     /// <summary>
-    /// Writes the day's queue, tell count, eras, countries and rules. Legendary
-    /// settings are left to their authors (missing legendaries are dropped).
+    /// Writes the day's queue, tell count, tell channels, eras, countries and
+    /// rules. Legendary settings are left to their authors (missing legendaries
+    /// are dropped).
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, CaseBlueprintSO blueprint, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules)
@@ -269,6 +675,11 @@ public static class WorldContentGenerator
         so.FindProperty("dayNumber").intValue = d.day;
         so.FindProperty("visitorsCount").intValue = d.queue;
         so.FindProperty("tellCount").intValue = d.tells;
+        string[] channels = d.channels ?? Array.Empty<string>();
+        SerializedProperty tellChannels = so.FindProperty("tellChannels");
+        tellChannels.arraySize = channels.Length;
+        for (int i = 0; i < channels.Length; i++)
+            tellChannels.GetArrayElementAtIndex(i).enumValueIndex = (int)(TellChannel)Enum.Parse(typeof(TellChannel), channels[i]);
         SetArray(so, "possibleBlueprints", new Object[] { blueprint });
         DropMissing(so, "availableLegendaries");
         SetArray(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
@@ -289,9 +700,153 @@ public static class WorldContentGenerator
         return plan;
     }
 
-    /// <summary>Sets every world array of the library (authoritative) and drops missing references from the rest.</summary>
+    /// <summary>Small-talk lines with their generated ids ("{ownerId}.smalltalk.{n}", 1-based).</summary>
+    private static List<LineText> SmallTalk(string ownerId, string[] lines) =>
+        (lines ?? Array.Empty<string>()).Select((text, i) => new LineText(SmallTalkId(ownerId, i), text)).ToList();
+
+    /// <summary>The id of an era's or place's small-talk line.</summary>
+    private static string SmallTalkId(string ownerId, int index) => $"{ownerId}.smalltalk.{index + 1}";
+
+    /// <summary>The id of an interview line ("interview.opener", ...).</summary>
+    private static string InterviewLineId(string field) => $"interview.{field}";
+
+    /// <summary>The interview's wording with generated line ids, and its layout limits.</summary>
+    private static InterviewLines BuildLines(InterviewData i) => new InterviewLines
+    {
+        deskName = i.deskName,
+        opener = new LineText(InterviewLineId("opener"), i.opener),
+        openerLegendary = new LineText(InterviewLineId("openerLegendary"), i.openerLegendary),
+        claim = new LineText(InterviewLineId("claim"), i.claim),
+        honorificMale = i.honorificMale,
+        honorificFemale = i.honorificFemale,
+        honorificUnknown = i.honorificUnknown,
+        requestLabel = i.requestLabel,
+        requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
+        requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
+        askLabel = i.askLabel,
+        backLabel = i.backLabel,
+        smallTalkLabel = i.smallTalkLabel,
+        smallTalkPrompt = new LineText(InterviewLineId("smallTalkPrompt"), i.smallTalkPrompt),
+        menuCapacity = i.menuCapacity,
+        maxLineChars = i.maxLineChars
+    };
+
+    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...).</summary>
+    private static InterviewQuestion BuildQuestion(QuestionData q) => new InterviewQuestion
+    {
+        id = q.id,
+        category = (ClueCategory)Enum.Parse(typeof(ClueCategory), q.category),
+        label = q.label,
+        prompt = new LineText($"{q.id}.prompt", q.prompt),
+        answer = new LineText($"{q.id}.answer", q.answer),
+        overrides = (q.overrides ?? Array.Empty<OverrideData>()).Select(o => new WordingOverride
+        {
+            eraId = o.era,
+            prompt = new LineText($"{q.id}.{o.era}.prompt", o.prompt),
+            answer = new LineText($"{q.id}.{o.era}.answer", o.answer)
+        }).ToList()
+    };
+
+    /// <summary>A dialog as the runner's data contract; one-shot unless repeatable. Never throws (an unknown speaker reads Traveller; the checks report it).</summary>
+    private static AuthoredDialog BuildDialog(DialogData d) => new AuthoredDialog
+    {
+        id = d.id,
+        label = d.label,
+        oneShot = !d.repeatable,
+        nodes = (d.nodes ?? Array.Empty<NodeData>()).Select(n => new ScriptNode
+        {
+            id = n.id,
+            lines = ScriptLines(n.lines),
+            choices = (n.choices ?? Array.Empty<ChoiceData>()).Select(c => new ScriptChoice
+            {
+                id = c.id,
+                label = c.label,
+                lines = ScriptLines(c.lines),
+                next = c.next ?? string.Empty,
+                effect = c.effect ?? string.Empty
+            }).ToList()
+        }).ToList()
+    };
+
+    private static List<ScriptLine> ScriptLines(LineData[] lines) =>
+        (lines ?? Array.Empty<LineData>()).Select(l => new ScriptLine
+        {
+            id = l.id,
+            speaker = ParseEnum(l.speaker, out DialogSpeaker speaker) ? speaker : DialogSpeaker.Traveller,
+            text = l.text
+        }).ToList();
+
+    /// <summary>A day gate at <paramref name="threshold"/> when the question starts after day 1, else nothing.</summary>
+    private static IEnumerable<TriggerCondition> DayGate(int fromDay, int threshold) =>
+        fromDay > 1
+            ? new[] { new TriggerCondition { type = TriggerConditionType.DayAtLeast, threshold = threshold } }
+            : Array.Empty<TriggerCondition>();
+
+    /// <summary>The authored conditions as trigger conditions.</summary>
+    private static IEnumerable<TriggerCondition> Conditions(ConditionData[] conditions) =>
+        (conditions ?? Array.Empty<ConditionData>()).Select(c => new TriggerCondition
+        {
+            type = (TriggerConditionType)Enum.Parse(typeof(TriggerConditionType), c.type),
+            key = c.key,
+            threshold = c.threshold
+        });
+
+    /// <summary>True when a question is gated (fromDay above 1 or any authored condition), so an unlock trigger announces it.</summary>
+    private static bool IsGated(QuestionData q) => q.fromDay > 1 || (q.conditions != null && q.conditions.Length > 0);
+
+    /// <summary>Writes Interview/Question_{id}.asset: the question and its day-start conditions (DayAtLeast fromDay when fromDay > 1, plus the authored ones).</summary>
+    private static QuestionSO MakeQuestion(QuestionData q, HashSet<string> written)
+    {
+        QuestionSO so = LoadOrCreate<QuestionSO>($"{InterviewFolder}/Question_{q.id}.asset", written);
+        so.question = BuildQuestion(q);
+        so.conditions = DayGate(q.fromDay, q.fromDay).Concat(Conditions(q.conditions)).ToList();
+        EditorUtility.SetDirty(so);
+        return so;
+    }
+
+    /// <summary>Writes Interview/Dialog_{id}.asset: the dialog and its conditions.</summary>
+    private static DialogSO MakeDialog(DialogData d, HashSet<string> written)
+    {
+        DialogSO so = LoadOrCreate<DialogSO>($"{InterviewFolder}/Dialog_{d.id}.asset", written);
+        so.dialog = BuildDialog(d);
+        so.conditions = Conditions(d.conditions).ToList();
+        EditorUtility.SetDirty(so);
+        return so;
+    }
+
+    /// <summary>
+    /// Writes Interview/Trigger_Unlock_{questionId}.asset for a gated question:
+    /// a one-shot trigger whose news line is the question's announcement. It
+    /// fires the night before the first day the question is askable
+    /// (DayAtLeast Gates.UnlockNight(fromDay) when fromDay > 1) and when the
+    /// question's own conditions hold.
+    /// </summary>
+    private static TimelineTriggerSO MakeUnlockTrigger(QuestionData q, HashSet<string> written)
+    {
+        TimelineTriggerSO t = LoadOrCreate<TimelineTriggerSO>($"{InterviewFolder}/Trigger_Unlock_{q.id}.asset", written);
+        t.id = $"unlock_{q.id}";
+        t.displayName = $"Unlock: {q.label}";
+        t.description = $"Generated by Generate World: announces the {q.label} question in the morning paper of the first day it can be asked.";
+        t.oneShot = true;
+        t.newsLineOnFire = q.announce;
+        t.conditions = DayGate(q.fromDay, Gates.UnlockNight(q.fromDay)).Concat(Conditions(q.conditions)).ToList();
+        t.outcomes = new List<TriggerOutcome>();
+        EditorUtility.SetDirty(t);
+        return t;
+    }
+
+    /// <summary>An enum value by name that the enum defines (plain Enum.TryParse also accepts any number).</summary>
+    private static bool ParseEnum<T>(string text, out T value) where T : struct =>
+        Enum.TryParse(text, out value) && Enum.IsDefined(typeof(T), value);
+
+    /// <summary>
+    /// Sets every world array of the library and the interview (authoritative),
+    /// rewires the triggers (the hand-authored ones kept in order, then the
+    /// generated unlock triggers) and drops missing references from the rest.
+    /// </summary>
     private static void WireLibrary(ContentLibrarySO lib, DayPlanSO[] days, EraSO[] eras, NationSO[] nations, NationEraProfileSO[] places,
-                                    ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books)
+                                    ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
+                                    InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks)
     {
         var so = new SerializedObject(lib);
         SetArray(so, "dayPlans", days);
@@ -301,10 +856,13 @@ public static class WorldContentGenerator
         SetArray(so, "archetypes", archetypes);
         SetArray(so, "attributes", attributes);
         SetArray(so, "referenceBooks", books);
+        so.FindProperty("interview").boxedValue = interview;
+        SetArray(so, "questions", questions);
+        SetArray(so, "dialogs", dialogs);
+        SetArray(so, "timelineTriggers", AuthoredTriggers(so).Concat(unlocks).ToArray());
         DropMissing(so, "clues");
         DropMissing(so, "legendaries");
         DropMissing(so, "effects");
-        DropMissing(so, "timelineTriggers");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }
@@ -398,6 +956,20 @@ public static class WorldContentGenerator
         return asset;
     }
 
+    /// <summary>The library's current triggers that are not generated here (non-null, outside the Interview folder), in order.</summary>
+    private static List<Object> AuthoredTriggers(SerializedObject so)
+    {
+        var kept = new List<Object>();
+        SerializedProperty p = so.FindProperty("timelineTriggers");
+        for (int i = 0; i < p.arraySize; i++)
+        {
+            Object o = p.GetArrayElementAtIndex(i).objectReferenceValue;
+            if (o != null && !AssetDatabase.GetAssetPath(o).StartsWith(InterviewFolder + "/"))
+                kept.Add(o);
+        }
+        return kept;
+    }
+
     private static void EnsureFolder(string path)
     {
         if (AssetDatabase.IsValidFolder(path))
@@ -422,6 +994,9 @@ public static class WorldContentGenerator
         public PlaceData[] places;
         public RuleData[] rules;
         public DayData[] days;
+        public InterviewData interview;
+        public QuestionData[] questions;
+        public DialogData[] dialogs;
     }
 
     /// <summary>Authored assets the world is wired into (asset paths).</summary>
@@ -437,7 +1012,7 @@ public static class WorldContentGenerator
 
     [Serializable] private sealed class AttributeData { public string id; public string asset; }
 
-    [Serializable] private sealed class EraData { public string id; public string displayName; public int order; }
+    [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public string[] smallTalk; }
 
     [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; }
 
@@ -455,6 +1030,7 @@ public static class WorldContentGenerator
         public FactData[] facts;
         public string[] maleNames;
         public string[] femaleNames;
+        public string[] smallTalk;
     }
 
     [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; }
@@ -468,8 +1044,65 @@ public static class WorldContentGenerator
         public int queue;
         /// <summary>Tells each liar leaks this day (at least 1).</summary>
         public int tells;
+        /// <summary>Where this day's tells may show ("Papers", "Answer").</summary>
+        public string[] channels;
         public EraWeightData[] eras;
         public string[] countries;
         public string[] rules;
     }
+
+    /// <summary>The interview's wording (plain strings; ids are generated) and its two layout limits.</summary>
+    [Serializable] private sealed class InterviewData
+    {
+        public string deskName;
+        public string opener;
+        public string openerLegendary;
+        public string claim;
+        public string honorificMale;
+        public string honorificFemale;
+        public string honorificUnknown;
+        public string requestLabel;
+        public string requestPrompt;
+        public string requestReply;
+        public string askLabel;
+        public string backLabel;
+        public string smallTalkLabel;
+        public string smallTalkPrompt;
+        public int menuCapacity;
+        public int maxLineChars;
+    }
+
+    /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated.</summary>
+    [Serializable] private sealed class QuestionData
+    {
+        public string id;
+        public string category;
+        public string label;
+        public string prompt;
+        public string answer;
+        public int fromDay;
+        public string announce;
+        public ConditionData[] conditions;
+        public OverrideData[] overrides;
+    }
+
+    [Serializable] private sealed class OverrideData { public string era; public string prompt; public string answer; }
+
+    [Serializable] private sealed class ConditionData { public string type; public string key; public float threshold; }
+
+    /// <summary>A narrative dialog; one-shot unless "repeatable" is true.</summary>
+    [Serializable] private sealed class DialogData
+    {
+        public string id;
+        public string label;
+        public bool repeatable;
+        public ConditionData[] conditions;
+        public NodeData[] nodes;
+    }
+
+    [Serializable] private sealed class NodeData { public string id; public LineData[] lines; public ChoiceData[] choices; }
+
+    [Serializable] private sealed class LineData { public string id; public string speaker; public string text; }
+
+    [Serializable] private sealed class ChoiceData { public string id; public string label; public LineData[] lines; public string next; public string effect; }
 }
