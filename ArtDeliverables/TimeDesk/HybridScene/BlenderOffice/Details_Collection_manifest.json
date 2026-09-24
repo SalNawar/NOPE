@@ -1,0 +1,446 @@
+{
+  "materials": {
+    "CRT_Terracotta": {
+      "color": [
+        0.7254901960784313,
+        0.7137254901960784,
+        0.6784313725490196
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_BackShell": {
+      "color": [
+        0.6862745098039216,
+        0.6784313725490196,
+        0.6470588235294118
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_Ivory": {
+      "color": [
+        0.7803921568627451,
+        0.7725490196078432,
+        0.7411764705882353
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_WarmGrey": {
+      "color": [
+        0.6,
+        0.611764705882353,
+        0.592156862745098
+      ],
+      "smoothness": 0.16000000000000003,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_DeepGrey": {
+      "color": [
+        0.3843137254901961,
+        0.4196078431372549,
+        0.4117647058823529
+      ],
+      "smoothness": 0.13,
+      "metallic": 0,
+      "texture": null
+    },
+    "Recess_Charcoal": {
+      "color": [
+        0.17254901960784313,
+        0.2,
+        0.20392156862745098
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_Glass": {
+      "color": [
+        0.14901960784313725,
+        0.24313725490196078,
+        0.25882352941176473
+      ],
+      "smoothness": 0.72,
+      "metallic": 0,
+      "texture": null
+    },
+    "Case_Steel": {
+      "color": [
+        0.6705882352941176,
+        0.6862745098039216,
+        0.6627450980392157
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.08,
+      "texture": null
+    },
+    "Power_Amber": {
+      "color": [
+        0.7294117647058823,
+        0.47058823529411764,
+        0.3137254901960784
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "Indicator_Green": {
+      "color": [
+        0.5333333333333333,
+        0.6666666666666666,
+        0.4627450980392157
+      ],
+      "smoothness": 0.37,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Light": {
+      "color": [
+        0.7725490196078432,
+        0.7490196078431373,
+        0.6862745098039216
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Dark": {
+      "color": [
+        0.5607843137254902,
+        0.5372549019607843,
+        0.48627450980392156
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Paper_Label": {
+      "color": [
+        0.7686274509803922,
+        0.7490196078431373,
+        0.6823529411764706
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Cable_Rubber": {
+      "color": [
+        0.2235294117647059,
+        0.24313725490196078,
+        0.21176470588235294
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Edge": {
+      "color": [
+        0.3568627450980392,
+        0.26666666666666666,
+        0.21176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Metal": {
+      "color": [
+        0.2549019607843137,
+        0.30196078431372547,
+        0.28627450980392155
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.05,
+      "texture": null
+    },
+    "Desk_WornEdge": {
+      "color": [
+        0.5529411764705883,
+        0.4196078431372549,
+        0.2980392156862745
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Walnut": {
+      "color": [
+        0.5019607843137255,
+        0.3843137254901961,
+        0.2784313725490196
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderPC\\Textures\\desk_walnut_albedo.png"
+    },
+    "Historic_Timber": {
+      "color": [
+        0.4745098039215686,
+        0.3843137254901961,
+        0.2980392156862745
+      ],
+      "smoothness": 0.06999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Historic_WornTimber": {
+      "color": [
+        0.6274509803921569,
+        0.5294117647058824,
+        0.4
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": null
+    },
+    "Historic_Iron": {
+      "color": [
+        0.2823529411764706,
+        0.3411764705882353,
+        0.34901960784313724
+      ],
+      "smoothness": 0.13,
+      "metallic": 0.12,
+      "texture": null
+    },
+    "Historic_Canvas": {
+      "color": [
+        0.7843137254901961,
+        0.7647058823529411,
+        0.6784313725490196
+      ],
+      "smoothness": 0.030000000000000027,
+      "metallic": 0,
+      "texture": null
+    },
+    "Historic_CanvasPatch": {
+      "color": [
+        0.615686274509804,
+        0.6196078431372549,
+        0.5450980392156862
+      ],
+      "smoothness": 0.020000000000000018,
+      "metallic": 0,
+      "texture": null
+    },
+    "Historic_Brass": {
+      "color": [
+        0.6196078431372549,
+        0.5725490196078431,
+        0.40784313725490196
+      ],
+      "smoothness": 0.16000000000000003,
+      "metallic": 0.16,
+      "texture": null
+    },
+    "Rocket_Ochre": {
+      "color": [
+        0.7137254901960784,
+        0.6313725490196078,
+        0.36470588235294116
+      ],
+      "smoothness": 0.06999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Historic_Rust": {
+      "color": [
+        0.5294117647058824,
+        0.39215686274509803,
+        0.3137254901960784
+      ],
+      "smoothness": 0.010000000000000009,
+      "metallic": 0,
+      "texture": null
+    },
+    "Vehicle_Ochre": {
+      "color": [
+        0.7098039215686275,
+        0.596078431372549,
+        0.37254901960784315
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Vehicle_Teal": {
+      "color": [
+        0.403921568627451,
+        0.5215686274509804,
+        0.5058823529411764
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Vehicle_Red": {
+      "color": [
+        0.615686274509804,
+        0.43529411764705883,
+        0.3843137254901961
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Vehicle_Glass": {
+      "color": [
+        0.24705882352941178,
+        0.34901960784313724,
+        0.3803921568627451
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Vehicle_Light": {
+      "color": [
+        0.788235294117647,
+        0.8392156862745098,
+        0.788235294117647
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Voyager_Gold": {
+      "color": [
+        0.7215686274509804,
+        0.6431372549019608,
+        0.41568627450980394
+      ],
+      "smoothness": 0.09999999999999998,
+      "metallic": 0.1,
+      "texture": null
+    },
+    "Voyager_Diagram": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.010000000000000009,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\Images\\voyager_record.png"
+    }
+  },
+  "models": [
+    {
+      "name": "Art_PrintingPress",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_PrintingPress.fbx",
+      "nodes": {
+        "Art_PrintingPress__Historic_Timber": "Historic_Timber",
+        "Art_PrintingPress__Historic_Iron": "Historic_Iron",
+        "Art_PrintingPress__Historic_WornTimber": "Historic_WornTimber",
+        "Art_PrintingPress__Paper_Label": "Paper_Label",
+        "Art_PrintingPress__Plastic_WarmGrey": "Plastic_WarmGrey"
+      },
+      "triangles": 16088
+    },
+    {
+      "name": "Art_WrightFlyer",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_WrightFlyer.fbx",
+      "nodes": {
+        "Art_WrightFlyer__Historic_Canvas": "Historic_Canvas",
+        "Art_WrightFlyer__Historic_CanvasPatch": "Historic_CanvasPatch",
+        "Art_WrightFlyer__Historic_WornTimber": "Historic_WornTimber",
+        "Art_WrightFlyer__Historic_Iron": "Historic_Iron",
+        "Art_WrightFlyer__Historic_Timber": "Historic_Timber",
+        "Art_WrightFlyer__Plastic_WarmGrey": "Plastic_WarmGrey"
+      },
+      "triangles": 17862
+    },
+    {
+      "name": "Art_Rocket",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_Rocket.fbx",
+      "nodes": {
+        "Art_Rocket__Plastic_WarmGrey": "Plastic_WarmGrey",
+        "Art_Rocket__Historic_Iron": "Historic_Iron",
+        "Art_Rocket__Rocket_Ochre": "Rocket_Ochre",
+        "Art_Rocket__Historic_Brass": "Historic_Brass",
+        "Art_Rocket__Recess_Charcoal": "Recess_Charcoal",
+        "Art_Rocket__Historic_Timber": "Historic_Timber",
+        "Art_Rocket__Historic_Rust": "Historic_Rust"
+      },
+      "triangles": 20320
+    },
+    {
+      "name": "Art_VoyagerCover",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_VoyagerCover.fbx",
+      "nodes": {
+        "Art_VoyagerCover__Voyager_Gold": "Voyager_Gold",
+        "Art_VoyagerCover__Voyager_Diagram": "Voyager_Diagram"
+      },
+      "triangles": 1620
+    },
+    {
+      "name": "Office_BoardBracket",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_BoardBracket.fbx",
+      "nodes": {
+        "Office_BoardBracket__Desk_Metal": "Desk_Metal",
+        "Office_BoardBracket__Case_Steel": "Case_Steel"
+      },
+      "triangles": 1316
+    },
+    {
+      "name": "Office_Pin",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_Pin.fbx",
+      "nodes": {
+        "Office_Pin__Case_Steel": "Case_Steel",
+        "Office_Pin__Power_Amber": "Power_Amber"
+      },
+      "triangles": 376
+    },
+    {
+      "name": "City_AirTaxi",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/City_AirTaxi.fbx",
+      "nodes": {
+        "City_AirTaxi__Vehicle_Ochre": "Vehicle_Ochre",
+        "City_AirTaxi__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "City_AirTaxi__Vehicle_Glass": "Vehicle_Glass",
+        "City_AirTaxi__Historic_Iron": "Historic_Iron",
+        "City_AirTaxi__Vehicle_Light": "Vehicle_Light",
+        "City_AirTaxi__Power_Amber": "Power_Amber",
+        "City_AirTaxi__Plastic_Ivory": "Plastic_Ivory",
+        "City_AirTaxi__Wear_Light": "Wear_Light"
+      },
+      "triangles": 5905
+    },
+    {
+      "name": "City_AirSedan",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/City_AirSedan.fbx",
+      "nodes": {
+        "City_AirSedan__Vehicle_Teal": "Vehicle_Teal",
+        "City_AirSedan__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "City_AirSedan__Vehicle_Glass": "Vehicle_Glass",
+        "City_AirSedan__Historic_Iron": "Historic_Iron",
+        "City_AirSedan__Vehicle_Light": "Vehicle_Light",
+        "City_AirSedan__Power_Amber": "Power_Amber",
+        "City_AirSedan__Plastic_Ivory": "Plastic_Ivory",
+        "City_AirSedan__Wear_Light": "Wear_Light"
+      },
+      "triangles": 5905
+    },
+    {
+      "name": "City_AirVan",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/City_AirVan.fbx",
+      "nodes": {
+        "City_AirVan__Vehicle_Red": "Vehicle_Red",
+        "City_AirVan__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "City_AirVan__Vehicle_Glass": "Vehicle_Glass",
+        "City_AirVan__Historic_Iron": "Historic_Iron",
+        "City_AirVan__Vehicle_Light": "Vehicle_Light",
+        "City_AirVan__Power_Amber": "Power_Amber",
+        "City_AirVan__Wear_Light": "Wear_Light"
+      },
+      "triangles": 5717
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+00:04.672  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+00:04.672  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+Info: Removed 480 vertices
+Info: Removed 480 vertices
+Info: Removed 960 vertices
+Info: Removed 240 vertices
+Info: Removed 240 vertices
+Info: Removed 64 vertices
+Info: Removed 2046 vertices
+Info: Removed 240 vertices
+Info: Removed 240 vertices
+Info: Removed 240 vertices
+Info: Removed 240 vertices
+Info: Removed 0 vertices
+Info: Removed 480 vertices
+Info: Removed 240 vertices
+Info: Removed 20 vertices
+Info: Removed 128 vertices
+Info: Removed 0 vertices
+Info: Removed 1204 vertices
+Info: Removed 4420 vertices
+Info: Removed 192 vertices
+Info: Removed 160 vertices
+Info: Removed 1204 vertices
+Info: Removed 32 vertices
+Info: Removed 32 vertices
+Info: Removed 176 vertices
+Info: Removed 32 vertices
+Info: Removed 480 vertices
+Info: Removed 240 vertices
+Info: Removed 160 vertices
+Info: Removed 32 vertices
+Info: Removed 480 vertices
+Info: Removed 96 vertices
+Info: Removed 20 vertices
+Info: Removed 0 vertices
+Info: Removed 240 vertices
+Info: Removed 480 vertices
+Info: Removed 240 vertices
+Info: Removed 128 vertices
+Info: Removed 512 vertices
+Info: Removed 128 vertices
+Info: Removed 96 vertices
+Info: Removed 16 vertices
+Info: Removed 64 vertices
+Info: Removed 64 vertices
+Info: Removed 64 vertices
+Info: Removed 3048 vertices
+Info: Removed 760 vertices
+Info: Removed 256 vertices
+Info: Removed 48 vertices
+Info: Removed 32 vertices
+Info: Removed 240 vertices
+Info: Removed 240 vertices
+Info: Removed 0 vertices
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_PrintingPress.fbx'
+export finished in 0.0250 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_WrightFlyer.fbx'
+export finished in 0.0255 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_Rocket.fbx'
+export finished in 0.0339 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_VoyagerCover.fbx'
+export finished in 0.0085 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Office_BoardBracket.fbx'
+export finished in 0.0072 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Office_Pin.fbx'
+export finished in 0.0070 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\City_AirTaxi.fbx'
+export finished in 0.0201 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\City_AirSedan.fbx'
+export finished in 0.0188 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\City_AirVan.fbx'
+export finished in 0.0169 sec.
+Info: Saved as "Details_Collection.blend"
+
+Blender quit

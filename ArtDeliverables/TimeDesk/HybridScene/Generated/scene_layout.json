@@ -1,0 +1,464 @@
+{
+  "status": "Original offline authoring proposal. The imported and refined Unity placements are now saved in Assets/Scenes/OfficeScene.unity; no Play-mode or test run by Codex.",
+  "units": "metres",
+  "axis": "Y up, view +Z",
+  "camera_proposal": {
+    "position": [
+      0,
+      1.8,
+      -3.0
+    ],
+    "look_at": [
+      0,
+      3.5,
+      20
+    ],
+    "vertical_fov_degrees": 58,
+    "aspect": 1.7777777777777777
+  },
+  "placements": [
+    {
+      "model": "hall_floor",
+      "name": "HallFloor",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "hall_structure",
+      "name": "HallStructure",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "banner",
+      "name": "Banner_-8",
+      "position": [
+        -8,
+        11.8,
+        13
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "banner",
+      "name": "Banner_-4.5",
+      "position": [
+        -4.5,
+        11.8,
+        18
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "banner",
+      "name": "Banner_4.5",
+      "position": [
+        4.5,
+        11.8,
+        18
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "banner",
+      "name": "Banner_8",
+      "position": [
+        8,
+        11.8,
+        13
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "departure_board",
+      "name": "Departures",
+      "position": [
+        0,
+        9.1,
+        19
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "portal_ring",
+      "name": "PortalRing",
+      "position": [
+        0,
+        0,
+        20
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "portal_surface",
+      "name": "PortalOpening",
+      "position": [
+        0,
+        0,
+        20.03
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "portal_cabinet",
+      "name": "PortalCabinet",
+      "position": [
+        4.1,
+        0,
+        20
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "public_bench",
+      "name": "Bench_-11.5_9",
+      "position": [
+        -11.5,
+        0,
+        9
+      ],
+      "yaw_degrees": 90,
+      "scale": 1
+    },
+    {
+      "model": "public_bench",
+      "name": "Bench_-11.5_16",
+      "position": [
+        -11.5,
+        0,
+        16
+      ],
+      "yaw_degrees": 90,
+      "scale": 1
+    },
+    {
+      "model": "public_bench",
+      "name": "Bench_11.5_9",
+      "position": [
+        11.5,
+        0,
+        9
+      ],
+      "yaw_degrees": -90,
+      "scale": 1
+    },
+    {
+      "model": "public_bench",
+      "name": "Bench_11.5_16",
+      "position": [
+        11.5,
+        0,
+        16
+      ],
+      "yaw_degrees": -90,
+      "scale": 1
+    },
+    {
+      "model": "desk",
+      "name": "Desk",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "partition",
+      "name": "LeftPartition",
+      "position": [
+        -2.95,
+        0,
+        0.15
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "partition",
+      "name": "RightPartition",
+      "position": [
+        2.95,
+        0,
+        0.15
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "crt_monitor",
+      "name": "CRT",
+      "position": [
+        1.65,
+        1.06,
+        0.13
+      ],
+      "yaw_degrees": -16,
+      "scale": 1
+    },
+    {
+      "model": "keyboard",
+      "name": "Keyboard",
+      "position": [
+        1.6,
+        1.06,
+        -0.55
+      ],
+      "yaw_degrees": -8,
+      "scale": 1
+    },
+    {
+      "model": "credits_till",
+      "name": "Till",
+      "position": [
+        -1.75,
+        1.06,
+        0.1
+      ],
+      "yaw_degrees": 10,
+      "scale": 1
+    },
+    {
+      "model": "next_sign",
+      "name": "Next",
+      "position": [
+        0,
+        1.06,
+        0.23
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "digital_clock",
+      "name": "Clock",
+      "position": [
+        -2.86,
+        2.05,
+        0.1
+      ],
+      "yaw_degrees": 90,
+      "scale": 1
+    },
+    {
+      "model": "stability_device",
+      "name": "Stability",
+      "position": [
+        2.86,
+        1.95,
+        0.18
+      ],
+      "yaw_degrees": -90,
+      "scale": 1
+    },
+    {
+      "model": "calendar",
+      "name": "DayCalendar",
+      "position": [
+        -2.86,
+        1.45,
+        0.4
+      ],
+      "yaw_degrees": 90,
+      "scale": 1
+    },
+    {
+      "model": "folded_newspaper",
+      "name": "Newspaper",
+      "position": [
+        -2.1,
+        1.06,
+        -0.53
+      ],
+      "yaw_degrees": -8,
+      "scale": 1
+    },
+    {
+      "model": "near_megablock",
+      "name": "Megablock_-35",
+      "position": [
+        -35,
+        -15,
+        50
+      ],
+      "yaw_degrees": 0,
+      "scale": 0.8
+    },
+    {
+      "model": "near_megablock",
+      "name": "Megablock_-10",
+      "position": [
+        -10,
+        -15,
+        95
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "near_megablock",
+      "name": "Megablock_25",
+      "position": [
+        25,
+        -15,
+        80
+      ],
+      "yaw_degrees": 0,
+      "scale": 1.1
+    },
+    {
+      "model": "near_megablock",
+      "name": "Megablock_45",
+      "position": [
+        45,
+        -15,
+        30
+      ],
+      "yaw_degrees": 0,
+      "scale": 0.8
+    },
+    {
+      "model": "near_megablock",
+      "name": "Megablock_-50",
+      "position": [
+        -50,
+        -15,
+        5
+      ],
+      "yaw_degrees": 0,
+      "scale": 0.65
+    },
+    {
+      "model": "exhibit_plinth",
+      "name": "ExhibitAnchor_0",
+      "position": [
+        -10,
+        0,
+        8
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "exhibit_plinth",
+      "name": "ExhibitAnchor_1",
+      "position": [
+        -9,
+        0,
+        15
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "exhibit_plinth",
+      "name": "ExhibitAnchor_2",
+      "position": [
+        -7,
+        0,
+        22
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "exhibit_plinth",
+      "name": "ExhibitAnchor_3",
+      "position": [
+        10,
+        0,
+        9
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "exhibit_plinth",
+      "name": "ExhibitAnchor_4",
+      "position": [
+        9,
+        0,
+        16
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    },
+    {
+      "model": "exhibit_plinth",
+      "name": "ExhibitAnchor_5",
+      "position": [
+        7,
+        0,
+        23
+      ],
+      "yaw_degrees": 0,
+      "scale": 1
+    }
+  ],
+  "traffic_routes": [
+    {
+      "start": [
+        -65,
+        12,
+        50
+      ],
+      "end": [
+        65,
+        12,
+        50
+      ],
+      "seconds": 24
+    },
+    {
+      "start": [
+        65,
+        18,
+        75
+      ],
+      "end": [
+        -65,
+        18,
+        75
+      ],
+      "seconds": 34
+    }
+  ],
+  "dynamic_surfaces": [
+    "runtime_clock",
+    "runtime_stability",
+    "runtime_credits",
+    "runtime_next",
+    "runtime_departures",
+    "runtime_billboard",
+    "runtime_calendar",
+    "crt_screen_4_3",
+    "animated_opening"
+  ],
+  "not_implemented": [
+    "Unity import/wiring",
+    "history-driven variants",
+    "shift-clock lighting",
+    "sculpted exhibit meshes",
+    "runtime animation controller"
+  ],
+  "authoritative_unity_scene": "Assets/Scenes/OfficeScene.unity"
+}

@@ -1,0 +1,598 @@
+fileFormatVersion: 2
+guid: 792dec7cb9f2e6f4ab7ce1259de869c7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 325801151879842752
+    second: mona_lisa_0
+  - first:
+      213: 2187478008378357982
+    second: mona_lisa_1
+  - first:
+      213: 408467630639956442
+    second: mona_lisa_2
+  - first:
+      213: 2035195461962282897
+    second: mona_lisa_3
+  - first:
+      213: -1592457279144562857
+    second: mona_lisa_4
+  - first:
+      213: -1483230665682795348
+    second: mona_lisa_5
+  - first:
+      213: -5040360002080132789
+    second: mona_lisa_6
+  - first:
+      213: -7340100529060694509
+    second: mona_lisa_7
+  - first:
+      213: -1021094250510860705
+    second: mona_lisa_8
+  - first:
+      213: 3211459077407473823
+    second: mona_lisa_9
+  - first:
+      213: 3288055939589474282
+    second: mona_lisa_10
+  - first:
+      213: -4693350661638506999
+    second: mona_lisa_11
+  - first:
+      213: 1003984853012918304
+    second: mona_lisa_12
+  - first:
+      213: 1071547262738768648
+    second: mona_lisa_13
+  - first:
+      213: 3696620005950686028
+    second: mona_lisa_14
+  - first:
+      213: 353021983330886277
+    second: mona_lisa_15
+  - first:
+      213: -1257950650700758989
+    second: mona_lisa_16
+  - first:
+      213: -353806692167110991
+    second: mona_lisa_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 0
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: mona_lisa_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1092
+        height: 1374
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0cb0635eb6a758400800000000000000
+      internalID: 325801151879842752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_1
+      rect:
+        serializedVersion: 2
+        x: 548
+        y: 1360
+        width: 21
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed8fe5ba8ab7b5e10800000000000000
+      internalID: 2187478008378357982
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_2
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 1361
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad14a8a552b2ba500800000000000000
+      internalID: 408467630639956442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_3
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 831
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 197bfbe5d777e3c10800000000000000
+      internalID: 2035195461962282897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_4
+      rect:
+        serializedVersion: 2
+        x: 56
+        y: 96
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 75f6a94ba8476e9e0800000000000000
+      internalID: -1592457279144562857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_5
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 87
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca4c20c61918a6be0800000000000000
+      internalID: -1483230665682795348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_6
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 78
+        width: 19
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b413de7784b0d0ab0800000000000000
+      internalID: -5040360002080132789
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_7
+      rect:
+        serializedVersion: 2
+        x: 604
+        y: 73
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3163ea55579b22a90800000000000000
+      internalID: -7340100529060694509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_8
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 72
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f5e3b1c603854d1f0800000000000000
+      internalID: -1021094250510860705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_9
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 64
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f90839f0405619c20800000000000000
+      internalID: 3211459077407473823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_10
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 51
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ae708d8c47581ad20800000000000000
+      internalID: 3288055939589474282
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_11
+      rect:
+        serializedVersion: 2
+        x: 893
+        y: 47
+        width: 11
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90631be807edddeb0800000000000000
+      internalID: -4693350661638506999
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_12
+      rect:
+        serializedVersion: 2
+        x: 232
+        y: 23
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02035bb87eedeed00800000000000000
+      internalID: 1003984853012918304
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_13
+      rect:
+        serializedVersion: 2
+        x: 300
+        y: 25
+        width: 10
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8032693ee86eede00800000000000000
+      internalID: 1071547262738768648
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_14
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 17
+        width: 23
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c430b445f480d4330800000000000000
+      internalID: 3696620005950686028
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_15
+      rect:
+        serializedVersion: 2
+        x: 335
+        y: 15
+        width: 45
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 582675a9f9f26e400800000000000000
+      internalID: 353021983330886277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_16
+      rect:
+        serializedVersion: 2
+        x: 387
+        y: 33
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 33082005c8cda8ee0800000000000000
+      internalID: -1257950650700758989
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mona_lisa_17
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 9
+        width: 7
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1be293220b6071bf0800000000000000
+      internalID: -353806692167110991
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      mona_lisa_0: 325801151879842752
+      mona_lisa_1: 2187478008378357982
+      mona_lisa_10: 3288055939589474282
+      mona_lisa_11: -4693350661638506999
+      mona_lisa_12: 1003984853012918304
+      mona_lisa_13: 1071547262738768648
+      mona_lisa_14: 3696620005950686028
+      mona_lisa_15: 353021983330886277
+      mona_lisa_16: -1257950650700758989
+      mona_lisa_17: -353806692167110991
+      mona_lisa_2: 408467630639956442
+      mona_lisa_3: 2035195461962282897
+      mona_lisa_4: -1592457279144562857
+      mona_lisa_5: -1483230665682795348
+      mona_lisa_6: -5040360002080132789
+      mona_lisa_7: -7340100529060694509
+      mona_lisa_8: -1021094250510860705
+      mona_lisa_9: 3211459077407473823
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

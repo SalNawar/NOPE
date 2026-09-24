@@ -1,0 +1,629 @@
+[
+  {
+    "old": "Hybrid_HallFloor",
+    "new": "Blender_HallFloor",
+    "model": "Hall_Floor",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_HallStructure",
+    "new": "Blender_HallStructure",
+    "model": "Hall_Structure",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Departures",
+    "new": "Blender_Departures",
+    "model": "Hall_Departures",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      0.0,
+      9.1,
+      19.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_PortalRing",
+    "new": "Blender_PortalRing",
+    "model": "Hall_Portal",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      0.0,
+      0.0,
+      20.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_PortalCabinet",
+    "new": "Blender_PortalCabinet",
+    "model": "Hall_ServiceCabinet",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      4.1,
+      0.0,
+      20.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Banner_-8",
+    "new": "Blender_Banner_-8",
+    "model": "Hall_Banner",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      -8.0,
+      11.8,
+      13.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Banner_-4.5",
+    "new": "Blender_Banner_-4.5",
+    "model": "Hall_Banner",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      -4.5,
+      11.8,
+      18.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Banner_4.5",
+    "new": "Blender_Banner_4.5",
+    "model": "Hall_Banner",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      4.5,
+      11.8,
+      18.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Banner_8",
+    "new": "Blender_Banner_8",
+    "model": "Hall_Banner",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      8.0,
+      11.8,
+      13.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Bench_-11.5_9",
+    "new": "Blender_Bench_-11.5_9",
+    "model": "Hall_Bench",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      -11.5,
+      0.0,
+      9.0
+    ],
+    "yaw": 270,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Bench_-11.5_16",
+    "new": "Blender_Bench_-11.5_16",
+    "model": "Hall_Bench",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      -11.5,
+      0.0,
+      16.0
+    ],
+    "yaw": 270,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Bench_11.5_9",
+    "new": "Blender_Bench_11.5_9",
+    "model": "Hall_Bench",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      11.5,
+      0.0,
+      9.0
+    ],
+    "yaw": 90,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Hybrid_Bench_11.5_16",
+    "new": "Blender_Bench_11.5_16",
+    "model": "Hall_Bench",
+    "parent": "HybridOffice/Hall",
+    "pos": [
+      11.5,
+      0.0,
+      16.0
+    ],
+    "yaw": 90,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "DroppedPaper_0",
+    "new": "Blender_DroppedPaper_0",
+    "model": "Hall_Paperwork",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -4.3,
+      0.01,
+      5.0
+    ],
+    "yaw": 20.0,
+    "rx": 0,
+    "rz": 0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "DroppedPaper_1",
+    "new": "Blender_DroppedPaper_1",
+    "model": "Hall_Paperwork",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      5.3,
+      0.01,
+      6.0
+    ],
+    "yaw": 335.0,
+    "rx": 0,
+    "rz": 0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "DroppedPaper_2",
+    "new": "Blender_DroppedPaper_2",
+    "model": "Hall_Paperwork",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -7.0,
+      0.01,
+      11.0
+    ],
+    "yaw": 55.0000038,
+    "rx": 0,
+    "rz": 0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "DroppedPaper_3",
+    "new": "Blender_DroppedPaper_3",
+    "model": "Hall_Paperwork",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      4.0,
+      0.01,
+      12.0
+    ],
+    "yaw": 330.0,
+    "rx": 0,
+    "rz": 0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "DroppedPaper_4",
+    "new": "Blender_DroppedPaper_4",
+    "model": "Hall_Paperwork",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -2.4,
+      0.01,
+      8.0
+    ],
+    "yaw": 30.0000019,
+    "rx": 0,
+    "rz": 0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "DroppedPaper_5",
+    "new": "Blender_DroppedPaper_5",
+    "model": "Hall_Paperwork",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      7.8,
+      0.01,
+      15.0
+    ],
+    "yaw": 0.0,
+    "rx": 0,
+    "rz": 0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "ThinkerPlinth",
+    "new": "Blender_ThinkerPlinth",
+    "model": "Hall_Plinth",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -5.8,
+      0.0,
+      12.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "old": "DiscobolusPlinth",
+    "new": "Blender_DiscobolusPlinth",
+    "model": "Hall_Plinth",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      4.4,
+      0.0,
+      8.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "old": "NefertitiPlinth",
+    "new": "Blender_NefertitiPlinth",
+    "model": "Hall_Plinth",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -7.8,
+      0.0,
+      6.5
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      0.68,
+      1.0,
+      0.68
+    ]
+  },
+  {
+    "old": "VoyagerPlinth",
+    "new": "Blender_VoyagerPlinth",
+    "model": "Hall_Plinth",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -3.7,
+      0.0,
+      6.0
+    ],
+    "yaw": 0.0,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      0.52,
+      1.0,
+      0.52
+    ]
+  },
+  {
+    "old": "Exhibit_MonaLisa",
+    "new": "Blender_Exhibit_MonaLisa",
+    "model": "Art_MonaLisa",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -4.9,
+      2.0,
+      7.9
+    ],
+    "yaw": -12,
+    "rx": 0.0,
+    "rz": 356.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Exhibit_PearlEarring",
+    "new": "Blender_Exhibit_PearlEarring",
+    "model": "Art_PearlEarring",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      7.0,
+      1.95,
+      10.5
+    ],
+    "yaw": 12,
+    "rx": 0.0,
+    "rz": 5.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Exhibit_StarryNight",
+    "new": "Blender_Exhibit_StarryNight",
+    "model": "Art_StarryNight",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -8.5,
+      2.2,
+      13.0
+    ],
+    "yaw": -12,
+    "rx": -5.33608535e-08,
+    "rz": 355.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Exhibit_GreatWave",
+    "new": "Blender_Exhibit_GreatWave",
+    "model": "Art_GreatWave",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      5.9,
+      2.1,
+      15.0
+    ],
+    "yaw": 12,
+    "rx": 0.0,
+    "rz": 3.00000024,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Exhibit_Milkmaid",
+    "new": "Blender_Exhibit_Milkmaid",
+    "model": "Art_Milkmaid",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -6.8,
+      0.69,
+      9.0
+    ],
+    "yaw": -12,
+    "rx": 348.0,
+    "rz": 12.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "Exhibit_Mondrian",
+    "new": "Blender_Exhibit_Mondrian",
+    "model": "Art_Mondrian",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      8.0,
+      0.8,
+      17.0
+    ],
+    "yaw": 12,
+    "rx": 352.0,
+    "rz": 351.0,
+    "scale": [
+      1,
+      1,
+      1
+    ]
+  },
+  {
+    "old": "MonaDisplay",
+    "new": "Blender_MonaDisplay",
+    "model": "Hall_DisplayStand",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -4.9,
+      0,
+      8.0
+    ],
+    "yaw": -12,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      0.9500000000000001,
+      1
+    ]
+  },
+  {
+    "old": "PearlDisplay",
+    "new": "Blender_PearlDisplay",
+    "model": "Hall_DisplayStand",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      7.0,
+      0,
+      10.6
+    ],
+    "yaw": 12,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1,
+      0.8928571428571429,
+      1
+    ]
+  },
+  {
+    "old": "StarryDisplay",
+    "new": "Blender_StarryDisplay",
+    "model": "Hall_DisplayStand",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      -8.5,
+      0,
+      13.1
+    ],
+    "yaw": -12,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1.7,
+      1.0035714285714286,
+      1
+    ]
+  },
+  {
+    "old": "WaveDisplay",
+    "new": "Blender_WaveDisplay",
+    "model": "Hall_DisplayStand",
+    "parent": "HybridOffice/Exhibits",
+    "pos": [
+      5.9,
+      0,
+      15.1
+    ],
+    "yaw": 12,
+    "rx": 0.0,
+    "rz": 0.0,
+    "scale": [
+      1.7,
+      0.9321428571428572,
+      1
+    ]
+  }
+]

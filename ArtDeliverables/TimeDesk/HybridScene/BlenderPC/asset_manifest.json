@@ -1,0 +1,389 @@
+{
+  "source": "ReStory user-supplied screenshot; original unbranded interpretation",
+  "materials": {
+    "CRT_Terracotta": {
+      "color": [
+        0.7254901960784313,
+        0.7137254901960784,
+        0.6784313725490196
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_BackShell": {
+      "color": [
+        0.6862745098039216,
+        0.6784313725490196,
+        0.6470588235294118
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_Ivory": {
+      "color": [
+        0.7803921568627451,
+        0.7725490196078432,
+        0.7411764705882353
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_WarmGrey": {
+      "color": [
+        0.6,
+        0.611764705882353,
+        0.592156862745098
+      ],
+      "smoothness": 0.16000000000000003,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_DeepGrey": {
+      "color": [
+        0.3843137254901961,
+        0.4196078431372549,
+        0.4117647058823529
+      ],
+      "smoothness": 0.13,
+      "metallic": 0,
+      "texture": null
+    },
+    "Recess_Charcoal": {
+      "color": [
+        0.17254901960784313,
+        0.2,
+        0.20392156862745098
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_Glass": {
+      "color": [
+        0.14901960784313725,
+        0.24313725490196078,
+        0.25882352941176473
+      ],
+      "smoothness": 0.72,
+      "metallic": 0,
+      "texture": null
+    },
+    "Case_Steel": {
+      "color": [
+        0.6705882352941176,
+        0.6862745098039216,
+        0.6627450980392157
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.08,
+      "texture": null
+    },
+    "Power_Amber": {
+      "color": [
+        0.7294117647058823,
+        0.47058823529411764,
+        0.3137254901960784
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "Indicator_Green": {
+      "color": [
+        0.5333333333333333,
+        0.6666666666666666,
+        0.4627450980392157
+      ],
+      "smoothness": 0.37,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Light": {
+      "color": [
+        0.7725490196078432,
+        0.7490196078431373,
+        0.6862745098039216
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Dark": {
+      "color": [
+        0.5607843137254902,
+        0.5372549019607843,
+        0.48627450980392156
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Paper_Label": {
+      "color": [
+        0.7686274509803922,
+        0.7490196078431373,
+        0.6823529411764706
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Cable_Rubber": {
+      "color": [
+        0.2235294117647059,
+        0.24313725490196078,
+        0.21176470588235294
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Edge": {
+      "color": [
+        0.3568627450980392,
+        0.26666666666666666,
+        0.21176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Metal": {
+      "color": [
+        0.2549019607843137,
+        0.30196078431372547,
+        0.28627450980392155
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.05,
+      "texture": null
+    },
+    "Desk_WornEdge": {
+      "color": [
+        0.5529411764705883,
+        0.4196078431372549,
+        0.2980392156862745
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Walnut": {
+      "color": [
+        0.5019607843137255,
+        0.3843137254901961,
+        0.2784313725490196
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderPC\\Textures\\desk_walnut_albedo.png"
+    }
+  },
+  "models": [
+    {
+      "name": "PC_CRT_Desktop",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderPC/Models/PC_CRT_Desktop.fbx",
+      "nodes": {
+        "PC_CRT_Desktop__Case_Steel": "Case_Steel",
+        "PC_CRT_Desktop__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "PC_CRT_Desktop__Cable_Rubber": "Cable_Rubber",
+        "PC_CRT_Desktop__Plastic_Ivory": "Plastic_Ivory",
+        "PC_CRT_Desktop__Recess_Charcoal": "Recess_Charcoal",
+        "PC_CRT_Desktop__Plastic_WarmGrey": "Plastic_WarmGrey",
+        "PC_CRT_Desktop__Paper_Label": "Paper_Label",
+        "PC_CRT_Desktop__Power_Amber": "Power_Amber",
+        "PC_CRT_Desktop__Indicator_Green": "Indicator_Green",
+        "PC_CRT_Desktop__Wear_Dark": "Wear_Dark",
+        "PC_CRT_Desktop__CRT_BackShell": "CRT_BackShell",
+        "PC_CRT_Desktop__CRT_Terracotta": "CRT_Terracotta",
+        "PC_CRT_Desktop__CRT_Glass": "CRT_Glass",
+        "PC_CRT_Desktop__Wear_Light": "Wear_Light"
+      },
+      "meshStats": [
+        {
+          "node": "PC_CRT_Desktop__Case_Steel",
+          "vertices": 96,
+          "triangles": 188
+        },
+        {
+          "node": "PC_CRT_Desktop__Plastic_DeepGrey",
+          "vertices": 2256,
+          "triangles": 4428
+        },
+        {
+          "node": "PC_CRT_Desktop__Cable_Rubber",
+          "vertices": 1124,
+          "triangles": 2192
+        },
+        {
+          "node": "PC_CRT_Desktop__Plastic_Ivory",
+          "vertices": 512,
+          "triangles": 1012
+        },
+        {
+          "node": "PC_CRT_Desktop__Recess_Charcoal",
+          "vertices": 1972,
+          "triangles": 3720
+        },
+        {
+          "node": "PC_CRT_Desktop__Plastic_WarmGrey",
+          "vertices": 480,
+          "triangles": 940
+        },
+        {
+          "node": "PC_CRT_Desktop__Paper_Label",
+          "vertices": 103,
+          "triangles": 193
+        },
+        {
+          "node": "PC_CRT_Desktop__Power_Amber",
+          "vertices": 288,
+          "triangles": 568
+        },
+        {
+          "node": "PC_CRT_Desktop__Indicator_Green",
+          "vertices": 240,
+          "triangles": 468
+        },
+        {
+          "node": "PC_CRT_Desktop__Wear_Dark",
+          "vertices": 21,
+          "triangles": 15
+        },
+        {
+          "node": "PC_CRT_Desktop__CRT_BackShell",
+          "vertices": 700,
+          "triangles": 1380
+        },
+        {
+          "node": "PC_CRT_Desktop__CRT_Terracotta",
+          "vertices": 396,
+          "triangles": 712
+        },
+        {
+          "node": "PC_CRT_Desktop__CRT_Glass",
+          "vertices": 825,
+          "triangles": 1536
+        },
+        {
+          "node": "PC_CRT_Desktop__Wear_Light",
+          "vertices": 28,
+          "triangles": 20
+        }
+      ]
+    },
+    {
+      "name": "PC_Keyboard",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderPC/Models/PC_Keyboard.fbx",
+      "nodes": {
+        "PC_Keyboard__Plastic_WarmGrey": "Plastic_WarmGrey",
+        "PC_Keyboard__Plastic_Ivory": "Plastic_Ivory",
+        "PC_Keyboard__Plastic_DeepGrey": "Plastic_DeepGrey",
+        "PC_Keyboard__Recess_Charcoal": "Recess_Charcoal",
+        "PC_Keyboard__Power_Amber": "Power_Amber",
+        "PC_Keyboard__Indicator_Green": "Indicator_Green",
+        "PC_Keyboard__Paper_Label": "Paper_Label",
+        "PC_Keyboard__Cable_Rubber": "Cable_Rubber",
+        "PC_Keyboard__Wear_Light": "Wear_Light"
+      },
+      "meshStats": [
+        {
+          "node": "PC_Keyboard__Plastic_WarmGrey",
+          "vertices": 2292,
+          "triangles": 3068
+        },
+        {
+          "node": "PC_Keyboard__Plastic_Ivory",
+          "vertices": 3756,
+          "triangles": 4988
+        },
+        {
+          "node": "PC_Keyboard__Plastic_DeepGrey",
+          "vertices": 384,
+          "triangles": 752
+        },
+        {
+          "node": "PC_Keyboard__Recess_Charcoal",
+          "vertices": 288,
+          "triangles": 564
+        },
+        {
+          "node": "PC_Keyboard__Power_Amber",
+          "vertices": 122,
+          "triangles": 160
+        },
+        {
+          "node": "PC_Keyboard__Indicator_Green",
+          "vertices": 288,
+          "triangles": 564
+        },
+        {
+          "node": "PC_Keyboard__Paper_Label",
+          "vertices": 96,
+          "triangles": 188
+        },
+        {
+          "node": "PC_Keyboard__Cable_Rubber",
+          "vertices": 802,
+          "triangles": 1576
+        },
+        {
+          "node": "PC_Keyboard__Wear_Light",
+          "vertices": 21,
+          "triangles": 15
+        }
+      ]
+    },
+    {
+      "name": "PC_Desk",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderPC/Models/PC_Desk.fbx",
+      "nodes": {
+        "PC_Desk__Desk_Walnut": "Desk_Walnut",
+        "PC_Desk__Desk_Edge": "Desk_Edge",
+        "PC_Desk__Recess_Charcoal": "Recess_Charcoal",
+        "PC_Desk__Desk_Metal": "Desk_Metal",
+        "PC_Desk__Desk_WornEdge": "Desk_WornEdge"
+      },
+      "meshStats": [
+        {
+          "node": "PC_Desk__Desk_Walnut",
+          "vertices": 192,
+          "triangles": 376
+        },
+        {
+          "node": "PC_Desk__Desk_Edge",
+          "vertices": 96,
+          "triangles": 188
+        },
+        {
+          "node": "PC_Desk__Recess_Charcoal",
+          "vertices": 96,
+          "triangles": 188
+        },
+        {
+          "node": "PC_Desk__Desk_Metal",
+          "vertices": 384,
+          "triangles": 752
+        },
+        {
+          "node": "PC_Desk__Desk_WornEdge",
+          "vertices": 49,
+          "triangles": 35
+        }
+      ]
+    }
+  ],
+  "screenLocalCenter": [
+    0,
+    0.69,
+    -0.305
+  ],
+  "screenSize": [
+    0.686,
+    0.5145
+  ],
+  "tabletopHeight": 1.06
+}

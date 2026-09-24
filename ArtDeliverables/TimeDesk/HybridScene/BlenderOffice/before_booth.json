@@ -1,0 +1,801 @@
+{
+  "Hybrid_Till": {
+    "name": "Hybrid_Till",
+    "entityId": "18446744073709548560",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Till",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -1.96,
+      "y": 1.06,
+      "z": 0.44
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 9.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 11,
+    "children": [
+      {
+        "name": "drawer",
+        "entityId": "18446744073709548558",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/drawer"
+      },
+      {
+        "name": "drawer_pull",
+        "entityId": "18446744073709548550",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/drawer_pull"
+      },
+      {
+        "name": "drawer_seam",
+        "entityId": "18446744073709548542",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/drawer_seam"
+      },
+      {
+        "name": "key_bed",
+        "entityId": "18446744073709548534",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/key_bed"
+      },
+      {
+        "name": "readout_housing",
+        "entityId": "18446744073709548526",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/readout_housing"
+      },
+      {
+        "name": "readout_recess",
+        "entityId": "18446744073709548518",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/readout_recess"
+      },
+      {
+        "name": "runtime_credits",
+        "entityId": "18446744073709548510",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/runtime_credits"
+      },
+      {
+        "name": "till_body",
+        "entityId": "18446744073709548502",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/till_body"
+      },
+      {
+        "name": "till_keys_action",
+        "entityId": "18446744073709548494",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/till_keys_action"
+      },
+      {
+        "name": "till_keys_number",
+        "entityId": "18446744073709548486",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/till_keys_number"
+      },
+      {
+        "name": "CreditsNumber",
+        "entityId": "73104",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Till/CreditsNumber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Next": {
+    "name": "Hybrid_Next",
+    "entityId": "18446744073709547088",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Next",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 1.06,
+      "z": 0.23
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 6,
+    "children": [
+      {
+        "name": "runtime_next",
+        "entityId": "18446744073709547086",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Next/runtime_next"
+      },
+      {
+        "name": "sign_base",
+        "entityId": "18446744073709547078",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Next/sign_base"
+      },
+      {
+        "name": "sign_casing",
+        "entityId": "18446744073709547070",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Next/sign_casing"
+      },
+      {
+        "name": "sign_recess",
+        "entityId": "18446744073709547062",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Next/sign_recess"
+      },
+      {
+        "name": "sign_screws",
+        "entityId": "18446744073709547054",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Next/sign_screws"
+      },
+      {
+        "name": "NextLabel",
+        "entityId": "73486",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Next/NextLabel"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Clock": {
+    "name": "Hybrid_Clock",
+    "entityId": "18446744073709548356",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Clock",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -2.35,
+      "y": 1.83,
+      "z": 0.6
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 25.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 4,
+    "children": [
+      {
+        "name": "casing",
+        "entityId": "18446744073709548354",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Clock/casing"
+      },
+      {
+        "name": "display_recess",
+        "entityId": "18446744073709548346",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Clock/display_recess"
+      },
+      {
+        "name": "runtime_clock",
+        "entityId": "18446744073709548338",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Clock/runtime_clock"
+      },
+      {
+        "name": "ShiftClockDisplay",
+        "entityId": "71804",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Clock/ShiftClockDisplay"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Stability": {
+    "name": "Hybrid_Stability",
+    "entityId": "18446744073709546436",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Stability",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 2.35,
+      "y": 2.03,
+      "z": 0.6
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 335.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 6,
+    "children": [
+      {
+        "name": "casing",
+        "entityId": "18446744073709546434",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stability/casing"
+      },
+      {
+        "name": "display_recess",
+        "entityId": "18446744073709546426",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stability/display_recess"
+      },
+      {
+        "name": "lamp_green",
+        "entityId": "18446744073709546418",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stability/lamp_green"
+      },
+      {
+        "name": "lamp_ivory_dark",
+        "entityId": "18446744073709546410",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stability/lamp_ivory_dark"
+      },
+      {
+        "name": "runtime_stability",
+        "entityId": "18446744073709546402",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stability/runtime_stability"
+      },
+      {
+        "name": "StabilityPercent",
+        "entityId": "73554",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stability/StabilityPercent"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_DayCalendar": {
+    "name": "Hybrid_DayCalendar",
+    "entityId": "18446744073709546744",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_DayCalendar",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -2.35,
+      "y": 1.32,
+      "z": 0.6
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 25.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "binding",
+        "entityId": "18446744073709546742",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_DayCalendar/binding"
+      },
+      {
+        "name": "calendar_backing",
+        "entityId": "18446744073709546734",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_DayCalendar/calendar_backing"
+      },
+      {
+        "name": "calendar_pins",
+        "entityId": "18446744073709546726",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_DayCalendar/calendar_pins"
+      },
+      {
+        "name": "runtime_calendar",
+        "entityId": "18446744073709546718",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_DayCalendar/runtime_calendar"
+      },
+      {
+        "name": "DayNumber",
+        "entityId": "73960",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_DayCalendar/DayNumber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Intercom": {
+    "name": "Hybrid_Intercom",
+    "entityId": "18446744073709547326",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Intercom",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -1.07,
+      "y": 1.06,
+      "z": 0.65
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 7.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 4,
+    "children": [
+      {
+        "name": "activity_lamp",
+        "entityId": "18446744073709547324",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Intercom/activity_lamp"
+      },
+      {
+        "name": "body",
+        "entityId": "18446744073709547316",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Intercom/body"
+      },
+      {
+        "name": "speaker_slots",
+        "entityId": "18446744073709547308",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Intercom/speaker_slots"
+      },
+      {
+        "name": "talk_button",
+        "entityId": "18446744073709547300",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Intercom/talk_button"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_ScannerTray": {
+    "name": "Hybrid_ScannerTray",
+    "entityId": "18446744073709547986",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_ScannerTray",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -1.08,
+      "y": 1.06,
+      "z": -0.31
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 7.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 6,
+    "children": [
+      {
+        "name": "feed_slot",
+        "entityId": "18446744073709547984",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_ScannerTray/feed_slot"
+      },
+      {
+        "name": "front_rail",
+        "entityId": "18446744073709547976",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_ScannerTray/front_rail"
+      },
+      {
+        "name": "rear_feed",
+        "entityId": "18446744073709547968",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_ScannerTray/rear_feed"
+      },
+      {
+        "name": "scanner_glass",
+        "entityId": "18446744073709547960",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_ScannerTray/scanner_glass"
+      },
+      {
+        "name": "side_rail",
+        "entityId": "18446744073709547952",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_ScannerTray/side_rail"
+      },
+      {
+        "name": "tray_base",
+        "entityId": "18446744073709547944",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_ScannerTray/tray_base"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_Stamp": {
+    "name": "Hybrid_Stamp",
+    "entityId": "18446744073709549300",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Stamp",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -0.68,
+      "y": 1.066,
+      "z": -0.7
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 4,
+    "children": [
+      {
+        "name": "stamp_base",
+        "entityId": "18446744073709549298",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stamp/stamp_base"
+      },
+      {
+        "name": "stamp_handle",
+        "entityId": "18446744073709549290",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stamp/stamp_handle"
+      },
+      {
+        "name": "stamp_neck",
+        "entityId": "18446744073709549282",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stamp/stamp_neck"
+      },
+      {
+        "name": "stamp_rubber",
+        "entityId": "18446744073709549274",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Stamp/stamp_rubber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_LeftPartition": {
+    "name": "Hybrid_LeftPartition",
+    "entityId": "18446744073709547524",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_LeftPartition",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -2.95,
+      "y": 0.0,
+      "z": 0.15
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "cap",
+        "entityId": "18446744073709547522",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_LeftPartition/cap"
+      },
+      {
+        "name": "lower_inset",
+        "entityId": "18446744073709547514",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_LeftPartition/lower_inset"
+      },
+      {
+        "name": "skirting",
+        "entityId": "18446744073709547506",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_LeftPartition/skirting"
+      },
+      {
+        "name": "solid_panel",
+        "entityId": "18446744073709547498",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_LeftPartition/solid_panel"
+      },
+      {
+        "name": "terminal_post",
+        "entityId": "18446744073709547490",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_LeftPartition/terminal_post"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Hybrid_RightPartition": {
+    "name": "Hybrid_RightPartition",
+    "entityId": "18446744073709548918",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_RightPartition",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 2.95,
+      "y": 0.0,
+      "z": 0.15
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "cap",
+        "entityId": "18446744073709548916",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_RightPartition/cap"
+      },
+      {
+        "name": "lower_inset",
+        "entityId": "18446744073709548908",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_RightPartition/lower_inset"
+      },
+      {
+        "name": "skirting",
+        "entityId": "18446744073709548900",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_RightPartition/skirting"
+      },
+      {
+        "name": "solid_panel",
+        "entityId": "18446744073709548892",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_RightPartition/solid_panel"
+      },
+      {
+        "name": "terminal_post",
+        "entityId": "18446744073709548884",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_RightPartition/terminal_post"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "LeftInstrumentBoard": {
+    "name": "LeftInstrumentBoard",
+    "entityId": "74168",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/LeftInstrumentBoard",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -2.36,
+      "y": 1.82,
+      "z": 0.69
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 25.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.68,
+      "y": 1.12,
+      "z": 0.07
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "RightInstrumentBoard": {
+    "name": "RightInstrumentBoard",
+    "entityId": "73478",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/RightInstrumentBoard",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 2.36,
+      "y": 1.92,
+      "z": 0.69
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 335.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.68,
+      "y": 1.12,
+      "z": 0.07
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "DeskBlotter": {
+    "name": "DeskBlotter",
+    "entityId": "72238",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/DeskBlotter",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 1.065,
+      "z": -0.55
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 2.25,
+      "y": 0.008,
+      "z": 0.93
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  "Hybrid_Newspaper": {
+    "name": "Hybrid_Newspaper",
+    "entityId": "18446744073709547936",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Hybrid_Newspaper",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": -2.1,
+      "y": 1.06,
+      "z": -0.53
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 352.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 2,
+    "children": [
+      {
+        "name": "folded_pages",
+        "entityId": "18446744073709547934",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Newspaper/folded_pages"
+      },
+      {
+        "name": "printed_face",
+        "entityId": "18446744073709547926",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Hybrid_Newspaper/printed_face"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  }
+}

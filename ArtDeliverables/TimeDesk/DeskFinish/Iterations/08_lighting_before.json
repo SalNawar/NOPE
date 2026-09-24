@@ -1,0 +1,108 @@
+[
+  {
+    "transform": {
+      "name": "OfficeDaylight",
+      "entityId": "73208",
+      "instanceId": 0,
+      "path": "HybridOffice/OfficeDaylight",
+      "tag": "Untagged",
+      "layer": "Default",
+      "isActive": true,
+      "position": {
+        "x": 0.0,
+        "y": 12.0,
+        "z": 8.0
+      },
+      "rotation": {
+        "x": 50.0,
+        "y": 332.0,
+        "z": -1.32823584e-06
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "parent": "HybridOffice",
+      "parentPath": "HybridOffice",
+      "childCount": 0,
+      "children": [],
+      "components": [
+        "Transform",
+        "Light"
+      ]
+    },
+    "light": {
+      "name": "OfficeDaylight",
+      "entityId": "73208",
+      "instanceId": 0,
+      "path": "HybridOffice/OfficeDaylight",
+      "lightType": "Directional",
+      "color": {
+        "r": 1.0,
+        "g": 0.91,
+        "b": 0.81
+      },
+      "intensity": 1.15,
+      "range": 10.0,
+      "spotAngle": 30.0,
+      "shadows": "Soft",
+      "enabled": true,
+      "cullingMask": -1,
+      "bounceIntensity": 1.0
+    }
+  },
+  {
+    "transform": {
+      "name": "OfficeInteriorFill",
+      "entityId": "74224",
+      "instanceId": 0,
+      "path": "HybridOffice/OfficeInteriorFill",
+      "tag": "Untagged",
+      "layer": "Default",
+      "isActive": true,
+      "position": {
+        "x": 0.0,
+        "y": 10.0,
+        "z": -2.0
+      },
+      "rotation": {
+        "x": 26.0,
+        "y": 155.0,
+        "z": 0.0
+      },
+      "scale": {
+        "x": 1.0,
+        "y": 1.0,
+        "z": 1.0
+      },
+      "parent": "HybridOffice",
+      "parentPath": "HybridOffice",
+      "childCount": 0,
+      "children": [],
+      "components": [
+        "Transform",
+        "Light"
+      ]
+    },
+    "light": {
+      "name": "OfficeInteriorFill",
+      "entityId": "74224",
+      "instanceId": 0,
+      "path": "HybridOffice/OfficeInteriorFill",
+      "lightType": "Directional",
+      "color": {
+        "r": 0.73,
+        "g": 0.83,
+        "b": 1.0
+      },
+      "intensity": 0.43,
+      "range": 10.0,
+      "spotAngle": 30.0,
+      "shadows": "None",
+      "enabled": true,
+      "cullingMask": -1,
+      "bounceIntensity": 1.0
+    }
+  }
+]

@@ -1,0 +1,21 @@
+Thinker source bounds [0.00688934326171875, 0.006557464599609375, 2.86102294921875e-06] [77.32318115234375, 102.92179870605469, 130.0]
+Discobolus source bounds [-357.9417419433594, -434.31134033203125, -108.74825286865234] [164.9291534423828, 610.3142700195312, 1586.036376953125]
+Nefertiti source bounds [0.009757952764630318, 0.0021524878684431314, 0.009731054306030273] [63.13016891479492, 95.8799819946289, 130.0097198486328]
+01:07.250  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+Timer 'STL Import' took 261.01 ms
+Timer 'STL Import' took 991.66 ms
+Timer 'STL Import' took 161.80 ms
+01:07.250  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_Thinker.fbx'
+export finished in 0.0148 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_Discobolus.fbx'
+export finished in 0.0133 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_Nefertiti.fbx'
+export finished in 0.0146 sec.
+Info: Saved as "Sculptures.blend"
+
+Blender quit

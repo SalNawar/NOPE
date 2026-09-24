@@ -1,0 +1,761 @@
+{
+  "materials": {
+    "CRT_Terracotta": {
+      "color": [
+        0.7254901960784313,
+        0.7137254901960784,
+        0.6784313725490196
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_BackShell": {
+      "color": [
+        0.6862745098039216,
+        0.6784313725490196,
+        0.6470588235294118
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_Ivory": {
+      "color": [
+        0.7803921568627451,
+        0.7725490196078432,
+        0.7411764705882353
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_WarmGrey": {
+      "color": [
+        0.6,
+        0.611764705882353,
+        0.592156862745098
+      ],
+      "smoothness": 0.16000000000000003,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_DeepGrey": {
+      "color": [
+        0.3843137254901961,
+        0.4196078431372549,
+        0.4117647058823529
+      ],
+      "smoothness": 0.13,
+      "metallic": 0,
+      "texture": null
+    },
+    "Recess_Charcoal": {
+      "color": [
+        0.17254901960784313,
+        0.2,
+        0.20392156862745098
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_Glass": {
+      "color": [
+        0.14901960784313725,
+        0.24313725490196078,
+        0.25882352941176473
+      ],
+      "smoothness": 0.72,
+      "metallic": 0,
+      "texture": null
+    },
+    "Case_Steel": {
+      "color": [
+        0.6705882352941176,
+        0.6862745098039216,
+        0.6627450980392157
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.08,
+      "texture": null
+    },
+    "Power_Amber": {
+      "color": [
+        0.7294117647058823,
+        0.47058823529411764,
+        0.3137254901960784
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "Indicator_Green": {
+      "color": [
+        0.5333333333333333,
+        0.6666666666666666,
+        0.4627450980392157
+      ],
+      "smoothness": 0.37,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Light": {
+      "color": [
+        0.7725490196078432,
+        0.7490196078431373,
+        0.6862745098039216
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Dark": {
+      "color": [
+        0.5607843137254902,
+        0.5372549019607843,
+        0.48627450980392156
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Paper_Label": {
+      "color": [
+        0.7686274509803922,
+        0.7490196078431373,
+        0.6823529411764706
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Cable_Rubber": {
+      "color": [
+        0.2235294117647059,
+        0.24313725490196078,
+        0.21176470588235294
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Edge": {
+      "color": [
+        0.3568627450980392,
+        0.26666666666666666,
+        0.21176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Metal": {
+      "color": [
+        0.2549019607843137,
+        0.30196078431372547,
+        0.28627450980392155
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.05,
+      "texture": null
+    },
+    "Desk_WornEdge": {
+      "color": [
+        0.5529411764705883,
+        0.4196078431372549,
+        0.2980392156862745
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Walnut": {
+      "color": [
+        1,
+        1,
+        1
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderPC\\Textures\\desk_walnut_albedo.png"
+    },
+    "Finish_Ivory": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.26,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\ivory_plastic.png"
+    },
+    "Finish_WarmGrey": {
+      "color": [
+        0.792156862745098,
+        0.788235294117647,
+        0.7647058823529411
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\ivory_plastic.png"
+    },
+    "Finish_Enamel": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\petrol_enamel.png"
+    },
+    "Finish_EnamelDark": {
+      "color": [
+        0.615686274509804,
+        0.6823529411764706,
+        0.6666666666666666
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\petrol_enamel.png"
+    },
+    "Finish_Charcoal": {
+      "color": [
+        0.19215686274509805,
+        0.24313725490196078,
+        0.25098039215686274
+      ],
+      "smoothness": 0.12,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_KeyGrey": {
+      "color": [
+        0.6196078431372549,
+        0.6666666666666666,
+        0.6235294117647059
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_KeyCream": {
+      "color": [
+        0.8588235294117647,
+        0.8196078431372549,
+        0.7176470588235294
+      ],
+      "smoothness": 0.22999999999999998,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_Coral": {
+      "color": [
+        0.7176470588235294,
+        0.47058823529411764,
+        0.3137254901960784
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_Brass": {
+      "color": [
+        0.6823529411764706,
+        0.5725490196078431,
+        0.41568627450980394
+      ],
+      "smoothness": 0.30000000000000004,
+      "metallic": 0.12,
+      "texture": null
+    },
+    "Finish_BlackRubber": {
+      "color": [
+        0.20392156862745098,
+        0.2196078431372549,
+        0.20392156862745098
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_Glass": {
+      "color": [
+        0.1411764705882353,
+        0.23921568627450981,
+        0.2627450980392157
+      ],
+      "smoothness": 0.69,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_Paper": {
+      "color": [
+        0.8352941176470589,
+        0.7803921568627451,
+        0.6627450980392157
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_Ink": {
+      "color": [
+        0.24313725490196078,
+        0.28627450980392155,
+        0.26666666666666666
+      ],
+      "smoothness": 0.030000000000000027,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_Wood": {
+      "color": [
+        0.45098039215686275,
+        0.32941176470588235,
+        0.26666666666666666
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_WoodEdge": {
+      "color": [
+        0.596078431372549,
+        0.4549019607843137,
+        0.3411764705882353
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Finish_LampInner": {
+      "color": [
+        0.8470588235294118,
+        0.803921568627451,
+        0.6980392156862745
+      ],
+      "smoothness": 0.25,
+      "metallic": 0,
+      "texture": null,
+      "emission": {
+        "color": [
+          1,
+          0.72,
+          0.42
+        ],
+        "intensity": 0.35
+      }
+    },
+    "Finish_Mat": {
+      "color": [
+        0.6627450980392157,
+        0.792156862745098,
+        1.0
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\inspection_mat.png"
+    },
+    "Hardware_CRTClay": {
+      "color": [
+        0.7098039215686275,
+        0.7294117647058823,
+        0.7529411764705882
+      ],
+      "smoothness": 0.36,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\ivory_plastic.png"
+    },
+    "Hardware_CRTTrim": {
+      "color": [
+        0.5333333333333333,
+        0.5607843137254902,
+        0.5294117647058824
+      ],
+      "smoothness": 0.27,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_Cream": {
+      "color": [
+        0.8509803921568627,
+        0.8745098039215686,
+        0.8980392156862745
+      ],
+      "smoothness": 0.35,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\ivory_plastic.png"
+    },
+    "Hardware_Steel": {
+      "color": [
+        0.6784313725490196,
+        0.7176470588235294,
+        0.7294117647058823
+      ],
+      "smoothness": 0.36,
+      "metallic": 0.1,
+      "texture": null
+    },
+    "Hardware_Modifier": {
+      "color": [
+        0.4470588235294118,
+        0.5686274509803921,
+        0.5411764705882353
+      ],
+      "smoothness": 0.31000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_Keys": {
+      "color": [
+        0.792156862745098,
+        0.803921568627451,
+        0.788235294117647
+      ],
+      "smoothness": 0.31999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_Seam": {
+      "color": [
+        0.21176470588235294,
+        0.23921568627450981,
+        0.23529411764705882
+      ],
+      "smoothness": 0.09999999999999998,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_Glass": {
+      "color": [
+        0.1411764705882353,
+        0.24705882352941178,
+        0.2784313725490196
+      ],
+      "smoothness": 0.6599999999999999,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_Rubber": {
+      "color": [
+        0.18823529411764706,
+        0.21568627450980393,
+        0.20784313725490197
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_CashPaint": {
+      "color": [
+        0.6549019607843137,
+        0.7372549019607844,
+        0.7058823529411765
+      ],
+      "smoothness": 0.4,
+      "metallic": 0.15,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\petrol_enamel.png"
+    },
+    "Hardware_CashEdge": {
+      "color": [
+        0.3215686274509804,
+        0.4235294117647059,
+        0.396078431372549
+      ],
+      "smoothness": 0.27,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_BareMetal": {
+      "color": [
+        0.6039215686274509,
+        0.6078431372549019,
+        0.5529411764705883
+      ],
+      "smoothness": 0.51,
+      "metallic": 0.38,
+      "texture": null
+    },
+    "Hardware_Paper": {
+      "color": [
+        0.8,
+        0.7725490196078432,
+        0.6666666666666666
+      ],
+      "smoothness": 0.030000000000000027,
+      "metallic": 0,
+      "texture": null
+    },
+    "Hardware_Amber": {
+      "color": [
+        0.7372549019607844,
+        0.4666666666666667,
+        0.2980392156862745
+      ],
+      "smoothness": 0.36,
+      "metallic": 0,
+      "texture": null
+    },
+    "Canvas_StarryNight": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.010000000000000009,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\Images\\starry_night.png"
+    },
+    "Canvas_Mondrian": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.010000000000000009,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\Images\\mondrian.png"
+    }
+  },
+  "models": [
+    {
+      "name": "Finish_Desk",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Desk.fbx",
+      "nodes": {
+        "Finish_Desk__Desk_Walnut": "Desk_Walnut",
+        "Finish_Desk__Finish_Wood": "Finish_Wood",
+        "Finish_Desk__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_Desk__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_Desk__Finish_WoodEdge": "Finish_WoodEdge"
+      },
+      "triangles": 1539
+    },
+    {
+      "name": "Finish_PC",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_PC.fbx",
+      "nodes": {
+        "Finish_PC__Hardware_Rubber": "Hardware_Rubber",
+        "Finish_PC__Hardware_Steel": "Hardware_Steel",
+        "Finish_PC__Hardware_Cream": "Hardware_Cream",
+        "Finish_PC__Hardware_Seam": "Hardware_Seam",
+        "Finish_PC__Hardware_Amber": "Hardware_Amber",
+        "Finish_PC__Indicator_Green": "Indicator_Green",
+        "Finish_PC__Hardware_Paper": "Hardware_Paper",
+        "Finish_PC__Hardware_Modifier": "Hardware_Modifier",
+        "Finish_PC__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_PC__Hardware_CRTTrim": "Hardware_CRTTrim",
+        "Finish_PC__Hardware_CRTClay": "Hardware_CRTClay",
+        "Finish_PC__Hardware_Glass": "Hardware_Glass"
+      },
+      "triangles": 33146
+    },
+    {
+      "name": "Finish_Keyboard",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Keyboard.fbx",
+      "nodes": {
+        "Finish_Keyboard__Hardware_Cream": "Hardware_Cream",
+        "Finish_Keyboard__Hardware_Rubber": "Hardware_Rubber",
+        "Finish_Keyboard__Hardware_Seam": "Hardware_Seam",
+        "Finish_Keyboard__Hardware_Keys": "Hardware_Keys",
+        "Finish_Keyboard__Hardware_Modifier": "Hardware_Modifier",
+        "Finish_Keyboard__Hardware_Amber": "Hardware_Amber",
+        "Finish_Keyboard__Indicator_Green": "Indicator_Green"
+      },
+      "triangles": 15616
+    },
+    {
+      "name": "Finish_Till",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Till.fbx",
+      "nodes": {
+        "Finish_Till__Hardware_Rubber": "Hardware_Rubber",
+        "Finish_Till__Hardware_CashPaint": "Hardware_CashPaint",
+        "Finish_Till__Hardware_CashEdge": "Hardware_CashEdge",
+        "Finish_Till__Hardware_Seam": "Hardware_Seam",
+        "Finish_Till__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_Till__Hardware_Glass": "Hardware_Glass",
+        "Finish_Till__Hardware_Paper": "Hardware_Paper"
+      },
+      "triangles": 5905
+    },
+    {
+      "name": "Finish_Tray",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Tray.fbx",
+      "nodes": {
+        "Finish_Tray__Finish_Enamel": "Finish_Enamel",
+        "Finish_Tray__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_Tray__Finish_BlackRubber": "Finish_BlackRubber"
+      },
+      "triangles": 1008
+    },
+    {
+      "name": "Finish_Intercom",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Intercom.fbx",
+      "nodes": {
+        "Finish_Intercom__Finish_Ivory": "Finish_Ivory",
+        "Finish_Intercom__Finish_Enamel": "Finish_Enamel",
+        "Finish_Intercom__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_Intercom__Finish_Coral": "Finish_Coral",
+        "Finish_Intercom__Finish_BlackRubber": "Finish_BlackRubber"
+      },
+      "triangles": 3472
+    },
+    {
+      "name": "Finish_Mouse",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Mouse.fbx",
+      "nodes": {
+        "Finish_Mouse__Finish_Ivory": "Finish_Ivory",
+        "Finish_Mouse__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_Mouse__Finish_KeyGrey": "Finish_KeyGrey",
+        "Finish_Mouse__Finish_BlackRubber": "Finish_BlackRubber",
+        "Finish_Mouse__Finish_EnamelDark": "Finish_EnamelDark"
+      },
+      "triangles": 2984
+    },
+    {
+      "name": "Finish_Inkpad",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Inkpad.fbx",
+      "nodes": {
+        "Finish_Inkpad__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_Inkpad__Finish_Enamel": "Finish_Enamel",
+        "Finish_Inkpad__Finish_Ink": "Finish_Ink"
+      },
+      "triangles": 752
+    },
+    {
+      "name": "Finish_Lamp",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Lamp.fbx",
+      "nodes": {
+        "Finish_Lamp__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_Lamp__Finish_BlackRubber": "Finish_BlackRubber",
+        "Finish_Lamp__Finish_Brass": "Finish_Brass",
+        "Finish_Lamp__Finish_Enamel": "Finish_Enamel",
+        "Finish_Lamp__Finish_LampInner": "Finish_LampInner",
+        "Finish_Lamp__Finish_Coral": "Finish_Coral"
+      },
+      "triangles": 5972
+    },
+    {
+      "name": "Finish_PencilRack",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_PencilRack.fbx",
+      "nodes": {
+        "Finish_PencilRack__Finish_Wood": "Finish_Wood",
+        "Finish_PencilRack__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_PencilRack__Finish_Coral": "Finish_Coral",
+        "Finish_PencilRack__Finish_Brass": "Finish_Brass",
+        "Finish_PencilRack__Finish_KeyGrey": "Finish_KeyGrey",
+        "Finish_PencilRack__Finish_Enamel": "Finish_Enamel"
+      },
+      "triangles": 2348
+    },
+    {
+      "name": "Finish_Board",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Board.fbx",
+      "nodes": {
+        "Finish_Board__Finish_Wood": "Finish_Wood",
+        "Finish_Board__Finish_Enamel": "Finish_Enamel",
+        "Finish_Board__Finish_WoodEdge": "Finish_WoodEdge",
+        "Finish_Board__Finish_Brass": "Finish_Brass",
+        "Finish_Board__Finish_Paper": "Finish_Paper"
+      },
+      "triangles": 2064
+    },
+    {
+      "name": "Finish_Mat",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_Mat.fbx",
+      "nodes": {
+        "Finish_Mat__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_Mat__Finish_Mat": "Finish_Mat"
+      },
+      "triangles": 190
+    },
+    {
+      "name": "Finish_DeskRail",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_DeskRail.fbx",
+      "nodes": {
+        "Finish_DeskRail__Finish_WoodEdge": "Finish_WoodEdge",
+        "Finish_DeskRail__Finish_Enamel": "Finish_Enamel",
+        "Finish_DeskRail__Finish_EnamelDark": "Finish_EnamelDark"
+      },
+      "triangles": 752
+    },
+    {
+      "name": "Finish_BoothFrame",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_BoothFrame.fbx",
+      "nodes": {
+        "Finish_BoothFrame__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_BoothFrame__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_BoothFrame__Finish_WoodEdge": "Finish_WoodEdge",
+        "Finish_BoothFrame__Finish_Wood": "Finish_Wood",
+        "Finish_BoothFrame__Finish_Enamel": "Finish_Enamel",
+        "Finish_BoothFrame__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_BoothFrame__Finish_Brass": "Finish_Brass",
+        "Finish_BoothFrame__Finish_BlackRubber": "Finish_BlackRubber"
+      },
+      "triangles": 7532
+    },
+    {
+      "name": "Finish_FormSorter",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_FormSorter.fbx",
+      "nodes": {
+        "Finish_FormSorter__Finish_BlackRubber": "Finish_BlackRubber",
+        "Finish_FormSorter__Finish_EnamelDark": "Finish_EnamelDark",
+        "Finish_FormSorter__Finish_Enamel": "Finish_Enamel",
+        "Finish_FormSorter__Finish_Paper": "Finish_Paper",
+        "Finish_FormSorter__Hardware_Paper": "Hardware_Paper",
+        "Finish_FormSorter__Finish_Coral": "Finish_Coral",
+        "Finish_FormSorter__Finish_Brass": "Finish_Brass"
+      },
+      "triangles": 5080
+    },
+    {
+      "name": "Finish_PaperBundle",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_PaperBundle.fbx",
+      "nodes": {
+        "Finish_PaperBundle__Hardware_Paper": "Hardware_Paper",
+        "Finish_PaperBundle__Finish_Paper": "Finish_Paper",
+        "Finish_PaperBundle__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_PaperBundle__Hardware_BareMetal": "Hardware_BareMetal"
+      },
+      "triangles": 3660
+    },
+    {
+      "name": "Finish_ComputerMedia",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_ComputerMedia.fbx",
+      "nodes": {
+        "Finish_ComputerMedia__Hardware_Paper": "Hardware_Paper",
+        "Finish_ComputerMedia__Finish_Charcoal": "Finish_Charcoal",
+        "Finish_ComputerMedia__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_ComputerMedia__Finish_Paper": "Finish_Paper",
+        "Finish_ComputerMedia__Finish_BlackRubber": "Finish_BlackRubber",
+        "Finish_ComputerMedia__Finish_Enamel": "Finish_Enamel"
+      },
+      "triangles": 2152
+    },
+    {
+      "name": "Finish_LeftEphemera",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_LeftEphemera.fbx",
+      "nodes": {
+        "Finish_LeftEphemera__Hardware_Paper": "Hardware_Paper",
+        "Finish_LeftEphemera__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_LeftEphemera__Finish_Coral": "Finish_Coral",
+        "Finish_LeftEphemera__Finish_Paper": "Finish_Paper",
+        "Finish_LeftEphemera__Canvas_StarryNight": "Canvas_StarryNight"
+      },
+      "triangles": 2402
+    },
+    {
+      "name": "Finish_RightEphemera",
+      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_RightEphemera.fbx",
+      "nodes": {
+        "Finish_RightEphemera__Finish_Paper": "Finish_Paper",
+        "Finish_RightEphemera__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_RightEphemera__Finish_Coral": "Finish_Coral",
+        "Finish_RightEphemera__Canvas_Mondrian": "Canvas_Mondrian",
+        "Finish_RightEphemera__Hardware_Paper": "Hardware_Paper"
+      },
+      "triangles": 1790
+    }
+  ]
+}

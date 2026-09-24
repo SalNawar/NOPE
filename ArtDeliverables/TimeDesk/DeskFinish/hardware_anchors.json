@@ -1,0 +1,20 @@
+{
+  "screenLocalCenter": [
+    0,
+    0.8285136692043763,
+    -0.2702744608967484
+  ],
+  "screenTiltDegrees": 8,
+  "screenSize": [
+    0.64,
+    0.48
+  ],
+  "creditsLocalPosition": [
+    0.073,
+    0.348,
+    0.011
+  ],
+  "creditsTextScale": 0.8,
+  "chassisTop": 0.262,
+  "hardwareFeetHeight": 0
+}

@@ -1,0 +1,34 @@
+{
+  "pcAndKeyboard": [
+    {
+      "name": "PC_CRT_Desktop",
+      "posX": 2,
+      "posY": 1.06,
+      "posZ": 0.25,
+      "rotY": 31.6075022462489
+    },
+    {
+      "name": "PC_Keyboard",
+      "posX": 1.6331318020349657,
+      "posY": 1.06,
+      "posZ": -0.34616082169318074,
+      "rotY": 31.6075022462489
+    },
+    {
+      "name": "MonitorVCam",
+      "posX": 1.3684626020744766,
+      "posY": 1.75,
+      "posZ": -0.7762482716289756,
+      "rotX": 0,
+      "rotY": 31.6075022462489,
+      "rotZ": 0
+    },
+    {
+      "name": "CRTMonitor",
+      "posX": 1.8401502851723779,
+      "posY": 1.72,
+      "posZ": -0.009755786594885907
+    }
+  ],
+  "orientationNote": "Front is local -Z; positive yaw turns right-side PC toward player."
+}

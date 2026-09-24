@@ -1,0 +1,30 @@
+[
+  {
+    "path": "HybridOffice/Booth/Finish_Lamp",
+    "posX": 1.73,
+    "posZ": 0.22
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_PencilRack",
+    "posX": 1.27,
+    "posZ": 0.38,
+    "rotY": 8
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Intercom",
+    "posX": -0.57,
+    "posZ": 0.46,
+    "rotY": -9
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Newspaper",
+    "posX": 1.87,
+    "posZ": -0.33,
+    "rotY": 16
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Desk_VoyagerRecord",
+    "posX": 1.66,
+    "posZ": -0.59
+  }
+]

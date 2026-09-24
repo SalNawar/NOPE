@@ -1,0 +1,624 @@
+fileFormatVersion: 2
+guid: 93df92aeee768984cb16abd3cd662220
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1177196138292077971
+    second: desk_deep_0
+  - first:
+      213: -906779867814594417
+    second: desk_deep_1
+  - first:
+      213: -2700298359584194835
+    second: desk_deep_2
+  - first:
+      213: 9182570104906112976
+    second: desk_deep_3
+  - first:
+      213: -3554036138205805429
+    second: desk_deep_4
+  - first:
+      213: 5469281979221010645
+    second: desk_deep_5
+  - first:
+      213: 1590551902852278369
+    second: desk_deep_6
+  - first:
+      213: 741786905574810516
+    second: desk_deep_7
+  - first:
+      213: -3018479215926346694
+    second: desk_deep_8
+  - first:
+      213: 6590581187193215068
+    second: desk_deep_9
+  - first:
+      213: -1295093988466161241
+    second: desk_deep_10
+  - first:
+      213: 4526607594411971015
+    second: desk_deep_11
+  - first:
+      213: -2512243527005932006
+    second: desk_deep_12
+  - first:
+      213: -7024142180214038473
+    second: desk_deep_13
+  - first:
+      213: -5135366098787147491
+    second: desk_deep_14
+  - first:
+      213: -865418968756031862
+    second: desk_deep_15
+  - first:
+      213: -2309415310523807721
+    second: desk_deep_16
+  - first:
+      213: 4505007502096209455
+    second: desk_deep_17
+  - first:
+      213: -4855947385452742043
+    second: desk_deep_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: desk_deep_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 728
+        width: 195
+        height: 103
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d6a932a6952c9afe0800000000000000
+      internalID: -1177196138292077971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_1
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 762
+        width: 22
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f887f69b3887a63f0800000000000000
+      internalID: -906779867814594417
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_2
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 714
+        width: 154
+        height: 92
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: deef961e2fc968ad0800000000000000
+      internalID: -2700298359584194835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_3
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 667
+        width: 231
+        height: 391
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dfdc0cebda0f6f70800000000000000
+      internalID: 9182570104906112976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_4
+      rect:
+        serializedVersion: 2
+        x: 1096
+        y: 642
+        width: 249
+        height: 395
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b84875f56f68daec0800000000000000
+      internalID: -3554036138205805429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_5
+      rect:
+        serializedVersion: 2
+        x: 1401
+        y: 651
+        width: 93
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d8e9eb8bfac6eb40800000000000000
+      internalID: 5469281979221010645
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_6
+      rect:
+        serializedVersion: 2
+        x: 828
+        y: 709
+        width: 11
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 168e45e4786c21610800000000000000
+      internalID: 1590551902852278369
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_7
+      rect:
+        serializedVersion: 2
+        x: 1013
+        y: 688
+        width: 80
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 493a2dda24b5b4a00800000000000000
+      internalID: 741786905574810516
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_8
+      rect:
+        serializedVersion: 2
+        x: 1068
+        y: 669
+        width: 13
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3c7fcc45253c16d0800000000000000
+      internalID: -3018479215926346694
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_9
+      rect:
+        serializedVersion: 2
+        x: 1077
+        y: 648
+        width: 16
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c58160edba2767b50800000000000000
+      internalID: 6590581187193215068
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_10
+      rect:
+        serializedVersion: 2
+        x: 1189
+        y: 688
+        width: 12
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a90bb211e6e60ee0800000000000000
+      internalID: -1295093988466161241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_11
+      rect:
+        serializedVersion: 2
+        x: 1207
+        y: 685
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7c1d286cf9db1de30800000000000000
+      internalID: 4526607594411971015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_12
+      rect:
+        serializedVersion: 2
+        x: 1207
+        y: 678
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a16798792d7b22dd0800000000000000
+      internalID: -2512243527005932006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_13
+      rect:
+        serializedVersion: 2
+        x: 1244
+        y: 662
+        width: 17
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 730218017eb358e90800000000000000
+      internalID: -7024142180214038473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_14
+      rect:
+        serializedVersion: 2
+        x: 1470
+        y: 683
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d116532ddb38bb8b0800000000000000
+      internalID: -5135366098787147491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_15
+      rect:
+        serializedVersion: 2
+        x: 1532
+        y: 651
+        width: 92
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8e6969780a6df3f0800000000000000
+      internalID: -865418968756031862
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_16
+      rect:
+        serializedVersion: 2
+        x: 1650
+        y: 706
+        width: 31
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7184169c20f43ffd0800000000000000
+      internalID: -2309415310523807721
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_17
+      rect:
+        serializedVersion: 2
+        x: 1675
+        y: 653
+        width: 50
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f261ae06470058e30800000000000000
+      internalID: 4505007502096209455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: desk_deep_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1920
+        height: 562
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56a3a12b4953c9cb0800000000000000
+      internalID: -4855947385452742043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      desk_deep_0: -1177196138292077971
+      desk_deep_1: -906779867814594417
+      desk_deep_10: -1295093988466161241
+      desk_deep_11: 4526607594411971015
+      desk_deep_12: -2512243527005932006
+      desk_deep_13: -7024142180214038473
+      desk_deep_14: -5135366098787147491
+      desk_deep_15: -865418968756031862
+      desk_deep_16: -2309415310523807721
+      desk_deep_17: 4505007502096209455
+      desk_deep_18: -4855947385452742043
+      desk_deep_2: -2700298359584194835
+      desk_deep_3: 9182570104906112976
+      desk_deep_4: -3554036138205805429
+      desk_deep_5: 5469281979221010645
+      desk_deep_6: 1590551902852278369
+      desk_deep_7: 741786905574810516
+      desk_deep_8: -3018479215926346694
+      desk_deep_9: 6590581187193215068
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

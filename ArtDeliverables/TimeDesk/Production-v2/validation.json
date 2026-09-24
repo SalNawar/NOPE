@@ -1,0 +1,3785 @@
+[
+  {
+    "path": "Concepts/booth-master.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/backwall.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      960
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/partition.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      480,
+      960
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/desk.png",
+    "status": "created-compatibility",
+    "mode": "RGBA",
+    "dimensions": [
+      1600,
+      360
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/crt.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      600,
+      520
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/sign.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      384,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/calendar.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      400
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/stabilitymonitor.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      440,
+      320
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/till.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      440,
+      320
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/poster.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/desk_deep.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Desktop/xp_bliss.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/intercom.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      240
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/scanner_tray.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      600,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/desk_mug.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      200,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/desk_photo.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      200,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/desk_plant.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      200,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/desk_stamp.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      200,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/lighting_overlay_warm.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/lighting_overlay_cold.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Booth/lighting_overlay_alarm.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_currency.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_language.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_technology.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_directives.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_citizen_records.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_scanner.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_compare.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_internet.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_lexicon.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_dialect.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_material.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_cluelog.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_notes.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_settings.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/icon_power.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      128,
+      128
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/window_frame.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/window_titlebar.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      32
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/taskbar.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      40
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/start_button_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      120,
+      40
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/start_button_pressed.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      120,
+      40
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/start_menu_panel.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      384
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/tray_bg.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      40
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/tray_day.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/tray_credits.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/tray_stability.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/cursor_arrow.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      32,
+      32
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/cursor_hand.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      32,
+      32
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_back_to_office.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      200,
+      48
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_min_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_min_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_min_pressed.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_max_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_max_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_max_pressed.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_close_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_close_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Desktop/btn_close_pressed.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      24,
+      24
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/scanner_backing.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/page_blank.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/photo_frame.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      240,
+      300
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/claim_banner.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/intercom_panel.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      600,
+      400
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/intercom_button_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      64
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/intercom_button_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      64
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/refbook_page.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/citizen_records_frame.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1000,
+      700
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/agency_logo.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/deviation_report_form.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/directives_sticky.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      400
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/citation_slip.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      600,
+      800
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/stamp_approved.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/stamp_denied.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/compare_bar_neutral.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      64
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/compare_bar_match.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      64
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/compare_bar_mismatch.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      64
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/compare_bar_deviation.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      64
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/btn_accept_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/btn_accept_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/btn_accept_pressed.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/btn_deny_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/btn_deny_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/btn_deny_pressed.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/refbook_cover_currency.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      560
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/refbook_cover_language.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      560
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Investigation/refbook_cover_technology.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      560
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Ancient/Egypt_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Ancient/Egypt_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Ancient/Egypt_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Ancient/Egypt_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Old/Egypt_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Old/Egypt_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Old/Egypt_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Old/Egypt_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Modern/Egypt_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Modern/Egypt_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Modern/Egypt_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Modern/Egypt_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Future/Egypt_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Future/Egypt_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Future/Egypt_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Egypt/Future/Egypt_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Ancient/Greece_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Ancient/Greece_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Ancient/Greece_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Ancient/Greece_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Old/Greece_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Old/Greece_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Old/Greece_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Old/Greece_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Modern/Greece_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Modern/Greece_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Modern/Greece_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Modern/Greece_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Future/Greece_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Future/Greece_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Future/Greece_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Greece/Future/Greece_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Ancient/China_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Ancient/China_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Ancient/China_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Ancient/China_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Old/China_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Old/China_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Old/China_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Old/China_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Modern/China_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Modern/China_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Modern/China_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Modern/China_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Future/China_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Future/China_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Future/China_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/China/Future/China_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Ancient/Germany_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Ancient/Germany_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Ancient/Germany_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Ancient/Germany_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Old/Germany_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Old/Germany_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Old/Germany_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Old/Germany_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Modern/Germany_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Modern/Germany_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Modern/Germany_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Modern/Germany_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Future/Germany_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Future/Germany_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Future/Germany_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Germany/Future/Germany_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Ancient/Japan_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Ancient/Japan_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Ancient/Japan_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Ancient/Japan_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Old/Japan_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Old/Japan_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Old/Japan_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Old/Japan_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Modern/Japan_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Modern/Japan_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Modern/Japan_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Modern/Japan_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Future/Japan_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Future/Japan_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Future/Japan_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Japan/Future/Japan_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Ancient/Britain_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Ancient/Britain_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Ancient/Britain_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Ancient/Britain_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Old/Britain_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Old/Britain_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Old/Britain_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Old/Britain_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Modern/Britain_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Modern/Britain_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Modern/Britain_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Modern/Britain_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Future/Britain_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Future/Britain_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Future/Britain_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Britain/Future/Britain_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Ancient/Iraq_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Ancient/Iraq_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Ancient/Iraq_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Ancient/Iraq_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Old/Iraq_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Old/Iraq_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Old/Iraq_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Old/Iraq_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Modern/Iraq_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Modern/Iraq_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Modern/Iraq_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Modern/Iraq_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Future/Iraq_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Future/Iraq_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Future/Iraq_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Iraq/Future/Iraq_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Ancient/Italy_Ancient_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Ancient/Italy_Ancient_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Ancient/Italy_Ancient_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Ancient/Italy_Ancient_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Old/Italy_Old_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Old/Italy_Old_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Old/Italy_Old_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Old/Italy_Old_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Modern/Italy_Modern_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Modern/Italy_Modern_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Modern/Italy_Modern_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Modern/Italy_Modern_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Future/Italy_Future_passport_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Future/Italy_Future_permit_stock.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Future/Italy_Future_seal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Documents/Italy/Future/Italy_Future_border.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_egypt_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_egypt_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_egypt_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_greece_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_greece_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_greece_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_china_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_china_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_china_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_germany_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_germany_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_germany_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_japan_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_japan_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_japan_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_britain_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_britain_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_britain_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_iraq_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_iraq_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_iraq_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_italy_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_italy_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_dom_italy_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_science_boom.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_democracy_collapse.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Office/Placeholder/Posters/poster_art_renaissance.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      320,
+      440
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/temporal_times_paper.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      1600
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/temporal_times_masthead.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      240
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/shift_ledger_paper.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      1600
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/shift_ledger_header.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      200
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/stamp_citation.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      300,
+      300
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/btn_start_shift_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      360,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/btn_start_shift_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      360,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/btn_go_home_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      360,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/DayFlow/btn_go_home_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      360,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/home_bg.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/panel_expenses.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1000
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/panel_shop.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1000
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/upgrade_advanced_scanner.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/upgrade_archive_access.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/upgrade_diplomatic_contacts.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_machine.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      800,
+      1000
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_lever.png",
+    "status": "created-imagegen",
+    "mode": "RGBA",
+    "dimensions": [
+      200,
+      600
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_small_win.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_jackpot.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_busted.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_forgery_warning.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/slot_legendary_omen.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Home/btn_sleep.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      360,
+      96
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/title_bg.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1920,
+      1080
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/logo_time_sorter.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      400
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_panel.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      1200,
+      800
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/btn_continue_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/btn_continue_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/btn_new_run_normal.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/btn_new_run_hover.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      400,
+      100
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_fired.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      900
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_bankrupt.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      900
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_retirement.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      900
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_scientific_age.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      900
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_democracy_triumphant.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      900
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "Title/ending_artistic_golden_age.png",
+    "status": "created-imagegen",
+    "mode": "RGB",
+    "dimensions": [
+      1600,
+      900
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/era_ancient.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/era_old.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/era_modern.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/era_future.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/attr_democracy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/attr_science.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/attr_art.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/attr_industry.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/attr_militarism.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/attr_philosophy.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/icon_money.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/icon_stability.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/icon_day.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  },
+  {
+    "path": "UI/Icons/icon_warning.png",
+    "status": "created-native",
+    "mode": "RGBA",
+    "dimensions": [
+      256,
+      256
+    ],
+    "checks": {
+      "size": true,
+      "alpha": true
+    }
+  }
+]

@@ -1,0 +1,94 @@
+[
+  {
+    "path": "HybridOffice/Booth/Finish_PC",
+    "posX": -1.32,
+    "posY": 1.06,
+    "posZ": -0.545,
+    "rotY": -12
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Keyboard",
+    "posX": -1.32,
+    "posY": 1.06,
+    "posZ": -0.915,
+    "rotY": -12
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Mouse",
+    "posX": -0.85,
+    "posY": 1.07,
+    "posZ": -0.8,
+    "rotY": -12
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Tray",
+    "posX": 1.48,
+    "posY": 1.06,
+    "posZ": -0.2,
+    "rotY": 8
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Stamp",
+    "posX": 1.48,
+    "posY": 1.06,
+    "posZ": -0.67,
+    "rotY": 14
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Inkpad",
+    "posX": 1.22,
+    "posY": 1.06,
+    "posZ": -0.69,
+    "rotY": 7
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Newspaper",
+    "posX": 2.12,
+    "posY": 1.06,
+    "posZ": -0.05,
+    "rotY": 8
+  },
+  {
+    "path": "HybridOffice/Booth/Blender_Desk_VoyagerRecord",
+    "posX": 1.68,
+    "posY": 1.069,
+    "posZ": -0.69,
+    "rotY": -12
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Lamp",
+    "posX": 2.34,
+    "posY": 1.06,
+    "posZ": 0.43,
+    "rotY": 0
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_PencilRack",
+    "posX": 1.7,
+    "posY": 1.06,
+    "posZ": 0.65,
+    "rotY": 6
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Intercom",
+    "posX": 0.69,
+    "posY": 1.06,
+    "posZ": 0.65,
+    "rotY": 12
+  },
+  {
+    "path": "OfficeRoot/CRTMonitor",
+    "posX": -1.283474406902564,
+    "posY": 1.5985338849828445,
+    "posZ": -0.7468394050527553
+  },
+  {
+    "path": "Cameras/MonitorVCam",
+    "posX": -1.1640591879523239,
+    "posY": 1.6792542835396824,
+    "posZ": -1.2786438396560178,
+    "rotX": 8,
+    "rotY": -12,
+    "rotZ": 0
+  }
+]

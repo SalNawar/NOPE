@@ -1,0 +1,395 @@
+[
+  {
+    "file": "hall_floor.obj",
+    "faces": 5040,
+    "vertices": 20160,
+    "parts": [
+      "floor_tiles"
+    ]
+  },
+  {
+    "file": "hall_structure.obj",
+    "faces": 570,
+    "vertices": 2280,
+    "parts": [
+      "ceiling",
+      "ceiling_beams",
+      "ceiling_light_faces",
+      "rear_dado",
+      "rear_mullions",
+      "rear_piers",
+      "rear_rails",
+      "side_dado",
+      "side_header",
+      "side_piers",
+      "side_window_mullions",
+      "side_window_rails"
+    ]
+  },
+  {
+    "file": "banner.obj",
+    "faces": 34,
+    "vertices": 144,
+    "parts": [
+      "bottom_hem",
+      "ceiling_suspension",
+      "cloth_blank",
+      "top_crossbar"
+    ]
+  },
+  {
+    "file": "departure_board.obj",
+    "faces": 27,
+    "vertices": 124,
+    "parts": [
+      "ceiling_rods",
+      "housing",
+      "runtime_departures"
+    ]
+  },
+  {
+    "file": "portal_ring.obj",
+    "faces": 90,
+    "vertices": 360,
+    "parts": [
+      "platform",
+      "ring_segment_00",
+      "ring_segment_01",
+      "ring_segment_02",
+      "ring_segment_03",
+      "ring_segment_04",
+      "ring_segment_05",
+      "ring_segment_06",
+      "ring_segment_07",
+      "ring_segment_08",
+      "ring_segment_09",
+      "ring_segment_10",
+      "ring_segment_11",
+      "ring_support"
+    ]
+  },
+  {
+    "file": "portal_surface.obj",
+    "faces": 1,
+    "vertices": 48,
+    "parts": [
+      "animated_opening"
+    ]
+  },
+  {
+    "file": "portal_cabinet.obj",
+    "faces": 31,
+    "vertices": 124,
+    "parts": [
+      "blank_diagnostic",
+      "cabinet",
+      "vent"
+    ]
+  },
+  {
+    "file": "public_bench.obj",
+    "faces": 66,
+    "vertices": 264,
+    "parts": [
+      "leg",
+      "rail",
+      "seat",
+      "seat_back"
+    ]
+  },
+  {
+    "file": "exhibit_plinth.obj",
+    "faces": 7,
+    "vertices": 28,
+    "parts": [
+      "base",
+      "blank_caption"
+    ]
+  },
+  {
+    "file": "frame.obj",
+    "faces": 25,
+    "vertices": 100,
+    "parts": [
+      "frame_end",
+      "frame_side",
+      "picture_surface"
+    ]
+  },
+  {
+    "file": "desk.obj",
+    "faces": 24,
+    "vertices": 96,
+    "parts": [
+      "front_edge",
+      "leg",
+      "top"
+    ]
+  },
+  {
+    "file": "partition.obj",
+    "faces": 24,
+    "vertices": 96,
+    "parts": [
+      "cap",
+      "solid_panel",
+      "terminal_post"
+    ]
+  },
+  {
+    "file": "crt_monitor.obj",
+    "faces": 73,
+    "vertices": 316,
+    "parts": [
+      "crt_screen_4_3",
+      "front_bezel",
+      "lower_controls",
+      "swivel",
+      "swivel_base",
+      "tube_casing",
+      "tube_vent"
+    ]
+  },
+  {
+    "file": "keyboard.obj",
+    "faces": 450,
+    "vertices": 1800,
+    "parts": [
+      "keyboard_body",
+      "keys",
+      "spacebar"
+    ]
+  },
+  {
+    "file": "credits_till.obj",
+    "faces": 139,
+    "vertices": 556,
+    "parts": [
+      "drawer",
+      "readout_housing",
+      "runtime_credits",
+      "till_body",
+      "till_keys"
+    ]
+  },
+  {
+    "file": "next_sign.obj",
+    "faces": 13,
+    "vertices": 52,
+    "parts": [
+      "runtime_next",
+      "sign_base",
+      "sign_casing"
+    ]
+  },
+  {
+    "file": "digital_clock.obj",
+    "faces": 7,
+    "vertices": 28,
+    "parts": [
+      "clock_casing",
+      "runtime_clock"
+    ]
+  },
+  {
+    "file": "stability_device.obj",
+    "faces": 19,
+    "vertices": 76,
+    "parts": [
+      "casing",
+      "indicator",
+      "runtime_stability"
+    ]
+  },
+  {
+    "file": "calendar.obj",
+    "faces": 7,
+    "vertices": 28,
+    "parts": [
+      "calendar_backing",
+      "runtime_calendar"
+    ]
+  },
+  {
+    "file": "folded_newspaper.obj",
+    "faces": 24,
+    "vertices": 96,
+    "parts": [
+      "folded_pages"
+    ]
+  },
+  {
+    "file": "hover_vehicle.obj",
+    "faces": 53,
+    "vertices": 244,
+    "parts": [
+      "body",
+      "cabin",
+      "front_glass",
+      "lift_pod"
+    ]
+  },
+  {
+    "file": "near_megablock.obj",
+    "faces": 199,
+    "vertices": 796,
+    "parts": [
+      "accent_band",
+      "buttress",
+      "front_window_band",
+      "megablock_mass",
+      "rear_window_band",
+      "runtime_billboard"
+    ]
+  },
+  {
+    "file": "assembled_base_geometry.obj",
+    "faces": 8000,
+    "vertices": 32116,
+    "parts": [
+      "Banner_-4.5__bottom_hem",
+      "Banner_-4.5__ceiling_suspension",
+      "Banner_-4.5__cloth_blank",
+      "Banner_-4.5__top_crossbar",
+      "Banner_-8__bottom_hem",
+      "Banner_-8__ceiling_suspension",
+      "Banner_-8__cloth_blank",
+      "Banner_-8__top_crossbar",
+      "Banner_4.5__bottom_hem",
+      "Banner_4.5__ceiling_suspension",
+      "Banner_4.5__cloth_blank",
+      "Banner_4.5__top_crossbar",
+      "Banner_8__bottom_hem",
+      "Banner_8__ceiling_suspension",
+      "Banner_8__cloth_blank",
+      "Banner_8__top_crossbar",
+      "Bench_-11.5_16__leg",
+      "Bench_-11.5_16__rail",
+      "Bench_-11.5_16__seat",
+      "Bench_-11.5_16__seat_back",
+      "Bench_-11.5_9__leg",
+      "Bench_-11.5_9__rail",
+      "Bench_-11.5_9__seat",
+      "Bench_-11.5_9__seat_back",
+      "Bench_11.5_16__leg",
+      "Bench_11.5_16__rail",
+      "Bench_11.5_16__seat",
+      "Bench_11.5_16__seat_back",
+      "Bench_11.5_9__leg",
+      "Bench_11.5_9__rail",
+      "Bench_11.5_9__seat",
+      "Bench_11.5_9__seat_back",
+      "CRT__crt_screen_4_3",
+      "CRT__front_bezel",
+      "CRT__lower_controls",
+      "CRT__swivel",
+      "CRT__swivel_base",
+      "CRT__tube_casing",
+      "CRT__tube_vent",
+      "Clock__clock_casing",
+      "Clock__runtime_clock",
+      "DayCalendar__calendar_backing",
+      "DayCalendar__runtime_calendar",
+      "Departures__ceiling_rods",
+      "Departures__housing",
+      "Departures__runtime_departures",
+      "Desk__front_edge",
+      "Desk__leg",
+      "Desk__top",
+      "ExhibitAnchor_0__base",
+      "ExhibitAnchor_0__blank_caption",
+      "ExhibitAnchor_1__base",
+      "ExhibitAnchor_1__blank_caption",
+      "ExhibitAnchor_2__base",
+      "ExhibitAnchor_2__blank_caption",
+      "ExhibitAnchor_3__base",
+      "ExhibitAnchor_3__blank_caption",
+      "ExhibitAnchor_4__base",
+      "ExhibitAnchor_4__blank_caption",
+      "ExhibitAnchor_5__base",
+      "ExhibitAnchor_5__blank_caption",
+      "HallFloor__floor_tiles",
+      "HallStructure__ceiling",
+      "HallStructure__ceiling_beams",
+      "HallStructure__ceiling_light_faces",
+      "HallStructure__rear_dado",
+      "HallStructure__rear_mullions",
+      "HallStructure__rear_piers",
+      "HallStructure__rear_rails",
+      "HallStructure__side_dado",
+      "HallStructure__side_header",
+      "HallStructure__side_piers",
+      "HallStructure__side_window_mullions",
+      "HallStructure__side_window_rails",
+      "Keyboard__keyboard_body",
+      "Keyboard__keys",
+      "Keyboard__spacebar",
+      "LeftPartition__cap",
+      "LeftPartition__solid_panel",
+      "LeftPartition__terminal_post",
+      "Megablock_-10__accent_band",
+      "Megablock_-10__buttress",
+      "Megablock_-10__front_window_band",
+      "Megablock_-10__megablock_mass",
+      "Megablock_-10__rear_window_band",
+      "Megablock_-10__runtime_billboard",
+      "Megablock_-35__accent_band",
+      "Megablock_-35__buttress",
+      "Megablock_-35__front_window_band",
+      "Megablock_-35__megablock_mass",
+      "Megablock_-35__rear_window_band",
+      "Megablock_-35__runtime_billboard",
+      "Megablock_-50__accent_band",
+      "Megablock_-50__buttress",
+      "Megablock_-50__front_window_band",
+      "Megablock_-50__megablock_mass",
+      "Megablock_-50__rear_window_band",
+      "Megablock_-50__runtime_billboard",
+      "Megablock_25__accent_band",
+      "Megablock_25__buttress",
+      "Megablock_25__front_window_band",
+      "Megablock_25__megablock_mass",
+      "Megablock_25__rear_window_band",
+      "Megablock_25__runtime_billboard",
+      "Megablock_45__accent_band",
+      "Megablock_45__buttress",
+      "Megablock_45__front_window_band",
+      "Megablock_45__megablock_mass",
+      "Megablock_45__rear_window_band",
+      "Megablock_45__runtime_billboard",
+      "Newspaper__folded_pages",
+      "Next__runtime_next",
+      "Next__sign_base",
+      "Next__sign_casing",
+      "PortalCabinet__blank_diagnostic",
+      "PortalCabinet__cabinet",
+      "PortalCabinet__vent",
+      "PortalOpening__animated_opening",
+      "PortalRing__platform",
+      "PortalRing__ring_segment_00",
+      "PortalRing__ring_segment_01",
+      "PortalRing__ring_segment_02",
+      "PortalRing__ring_segment_03",
+      "PortalRing__ring_segment_04",
+      "PortalRing__ring_segment_05",
+      "PortalRing__ring_segment_06",
+      "PortalRing__ring_segment_07",
+      "PortalRing__ring_segment_08",
+      "PortalRing__ring_segment_09",
+      "PortalRing__ring_segment_10",
+      "PortalRing__ring_segment_11",
+      "PortalRing__ring_support",
+      "RightPartition__cap",
+      "RightPartition__solid_panel",
+      "RightPartition__terminal_post",
+      "Stability__casing",
+      "Stability__indicator",
+      "Stability__runtime_stability",
+      "Till__drawer",
+      "Till__readout_housing",
+      "Till__runtime_credits",
+      "Till__till_body",
+      "Till__till_keys"
+    ]
+  }
+]

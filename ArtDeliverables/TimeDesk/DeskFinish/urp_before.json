@@ -1,0 +1,52 @@
+{
+  "success": true,
+  "asset": {
+    "name": "UniversalRP",
+    "path": "Assets/Settings/UniversalRP.asset",
+    "supportsHDR": true,
+    "msaaSampleCount": 4,
+    "renderScale": 1.0,
+    "supportsMainLightShadows": true,
+    "supportsAdditionalLightShadows": false,
+    "supportsCameraDepthTexture": false,
+    "supportsCameraOpaqueTexture": false,
+    "shadowDistance": 55.0,
+    "defaultRendererIndex": 0
+  },
+  "renderers": [
+    {
+      "index": 0,
+      "isDefault": true,
+      "name": "Renderer2D",
+      "path": "Assets/Settings/Renderer2D.asset",
+      "rendererType": "Renderer2DData",
+      "featureCount": 0
+    },
+    {
+      "index": 1,
+      "isDefault": false,
+      "name": "OfficeForwardRenderer",
+      "path": "Assets/Settings/OfficeForwardRenderer.asset",
+      "rendererType": "UniversalRendererData",
+      "featureCount": 1
+    }
+  ],
+  "creatableRendererFeatures": [
+    {
+      "name": "DecalRendererFeature",
+      "notes": "URP decal projection support"
+    },
+    {
+      "name": "FullScreenPassRendererFeature",
+      "notes": "Inject a fullscreen pass"
+    },
+    {
+      "name": "RenderObjects",
+      "notes": "Filter and draw renderers with custom overrides"
+    },
+    {
+      "name": "ScreenSpaceAmbientOcclusion",
+      "notes": "Screen-space ambient occlusion"
+    }
+  ]
+}

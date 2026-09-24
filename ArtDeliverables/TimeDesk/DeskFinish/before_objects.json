@@ -1,0 +1,568 @@
+{
+  "Main Camera": {
+    "name": "Main Camera",
+    "entityId": "73604",
+    "instanceId": 0,
+    "path": "Main Camera",
+    "tag": "MainCamera",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 2.15,
+      "z": -3.0
+    },
+    "rotation": {
+      "x": 5.00000048,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": null,
+    "parentPath": null,
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "Camera",
+      "AudioListener",
+      "UniversalAdditionalCameraData",
+      "CinemachineBrain",
+      "Physics2DRaycaster"
+    ]
+  },
+  "Cameras": {
+    "name": "Cameras",
+    "entityId": "71458",
+    "instanceId": 0,
+    "path": "Cameras",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": null,
+    "parentPath": null,
+    "childCount": 2,
+    "children": [
+      {
+        "name": "OfficeVCam",
+        "entityId": "74128",
+        "instanceId": 0,
+        "path": "Cameras/OfficeVCam"
+      },
+      {
+        "name": "MonitorVCam",
+        "entityId": "72028",
+        "instanceId": 0,
+        "path": "Cameras/MonitorVCam"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "PC_CRT_Desktop": {
+    "name": "PC_CRT_Desktop",
+    "entityId": "18446744073709543826",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/PC_CRT_Desktop",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 2.0,
+      "y": 1.06,
+      "z": 0.25
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 31.6075039,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 14,
+    "children": [
+      {
+        "name": "PC_CRT_Desktop__Cable_Rubber",
+        "entityId": "18446744073709543822",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Cable_Rubber"
+      },
+      {
+        "name": "PC_CRT_Desktop__Case_Steel",
+        "entityId": "18446744073709543814",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Case_Steel"
+      },
+      {
+        "name": "PC_CRT_Desktop__CRT_BackShell",
+        "entityId": "18446744073709543806",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__CRT_BackShell"
+      },
+      {
+        "name": "PC_CRT_Desktop__CRT_Glass",
+        "entityId": "18446744073709543798",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__CRT_Glass"
+      },
+      {
+        "name": "PC_CRT_Desktop__CRT_Terracotta",
+        "entityId": "18446744073709543790",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__CRT_Terracotta"
+      },
+      {
+        "name": "PC_CRT_Desktop__Indicator_Green",
+        "entityId": "18446744073709543782",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Indicator_Green"
+      },
+      {
+        "name": "PC_CRT_Desktop__Paper_Label",
+        "entityId": "18446744073709543774",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Paper_Label"
+      },
+      {
+        "name": "PC_CRT_Desktop__Plastic_DeepGrey",
+        "entityId": "18446744073709543766",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Plastic_DeepGrey"
+      },
+      {
+        "name": "PC_CRT_Desktop__Plastic_Ivory",
+        "entityId": "18446744073709543758",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Plastic_Ivory"
+      },
+      {
+        "name": "PC_CRT_Desktop__Plastic_WarmGrey",
+        "entityId": "18446744073709543750",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Plastic_WarmGrey"
+      },
+      {
+        "name": "PC_CRT_Desktop__Power_Amber",
+        "entityId": "18446744073709543742",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Power_Amber"
+      },
+      {
+        "name": "PC_CRT_Desktop__Recess_Charcoal",
+        "entityId": "18446744073709543734",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Recess_Charcoal"
+      },
+      {
+        "name": "PC_CRT_Desktop__Wear_Dark",
+        "entityId": "18446744073709543726",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Wear_Dark"
+      },
+      {
+        "name": "PC_CRT_Desktop__Wear_Light",
+        "entityId": "18446744073709543718",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop/PC_CRT_Desktop__Wear_Light"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "PC_Keyboard": {
+    "name": "PC_Keyboard",
+    "entityId": "18446744073709543704",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/PC_Keyboard",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 1.63313174,
+      "y": 1.06,
+      "z": -0.346160829
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 31.6075039,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 9,
+    "children": [
+      {
+        "name": "PC_Keyboard__Cable_Rubber",
+        "entityId": "18446744073709543700",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Cable_Rubber"
+      },
+      {
+        "name": "PC_Keyboard__Indicator_Green",
+        "entityId": "18446744073709543684",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Indicator_Green"
+      },
+      {
+        "name": "PC_Keyboard__Paper_Label",
+        "entityId": "18446744073709543676",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Paper_Label"
+      },
+      {
+        "name": "PC_Keyboard__Plastic_DeepGrey",
+        "entityId": "18446744073709543668",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Plastic_DeepGrey"
+      },
+      {
+        "name": "PC_Keyboard__Plastic_Ivory",
+        "entityId": "18446744073709543660",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Plastic_Ivory"
+      },
+      {
+        "name": "PC_Keyboard__Plastic_WarmGrey",
+        "entityId": "18446744073709543652",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Plastic_WarmGrey"
+      },
+      {
+        "name": "PC_Keyboard__Power_Amber",
+        "entityId": "18446744073709540332",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Power_Amber"
+      },
+      {
+        "name": "PC_Keyboard__Recess_Charcoal",
+        "entityId": "18446744073709543644",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Recess_Charcoal"
+      },
+      {
+        "name": "PC_Keyboard__Wear_Light",
+        "entityId": "18446744073709543636",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard/PC_Keyboard__Wear_Light"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "OfficeDaylight": {
+    "name": "OfficeDaylight",
+    "entityId": "73208",
+    "instanceId": 0,
+    "path": "HybridOffice/OfficeDaylight",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 12.0,
+      "z": 8.0
+    },
+    "rotation": {
+      "x": 50.0,
+      "y": 332.0,
+      "z": -1.32823584e-06
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "HybridOffice",
+    "parentPath": "HybridOffice",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "Light"
+    ]
+  },
+  "OfficeInteriorFill": {
+    "name": "OfficeInteriorFill",
+    "entityId": "74224",
+    "instanceId": 0,
+    "path": "HybridOffice/OfficeInteriorFill",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 10.0,
+      "z": -2.0
+    },
+    "rotation": {
+      "x": 26.0,
+      "y": 155.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "HybridOffice",
+    "parentPath": "HybridOffice",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "Light"
+    ]
+  },
+  "Blender_Exhibit_Discobolus": {
+    "name": "Blender_Exhibit_Discobolus",
+    "entityId": "18446744073709525328",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Discobolus",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 4.4,
+      "y": 0.9,
+      "z": 8.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 15.000001,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 2,
+    "children": [
+      {
+        "name": "Art_Discobolus__Sculpture_Dust",
+        "entityId": "18446744073709525324",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_Exhibit_Discobolus/Art_Discobolus__Sculpture_Dust"
+      },
+      {
+        "name": "Art_Discobolus__Sculpture_Stone",
+        "entityId": "18446744073709525316",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_Exhibit_Discobolus/Art_Discobolus__Sculpture_Stone"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  "Booth": {
+    "name": "Booth",
+    "entityId": "72140",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": true,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "HybridOffice",
+    "parentPath": "HybridOffice",
+    "childCount": 24,
+    "children": [
+      {
+        "name": "PC_CRT_Desktop",
+        "entityId": "18446744073709543826",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_CRT_Desktop"
+      },
+      {
+        "name": "PC_Keyboard",
+        "entityId": "18446744073709543704",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Keyboard"
+      },
+      {
+        "name": "PC_Desk",
+        "entityId": "18446744073709543622",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/PC_Desk"
+      },
+      {
+        "name": "Blender_Till",
+        "entityId": "18446744073709536694",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Till"
+      },
+      {
+        "name": "Blender_Next",
+        "entityId": "18446744073709536612",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Next"
+      },
+      {
+        "name": "Blender_Clock",
+        "entityId": "18446744073709536554",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Clock"
+      },
+      {
+        "name": "Blender_Stability",
+        "entityId": "18446744073709536504",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Stability"
+      },
+      {
+        "name": "Blender_DayCalendar",
+        "entityId": "18446744073709536438",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_DayCalendar"
+      },
+      {
+        "name": "Blender_Intercom",
+        "entityId": "18446744073709536388",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Intercom"
+      },
+      {
+        "name": "Blender_ScannerTray",
+        "entityId": "18446744073709536346",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_ScannerTray"
+      },
+      {
+        "name": "Blender_Stamp",
+        "entityId": "18446744073709536296",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Stamp"
+      },
+      {
+        "name": "Blender_LeftPartition",
+        "entityId": "18446744073709536262",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_LeftPartition"
+      },
+      {
+        "name": "Blender_RightPartition",
+        "entityId": "18446744073709536220",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_RightPartition"
+      },
+      {
+        "name": "Blender_LeftInstrumentBoard",
+        "entityId": "18446744073709536178",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_LeftInstrumentBoard"
+      },
+      {
+        "name": "Blender_RightInstrumentBoard",
+        "entityId": "18446744073709536144",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_RightInstrumentBoard"
+      },
+      {
+        "name": "Blender_DeskBlotter",
+        "entityId": "18446744073709536110",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_DeskBlotter"
+      },
+      {
+        "name": "Blender_Newspaper",
+        "entityId": "18446744073709536076",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Newspaper"
+      },
+      {
+        "name": "Blender_Desk_VoyagerRecord",
+        "entityId": "18446744073709522398",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_VoyagerRecord"
+      },
+      {
+        "name": "Blender_LeftBoardBracket",
+        "entityId": "18446744073709522372",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_LeftBoardBracket"
+      },
+      {
+        "name": "Blender_RightBoardBracket",
+        "entityId": "18446744073709522346",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_RightBoardBracket"
+      },
+      {
+        "name": "Blender_Desk_GreatWavePostcard",
+        "entityId": "18446744073709519534",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_GreatWavePostcard"
+      },
+      {
+        "name": "Blender_Desk_MonaLisaPostcard",
+        "entityId": "18446744073709519492",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_MonaLisaPostcard"
+      },
+      {
+        "name": "BoardPicturePin_Left",
+        "entityId": "18446744073709519156",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/BoardPicturePin_Left"
+      },
+      {
+        "name": "BoardPicturePin_Right",
+        "entityId": "18446744073709519130",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/BoardPicturePin_Right"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  }
+}

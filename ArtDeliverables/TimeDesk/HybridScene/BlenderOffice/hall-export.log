@@ -1,0 +1,54 @@
+00:21.360  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+00:21.360  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Structure.fbx'
+export finished in 0.0352 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Floor.fbx'
+export finished in 0.0329 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Banner.fbx'
+export finished in 0.0054 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Departures.fbx'
+export finished in 0.0076 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Bench.fbx'
+export finished in 0.0101 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Portal.fbx'
+export finished in 0.0233 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_ServiceCabinet.fbx'
+export finished in 0.0095 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Plinth.fbx'
+export finished in 0.0092 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_DisplayStand.fbx'
+export finished in 0.0042 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_MonaLisa.fbx'
+export finished in 0.0073 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_PearlEarring.fbx'
+export finished in 0.0092 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_StarryNight.fbx'
+export finished in 0.0144 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_GreatWave.fbx'
+export finished in 0.0116 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_Milkmaid.fbx'
+export finished in 0.0115 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Art_Mondrian.fbx'
+export finished in 0.0132 sec.
+
+FBX export starting... 'E:\\unity\\NOPE\\ArtDeliverables\\TimeDesk\\HybridScene\\BlenderOffice\\Exports\\Hall_Paperwork.fbx'
+export finished in 0.0061 sec.
+Info: Saved as "Hall_Collection.blend"
+
+Blender quit

@@ -1,0 +1,252 @@
+{
+  "colors": {
+    "ivory": [
+      0.68,
+      0.6,
+      0.44
+    ],
+    "ivory_edge": [
+      0.83,
+      0.75,
+      0.57
+    ],
+    "ivory_dark": [
+      0.43,
+      0.37,
+      0.27
+    ],
+    "teal": [
+      0.13,
+      0.25,
+      0.24
+    ],
+    "teal_edge": [
+      0.25,
+      0.39,
+      0.34
+    ],
+    "metal": [
+      0.2,
+      0.24,
+      0.22
+    ],
+    "rubber": [
+      0.08,
+      0.105,
+      0.1
+    ],
+    "screen": [
+      0.085,
+      0.145,
+      0.15
+    ],
+    "glass_edge": [
+      0.13,
+      0.24,
+      0.25
+    ],
+    "wood": [
+      0.52,
+      0.29,
+      0.13
+    ],
+    "wood_edge": [
+      0.65,
+      0.4,
+      0.2
+    ],
+    "brass": [
+      0.59,
+      0.4,
+      0.16
+    ],
+    "key": [
+      0.74,
+      0.68,
+      0.53
+    ],
+    "key_dark": [
+      0.48,
+      0.47,
+      0.37
+    ],
+    "paper": [
+      0.79,
+      0.75,
+      0.61
+    ],
+    "green": [
+      0.42,
+      0.74,
+      0.47
+    ],
+    "red": [
+      0.64,
+      0.26,
+      0.16
+    ],
+    "rust": [
+      0.38,
+      0.2,
+      0.12
+    ]
+  },
+  "models": [
+    {
+      "model": "crt_monitor",
+      "groups": {
+        "swivel_base": "ivory",
+        "swivel": "ivory_dark",
+        "tube_casing": "ivory",
+        "front_bezel": "ivory_edge",
+        "screen_recess": "ivory_dark",
+        "crt_screen_4_3": "screen",
+        "control_strip": "ivory",
+        "power_button": "ivory_dark",
+        "power_indicator": "green",
+        "adjust_buttons": "ivory_dark",
+        "tube_vent": "rubber",
+        "case_fasteners": "ivory_dark",
+        "power_cable": "rubber"
+      },
+      "faces": 1293
+    },
+    {
+      "model": "keyboard",
+      "groups": {
+        "keyboard_body": "ivory",
+        "key_bed": "ivory_dark",
+        "keys_key_dark": "key_dark",
+        "keys_key": "key",
+        "spacebar": "key",
+        "status_indicators": "green",
+        "keyboard_cable": "rubber"
+      },
+      "faces": 5678
+    },
+    {
+      "model": "desk",
+      "groups": {
+        "top": "wood",
+        "front_edge": "wood_edge",
+        "lower_apron": "wood",
+        "leg": "metal",
+        "edge_repair": "brass"
+      },
+      "faces": 518
+    },
+    {
+      "model": "credits_till",
+      "groups": {
+        "drawer": "ivory",
+        "drawer_seam": "ivory_dark",
+        "drawer_pull": "metal",
+        "till_body": "ivory_edge",
+        "key_bed": "ivory_dark",
+        "till_keys_number": "key",
+        "till_keys_action": "teal",
+        "readout_housing": "ivory",
+        "readout_recess": "ivory_dark",
+        "runtime_credits": "screen"
+      },
+      "faces": 1949
+    },
+    {
+      "model": "next_sign",
+      "groups": {
+        "sign_base": "brass",
+        "sign_casing": "ivory",
+        "sign_recess": "ivory_dark",
+        "runtime_next": "teal",
+        "sign_screws": "brass"
+      },
+      "faces": 193
+    },
+    {
+      "model": "digital_clock",
+      "groups": {
+        "casing": "ivory",
+        "display_recess": "ivory_dark",
+        "runtime_clock": "screen"
+      },
+      "faces": 99
+    },
+    {
+      "model": "stability_device",
+      "groups": {
+        "casing": "ivory",
+        "display_recess": "ivory_dark",
+        "runtime_stability": "screen",
+        "lamp_green": "green",
+        "lamp_ivory_dark": "ivory_dark"
+      },
+      "faces": 127
+    },
+    {
+      "model": "calendar",
+      "groups": {
+        "calendar_backing": "ivory",
+        "runtime_calendar": "paper",
+        "binding": "teal",
+        "calendar_pins": "brass"
+      },
+      "faces": 177
+    },
+    {
+      "model": "partition",
+      "groups": {
+        "solid_panel": "teal",
+        "lower_inset": "teal_edge",
+        "terminal_post": "wood",
+        "cap": "wood_edge",
+        "skirting": "metal"
+      },
+      "faces": 444
+    },
+    {
+      "model": "scanner_tray",
+      "groups": {
+        "tray_base": "metal",
+        "scanner_glass": "screen",
+        "side_rail": "ivory",
+        "rear_feed": "ivory",
+        "feed_slot": "rubber",
+        "front_rail": "ivory"
+      },
+      "faces": 518
+    },
+    {
+      "model": "desk_stamp",
+      "groups": {
+        "stamp_rubber": "rubber",
+        "stamp_base": "wood",
+        "stamp_neck": "wood",
+        "stamp_handle": "wood_edge"
+      },
+      "faces": 278
+    },
+    {
+      "model": "intercom",
+      "groups": {
+        "body": "ivory",
+        "speaker_slots": "rubber",
+        "talk_button": "brass",
+        "activity_lamp": "green"
+      },
+      "faces": 628
+    },
+    {
+      "model": "portal_ring",
+      "groups": {
+        "segment_brass": "brass",
+        "joint": "metal",
+        "gate_fasteners": "metal",
+        "segment_ivory_dark": "ivory_dark",
+        "segment_ivory": "ivory",
+        "platform": "metal",
+        "support": "ivory_dark"
+      },
+      "faces": 990
+    }
+  ]
+}

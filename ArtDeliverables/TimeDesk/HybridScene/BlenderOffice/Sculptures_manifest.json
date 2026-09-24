@@ -1,0 +1,285 @@
+{
+  "materials": {
+    "CRT_Terracotta": {
+      "color": [
+        0.7254901960784313,
+        0.7137254901960784,
+        0.6784313725490196
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_BackShell": {
+      "color": [
+        0.6862745098039216,
+        0.6784313725490196,
+        0.6470588235294118
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_Ivory": {
+      "color": [
+        0.7803921568627451,
+        0.7725490196078432,
+        0.7411764705882353
+      ],
+      "smoothness": 0.18999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_WarmGrey": {
+      "color": [
+        0.6,
+        0.611764705882353,
+        0.592156862745098
+      ],
+      "smoothness": 0.16000000000000003,
+      "metallic": 0,
+      "texture": null
+    },
+    "Plastic_DeepGrey": {
+      "color": [
+        0.3843137254901961,
+        0.4196078431372549,
+        0.4117647058823529
+      ],
+      "smoothness": 0.13,
+      "metallic": 0,
+      "texture": null
+    },
+    "Recess_Charcoal": {
+      "color": [
+        0.17254901960784313,
+        0.2,
+        0.20392156862745098
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "CRT_Glass": {
+      "color": [
+        0.14901960784313725,
+        0.24313725490196078,
+        0.25882352941176473
+      ],
+      "smoothness": 0.72,
+      "metallic": 0,
+      "texture": null
+    },
+    "Case_Steel": {
+      "color": [
+        0.6705882352941176,
+        0.6862745098039216,
+        0.6627450980392157
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.08,
+      "texture": null
+    },
+    "Power_Amber": {
+      "color": [
+        0.7294117647058823,
+        0.47058823529411764,
+        0.3137254901960784
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "Indicator_Green": {
+      "color": [
+        0.5333333333333333,
+        0.6666666666666666,
+        0.4627450980392157
+      ],
+      "smoothness": 0.37,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Light": {
+      "color": [
+        0.7725490196078432,
+        0.7490196078431373,
+        0.6862745098039216
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Wear_Dark": {
+      "color": [
+        0.5607843137254902,
+        0.5372549019607843,
+        0.48627450980392156
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Paper_Label": {
+      "color": [
+        0.7686274509803922,
+        0.7490196078431373,
+        0.6823529411764706
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Cable_Rubber": {
+      "color": [
+        0.2235294117647059,
+        0.24313725490196078,
+        0.21176470588235294
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Edge": {
+      "color": [
+        0.3568627450980392,
+        0.26666666666666666,
+        0.21176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Metal": {
+      "color": [
+        0.2549019607843137,
+        0.30196078431372547,
+        0.28627450980392155
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0.05,
+      "texture": null
+    },
+    "Desk_WornEdge": {
+      "color": [
+        0.5529411764705883,
+        0.4196078431372549,
+        0.2980392156862745
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "Desk_Walnut": {
+      "color": [
+        0.5019607843137255,
+        0.3843137254901961,
+        0.2784313725490196
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderPC\\Textures\\desk_walnut_albedo.png"
+    },
+    "Sculpture_Bronze": {
+      "color": [
+        0.3803921568627451,
+        0.4470588235294118,
+        0.403921568627451
+      ],
+      "smoothness": 0.09999999999999998,
+      "metallic": 0.1,
+      "texture": null
+    },
+    "Sculpture_Patina": {
+      "color": [
+        0.47058823529411764,
+        0.5176470588235295,
+        0.4745098039215686
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Sculpture_Stone": {
+      "color": [
+        0.7647058823529411,
+        0.7529411764705882,
+        0.6784313725490196
+      ],
+      "smoothness": 0.030000000000000027,
+      "metallic": 0,
+      "texture": null
+    },
+    "Sculpture_Dust": {
+      "color": [
+        0.6509803921568628,
+        0.6313725490196078,
+        0.5490196078431373
+      ],
+      "smoothness": 0.020000000000000018,
+      "metallic": 0,
+      "texture": null
+    },
+    "Nefertiti_Limestone": {
+      "color": [
+        0.7058823529411765,
+        0.615686274509804,
+        0.47058823529411764
+      ],
+      "smoothness": 0.050000000000000044,
+      "metallic": 0,
+      "texture": null
+    },
+    "Nefertiti_Crown": {
+      "color": [
+        0.28627450980392155,
+        0.4,
+        0.4549019607843137
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": null
+    },
+    "Nefertiti_Band": {
+      "color": [
+        0.596078431372549,
+        0.4823529411764706,
+        0.3215686274509804
+      ],
+      "smoothness": 0.040000000000000036,
+      "metallic": 0,
+      "texture": null
+    }
+  },
+  "models": [
+    {
+      "name": "Art_Thinker",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_Thinker.fbx",
+      "nodes": {
+        "Art_Thinker__Sculpture_Patina": "Sculpture_Patina",
+        "Art_Thinker__Sculpture_Bronze": "Sculpture_Bronze"
+      },
+      "triangles": 6998
+    },
+    {
+      "name": "Art_Discobolus",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_Discobolus.fbx",
+      "nodes": {
+        "Art_Discobolus__Sculpture_Stone": "Sculpture_Stone",
+        "Art_Discobolus__Sculpture_Dust": "Sculpture_Dust"
+      },
+      "triangles": 7000
+    },
+    {
+      "name": "Art_Nefertiti",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_Nefertiti.fbx",
+      "nodes": {
+        "Art_Nefertiti__Sculpture_Dust": "Sculpture_Dust",
+        "Art_Nefertiti__Nefertiti_Limestone": "Nefertiti_Limestone",
+        "Art_Nefertiti__Nefertiti_Crown": "Nefertiti_Crown",
+        "Art_Nefertiti__Nefertiti_Band": "Nefertiti_Band"
+      },
+      "triangles": 7000
+    }
+  ]
+}

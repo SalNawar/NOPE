@@ -1,0 +1,87 @@
+[
+  {
+    "old": "Megacity_West",
+    "new": "Blender_Megacity_West",
+    "model": "City_CivicMegablock",
+    "parent": "HybridOffice/Exterior",
+    "pos": [
+      -35.0,
+      -15.0,
+      50.0
+    ],
+    "yaw": 353.0,
+    "scale": [
+      0.8,
+      0.8,
+      0.8
+    ]
+  },
+  {
+    "old": "Megacity_Rear",
+    "new": "Blender_Megacity_Rear",
+    "model": "City_TwinMegablock",
+    "parent": "HybridOffice/Exterior",
+    "pos": [
+      -10.0,
+      -15.0,
+      95.0
+    ],
+    "yaw": 0.0,
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  {
+    "old": "Megacity_EastRear",
+    "new": "Blender_Megacity_EastRear",
+    "model": "City_TerracedMegablock",
+    "parent": "HybridOffice/Exterior",
+    "pos": [
+      25.0,
+      -15.0,
+      80.0
+    ],
+    "yaw": 352.0,
+    "scale": [
+      1.1,
+      1.1,
+      1.1
+    ]
+  },
+  {
+    "old": "Megacity_East",
+    "new": "Blender_Megacity_East",
+    "model": "City_CivicMegablock",
+    "parent": "HybridOffice/Exterior",
+    "pos": [
+      45.0,
+      -15.0,
+      30.0
+    ],
+    "yaw": 340.0,
+    "scale": [
+      0.8,
+      0.8,
+      0.8
+    ]
+  },
+  {
+    "old": "Megacity_WestNear",
+    "new": "Blender_Megacity_WestNear",
+    "model": "City_TerracedMegablock",
+    "parent": "HybridOffice/Exterior",
+    "pos": [
+      -50.0,
+      -15.0,
+      5.0
+    ],
+    "yaw": 20.0000019,
+    "scale": [
+      0.65,
+      0.65,
+      0.65
+    ]
+  }
+]

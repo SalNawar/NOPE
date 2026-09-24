@@ -1,0 +1,94 @@
+{
+    "MonoBehaviour": {
+        "m_Enabled": true,
+        "m_EditorHideFlags": 0,
+        "m_Name": "OfficeForwardRenderer",
+        "m_EditorClassIdentifier": "Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalRendererData",
+        "debugShaders": {
+            "debugReplacementPS": {
+                "fileID": 4800000,
+                "guid": "cf852408f2e174538bcd9b7fda1c5ae7",
+                "type": 3
+            },
+            "hdrDebugViewPS": {
+                "fileID": 4800000,
+                "guid": "573620ae32aec764abd4d728906d2587",
+                "type": 3
+            },
+            "probeVolumeSamplingDebugComputeShader": {
+                "fileID": 7200000,
+                "guid": "53626a513ea68ce47b59dc1299fe3959",
+                "type": 3
+            }
+        },
+        "probeVolumeResources": {
+            "probeVolumeDebugShader": {
+                "instanceID": 0
+            },
+            "probeVolumeFragmentationDebugShader": {
+                "instanceID": 0
+            },
+            "probeVolumeOffsetDebugShader": {
+                "instanceID": 0
+            },
+            "probeVolumeSamplingDebugShader": {
+                "instanceID": 0
+            },
+            "probeSamplingDebugMesh": {
+                "instanceID": 0
+            },
+            "probeSamplingDebugTexture": {
+                "instanceID": 0
+            },
+            "probeVolumeBlendStatesCS": {
+                "instanceID": 0
+            }
+        },
+        "m_RendererFeatures": [
+            {
+                "fileID": -7555180300608094714,
+                "guid": "acf1f2f3b521f2140b5c596ceae4fdd6",
+                "type": 2
+            }
+        ],
+        "m_RendererFeatureMap": [
+            -7555180300608094714
+        ],
+        "m_UseNativeRenderPass": false,
+        "xrSystemData": {
+            "instanceID": 0
+        },
+        "postProcessData": {
+            "instanceID": 0
+        },
+        "m_AssetVersion": 3,
+        "m_PrepassLayerMask": {
+            "serializedVersion": "2",
+            "m_Bits": 4294967295
+        },
+        "m_OpaqueLayerMask": {
+            "serializedVersion": "2",
+            "m_Bits": 4294967295
+        },
+        "m_TransparentLayerMask": {
+            "serializedVersion": "2",
+            "m_Bits": 4294967295
+        },
+        "m_DefaultStencilState": {
+            "overrideStencilState": false,
+            "stencilReference": 0,
+            "stencilCompareFunction": 8,
+            "passOperation": 2,
+            "failOperation": 0,
+            "zFailOperation": 0
+        },
+        "m_ShadowTransparentReceive": true,
+        "m_RenderingMode": 0,
+        "m_DepthPrimingMode": 0,
+        "m_CopyDepthMode": 1,
+        "m_DepthAttachmentFormat": 0,
+        "m_DepthTextureFormat": 0,
+        "m_AccurateGbufferNormals": false,
+        "m_IntermediateTextureMode": 1
+    }
+}

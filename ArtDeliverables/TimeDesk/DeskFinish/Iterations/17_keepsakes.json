@@ -1,0 +1,26 @@
+[
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/Art_Rocket.prefab",
+    "name": "DeskKeepsake_Rocket",
+    "parentPath": "HybridOffice/Booth",
+    "x": -2.55,
+    "y": 2.557,
+    "z": 0.69,
+    "rotY": 90,
+    "scaleX": 0.18,
+    "scaleY": 0.18,
+    "scaleZ": 0.18
+  },
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/Art_Nefertiti.prefab",
+    "name": "DeskKeepsake_Nefertiti",
+    "parentPath": "HybridOffice/Booth",
+    "x": 2.54,
+    "y": 2.559,
+    "z": 0.68,
+    "rotY": 25,
+    "scaleX": 0.48,
+    "scaleY": 0.48,
+    "scaleZ": 0.48
+  }
+]

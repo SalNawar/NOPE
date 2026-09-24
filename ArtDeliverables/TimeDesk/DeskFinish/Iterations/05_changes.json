@@ -1,0 +1,57 @@
+[
+  {
+    "path": "HybridOffice/Booth/Finish_PC",
+    "posX": -1.54,
+    "posY": 1.06,
+    "posZ": -0.29,
+    "rotY": -42,
+    "scaleX": 0.59,
+    "scaleY": 0.59,
+    "scaleZ": 0.59
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Keyboard",
+    "posX": -1.235,
+    "posY": 1.06,
+    "posZ": -0.67,
+    "rotY": -35,
+    "scaleX": 0.57,
+    "scaleY": 0.57,
+    "scaleZ": 0.57
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Mouse",
+    "posX": -0.83,
+    "posY": 1.07,
+    "posZ": -0.72,
+    "rotY": -25,
+    "scaleX": 0.75,
+    "scaleY": 0.75,
+    "scaleZ": 0.75
+  },
+  {
+    "path": "HybridOffice/Booth/Finish_Till",
+    "posX": -1.09,
+    "posY": 1.06,
+    "posZ": 0.39,
+    "rotY": -5,
+    "scaleX": 0.7,
+    "scaleY": 0.7,
+    "scaleZ": 0.7
+  },
+  {
+    "path": "OfficeRoot/CRTMonitor",
+    "posX": -1.4332991407971387,
+    "posY": 1.548823064830582,
+    "posZ": -0.4385033095737254
+  },
+  {
+    "path": "Cameras/MonitorVCam",
+    "posX": -1.0489803102861184,
+    "posY": 1.62954346338742,
+    "posZ": -0.8353326124237839,
+    "rotX": 8,
+    "rotY": -42,
+    "rotZ": 0
+  }
+]
