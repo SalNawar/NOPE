@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public sealed class RunManager : MonoBehaviour
 {
-    /// <summary>Resources path of the RunConfigSO asset.</summary>
-    private const string ConfigResourcePath = "RunConfig";
+    /// <summary>Resources path of the RunConfigSO asset (shared with other boot-time loaders).</summary>
+    public const string ConfigResourcePath = "RunConfig";
 
     /// <summary>Singleton instance (null until first GetOrCreate).</summary>
     public static RunManager Instance { get; private set; }

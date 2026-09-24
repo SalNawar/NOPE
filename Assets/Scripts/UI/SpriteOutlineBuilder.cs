@@ -9,23 +9,19 @@ using UnityEngine;
 public static class SpriteOutlineBuilder
 {
     /// <summary>Builds the outline sprite (white; tint with SpriteRenderer.color). Null if the sprite has no texture.</summary>
+    /// <exception cref="System.InvalidOperationException">The sprite is tightly packed or rotated in an atlas.</exception>
     public static Sprite Build(Sprite source, int ringWidthPx)
     {
         if (source == null || source.texture == null)
             return null;
 
-        Rect region;
-        Vector2 trimOffset;
-        try
-        {
-            region = source.textureRect;         // where the sprite sits in its (possibly atlased) texture
-            trimOffset = source.textureRectOffset;
-        }
-        catch (UnityException)
-        {
-            region = source.rect;                // tightly packed atlas: fall back to the sprite rect
-            trimOffset = Vector2.zero;
-        }
+        // Tight or rotated atlas packing has no rectangular source region to read.
+        if (source.packed && (source.packingMode == SpritePackingMode.Tight || source.packingRotation != SpritePackingRotation.None))
+            throw new System.InvalidOperationException(
+                $"Sprite '{source.name}' is tightly packed or rotated in an atlas; hover outlines need Rectangle packing with no rotation for clickable sprites.");
+
+        Rect region = source.textureRect;         // where the sprite sits in its (possibly atlased) texture
+        Vector2 trimOffset = source.textureRectOffset;
 
         int width = Mathf.Max(1, Mathf.RoundToInt(region.width));
         int height = Mathf.Max(1, Mathf.RoundToInt(region.height));

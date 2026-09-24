@@ -21,15 +21,21 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     public Vector2 handHotspot = new Vector2(12f, 1f);
 
     [Header("Hover outline")]
-    /// <summary>Outline colour for booth objects and UI.</summary>
+    /// <summary>Outline colour for booth objects (world sprites).</summary>
     public Color outlineColor = Color.white;
 
     /// <summary>Booth outline thickness in world units.</summary>
     [Min(0.005f)]
     public float worldOutlineWidth = 0.05f;
 
+    /// <summary>
+    /// Outline colour for desktop UI. XP-style hover amber by default: it reads
+    /// on both the light windows and the blue wallpaper/taskbar (white would vanish on paper).
+    /// </summary>
+    public Color uiOutlineColor = new Color(0.98f, 0.72f, 0.2f, 1f);
+
     /// <summary>UI outline offset in pixels (uGUI Outline effect distance).</summary>
-    public Vector2 uiOutlineDistance = new Vector2(3f, -3f);
+    public Vector2 uiOutlineDistance = new Vector2(2f, -2f);
 
     /// <summary>Unlit sprite material for booth outlines, so lighting never dims the highlight.</summary>
     public Material outlineMaterial;

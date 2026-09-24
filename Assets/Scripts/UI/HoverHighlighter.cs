@@ -2,14 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// One per scene. Each frame it finds what the pointer is over, through the
-/// EventSystem's raycasters (the same ones clicks use), and, when that changes,
-/// moves the hover highlight and swaps the cursor: a white outline and hand
-/// cursor on any interactable Clickable (booth sprite) or Selectable (UI), the
-/// arrow elsewhere. Objects need no setup of their own.
+/// One persistent instance (created by InteractionFeedbackBootstrap). Each frame
+/// it reads what the pointer is over from the EventSystem (reusing the Input
+/// System UI module's own raycast) and, when that changes, moves the hover
+/// highlight and swaps the cursor: an outline and hand cursor on any
+/// interactable Clickable (booth sprite) or Selectable (UI), the arrow
+/// elsewhere. Objects need no setup of their own.
 /// </summary>
 public sealed class HoverHighlighter : MonoBehaviour
 {
@@ -19,14 +22,23 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>Cursor textures and outline look.</summary>
     [SerializeField] private InteractionFeedbackSO settings;
 
-    /// <summary>Reused raycast results.</summary>
+    /// <summary>Reused raycast results (fallback path only).</summary>
     private readonly List<RaycastResult> _hits = new List<RaycastResult>();
 
     /// <summary>Generated outlines per booth sprite renderer.</summary>
     private readonly Dictionary<SpriteRenderer, WorldOutline> _worldOutlines = new Dictionary<SpriteRenderer, WorldOutline>();
 
-    /// <summary>Reused pointer data for raycasts.</summary>
+    /// <summary>Reused pointer data for the fallback raycast.</summary>
     private PointerEventData _pointerData;
+
+    /// <summary>EventSystem the fallback pointer data belongs to.</summary>
+    private EventSystem _pointerDataOwner;
+
+    /// <summary>Object under the pointer last frame.</summary>
+    private GameObject _lastHitObject;
+
+    /// <summary>Nearest Clickable/Selectable of <see cref="_lastHitObject"/> (interactable or not).</summary>
+    private Component _lastCandidate;
 
     /// <summary>Currently highlighted Clickable or Selectable (null = nothing).</summary>
     private Component _hovered;
@@ -50,13 +62,22 @@ public sealed class HoverHighlighter : MonoBehaviour
         public SpriteRenderer renderer;
     }
 
+    /// <summary>Assigns the look (call before the component first enables).</summary>
+    public void Configure(InteractionFeedbackSO feedback)
+    {
+        settings = feedback;
+    }
+
     private void OnEnable()
     {
         if (settings == null)
             Debug.LogWarning("HoverHighlighter: no InteractionFeedbackSO assigned, so there is no custom cursor or hover outline. Run Tools > TimeDesk > Build Office UI.", this);
+
+        SceneManager.sceneUnloaded += HandleSceneUnloaded;
     }
 
-    private void Update()
+    /// <summary>LateUpdate so the UI module has already raycast this frame.</summary>
+    private void LateUpdate()
     {
         if (settings == null)
             return;
@@ -74,6 +95,7 @@ public sealed class HoverHighlighter : MonoBehaviour
 
     private void OnDisable()
     {
+        SceneManager.sceneUnloaded -= HandleSceneUnloaded;
         SetHighlighted(_hovered, false);
         _hovered = null;
         if (_cursorApplied)
@@ -92,40 +114,67 @@ public sealed class HoverHighlighter : MonoBehaviour
         _worldOutlines.Clear();
     }
 
-    /// <summary>Topmost interactable under the pointer, or null.</summary>
+    /// <summary>The interactable under the pointer, or null (hierarchy walk only when the hit object changes).</summary>
     private Component FindHoverTarget()
+    {
+        GameObject hit = PointerHitObject();
+        if (hit != _lastHitObject)
+        {
+            _lastHitObject = hit;
+            _lastCandidate = hit != null ? NearestCandidate(hit) : null;
+        }
+
+        // Re-checked every frame: READY and buttons toggle interactable while hovered.
+        return IsInteractable(_lastCandidate) ? _lastCandidate : null;
+    }
+
+    /// <summary>
+    /// Topmost object under the pointer: the Input System UI module's own raycast
+    /// when that module is active (no second raycast), else a direct EventSystem raycast.
+    /// </summary>
+    private GameObject PointerHitObject()
     {
         EventSystem eventSystem = EventSystem.current;
         Pointer pointer = Pointer.current;
         if (eventSystem == null || pointer == null)
             return null;
 
-        if (_pointerData == null)
+        if (eventSystem.currentInputModule is InputSystemUIInputModule module)
+            return module.GetLastRaycastResult(pointer.deviceId).gameObject;
+
+        if (_pointerData == null || _pointerDataOwner != eventSystem)
+        {
             _pointerData = new PointerEventData(eventSystem);
+            _pointerDataOwner = eventSystem;
+        }
         _pointerData.position = pointer.position.ReadValue();
 
         _hits.Clear();
         eventSystem.RaycastAll(_pointerData, _hits);
-        return _hits.Count > 0 ? InteractiveOn(_hits[0].gameObject) : null;
+        return _hits.Count > 0 ? _hits[0].gameObject : null;
     }
 
-    /// <summary>
-    /// The interactable Clickable or Selectable on this object or its nearest
-    /// parent that has one; null if that one is not interactable (or there is none).
-    /// </summary>
-    private static Component InteractiveOn(GameObject go)
+    /// <summary>The nearest Clickable or Selectable on this object or its parents, or null.</summary>
+    private static Component NearestCandidate(GameObject go)
     {
         for (Transform t = go.transform; t != null; t = t.parent)
         {
-            Clickable clickable = t.GetComponent<Clickable>();
-            if (clickable != null && clickable.isActiveAndEnabled)
-                return clickable.Interactable ? clickable : null;
-
-            Selectable selectable = t.GetComponent<Selectable>();
-            if (selectable != null && selectable.isActiveAndEnabled)
-                return selectable.IsInteractable() ? selectable : null;
+            if (t.TryGetComponent(out Clickable clickable))
+                return clickable;
+            if (t.TryGetComponent(out Selectable selectable))
+                return selectable;
         }
         return null;
+    }
+
+    /// <summary>True when a candidate is enabled and currently accepts clicks.</summary>
+    private static bool IsInteractable(Component candidate)
+    {
+        if (candidate is Clickable clickable)
+            return clickable != null && clickable.isActiveAndEnabled && clickable.Interactable;
+        if (candidate is Selectable selectable)
+            return selectable != null && selectable.isActiveAndEnabled && selectable.IsInteractable();
+        return false;
     }
 
     /// <summary>Turns the highlight on a target on or off.</summary>
@@ -136,8 +185,7 @@ public sealed class HoverHighlighter : MonoBehaviour
 
         if (target is Clickable clickable)
         {
-            SpriteRenderer sr = clickable.GetComponent<SpriteRenderer>();
-            if (sr == null)
+            if (!clickable.TryGetComponent(out SpriteRenderer sr))
                 return;
 
             WorldOutline outline = on ? EnsureWorldOutline(sr) : Lookup(sr);
@@ -147,16 +195,16 @@ public sealed class HoverHighlighter : MonoBehaviour
         else if (target is Selectable selectable && selectable.targetGraphic != null)
         {
             GameObject host = selectable.targetGraphic.gameObject;
-            HoverUIOutline uiOutline = host.GetComponent<HoverUIOutline>();
-            if (uiOutline == null)
+            if (!host.TryGetComponent(out HoverUIOutline uiOutline))
             {
                 if (!on)
                     return;
                 uiOutline = host.AddComponent<HoverUIOutline>();
             }
 
-            uiOutline.effectColor = settings.outlineColor;
+            uiOutline.effectColor = settings.uiOutlineColor;
             uiOutline.effectDistance = settings.uiOutlineDistance;
+            uiOutline.useGraphicAlpha = false; // translucent rows would otherwise fade the outline
             uiOutline.enabled = on;
         }
     }
@@ -234,6 +282,27 @@ public sealed class HoverHighlighter : MonoBehaviour
         Cursor.SetCursor(texture, hotspot, CursorMode.Auto);
         _handCursor = hand;
         _cursorApplied = true;
+    }
+
+    /// <summary>Drops outlines whose sprites went away with an unloaded scene.</summary>
+    private void HandleSceneUnloaded(Scene scene)
+    {
+        var dead = new List<SpriteRenderer>();
+        foreach (KeyValuePair<SpriteRenderer, WorldOutline> pair in _worldOutlines)
+        {
+            if (pair.Key == null)
+                dead.Add(pair.Key);
+        }
+
+        foreach (SpriteRenderer key in dead)
+        {
+            DestroyOutlineSprite(_worldOutlines[key]);
+            _worldOutlines.Remove(key);
+        }
+
+        _lastHitObject = null;
+        _lastCandidate = null;
+        _hovered = null;
     }
 
     /// <summary>Destroys a generated outline sprite and its texture.</summary>

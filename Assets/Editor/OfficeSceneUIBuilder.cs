@@ -246,7 +246,7 @@ public static class OfficeSceneUIBuilder
         // windows are launched by the investigation icon grid), plus a Start menu.
         BuildDesktopShell(canvas, bookShelf, windowLayer);
 
-        // Cursor + hover highlight: one scene component; clickables need no setup.
+        // Cursor + hover highlight settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
 
         // Shift clock: driver beside the GameManager, tray + wall-clock readouts.
@@ -825,36 +825,31 @@ public static class OfficeSceneUIBuilder
     /// </summary>
     private static Sprite EnsureOfficeSprite(string name, Color color, int w, int h)
     {
-        string folder = "Assets/Art/Office/Placeholder";
-        string assetPath = $"{folder}/{name}.png";
-        Sprite existing = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-        if (existing != null)
-            return existing;
+        Color32 c32 = color;
+        return EnsureOfficeShape(name, w, h, new Vector2(0.5f, 0.5f), (x, y) => c32);
+    }
 
-        EnsureFolderTree(folder);
+    /// <summary>
+    /// Writes a generated placeholder PNG (pixels from a function, row 0 = bottom)
+    /// to an asset path and imports it. Callers apply their own importer settings.
+    /// </summary>
+    private static void WritePlaceholderPng(string assetPath, int w, int h, System.Func<int, int, Color32> pixel)
+    {
+        EnsureFolderTree(System.IO.Path.GetDirectoryName(assetPath).Replace('\\', '/'));
 
         var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
         var pixels = new Color32[w * h];
-        Color32 c32 = color;
-        for (int i = 0; i < pixels.Length; i++)
-            pixels[i] = c32;
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+                pixels[y * w + x] = pixel(x, y);
         tex.SetPixels32(pixels);
         tex.Apply();
 
-        string abs = System.IO.Path.Combine(Application.dataPath, $"Art/Office/Placeholder/{name}.png");
-        System.IO.File.WriteAllBytes(abs, tex.EncodeToPNG());
+        string projectRoot = System.IO.Directory.GetParent(Application.dataPath).FullName;
+        System.IO.File.WriteAllBytes(System.IO.Path.Combine(projectRoot, assetPath), tex.EncodeToPNG());
         Object.DestroyImmediate(tex);
 
         AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
-        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
-        {
-            imp.textureType = TextureImporterType.Sprite;
-            imp.spriteImportMode = SpriteImportMode.Single;
-            imp.spritePixelsPerUnit = 100f;
-            imp.mipmapEnabled = false;
-            imp.SaveAndReimport();
-        }
-        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
     }
 
     /// <summary>Creates (or finds) a world-space sprite GameObject under a parent.</summary>
@@ -911,8 +906,12 @@ public static class OfficeSceneUIBuilder
         }
         main.orthographic = true;
         if (main.GetComponent<CinemachineBrain>() == null) main.gameObject.AddComponent<CinemachineBrain>();
-        if (main.GetComponent<Physics2DRaycaster>() == null)
-            main.gameObject.AddComponent<Physics2DRaycaster>();
+        Physics2DRaycaster raycaster = main.GetComponent<Physics2DRaycaster>();
+        if (raycaster == null)
+            raycaster = main.gameObject.AddComponent<Physics2DRaycaster>();
+
+        // A fixed hit buffer keeps the UI module's per-frame booth raycast allocation-free.
+        raycaster.maxRayIntersections = BoothRaycastHits;
 
         // Camera rig + view controller on OfficeRoot.
         CinemachineCameraRig rig = root.GetComponent<CinemachineCameraRig>();
@@ -996,6 +995,9 @@ public static class OfficeSceneUIBuilder
 
     // ----------------------------- Shift clock (booth + tray) -----------------------------
 
+    /// <summary>Hit buffer size for the booth's Physics2DRaycaster (non-allocating raycasts).</summary>
+    private const int BoothRaycastHits = 8;
+
     /// <summary>Ink colour of the placeholder wall clock.</summary>
     private static readonly Color32 ClockInk = new Color32(30, 28, 26, 255);
 
@@ -1059,27 +1061,12 @@ public static class OfficeSceneUIBuilder
     /// </summary>
     private static Sprite EnsureOfficeShape(string name, int w, int h, Vector2 pivot, System.Func<int, int, Color32> pixel)
     {
-        string folder = "Assets/Art/Office/Placeholder";
-        string assetPath = $"{folder}/{name}.png";
+        string assetPath = $"Assets/Art/Office/Placeholder/{name}.png";
         Sprite existing = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
         if (existing != null)
             return existing;
 
-        EnsureFolderTree(folder);
-
-        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
-        var pixels = new Color32[w * h];
-        for (int y = 0; y < h; y++)
-            for (int x = 0; x < w; x++)
-                pixels[y * w + x] = pixel(x, y);
-        tex.SetPixels32(pixels);
-        tex.Apply();
-
-        string abs = System.IO.Path.Combine(Application.dataPath, $"Art/Office/Placeholder/{name}.png");
-        System.IO.File.WriteAllBytes(abs, tex.EncodeToPNG());
-        Object.DestroyImmediate(tex);
-
-        AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+        WritePlaceholderPng(assetPath, w, h, pixel);
         if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
         {
             imp.textureType = TextureImporterType.Sprite;
@@ -1136,8 +1123,10 @@ public static class OfficeSceneUIBuilder
 
     /// <summary>
     /// Ensures the interaction-feedback settings (cursor art by file name when
-    /// present, placeholders otherwise; unlit outline material) and a
-    /// HoverHighlighter on the EventSystem wired to them. Idempotent.
+    /// present, placeholders otherwise, with click points derived from the art;
+    /// unlit outline material) and assigns them to RunConfig, from which
+    /// InteractionFeedbackBootstrap builds the one persistent HoverHighlighter
+    /// used in every scene. Idempotent.
     /// </summary>
     private static void BuildInteractionFeedback()
     {
@@ -1149,29 +1138,56 @@ public static class OfficeSceneUIBuilder
             AssetDatabase.CreateAsset(settings, InteractionFeedbackPath);
         }
 
-        // Replace only empty or placeholder cursors, so final art wins but a designer's pick is kept.
+        // Final art (by file name) replaces empty or placeholder cursors; a designer's own pick is kept.
+        // Whenever a cursor texture is replaced, its click point is re-derived from the image.
         if (settings.arrowCursor == null || IsPlaceholderCursor(settings.arrowCursor))
-            settings.arrowCursor = EnsureCursorTexture("cursor_arrow", ArrowCursorShape);
+        {
+            Texture2D arrow = EnsureCursorTexture("cursor_arrow", ArrowCursorShape);
+            if (arrow != settings.arrowCursor)
+            {
+                settings.arrowCursor = arrow;
+                settings.arrowHotspot = DetectHotspot(arrow, CursorHotspot.Kind.Tip, settings.arrowHotspot);
+            }
+        }
         if (settings.handCursor == null || IsPlaceholderCursor(settings.handCursor))
-            settings.handCursor = EnsureCursorTexture("cursor_hand", HandCursorShape);
+        {
+            Texture2D hand = EnsureCursorTexture("cursor_hand", HandCursorShape);
+            if (hand != settings.handCursor)
+            {
+                settings.handCursor = hand;
+                settings.handHotspot = DetectHotspot(hand, CursorHotspot.Kind.Fingertip, settings.handHotspot);
+            }
+        }
         if (settings.outlineMaterial == null)
             settings.outlineMaterial = AssetDatabase.LoadAssetAtPath<Material>(UnlitSpriteMaterialPath);
         EditorUtility.SetDirty(settings);
-        AssetDatabase.SaveAssets();
 
-        EventSystem eventSystem = Object.FindFirstObjectByType<EventSystem>();
-        if (eventSystem == null)
+        RunConfigSO runConfig = FindAssetByName<RunConfigSO>("RunConfig");
+        if (runConfig == null)
+            Debug.LogWarning("[TimeDesk] No RunConfig asset, so the game cursor and hover outline are not active. Create Assets/Resources/RunConfig.asset and rebuild.");
+        else if (runConfig.interactionFeedback != settings)
         {
-            Debug.LogWarning("[TimeDesk] No EventSystem, so no HoverHighlighter was added.");
-            return;
+            runConfig.interactionFeedback = settings;
+            EditorUtility.SetDirty(runConfig);
         }
 
-        HoverHighlighter highlighter = eventSystem.GetComponent<HoverHighlighter>();
-        if (highlighter == null)
-            highlighter = eventSystem.gameObject.AddComponent<HoverHighlighter>();
-        var so = new SerializedObject(highlighter);
-        SetRef(so, "settings", settings);
-        so.ApplyModifiedProperties();
+        AssetDatabase.SaveAssets();
+    }
+
+    /// <summary>Click point of a cursor texture from its alpha (falls back to the current value if unreadable).</summary>
+    private static Vector2 DetectHotspot(Texture2D cursor, CursorHotspot.Kind kind, Vector2 fallback)
+    {
+        if (cursor == null || !cursor.isReadable)
+            return fallback;
+
+        Color32[] pixels = cursor.GetPixels32();
+        var alpha = new byte[pixels.Length];
+        for (int i = 0; i < pixels.Length; i++)
+            alpha[i] = pixels[i].a;
+
+        (int x, int y) = CursorHotspot.Find(alpha, cursor.width, cursor.height, kind);
+        Debug.Log($"[TimeDesk] Cursor '{cursor.name}' click point set to ({x}, {y}).");
+        return new Vector2(x, y);
     }
 
     /// <summary>True for a cursor generated by this builder.</summary>
@@ -1184,24 +1200,12 @@ public static class OfficeSceneUIBuilder
     /// </summary>
     private static Texture2D EnsureCursorTexture(string artName, Vector2[] placeholderShape)
     {
-        Texture2D art = FindTextureByName(artName, PlaceholderCursorFolder);
+        const int size = 32;
+        Texture2D art = FindAssetByName<Texture2D>(artName);
         string path = art != null ? AssetDatabase.GetAssetPath(art) : $"{PlaceholderCursorFolder}/placeholder_{artName}.png";
 
         if (art == null && AssetDatabase.LoadAssetAtPath<Texture2D>(path) == null)
-        {
-            EnsureFolderTree(PlaceholderCursorFolder);
-            const int size = 32;
-            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
-            var pixels = new Color32[size * size];
-            for (int y = 0; y < size; y++)
-                for (int x = 0; x < size; x++)
-                    pixels[y * size + x] = CursorPixel(placeholderShape, x, y, size);
-            tex.SetPixels32(pixels);
-            tex.Apply();
-            System.IO.File.WriteAllBytes(System.IO.Path.GetFullPath(path), tex.EncodeToPNG());
-            Object.DestroyImmediate(tex);
-            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
-        }
+            WritePlaceholderPng(path, size, size, (x, y) => CursorPixel(placeholderShape, x, y, size));
 
         if (AssetImporter.GetAtPath(path) is TextureImporter imp &&
             (imp.textureType != TextureImporterType.Cursor || !imp.isReadable || imp.mipmapEnabled))
@@ -1216,18 +1220,6 @@ public static class OfficeSceneUIBuilder
         return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
     }
 
-    /// <summary>First Texture2D whose file name is exactly <paramref name="name"/>, outside a folder.</summary>
-    private static Texture2D FindTextureByName(string name, string excludeFolder)
-    {
-        foreach (string guid in AssetDatabase.FindAssets($"{name} t:Texture2D"))
-        {
-            string p = AssetDatabase.GUIDToAssetPath(guid);
-            if (p.StartsWith(excludeFolder) || System.IO.Path.GetFileNameWithoutExtension(p) != name)
-                continue;
-            return AssetDatabase.LoadAssetAtPath<Texture2D>(p);
-        }
-        return null;
-    }
 
     /// <summary>Placeholder cursor pixel: white inside the polygon, 1 px black edge, clear outside.</summary>
     private static Color32 CursorPixel(Vector2[] polygon, int x, int y, int size)

@@ -15,6 +15,9 @@ public sealed class RunConfigSO : ScriptableObject
     /// <summary>Gameplay tuning (pay, citations, stability).</summary>
     public GameConfigSO gameConfig;
 
+    /// <summary>Game cursor + hover outline look, used in every scene (see InteractionFeedbackBootstrap).</summary>
+    public InteractionFeedbackSO interactionFeedback;
+
     [Header("Starting values")]
     /// <summary>Money the player starts a new run with.</summary>
     public int startingMoney = 50;
