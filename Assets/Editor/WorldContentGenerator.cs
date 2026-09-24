@@ -176,8 +176,8 @@ public static class WorldContentGenerator
         {
             if (!countryIds.Contains(p.country) || !eraIds.Contains(p.era))
                 errors.Add($"Place '{p.displayName}' references unknown country '{p.country}' or era '{p.era}'.");
-            if (!placeKeys.Add($"{p.country}_{p.era}"))
-                errors.Add($"Place '{p.country}_{p.era}' is listed twice.");
+            if (!placeKeys.Add(PlaceId(p)))
+                errors.Add($"Place '{PlaceId(p)}' is listed twice.");
             foreach (FactData f in p.facts ?? Array.Empty<FactData>())
                 if (!Enum.TryParse(f.category, out ClueCategory _))
                     errors.Add($"Place '{p.displayName}' has unknown fact category '{f.category}'.");
@@ -236,7 +236,10 @@ public static class WorldContentGenerator
         }
 
         // One id set for every line, generated or authored; it starts with the runtime ids.
-        var ids = new Dictionary<string, string> { ["case.intro"] = "the desk's opener at runtime", ["case.claim"] = "the traveller's claim at runtime" };
+        var ids = new Dictionary<string, string>
+        {
+            [InterviewScript.IntroLineId] = "the desk's opener at runtime", [InterviewScript.ClaimLineId] = "the traveller's claim at runtime"
+        };
         void Id(string id, string owner)
         {
             if (string.IsNullOrWhiteSpace(id))
@@ -330,11 +333,11 @@ public static class WorldContentGenerator
             CheckConditions(q.conditions, owner, true, authored, errors);
 
             Ascii($"{q.id}.label", q.label);
-            Ascii($"{q.id}.prompt", q.prompt);
-            Ascii($"{q.id}.answer", q.answer);
+            Ascii(QuestionLineId(q.id, PromptPart), q.prompt);
+            Ascii(QuestionLineId(q.id, AnswerPart), q.answer);
             Ascii($"{q.id}.announce", q.announce);
-            Id($"{q.id}.prompt", $"question '{q.id}'");
-            Id($"{q.id}.answer", $"question '{q.id}'");
+            Id(QuestionLineId(q.id, PromptPart), $"question '{q.id}'");
+            Id(QuestionLineId(q.id, AnswerPart), $"question '{q.id}'");
 
             var overridden = new HashSet<string>();
             foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
@@ -348,10 +351,10 @@ public static class WorldContentGenerator
                     errors.Add($"{oOwner} has a blank prompt.");
                 if (!Interview.HoldsToken(o.answer, Interview.ValueToken))
                     errors.Add($"{oOwner}: its answer must hold {Interview.Placeholder(Interview.ValueToken)}.");
-                Ascii($"{q.id}.{o.era}.prompt", o.prompt);
-                Ascii($"{q.id}.{o.era}.answer", o.answer);
-                Id($"{q.id}.{o.era}.prompt", $"question '{q.id}' override '{o.era}'");
-                Id($"{q.id}.{o.era}.answer", $"question '{q.id}' override '{o.era}'");
+                Ascii(OverrideLineId(q.id, o.era, PromptPart), o.prompt);
+                Ascii(OverrideLineId(q.id, o.era, AnswerPart), o.answer);
+                Id(OverrideLineId(q.id, o.era, PromptPart), $"question '{q.id}' override '{o.era}'");
+                Id(OverrideLineId(q.id, o.era, AnswerPart), $"question '{q.id}' override '{o.era}'");
             }
         }
 
@@ -390,8 +393,9 @@ public static class WorldContentGenerator
                 Lines(n.lines, $"dialog '{d.id}' node '{n.id}'");
                 foreach (ChoiceData c in n.choices ?? Array.Empty<ChoiceData>())
                 {
-                    Id($"{d.id}.{c.id}", $"choice '{c.id}' of dialog '{d.id}'");
-                    Ascii($"{d.id}.{c.id}", c.label);
+                    string choiceLineId = InterviewScript.ChoiceLineId(d.id, c.id);
+                    Id(choiceLineId, $"choice '{c.id}' of dialog '{d.id}'");
+                    Ascii(choiceLineId, c.label);
                     Lines(c.lines, $"a line of choice '{c.id}' of dialog '{d.id}'");
 
                     if (string.IsNullOrWhiteSpace(c.effect))
@@ -430,7 +434,7 @@ public static class WorldContentGenerator
         foreach (EraData e in src.eras)
             SmallTalkLines(e.id, e.smallTalk, $"era '{e.id}'");
         foreach (PlaceData p in src.places)
-            SmallTalkLines($"{p.country}_{p.era}", p.smallTalk, $"place '{p.country}_{p.era}'");
+            SmallTalkLines(PlaceId(p), p.smallTalk, $"place '{PlaceId(p)}'");
 
         // --- Menus: the intercom must show every choice ---
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
@@ -467,12 +471,12 @@ public static class WorldContentGenerator
         foreach (QuestionData q in questions)
         {
             int longestValue = ParseEnum(q.category, out ClueCategory category) ? LongestValue(src, category) : 0;
-            Fits($"{q.id}.prompt", q.prompt, Interview.ValueToken, 0);
-            Fits($"{q.id}.answer", q.answer, Interview.ValueToken, longestValue);
+            Fits(QuestionLineId(q.id, PromptPart), q.prompt, Interview.ValueToken, 0);
+            Fits(QuestionLineId(q.id, AnswerPart), q.answer, Interview.ValueToken, longestValue);
             foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
             {
-                Fits($"{q.id}.{o.era}.prompt", o.prompt, Interview.ValueToken, 0);
-                Fits($"{q.id}.{o.era}.answer", o.answer, Interview.ValueToken, longestValue);
+                Fits(OverrideLineId(q.id, o.era, PromptPart), o.prompt, Interview.ValueToken, 0);
+                Fits(OverrideLineId(q.id, o.era, AnswerPart), o.answer, Interview.ValueToken, longestValue);
             }
         }
 
@@ -484,7 +488,7 @@ public static class WorldContentGenerator
                     Fits(line.id, line.text, Interview.ValueToken, 0);
                 foreach (ChoiceData c in n.choices ?? Array.Empty<ChoiceData>())
                 {
-                    Fits($"{d.id}.{c.id}", c.label, Interview.ValueToken, 0);
+                    Fits(InterviewScript.ChoiceLineId(d.id, c.id), c.label, Interview.ValueToken, 0);
                     foreach (LineData line in c.lines ?? Array.Empty<LineData>())
                         Fits(line.id, line.text, Interview.ValueToken, 0);
                 }
@@ -496,7 +500,7 @@ public static class WorldContentGenerator
                 Fits(SmallTalkId(e.id, i), e.smallTalk[i], Interview.ValueToken, 0);
         foreach (PlaceData p in src.places)
             for (int i = 0; p.smallTalk != null && i < p.smallTalk.Length; i++)
-                Fits(SmallTalkId($"{p.country}_{p.era}", i), p.smallTalk[i], Interview.ValueToken, 0);
+                Fits(SmallTalkId(PlaceId(p), i), p.smallTalk[i], Interview.ValueToken, 0);
     }
 
     /// <summary>
@@ -627,8 +631,8 @@ public static class WorldContentGenerator
                                                 Dictionary<string, AttributeSO> attributes, int ageMin, int ageMax,
                                                 HashSet<string> written)
     {
-        NationEraProfileSO place = LoadOrCreate<NationEraProfileSO>($"{WorldRoot}/Places/Place_{p.country}_{p.era}.asset", written);
-        place.id = $"{p.country}_{p.era}";
+        NationEraProfileSO place = LoadOrCreate<NationEraProfileSO>($"{WorldRoot}/Places/Place_{PlaceId(p)}.asset", written);
+        place.id = PlaceId(p);
         place.displayName = p.displayName;
         place.nation = nation;
         place.era = era;
@@ -710,6 +714,18 @@ public static class WorldContentGenerator
     /// <summary>The id of an interview line ("interview.opener", ...).</summary>
     private static string InterviewLineId(string field) => $"interview.{field}";
 
+    /// <summary>The parts of a question's (or an override's) two line ids: its prompt and its answer.</summary>
+    private const string PromptPart = "prompt", AnswerPart = "answer";
+
+    /// <summary>The id of a question's line, "{questionId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
+    private static string QuestionLineId(string questionId, string part) => $"{questionId}.{part}";
+
+    /// <summary>The id of an era override's line, "{questionId}.{eraId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
+    private static string OverrideLineId(string questionId, string eraId, string part) => $"{questionId}.{eraId}.{part}";
+
+    /// <summary>A place's id, "{country}_{era}": the profile's id, its asset name and its small-talk lines' owner id.</summary>
+    private static string PlaceId(PlaceData p) => $"{p.country}_{p.era}";
+
     /// <summary>The interview's wording with generated line ids, and its menu capacity (the longest-line limit stays in the source: only CheckInterview reads it).</summary>
     private static InterviewLines BuildLines(InterviewData i) => new InterviewLines
     {
@@ -736,13 +752,13 @@ public static class WorldContentGenerator
         id = q.id,
         category = (ClueCategory)Enum.Parse(typeof(ClueCategory), q.category),
         label = q.label,
-        prompt = new LineText($"{q.id}.prompt", q.prompt),
-        answer = new LineText($"{q.id}.answer", q.answer),
+        prompt = new LineText(QuestionLineId(q.id, PromptPart), q.prompt),
+        answer = new LineText(QuestionLineId(q.id, AnswerPart), q.answer),
         overrides = (q.overrides ?? Array.Empty<OverrideData>()).Select(o => new WordingOverride
         {
             eraId = o.era,
-            prompt = new LineText($"{q.id}.{o.era}.prompt", o.prompt),
-            answer = new LineText($"{q.id}.{o.era}.answer", o.answer)
+            prompt = new LineText(OverrideLineId(q.id, o.era, PromptPart), o.prompt),
+            answer = new LineText(OverrideLineId(q.id, o.era, AnswerPart), o.answer)
         }).ToList()
     };
 

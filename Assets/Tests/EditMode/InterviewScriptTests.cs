@@ -204,6 +204,19 @@ public class InterviewScriptTests
         CollectionAssert.AreEqual(new[] { "case.claim" }, LineIds(InterviewScript.Opening(Case(intro: " "))));
     }
 
+    [Test]
+    public void TheRuntimeLineIds_HaveOneHome_ThatGenerateWorldReservesAndChecks()
+    {
+        Assert.AreEqual("case.intro", InterviewScript.IntroLineId);
+        Assert.AreEqual("case.claim", InterviewScript.ClaimLineId);
+        CollectionAssert.AreEqual(new[] { InterviewScript.IntroLineId, InterviewScript.ClaimLineId }, LineIds(InterviewScript.Opening(Case())));
+
+        Assert.AreEqual("dlg_rumour.more", InterviewScript.ChoiceLineId("dlg_rumour", "more"));
+        DialogChoice more = Build().Node("dlg_rumour/start").Choices[0];
+        Assert.AreEqual(InterviewScript.ChoiceLineId("dlg_rumour", "more"), more.Id, "the runtime choice id");
+        Assert.AreEqual(InterviewScript.ChoiceLineId("dlg_rumour", "more"), more.Lines[0].Id, "the label line the desk speaks");
+    }
+
     // -----------------------------
     // Authored dialogs
     // -----------------------------

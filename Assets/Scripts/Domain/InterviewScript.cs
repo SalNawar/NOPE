@@ -36,7 +36,20 @@ public static class InterviewScript
     /// <summary>The ask menu's id.</summary>
     public const string AskNodeId = "ask";
 
-    /// <summary>The transcript's first lines: the desk's opener ("case.intro", skipped when blank), then the traveller's claim ("case.claim").</summary>
+    /// <summary>The id of the desk's opener line, composed per case at runtime (Generate World reserves it).</summary>
+    public const string IntroLineId = "case.intro";
+
+    /// <summary>The id of the traveller's claim line, composed per case at runtime (Generate World reserves it).</summary>
+    public const string ClaimLineId = "case.claim";
+
+    /// <summary>
+    /// The id of an authored choice: "{dialogId}.{choiceId}". It is both the
+    /// runtime choice id and the id of the label line the desk speaks, so
+    /// Generate World checks every choice under this same id.
+    /// </summary>
+    public static string ChoiceLineId(string dialogId, string choiceId) => $"{dialogId}.{choiceId}";
+
+    /// <summary>The transcript's first lines: the desk's opener (<see cref="IntroLineId"/>, skipped when blank), then the traveller's claim (<see cref="ClaimLineId"/>).</summary>
     public static IReadOnlyList<DialogLine> Opening(InterviewCase c)
     {
         var lines = new List<DialogLine>();
@@ -44,8 +57,8 @@ public static class InterviewScript
             return lines;
 
         if (!string.IsNullOrWhiteSpace(c.introLine))
-            lines.Add(new DialogLine("case.intro", DialogSpeaker.Desk, c.introLine));
-        lines.Add(new DialogLine("case.claim", DialogSpeaker.Traveller, c.claimLine));
+            lines.Add(new DialogLine(IntroLineId, DialogSpeaker.Desk, c.introLine));
+        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, c.claimLine));
         return lines;
     }
 
@@ -174,7 +187,7 @@ public static class InterviewScript
             if (choice == null)
                 continue;
 
-            string id = $"{d.id}.{choice.id}";
+            string id = ChoiceLineId(d.id, choice.id);
             var runtime = new DialogChoice { Id = id, Label = choice.label };
             runtime.Lines.Add(new DialogLine(id, DialogSpeaker.Desk, choice.label));
             if (choice.lines != null)
