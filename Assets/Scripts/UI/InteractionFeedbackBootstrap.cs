@@ -15,7 +15,7 @@ public static class InteractionFeedbackBootstrap
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void CreateHighlighter()
     {
-        if (Object.FindFirstObjectByType<HoverHighlighter>() != null)
+        if (Object.FindAnyObjectByType<HoverHighlighter>() != null)
             return;
 
         var config = Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath);

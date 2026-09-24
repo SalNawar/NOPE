@@ -92,3 +92,19 @@ A four-lens review (logic, Unity runtime, intent audit, regressions), with an ad
 12. A missing clock or unreached content failed silently. Both now log warnings.
 
 This supersedes the original note that `ShiftFlow` alone covers closing (`ShouldStartSlot` was dropped in favour of the orchestrator's loop, now `DaySlotSequencer`).
+
+## 7. Verification record (2026-09-24, in the branch's own Unity instance)
+
+- **Compile + EditMode suite outside Unity:** 86/86 TimeDesk tests pass.
+- **Unity Test Runner (EditMode):** every TimeDesk test passes. The only failure in the run is the third-party UnitySkills `PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly`, which assumes an empty open scene; the automation had OfficeScene open.
+- **Builder on OfficeScene:** it adds WallClock, HourHand, MinuteHand and ClockText plus the ShiftClockDriver, ShiftClockReadouts and TMP components, and removes nothing. GameManager.shiftClock, ShiftClockReadouts (driver, tray, hands), RunConfig.interactionFeedback and the raycaster hit buffer (8) are all wired.
+- **Play-mode smoke, scripted:**
+  - The bootstrap creates the persistent HoverHighlighter.
+  - The clock shows 09:00 during the briefing and is not running; the tray shows `09:00` and the hour hand sits at +90°.
+  - The GPU readback orientation is correct on DX12.
+  - The CRT outline is 150×130 plus a 6 px margin, with its pivot shifted by exactly the margin.
+  - Start Shift starts the clock (`09:02` after about 2 s) and arms READY.
+  - Closing with the traveller behind READY closes the booth at once and abandons the slot; READY is disarmed and the Shift Ledger shows.
+  - Closing with the traveller at the desk finishes the current slot: the day stays open, the decision is scored (+10), then the day ends and the Shift Ledger shows.
+  - The only error logged is Unity's own `UnityEditor.Search` indexing exception at editor start.
+- **Not yet verified by eye:** how the outline and the cursor swap look under a real mouse, and the cursor in the Title and Home scenes. Both are on the Task 10 checklist for Saleh.
