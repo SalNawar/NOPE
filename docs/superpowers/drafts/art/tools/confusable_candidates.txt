@@ -1,0 +1,3203 @@
+Signature items against every other place's item in the same slot and gender (review list for confusable pairs).
+PAIR = already a confusable pair; COVERS = the claim's headwear hides all hair; HIDDEN = generated 'top' pair.
+
+[m] egypt_ancient Accessory 'wesekh collar':
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] iraq_ancient FacialHair 'curled beard':
+    egypt_ancient        -                          
+    greece_ancient       rounded beard              
+    italy_ancient        -                          
+    china_ancient        moustache and goatee       
+    japan_ancient        -                          
+    britain_ancient      long drooping moustache    
+    germany_ancient      full short beard           
+    egypt_medieval       rounded beard              
+    iraq_medieval        rounded beard              
+    greece_medieval      long full beard            PAIR
+    italy_medieval       -                          
+    china_medieval       thin moustache and beard   
+    japan_medieval       moustache and chin tuft    
+    britain_medieval     long English moustache     
+    germany_medieval     -                          PAIR
+    egypt_earlymodern    short rounded beard        
+    iraq_earlymodern     full beard                 
+    greece_earlymodern   full beard                 
+    italy_earlymodern    -                          
+    china_earlymodern    neat moustache and beard   
+    japan_earlymodern    thin moustache and beard   
+    britain_earlymodern  pick-a-devant beard        
+    germany_earlymodern  short rounded beard        
+    egypt_industrial     groomed moustache          
+    iraq_industrial      moustache, short beard     
+    greece_industrial    upturned moustache         
+    italy_industrial     Umbertine moustache        
+    china_industrial     -                          
+    japan_industrial     trimmed moustache          
+    britain_industrial   mutton-chop whiskers       
+    germany_industrial   turned-up moustache        
+    egypt_modern         thick moustache            
+    iraq_modern          trimmed moustache          
+    greece_modern        thick full moustache       
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       -                          
+    germany_modern       walrus moustache           
+[m] greece_ancient Headwear 'petasos hat':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] italy_ancient Hair 'Caesar crop':
+    egypt_ancient        bobbed wig                 
+    iraq_ancient         low chignon                
+    greece_ancient       forward curls              PAIR
+    china_ancient        Han topknot                HIDDEN
+    japan_ancient        mizura                     
+    britain_ancient      swept-back mane            
+    germany_ancient      Suebian knot               
+    egypt_medieval       short crop                 COVERS
+    iraq_medieval        smooth nape-length hair    HIDDEN
+    greece_medieval      long centre-parted hair    HIDDEN
+    italy_medieval       rounded short crop         HIDDEN
+    china_medieval       crown topknot              HIDDEN
+    japan_medieval       motodori topknot           HIDDEN
+    britain_medieval     collar-length hair         
+    germany_medieval     fringed chin-length hair   COVERS
+    egypt_earlymodern    short crop                 COVERS
+    iraq_earlymodern     short crop                 COVERS
+    greece_earlymodern   short crop                 HIDDEN
+    italy_earlymodern    zazzera bob                HIDDEN
+    china_earlymodern    topknot with wangjin       HIDDEN
+    japan_earlymodern    chasen-mage                
+    britain_earlymodern  brushed-up short hair      HIDDEN
+    germany_earlymodern  short Kolbe                HIDDEN
+    egypt_industrial     short trimmed hair         HIDDEN
+    iraq_industrial      close crop                 COVERS
+    greece_industrial    short tapered hair         HIDDEN
+    italy_industrial     pomaded side parting       HIDDEN
+    china_industrial     queue                      HIDDEN
+    japan_industrial     zangiri crop               HIDDEN
+    britain_industrial   curled side parting        HIDDEN
+    germany_industrial   brush cut                  HIDDEN
+    egypt_modern         combed-back hair           
+    iraq_modern          side-parted short hair     HIDDEN
+    greece_modern        shaggy 1970s cut           
+    italy_modern         slicked-back hair          
+    china_modern         side-parted crop           HIDDEN
+    japan_modern         combed side parting        
+    britain_modern       short back and sides       HIDDEN
+    germany_modern       brushed-back hair          HIDDEN
+[m] china_ancient Headwear 'jieze cap':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] japan_ancient Hair 'mizura':
+    egypt_ancient        bobbed wig                 
+    iraq_ancient         low chignon                
+    greece_ancient       forward curls              
+    italy_ancient        Caesar crop                
+    china_ancient        Han topknot                
+    britain_ancient      swept-back mane            
+    germany_ancient      Suebian knot               
+    egypt_medieval       short crop                 COVERS
+    iraq_medieval        smooth nape-length hair    
+    greece_medieval      long centre-parted hair    
+    italy_medieval       rounded short crop         
+    china_medieval       crown topknot              
+    japan_medieval       motodori topknot           
+    britain_medieval     collar-length hair         
+    germany_medieval     fringed chin-length hair   COVERS
+    egypt_earlymodern    short crop                 COVERS
+    iraq_earlymodern     short crop                 COVERS
+    greece_earlymodern   short crop                 
+    italy_earlymodern    zazzera bob                
+    china_earlymodern    topknot with wangjin       
+    japan_earlymodern    chasen-mage                
+    britain_earlymodern  brushed-up short hair      
+    germany_earlymodern  short Kolbe                
+    egypt_industrial     short trimmed hair         
+    iraq_industrial      close crop                 COVERS
+    greece_industrial    short tapered hair         
+    italy_industrial     pomaded side parting       
+    china_industrial     queue                      
+    japan_industrial     zangiri crop               
+    britain_industrial   curled side parting        
+    germany_industrial   brush cut                  
+    egypt_modern         combed-back hair           
+    iraq_modern          side-parted short hair     
+    greece_modern        shaggy 1970s cut           
+    italy_modern         slicked-back hair          
+    china_modern         side-parted crop           
+    japan_modern         combed side parting        
+    britain_modern       short back and sides       
+    germany_modern       brushed-back hair          
+[m] britain_ancient Accessory 'torc':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] germany_ancient Hair 'Suebian knot':
+    egypt_ancient        bobbed wig                 
+    iraq_ancient         low chignon                
+    greece_ancient       forward curls              HIDDEN
+    italy_ancient        Caesar crop                
+    china_ancient        Han topknot                HIDDEN
+    japan_ancient        mizura                     
+    britain_ancient      swept-back mane            
+    egypt_medieval       short crop                 COVERS
+    iraq_medieval        smooth nape-length hair    HIDDEN
+    greece_medieval      long centre-parted hair    HIDDEN
+    italy_medieval       rounded short crop         HIDDEN
+    china_medieval       crown topknot              HIDDEN
+    japan_medieval       motodori topknot           HIDDEN
+    britain_medieval     collar-length hair         
+    germany_medieval     fringed chin-length hair   COVERS
+    egypt_earlymodern    short crop                 COVERS
+    iraq_earlymodern     short crop                 COVERS
+    greece_earlymodern   short crop                 HIDDEN
+    italy_earlymodern    zazzera bob                HIDDEN
+    china_earlymodern    topknot with wangjin       HIDDEN
+    japan_earlymodern    chasen-mage                
+    britain_earlymodern  brushed-up short hair      HIDDEN
+    germany_earlymodern  short Kolbe                HIDDEN
+    egypt_industrial     short trimmed hair         HIDDEN
+    iraq_industrial      close crop                 COVERS
+    greece_industrial    short tapered hair         HIDDEN
+    italy_industrial     pomaded side parting       HIDDEN
+    china_industrial     queue                      HIDDEN
+    japan_industrial     zangiri crop               HIDDEN
+    britain_industrial   curled side parting        HIDDEN
+    germany_industrial   brush cut                  HIDDEN
+    egypt_modern         combed-back hair           
+    iraq_modern          side-parted short hair     HIDDEN
+    greece_modern        shaggy 1970s cut           
+    italy_modern         slicked-back hair          
+    china_modern         side-parted crop           HIDDEN
+    japan_modern         combed side parting        
+    britain_modern       short back and sides       HIDDEN
+    germany_modern       brushed-back hair          HIDDEN
+[m] egypt_medieval Headwear 'imama turban':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           PAIR
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] iraq_medieval Headwear 'qalansuwa':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 PAIR
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] greece_medieval Headwear 'Palaiologan hat':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] italy_medieval Headwear 'mazzocchio hat':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] china_medieval Headwear 'winged futou':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] japan_medieval Headwear 'eboshi cap':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  PAIR
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] britain_medieval Accessory 'disc brooch':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] germany_medieval Headwear 'Gugel hood':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] egypt_earlymodern Headwear 'red-crown turban':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               PAIR
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] iraq_earlymodern Headwear 'checked turban':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] greece_earlymodern Headwear 'kalpak':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           PAIR
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] italy_earlymodern Headwear 'red berretta':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] china_earlymodern Headwear 'square gauze cap':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     PAIR
+    italy_earlymodern    red berretta               
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] japan_earlymodern Hair 'chasen-mage':
+    egypt_ancient        bobbed wig                 
+    iraq_ancient         low chignon                
+    greece_ancient       forward curls              HIDDEN
+    italy_ancient        Caesar crop                
+    china_ancient        Han topknot                HIDDEN
+    japan_ancient        mizura                     
+    britain_ancient      swept-back mane            
+    germany_ancient      Suebian knot               
+    egypt_medieval       short crop                 COVERS
+    iraq_medieval        smooth nape-length hair    HIDDEN
+    greece_medieval      long centre-parted hair    HIDDEN
+    italy_medieval       rounded short crop         HIDDEN
+    china_medieval       crown topknot              HIDDEN
+    japan_medieval       motodori topknot           HIDDEN
+    britain_medieval     collar-length hair         
+    germany_medieval     fringed chin-length hair   COVERS
+    egypt_earlymodern    short crop                 COVERS
+    iraq_earlymodern     short crop                 COVERS
+    greece_earlymodern   short crop                 HIDDEN
+    italy_earlymodern    zazzera bob                HIDDEN
+    china_earlymodern    topknot with wangjin       HIDDEN
+    britain_earlymodern  brushed-up short hair      HIDDEN
+    germany_earlymodern  short Kolbe                HIDDEN
+    egypt_industrial     short trimmed hair         HIDDEN
+    iraq_industrial      close crop                 COVERS
+    greece_industrial    short tapered hair         HIDDEN
+    italy_industrial     pomaded side parting       HIDDEN
+    china_industrial     queue                      HIDDEN
+    japan_industrial     zangiri crop               HIDDEN
+    britain_industrial   curled side parting        HIDDEN
+    germany_industrial   brush cut                  HIDDEN
+    egypt_modern         combed-back hair           
+    iraq_modern          side-parted short hair     HIDDEN
+    greece_modern        shaggy 1970s cut           
+    italy_modern         slicked-back hair          
+    china_modern         side-parted crop           HIDDEN
+    japan_modern         combed side parting        
+    britain_modern       short back and sides       HIDDEN
+    germany_modern       brushed-back hair          HIDDEN
+[m] britain_earlymodern Headwear 'capotain hat':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    PAIR
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] germany_earlymodern Headwear 'Barett':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] egypt_industrial Headwear 'tarboush':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       PAIR
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] iraq_industrial Headwear 'chfiyya':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] greece_industrial Headwear 'fesi':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   PAIR
+    iraq_industrial      chfiyya                    
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] italy_industrial Accessory 'silk scarf':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] china_industrial Headwear 'guapimao cap':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] japan_industrial Headwear 'bowler hat':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] britain_industrial Headwear 'top hat':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               PAIR
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] germany_industrial Headwear 'Homburg':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        PAIR
+[m] egypt_modern Accessory 'fringed shal':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             PAIR
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] iraq_modern Headwear 'sidara':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   
+    japan_modern         -                          
+    britain_modern       flat cap                   
+    germany_modern       broad soft felt hat        
+[m] greece_modern Accessory 'tagari bag':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] italy_modern Accessory 'dark shades':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] china_modern Headwear 'navy cap':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    japan_modern         -                          
+    britain_modern       flat cap                   PAIR
+    germany_modern       broad soft felt hat        
+[m] japan_modern Accessory 'orange headphones':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         cylinder seal              
+    greece_ancient       pera pouch                 
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        magatama necklace          
+    britain_ancient      torc                       
+    germany_ancient      -                          
+    egypt_medieval       fringed silk girdle        
+    iraq_medieval        taylasan shawl             
+    greece_medieval      gilt-mounted belt          
+    italy_medieval       -                          
+    china_medieval       plaque belt                
+    japan_medieval       -                          
+    britain_medieval     disc brooch                
+    germany_medieval     -                          
+    egypt_earlymodern    shawl sash                 
+    iraq_earlymodern     -                          
+    greece_earlymodern   striped sash               
+    italy_earlymodern    -                          
+    china_earlymodern    tasselled sitao sash       
+    japan_earlymodern    -                          
+    britain_earlymodern  -                          
+    germany_earlymodern  gold chain                 
+    egypt_industrial     gold watch chain           
+    iraq_industrial      -                          
+    greece_industrial    red silk sash              
+    italy_industrial     silk scarf                 
+    china_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   watch chain                
+    germany_industrial   pince-nez                  
+    egypt_modern         fringed shal               
+    iraq_modern          horn-rimmed glasses        
+    greece_modern        tagari bag                 
+    italy_modern         dark shades                
+    china_modern         khaki satchel              
+    britain_modern       college scarf              
+    germany_modern       round spectacles           
+[m] britain_modern Headwear 'flat cap':
+    egypt_ancient        -                          
+    iraq_ancient         wool fillet                
+    greece_ancient       petasos hat                
+    italy_ancient        -                          
+    china_ancient        jieze cap                  
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       imama turban               
+    iraq_medieval        qalansuwa                  
+    greece_medieval      Palaiologan hat            
+    italy_medieval       mazzocchio hat             
+    china_medieval       winged futou               
+    japan_medieval       eboshi cap                 
+    britain_medieval     -                          
+    germany_medieval     Gugel hood                 
+    egypt_earlymodern    red-crown turban           
+    iraq_earlymodern     checked turban             
+    greece_earlymodern   kalpak                     
+    italy_earlymodern    red berretta               
+    china_earlymodern    square gauze cap           
+    japan_earlymodern    -                          
+    britain_earlymodern  capotain hat               
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarboush                   
+    iraq_industrial      chfiyya                    
+    greece_industrial    fesi                       
+    italy_industrial     wide black felt hat        
+    china_industrial     guapimao cap               
+    japan_industrial     bowler hat                 
+    britain_industrial   top hat                    
+    germany_industrial   Homburg                    
+    egypt_modern         -                          
+    iraq_modern          sidara                     
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         navy cap                   PAIR
+    japan_modern         -                          
+    germany_modern       broad soft felt hat        
+[m] germany_modern FacialHair 'walrus moustache':
+    egypt_ancient        -                          
+    iraq_ancient         curled beard               
+    greece_ancient       rounded beard              
+    italy_ancient        -                          
+    china_ancient        moustache and goatee       
+    japan_ancient        -                          
+    britain_ancient      long drooping moustache    PAIR
+    germany_ancient      full short beard           
+    egypt_medieval       rounded beard              
+    iraq_medieval        rounded beard              
+    greece_medieval      long full beard            
+    italy_medieval       -                          
+    china_medieval       thin moustache and beard   
+    japan_medieval       moustache and chin tuft    
+    britain_medieval     long English moustache     PAIR
+    germany_medieval     -                          
+    egypt_earlymodern    short rounded beard        
+    iraq_earlymodern     full beard                 
+    greece_earlymodern   full beard                 
+    italy_earlymodern    -                          
+    china_earlymodern    neat moustache and beard   
+    japan_earlymodern    thin moustache and beard   
+    britain_earlymodern  pick-a-devant beard        
+    germany_earlymodern  short rounded beard        
+    egypt_industrial     groomed moustache          PAIR
+    iraq_industrial      moustache, short beard     PAIR
+    greece_industrial    upturned moustache         PAIR
+    italy_industrial     Umbertine moustache        PAIR
+    china_industrial     -                          
+    japan_industrial     trimmed moustache          
+    britain_industrial   mutton-chop whiskers       
+    germany_industrial   turned-up moustache        
+    egypt_modern         thick moustache            PAIR
+    iraq_modern          trimmed moustache          
+    greece_modern        thick full moustache       PAIR
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       -                          
+[f] egypt_ancient Accessory 'wesekh collar':
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] iraq_ancient Headwear 'gold fillet':
+    egypt_ancient        lotus fillet               
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] greece_ancient Headwear 'sakkos snood':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           PAIR
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     PAIR
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] italy_ancient Hair 'nodus roll':
+    egypt_ancient        tripartite wig             
+    iraq_ancient         braid crown                
+    greece_ancient       wavy low bun               HIDDEN
+    china_ancient        low looped bun             
+    japan_ancient        board chignon              
+    britain_ancient      two thick braids           
+    germany_ancient      low bound knot             
+    egypt_medieval       pinned braids              COVERS
+    iraq_medieval        S-curl side locks          HIDDEN
+    greece_medieval      pinned-up hair             COVERS
+    italy_medieval       drawn-back coil            HIDDEN
+    china_medieval       tall gaoji bun             
+    japan_medieval       long tied-back hair        HIDDEN
+    britain_medieval     low nape coil              COVERS
+    germany_medieval     pinned plaits              COVERS
+    egypt_earlymodern    curtain of thin plaits     HIDDEN
+    iraq_earlymodern     pinned braids              COVERS
+    greece_earlymodern   two front braids           HIDDEN
+    italy_earlymodern    smooth centre parting      
+    china_earlymodern    high flat bun              
+    japan_earlymodern    tamamusubi loop            
+    britain_earlymodern  pinned-up hair             COVERS
+    germany_earlymodern  plaits in gold net         HIDDEN
+    egypt_industrial     curtain of thin plaits     HIDDEN
+    iraq_industrial      long braids                COVERS
+    greece_industrial    braids round the crown     
+    italy_industrial     high curled chignon        
+    china_industrial     low flat bun               
+    japan_industrial     sokuhatsu                  
+    britain_industrial   ringlets and bun           HIDDEN
+    germany_industrial   soft low chignon           
+    egypt_modern         smooth plaited hair        HIDDEN
+    iraq_modern          permed curls               HIDDEN
+    greece_modern        long loose hair            
+    italy_modern         bouffant                   
+    china_modern         clipped bob                
+    japan_modern         Seiko-chan cut             
+    britain_modern       pin-curl set               HIDDEN
+    germany_modern       Bubikopf bob               HIDDEN
+[f] china_ancient Accessory 'bi-disc pendant':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] japan_ancient Accessory 'magatama beads':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] britain_ancient Accessory 'torc':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] germany_ancient Accessory 'amber beads':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                PAIR
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] egypt_medieval Headwear 'izar hood':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    iraq_medieval        veil with isaba            PAIR
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 PAIR
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] iraq_medieval Headwear 'veil with isaba':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  PAIR
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 PAIR
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] greece_medieval Headwear 'fakiolion':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] italy_medieval Headwear 'ghirlanda':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] china_medieval Headwear 'crescent comb':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] japan_medieval Headwear 'ichime-gasa':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] britain_medieval Headwear 'headrail':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] germany_medieval Headwear 'Kruseler veil':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] egypt_earlymodern Headwear 'tartur':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] iraq_earlymodern Headwear 'futa shawl':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 PAIR
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        PAIR
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] greece_earlymodern Accessory 'pafti buckle':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] italy_earlymodern Headwear 'lenza':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    china_earlymodern    baotou                     PAIR
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 PAIR
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] china_earlymodern Headwear 'baotou':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      PAIR
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 PAIR
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] japan_earlymodern Accessory 'Nagoya-obi':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] britain_earlymodern Headwear 'hat over coif':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] germany_earlymodern Headwear 'Barett':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] egypt_industrial Headwear 'tarha veil':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  PAIR
+    iraq_medieval        veil with isaba            PAIR
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] iraq_industrial Headwear 'abaya veil':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 PAIR
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        PAIR
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] greece_industrial Headwear 'fesi':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           PAIR
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] italy_industrial Accessory 'coral beads':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                PAIR
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] china_industrial Headwear 'meile band':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      PAIR
+    china_earlymodern    baotou                     PAIR
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] japan_industrial Hair 'sokuhatsu':
+    egypt_ancient        tripartite wig             
+    iraq_ancient         braid crown                
+    greece_ancient       wavy low bun               HIDDEN
+    italy_ancient        nodus roll                 
+    china_ancient        low looped bun             
+    japan_ancient        board chignon              
+    britain_ancient      two thick braids           
+    germany_ancient      low bound knot             
+    egypt_medieval       pinned braids              COVERS
+    iraq_medieval        S-curl side locks          HIDDEN
+    greece_medieval      pinned-up hair             COVERS
+    italy_medieval       drawn-back coil            HIDDEN
+    china_medieval       tall gaoji bun             
+    japan_medieval       long tied-back hair        HIDDEN
+    britain_medieval     low nape coil              COVERS
+    germany_medieval     pinned plaits              COVERS
+    egypt_earlymodern    curtain of thin plaits     HIDDEN
+    iraq_earlymodern     pinned braids              COVERS
+    greece_earlymodern   two front braids           HIDDEN
+    italy_earlymodern    smooth centre parting      
+    china_earlymodern    high flat bun              
+    japan_earlymodern    tamamusubi loop            
+    britain_earlymodern  pinned-up hair             COVERS
+    germany_earlymodern  plaits in gold net         HIDDEN
+    egypt_industrial     curtain of thin plaits     HIDDEN
+    iraq_industrial      long braids                COVERS
+    greece_industrial    braids round the crown     
+    italy_industrial     high curled chignon        
+    china_industrial     low flat bun               
+    britain_industrial   ringlets and bun           HIDDEN
+    germany_industrial   soft low chignon           
+    egypt_modern         smooth plaited hair        HIDDEN
+    iraq_modern          permed curls               HIDDEN
+    greece_modern        long loose hair            
+    italy_modern         bouffant                   
+    china_modern         clipped bob                
+    japan_modern         Seiko-chan cut             
+    britain_modern       pin-curl set               HIDDEN
+    germany_modern       Bubikopf bob               HIDDEN
+[f] britain_industrial Headwear 'poke bonnet':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
+    germany_modern       cloche                     
+[f] germany_industrial Accessory 'Jugendstil pendant':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] egypt_modern Headwear 'mandil':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               PAIR
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           PAIR
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  PAIR
+    germany_modern       cloche                     
+[f] iraq_modern Accessory 'gold coin pendant':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            PAIR
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         PAIR
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] greece_modern Accessory 'tagari bag':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] italy_modern Accessory 'cat-eye shades':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    china_modern         khaki satchel              
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] china_modern Accessory 'khaki satchel':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    japan_modern         orange headphones          
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] japan_modern Accessory 'orange headphones':
+    egypt_ancient        wesekh collar              
+    iraq_ancient         -                          
+    greece_ancient       -                          
+    italy_ancient        pearl monile               
+    china_ancient        bi-disc pendant            
+    japan_ancient        magatama beads             
+    britain_ancient      torc                       
+    germany_ancient      amber beads                
+    egypt_medieval       filigree collar            
+    iraq_medieval        pearl choker               
+    greece_medieval      lunate earrings            
+    italy_medieval       pearl pendant jewel        
+    china_medieval       -                          
+    japan_medieval       -                          
+    britain_medieval     -                          
+    germany_medieval     -                          
+    egypt_earlymodern    disc-drop earrings         
+    iraq_earlymodern     qilada necklace            
+    greece_earlymodern   pafti buckle               
+    italy_earlymodern    jet bead necklace          
+    china_earlymodern    -                          
+    japan_earlymodern    Nagoya-obi                 
+    britain_earlymodern  pomander girdle            
+    germany_earlymodern  layered gold chains        
+    egypt_industrial     kirdan choker              
+    iraq_industrial      filigree bangles           
+    greece_industrial    gold disc necklace         
+    italy_industrial     coral beads                
+    china_industrial     white jade bangle          
+    japan_industrial     -                          
+    britain_industrial   Paisley shawl              
+    germany_industrial   Jugendstil pendant         
+    egypt_modern         gold bangles               
+    iraq_modern          gold coin pendant          
+    greece_modern        tagari bag                 
+    italy_modern         cat-eye shades             
+    china_modern         khaki satchel              
+    britain_modern       pearl strand               
+    germany_modern       Bauhaus necklace           
+[f] britain_modern Headwear 'headscarf':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     PAIR
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    germany_modern       cloche                     
+[f] germany_modern Headwear 'cloche':
+    egypt_ancient        lotus fillet               
+    iraq_ancient         gold fillet                
+    greece_ancient       sakkos snood               
+    italy_ancient        -                          
+    china_ancient        -                          
+    japan_ancient        -                          
+    britain_ancient      -                          
+    germany_ancient      -                          
+    egypt_medieval       izar hood                  
+    iraq_medieval        veil with isaba            
+    greece_medieval      fakiolion                  
+    italy_medieval       ghirlanda                  
+    china_medieval       crescent comb              
+    japan_medieval       ichime-gasa                
+    britain_medieval     headrail                   
+    germany_medieval     Kruseler veil              
+    egypt_earlymodern    tartur                     
+    iraq_earlymodern     futa shawl                 
+    greece_earlymodern   cap and tsemberi           
+    italy_earlymodern    lenza                      
+    china_earlymodern    baotou                     
+    japan_earlymodern    -                          
+    britain_earlymodern  hat over coif              
+    germany_earlymodern  Barett                     
+    egypt_industrial     tarha veil                 
+    iraq_industrial      abaya veil                 
+    greece_industrial    fesi                       
+    italy_industrial     -                          
+    china_industrial     meile band                 
+    japan_industrial     -                          
+    britain_industrial   poke bonnet                
+    germany_industrial   -                          
+    egypt_modern         mandil                     
+    iraq_modern          abaya over the head        
+    greece_modern        -                          
+    italy_modern         -                          
+    china_modern         -                          
+    japan_modern         -                          
+    britain_modern       headscarf                  
