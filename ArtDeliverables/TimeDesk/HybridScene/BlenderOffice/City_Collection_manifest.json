@@ -286,7 +286,7 @@
         "City_CivicMegablock__City_Concrete": "City_Concrete",
         "City_CivicMegablock__City_Sign": "City_Sign"
       },
-      "triangles": 11215
+      "triangles": 40215
     },
     {
       "name": "City_TwinMegablock",
@@ -302,7 +302,7 @@
         "City_TwinMegablock__City_Concrete": "City_Concrete",
         "City_TwinMegablock__City_Sign": "City_Sign"
       },
-      "triangles": 11943
+      "triangles": 45583
     },
     {
       "name": "City_TerracedMegablock",
@@ -318,7 +318,7 @@
         "City_TerracedMegablock__City_Concrete": "City_Concrete",
         "City_TerracedMegablock__City_Sign": "City_Sign"
       },
-      "triangles": 12079
+      "triangles": 47575
     }
   ]
 }

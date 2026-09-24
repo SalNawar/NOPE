@@ -206,7 +206,7 @@
         0.6627450980392157,
         0.6196078431372549
       ],
-      "smoothness": 0.06999999999999995,
+      "smoothness": 0.16000000000000003,
       "metallic": 0,
       "texture": null
     },
@@ -216,7 +216,7 @@
         0.6509803921568628,
         0.6196078431372549
       ],
-      "smoothness": 0.06999999999999995,
+      "smoothness": 0.13,
       "metallic": 0,
       "texture": null
     },
@@ -436,7 +436,7 @@
         "Hall_Floor__Hall_Teal": "Hall_Teal",
         "Hall_Floor__Hall_Wear": "Hall_Wear"
       },
-      "triangles": 39536
+      "triangles": 39585
     },
     {
       "name": "Hall_Banner",
@@ -445,7 +445,7 @@
         "Hall_Banner__Hall_DarkMetal": "Hall_DarkMetal",
         "Hall_Banner__Banner_Cloth": "Banner_Cloth"
       },
-      "triangles": 1548
+      "triangles": 13048
     },
     {
       "name": "Hall_Departures",
@@ -518,6 +518,15 @@
       "triangles": 1128
     },
     {
+      "name": "Hall_GalleryRail",
+      "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Hall_GalleryRail.fbx",
+      "nodes": {
+        "Hall_GalleryRail__Hall_DarkMetal": "Hall_DarkMetal",
+        "Hall_GalleryRail__Frame_Brass": "Frame_Brass"
+      },
+      "triangles": 4072
+    },
+    {
       "name": "Art_MonaLisa",
       "assetPath": "Assets/Art/Office/Hybrid/BlenderOffice/Models/Art_MonaLisa.fbx",
       "nodes": {
@@ -526,7 +535,7 @@
         "Art_MonaLisa__Frame_Brass": "Frame_Brass",
         "Art_MonaLisa__Frame_Chips": "Frame_Chips"
       },
-      "triangles": 1135
+      "triangles": 679
     },
     {
       "name": "Art_PearlEarring",
@@ -537,7 +546,7 @@
         "Art_PearlEarring__Frame_Brass": "Frame_Brass",
         "Art_PearlEarring__Frame_Chips": "Frame_Chips"
       },
-      "triangles": 1135
+      "triangles": 679
     },
     {
       "name": "Art_StarryNight",
@@ -549,7 +558,7 @@
         "Art_StarryNight__Frame_Chips": "Frame_Chips",
         "Art_StarryNight__Paper_Label": "Paper_Label"
       },
-      "triangles": 1328
+      "triangles": 872
     },
     {
       "name": "Art_GreatWave",
@@ -560,7 +569,7 @@
         "Art_GreatWave__Frame_Chips": "Frame_Chips",
         "Art_GreatWave__Frame_Brass": "Frame_Brass"
       },
-      "triangles": 1135
+      "triangles": 679
     },
     {
       "name": "Art_Milkmaid",
@@ -571,7 +580,7 @@
         "Art_Milkmaid__Frame_Brass": "Frame_Brass",
         "Art_Milkmaid__Frame_Chips": "Frame_Chips"
       },
-      "triangles": 1135
+      "triangles": 679
     },
     {
       "name": "Art_Mondrian",

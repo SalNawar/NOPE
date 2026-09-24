@@ -5,8 +5,8 @@ sys.path.insert(0,str(Path(__file__).resolve().parent))
 from artlib import *
 material('Hall_Plaster','B6B7AE',.96)
 material('Hall_Stone','969E98',.94)
-material('Hall_Floor','AAA99E',.93)
-material('Hall_FloorAlt','A2A69E',.93)
+material('Hall_Floor','AAA99E',.84)
+material('Hall_FloorAlt','A2A69E',.87)
 material('Hall_Grout','808B87',.96)
 material('Hall_Teal','56716D',.92)
 material('Hall_DarkMetal','465B5D',.86,.07)
@@ -61,19 +61,35 @@ for x in range(-14,14,2):
         box('Large stone floor slab',(x+1,-.004,z+1),(1.987,.012,1.987),mat,.001)
 for x in [-6,6]:box('Civic floor border',(x,.004,13),(.075,.002,20),'Hall_Teal',0)
 for x,z in [(-7.7,8.4),(8.2,10.1),(-9.1,15.1),(5.5,21.8)]:patch('Scuffed stone',(x,.004,z),.62,.19,'Hall_Wear','top')
+# Surface damage follows the loaded edges beside the existing exhibits. These
+# shallow chips and repaired joints are geometry, with no baked illumination.
+for x,z in [(-3.6,12.2),(3.6,12.2),(-6.95,11.25),(-9.3,16.2),(8.8,16.6)]:
+    patch('Worn plinth approach',(x,.005,z),.32,.095,'Hall_Wear','top')
+for x,z,sgn in [(-4,11,1),(4,11,-1),(-8,15,1),(8,17,-1)]:
+    pts=[(x,.006,z+.08),(x+sgn*.15,.006,z+.27),(x+sgn*.11,.006,z+.47),(x+sgn*.31,.006,z+.66)]
+    # Flat hairline silhouette, not an inflated tube or a random pile of debris.
+    vv=[]
+    for xx,yy,zz in pts:vv.extend([(xx-.006,yy,zz),(xx+.006,yy,zz)])
+    mesh('Stone edge hairline',vv,[(i,i+1,i+3,i+2) for i in range(0,6,2)],'Hall_Grout')
 
 group('Hall_Banner')
-box('Banner crossbar',(0,0,0),(1.86,.083,.095),'Hall_DarkMetal',.007)
+box('Banner crossbar',(0,-3,0),(1.86,.083,.095),'Hall_DarkMetal',.007)
 verts=[];faces=[];nx,ny=12,16
 for j in range(ny+1):
     for i in range(nx+1):
         t=j/ny;u=i/nx
-        verts.append(((u-.5)*1.65,-.06-4.4*t+(.10 if i==nx else 0)*t**8,.04*math.sin(u*math.pi*5)*(.25+.75*t)))
+        verts.append(((u-.5)*1.65,-3.06-4.4*t+(.10 if i==nx else 0)*t**8,.04*math.sin(u*math.pi*5)*(.25+.75*t)))
 for j in range(ny):
     for i in range(nx):
         a=j*(nx+1)+i;faces.append((a,a+1,a+nx+2,a+nx+1))
 o=mesh('Blank cloth with weighted folds',verts,faces,'Banner_Cloth',True);m=o.modifiers.new('Fabric thickness','SOLIDIFY');m.thickness=.009
-for x in [-.65,.65]:tube('Ceiling suspension',[(x,.02,0),(x,1.70,0)],.012,'Hall_DarkMetal')
+# Turned hems follow the same cloth surface. No logos or permanent slogans.
+for edge in [0,nx]:
+    tube('Stitched side hem',[verts[j*(nx+1)+edge] for j in range(ny+1)],.007,'Banner_Cloth')
+tube('Weighted lower hem',[verts[ny*(nx+1)+i] for i in range(nx+1)],.012,'Banner_Cloth')
+for x in [-.65,-.325,0,.325,.65]:
+    box('Canvas suspension tab',(x,-3.06,.006),(.052,.16,.019),'Banner_Cloth',.007)
+for x in [-.65,.65]:tube('Ceiling suspension',[(x,-2.98,0),(x,1.70,0)],.012,'Hall_DarkMetal')
 
 group('Hall_Departures')
 box('Departure housing',(0,0,0),(7,2.2,.3),'Hall_DarkMetal',.035)
@@ -154,6 +170,18 @@ box('Display vertical bracket',(0,1.67,0),(.09,.75,.07),'Hall_DarkMetal',.005)
 for x in [-.21,.21]:box('Picture support',(x,1.4,-.04),(.054,.025,.15),'Hall_DarkMetal',.004)
 box('Cross rail',(0,1.44,.01),(.54,.05,.06),'Hall_DarkMetal',.005)
 
+# Two coherent, open display rails replace scattered single-picture posts.
+# Their narrow structure preserves the windows and makes the mounting legible.
+group('Hall_GalleryRail')
+for x in [-2.85,0,2.85]:
+    box('Gallery rail foot',(x,.035,.10),(.46,.07,.84),'Hall_DarkMetal',.014)
+    box('Gallery upright',(x,1.48,.12),(.070,2.90,.070),'Hall_DarkMetal',.007)
+    for z in [-.25,.45]:cylinder('Foot bolt',(x,.076,z),.012,.009,'Frame_Brass','y',16)
+for y in [1.24,2.89]:
+    box('Continuous picture mounting rail',(0,y,.12),(5.76,.063,.074),'Hall_DarkMetal',.009)
+for x in [-2.3,-1.65,-.35,.30,1.65,2.25]:
+    tube('Picture hanging wire',[(x,2.9,.10),(x,1.47,.01)],.008,'Hall_DarkMetal')
+
 # Texture is mapped only to the canvas. Existing painted frames/background are
 # excluded by UV coordinates, replaced with dimensional mitered wooden frames.
 paintings=[('MonaLisa','mona_lisa-flat-v2.png',.99,1.2,[(.192,.84),(.810,.84),(.810,.133),(.192,.133)]),
@@ -170,12 +198,22 @@ for name,file,w,h,uvcorners in paintings:
     # Image corners specified with top-origin pixels: bottom left/right then top.
     for loop in face.data.loops:uv.data[loop.index].uv=(uvcorners[loop.vertex_index][0],1-uvcorners[loop.vertex_index][1])
     bw=.07
-    for sx in [-1,1]:
-        broken=name=='Mondrian' and sx==1
-        side=box('Frame upright',(sx*(w/2+bw/2),.065 if broken else 0,-.015),(bw,h+2*bw-(.13 if broken else 0),.10),'Frame_Brass' if name!='GreatWave' else 'Frame_Timber',.006)
-    for sy in [-1,1]:
-        broken=name=='Mondrian' and sy==-1
-        box('Frame crosspiece',(-.055 if broken else 0,sy*(h/2+bw/2),-.015),(w-(.11 if broken else 0),bw,.10),'Frame_Brass' if name!='GreatWave' else 'Frame_Timber',.006)
+    if name!='Mondrian':
+        # One continuous profile makes true mitred corners and a recessed inner
+        # reveal. Broad moulding planes stay legible with the flat painted art.
+        vv=[]
+        for d,z in [(0,-.012),(.009,-.038),(.015,-.051),(.038,-.053),(.046,-.064),(.061,-.069),(.073,-.048),(.073,.032)]:
+            vv.extend([(-w/2-d,-h/2-d,z),(w/2+d,-h/2-d,z),(w/2+d,h/2+d,z),(-w/2-d,h/2+d,z)])
+        ff=[(j*4+i,j*4+(i+1)%4,(j+1)*4+(i+1)%4,(j+1)*4+i) for j in range(7) for i in range(4)]
+        mould=mesh('Mitred stepped picture moulding',vv,ff,'Frame_Brass' if name!='GreatWave' else 'Frame_Timber')
+        bevel(mould,.0018,2)
+    else:
+        for sx in [-1,1]:
+            broken=sx==1
+            box('Frame upright',(sx*(w/2+bw/2),.065 if broken else 0,-.015),(bw,h+2*bw-(.13 if broken else 0),.10),'Frame_Brass',.006)
+        for sy in [-1,1]:
+            broken=sy==-1
+            box('Frame crosspiece',(-.055 if broken else 0,sy*(h/2+bw/2),-.015),(w-(.11 if broken else 0),bw,.10),'Frame_Brass',.006)
     if name=='Mondrian':
         fragment=box('Detached frame corner',(w/2+.028,-h/2-.064,-.016),(.15,.073,.093),'Frame_Timber',.003)
         fragment.rotation_euler.y=math.radians(24)

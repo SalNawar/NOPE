@@ -25,11 +25,22 @@ Reference: `../ReStory_current_reference.png`, the last image specifically chose
 | 17_named_keepsakes | Rocket locomotive and Nefertiti shelf reproductions establish specific historical identities at the sides. |
 | 18_panel_layers | Blank pinned slips plus Starry Night and Mondrian postcards add overlapping detail without hiding live readouts. |
 | 19_exterior_depth | Cooler, lighter city material palette separates exterior from the warm desk without changing megablock geometry. |
-| 20_lamp_reflector | Correct inward-facing reflector and small bulb replace the dark, incorrectly facing disk. Latest reviewed in-game capture; zero console errors. |
-| 21_hardware_palette | Cooler gray-beige PC/keyboard and restrained metal response on the till. User then identified clipping shelves, repeated artworks, statue defects, background resolution and banner visibility; these are pending corrections, not accepted final art. |
+| 20_lamp_reflector | Correct inward-facing reflector and small bulb replace the dark, incorrectly facing disk. Reviewed in-game capture; zero console errors at that pass. |
+| 21_hardware_palette | Cooler gray-beige PC/keyboard and restrained metal response on the till. User then identified clipping shelves, repeated artworks, statue defects, background resolution and banner visibility; subsequent corrections are recorded below. |
+| 22_glass_transparency_25 / slider_0, 100, 25 | Three window walls and Inspector transparency slider. Saved value is literally 25% transparent, hence 75% opaque. Endpoint captures show opaque, absent and tinted panes. |
+| 23_unclipped_booth | Removed clipping crown/shelves and duplicate postcards/miniatures. |
+| 24_banner_lamp_statues | Visible full banner cloth with ceiling suspension; lamp shade/light aimed at mat; gentler sculpture smoothing and 24k triangles. |
+| 25_grouped_hall | Two supported picture rails replace isolated stands. Grouped unique exhibits and removed second Voyager cover. |
+| 26_city_meshes | Replaced stretched city raster with six mesh megablocks. Clear-glass image is diagnostic; saved transparency remains 25. Composition frozen after this pass by user request. |
+| 27_tasklight_finish | Increased lamp coverage for review; pool too prominent, superseded by 30. |
+| 28_asset_finish | Window reveals/sills, cashbox hinges/key and ruled blank forms. No camera/prop moves. |
+| 29_walnut_mapping | Continuous walnut UV map replaces inherited cube channel. Grain now reads. |
+| 30_soft_tasklight | Softer, wider warm lamp pool keeps mat grid visible. |
+| 31_hall_craft | Continuous mitred mouldings, banner hems/tabs and restrained floor wear/cracks. No layout changes. |
+| 32_desk_bounce / 32_final_art_pass | Restrained real-time foreground fill improves shaded PC face readability. Final capture with glass 25. |
 
-The mouse remains to the right of the keyboard for right-handed use, with its cable modeled toward the left-hand computer. Computer zoom camera and original click proxy follow the moved glass. All changing text, the digital clock, stability readout and NEXT control remain the original game-controlled objects. No Unity C# was added or changed in these iterations.
+PC stays left, tilted inward; mouse right; central mat clear. Original camera/click proxy and live text retained. Only the requested glass slider adds C# in this corrective pass.
 
-The strongest remaining differences from the reference are the hall's blocky architecture, repetitive city detail, limited color variation across individual props and the overall material finish. The new framing and named details improve the booth but do not make the whole scene final quality. The large government hall, windows and megacity remain the game's distinct environment and should not be replaced by ReStory's small workshop.
+Validation: slider 0/100/25 had expected pane visibility; original CRT event enters MonitorFocus; fresh console zero errors. See `verification_32.json`. Earlier UnitySkills request-abort during transition was archived before clearing. Physical pointer and full gameplay day were not tested. Review captures are retained outside Assets; byte-identical screenshot imports are removed.
 
-Validation: each accepted pass was captured in Play mode and visually inspected against the reference. The console returned zero errors after the final wide view and monitor event check. Physical mouse interaction and a full gameplay day were not tested. Final placement snapshot is `../hardware_scene_placement.json`; it supersedes older placement records.
+Current art remains below the reference in architectural detail, background treatment, exhibit integration and light/material richness. ReStory-level parity is not established. Camera/hall proportion changes are deferred by the latest user instruction. This is an art checkpoint, not final quality sign-off.

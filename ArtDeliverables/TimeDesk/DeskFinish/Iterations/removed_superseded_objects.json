@@ -1,0 +1,716 @@
+[
+  {
+    "name": "Finish_BoothFrame",
+    "entityId": "18446744073709403314",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Finish_BoothFrame",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 8,
+    "children": [
+      {
+        "name": "Finish_BoothFrame__Finish_BlackRubber",
+        "entityId": "18446744073709403310",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_BlackRubber"
+      },
+      {
+        "name": "Finish_BoothFrame__Finish_Brass",
+        "entityId": "18446744073709403302",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_Brass"
+      },
+      {
+        "name": "Finish_BoothFrame__Finish_Charcoal",
+        "entityId": "18446744073709403294",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_Charcoal"
+      },
+      {
+        "name": "Finish_BoothFrame__Finish_Enamel",
+        "entityId": "18446744073709403286",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_Enamel"
+      },
+      {
+        "name": "Finish_BoothFrame__Finish_EnamelDark",
+        "entityId": "18446744073709403278",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_EnamelDark"
+      },
+      {
+        "name": "Finish_BoothFrame__Finish_Wood",
+        "entityId": "18446744073709403270",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_Wood"
+      },
+      {
+        "name": "Finish_BoothFrame__Finish_WoodEdge",
+        "entityId": "18446744073709403262",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Finish_WoodEdge"
+      },
+      {
+        "name": "Finish_BoothFrame__Hardware_BareMetal",
+        "entityId": "18446744073709403254",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Finish_BoothFrame/Finish_BoothFrame__Hardware_BareMetal"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "DeskKeepsake_Rocket",
+    "entityId": "18446744073709380186",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/DeskKeepsake_Rocket",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -2.55,
+      "y": 2.557,
+      "z": 0.69
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 90.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.18,
+      "y": 0.18,
+      "z": 0.18
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 7,
+    "children": [
+      {
+        "name": "Art_Rocket__Historic_Brass",
+        "entityId": "18446744073709380182",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Historic_Brass"
+      },
+      {
+        "name": "Art_Rocket__Historic_Iron",
+        "entityId": "18446744073709380174",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Historic_Iron"
+      },
+      {
+        "name": "Art_Rocket__Historic_Rust",
+        "entityId": "18446744073709380166",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Historic_Rust"
+      },
+      {
+        "name": "Art_Rocket__Historic_Timber",
+        "entityId": "18446744073709380158",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Historic_Timber"
+      },
+      {
+        "name": "Art_Rocket__Plastic_WarmGrey",
+        "entityId": "18446744073709380150",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Plastic_WarmGrey"
+      },
+      {
+        "name": "Art_Rocket__Recess_Charcoal",
+        "entityId": "18446744073709380142",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Recess_Charcoal"
+      },
+      {
+        "name": "Art_Rocket__Rocket_Ochre",
+        "entityId": "18446744073709380134",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Rocket/Art_Rocket__Rocket_Ochre"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "DeskKeepsake_Nefertiti",
+    "entityId": "18446744073709380120",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/DeskKeepsake_Nefertiti",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 2.54,
+      "y": 2.559,
+      "z": 0.68
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 25.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.48,
+      "y": 0.48,
+      "z": 0.48
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 4,
+    "children": [
+      {
+        "name": "Art_Nefertiti__Nefertiti_Band",
+        "entityId": "18446744073709380116",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Nefertiti/Art_Nefertiti__Nefertiti_Band"
+      },
+      {
+        "name": "Art_Nefertiti__Nefertiti_Crown",
+        "entityId": "18446744073709380108",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Nefertiti/Art_Nefertiti__Nefertiti_Crown"
+      },
+      {
+        "name": "Art_Nefertiti__Nefertiti_Limestone",
+        "entityId": "18446744073709380100",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Nefertiti/Art_Nefertiti__Nefertiti_Limestone"
+      },
+      {
+        "name": "Art_Nefertiti__Sculpture_Dust",
+        "entityId": "18446744073709380092",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/DeskKeepsake_Nefertiti/Art_Nefertiti__Sculpture_Dust"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "Blender_Desk_GreatWavePostcard",
+    "entityId": "18446744073709519534",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Blender_Desk_GreatWavePostcard",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -2.204266,
+      "y": 2.05,
+      "z": 0.7302609
+    },
+    "rotation": {
+      "x": -1.06721707e-07,
+      "y": 330.0,
+      "z": 354.0
+    },
+    "scale": {
+      "x": 0.11,
+      "y": 0.11,
+      "z": 0.11
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 4,
+    "children": [
+      {
+        "name": "Art_GreatWave__Canvas_GreatWave",
+        "entityId": "18446744073709519530",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_GreatWavePostcard/Art_GreatWave__Canvas_GreatWave"
+      },
+      {
+        "name": "Art_GreatWave__Frame_Brass",
+        "entityId": "18446744073709519522",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_GreatWavePostcard/Art_GreatWave__Frame_Brass"
+      },
+      {
+        "name": "Art_GreatWave__Frame_Chips",
+        "entityId": "18446744073709519514",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_GreatWavePostcard/Art_GreatWave__Frame_Chips"
+      },
+      {
+        "name": "Art_GreatWave__Frame_Timber",
+        "entityId": "18446744073709519506",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_GreatWavePostcard/Art_GreatWave__Frame_Timber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "Blender_Desk_MonaLisaPostcard",
+    "entityId": "18446744073709519492",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/Blender_Desk_MonaLisaPostcard",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 2.47706413,
+      "y": 1.99,
+      "z": 0.5727609
+    },
+    "rotation": {
+      "x": -1.06721707e-07,
+      "y": 30.0000076,
+      "z": 7.000001
+    },
+    "scale": {
+      "x": 0.16,
+      "y": 0.16,
+      "z": 0.16
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 4,
+    "children": [
+      {
+        "name": "Art_MonaLisa__Canvas_MonaLisa",
+        "entityId": "18446744073709519488",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_MonaLisaPostcard/Art_MonaLisa__Canvas_MonaLisa"
+      },
+      {
+        "name": "Art_MonaLisa__Frame_Brass",
+        "entityId": "18446744073709519480",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_MonaLisaPostcard/Art_MonaLisa__Frame_Brass"
+      },
+      {
+        "name": "Art_MonaLisa__Frame_Chips",
+        "entityId": "18446744073709519472",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_MonaLisaPostcard/Art_MonaLisa__Frame_Chips"
+      },
+      {
+        "name": "Art_MonaLisa__Frame_Timber",
+        "entityId": "18446744073709519464",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/Blender_Desk_MonaLisaPostcard/Art_MonaLisa__Frame_Timber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "BoardPicturePin_Left",
+    "entityId": "18446744073709519156",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/BoardPicturePin_Left",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -2.199266,
+      "y": 2.138,
+      "z": 0.721600652
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 330.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 2,
+    "children": [
+      {
+        "name": "Office_Pin__Case_Steel",
+        "entityId": "18446744073709519152",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/BoardPicturePin_Left/Office_Pin__Case_Steel"
+      },
+      {
+        "name": "Office_Pin__Power_Amber",
+        "entityId": "18446744073709519144",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/BoardPicturePin_Left/Office_Pin__Power_Amber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "BoardPicturePin_Right",
+    "entityId": "18446744073709519130",
+    "instanceId": 0,
+    "path": "HybridOffice/Booth/BoardPicturePin_Right",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 2.471564,
+      "y": 2.102,
+      "z": 0.5632609
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 30.0000019,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Booth",
+    "parentPath": "HybridOffice/Booth",
+    "childCount": 2,
+    "children": [
+      {
+        "name": "Office_Pin__Case_Steel",
+        "entityId": "18446744073709519126",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/BoardPicturePin_Right/Office_Pin__Case_Steel"
+      },
+      {
+        "name": "Office_Pin__Power_Amber",
+        "entityId": "18446744073709519118",
+        "instanceId": 0,
+        "path": "HybridOffice/Booth/BoardPicturePin_Right/Office_Pin__Power_Amber"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "Blender_MonaDisplay",
+    "entityId": "18446744073709529614",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_MonaDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -4.171,
+      "y": 0.026,
+      "z": 14.433
+    },
+    "rotation": {
+      "x": 358.058044,
+      "y": 318.9949,
+      "z": 0.5023664
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 0.95,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  {
+    "name": "Blender_PearlDisplay",
+    "entityId": "18446744073709529600",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_PearlDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 7.0,
+      "y": 0.0,
+      "z": 10.6
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 12.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 0.892857134,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  {
+    "name": "Blender_StarryDisplay",
+    "entityId": "18446744073709529586",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_StarryDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -8.5,
+      "y": 0.0,
+      "z": 13.1
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.7,
+      "y": 1.00357139,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  {
+    "name": "Blender_WaveDisplay",
+    "entityId": "18446744073709529572",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_WaveDisplay",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 5.9,
+      "y": 0.0,
+      "z": 15.1
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 12.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.7,
+      "y": 0.932142854,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  {
+    "name": "Blender_VoyagerPlinth",
+    "entityId": "18446744073709529932",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -3.7,
+      "y": 0.0,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.52,
+      "y": 1.0,
+      "z": 0.52
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 5,
+    "children": [
+      {
+        "name": "Hall_Plinth__Frame_Brass",
+        "entityId": "18446744073709529928",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth/Hall_Plinth__Frame_Brass"
+      },
+      {
+        "name": "Hall_Plinth__Hall_DarkMetal",
+        "entityId": "18446744073709529920",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth/Hall_Plinth__Hall_DarkMetal"
+      },
+      {
+        "name": "Hall_Plinth__Hall_Plaster",
+        "entityId": "18446744073709529912",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth/Hall_Plinth__Hall_Plaster"
+      },
+      {
+        "name": "Hall_Plinth__Hall_Stone",
+        "entityId": "18446744073709529904",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth/Hall_Plinth__Hall_Stone"
+      },
+      {
+        "name": "Hall_Plinth__Hall_Wear",
+        "entityId": "18446744073709529896",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth/Hall_Plinth__Hall_Wear"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "Blender_Exhibit_VoyagerRecord",
+    "entityId": "18446744073709522424",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_VoyagerRecord",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -3.7,
+      "y": 1.115,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 2,
+    "children": [
+      {
+        "name": "Art_VoyagerCover__Voyager_Diagram",
+        "entityId": "18446744073709522420",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_Exhibit_VoyagerRecord/Art_VoyagerCover__Voyager_Diagram"
+      },
+      {
+        "name": "Art_VoyagerCover__Voyager_Gold",
+        "entityId": "18446744073709522412",
+        "instanceId": 0,
+        "path": "HybridOffice/Exhibits/Blender_Exhibit_VoyagerRecord/Art_VoyagerCover__Voyager_Gold"
+      }
+    ],
+    "components": [
+      "Transform"
+    ]
+  },
+  {
+    "name": "VoyagerRecordSupport",
+    "entityId": "72674",
+    "instanceId": 0,
+    "path": "HybridOffice/Exhibits/VoyagerRecordSupport",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": -3.7,
+      "y": 1.015,
+      "z": 6.025
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 7.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.04,
+      "y": 0.23,
+      "z": 0.065
+    },
+    "parent": "Exhibits",
+    "parentPath": "HybridOffice/Exhibits",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  },
+  {
+    "name": "FarMegacityLayer",
+    "entityId": "74254",
+    "instanceId": 0,
+    "path": "HybridOffice/Exterior/FarMegacityLayer",
+    "tag": "Untagged",
+    "layer": "Default",
+    "isActive": false,
+    "position": {
+      "x": 0.0,
+      "y": 33.0,
+      "z": 120.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 220.327316,
+      "y": 124.0,
+      "z": 1.0
+    },
+    "parent": "Exterior",
+    "parentPath": "HybridOffice/Exterior",
+    "childCount": 0,
+    "children": [],
+    "components": [
+      "Transform",
+      "MeshFilter",
+      "MeshRenderer"
+    ]
+  }
+]

@@ -1,0 +1,434 @@
+[
+  {
+    "path": "HybridOffice/Exhibits/FlyerSuspension_0",
+    "position": {
+      "x": 5.546486,
+      "y": 9.315,
+      "z": 12.1692352
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.013,
+      "y": 7.71,
+      "z": 0.013
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/FlyerSuspension_1",
+    "position": {
+      "x": 7.853514,
+      "y": 9.315,
+      "z": 12.8307648
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.013,
+      "y": 7.71,
+      "z": 0.013
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/VoyagerRecordSupport",
+    "position": {
+      "x": -3.7,
+      "y": 1.015,
+      "z": 6.025
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 7.999999,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.04,
+      "y": 0.23,
+      "z": 0.065
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_ThinkerPlinth",
+    "position": {
+      "x": -5.8,
+      "y": 0.0,
+      "z": 12.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_DiscobolusPlinth",
+    "position": {
+      "x": 4.4,
+      "y": 0.0,
+      "z": 8.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 99.92399,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_NefertitiPlinth",
+    "position": {
+      "x": -7.8,
+      "y": 0.0,
+      "z": 6.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.68,
+      "y": 1.0,
+      "z": 0.68
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_VoyagerPlinth",
+    "position": {
+      "x": -3.7,
+      "y": 0.0,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 0.52,
+      "y": 1.0,
+      "z": 0.52
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_MonaLisa",
+    "position": {
+      "x": -4.091314,
+      "y": 2.021277,
+      "z": 14.282939
+    },
+    "rotation": {
+      "x": 358.058044,
+      "y": 318.9949,
+      "z": 356.50238
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_PearlEarring",
+    "position": {
+      "x": 7.0,
+      "y": 1.95,
+      "z": 10.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 12.0,
+      "z": 5.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_StarryNight",
+    "position": {
+      "x": -8.5,
+      "y": 2.2,
+      "z": 13.0
+    },
+    "rotation": {
+      "x": -5.33608535e-08,
+      "y": 348.0,
+      "z": 354.999969
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_GreatWave",
+    "position": {
+      "x": 5.9,
+      "y": 2.1,
+      "z": 15.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 12.000001,
+      "z": 3.00000048
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Milkmaid",
+    "position": {
+      "x": -6.8,
+      "y": 0.69,
+      "z": 9.0
+    },
+    "rotation": {
+      "x": 348.0,
+      "y": 348.0,
+      "z": 12.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Mondrian",
+    "position": {
+      "x": 8.0,
+      "y": 0.8,
+      "z": 17.0
+    },
+    "rotation": {
+      "x": 352.0,
+      "y": 12.0,
+      "z": 351.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_MonaDisplay",
+    "position": {
+      "x": -4.171,
+      "y": 0.026,
+      "z": 14.433
+    },
+    "rotation": {
+      "x": 358.058044,
+      "y": 318.9949,
+      "z": 0.5023664
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 0.95,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_PearlDisplay",
+    "position": {
+      "x": 7.0,
+      "y": 0.0,
+      "z": 10.6
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 12.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 0.892857134,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_StarryDisplay",
+    "position": {
+      "x": -8.5,
+      "y": 0.0,
+      "z": 13.1
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.7,
+      "y": 1.00357139,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_WaveDisplay",
+    "position": {
+      "x": 5.9,
+      "y": 0.0,
+      "z": 15.1
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 12.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.7,
+      "y": 0.932142854,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Thinker",
+    "position": {
+      "x": -5.81064653,
+      "y": 0.9,
+      "z": 12.01134
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 192.086792,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Discobolus",
+    "position": {
+      "x": 4.399693,
+      "y": 0.9,
+      "z": 8.000296
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 243.226227,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Nefertiti",
+    "position": {
+      "x": -7.8,
+      "y": 0.9,
+      "z": 6.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 345.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_PrintingPress3D",
+    "position": {
+      "x": 8.4,
+      "y": 0.0,
+      "z": 8.4
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 340.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_WrightFlyer3D",
+    "position": {
+      "x": 6.7,
+      "y": 4.6,
+      "z": 12.5
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 344.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_Rocket3D",
+    "position": {
+      "x": -8.7,
+      "y": 0.0,
+      "z": 17.7
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 328.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.05,
+      "y": 1.05,
+      "z": 1.05
+    }
+  },
+  {
+    "path": "HybridOffice/Exhibits/Blender_Exhibit_VoyagerRecord",
+    "position": {
+      "x": -3.7,
+      "y": 1.115,
+      "z": 6.0
+    },
+    "rotation": {
+      "x": 0.0,
+      "y": 348.0,
+      "z": 0.0
+    },
+    "scale": {
+      "x": 1.0,
+      "y": 1.0,
+      "z": 1.0
+    }
+  }
+]

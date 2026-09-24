@@ -176,9 +176,9 @@
         1,
         1
       ],
-      "smoothness": 0.14,
+      "smoothness": 0.26,
       "metallic": 0,
-      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderPC\\Textures\\desk_walnut_albedo.png"
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskFinish\\Textures\\walnut_veneer.png"
     },
     "Finish_Ivory": {
       "color": [
@@ -341,7 +341,7 @@
       "texture": null,
       "emission": {
         "color": [
-          1,
+          1.0,
           0.72,
           0.42
         ],
@@ -497,26 +497,6 @@
       "smoothness": 0.36,
       "metallic": 0,
       "texture": null
-    },
-    "Canvas_StarryNight": {
-      "color": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "smoothness": 0.010000000000000009,
-      "metallic": 0,
-      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\Images\\starry_night.png"
-    },
-    "Canvas_Mondrian": {
-      "color": [
-        1.0,
-        1.0,
-        1.0
-      ],
-      "smoothness": 0.010000000000000009,
-      "metallic": 0,
-      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\Images\\mondrian.png"
     }
   },
   "models": [
@@ -572,12 +552,12 @@
         "Finish_Till__Hardware_Rubber": "Hardware_Rubber",
         "Finish_Till__Hardware_CashPaint": "Hardware_CashPaint",
         "Finish_Till__Hardware_CashEdge": "Hardware_CashEdge",
-        "Finish_Till__Hardware_Seam": "Hardware_Seam",
         "Finish_Till__Hardware_BareMetal": "Hardware_BareMetal",
+        "Finish_Till__Hardware_Seam": "Hardware_Seam",
         "Finish_Till__Hardware_Glass": "Hardware_Glass",
         "Finish_Till__Hardware_Paper": "Hardware_Paper"
       },
-      "triangles": 5905
+      "triangles": 15194
     },
     {
       "name": "Finish_Tray",
@@ -681,21 +661,6 @@
       "triangles": 752
     },
     {
-      "name": "Finish_BoothFrame",
-      "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_BoothFrame.fbx",
-      "nodes": {
-        "Finish_BoothFrame__Finish_EnamelDark": "Finish_EnamelDark",
-        "Finish_BoothFrame__Finish_Charcoal": "Finish_Charcoal",
-        "Finish_BoothFrame__Finish_WoodEdge": "Finish_WoodEdge",
-        "Finish_BoothFrame__Finish_Wood": "Finish_Wood",
-        "Finish_BoothFrame__Finish_Enamel": "Finish_Enamel",
-        "Finish_BoothFrame__Hardware_BareMetal": "Hardware_BareMetal",
-        "Finish_BoothFrame__Finish_Brass": "Finish_Brass",
-        "Finish_BoothFrame__Finish_BlackRubber": "Finish_BlackRubber"
-      },
-      "triangles": 7532
-    },
-    {
       "name": "Finish_FormSorter",
       "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_FormSorter.fbx",
       "nodes": {
@@ -738,24 +703,24 @@
       "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_LeftEphemera.fbx",
       "nodes": {
         "Finish_LeftEphemera__Hardware_Paper": "Hardware_Paper",
+        "Finish_LeftEphemera__Finish_KeyGrey": "Finish_KeyGrey",
         "Finish_LeftEphemera__Hardware_BareMetal": "Hardware_BareMetal",
         "Finish_LeftEphemera__Finish_Coral": "Finish_Coral",
-        "Finish_LeftEphemera__Finish_Paper": "Finish_Paper",
-        "Finish_LeftEphemera__Canvas_StarryNight": "Canvas_StarryNight"
+        "Finish_LeftEphemera__Finish_Paper": "Finish_Paper"
       },
-      "triangles": 2402
+      "triangles": 2784
     },
     {
       "name": "Finish_RightEphemera",
       "assetPath": "Assets/Art/Office/DeskFinish/Models/Finish_RightEphemera.fbx",
       "nodes": {
         "Finish_RightEphemera__Finish_Paper": "Finish_Paper",
+        "Finish_RightEphemera__Finish_KeyGrey": "Finish_KeyGrey",
         "Finish_RightEphemera__Hardware_BareMetal": "Hardware_BareMetal",
         "Finish_RightEphemera__Finish_Coral": "Finish_Coral",
-        "Finish_RightEphemera__Canvas_Mondrian": "Canvas_Mondrian",
         "Finish_RightEphemera__Hardware_Paper": "Hardware_Paper"
       },
-      "triangles": 1790
+      "triangles": 2088
     }
   ]
 }

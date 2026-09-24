@@ -49,6 +49,15 @@ for variant,name in enumerate(['City_CivicMegablock','City_TwinMegablock','City_
                     zz=cz+side*(d/2+.008)
                     mesh('Window pair',[(x-.87,y-.53,zz),(x+.87,y-.53,zz),(x+.87,y+.53,zz),(x-.87,y+.53,zz)],[(0,1,2,3) if side<0 else (3,2,1,0)],wm)
                     box('Window centre bar',(x,y,zz+side*.01),(.075,1.06,.033),'City_ConcreteDark',0)
+                    # A modeled reveal and sill create depth under live light;
+                    # the window no longer reads as a dark rectangle painted on concrete.
+                    vv=[]
+                    for w0,h0,z0 in [(.98,.64,zz+side*.17),(.87,.53,zz)]:
+                        vv.extend([(x-w0,y-h0,z0),(x+w0,y-h0,z0),(x+w0,y+h0,z0),(x-w0,y+h0,z0)])
+                    ff=[(k,(k+1)%4,(k+1)%4+4,k+4) for k in range(4)]
+                    if side>0:ff=[tuple(reversed(f)) for f in ff]
+                    mesh('Chamfered window reveal',vv,ff,'City_ConcreteDark')
+                    box('Projecting window sill',(x,y-.64,zz+side*.10),(2.06,.105,.25),'City_ConcreteLight',.018)
             for col in range(scols):
                 z=cz+(col-(scols-1)/2)*2.9
                 for side in [-1,1]:

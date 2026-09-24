@@ -33,8 +33,14 @@ lamp_shader.inputs['Emission Strength'].default_value=.35
 A.specs['Finish_LampInner']['emission']={'color':list(lamp_emission),'intensity':.35}
 material('Finish_Mat','A9CAFF',.96,texture=T/'inspection_mat.png')
 # The albedo contains the wood colour; keep both Blender and Unity tint neutral.
-materials['Desk_Walnut'].node_tree.nodes.get('Principled BSDF').inputs['Base Color'].default_value=(1,1,1,1)
+wood_material=materials['Desk_Walnut']
+wood_material.node_tree.nodes.get('Principled BSDF').inputs['Base Color'].default_value=(1,1,1,1)
+wood_material.node_tree.nodes.get('Principled BSDF').inputs['Roughness'].default_value=.74
+for node in wood_material.node_tree.nodes:
+    if node.type=='TEX_IMAGE':node.image=bpy.data.images.load(str(T/'walnut_veneer.png'))
 A.specs['Desk_Walnut']['color']=[1,1,1]
+A.specs['Desk_Walnut']['smoothness']=.26
+A.specs['Desk_Walnut']['texture']=str(T/'walnut_veneer.png')
 
 # Keep the desk model; the three hardware assets are authored from local origin.
 source=PROJECT/'ArtDeliverables/TimeDesk/HybridScene/BlenderPC/TimeDesk_PC.blend'
@@ -49,6 +55,15 @@ for col in dst.collections:
                 n=slot.material.name.split('.')[0]
                 if n in pcmap:slot.material=materials[pcmap[n]]
                 elif n=='Desk_Walnut':slot.material=materials['Desk_Walnut']
+        if ob.type=='MESH' and any(m==materials['Desk_Walnut'] for m in ob.data.materials):
+            # Remove the inherited cube UV channel. A single surface map gives
+            # the tabletop one continuous grain instead of sampling cube islands.
+            for layer in list(ob.data.uv_layers):ob.data.uv_layers.remove(layer)
+            uv=ob.data.uv_layers.new(name='WalnutSurfaceUV')
+            for face in ob.data.polygons:
+                for li in face.loop_indices:
+                    co=ob.data.vertices[ob.data.loops[li].vertex_index].co
+                    uv.data[li].uv=(co.x/5.8+.5,co.y/2.52+.5 if abs(face.normal.z)>.5 else co.z/.25+.5)
     bpy.data.collections.remove(col)
 sys.path.insert(0,str(HERE))
 from hardware_models import build_hardware
@@ -100,12 +115,13 @@ lid=box('Open inkpad lid',(0,.066,.095),(.22,.105,.015),'Finish_Enamel',.007);li
 group('Finish_Lamp')
 lathe('Weighted lamp base',[(.003,.113),(.013,.121),(.023,.119),(.031,.095),(.037,.059),(.042,.028)],'Finish_EnamelDark',64)
 for x in [-.073,.073]:box('Lamp rubber foot',(x,.004,0),(.035,.008,.08),'Finish_BlackRubber',.003)
-points=[(0,.045,0),(-.04,.32,.02),(.105,.62,-.04),(-.06,.74,-.13)]
+points=[(0,.045,0),(-.04,.32,.02),(.105,.62,-.04),(-.30,.80,-.15)]
 for i in range(3):
     for off in [-.014,.014]:tube('Articulated lamp strut',[(points[i][0]+off,points[i][1],points[i][2]),(points[i+1][0]+off,points[i+1][1],points[i+1][2])],.008,'Finish_EnamelDark')
 for x,y,z in points[1:]:cylinder('Lamp hinge',(x,y,z),.023,.062,'Finish_Brass','x',24)
-tube('External lamp flex',[(.02,.03,.05),(.006,.18,.075),(-.02,.34,.06),(.14,.63,-.005),(-.07,.745,-.11)],.003,'Finish_BlackRubber')
-start=Vector((-.06,.74,-.13));direction=Vector((-.25,-.7,-.25)).normalized();right=direction.cross(Vector((0,0,1))).normalized();up=right.cross(direction).normalized()
+tube('External lamp flex',[(.02,.03,.05),(.006,.18,.075),(-.02,.34,.06),(.14,.63,-.005),(-.31,.805,-.13)],.003,'Finish_BlackRubber')
+# The shade and Unity spotlight share this axis, aimed at the work-mat centre.
+start=Vector((-.30,.80,-.15));direction=Vector((-1.43,-.799,-.59)).normalized();right=direction.cross(Vector((0,0,1))).normalized();up=right.cross(direction).normalized()
 vv=[];ff=[];nr=48
 for dist,r in [(-.018,.038),(0,.048),(.155,.126),(.168,.130),(.172,.121),(.150,.117),(.008,.042)]:
     for i in range(nr):a=i*math.tau/nr;vv.append(tuple(start+direction*dist+(right*math.cos(a)+up*math.sin(a))*r))
@@ -157,8 +173,7 @@ box('Rear clerk counter rim',(0,0,0),(1.31,.055,.13),'Finish_WoodEdge',.009)
 box('Counter fascia',(0,-.072,.040),(1.28,.10,.052),'Finish_Enamel',.006)
 for x in [-.53,.53]:box('Counter bracket',(x,-.125,.02),(.037,.16,.087),'Finish_EnamelDark',.004)
 
-from booth_detail_models import build_booth_frame, build_desk_stationery, build_panel_ephemera
-build_booth_frame()
+from booth_detail_models import build_desk_stationery, build_panel_ephemera
 build_desk_stationery()
 build_panel_ephemera(PROJECT)
 

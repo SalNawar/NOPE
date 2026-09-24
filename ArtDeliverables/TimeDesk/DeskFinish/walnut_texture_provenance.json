@@ -1,0 +1,7 @@
+{
+  "tool": "Built-in image_gen",
+  "output": "Assets/Art/Office/DeskFinish/Textures/walnut_veneer.png",
+  "original": "exec-d0faf65b-733e-47bb-aa52-46ee19ec0915.png",
+  "postProcessing": "None; copied into project unchanged",
+  "prompt": "Use case: stylized-concept. Asset type: production game material, flat diffuse/albedo texture only, no scene render. Create a 2048 x 1024 rectangular texture of well-used brown walnut veneer for a government clerk's desk in a stylized anime-influenced 1990s repair-shop game with simple painted textures. Orthographic top-down straight onto a single continuous sheet of wood filling the entire image, with NO perspective, NO thickness, NO outer edge or border. Warm medium-dark brown walnut (#73503a) with broad subtly undulating horizontal grain strokes, a few darker elongated grain loops and understated rubbed lighter patches, only a handful of sparse short pale scratches. Grain should be elegantly hand-painted, readable from a distance, calm broad colour masses with very little micro-noise, not photorealistic. Restrained grain contrast, not orange or yellow, no rustic barn planks. Even colour and exposure across the entire surface; uniform ambient illumination only, no light direction, no gradients, NO shadows, NO highlights, NO ambient occlusion, NO glow, NO vignetting. No objects, no lettering, no seams between planks, no coffee rings, no logos. This is an unlit material map that will be lit dynamically in Unity. Return only the texture."
+}

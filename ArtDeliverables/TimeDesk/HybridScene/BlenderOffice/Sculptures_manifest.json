@@ -259,7 +259,7 @@
         "Art_Thinker__Sculpture_Patina": "Sculpture_Patina",
         "Art_Thinker__Sculpture_Bronze": "Sculpture_Bronze"
       },
-      "triangles": 6998
+      "triangles": 24000
     },
     {
       "name": "Art_Discobolus",
@@ -268,7 +268,7 @@
         "Art_Discobolus__Sculpture_Stone": "Sculpture_Stone",
         "Art_Discobolus__Sculpture_Dust": "Sculpture_Dust"
       },
-      "triangles": 7000
+      "triangles": 24000
     },
     {
       "name": "Art_Nefertiti",
@@ -279,7 +279,7 @@
         "Art_Nefertiti__Nefertiti_Crown": "Nefertiti_Crown",
         "Art_Nefertiti__Nefertiti_Band": "Nefertiti_Band"
       },
-      "triangles": 7000
+      "triangles": 24000
     }
   ]
 }

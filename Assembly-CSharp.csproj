@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\DevTools\DebugPanelController.cs" />
     <Compile Include="Assets\Scripts\ClueSO.cs" />
     <Compile Include="Assets\Scripts\UI\CompareController.cs" />
+    <Compile Include="Assets\Scripts\Office\OfficeWindowGlass.cs" />
     <Compile Include="Assets\Scripts\UI\DesktopIcon.cs" />
     <Compile Include="Assets\Scripts\Investigation\ReferenceBookSO.cs" />
     <Compile Include="Assets\Scripts\Home\HomeManager.cs" />
