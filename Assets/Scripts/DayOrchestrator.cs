@@ -32,6 +32,12 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// <summary>True while the orchestrator is waiting for a case to be resolved.</summary>
     private bool _waitingForCaseResolution;
 
+    /// <summary>True once the booth closed: no further case slot starts.</summary>
+    private bool _closeRequested;
+
+    /// <summary>True when the current slot was abandoned before its traveller was called in.</summary>
+    private bool _abortCurrentSlot;
+
     /// <summary>Handle for the currently running day loop coroutine.</summary>
     private Coroutine _dayLoopRoutine;
 
@@ -90,6 +96,8 @@ public sealed class DayOrchestrator : MonoBehaviour
         }
 
         _caseIndex1Based = 1;
+        _closeRequested = false;
+        _abortCurrentSlot = false;
 
         // Resolve random placements once. This keeps the runtime loop simple and debuggable.
         _resolvedSchedule = dayPlan != null ? dayPlan.ResolveSchedule(seed) : null;
@@ -113,6 +121,30 @@ public sealed class DayOrchestrator : MonoBehaviour
     }
 
     /// <summary>
+    /// Closing time with a traveller at the desk: finish the current case slot
+    /// normally, then end the day instead of starting the next one.
+    /// </summary>
+    public void CloseAfterCurrentSlot()
+    {
+        _closeRequested = true;
+    }
+
+    /// <summary>
+    /// Closing time with nobody at the desk: end the day at once. If the loop is
+    /// waiting on a slot whose traveller was never called in, that slot is
+    /// abandoned (no slot-ended or after-case events).
+    /// </summary>
+    public void CloseNow()
+    {
+        _closeRequested = true;
+        if (_waitingForCaseResolution)
+        {
+            _abortCurrentSlot = true;
+            _waitingForCaseResolution = false;
+        }
+    }
+
+    /// <summary>
     /// Main loop: for each case slot, run before-events, wait for external case resolution,
     /// then run after-events.
     /// </summary>
@@ -125,15 +157,21 @@ public sealed class DayOrchestrator : MonoBehaviour
 
         Debug.Log($"[DayOrchestrator] >>> Entering DayLoop (day {_worldState?.day}, {total} case slot(s)).");
 
-        while (_caseIndex1Based <= total)
+        while (_caseIndex1Based <= total && !_closeRequested)
         {
             Debug.Log($"[DayOrchestrator] >>> Entering case slot {_caseIndex1Based}/{total}.");
 
             // 1) BeforeCase events
             yield return RunScheduledEvents(DayEventTrigger.BeforeCase, _caseIndex1Based);
 
-            // 2) Notify gameplay layer to start this case slot.
+            // The booth may have closed while those events ran.
+            if (_closeRequested)
+                break;
+
+            // 2) Notify gameplay layer to start this case slot. Flags are set first so
+            // a CloseNow() raised synchronously by a listener is honoured.
             _waitingForCaseResolution = true;
+            _abortCurrentSlot = false;
             OnCaseSlotStarted?.Invoke(_caseIndex1Based);
 
             // 3) Wait until gameplay layer resolves the case.
@@ -153,6 +191,13 @@ public sealed class DayOrchestrator : MonoBehaviour
                 return _waitingForCaseResolution == false;
             });
 
+            // Closed before this traveller was called in: skip the slot's end and after-case events.
+            if (_abortCurrentSlot)
+            {
+                Debug.Log($"[DayOrchestrator] Case slot {_caseIndex1Based} abandoned at closing time.");
+                break;
+            }
+
             // 4) Notify slot ended.
             OnCaseSlotEnded?.Invoke(_caseIndex1Based);
 
@@ -165,9 +210,9 @@ public sealed class DayOrchestrator : MonoBehaviour
             _caseIndex1Based++;
         }
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, invoking OnDayCompleted).");
+        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, closedEarly={_closeRequested}, invoking OnDayCompleted).");
 
-        // All case slots resolved: the shift is over.
+        // Queue done or booth closed: the shift is over.
         OnDayCompleted?.Invoke();
     }
 

@@ -36,6 +36,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Optional: the READY sign that releases the per-case gate.</summary>
     [SerializeField] private Clickable readySign;
 
+    /// <summary>Scene clock for today's shift (optional: without it the day ends only when the queue is empty).</summary>
+    [SerializeField] private ShiftClockDriver shiftClock;
+
     /// <summary>Seed for deterministic day schedule randomness.</summary>
     [SerializeField] private int seed = 12345;
 
@@ -56,6 +59,9 @@ public sealed class GameManager : MonoBehaviour
 
     /// <summary>Per-case readiness gate, released by the READY sign.</summary>
     private readonly ReadyGate _readyGate = new ReadyGate();
+
+    /// <summary>True from presenting a traveller until the player's decision (closing-time rule).</summary>
+    private bool _travellerAtDesk;
 
     /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
     private GameConfigSO _gameConfig;
@@ -109,6 +115,13 @@ public sealed class GameManager : MonoBehaviour
         if (_gameConfig == null)
             Debug.LogWarning("GameManager: no GameConfigSO assigned in RunConfig — pay/citations/stability will not be applied.");
 
+        // Shift clock (Papers, Please-style closing time).
+        if (shiftClock != null)
+        {
+            shiftClock.Configure(_gameConfig);
+            shiftClock.Closed += HandleShiftClosed;
+        }
+
         // Fresh ledger for this shift.
         _ledger = new ShiftLedger();
 
@@ -146,12 +159,12 @@ public sealed class GameManager : MonoBehaviour
             DayPlanSO planToRun = dayPlan;
             int seedToUse = seed;
             Debug.Log("[GameManager] <<< Exiting Start (showing morning briefing before day loop).");
-            dayFlowUI.ShowBriefing(_worldState, () => orchestrator.StartDay(_worldState, planToRun, seedToUse));
+            dayFlowUI.ShowBriefing(_worldState, () => BeginShift(planToRun, seedToUse));
         }
         else
         {
             Debug.Log("[GameManager] <<< Exiting Start (starting day loop directly).");
-            orchestrator.StartDay(_worldState, dayPlan, seed);
+            BeginShift(dayPlan, seed);
         }
     }
 
@@ -160,6 +173,9 @@ public sealed class GameManager : MonoBehaviour
     /// </summary>
     private void OnDestroy()
     {
+        if (shiftClock != null)
+            shiftClock.Closed -= HandleShiftClosed;
+
         if (orchestrator == null)
             return;
 
@@ -175,6 +191,11 @@ public sealed class GameManager : MonoBehaviour
     private void HandleDayCompleted()
     {
         Debug.Log($"[GameManager] >>> Entering HandleDayCompleted (day {_worldState.day}).");
+
+        // The booth is shut: freeze the clock (the queue may have run out before closing).
+        _travellerAtDesk = false;
+        if (shiftClock != null)
+            shiftClock.StopShift();
 
         int correctCount = 0;
         int totalPay = 0;
@@ -285,6 +306,41 @@ public sealed class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotStarted (slot {caseIndex1Based}, awaiting player decision).");
     }
 
+    /// <summary>Starts the day loop and the shift clock together (after the briefing).</summary>
+    private void BeginShift(DayPlanSO plan, int daySeed)
+    {
+        orchestrator.StartDay(_worldState, plan, daySeed);
+
+        if (shiftClock != null)
+            shiftClock.StartShift();
+    }
+
+    /// <summary>
+    /// Closing time: a traveller already at the desk may be finished; otherwise
+    /// the booth closes at once, and a traveller still behind READY is never called.
+    /// </summary>
+    private void HandleShiftClosed()
+    {
+        ClosingAction action = ShiftFlow.OnClosing(_travellerAtDesk);
+        Debug.Log($"[GameManager] Closing time (travellerAtDesk={_travellerAtDesk}) -> {action}.");
+
+        if (action == ClosingAction.FinishCurrent)
+        {
+            orchestrator.CloseAfterCurrentSlot();
+            return;
+        }
+
+        if (_readyGate.IsArmed)
+        {
+            _readyGate.Released -= ShowActiveCaseOnce;
+            _readyGate.Disarm();
+            if (readySign != null)
+                readySign.Interactable = false;
+        }
+
+        orchestrator.CloseNow();
+    }
+
     /// <summary>One-shot handler so the gate shows the case a single time.</summary>
     private void ShowActiveCaseOnce()
     {
@@ -303,6 +359,8 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Presents a case via the investigation UI (or legacy era UI).</summary>
     private void ShowActiveCase(CaseInstance inst)
     {
+        _travellerAtDesk = true;
+
         if (investigationUI != null)
             investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
         else
@@ -328,6 +386,7 @@ public sealed class GameManager : MonoBehaviour
     private void HandlePlayerChoseEra(EraSO chosenEra)
     {
         Debug.Log($"[GameManager] >>> Entering HandlePlayerChoseEra (slot {_activeCaseIndex1Based}, chosenEra='{chosenEra?.id}').");
+        _travellerAtDesk = false;
 
         int idx = _activeCaseIndex1Based - 1;
 
@@ -379,7 +438,7 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (run ending '{ending.id}' — showing verdict then title scene).");
 
             // Show the verdict, then hand off to the title scene instead of continuing the day.
-            officeUI.ShowVerdict(verdict, HandleEndingReached);
+            ShowVerdictThen(verdict, HandleEndingReached);
             return;
         }
 
@@ -391,7 +450,7 @@ public sealed class GameManager : MonoBehaviour
         Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (slot {_activeCaseIndex1Based} resolved, showing verdict then advancing).");
 
         // Show the verdict (citation slip pauses the day if wired), then advance.
-        officeUI.ShowVerdict(verdict, () => orchestrator.MarkCaseResolved());
+        ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
     }
 
     /// <summary>
@@ -402,6 +461,7 @@ public sealed class GameManager : MonoBehaviour
     private void HandleDecision(bool accepted)
     {
         Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
+        _travellerAtDesk = false;
 
         int idx = _activeCaseIndex1Based - 1;
 
@@ -463,13 +523,29 @@ public sealed class GameManager : MonoBehaviour
         ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
     }
 
-    /// <summary>Shows the verdict slip if a UI is wired, then runs the continuation.</summary>
+    /// <summary>
+    /// Shows the verdict slip if a UI is wired (pausing the shift clock while a
+    /// citation slip is up), then runs the continuation.
+    /// </summary>
     private void ShowVerdictThen(CaseVerdict verdict, System.Action onContinue)
     {
-        if (officeUI != null)
-            officeUI.ShowVerdict(verdict, onContinue);
-        else
+        if (officeUI == null)
+        {
             onContinue?.Invoke();
+            return;
+        }
+
+        // A citation slip holds the day, and the shift clock, until acknowledged.
+        bool holdsClock = shiftClock != null && verdict != null && verdict.citationIssued;
+        if (holdsClock)
+            shiftClock.Pause();
+
+        officeUI.ShowVerdict(verdict, () =>
+        {
+            if (holdsClock)
+                shiftClock.Resume();
+            onContinue?.Invoke();
+        });
     }
 
     /// <summary>

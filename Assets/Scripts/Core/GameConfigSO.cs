@@ -35,6 +35,19 @@ public sealed class GameConfigSO : ScriptableObject
     /// </summary>
     public bool requireEvidenceToDeny = true;
 
+    [Header("Shift clock")]
+    /// <summary>Hour the booth opens (0-23). The clock shows this during the briefing and starts at Start Shift.</summary>
+    [Range(0, 23)]
+    public int shiftStartHour = 9;
+
+    /// <summary>Hour the booth closes (1-24, after the opening hour). No new traveller is called after it.</summary>
+    [Range(1, 24)]
+    public int shiftEndHour = 17;
+
+    /// <summary>Real seconds a whole shift lasts (the Papers, Please-style time pressure).</summary>
+    [Min(10f)]
+    public float shiftRealSeconds = 480f;
+
     [Header("Timeline stability")]
     /// <summary>Stability lost per wrong send (0..100 scale).</summary>
     [Min(0f)]
