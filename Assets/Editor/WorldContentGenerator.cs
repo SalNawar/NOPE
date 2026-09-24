@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 /// reads the hand-maintained world source (Assets/Data/World/world_source.json)
 /// and creates or updates the eras, nations, places (NationEraProfileSO with
 /// facts, names, birth years and small talk), travel rules and day plans (tell
-/// count and tell channels), the interview (its wording and layout limits,
+/// count and tell channels), the interview (its wording and menu capacity,
 /// questions, narrative dialogs, and a one-shot unlock-announcement trigger
 /// for every gated question), points the case blueprint at the listed
 /// archetypes, then sets every world array of the content library
@@ -710,7 +710,7 @@ public static class WorldContentGenerator
     /// <summary>The id of an interview line ("interview.opener", ...).</summary>
     private static string InterviewLineId(string field) => $"interview.{field}";
 
-    /// <summary>The interview's wording with generated line ids, and its layout limits.</summary>
+    /// <summary>The interview's wording with generated line ids, and its menu capacity (the longest-line limit stays in the source: only CheckInterview reads it).</summary>
     private static InterviewLines BuildLines(InterviewData i) => new InterviewLines
     {
         deskName = i.deskName,
@@ -727,8 +727,7 @@ public static class WorldContentGenerator
         backLabel = i.backLabel,
         smallTalkLabel = i.smallTalkLabel,
         smallTalkPrompt = new LineText(InterviewLineId("smallTalkPrompt"), i.smallTalkPrompt),
-        menuCapacity = i.menuCapacity,
-        maxLineChars = i.maxLineChars
+        menuCapacity = i.menuCapacity
     };
 
     /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...).</summary>
@@ -1051,7 +1050,7 @@ public static class WorldContentGenerator
         public string[] rules;
     }
 
-    /// <summary>The interview's wording (plain strings; ids are generated) and its two layout limits.</summary>
+    /// <summary>The interview's wording (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>
     [Serializable] private sealed class InterviewData
     {
         public string deskName;

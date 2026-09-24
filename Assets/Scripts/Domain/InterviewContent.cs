@@ -162,9 +162,11 @@ public sealed class InterviewQuestion
 }
 
 /// <summary>
-/// The interview's fixed wording, plus the two layout limits content is
-/// checked against: the most choices the intercom shows at once and the
-/// longest line a transcript row holds.
+/// The interview's fixed wording, plus the layout limit content is checked
+/// against at run time and by the content validator: the most choices the
+/// intercom shows at once. (The longest line a transcript row holds is a
+/// source-only limit, world_source.json interview.maxLineChars, which only
+/// Generate World checks.)
 /// </summary>
 [Serializable]
 public sealed class InterviewLines
@@ -213,7 +215,4 @@ public sealed class InterviewLines
 
     /// <summary>The most choices the intercom shows at once (content never offers more).</summary>
     public int menuCapacity;
-
-    /// <summary>The longest line a transcript row holds, worst case after filling every token.</summary>
-    public int maxLineChars;
 }

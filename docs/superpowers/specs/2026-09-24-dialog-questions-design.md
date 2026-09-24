@@ -317,7 +317,7 @@ Line endings, to preserve:
 | `AuthoredDialog` | `string id; string label; bool oneShot = true; List<ScriptNode> nodes;` | `nodes[0]` is the start; the generator writes `oneShot = !repeatable` (R27) |
 | `WordingOverride` | `string eraId; LineText prompt; LineText answer;` | chosen by the traveller's **claimed** era |
 | `InterviewQuestion` | `string id; ClueCategory category; string label; LineText prompt; LineText answer; List<WordingOverride> overrides;` | `label` is the ask-menu entry ("Capital"); adds `LineText PromptFor(string eraId)` and `LineText AnswerFor(string eraId)`: the matching override, else the default |
-| `InterviewLines` | `string deskName; LineText opener; LineText openerLegendary; LineText claim; string honorificMale, honorificFemale, honorificUnknown; string requestLabel; LineText requestPrompt; LineText requestReply; string askLabel; string backLabel; string smallTalkLabel; LineText smallTalkPrompt; int menuCapacity; int maxLineChars;` | the interview's fixed wording, plus the two layout limits content is checked against: the most choices the intercom shows at once (R25) and the longest line the transcript row holds (R10) |
+| `InterviewLines` | `string deskName; LineText opener; LineText openerLegendary; LineText claim; string honorificMale, honorificFemale, honorificUnknown; string requestLabel; LineText requestPrompt; LineText requestReply; string askLabel; string backLabel; string smallTalkLabel; LineText smallTalkPrompt; int menuCapacity;` | the interview's fixed wording, plus the layout limit the runtime, the validator and the builder check content against: the most choices the intercom shows at once (R25). The longest line a transcript row holds (R10) is not copied here: it stays in `world_source.json` (`interview.maxLineChars`), whose only reader is Generate World's line-length check (§2.13) |
 
 **`Interview.cs`** (new):
 
@@ -631,7 +631,7 @@ Line endings, to preserve:
 **`world_source.json`** (LF, hand-maintained from now on; the scratchpad `build_world_source.py` is retired, X10):
 
 - `content.books` gains `Assets/Data/Investigation/RefBook_Capital.asset` and `RefBook_Ruler.asset`.
-- New `interview` object, with the `InterviewLines` field names: the wording as plain strings (`deskName`, `opener`, `openerLegendary`, `claim`, `honorificMale`, `honorificFemale`, `honorificUnknown`, `requestLabel`, `requestPrompt`, `requestReply`, `askLabel`, `backLabel`, `smallTalkLabel`, `smallTalkPrompt`) and the two limits as ints (`menuCapacity`, `maxLineChars`).
+- New `interview` object, with the `InterviewLines` field names: the wording as plain strings (`deskName`, `opener`, `openerLegendary`, `claim`, `honorificMale`, `honorificFemale`, `honorificUnknown`, `requestLabel`, `requestPrompt`, `requestReply`, `askLabel`, `backLabel`, `smallTalkLabel`, `smallTalkPrompt`) and the two limits as ints (`menuCapacity`, `maxLineChars`). Generate World writes `menuCapacity` into `InterviewLines`; `maxLineChars` stays in the source for its own line-length check.
 - New `questions[]`: `{ id, category, label, prompt, answer, fromDay, announce, conditions[], overrides[] }`. `fromDay` is required (R27). Each condition is `{ type, key, threshold }`; each override is `{ era, prompt, answer }`.
 - New `dialogs[]`: `{ id, label, repeatable, conditions[], nodes[] }`. `repeatable` is optional and false when missing, so a dialog is one-shot unless it says otherwise (R27). Each node is `{ id, lines[], choices[] }`, each line `{ id, speaker, text }`, and each choice `{ id, label, lines[], next, effect }`.
 - A missing array or string anywhere reads as empty.
@@ -701,7 +701,7 @@ Every id in this table, generated or authored, goes into one set; a repeat is a 
 
 **`ContentLibraryValidator`** (CRLF) adds these checks:
 - null entries and duplicate ids for `Questions` (`q.question.id`) and `Dialogs` (`d.dialog.id`);
-- the interview lines are non-blank, and `menuCapacity` and `maxLineChars` are at least 1;
+- the interview lines are non-blank, and `menuCapacity` is at least 1 (the asset holds no line-length limit: Generate World checks line lengths against the source's `interview.maxLineChars`);
 - every question's category satisfies `Forgery.IsProvableCategory(category, lib.ReferenceBookCategories())`, else an error "answers in this category can never be proven";
 - one question per category;
 - answer templates hold `{value}`;
@@ -795,7 +795,7 @@ Both dialogs are one-shot (no `repeatable` key).
 | Question unlocks (and whether a question can carry a tell) | `QuestionSO.conditions` (+ unlock trigger) | §1.3 | `questions[].fromDay`/`conditions` |
 | Question and interview wording | `QuestionSO.question`, `ContentLibrarySO.interview` | §2.14 | `questions[]`, `interview` |
 | Intercom menu capacity | `InterviewLines.menuCapacity` | 8 | `interview.menuCapacity` (the builder checks the intercom fits it) |
-| Longest transcript line | `InterviewLines.maxLineChars` | 100 | `interview.maxLineChars` |
+| Longest transcript line | `world_source.json` only (Generate World's line-length check reads it) | 100 | `interview.maxLineChars` |
 | Dialog availability, one-shot, consequences | `DialogSO` | §2.14 | `dialogs[]` |
 | Small talk | `EraSO.smallTalk`, `NationEraProfileSO.smallTalk` | §2.14 | `eras[]`/`places[].smallTalk` |
 | Transcript rows per page | `TranscriptWindowController.entriesPerPage` | 8 | builder |
@@ -978,7 +978,7 @@ Line numbers are those of the current `FEATURES.md`, with all of piece 2's edits
 - **:71:** "The clock pauses only while a citation slip is shown (the interview takes real time and costs nothing else)".
 - **:86** (piece-2 text): "Only provable tells are generated … a place fact is a tell only when a reference book covers it and the true home's value differs from the claim's and belongs to no other of today's places; it shows on the papers only when a paper prints it, in speech only when its question is askable that day and gated by day alone; … names are never tells" (tested: `ForgeryTests`, `LiesTests`, `BirthDatesTests`, `InterviewDayTests`).
 - **New bullet under "Scoring & consequences":** "Narrative dialogs may carry a consequence: an effect limited to instant ops (flags, counters, money, stability, upgrades, scores) and briefing/news lines; the generator and validator reject timed modifiers (pay, liar, legendary, shop, visitor and blueprint bonuses, cues) in a dialog's effect. A dialog with a consequence is one-shot per run. Consequences apply at the end of the shift, before the save: instant ops at once (the HUD refreshes and endings are checked), briefing and news lines in the next morning's paper. A dialog asset whose structure is broken (a node that cannot reach an ending, an effect on a non-ending choice, too many choices) is never offered and an error is logged (recording, one-shot memory and apply-once tested: `InterviewDayTests`; structure tested: `InterviewScriptTests`; the op rule tested: `EffectOpsTests`; the effect application is Assembly-CSharp and checked in Unity)".
-- **:95:** add "questions (with an unlock-announcement trigger for every gated question), dialogs, interview wording and its two layout limits (menu capacity, longest line), small talk and each day's tell channels; checks every id is unique, authored text is ASCII, no line is longer than the transcript holds, no menu is fuller than the intercom shows, and no dialog effect carries a timed modifier; also owns `Assets/Data/World/Interview`, and rewires the library's triggers (hand-authored triggers kept, generated unlock triggers appended); `world_source.json` is hand-maintained (the scratchpad build script is retired)".
+- **:95:** add "questions (with an unlock-announcement trigger for every gated question), dialogs, interview wording and menu capacity (the longest-line limit stays in the source), small talk and each day's tell channels; checks every id is unique, authored text is ASCII, no line is longer than the transcript holds, no menu is fuller than the intercom shows, and no dialog effect carries a timed modifier; also owns `Assets/Data/World/Interview`, and rewires the library's triggers (hand-authored triggers kept, generated unlock triggers appended); `world_source.json` is hand-maintained (the scratchpad build script is retired)".
 - **:96:** add "questions (a book or the record proves every question's category; one per category), dialogs (structure, reachable endings, effects and their op types, one-shot), menu capacity, upgrade ids, tell channels, small talk".
 - **:97** (Build Office UI): append "; it reports an intercom that fits fewer choices than the content's menu capacity" (icon upgrade ids are in :31).
 - **:45** (piece-2 gender bullet): "… is recorded from the claimed place's name lists; the desk's opener uses it for the honorific (sir/madam/traveller)".
@@ -1101,7 +1101,7 @@ Line numbers are those of the current `FEATURES.md`, with all of piece 2's edits
 1. **Content:**
    - Generate World twice; the second run changes no file;
    - `Assets/Data/World/Interview` holds 6 questions, 2 dialogs and 3 unlock triggers (`unlock_q_capital`, `unlock_q_ruler`, `unlock_q_born`; the last one's only condition is `UpgradeOwned interview_protocols`);
-   - the library holds 5 books, 6 questions, 2 dialogs, the 3 authored triggers plus the 3 unlock triggers, 4 upgrades and the rumour effect; `interview.menuCapacity` is 8 and `maxLineChars` 100;
+   - the library holds 5 books, 6 questions, 2 dialogs, the 3 authored triggers plus the 3 unlock triggers, 4 upgrades and the rumour effect; `interview.menuCapacity` is 8;
    - both `DialogSO`s have `oneShot = true` with no `repeatable` key in the JSON, and every `QuestionSO`'s conditions match §2.14 (`q_currency`, `q_language`, `q_device` and `q_born` carry no `DayAtLeast`);
    - the day plans hold their channels;
    - Validate Content Library reports no issues;

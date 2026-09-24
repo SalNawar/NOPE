@@ -110,7 +110,7 @@ public static class ContentLibraryValidator
 
     /// <summary>
     /// Reports interview content the office could not use: blank wording or
-    /// layout limits; a question whose answers could never be proven, a second
+    /// menu capacity; a question whose answers could never be proven, a second
     /// question for one category, an answer template without {value}; a
     /// structurally broken dialog; a dialog effect that is missing or holds an
     /// op that acts while active (and a warning for a permanent one with a
@@ -140,8 +140,6 @@ public static class ContentLibraryValidator
 
         if (lines.menuCapacity < 1)
             Error("Interview menu capacity is below 1 (run Tools > TimeDesk > Generate World).", lib);
-        if (lines.maxLineChars < 1)
-            Error("Interview longest line (maxLineChars) is below 1 (run Tools > TimeDesk > Generate World).", lib);
 
         HashSet<ClueCategory> books = lib.ReferenceBookCategories();
         var asked = new HashSet<ClueCategory>();
