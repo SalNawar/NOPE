@@ -61,6 +61,57 @@ public static class BirthDates
     }
 
     /// <summary>
+    /// True when <paramref name="coverDate"/> is readable and [yearMin, yearMax]
+    /// (bounds may be reversed) holds a year that is neither 0 nor the cover
+    /// date's year, so a birth-date tell can be drawn. Draws nothing.
+    /// </summary>
+    public static bool HasOtherYear(string coverDate, int yearMin, int yearMax) =>
+        TryParse(coverDate, out _, out _, out int coverYear) && OtherYearCount(coverYear, yearMin, yearMax) > 0;
+
+    /// <summary>
+    /// A birth-date tell: the cover date's day and month with a year drawn
+    /// uniformly from [yearMin, yearMax] (bounds may be reversed), never year 0
+    /// and never the cover year. Exactly one Range draw: an index into those
+    /// years in ascending order. Null, with no draw, when <see cref="HasOtherYear"/>
+    /// is false or <paramref name="rng"/> is null.
+    /// </summary>
+    public static string PickOtherYear(string coverDate, int yearMin, int yearMax, IRandomSource rng)
+    {
+        if (rng == null || !TryParse(coverDate, out int day, out int month, out int coverYear))
+            return null;
+
+        int count = OtherYearCount(coverYear, yearMin, yearMax);
+        if (count <= 0)
+            return null;
+
+        if (yearMax < yearMin)
+            (yearMin, yearMax) = (yearMax, yearMin);
+
+        // Step over the skipped years (0 and the cover year), smallest first.
+        long year = (long)yearMin + rng.Range(0, count);
+        foreach (int skipped in coverYear < 0 ? new[] { coverYear, 0 } : new[] { 0, coverYear })
+            if (skipped >= yearMin && skipped <= year)
+                year++;
+
+        return Format(day, month, (int)year);
+    }
+
+    /// <summary>How many years of [yearMin, yearMax] (either order) are neither 0 nor <paramref name="coverYear"/>.</summary>
+    private static int OtherYearCount(int coverYear, int yearMin, int yearMax)
+    {
+        if (yearMax < yearMin)
+            (yearMin, yearMax) = (yearMax, yearMin);
+
+        long count = (long)yearMax - yearMin + 1;
+        if (yearMin <= 0 && 0 <= yearMax)
+            count--;
+        if (coverYear != 0 && yearMin <= coverYear && coverYear <= yearMax)
+            count--;
+
+        return count > int.MaxValue ? int.MaxValue : (int)count;
+    }
+
+    /// <summary>
     /// A plausible but wrong date: same day and month, year shifted by
     /// <paramref name="shiftMin"/>..<paramref name="shiftMax"/> years either way,
     /// skipping year 0. The forged year stays inside [yearMin, yearMax] (the
