@@ -56,15 +56,17 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 ## Shift clock & queue
 
 - [ ] Papers, Please-style clock: 09:00–17:00 over 8 real minutes (GameConfigSO "Shift clock"); starts at Start Shift (tested: `ShiftClockTests`)
-- [ ] The day plan's visitor count is the queue size (12); the day ends at closing time or when the queue empties
-- [ ] Closing: a traveller at the desk may be finished; one still behind READY is never called (tested: `ShiftFlowTests`, `ReadyGateTests`)
+- [ ] The day plan's visitor count is the queue size (8 / 10 / 12 on days 1–3); the day ends at closing time or when the queue empties
+- [ ] Closing: a traveller at the desk may be finished; one still behind READY is never called (tested: `DaySlotSequencerTests`, `ShiftFlowTests`, `ReadyGateTests`)
+- [ ] Scheduled events / forced cases in slots never reached before closing are reported as a warning
 - [ ] The clock pauses only while a citation slip is shown
-- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out) (tested: `NameRosterTests`)
+- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out; a legendary never repeats a name used that day) (tested: `NameRosterTests`)
 
 ## Interaction feedback
 
-- [ ] Game cursor: arrow, or a hand over anything clickable (`InteractionFeedbackSO`)
-- [ ] Hover highlight: white outline on booth clickables and desktop UI buttons and icons (tested: `OutlineMaskTests`)
+- [ ] Game cursor in every scene: arrow, or a hand over anything clickable (`InteractionFeedbackSO` via `RunConfig`; click points derived from the cursor art) (tested: `CursorHotspotTests`)
+- [ ] Hover highlight: white outline on booth clickables, XP-amber outline on desktop UI buttons and icons (tested: `OutlineMaskTests`)
+- [ ] Hover outlines need Rectangle (not Tight/rotated) atlas packing on clickable sprites; otherwise a warning is logged
 
 ## Scoring & consequences
 
@@ -81,6 +83,6 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] `Tools > TimeDesk > Generate Investigation Sample` — full playable world (eras, nations, profiles, archetypes, books, templates, rules, day plans)
 - [ ] `Tools > TimeDesk > Build Office UI` — idempotent, authoritative scene builder
 - [ ] Travel rules: era / nation / nation+era forbidden, shown in briefing + directives
-- [ ] Day events system (before/after-case scheduled events; no event types authored yet)
+- [ ] Day events system (before/after-case scheduled events; no event types authored yet; events placed past closing time never run)
 - [ ] Legendary encounters (bonus pay, extra stability risk)
 - [ ] Debug panel (dev tools)

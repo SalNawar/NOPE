@@ -2072,9 +2072,12 @@ Also change "citation slip pauses the day until acknowledged" to "citation slip 
 
 ---
 
-### Task 10: Verification in Unity (with Saleh; after Codex is idle)
+### Task 10: Verification in Unity (on the branch, before any merge)
 
-- [ ] Merge the branch into the main checkout only when Saleh confirms Codex is idle. Uncommitted art and scenes in the main checkout are Codex's work; don't include them in commits.
-- [ ] In Unity, run **Tools > TimeDesk > Build Office UI (HUD + Panels)** on OfficeScene and save.
+*Revised after review: the scene is built on the branch, so a merge never ships the queue change without the clock.*
+
+- [ ] Open the WORKTREE (`E:\unity\NOPE-feat-clock`) as its own Unity project; the main checkout stays untouched for Codex. Run **Tools > TimeDesk > Build Office UI (HUD + Panels)** on its OfficeScene and save.
+- [ ] Commit on the branch: `OfficeScene.unity`, `InteractionFeedback_Default.asset`, `RunConfig.asset` (interactionFeedback reference), the generated placeholders (`Generated/Cursors/*`, `clock_face`, `clock_hand_hour`, `clock_hand_minute`) and all their `.meta` files. Check that the scene diff only adds the shift-clock pieces.
 - [ ] **Window > General > Test Runner > EditMode > Run All**: all green.
-- [ ] Play: hover the CRT and READY sign (outline + hand), hover desktop buttons (outline + hand), watch the tray and wall clock from 09:00, shorten `shiftRealSeconds` to 30 in GameConfig_Default to test closing both ways (mid-traveller, and waiting at READY), and confirm the citation slip pauses the clock.
+- [ ] Play: hover the CRT and READY sign (outline + hand), hover desktop buttons (outline + hand), watch the tray and wall clock from 09:00, shorten `shiftRealSeconds` to 30 in GameConfig_Default to test closing both ways (mid-traveller, and waiting at READY), and confirm the citation slip pauses the clock. Check that the Title and Home screens show the game cursor too.
+- [ ] Merge only when Saleh confirms Codex is idle. If Codex committed scene changes first, rebase and re-run the builder (it is authoritative) before merging.
