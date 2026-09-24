@@ -309,7 +309,7 @@ public sealed class CaseFactory
 
         if (lie.Outcome == LieOutcome.NoPossibleLie)
         {
-            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today differs from '{inst.originLabel}' in a printed, book-covered fact or birth year, so the traveller stays honest. Widen the day's eras or countries, or add a reference book for a printed category.");
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today can carry a provable tell against '{inst.originLabel}' (no printed, book-covered fact that differs from the claim's and belongs to that place alone, and no birth year other than the record's), so the traveller stays honest. Widen the day's eras or countries, add a reference book for a printed category, or give places that share a fact value distinct values.");
         }
         else if (lie.Outcome == LieOutcome.Liar)
         {

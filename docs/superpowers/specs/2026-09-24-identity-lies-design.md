@@ -303,7 +303,7 @@ The R8 table applies: exact match first, then `NameRoster.BaseName(givenName)`, 
    - the projection;
    - `fields` as they are (Domain derives the distinct categories, R3);
    - `_facts`, `_bookCategories`, `_lieRng`.
-4. `NoPossibleLie` logs this warning (the text spells out the fix): "[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today differs from '{originLabel}' in a printed, book-covered fact or birth year, so the traveller stays honest. Widen the day's eras or countries, or add a reference book for a printed category."
+4. `NoPossibleLie` logs this warning (the text spells out the fix): "[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today can carry a provable tell against '{originLabel}' (no printed, book-covered fact that differs from the claim's and belongs to that place alone, and no birth year other than the record's), so the traveller stays honest. Widen the day's eras or countries, add a reference book for a printed category, or give places that share a fact value distinct values." It names both causes: a place can differ from the claim and still give no tell when a third place shares its value (R13). The text keeps the prefix "rolled a liar, but no other place", which the §6 world check counts.
 5. `Liar` sets `inst.trueHome = _todays[p.HomeIndex]` and `inst.trueHomeLabel = PlaceLabel(inst.trueHome)`, then calls `p.ApplyTo(fields)`.
 6. It returns the plan.
 
