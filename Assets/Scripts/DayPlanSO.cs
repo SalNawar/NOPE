@@ -112,6 +112,17 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Whether each active rule is guaranteed a violator in the first half of the queue.</summary>
     public bool GuaranteeRuleViolators => guaranteeRuleViolators;
 
+    /// <summary>Every forced case's blueprint (set slots only, in authored order); the content validator counts their documents.</summary>
+    public IEnumerable<CaseBlueprintSO> ForcedBlueprints
+    {
+        get
+        {
+            foreach (ForcedCaseSlot slot in forcedCases)
+                if (slot != null && slot.caseBlueprint != null)
+                    yield return slot.caseBlueprint;
+        }
+    }
+
     /// <summary>True when travellers may come from this country today.</summary>
     public bool AllowsNation(NationSO nation) =>
         nation != null && (allowedNations == null || allowedNations.Length == 0 || Array.IndexOf(allowedNations, nation) >= 0);

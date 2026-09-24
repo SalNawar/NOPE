@@ -1,4 +1,5 @@
 // ReSharper disable InconsistentNaming
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -16,4 +17,7 @@ public sealed class EraSO : ScriptableObject
 
     /// <summary>Chronological position (0 = oldest); orders places in the books.</summary>
     public int order;
+
+    /// <summary>Small-talk lines of travellers claiming this era (used when their place has none).</summary>
+    public List<LineText> smallTalk = new();
 }

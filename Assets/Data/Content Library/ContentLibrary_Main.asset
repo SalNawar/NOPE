@@ -32,10 +32,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 204fc91addc6bfb438d1eff353f9b074, type: 2}
   - {fileID: 11400000, guid: 5ab449e622cfeb847bc6cab15cc1cf7e, type: 2}
   - {fileID: 11400000, guid: d84dddd24193a8849840cf0d983a4c4f, type: 2}
+  - {fileID: 11400000, guid: 8400fe10969c4ecc8639da5d1a9e8484, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 00c95d5dbdd51e945a9157454c034cb6, type: 2}
   - {fileID: 11400000, guid: 4310a94e0a8291a4380d458bff90205e, type: 2}
   - {fileID: 11400000, guid: f163b89b65df0ff4bb129a518b6ee741, type: 2}
+  - {fileID: 11400000, guid: 1c15365f5ee847309cf3bf46489df055, type: 2}
   attributes:
   - {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
   - {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}

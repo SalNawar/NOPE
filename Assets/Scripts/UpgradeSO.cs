@@ -2,7 +2,8 @@
 using UnityEngine;
 
 /// <summary>
-/// Upgrade definition used for gating clue generation and for the Home shop (Phase 4).
+/// Upgrade definition used for gating clue generation, interview questions
+/// (UpgradeOwned) and the Home shop (Phase 4).
 /// </summary>
 [CreateAssetMenu(fileName = "Upgrade_", menuName = "TimeDesk/Upgrade", order = 13)]
 public sealed class UpgradeSO : ScriptableObject

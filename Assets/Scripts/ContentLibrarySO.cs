@@ -57,6 +57,16 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Reference books the player consults (one per clue category).</summary>
     [SerializeField] private ReferenceBookSO[] referenceBooks;
 
+    [Header("Interview")]
+    /// <summary>The interview's fixed wording and layout limits (written by Generate World from world_source.json "interview").</summary>
+    [SerializeField] private InterviewLines interview = new();
+
+    /// <summary>Interview questions, in ask-menu order (generated from world_source.json "questions").</summary>
+    [SerializeField] private QuestionSO[] questions;
+
+    /// <summary>Narrative dialogs (generated from world_source.json "dialogs").</summary>
+    [SerializeField] private DialogSO[] dialogs;
+
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
@@ -121,7 +131,7 @@ public sealed class ContentLibrarySO : ScriptableObject
         return table;
     }
 
-    /// <summary>Categories that have a reference book (only these can carry a place-fact tell).</summary>
+    /// <summary>Categories that have a reference book (only these can carry a place-fact tell, on papers or in an answer).</summary>
     public HashSet<ClueCategory> ReferenceBookCategories()
     {
         var categories = new HashSet<ClueCategory>();
@@ -176,6 +186,15 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Public read-only access to timeline triggers.</summary>
     public IReadOnlyList<TimelineTriggerSO> Triggers => timelineTriggers ?? System.Array.Empty<TimelineTriggerSO>();
+
+    /// <summary>The interview's fixed wording and layout limits.</summary>
+    public InterviewLines Interview => interview;
+
+    /// <summary>Public read-only access to interview questions (ask-menu order).</summary>
+    public IReadOnlyList<QuestionSO> Questions => questions ?? System.Array.Empty<QuestionSO>();
+
+    /// <summary>Public read-only access to narrative dialogs.</summary>
+    public IReadOnlyList<DialogSO> Dialogs => dialogs ?? System.Array.Empty<DialogSO>();
 
     /// <summary>
     /// Finds the authored profile for a nation at an era (null if none authored).

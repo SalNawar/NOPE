@@ -63,7 +63,7 @@ public sealed class WorldState
     // Unlocks, flags, counters
     // -----------------------------
 
-    /// <summary>Unlocked upgrade IDs for gating clue generation and shop state.</summary>
+    /// <summary>Unlocked upgrade IDs for gating clue generation, interview questions and shop state.</summary>
     public List<string> unlockedUpgradeIds = new();
 
     /// <summary>Arbitrary boolean story/consequence flags (e.g., "Tyrant_Rises").</summary>

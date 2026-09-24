@@ -40,6 +40,9 @@ public sealed class NationEraProfileSO : ScriptableObject
     /// <summary>Period-appropriate female given names.</summary>
     public string[] femaleNames;
 
+    /// <summary>Small-talk lines of travellers claiming this place (flavour, never evidence).</summary>
+    public List<LineText> smallTalk = new();
+
     [Header("Timeline")]
     /// <summary>Baseline attribute scores + tier effects for this profile.</summary>
     public List<AttributeBaseline> baselines = new();
