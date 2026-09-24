@@ -2,6 +2,8 @@
 
 Installed and saved in `Assets/Scenes/OfficeScene.unity`.
 
+Latest user-directed change: all 13 historical exhibits/keepsakes and 7 display supports have been removed from the scene. Functional office props, floor paperwork, portal and city remain. Source assets are retained. Current Game View: `Iterations/37_historical_clutter_removed.png`. The historical-art descriptions below document earlier passes.
+
 The active replacement assets are under `Assets/Art/Office/DeskFinish`: 18 separately reusable Blender models, their material-linked prefabs, and four generated albedo textures. `DeskFinish.blend` retains editable mesh parts and modifiers. `author_desk_finish.py`, `hardware_models.py` and `booth_detail_models.py` are offline Blender authoring sources, outside Unity's Assets directory. The scene is authoritative for final placement; `hardware_scene_placement.json` supersedes the corresponding entries in the earlier `placements.json`.
 
 ## Current PC, till and camera refinement
@@ -75,6 +77,6 @@ The earlier walnut albedo remains in the previous asset library; the active desk
 
 ## Handoff
 
-The scene is authoritative. `hardware_scene_placement.json` records 98 current camera, prop, exhibit, light and environment transforms plus glass/rendering settings. It supersedes old placement snapshots. `hardware_anchors.json` retains monitor attachment points. `Iterations/REVIEW.md` records accepted/rejected passes; `Iterations/verification_36.json` records the latest targeted checks.
+The scene is authoritative. `hardware_scene_placement.json` records 78 current camera, prop, exhibit, light and environment transforms plus glass/rendering settings. It supersedes old placement snapshots. `hardware_anchors.json` retains monitor attachment points. `Iterations/REVIEW.md` records accepted/rejected passes; `Iterations/verification_36.json` records the latest targeted checks.
 
 Authoring scripts and .blend files stay outside Assets; Unity consumes FBX models and linked prefabs. Keep sculpture credits with redistributed derivatives. The art branch continues from pushed main checkpoint b7f8671.

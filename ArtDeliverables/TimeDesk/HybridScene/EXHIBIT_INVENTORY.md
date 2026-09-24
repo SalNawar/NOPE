@@ -1,6 +1,6 @@
-# Named exhibit inventory
+# Archived exhibit inventory
 
-These thirteen named exhibits are installed in `Assets/Scenes/OfficeScene.unity`.
+All thirteen historical subjects, their plinths, gallery rails and suspension wires were removed from `Assets/Scenes/OfficeScene.unity` at the user's request after the three art passes. The assets and credits remain available. The inventory below records their former placement; none are currently installed.
 The printing press, Wright Flyer, Rocket, three sculptures and record cover are 3D
 meshes. The paintings have 3D frames with separately mapped canvas images. Wear is
 fictional. The central portal approach stays open, with displays, plinths, a short

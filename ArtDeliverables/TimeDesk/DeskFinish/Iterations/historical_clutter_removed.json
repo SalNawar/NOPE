@@ -1,0 +1,73 @@
+{
+  "removed": [
+    {
+      "path": "HybridOffice/Exhibits/FlyerSuspension_0"
+    },
+    {
+      "path": "HybridOffice/Exhibits/FlyerSuspension_1"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_ThinkerPlinth"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_DiscobolusPlinth"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_NefertitiPlinth"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_MonaLisa"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_PearlEarring"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_StarryNight"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_GreatWave"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_Milkmaid"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_Mondrian"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_Thinker"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_Discobolus"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_Nefertiti"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_PrintingPress3D"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_WrightFlyer3D"
+    },
+    {
+      "path": "HybridOffice/Exhibits/Blender_Exhibit_Rocket3D"
+    },
+    {
+      "path": "HybridOffice/Exhibits/GalleryRail_Left"
+    },
+    {
+      "path": "HybridOffice/Exhibits/GalleryRail_Right"
+    },
+    {
+      "path": "HybridOffice/Booth/Blender_Desk_VoyagerRecord"
+    }
+  ],
+  "remainingHallItems": [
+    "HybridOffice/Exhibits/Blender_DroppedPaper_0",
+    "HybridOffice/Exhibits/Blender_DroppedPaper_1",
+    "HybridOffice/Exhibits/Blender_DroppedPaper_2",
+    "HybridOffice/Exhibits/Blender_DroppedPaper_3",
+    "HybridOffice/Exhibits/Blender_DroppedPaper_4",
+    "HybridOffice/Exhibits/Blender_DroppedPaper_5"
+  ],
+  "sourceAssets": "Retained; removed scene instances only."
+}
