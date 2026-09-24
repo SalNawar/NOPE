@@ -44,16 +44,25 @@ Shader "TimeSorter/OfficePortal"
                 float2 p = input.uv * 2.0 - 1.0;
                 float radius = length(p);
                 float phase = _Time.y * _Speed;
-                // Broad drifting folds, with no concentric target pattern.
-                float2 drift = p + float2(sin(p.y * 3.1 + phase),
-                                          cos(p.x * 2.7 - phase * 0.7)) * 0.16;
-                float field = sin(drift.x * 3.5 + drift.y * 2.1 - phase)
-                            + sin(drift.y * 4.0 - drift.x * 1.3 + phase * 0.6) * 0.45;
-                float flow = smoothstep(-0.3, 0.0, field) * 0.34
-                           + smoothstep(0.6, 0.85, field) * 0.22;
-                float edge = smoothstep(0.93, 1.0, radius);
+                // Moving, layered folds in a liquid membrane. Broad colour masses
+                // and two restrained crests stay readable at the office camera.
+                float2 drift = p + float2(sin(p.y * 3.2 + phase * 0.6),
+                                          cos(p.x * 2.5 - phase * 0.4)) * 0.20;
+                float bend = drift.x * 3.1 + drift.y * 2.7
+                           + sin(drift.y * 3.6 - phase * 0.35) * 0.65;
+                float fold = sin(bend - phase);
+                float secondFold = sin(bend * 1.67 + drift.y * 1.2 + phase * 0.55);
+                float flow = smoothstep(-0.65, 0.5, fold) * 0.48
+                           + smoothstep(0.1, 0.8, secondFold) * 0.20;
+                float crest = pow(saturate(fold), 24.0) * 0.11
+                            + pow(saturate(secondFold), 36.0) * 0.035;
+                float edge = smoothstep(0.83, 1.0, radius);
+                float innerGlow = smoothstep(0.60, 0.98, radius)
+                                * (0.65 + 0.35 * sin(p.y * 3.0 + phase));
                 half3 colour = lerp(_DeepColor.rgb, _FlowColor.rgb, flow);
-                colour = lerp(colour, _RimColor.rgb, edge * 0.45);
+                colour = lerp(colour, _RimColor.rgb, crest * (1.0 - edge));
+                colour += _FlowColor.rgb * innerGlow * 0.16;
+                colour = lerp(colour, _RimColor.rgb, edge * 0.64);
                 return half4(colour, 1);
             }
             ENDHLSL

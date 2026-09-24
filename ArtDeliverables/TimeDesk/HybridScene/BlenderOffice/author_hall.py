@@ -3,23 +3,24 @@ import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 from artlib import *
-material('Hall_Plaster','B6B7AE',.96)
-material('Hall_Stone','969E98',.94)
-material('Hall_Floor','AAA99E',.84)
-material('Hall_FloorAlt','A2A69E',.87)
+stone_texture=OUT/'Textures/civic_stone.png'
+material('Hall_Plaster','CEC7AF',.93)
+material('Hall_Stone','D9E0DB',.88,texture=stone_texture)
+material('Hall_Floor','FFFFFF',.79,texture=stone_texture)
+material('Hall_FloorAlt','E3E8E3',.86,texture=stone_texture)
 material('Hall_Grout','808B87',.96)
-material('Hall_Teal','56716D',.92)
-material('Hall_DarkMetal','465B5D',.86,.07)
+material('Hall_Teal','315D54',.80)
+material('Hall_DarkMetal','2D4246',.75,.18)
 material('Hall_Wear','7E887F',.98)
 material('Hall_Rust','947256',.98)
 material('Hall_LightFace','D5DDD5',.80)
-material('Frame_Brass','A29570',.88,.10)
+material('Frame_Brass','A29570',.65,.45)
 material('Frame_Timber','7F6B53',.94)
 material('Frame_Chips','ADA48C',.98)
-material('Banner_Cloth','526C68',.97)
-material('Portal_Paint','9CA7A4',.90)
-material('Portal_Orange','B9885C',.92)
-material('Portal_Coil','607F80',.85,.10)
+material('Banner_Cloth','36706C',.97)
+material('Portal_Paint','BDC1AE',.66,.10)
+material('Portal_Orange','B97846',.79)
+material('Portal_Coil','537D82',.56,.30)
 
 group('Hall_Structure')
 for x in [-14,14]:
@@ -52,13 +53,38 @@ for x in [-9,-3,3,9]:
         box('Ceiling fixture',(x,13.24,z),(1.85,.14,.60),'Hall_DarkMetal',.007)
         for dx in [-.45,0,.45]:box('Light diffuser',(x+dx,13.16,z),(.41,.015,.47),'Hall_LightFace',.003)
 for x,y,z,w,h in [(-6.96,2.5,26.632,.33,.44),(7.13,1.3,26.632,.24,.48),(.16,3.2,26.632,.23,.61),(-10.4,.75,26.843,.9,.12)]:patch('Chipped civic paint',(x,y,z),w,h,'Hall_Wear')
+# Recessed flutes, collars and brass fixing plates give the existing civic
+# structure a consistent built identity. No room dimensions or window openings change.
+for x in [-14,-7,0,7,14]:
+    box('Pier inset front channel',(x,7.1,26.625),(.40,10.7,.024),'Hall_DarkMetal',.006)
+    for dx in [-.135,0,.135]:box('Pier fluted raised rib',(x+dx,7.1,26.59),(.045,10.65,.062),'Hall_Stone',.005)
+    for yy in [1.72,6.8,12.60]:box('Civic pier collar',(x,yy,27),(.82,.14,.82),'Hall_Stone',.018)
+    box('Pier base inset field',(x,.43,26.576),(.61,.46,.025),'Hall_Teal',.012)
+for x in [-10.5,-3.5,3.5,10.5]:
+    box('Glazing junction cover',(x,6.8,26.934),(.23,.20,.029),'Hall_DarkMetal',.009)
+    for dx in [-.075,.075]:
+        for yy in [6.74,6.86]:cylinder('Glazing plate fixing',(x+dx,yy,26.914),.011,.009,'Frame_Brass','z',12)
+for side in [-1,1]:
+    for z in [-3,7,17,27]:
+        xx=side*13.625
+        box('Side pier inset channel',(xx,7.1,z),(.024,10.7,.40),'Hall_DarkMetal',.006)
+        for dz in [-.135,0,.135]:box('Side pier fluted rib',(xx-side*.033,7.1,z+dz),(.062,10.65,.045),'Hall_Stone',.005)
+        for yy in [1.72,6.8,12.60]:box('Side pier civic collar',(side*14,yy,z),(.82,.14,.82),'Hall_Stone',.018)
 
 group('Hall_Floor')
 box('Continuous floor bed',(0,-.085,12),(28,.16,30),'Hall_Grout',0)
 for x in range(-14,14,2):
     for z in range(-3,27,2):
         mat='Hall_FloorAlt' if (x*7+z*11)%13<3 else 'Hall_Floor'
-        box('Large stone floor slab',(x+1,-.004,z+1),(1.987,.012,1.987),mat,.001)
+        slab=box('Large stone floor slab',(x+1,-.004,z+1),(1.987,.012,1.987),mat,.001)
+        for old_uv in list(slab.data.uv_layers):slab.data.uv_layers.remove(old_uv)
+        uv=slab.data.uv_layers.new(name='StoneSlabUV')
+        quarter=(x*13+z*7)%4
+        for loop in slab.data.loops:
+            co=slab.data.vertices[loop.vertex_index].co
+            u,t=co.x/1.987+.5,co.y/1.987+.5
+            for _ in range(quarter):u,t=1-t,u
+            uv.data[loop.index].uv=(u,t)
 for x in [-6,6]:box('Civic floor border',(x,.004,13),(.075,.002,20),'Hall_Teal',0)
 for x,z in [(-7.7,8.4),(8.2,10.1),(-9.1,15.1),(5.5,21.8)]:patch('Scuffed stone',(x,.004,z),.62,.19,'Hall_Wear','top')
 # Surface damage follows the loaded edges beside the existing exhibits. These
@@ -124,6 +150,8 @@ group('Hall_Portal')
 ring('Continuous ring chassis',3.05,2.38,2.92,-.23,.30,'Hall_DarkMetal')
 ring('Inner emitter collar',3.05,2.31,2.45,-.31,.15,'Portal_Coil')
 ring('Outer painted lip',3.05,2.84,2.94,-.30,-.21,'Portal_Paint')
+ring('Inner rubber seal',3.05,2.29,2.335,-.337,-.22,'Hall_DarkMetal')
+ring('Outer protective rolled bead',3.05,2.91,2.97,-.33,-.19,'Portal_Coil')
 for i in range(16):
     a=math.tau*i/16;lo=a+.018;hi=a+math.tau/16-.018
     vv=[]
@@ -140,10 +168,24 @@ for i in range(16):
     if i%2:
         for delta in [-.05,0,.05]:
             t=mid+delta;tube('Cooling aperture',[(2.58*math.cos(t),3.05+2.58*math.sin(t),-.34),(2.69*math.cos(t),3.05+2.69*math.sin(t),-.34)],.008,'Hall_DarkMetal')
+    # Physical junction covers and retaining straps give readable depth at
+    # the scene camera, instead of a ring made only of flat coloured segments.
+    if i%4==0:
+        x,y=2.655*math.cos(mid),3.05+2.655*math.sin(mid)
+        cap=box('Portal junction housing',(x,y,-.378),(.29,.19,.105),'Portal_Orange',.026)
+        cap.rotation_euler.y=-mid
+        for sign in [-1,1]:
+            bx=x+sign*.10*math.cos(mid);by=y+sign*.10*math.sin(mid)
+            cylinder('Junction captive screw',(bx,by,-.438),.015,.009,'Hall_DarkMetal','z',16)
+    for delta in [-.072,.072]:
+        t=mid+delta
+        tube('Emitter rib',[(2.335*math.cos(t),3.05+2.335*math.sin(t),-.355),(2.435*math.cos(t),3.05+2.435*math.sin(t),-.355)],.012,'Portal_Paint')
 box('Portal plinth',(0,.10,0),(6.65,.20,1.55),'Hall_Stone',.024)
 for x in [-2.15,2.15]:
     box('Ring bearing shoe',(x,.43,.035),(.63,.57,.84),'Hall_DarkMetal',.025)
     box('Bearing front plate',(x,.41,-.406),(.49,.34,.032),'Portal_Paint',.009)
+    for dx in [-.175,.175]:
+        for yy in [.30,.51]:cylinder('Bearing shoe bolt',(x+dx,yy,-.426),.024,.016,'Hall_DarkMetal','z',20)
 tube('Power umbilical',[(2.82,1.68,.25),(3.30,1.05,.32),(3.35,.14,.35),(4.2,.10,.37)],.060,'Cable_Rubber')
 
 group('Hall_ServiceCabinet')
@@ -159,8 +201,11 @@ patch('Cabinet scuff',(-.32,.24,-.363),.20,.034,'Hall_Wear')
 group('Hall_Plinth')
 box('Exhibit pedestal',(0,.42,0),(.88,.84,.88),'Hall_Stone',.012)
 box('Exhibit top',(0,.865,0),(1,.07,1),'Hall_Plaster',.008)
+box('Pedestal upper shadow reveal',(0,.813,0),(.90,.022,.90),'Hall_DarkMetal',.003)
+box('Pedestal stepped top moulding',(0,.831,0),(.955,.018,.955),'Hall_Plaster',.004)
 box('Pedestal skirting',(0,.045,0),(.96,.09,.96),'Hall_DarkMetal',.007)
 box('Blank accession plate',(0,.64,-.444),(.35,.11,.006),'Frame_Brass',.002)
+for x in [-.148,.148]:cylinder('Accession plate fixing',(x,.64,-.449),.008,.005,'Hall_DarkMetal','z',12)
 patch('Chipped plinth face',(-.32,.29,-.442),.20,.33,'Hall_Wear')
 
 group('Hall_DisplayStand')

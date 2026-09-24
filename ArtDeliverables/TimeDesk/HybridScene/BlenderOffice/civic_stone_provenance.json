@@ -1,0 +1,11 @@
+{
+  "tool": "Built-in image_gen",
+  "output": "Assets/Art/Office/Hybrid/BlenderOffice/Textures/civic_stone.png",
+  "original": "exec-68948aa7-c50b-4519-b1e4-e1f9ca8e49a7.png",
+  "actualDimensions": [
+    1254,
+    1254
+  ],
+  "postProcessing": "None; original copied unchanged. Screenshot previews are separate review artifacts.",
+  "briefSummary": "A single square unlit smooth old civic limestone albedo, warm greige, very subtle broad pale and grey-green patches, sparse fine scratches, low-contrast painted flat colour. No tile grid, borders, perspective, objects, text, directional lighting, shadows, highlights, ambient occlusion or vignette."
+}

@@ -38,9 +38,13 @@ Reference: `../ReStory_current_reference.png`, the last image specifically chose
 | 30_soft_tasklight | Softer, wider warm lamp pool keeps mat grid visible. |
 | 31_hall_craft | Continuous mitred mouldings, banner hems/tabs and restrained floor wear/cracks. No layout changes. |
 | 32_desk_bounce / 32_final_art_pass | Restrained real-time foreground fill improves shaded PC face readability. Final capture with glass 25. |
+| 33_before_three_passes | Baseline for the user's final three authorized iterations. |
+| 34_iteration_1_material_light | PC and metal palette, deeper walnut, generated unlit stone with per-slab UVs, real-time ceiling lights, dark glass tint without the pale reflection veil. Stronger separation; architecture still too repetitive. |
+| 35_iteration_2_environment | Three different facade constructions, fluted piers, glazing joint covers, glass behind its frames, portal seals/ribs/bearing fixings, stepped plinths and animated membrane folds. Exterior too dark; foreground highlights still weak. |
+| 36_iteration_3_final | Increased daylight and neutral foreground fill; selected illuminated windows; modeled intercom and inkpad construction details. No camera/layout changes. Better material separation and city legibility; still below the reference's overall painterly richness and integration. |
 
 PC stays left, tilted inward; mouse right; central mat clear. Original camera/click proxy and live text retained. Only the requested glass slider adds C# in this corrective pass.
 
-Validation: slider 0/100/25 had expected pane visibility; original CRT event enters MonitorFocus; fresh console zero errors. See `verification_32.json`. Earlier UnitySkills request-abort during transition was archived before clearing. Physical pointer and full gameplay day were not tested. Review captures are retained outside Assets; byte-identical screenshot imports are removed.
+Latest validation: all three panes had expected visibility at 0/100/25; original CRT event enters MonitorFocus; portal shader has zero compilation errors; fresh console zero errors. See `verification_36.json`. Physical pointer and full gameplay day were not tested. Full 5120x2880 game captures are retained outside Assets, alongside 1920x1080 inspection previews; byte-identical screenshot imports are removed.
 
 Current art remains below the reference in architectural detail, background treatment, exhibit integration and light/material richness. ReStory-level parity is not established. Camera/hall proportion changes are deferred by the latest user instruction. This is an art checkpoint, not final quality sign-off.

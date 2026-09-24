@@ -14,11 +14,23 @@ The latest user-provided reference is saved as `ReStory_current_reference.png` (
 - **Camera:** vertical FOV changed from 58 to 55 degrees, pitch from 5 to 10 degrees, and position from (0, 2.15, -3) to (0, 2.16, -2.62), on both the office Cinemachine camera and Main Camera. This is framing inferred from the reference, not a claim to know its exact camera settings. The PC is on the left, yawed -56 degrees toward the player; its tube retains its separate 8-degree back tilt. The keyboard follows at -44 degrees, with the mouse to its right. The till and intercom sit behind this group. The lamp, tray, stamp, inkpad, stationery and folded newspaper form a group on the right. The narrower mat remains clear for case work.
 - **Interaction:** the original PC click target and monitor zoom camera were moved to the new tilted glass. `hardware_anchors.json` supplies exact model-space attachment points.
 
-`Hardware_authoring.png` is an offline Blender view of the meshes, not an in-game screenshot. The user subsequently authorized small changes followed by tests and reference comparisons, superseding their earlier request not to test. Actual Game View captures are now under `Iterations/`; `32_final_art_pass.png` is the latest reviewed wide view.
+`Hardware_authoring.png` is an offline Blender view of the meshes, not an in-game screenshot. The user subsequently authorized small changes followed by tests and reference comparisons, superseding their earlier request not to test. Actual Game View captures are under `Iterations/`; `36_iteration_3_final.png` is the latest reviewed wide view.
+
+## Latest three authorized art iterations
+
+Completed and visually reviewed all three passes from `docs/THREE_ART_ITERATIONS.md`, starting at art checkpoint 8928865:
+
+1. Material and lighting separation: cooler PC plastic/keys and metal, walnut tint, painted unlit stone with per-slab UVs, darker glass without the pale reflection veil, and real-time ceiling fixtures.
+2. Environment construction: three different facade treatments at unchanged placements, fluted civic piers, window joint covers, glass behind the frames, portal seals/emitter ribs/bearing fixings, stepped pedestal mouldings, and animated liquid folds in the portal shader.
+3. Final corrections: more daylight and foreground fill, selected illuminated city windows, and intercom/inkpad seams, feet, fixings and hinges. No camera or object layout changes.
+
+Final actual capture: `Iterations/36_iteration_3_final.png` (5120x2880), with a resized inspection preview. Verification is recorded in `Iterations/verification_36.json`: all three glass panes at 0/100/25, original monitor event, zero console errors and zero portal shader errors. Transparency restored and saved at 25. No new gameplay C# in these three passes. This is a visible improvement, but ReStory quality parity has not been reached.
+
+Final lighting: daylight 1.7, cool interior fill 0.32, neutral foreground bounce 2.4; lamp intensity 4.5 with outer/inner cones 85/45 degrees; two ceiling spots 65 each. Exposure +0.10, contrast 12, saturation 13, vignette 0.20. All lighting remains real-time. Glass tint is (0.16, 0.23, 0.27) at the existing 25% transparency setting. Current values supersede the historical pass notes below.
 
 ## Current finish pass: iterations 22-32
 
-Camera and object composition are frozen after pass 26 at the user's request. Hall proportion/layout changes are deferred. The latest actual Game View capture is `Iterations/32_final_art_pass.png`, a review checkpoint rather than reference-quality sign-off.
+Camera and object composition are frozen after pass 26 at the user's request. Hall proportion/layout changes are deferred. This section records the earlier pass ending at `Iterations/32_final_art_pass.png`.
 
 - Removed clipping booth crown/shelves, duplicate miniatures and painting postcards. Removed the unused frame source function, FBX and prefab. Side boards now carry pinned administrative slips with empty form fields.
 - Four complete blank banners hang from the ceiling, with turned hems and suspension tabs. Sign/agency/banner faces remain available for localization and history changes.
@@ -57,10 +69,12 @@ Created with the built-in image-generation tool; original outputs were copied wi
 
 Original outputs are in `C:/Users/Saleh/.codex/generated_images/01a0ce95-032b-7493-bef2-461e92d9f386/`.
 
+The later hall stone albedo is `Assets/Art/Office/Hybrid/BlenderOffice/Textures/civic_stone.png`, an unchanged 1254x1254 generated output. Brief and source filename are recorded in `../HybridScene/BlenderOffice/civic_stone_provenance.json`. It contains surface colour only; lighting and shadows remain in the scene.
+
 The earlier walnut albedo remains in the previous asset library; the active desk uses `Textures/walnut_veneer.png`. Images were copied into the project without raster post-processing. Manufactured parts map their textures individually; small controls sample quiet texture areas.
 
 ## Handoff
 
-The scene is authoritative. `hardware_scene_placement.json` records 96 current camera, prop, exhibit, light and environment transforms plus glass/rendering settings. It supersedes old placement snapshots. `hardware_anchors.json` retains monitor attachment points. `Iterations/REVIEW.md` records accepted/rejected passes; `verification_32.json` records the targeted checks.
+The scene is authoritative. `hardware_scene_placement.json` records 98 current camera, prop, exhibit, light and environment transforms plus glass/rendering settings. It supersedes old placement snapshots. `hardware_anchors.json` retains monitor attachment points. `Iterations/REVIEW.md` records accepted/rejected passes; `Iterations/verification_36.json` records the latest targeted checks.
 
 Authoring scripts and .blend files stay outside Assets; Unity consumes FBX models and linked prefabs. Keep sculpture credits with redistributed derivatives. The art branch continues from pushed main checkpoint b7f8671.

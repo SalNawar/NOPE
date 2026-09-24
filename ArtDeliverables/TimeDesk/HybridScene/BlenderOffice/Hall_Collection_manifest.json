@@ -182,43 +182,43 @@
     },
     "Hall_Plaster": {
       "color": [
-        0.7137254901960784,
-        0.7176470588235294,
-        0.6823529411764706
+        0.807843137254902,
+        0.7803921568627451,
+        0.6862745098039216
       ],
-      "smoothness": 0.040000000000000036,
+      "smoothness": 0.06999999999999995,
       "metallic": 0,
       "texture": null
     },
     "Hall_Stone": {
       "color": [
-        0.5882352941176471,
-        0.6196078431372549,
-        0.596078431372549
+        0.8509803921568627,
+        0.8784313725490196,
+        0.8588235294117647
       ],
-      "smoothness": 0.06000000000000005,
+      "smoothness": 0.12,
       "metallic": 0,
-      "texture": null
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderOffice\\Textures\\civic_stone.png"
     },
     "Hall_Floor": {
       "color": [
-        0.6666666666666666,
-        0.6627450980392157,
-        0.6196078431372549
+        1.0,
+        1.0,
+        1.0
       ],
-      "smoothness": 0.16000000000000003,
+      "smoothness": 0.20999999999999996,
       "metallic": 0,
-      "texture": null
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderOffice\\Textures\\civic_stone.png"
     },
     "Hall_FloorAlt": {
       "color": [
-        0.6352941176470588,
-        0.6509803921568628,
-        0.6196078431372549
+        0.8901960784313725,
+        0.9098039215686274,
+        0.8901960784313725
       ],
-      "smoothness": 0.13,
+      "smoothness": 0.14,
       "metallic": 0,
-      "texture": null
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\Hybrid\\BlenderOffice\\Textures\\civic_stone.png"
     },
     "Hall_Grout": {
       "color": [
@@ -232,22 +232,22 @@
     },
     "Hall_Teal": {
       "color": [
-        0.33725490196078434,
-        0.44313725490196076,
-        0.42745098039215684
+        0.19215686274509805,
+        0.36470588235294116,
+        0.32941176470588235
       ],
-      "smoothness": 0.07999999999999996,
+      "smoothness": 0.19999999999999996,
       "metallic": 0,
       "texture": null
     },
     "Hall_DarkMetal": {
       "color": [
-        0.27450980392156865,
-        0.3568627450980392,
-        0.36470588235294116
+        0.17647058823529413,
+        0.25882352941176473,
+        0.27450980392156865
       ],
-      "smoothness": 0.14,
-      "metallic": 0.07,
+      "smoothness": 0.25,
+      "metallic": 0.18,
       "texture": null
     },
     "Hall_Wear": {
@@ -286,8 +286,8 @@
         0.5843137254901961,
         0.4392156862745098
       ],
-      "smoothness": 0.12,
-      "metallic": 0.1,
+      "smoothness": 0.35,
+      "metallic": 0.45,
       "texture": null
     },
     "Frame_Timber": {
@@ -312,9 +312,9 @@
     },
     "Banner_Cloth": {
       "color": [
-        0.3215686274509804,
-        0.4235294117647059,
-        0.40784313725490196
+        0.21176470588235294,
+        0.4392156862745098,
+        0.4235294117647059
       ],
       "smoothness": 0.030000000000000027,
       "metallic": 0,
@@ -322,32 +322,32 @@
     },
     "Portal_Paint": {
       "color": [
-        0.611764705882353,
-        0.6549019607843137,
-        0.6431372549019608
+        0.7411764705882353,
+        0.7568627450980392,
+        0.6823529411764706
       ],
-      "smoothness": 0.09999999999999998,
-      "metallic": 0,
+      "smoothness": 0.33999999999999997,
+      "metallic": 0.1,
       "texture": null
     },
     "Portal_Orange": {
       "color": [
         0.7254901960784313,
-        0.5333333333333333,
-        0.3607843137254902
+        0.47058823529411764,
+        0.27450980392156865
       ],
-      "smoothness": 0.07999999999999996,
+      "smoothness": 0.20999999999999996,
       "metallic": 0,
       "texture": null
     },
     "Portal_Coil": {
       "color": [
-        0.3764705882352941,
-        0.4980392156862745,
-        0.5019607843137255
+        0.3254901960784314,
+        0.49019607843137253,
+        0.5098039215686274
       ],
-      "smoothness": 0.15000000000000002,
-      "metallic": 0.1,
+      "smoothness": 0.43999999999999995,
+      "metallic": 0.3,
       "texture": null
     },
     "Canvas_MonaLisa": {
@@ -422,9 +422,10 @@
         "Hall_Structure__Hall_Plaster": "Hall_Plaster",
         "Hall_Structure__Hall_Rust": "Hall_Rust",
         "Hall_Structure__Hall_LightFace": "Hall_LightFace",
-        "Hall_Structure__Hall_Wear": "Hall_Wear"
+        "Hall_Structure__Hall_Wear": "Hall_Wear",
+        "Hall_Structure__Frame_Brass": "Frame_Brass"
       },
-      "triangles": 28136
+      "triangles": 49176
     },
     {
       "name": "Hall_Floor",
@@ -480,7 +481,7 @@
         "Hall_Portal__Hall_Stone": "Hall_Stone",
         "Hall_Portal__Cable_Rubber": "Cable_Rubber"
       },
-      "triangles": 21692
+      "triangles": 38124
     },
     {
       "name": "Hall_ServiceCabinet",
@@ -507,7 +508,7 @@
         "Hall_Plinth__Frame_Brass": "Frame_Brass",
         "Hall_Plinth__Hall_Wear": "Hall_Wear"
       },
-      "triangles": 757
+      "triangles": 1413
     },
     {
       "name": "Hall_DisplayStand",

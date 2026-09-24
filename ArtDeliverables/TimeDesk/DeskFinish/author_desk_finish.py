@@ -12,7 +12,7 @@ for sub in ['Models','Textures']:(A.OUT/sub).mkdir(parents=True,exist_ok=True)
 T=A.OUT/'Textures'
 material('Finish_Ivory','FFFFFF',.74,texture=T/'ivory_plastic.png')
 material('Finish_WarmGrey','CAC9C3',.80,texture=T/'ivory_plastic.png')
-material('Finish_Enamel','FFFFFF',.76,texture=T/'petrol_enamel.png')
+material('Finish_Enamel','C2E1D9',.76,texture=T/'petrol_enamel.png')
 material('Finish_EnamelDark','9DAEAA',.80,texture=T/'petrol_enamel.png')
 material('Finish_Charcoal','313E40',.88)
 material('Finish_KeyGrey','9EAA9F',.80)
@@ -32,13 +32,19 @@ lamp_shader.inputs['Emission Color'].default_value=(*lamp_emission,1)
 lamp_shader.inputs['Emission Strength'].default_value=.35
 A.specs['Finish_LampInner']['emission']={'color':list(lamp_emission),'intensity':.35}
 material('Finish_Mat','A9CAFF',.96,texture=T/'inspection_mat.png')
-# The albedo contains the wood colour; keep both Blender and Unity tint neutral.
+# A restrained cool tint counteracts the orange bias of the generated veneer.
 wood_material=materials['Desk_Walnut']
-wood_material.node_tree.nodes.get('Principled BSDF').inputs['Base Color'].default_value=(1,1,1,1)
+wood_tint=tuple(int('BEC6CE'[i:i+2],16)/255 for i in (0,2,4))
+wood_shader=wood_material.node_tree.nodes.get('Principled BSDF')
+wood_shader.inputs['Base Color'].default_value=(*[linear(c) for c in wood_tint],1)
 wood_material.node_tree.nodes.get('Principled BSDF').inputs['Roughness'].default_value=.74
-for node in wood_material.node_tree.nodes:
-    if node.type=='TEX_IMAGE':node.image=bpy.data.images.load(str(T/'walnut_veneer.png'))
-A.specs['Desk_Walnut']['color']=[1,1,1]
+wood_texture=next(node for node in wood_material.node_tree.nodes if node.type=='TEX_IMAGE')
+wood_texture.image=bpy.data.images.load(str(T/'walnut_veneer.png'))
+wood_multiply=wood_material.node_tree.nodes.new('ShaderNodeMixRGB');wood_multiply.blend_type='MULTIPLY';wood_multiply.inputs[0].default_value=1
+wood_multiply.inputs[2].default_value=(*[linear(c) for c in wood_tint],1)
+wood_material.node_tree.links.new(wood_texture.outputs['Color'],wood_multiply.inputs[1])
+wood_material.node_tree.links.new(wood_multiply.outputs['Color'],wood_shader.inputs['Base Color'])
+A.specs['Desk_Walnut']['color']=list(wood_tint)
 A.specs['Desk_Walnut']['smoothness']=.26
 A.specs['Desk_Walnut']['texture']=str(T/'walnut_veneer.png')
 
@@ -84,6 +90,9 @@ box('Soft tray insert',(0,.032,0),(.655,.007,.337),'Finish_EnamelDark',.022)
 for x in [-.29,.29]:box('Tray foot',(x,.005,0),(.04,.01,.20),'Finish_BlackRubber',.003)
 
 group('Finish_Intercom')
+box('Intercom lower shell seam',(0,.016,0),(.297,.014,.230),'Finish_Charcoal',.011)
+for x in [-.110,.110]:
+    for z in [-.078,.078]:box('Intercom rubber foot',(x,.007,z),(.039,.014,.035),'Finish_BlackRubber',.005)
 vv=[(-.154,.015,-.12),(.154,.015,-.12),(.154,.015,.12),(-.154,.015,.12),(-.147,.105,-.112),(.147,.105,-.112),(.147,.182,.112),(-.147,.182,.112)]
 o=mesh('Intercom molded case',vv,[(0,3,2,1),(0,1,5,4),(1,2,6,5),(2,3,7,6),(3,0,4,7),(4,5,6,7)],'Finish_Ivory');bevel(o,.011,4)
 face=box('Speaker face panel',(-.035,.152,.001),(.188,.009,.182),'Finish_Enamel',.014);face.rotation_euler.x=math.radians(-19)
@@ -92,6 +101,11 @@ for i in range(8):
     vent=box('Speaker opening',(-.035,y,z),(.134-abs(i-3.5)*.01,.005,.005),'Finish_Charcoal',.002);vent.rotation_euler.x=math.radians(-19)
 cylinder('Push-to-talk rim',(.107,.139,-.029),.021,.008,'Finish_Charcoal','y',32)
 cylinder('Push-to-talk cap',(.107,.146,-.029),.017,.011,'Finish_Coral','y',32)
+for x in [-.128,.128]:
+    # Fixings belong to the lower face, clear of the speaker slots.
+    cylinder('Intercom front fixing',(x,.067,-.119),.005,.004,'Hardware_BareMetal','z',20)
+    box('Intercom fixing slot',(x,.067,-.122),(.006,.001,.001),'Finish_Charcoal',0)
+box('Intercom blank inventory inset',(-.056,.059,-.121),(.082,.021,.002),'Finish_WarmGrey',.002)
 tube('Curled intercom lead',[(.10,.06,.12),(.17,.02,.21),(.22,.012,.19),(.24,.012,.27)],.006,'Finish_BlackRubber')
 
 group('Finish_Mouse')
@@ -111,6 +125,11 @@ box('Stamp pad base',(0,.018,0),(.22,.034,.15),'Finish_EnamelDark',.009)
 box('Stamp pad lip',(0,.035,0),(.208,.007,.138),'Finish_Enamel',.006)
 box('Ink cushion',(0,.040,0),(.185,.009,.113),'Finish_Ink',.009)
 lid=box('Open inkpad lid',(0,.066,.095),(.22,.105,.015),'Finish_Enamel',.007);lid.rotation_euler.x=math.radians(12)
+for x in [-.069,.069]:
+    cylinder('Inkpad rolled hinge',(x,.034,.079),.006,.052,'Finish_Brass','x',24)
+    cylinder('Inkpad hinge pin',(x,.034,.079),.0028,.058,'Hardware_BareMetal','x',16)
+    box('Inkpad rubber rest',(x,.003,0),(.03,.006,.085),'Finish_BlackRubber',.003)
+box('Inkpad lid catch',(0,.028,-.078),(.037,.015,.008),'Finish_Brass',.003)
 
 group('Finish_Lamp')
 lathe('Weighted lamp base',[(.003,.113),(.013,.121),(.023,.119),(.031,.095),(.037,.059),(.042,.028)],'Finish_EnamelDark',64)

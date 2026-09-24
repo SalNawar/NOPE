@@ -1216,7 +1216,7 @@
       "active": true,
       "posX": 0.0,
       "posY": 7.2,
-      "posZ": 26.93,
+      "posZ": 27.025,
       "rotX": 0.0,
       "rotY": 0.0,
       "rotZ": 0.0,
@@ -1227,7 +1227,7 @@
     {
       "path": "HybridOffice/Hall/WindowGlass/West",
       "active": true,
-      "posX": -13.93,
+      "posX": -14.025,
       "posY": 7.2,
       "posZ": 12.0,
       "rotX": 0.0,
@@ -1240,7 +1240,7 @@
     {
       "path": "HybridOffice/Hall/WindowGlass/East",
       "active": true,
-      "posX": 13.93,
+      "posX": 14.025,
       "posY": 7.2,
       "posZ": 12.0,
       "rotX": 0.0,
@@ -1249,6 +1249,32 @@
       "scaleX": 30.0,
       "scaleY": 11.2,
       "scaleZ": 1.0
+    },
+    {
+      "path": "HybridOffice/Hall/HallCeilingLamp_Left",
+      "active": true,
+      "posX": -3,
+      "posY": 13.12,
+      "posZ": 12,
+      "rotX": 90,
+      "rotY": 0,
+      "rotZ": 0,
+      "scaleX": 1,
+      "scaleY": 1,
+      "scaleZ": 1
+    },
+    {
+      "path": "HybridOffice/Hall/HallCeilingLamp_Right",
+      "active": true,
+      "posX": 3,
+      "posY": 13.12,
+      "posZ": 12,
+      "rotX": 90,
+      "rotY": 0,
+      "rotZ": 0,
+      "scaleX": 1,
+      "scaleY": 1,
+      "scaleZ": 1
     }
   ],
   "screenWorldCenter": [
@@ -1256,10 +1282,10 @@
     1.54882312,
     -0.409169972
   ],
-  "iteration": "32_final_art_pass",
+  "iteration": "36_iteration_3_final",
   "pcSide": "left",
   "mouseHandedness": "right; mouse to right of keyboard, cable toward PC",
-  "verification": "Glass slider 0/100/25 checked; original monitor click event opens MonitorFocus; fresh console 0 errors. Physical pointer and full day not tested.",
+  "verification": "All three glass panes at 0/100/25 checked; original CRT event enters MonitorFocus; shader and console zero errors. See Iterations/verification_36.json. Physical pointer and full day not tested.",
   "rendering": {
     "SSAO": {
       "asset": "Assets/Settings/OfficeContactShading.asset",
@@ -1269,10 +1295,10 @@
     },
     "profile": "Assets/Settings/OfficeFinishProfile.asset",
     "toneMapping": "Neutral",
-    "postExposure": 0.12,
-    "contrast": 10,
-    "saturation": 8,
-    "vignette": 0.13,
+    "postExposure": 0.1,
+    "contrast": 12,
+    "saturation": 13,
+    "vignette": 0.2,
     "antiAliasing": "SMAA High",
     "reflectionProbe": {
       "mode": "Realtime",
@@ -1295,15 +1321,15 @@
       "intensity": 0.35
     },
     "taskLight": {
-      "intensity": 4.2,
+      "intensity": 4.5,
       "color": [
         1,
-        0.82,
-        0.61
+        0.74,
+        0.43
       ],
       "range": 4,
-      "spotAngle": 68,
-      "innerSpotAngle": 38,
+      "spotAngle": 85,
+      "innerSpotAngle": 45,
       "target": [
         0,
         1.061,
@@ -1311,19 +1337,61 @@
       ]
     },
     "roomBounce": {
-      "intensity": 1.1,
+      "intensity": 2.4,
       "color": [
         1,
-        0.85,
-        0.7
+        0.9,
+        0.79
       ],
-      "range": 3.5,
+      "range": 4.2,
       "mode": "Realtime",
       "position": [
         -0.8,
         2.35,
         -1.55
       ]
+    },
+    "daylight": {
+      "intensity": 1.7,
+      "color": [
+        1,
+        0.93,
+        0.81
+      ],
+      "mode": "Realtime"
+    },
+    "interiorFill": {
+      "intensity": 0.32,
+      "color": [
+        0.65,
+        0.8,
+        1
+      ],
+      "mode": "Realtime"
+    },
+    "ceilingLights": {
+      "paths": [
+        "HybridOffice/Hall/HallCeilingLamp_Left",
+        "HybridOffice/Hall/HallCeilingLamp_Right"
+      ],
+      "type": "Spot",
+      "intensity": 65,
+      "range": 18,
+      "spotAngle": 80,
+      "color": [
+        1,
+        0.86,
+        0.64
+      ],
+      "mode": "Realtime"
+    },
+    "cityWindowEmission": {
+      "color": [
+        0.72,
+        0.4,
+        0.14
+      ],
+      "intensity": 1.4
     }
   },
   "compositionStatus": "Frozen after pass 26 at user request; hall proportions and composition deferred.",
@@ -1331,6 +1399,13 @@
     "path": "HybridOffice/Hall/WindowGlass",
     "component": "OfficeWindowGlass",
     "transparencyPercent": 25,
-    "opacity": 0.75
+    "opacity": 0.75,
+    "tint": [
+      0.16,
+      0.23,
+      0.27
+    ],
+    "environmentReflections": false,
+    "placement": "Behind inner mullion and transom faces"
   }
 }

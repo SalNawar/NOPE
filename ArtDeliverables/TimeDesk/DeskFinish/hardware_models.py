@@ -6,12 +6,12 @@ from mathutils import Matrix, Vector
 
 
 def build_hardware(texture_dir):
-    material('Hardware_CRTClay','B5BAC0',.64,texture=texture_dir/'ivory_plastic.png')
+    material('Hardware_CRTClay','A8B1BD',.64,texture=texture_dir/'ivory_plastic.png')
     material('Hardware_CRTTrim','888F87',.73)
-    material('Hardware_Cream','D9DFE5',.65,texture=texture_dir/'ivory_plastic.png')
-    material('Hardware_Steel','ADB7BA',.64,.10)
-    material('Hardware_Modifier','72918A',.69)
-    material('Hardware_Keys','CACDC9',.68)
+    material('Hardware_Cream','CDD5DE',.65,texture=texture_dir/'ivory_plastic.png')
+    material('Hardware_Steel','879399',.64,.10)
+    material('Hardware_Modifier','586F73',.69)
+    material('Hardware_Keys','BEC4C4',.68)
     material('Hardware_Seam','363D3C',.90)
     material('Hardware_Glass','243F47',.34)
     material('Hardware_Rubber','303735',.94)

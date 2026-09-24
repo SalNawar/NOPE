@@ -1,0 +1,41 @@
+{
+  "scene": "Assets/Scenes/OfficeScene.unity",
+  "glass": [
+    {
+      "transparency": 0,
+      "panes": {
+        "Rear": "True",
+        "West": "True",
+        "East": "True"
+      }
+    },
+    {
+      "transparency": 100,
+      "panes": {
+        "Rear": "False",
+        "West": "False",
+        "East": "False"
+      }
+    },
+    {
+      "transparency": 25,
+      "panes": {
+        "Rear": "True",
+        "West": "True",
+        "East": "True"
+      }
+    }
+  ],
+  "note": "API event-path check, not a physical pointer test or full gameplay day.",
+  "monitorView": "MonitorFocus",
+  "shader": {
+    "shaderName": "TimeSorter/OfficePortal",
+    "hasErrors": false,
+    "messageCount": 0
+  },
+  "errors": {
+    "count": 0,
+    "logs": [],
+    "source": "console"
+  }
+}
