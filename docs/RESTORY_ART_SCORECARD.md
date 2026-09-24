@@ -20,6 +20,6 @@ These are subjective visual judgments, not measured production-quality metrics. 
 
 **Total: 42/100.** Equal category weights. This is not ReStory-quality art yet.
 
-Acceptance bar: at least 8/10 in every category, with no category hidden by a high overall average. Evaluate from the fixed game camera at normal viewing size; require readable forms, intentional groups, coherent surfaces and matching finish across the image. Extra polygons, more props, higher resolution or a passing console check do not by themselves increase the art score.
+Target: comparable reference quality in every category, represented by 10/10 on this scale. An improved average cannot hide a weak category. Evaluate from the fixed game camera at normal viewing size; require readable forms, intentional groups, coherent surfaces and matching finish across the image. Extra polygons, more props, higher resolution or a passing console check do not by themselves increase the art score.
 
 Highest-impact remaining work: a coherent style across all asset families; more authored, functional groupings; and stronger background/light depth. Composition changes remain deferred by the user's instruction. This scorecard is an assessment, not authorization to begin a fourth iteration.
