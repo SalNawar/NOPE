@@ -26,6 +26,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   legendaryBaseChance: 0.05
   availableLegendaries: []
+  tellCount: 1
   activeTravelRules: []
   guaranteeRuleViolators: 1
   forcedCases: []
