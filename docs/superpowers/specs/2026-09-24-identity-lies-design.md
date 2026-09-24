@@ -255,7 +255,7 @@ The R8 table applies: exact match first, then `NameRoster.BaseName(givenName)`, 
 **`CaseVerdict`** (`ShiftLedger.cs`, CRLF):
 - `wasForged` (130-131) becomes `public bool wasLiar;` ("True if the traveller lied about their home").
 - Add `public string trueHomeLabel = string.Empty;` ("Where the traveller really comes from: the claimed place for an honest traveller").
-- Docs: `shouldAccept` (127) becomes "honest + allowed"; `unprovenDenial` (142) and `UnprovenDenialCount` (52) say "liar" instead of "forger".
+- Docs: `shouldAccept` (127) becomes "honest + allowed"; `unprovenDenial` (142) and `UnprovenDenialCount` (52) say "liar" instead of "forger"; `trueEraId` (90, "The correct era.") becomes "The claimed era, where the traveller is sent (the correct era on the legacy era-pick path). A liar's real home is `trueHomeLabel`." (R10).
 
 **`DocumentField`** (`DocumentField.cs`, CRLF): docs at 22-27 and 42 describe `isAnachronism` as "this value is a liar's tell (anachronistic for the claim)".
 
@@ -315,7 +315,8 @@ Doc fixes:
 - `BuildRegistry` (410-414): "Records carry the registered identity: an honest traveller's, or a liar's cover (claimed origin). They never reveal a true home."
 - `ResolveFieldValue` (326-327): the placeholder keeps the field "internally consistent (never a tell)". This holds: `IsProvableTell` needs the claim's fact, so a category without one can never carry a tell.
 - The class summary (5-13) describes the claim, cover identity and lie stream.
-- The "true era" comments (137, 154, 358, 442) say "claimed era".
+- The "true era" comments (137, 154, 358, 442, and the legacy clue-pool comments 545-546) say "claimed era".
+- `ResolveFieldValue`'s summary (308, "Resolves a field's true value") says it resolves the value for the claim: identity fields from the registered identity (a liar's cover), place fields from the claimed place, with a liar's tells applied afterwards by `Disguise`.
 
 **Streams after piece 2:**
 

@@ -334,9 +334,11 @@ public sealed class CaseFactory
             TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
 
     /// <summary>
-    /// Resolves a field's true value: identity fields come from the visitor's
-    /// identity; place fields come from today's facts for the claimed place,
-    /// with a readable placeholder (and a warning) when content is missing.
+    /// Resolves a field's value for the claim: identity fields come from the
+    /// registered identity (a liar's cover); place fields come from today's
+    /// facts for the claimed place, with a readable placeholder (and a warning)
+    /// when content is missing. A liar's tells overwrite these values afterwards
+    /// (Disguise).
     /// </summary>
     private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
     {
@@ -572,8 +574,8 @@ public sealed class CaseFactory
         }
 
         // Build clue pools from the library:
-        // - supporting clues for the true era
-        // - contradicting clues against the true era
+        // - supporting clues for the claimed era
+        // - contradicting clues against the claimed era
         // - red herrings: irrelevant but plausible clues
         IReadOnlyList<ClueSO> clueSource = _lib.Clues != null ? _lib.Clues : System.Array.Empty<ClueSO>();
 

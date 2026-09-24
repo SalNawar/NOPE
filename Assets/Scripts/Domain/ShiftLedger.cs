@@ -87,7 +87,7 @@ public sealed class CaseVerdict
     /// <summary>Era the player chose.</summary>
     public string chosenEraId;
 
-    /// <summary>The correct era.</summary>
+    /// <summary>The claimed era, where the traveller is sent (the correct era on the legacy era-pick path). A liar's real home is <see cref="trueHomeLabel"/>.</summary>
     public string trueEraId;
 
     /// <summary>True if the send was correct.</summary>
