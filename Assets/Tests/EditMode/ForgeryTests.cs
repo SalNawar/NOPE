@@ -92,4 +92,40 @@ public class ForgeryTests
         Assert.IsFalse(Forgery.IsProvableTell(ClueCategory.Currency, "egypt", "ancient", "1 Jan 5", IraqHome, null, BookCategories));
         Assert.IsFalse(Forgery.IsProvableTell(ClueCategory.Currency, "egypt", "ancient", "1 Jan 5", IraqHome, World(), null));
     }
+
+    // -----------------------------
+    // IsProvableCategory: the one rule questions and tells share
+    // -----------------------------
+
+    /// <summary>Every category, as a book set covering all of them.</summary>
+    private static HashSet<ClueCategory> EveryBook() =>
+        new HashSet<ClueCategory>((ClueCategory[])System.Enum.GetValues(typeof(ClueCategory)));
+
+    [Test]
+    public void IsProvableCategory_Name_IsNever_EvenWithEveryBook()
+    {
+        Assert.IsFalse(Forgery.IsProvableCategory(ClueCategory.Name, EveryBook()));
+    }
+
+    [Test]
+    public void IsProvableCategory_BirthDate_IsAlways_TheRecordProvesIt()
+    {
+        Assert.IsTrue(Forgery.IsProvableCategory(ClueCategory.BirthDate, new HashSet<ClueCategory>()));
+        Assert.IsTrue(Forgery.IsProvableCategory(ClueCategory.BirthDate, null));
+    }
+
+    [Test]
+    public void IsProvableCategory_APlaceFact_ExactlyWhenABookCoversIt()
+    {
+        Assert.IsTrue(Forgery.IsProvableCategory(ClueCategory.Currency, BookCategories));
+        Assert.IsFalse(Forgery.IsProvableCategory(ClueCategory.Geography, BookCategories));
+        Assert.IsTrue(Forgery.IsProvableCategory(ClueCategory.Geography, EveryBook()));
+    }
+
+    [Test]
+    public void IsProvableCategory_ANullBookSet_ProvesNoPlaceFact()
+    {
+        foreach (ClueCategory category in new[] { ClueCategory.Language, ClueCategory.Material, ClueCategory.Politics, ClueCategory.Technology, ClueCategory.Currency, ClueCategory.Geography, ClueCategory.Culture })
+            Assert.IsFalse(Forgery.IsProvableCategory(category, null), category.ToString());
+    }
 }
