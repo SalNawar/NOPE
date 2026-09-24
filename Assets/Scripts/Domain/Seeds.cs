@@ -17,6 +17,9 @@ public static class Seeds
     /// <summary>Salt for a traveller's lie stream ("LIES").</summary>
     public const int LieSalt = 0x4C494553;
 
+    /// <summary>Salt for a traveller's dialog stream ("DIAG").</summary>
+    public const int DialogSalt = 0x44494147;
+
     /// <summary>The day's seed: same run + same day = same seed.</summary>
     public static int Day(int runSeed, int day)
     {
@@ -57,4 +60,11 @@ public static class Seeds
     /// changes who travellers are.
     /// </summary>
     public static int ForLies(int caseSeed) => Mix(caseSeed, LieSalt);
+
+    /// <summary>
+    /// Seed for one traveller's dialog variant picks (small talk), apart from
+    /// the case and lie streams so content never changes who travellers are
+    /// or who lies.
+    /// </summary>
+    public static int ForDialog(int caseSeed) => Mix(caseSeed, DialogSalt);
 }

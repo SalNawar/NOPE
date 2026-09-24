@@ -69,6 +69,26 @@ public class SeedsTests
     }
 
     [Test]
+    public void DialogStream_IsDistinctFromCaseClueLieAndViolatorStreams()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
+        var dialogs = new HashSet<int>();
+        for (int c = 1; c <= 20; c++)
+        {
+            int caseSeed = Seeds.ForCase(daySeed, c);
+            int dialog = Seeds.ForDialog(caseSeed);
+            Assert.IsFalse(cases.Contains(dialog), $"case {c}: the dialog seed is a case seed");
+            Assert.AreNotEqual(Seeds.ForClues(caseSeed), dialog, $"case {c}: dialog seed equals the clue seed");
+            Assert.AreNotEqual(Seeds.ForLies(caseSeed), dialog, $"case {c}: dialog seed equals the lie seed");
+            Assert.AreNotEqual(Seeds.ForViolators(daySeed), dialog, $"case {c}: dialog seed equals the violator seed");
+            Assert.AreEqual(dialog, Seeds.ForDialog(caseSeed), $"case {c}: not deterministic");
+            dialogs.Add(dialog);
+        }
+        Assert.AreEqual(20, dialogs.Count, "dialog seeds repeat across cases");
+    }
+
+    [Test]
     public void Mix_IsDeterministic_AndSaltSensitive()
     {
         Assert.AreEqual(Seeds.Mix(5, 9), Seeds.Mix(5, 9));
