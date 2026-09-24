@@ -3019,7 +3019,7 @@ What the automation must prove (spec §6):
 
 - [ ] **Step 1: Offline gate**
 
-Run the compile check and the test run. Expected: exit 0 / exit 0; `passed 213, failed 0`. `git status --short` shows only the two untracked files.
+Run the compile check and the test run. Expected: exit 0 / exit 0; `passed 216, failed 0` (213 after Task 12, plus the three `NameRosterTests` cases the implementation review added). `git status --short` shows only the two untracked files.
 
 - [ ] **Step 2: Check no Unity editor is open on the worktree** (PowerShell)
 
@@ -3395,7 +3395,7 @@ public static class TimeDeskLiesAutomation
 ```powershell
 Start-Process -FilePath 'C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Unity.exe' -ArgumentList @('-projectPath','E:\unity\NOPE-feat-clock','-executeMethod','TimeDeskLiesAutomation.Run','-logFile','C:\Users\Saleh\AppData\Local\Temp\claude\E--unity-NOPE\06be6de7-86f0-489b-bc3c-afd3817f5196\scratchpad\unity_lies_automation.log') -PassThru -Wait
 ```
-Expected in `SCRATCH/lies_automation_report.txt`: both Generate World runs `ran=True` with `World generated: 6 eras, 8 nations, 40 places, 3 rules, 3 day plans`; `idempotent second run: changedFiles=0`; three `has 'tellCount: 1' = True`; `blueprint still has forgedBirthYearShift = False`; the validator logs `no issues found`; `world check problems=0`; `tests passed=342 failed=1` (285 − 156 + 213) with the only `FAIL` line being `UnitySkills.Tests.Core.PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly`. Exit code 3 comes from that known failure. In `SCRATCH/lies_world_check.txt`: no `PROBLEM` line, a coverage line with `rate` between 0.45 and 0.55, all four tell kinds, `crossEraLiars` above 0, and `NoPossibleLie warnings: 0`.
+Expected in `SCRATCH/lies_automation_report.txt`: both Generate World runs `ran=True` with `World generated: 6 eras, 8 nations, 40 places, 3 rules, 3 day plans`; `idempotent second run: changedFiles=0`; three `has 'tellCount: 1' = True`; `blueprint still has forgedBirthYearShift = False`; the validator logs `no issues found`; `world check problems=0`; `tests passed=345 failed=1` (285 − 156 + 216) with the only `FAIL` line being `UnitySkills.Tests.Core.PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly`. Exit code 3 comes from that known failure. In `SCRATCH/lies_world_check.txt`: no `PROBLEM` line, a coverage line with `rate` between 0.45 and 0.55, all four tell kinds, `crossEraLiars` above 0, and `NoPossibleLie warnings: 0`.
 
 - [ ] **Step 5: Write session B** (`Assets/Editor/_TimeDeskLiesPlaySmoke.cs`, Write tool)
 
@@ -3805,7 +3805,7 @@ The first branch puts the player's save back and deletes the backup; the second 
 
 - [ ] **Step 7: Offline re-check**
 
-Run the compile check and the test run. Expected: exit 0 / exit 0; `passed 213, failed 0`.
+Run the compile check and the test run. Expected: exit 0 / exit 0; `passed 216, failed 0`.
 
 - [ ] **Step 8: Hygiene**
 
@@ -3839,7 +3839,7 @@ Run in the branch's own Unity 6000.4.11f1 editor through temporary `-executeMeth
 - Baseline at `14bd22e` (before any code change): seeds 12345 and 999, days 1–3, 60 slots dumped.
 - Generate World ran twice; the second run changed no file. The day plans gained `tellCount: 1` and the blueprint lost `forgedBirthYearShift`. Validate Content Library: no issues.
 - World check (seeds 12345 and 999 × days 1–3, plus 200 seeds × days 1–3): {problems from "world check problems="} problems. The same seed gives the same travellers, liars, homes, tells and paper values; a different seed differs. Claims, names, registered dates, roles and violator slots equal the baseline line for line. Every liar's true home is another of today's places; each tell carries the home's value and registers (mismatch on the claim's row, origin proof naming the home on its row, record proof for birth dates), and no third place's row registers anything. Honest travellers are fully consistent; violators are honest; records show the cover; every traveller is Male or Female. Sweep: liar rate {rate} of {eligible} eligible travellers; tells {the "tells=[…]" list}; {crossEraLiars} cross-era liars on days 2–3; no NoPossibleLie warning.
-- EditMode suite: {passed} passed. The one failure is the known third-party `UnitySkills.Tests.Core.PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly` (scene-dependent, unrelated). Offline Domain run: 213/213.
+- EditMode suite: {passed} passed. The one failure is the known third-party `UnitySkills.Tests.Core.PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly` (scene-dependent, unrelated). Offline Domain run: 216/216.
 - Scripted day-1 play-through on the committed OfficeScene (run seed {seed}; the builder is unchanged, so the scene was not rebuilt): the honest traveller was accepted without a citation; comparing a liar's {category} tell with the true home's book row logged "… which belongs to {true home}" and the denial was correct; the birth-date liar's Citizen Record showed the claimed origin and the cover date, comparing Born with Date of Birth logged "BIRTH DATE INCORRECT" and the denial was correct; denying a liar without evidence issued the unproven-denial citation; forcing closing time showed "Undocumented denials: 1". No warnings or errors; the Records wiring warning stayed silent.
 ```
 

@@ -643,3 +643,12 @@ The review of the implementation plan (2026-09-24) also corrected this spec; the
 - `ScriptedRandomTests` pins the helper that R11's guarantee rests on (§5, §2.8).
 - The §2.8 "forg" claim was false for `DiscrepancyLogTests`, which the grep had found but the table missed. Its helpers, one test name, the class doc and one comment move to tell vocabulary (§2.8, §5), so the claim now holds, tests included.
 - The §6 play-through opens the Citizen Records app before searching, because its rows are wired only when the app first opens.
+
+The review of the implementation (2026-09-24, at `d7614f0`) raised six findings. Each was checked against the branch, and four were applied:
+
+- The evidence-gated denial line in `FEATURES.md` scoped its test claim: `VerdictRulesTests` covers the `IsUnprovenDenial` decision, while the citation and deduction happen in `ShiftScoring` (§3.3). The directive-violation line gained the gate-exemption test claim.
+- `NameRoster.BaseName` had a second numeral parser (`ParseRoman`, `RomanDigit`) beside `Roman`'s digit table. It now looks the last word up in the suffixes `Roman` itself writes, so `Roman` is the one owner of the format (§2.3, §5).
+- The `NoPossibleLie` warning said "no other place today differs", which is false when a shared value (R13) caused the fallback. It now names both causes and the fix of giving places distinct values (§2.4).
+- The `ResolveFieldValue` summary and `CaseVerdict.trueEraId` still said "true" and "correct" where they mean the claim (§2.3, §2.4).
+
+The other two findings, the regenerated day plans and blueprint (§2.1, §2.8) and the §8 record behind the "checked in Unity" test claims in `FEATURES.md`, are the plan's Task 13 (Unity verification). It runs after these fixes so that it verifies the final code.
