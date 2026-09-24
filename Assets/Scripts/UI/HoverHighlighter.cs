@@ -12,7 +12,8 @@ using UnityEngine.UI;
 /// System UI module's own raycast) and, when that changes, moves the hover
 /// highlight and swaps the cursor: an outline and hand cursor on any
 /// interactable Clickable (booth sprite) or Selectable (UI), the arrow
-/// elsewhere. Objects need no setup of their own.
+/// elsewhere. A Clickable whose sprite is hidden (a hit zone over other art)
+/// gets the hand cursor but no outline. Objects need no setup of their own.
 /// </summary>
 public sealed class HoverHighlighter : MonoBehaviour
 {
@@ -188,9 +189,11 @@ public sealed class HoverHighlighter : MonoBehaviour
             if (!clickable.TryGetComponent(out SpriteRenderer sr))
                 return;
 
-            WorldOutline outline = on ? EnsureWorldOutline(sr) : Lookup(sr);
+            // A hidden sprite is a hit zone over other art: no outline of its shape.
+            bool show = on && sr.enabled;
+            WorldOutline outline = show ? EnsureWorldOutline(sr) : Lookup(sr);
             if (outline != null && outline.renderer != null)
-                outline.renderer.enabled = on && outline.outline != null;
+                outline.renderer.enabled = show && outline.outline != null;
         }
         else if (target is Selectable selectable && selectable.targetGraphic != null)
         {
