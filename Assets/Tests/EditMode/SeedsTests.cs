@@ -40,6 +40,16 @@ public class SeedsTests
     }
 
     [Test]
+    public void ViolatorAndClueStreams_AreDistinctFromEveryCaseStream()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
+        Assert.IsFalse(cases.Contains(Seeds.ForViolators(daySeed)));
+        Assert.IsFalse(cases.Contains(Seeds.ForClues(Seeds.ForCase(daySeed, 1))));
+        Assert.AreEqual(Seeds.ForViolators(daySeed), Seeds.ForViolators(daySeed));
+    }
+
+    [Test]
     public void Mix_IsDeterministic_AndSaltSensitive()
     {
         Assert.AreEqual(Seeds.Mix(5, 9), Seeds.Mix(5, 9));

@@ -150,8 +150,22 @@ public static class TimelineService
     }
 
     /// <summary>
+    /// Ranks every place's attributes from the baselines alone, without news.
+    /// Called once when a run starts, so the first night reports exactly the
+    /// tier changes the player's day-1 sends caused.
+    /// </summary>
+    public static void SeedDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config)
+    {
+        if (world == null || lib == null)
+            return;
+
+        RecomputeDominance(world, lib, config, null);
+    }
+
+    /// <summary>
     /// Recomputes dominant/supporting attributes per authored profile and
-    /// reports tier changes as news lines.
+    /// reports tier changes as news lines (none when <paramref name="news"/> is
+    /// null, or when no earlier ranking exists to compare with).
     /// </summary>
     private static void RecomputeDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config, List<string> news)
     {
@@ -163,10 +177,11 @@ public static class TimelineService
         var newDominant = new List<string>();
         var newSupporting = new List<string>();
 
-        // The very first ranking only seeds the tiers: announcing every place's
-        // starting tiers would flood the morning paper. Later changes come from
-        // the player's sends and are reported.
-        bool firstRanking = world.timeline.dominantKeys.Count == 0 && world.timeline.supportingKeys.Count == 0;
+        // Only changes against an earlier ranking are news: SeedDominance ranks
+        // the baselines at run start, and a run without that seed stays silent
+        // on its first night instead of announcing every place's starting tiers.
+        bool announce = news != null &&
+                        (world.timeline.dominantKeys.Count > 0 || world.timeline.supportingKeys.Count > 0);
 
         foreach (NationEraProfileSO profile in lib.Profiles)
         {
@@ -196,14 +211,14 @@ public static class TimelineService
                 {
                     newDominant.Add(key);
 
-                    if (!firstRanking && !world.timeline.dominantKeys.Contains(key))
+                    if (announce && !world.timeline.dominantKeys.Contains(key))
                         news.Add($"{ranked[i].attr.displayName} is now DOMINANT in {profile.displayName}.");
                 }
                 else if (i < dominantCount + supportingCount)
                 {
                     newSupporting.Add(key);
 
-                    if (!firstRanking && !world.timeline.supportingKeys.Contains(key) && !world.timeline.dominantKeys.Contains(key))
+                    if (announce && !world.timeline.supportingKeys.Contains(key) && !world.timeline.dominantKeys.Contains(key))
                         news.Add($"{ranked[i].attr.displayName} is rising in {profile.displayName}.");
                 }
             }
@@ -212,7 +227,7 @@ public static class TimelineService
         world.timeline.dominantKeys = newDominant;
         world.timeline.supportingKeys = newSupporting;
 
-        Debug.Log($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, newsAdded={news.Count}).");
+        Debug.Log($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, announced={announce}).");
     }
 
     /// <summary>

@@ -107,6 +107,9 @@ public sealed class RunManager : MonoBehaviour
             }
         }
 
+        // Rank the baselines now, so the first night reports only what day 1 changed.
+        TimelineService.SeedDominance(World, Library, Config.gameConfig);
+
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
     }
 

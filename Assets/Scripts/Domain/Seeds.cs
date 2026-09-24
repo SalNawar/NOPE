@@ -8,6 +8,12 @@ public static class Seeds
     /// <summary>Salt for per-traveller case-generation streams ("CASE").</summary>
     public const int CaseSalt = 0x43415345;
 
+    /// <summary>Salt for the day's guaranteed rule-violator stream ("VIOL").</summary>
+    public const int ViolatorSalt = 0x56494F4C;
+
+    /// <summary>Salt for a traveller's legacy clue stream ("CLUE").</summary>
+    public const int ClueSalt = 0x434C5545;
+
     /// <summary>The day's seed: same run + same day = same seed.</summary>
     public static int Day(int runSeed, int day)
     {
@@ -32,4 +38,13 @@ public static class Seeds
 
     /// <summary>Seed for one traveller's generation stream (independent of the other slots).</summary>
     public static int ForCase(int daySeed, int caseIndex1Based) => Mix(Mix(daySeed, CaseSalt), caseIndex1Based);
+
+    /// <summary>Seed for the day's rule-violator placement (which slots, which places).</summary>
+    public static int ForViolators(int daySeed) => Mix(daySeed, ViolatorSalt);
+
+    /// <summary>
+    /// Seed for one traveller's legacy clue draws, kept apart from the case
+    /// stream so clue settings never change who is a forger.
+    /// </summary>
+    public static int ForClues(int caseSeed) => Mix(caseSeed, ClueSalt);
 }

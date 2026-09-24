@@ -25,12 +25,6 @@ public sealed class NationEraProfileSO : ScriptableObject
     public EraSO era;
 
     [Header("Place (world model)")]
-    /// <summary>The researched moment this place stands for ("Baghdad under the Abbasids, c. 830 CE").</summary>
-    [TextArea] public string moment;
-
-    /// <summary>Representative year of the moment (negative = BCE).</summary>
-    public int year;
-
     /// <summary>Earliest birth year of a traveller from here (negative = BCE).</summary>
     public int birthYearMin;
 
@@ -51,7 +45,7 @@ public sealed class NationEraProfileSO : ScriptableObject
     public List<AttributeBaseline> baselines = new();
 
     /// <summary>Label used in books, claims and Citizen Records: "Abbasid Baghdad (Medieval)".</summary>
-    public string OriginLabel => era != null ? $"{displayName} ({era.displayName})" : displayName;
+    public string OriginLabel => OriginLabels.Format(displayName, era != null ? era.displayName : null);
 
     /// <summary>Every given name of this place (male then female).</summary>
     public IReadOnlyList<string> AllNames
@@ -63,19 +57,6 @@ public sealed class NationEraProfileSO : ScriptableObject
             if (femaleNames != null) names.AddRange(femaleNames);
             return names;
         }
-    }
-
-    /// <summary>The value of one of this place's facts, or null if not authored.</summary>
-    public string GetFact(ClueCategory category)
-    {
-        if (facts == null)
-            return null;
-
-        foreach (ProfileFact f in facts)
-            if (f != null && f.category == category)
-                return f.value;
-
-        return null;
     }
 
     /// <summary>

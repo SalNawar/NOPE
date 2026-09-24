@@ -1,6 +1,38 @@
 {
   "travellerAgeMin": 18,
   "travellerAgeMax": 70,
+  "content": {
+    "library": "Assets/Data/Content Library/ContentLibrary_Main.asset",
+    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Investigation.asset",
+    "dayPlanFolder": "Assets/Data/Investigation",
+    "attributes": [
+      {
+        "id": "democracy",
+        "asset": "Assets/Data/Attributes/Attr_Democracy.asset"
+      },
+      {
+        "id": "science",
+        "asset": "Assets/Data/Attributes/Attr_Science.asset"
+      },
+      {
+        "id": "art",
+        "asset": "Assets/Data/Attributes/Attr_Art.asset"
+      }
+    ],
+    "archetypes": [
+      "Assets/Data/Archetypes/Archetype_Artist.asset",
+      "Assets/Data/Archetypes/Archetype_Diplomat.asset",
+      "Assets/Data/Archetypes/Archetype_Merchant.asset",
+      "Assets/Data/Archetypes/Archetype_Scientist.asset",
+      "Assets/Data/Archetypes/Archetype_Soldier.asset",
+      "Assets/Data/Archetypes/Archetype_Wanderer.asset"
+    ],
+    "books": [
+      "Assets/Data/Investigation/RefBook_Currency.asset",
+      "Assets/Data/Investigation/RefBook_Language.asset",
+      "Assets/Data/Investigation/RefBook_Technology.asset"
+    ]
+  },
   "eras": [
     {
       "id": "ancient",

@@ -96,7 +96,7 @@ public static class ContentLibraryValidator
     private static readonly ClueCategory[] RequiredFacts =
         { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics };
 
-    /// <summary>Reports places with missing or duplicate facts, no names, or an inverted birth-year range.</summary>
+    /// <summary>Reports places with missing or duplicate facts, no names, or unset / inverted birth years.</summary>
     private static int CheckPlaces(ContentLibrarySO lib)
     {
         int issues = 0;
@@ -108,7 +108,8 @@ public static class ContentLibraryValidator
 
             foreach (ClueCategory category in RequiredFacts)
             {
-                if (string.IsNullOrWhiteSpace(place.GetFact(category)))
+                ProfileFact fact = place.facts?.FirstOrDefault(f => f != null && f.category == category);
+                if (fact == null || string.IsNullOrWhiteSpace(fact.value))
                 {
                     Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has no {category} fact in '{lib.name}' (papers would print a placeholder).", place);
                     issues++;
@@ -123,11 +124,16 @@ public static class ContentLibraryValidator
 
             if (place.AllNames.Count == 0)
             {
-                Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has no names; visitors from there fall back to other pools.", place);
+                Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has no names; visitors from there are called 'Subject #n'.", place);
                 issues++;
             }
 
-            if (place.birthYearMin > place.birthYearMax)
+            if (place.birthYearMin == 0 && place.birthYearMax == 0)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has no birth years (0..0); its visitors are born 'Unknown' and their birth dates are never forged.", place);
+                issues++;
+            }
+            else if (place.birthYearMin > place.birthYearMax)
             {
                 Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has birthYearMin {place.birthYearMin} > birthYearMax {place.birthYearMax}.", place);
                 issues++;
@@ -137,7 +143,11 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>Reports day plans whose weighted eras have no place today (eras x allowed nations).</summary>
+    /// <summary>
+    /// Reports day plans whose weighted eras have no place today (eras x allowed
+    /// nations), rules no place of the day can break, and legendaries whose
+    /// place is outside the day's world (their papers would print placeholders).
+    /// </summary>
     private static int CheckDayPlanPlaces(ContentLibrarySO lib)
     {
         int issues = 0;
@@ -155,14 +165,32 @@ public static class ContentLibraryValidator
                 continue;
             }
 
-            if (plan.EraWeights == null)
-                continue;
-
-            foreach (EraWeight w in plan.EraWeights)
+            foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
             {
                 if (w.era != null && w.weight > 0f && today.All(p => p.era != w.era))
                 {
                     Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights era '{w.era.id}' but none of its allowed nations has a place there.", plan);
+                    issues++;
+                }
+            }
+
+            foreach (TravelRuleSO rule in plan.ActiveTravelRules)
+            {
+                if (rule != null && today.All(p => rule.Allows(p.nation, p.era)))
+                {
+                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' uses rule '{rule.name}', which forbids none of the day's places (no traveller can break it).", plan);
+                    issues++;
+                }
+            }
+
+            foreach (LegendarySO legend in plan.AvailableLegendaries ?? Array.Empty<LegendarySO>())
+            {
+                if (legend == null || legend.nation == null || legend.trueEra == null)
+                    continue;
+
+                if (!today.Any(p => p.nation == legend.nation && p.era == legend.trueEra))
+                {
+                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' lists legendary '{legend.displayName}' whose place ({legend.nation.id}, {legend.trueEra.id}) is not in the day's world; their papers would print placeholders.", plan);
                     issues++;
                 }
             }

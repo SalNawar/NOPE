@@ -34,12 +34,24 @@ public static class SaveSystem
         public WorldState world;
     }
 
-    /// <summary>Returns true if a save file exists that this build can continue.</summary>
+    /// <summary>Returns true if a save file exists that this build can continue (older versions are ignored with a warning).</summary>
     public static bool HasSave()
     {
-        bool exists = File.Exists(SavePath) && ReadVersion() >= MinCompatibleVersion;
-        Debug.Log($"[SaveSystem] HasSave: {exists} ('{SavePath}').");
-        return exists;
+        if (!File.Exists(SavePath))
+        {
+            Debug.Log($"[SaveSystem] HasSave: false (no file at '{SavePath}').");
+            return false;
+        }
+
+        int version = ReadVersion();
+        if (version < MinCompatibleVersion)
+        {
+            Debug.LogWarning($"[SaveSystem] Ignoring the save at '{SavePath}': version {version} predates the real-world content (needs {MinCompatibleVersion}+). Start a new run.");
+            return false;
+        }
+
+        Debug.Log($"[SaveSystem] HasSave: true ('{SavePath}', version {version}).");
+        return true;
     }
 
     /// <summary>The save file's version, or -1 if it is missing or unreadable.</summary>
@@ -103,7 +115,7 @@ public static class SaveSystem
 
         if (!HasSave())
         {
-            Debug.Log("[SaveSystem] <<< Exiting Load — no save file present.");
+            Debug.Log("[SaveSystem] <<< Exiting Load — no save this build can continue.");
             return null;
         }
 
@@ -115,12 +127,6 @@ public static class SaveSystem
             if (file == null || file.world == null)
             {
                 Debug.LogError("SaveSystem.Load: save file was empty or malformed.");
-                return null;
-            }
-
-            if (file.version < MinCompatibleVersion)
-            {
-                Debug.LogWarning($"SaveSystem.Load: save version {file.version} predates the real-world content (needs {MinCompatibleVersion}+); ignoring it. Start a new run.");
                 return null;
             }
 

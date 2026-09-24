@@ -7,8 +7,9 @@ using UnityEngine;
 /// DayPlanSO -> picks the traveller's place (era by weight, nation among today's
 /// places) -> identity (names and birth years of that place) -> documents whose
 /// fields come from today's FactTable (one field may be forged with another
-/// place's value). Every draw comes from a per-traveller seeded stream, so the
-/// same run and day always produce the same travellers.
+/// place's value). Every draw comes from seeded streams (one per traveller,
+/// plus the day's rule-violator stream), so the same run and day always
+/// produce the same travellers.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -27,6 +28,15 @@ public sealed class CaseFactory
     /// <summary>The current traveller's random stream (reset per case).</summary>
     private IRandomSource _rng = new SeededRandom(0);
 
+    /// <summary>The current traveller's legacy clue stream, apart from <see cref="_rng"/> so clue settings never change who forges.</summary>
+    private IRandomSource _clueRng = new SeededRandom(0);
+
+    /// <summary>Categories with a reference book (only these can prove a forged place fact).</summary>
+    private readonly HashSet<ClueCategory> _bookCategories;
+
+    /// <summary>Guaranteed rule violators for the day being generated, by 1-based slot.</summary>
+    private Dictionary<int, NationEraProfileSO> _violators = new Dictionary<int, NationEraProfileSO>();
+
     /// <summary>
     /// Construct a factory over a content library and today's fact snapshot
     /// (ContentLibrarySO.BuildFactTable for the same day plan).
@@ -35,6 +45,7 @@ public sealed class CaseFactory
     {
         _lib = lib;
         _facts = facts ?? new FactTable();
+        _bookCategories = lib != null ? lib.ReferenceBookCategories() : new HashSet<ClueCategory>();
     }
 
     /// <summary>
@@ -64,12 +75,16 @@ public sealed class CaseFactory
         if (_todays.Count == 0)
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
 
-        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s).");
+        _violators = PlanViolators(plan, total, daySeed);
+
+        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s); guaranteed violators in slot(s) [{string.Join(", ", _violators.Keys)}].");
 
         for (int i = 0; i < total; i++)
         {
             int caseIndex1Based = i + 1;
-            _rng = new SeededRandom(Seeds.ForCase(daySeed, caseIndex1Based));
+            int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
+            _rng = new SeededRandom(caseSeed);
+            _clueRng = new SeededRandom(Seeds.ForClues(caseSeed));
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
 
@@ -79,9 +94,46 @@ public sealed class CaseFactory
     }
 
     /// <summary>
+    /// Places one violator of each active rule in the first half of the queue
+    /// (DayPlanSO.GuaranteeRuleViolators), drawn from the day's own violator
+    /// stream so the travellers' streams are untouched. A rule that forbids
+    /// none of today's places cannot be tested and is skipped with a warning.
+    /// </summary>
+    private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed)
+    {
+        var violators = new Dictionary<int, NationEraProfileSO>();
+        if (!plan.GuaranteeRuleViolators)
+            return violators;
+
+        var breakersPerRule = new List<List<NationEraProfileSO>>();
+        foreach (TravelRuleSO rule in plan.ActiveTravelRules)
+        {
+            if (rule == null)
+                continue;
+
+            List<NationEraProfileSO> breakers = _todays.Where(p => !rule.Allows(p.nation, p.era)).ToList();
+            if (breakers.Count == 0)
+            {
+                Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' forbids none of day {plan.DayNumber}'s places, so no traveller can break it.");
+                continue;
+            }
+
+            breakersPerRule.Add(breakers);
+        }
+
+        var rng = new SeededRandom(Seeds.ForViolators(daySeed));
+        int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count, rng);
+        for (int i = 0; i < slots.Length; i++)
+            violators[slots[i]] = breakersPerRule[i][rng.Range(0, breakersPerRule[i].Count)];
+
+        return violators;
+    }
+
+    /// <summary>
     /// Generates one case:
     /// - Forced blueprint for this slot (if defined)
     /// - Maybe legendary (based on chance)
+    /// - A guaranteed rule violator's place for this slot (if planned)
     /// - Otherwise pick the true era from day weights and a place in it
     /// - If blueprint not forced, pick from possibleBlueprints
     /// - Build documents, then fill and maybe forge their fields
@@ -94,8 +146,15 @@ public sealed class CaseFactory
         // 2) Legendary roll.
         LegendarySO legendary = TryRollLegendary(plan, state);
 
+        // 2.5) A planned rule violator stands in this slot (a legendary keeps its own place).
+        NationEraProfileSO violatorPlace = null;
+        if (legendary == null)
+            _violators.TryGetValue(caseIndex1Based, out violatorPlace);
+
         // 3) Decide true era.
-        EraSO trueEra = legendary != null ? legendary.trueEra : PickEraFromPlan(plan);
+        EraSO trueEra = legendary != null ? legendary.trueEra
+            : violatorPlace != null ? violatorPlace.era
+            : PickEraFromPlan(plan);
 
         // 4) Decide blueprint (forced > legendary override > weighted pick,
         //    with active-effect weight multipliers applied).
@@ -108,10 +167,12 @@ public sealed class CaseFactory
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationEraProfileSO place = PickPlace(legendary, trueEra);
+        NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, trueEra);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
-        string originLabel = place != null ? place.OriginLabel : FallbackOriginLabel(nation, trueEra);
-        string givenName = ResolveGivenName(legendary, archetype, place, nation, caseIndex1Based);
+        string originLabel = place != null
+            ? _facts.OriginLabel(place.nation.id, place.era.id) ?? place.OriginLabel
+            : FallbackOriginLabel(nation, trueEra);
+        string givenName = ResolveGivenName(legendary, place, caseIndex1Based);
         string role = archetype != null ? archetype.displayName : "Traveler";
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
         string birthDate = GenerateBirthDate(place);
@@ -125,7 +186,6 @@ public sealed class CaseFactory
             legendarySource = legendary,
             archetype = archetype,
             nation = nation,
-            place = place,
             originLabel = originLabel,
             visitorDisplayName = visitorName,
             visitorGivenName = givenName,
@@ -154,7 +214,7 @@ public sealed class CaseFactory
         inst.claimedEra = trueEra;
         inst.claimLine = $"I request passage home to {originLabel}.";
         inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
-        PopulateDocumentFields(inst, blueprint, state);
+        PopulateDocumentFields(inst, place, blueprint, state);
 
         Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetype?.displayName}', legendary={legendary != null}, visitor='{visitorName}', born='{birthDate}', forged={inst.isForged}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
 
@@ -162,18 +222,16 @@ public sealed class CaseFactory
     }
 
     /// <summary>Origin label when no place is authored for a nation+era (content gap).</summary>
-    private static string FallbackOriginLabel(NationSO nation, EraSO era)
-    {
-        string where = nation != null ? nation.displayName : "an unlisted land";
-        return era != null ? $"{where} ({era.displayName})" : where;
-    }
+    private static string FallbackOriginLabel(NationSO nation, EraSO era) =>
+        OriginLabels.Format(nation != null ? nation.displayName : "an unlisted land", era != null ? era.displayName : null);
 
     /// <summary>
     /// Fills each document's structured fields from today's facts for the
     /// case's claimed place, then (with the blueprint's contradiction chance)
-    /// forges exactly one provable field with another place's value, flagging the case.
+    /// forges exactly one provable field with another place's value (or a
+    /// shifted birth year inside the place's birth years), flagging the case.
     /// </summary>
-    private void PopulateDocumentFields(CaseInstance inst, CaseBlueprintSO blueprint, WorldState state)
+    private void PopulateDocumentFields(CaseInstance inst, NationEraProfileSO place, CaseBlueprintSO blueprint, WorldState state)
     {
         if (inst == null || _lib == null)
             return;
@@ -215,45 +273,28 @@ public sealed class CaseFactory
         if (_rng.Value() >= forgeChance)
             return;
 
-        // Forge one PROVABLE field. Place facts are provable when today's table
-        // holds the claim's truth plus a different value to forge with (the
-        // player can find both in the books); birth dates are provable against
-        // the citizen records (which always carry the true identity). Names stay
-        // honest for now — forged names pair with the future missing-record mechanic.
+        // Forge one PROVABLE field (see Forgery.IsProvable): the player can
+        // always find the truth and the forged value in the books, or the true
+        // birth date in Citizen Records.
         string nationId = inst.claimedNation != null ? inst.claimedNation.id : null;
         string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
-        var provable = new List<DocumentField>();
-
-        foreach (DocumentField f in allFields)
-        {
-            if (f.category == ClueCategory.Name)
-                continue;
-
-            if (f.category == ClueCategory.BirthDate)
-            {
-                if (BirthDates.TryParse(inst.trueBirthDate, out _, out _, out _))
-                    provable.Add(f);
-                continue;
-            }
-
-            string truth = _facts.Get(nationId, eraId, f.category);
-            if (string.IsNullOrEmpty(truth) || _facts.PickOtherValue(f.category, truth, n => 0) == null)
-                continue;
-
-            provable.Add(f);
-        }
+        List<DocumentField> provable = allFields
+            .Where(f => Forgery.IsProvable(f.category, nationId, eraId, _facts, _bookCategories, inst.trueBirthDate))
+            .ToList();
 
         if (provable.Count == 0)
         {
-            Debug.LogWarning($"[CaseFactory] No provable field to forge for '{inst.originLabel}' — case stays genuine. Today's world needs at least two places with this fact.");
+            Debug.LogWarning($"[CaseFactory] No provable field to forge for '{inst.originLabel}' — case stays genuine. Today's world needs a reference book and at least two places with the field's fact.");
             return;
         }
 
         DocumentField target = provable[_rng.Range(0, provable.Count)];
+        Vector2Int shift = blueprint.ForgedBirthYearShift;
 
         string wrong = target.category == ClueCategory.BirthDate
-            ? BirthDates.Forge(inst.trueBirthDate, _rng)
-            : _facts.PickOtherValue(target.category, _facts.Get(nationId, eraId, target.category), n => _rng.Range(0, n));
+            ? BirthDates.Forge(inst.trueBirthDate, shift.x, shift.y,
+                place != null ? place.birthYearMin : int.MinValue, place != null ? place.birthYearMax : int.MaxValue, _rng)
+            : _facts.PickOtherValue(target.category, _facts.Get(nationId, eraId, target.category), _rng);
 
         if (!string.IsNullOrEmpty(wrong) && wrong != target.value)
         {
@@ -319,7 +360,12 @@ public sealed class CaseFactory
     private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO trueEra)
     {
         if (legendary != null && legendary.nation != null)
-            return _lib.GetProfile(legendary.nation, trueEra);
+        {
+            NationEraProfileSO own = _lib.GetProfile(legendary.nation, trueEra);
+            if (own != null && !_todays.Contains(own))
+                Debug.LogWarning($"[CaseFactory] Legendary '{legendary.displayName}' comes from '{own.OriginLabel}', which is not in today's world, so their papers print placeholders. List them only on days that include their place.");
+            return own;
+        }
 
         if (trueEra == null)
             return null;
@@ -330,10 +376,10 @@ public sealed class CaseFactory
 
     /// <summary>
     /// The visitor's given name (no role suffix; records lookup key), unique
-    /// within the day: legendary name > the place's period names > the nation's
-    /// pool > archetype name pool > generic subject.
+    /// within the day: legendary name > the place's period names > generic
+    /// subject (only when a place has no names; the validator flags that).
     /// </summary>
-    private string ResolveGivenName(LegendarySO legendary, ArchetypeSO archetype, NationEraProfileSO place, NationSO nation, int caseIndex1Based)
+    private string ResolveGivenName(LegendarySO legendary, NationEraProfileSO place, int caseIndex1Based)
     {
         if (legendary != null)
         {
@@ -343,9 +389,7 @@ public sealed class CaseFactory
             return legendary.displayName;
         }
 
-        string picked = _roster.Take(place != null ? place.AllNames : null, n => _rng.Range(0, n))
-                        ?? _roster.Take(nation != null ? nation.namePool : null, n => _rng.Range(0, n))
-                        ?? _roster.Take(archetype != null ? archetype.namePool : null, n => _rng.Range(0, n));
+        string picked = _roster.Take(place != null ? place.AllNames : null, n => _rng.Range(0, n));
         if (picked != null)
             return picked;
 
@@ -354,10 +398,10 @@ public sealed class CaseFactory
         return fallback;
     }
 
-    /// <summary>A birth date within the place's birth-year range ("Unknown" when no place is authored).</summary>
+    /// <summary>A birth date within the place's birth-year range ("Unknown" when no place or birth years are authored).</summary>
     private string GenerateBirthDate(NationEraProfileSO place)
     {
-        if (place == null)
+        if (place == null || (place.birthYearMin == 0 && place.birthYearMax == 0))
             return "Unknown";
 
         return BirthDates.Generate(place.birthYearMin, place.birthYearMax, _rng);
@@ -485,7 +529,7 @@ public sealed class CaseFactory
             return;
 
         // Decide how many total clue lines this case should contain.
-        int totalCluesTarget = _rng.Range(blueprint.TotalCluesMin, blueprint.TotalCluesMax + 1);
+        int totalCluesTarget = _clueRng.Range(blueprint.TotalCluesMin, blueprint.TotalCluesMax + 1);
 
         // Create runtime document instances from templates.
         var docInstances = new List<DocumentInstance>();
@@ -532,11 +576,11 @@ public sealed class CaseFactory
         // Decide counts: how many contradictions and red herrings to inject.
         int contradictions = 0;
         for (int i = 0; i < totalCluesTarget; i++)
-            if (_rng.Value() < effectiveContradictionChance) contradictions++;
+            if (_clueRng.Value() < effectiveContradictionChance) contradictions++;
 
         int herrings = 0;
         for (int i = 0; i < totalCluesTarget; i++)
-            if (_rng.Value() < blueprint.RedHerringChance) herrings++;
+            if (_clueRng.Value() < blueprint.RedHerringChance) herrings++;
 
         contradictions = Mathf.Min(contradictions, totalCluesTarget);
         herrings = Mathf.Min(herrings, totalCluesTarget - contradictions);
@@ -601,7 +645,7 @@ public sealed class CaseFactory
 
         for (int i = 0; i < count && temp.Count > 0; i++)
         {
-            int idx = _rng.Range(0, temp.Count);
+            int idx = _clueRng.Range(0, temp.Count);
             result.Add(temp[idx]);
             temp.RemoveAt(idx);
         }
@@ -629,7 +673,7 @@ public sealed class CaseFactory
         ).ToList();
 
         if (preferred.Count > 0)
-            return preferred[_rng.Range(0, preferred.Count)];
+            return preferred[_clueRng.Range(0, preferred.Count)];
 
         // Otherwise choose any doc that still has room.
         var any = docs.Where(d =>
@@ -639,10 +683,10 @@ public sealed class CaseFactory
         ).ToList();
 
         if (any.Count > 0)
-            return any[_rng.Range(0, any.Count)];
+            return any[_clueRng.Range(0, any.Count)];
 
         // Worst case: all docs are "full" -> dump into a random doc anyway.
-        return docs[_rng.Range(0, docs.Count)];
+        return docs[_clueRng.Range(0, docs.Count)];
     }
 
     /// <summary>

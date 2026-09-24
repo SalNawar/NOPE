@@ -55,6 +55,12 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Travel restrictions active this day (announced in the briefing).</summary>
     [SerializeField] private TravelRuleSO[] activeTravelRules;
 
+    /// <summary>
+    /// Each active rule sends at least one violator, placed in the first half
+    /// of the queue, so the day's directives are always tested.
+    /// </summary>
+    [SerializeField] private bool guaranteeRuleViolators = true;
+
     /// <summary>Forced case blueprints by slot index (1-based).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
@@ -82,8 +88,8 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
 
-    /// <summary>Countries allowed today (empty = all).</summary>
-    public IReadOnlyList<NationSO> AllowedNations => allowedNations ?? System.Array.Empty<NationSO>();
+    /// <summary>Whether each active rule is guaranteed a violator in the first half of the queue.</summary>
+    public bool GuaranteeRuleViolators => guaranteeRuleViolators;
 
     /// <summary>True when travellers may come from this country today.</summary>
     public bool AllowsNation(NationSO nation) =>

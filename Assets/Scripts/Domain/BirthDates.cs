@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>
 /// Visitor birth dates as shown on papers and in Citizen Records: "12 Mar 830"
@@ -60,23 +61,47 @@ public static class BirthDates
     }
 
     /// <summary>
-    /// A plausible but wrong date: same day and month, year shifted by 2..24
-    /// either way, skipping year 0. Unreadable input is returned with "(?)".
+    /// A plausible but wrong date: same day and month, year shifted by
+    /// <paramref name="shiftMin"/>..<paramref name="shiftMax"/> years either way,
+    /// skipping year 0. The forged year stays inside [yearMin, yearMax] (the
+    /// place's birth years, so the traveller is never born after their own
+    /// moment) whenever such a shift exists; otherwise any shift in range is used.
+    /// Unreadable input is returned with "(?)".
     /// </summary>
-    public static string Forge(string trueDate, IRandomSource rng)
+    public static string Forge(string trueDate, int shiftMin, int shiftMax, int yearMin, int yearMax, IRandomSource rng)
     {
         if (!TryParse(trueDate, out int day, out int month, out int year))
             return trueDate + " (?)";
 
-        int offset = rng.Range(2, 25) * (rng.Value() < 0.5f ? -1 : 1);
-        int forged = year + offset;
+        shiftMin = Math.Max(1, shiftMin);
+        shiftMax = Math.Max(shiftMin, shiftMax);
+        if (yearMax < yearMin)
+            (yearMin, yearMax) = (yearMax, yearMin);
 
-        // Crossing from CE to BCE (or back) passes over the missing year 0.
-        if (year > 0 && forged <= 0)
-            forged -= 1;
-        else if (year < 0 && forged >= 0)
-            forged += 1;
+        var inRange = new List<int>();
+        var any = new List<int>();
+        for (int shift = shiftMin; shift <= shiftMax; shift++)
+        {
+            foreach (int forged in new[] { AddYears(year, -shift), AddYears(year, shift) })
+            {
+                any.Add(forged);
+                if (forged >= yearMin && forged <= yearMax)
+                    inRange.Add(forged);
+            }
+        }
 
-        return Format(day, month, forged);
+        List<int> pool = inRange.Count > 0 ? inRange : any;
+        return Format(day, month, pool[rng.Range(0, pool.Count)]);
+    }
+
+    /// <summary>Adds years to a signed year, passing over the missing year 0.</summary>
+    private static int AddYears(int year, int offset)
+    {
+        int result = year + offset;
+        if (year > 0 && result <= 0)
+            result -= 1;
+        else if (year < 0 && result >= 0)
+            result += 1;
+        return result;
     }
 }

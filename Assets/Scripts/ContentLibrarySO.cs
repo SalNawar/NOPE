@@ -63,21 +63,28 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>
     /// Today's places: profiles whose era the plan includes and whose nation it
     /// allows, ordered by country (library nation order) then era (chronological).
-    /// A null plan means every authored place.
+    /// Places missing a nation/era (or their ids) are skipped with a warning
+    /// (the validator reports them as errors).
     /// </summary>
     public List<NationEraProfileSO> TodaysProfiles(DayPlanSO plan)
     {
         var result = new List<NationEraProfileSO>();
 
-        if (nationEraProfiles == null)
+        if (nationEraProfiles == null || plan == null)
             return result;
 
         foreach (NationEraProfileSO p in nationEraProfiles)
         {
-            if (p == null || p.nation == null || p.era == null)
+            if (p == null)
                 continue;
 
-            if (plan != null && (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation)))
+            if (p.nation == null || p.era == null || string.IsNullOrWhiteSpace(p.nation.id) || string.IsNullOrWhiteSpace(p.era.id))
+            {
+                Debug.LogWarning($"[ContentLibrarySO] Place '{p.name}' has no nation/era id; it is left out of today's world (Tools > TimeDesk > Validate Content Library).", p);
+                continue;
+            }
+
+            if (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation))
                 continue;
 
             result.Add(p);
@@ -93,9 +100,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>
     /// The day's fact snapshot: every fact of today's places, in book order.
-    /// The only code that turns place data into facts, so the reference books,
-    /// the papers and Citizen Records all read the same values (and
-    /// history-dependent facts have one place to plug in).
+    /// The only code that turns place data into facts, so the reference books
+    /// and the papers read the same values (and history-dependent facts have
+    /// one place to plug in).
     /// </summary>
     public FactTable BuildFactTable(DayPlanSO plan)
     {
@@ -112,6 +119,16 @@ public sealed class ContentLibrarySO : ScriptableObject
         }
 
         return table;
+    }
+
+    /// <summary>Categories that have a reference book (only these can prove a forged place fact).</summary>
+    public HashSet<ClueCategory> ReferenceBookCategories()
+    {
+        var categories = new HashSet<ClueCategory>();
+        foreach (ReferenceBookSO book in ReferenceBooks)
+            if (book != null)
+                categories.Add(book.category);
+        return categories;
     }
 
     /// <summary>Position of a nation in the library (unlisted nations sort last).</summary>

@@ -39,10 +39,11 @@ public readonly struct FactRow
 
 /// <summary>
 /// Today's world facts, keyed by (nation id, era id, category): the single
-/// lookup that case generation, the reference books and Citizen Records all
-/// read. Built once per day (a snapshot), so papers and books always agree.
-/// Pure and string-keyed, so it is tested headless; history-dependent facts
-/// (a later feature) change what goes in, not how it is read.
+/// lookup that case generation (field values, forgeries, the claim's origin
+/// label) and the reference books read. Built once per day (a snapshot), so
+/// papers and books always agree; Citizen Records carry the origin label the
+/// case took from here. Pure and string-keyed, so it is tested headless;
+/// history-dependent facts (a later feature) change what goes in, not how it is read.
 /// </summary>
 public sealed class FactTable
 {
@@ -96,12 +97,24 @@ public sealed class FactTable
         _rows.TryGetValue(category, out List<FactRow> list) ? list : NoRows;
 
     /// <summary>
+    /// Whether today holds a value of this category that differs from
+    /// <paramref name="exclude"/> under the scanner's comparison.
+    /// </summary>
+    public bool HasOtherValue(ClueCategory category, string exclude) => OtherValues(category, exclude).Count > 0;
+
+    /// <summary>
     /// A value of this category that differs from <paramref name="exclude"/>
     /// under the scanner's comparison (trimmed, case-insensitive); each distinct
     /// value is offered once. Null when there is none.
     /// </summary>
-    /// <param name="randomIndex">Returns an index in [0, count); out-of-range values are clamped.</param>
-    public string PickOtherValue(ClueCategory category, string exclude, Func<int, int> randomIndex)
+    public string PickOtherValue(ClueCategory category, string exclude, IRandomSource rng)
+    {
+        List<string> candidates = OtherValues(category, exclude);
+        return candidates.Count == 0 || rng == null ? null : candidates[rng.Range(0, candidates.Count)];
+    }
+
+    /// <summary>Distinct values of a category that differ from <paramref name="exclude"/>, in row order.</summary>
+    private List<string> OtherValues(ClueCategory category, string exclude)
     {
         var candidates = new List<string>();
         foreach (FactRow row in Rows(category))
@@ -116,10 +129,6 @@ public sealed class FactTable
                 candidates.Add(row.Value);
         }
 
-        if (candidates.Count == 0 || randomIndex == null)
-            return null;
-
-        int i = randomIndex(candidates.Count);
-        return candidates[i < 0 ? 0 : i >= candidates.Count ? candidates.Count - 1 : i];
+        return candidates;
     }
 }
