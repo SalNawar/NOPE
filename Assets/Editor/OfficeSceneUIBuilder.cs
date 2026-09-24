@@ -74,7 +74,7 @@ public static class OfficeSceneUIBuilder
 
         // XP desktop wallpaper (behind everything) + taskbar with system-tray HUD.
         BuildDesktop(root);
-        BuildTaskbar(root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText);
+        BuildTaskbar(root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
 
         // Verdict line (result text)
         TMP_Text verdictText = Text(root, "VerdictText", "", 26, TextAlignmentOptions.Center, new Vector2(0.25f, 0.86f), new Vector2(0.75f, 0.92f), Color.white);
@@ -246,6 +246,15 @@ public static class OfficeSceneUIBuilder
         // windows are launched by the investigation icon grid), plus a Start menu.
         BuildDesktopShell(canvas, bookShelf, windowLayer);
 
+        // Cursor + hover highlight: one scene component; clickables need no setup.
+        BuildInteractionFeedback();
+
+        // Shift clock: driver beside the GameManager, tray + wall-clock readouts.
+        ShiftClockDriver shiftClock = gameManager.GetComponent<ShiftClockDriver>();
+        if (shiftClock == null)
+            shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
+        BuildShiftClockReadouts(shiftClock, trayClockText);
+
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
         SetRef(soOffice, "moneyText", moneyText);
@@ -308,6 +317,7 @@ public static class OfficeSceneUIBuilder
         SetRef(soGm, "dayFlowUI", dayFlow);
         SetRef(soGm, "officeView", officeView);
         SetRef(soGm, "readySign", GameObject.Find("OfficeRoot")?.transform.Find("ReadySign")?.GetComponent<Clickable>());
+        SetRef(soGm, "shiftClock", shiftClock);
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
@@ -691,7 +701,7 @@ public static class OfficeSceneUIBuilder
         return panel;
     }
 
-    private static void BuildTaskbar(Transform root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText)
+    private static void BuildTaskbar(Transform root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text clockText)
     {
         Transform bar = Panel(root, "Taskbar", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 18f), new Vector2(0f, 36f), XpBlue);
         Panel(bar, "TaskbarGloss", new Vector2(0f, 0.72f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.18f));
@@ -701,10 +711,17 @@ public static class OfficeSceneUIBuilder
         TMP_Text st = Text(start, "Label", "start", 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white);
         st.fontStyle = FontStyles.Bold | FontStyles.Italic;
 
-        Transform tray = Panel(bar, "Tray", new Vector2(0.74f, 0.12f), new Vector2(0.995f, 0.88f), Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f));
-        dayText = Text(tray, "DayText", "Day 1", 18, TextAlignmentOptions.Center, new Vector2(0f, 0f), new Vector2(0.34f, 1f), Color.white);
-        moneyText = Text(tray, "MoneyText", "Credits: 0", 18, TextAlignmentOptions.Center, new Vector2(0.34f, 0f), new Vector2(0.67f, 1f), Color.white);
-        stabilityText = Text(tray, "StabilityText", "Stability: 100%", 18, TextAlignmentOptions.Center, new Vector2(0.67f, 0f), new Vector2(1f, 1f), Color.white);
+        // System tray: Day | Credits | Stability | Clock. Text() returns existing
+        // objects unchanged, so the slot anchors are re-applied here (authoritative).
+        Transform tray = Panel(bar, "Tray", new Vector2(0.64f, 0.12f), new Vector2(0.995f, 0.88f), Vector2.zero, Vector2.zero, new Color(0.1f, 0.32f, 0.78f, 1f));
+        dayText = Text(tray, "DayText", "Day 1", 18, TextAlignmentOptions.Center, new Vector2(0f, 0f), new Vector2(0.2f, 1f), Color.white);
+        moneyText = Text(tray, "MoneyText", "Credits: 0", 18, TextAlignmentOptions.Center, new Vector2(0.2f, 0f), new Vector2(0.48f, 1f), Color.white);
+        stabilityText = Text(tray, "StabilityText", "Stability: 100%", 18, TextAlignmentOptions.Center, new Vector2(0.48f, 0f), new Vector2(0.8f, 1f), Color.white);
+        clockText = Text(tray, "ClockText", "09:00", 18, TextAlignmentOptions.Center, new Vector2(0.8f, 0f), new Vector2(1f, 1f), Color.white);
+        SetAnchors(dayText.transform, new Vector2(0f, 0f), new Vector2(0.2f, 1f));
+        SetAnchors(moneyText.transform, new Vector2(0.2f, 0f), new Vector2(0.48f, 1f));
+        SetAnchors(stabilityText.transform, new Vector2(0.48f, 0f), new Vector2(0.8f, 1f));
+        SetAnchors(clockText.transform, new Vector2(0.8f, 0f), new Vector2(1f, 1f));
 
         bar.SetAsLastSibling();
     }
@@ -975,6 +992,265 @@ public static class OfficeSceneUIBuilder
         var so = new SerializedObject(reactive);
         SetRef(so, "target", poster);
         so.ApplyModifiedProperties();
+    }
+
+    // ----------------------------- Shift clock (booth + tray) -----------------------------
+
+    /// <summary>Ink colour of the placeholder wall clock.</summary>
+    private static readonly Color32 ClockInk = new Color32(30, 28, 26, 255);
+
+    /// <summary>
+    /// Builds the booth wall clock (face plus hour and minute hands; placeholder
+    /// art until the real clock pieces land) and wires ShiftClockReadouts on
+    /// OfficeRoot to the driver, the tray clock and the hands. Idempotent.
+    /// </summary>
+    private static void BuildShiftClockReadouts(ShiftClockDriver driver, TMP_Text trayClockText)
+    {
+        GameObject root = GameObject.Find("OfficeRoot");
+        if (root == null)
+        {
+            Debug.LogWarning("[TimeDesk] No OfficeRoot, so the wall clock was not built (the booth is built first in Build()).");
+            return;
+        }
+
+        SpriteRenderer face = EnsureSprite(root.transform, "WallClock",
+            EnsureOfficeShape("clock_face", 100, 100, new Vector2(0.5f, 0.5f), ClockFacePixel),
+            new Vector3(6.2f, 3.3f, 4.5f), -40);
+        SpriteRenderer hourHand = EnsureSprite(face.transform, "HourHand",
+            EnsureOfficeShape("clock_hand_hour", 8, 30, new Vector2(0.5f, 0.1f), (x, y) => ClockInk),
+            new Vector3(0f, 0f, -0.01f), -39);
+        SpriteRenderer minuteHand = EnsureSprite(face.transform, "MinuteHand",
+            EnsureOfficeShape("clock_hand_minute", 6, 42, new Vector2(0.5f, 0.07f), (x, y) => ClockInk),
+            new Vector3(0f, 0f, -0.02f), -38);
+
+        ShiftClockReadouts readouts = root.GetComponent<ShiftClockReadouts>();
+        if (readouts == null)
+            readouts = root.AddComponent<ShiftClockReadouts>();
+        var so = new SerializedObject(readouts);
+        SetRef(so, "driver", driver);
+        SetRef(so, "trayClockText", trayClockText);
+        SetRef(so, "hourHand", hourHand.transform);
+        SetRef(so, "minuteHand", minuteHand.transform);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>Placeholder clock face: cream dial, dark rim, hour ticks, centre cap.</summary>
+    private static Color32 ClockFacePixel(int x, int y)
+    {
+        float dx = x - 49.5f;
+        float dy = y - 49.5f;
+        float d = Mathf.Sqrt(dx * dx + dy * dy);
+        if (d > 49f)
+            return new Color32(0, 0, 0, 0);
+        if (d > 45f)
+            return ClockInk;
+        float angle = Mathf.Repeat(Mathf.Atan2(dy, dx) * Mathf.Rad2Deg, 30f);
+        if (d > 37f && (angle < 2.5f || angle > 27.5f))
+            return ClockInk;
+        if (d < 3f)
+            return ClockInk;
+        return new Color32(242, 237, 220, 255);
+    }
+
+    /// <summary>
+    /// Returns a placeholder Sprite at Assets/Art/Office/Placeholder/{name}.png drawn
+    /// by a pixel function, with a custom pivot (e.g. clock hands pivot at their
+    /// base). Created once; swap the PNG for final art and keep the .meta (the pivot lives there).
+    /// </summary>
+    private static Sprite EnsureOfficeShape(string name, int w, int h, Vector2 pivot, System.Func<int, int, Color32> pixel)
+    {
+        string folder = "Assets/Art/Office/Placeholder";
+        string assetPath = $"{folder}/{name}.png";
+        Sprite existing = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+        if (existing != null)
+            return existing;
+
+        EnsureFolderTree(folder);
+
+        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        var pixels = new Color32[w * h];
+        for (int y = 0; y < h; y++)
+            for (int x = 0; x < w; x++)
+                pixels[y * w + x] = pixel(x, y);
+        tex.SetPixels32(pixels);
+        tex.Apply();
+
+        string abs = System.IO.Path.Combine(Application.dataPath, $"Art/Office/Placeholder/{name}.png");
+        System.IO.File.WriteAllBytes(abs, tex.EncodeToPNG());
+        Object.DestroyImmediate(tex);
+
+        AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
+        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
+        {
+            imp.textureType = TextureImporterType.Sprite;
+            imp.spriteImportMode = SpriteImportMode.Single;
+            imp.spritePixelsPerUnit = 100f;
+            imp.mipmapEnabled = false;
+            imp.alphaIsTransparency = true;
+            var settings = new TextureImporterSettings();
+            imp.ReadTextureSettings(settings);
+            settings.spriteAlignment = (int)SpriteAlignment.Custom;
+            settings.spritePivot = pivot;
+            imp.SetTextureSettings(settings);
+            imp.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+    }
+
+    /// <summary>Sets a RectTransform's anchors and zeroes its offsets (stretch within the anchors).</summary>
+    private static void SetAnchors(Transform t, Vector2 aMin, Vector2 aMax)
+    {
+        var rt = (RectTransform)t;
+        rt.anchorMin = aMin;
+        rt.anchorMax = aMax;
+        rt.offsetMin = Vector2.zero;
+        rt.offsetMax = Vector2.zero;
+    }
+
+    // ----------------------------- Cursor + hover highlight -----------------------------
+
+    /// <summary>Settings asset for the cursor and hover outline.</summary>
+    private const string InteractionFeedbackPath = "Assets/Data/Config/InteractionFeedback_Default.asset";
+
+    /// <summary>URP's unlit sprite material (outlines ignore 2D lighting).</summary>
+    private const string UnlitSpriteMaterialPath = "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Sprite-Unlit-Default.mat";
+
+    /// <summary>Where generated placeholder cursors live (never mistaken for final art).</summary>
+    private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
+
+    /// <summary>Placeholder arrow outline, in top-left pixel coordinates of a 32x32 cursor.</summary>
+    private static readonly Vector2[] ArrowCursorShape =
+    {
+        new Vector2(0, 0), new Vector2(0, 22), new Vector2(5, 17), new Vector2(9, 26),
+        new Vector2(12, 25), new Vector2(8, 16), new Vector2(15, 16),
+    };
+
+    /// <summary>Placeholder pointing hand (fingertip at 12,1), top-left pixel coordinates.</summary>
+    private static readonly Vector2[] HandCursorShape =
+    {
+        new Vector2(10, 1), new Vector2(13, 1), new Vector2(14, 2), new Vector2(14, 12),
+        new Vector2(21, 13), new Vector2(23, 15), new Vector2(23, 25), new Vector2(19, 30),
+        new Vector2(10, 30), new Vector2(6, 24), new Vector2(5, 18), new Vector2(7, 17),
+        new Vector2(10, 19),
+    };
+
+    /// <summary>
+    /// Ensures the interaction-feedback settings (cursor art by file name when
+    /// present, placeholders otherwise; unlit outline material) and a
+    /// HoverHighlighter on the EventSystem wired to them. Idempotent.
+    /// </summary>
+    private static void BuildInteractionFeedback()
+    {
+        InteractionFeedbackSO settings = AssetDatabase.LoadAssetAtPath<InteractionFeedbackSO>(InteractionFeedbackPath);
+        if (settings == null)
+        {
+            EnsureFolderTree("Assets/Data/Config");
+            settings = ScriptableObject.CreateInstance<InteractionFeedbackSO>();
+            AssetDatabase.CreateAsset(settings, InteractionFeedbackPath);
+        }
+
+        // Replace only empty or placeholder cursors, so final art wins but a designer's pick is kept.
+        if (settings.arrowCursor == null || IsPlaceholderCursor(settings.arrowCursor))
+            settings.arrowCursor = EnsureCursorTexture("cursor_arrow", ArrowCursorShape);
+        if (settings.handCursor == null || IsPlaceholderCursor(settings.handCursor))
+            settings.handCursor = EnsureCursorTexture("cursor_hand", HandCursorShape);
+        if (settings.outlineMaterial == null)
+            settings.outlineMaterial = AssetDatabase.LoadAssetAtPath<Material>(UnlitSpriteMaterialPath);
+        EditorUtility.SetDirty(settings);
+        AssetDatabase.SaveAssets();
+
+        EventSystem eventSystem = Object.FindFirstObjectByType<EventSystem>();
+        if (eventSystem == null)
+        {
+            Debug.LogWarning("[TimeDesk] No EventSystem, so no HoverHighlighter was added.");
+            return;
+        }
+
+        HoverHighlighter highlighter = eventSystem.GetComponent<HoverHighlighter>();
+        if (highlighter == null)
+            highlighter = eventSystem.gameObject.AddComponent<HoverHighlighter>();
+        var so = new SerializedObject(highlighter);
+        SetRef(so, "settings", settings);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>True for a cursor generated by this builder.</summary>
+    private static bool IsPlaceholderCursor(Texture2D texture) =>
+        AssetDatabase.GetAssetPath(texture).StartsWith(PlaceholderCursorFolder);
+
+    /// <summary>
+    /// Returns the cursor texture named <paramref name="artName"/> (final art, anywhere
+    /// under Assets) or a generated placeholder, with Cursor import settings applied.
+    /// </summary>
+    private static Texture2D EnsureCursorTexture(string artName, Vector2[] placeholderShape)
+    {
+        Texture2D art = FindTextureByName(artName, PlaceholderCursorFolder);
+        string path = art != null ? AssetDatabase.GetAssetPath(art) : $"{PlaceholderCursorFolder}/placeholder_{artName}.png";
+
+        if (art == null && AssetDatabase.LoadAssetAtPath<Texture2D>(path) == null)
+        {
+            EnsureFolderTree(PlaceholderCursorFolder);
+            const int size = 32;
+            var tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+            var pixels = new Color32[size * size];
+            for (int y = 0; y < size; y++)
+                for (int x = 0; x < size; x++)
+                    pixels[y * size + x] = CursorPixel(placeholderShape, x, y, size);
+            tex.SetPixels32(pixels);
+            tex.Apply();
+            System.IO.File.WriteAllBytes(System.IO.Path.GetFullPath(path), tex.EncodeToPNG());
+            Object.DestroyImmediate(tex);
+            AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceUpdate);
+        }
+
+        if (AssetImporter.GetAtPath(path) is TextureImporter imp &&
+            (imp.textureType != TextureImporterType.Cursor || !imp.isReadable || imp.mipmapEnabled))
+        {
+            imp.textureType = TextureImporterType.Cursor;
+            imp.isReadable = true;
+            imp.mipmapEnabled = false;
+            imp.alphaIsTransparency = true;
+            imp.npotScale = TextureImporterNPOTScale.None;
+            imp.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+    }
+
+    /// <summary>First Texture2D whose file name is exactly <paramref name="name"/>, outside a folder.</summary>
+    private static Texture2D FindTextureByName(string name, string excludeFolder)
+    {
+        foreach (string guid in AssetDatabase.FindAssets($"{name} t:Texture2D"))
+        {
+            string p = AssetDatabase.GUIDToAssetPath(guid);
+            if (p.StartsWith(excludeFolder) || System.IO.Path.GetFileNameWithoutExtension(p) != name)
+                continue;
+            return AssetDatabase.LoadAssetAtPath<Texture2D>(p);
+        }
+        return null;
+    }
+
+    /// <summary>Placeholder cursor pixel: white inside the polygon, 1 px black edge, clear outside.</summary>
+    private static Color32 CursorPixel(Vector2[] polygon, int x, int y, int size)
+    {
+        bool Inside(int px, int py) => InPolygon(polygon, px + 0.5f, (size - 1 - py) + 0.5f);
+
+        if (!Inside(x, y))
+            return new Color32(0, 0, 0, 0);
+        bool edge = !Inside(x - 1, y) || !Inside(x + 1, y) || !Inside(x, y - 1) || !Inside(x, y + 1);
+        return edge ? new Color32(0, 0, 0, 255) : new Color32(255, 255, 255, 255);
+    }
+
+    /// <summary>Even-odd point-in-polygon test.</summary>
+    private static bool InPolygon(Vector2[] polygon, float px, float py)
+    {
+        bool inside = false;
+        for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
+        {
+            if ((polygon[i].y > py) != (polygon[j].y > py) &&
+                px < (polygon[j].x - polygon[i].x) * (py - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x)
+                inside = !inside;
+        }
+        return inside;
     }
 
     /// <summary>Adds a visible "Back to Office" button to the desktop canvas.</summary>
