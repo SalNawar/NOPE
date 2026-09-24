@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_germany_modern
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: germany_modern
+  displayName: Weimar Berlin
+  nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
+  era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  birthYearMin: 1856
+  birthYearMax: 1908
+  facts:
+  - category: 4
+    value: Reichsmark & Rentenmark
+  - category: 0
+    value: Berlin German (Berlinisch)
+  - category: 3
+    value: Leica 35mm camera
+  - category: 5
+    value: Berlin (Weimar Republic)
+  - category: 2
+    value: "Reichspr\xE4sident Hindenburg"
+  maleNames:
+  - Kurt
+  - Erich
+  - Werner
+  - Herbert
+  - Willi
+  - Rudolf
+  - Walter
+  - Heinz
+  femaleNames:
+  - Lotte
+  - "K\xE4the"
+  - Erna
+  - Ilse
+  - Hilde
+  - Elfriede
+  - Irmgard
+  - Trude
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

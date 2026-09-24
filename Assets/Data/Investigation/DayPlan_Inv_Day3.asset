@@ -17,16 +17,18 @@ MonoBehaviour:
   possibleBlueprints:
   - {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
   eraWeights:
-  - era: {fileID: 11400000, guid: 534846cde921ef949a1905cece8a8d6f, type: 2}
+  - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
     weight: 1
-  - era: {fileID: 11400000, guid: a66b025b152f6e048b2667fbc96ec12e, type: 2}
+  - era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
     weight: 1
-  - era: {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
+  - era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
     weight: 1
+  allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries: []
   activeTravelRules:
-  - {fileID: 11400000, guid: 579af5ca677572f4c83671ef19cc7271, type: 2}
-  - {fileID: 11400000, guid: 8ee68e8e7b7192f41bef5023d1eddc4b, type: 2}
+  - {fileID: 11400000, guid: c6838f36d34d76a4ab89183d7ddc67b7, type: 2}
+  - {fileID: 11400000, guid: a23d6b403075707429acad1c0d651b50, type: 2}
+  guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []

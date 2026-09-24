@@ -20,9 +20,12 @@ MonoBehaviour:
   totalCluesMax: 0
   contradictionChance: 0.5
   redHerringChance: 0.1
+  forgedBirthYearShift: {x: 2, y: 24}
   archetypePool:
-  - {fileID: 11400000, guid: 2b72306525545af429d4406d35b8117a, type: 2}
-  - {fileID: 11400000, guid: 037a374c8da872c49927573b142f5a02, type: 2}
-  - {fileID: 11400000, guid: 640e3d609c682ef45b7db445a250b559, type: 2}
-  - {fileID: 11400000, guid: e6fa9a09c04b5424ab8c6b60aea01d66, type: 2}
+  - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
+  - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
+  - {fileID: 11400000, guid: 4ecaec54e9ac6c64588519617bd49e3b, type: 2}
+  - {fileID: 11400000, guid: 322dd872b153b1442b6dc557666a1b31, type: 2}
+  - {fileID: 11400000, guid: 49896eb7768f7d7478adbfbaf25102e7, type: 2}
+  - {fileID: 11400000, guid: da73973847718a44bae58351b1e5ec41, type: 2}
   authoredImpacts: []

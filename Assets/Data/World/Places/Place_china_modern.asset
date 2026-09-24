@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_china_modern
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: china_modern
+  displayName: Beijing, People's Republic
+  nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
+  era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  birthYearMin: 1902
+  birthYearMax: 1954
+  facts:
+  - category: 4
+    value: Renminbi & grain coupons
+  - category: 0
+    value: Putonghua (simplified chars)
+  - category: 3
+    value: Flying Pigeon bicycle
+  - category: 5
+    value: Beijing (People's Republic)
+  - category: 2
+    value: Acting Chairman Dong Biwu
+  maleNames:
+  - Jianguo
+  - Weidong
+  - Jianjun
+  - Aiguo
+  - Xiangdong
+  - Zhiqiang
+  - Guoqing
+  - Hongwei
+  femaleNames:
+  - Hongmei
+  - Yanhong
+  - Lihua
+  - Aihua
+  - Chunmei
+  - Weihong
+  - Hongying
+  - Lijuan
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
