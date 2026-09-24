@@ -16,9 +16,9 @@ public struct InteractionAction
 
 /// <summary>
 /// The intercom: a vertical list of actions the player can issue to the
-/// traveller. Actions are provided per case by the investigation controller;
-/// the panel only renders buttons (future actions — interrogation questions,
-/// photo capture — plug in as more list entries).
+/// traveller. Actions are the current interview node's choices (requests,
+/// questions, dialog replies), supplied per step by the investigation
+/// controller; the panel only renders buttons.
 /// </summary>
 public sealed class InteractionPanelController : MonoBehaviour
 {

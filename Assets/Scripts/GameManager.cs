@@ -136,16 +136,27 @@ public sealed class GameManager : MonoBehaviour
         // Create the case factory from the content library and today's facts.
         _caseFactory = new CaseFactory(contentLibrary, facts);
 
-        // Generate all cases up-front (seeded: same run + same day = same travellers).
-        _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed);
+        // Today's interview, fixed at day start: the askable questions, which of
+        // them may carry a spoken tell, and the offered dialogs.
+        InterviewDay interview = BuildInterviewDay();
+
+        // Generate all cases up-front (seeded: same run + same day + same
+        // interview wiring = same travellers). Where nothing spoken can be read,
+        // no answer is computed and no tell is spoken.
+        bool spoken = investigationUI != null && investigationUI.InterviewReachable;
+        _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed,
+            spoken ? interview.AskableCategories : System.Array.Empty<ClueCategory>(),
+            spoken ? interview.AnswerTellCategories : System.Array.Empty<ClueCategory>());
+        Debug.Log($"[GameManager] Interview: spoken={spoken}, askable=[{string.Join(", ", interview.AskableCategories)}], spoken tells may come from [{string.Join(", ", interview.AnswerTellCategories)}], dialogs offered={interview.OfferedDialogs().Count}.");
 
         // Investigation: surface today's travel directives (rules to deny), the
-        // agency's citizen records for today's visitors, and today's facts.
+        // agency's citizen records for today's visitors, today's facts and interview.
         if (investigationUI != null)
         {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
             investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
             investigationUI.SetFacts(facts);
+            investigationUI.SetInterviewDay(interview);
         }
 
         // Initial HUD state.
@@ -175,6 +186,19 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log("[GameManager] <<< Exiting Start (starting day loop directly).");
             BeginShift(dayPlan, seed);
         }
+    }
+
+    /// <summary>
+    /// Today's interview from the content library and the day-start world
+    /// (TimelineService.BuildInterviewDay; InterviewDay decides what is askable
+    /// and offered). Logs every structurally broken dialog as an error.
+    /// </summary>
+    private InterviewDay BuildInterviewDay()
+    {
+        InterviewDay interview = TimelineService.BuildInterviewDay(contentLibrary, _worldState, _ledger);
+        foreach (string problem in interview.ContentProblems)
+            Debug.LogError($"[GameManager] {problem} Run Tools > TimeDesk > Generate World, then Validate Content Library.");
+        return interview;
     }
 
     /// <summary>

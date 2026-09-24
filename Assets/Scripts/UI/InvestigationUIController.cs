@@ -7,8 +7,10 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Orchestrates the office investigation: shows the visitor's travel claim and
-/// today's directives, spawns a draggable window per document, builds a shelf of
-/// reference books the player can open/stow, and offers the binary Accept/Deny.
+/// today's directives, runs the interview on the intercom (document requests,
+/// today's questions and narrative dialogs, with the transcript window), spawns
+/// a draggable window per document, builds a shelf of reference books the
+/// player can open/stow, and offers the binary Accept/Deny.
 ///
 /// Two modes:
 /// - RICH: when the desk has been built (document/book/shelf templates wired by
@@ -42,11 +44,18 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private OSWindowChrome scannerWindow;
 
     [Header("Interaction / records")]
-    /// <summary>Intercom panel listing per-case traveller actions.</summary>
+    /// <summary>The intercom: shows the current interview node's choices (requests, questions, dialog replies).</summary>
     [SerializeField] private InteractionPanelController interactionPanel;
 
     /// <summary>Citizen Records app (registry injected per day).</summary>
     [SerializeField] private CitizenRecordsWindowController recordsWindow;
+
+    [Header("Interview")]
+    /// <summary>Case Notes: Interview, the current traveller's transcript (answer rows are compare-clickable).</summary>
+    [SerializeField] private TranscriptWindowController transcriptWindow;
+
+    /// <summary>The transcript window's chrome; every interview choice but a document request opens it.</summary>
+    [SerializeField] private OSWindowChrome transcriptChrome;
 
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
@@ -66,6 +75,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The case currently on the desk (null between cases).</summary>
     private CaseInstance _currentCase;
 
+    /// <summary>Today's interview (set by GameManager): askable questions, offered dialogs, wording and the shift's dialog outcomes.</summary>
+    private InterviewDay _day;
+
+    /// <summary>The current traveller's interview (null before the first case).</summary>
+    private DialogRunner _runner;
+
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
 
@@ -74,6 +89,16 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// scoring may gate denials on documented evidence.
     /// </summary>
     public bool EvidenceSystemActive => RichMode && compareController != null;
+
+    /// <summary>
+    /// True when a traveller's answers can be read: always in the text
+    /// fallback; in the rich desk only when the intercom, the transcript window
+    /// and its chrome are wired. When false, GameManager computes no answers
+    /// and generates no spoken tell that day. (Serialized references are
+    /// compared with != null: an unassigned one is Unity's fake null.)
+    /// </summary>
+    public bool InterviewReachable =>
+        !RichMode || (interactionPanel != null && transcriptWindow != null && transcriptChrome != null);
 
     // Fallback state
     private bool _fallbackBuilt;
@@ -98,6 +123,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         // Birth-date tells are proven only against Citizen Records (RecordMismatch).
         if (EvidenceSystemActive && recordsWindow == null)
             Debug.LogWarning("[InvestigationUIController] Citizen Records not wired: birth-date tells cannot be proven. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
+        if (RichMode && !InterviewReachable)
+            Debug.LogWarning("[InvestigationUIController] Intercom or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
     }
 
     private void OnDestroy()
@@ -152,6 +181,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _facts = facts;
     }
 
+    /// <summary>Injects today's interview (questions, dialogs and wording, fixed at day start).</summary>
+    public void SetInterviewDay(InterviewDay day)
+    {
+        _day = day;
+    }
+
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
     private void RefreshScannerText()
     {
@@ -162,7 +197,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         {
             scannerText.text =
                 "No deviations documented.\n\n" +
-                "Compare a document field against the claimed place's reference entry, " +
+                "Compare a document field or a traveller's answer against the claimed place's reference entry, " +
                 "the entry it really belongs to, or the Citizen Record to log evidence.";
             return;
         }
@@ -245,9 +280,9 @@ public sealed class InvestigationUIController : MonoBehaviour
                 Destroy(ic);
         _docIcons.Clear();
 
-        // Documents are handed over via intercom actions ("Request Passport"),
-        // not desktop icons: the windows spawn hidden and open on request.
-        var actions = new List<InteractionAction>();
+        // Documents are handed over through the interview ("Request Travel
+        // Passport"), not desktop icons: the windows spawn hidden and open on request.
+        var documentNames = new List<string>();
 
         if (inst != null)
         {
@@ -260,26 +295,12 @@ public sealed class InvestigationUIController : MonoBehaviour
                     rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
                 clone.SetDocument(doc, compareController);
                 _docWindows.Add(clone.gameObject);
-
-                string docName = doc != null && doc.template != null ? doc.template.displayName : "Document";
-                GameObject window = clone.gameObject;
-                actions.Add(new InteractionAction
-                {
-                    label = $"Request {docName}",
-                    execute = () =>
-                    {
-                        if (window == null)
-                            return;
-                        window.SetActive(true);
-                        window.transform.SetAsLastSibling();
-                    }
-                });
+                documentNames.Add(doc != null && doc.template != null ? doc.template.displayName : "Document");
                 i++;
             }
         }
 
-        if (interactionPanel != null)
-            interactionPanel.SetActions(actions);
+        StartInterview(inst, documentNames);
 
         BuildBookShelf(lib);
 
@@ -287,6 +308,97 @@ public sealed class InvestigationUIController : MonoBehaviour
             compareController.Clear();
 
         WireDecisionButtons(acceptButton, denyButton);
+    }
+
+    /// <summary>
+    /// Starts the traveller's interview: the hub with a request per document,
+    /// and, when the interview is reachable, today's questions, small talk and
+    /// offered dialogs (without a wired transcript nothing spoken could be read,
+    /// so only the requests remain). The transcript starts with the opener and
+    /// the claim.
+    /// </summary>
+    private void StartInterview(CaseInstance inst, IReadOnlyList<string> documentNames)
+    {
+        _runner = null;
+        if (_day == null)
+        {
+            Debug.LogError("[InvestigationUIController] No interview day was injected (GameManager.SetInterviewDay), so the intercom is empty.", this);
+            if (interactionPanel != null)
+                interactionPanel.Clear();
+            return;
+        }
+
+        bool reachable = InterviewReachable;
+        var interviewCase = new InterviewCase
+        {
+            introLine = inst != null ? inst.introLine : null,
+            claimLine = inst != null ? inst.claimLine : null,
+            claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
+            documentNames = documentNames,
+            answers = inst != null ? inst.answers : null,
+            smallTalk = reachable && inst != null ? inst.smallTalk : null
+        };
+
+        DialogGraph graph = InterviewScript.Build(_day.Lines,
+            reachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
+            reachable ? _day.OfferedDialogs() : Array.Empty<AuthoredDialog>(),
+            interviewCase);
+        _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
+
+        if (transcriptWindow != null)
+            transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController);
+
+        RefreshChoices();
+    }
+
+    /// <summary>Shows the current interview node's choices on the intercom.</summary>
+    private void RefreshChoices()
+    {
+        if (interactionPanel == null || _runner == null)
+            return;
+
+        var actions = new List<InteractionAction>();
+        foreach (DialogChoice choice in _runner.Choices)
+        {
+            string id = choice.Id;
+            actions.Add(new InteractionAction { label = choice.Label, execute = () => Choose(id) });
+        }
+
+        interactionPanel.SetActions(actions);
+    }
+
+    /// <summary>
+    /// Plays one interview choice: the transcript shows its lines; a document
+    /// request opens and raises that document's window, any other choice opens
+    /// the transcript; a finished dialog is recorded for the end of the shift.
+    /// </summary>
+    private void Choose(string choiceId)
+    {
+        DialogChoice choice = _runner != null ? _runner.Choose(choiceId) : null;
+        if (choice == null)
+            return;
+
+        if (transcriptWindow != null)
+            transcriptWindow.Refresh();
+
+        if (choice.Action == DialogAction.OpenDocument)
+        {
+            GameObject window = choice.DocumentIndex >= 0 && choice.DocumentIndex < _docWindows.Count ? _docWindows[choice.DocumentIndex] : null;
+            if (window != null)
+            {
+                window.SetActive(true);
+                window.transform.SetAsLastSibling();
+            }
+        }
+        else if (transcriptChrome != null)
+        {
+            transcriptChrome.Open();
+        }
+
+        if (choice.Action == DialogAction.CompleteDialog)
+            _day.Complete(choice.DialogId, choice.EffectName);
+
+        RefreshChoices();
     }
 
     /// <summary>
@@ -407,14 +519,15 @@ public sealed class InvestigationUIController : MonoBehaviour
                 : string.Empty;
 
         if (_fallbackBody != null)
-            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts, _registry);
+            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts, _registry, _day);
     }
 
     /// <summary>
     /// The text fallback's body: the papers, the traveller's agency record (so
-    /// a birth-date tell can be spotted without the Records app) and today's books.
+    /// a birth-date tell can be spotted without the Records app), their answers
+    /// to today's questions, and the claimed place's entry in each book.
     /// </summary>
-    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts, CitizenRegistry registry)
+    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts, CitizenRegistry registry, InterviewDay day)
     {
         var sb = new StringBuilder();
 
@@ -442,20 +555,31 @@ public sealed class InvestigationUIController : MonoBehaviour
                 sb.AppendLine($"    Origin: {record.origin}");
             }
             sb.AppendLine();
+
+            if (day != null)
+            {
+                sb.AppendLine("— INTERVIEW —");
+                string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
+                foreach (InterviewQuestion q in day.Questions)
+                {
+                    InterviewAnswer answer = inst.answers.Find(a => a.category == q.category);
+                    if (answer == null)
+                        continue;
+                    sb.AppendLine(InterviewScript.PromptLine(q, eraId).Text);
+                    sb.AppendLine($"    {inst.visitorGivenName}: {InterviewScript.AnswerLine(q, eraId, answer).Text}");
+                }
+                sb.AppendLine();
+            }
         }
 
         if (lib != null && lib.ReferenceBooks.Count > 0)
         {
-            sb.AppendLine("— REFERENCE BOOKS (cross-check) —");
+            sb.AppendLine("— REFERENCE (claimed place) —");
+            string nationId = inst != null && inst.claimedNation != null ? inst.claimedNation.id : null;
+            string eraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null;
             foreach (ReferenceBookSO book in lib.ReferenceBooks)
-            {
-                if (book == null)
-                    continue;
-                sb.AppendLine($"[{book.displayName}]");
-                if (facts != null)
-                    foreach (FactRow row in facts.Rows(book.category))
-                        sb.AppendLine($"    {row.OriginLabel}: {row.Value}");
-            }
+                if (book != null)
+                    sb.AppendLine($"{book.displayName}: {(facts != null ? facts.Get(nationId, eraId, book.category) : null) ?? "(no entry)"}");
         }
 
         return sb.ToString();

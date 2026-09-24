@@ -8,7 +8,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] Title scene → new run / continue via `RunManager` (+ `SaveSystem` persistence; save version 2 — version-1 saves from the made-up world are ignored, Title offers New Run)
 - [ ] Day plans per day number from `ContentLibrary_Main` (fallback: inspector plan). Ramp: day 1 Ancient × Egypt/Iraq/Greece/Italy (8); day 2 + Medieval, + China/Britain, no Ancient Egypt (10); day 3 + Early modern, all 8 countries, no Medieval China / Early modern Japan (12)
-- [ ] Deterministic case generation: same run + same day = same travellers; one seeded stream per traveller (`Seeds.ForCase`), plus a day stream for rule violators, a separate stream for legacy clues and a per-traveller lie stream (`Seeds.ForLies`); day seed formula unchanged (seeding tested: `SeedsTests`, `SeededRandomTests`, `WeightedRandomTests`; whole-day determinism is checked in Unity, not by the EditMode suite)
+- [ ] Deterministic case generation: same run + same day = same travellers; one seeded stream per traveller (`Seeds.ForCase`), plus a day stream for rule violators, a separate stream for legacy clues, a per-traveller lie stream (`Seeds.ForLies`) and a per-traveller dialog stream (`Seeds.ForDialog`, small-talk pick); the day's lie draws depend only on the run and the day (and the interview wiring), never on purchases or flags; day seed formula unchanged (seeding tested: `SeedsTests`, `SeededRandomTests`, `WeightedRandomTests`; tell eligibility tested: `InterviewDayTests`; whole-day determinism is checked in Unity, not by the EditMode suite)
 - [ ] Endings evaluated after every verdict (`EndingService`); firing threshold on stability; bankruptcy threshold
 - [ ] Home phase between days: expenses, family conditions & care, slot machine (pay-rate modifier), upgrades
 
@@ -33,7 +33,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Clue Log, Notes
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)
 - [ ] Every new case closes all open windows (pin system planned to override)
-- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it)
+- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it); likewise the rich desk warns once at start when the intercom, the interview transcript or its window chrome is not wired: that day questions are hidden, no answer is computed and no tell is spoken, and the intercom offers only document requests
 
 ## World
 
@@ -41,28 +41,30 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Each place has a moment and year, five facts (currency, language, technology, capital, ruler) and 8 male + 8 female period names
 - [ ] Travellers are born 18–70 years before their place's year (set by the generator); ancient dates print as BCE (dates tested: `BirthDatesTests`)
 - [ ] Visitor roles: Artist, Diplomat, Merchant, Scientist, Soldier, Wanderer (their accepted sends move Democracy / Science / Art); names come only from the claimed place's period names (a liar's name is part of their cover)
-- [ ] Every traveller asks to go home to the place they claim, and their name, birth date, papers and Citizen Record all come from that claim. An honest traveller really comes from there: every field agrees with the books and the record. A liar really comes from another of today's places (any country, any of today's eras) and travels under the claimed place's cover identity, but the papers leak tells carrying the true home's value: a Currency, Language or Technology tell rewrites every field of that category; a birth-date tell keeps the record's day and month with a year from the true home's birth years. Each liar leaks the day's tell count (`DayPlanSO` "tell count", 1 on days 1–3), capped by the categories that can carry a tell for them. The liar chance is the blueprint's contradiction chance plus the slot-machine modifier and forgery-risk effects; rule violators and legendaries never lie; a rolled liar with no possible tell stays honest and a warning is logged (tell selection, eligibility and the may-lie exemptions tested: `LiesTests`, `ForgeryTests`; the liar chance, cover records and whole-day behaviour are checked in Unity, not by the EditMode suite)
-- [ ] Traveller gender is recorded from the claimed place's name lists ("Marcus II" counts as Marcus; legendaries and "Subject #n" are unknown); it is not shown yet (tested: `TravellerGendersTests`, `NameRosterTests`)
+- [ ] Every traveller asks to go home to the place they claim, and their name, birth date, papers and Citizen Record all come from that claim. An honest traveller really comes from there: every field agrees with the books and the record. A liar really comes from another of today's places (any country, any of today's eras) and travels under the claimed place's cover identity, but the disguise leaks tells carrying the true home's value, on the papers (a Currency, Language or Technology tell rewrites every field of that category; a birth-date tell keeps the record's day and month with a year from the true home's birth years) or in speech (their answer to one of today's day-gated questions gives the true home's value while the papers show the cover). A category leaks on one channel only. The day plan's tell channels set where tells may appear (day 1 papers only; days 2–3 papers and answers); a spoken tell needs its question askable that day, gated by day alone, and a book (or the Citizen Record for a birth date). Each liar leaks the day's tell count (`DayPlanSO` "tell count", 1 on days 1–3), capped by the categories that can carry a tell for them. The liar chance is the blueprint's contradiction chance plus the slot-machine modifier and forgery-risk effects; rule violators and legendaries never lie; a rolled liar with no possible tell stays honest and a warning is logged (tell selection, channels, eligibility and the may-lie exemptions tested: `LiesTests`, `ForgeryTests`, `InterviewDayTests`; answers tested: `InterviewTests`; the liar chance, cover records and whole-day behaviour are checked in Unity, not by the EditMode suite)
+- [ ] Traveller gender is recorded from the claimed place's name lists ("Marcus II" counts as Marcus; legendaries and "Subject #n" are unknown); the desk's opener uses it for the honorific (sir/madam/traveller) (tested: `TravellerGendersTests`, `NameRosterTests`, `InterviewTests`)
 
 ## Investigation loop
 
 - [ ] Claim banner (visitor name + "I request passage home to <place> (<era>)")
-- [ ] Intercom interaction panel: per-case traveller actions — "Request Travel Passport", "Request Transit Permit" (more actions planned: interrogation, photo capture)
+- [ ] Intercom = the interview: every entry is a dialog choice. Hub: "Request <document>" (repeatable; the traveller hands it over and the window opens), "Ask about home >" ("< Back" first, then today's questions, one-shot per traveller, and small talk) and today's narrative dialogs; content never offers more choices than the intercom shows (8), and the way back and the requests come first (hub and menus tested: `InterviewScriptTests`, `DialogRunnerTests`; locked questions hidden and dialogs offered tested: `InterviewDayTests`; capacity rules tested: `InterviewScriptTests`)
+- [ ] Questions: Currency, Language, Device from day 1; Capital from day 2; Ruler from day 3 (each announced in that morning's paper); Date of birth once Interview Protocols is owned (announced the next morning). Unlocks are fixed at the start of the day. Only day-gated questions can carry a spoken tell: the birth-date question is always answered with the registered date, a hint against a passport birth-date tell (gates tested: `GatesTests`; availability and tell eligibility tested: `InterviewDayTests`)
+- [ ] Honest answers equal the claimed place's book entries and the Citizen Record; a liar answers with the cover except for a spoken tell; small talk comes from the claimed place (or its era) and is never evidence (answers tested: `InterviewTests`)
 - [ ] Documents render as SCANNED pages (white page + photo placeholder on dark scanner backing), multi-page, structured fields
 - [ ] Passport carries identity fields: Full Name + Date of Birth (checked against Citizen Records)
 - [ ] Reference book windows list TODAY's places only (country then era, paged), read from the day's `FactTable` snapshot — the same values printed on papers (table tested: `FactTableTests`; the day's place filter is covered by the content validator and the Unity world check)
 - [ ] Reference books: Currency Ledger, Tongues & Scripts, Index of Devices, Capitals Gazetteer, Rulers & Regents (all on the desktop from day 1; five book windows open in two staggered rows)
 - [ ] Click-to-compare any two values; MATCH/MISMATCH bar (visual, no auto-verdict); auto-sized text
-- [ ] Scanner = Deviation Report: true contradictions auto-register (tested: `DiscrepancyLogTests`)
-  - [ ] Mismatch proof: a liar's tell ≠ claimed-era reference entry
-  - [ ] Match proof: a liar's tell = a *different* era/nation's entry (origin proof); it names the traveller's true home
-  - [ ] Record proof: a birth-date tell ≠ agency citizen record (tested)
-  - [ ] Junk comparisons never register (wrong category, foreign-era mismatch, honest fields)
-  - [ ] One discrepancy per category; a second proof of a documented category shows "ALREADY DOCUMENTED" in the compare bar and adds nothing; cleared per case; window auto-opens on first find
+- [ ] Scanner = Deviation Report: true contradictions auto-register from a document field or a traveller's answer (tested: `DiscrepancyLogTests`)
+  - [ ] Mismatch proof: a liar's tell (printed or spoken) ≠ claimed-era reference entry
+  - [ ] Match proof: a liar's tell (printed or spoken) = a *different* era/nation's entry (origin proof); it names the traveller's true home
+  - [ ] Record proof: a birth-date tell (printed or spoken) ≠ agency citizen record (tested)
+  - [ ] Junk comparisons never register (wrong category, foreign-era mismatch, honest fields and answers, answer vs papers, answer vs answer)
+  - [ ] One discrepancy per category from any source; a second proof of a documented category shows "ALREADY DOCUMENTED" in the compare bar and adds nothing; cleared per case; window auto-opens on first find
   - [ ] Compare bar flips to a red "DEVIATION LOGGED — …" verdict when evidence registers (never a green MATCH)
-  - [ ] Reports label Geography CAPITAL, Politics RULER, Technology DEVICE and birth dates BIRTH DATE (tested: `DiscrepancyLogTests`)
+  - [ ] Reports say where the tell was ("papers show …" / "traveller said …") and label Geography CAPITAL, Politics RULER, Technology DEVICE and birth dates BIRTH DATE (tested: `DiscrepancyLogTests`)
 - [ ] Accept / Deny decision buttons
-- [ ] Fallback text-mode investigation when the rich desk isn't built (papers, the traveller's agency record and today's books)
+- [ ] Fallback text-mode investigation when the rich desk isn't built (papers, the traveller's agency record, their answers to today's questions, and the claimed place's entry in each book)
 
 ## Shift clock & queue
 
@@ -70,7 +72,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] The day plan's visitor count is the queue size (8 / 10 / 12 on days 1–3); the day ends at closing time or when the queue empties
 - [ ] Closing: a traveller at the desk may be finished; one still behind READY is never called (tested: `DaySlotSequencerTests`, `ShiftFlowTests`, `ReadyGateTests`)
 - [ ] Scheduled events / forced cases in slots never reached before closing are reported as a warning
-- [ ] The clock pauses only while a citation slip is shown
+- [ ] The clock pauses only while a citation slip is shown (the interview takes real time and costs nothing else)
 - [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out; a legendary never repeats a name used that day) (tested: `NameRosterTests`)
 
 ## Interaction feedback
@@ -85,7 +87,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Wrong decision: citation (free warnings, then escalating penalties), stability loss
 - [ ] Evidence-gated denial: denying a liar with **zero** documented discrepancies counts as a wrong decision (citation and stability loss; a deduction once the free warnings are used) even though the visitor lied (`requireEvidenceToDeny` toggle) (the unproven-denial rule tested: `VerdictRulesTests`; the citation and deduction are Assembly-CSharp (`ShiftScoring`) and checked in Unity, not by the EditMode suite)
 - [ ] Directive-violation denials never need scanned evidence (the gate exemption tested: `VerdictRulesTests`)
-- [ ] Only provable tells are generated (tested: `ForgeryTests`, `BirthDatesTests`): a place fact is a tell only when a reference book covers it and the true home's value differs from the claim's and belongs to no other of today's places (so the books prove it and the origin proof names the home); a birth-date tell keeps day and month and takes a year from the true home's birth years, never the record's (provable via citizen records); names, capitals and rulers are never tells
+- [ ] Only provable tells are generated (tested: `ForgeryTests`, `LiesTests`, `BirthDatesTests`, `InterviewDayTests`): a place fact is a tell only when a reference book covers it and the true home's value differs from the claim's and belongs to no other of today's places (so the books prove it and the origin proof names the home); it shows on the papers only when a paper prints it, in speech only when its question is askable that day and gated by day alone; a birth-date tell keeps day and month and takes a year from the true home's birth years, never the record's (provable via citizen records); names are never tells
 - [ ] Every active travel rule gets at least one violator in the first half of the queue (`DayPlanSO` "guarantee rule violators", on by default) (slots tested: `ViolatorSlotsTests`)
 - [ ] Timeline impacts apply only on ACCEPT and land on the claimed place (where the traveller is sent), liar or not; sends tracked per era
 - [ ] A new run ranks every place's attributes from the baselines silently; each night's news then reports only real tier changes ("Science is now DOMINANT in …", "… is rising in …")

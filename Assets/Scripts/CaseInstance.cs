@@ -48,7 +48,7 @@ public sealed class CaseInstance
     /// <summary>Gender from the claimed place's name list the given name came from (Unknown for legendaries and "Subject #n").</summary>
     public TravellerGender gender;
 
-    /// <summary>Short intro line for the case.</summary>
+    /// <summary>The desk's opener for this traveller (interview lines, with the traveller's honorific); the transcript's first line.</summary>
     public string introLine;
 
     // -----------------------------
@@ -70,7 +70,7 @@ public sealed class CaseInstance
     /// <summary>The true home's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
     public string trueHomeLabel = string.Empty;
 
-    /// <summary>True when the traveller lied about their home (their papers leak tells).</summary>
+    /// <summary>True when the traveller lied about their home (their papers or answers leak tells).</summary>
     public bool IsLiar => trueHome != null;
 
     /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
@@ -79,8 +79,14 @@ public sealed class CaseInstance
     /// <summary>True if the claimed destination is permitted by today's rules.</summary>
     public bool claimAllowedByRules = true;
 
-    /// <summary>The visitor's stated travel claim line, for the UI banner.</summary>
+    /// <summary>The traveller's claim sentence (interview.claim with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
     public string claimLine;
+
+    /// <summary>The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers).</summary>
+    public readonly List<InterviewAnswer> answers = new();
+
+    /// <summary>What the traveller says when asked small talk (their claimed place's or era's flavour; null when none is authored).</summary>
+    public LineText smallTalk;
 
     /// <summary>
     /// The correct decision: accept only an honest traveller whose destination

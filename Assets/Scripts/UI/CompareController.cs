@@ -6,8 +6,9 @@ using UnityEngine.UI;
 /// Visual-only click-to-compare (Papers, Please style). Click one value, then
 /// another, and both are highlighted and shown side by side in a compare bar so
 /// the player can spot a mismatch themselves — no automatic verdict. A third
-/// click starts a new comparison. Document field rows and reference-book entry
-/// rows call <see cref="Select"/>.
+/// click starts a new comparison. Document field rows, reference-book entry
+/// rows, Citizen Records rows and interview transcript answer rows call
+/// <see cref="Select"/>.
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {

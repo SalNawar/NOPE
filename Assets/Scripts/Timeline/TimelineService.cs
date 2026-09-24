@@ -31,6 +31,8 @@ public static class TimelineKeys
 /// - ApplyVerdictImpacts: every send moves attribute/nation scores (during shift).
 /// - NightlyResolve: recompute dominance tiers, fire triggers, expire effects,
 ///   build the deterministic "tomorrow package" (run at sleep, before day++).
+/// - BuildInterviewDay: the day's interview, its questions and dialogs gated
+///   on a snapshot of the day-start world (run at day start).
 /// All state lives in WorldState; this class is stateless.
 /// </summary>
 public static class TimelineService
@@ -324,6 +326,39 @@ public static class TimelineService
         }
 
         Debug.Log($"[TimelineService] <<< Exiting EvaluateTriggers ({fired}/{total} fired).");
+    }
+
+    /// <summary>
+    /// The day's interview from the library's questions and dialogs and the
+    /// day-start world (glue only; InterviewDay decides what is askable and
+    /// offered): each item's conditions projected with ToGates, and one
+    /// snapshot of the world holding the scores every question's and dialog's
+    /// conditions read. Null library entries are skipped.
+    /// </summary>
+    public static InterviewDay BuildInterviewDay(ContentLibrarySO lib, WorldState world, ShiftLedger ledger)
+    {
+        var conditions = new List<TriggerCondition>();
+        var questions = new List<Gated<InterviewQuestion>>();
+        foreach (QuestionSO q in lib.Questions)
+        {
+            if (q == null)
+                continue;
+            if (q.conditions != null)
+                conditions.AddRange(q.conditions);
+            questions.Add(new Gated<InterviewQuestion>(q.question, ToGates(q.conditions)));
+        }
+
+        var dialogs = new List<Gated<AuthoredDialog>>();
+        foreach (DialogSO d in lib.Dialogs)
+        {
+            if (d == null)
+                continue;
+            if (d.conditions != null)
+                conditions.AddRange(d.conditions);
+            dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
+        }
+
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger);
     }
 
     /// <summary>

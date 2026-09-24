@@ -8,11 +8,13 @@ using UnityEngine;
 /// nation among today's places) -> the registered identity every traveller
 /// carries (names and birth years of the claimed place) -> documents whose
 /// fields come from today's FactTable for the claim -> maybe a lie: a liar
-/// really comes from another of today's places and their papers leak tells
-/// carrying that true home's values (Lies). Every draw comes from seeded
-/// streams (per traveller: the case, legacy clue and lie streams; plus the
-/// day's rule-violator stream), so the same run and day always produce the
-/// same travellers.
+/// really comes from another of today's places and leaks tells carrying that
+/// true home's values, on the papers or in their answers (Lies) -> the
+/// traveller's answers to today's questions, the desk's opener and the claim
+/// sentence (the content library's interview wording) and a small-talk line.
+/// Every draw comes from seeded streams (per traveller: the case, legacy
+/// clue, lie and dialog streams; plus the day's rule-violator stream), so the
+/// same run and day always produce the same travellers.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -37,6 +39,15 @@ public sealed class CaseFactory
     /// <summary>The current traveller's lie stream (Seeds.ForLies), apart from <see cref="_rng"/> so lie tuning never changes who travellers are.</summary>
     private IRandomSource _lieRng = new SeededRandom(0);
 
+    /// <summary>The current traveller's dialog stream (Seeds.ForDialog): the small-talk pick, apart from the case and lie streams.</summary>
+    private IRandomSource _dialogRng = new SeededRandom(0);
+
+    /// <summary>Today's askable question categories; every traveller answers each (InterviewDay.AskableCategories).</summary>
+    private IReadOnlyList<ClueCategory> _askable = System.Array.Empty<ClueCategory>();
+
+    /// <summary>Today's question categories that may carry an Answer tell (day-gated questions only; InterviewDay.AnswerTellCategories).</summary>
+    private IReadOnlyList<ClueCategory> _answerTellCategories = System.Array.Empty<ClueCategory>();
+
     /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
     private readonly HashSet<ClueCategory> _bookCategories;
 
@@ -58,9 +69,13 @@ public sealed class CaseFactory
     /// Generates the full list of cases for a day, based on the DayPlan.
     /// Forced cases override procedural blueprint selection per slot. Each slot
     /// draws from its own stream (Seeds.ForCase), so one traveller's draws never
-    /// shift the next one's.
+    /// shift the next one's. Every traveller answers each of
+    /// <paramref name="askable"/> (InterviewDay.AskableCategories); only
+    /// <paramref name="answerTellCategories"/> (InterviewDay.AnswerTellCategories)
+    /// may carry a spoken tell. Null lists count as empty.
     /// </summary>
-    public List<CaseInstance> GenerateDayCases(DayPlanSO plan, WorldState state, int daySeed)
+    public List<CaseInstance> GenerateDayCases(DayPlanSO plan, WorldState state, int daySeed,
+                                               IReadOnlyList<ClueCategory> askable, IReadOnlyList<ClueCategory> answerTellCategories)
     {
         Debug.Log($"[CaseFactory] >>> Entering GenerateDayCases (day {state?.day}, plan='{plan?.name}', daySeed={daySeed}).");
 
@@ -73,6 +88,15 @@ public sealed class CaseFactory
         }
 
         int total = Mathf.Max(1, plan.VisitorsCount);
+        _askable = askable ?? System.Array.Empty<ClueCategory>();
+        _answerTellCategories = answerTellCategories ?? System.Array.Empty<ClueCategory>();
+
+        // The opener and the claim are content: one warning a day when Generate World has not written them.
+        InterviewLines wording = _lib.Interview;
+        if (wording == null || string.IsNullOrWhiteSpace(wording.opener?.text) || string.IsNullOrWhiteSpace(wording.openerLegendary?.text))
+            Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library's interview opener or legendary opener is blank, so a transcript may start with the claim. Run Tools > TimeDesk > Generate World.");
+        if (wording == null || string.IsNullOrWhiteSpace(wording.claim?.text))
+            Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no interview claim line, so the banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
 
         // Fresh roster: names are unique within the day (records use first match).
         _roster = new NameRoster();
@@ -92,6 +116,7 @@ public sealed class CaseFactory
             _rng = new SeededRandom(caseSeed);
             _clueRng = new SeededRandom(Seeds.ForClues(caseSeed));
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
+            _dialogRng = new SeededRandom(Seeds.ForDialog(caseSeed));
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
 
@@ -184,7 +209,7 @@ public sealed class CaseFactory
         string role = archetype != null ? archetype.displayName : "Traveler";
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
         string birthDate = GenerateBirthDate(place);
-        string intro = legendary != null ? $"Priority arrival: {legendary.displayName}." : "Next subject for reassignment.";
+        string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null);
 
         var inst = new CaseInstance
         {
@@ -221,14 +246,19 @@ public sealed class CaseFactory
         // 7) Investigation layer: stated claim, structured fields, the lie (if any), daily rules.
         inst.claimedNation = nation;
         inst.claimedEra = trueEra;
-        inst.claimLine = $"I request passage home to {originLabel}.";
+        inst.claimLine = Interview.Claim(_lib.Interview, originLabel);
         inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = Disguise(inst, fields, plan, blueprint, state, caseIndex1Based);
+        AddAnswers(inst, lie);
+
+        // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
+        EraSO talkEra = place != null ? place.era : trueEra;
+        inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
-        string tells = lie != null ? string.Join(", ", lie.Tells) : string.Empty;
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetypeName}', legendary={legendary != null}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], gender={inst.gender}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
+        string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetypeName}', legendary={legendary != null}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], answers={inst.answers.Count}, gender={inst.gender}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -280,8 +310,9 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Rolls the traveller's lie on their lie stream and applies it (Lies.Plan):
-    /// a liar gets a true home among today's other places, and every field of
-    /// each tell category is rewritten with that home's value. Exempt
+    /// a liar gets a true home among today's other places; every field of each
+    /// Papers-tell category is rewritten with that home's value, and an Answer
+    /// tell leaves the papers on the cover (AddAnswers speaks it). Exempt
     /// travellers (legendaries, a claim a rule forbids, no papers) draw
     /// nothing. Returns the plan, or null when the traveller is exempt.
     /// </summary>
@@ -303,7 +334,7 @@ public sealed class CaseFactory
             inst.trueBirthDate,
             todays,
             fields,
-            System.Array.Empty<ClueCategory>(),
+            _answerTellCategories,
             plan.TellChannels,
             _facts,
             _bookCategories,
@@ -311,7 +342,7 @@ public sealed class CaseFactory
 
         if (lie.Outcome == LieOutcome.NoPossibleLie)
         {
-            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today can carry a provable tell against '{inst.originLabel}' (no printed, book-covered fact that differs from the claim's and belongs to that place alone, and no birth year other than the record's), so the traveller stays honest. Widen the day's eras or countries, add a reference book for a printed category, or give places that share a fact value distinct values.");
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today can carry a provable tell against '{inst.originLabel}' (no book-covered fact that its papers print or today's day-gated questions ask, that differs from the claim's and belongs to that place alone, and no birth year other than the record's), so the traveller stays honest. Widen the day's eras or countries, add a reference book, allow more tell channels, or give places that share a fact value distinct values.");
         }
         else if (lie.Outcome == LieOutcome.Liar)
         {
@@ -321,6 +352,19 @@ public sealed class CaseFactory
         }
 
         return lie;
+    }
+
+    /// <summary>
+    /// The traveller's answer to each of today's askable questions, in
+    /// question order: the cover value ResolveFieldValue gives the papers (the
+    /// registered birth date, the claim's fact or its placeholder), or an
+    /// Answer tell's true-home value (Interview.Answer). Reads the claim, never
+    /// the fields, so it does not matter that Disguise already applied the plan.
+    /// </summary>
+    private void AddAnswers(CaseInstance inst, LiePlan lie)
+    {
+        foreach (ClueCategory category in _askable)
+            inst.answers.Add(Interview.Answer(category, ResolveFieldValue(category, inst), lie));
     }
 
     /// <summary>
@@ -339,8 +383,10 @@ public sealed class CaseFactory
     /// Resolves a field's value for the claim: identity fields come from the
     /// registered identity (a liar's cover); place fields come from today's
     /// facts for the claimed place, with a readable placeholder (and a warning)
-    /// when content is missing. A liar's tells overwrite these values afterwards
-    /// (Disguise).
+    /// when content is missing; also each spoken answer's cover value
+    /// (AddAnswers). A liar's Papers tells overwrite the printed values
+    /// afterwards (Disguise); an Answer tell replaces only the spoken value
+    /// (Interview.Answer).
     /// </summary>
     private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
     {
@@ -359,7 +405,7 @@ public sealed class CaseFactory
         // No authored fact: a stable placeholder keeps the field internally
         // consistent (never a tell: a tell needs the claim's fact) and the gap visible.
         string e = inst.claimedEra != null ? inst.claimedEra.id : "unknown";
-        Debug.LogWarning($"[CaseFactory] '{inst.originLabel}' has no {category} fact today; printing a placeholder. Check the place's facts (Tools > TimeDesk > Validate Content Library).");
+        Debug.LogWarning($"[CaseFactory] '{inst.originLabel}' has no {category} fact today; using a placeholder on the papers and in answers. Check the place's facts (Tools > TimeDesk > Validate Content Library).");
         return $"{category}:{e}";
     }
 
