@@ -90,6 +90,61 @@ public sealed class NameRoster
         return sb.ToString();
     }
 
+    /// <summary>
+    /// The pool name behind a name <see cref="Take"/> handed out: the trimmed
+    /// name without its " {numeral}" suffix ("Marcus II" gives "Marcus"). The
+    /// last word counts as a suffix only when it is exactly <see cref="Roman"/>(n)
+    /// for some n of at least 2, so "Anna Maria", "Marcus I" and "Marcus iv"
+    /// stay whole. Null stays null.
+    /// </summary>
+    public static string BaseName(string name)
+    {
+        if (name == null)
+            return null;
+
+        string trimmed = name.Trim();
+        int space = trimmed.LastIndexOf(' ');
+        if (space <= 0)
+            return trimmed;
+
+        string last = trimmed.Substring(space + 1);
+        int value = ParseRoman(last);
+        return value >= 2 && Roman(value) == last ? trimmed.Substring(0, space).TrimEnd() : trimmed;
+    }
+
+    /// <summary>Value of an upper-case Roman numeral; 0 when it holds another character or exceeds 3999.</summary>
+    private static int ParseRoman(string numeral)
+    {
+        int total = 0;
+        for (int i = 0; i < numeral.Length; i++)
+        {
+            int digit = RomanDigit(numeral[i]);
+            if (digit == 0)
+                return 0;
+
+            int next = i + 1 < numeral.Length ? RomanDigit(numeral[i + 1]) : 0;
+            total += digit < next ? -digit : digit;
+        }
+
+        return total <= 3999 ? total : 0;
+    }
+
+    /// <summary>Value of one upper-case Roman digit (0 for any other character).</summary>
+    private static int RomanDigit(char c)
+    {
+        switch (c)
+        {
+            case 'I': return 1;
+            case 'V': return 5;
+            case 'X': return 10;
+            case 'L': return 50;
+            case 'C': return 100;
+            case 'D': return 500;
+            case 'M': return 1000;
+            default: return 0;
+        }
+    }
+
     /// <summary>Clamps a random index into [0, count).</summary>
     private static int Clamp(int index, int count) => index < 0 ? 0 : index >= count ? count - 1 : index;
 }

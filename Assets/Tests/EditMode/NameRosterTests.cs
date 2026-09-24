@@ -85,4 +85,31 @@ public class NameRosterTests
     {
         Assert.AreEqual(expected, NameRoster.Roman(number));
     }
+
+    [TestCase("Marcus II", "Marcus")]
+    [TestCase("Marcus XIV", "Marcus")]
+    [TestCase(" Marcus II ", "Marcus")]
+    [TestCase("Marcus", "Marcus")]
+    [TestCase("Anna Maria", "Anna Maria")]
+    [TestCase("Mary Ann", "Mary Ann")]
+    [TestCase("Sitt al-Wuzara", "Sitt al-Wuzara")]
+    [TestCase("Marcus I", "Marcus I")]
+    [TestCase("Marcus iv", "Marcus iv")]
+    public void BaseName_StripsOnlyTheSuffixTakeAdds(string name, string expected)
+    {
+        Assert.AreEqual(expected, NameRoster.BaseName(name));
+    }
+
+    [Test]
+    public void BaseName_MapsEveryNameTakeHandsOut_BackToItsPoolName()
+    {
+        var roster = new NameRoster();
+        string[] pool = { "Marcus", "Anna Maria" };
+        for (int i = 0; i < 40; i++)
+        {
+            int pick = i;
+            string name = roster.Take(pool, n => pick % n);
+            CollectionAssert.Contains(pool, NameRoster.BaseName(name), name);
+        }
+    }
 }
