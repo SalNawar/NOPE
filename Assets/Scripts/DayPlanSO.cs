@@ -9,6 +9,7 @@ using UnityEngine;
 /// - Day identity (dayNumber)
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
 /// - Procedural generation knobs (blueprints, eras, legendary chance)
+/// - Where today's liars may leak tells (tell count and tell channels)
 /// - Forced cases (e.g., "3rd case on day 2 is X")
 /// - Event rules (fixed or random placement, including "random but after N cases")
 /// </summary>
@@ -55,6 +56,13 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField, Min(1)] private int tellCount = 1;
 
+    /// <summary>
+    /// Where today's liars may leak tells: Papers (their documents) and/or
+    /// Answer (their answers to today's questions). The default keeps a day
+    /// plan that does not set it on papers-only tells.
+    /// </summary>
+    [SerializeField] private TellChannel[] tellChannels = { TellChannel.Papers };
+
     // -----------------------------
     // Scripted overrides
     // -----------------------------
@@ -94,6 +102,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Tells each liar leaks today (at least 1).</summary>
     public int TellCount => tellCount;
+
+    /// <summary>Where today's liars may leak tells (empty when unset).</summary>
+    public IReadOnlyList<TellChannel> TellChannels => tellChannels ?? Array.Empty<TellChannel>();
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();

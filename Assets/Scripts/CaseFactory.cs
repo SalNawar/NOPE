@@ -303,6 +303,8 @@ public sealed class CaseFactory
             inst.trueBirthDate,
             todays,
             fields,
+            System.Array.Empty<ClueCategory>(),
+            plan.TellChannels,
             _facts,
             _bookCategories,
             _lieRng);
