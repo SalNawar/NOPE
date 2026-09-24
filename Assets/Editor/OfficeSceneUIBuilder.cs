@@ -14,8 +14,9 @@ using UnityEngine.UI;
 /// - HUD (day/money/stability), citation slip, verdict line  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: claim banner, directives, draggable/multi-page document
-///   windows, a reference-book shelf with openable book windows, a visual
-///   compare bar, and Accept/Deny buttons  [InvestigationUIController + CompareController]
+///   windows, a reference-book shelf with openable book windows, the intercom
+///   and the interview transcript, a visual compare bar, and Accept/Deny
+///   buttons  [InvestigationUIController + CompareController]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
 /// Safe to re-run: finds existing pieces by name and only fills gaps.
@@ -34,6 +35,15 @@ public static class OfficeSceneUIBuilder
     private static readonly Color HeaderBar = new Color(0.13f, 0.34f, 0.86f, 1f); // XP title bar
     private static readonly Color RowBg = new Color(1f, 1f, 1f, 0.7f);            // near-white field row
     private static readonly Color Ink = new Color(0.1f, 0.09f, 0.08f, 1f);
+
+    /// <summary>Padding on every side of a vertical list (AddVLayout).</summary>
+    private const int VLayoutPadding = 6;
+
+    /// <summary>The reference resolution of both canvas scalers; every layout is authored against it (the intercom's fit reads its height).</summary>
+    private static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
+
+    /// <summary>Transcript rows per page: the book row height (34 px) and spacing fit 8 in the window's row area.</summary>
+    private const int TranscriptRowsPerPage = 8;
 
     [MenuItem("Tools/TimeDesk/Build Office UI (HUD + Panels)")]
     public static void Build()
@@ -148,15 +158,23 @@ public static class OfficeSceneUIBuilder
         TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
         BuildDesktopIcon(bookShelf, "IconScanner", "Scanner", scannerWindow, "");
 
-        // Intercom: per-case traveller actions ("Request Passport", ...); the
-        // action list is provided at runtime by InvestigationUIController.
-        Transform intercom = Panel(investRoot, "IntercomPanel", new Vector2(0.79f, 0.36f), new Vector2(0.995f, 0.85f), Vector2.zero, Vector2.zero, new Color(0.07f, 0.1f, 0.16f, 0.92f));
+        // Intercom: the interview's choices (document requests, questions,
+        // dialog replies), provided at runtime by InvestigationUIController.
+        // The layout numbers also give how many choices it shows at once.
+        const float intercomMinY = 0.36f, intercomMaxY = 0.85f;
+        const float actionsMinY = 0.02f, actionsMaxY = 0.86f;
+        const float actionSpacing = 6f, actionHeight = 44f;
+        Transform intercom = Panel(investRoot, "IntercomPanel", new Vector2(0.79f, intercomMinY), new Vector2(0.995f, intercomMaxY), Vector2.zero, Vector2.zero, new Color(0.07f, 0.1f, 0.16f, 0.92f));
         TMP_Text intercomTitle = Text(intercom, "Title", "INTERCOM", 20, TextAlignmentOptions.Center, new Vector2(0.05f, 0.88f), new Vector2(0.95f, 0.99f), new Color(0.7f, 0.85f, 1f, 1f));
         intercomTitle.fontStyle = FontStyles.Bold;
-        Transform intercomActions = Panel(intercom, "Actions", new Vector2(0.04f, 0.02f), new Vector2(0.96f, 0.86f), Vector2.zero, Vector2.zero, null);
-        AddVLayout(intercomActions, 6f);
+        Transform intercomActions = Panel(intercom, "Actions", new Vector2(0.04f, actionsMinY), new Vector2(0.96f, actionsMaxY), Vector2.zero, Vector2.zero, null);
+        AddVLayout(intercomActions, actionSpacing);
+        if (intercomActions.GetComponent<RectMask2D>() == null)
+            intercomActions.gameObject.AddComponent<RectMask2D>(); // an overflow is clipped, never drawn over the desk
         Button actionTemplate = MakeButton(intercomActions, "ActionButtonTemplate", "Request", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 1f));
-        SetLayoutHeight(actionTemplate, 44f);
+        SetLayoutHeight(actionTemplate, actionHeight);
+        float actionsHeight = (intercomMaxY - intercomMinY) * ReferenceResolution.y * (actionsMaxY - actionsMinY);
+        int intercomFit = Mathf.FloorToInt((actionsHeight - 2 * VLayoutPadding + actionSpacing) / (actionHeight + actionSpacing));
         actionTemplate.gameObject.SetActive(false);
         InteractionPanelController interaction = intercom.GetComponent<InteractionPanelController>();
         if (interaction == null)
@@ -200,6 +218,30 @@ public static class OfficeSceneUIBuilder
         soRecords.ApplyModifiedProperties();
         BuildDesktopIcon(bookShelf, "IconRecords", "Records", recordsChrome, "");
 
+        // Case Notes: Interview — the current traveller's transcript, in the
+        // retired Clue Log placeholder's slot. Rebuilt fresh each run (like
+        // Records), so its row template always has the transcript layout and
+        // the window layer keeps a stable order. Opened by every interview
+        // choice but a document request; answer rows are compare-clickable.
+        DestroyChildIfPresent(windowLayer, "IconClueLogWindow");
+        DestroyChildIfPresent(windowLayer, "TranscriptWindow");
+        Transform transcriptWin = Panel(windowLayer, "TranscriptWindow", Center, Center, new Vector2(220f, 70f), new Vector2(620f, 460f), Paper);
+        WindowShell transcriptShell = BuildWindowShell(transcriptWin, "Case Notes: Interview");
+        TranscriptWindowController transcript = transcriptWin.gameObject.AddComponent<TranscriptWindowController>();
+        var soTranscript = new SerializedObject(transcript);
+        SetRef(soTranscript, "titleText", transcriptShell.title);
+        SetRef(soTranscript, "pageText", transcriptShell.page);
+        SetRef(soTranscript, "prevButton", transcriptShell.prev);
+        SetRef(soTranscript, "nextButton", transcriptShell.next);
+        SetRef(soTranscript, "entryRowsRoot", transcriptShell.rowsRoot);
+        SetRef(soTranscript, "entryRowTemplate", transcriptShell.rowTemplate);
+        soTranscript.FindProperty("entriesPerPage").intValue = TranscriptRowsPerPage;
+        soTranscript.ApplyModifiedProperties();
+        ApplyTranscriptRowLayout(transcriptShell.rowTemplate);
+        OSWindowChrome transcriptChrome = transcriptWin.GetComponent<OSWindowChrome>();
+        transcriptWin.gameObject.SetActive(false);
+        BuildDesktopIcon(bookShelf, "IconClueLog", "Clue Log", transcriptChrome, "");
+
         // Compare bar (XP tooltip-yellow, above the shelf). Auto-sizing keeps
         // long verdict lines inside the bar.
         Transform compareBar = Panel(investRoot, "CompareBar", new Vector2(0.1f, 0.27f), new Vector2(0.9f, 0.34f), Vector2.zero, Vector2.zero, Tooltip);
@@ -229,6 +271,8 @@ public static class OfficeSceneUIBuilder
         }
         if (dayPlan == null) dayPlan = FindFirstAsset<DayPlanSO>();
         if (library == null) Debug.LogWarning("[TimeDesk] No ContentLibrarySO found — assign GameManager.contentLibrary manually.");
+        if (library != null && library.Interview != null && library.Interview.menuCapacity > intercomFit)
+            Debug.LogError($"[TimeDesk] The intercom fits {intercomFit} choices, but the content library's interview menu capacity is {library.Interview.menuCapacity}; lower interview.menuCapacity in world_source.json or enlarge the intercom.");
         if (dayPlan == null) Debug.LogWarning("[TimeDesk] No DayPlanSO found — generate content first (Tools > TimeDesk).");
 
         DayOrchestrator orchestrator = Object.FindFirstObjectByType<DayOrchestrator>();
@@ -244,7 +288,7 @@ public static class OfficeSceneUIBuilder
 
         // Fake-OS desktop shell: NEW apps only (existing document/reference/compare
         // windows are launched by the investigation icon grid), plus a Start menu.
-        BuildDesktopShell(canvas, bookShelf, windowLayer);
+        BuildDesktopShell(canvas, bookShelf, windowLayer, library);
 
         // Cursor + hover highlight settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
@@ -301,6 +345,8 @@ public static class OfficeSceneUIBuilder
         SetRef(soInvest, "scannerWindow", scannerWindow);
         SetRef(soInvest, "interactionPanel", interaction);
         SetRef(soInvest, "recordsWindow", records);
+        SetRef(soInvest, "transcriptWindow", transcript);
+        SetRef(soInvest, "transcriptChrome", transcriptChrome);
         soInvest.ApplyModifiedProperties();
 
         var soOrch = new SerializedObject(orchestrator);
@@ -321,7 +367,7 @@ public static class OfficeSceneUIBuilder
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
-        Debug.Log("[TimeDesk] Office investigation desk built and wired (HUD, citation, briefing/results, claim, document + book windows, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
+        Debug.Log("[TimeDesk] Office investigation desk built and wired (HUD, citation, briefing/results, claim, document + book windows, intercom + interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
     }
 
     // -----------------------------
@@ -415,6 +461,45 @@ public static class OfficeSceneUIBuilder
         return new WindowShell { title = title, page = page, prev = prev, next = next, rowsRoot = rowsRoot, rowTemplate = rowTemplate };
     }
 
+    /// <summary>
+    /// The transcript's row layout, re-applied on every build: the speaker in a
+    /// fixed 150 px column that ellipsizes, the sentence in the rest, wrapping
+    /// onto a second line and auto-sizing 12-18 pt inside the fixed 34 px row
+    /// (its width never follows its text).
+    /// </summary>
+    private static void ApplyTranscriptRowLayout(GameObject row)
+    {
+        HorizontalLayoutGroup h = row.GetComponent<HorizontalLayoutGroup>();
+        if (h != null)
+            h.childForceExpandWidth = false;
+
+        ConfigureTranscriptText(row.transform.Find("Label"), 150f, 0f, TextWrappingModes.NoWrap, TextOverflowModes.Ellipsis);
+        ConfigureTranscriptText(row.transform.Find("Value"), 0f, 1f, TextWrappingModes.Normal, TextOverflowModes.Overflow);
+    }
+
+    /// <summary>Sizes one transcript row text: layout width, auto-size range, wrapping and overflow.</summary>
+    private static void ConfigureTranscriptText(Transform t, float width, float flexibleWidth, TextWrappingModes wrapping, TextOverflowModes overflow)
+    {
+        if (t == null)
+            return;
+
+        LayoutElement le = t.GetComponent<LayoutElement>();
+        if (le == null)
+            le = t.gameObject.AddComponent<LayoutElement>();
+        le.minWidth = width;
+        le.preferredWidth = width;
+        le.flexibleWidth = flexibleWidth;
+
+        TMP_Text text = t.GetComponent<TMP_Text>();
+        if (text == null)
+            return;
+        text.enableAutoSizing = true;
+        text.fontSizeMin = 12f;
+        text.fontSizeMax = 18f;
+        text.textWrappingMode = wrapping;
+        text.overflowMode = overflow;
+    }
+
     private static GameObject BuildRowTemplate(Transform parent)
     {
         Transform existing = parent.Find("RowTemplate");
@@ -466,7 +551,7 @@ public static class OfficeSceneUIBuilder
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         var scaler = canvas.GetComponent<CanvasScaler>() ?? canvas.gameObject.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.referenceResolution = ReferenceResolution;
         if (canvas.GetComponent<GraphicRaycaster>() == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
         return canvas;
     }
@@ -501,7 +586,7 @@ public static class OfficeSceneUIBuilder
     {
         var l = t.GetComponent<VerticalLayoutGroup>() ?? t.gameObject.AddComponent<VerticalLayoutGroup>();
         l.spacing = spacing;
-        l.padding = new RectOffset(6, 6, 6, 6);
+        l.padding = new RectOffset(VLayoutPadding, VLayoutPadding, VLayoutPadding, VLayoutPadding);
         l.childAlignment = TextAnchor.UpperCenter;
         l.childForceExpandWidth = true;
         l.childForceExpandHeight = false;
@@ -672,7 +757,7 @@ public static class OfficeSceneUIBuilder
         if (scaler == null)
             scaler = go.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.referenceResolution = ReferenceResolution;
 
         if (go.GetComponent<GraphicRaycaster>() == null)
             go.AddComponent<GraphicRaycaster>();
@@ -1254,11 +1339,12 @@ public static class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the fake-OS desktop shell: a left column of icons (some unlock-gated)
-    /// that open placeholder windows with min/max/close chrome, plus a Start menu
+    /// Builds the fake-OS desktop shell: a left column of icons (some unlock-gated
+    /// by a library upgrade id, reported when the library does not know it) that
+    /// open placeholder windows with min/max/close chrome, plus a Start menu
     /// (Settings + Power) wired to a DesktopShell on the canvas. Idempotent.
     /// </summary>
-    private static void BuildDesktopShell(Canvas canvas, Transform iconGrid, Transform windowLayer)
+    private static void BuildDesktopShell(Canvas canvas, Transform iconGrid, Transform windowLayer, ContentLibrarySO library)
     {
         Transform root = canvas.transform;
 
@@ -1269,20 +1355,27 @@ public static class OfficeSceneUIBuilder
 
         // Only genuinely-new apps get placeholder windows; existing
         // Passport/Permit documents, reference books, and Compare are launched by
-        // the investigation icon grid (real windows with real data). Scanner and
-        // Directives are built separately in Build() and wired to controllers.
+        // the investigation icon grid (real windows with real data). Scanner,
+        // Directives, Records and the interview transcript (Clue Log) are built
+        // separately in Build() and wired to controllers. Upgrade ids are
+        // UpgradeSO.id values.
         var apps = new (string name, string label, string title, string body, string upgrade)[]
         {
             ("IconInternet", "Internet", "Internet - News",  "Today's news feed. (placeholder)", ""),
-            ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (placeholder)", "ArchiveAccess"),
-            ("IconDialect",  "Dialect",  "Dialect Filter",   "Highlights anachronistic phrases. (upgrade)", "DialectFilter"),
-            ("IconMaterial", "Material", "Material Scanner", "Flags tech/materials beyond the claimed era. (upgrade)", "AdvancedScanner"),
-            ("IconClueLog",  "Clue Log", "Case Notes",       "Clues & contradictions for the current case. (placeholder)", ""),
+            ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (placeholder)", "archive_access"),
+            ("IconDialect",  "Dialect",  "Dialect",          "Notes on accents and phrasing. (placeholder)", ""),
+            ("IconMaterial", "Material", "Material Scanner", "Flags tech/materials beyond the claimed era. (upgrade)", "adv_scanner"),
             ("IconNotes",    "Notes",    "Sticky Notes",     "Your notes. (placeholder)", ""),
         };
 
+        // BuildOSWindow keeps an existing window's texts, so the renamed Dialect window is rebuilt.
+        DestroyChildIfPresent(windowLayer, "IconDialectWindow");
+
         foreach (var a in apps)
         {
+            if (library != null && !string.IsNullOrEmpty(a.upgrade) && library.GetUpgradeById(a.upgrade) == null)
+                Debug.LogError($"[TimeDesk] Desktop icon '{a.name}' requires unknown upgrade '{a.upgrade}' (not in the content library's upgrades); it could never unlock.");
+
             OSWindowChrome w = BuildOSWindow(windowLayer, a.name + "Window", a.title, a.body);
             BuildDesktopIcon(iconGrid, a.name, a.label, w, a.upgrade);
         }

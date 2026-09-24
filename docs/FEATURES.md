@@ -28,9 +28,10 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability / Clock)
 - [ ] Start menu: Settings (stub window) + Power (quit); fixed-height entries
 - [ ] Desktop icon grid top-left; reference book icons + app icons (documents come via the intercom, not icons)
-- [ ] Upgrade-gated icons (Lexicon/Dialect/Material) dim until the upgrade is owned
+- [ ] Upgrade-gated icons (Lexicon needs Archive Access, Material needs Advanced Scanner) dim until the upgrade is owned; the builder reports icon upgrade ids the library does not know
 - [ ] Draggable windows; min/max/close chrome on ALL windows (app, document, reference)
-- [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Clue Log, Notes
+- [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Notes
+- [ ] Clue Log = Case Notes: Interview, the current traveller's transcript (speaker + line, 8 per page, long lines wrap onto two, jumps to the newest page); answer rows are compare-clickable; every intercom choice except a document request opens it (questions, small talk, dialog replies, "Ask about home >" and "< Back"); it closes with every new case
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)
 - [ ] Every new case closes all open windows (pin system planned to override)
 - [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it); likewise the rich desk warns once at start when the intercom, the interview transcript or its window chrome is not wired: that day questions are hidden, no answer is computed and no tell is spoken, and the intercom offers only document requests
@@ -99,7 +100,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] `Tools > TimeDesk > Generate World` — builds the real world from the hand-maintained `Assets/Data/World/world_source.json` (eras, countries, 40 places, rules, day plans with each day's tell count and tell channels, small talk, the interview's wording and its two layout limits (menu capacity, longest line), questions with an unlock-announcement trigger for every gated question, and dialogs) and wires `ContentLibrary_Main`, the case blueprint and the day plans named in its `content` section; checks every reference before writing anything, and that every line id is unique, authored interview text is ASCII, no line is longer than the transcript holds, no menu is fuller than the intercom shows and no dialog effect carries a timed modifier; idempotent; owns only `Assets/Data/World/{Eras,Nations,Places,Rules,Interview}` (unlisted assets there go to the trash) and never removes hand-authored legendaries, effects or triggers (the library's triggers are rewired: hand-authored ones kept in order, generated unlock triggers appended); the scratchpad script that once wrote the source is retired
 - [ ] Content validator checks every place (five facts, names, birth years set) and every day plan (today has places; every weighted era has one; every rule can be broken; listed legendaries come from today's places; at least one tell channel); questions (a book or the Citizen Record proves every question's category; one question per category; answer templates hold `{value}`), dialogs (structure, reachable endings, effects and their op types, one-shot), the interview's wording and menu capacity, every upgrade id, and small talk for the eras day plans use
-- [ ] `Tools > TimeDesk > Build Office UI` — idempotent, authoritative scene builder
+- [ ] `Tools > TimeDesk > Build Office UI` — idempotent, authoritative scene builder; it reports an intercom that fits fewer choices than the content's menu capacity
 - [ ] Travel rules: era / nation / nation+era forbidden, shown in briefing + directives
 - [ ] Day events system (before/after-case scheduled events; no event types authored yet; events placed past closing time never run)
 - [ ] Legendary encounters (bonus pay, extra stability risk) — none authored in the real world yet (premade characters come later)
