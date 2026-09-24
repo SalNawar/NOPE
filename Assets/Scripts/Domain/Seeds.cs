@@ -14,6 +14,9 @@ public static class Seeds
     /// <summary>Salt for a traveller's legacy clue stream ("CLUE").</summary>
     public const int ClueSalt = 0x434C5545;
 
+    /// <summary>Salt for a traveller's lie stream ("LIES").</summary>
+    public const int LieSalt = 0x4C494553;
+
     /// <summary>The day's seed: same run + same day = same seed.</summary>
     public static int Day(int runSeed, int day)
     {
@@ -44,7 +47,14 @@ public static class Seeds
 
     /// <summary>
     /// Seed for one traveller's legacy clue draws, kept apart from the case
-    /// stream so clue settings never change who is a forger.
+    /// stream so clue settings never change who lies.
     /// </summary>
     public static int ForClues(int caseSeed) => Mix(caseSeed, ClueSalt);
+
+    /// <summary>
+    /// Seed for one traveller's lie stream: the liar roll, the true-home pick
+    /// and the tell picks. Kept apart from the case stream so lie tuning never
+    /// changes who travellers are.
+    /// </summary>
+    public static int ForLies(int caseSeed) => Mix(caseSeed, LieSalt);
 }

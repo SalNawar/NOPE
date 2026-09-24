@@ -50,6 +50,25 @@ public class SeedsTests
     }
 
     [Test]
+    public void LieStream_IsDistinctFromCaseClueAndViolatorStreams()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
+        var lies = new HashSet<int>();
+        for (int c = 1; c <= 20; c++)
+        {
+            int caseSeed = Seeds.ForCase(daySeed, c);
+            int lie = Seeds.ForLies(caseSeed);
+            Assert.IsFalse(cases.Contains(lie), $"case {c}: the lie seed is a case seed");
+            Assert.AreNotEqual(Seeds.ForClues(caseSeed), lie, $"case {c}: lie seed equals the clue seed");
+            Assert.AreNotEqual(Seeds.ForViolators(daySeed), lie, $"case {c}: lie seed equals the violator seed");
+            Assert.AreEqual(lie, Seeds.ForLies(caseSeed), $"case {c}: not deterministic");
+            lies.Add(lie);
+        }
+        Assert.AreEqual(20, lies.Count, "lie seeds repeat across cases");
+    }
+
+    [Test]
     public void Mix_IsDeterministic_AndSaltSensitive()
     {
         Assert.AreEqual(Seeds.Mix(5, 9), Seeds.Mix(5, 9));
