@@ -30,7 +30,7 @@ public sealed class GameConfigSO : ScriptableObject
 
     [Header("Evidence (deny gating)")]
     /// <summary>
-    /// When true, denying a forger without documented scanner evidence earns a
+    /// When true, denying a liar without documented scanner evidence earns a
     /// citation + deduction even though the visitor really was lying.
     /// </summary>
     public bool requireEvidenceToDeny = true;

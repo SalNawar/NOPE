@@ -130,7 +130,7 @@ public static class ContentLibraryValidator
 
             if (place.birthYearMin == 0 && place.birthYearMax == 0)
             {
-                Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has no birth years (0..0); its visitors are born 'Unknown' and their birth dates are never forged.", place);
+                Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has no birth years (0..0); its visitors are born 'Unknown' and their birth dates can never carry a birth-date tell.", place);
                 issues++;
             }
             else if (place.birthYearMin > place.birthYearMax)

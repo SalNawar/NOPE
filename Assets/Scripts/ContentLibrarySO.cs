@@ -121,7 +121,7 @@ public sealed class ContentLibrarySO : ScriptableObject
         return table;
     }
 
-    /// <summary>Categories that have a reference book (only these can prove a forged place fact).</summary>
+    /// <summary>Categories that have a reference book (only these can carry a place-fact tell).</summary>
     public HashSet<ClueCategory> ReferenceBookCategories()
     {
         var categories = new HashSet<ClueCategory>();

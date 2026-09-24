@@ -47,7 +47,7 @@ public struct CompareEvidence
     /// <summary>The displayed value.</summary>
     public string value;
 
-    /// <summary>Document side: true if the value is forged for the claim.</summary>
+    /// <summary>Document side: true if the value is a liar's tell (anachronistic for the claim).</summary>
     public bool isAnachronism;
 
     /// <summary>Reference side: nation id the entry applies to (null/empty = any).</summary>
@@ -95,7 +95,7 @@ public sealed class Discrepancy
     /// <summary>Category that was disproved (Language, Currency, ...).</summary>
     public ClueCategory category;
 
-    /// <summary>Forged value printed on the visitor's papers.</summary>
+    /// <summary>The tell's value printed on the visitor's papers.</summary>
     public string documentValue;
 
     /// <summary>
@@ -140,9 +140,9 @@ public sealed class Discrepancy
 /// Per-case list of documented contradictions (the "Deviation Report").
 /// Pure C# so the registration rules are unit-testable. Registration only
 /// succeeds for TRUE contradictions, proved either way:
-/// - MISMATCH proof: a forged document field differs from the reference entry
+/// - MISMATCH proof: a liar's tell differs from the reference entry
 ///   that applies to the CLAIMED nation+era.
-/// - MATCH proof: a forged document field equals a reference entry that does
+/// - MATCH proof: a liar's tell equals a reference entry that does
 ///   NOT apply to the claim — the value provably belongs somewhere else
 ///   (e.g. papers claim Medieval but the declared device matches Ancient Rome).
 /// </summary>
@@ -188,7 +188,7 @@ public sealed class DiscrepancyLog
         if (doc.category != truth.category)
             return null;
 
-        // Only a genuinely forged field is a contradiction; a coincidental
+        // Only a liar's tell is a contradiction; a coincidental
         // mismatch/match on an honest field proves nothing.
         if (!doc.isAnachronism)
             return null;

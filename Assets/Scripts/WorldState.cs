@@ -53,7 +53,7 @@ public sealed class WorldState
     /// <summary>Bonus added to legendary chance per case (0..1).</summary>
     public float legendaryChanceBonus;
 
-    /// <summary>Additive modifier to contradiction/forgery chance for generated cases.</summary>
+    /// <summary>Additive modifier to the liar chance (and the legacy per-clue contradiction chance).</summary>
     public float forgeryChanceModifier;
 
     /// <summary>Multiplier applied to case pay (1 = normal).</summary>

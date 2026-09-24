@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// The Citizen Records desktop app: type a name, get the agency's record for
 /// that person. The Name and Born rows are compare-clickable, so a record can
-/// disprove forged identity papers (RecordMismatch evidence).
+/// disprove a liar's birth-date tell (RecordMismatch evidence).
 /// Registry is injected per day by GameManager via InvestigationUIController.
 /// </summary>
 public sealed class CitizenRecordsWindowController : MonoBehaviour

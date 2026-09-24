@@ -3,14 +3,14 @@ using NUnit.Framework;
 /// <summary>
 /// Decision table for DiscrepancyLog.TryRegister — the core verification rule.
 /// Claim under test: Norvik / Medieval. Truth for Technology: "Longship".
-/// The forged papers print "Aqueduct" (which really belongs to Latia / Rome).
+/// A liar's papers print "Aqueduct" (which really belongs to Latia / Rome).
 /// </summary>
 public class DiscrepancyLogTests
 {
     private const string ClaimNation = "norvik";
     private const string ClaimEra = "medieval";
 
-    private static CompareEvidence ForgedDocField(string value = "Aqueduct") => new CompareEvidence
+    private static CompareEvidence TellDocField(string value = "Aqueduct") => new CompareEvidence
     {
         kind = EvidenceKind.DocumentField,
         category = ClueCategory.Technology,
@@ -29,7 +29,7 @@ public class DiscrepancyLogTests
     private static CompareEvidence Entry(string nationId, string eraId, string value, ClueCategory category = ClueCategory.Technology) =>
         CompareEvidence.ForReferenceEntry(category, value, nationId, eraId, $"{nationId} — {eraId}");
 
-    private static CompareEvidence ForgedIdentityField(ClueCategory category, string value) => new CompareEvidence
+    private static CompareEvidence TellIdentityField(ClueCategory category, string value) => new CompareEvidence
     {
         kind = EvidenceKind.DocumentField,
         category = category,
@@ -42,11 +42,11 @@ public class DiscrepancyLogTests
     // -----------------------------
 
     [Test]
-    public void ForgedBirthDate_VsRecord_Registers_AsRecordMismatch()
+    public void BirthDateTell_VsRecord_Registers_AsRecordMismatch()
     {
         var log = new DiscrepancyLog();
         Discrepancy d = log.TryRegister(
-            ForgedIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
             CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
             ClaimNation, ClaimEra);
 
@@ -77,7 +77,7 @@ public class DiscrepancyLogTests
     {
         var log = new DiscrepancyLog();
         Assert.IsNull(log.TryRegister(
-            ForgedDocField(), // Technology
+            TellDocField(), // Technology
             CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
             ClaimNation, ClaimEra));
     }
@@ -98,7 +98,7 @@ public class DiscrepancyLogTests
         // Identity has nothing to do with the travel claim.
         var log = new DiscrepancyLog();
         Discrepancy d = log.TryRegister(
-            ForgedIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
             CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
             null, null);
 
@@ -113,7 +113,7 @@ public class DiscrepancyLogTests
     public void MismatchAgainstClaimedEraEntry_Registers()
     {
         var log = new DiscrepancyLog();
-        Discrepancy d = log.TryRegister(ForgedDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        Discrepancy d = log.TryRegister(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
         Assert.AreEqual("Longship", d.expectedValue);
@@ -127,7 +127,7 @@ public class DiscrepancyLogTests
         // The screenshot bug: papers say Aqueduct, player matches it against
         // the Latia/Rome entry — that MATCH proves the device is Roman.
         var log = new DiscrepancyLog();
-        Discrepancy d = log.TryRegister(ForgedDocField("Aqueduct"), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
+        Discrepancy d = log.TryRegister(TellDocField("Aqueduct"), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
         Assert.IsNull(d.expectedValue);
@@ -138,7 +138,7 @@ public class DiscrepancyLogTests
     public void EraOnlyEntry_AppliesToAnyNationOfThatEra()
     {
         var log = new DiscrepancyLog();
-        Discrepancy d = log.TryRegister(ForgedDocField(), Entry(null, "medieval", "Longship"), ClaimNation, ClaimEra);
+        Discrepancy d = log.TryRegister(TellDocField(), Entry(null, "medieval", "Longship"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
     }
@@ -147,7 +147,7 @@ public class DiscrepancyLogTests
     public void ArgumentOrder_DoesNotMatter()
     {
         var log = new DiscrepancyLog();
-        Discrepancy d = log.TryRegister(Entry("norvik", "medieval", "Longship"), ForgedDocField(), ClaimNation, ClaimEra);
+        Discrepancy d = log.TryRegister(Entry("norvik", "medieval", "Longship"), TellDocField(), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
     }
@@ -162,7 +162,7 @@ public class DiscrepancyLogTests
         // Aqueduct vs The Future's "Solar Sail": mismatch, but the entry says
         // nothing about the claim — proves nothing.
         var log = new DiscrepancyLog();
-        Assert.IsNull(log.TryRegister(ForgedDocField(), Entry("helios", "future", "Solar Sail"), ClaimNation, ClaimEra));
+        Assert.IsNull(log.TryRegister(TellDocField(), Entry("helios", "future", "Solar Sail"), ClaimNation, ClaimEra));
         Assert.AreEqual(0, log.Count);
     }
 
@@ -180,14 +180,14 @@ public class DiscrepancyLogTests
     public void DifferentCategories_DoNotRegister()
     {
         var log = new DiscrepancyLog();
-        Assert.IsNull(log.TryRegister(ForgedDocField(), Entry("norvik", "medieval", "Silver Mark", ClueCategory.Currency), ClaimNation, ClaimEra));
+        Assert.IsNull(log.TryRegister(TellDocField(), Entry("norvik", "medieval", "Silver Mark", ClueCategory.Currency), ClaimNation, ClaimEra));
     }
 
     [Test]
     public void TwoDocumentFields_DoNotRegister()
     {
         var log = new DiscrepancyLog();
-        Assert.IsNull(log.TryRegister(ForgedDocField(), ForgedDocField("Something"), ClaimNation, ClaimEra));
+        Assert.IsNull(log.TryRegister(TellDocField(), TellDocField("Something"), ClaimNation, ClaimEra));
     }
 
     [Test]
@@ -203,16 +203,16 @@ public class DiscrepancyLogTests
         // Albion's Waterwheel is not Norvik's truth — a mismatch against it
         // proves nothing about the claim.
         var log = new DiscrepancyLog();
-        Assert.IsNull(log.TryRegister(ForgedDocField(), Entry("albion", "medieval", "Waterwheel"), ClaimNation, ClaimEra));
+        Assert.IsNull(log.TryRegister(TellDocField(), Entry("albion", "medieval", "Waterwheel"), ClaimNation, ClaimEra));
     }
 
     [Test]
     public void OtherNationSameEraEntry_MatchRegisters_AsOriginProof()
     {
-        // Forged value equals Albion/Medieval's truth while claiming Norvik:
+        // The tell equals Albion/Medieval's truth while claiming Norvik:
         // the value provably belongs to Albion.
         var log = new DiscrepancyLog();
-        Discrepancy d = log.TryRegister(ForgedDocField("Waterwheel"), Entry("albion", "medieval", "Waterwheel"), ClaimNation, ClaimEra);
+        Discrepancy d = log.TryRegister(TellDocField("Waterwheel"), Entry("albion", "medieval", "Waterwheel"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
         Assert.AreEqual("albion — medieval", d.actualOrigin);
@@ -222,14 +222,14 @@ public class DiscrepancyLogTests
     public void NullClaimEra_DoesNotRegister()
     {
         var log = new DiscrepancyLog();
-        Assert.IsNull(log.TryRegister(ForgedDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, null));
+        Assert.IsNull(log.TryRegister(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, null));
     }
 
     [Test]
     public void ValueComparison_IgnoresCaseAndWhitespace()
     {
         var log = new DiscrepancyLog();
-        Discrepancy d = log.TryRegister(ForgedDocField("  aqueduct "), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
+        Discrepancy d = log.TryRegister(TellDocField("  aqueduct "), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
     }
@@ -242,8 +242,8 @@ public class DiscrepancyLogTests
     public void SameCategory_RegistersOnlyOnce()
     {
         var log = new DiscrepancyLog();
-        Assert.NotNull(log.TryRegister(ForgedDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra));
-        Assert.IsNull(log.TryRegister(ForgedDocField(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra));
+        Assert.NotNull(log.TryRegister(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra));
+        Assert.IsNull(log.TryRegister(TellDocField(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra));
         Assert.AreEqual(1, log.Count);
     }
 
@@ -251,7 +251,7 @@ public class DiscrepancyLogTests
     public void Clear_EmptiesTheLog()
     {
         var log = new DiscrepancyLog();
-        log.TryRegister(ForgedDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        log.TryRegister(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
         log.Clear();
 
         Assert.AreEqual(0, log.Count);

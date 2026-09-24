@@ -21,7 +21,7 @@ public sealed class DocumentTemplateSO : ScriptableObject
     /// <summary>
     /// Structured fields this document presents (investigation feature). Each
     /// spec's value is filled at runtime from the reference data for the case's
-    /// claimed nation+era; a forged case flips one to an anachronism.
+    /// claimed nation+era; a liar's tells rewrite every field of a tell category.
     /// </summary>
     [Header("Investigation fields")]
     public DocumentFieldSpec[] fieldSpecs;

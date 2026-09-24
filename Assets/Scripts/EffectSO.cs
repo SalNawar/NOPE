@@ -41,7 +41,7 @@ public enum EffectOpType
 
     // ---- Continuous (queried while active) ----
     LegendaryChanceBonus,    // floatParam = +chance (0..1)
-    ForgeryChanceBonus,      // floatParam = +contradiction chance (0..1)
+    ForgeryChanceBonus,      // floatParam = +liar chance (0..1)
     PayRateBonus,            // floatParam = +multiplier (0.25 = +25% pay)
     VisitorTagWeight,        // stringParam = archetype tag, floatParam = weight multiplier
     ShopDiscountPercent,     // stringParam = upgrade id ("" = all), floatParam = percent off

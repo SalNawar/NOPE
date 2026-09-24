@@ -44,8 +44,9 @@ public static class TimelineService
 
     /// <summary>
     /// Applies the timeline impacts of one decision. The visitor physically goes
-    /// to the CHOSEN era, so impacts land on (case nation, chosen era) — authored
-    /// profile if one exists, ad-hoc score keys otherwise.
+    /// to the CHOSEN era, so impacts land on (claimed nation, chosen era): where
+    /// the traveller is sent, liar or not — authored profile if one exists,
+    /// ad-hoc score keys otherwise.
     /// Also bumps tag counters used by trigger conditions.
     /// </summary>
     public static void ApplyVerdictImpacts(
