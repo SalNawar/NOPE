@@ -1,0 +1,2237 @@
+{
+  "travellerAgeMin": 18,
+  "travellerAgeMax": 70,
+  "eras": [
+    {
+      "id": "ancient",
+      "displayName": "Ancient",
+      "order": 0
+    },
+    {
+      "id": "medieval",
+      "displayName": "Medieval",
+      "order": 1
+    },
+    {
+      "id": "earlymodern",
+      "displayName": "Early modern",
+      "order": 2
+    },
+    {
+      "id": "industrial",
+      "displayName": "Industrial",
+      "order": 3
+    },
+    {
+      "id": "modern",
+      "displayName": "Modern",
+      "order": 4
+    },
+    {
+      "id": "future",
+      "displayName": "Future",
+      "order": 5
+    }
+  ],
+  "countries": [
+    {
+      "id": "egypt",
+      "displayName": "Egypt",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 1.0
+        },
+        {
+          "attribute": "science",
+          "score": 3.0
+        },
+        {
+          "attribute": "art",
+          "score": 4.0
+        }
+      ]
+    },
+    {
+      "id": "iraq",
+      "displayName": "Iraq",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 2.0
+        },
+        {
+          "attribute": "science",
+          "score": 4.0
+        },
+        {
+          "attribute": "art",
+          "score": 2.5
+        }
+      ]
+    },
+    {
+      "id": "greece",
+      "displayName": "Greece",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 5.0
+        },
+        {
+          "attribute": "science",
+          "score": 3.0
+        },
+        {
+          "attribute": "art",
+          "score": 3.1
+        }
+      ]
+    },
+    {
+      "id": "italy",
+      "displayName": "Italy",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 2.0
+        },
+        {
+          "attribute": "science",
+          "score": 3.0
+        },
+        {
+          "attribute": "art",
+          "score": 5.0
+        }
+      ]
+    },
+    {
+      "id": "china",
+      "displayName": "China",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 1.0
+        },
+        {
+          "attribute": "science",
+          "score": 5.0
+        },
+        {
+          "attribute": "art",
+          "score": 3.0
+        }
+      ]
+    },
+    {
+      "id": "japan",
+      "displayName": "Japan",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 2.0
+        },
+        {
+          "attribute": "science",
+          "score": 4.2
+        },
+        {
+          "attribute": "art",
+          "score": 4.0
+        }
+      ]
+    },
+    {
+      "id": "britain",
+      "displayName": "Britain",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 4.1
+        },
+        {
+          "attribute": "science",
+          "score": 4.0
+        },
+        {
+          "attribute": "art",
+          "score": 2.0
+        }
+      ]
+    },
+    {
+      "id": "germany",
+      "displayName": "Germany",
+      "baselines": [
+        {
+          "attribute": "democracy",
+          "score": 3.0
+        },
+        {
+          "attribute": "science",
+          "score": 5.0
+        },
+        {
+          "attribute": "art",
+          "score": 3.1
+        }
+      ]
+    }
+  ],
+  "places": [
+    {
+      "country": "egypt",
+      "era": "ancient",
+      "displayName": "New Kingdom Egypt",
+      "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
+      "year": -1470,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Deben (copper, by weight)"
+        },
+        {
+          "category": "Language",
+          "value": "Middle Egyptian, hieroglyphs"
+        },
+        {
+          "category": "Technology",
+          "value": "Papyrus & reed brush"
+        },
+        {
+          "category": "Geography",
+          "value": "Thebes (Waset)"
+        },
+        {
+          "category": "Politics",
+          "value": "Pharaoh Hatshepsut"
+        }
+      ],
+      "maleNames": [
+        "Nebamun",
+        "Djehuty",
+        "Ineni",
+        "Menna",
+        "Nakht",
+        "Paheri",
+        "Sennefer",
+        "Puyemre"
+      ],
+      "femaleNames": [
+        "Hatnefer",
+        "Meryt",
+        "Henuttawy",
+        "Iset",
+        "Baketamun",
+        "Tuya",
+        "Sitre",
+        "Senseneb"
+      ]
+    },
+    {
+      "country": "egypt",
+      "era": "medieval",
+      "displayName": "Mamluk Egypt",
+      "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
+      "year": 1340,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Dirham nuqra & copper fulus"
+        },
+        {
+          "category": "Language",
+          "value": "Arabic; Kipchak Turkic court"
+        },
+        {
+          "category": "Technology",
+          "value": "Carrier pigeon post"
+        },
+        {
+          "category": "Geography",
+          "value": "Cairo (Mamluk Citadel)"
+        },
+        {
+          "category": "Politics",
+          "value": "Sultan al-Nasir Muhammad"
+        }
+      ],
+      "maleNames": [
+        "Aqbugha",
+        "Baktamur",
+        "Aydughmish",
+        "Tuquztimur",
+        "Mahmud",
+        "Ibrahim",
+        "Yusuf",
+        "Jirjis"
+      ],
+      "femaleNames": [
+        "Fatima",
+        "Khadija",
+        "Zaynab",
+        "Aisha",
+        "Tughay",
+        "Tatar",
+        "Sitt al-Wuzara",
+        "Maryam"
+      ]
+    },
+    {
+      "country": "egypt",
+      "era": "earlymodern",
+      "displayName": "Ottoman Egypt",
+      "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
+      "year": 1700,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver medin (para)"
+        },
+        {
+          "category": "Language",
+          "value": "Egyptian Arabic; Turkish"
+        },
+        {
+          "category": "Technology",
+          "value": "Yemeni coffee (qahwa)"
+        },
+        {
+          "category": "Geography",
+          "value": "Cairo (Ottoman eyalet)"
+        },
+        {
+          "category": "Politics",
+          "value": "Sultan Mustafa II"
+        }
+      ],
+      "maleNames": [
+        "Ridwan",
+        "Uthman",
+        "Zulfiqar",
+        "Abd al-Rahman",
+        "Qasim",
+        "Shahin",
+        "Hasan",
+        "Mikhail"
+      ],
+      "femaleNames": [
+        "Nafisa",
+        "Amina",
+        "Ruqayya",
+        "Safiyya",
+        "Salha",
+        "Hawa",
+        "Zulaykha",
+        "Dimyana"
+      ]
+    },
+    {
+      "country": "egypt",
+      "era": "industrial",
+      "displayName": "Khedivate of Egypt",
+      "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
+      "year": 1869,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Egyptian pound (qirsh/para)"
+        },
+        {
+          "category": "Language",
+          "value": "Egyptian Arabic; French"
+        },
+        {
+          "category": "Technology",
+          "value": "Suez Canal steamship"
+        },
+        {
+          "category": "Geography",
+          "value": "Cairo (Khedivate)"
+        },
+        {
+          "category": "Politics",
+          "value": "Khedive Isma'il"
+        }
+      ],
+      "maleNames": [
+        "Ali",
+        "Salih",
+        "Mahmud",
+        "Abdallah",
+        "Rifaa",
+        "Butrus",
+        "Ghali",
+        "Yaqub"
+      ],
+      "femaleNames": [
+        "Bahiyya",
+        "Sakina",
+        "Warda",
+        "Hafiza",
+        "Tawhida",
+        "Zakiya",
+        "Jalila",
+        "Aisha"
+      ]
+    },
+    {
+      "country": "egypt",
+      "era": "modern",
+      "displayName": "Nasser's Egypt",
+      "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
+      "year": 1962,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Egyptian pound (milliemes)"
+        },
+        {
+          "category": "Language",
+          "value": "Egyptian Arabic"
+        },
+        {
+          "category": "Technology",
+          "value": "Transistor radio"
+        },
+        {
+          "category": "Geography",
+          "value": "Cairo, United Arab Rep."
+        },
+        {
+          "category": "Politics",
+          "value": "President Gamal Abdel Nasser"
+        }
+      ],
+      "maleNames": [
+        "Mahmoud",
+        "Magdy",
+        "Samir",
+        "Ashraf",
+        "Adel",
+        "Fathy",
+        "Sayed",
+        "Nabil"
+      ],
+      "femaleNames": [
+        "Fatma",
+        "Nadia",
+        "Samia",
+        "Soad",
+        "Aida",
+        "Mervat",
+        "Nagwa",
+        "Sanaa"
+      ]
+    },
+    {
+      "country": "iraq",
+      "era": "ancient",
+      "displayName": "Babylonia",
+      "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
+      "year": -1760,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver shekel (by weight)"
+        },
+        {
+          "category": "Language",
+          "value": "Old Babylonian (cuneiform)"
+        },
+        {
+          "category": "Technology",
+          "value": "Cylinder seal"
+        },
+        {
+          "category": "Geography",
+          "value": "Babylon (Babili)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Hammurabi"
+        }
+      ],
+      "maleNames": [
+        "Ea-nasir",
+        "Awil-Ninurta",
+        "Nur-Shamash",
+        "Ubar-Shamash",
+        "Iddin-Marduk",
+        "Shamash-hazir",
+        "Ilshu-ibni",
+        "Awil-ili"
+      ],
+      "femaleNames": [
+        "Amat-Mamu",
+        "Beltani",
+        "Lamassani",
+        "Erishti-Aya",
+        "Shat-Aya",
+        "Ahatum",
+        "Belessunu",
+        "Aya-lamassi"
+      ]
+    },
+    {
+      "country": "iraq",
+      "era": "medieval",
+      "displayName": "Abbasid Baghdad",
+      "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
+      "year": 830,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Abbasid silver dirham"
+        },
+        {
+          "category": "Language",
+          "value": "Arabic; Persian; Aramaic"
+        },
+        {
+          "category": "Technology",
+          "value": "Paper (Baghdad mills)"
+        },
+        {
+          "category": "Geography",
+          "value": "Baghdad (Madinat al-Salam)"
+        },
+        {
+          "category": "Politics",
+          "value": "Caliph al-Ma'mun"
+        }
+      ],
+      "maleNames": [
+        "Ja'far",
+        "Yahya",
+        "Ishaq",
+        "Fadl",
+        "Sahl",
+        "Hamid",
+        "Hunayn",
+        "Khalid"
+      ],
+      "femaleNames": [
+        "Buran",
+        "Ulayya",
+        "Arib",
+        "Zubayda",
+        "Asma",
+        "Maymuna",
+        "Lubaba",
+        "Sukayna"
+      ]
+    },
+    {
+      "country": "iraq",
+      "era": "earlymodern",
+      "displayName": "Ottoman Baghdad",
+      "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
+      "year": 1720,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Kurus & Persian abbasi"
+        },
+        {
+          "category": "Language",
+          "value": "Baghdadi Arabic; Turkish"
+        },
+        {
+          "category": "Technology",
+          "value": "Quffa (Tigris coracle)"
+        },
+        {
+          "category": "Geography",
+          "value": "Baghdad (Ottoman eyalet)"
+        },
+        {
+          "category": "Politics",
+          "value": "Sultan Ahmed III"
+        }
+      ],
+      "maleNames": [
+        "Sulayman",
+        "Abdullah",
+        "Husayn",
+        "Abd al-Qadir",
+        "Dawud",
+        "Hormizd",
+        "Sasson",
+        "Umar"
+      ],
+      "femaleNames": [
+        "Rabia",
+        "Hafsa",
+        "Nuriya",
+        "Masuda",
+        "Sara",
+        "Fatima",
+        "Zaynab",
+        "Asiya"
+      ]
+    },
+    {
+      "country": "iraq",
+      "era": "industrial",
+      "displayName": "Ottoman Iraq (Baghdad Vilayet)",
+      "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
+      "year": 1870,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Kurus & silver mecidiye"
+        },
+        {
+          "category": "Language",
+          "value": "Baghdadi Arabic; Turkish"
+        },
+        {
+          "category": "Technology",
+          "value": "Horse tram to Kadhimiya"
+        },
+        {
+          "category": "Geography",
+          "value": "Baghdad (vilayet seat)"
+        },
+        {
+          "category": "Politics",
+          "value": "Sultan Abdulaziz"
+        }
+      ],
+      "maleNames": [
+        "Hamdi",
+        "Shukri",
+        "Fadil",
+        "Abd al-Rahman",
+        "Heskel",
+        "Hanna",
+        "Kadhim",
+        "Jafar"
+      ],
+      "femaleNames": [
+        "Hasiba",
+        "Rahel",
+        "Fahima",
+        "Nazira",
+        "Latifa",
+        "Habiba",
+        "Zahra",
+        "Maryam"
+      ]
+    },
+    {
+      "country": "iraq",
+      "era": "modern",
+      "displayName": "Kingdom of Iraq",
+      "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
+      "year": 1956,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Iraqi dinar (1000 fils)"
+        },
+        {
+          "category": "Language",
+          "value": "Iraqi Arabic; Kurdish"
+        },
+        {
+          "category": "Technology",
+          "value": "Television (Baghdad TV)"
+        },
+        {
+          "category": "Geography",
+          "value": "Baghdad (Kingdom of Iraq)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Faisal II"
+        }
+      ],
+      "maleNames": [
+        "Adnan",
+        "Sabah",
+        "Jasim",
+        "Salim",
+        "Shakir",
+        "Karim",
+        "Kamil",
+        "Fuad"
+      ],
+      "femaleNames": [
+        "Nazik",
+        "Sabiha",
+        "Bahija",
+        "Naziha",
+        "Lamia",
+        "Munira",
+        "Wijdan",
+        "Salima"
+      ]
+    },
+    {
+      "country": "greece",
+      "era": "ancient",
+      "displayName": "Periclean Athens",
+      "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
+      "year": -430,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver drachma (owl)"
+        },
+        {
+          "category": "Language",
+          "value": "Attic Greek"
+        },
+        {
+          "category": "Technology",
+          "value": "Klepsydra (water clock)"
+        },
+        {
+          "category": "Geography",
+          "value": "Athens (city-state)"
+        },
+        {
+          "category": "Politics",
+          "value": "Strategos Pericles"
+        }
+      ],
+      "maleNames": [
+        "Kallias",
+        "Glaukon",
+        "Theodoros",
+        "Diodotos",
+        "Lykon",
+        "Philippos",
+        "Hipponikos",
+        "Charmides"
+      ],
+      "femaleNames": [
+        "Hegeso",
+        "Mnesarete",
+        "Myrrhine",
+        "Archestrate",
+        "Phanostrate",
+        "Kleito",
+        "Theano",
+        "Lysimache"
+      ]
+    },
+    {
+      "country": "greece",
+      "era": "medieval",
+      "displayName": "Byzantine Mystras",
+      "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
+      "year": 1430,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver stavraton"
+        },
+        {
+          "category": "Language",
+          "value": "Late Byzantine Greek"
+        },
+        {
+          "category": "Technology",
+          "value": "Morean silk (sericulture)"
+        },
+        {
+          "category": "Geography",
+          "value": "Mystras (Despotate of Morea)"
+        },
+        {
+          "category": "Politics",
+          "value": "Despot Theodore II"
+        }
+      ],
+      "maleNames": [
+        "Georgios",
+        "Demetrios",
+        "Michael",
+        "Nikephoros",
+        "Ioannes",
+        "Leon",
+        "Gregorios",
+        "Stephanos"
+      ],
+      "femaleNames": [
+        "Eirene",
+        "Theodora",
+        "Eudokia",
+        "Helene",
+        "Kale",
+        "Thomais",
+        "Euphrosyne",
+        "Anna"
+      ]
+    },
+    {
+      "country": "greece",
+      "era": "earlymodern",
+      "displayName": "Ottoman Ioannina",
+      "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
+      "year": 1700,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Ottoman kurus (grosi)"
+        },
+        {
+          "category": "Language",
+          "value": "Romaic Greek (Epirote)"
+        },
+        {
+          "category": "Technology",
+          "value": "Ioannina silver filigree"
+        },
+        {
+          "category": "Geography",
+          "value": "Constantinople (Ottoman)"
+        },
+        {
+          "category": "Politics",
+          "value": "Sultan Mustafa II"
+        }
+      ],
+      "maleNames": [
+        "Emmanouil",
+        "Balanos",
+        "Zois",
+        "Epifanios",
+        "Lambros",
+        "Stamatis",
+        "Christodoulos",
+        "Anastasis"
+      ],
+      "femaleNames": [
+        "Marigo",
+        "Frosini",
+        "Kyranna",
+        "Chrysafo",
+        "Asimo",
+        "Zafeira",
+        "Despo",
+        "Lenio"
+      ]
+    },
+    {
+      "country": "greece",
+      "era": "industrial",
+      "displayName": "Athens, Kingdom of Greece",
+      "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
+      "year": 1860,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Royal drachma (100 lepta)"
+        },
+        {
+          "category": "Language",
+          "value": "Greek; official Katharevousa"
+        },
+        {
+          "category": "Technology",
+          "value": "Electric telegraph (1859)"
+        },
+        {
+          "category": "Geography",
+          "value": "Athens (Kingdom of Greece)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Otto (Othon)"
+        }
+      ],
+      "maleNames": [
+        "Georgios",
+        "Ioannis",
+        "Dimitrios",
+        "Nikolaos",
+        "Spyridon",
+        "Athanasios",
+        "Panagiotis",
+        "Anastasios"
+      ],
+      "femaleNames": [
+        "Aikaterini",
+        "Kalliopi",
+        "Angeliki",
+        "Smaragda",
+        "Eirini",
+        "Evanthia",
+        "Chrysoula",
+        "Panagiota"
+      ]
+    },
+    {
+      "country": "greece",
+      "era": "modern",
+      "displayName": "Metapolitefsi Athens",
+      "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
+      "year": 1975,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Drachma (1954 new drachma)"
+        },
+        {
+          "category": "Language",
+          "value": "Demotic Greek (polytonic)"
+        },
+        {
+          "category": "Technology",
+          "value": "Frappé coffee shaker"
+        },
+        {
+          "category": "Geography",
+          "value": "Athens (Hellenic Republic)"
+        },
+        {
+          "category": "Politics",
+          "value": "President K. Tsatsos"
+        }
+      ],
+      "maleNames": [
+        "Giorgos",
+        "Kostas",
+        "Nikos",
+        "Giannis",
+        "Dimitris",
+        "Vasilis",
+        "Takis",
+        "Manolis"
+      ],
+      "femaleNames": [
+        "Maria",
+        "Eleni",
+        "Katerina",
+        "Georgia",
+        "Sofia",
+        "Dimitra",
+        "Despina",
+        "Voula"
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "ancient",
+      "displayName": "Republican Rome",
+      "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
+      "year": -50,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver denarius"
+        },
+        {
+          "category": "Language",
+          "value": "Late Republican Latin"
+        },
+        {
+          "category": "Technology",
+          "value": "Roman concrete"
+        },
+        {
+          "category": "Geography",
+          "value": "Rome (Roman Republic)"
+        },
+        {
+          "category": "Politics",
+          "value": "Consuls Paullus & Marcellus"
+        }
+      ],
+      "maleNames": [
+        "Gaius",
+        "Lucius",
+        "Marcus",
+        "Publius",
+        "Quintus",
+        "Titus",
+        "Gnaeus",
+        "Sextus"
+      ],
+      "femaleNames": [
+        "Cornelia",
+        "Tullia",
+        "Terentia",
+        "Valeria",
+        "Caecilia",
+        "Servilia",
+        "Fulvia",
+        "Aemilia"
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "medieval",
+      "displayName": "Florentine Republic",
+      "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
+      "year": 1439,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Gold florin (fiorino d'oro)"
+        },
+        {
+          "category": "Language",
+          "value": "Florentine Tuscan (volgare)"
+        },
+        {
+          "category": "Technology",
+          "value": "Bill of exchange (Medici)"
+        },
+        {
+          "category": "Geography",
+          "value": "Florence (Republic)"
+        },
+        {
+          "category": "Politics",
+          "value": "Cosimo de' Medici (de facto)"
+        }
+      ],
+      "maleNames": [
+        "Giovanni",
+        "Antonio",
+        "Piero",
+        "Iacopo",
+        "Bartolomeo",
+        "Niccolo",
+        "Domenico",
+        "Zanobi"
+      ],
+      "femaleNames": [
+        "Caterina",
+        "Antonia",
+        "Margherita",
+        "Piera",
+        "Nanna",
+        "Bartolomea",
+        "Lisa",
+        "Cecca"
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "earlymodern",
+      "displayName": "Sforza Milan",
+      "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
+      "year": 1495,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Milanese silver testone"
+        },
+        {
+          "category": "Language",
+          "value": "Milanese Lombard"
+        },
+        {
+          "category": "Technology",
+          "value": "Milanese plate armour"
+        },
+        {
+          "category": "Geography",
+          "value": "Milan (Duchy of Milan)"
+        },
+        {
+          "category": "Politics",
+          "value": "Duke Ludovico Sforza"
+        }
+      ],
+      "maleNames": [
+        "Ambrogio",
+        "Bernardino",
+        "Gaspare",
+        "Cristoforo",
+        "Giacomo",
+        "Battista",
+        "Donato",
+        "Bartolomeo"
+      ],
+      "femaleNames": [
+        "Bianca",
+        "Chiara",
+        "Lucia",
+        "Veronica",
+        "Giovanna",
+        "Angela",
+        "Cecilia",
+        "Isotta"
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "industrial",
+      "displayName": "Bologna, Kingdom of Italy",
+      "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
+      "year": 1895,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Italian lira (100 centesimi)"
+        },
+        {
+          "category": "Language",
+          "value": "Bolognese dialect; Italian"
+        },
+        {
+          "category": "Technology",
+          "value": "Safety bicycle"
+        },
+        {
+          "category": "Geography",
+          "value": "Rome (Kingdom of Italy)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Umberto I"
+        }
+      ],
+      "maleNames": [
+        "Giuseppe",
+        "Luigi",
+        "Enrico",
+        "Augusto",
+        "Alfredo",
+        "Ettore",
+        "Arturo",
+        "Cesare"
+      ],
+      "femaleNames": [
+        "Giuseppina",
+        "Teresa",
+        "Ada",
+        "Elvira",
+        "Adele",
+        "Ida",
+        "Clelia",
+        "Amelia"
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "modern",
+      "displayName": "Dolce Vita Rome",
+      "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
+      "year": 1960,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Italian lira (Repubblica)"
+        },
+        {
+          "category": "Language",
+          "value": "Italian; Romanesco dialect"
+        },
+        {
+          "category": "Technology",
+          "value": "Vespa scooter"
+        },
+        {
+          "category": "Geography",
+          "value": "Rome (Italian Republic)"
+        },
+        {
+          "category": "Politics",
+          "value": "President Giovanni Gronchi"
+        }
+      ],
+      "maleNames": [
+        "Mario",
+        "Franco",
+        "Sergio",
+        "Luciano",
+        "Giorgio",
+        "Bruno",
+        "Renato",
+        "Marcello"
+      ],
+      "femaleNames": [
+        "Franca",
+        "Carla",
+        "Silvana",
+        "Gabriella",
+        "Marisa",
+        "Luciana",
+        "Giuliana",
+        "Anna Maria"
+      ]
+    },
+    {
+      "country": "china",
+      "era": "ancient",
+      "displayName": "Eastern Han Luoyang",
+      "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
+      "year": 105,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Wuzhu bronze cash"
+        },
+        {
+          "category": "Language",
+          "value": "Old Chinese, clerical script"
+        },
+        {
+          "category": "Technology",
+          "value": "Cai Lun bark-and-rag paper"
+        },
+        {
+          "category": "Geography",
+          "value": "Luoyang"
+        },
+        {
+          "category": "Politics",
+          "value": "Emperor He of Han"
+        }
+      ],
+      "maleNames": [
+        "Chong",
+        "Heng",
+        "Gu",
+        "Shen",
+        "Yong",
+        "Kuan",
+        "Ba",
+        "Liang"
+      ],
+      "femaleNames": [
+        "Zhao",
+        "Yan",
+        "Hui",
+        "Ji",
+        "Shu",
+        "Jiao",
+        "Ling",
+        "Rong"
+      ]
+    },
+    {
+      "country": "china",
+      "era": "medieval",
+      "displayName": "Northern Song Kaifeng",
+      "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
+      "year": 1075,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Copper cash (Xining Yuanbao)"
+        },
+        {
+          "category": "Language",
+          "value": "Late Middle Chinese (Song)"
+        },
+        {
+          "category": "Technology",
+          "value": "Bi Sheng clay movable type"
+        },
+        {
+          "category": "Geography",
+          "value": "Kaifeng (Bianjing)"
+        },
+        {
+          "category": "Politics",
+          "value": "Emperor Shenzong of Song"
+        }
+      ],
+      "maleNames": [
+        "Tingjian",
+        "Shixiong",
+        "Zhongyou",
+        "Boyu",
+        "Kuo",
+        "Guan",
+        "Songnian",
+        "Deyuan"
+      ],
+      "femaleNames": [
+        "Qingzhao",
+        "Chaoyun",
+        "Shuzhen",
+        "Runzhi",
+        "Sanniang",
+        "Qiniang",
+        "Yuniang",
+        "Huiniang"
+      ]
+    },
+    {
+      "country": "china",
+      "era": "earlymodern",
+      "displayName": "Late Ming Suzhou",
+      "moment": "Suzhou and Jiangnan in the late Ming, c. 1635, during the printing and publishing boom that produced Song Yingxing's illustrated technology encyclopedia Tiangong Kaiwu (1637)",
+      "year": 1635,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver taels, Chongzhen cash"
+        },
+        {
+          "category": "Language",
+          "value": "Wu Chinese (Suzhou dialect)"
+        },
+        {
+          "category": "Technology",
+          "value": "Suanpan abacus"
+        },
+        {
+          "category": "Geography",
+          "value": "Beijing (Shuntian Fu)"
+        },
+        {
+          "category": "Politics",
+          "value": "Chongzhen Emperor"
+        }
+      ],
+      "maleNames": [
+        "Menglong",
+        "Zhenheng",
+        "Yingxing",
+        "Guangqi",
+        "Zhengming",
+        "Pu",
+        "Qianyi",
+        "Weiye"
+      ],
+      "femaleNames": [
+        "Yixiu",
+        "Xiaoluan",
+        "Wanwan",
+        "Rushi",
+        "Yuanyuan",
+        "Xiaowan",
+        "Xiangjun",
+        "Yujing"
+      ]
+    },
+    {
+      "country": "china",
+      "era": "industrial",
+      "displayName": "Qing Shanghai",
+      "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
+      "year": 1880,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver tael & Mexican dollar"
+        },
+        {
+          "category": "Language",
+          "value": "Shanghainese, Pidgin English"
+        },
+        {
+          "category": "Technology",
+          "value": "Rickshaw (dongyangche)"
+        },
+        {
+          "category": "Geography",
+          "value": "Peking (Jingshi)"
+        },
+        {
+          "category": "Politics",
+          "value": "Guangxu Emperor"
+        }
+      ],
+      "maleNames": [
+        "Guanying",
+        "Tingshu",
+        "Xueyan",
+        "Bonian",
+        "Tao",
+        "Run",
+        "Deyi",
+        "Jinfu"
+      ],
+      "femaleNames": [
+        "Xiuying",
+        "Guifen",
+        "Cuilan",
+        "Yulan",
+        "Aizhen",
+        "Baozhu",
+        "Suzhen",
+        "Meiying"
+      ]
+    },
+    {
+      "country": "china",
+      "era": "modern",
+      "displayName": "Beijing, People's Republic",
+      "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
+      "year": 1972,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Renminbi & grain coupons"
+        },
+        {
+          "category": "Language",
+          "value": "Putonghua (simplified chars)"
+        },
+        {
+          "category": "Technology",
+          "value": "Flying Pigeon bicycle"
+        },
+        {
+          "category": "Geography",
+          "value": "Beijing (People's Republic)"
+        },
+        {
+          "category": "Politics",
+          "value": "Acting Chairman Dong Biwu"
+        }
+      ],
+      "maleNames": [
+        "Jianguo",
+        "Weidong",
+        "Jianjun",
+        "Aiguo",
+        "Xiangdong",
+        "Zhiqiang",
+        "Guoqing",
+        "Hongwei"
+      ],
+      "femaleNames": [
+        "Hongmei",
+        "Yanhong",
+        "Lihua",
+        "Aihua",
+        "Chunmei",
+        "Weihong",
+        "Hongying",
+        "Lijuan"
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "ancient",
+      "displayName": "Kofun Yamato",
+      "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
+      "year": 450,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Barter: iron ingots & cloth"
+        },
+        {
+          "category": "Language",
+          "value": "Pre-Old Japanese (Yamato)"
+        },
+        {
+          "category": "Technology",
+          "value": "Sue ware (anagama kiln)"
+        },
+        {
+          "category": "Geography",
+          "value": "Totsu-Asuka Palace, Yamato"
+        },
+        {
+          "category": "Politics",
+          "value": "Great King Sai (Ingyo)"
+        }
+      ],
+      "maleNames": [
+        "Wowake",
+        "Ohohiko",
+        "Takari",
+        "Teyokariwake",
+        "Takahashiwake",
+        "Tasakiwake",
+        "Hatehi",
+        "Kasahaya"
+      ],
+      "femaleNames": [
+        "Sotoorihime",
+        "Iwanohime",
+        "Kurohime",
+        "Kaminagahime",
+        "Hatabihime",
+        "Karahime",
+        "Nakatsuhime",
+        "Oiratsume"
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "medieval",
+      "displayName": "Muromachi Kyoto",
+      "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
+      "year": 1400,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Toraisen (imported cash)"
+        },
+        {
+          "category": "Language",
+          "value": "Late Middle Japanese (Kyoto)"
+        },
+        {
+          "category": "Technology",
+          "value": "Folding fan (sensu)"
+        },
+        {
+          "category": "Geography",
+          "value": "Kyoto (Heian-kyo)"
+        },
+        {
+          "category": "Politics",
+          "value": "Emperor Go-Komatsu"
+        }
+      ],
+      "maleNames": [
+        "Hikotaro",
+        "Magojiro",
+        "Matashiro",
+        "Saburo",
+        "Kuro",
+        "Motokiyo",
+        "Mochiyuki",
+        "Yasutada"
+      ],
+      "femaleNames": [
+        "Tsuru",
+        "Kame",
+        "Matsu",
+        "Kiku",
+        "Tora",
+        "Chiyo",
+        "Tomoe",
+        "Iwa"
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "earlymodern",
+      "displayName": "Tokugawa Edo",
+      "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
+      "year": 1610,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Keicho koban & chogin"
+        },
+        {
+          "category": "Language",
+          "value": "Early Modern Japanese"
+        },
+        {
+          "category": "Technology",
+          "value": "Tanegashima matchlock"
+        },
+        {
+          "category": "Geography",
+          "value": "Edo (shogunate seat)"
+        },
+        {
+          "category": "Politics",
+          "value": "Shogun Tokugawa Hidetada"
+        }
+      ],
+      "maleNames": [
+        "Kichibei",
+        "Chobei",
+        "Jinbei",
+        "Gonbei",
+        "Kyuzaemon",
+        "Hachiemon",
+        "Tokubei",
+        "Mataemon"
+      ],
+      "femaleNames": [
+        "Ofuku",
+        "Oman",
+        "Onatsu",
+        "Otama",
+        "Otake",
+        "Osen",
+        "Oume",
+        "Okiku"
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "industrial",
+      "displayName": "Meiji Nagoya",
+      "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
+      "year": 1899,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Yen (gold standard, 1897)"
+        },
+        {
+          "category": "Language",
+          "value": "Japanese (Nagoya dialect)"
+        },
+        {
+          "category": "Technology",
+          "value": "Toyoda power loom (1896)"
+        },
+        {
+          "category": "Geography",
+          "value": "Tokyo City (Tokyo-shi)"
+        },
+        {
+          "category": "Politics",
+          "value": "Emperor Meiji (Mutsuhito)"
+        }
+      ],
+      "maleNames": [
+        "Kinjiro",
+        "Tokujiro",
+        "Seitaro",
+        "Kumakichi",
+        "Tomekichi",
+        "Heisaku",
+        "Tsunekichi",
+        "Yasujiro"
+      ],
+      "femaleNames": [
+        "Ume",
+        "Haru",
+        "Hana",
+        "Masa",
+        "Tome",
+        "Fusa",
+        "Shizu",
+        "Toshi"
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "modern",
+      "displayName": "Showa Tokyo",
+      "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
+      "year": 1980,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Yen (Shotoku ¥10,000 note)"
+        },
+        {
+          "category": "Language",
+          "value": "Standard Japanese (hyojungo)"
+        },
+        {
+          "category": "Technology",
+          "value": "Portable cassette player"
+        },
+        {
+          "category": "Geography",
+          "value": "Tokyo Metropolis (Tokyo-to)"
+        },
+        {
+          "category": "Politics",
+          "value": "Emperor Hirohito (Showa)"
+        }
+      ],
+      "maleNames": [
+        "Hiroshi",
+        "Takashi",
+        "Kazuo",
+        "Minoru",
+        "Akira",
+        "Shigeru",
+        "Kenji",
+        "Toshio"
+      ],
+      "femaleNames": [
+        "Keiko",
+        "Kazuko",
+        "Yoko",
+        "Sachiko",
+        "Michiko",
+        "Emiko",
+        "Kumiko",
+        "Yumiko"
+      ]
+    },
+    {
+      "country": "britain",
+      "era": "ancient",
+      "displayName": "Iron Age Britain",
+      "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
+      "year": 20,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Gold stater (corn-ear)"
+        },
+        {
+          "category": "Language",
+          "value": "Common Brittonic"
+        },
+        {
+          "category": "Technology",
+          "value": "Essedum (war chariot)"
+        },
+        {
+          "category": "Geography",
+          "value": "Camulodunum (Colchester)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Cunobelinus"
+        }
+      ],
+      "maleNames": [
+        "Cunovindus",
+        "Cintusmus",
+        "Catavignus",
+        "Litugenus",
+        "Vindiorix",
+        "Cunomolius",
+        "Riovassus",
+        "Deomiorix"
+      ],
+      "femaleNames": [
+        "Senovara",
+        "Britivenda",
+        "Lovernisca",
+        "Venibelia",
+        "Velvinna",
+        "Cunoarda",
+        "Tancorix",
+        "Verctissa"
+      ]
+    },
+    {
+      "country": "britain",
+      "era": "medieval",
+      "displayName": "Anglo-Saxon England",
+      "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
+      "year": 1050,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver penny (pening)"
+        },
+        {
+          "category": "Language",
+          "value": "Late Old English"
+        },
+        {
+          "category": "Technology",
+          "value": "Tide-dial sundial"
+        },
+        {
+          "category": "Geography",
+          "value": "Winchester (royal treasury)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Edward the Confessor"
+        }
+      ],
+      "maleNames": [
+        "Aelfric",
+        "Godric",
+        "Leofwine",
+        "Wulfric",
+        "Eadric",
+        "Osgod",
+        "Brihtwold",
+        "Aelfwine"
+      ],
+      "femaleNames": [
+        "Aelfgifu",
+        "Eadgifu",
+        "Leofrun",
+        "Wulfrun",
+        "Godgifu",
+        "Wulfgyth",
+        "Aelfflaed",
+        "Leofgyth"
+      ]
+    },
+    {
+      "country": "britain",
+      "era": "earlymodern",
+      "displayName": "Elizabethan England",
+      "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
+      "year": 1600,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Silver shilling & sixpence"
+        },
+        {
+          "category": "Language",
+          "value": "Early Modern English"
+        },
+        {
+          "category": "Technology",
+          "value": "Clay tobacco pipe"
+        },
+        {
+          "category": "Geography",
+          "value": "London (Whitehall Palace)"
+        },
+        {
+          "category": "Politics",
+          "value": "Queen Elizabeth I"
+        }
+      ],
+      "maleNames": [
+        "Humphrey",
+        "Ambrose",
+        "Nicholas",
+        "Tobias",
+        "Gilbert",
+        "Bartholomew",
+        "Francis",
+        "Christopher"
+      ],
+      "femaleNames": [
+        "Margery",
+        "Cicely",
+        "Lettice",
+        "Bridget",
+        "Judith",
+        "Dorothy",
+        "Joan",
+        "Agnes"
+      ]
+    },
+    {
+      "country": "britain",
+      "era": "industrial",
+      "displayName": "Victorian Britain",
+      "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
+      "year": 1843,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Gold sovereign (£sd)"
+        },
+        {
+          "category": "Language",
+          "value": "Victorian English"
+        },
+        {
+          "category": "Technology",
+          "value": "Penny Red postage stamp"
+        },
+        {
+          "category": "Geography",
+          "value": "London (Buckingham Palace)"
+        },
+        {
+          "category": "Politics",
+          "value": "Queen Victoria"
+        }
+      ],
+      "maleNames": [
+        "Josiah",
+        "Samuel",
+        "Thomas",
+        "Alfred",
+        "Frederick",
+        "Ebenezer",
+        "Septimus",
+        "Horace"
+      ],
+      "femaleNames": [
+        "Eliza",
+        "Harriet",
+        "Hannah",
+        "Susannah",
+        "Esther",
+        "Charlotte",
+        "Mary Ann",
+        "Louisa"
+      ]
+    },
+    {
+      "country": "britain",
+      "era": "modern",
+      "displayName": "Post-war Britain",
+      "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
+      "year": 1950,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "£1 note & half-crown (£sd)"
+        },
+        {
+          "category": "Language",
+          "value": "British English"
+        },
+        {
+          "category": "Technology",
+          "value": "NHS spectacles"
+        },
+        {
+          "category": "Geography",
+          "value": "London (Westminster)"
+        },
+        {
+          "category": "Politics",
+          "value": "King George VI"
+        }
+      ],
+      "maleNames": [
+        "Ronald",
+        "Kenneth",
+        "Dennis",
+        "Leslie",
+        "Stanley",
+        "Norman",
+        "Derek",
+        "Raymond"
+      ],
+      "femaleNames": [
+        "Doreen",
+        "Joyce",
+        "Sheila",
+        "Brenda",
+        "Maureen",
+        "Audrey",
+        "Pamela",
+        "Irene"
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "ancient",
+      "displayName": "Germania",
+      "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
+      "year": 98,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Cattle & old Roman silver"
+        },
+        {
+          "category": "Language",
+          "value": "Proto-Germanic (pre-runic)"
+        },
+        {
+          "category": "Technology",
+          "value": "Framea (short spear)"
+        },
+        {
+          "category": "Geography",
+          "value": "No capital (tribal things)"
+        },
+        {
+          "category": "Politics",
+          "value": "Tribal kings & war-chiefs"
+        }
+      ],
+      "maleNames": [
+        "Segimundus",
+        "Sesithacus",
+        "Thumelicus",
+        "Boiocalus",
+        "Chariovalda",
+        "Inguiomerus",
+        "Mallovendus",
+        "Libes"
+      ],
+      "femaleNames": [
+        "Thusnelda",
+        "Rhamis",
+        "Veleda",
+        "Ganna",
+        "Aurinia",
+        "Waluburg",
+        "Gambara",
+        "Hariso"
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "medieval",
+      "displayName": "Holy Roman Empire (Rhineland)",
+      "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
+      "year": 1440,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Rhenish gulden & Albus"
+        },
+        {
+          "category": "Language",
+          "value": "Early New High German"
+        },
+        {
+          "category": "Technology",
+          "value": "Aachen pilgrim mirror"
+        },
+        {
+          "category": "Geography",
+          "value": "Frankfurt (royal election)"
+        },
+        {
+          "category": "Politics",
+          "value": "King Frederick III"
+        }
+      ],
+      "maleNames": [
+        "Henne",
+        "Tilman",
+        "Goswin",
+        "Clais",
+        "Gerhard",
+        "Dietrich",
+        "Godert",
+        "Peter"
+      ],
+      "femaleNames": [
+        "Gude",
+        "Fygen",
+        "Bechte",
+        "Gele",
+        "Irmele",
+        "Meckil",
+        "Else",
+        "Katherine"
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "earlymodern",
+      "displayName": "Renaissance Nuremberg",
+      "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
+      "year": 1525,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Gulden & Nuremberg Pfennig"
+        },
+        {
+          "category": "Language",
+          "value": "East Franconian German"
+        },
+        {
+          "category": "Technology",
+          "value": "Henlein spring-driven watch"
+        },
+        {
+          "category": "Geography",
+          "value": "Nuremberg (Reichsstadt)"
+        },
+        {
+          "category": "Politics",
+          "value": "Emperor Charles V"
+        }
+      ],
+      "maleNames": [
+        "Sebald",
+        "Willibald",
+        "Veit",
+        "Endres",
+        "Lienhard",
+        "Jobst",
+        "Kunz",
+        "Wolf"
+      ],
+      "femaleNames": [
+        "Kunigunde",
+        "Ursula",
+        "Barbara",
+        "Walburga",
+        "Magdalena",
+        "Ottilia",
+        "Apollonia",
+        "Margaretha"
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "industrial",
+      "displayName": "Wilhelmine Germany",
+      "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
+      "year": 1899,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Mark, 100 Pfennig (gold)"
+        },
+        {
+          "category": "Language",
+          "value": "High German (Fraktur)"
+        },
+        {
+          "category": "Technology",
+          "value": "Aspirin powder (1899)"
+        },
+        {
+          "category": "Geography",
+          "value": "Berlin (Stadtschloss)"
+        },
+        {
+          "category": "Politics",
+          "value": "Kaiser Wilhelm II"
+        }
+      ],
+      "maleNames": [
+        "Gustav",
+        "Emil",
+        "Paul",
+        "Ernst",
+        "August",
+        "Ludwig",
+        "Hermann",
+        "Theodor"
+      ],
+      "femaleNames": [
+        "Auguste",
+        "Wilhelmine",
+        "Minna",
+        "Bertha",
+        "Hedwig",
+        "Frieda",
+        "Emma",
+        "Clara"
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "modern",
+      "displayName": "Weimar Berlin",
+      "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
+      "year": 1926,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Reichsmark & Rentenmark"
+        },
+        {
+          "category": "Language",
+          "value": "Berlin German (Berlinisch)"
+        },
+        {
+          "category": "Technology",
+          "value": "Leica 35mm camera"
+        },
+        {
+          "category": "Geography",
+          "value": "Berlin (Weimar Republic)"
+        },
+        {
+          "category": "Politics",
+          "value": "Reichspräsident Hindenburg"
+        }
+      ],
+      "maleNames": [
+        "Kurt",
+        "Erich",
+        "Werner",
+        "Herbert",
+        "Willi",
+        "Rudolf",
+        "Walter",
+        "Heinz"
+      ],
+      "femaleNames": [
+        "Lotte",
+        "Käthe",
+        "Erna",
+        "Ilse",
+        "Hilde",
+        "Elfriede",
+        "Irmgard",
+        "Trude"
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "asset": "Rule_NoAncientEgypt",
+      "type": "NationEraForbidden",
+      "country": "egypt",
+      "era": "ancient",
+      "description": "Embargo: no travel to New Kingdom Egypt today."
+    },
+    {
+      "asset": "Rule_NoMedievalChina",
+      "type": "NationEraForbidden",
+      "country": "china",
+      "era": "medieval",
+      "description": "Quarantine: no travel to Northern Song Kaifeng today."
+    },
+    {
+      "asset": "Rule_NoEarlyModernJapan",
+      "type": "NationEraForbidden",
+      "country": "japan",
+      "era": "earlymodern",
+      "description": "Sakoku seal: no travel to Tokugawa Edo today."
+    }
+  ],
+  "days": [
+    {
+      "asset": "DayPlan_Inv_Day1",
+      "day": 1,
+      "queue": 8,
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        }
+      ],
+      "countries": [
+        "egypt",
+        "iraq",
+        "greece",
+        "italy"
+      ],
+      "rules": []
+    },
+    {
+      "asset": "DayPlan_Inv_Day2",
+      "day": 2,
+      "queue": 10,
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        }
+      ],
+      "countries": [
+        "egypt",
+        "iraq",
+        "greece",
+        "italy",
+        "china",
+        "britain"
+      ],
+      "rules": [
+        "Rule_NoAncientEgypt"
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day3",
+      "day": 3,
+      "queue": 12,
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoMedievalChina",
+        "Rule_NoEarlyModernJapan"
+      ]
+    }
+  ]
+}

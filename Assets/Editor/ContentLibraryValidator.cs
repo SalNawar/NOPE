@@ -85,6 +85,89 @@ public static class ContentLibraryValidator
         issues += CheckLegendaryReferences(lib);
         issues += CheckNationEraProfiles(lib);
 
+        // --- World model (places and the days that use them) ---
+        issues += CheckPlaces(lib);
+        issues += CheckDayPlanPlaces(lib);
+
+        return issues;
+    }
+
+    /// <summary>Fact categories every place must have (papers + books + planned questions).</summary>
+    private static readonly ClueCategory[] RequiredFacts =
+        { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics };
+
+    /// <summary>Reports places with missing or duplicate facts, no names, or an inverted birth-year range.</summary>
+    private static int CheckPlaces(ContentLibrarySO lib)
+    {
+        int issues = 0;
+
+        foreach (NationEraProfileSO place in lib.Profiles)
+        {
+            if (place == null)
+                continue;
+
+            foreach (ClueCategory category in RequiredFacts)
+            {
+                if (string.IsNullOrWhiteSpace(place.GetFact(category)))
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has no {category} fact in '{lib.name}' (papers would print a placeholder).", place);
+                    issues++;
+                }
+            }
+
+            if (place.facts != null && place.facts.Where(f => f != null).GroupBy(f => f.category).Any(g => g.Count() > 1))
+            {
+                Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' lists a fact category twice in '{lib.name}'.", place);
+                issues++;
+            }
+
+            if (place.AllNames.Count == 0)
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has no names; visitors from there fall back to other pools.", place);
+                issues++;
+            }
+
+            if (place.birthYearMin > place.birthYearMax)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has birthYearMin {place.birthYearMin} > birthYearMax {place.birthYearMax}.", place);
+                issues++;
+            }
+        }
+
+        return issues;
+    }
+
+    /// <summary>Reports day plans whose weighted eras have no place today (eras x allowed nations).</summary>
+    private static int CheckDayPlanPlaces(ContentLibrarySO lib)
+    {
+        int issues = 0;
+
+        foreach (DayPlanSO plan in lib.DayPlans)
+        {
+            if (plan == null)
+                continue;
+
+            List<NationEraProfileSO> today = lib.TodaysProfiles(plan);
+            if (today.Count == 0)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' has no places (its eras x allowed nations match no place).", plan);
+                issues++;
+                continue;
+            }
+
+            if (plan.EraWeights == null)
+                continue;
+
+            foreach (EraWeight w in plan.EraWeights)
+            {
+                if (w.era != null && w.weight > 0f && today.All(p => p.era != w.era))
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights era '{w.era.id}' but none of its allowed nations has a place there.", plan);
+                    issues++;
+                }
+            }
+        }
+
         return issues;
     }
 
