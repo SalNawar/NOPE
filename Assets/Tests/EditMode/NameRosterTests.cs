@@ -38,6 +38,19 @@ public class NameRosterTests
     }
 
     [Test]
+    public void IsTaken_SeesReservedAndTakenNames_CaseAndSpaceInsensitive()
+    {
+        var roster = new NameRoster();
+        roster.Reserve("Calliope Demarch");
+        string taken = roster.Take(Pool, First);
+        Assert.IsTrue(roster.IsTaken(" calliope demarch"));
+        Assert.IsTrue(roster.IsTaken(taken.ToUpperInvariant()));
+        Assert.IsFalse(roster.IsTaken("Gaius"));
+        Assert.IsFalse(roster.IsTaken(null));
+        Assert.IsFalse(roster.IsTaken("  "));
+    }
+
+    [Test]
     public void Take_TrimsNames_SkipsBlanks_AndTreatsCaseVariantsAsOne()
     {
         var roster = new NameRoster();

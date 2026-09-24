@@ -23,6 +23,10 @@ public sealed class NameRoster
         return _used.Add(name.Trim());
     }
 
+    /// <summary>True when someone already has this name today (trimmed, case-insensitive).</summary>
+    public bool IsTaken(string name) =>
+        !string.IsNullOrWhiteSpace(name) && _used.Contains(name.Trim());
+
     /// <summary>
     /// Takes a name nobody has today: a random unused pool name, or, once every
     /// pool name is taken, a pool name with the lowest free numeral suffix.

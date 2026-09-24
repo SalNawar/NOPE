@@ -347,7 +347,9 @@ public sealed class CaseFactory
     {
         if (legendary != null)
         {
-            _roster.Reserve(legendary.displayName);
+            // TryRollLegendary skips taken names, so a clash means that filter was bypassed.
+            if (!_roster.Reserve(legendary.displayName))
+                Debug.LogError($"[CaseFactory] Legendary '{legendary.displayName}' shares a name with an earlier visitor today; Citizen Records will return the first match.");
             return legendary.displayName;
         }
 
@@ -473,15 +475,16 @@ public sealed class CaseFactory
 
         int day = state.day;
 
-        // Only allow legendaries that are active within the day range.
+        // Only allow legendaries that are active within the day range and whose
+        // name nobody has today (a repeat would duplicate a citizen record).
         var valid = plan.AvailableLegendaries
-            .Where(l => l != null && day >= l.minDay && day <= l.maxDay)
+            .Where(l => l != null && day >= l.minDay && day <= l.maxDay && !_roster.IsTaken(l.displayName))
             .ToList();
 
         if (valid.Count == 0)
         {
             if (forced)
-                Debug.LogWarning($"[CaseFactory] TryRollLegendary: ForceLegendaryNextCase is set but no legendary is valid for day {day} — flag left active.");
+                Debug.LogWarning($"[CaseFactory] TryRollLegendary: ForceLegendaryNextCase is set but no unused legendary is valid for day {day} — flag left active.");
 
             return null;
         }
