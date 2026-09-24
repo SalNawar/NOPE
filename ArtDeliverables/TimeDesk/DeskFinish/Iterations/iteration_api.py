@@ -1,10 +1,22 @@
-import json,time,urllib.request
+import json,time,urllib.request,concurrent.futures
 from pathlib import Path
 HERE=Path(__file__).resolve().parent
 PROJECT=HERE.parents[3]
 HEADERS={'Content-Type':'application/json','X-Agent-Id':'Codex-ArtIteration'}
+def discover():
+ def probe(port):
+  try:
+   base=f'http://127.0.0.1:{port}'
+   health=json.load(urllib.request.urlopen(base+'/health',timeout=1))
+   if health.get('projectName')=='NOPE' and health.get('serverRunning'):return base
+  except Exception:pass
+ with concurrent.futures.ThreadPoolExecutor(max_workers=11) as executor:
+  for base in executor.map(probe,range(8090,8101)):
+   if base:return base
+ raise RuntimeError('No responsive NOPE UnitySkills server')
+BASE=discover()
 def call(skill,**args):
- req=urllib.request.Request('http://localhost:8091/skill/'+skill,data=json.dumps(args).encode(),headers=HEADERS)
+ req=urllib.request.Request(BASE+'/skill/'+skill,data=json.dumps(args).encode(),headers=HEADERS)
  raw=json.load(urllib.request.urlopen(req,timeout=60))
  if raw.get('status')!='success':raise RuntimeError(raw)
  result=raw.get('result',{})
@@ -12,9 +24,12 @@ def call(skill,**args):
  return result
 def batch(skill,items):return call(skill,items=json.dumps(items))
 def state():
+ global BASE
  for attempt in range(8):
-  try:return call('editor_get_state')
-  except (json.JSONDecodeError,urllib.error.URLError):time.sleep(.4)
+  try:
+   BASE=discover()
+   return call('editor_get_state')
+  except (json.JSONDecodeError,urllib.error.URLError,RuntimeError):time.sleep(.4)
  raise RuntimeError('Editor state unavailable after reload')
 def stop():
  if state()['isPlaying']:call('editor_stop')

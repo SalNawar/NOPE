@@ -1,8 +1,8 @@
-# Current direction — awaiting mockup review
+# Approved direction - hybrid mockup 02
 
 The user corrected the first pack-placement pass on 2026-09-24. That pass's
 middle-ground administration and waiting-area furniture is **not the accepted
-direction**. Do not rerun its `layout.json` as the final design.
+direction**. The manifest has now been replaced for the approved hybrid mockup 02.
 
 ## Revised scope
 
@@ -45,3 +45,5 @@ hearts or lunar decorations. Final lighting remains dynamic.
 
 The first mockup is a built-in image-generation concept based on pack previews,
 the ReStory reference and the empty-hall Game view. It is not an in-engine render.
+
+User approved implementation with do it. The authored scene is being compared against office_mix_02_hybrid.png.
