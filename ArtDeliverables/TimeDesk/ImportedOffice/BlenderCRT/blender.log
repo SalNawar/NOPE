@@ -1,0 +1,16 @@
+E:\unity\NOPE\ArtDeliverables\TimeDesk\ImportedOffice\BlenderCRT\style_crt.py:21: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  m=bpy.data.materials.new(name);m.use_nodes=True
+E:\unity\NOPE\ArtDeliverables\TimeDesk\ImportedOffice\BlenderCRT\style_crt.py:60: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world.use_nodes=True;scene.world.node_tree.nodes['Background'].inputs[0].default_value=(.28,.31,.35,1);scene.world.node_tree.nodes['Background'].inputs[1].default_value=.35
+00:10.922  render           | Saved: 'E:\unity\NOPE\ArtDeliverables\TimeDesk\ImportedOffice\BlenderCRT\before.png'
+00:19.766  render           | Saved: 'E:\unity\NOPE\ArtDeliverables\TimeDesk\ImportedOffice\BlenderCRT\after.png'
+00:19.766  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Dots Stroke'
+Blender 5.2.2 LTS (hash d13f752e3b9c built 2026-09-15 01:37:04)
+00:19.766  reports          | WARNING Path 'C:\Program Files\Blender Foundation\Blender 5.2\5.2\datafiles\assets\brushes\essentials_brushes-gp_draw.blend' cannot be made relative for Material 'Material'
+FBX version: 7400
+
+FBX export starting... 'E:\\unity\\NOPE\\Assets\\Art\\Office\\ImportedOffice\\Models\\CRT_Painted.fbx'
+export finished in 0.0466 sec.
+Info: Saved as "CRT_StyleStudy.blend"
+
+Blender quit

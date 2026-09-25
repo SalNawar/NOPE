@@ -1,3 +1,5 @@
+> Superseded by the current desk-only rollback and CRT study. Do not run the old whole-office build. See RESTORY_STYLE_GUIDE.md and BlenderCRT/provenance.md.
+
 # Paused checkpoint — 2026-09-24
 
 Paused at the user's request. Do not continue art iterations until asked.

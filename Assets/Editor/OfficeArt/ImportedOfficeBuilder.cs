@@ -33,65 +33,6 @@ public static class ImportedOfficeBuilder
     [Serializable] public class Report { public List<Placed> placed = new(); }
     static readonly Dictionary<string, Material> materials = new();
 
-    [MenuItem("Tools/Office Art/Apply Surface Finish")]
-    public static void ApplySurfaceFinish()
-    {
-        if(EditorApplication.isPlaying)throw new InvalidOperationException("Leave Play mode before authoring.");
-        var root=GameObject.Find(Root).transform;
-        var importedCeiling=root.Find("Ceiling");
-        if(importedCeiling)importedCeiling.gameObject.SetActive(false);
-        RestoreOriginalCeiling();
-        foreach(var name in new[]{"MI_Computer","MI_WoodenFurniture","MI_Wood","MI_LampDesk","HD_Stuff_02_Norm"})
-        {
-            var mat=AssetDatabase.LoadAssetAtPath<Material>($"{Folder}/Materials/{name}_Painted.mat");
-            if(!mat)continue;
-            Undo.RecordObject(mat,"Material surface finish");
-            mat.SetFloat("_MipBias",0);mat.SetFloat("_BumpScale",.1f);
-            mat.SetFloat("_Smoothness",name=="MI_Computer"?.3f:name=="MI_LampDesk"?.42f:name.StartsWith("HD")?.32f:.18f);
-            if(name=="MI_LampDesk")
-            {mat.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/Textures/lamp_painted.png"));mat.SetColor("_BaseColor",Color.white);}
-            EditorUtility.SetDirty(mat);
-        }
-        AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-    }
-
-    static void RestoreOriginalCeiling()
-    {
-        var hall=GameObject.Find("HybridOffice/Hall").transform;
-        if(hall.Find("Original ceiling"))return;
-        var ceiling=new GameObject("Original ceiling");ceiling.transform.SetParent(hall,false);
-        Undo.RegisterCreatedObjectUndo(ceiling,"Restore original ceiling");
-        // The original import is merged by material. Extract its existing roof,
-        // beams and fixtures above the window heads without duplicating walls.
-        foreach(var filter in hall.Find("Blender_HallStructure").GetComponentsInChildren<MeshFilter>(true))
-        {
-            using var data=Mesh.AcquireReadOnlyMeshData(filter.sharedMesh);
-            var md=data[0];
-            using var v=new Unity.Collections.NativeArray<Vector3>(md.vertexCount,Unity.Collections.Allocator.Temp);
-            using var n=new Unity.Collections.NativeArray<Vector3>(md.vertexCount,Unity.Collections.Allocator.Temp);
-            using var uv=new Unity.Collections.NativeArray<Vector2>(md.vertexCount,Unity.Collections.Allocator.Temp);
-            md.GetVertices(v);md.GetNormals(n);md.GetUVs(0,uv);
-            var indices=new List<int>();
-            for(int sub=0;sub<md.subMeshCount;sub++)
-            {
-                using var source=new Unity.Collections.NativeArray<int>(md.GetSubMesh(sub).indexCount,Unity.Collections.Allocator.Temp);
-                md.GetIndices(source,sub);
-                for(int i=0;i<source.Length;i+=3)
-                    if(filter.transform.TransformPoint(v[source[i]]).y>13 && filter.transform.TransformPoint(v[source[i+1]]).y>13 && filter.transform.TransformPoint(v[source[i+2]]).y>13)
-                    {indices.Add(source[i]);indices.Add(source[i+1]);indices.Add(source[i+2]);}
-            }
-            if(indices.Count==0)continue;
-            var mesh=new Mesh {name=filter.name+"_Ceiling",indexFormat=UnityEngine.Rendering.IndexFormat.UInt32};
-            mesh.SetVertices(v);mesh.SetNormals(n);mesh.SetUVs(0,uv);mesh.SetTriangles(indices,0);mesh.RecalculateBounds();
-            string path=Folder+"/"+mesh.name+".asset";
-            AssetDatabase.CreateAsset(mesh,path);
-            var go=new GameObject(filter.name);go.transform.SetParent(ceiling.transform,false);
-            go.transform.SetPositionAndRotation(filter.transform.position,filter.transform.rotation);go.transform.localScale=filter.transform.lossyScale;
-            go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterials=filter.GetComponent<Renderer>().sharedMaterials;
-        }
-        ceiling.transform.localPosition=new Vector3(0,-5.5f,0);
-    }
-
     [MenuItem("Tools/Office Art/Check Paint Shader")]
     public static void CheckShader()
     {
@@ -100,18 +41,19 @@ public static class ImportedOfficeBuilder
             ShaderUtil.GetShaderMessages(shader).Select(x=>$"{x.severity}: {x.file}:{x.line}: {x.message}"));
     }
 
-    [MenuItem("Tools/Office Art/Build Imported Office")]
+    [MenuItem("Tools/Office Art/Build Desk Props")]
     public static void Build()
     {
         if(EditorApplication.isPlaying) throw new InvalidOperationException("Leave Play mode before authoring.");
         if(EditorSceneManager.GetActiveScene().path != "Assets/Scenes/OfficeScene.unity")
             throw new InvalidOperationException("Open OfficeScene before authoring.");
         var layout=JsonUtility.FromJson<Layout>(File.ReadAllText(Manifest));
+        if(layout.items.Any(item=>item.group!="Desk"))throw new InvalidOperationException("Only desktop props are allowed.");
         foreach(var item in layout.items)
             if(!AssetDatabase.LoadAssetAtPath<GameObject>(item.prefab)) throw new FileNotFoundException(item.prefab);
         if(!Shader.Find("NOPE/Office Painted Surface")) throw new InvalidOperationException("Paint shader has not imported.");
         Directory.CreateDirectory(Folder+"/Materials");
-        Undo.IncrementCurrentGroup(); int undo=Undo.GetCurrentGroup(); Undo.SetCurrentGroupName("Reconstruct office from imported packs");
+        Undo.IncrementCurrentGroup(); int undo=Undo.GetCurrentGroup(); Undo.SetCurrentGroupName("Replace desktop props");
         var old=GameObject.Find(Root); if(old) Undo.DestroyObjectImmediate(old);
         var root=new GameObject(Root); Undo.RegisterCreatedObjectUndo(root,"Imported office dress");
         foreach(var path in layout.disablePaths ?? Array.Empty<string>())
@@ -119,20 +61,11 @@ public static class ImportedOfficeBuilder
             var go=GameObject.Find(path);if(!go)continue;
             Undo.RecordObject(go,"Replace original art");go.SetActive(false);
         }
-        foreach(var pose in layout.poses ?? Array.Empty<Pose>())
-        {
-            var go=GameObject.Find(pose.path);if(!go)throw new InvalidOperationException("Missing scene binding: "+pose.path);
-            Undo.RecordObject(go.transform,"Place existing functional art");
-            go.transform.SetPositionAndRotation(pose.position,Quaternion.Euler(pose.rotation));
-            if(pose.scale!=Vector3.zero)go.transform.localScale=pose.scale;
-        }
         var groups=new Dictionary<string,Transform>(); materials.Clear(); var report=new Report();
         try
         {
             foreach(var item in layout.items)
             {
-                // The continuous original floor is the approved floor, including on rebuild.
-                if(item.group=="Hall floor" || item.group=="Ceiling")continue;
                 if(!groups.TryGetValue(item.group,out var group))
                 {
                     group=new GameObject(item.group).transform;group.SetParent(root.transform,false);groups.Add(item.group,group);
@@ -153,7 +86,6 @@ public static class ImportedOfficeBuilder
                 foreach(var r in renderers)
                 {
                     var sourceMaterials=r.sharedMaterials;
-                    if(item.group=="Hall floor" && item.name.StartsWith("Floor tile"))sourceMaterials=sourceMaterials.Select(_=>AssetDatabase.LoadAssetAtPath<Material>("Assets/80s_Office/Materials/MI_Floor_Tiles.mat")).ToArray();
                     r.sharedMaterials=sourceMaterials.Select(Convert).ToArray();
                     r.shadowCastingMode=ShadowCastingMode.On;r.receiveShadows=true;
                 }
@@ -166,14 +98,7 @@ public static class ImportedOfficeBuilder
                 report.placed.Add(new Placed { name=item.name,source=item.prefab,group=item.group,min=b.min,max=b.max,
                     triangles=instance.GetComponentsInChildren<MeshFilter>().Sum(x=>x.sharedMesh?(int)Enumerable.Range(0,x.sharedMesh.subMeshCount).Sum(n=>(long)x.sharedMesh.GetIndexCount(n)/3):0) });
             }
-            var originalFloor=GameObject.Find("HybridOffice/Hall").transform.Find("Blender_HallFloor");
-            Undo.RecordObject(originalFloor.gameObject,"Preserve original hall floor");
-            originalFloor.gameObject.SetActive(true);
             ConnectMonitor(root.transform);
-            AddTaskLight(root.transform);
-            ConfigureHallLighting(root.transform);
-            AddHybridLayers(root.transform);
-            ApplySurfaceFinish();
             AssetDatabase.SaveAssets();
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             File.WriteAllText("ArtDeliverables/TimeDesk/ImportedOffice/placed.json",JsonUtility.ToJson(report,true));
@@ -196,6 +121,7 @@ public static class ImportedOfficeBuilder
         string name=source.name.Replace(" ","_");
         string path=$"{Folder}/Materials/{name}_Painted.mat";
         var mat=AssetDatabase.LoadAssetAtPath<Material>(path);
+        if(mat){materials[sourcePath]=mat;return mat;}
         if(!mat) {mat=new Material(Shader.Find("NOPE/Office Painted Surface"));AssetDatabase.CreateAsset(mat,path);}
         mat.shader=Shader.Find("NOPE/Office Painted Surface");
         bool sci=sourcePath.Contains("Creepy_Cat");
@@ -283,67 +209,6 @@ public static class ImportedOfficeBuilder
             }
         }
         throw new InvalidOperationException("Imported CRT screen submesh not found; interaction was not moved.");
-    }
-
-    static void AddTaskLight(Transform root)
-    {
-        var obj=new GameObject("Realtime desk lamp light");obj.transform.SetParent(root,false);
-        obj.transform.position=new Vector3(1.65f,1.62f,.15f);obj.transform.LookAt(new Vector3(.35f,1.07f,-.45f));
-        var light=obj.AddComponent<Light>();light.type=LightType.Spot;light.color=new Color(1,.79f,.52f);
-        light.intensity=1.25f;light.range=4;light.spotAngle=108;light.innerSpotAngle=70;light.shadows=LightShadows.Soft;
-    }
-
-    static void ConfigureHallLighting(Transform root)
-    {
-        var sun=GameObject.Find("HybridOffice/OfficeDaylight").GetComponent<Light>();
-        Undo.RecordObject(sun,"Soften office daylight");sun.shadowBias=.65f;sun.shadowNormalBias=.45f;sun.shadowStrength=.58f;
-        var fill=GameObject.Find("HybridOffice/OfficeInteriorFill").GetComponent<Light>();
-        Undo.RecordObject(fill,"Balance indoor fill");fill.intensity=.55f;
-        foreach(float x in new[]{-4.5f,4.5f})
-        {
-            var go=new GameObject("Ceiling bounce "+x);go.transform.SetParent(root,false);go.transform.position=new Vector3(x,5.8f,11);
-            var light=go.AddComponent<Light>();light.type=LightType.Point;light.color=new Color(.91f,.91f,.81f);light.intensity=24;light.range=17;
-        }
-    }
-
-    static void AddHybridLayers(Transform root)
-    {
-        // Real SpriteRenderer cards, not meshes pretending to be additional props.
-        const string paper="Assets/Art/Office/Hybrid/Images/floor_paper.png";
-        var tex=AssetDatabase.LoadAssetAtPath<Texture2D>(paper);
-        if(tex)
-        {
-            string path=Folder+"/PaperSprite.asset";
-            var sprite=AssetDatabase.LoadAssetAtPath<Sprite>(path);
-            if(!sprite){sprite=Sprite.Create(tex,new Rect(0,0,tex.width,tex.height),new Vector2(.5f,.5f),100);AssetDatabase.CreateAsset(sprite,path);}
-            var mat=AssetDatabase.LoadAssetAtPath<Material>(Folder+"/Materials/PaperSprite.mat");
-            if(!mat){mat=new Material(Shader.Find("NOPE/Office Painted Surface"));AssetDatabase.CreateAsset(mat,Folder+"/Materials/PaperSprite.mat");}
-            mat.SetTexture("_BaseMap",tex);mat.SetFloat("_Cull",0);mat.SetFloat("_AlphaClip",1);mat.EnableKeyword("_ALPHATEST_ON");mat.SetFloat("_Smoothness",0);mat.SetFloat("_BumpScale",0);
-            SpriteCard(root,sprite,mat,"Desk loose document",new Vector3(1.23f,1.074f,-.38f),new Vector3(90,0,-12),.28f);
-            SpriteCard(root,sprite,mat,"Hall maintenance notice",new Vector3(-8.57f,1.35f,7),new Vector3(0,-90,0),.35f);
-            SpriteCard(root,sprite,mat,"Portal service notice",new Vector3(3.35f,1.55f,20.23f),new Vector3(0,0,0),.28f);
-        }
-        var city=AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/Textures/painted_megacity.png");
-        if(city)
-        {
-            var mat=AssetDatabase.LoadAssetAtPath<Material>(Folder+"/Materials/PaintedMegacity.mat");
-            if(!mat){mat=new Material(Shader.Find("Universal Render Pipeline/Unlit"));AssetDatabase.CreateAsset(mat,Folder+"/Materials/PaintedMegacity.mat");}
-            mat.SetTexture("_BaseMap",city);mat.SetColor("_BaseColor",Color.white);mat.SetFloat("_Cull",0);
-            var go=GameObject.CreatePrimitive(PrimitiveType.Quad);go.name="Painted skyline layer";go.transform.SetParent(root,false);
-            Object.DestroyImmediate(go.GetComponent<Collider>());
-            go.transform.position=new Vector3(0,20,70);go.transform.localScale=new Vector3(140,78.75f,1);go.GetComponent<Renderer>().sharedMaterial=mat;
-            go.GetComponent<Renderer>().shadowCastingMode=ShadowCastingMode.Off;
-            var exterior=GameObject.Find("HybridOffice/Exterior");
-            foreach(Transform child in exterior.transform)
-                if(child.name.Contains("Megacity")){Undo.RecordObject(child.gameObject,"Replace backdrop with painted layer");child.gameObject.SetActive(false);}
-        }
-    }
-
-    static void SpriteCard(Transform root,Sprite sprite,Material mat,string name,Vector3 position,Vector3 rotation,float width)
-    {
-        var go=new GameObject(name);go.transform.SetParent(root,false);go.transform.SetPositionAndRotation(position,Quaternion.Euler(rotation));
-        go.transform.localScale=Vector3.one*(width/sprite.bounds.size.x);
-        var renderer=go.AddComponent<SpriteRenderer>();renderer.sprite=sprite;renderer.sharedMaterial=mat;
     }
 
 }

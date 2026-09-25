@@ -59,6 +59,7 @@
     <Compile Include="Assets\Editor\OfficeArt\ImportedOfficeBuilder.cs" />
     <Compile Include="Assets\Editor\TitleSceneBuilder.cs" />
     <Compile Include="Assets\Editor\InvestigationContentGenerator.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeCrtStudy.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

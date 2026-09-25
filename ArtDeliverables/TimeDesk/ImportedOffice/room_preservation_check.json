@@ -1,0 +1,20 @@
+{
+  "baseline": "004eb02",
+  "unchanged_original_serialized_documents": 1488,
+  "original_documents": 1499,
+  "changed_original_document_ids": [
+    404366523,
+    783206714,
+    783206716,
+    1316221750,
+    1969993384,
+    4562423549108172660,
+    6358327076096382305,
+    6622131844687517959,
+    6821961654442208731,
+    8361868076814499601,
+    9223372036854775807
+  ],
+  "unexpected_changes": [],
+  "scope": "Seven old desktop prop roots disabled; CRT hit target and monitor-focus camera aligned to replacement; new desk-only root. All other original scene documents identical to baseline."
+}
