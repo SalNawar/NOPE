@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 /// <summary>
 /// One case's papers on the desk: hands papers over from the traveller's side
@@ -14,11 +15,15 @@ using UnityEngine.InputSystem;
 /// day-1 scan note. A click on a paper routes through PaperClicks (piece 10):
 /// it lifts a paper on the desk into the hand (DeskPapers.Hold, posed by the
 /// PaperExaminer; PaperExamined; on the side that hides no other paper when
-/// it can, and a paper handed over while papers are held lands where none
-/// covers it: HeldCover), picks a held paper's row (FieldPicked) or
+/// it can: HeldCover), picks a held paper's row (FieldPicked) or
 /// puts it back where it lay, on top of the stack; a click on the desk (the
 /// desk catcher) or Escape puts every held paper back, and dragging a held
-/// paper drops it back onto the desk under the pointer and on. A paper on the
+/// paper drops it back onto the desk under the pointer and on. A paper handed
+/// over lands where the player sees it (PaperLanding): the next spawn slot in
+/// turn, else the first spot that shows whole on the screen, clear of the held
+/// papers' places and the overlay over the desk (the case HUD's strips, the
+/// bubble, the wheel), sending the paper held longest back when nothing
+/// shows whole. A paper on the
 /// desk takes input only while BoothCoordinator allows papers, DeskPapers lets
 /// it be dragged and it is not sliding; a held paper while held papers are
 /// allowed; papers not allowed take no raycasts at all (spec R38).
@@ -51,6 +56,9 @@ public sealed class DeskController : MonoBehaviour
 
     /// <summary>The desk catcher (piece 10; optional): a click on the desk puts every held paper back; active only while BoothCoordinator allows it.</summary>
     [SerializeField] private ClickCatcher deskCatcher;
+
+    /// <summary>The office overlay's parts a handed-over paper must not land under (the case HUD's strips, the speech bubble, the wheel's ring; optional): each counts while shown, as the screen rectangle of its visible graphics.</summary>
+    [SerializeField] private RectTransform[] landingCovers;
 
     /// <summary>The case's papers by index (null until handed over).</summary>
     private readonly List<DeskDocument> _papers = new List<DeskDocument>();
@@ -186,7 +194,7 @@ public sealed class DeskController : MonoBehaviour
         _stack.Add(i);
         ApplyStack();
 
-        Vector3 target = LandingPoint();
+        Vector3 target = LandingPoint(paper);
         _handedOver++;
         Slide(paper, target);
         RefreshHint();
@@ -283,21 +291,94 @@ public sealed class DeskController : MonoBehaviour
     }
 
     /// <summary>
-    /// Where the next handed-over paper lands: the next spawn slot in turn
-    /// (slots are reused in order), or, while papers are held, the first slot
-    /// after it that no held paper covers (HeldCover.LandingSlot).
+    /// Where <paramref name="paper"/>, just handed over, lands (PaperLanding.Choose,
+    /// Saleh: "third paper lands visibly"): the spots are the spawn slots from
+    /// the next in turn (slots are reused in order), then the fallback grid
+    /// over the landing area (DeskConfigSO.landingGrid, off the scanner); each
+    /// is the lying paper's rectangle on the screen, tested against the held
+    /// papers' places and the overlay's covers. When the rule sends the paper
+    /// held longest back, it goes back here, before this one lands.
     /// </summary>
-    private Vector3 LandingPoint()
+    private Vector3 LandingPoint(DeskDocument paper)
     {
         Vector2[] slots = config.paperSpawnSlots;
         if (slots == null || slots.Length == 0)
             return surface.transform.position;
 
-        var covered = new bool[slots.Length];
-        if (examiner != null && _state.HeldCount > 0)
-            for (int k = 0; k < slots.Length; k++)
-                covered[k] = examiner.HeldCovers(surface.PointAt(slots[k]));
-        return surface.PointAt(slots[HeldCover.LandingSlot(_handedOver, covered)]);
+        var points = new List<Vector3>();
+        for (int k = 0; k < slots.Length; k++)
+            points.Add(surface.PointAt(slots[(_handedOver + k) % slots.Length]));
+        if (examiner == null)
+            return points[0];
+        foreach ((float u, float v) in PaperLanding.GridSpots(config.landingGrid.x, config.landingGrid.y))
+        {
+            Vector3 point = surface.PointAt(new Vector2(u, v));
+            if (!scanner.Contains(point))
+                points.Add(point);
+        }
+
+        var spots = new List<ScreenRect>(points.Count);
+        foreach (Vector3 point in points)
+            spots.Add(examiner.ScreenRectOf(Footprint(paper, point)));
+
+        int longest = _state.HeldLongest;
+        DeskDocument oldest = longest >= 0 ? _papers[longest] : null;
+        var covers = new List<ScreenRect>();
+        foreach (DeskDocument held in _papers)
+            if (held != null && held != oldest && _state.IsHeld(held.Index))
+                covers.Add(examiner.HeldPlaces(held));
+        AddOverlayCovers(covers);
+        ScreenRect oldestHeld = oldest != null ? examiner.HeldPlaces(oldest) : default;
+        ScreenRect oldestRest = oldest != null ? examiner.ScreenRectOf(Footprint(paper, oldest.transform.position)) : default;
+
+        LandingChoice choice = PaperLanding.Choose(spots, covers, oldestHeld, oldestRest, new ScreenRect(0f, 0f, Screen.width, Screen.height));
+        if (choice.PutBackHeldLongest && _state.PutBack(longest))
+        {
+            Release(oldest, false);
+            HoldsChanged?.Invoke();
+        }
+        return points[Mathf.Max(0, choice.Spot)];
+    }
+
+    /// <summary>The corners of a paper lying with its root at <paramref name="at"/> (every paper lies as the template does: the new paper's sheet gives the offsets).</summary>
+    private Vector3[] Footprint(DeskDocument paper, Vector3 at)
+    {
+        Vector2 size = config.paperSize;
+        Transform sheet = paper.Sheet;
+        Vector3 root = paper.transform.position;
+        return new[]
+        {
+            at + sheet.TransformPoint(new Vector3(-size.x / 2f, -size.y / 2f, 0f)) - root,
+            at + sheet.TransformPoint(new Vector3(size.x / 2f, -size.y / 2f, 0f)) - root,
+            at + sheet.TransformPoint(new Vector3(-size.x / 2f, size.y / 2f, 0f)) - root,
+            at + sheet.TransformPoint(new Vector3(size.x / 2f, size.y / 2f, 0f)) - root,
+        };
+    }
+
+    /// <summary>Adds each shown landing cover's rectangle on the screen: the bounds of its visible graphics.</summary>
+    private void AddOverlayCovers(List<ScreenRect> covers)
+    {
+        if (landingCovers == null)
+            return;
+        var corners = new Vector3[4];
+        foreach (RectTransform cover in landingCovers)
+        {
+            if (cover == null || !cover.gameObject.activeInHierarchy)
+                continue;
+            Canvas canvas = cover.GetComponentInParent<Canvas>();
+            Camera cam = canvas != null && canvas.rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.rootCanvas.worldCamera : null;
+            ScreenRect bounds = default;
+            foreach (Graphic graphic in cover.GetComponentsInChildren<Graphic>())
+            {
+                if (!graphic.enabled || graphic.color.a <= 0.01f)
+                    continue;
+                graphic.rectTransform.GetWorldCorners(corners);
+                Vector2 a = RectTransformUtility.WorldToScreenPoint(cam, corners[0]), b = RectTransformUtility.WorldToScreenPoint(cam, corners[2]);
+                bounds = ScreenRect.Enclosing(bounds, new ScreenRect(Mathf.Min(a.x, b.x), Mathf.Min(a.y, b.y), Mathf.Max(a.x, b.x), Mathf.Max(a.y, b.y)));
+            }
+            if (!bounds.IsEmpty)
+                covers.Add(bounds);
+        }
     }
 
     /// <summary>

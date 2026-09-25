@@ -71,15 +71,44 @@ public sealed class PaperExaminer : MonoBehaviour
     public bool SlotCovers(bool right, Vector3 world) =>
         _camera != null && config != null && Covers(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, false, config.examine), world);
 
-    /// <summary>True when a held paper (not one on its way back) covers a world point on the screen, where it sits now: its office slot or its place beside the open frame.</summary>
-    public bool HeldCovers(Vector3 world)
+    /// <summary>A world quad's rectangle on the screen through the office camera, in pixels (empty without a camera or with a corner behind it): where a paper lying there shows.</summary>
+    public ScreenRect ScreenRectOf(IReadOnlyList<Vector3> corners)
     {
-        if (_camera == null || config == null)
-            return false;
-        foreach (Entry entry in _entries)
-            if (!entry.Releasing && Covers(BoxOf(entry), world))
-                return true;
-        return false;
+        if (_camera == null || corners == null || corners.Count == 0)
+            return default;
+
+        float xMin = float.MaxValue, yMin = float.MaxValue, xMax = float.MinValue, yMax = float.MinValue;
+        foreach (Vector3 corner in corners)
+        {
+            Vector3 s = _camera.WorldToScreenPoint(corner);
+            if (s.z <= 0f)
+                return default;
+            xMin = Mathf.Min(xMin, s.x);
+            yMin = Mathf.Min(yMin, s.y);
+            xMax = Mathf.Max(xMax, s.x);
+            yMax = Mathf.Max(yMax, s.y);
+        }
+        return new ScreenRect(xMin, yMin, xMax, yMax);
+    }
+
+    /// <summary>Where a held paper can sit in the office, in pixels: its office slot raised and dipped under the wheel, together (a paper on the desk hidden there now or once the wheel closes); empty for a paper that is not held, or on its way back.</summary>
+    public ScreenRect HeldPlaces(DeskDocument paper)
+    {
+        Entry entry = Find(paper);
+        if (entry == null || entry.Releasing || config == null)
+            return default;
+
+        bool right = entry.Slot == ExamineSlot.Right;
+        return ScreenRect.Enclosing(Pixels(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, false, config.examine)),
+                                    Pixels(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, true, config.examine)));
+    }
+
+    /// <summary>A box in screen heights as a rectangle in pixels.</summary>
+    private ScreenRect Pixels(ScreenBox box)
+    {
+        float h = Screen.height, halfWidth = Screen.width / 2f, w = box.Height * PaperAspect;
+        return new ScreenRect(halfWidth + (box.CentreX - w / 2f) * h, (box.CentreY - box.Height / 2f) * h,
+                              halfWidth + (box.CentreX + w / 2f) * h, (box.CentreY + box.Height / 2f) * h);
     }
 
     /// <summary>Takes a paper into the hand at <paramref name="slot"/>: its sheet rises to the slot (a paper on its way back turns round).</summary>

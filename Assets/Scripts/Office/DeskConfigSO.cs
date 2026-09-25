@@ -60,6 +60,9 @@ public sealed class DeskConfigSO : ScriptableObject
         new Vector2(0.5f, 0.62f), new Vector2(0.74f, 0.5f), new Vector2(0.27f, 0.45f), new Vector2(0.55f, 0.28f)
     };
 
+    /// <summary>Where a handed-over paper may land when no spawn slot shows whole on the screen (papers held, the overlay over the mat): a grid of this many columns and rows of spots over the landing area, nearest its centre first (PaperLanding.GridSpots).</summary>
+    public Vector2Int landingGrid = new Vector2Int(5, 4);
+
     /// <summary>Seconds a paper takes to slide (hand-over, back from the scanner, away at the decision).</summary>
     [Min(0f)] public float paperSlideSeconds = 0.25f;
 

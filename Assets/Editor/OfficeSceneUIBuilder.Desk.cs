@@ -562,6 +562,15 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
 
+        // What a handed-over paper must not land under: the case HUD's strips, the speech bubble, the wheel's ring.
+        var soDesk = new SerializedObject(desk);
+        SerializedArrays.Set(soDesk, "landingCovers", new Object[]
+        {
+            caseHud.transform.Find("Root/ClaimStrip"), caseHud.transform.Find("Root/CompareStrip"),
+            callouts[0].transform.Find("Panel"), wheel.transform.Find("Catcher/Ring")
+        });
+        soDesk.ApplyModifiedProperties();
+
         // The traveller and the wheel's openers (the traveller and the desk intercom).
         TravellerView traveller = BuildTraveller(office, out Clickable travellerZone);
         WirePersistentVoid(travellerZone, "onClick", wheel, nameof(TravellerWheel.Open));

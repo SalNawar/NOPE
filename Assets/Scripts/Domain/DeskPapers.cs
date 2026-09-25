@@ -343,12 +343,10 @@ public sealed class DeskPapers
 }
 
 /// <summary>
-/// Where papers go while papers are held in the hand (piece 10): the two
-/// examine slots cover most of the desk's mat, so a paper lifted into the hand
-/// takes the side that hides no other paper on the desk when the side it lies
-/// on would hide one, and a paper handed over while papers are held lands on
-/// the first spawn slot that no held paper covers (under them only when every
-/// slot is covered).
+/// Where a paper lifted into the hand goes (piece 10): the two examine slots
+/// cover most of the desk's mat, so it takes the side that hides no other
+/// paper on the desk when the side it lies on would hide one (where a paper
+/// handed over lands is PaperLanding's, in screen space).
 /// </summary>
 public static class HeldCover
 {
@@ -358,23 +356,6 @@ public static class HeldCover
         int own = liesRight ? hiddenRight : hiddenLeft;
         int other = liesRight ? hiddenLeft : hiddenRight;
         return own > 0 && other == 0 ? !liesRight : liesRight;
-    }
-
-    /// <summary>The spawn slot a handed-over paper lands on: the next in turn (<paramref name="next"/>, wrapped round the slots) unless a held paper covers it, else the first uncovered slot after it; the next in turn when every slot is covered or nothing is known (0 with no slots).</summary>
-    public static int LandingSlot(int next, IReadOnlyList<bool> covered)
-    {
-        int count = covered != null ? covered.Count : 0;
-        if (count == 0)
-            return covered == null ? next : 0;
-
-        int first = ((next % count) + count) % count;
-        for (int k = 0; k < count; k++)
-        {
-            int slot = (first + k) % count;
-            if (!covered[slot])
-                return slot;
-        }
-        return first;
     }
 }
 
