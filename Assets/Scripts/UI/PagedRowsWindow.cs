@@ -68,8 +68,8 @@ public abstract class PagedRowsWindow : MonoBehaviour
     /// <summary>Switches to a page (clamped), updates the footer and rebuilds its rows.</summary>
     public void ShowPage(int page)
     {
-        int pages = PageCount();
-        _page = Mathf.Clamp(page, 0, pages - 1);
+        int pages = Paging.PageCount(RowCount, entriesPerPage);
+        _page = Paging.Clamp(page, RowCount, entriesPerPage);
 
         if (pageText != null)
             pageText.text = UiText.Format("window.page", _page + 1, pages);
@@ -84,14 +84,7 @@ public abstract class PagedRowsWindow : MonoBehaviour
     }
 
     /// <summary>Shows the newest page.</summary>
-    public void ShowLastPage() => ShowPage(PageCount() - 1);
-
-    /// <summary>Pages needed for every row (at least 1).</summary>
-    private int PageCount()
-    {
-        int count = RowCount;
-        return count == 0 ? 1 : Mathf.Max(1, Mathf.CeilToInt(count / (float)Mathf.Max(1, entriesPerPage)));
-    }
+    public void ShowLastPage() => ShowPage(Paging.PageCount(RowCount, entriesPerPage) - 1);
 
     /// <summary>Replaces the row clones with the current page's rows.</summary>
     private void Rebuild()
@@ -106,11 +99,8 @@ public abstract class PagedRowsWindow : MonoBehaviour
         if (count == 0 || entryRowsRoot == null || entryRowTemplate == null)
             return;
 
-        int per = Mathf.Max(1, entriesPerPage);
-        int start = _page * per;
-        int end = Mathf.Min(start + per, count);
-
-        for (int i = start; i < end; i++)
+        int end = Paging.End(_page, count, entriesPerPage);
+        for (int i = Paging.First(_page, count, entriesPerPage); i < end; i++)
         {
             GameObject row = Instantiate(entryRowTemplate, entryRowsRoot);
             row.SetActive(true);
