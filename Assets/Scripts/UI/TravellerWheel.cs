@@ -394,10 +394,10 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         bubble.Reveal(_speech.VisibleCharacters);
     }
 
-    /// <summary>Centres the ring on the traveller's anchor (with no traveller or anchor it stays centred on the screen).</summary>
+    /// <summary>Centres the ring on the traveller's anchor, kept on the screen when the anchor is above it (the desk view); with no traveller or anchor it stays centred on the screen.</summary>
     private void Place()
     {
         if (ring != null && traveller != null && traveller.Anchor != null)
-            OverlayProjection.TryPlace(ring, _canvasRect, _camera, traveller.Anchor.position, Vector2.zero);
+            OverlayProjection.TryPlace(ring, _canvasRect, _camera, traveller.Anchor.position, Vector2.zero, true);
     }
 }

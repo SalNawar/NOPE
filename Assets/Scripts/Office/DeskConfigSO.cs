@@ -4,8 +4,8 @@ using UnityEngine;
 /// Tuning for the physical desk in the office (pieces 7 and the office move):
 /// screen power, the desktop's clone on the PC, the scanner, the papers on the
 /// desk, the traveller, the traveller wheel and its speech bubble's pacing
-/// (piece 8), the day-1 desk notes, and papers read in the hand (piece 10:
-/// the paper's face, the examine pose). Geometry that belongs to the art
+/// (piece 8), the day-1 desk notes, papers read in the hand (piece 10: the
+/// paper's face, the examine pose) and the desk view. Geometry that belongs to the art
 /// (where the desk, the PC, the scanner and the traveller are) comes from the
 /// art scene's anchors (OfficeSceneContractSO), so another office supplies its
 /// own. Created and assigned by Tools > TimeDesk > Build Office UI
@@ -123,6 +123,10 @@ public sealed class DeskConfigSO : ScriptableObject
 
     /// <summary>Where the stamp tray's centre sits from the stamp (overlay reference px): above it.</summary>
     public Vector2 stampTrayOffset = new Vector2(0f, 140f);
+
+    [Header("Desk view (piece 10)")]
+    /// <summary>The camera tilted forward over the desk (a click on the mat): how far it moves from the art office's view (forward and up, metres), how much further it pitches than aiming at the mat's centre (degrees), and the blend's seconds (a cut under Reduced Motion).</summary>
+    public DeskViewTuning deskView = new DeskViewTuning();
 
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>

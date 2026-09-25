@@ -8,7 +8,9 @@ using UnityEngine;
 /// times it itself, and flips a translated line through its Label) and the
 /// desk props' tooltips (DeskReaction). The host stays active; its Panel child
 /// is shown and hidden. It hides when its time is up, when the followed object
-/// is destroyed, or when that object leaves the view. Callers apply DisplayText.
+/// is destroyed, or when that object leaves the view (unless it keeps on
+/// screen, as the speech bubble does: it then waits at the screen's edge).
+/// Callers apply DisplayText.
 /// </summary>
 public sealed class OverlayCallout : MonoBehaviour
 {
@@ -17,6 +19,9 @@ public sealed class OverlayCallout : MonoBehaviour
 
     /// <summary>The box's text.</summary>
     [SerializeField] private TMP_Text label;
+
+    /// <summary>True when the box stays at the screen's edge while its object is out of view (the speech bubble: the desk view tilts the traveller's head above the top); false hides it (the tooltips).</summary>
+    [SerializeField] private bool keepOnScreen;
 
     private Camera _camera;
     private RectTransform _canvasRect;
@@ -59,7 +64,7 @@ public sealed class OverlayCallout : MonoBehaviour
         _offset = offset;
         _remaining = seconds;
         panel.gameObject.SetActive(true);
-        if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset))
+        if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen))
             Hide();
     }
 
@@ -85,7 +90,7 @@ public sealed class OverlayCallout : MonoBehaviour
             return;
 
         _remaining -= Time.deltaTime;
-        if (_remaining <= 0f || _follow == null || !OverlayProjection.TryPlace(panel, _canvasRect, _camera, _follow.position, _offset))
+        if (_remaining <= 0f || _follow == null || !OverlayProjection.TryPlace(panel, _canvasRect, _camera, _follow.position, _offset, keepOnScreen))
             Hide();
     }
 }

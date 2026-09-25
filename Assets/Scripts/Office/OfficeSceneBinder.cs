@@ -14,7 +14,8 @@ using UnityEngine.SceneManagement;
 /// their renderers (the art objects get no components of ours), hands the
 /// props' renderers to their outlines and reactions, puts the desktop's clone
 /// on the PC's glass, sizes the desk, its catcher and the scanner, hands the
-/// paper examiner the camera, stands the traveller,
+/// paper examiner the camera, poses the desk view from the art's Cinemachine
+/// camera and the mat, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), and
 /// readies the office camera (a PhysicsRaycaster on the Interactable layer,
 /// the desktop's layer culled, its Cinemachine camera on top). Runs before
@@ -87,6 +88,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The desk catcher's box (piece 10; optional): sized over the desk's clamp area, just under its plane, so papers and props above it win the raycast.</summary>
     [SerializeField] private BoxCollider deskCatcher;
 
+    /// <summary>The mat's click box (the desk view's toggle; piece 10; optional): laid exactly like the desk catcher's.</summary>
+    [SerializeField] private BoxCollider matCatcher;
+
+    /// <summary>The desk view (piece 10; optional): posed from the art's Cinemachine camera and the mat.</summary>
+    [SerializeField] private DeskView deskView;
+
     /// <summary>The day-1 scan note (floats over the scanner, facing the camera).</summary>
     [SerializeField] private Transform scanHint;
 
@@ -153,6 +160,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     private const int RaycastHits = 16;
 
     private Dictionary<OfficeAnchorId, ResolvedAnchor> _anchors;
+
+    /// <summary>The art's office Cinemachine camera when the office camera has a brain to blend it (the desk view needs both), else null.</summary>
+    private CinemachineCamera _officeVcam;
 
     private void Awake()
     {
@@ -235,7 +245,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
         Transform vcam = At(OfficeAnchorId.OfficeVCam).Transform;
         if (vcam != null && vcam.TryGetComponent(out CinemachineCamera office))
+        {
             office.Priority = 100;
+            if (cam.TryGetComponent(out CinemachineBrain _))
+                _officeVcam = office;
+        }
     }
 
     // -----------------------------
@@ -348,9 +362,20 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                               new Vector2(deskRect.Width, deskRect.Height));
         }
 
+        var catcherCentre = new Vector3(area.CentreX, top - DeskCatcherDepth - DeskCatcherThickness / 2f, area.CentreY);
+        var catcherSize = new Vector3(area.Width, DeskCatcherThickness, area.Height);
         if (deskCatcher != null)
-            PlaceBox(deskCatcher.transform, new Vector3(area.CentreX, top - DeskCatcherDepth - DeskCatcherThickness / 2f, area.CentreY),
-                     new Vector3(area.Width, DeskCatcherThickness, area.Height));
+            PlaceBox(deskCatcher.transform, catcherCentre, catcherSize);
+        if (matCatcher != null)
+            PlaceBox(matCatcher.transform, catcherCentre, catcherSize);
+
+        if (deskView != null)
+        {
+            if (_officeVcam != null)
+                deskView.Bind(_officeVcam, deskCentre);
+            else
+                Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
+        }
 
         if (handOver != null)
         {
