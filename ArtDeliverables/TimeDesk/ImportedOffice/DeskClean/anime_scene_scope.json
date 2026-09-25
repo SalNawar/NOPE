@@ -1,0 +1,135 @@
+{
+  "baseline": "a1ec7d2",
+  "scene": "Assets/Scenes/OfficeScene.unity",
+  "changes": [
+    {
+      "id": "485105308",
+      "kind": 4,
+      "change": "modified",
+      "path": "HybridOffice/Booth"
+    },
+    {
+      "id": "1802222365",
+      "kind": 4,
+      "change": "removed",
+      "path": "HybridOffice/Booth/Finish_ComputerMedia"
+    },
+    {
+      "id": "5692412085129911053",
+      "kind": 1001,
+      "change": "removed",
+      "path": "HybridOffice/Booth/Finish_ComputerMedia"
+    },
+    {
+      "id": "407801546",
+      "kind": 1001,
+      "change": "removed",
+      "path": "HybridOffice/Booth/Finish_ComputerMedia/Clean Art"
+    },
+    {
+      "id": "407801547",
+      "kind": 4,
+      "change": "removed",
+      "path": "HybridOffice/Booth/Finish_ComputerMedia/Clean Art"
+    },
+    {
+      "id": "5180144104279160602",
+      "kind": 1001,
+      "change": "modified",
+      "path": "HybridOffice/Booth/Finish_Mouse"
+    },
+    {
+      "id": "1583627595",
+      "kind": 1001,
+      "change": "removed",
+      "path": "HybridOffice/Booth/Finish_Mouse/Clean Art"
+    },
+    {
+      "id": "1583627596",
+      "kind": 4,
+      "change": "removed",
+      "path": "HybridOffice/Booth/Finish_Mouse/Clean Art"
+    },
+    {
+      "id": "1992062793",
+      "kind": 1001,
+      "change": "added",
+      "path": "HybridOffice/Booth/Finish_Mouse/Clean Art"
+    },
+    {
+      "id": "1992062794",
+      "kind": 4,
+      "change": "added",
+      "path": "HybridOffice/Booth/Finish_Mouse/Clean Art"
+    },
+    {
+      "id": "906169016",
+      "kind": 4,
+      "change": "modified",
+      "path": "ImportedOfficeDress/Desk/Clerk hotline"
+    },
+    {
+      "id": "1215601507",
+      "kind": 1001,
+      "change": "added",
+      "path": "ImportedOfficeDress/Desk/Clerk hotline/Clean Art"
+    },
+    {
+      "id": "1215601508",
+      "kind": 4,
+      "change": "added",
+      "path": "ImportedOfficeDress/Desk/Clerk hotline/Clean Art"
+    },
+    {
+      "id": "1232334435",
+      "kind": 1001,
+      "change": "removed",
+      "path": "ImportedOfficeDress/Desk/Clerk hotline/Clean Art"
+    },
+    {
+      "id": "1232334436",
+      "kind": 4,
+      "change": "removed",
+      "path": "ImportedOfficeDress/Desk/Clerk hotline/Clean Art"
+    },
+    {
+      "id": "552722558",
+      "kind": 1001,
+      "change": "modified",
+      "path": "ImportedOfficeDress/Desk/Retro keyboard/Clean Art",
+      "note": "Retained live 4 mm keyboard art offset; not authored by the revision installer."
+    },
+    {
+      "id": "2014962612",
+      "kind": 4,
+      "change": "modified",
+      "path": "ImportedOfficeDress/Desk/Spare forms"
+    },
+    {
+      "id": "1080401796",
+      "kind": 1001,
+      "change": "added",
+      "path": "ImportedOfficeDress/Desk/Spare forms/Clean Art"
+    },
+    {
+      "id": "1080401797",
+      "kind": 4,
+      "change": "added",
+      "path": "ImportedOfficeDress/Desk/Spare forms/Clean Art"
+    },
+    {
+      "id": "2022948899",
+      "kind": 1001,
+      "change": "removed",
+      "path": "ImportedOfficeDress/Desk/Spare forms/Clean Art"
+    },
+    {
+      "id": "2022948900",
+      "kind": 4,
+      "change": "removed",
+      "path": "ImportedOfficeDress/Desk/Spare forms/Clean Art"
+    }
+  ],
+  "unexpected": [],
+  "note": "Booth transform changes only remove the floppy child reference. Material assets are audited separately."
+}

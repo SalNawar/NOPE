@@ -1,0 +1,12 @@
+{
+    "success": true,
+    "groups": 19,
+    "uniqueCompositions": 6,
+    "visibleGroups": 19,
+    "colliders": 0,
+    "renderers": 38,
+    "floorTop": 0.0020000003278255464,
+    "eveningBlend": 0.0,
+    "mode": "Morning",
+    "errors": []
+}

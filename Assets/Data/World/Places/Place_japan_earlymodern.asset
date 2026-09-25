@@ -32,7 +32,7 @@ MonoBehaviour:
   - category: 2
     value: Shogun Tokugawa Hidetada
   - category: 6
-    value: chasen-mage / Nagoya-obi
+    value: chasen-mage / kazuki veil
   maleNames:
   - Kichibei
   - Chobei
@@ -91,7 +91,7 @@ MonoBehaviour:
         covers: 
         artNation: 
     female:
-      signature: 4
+      signature: 3
       outfit:
         label: Keicho kosode
         leakable: 0
@@ -114,15 +114,15 @@ MonoBehaviour:
         covers: 
         artNation: 
       headwear:
-        label: 
-        leakable: 0
+        label: kazuki veil
+        leakable: 1
         wig: 0
         back: 0
         covers: 
         artNation: 
       accessory:
-        label: Nagoya-obi
-        leakable: 1
+        label: 
+        leakable: 0
         wig: 0
         back: 0
         covers: 

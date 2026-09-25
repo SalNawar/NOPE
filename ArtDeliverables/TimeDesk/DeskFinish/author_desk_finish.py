@@ -31,7 +31,8 @@ lamp_shader=materials['Finish_LampInner'].node_tree.nodes.get('Principled BSDF')
 lamp_shader.inputs['Emission Color'].default_value=(*lamp_emission,1)
 lamp_shader.inputs['Emission Strength'].default_value=.35
 A.specs['Finish_LampInner']['emission']={'color':list(lamp_emission),'intensity':.35}
-material('Finish_Mat','A9CAFF',.96,texture=T/'inspection_mat.png')
+material('Finish_Mat','4A453C',.88) # Plain office blotter, no repair grid.
+material('Finish_BlotterEdge','201E1A',.90)
 # A restrained cool tint counteracts the orange bias of the generated veneer.
 wood_material=materials['Desk_Walnut']
 wood_tint=tuple(int('BEC6CE'[i:i+2],16)/255 for i in (0,2,4))
@@ -181,9 +182,9 @@ paper=box('Clipped blank office memo',(.17,-.31,-.039),(.18,.21,.002),'Finish_Pa
 box('Memo spring clip',(.17,-.204,-.044),(.057,.017,.012),'Finish_Brass',.003)
 
 group('Finish_Mat')
-box('Inspection mat body',(0,.004,0),(2.15,.008,1.04),'Finish_EnamelDark',.005)
-o=mesh('Painted inspection surface',[(-1.065,.0085,-.51),(1.065,.0085,-.51),(1.065,.0085,.51),(-1.065,.0085,.51)],[(0,1,2,3)],'Finish_Mat')
-uv=o.data.uv_layers.new(name='InspectionUV')
+box('Office blotter body',(0,.004,0),(2.15,.008,1.04),'Finish_BlotterEdge',.005)
+o=mesh('Plain office writing surface',[(-1.065,.0085,-.51),(1.065,.0085,-.51),(1.065,.0085,.51),(-1.065,.0085,.51)],[(0,1,2,3)],'Finish_Mat')
+uv=o.data.uv_layers.new(name='BlotterUV')
 for loop in o.data.loops:
     co=o.data.vertices[loop.vertex_index].co;uv.data[loop.index].uv=(-co.x/2.13+.5,-co.y/1.02+.5)
 

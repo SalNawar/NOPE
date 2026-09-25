@@ -1,0 +1,6 @@
+Original bounds: Center: (-1.64, 1.43, -0.13), Extents: (0.46, 0.37, 0.40)
+Rebuilt bounds: Center: (-1.64, 1.39, -0.13), Extents: (0.45, 0.33, 0.43)
+Screen center: (-1.54, 1.51, -0.40)
+Click target: (-1.54, 1.51, -0.40)
+Collider size: (0.47, 0.37)
+Focus camera: (-1.25, 1.54, -1.21)

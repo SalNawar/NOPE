@@ -1,22 +1,27 @@
 """Builds the corrected wardrobe data for brief v2 (read-only inputs, output under art/tools).
 
-1. Loads costume_research.json from the main checkout (read only).
+1. Loads costume_research.json and brief_review.json from this checkout's ArtDeliverables/TimeDesk/Characters
+   (read only).
 2. Applies the 68 data fixes from brief_review.json.
 3. Applies the text edits of the 22 practicality issues (and the conflict rules of
    the piece-4 spec R23: a later practicality issue wins over an earlier data fix).
 4. Applies the review-2 edits (the review of brief v2): self-contained signature items, accessories that depended on
    an outfit moved into it, the one hair-back test, colour and wording fixes.
-5. Adds the piece-4 wardrobe proposals: a short label for every item, the signature slot per gender, leakable, wig,
+5. Applies the v2.1 edits (2026-09-25, the 3D office): the desk and its NEXT sign hide the traveller below the waist,
+   so every leak item sits on the head, face, neck, shoulders or upper chest, and every MUST READ line names only
+   what shows above the desk.
+6. Adds the piece-4 wardrobe proposals: a short label for every item, the signature slot per gender, leakable, wig,
    back and covers flags, ornaments to mask before recolouring, confusable pairs (hand-authored and generated), the
    DO NOT DRAW split, and the Future wardrobes.
-Checks the full Looks.LabelProblems rule and the accessory rule. Writes art/tools/wardrobe_v2.json and
-art/tools/confusable_candidates.txt and prints an audit.
+Checks the full Looks.LabelProblems rule, the accessory rule and the desk-view rule (v2.1). Writes
+art/tools/wardrobe_v2.json and art/tools/confusable_candidates.txt and prints an audit.
 """
 import json, re, sys
 from pathlib import Path
 
 sys.stdout.reconfigure(encoding="utf-8")
-SRC = Path(r"E:\unity\NOPE\ArtDeliverables\TimeDesk\Characters")
+REPO = Path(__file__).resolve().parents[5]
+SRC = REPO / "ArtDeliverables" / "TimeDesk" / "Characters"
 OUT = Path(__file__).parent
 
 data = json.loads((SRC / "costume_research.json").read_text(encoding="utf-8"))
@@ -415,6 +420,120 @@ rep("greece_ancient", "m.headwear", "a flat, wide-brimmed felt traveller's hat",
 rep("china_industrial", "f.outfit", "worn over a black pleated mamian skirt.", "worn over a black pleated mamian skirt. Flat black cloth shoes.",
     f"{R2} finding 20: an explicit shoe replaces the 'bound feet' warning, which moves to the review list")
 
+# ---------------------------------------------------------------- 2c. v2.1: the 3D office (2026-09-25)
+# The game stands the flat figure behind the desk of the art side's 3D office. At the traveller anchor the NEXT sign
+# and the desk hide everything below the waist (canvas y ~760), papers held up to read (piece 10) cover the figure's
+# sides from about mid-chest down, and nothing shows the whole figure any more (the piece-4 Visitor window was dropped).
+# So a leak item sits on the head, face, neck, shoulders or upper chest, and a MUST READ line names only what shows
+# above the desk; the lower body stays in the outfit lines (it is still drawn). Brief section "What changed in v2.1".
+V21 = "v2.1 (3D office)"
+# Ottoman Ioannina women: the pafti buckle sits at the waist, behind the NEXT sign. The leak item becomes Epirote chest
+# silverwork (Greek women's chest ornaments of silver chains; Ioannina's filigree workshops), back-projected to c. 1700
+# like the pafti itself (the research's own note); the pafti stays drawn, as the buckle that closes the outfit's belt.
+setv("greece_earlymodern", "f.accessory",
+     "Silver chest chains: four or five rows of fine silver chains hanging in festoons across the upper chest from two "
+     "round silver-filigree rosettes on the collarbones, the rosettes joined by a silver chain round the back of the "
+     "neck; the chains are strung with round silver filigree beads (Ioannina silverwork)",
+     f"{V21}: the pafti buckle at the waist is hidden by the desk; chest silverwork is the visible Ioannina item")
+rep("greece_earlymodern", "f.outfit", "embroidered with gold cord.",
+    "embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate "
+    "silver-filigree buckle (Ioannina silverwork).",
+    f"{V21}: the pafti closes the outfit's belt, so it is part of the outfit (the accessory rule)")
+# Tokugawa Edo women: the Nagoya-obi is wound round the hips. The leak item becomes the kazuki, the kosode worn over the
+# head as a veil by women going out in the Momoyama and early Edo periods; the Nagoya-obi stays drawn, in the outfit.
+setv("japan_earlymodern", "f.headwear",
+     "Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it "
+     "frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper "
+     "arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from "
+     "the kosode worn on the body. The face is fully uncovered.",
+     f"{V21}: a visible leak item on the head (the Nagoya-obi at the hips is hidden by the desk)")
+setv("japan_earlymodern", "f.accessory", "none", f"{V21}: the Nagoya-obi moves into the outfit")
+rep("japan_earlymodern", "f.outfit", "slim silhouette with no wide obi.",
+    "slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and "
+    "tied in front, with long tassels hanging to the knee.",
+    f"{V21}: the Nagoya-obi stays drawn, as part of the outfit")
+# Beijing 1972 women: the khaki satchel hangs at the hip. The leak item becomes the plain cloth peaked cap worn with the
+# Zhongshan suit by men and women alike; the satchel stays drawn, as the women's (non-leakable) accessory.
+setv("china_modern", "f.headwear",
+     "The same soft navy cotton cap as the men's: a tall, rounded, slightly stiffened crown, a cloth band and a short "
+     "stiff peak, sitting high on the head over the bob, unlike a low flat cap. Plain, with no badge or star.",
+     f"{V21}: a visible leak item on the head (the khaki satchel at the hip is hidden by the desk)")
+# Metapolitefsi Athens: the tagari rested at the front of the hip. No head or neck item of Athens 1975 passes the checks
+# (the moustache and the 1970s cut look like other places' items; the fisherman's cap is Beijing's and London's cap), so
+# the tagari stays the leak item and is drawn higher: a shorter strap brings the bag up against the side of the chest.
+TAGARI = ("Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the "
+          "head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs "
+          "from the right shoulder across the chest, and the bag rides high against the left side of the chest, its "
+          "top level with the armpit")
+setv("greece_modern", "m.accessory", TAGARI, f"{V21}: the bag rode at the hip, behind the desk; drawn high on the chest")
+setv("greece_modern", "f.accessory", TAGARI, f"{V21}: the bag rode at the hip, behind the desk; drawn high on the chest")
+# Eastern Han women: the bi-disc at mid-chest shows above the desk, but papers held up to read reach mid-chest, so it
+# moves up to the upper chest (it is on its own cord round the neck since the v2 review).
+rep("china_ancient", "f.accessory", "hanging at mid-chest on its own long red silk cord round the neck",
+    "hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round "
+    "the neck", f"{V21}: raised from mid-chest to the upper chest, clear of papers held up to read")
+
+# MUST READ lines name only what shows above the desk (the lower body stays in the outfit lines).
+MUST_V21 = {
+    "italy_ancient": "Men: a plain white toga with a curved, rounded edge draped over the left shoulder, over a tunic "
+                     "with a narrow deep wine-red clavus stripe running down from the shoulder. Women: the nodus roll of "
+                     "hair above the forehead, with the stola's straps on the shoulders.",
+    "china_ancient": "The layered cross-collars (a 'y' at the throat) of a long wrap robe with broad dark borders and huge "
+                     "bag-shaped 'ox-dewlap' sleeves; men add the roof-ridged black jieze cap, women the palm-wide dark "
+                     "jade bi-disc pendant high on the chest",
+    "japan_ancient": "Men: mizura hair loops beside the ears (the clearest silhouette cue) and a necklace of dark "
+                     "grey-green comma-shaped magatama beads over a short belted jacket. Women: the flat board chignon "
+                     "and a necklace of magatama beads over the jacket.",
+    "italy_medieval": "Men: the cappuccio a mazzocchio (a padded ring-hat with a draped side and a long hanging "
+                      "becchetto) over a red lucco gown. Women: the pearl-studded padded ghirlanda roll over bare, "
+                      "drawn-back hair and a plucked high forehead.",
+    "japan_medieval": "Men: a tall, soft, crumpled black eboshi cap with a wide-sleeved hitatare. Women: the wide, "
+                      "knob-crowned ichime-gasa travel hat.",
+    "britain_medieval": "Men: a big round silver disc brooch high on the right shoulder and the long English moustache, "
+                        "with a cloak over a tunic. Women: a coloured headrail veil wrapped over the head and round the "
+                        "throat, above a bell-sleeved overgown.",
+    "germany_medieval": "Men: the Gugel hood with its scalloped shoulder cape, the face fully clear. Women: the Kruseler "
+                        "veil with its many-layered frilled edge.",
+    "greece_earlymodern": "Men: the tall, rounded, black lambskin kalpak with a full beard, over a long dark coat edged "
+                          "with fur at the collar and down the front. Women: rows of fine silver chains festooned across "
+                          "the upper chest over a dark gold-corded velvet waistcoat, with a red cap wrapped in a "
+                          "patterned headscarf.",
+    "italy_earlymodern": "Lenza: a finger-wide dark brow band with a large dark-red jewel at the centre, worn straight "
+                         "across the forehead over smooth, hatless hair (men: a small soft red berretta over a "
+                         "shoulder-length bob, with a dusty-coral pitocco tunic)",
+    "china_earlymodern": "Tall, square, black gauze scholar's cap (women: the broad black satin baotou band worn low "
+                         "across the brow, over a jacket with a standing collar and gold buttons)",
+    "japan_earlymodern": "Men: the bare, shaved-pate tea-whisk topknot (chasen-mage) with a sleeveless kataginu vest "
+                         "with flat, squared shoulders over a kosode. Women: the kazuki, a densely patterned kosode worn "
+                         "over the head and shoulders as a veil, framing the face.",
+    "iraq_industrial": "Men: the white chfiyya headcloth held by a black 'igal cord, worn with a gold-trimmed camel "
+                       "'aba. Women: the black silk 'abaya drawn over the head and falling open over a brocade dress.",
+    "greece_industrial": "Men: the small red fesi with a long tassel, over a full-sleeved white shirt and a dark-crimson "
+                         "gold-braided jacket. Women: the gold-embroidered velvet kontogouni bolero with a small tilted "
+                         "red fesi and a gold tassel.",
+    "japan_industrial": "Men: a black bowler hat worn with a black haori closed by a white himo cord, a Western hat over "
+                        "Japanese dress. Women: the sokuhatsu hairstyle with a large white ribbon bow, over a yagasuri "
+                        "kimono.",
+    "germany_industrial": "Men: a Homburg hat with pince-nez and an upturned moustache. Women: a large Jugendstil "
+                          "pendant at the throat, over the embroidered yoke of a loose Reformkleid.",
+    "egypt_modern": "Men: a long, dark, fringed shal round the neck, its ends down the chest, over a tailored Western "
+                    "jacket worn on a galabiya. Women: a flower-edged mandil tied at the nape, with a bright printed "
+                    "galabiya.",
+    "greece_modern": "The tagari: a hand-woven wool bag in bold stripes with a fringed bottom, worn high on the left side "
+                     "of the chest on a broad striped strap that crosses the chest (men with a thick moustache and a "
+                     "shaggy 1970s cut; women with a cross-stitched folk blouse and long loose hair)",
+    "china_modern": "The soft navy cap with a tall, rounded crown and a short peak, over a blue-grey Zhongshan (Mao) "
+                    "jacket with a turn-down collar and buttoned patch pockets, worn by men and women alike",
+    "japan_modern": "Orange-foam headphones resting around the neck (men with a dark salaryman suit, women with a "
+                    "fitted office waistcoat over a blouse with a bow at the collar)",
+    "britain_modern": "Men: a flat cap, with a herringbone tweed jacket over a Fair Isle pullover. Women: an "
+                      "under-the-chin headscarf, with a twinset and pearls.",
+    "germany_modern": "For women, the close felt cloche over a Bubikopf bob, with Bauhaus colour-block geometry on the "
+                      "dress. For men, a broad-brimmed soft felt hat, a walrus moustache and round wire spectacles.",
+}
+for _place, _text in MUST_V21.items():
+    setv(_place, "signature", _text, f"{V21}: MUST READ names only what shows above the desk")
+
 # ---------------------------------------------------------------- 3. piece-4 proposals
 # Signature (leak) item per gender: slot + short label. Culture value = "m / f" (<= 28).
 SIG = {
@@ -597,6 +716,16 @@ HIDES = {
 HAIR_TOP_READ = {("italy_ancient", "m"), ("germany_ancient", "m"), ("japan_earlymodern", "m"),
                  ("italy_ancient", "f"), ("japan_industrial", "f")}
 
+# v2.1 (the 3D office): the leak items the desk can see (section 2c). The v2 proposals above stay as the record.
+SIG["greece_earlymodern"] = (SIG["greece_earlymodern"][0], ("Accessory", "silver chest chains"))
+SIG["japan_earlymodern"] = (SIG["japan_earlymodern"][0], ("Headwear", "kazuki veil"))
+SIG["china_modern"] = (SIG["china_modern"][0], ("Headwear", "navy cap"))
+LABELS["greece_earlymodern"]["f"] = ("anteri and zipouni", "two front braids", "cap and tsemberi", "silver chest chains")
+LABELS["japan_earlymodern"]["f"] = ("Keicho kosode", "tamamusubi loop", "kazuki veil", None)
+LABELS["china_modern"]["f"] = ("Zhongshan jacket", "clipped bob", "navy cap", "khaki satchel")
+HIDES[("japan_earlymodern", "f")] = "top"  # the kazuki frames the face and the side hair
+HIDES[("china_modern", "f")] = "top"
+
 places = []
 problems = []
 for key, e in E.items():
@@ -686,6 +815,20 @@ for p in places:
         if not none(t) and DEPEND.search(t):
             problems.append(f"{p['id']} {g} accessory depends on another layer or is small: ...{DEPEND.search(t).group(0)}...")
 
+# Desk-view rule (v2.1): the desk and its NEXT sign hide the figure below the waist, so no leak accessory may sit there
+# (hair, facial hair and headwear start on the head, and a long veil still reads there) and no MUST READ line may name
+# a lower-body feature (the outfit lines keep the lower body: it is still drawn).
+LOWER = re.compile(r"\b(waist|hips?|thighs?|knees?|ankles?|legs?|feet|foot|shoes?|boots?|sandals?|Schnabelschuhe|calcei|"
+                   r"trousers|bracae|hakama|skirts?|kilt|fustanella|flares|jeans|obi|hose|stockings)\b", re.I)
+for p in places:
+    for g, G_ in (("m", "male"), ("f", "female")):
+        sig = p["wardrobe"][g]["signature"]
+        if sig["slot"] == "Accessory" and LOWER.search(p[G_][SLOTKEY[sig["slot"]]]):
+            problems.append(f"{p['id']} {g}: the leak item ({sig['label']}) sits below the desk: "
+                            f"...{LOWER.search(p[G_][SLOTKEY[sig['slot']]]).group(0)}...")
+    if LOWER.search(p["mustRead"]):
+        problems.append(f"{p['id']}: MUST READ names a feature below the desk: ...{LOWER.search(p['mustRead']).group(0)}...")
+
 # Confusable pairs (looks.confusable). Hand-authored: signature items that read alike in their slot (review 2
 # findings 4 and 25; spec 2.14). Unordered; CanLeak refuses a leak between the two places in that slot and gender.
 CONFUSABLE = [
@@ -726,6 +869,11 @@ CONFUSABLE = [
     ("iraq_modern", "greece_industrial", "Accessory", "f", "plain gold discs at the neck (coin pendant vs disc necklace)"),
     ("iraq_modern", "iraq_earlymodern", "Accessory", "f", "plain gold discs at the neck (coin pendant vs qilada)"),
 ]
+# v2.1: the new leak items, checked against the candidate grid (kept apart so the brief can tell v2's pairs from them).
+CONFUSABLE_V21 = [
+    ("greece_earlymodern", "germany_earlymodern", "Accessory", "f", "festoons of chains on the chest (silver vs layered gold)"),
+]
+CONFUSABLE += CONFUSABLE_V21
 # Generated: a hair signature read on the top of the head is hidden under a claim's "top" headwear (review 2 finding 2).
 CONFUSABLE_HIDDEN = []
 hand = {(frozenset((a, b)), sl, g) for a, b, sl, g, _ in CONFUSABLE}
@@ -950,6 +1098,7 @@ for fp in future:
 out = {"places": places, "future": future, "fixLog": fix_log,
        "confusable": [{"a": a, "b": b, "slot": sl, "gender": g, "why": y} for a, b, sl, g, y in CONFUSABLE],
        "confusableHidden": [{"a": a, "b": b, "slot": sl, "gender": g, "why": y} for a, b, sl, g, y in CONFUSABLE_HIDDEN],
+       "confusableAddedV21": len(CONFUSABLE_V21),
        "editLog": [{"place": a, "field": b, "change": c, "why": d} for a, b, c, d in edit_log],
        "problems": problems}
 (OUT / "wardrobe_v2.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")

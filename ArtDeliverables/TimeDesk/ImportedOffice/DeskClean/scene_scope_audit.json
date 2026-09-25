@@ -1,0 +1,223 @@
+{
+  "baseline": "23aa6e1",
+  "existing_documents_changed": [
+    {
+      "id": "9583987",
+      "type": "4",
+      "name": "Retro CRT",
+      "removed": false
+    },
+    {
+      "id": "310345408",
+      "type": "4",
+      "name": "Cabinet keys",
+      "removed": false
+    },
+    {
+      "id": "404366523",
+      "type": "4",
+      "name": "MonitorVCam",
+      "removed": false
+    },
+    {
+      "id": "430757102",
+      "type": "1001",
+      "name": "PF_Landline_Phone",
+      "removed": false
+    },
+    {
+      "id": "486590549",
+      "type": "1001",
+      "name": "Finish_Mat",
+      "removed": false
+    },
+    {
+      "id": "503303571",
+      "type": "1001",
+      "name": "Keyboard",
+      "removed": false
+    },
+    {
+      "id": "583270254",
+      "type": "4",
+      "name": "Document out tray",
+      "removed": false
+    },
+    {
+      "id": "783206714",
+      "type": "4",
+      "name": "CRTMonitor",
+      "removed": false
+    },
+    {
+      "id": "783206716",
+      "type": "61",
+      "name": "CRTMonitor",
+      "removed": false
+    },
+    {
+      "id": "787652894",
+      "type": "4",
+      "name": "Out tray forms",
+      "removed": false
+    },
+    {
+      "id": "906169016",
+      "type": "4",
+      "name": "Clerk hotline",
+      "removed": false
+    },
+    {
+      "id": "966597570",
+      "type": "1001",
+      "name": "OfficeKeys",
+      "removed": false
+    },
+    {
+      "id": "1029540584",
+      "type": "1001",
+      "name": "Stapler",
+      "removed": false
+    },
+    {
+      "id": "1038299316",
+      "type": "1001",
+      "name": "PF_Office_File_V2",
+      "removed": false
+    },
+    {
+      "id": "1196567927",
+      "type": "4",
+      "name": "Desk calculator",
+      "removed": false
+    },
+    {
+      "id": "1206215446",
+      "type": "1001",
+      "name": "Finish_Till",
+      "removed": false
+    },
+    {
+      "id": "1208819869",
+      "type": "1001",
+      "name": "PaperPile",
+      "removed": false
+    },
+    {
+      "id": "1215765954",
+      "type": "1001",
+      "name": "Lamp_Desk",
+      "removed": false
+    },
+    {
+      "id": "1260447501",
+      "type": "4",
+      "name": "Forms stapler",
+      "removed": false
+    },
+    {
+      "id": "1451070295",
+      "type": "4",
+      "name": "Retro keyboard",
+      "removed": false
+    },
+    {
+      "id": "1524050751",
+      "type": "1001",
+      "name": "PF_Calculator",
+      "removed": false
+    },
+    {
+      "id": "1609914246",
+      "type": "1001",
+      "name": "Blender CRT",
+      "removed": false
+    },
+    {
+      "id": "1825562552",
+      "type": "1001",
+      "name": "PF_Paper_Tray",
+      "removed": false
+    },
+    {
+      "id": "1905239625",
+      "type": "4",
+      "name": "Reference binder",
+      "removed": false
+    },
+    {
+      "id": "1946569802",
+      "type": "1001",
+      "name": "PaperPile",
+      "removed": false
+    },
+    {
+      "id": "2014962612",
+      "type": "4",
+      "name": "Spare forms",
+      "removed": false
+    },
+    {
+      "id": "2060946023",
+      "type": "4",
+      "name": "Banker task lamp",
+      "removed": false
+    },
+    {
+      "id": "2080371989",
+      "type": "1001",
+      "name": "PenHolder",
+      "removed": false
+    },
+    {
+      "id": "2081653153",
+      "type": "4",
+      "name": "Pen pot",
+      "removed": false
+    },
+    {
+      "id": "113188655259468420",
+      "type": "1001",
+      "name": "Blender_Stamp",
+      "removed": false
+    },
+    {
+      "id": "794360756582106099",
+      "type": "1001",
+      "name": "Blender_Next",
+      "removed": false
+    },
+    {
+      "id": "2563561267094824973",
+      "type": "1001",
+      "name": "Finish_FormSorter",
+      "removed": false
+    },
+    {
+      "id": "3856291457704350401",
+      "type": "1001",
+      "name": "Blender_Newspaper",
+      "removed": false
+    },
+    {
+      "id": "5180144104279160602",
+      "type": "1001",
+      "name": "Finish_Mouse",
+      "removed": false
+    },
+    {
+      "id": "5692412085129911053",
+      "type": "1001",
+      "name": "Finish_ComputerMedia",
+      "removed": false
+    },
+    {
+      "id": "6169562283773403565",
+      "type": "1001",
+      "name": "Finish_Inkpad",
+      "removed": false
+    }
+  ],
+  "new_documents": 40,
+  "original_documents_removed": 0
+}
