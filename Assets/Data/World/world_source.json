@@ -4865,6 +4865,20 @@
     "smallTalkLabel": "Small talk",
     "lookLabel": "Look >",
     "smallTalkPrompt": "How is life back home?",
+    "requests": [
+      {
+        "id": "step_closer",
+        "label": "Step closer",
+        "prompt": "Step closer to the glass, please.",
+        "reply": "Like this?"
+      },
+      {
+        "id": "speak_up",
+        "label": "Speak up",
+        "prompt": "Speak up, please. I can barely hear you.",
+        "reply": "Sorry. Is this better?"
+      }
+    ],
     "menuCapacity": 8,
     "maxLineChars": 100
   },
