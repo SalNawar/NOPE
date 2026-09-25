@@ -1254,9 +1254,11 @@ public static partial class OfficeSceneUIBuilder
     /// out of the desk view) under the office overlay canvas, rebuilt each run:
     /// a small button at the top centre, under the case HUD's strips, in the
     /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
-    /// under it (deskView.backHint: the other ways back) in the tooltip's
-    /// role, shown by HoverHint. Inactive: DeskView shows it while tilted
-    /// (BoothRules.DeskViewBackLive). Returns its button.
+    /// beside it, on its right (deskView.backHint: the other ways back), in the
+    /// tooltip's role, shown by HoverHint (beside, not under: the speech bubble
+    /// waits right under the Back control in the desk view). Inactive:
+    /// DeskView shows it while tilted (BoothRules.DeskViewBackLive). Returns
+    /// its button.
     /// </summary>
     private static Button BuildDeskViewBack(Transform overlay)
     {
@@ -1269,8 +1271,8 @@ public static partial class OfficeSceneUIBuilder
         rt.anchoredPosition = new Vector2(0f, -CaseHudClearance);
         rt.sizeDelta = DeskViewBackSize;
 
-        Transform hint = Panel(back.transform, "Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, -6f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
-        ((RectTransform)hint).pivot = new Vector2(0.5f, 1f);
+        Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)hint).pivot = new Vector2(0f, 0.5f);
         hint.GetComponent<Image>().raycastTarget = false;
         TMP_Text hintText = Text(hint, "Label", null, 18, TextAlignmentOptions.Center, new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.95f), Ink,
                                  ThemeRoleId.Tooltip, "deskView.backHint", FontStyles.Normal, ThemeTextKind.Body, true);
