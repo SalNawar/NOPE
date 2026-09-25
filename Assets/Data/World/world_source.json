@@ -4759,35 +4759,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "solar-weave galabiya"
+            "label": "bead-row yoke linen"
           },
           "hair": {
-            "label": "close-cropped hair"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
-          "headwear": {
-            "label": "scarab visor",
-            "leakable": true
-          },
-          "accessory": {
-            "label": "wrist datapad"
+          "facialHair": {
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "pleated solar gown"
+            "label": "bead-row yoke linen"
           },
           "hair": {
-            "label": "braided crown"
-          },
-          "headwear": {
-            "label": "lotus veil",
-            "leakable": true
-          },
-          "accessory": {
-            "label": "gold ear cuffs"
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -4842,35 +4834,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "garden-guild coverall"
+            "label": "fringed lapis coat"
           },
           "hair": {
-            "label": "short neat hair"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
           "facialHair": {
-            "label": "trimmed full beard"
-          },
-          "accessory": {
-            "label": "palm sash",
-            "leakable": true
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "green-silk abaya"
+            "label": "fringed lapis coat"
           },
           "hair": {
-            "label": "long dark waves"
-          },
-          "headwear": {
-            "label": "vine hijab",
-            "leakable": true
-          },
-          "accessory": {
-            "label": "seed-pod pendant"
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -4925,32 +4909,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "white wave-cloth tunic"
+            "label": "meander-trim drape"
           },
           "hair": {
-            "label": "short curly hair"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
           "facialHair": {
-            "label": "close-cut beard"
-          },
-          "accessory": {
-            "label": "wave torc",
-            "leakable": true
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "draped sea-blue gown"
+            "label": "meander-trim drape"
           },
           "hair": {
-            "label": "high knotted bun"
-          },
-          "accessory": {
-            "label": "wave torc",
-            "leakable": true
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -5005,29 +4984,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "tailored union suit"
+            "label": "clavus-stripe wrap"
           },
           "hair": {
-            "label": "slick quiff"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
-          "accessory": {
-            "label": "laurel pin",
-            "leakable": true
+          "facialHair": {
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "sculpted cape dress"
+            "label": "clavus-stripe wrap"
           },
           "hair": {
-            "label": "sleek chignon"
-          },
-          "accessory": {
-            "label": "laurel pin",
-            "leakable": true
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -5082,32 +5059,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "high-collar smart coat"
+            "label": "pankou cross-collar coat"
           },
           "hair": {
-            "label": "sharp undercut"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
-          "headwear": {
-            "label": "maglev visor",
-            "leakable": true
-          },
-          "accessory": {
-            "label": "collar earpiece"
+          "facialHair": {
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "qipao-cut smart coat"
+            "label": "pankou cross-collar coat"
           },
           "hair": {
-            "label": "twin high buns"
-          },
-          "accessory": {
-            "label": "jade earbud",
-            "leakable": true
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -5162,32 +5134,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "bay-worker haori coat"
+            "label": "kasane-collar layers"
           },
           "hair": {
-            "label": "spiked crop"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
-          "headwear": {
-            "label": "LED headband",
-            "leakable": true
+          "facialHair": {
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "neon kimono jacket"
+            "label": "kasane-collar layers"
           },
           "hair": {
-            "label": "asymmetric bob"
-          },
-          "headwear": {
-            "label": "LED headband",
-            "leakable": true
-          },
-          "accessory": {
-            "label": "drone wristband"
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -5242,32 +5209,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Headwear",
+          "signature": "Outfit",
           "outfit": {
-            "label": "waxed flood jacket"
+            "label": "tweed-grid frock coat"
           },
           "hair": {
-            "label": "neat side parting"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
-          "headwear": {
-            "label": "tidal bowler",
-            "leakable": true
-          },
-          "accessory": {
-            "label": "barrier pass lanyard"
+          "facialHair": {
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "belted rain cape"
+            "label": "tweed-grid frock coat"
           },
           "hair": {
-            "label": "cropped pixie cut"
-          },
-          "accessory": {
-            "label": "Thames brooch",
-            "leakable": true
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
@@ -5322,32 +5284,27 @@
       ],
       "wardrobe": {
         "m": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "hydrogen-works overall"
+            "label": "Bauhaus colour panels"
           },
           "hair": {
-            "label": "buzz cut"
+            "label": "short textured crop",
+            "artNation": "neutral"
           },
           "facialHair": {
-            "label": "designer stubble"
-          },
-          "accessory": {
-            "label": "hydrogen badge",
-            "leakable": true
+            "label": "short trimmed beard",
+            "artNation": "neutral"
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Outfit",
           "outfit": {
-            "label": "structured wool coat"
+            "label": "Bauhaus colour panels"
           },
           "hair": {
-            "label": "sharp chin bob"
-          },
-          "accessory": {
-            "label": "hydrogen badge",
-            "leakable": true
+            "label": "sleek low bun",
+            "artNation": "neutral"
           }
         }
       }
