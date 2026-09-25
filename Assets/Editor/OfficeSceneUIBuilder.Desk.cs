@@ -571,15 +571,15 @@ public static partial class OfficeSceneUIBuilder
     /// no graphic, and its Panel child (anchors and pivot (0.5, 0.5), raycast
     /// targets off, inactive) holding an auto-sized label.
     /// </summary>
-    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background)
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role)
     {
         DestroyChildIfPresent(overlay, name);
         Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        Transform panel = Panel(host, "Panel", Center, Center, Vector2.zero, size, background);
+        Transform panel = Panel(host, "Panel", Center, Center, Vector2.zero, size, background, role);
         ((RectTransform)panel).pivot = Center;
         panel.GetComponent<Image>().raycastTarget = false;
 
-        TMP_Text label = Text(panel, "Label", "", 24, TextAlignmentOptions.Center, new Vector2(0.04f, 0.08f), new Vector2(0.96f, 0.92f), Ink);
+        TMP_Text label = Text(panel, "Label", "", 24, TextAlignmentOptions.Center, new Vector2(0.04f, 0.08f), new Vector2(0.96f, 0.92f), Ink, role);
         label.enableAutoSizing = true;
         label.fontSizeMin = 14f;
         label.fontSizeMax = 24f;
@@ -610,7 +610,7 @@ public static partial class OfficeSceneUIBuilder
     {
         DestroyChildIfPresent(overlay, "TravellerWheel");
         Transform host = Panel(overlay, "TravellerWheel", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f));
+        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
 
         Transform ring = Panel(catcher, "Ring", Center, Center, Vector2.zero, Vector2.zero, null);
         ((RectTransform)ring).pivot = Center;
@@ -622,7 +622,7 @@ public static partial class OfficeSceneUIBuilder
         ((RectTransform)centre).pivot = Center;
         centre.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
 
-        Button template = MakeButton(ring, "ActionButtonTemplate", "Choice", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 0.95f));
+        Button template = MakeButton(ring, "ActionButtonTemplate", "Choice", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 0.95f), ThemeRoleId.WheelButton);
         TMP_Text choice = template.transform.Find("Label").GetComponent<TMP_Text>();
         choice.enableAutoSizing = true;
         choice.fontSizeMin = 12f;
