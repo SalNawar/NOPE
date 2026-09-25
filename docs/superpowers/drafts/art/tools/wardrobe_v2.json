@@ -417,7 +417,7 @@
     "headwear": "none",
     "accessory": "Monile: a short necklace of large pearls on gold links, worn high on the chest"
    },
-   "mustRead": "Men: a plain white toga with a curved, rounded edge over a tunic with a narrow deep wine-red clavus stripe, with calcei boots. Women: the nodus roll of hair above the forehead, with the strapped stola.",
+   "mustRead": "Men: a plain white toga with a curved, rounded edge draped over the left shoulder, over a tunic with a narrow deep wine-red clavus stripe running down from the shoulder. Women: the nodus roll of hair above the forehead, with the stola's straps on the shoulders.",
    "avoid": [
     "deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late",
     "laurel wreath (triumphal or imperial)",
@@ -538,9 +538,9 @@
     "hair": "Chuishao ji: centre-parted hair drawn smoothly back into a low looped bun at the nape, with a short tail of hair hanging below it",
     "facialHair": "none",
     "headwear": "none",
-    "accessory": "Jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging at mid-chest on its own long red silk cord round the neck, with a short red tassel below it"
+    "accessory": "Jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck, with a short red tassel below it"
    },
-   "mustRead": "A long cross-collar wrap robe with huge bag-shaped 'ox-dewlap' sleeves and broad contrasting borders; men add the roof-ridged black jieze cap",
+   "mustRead": "The layered cross-collars (a 'y' at the throat) of a long wrap robe with broad dark borders and huge bag-shaped 'ox-dewlap' sleeves; men add the roof-ridged black jieze cap, women the palm-wide dark jade bi-disc pendant high on the chest",
    "avoid": [
     "Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow",
     "jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank",
@@ -669,7 +669,7 @@
     "headwear": "none",
     "accessory": "Multi-strand necklace of dark grey-green magatama and round blue glass beads"
    },
-   "mustRead": "A short belted jacket over knee-tied trousers or a long skirt, with a necklace of dark grey-green comma-shaped magatama beads; men also wear mizura hair loops beside the ears (the clearest silhouette cue), and women the flat board chignon",
+   "mustRead": "Men: mizura hair loops beside the ears (the clearest silhouette cue) and a necklace of dark grey-green comma-shaped magatama beads over a short belted jacket. Women: the flat board chignon and a necklace of magatama beads over the jacket.",
    "avoid": [
     "keiko armour, swords, helmets (the famous haniwa warrior)",
     "shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical",
@@ -1478,7 +1478,7 @@
     "headwear": "Ghirlanda: a thick padded roll, like a fat wreath, covered in crimson silk and studded with pearls, set around the crown of the head. No veil, so the drawn-back hair and the high bare forehead show.",
     "accessory": "A large gold pendant jewel (fermaglio) with a pearl cluster, as wide as the palm, hanging at the base of the throat on its own short gold chain"
    },
-   "mustRead": "Men: the cappuccio a mazzocchio (a padded ring-hat with a draped side and a long hanging becchetto) with an ankle-length red lucco. Women: the pearl-studded padded ghirlanda roll over bare, drawn-back hair and a plucked high forehead.",
+   "mustRead": "Men: the cappuccio a mazzocchio (a padded ring-hat with a draped side and a long hanging becchetto) over a red lucco gown. Women: the pearl-studded padded ghirlanda roll over bare, drawn-back hair and a plucked high forehead.",
    "avoid": [
     "beards on men (reads Byzantine Greek)",
     "tall brimmed Byzantine hat",
@@ -1746,7 +1746,7 @@
     "headwear": "Ichime-gasa: a wide-brimmed lacquered sedge hat with a tall knob crown, worn WITHOUT its veil so the face is fully visible",
     "accessory": "none"
    },
-   "mustRead": "Men: a tall, soft, crumpled black eboshi cap with a wide-sleeved hitatare and hakama. Women: the wide, knob-crowned ichime-gasa travel hat.",
+   "mustRead": "Men: a tall, soft, crumpled black eboshi cap with a wide-sleeved hitatare. Women: the wide, knob-crowned ichime-gasa travel hat.",
    "avoid": [
     "armour, katana, samurai helmets, ninja imagery",
     "Heian junihitoe or court robes (aristocratic and the wrong period)",
@@ -1877,7 +1877,7 @@
     "headwear": "Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it.",
     "accessory": "none"
    },
-   "mustRead": "Men: the only knee-length tunic of the era, with leg bindings, a big round silver disc brooch high on the right shoulder, and the long English moustache. Women: a coloured headrail veil wrapped over the head and round the throat, above a bell-sleeved overgown.",
+   "mustRead": "Men: a big round silver disc brooch high on the right shoulder and the long English moustache, with a cloak over a tunic. Women: a coloured headrail veil wrapped over the head and round the throat, above a bell-sleeved overgown.",
    "avoid": [
     "horned or winged helmets and Viking-raider stereotypes",
     "chainmail, Norman kite shields, any armour or weapons",
@@ -2013,7 +2013,7 @@
     "headwear": "Kruseler: a white linen veil edged with several rows of tightly ruffled frills that frame the forehead and cheeks like a halo, with no chin band",
     "accessory": "none"
    },
-   "mustRead": "Men: the Gugel hood with its scalloped shoulder cape, plus pointed Schnabelschuhe. Women: the Kruseler veil with its many-layered frilled edge.",
+   "mustRead": "Men: the Gugel hood with its scalloped shoulder cape, the face fully clear. Women: the Kruseler veil with its many-layered frilled edge.",
    "avoid": [
     "armour, crowns or noble regalia",
     "clerical or monastic robes",
@@ -2427,13 +2427,13 @@
     "accessory": "Wide striped silk-cotton sash (zonari) wound several times around the waist"
    },
    "female": {
-    "outfit": "Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord.",
+    "outfit": "Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).",
     "hair": "Long hair plaited into two braids that fall forward over the shoulders onto the chest",
     "facialHair": "none",
     "headwear": "Small red cap wrapped with a patterned silk headscarf (tsemberi) tied at the back. The braids and face stay visible.",
-    "accessory": "Pafti: a large, ornate double-plate silver-filigree buckle on a belt at the waist (Ioannina silverwork)"
+    "accessory": "Silver chest chains: four or five rows of fine silver chains hanging in festoons across the upper chest from two round silver-filigree rosettes on the collarbones, the rosettes joined by a silver chain round the back of the neck; the chains are strung with round silver filigree beads (Ioannina silverwork)"
    },
-   "mustRead": "Tall, rounded, black lambskin kalpak worn with a long, dark, fur-edged coat (women: the large silver pafti buckle)",
+   "mustRead": "Men: the tall, rounded, black lambskin kalpak with a full beard, over a long dark coat edged with fur at the collar and down the front. Women: rows of fine silver chains festooned across the upper chest over a dark gold-corded velvet waistcoat, with a red cap wrapped in a patterned headscarf.",
    "avoid": [
     "white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq)",
     "red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims)",
@@ -2484,14 +2484,14 @@
      "back": false,
      "signature": {
       "slot": "Accessory",
-      "label": "pafti buckle",
+      "label": "silver chest chains",
       "leakable": true
      },
      "labels": {
       "outfit": "anteri and zipouni",
       "hair": "two front braids",
       "headwear": "cap and tsemberi",
-      "accessory": "pafti buckle"
+      "accessory": "silver chest chains"
      },
      "headwearHides": "top",
      "covers": [],
@@ -2530,12 +2530,12 @@
       "label": "cap and tsemberi"
      },
      "accessory": {
-      "label": "pafti buckle",
+      "label": "silver chest chains",
       "leakable": true
      }
     }
    },
-   "cultureValue": "kalpak / pafti buckle",
+   "cultureValue": "kalpak / silver chest chains",
    "avoidChatGPT": [
     "white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq)",
     "red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims)",
@@ -2570,7 +2570,7 @@
     "headwear": "Lenza: a finger-wide dark velvet band worn straight across the forehead, with a large dark-red stone set in gold, as big as the whole eye, at the centre of the brow",
     "accessory": "Long necklace of dark jet beads looped twice around the neck"
    },
-   "mustRead": "Lenza: a finger-wide dark brow band with a large dark-red jewel at the centre, worn straight across the forehead over smooth, hatless hair (men: a small soft red berretta over a shoulder-length bob, with a knee-length dusty-coral pitocco)",
+   "mustRead": "Lenza: a finger-wide dark brow band with a large dark-red jewel at the centre, worn straight across the forehead over smooth, hatless hair (men: a small soft red berretta over a shoulder-length bob, with a dusty-coral pitocco tunic)",
    "avoid": [
     "Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell)",
     "any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern)",
@@ -2701,7 +2701,7 @@
     "headwear": "Baotou (tougu): a broad black satin band worn low across the brow, with a small jade or pearl ornament at the centre",
     "accessory": "none"
    },
-   "mustRead": "Tall, square, black gauze scholar's cap (women: a knee-length jacket with a standing collar and gold buttons over a pleated horse-face skirt)",
+   "mustRead": "Tall, square, black gauze scholar's cap (women: the broad black satin baotou band worn low across the brow, over a jacket with a standing collar and gold buttons)",
    "avoid": [
     "Qing queue, skullcap or horse-hoof cuffs (wrong dynasty)",
     "Mandarin rank squares (buzi), python or dragon robes, the official winged wusha cap",
@@ -2835,13 +2835,13 @@
     "accessory": "none"
    },
    "female": {
-    "outfit": "Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi.",
+    "outfit": "Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.",
     "hair": "Long centre-parted hair drawn to the nape and looped once into a soft tamamusubi fold, tied with white paper cord, with the ends hanging down the back (hidden from the front)",
     "facialHair": "none",
-    "headwear": "none",
-    "accessory": "Nagoya-obi: a braided silk cord belt wound several times around the hips and tied in front, with long tassels hanging to the knee"
+    "headwear": "Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.",
+    "accessory": "none"
    },
-   "mustRead": "Sleeveless kataginu vest over a kosode and pleated hakama, with the shaved-pate tea-whisk topknot (women: the tasselled Nagoya-obi cord belt on a dark, densely patterned kosode)",
+   "mustRead": "Men: the bare, shaved-pate tea-whisk topknot (chasen-mage) with a sleeveless kataginu vest with flat, squared shoulders over a kosode. Women: the kazuki, a densely patterned kosode worn over the head and shoulders as a veil, framing the face.",
    "avoid": [
     "stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development)",
     "Katana, wakizashi or any sword (samurai wore two; omit them)",
@@ -2882,22 +2882,22 @@
       "outfit": true,
       "hair": true,
       "facialHair": false,
-      "headwear": false,
-      "accessory": true
+      "headwear": true,
+      "accessory": false
      },
      "wig": false,
      "back": false,
      "signature": {
-      "slot": "Accessory",
-      "label": "Nagoya-obi",
+      "slot": "Headwear",
+      "label": "kazuki veil",
       "leakable": true
      },
      "labels": {
       "outfit": "Keicho kosode",
       "hair": "tamamusubi loop",
-      "accessory": "Nagoya-obi"
+      "headwear": "kazuki veil"
      },
-     "headwearHides": "",
+     "headwearHides": "top",
      "covers": [],
      "ornamentsToMask": "white paper cord"
     }
@@ -2917,20 +2917,20 @@
      }
     },
     "f": {
-     "signature": "Accessory",
+     "signature": "Headwear",
      "outfit": {
       "label": "Keicho kosode"
      },
      "hair": {
       "label": "tamamusubi loop"
      },
-     "accessory": {
-      "label": "Nagoya-obi",
+     "headwear": {
+      "label": "kazuki veil",
       "leakable": true
      }
     }
    },
-   "cultureValue": "chasen-mage / Nagoya-obi",
+   "cultureValue": "chasen-mage / kazuki veil",
    "avoidChatGPT": [
     "stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development)",
     "Katana, wakizashi or any sword (samurai wore two; omit them)",
@@ -3366,7 +3366,7 @@
     "headwear": "The top of the black silk 'abaya drawn over a black head-kerchief (futa), from the crown down both sides of the head and neck to the shoulders. The face is uncovered.",
     "accessory": "Heavy gold filigree bangles stacked on both wrists"
    },
-   "mustRead": "Men: the white chfiyya headcloth held by a black 'igal cord, worn with a gold-trimmed camel 'aba. Women: the black silk 'abaya worn from the crown of the head to the ankles, open over a brocade dress.",
+   "mustRead": "Men: the white chfiyya headcloth held by a black 'igal cord, worn with a gold-trimmed camel 'aba. Women: the black silk 'abaya drawn over the head and falling open over a brocade dress.",
    "avoid": [
     "a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it)",
     "a white veil trailing down the back (reads as Egypt women)",
@@ -3505,7 +3505,7 @@
     "headwear": "Small red fesi pinned tilted on the crown, with a long tassel of braided gold thread falling to the shoulder. The face and hairline are fully visible.",
     "accessory": "Necklace of plain gold discs with raised rims on a chain (the dowry flouria, drawn with no face, letters or marks)"
    },
-   "mustRead": "Men: the white, many-pleated fustanella kilt. Women: the gold-embroidered velvet kontogouni bolero with a small tilted red fesi and a gold tassel.",
+   "mustRead": "Men: the small red fesi with a long tassel, over a full-sleeved white shirt and a dark-crimson gold-braided jacket. Women: the gold-embroidered velvet kontogouni bolero with a small tilted red fesi and a gold tassel.",
    "avoid": [
     "Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military)",
     "silahlik weapon belt, pistols, yataghan, rifles, cartridge belts",
@@ -3905,7 +3905,7 @@
     "headwear": "none",
     "accessory": "none"
    },
-   "mustRead": "Men: a black bowler hat worn with a black haori, white himo cord and striped hakama, a Western hat over Japanese dress. Women: the maroon hakama tied high over a yagasuri kimono, with sokuhatsu hair and a ribbon bow.",
+   "mustRead": "Men: a black bowler hat worn with a black haori closed by a white himo cord, a Western hat over Japanese dress. Women: the sokuhatsu hairstyle with a large white ribbon bow, over a yagasuri kimono.",
    "avoid": [
     "Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum",
     "Swords (banned in 1876)",
@@ -4165,7 +4165,7 @@
     "headwear": "none",
     "accessory": "Jugendstil pendant: a large silver plaque with dark-blue enamel and a curving 'whiplash' leaf motif in the Pforzheim style, about as wide as the face, hanging at the base of the throat on its own short silver chain"
    },
-   "mustRead": "Men: a Homburg hat with pince-nez and an upturned moustache. Women: a loose, uncorseted Reformkleid with Jugendstil embroidery on the yoke.",
+   "mustRead": "Men: a Homburg hat with pince-nez and an upturned moustache. Women: a large Jugendstil pendant at the throat, over the embroidered yoke of a loose Reformkleid.",
    "avoid": [
     "Pickelhaube or any military or police uniform",
     "Iron Cross, eagle emblems, black-white-red imperial colours",
@@ -4303,7 +4303,7 @@
     "headwear": "Mandil abu oya: a coloured triangular cotton headscarf tied at the back of the head (knot at the nape, point covering the back of the head), its front edge trimmed with a fringe of tiny crocheted flowers or beads that frames the forehead. Face, chin and neck fully visible.",
     "accessory": "Ghawayesh: a stack of thick gold bangles on each wrist"
    },
-   "mustRead": "The galabiya. Men wear a tailored Western jacket over it. Women wear a bright printed galabiya with a flower-edged mandil tied at the nape.",
+   "mustRead": "Men: a long, dark, fringed shal round the neck, its ends down the chest, over a tailored Western jacket worn on a galabiya. Women: a flower-edged mandil tied at the nape, with a bright printed galabiya.",
    "avoid": [
     "tarboush or fez (reads as Egypt-industrial)",
     "military uniforms or Free Officers' khaki",
@@ -4570,16 +4570,16 @@
     "hair": "Collar-length, slightly shaggy 1970s cut",
     "facialHair": "Thick full moustache",
     "headwear": "none",
-    "accessory": "Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body with the bag resting at the front of the hip"
+    "accessory": "Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit"
    },
    "female": {
     "outfit": "White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.",
     "hair": "Long, straight, centre-parted and loose",
     "facialHair": "none",
     "headwear": "none",
-    "accessory": "Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body with the bag resting at the front of the hip"
+    "accessory": "Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit"
    },
-   "mustRead": "Tagari: a hand-woven striped wool shoulder bag with a fringed bottom, worn crossbody",
+   "mustRead": "The tagari: a hand-woven wool bag in bold stripes with a fringed bottom, worn high on the left side of the chest on a broad striped strap that crosses the chest (men with a thick moustache and a shaggy 1970s cut; women with a cross-stitched folk blouse and long loose hair)",
    "avoid": [
     "junta-era (1967-74) uniforms, insignia or the phoenix emblem (regime symbols)",
     "any military or police uniform",
@@ -4839,10 +4839,10 @@
     "outfit": "Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.",
     "hair": "Short, straight, chin-length bob with a side part, held back on one side by a plain black hair clip",
     "facialHair": "none",
-    "headwear": "none",
+    "headwear": "The same soft navy cotton cap as the men's: a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak, sitting high on the head over the bob, unlike a low flat cap. Plain, with no badge or star.",
     "accessory": "Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes"
    },
-   "mustRead": "Blue-grey Zhongshan (Mao) suit with four patch pockets, worn by men and women alike",
+   "mustRead": "The soft navy cap with a tall, rounded crown and a short peak, over a blue-grey Zhongshan (Mao) jacket with a turn-down collar and buttoned patch pockets, worn by men and women alike",
    "avoid": [
     "Mao badges or portrait pins",
     "Red-star cap badge, green PLA uniform, Red Guard armbands",
@@ -4885,22 +4885,23 @@
       "outfit": true,
       "hair": true,
       "facialHair": false,
-      "headwear": false,
+      "headwear": true,
       "accessory": true
      },
      "wig": false,
      "back": false,
      "signature": {
-      "slot": "Accessory",
-      "label": "khaki satchel",
+      "slot": "Headwear",
+      "label": "navy cap",
       "leakable": true
      },
      "labels": {
       "outfit": "Zhongshan jacket",
       "hair": "clipped bob",
+      "headwear": "navy cap",
       "accessory": "khaki satchel"
      },
-     "headwearHides": "",
+     "headwearHides": "top",
      "covers": [],
      "ornamentsToMask": "black hair clip"
     }
@@ -4923,20 +4924,23 @@
      }
     },
     "f": {
-     "signature": "Accessory",
+     "signature": "Headwear",
      "outfit": {
       "label": "Zhongshan jacket"
      },
      "hair": {
       "label": "clipped bob"
      },
-     "accessory": {
-      "label": "khaki satchel",
+     "headwear": {
+      "label": "navy cap",
       "leakable": true
+     },
+     "accessory": {
+      "label": "khaki satchel"
      }
     }
    },
-   "cultureValue": "navy cap / khaki satchel",
+   "cultureValue": "navy cap",
    "avoidChatGPT": [
     "any badge or pin on the jacket",
     "a star or badge on the cap, a green army-style uniform, armbands",
@@ -4976,7 +4980,7 @@
     "headwear": "none",
     "accessory": "The same silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck; no cord, no player, no brand logo"
    },
-   "mustRead": "Orange-foam headphones resting around the neck (men with a dark salaryman suit, women with a fitted office waistcoat and pleated skirt)",
+   "mustRead": "Orange-foam headphones resting around the neck (men with a dark salaryman suit, women with a fitted office waistcoat over a blouse with a bow at the collar)",
    "avoid": [
     "Rising Sun flag or rays, or a hachimaki headband with the hinomaru",
     "WWII military uniforms or imagery",
@@ -5097,7 +5101,7 @@
     "headwear": "Printed silk square headscarf folded into a triangle and knotted under the chin, covering the ears, its front edge set back from the forehead; face fully visible",
     "accessory": "A single strand of pearls (the 'twinset and pearls')"
    },
-   "mustRead": "Tweed and knitwear. Men wear a herringbone tweed jacket over a Fair Isle pullover with a flat cap. Women wear a twinset and pearls with a tweed skirt and an under-the-chin headscarf.",
+   "mustRead": "Men: a flat cap, with a herringbone tweed jacket over a Fair Isle pullover. Women: an under-the-chin headscarf, with a twinset and pearls.",
    "avoid": [
     "military, Home Guard, ARP or any uniform",
     "Union Jack, royal regalia, guards' bearskins, police helmets",
@@ -5231,7 +5235,7 @@
     "headwear": "Close-fitting felt cloche hat pulled down to just above the eyebrows, with a small brim so the eyes and face stay clear",
     "accessory": "Geometric chrome-and-brass necklace of circles and bars in the Bauhaus metal-workshop style"
    },
-   "mustRead": "For women, Bauhaus colour-block geometry with a Bubikopf bob and cloche. For men, a broad-brimmed soft felt hat, walrus moustache and round wire spectacles.",
+   "mustRead": "For women, the close felt cloche over a Bubikopf bob, with Bauhaus colour-block geometry on the dress. For men, a broad-brimmed soft felt hat, a walrus moustache and round wire spectacles.",
    "avoid": [
     "ANY uniform, armband, swastika or other regime or military insignia",
     "brown shirts, black shirts, jackboots, leather trench coats (secret-police stereotype)",
@@ -5676,21 +5680,21 @@
    "place": "italy_ancient",
    "field": "signature",
    "status": "applied, then amended",
-   "note": "issue 4"
+   "note": "issue 4; v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 8,
    "place": "china_ancient",
    "field": "signature",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 9,
    "place": "japan_ancient",
    "field": "signature",
    "status": "applied, then amended",
-   "note": "issue 4 (on fix 9's wording)"
+   "note": "issue 4 (on fix 9's wording); v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 10,
@@ -5781,7 +5785,7 @@
    "place": "britain_medieval",
    "field": "signature",
    "status": "applied, then amended",
-   "note": "review 2 finding 3 (the brooch no longer pins the cloak)"
+   "note": "review 2 finding 3 (the brooch no longer pins the cloak); v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 23,
@@ -5815,8 +5819,8 @@
    "n": 27,
    "place": "germany_medieval",
    "field": "signature",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 28,
@@ -5836,8 +5840,8 @@
    "n": 30,
    "place": "greece_earlymodern",
    "field": "female.accessory",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): the pafti buckle at the waist is hidden by the desk; chest silverwork is the visible Ioannina item"
   },
   {
    "n": 31,
@@ -5857,8 +5861,8 @@
    "n": 33,
    "place": "japan_earlymodern",
    "field": "signature",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 34,
@@ -6046,15 +6050,15 @@
    "n": 60,
    "place": "greece_modern",
    "field": "male.accessory",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): the bag rode at the hip, behind the desk; drawn high on the chest"
   },
   {
    "n": 61,
    "place": "greece_modern",
    "field": "female.accessory",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): the bag rode at the hip, behind the desk; drawn high on the chest"
   },
   {
    "n": 62,
@@ -6075,14 +6079,14 @@
    "place": "japan_modern",
    "field": "signature",
    "status": "applied, then amended",
-   "note": "review 2 finding 3"
+   "note": "review 2 finding 3; v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 65,
    "place": "britain_modern",
    "field": "signature",
-   "status": "applied",
-   "note": ""
+   "status": "applied, then amended",
+   "note": "v2.1 (3D office): MUST READ names only what shows above the desk"
   },
   {
    "n": 66,
@@ -6358,6 +6362,13 @@
    "slot": "Accessory",
    "gender": "f",
    "why": "plain gold discs at the neck (coin pendant vs qilada)"
+  },
+  {
+   "a": "greece_earlymodern",
+   "b": "germany_earlymodern",
+   "slot": "Accessory",
+   "gender": "f",
+   "why": "festoons of chains on the chest (silver vs layered gold)"
   }
  ],
  "confusableHidden": [
@@ -6565,6 +6576,13 @@
    "why": "nodus roll hidden under the cap and tsemberi"
   },
   {
+   "a": "japan_earlymodern",
+   "b": "italy_ancient",
+   "slot": "Hair",
+   "gender": "f",
+   "why": "nodus roll hidden under the kazuki veil"
+  },
+  {
    "a": "germany_earlymodern",
    "b": "italy_ancient",
    "slot": "Hair",
@@ -6598,6 +6616,13 @@
    "slot": "Hair",
    "gender": "f",
    "why": "nodus roll hidden under the abaya over the head"
+  },
+  {
+   "a": "china_modern",
+   "b": "italy_ancient",
+   "slot": "Hair",
+   "gender": "f",
+   "why": "nodus roll hidden under the navy cap"
   },
   {
    "a": "britain_modern",
@@ -6971,6 +6996,13 @@
    "why": "sokuhatsu hidden under the cap and tsemberi"
   },
   {
+   "a": "japan_earlymodern",
+   "b": "japan_industrial",
+   "slot": "Hair",
+   "gender": "f",
+   "why": "sokuhatsu hidden under the kazuki veil"
+  },
+  {
    "a": "germany_earlymodern",
    "b": "japan_industrial",
    "slot": "Hair",
@@ -7006,6 +7038,13 @@
    "why": "sokuhatsu hidden under the abaya over the head"
   },
   {
+   "a": "china_modern",
+   "b": "japan_industrial",
+   "slot": "Hair",
+   "gender": "f",
+   "why": "sokuhatsu hidden under the navy cap"
+  },
+  {
    "a": "britain_modern",
    "b": "japan_industrial",
    "slot": "Hair",
@@ -7020,6 +7059,7 @@
    "why": "sokuhatsu hidden under the cloche"
   }
  ],
+ "confusableAddedV21": 1,
  "editLog": [
   {
    "place": "italy_ancient",
@@ -7980,6 +8020,186 @@
    "field": "f.outfit",
    "change": "'worn over a black pleated mamian skirt.' -> 'worn over a black pleated mamian skirt. Flat black cloth shoes.'",
    "why": "review 2 finding 20: an explicit shoe replaces the 'bound feet' warning, which moves to the review list"
+  },
+  {
+   "place": "greece_earlymodern",
+   "field": "f.accessory",
+   "change": "set",
+   "why": "v2.1 (3D office): the pafti buckle at the waist is hidden by the desk; chest silverwork is the visible Ioannina item"
+  },
+  {
+   "place": "greece_earlymodern",
+   "field": "f.outfit",
+   "change": "'embroidered with gold cord.' -> 'embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).'",
+   "why": "v2.1 (3D office): the pafti closes the outfit's belt, so it is part of the outfit (the accessory rule)"
+  },
+  {
+   "place": "japan_earlymodern",
+   "field": "f.headwear",
+   "change": "set",
+   "why": "v2.1 (3D office): a visible leak item on the head (the Nagoya-obi at the hips is hidden by the desk)"
+  },
+  {
+   "place": "japan_earlymodern",
+   "field": "f.accessory",
+   "change": "set",
+   "why": "v2.1 (3D office): the Nagoya-obi moves into the outfit"
+  },
+  {
+   "place": "japan_earlymodern",
+   "field": "f.outfit",
+   "change": "'slim silhouette with no wide obi.' -> 'slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.'",
+   "why": "v2.1 (3D office): the Nagoya-obi stays drawn, as part of the outfit"
+  },
+  {
+   "place": "china_modern",
+   "field": "f.headwear",
+   "change": "set",
+   "why": "v2.1 (3D office): a visible leak item on the head (the khaki satchel at the hip is hidden by the desk)"
+  },
+  {
+   "place": "greece_modern",
+   "field": "m.accessory",
+   "change": "set",
+   "why": "v2.1 (3D office): the bag rode at the hip, behind the desk; drawn high on the chest"
+  },
+  {
+   "place": "greece_modern",
+   "field": "f.accessory",
+   "change": "set",
+   "why": "v2.1 (3D office): the bag rode at the hip, behind the desk; drawn high on the chest"
+  },
+  {
+   "place": "china_ancient",
+   "field": "f.accessory",
+   "change": "'hanging at mid-chest on its own long red silk cord round the neck' -> 'hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck'",
+   "why": "v2.1 (3D office): raised from mid-chest to the upper chest, clear of papers held up to read"
+  },
+  {
+   "place": "italy_ancient",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "china_ancient",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "japan_ancient",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "italy_medieval",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "japan_medieval",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "britain_medieval",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "germany_medieval",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "greece_earlymodern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "italy_earlymodern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "china_earlymodern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "japan_earlymodern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "iraq_industrial",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "greece_industrial",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "japan_industrial",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "germany_industrial",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "egypt_modern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "greece_modern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "china_modern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "japan_modern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "britain_modern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
+  },
+  {
+   "place": "germany_modern",
+   "field": "signature",
+   "change": "set",
+   "why": "v2.1 (3D office): MUST READ names only what shows above the desk"
   }
  ],
  "problems": []
