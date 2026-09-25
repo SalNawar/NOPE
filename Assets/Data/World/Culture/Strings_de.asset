@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567a3555c681439ea7087bd38a206262, type: 3}
+  m_Name: Strings_de
+  m_EditorClassIdentifier: Assembly-CSharp::UiStringTableSO
+  language: de
+  rightToLeft: 0
+  entries:
+  - key: accept
+    text: ANNEHMEN
+    gloss: 0
+    tier: 0
+  - key: deny
+    text: ABLEHNEN
+    gloss: 0
+    tier: 0
+  - key: taskbar.start
+    text: Start
+    gloss: 0
+    tier: 0
+  - key: startmenu.settings
+    text: Einstellungen
+    gloss: 0
+    tier: 0
+  - key: startmenu.screenOff
+    text: Bildschirm aus
+    gloss: 0
+    tier: 0
+  - key: startmenu.quit
+    text: Spiel beenden
+    gloss: 0
+    tier: 0
+  - key: briefing.masthead
+    text: DER ZEITBOTE
+    gloss: 0
+    tier: 0
+  - key: briefing.start
+    text: SCHICHT BEGINNEN
+    gloss: 0
+    tier: 0
+  - key: results.masthead
+    text: "SCHICHTBUCH \u2014 ABENDAUSGABE"
+    gloss: 0
+    tier: 0
+  - key: results.goHome
+    text: NACH HAUSE
+    gloss: 0
+    tier: 0
+  - key: records.title
+    text: Einwohnerregister
+    gloss: 0
+    tier: 0
+  - key: records.search
+    text: SUCHEN
+    gloss: 0
+    tier: 0
+  - key: compare.match
+    text: STIMMT
+    gloss: 0
+    tier: 0
+  - key: compare.mismatch
+    text: ABWEICHUNG
+    gloss: 0
+    tier: 0
+  - key: citation.title
+    text: MELDUNG EINER ZEITABWEICHUNG
+    gloss: 0
+    tier: 0
+  - key: citation.acknowledge
+    text: Zur Kenntnis
+    gloss: 0
+    tier: 0
+  - key: window.directives
+    text: Anweisungen
+    gloss: 0
+    tier: 0
+  - key: window.scanner
+    text: Abweichungsbericht
+    gloss: 0
+    tier: 0
+  - key: window.settings
+    text: Einstellungen
+    gloss: 0
+    tier: 0
+  - key: icon.directives
+    text: Anweisungen
+    gloss: 0
+    tier: 0
+  - key: icon.scanner
+    text: Abweichungsbericht
+    gloss: 0
+    tier: 0
+  - key: icon.records
+    text: Register
+    gloss: 0
+    tier: 0
+  - key: icon.internet
+    text: Internet
+    gloss: 0
+    tier: 0
+  - key: icon.lexicon
+    text: Lexikon
+    gloss: 0
+    tier: 0
+  - key: icon.dialect
+    text: Mundart
+    gloss: 0
+    tier: 0
+  - key: icon.material
+    text: Material
+    gloss: 0
+    tier: 0
+  - key: icon.notes
+    text: Notizen
+    gloss: 0
+    tier: 0
+  - key: icon.clueLog
+    text: Hinweise
+    gloss: 0
+    tier: 0
+  - key: tray.day
+    text: Tag {0}
+    gloss: 0
+    tier: 0
+  - key: tray.stability
+    text: "Stabilit\xE4t: {0:0}%"
+    gloss: 0
+    tier: 0
+  - key: taskbar.desk
+    text: < Schreibtisch
+    gloss: 0
+    tier: 0
+  - key: briefing.title
+    text: "Tag {0} \u2014 Morgenbesprechung"
+    gloss: 0
+    tier: 0
+  - key: results.title
+    text: "Tag {0} \u2014 Schichtbericht"
+    gloss: 0
+    tier: 0
+  - key: briefing.newsHeader
+    text: "\u2014 ZEITLINIEN-NACHRICHTEN \u2014"
+    gloss: 0
+    tier: 0

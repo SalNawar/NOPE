@@ -1,0 +1,260 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11ae82f027b44f61930f992bfc73a21b, type: 3}
+  m_Name: Theme_germany
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSO
+  cultureId: germany
+  displayName: Germany
+  language: de
+  runtimeFont: 1
+  fonts:
+  - file: segoeui.ttf
+    face: 0
+    family: Segoe UI
+    style: Regular
+  - file: arial.ttf
+    face: 0
+    family: Arial
+    style: Regular
+  - file: 
+    face: 0
+    family: Helvetica Neue
+    style: Regular
+  headingAdd: 0
+  buttonAdd: 1
+  stripItalic: 0
+  palette:
+  - role: 0
+    hasFill: 1
+    fill: {r: 0.61960787, g: 0.6392157, b: 0.65882355, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 1
+    hasFill: 1
+    fill: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 0.8}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 2
+    hasFill: 1
+    fill: {r: 0.16862746, g: 0.16862746, b: 0.16862746, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 3
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 0.18}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 4
+    hasFill: 1
+    fill: {r: 0.8784314, g: 0.6901961, b: 0, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 2
+  - role: 5
+    hasFill: 1
+    fill: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 6
+    hasFill: 1
+    fill: {r: 0.9490196, g: 0.9490196, b: 0.9411765, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 7
+    hasFill: 1
+    fill: {r: 0.16862746, g: 0.16862746, b: 0.16862746, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 8
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 0.14}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 9
+    hasFill: 1
+    fill: {r: 0.8862745, g: 0.8862745, b: 0.87058824, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 10
+    hasFill: 1
+    fill: {r: 0.7529412, g: 0.15294118, b: 0.1764706, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 3
+  - role: 11
+    hasFill: 1
+    fill: {r: 0.18431373, g: 0.43529412, b: 0.24313726, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 12
+    hasFill: 1
+    fill: {r: 0.7529412, g: 0.15294118, b: 0.1764706, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 13
+    hasFill: 1
+    fill: {r: 0.8784314, g: 0.6901961, b: 0, a: 0.95}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 14
+    hasFill: 1
+    fill: {r: 0.8784314, g: 0.6901961, b: 0, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 15
+    hasFill: 1
+    fill: {r: 0.8784314, g: 0.6901961, b: 0, a: 0.85}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 16
+    hasFill: 1
+    fill: {r: 0.8784314, g: 0.6901961, b: 0, a: 0.95}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 17
+    hasFill: 1
+    fill: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 0.92}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 18
+    hasFill: 1
+    fill: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 0.8}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 19
+    hasFill: 1
+    fill: {r: 0.7529412, g: 0.15294118, b: 0.1764706, a: 0.96}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 20
+    hasFill: 1
+    fill: {r: 1, g: 0.95686275, b: 0.72156864, a: 0.97}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 21
+    hasFill: 1
+    fill: {r: 1, g: 0.95686275, b: 0.72156864, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 22
+    hasFill: 1
+    fill: {r: 1, g: 0.95686275, b: 0.72156864, a: 1}
+    hasInk: 1
+    ink: {r: 0.18431373, g: 0.43529412, b: 0.24313726, a: 1}
+    textClass: 1
+  - role: 23
+    hasFill: 1
+    fill: {r: 1, g: 0.95686275, b: 0.72156864, a: 1}
+    hasInk: 1
+    ink: {r: 0.6901961, g: 0.13725491, b: 0.16470589, a: 1}
+    textClass: 1
+  - role: 24
+    hasFill: 1
+    fill: {r: 1, g: 0.95686275, b: 0.72156864, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 25
+    hasFill: 1
+    fill: {r: 1, g: 0.8784314, b: 0.4, a: 0.7}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 26
+    hasFill: 1
+    fill: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 0.97}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 27
+    hasFill: 1
+    fill: {r: 0.8784314, g: 0.6901961, b: 0, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 28
+    hasFill: 1
+    fill: {r: 0.7529412, g: 0.15294118, b: 0.1764706, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 29
+    hasFill: 1
+    fill: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 30
+    hasFill: 1
+    fill: {r: 0.9490196, g: 0.9490196, b: 0.9411765, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 31
+    hasFill: 1
+    fill: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    hasInk: 1
+    ink: {r: 0.9490196, g: 0.9490196, b: 0.9411765, a: 1}
+    textClass: 1
+  - role: 32
+    hasFill: 1
+    fill: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 0.55}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 33
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 34
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.4509804, g: 0.4509804, b: 0.4509804, a: 0.8}
+    textClass: 4
+  - role: 35
+    hasFill: 1
+    fill: {r: 1, g: 0.95686275, b: 0.72156864, a: 1}
+    hasInk: 1
+    ink: {r: 0.06666667, g: 0.06666667, b: 0.06666667, a: 1}
+    textClass: 1
+  - role: 36
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 0}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  ringDark: {r: 0.08627451, g: 0.08627451, b: 0.08627451, a: 1}
+  ringLight: {r: 1, g: 0.8, b: 0, a: 1}
+  wallpaper: {fileID: 21300000, guid: 6aac1b72eef0f9f49a11a1e1e021f389, type: 3}

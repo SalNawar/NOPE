@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567a3555c681439ea7087bd38a206262, type: 3}
+  m_Name: Strings_it
+  m_EditorClassIdentifier: Assembly-CSharp::UiStringTableSO
+  language: it
+  rightToLeft: 0
+  entries:
+  - key: accept
+    text: ACCETTA
+    gloss: 0
+    tier: 0
+  - key: deny
+    text: RIFIUTA
+    gloss: 0
+    tier: 0
+  - key: taskbar.start
+    text: avvio
+    gloss: 0
+    tier: 0
+  - key: startmenu.settings
+    text: Impostazioni
+    gloss: 0
+    tier: 0
+  - key: startmenu.screenOff
+    text: Spegni lo schermo
+    gloss: 0
+    tier: 0
+  - key: startmenu.quit
+    text: Esci dal gioco
+    gloss: 0
+    tier: 0
+  - key: briefing.masthead
+    text: IL CORRIERE DEL TEMPO
+    gloss: 0
+    tier: 0
+  - key: briefing.start
+    text: INIZIA IL TURNO
+    gloss: 0
+    tier: 0
+  - key: results.masthead
+    text: "REGISTRO DEL TURNO \u2014 EDIZIONE DELLA SERA"
+    gloss: 0
+    tier: 0
+  - key: results.goHome
+    text: A CASA
+    gloss: 0
+    tier: 0
+  - key: records.title
+    text: Anagrafe
+    gloss: 0
+    tier: 0
+  - key: records.search
+    text: CERCA
+    gloss: 0
+    tier: 0
+  - key: compare.match
+    text: CORRISPONDE
+    gloss: 0
+    tier: 0
+  - key: compare.mismatch
+    text: NON CORRISPONDE
+    gloss: 0
+    tier: 0
+  - key: citation.title
+    text: AVVISO DI DEVIAZIONE TEMPORALE
+    gloss: 0
+    tier: 0
+  - key: citation.acknowledge
+    text: Preso atto
+    gloss: 0
+    tier: 0
+  - key: window.directives
+    text: Direttive
+    gloss: 0
+    tier: 0
+  - key: window.scanner
+    text: Rapporto deviazioni
+    gloss: 0
+    tier: 0
+  - key: window.settings
+    text: Impostazioni
+    gloss: 0
+    tier: 0
+  - key: icon.directives
+    text: Direttive
+    gloss: 0
+    tier: 0
+  - key: icon.scanner
+    text: Rapporto deviazioni
+    gloss: 0
+    tier: 0
+  - key: icon.records
+    text: Anagrafe
+    gloss: 0
+    tier: 0
+  - key: icon.internet
+    text: Internet
+    gloss: 0
+    tier: 0
+  - key: icon.lexicon
+    text: Lessico
+    gloss: 0
+    tier: 0
+  - key: icon.dialect
+    text: Dialetto
+    gloss: 0
+    tier: 0
+  - key: icon.material
+    text: Materiali
+    gloss: 0
+    tier: 0
+  - key: icon.notes
+    text: Appunti
+    gloss: 0
+    tier: 0
+  - key: icon.clueLog
+    text: Indizi
+    gloss: 0
+    tier: 0
+  - key: tray.day
+    text: Giorno {0}
+    gloss: 0
+    tier: 0
+  - key: tray.stability
+    text: "Stabilit\xE0: {0:0}%"
+    gloss: 0
+    tier: 0
+  - key: taskbar.desk
+    text: < Scrivania
+    gloss: 0
+    tier: 0
+  - key: briefing.title
+    text: "Giorno {0} \u2014 Briefing del mattino"
+    gloss: 0
+    tier: 0
+  - key: results.title
+    text: "Giorno {0} \u2014 Rapporto del turno"
+    gloss: 0
+    tier: 0
+  - key: briefing.newsHeader
+    text: "\u2014 NOTIZIE DELLA LINEA TEMPORALE \u2014"
+    gloss: 0
+    tier: 0

@@ -1,0 +1,248 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11ae82f027b44f61930f992bfc73a21b, type: 3}
+  m_Name: Theme_greece
+  m_EditorClassIdentifier: Assembly-CSharp::ThemeSO
+  cultureId: greece
+  displayName: Greece
+  language: el
+  runtimeFont: 1
+  fonts: []
+  headingAdd: 0
+  buttonAdd: 0
+  stripItalic: 0
+  palette:
+  - role: 0
+    hasFill: 1
+    fill: {r: 0.43529412, g: 0.65882355, b: 0.8627451, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 1
+    hasFill: 1
+    fill: {r: 0.039215688, g: 0.23921569, b: 0.4509804, a: 0.8}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 2
+    hasFill: 1
+    fill: {r: 0.050980393, g: 0.36862746, b: 0.6862745, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 3
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 0.18}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 4
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.43529412, b: 0.54509807, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 5
+    hasFill: 1
+    fill: {r: 0.039215688, g: 0.23921569, b: 0.4509804, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 6
+    hasFill: 1
+    fill: {r: 0.98039216, g: 0.98039216, b: 0.96862745, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 7
+    hasFill: 1
+    fill: {r: 0.050980393, g: 0.36862746, b: 0.6862745, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 8
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 0.14}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 9
+    hasFill: 1
+    fill: {r: 0.9019608, g: 0.92156863, b: 0.9411765, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 10
+    hasFill: 1
+    fill: {r: 0.69803923, g: 0.22745098, b: 0.22745098, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 3
+  - role: 11
+    hasFill: 1
+    fill: {r: 0.18039216, g: 0.49019608, b: 0.35686275, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 12
+    hasFill: 1
+    fill: {r: 0.69803923, g: 0.22745098, b: 0.22745098, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 13
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.43529412, b: 0.54509807, a: 0.95}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 14
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.43529412, b: 0.54509807, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 15
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.43529412, b: 0.54509807, a: 0.85}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 16
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.43529412, b: 0.54509807, a: 0.95}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 17
+    hasFill: 1
+    fill: {r: 0.039215688, g: 0.23921569, b: 0.4509804, a: 0.92}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 18
+    hasFill: 1
+    fill: {r: 0.039215688, g: 0.23921569, b: 0.4509804, a: 0.8}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 19
+    hasFill: 1
+    fill: {r: 0.69803923, g: 0.22745098, b: 0.22745098, a: 0.96}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 2
+  - role: 20
+    hasFill: 1
+    fill: {r: 1, g: 0.9647059, b: 0.84705883, a: 0.97}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 21
+    hasFill: 1
+    fill: {r: 1, g: 0.9647059, b: 0.84705883, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 22
+    hasFill: 1
+    fill: {r: 1, g: 0.9647059, b: 0.84705883, a: 1}
+    hasInk: 1
+    ink: {r: 0.11764706, g: 0.41960785, b: 0.27058825, a: 1}
+    textClass: 1
+  - role: 23
+    hasFill: 1
+    fill: {r: 1, g: 0.9647059, b: 0.84705883, a: 1}
+    hasInk: 1
+    ink: {r: 0.6313726, g: 0.1764706, b: 0.1764706, a: 1}
+    textClass: 1
+  - role: 24
+    hasFill: 1
+    fill: {r: 1, g: 0.9647059, b: 0.84705883, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 25
+    hasFill: 1
+    fill: {r: 1, g: 0.8784314, b: 0.5411765, a: 0.7}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 26
+    hasFill: 1
+    fill: {r: 0.039215688, g: 0.23921569, b: 0.4509804, a: 0.97}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 27
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.43529412, b: 0.54509807, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 28
+    hasFill: 1
+    fill: {r: 0.69803923, g: 0.22745098, b: 0.22745098, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 29
+    hasFill: 1
+    fill: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 30
+    hasFill: 1
+    fill: {r: 0.98039216, g: 0.98039216, b: 0.96862745, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 31
+    hasFill: 1
+    fill: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    hasInk: 1
+    ink: {r: 0.98039216, g: 0.98039216, b: 0.96862745, a: 1}
+    textClass: 1
+  - role: 32
+    hasFill: 1
+    fill: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 0.55}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 33
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 34
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.4509804, g: 0.4509804, b: 0.4509804, a: 0.8}
+    textClass: 4
+  - role: 35
+    hasFill: 1
+    fill: {r: 1, g: 0.9647059, b: 0.84705883, a: 1}
+    hasInk: 1
+    ink: {r: 0.105882354, g: 0.14117648, b: 0.2, a: 1}
+    textClass: 1
+  - role: 36
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 0}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  ringDark: {r: 0.03529412, g: 0.21568628, b: 0.40784314, a: 1}
+  ringLight: {r: 1, g: 0.8784314, b: 0.5411765, a: 1}
+  wallpaper: {fileID: 21300000, guid: 75cce516b87e7354db11c06e04509b65, type: 3}
