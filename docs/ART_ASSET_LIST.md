@@ -12,7 +12,7 @@ Every piece of art the game needs today: what it is, where the player sees it, t
 - **Tier 3: Blender.** A 3D model from the art side, not a ChatGPT image. Listed so the list is complete.
 - **Status:** *placeholder* (the game's generated stand-in), *interim* (older art from the 2026-09-24 batch: the old painted style or baked text; not final), *missing* (no file), *code-drawn* (no file; the game draws a flat themed panel), *done*.
 - Sizes are pixels. "At 1080p" means the 1920 × 1080 reference canvas the office overlay is laid out on.
-- ⚠️ marks an item that waits on a decision from Saleh (all listed in "Decisions for Saleh").
+- Every decision the first version marked ⚠️ is made (Saleh, 2026-09-25: "yes to all"); see "Decisions".
 
 ## How the art docs fit together
 
@@ -79,7 +79,7 @@ A 4:3 canvas of 1440 × 1080, seen in the PC frame (its glass is 1120 × 840 at 
 |---|---|---|---|---|---|---|
 | Neutral wallpaper | behind the desktop until a country leads history | `Assets/Art/Generated/xp_bliss.png` (via `Theme_neutral`) | 1920 × 1080; the 4:3 desktop shows its middle 1440 × 1080 | keep | 1 | done |
 | Culture wallpapers × 8 | behind the desktop from the morning after a country leads | `Assets/Art/Culture/<id>/wallpaper.png` for `egypt`, `iraq`, `greece`, `italy`, `china`, `japan`, `britain`, `germany` (via `Theme_<id>`) | Generate World placeholders, 960 × 540 | **1440 × 1080**: ask ChatGPT for 1536 × 1024 and Claude crops the middle (UI_ART_RULES, "Wallpapers" and "The eight cultures") | 1 | placeholder |
-| Desktop icons × 17 ⚠️ | the icon column at the left: two columns of 82 × 60 tiles, text-only today | `Assets/Art/UI/Desktop/icon_<id>.png` (ids below) | 12 interim (128 × 128, a cream plate with a blue glyph), 5 missing | 128 × 128, a bold greyscale glyph on transparent (in an 82 × 60 tile it would show about 25 px tall in the frame), no plate | 2 | interim / missing |
+| Desktop icons × 17 | the icon column at the left: two columns of 82 × 60 tiles, text-only today | `Assets/Art/UI/Desktop/icon_<id>.png` (ids below) | 12 interim (128 × 128, a cream plate with a blue glyph), 5 missing | 128 × 128, a bold greyscale glyph on transparent (in an 82 × 60 tile it would show about 25 px tall in the frame), no plate | 2 | interim / missing |
 | Cursors: arrow, hand | everywhere: the game's cursor, the hand over anything clickable | `Assets/Art/UI/Desktop/cursor_arrow.png`, `cursor_hand.png` (found by name, set in `InteractionFeedback_Default`) | interim 32 × 32 | 32 × 32; the tip (arrow) and the fingertip (hand) are the click point: the stored points are (3, 2) and (13, 3), so Claude re-measures them when new art lands | 1 | interim |
 | Cursors: grab, grabbing | over a desk paper and while dragging it | `cursor_grab.png`, `cursor_grabbing.png` | none (the hand shows) | 32 × 32 | 2 | missing, later |
 | UI kit × 9 | every window, button, bar and menu (table below) | `Assets/Art/UI/Desktop/` | code-drawn themed panels | greyscale 9-slice pieces | 2 | later |
@@ -109,11 +109,11 @@ A traveller hands over a **Travel Passport** (with the photo) and a **Transit Pe
 | Item | Where it shows | File | Now | Deliver | Tier | Status |
 |---|---|---|---|---|---|---|
 | Paper face | every paper on the desk; from piece 10 held up to read (up to 670 px tall at 1080p) | `Assets/Art/Office/Placeholder/paper.png` (the `_BaseMap` of `Assets/Art/Office/Gameplay/Materials/Paper.mat`) | builder placeholder, 150 × 200, plain cream | **1024 × 1339** (at least 784 × 1024): a paper tone and a printed border, perhaps a guilloche band behind the title; no labels, lines, boxes, emblems or seals. Claude turns mipmaps on when it lands | 1 | placeholder |
-| Passport face, permit face ⚠️ | one face per document kind instead of one for all | set by the paper faces' own brief, which follows piece 10 | none | as the paper face | 2 | waits on piece 10 |
-| Photo frame ⚠️ | the passport photo's 4:5 window: on the desk paper and on the scanned copy | with the faces' brief (it may be printed on the passport face instead) | code-drawn grey box | 4:5, for example 480 × 600 with a transparent window | 2 | code-drawn |
+| Passport face, permit face | one face per document kind instead of one for all | set by the paper faces' own brief, which follows piece 10 | none | as the paper face | 2 | waits on piece 10 |
+| Photo frame | the passport photo's 4:5 window: on the desk paper and on the scanned copy | with the faces' brief (it may be printed on the passport face instead) | code-drawn grey box | 4:5, for example 480 × 600 with a transparent window | 2 | code-drawn |
 | The scanned copy | the document window on the PC: a page on a dark backing | the hook reuses the paper face | code-drawn | no separate art | 2 | code-drawn |
-| Reference book covers × 6 ⚠️ | nowhere today: a book is a text tile and a window | `Assets/Art/UI/Investigation/refbook_cover_<id>.png` for `currency`, `language`, `technology`, `capital`, `ruler`, `culture` | 3 interim (400 × 560, titles baked), 3 missing | 400 × 560, a closed cover with a simple motif, no title | 2 | interim / missing |
-| Verdict ink marks ⚠️ | on a paper after the verdict | `stamp_accept.png`, `stamp_deny.png` (new names) | none | 400 × 200, transparent, a text-free tick mark and cross mark | 2 | missing |
+| Reference book covers × 6 | nowhere today: a book is a text tile and a window | `Assets/Art/UI/Investigation/refbook_cover_<id>.png` for `currency`, `language`, `technology`, `capital`, `ruler`, `culture` | 3 interim (400 × 560, titles baked), 3 missing | 400 × 560, a closed cover with a simple motif, no title | 2 | interim / missing |
+| Verdict ink marks | on a paper after the verdict | `stamp_accept.png`, `stamp_deny.png` (new names) | none | 400 × 200, transparent, a text-free tick mark and cross mark | 2 | missing |
 
 - **The stamp itself** is the Blender prop (section 1). The PC's Accept and Deny buttons are code-drawn, and so is piece 10's stamp tray.
 - **Drawn by code, no art:** the reference book pages, Citizen Records, the Deviation Report, the Directives sticky note and the transcript. All are windows, so they take the UI kit.
@@ -135,16 +135,16 @@ A traveller hands over a **Travel Passport** (with the photo) and a **Transit Pe
 
 | Item | Where it shows | File | Now | Deliver | Tier | Status |
 |---|---|---|---|---|---|---|
-| Home background ⚠️ | behind every Home panel, full screen | `Assets/Art/Home/home_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted, warm lamp light | 1920 × 1080, opaque | 1 | interim |
+| Home background | behind every Home panel, full screen | `Assets/Art/Home/home_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted, warm lamp light | 1920 × 1080, opaque, redrawn in the cel style | 1 | interim |
 | Expenses panel | the day's bills and the family rows, 760 × 600 | `Assets/Art/Home/panel_expenses.png` (`ExpensesPanel`) | interim 800 × 1000, stretched to 760 × 600 | 1520 × 1200, a text-free paper panel | 1 | interim |
 | Shop panel | the upgrade shop, 760 × 600 | `Assets/Art/Home/panel_shop.png` (`ShopPanel`) | interim 800 × 1000, stretched | 1520 × 1200 | 1 | interim |
-| Slot panel ⚠️ | the slot machine, 560 × 360 | `Assets/Art/Home/panel_slot.png` | code-drawn | 1120 × 720 | 2 | code-drawn |
+| Slot panel | the slot machine, 560 × 360 | `Assets/Art/Home/panel_slot.png` | code-drawn | 1120 × 720 | 2 | code-drawn |
 | Sleep panel | "Turn in", 560 × 320 | `Assets/Art/Home/panel_sleep.png` | code-drawn | 1120 × 640 | 2 | code-drawn |
-| Slot machine ⚠️ | in the slot panel | `Assets/Art/Home/slot_machine.png` | interim 800 × 1000, portrait: it does not fit the landscape panel | set with the panel's layout | 2 | interim |
-| Slot lever | beside the machine | `Assets/Art/Home/slot_lever.png` | interim 200 × 600 | with the layout | 2 | interim |
+| Slot machine | in the slot panel | `Assets/Art/Home/slot_machine.png` | interim 800 × 1000, portrait: it does not fit the landscape panel | a landscape machine that fills the 560 × 360 panel: 1000 × 640, the reels in the middle, no lever in the picture | 2 | interim |
+| Slot lever | beside the machine | `Assets/Art/Home/slot_lever.png` | interim 200 × 600 | 160 × 480, standing at the machine's right edge | 2 | interim |
 | Slot outcome symbols × 5 | the result of a spin | `Assets/Art/Home/slot_<outcome id>.png` for `small_win`, `jackpot_cash`, `busted_machine`, `forgery_warning`, `legendary_omen` | 5 interim at 256 × 256; two still carry older names (`slot_jackpot`, `slot_busted`) | 256 × 256 | 2 | interim |
-| Upgrade icons × 12 ⚠️ | one per shop row (the rows are text today) | `Assets/Art/Home/upgrade_<id>.png` (ids below) | 3 interim at 256 × 256 (`upgrade_archive_access`, and `upgrade_advanced_scanner` and `upgrade_diplomatic_contacts` under older names), 9 missing | 256 × 256, for about 48 px in a shop row | 2 | interim / missing |
-| Family portraits ⚠️ | the family rows: the Partner and the Kid (`RunConfig.startingFamilyMembers`), whose condition runs from 0 to 10 | `Assets/Art/Home/family_<member>_<band>.png` | none: the rows are text | 512 × 512, in the character style; 2 members × 3 condition bands | 2 | missing |
+| Upgrade icons × 12 | one per shop row (the rows are text today) | `Assets/Art/Home/upgrade_<id>.png` (ids below) | 3 interim at 256 × 256 (`upgrade_archive_access`, and `upgrade_advanced_scanner` and `upgrade_diplomatic_contacts` under older names), 9 missing | 256 × 256, for about 48 px in a shop row | 2 | interim / missing |
+| Family portraits | the family rows: the Partner and the Kid (`RunConfig.startingFamilyMembers`), whose condition runs from 0 to 10 | `Assets/Art/Home/family_<member>_<band>.png` | none: the rows are text | 512 × 512, in the character style; 2 members × 3 condition bands | 2 | missing |
 
 **Upgrade ids (12).** `adv_scanner` (Advanced Scanner), `archive_access` (Archive Access), `diplo_contacts` (Diplomatic Contacts), `interview_protocols` (Interview Protocols), and the eight translators: `tr_near_east_written` and `tr_near_east_spoken` (Near East Translator: Papers, Speech), `tr_mediterranean_written`, `tr_mediterranean_spoken`, `tr_east_asia_written`, `tr_east_asia_spoken`, `tr_north_europe_written`, `tr_north_europe_spoken`.
 
@@ -156,11 +156,11 @@ A traveller hands over a **Travel Passport** (with the photo) and a **Transit Pe
 
 | Item | Where it shows | File | Now | Deliver | Tier | Status |
 |---|---|---|---|---|---|---|
-| Title background ⚠️ | the first screen, full screen | `Assets/Art/Title/title_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted (an older office, warm light) | 1920 × 1080, opaque | 1 | interim |
-| Logo ⚠️ | the title panel's top (the printed title is switched off; the logo is the title) | `Assets/Art/Title/logo_time_sorter.png` (`TitlePanel/ArtLogo`, keeps its aspect) | interim 1200 × 400, "TIME SORTER" lettered | 1800 × 600 | 1 | interim |
-| Title buttons ⚠️ | Continue and New Run on the title, New Run on the ending panel; the sprite swaps on hover; their labels are off | `Assets/Art/Title/btn_continue_normal.png`, `btn_continue_hover.png`, `btn_new_run_normal.png`, `btn_new_run_hover.png` | interim 400 × 100, English baked, stretched to 1152 × 162 (title) and 304 × 73 (ending panel) | a text-free 9-slice face, 512 × 128, normal and hover; Claude then switches the three buttons to sliced with their labels on | 1 | interim |
+| Title background | the first screen, full screen | `Assets/Art/Title/title_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted (an older office, warm light) | 1920 × 1080, opaque, redrawn in the cel style showing the 3D office (from a render the art side makes) | 1 | interim |
+| Logo | the title panel's top (the printed title is switched off; the logo is the title) | `Assets/Art/Title/logo_time_sorter.png` (`TitlePanel/ArtLogo`, keeps its aspect) | interim 1200 × 400, "TIME SORTER" lettered | 1800 × 600, the lettered wordmark "TIME SORTER" (the one place lettering is allowed) in the cel style | 1 | interim |
+| Title buttons | Continue and New Run on the title, New Run on the ending panel; the sprite swaps on hover; their labels are off | `Assets/Art/Title/btn_continue_normal.png`, `btn_continue_hover.png`, `btn_new_run_normal.png`, `btn_new_run_hover.png` | interim 400 × 100, English baked, stretched to 1152 × 162 (title) and 304 × 73 (ending panel) | a text-free 9-slice face, 512 × 128, normal and hover; Claude then switches the three buttons to sliced with their labels on | 1 | interim |
 | Ending panel | the run's ending, 760 × 520 | `Assets/Art/Title/ending_panel.png` | interim 1200 × 800, not wired | 1520 × 1040, text-free | 2 | interim |
-| Ending illustrations × 6 ⚠️ | behind the ending text | `Assets/Art/Title/ending_<id>.png` for `fired`, `bankrupt`, `retirement`, `scientific_age`, `democracy_triumphant`, `artistic_golden_age` | interim 1600 × 900, painted, not wired (an ending has no picture field yet) | 1920 × 1080, opaque | 2 | interim |
+| Ending illustrations × 6 | behind the ending text | `Assets/Art/Title/ending_<id>.png` for `fired`, `bankrupt`, `retirement`, `scientific_age`, `democracy_triumphant`, `artistic_golden_age` | interim 1600 × 900, painted, not wired (an ending has no picture field yet) | 1920 × 1080, opaque, redrawn in the cel style; Claude adds the ending's picture field | 2 | interim |
 
 ## 8. Icons
 
@@ -191,14 +191,14 @@ New 2D files (the Blender scanner and the characters are counted apart):
 | 8. Icons | 6 | 0 | 6 |
 | **Total** | **29** | **78** | **107** |
 
-- 107 if every ⚠️ question is answered yes. A no to decisions 3, 5, 6, 7, 8 and 10 (the title buttons, the desktop icons, the per-document faces with the photo frame, the book covers, the ink marks, the family) and two shared translator icons (decision 9) leave 63.
+- Every decision was answered yes, so all 107 are wanted.
 - Also: the scanner (1 Blender model) and about 880 character files (the brief).
 
 ## Suggested order
 
 What the player sees first comes first. Within a step, the Tier 1 files come first: they pay off with no code.
 
-1. **The title screen:** background, logo, buttons (6, Tier 1), once decisions 1 to 3 are made.
+1. **The title screen:** background, logo, buttons (6, Tier 1).
 2. **The morning briefing** sheet (1).
 3. **The office:** the scanner (Blender) and the travellers (the character brief's batches, its own track).
 4. **At the desk:** the wheel icons (6, Tier 1), the paper face (1, Tier 1), the speech bubble and its tail (2).
@@ -208,19 +208,19 @@ What the player sees first comes first. Within a step, the Tier 1 files come fir
 8. **The endings:** the panel and the six illustrations (7).
 9. **Polish:** the UI kit (9), the cursors (2 Tier 1 and 2 Tier 2), the document faces and photo frame after piece 10 (3), the book covers (6), the ink marks (2).
 
-## Decisions for Saleh ⚠️
+## Decisions (Saleh, 2026-09-25: "yes to all")
 
-1. **Title background:** keep the interim painting (an older office in warm light) or redraw it in the cel style to show the 3D office (for example from a render the art side makes)?
-2. **Logo:** keep a lettered "Time Sorter" wordmark (the one place lettering would be allowed) or a text-free emblem with the title printed by the game?
-3. **Title buttons:** text-free faces with the labels on (one button look everywhere), or keep the baked English?
-4. **Home background and ending illustrations:** keep the interim painted style or redraw them in the cel style?
-5. **Desktop icons:** give the 17 icon tiles pictures (a small tile layout change), greyscale and tinted by the culture per rule 5?
-6. **Paper faces:** one face for every document, or one per document kind (passport, permit)? Decided with the faces' brief after piece 10, together with the photo frame.
-7. **Reference book covers:** show them somewhere (the book window or its tile), or drop them?
-8. **Verdict ink mark:** should a verdict leave a text-free tick or cross mark on the paper?
-9. **Translator icons:** eight (four regions × papers and speech) or two (a papers glyph and a speech glyph, shared by the regions)?
-10. **Family:** draw the Partner and the Kid (in the character style, three condition bands each), or keep the rows text-only?
-11. **Slot machine:** the panel is landscape (560 × 360) and the interim machine is portrait. Enlarge the panel, or draw a landscape machine?
+1. **Title background:** redrawn in the cel style, showing the 3D office (from a render the art side makes).
+2. **Logo:** the lettered "TIME SORTER" wordmark, the one image allowed to carry lettering.
+3. **Title buttons:** text-free 9-slice faces with the game's labels on (one button look everywhere).
+4. **Home background and ending illustrations:** redrawn in the cel style.
+5. **Desktop icons:** the 17 tiles get pictures, greyscale and tinted by the culture (rule 5); Claude changes the tile layout when they land.
+6. **Paper faces:** one face per document kind (passport, permit), with the photo frame; drawn from the faces' own brief after piece 10.
+7. **Reference book covers:** shown on the book's tile and at the top of its window.
+8. **Verdict ink mark:** a text-free tick or cross mark lands on the papers after the verdict.
+9. **Translator icons:** eight, one per region and kind (papers, speech).
+10. **Family:** the Partner and the Kid are drawn in the character style, three condition bands each.
+11. **Slot machine:** "yes" did not pick between the two options here, so Claude chose a **landscape machine** drawn for the 560 × 360 panel: the Home screen's 800 × 600 layout has no room for a taller panel.
 
 ## Retired (don't make these)
 
@@ -259,7 +259,7 @@ Many retired files still sit in `Assets/Art` from the 2026-09-24 batch. Several 
 ## Delivery checklist
 
 - File names exactly as listed; sizes as listed; transparent unless the item says opaque.
-- No text, letters or numbers in any image (the logo waits on decision 2).
+- No text, letters or numbers in any image, except the logo's "TIME SORTER" wordmark.
 - Tier 1: overwrite the file in place and keep its `.meta`.
 - Tier 2: save the original in `ArtDeliverables/TimeDesk/UI/Raw/`; Claude wires it.
 - Commit each PNG with its `.meta`.
