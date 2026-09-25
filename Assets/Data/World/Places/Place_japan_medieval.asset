@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Muromachi Kyoto
   nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1400
   birthYearMin: 1330
   birthYearMax: 1382
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Kyoto (Heian-kyo)
   - category: 2
     value: Emperor Go-Komatsu
+  - category: 6
+    value: eboshi cap / ichime-gasa
   maleNames:
   - Hikotaro
   - Magojiro
@@ -48,6 +51,81 @@ MonoBehaviour:
   - Tomoe
   - Iwa
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: hitatare and hakama
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: motodori topknot
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: moustache and chin tuft
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: eboshi cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: tsubo-shozoku robes
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: long tied-back hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: ichime-gasa
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

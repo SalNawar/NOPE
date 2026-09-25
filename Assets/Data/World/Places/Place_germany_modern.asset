@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Weimar Berlin
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1926
   birthYearMin: 1856
   birthYearMax: 1908
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Berlin (Weimar Republic)
   - category: 2
     value: "Reichspr\xE4sident Hindenburg"
+  - category: 6
+    value: walrus moustache / cloche
   maleNames:
   - Kurt
   - Erich
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Irmgard
   - Trude
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 2
+      outfit:
+        label: rumpled suit and coat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: brushed-back hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: walrus moustache
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: broad soft felt hat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: round spectacles
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: Bauhaus drop-waist dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: Bubikopf bob
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: cloche
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: Bauhaus necklace
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 4
+    - 4
+    - 1
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 4
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 3

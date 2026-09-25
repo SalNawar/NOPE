@@ -3,7 +3,7 @@ using System;
 /// <summary>
 /// Visitor birth dates as shown on papers and in Citizen Records: "12 Mar 830"
 /// or "3 Jun 1450 BCE". Years are signed (negative = BCE); there is no year 0.
-/// Pure, so generation and birth-date tells are seeded and tested headless.
+/// Pure, so generation, birth-date tells and ages are seeded and tested headless.
 /// </summary>
 public static class BirthDates
 {
@@ -41,6 +41,21 @@ public static class BirthDates
             return false;
 
         year = bce ? -absYear : absYear;
+        return true;
+    }
+
+    /// <summary>
+    /// The age in <paramref name="atYear"/> of someone born on
+    /// <paramref name="date"/> (years only; no year 0, so 10 BCE to 5 CE is 14).
+    /// False when the date is unreadable or <paramref name="atYear"/> is 0.
+    /// </summary>
+    public static bool TryAgeAt(string date, int atYear, out int age)
+    {
+        age = 0;
+        if (atYear == 0 || !TryParse(date, out _, out _, out int year))
+            return false;
+
+        age = atYear - year - (year < 0 && atYear > 0 ? 1 : 0);
         return true;
     }
 

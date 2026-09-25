@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Kingdom of Iraq
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1956
   birthYearMin: 1886
   birthYearMax: 1938
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Baghdad (Kingdom of Iraq)
   - category: 2
     value: King Faisal II
+  - category: 6
+    value: sidara / gold coin pendant
   maleNames:
   - Adnan
   - Sabah
@@ -48,6 +51,83 @@ MonoBehaviour:
   - Wijdan
   - Salima
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: light wool suit
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: side-parted short hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: trimmed moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: sidara
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: horn-rimmed glasses
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: 1950s dress and abaya
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: permed curls
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: abaya over the head
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: gold coin pendant
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 4
+    - 3
+    - 1
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

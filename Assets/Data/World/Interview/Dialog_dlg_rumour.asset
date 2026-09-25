@@ -22,6 +22,7 @@ MonoBehaviour:
       - id: dlg_rumour.start.1
         speaker: 1
         text: 'News? Only a rumour: someone sells pocket calculators to the ancients.'
+        expression: 
       choices:
       - id: more
         label: Tell me more.
@@ -39,6 +40,7 @@ MonoBehaviour:
         speaker: 1
         text: They say a courier from your own century carries them. Watch for anyone
           who counts too fast.
+        expression: 
       choices:
       - id: noted
         label: Noted. Thank you.

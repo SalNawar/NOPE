@@ -89,6 +89,37 @@ public class SeedsTests
     }
 
     [Test]
+    public void LookAndLegendaryStreams_AreDistinct()
+    {
+        int daySeed = Seeds.Day(12345, 3);
+        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
+        var looks = new HashSet<int>();
+        var legendaries = new HashSet<int>();
+        for (int c = 1; c <= 20; c++)
+        {
+            int caseSeed = Seeds.ForCase(daySeed, c);
+            int look = Seeds.ForLooks(caseSeed);
+            int legendary = Seeds.ForLegendary(caseSeed);
+            foreach ((string name, int seed) in new[] { ("look", look), ("legendary", legendary) })
+            {
+                Assert.IsFalse(cases.Contains(seed), $"case {c}: the {name} seed is a case seed");
+                Assert.AreNotEqual(Seeds.ForClues(caseSeed), seed, $"case {c}: {name} seed equals the clue seed");
+                Assert.AreNotEqual(Seeds.ForLies(caseSeed), seed, $"case {c}: {name} seed equals the lie seed");
+                Assert.AreNotEqual(Seeds.ForDialog(caseSeed), seed, $"case {c}: {name} seed equals the dialog seed");
+                Assert.AreNotEqual(Seeds.ForViolators(daySeed), seed, $"case {c}: {name} seed equals the violator seed");
+            }
+
+            Assert.AreNotEqual(look, legendary, $"case {c}: look and legendary seeds are equal");
+            Assert.AreEqual(look, Seeds.ForLooks(caseSeed), $"case {c}: look seed not deterministic");
+            Assert.AreEqual(legendary, Seeds.ForLegendary(caseSeed), $"case {c}: legendary seed not deterministic");
+            looks.Add(look);
+            legendaries.Add(legendary);
+        }
+        Assert.AreEqual(20, looks.Count, "look seeds repeat across cases");
+        Assert.AreEqual(20, legendaries.Count, "legendary seeds repeat across cases");
+    }
+
+    [Test]
     public void Mix_IsDeterministic_AndSaltSensitive()
     {
         Assert.AreEqual(Seeds.Mix(5, 9), Seeds.Mix(5, 9));

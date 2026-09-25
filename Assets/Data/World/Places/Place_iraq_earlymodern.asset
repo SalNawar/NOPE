@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Ottoman Baghdad
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1720
   birthYearMin: 1650
   birthYearMax: 1702
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Baghdad (Ottoman eyalet)
   - category: 2
     value: Sultan Ahmed III
+  - category: 6
+    value: checked turban / futa shawl
   maleNames:
   - Sulayman
   - Abdullah
@@ -48,6 +51,83 @@ MonoBehaviour:
   - Zaynab
   - Asiya
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: zaboun and striped aba
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: short crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: full beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: checked turban
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: striped dress and aba
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: pinned braids
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: futa shawl
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: qilada necklace
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 4
+    - 3
+    - 1
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

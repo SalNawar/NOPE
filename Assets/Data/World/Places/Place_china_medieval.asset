@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Northern Song Kaifeng
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1075
   birthYearMin: 1005
   birthYearMax: 1057
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Kaifeng (Bianjing)
   - category: 2
     value: Emperor Shenzong of Song
+  - category: 6
+    value: winged futou / crescent comb
   maleNames:
   - Tingjian
   - Shixiong
@@ -48,6 +51,81 @@ MonoBehaviour:
   - Yuniang
   - Huiniang
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: round-collared robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: crown topknot
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: thin moustache and beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: winged futou
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: plaque belt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: beizi coat and skirt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: tall gaoji bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: crescent comb
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 1

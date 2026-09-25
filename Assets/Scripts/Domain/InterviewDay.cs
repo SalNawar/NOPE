@@ -4,7 +4,8 @@ using System.Collections.Generic;
 /// The day's interview, fixed at day start: which questions are askable,
 /// which of them may carry a spoken tell, and which narrative dialogs are
 /// offered (their conditions pass on the day-start snapshot, their structure
-/// is sound, and a one-shot dialog is not done yet). Every availability rule
+/// is sound, a one-shot dialog is not done yet, and a dialog bound to a
+/// premade only while that premade is at the desk). Every availability rule
 /// lives here, so the office decides nothing on its own.
 /// </summary>
 public sealed class InterviewDay
@@ -14,14 +15,24 @@ public sealed class InterviewDay
     private readonly List<ClueCategory> _answerTell = new List<ClueCategory>();
     private readonly List<AuthoredDialog> _dayStartDialogs = new List<AuthoredDialog>();
     private readonly List<string> _problems = new List<string>();
+    private readonly HashSet<string> _premadeDialogIds = new HashSet<string>();
     private readonly ShiftLedger _ledger;
 
-    /// <summary>Decides today's interview once, from the day-start snapshot.</summary>
+    /// <summary>
+    /// Decides today's interview once, from the day-start snapshot.
+    /// <paramref name="premadeDialogIds"/> are the dialogs premades name
+    /// (LegendarySO.dialogId): each is offered only while its premade is at the desk.
+    /// </summary>
     public InterviewDay(InterviewLines lines, IReadOnlyList<Gated<InterviewQuestion>> questions,
-                        IReadOnlyList<Gated<AuthoredDialog>> dialogs, GateSnapshot snapshot, ShiftLedger ledger)
+                        IReadOnlyList<Gated<AuthoredDialog>> dialogs, GateSnapshot snapshot, ShiftLedger ledger,
+                        IEnumerable<string> premadeDialogIds)
     {
         Lines = lines ?? new InterviewLines();
         _ledger = ledger ?? new ShiftLedger();
+        if (premadeDialogIds != null)
+            foreach (string id in premadeDialogIds)
+                if (!string.IsNullOrWhiteSpace(id))
+                    _premadeDialogIds.Add(id);
 
         if (questions != null)
         {
@@ -74,12 +85,17 @@ public sealed class InterviewDay
     /// <summary>Every structural problem of every dialog, whether or not its conditions pass ("Dialog 'x' is not offered: ...").</summary>
     public IReadOnlyList<string> ContentProblems => _problems;
 
-    /// <summary>The dialogs offered at day start, minus those completed this shift.</summary>
-    public IReadOnlyList<AuthoredDialog> OfferedDialogs()
+    /// <summary>
+    /// The dialogs offered to the traveller at the desk: those offered at day
+    /// start, minus those completed this shift, minus every premade-bound
+    /// dialog except <paramref name="premadeDialogId"/> (the dialog of the
+    /// premade at the desk; null or blank for an ordinary traveller).
+    /// </summary>
+    public IReadOnlyList<AuthoredDialog> OfferedDialogs(string premadeDialogId)
     {
         var offered = new List<AuthoredDialog>();
         foreach (AuthoredDialog d in _dayStartDialogs)
-            if (!CompletedThisShift(d.id))
+            if (!CompletedThisShift(d.id) && (!_premadeDialogIds.Contains(d.id) || d.id == premadeDialogId))
                 offered.Add(d);
         return offered;
     }

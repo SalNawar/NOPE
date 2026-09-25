@@ -6,8 +6,9 @@ using UnityEngine;
 /// <summary>
 /// A place: a nation at a specific time period ("Abbasid Baghdad", Medieval).
 /// It is the unit of the world model (its facts, names and birth years feed
-/// case generation and the reference books through ContentLibrarySO.BuildToday, history applied)
-/// and of timeline state (baseline attribute scores and tier effects).
+/// case generation and the reference books through ContentLibrarySO.BuildToday, history applied),
+/// of how its travellers look (wardrobe and look weights) and of timeline
+/// state (baseline attribute scores and tier effects).
 /// </summary>
 [CreateAssetMenu(fileName = "Profile_", menuName = "TimeDesk/Timeline/Nation-Era Profile", order = 22)]
 public sealed class NationEraProfileSO : ScriptableObject
@@ -25,6 +26,9 @@ public sealed class NationEraProfileSO : ScriptableObject
     public EraSO era;
 
     [Header("Place (world model)")]
+    /// <summary>The place's moment year (negative = BCE); travellers' ages (their face) are measured against it.</summary>
+    public int year;
+
     /// <summary>Earliest birth year of a traveller from here (negative = BCE).</summary>
     public int birthYearMin;
 
@@ -42,6 +46,13 @@ public sealed class NationEraProfileSO : ScriptableObject
 
     /// <summary>Small-talk lines of travellers claiming this place (flavour, never evidence).</summary>
     public List<LineText> smallTalk = new();
+
+    [Header("Look")]
+    /// <summary>What people of this place wear, per gender, and each gender's signature item (the Costume Guide entry and the only item a disguise can leak).</summary>
+    public PlaceWardrobe wardrobe = new();
+
+    /// <summary>Skin-tone and hair-colour weights of travellers claiming this place (never a tell).</summary>
+    public LookWeights looks = new();
 
     [Header("Timeline")]
     /// <summary>Baseline attribute scores + tier effects for this profile.</summary>

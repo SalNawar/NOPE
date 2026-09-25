@@ -54,9 +54,9 @@ public class InterviewDayTests
     };
 
     private static InterviewDay DayOf(GateSnapshot snapshot, ShiftLedger ledger = null) =>
-        new InterviewDay(new InterviewLines { menuCapacity = 8 }, Questions(), Dialogs(), snapshot, ledger ?? new ShiftLedger());
+        new InterviewDay(new InterviewLines { menuCapacity = 8 }, Questions(), Dialogs(), snapshot, ledger ?? new ShiftLedger(), null);
 
-    private static string[] Offered(InterviewDay day) => day.OfferedDialogs().Select(d => d.id).ToArray();
+    private static string[] Offered(InterviewDay day, string premadeDialogId = null) => day.OfferedDialogs(premadeDialogId).Select(d => d.id).ToArray();
 
     [Test]
     public void Questions_AreThoseWhoseConditionsPass_InLibraryOrder()
@@ -127,13 +127,13 @@ public class InterviewDayTests
             }
         }, null) };
 
-        var one = new InterviewDay(new InterviewLines { menuCapacity = 1 }, null, twoChoices, Snap(1), new ShiftLedger());
+        var one = new InterviewDay(new InterviewLines { menuCapacity = 1 }, null, twoChoices, Snap(1), new ShiftLedger(), null);
         CollectionAssert.IsEmpty(Offered(one), "two choices never fit a traveller wheel of one");
         Assert.AreEqual(1, one.ContentProblems.Count, string.Join(" | ", one.ContentProblems));
         StringAssert.StartsWith("Dialog 'dlg_two' is not offered: ", one.ContentProblems[0]);
         StringAssert.Contains("node 'start' offers 2 choices; the traveller wheel shows at most 1", one.ContentProblems[0]);
 
-        var unlimited = new InterviewDay(new InterviewLines { menuCapacity = 0 }, null, twoChoices, Snap(1), new ShiftLedger());
+        var unlimited = new InterviewDay(new InterviewLines { menuCapacity = 0 }, null, twoChoices, Snap(1), new ShiftLedger(), null);
         CollectionAssert.AreEqual(new[] { "dlg_two" }, Offered(unlimited), "no capacity, no capacity problem");
         CollectionAssert.IsEmpty(unlimited.ContentProblems);
     }
@@ -198,10 +198,27 @@ public class InterviewDayTests
         CollectionAssert.IsEmpty(DialogOutcomes.FlagsToSet(null));
         CollectionAssert.IsEmpty(DialogOutcomes.EffectsToApply(null));
 
-        var day = new InterviewDay(null, null, null, null, null);
+        var day = new InterviewDay(null, null, null, null, null, null);
         CollectionAssert.IsEmpty(day.Questions);
-        CollectionAssert.IsEmpty(day.OfferedDialogs());
+        CollectionAssert.IsEmpty(day.OfferedDialogs(null));
         Assert.IsNotNull(day.Lines);
         Assert.IsFalse(day.Complete("x", ""));
+    }
+
+    [Test]
+    public void APremadeBoundDialog_IsOfferedOnlyWhileItsPremadeIsAtTheDesk_AndUnboundOnesForAnyone()
+    {
+        var dialogs = new List<Gated<AuthoredDialog>>
+        {
+            new Gated<AuthoredDialog>(Dialog("dlg_chat", false), null),
+            new Gated<AuthoredDialog>(Dialog("dlg_senenmut", true), null),
+            new Gated<AuthoredDialog>(Dialog("dlg_socrates", true), null)
+        };
+        var day = new InterviewDay(new InterviewLines { menuCapacity = 8 }, null, dialogs, Snap(1), new ShiftLedger(), new[] { "dlg_senenmut", "dlg_socrates", "" });
+
+        CollectionAssert.AreEqual(new[] { "dlg_chat" }, Offered(day), "an ordinary traveller");
+        CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_senenmut" }, Offered(day, "dlg_senenmut"));
+        CollectionAssert.AreEqual(new[] { "dlg_chat", "dlg_socrates" }, Offered(day, "dlg_socrates"));
+        CollectionAssert.AreEqual(new[] { "dlg_chat" }, Offered(day, "dlg_unknown"), "a premade without a dialog of today");
     }
 }

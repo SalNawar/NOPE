@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Athens, Kingdom of Greece
   nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1860
   birthYearMin: 1790
   birthYearMax: 1842
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Athens (Kingdom of Greece)
   - category: 2
     value: King Otto (Othon)
+  - category: 6
+    value: fesi
   maleNames:
   - Georgios
   - Ioannis
@@ -48,6 +51,85 @@ MonoBehaviour:
   - Chrysoula
   - Panagiota
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: fustanella
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: short tapered hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: upturned moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: fesi
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: red silk sash
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: Amalia dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: braids round the crown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: fesi
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: gold disc necklace
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 3
+    - 5
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 5
+    - colour: brown
+      weight: 4
+    - colour: blond
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 5

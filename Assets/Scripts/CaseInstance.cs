@@ -15,10 +15,10 @@ public sealed class CaseInstance
     /// </summary>
     public EraSO trueEra;
 
-    /// <summary>True if this case was generated as a legendary encounter.</summary>
+    /// <summary>True if this traveller is a premade character (named, drawn whole).</summary>
     public bool isLegendary;
 
-    /// <summary>Reference to the legendary source asset (if legendary).</summary>
+    /// <summary>The premade's asset (null for a generated traveller).</summary>
     public LegendarySO legendarySource;
 
     /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
@@ -45,7 +45,7 @@ public sealed class CaseInstance
     /// </summary>
     public string trueBirthDate;
 
-    /// <summary>Gender from the claimed place's name list the given name came from (Unknown for legendaries and "Subject #n").</summary>
+    /// <summary>Gender from the claimed place's name list the given name came from, or the premade's (Unknown for "Subject #n").</summary>
     public TravellerGender gender;
 
     /// <summary>The desk's opener for this traveller (interview lines, with the traveller's honorific); the transcript's first line.</summary>
@@ -70,7 +70,7 @@ public sealed class CaseInstance
     /// <summary>The true home's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
     public string trueHomeLabel = string.Empty;
 
-    /// <summary>True when the traveller lied about their home (their papers or answers leak tells).</summary>
+    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells).</summary>
     public bool IsLiar => trueHome != null;
 
     /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
@@ -87,6 +87,13 @@ public sealed class CaseInstance
 
     /// <summary>What the traveller says when asked small talk (their claimed place's or era's flavour; null when none is authored).</summary>
     public LineText smallTalk;
+
+    /// <summary>
+    /// How the traveller looks (layers and garments; a premade: one whole
+    /// picture), composed at generation from the claim; a liar's dress tell is
+    /// one garment from the true home. Null only when the case has no blueprint.
+    /// </summary>
+    public TravellerLook look;
 
     /// <summary>
     /// The correct decision: accept only an honest traveller whose destination

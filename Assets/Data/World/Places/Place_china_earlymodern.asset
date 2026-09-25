@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Late Ming Suzhou
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1635
   birthYearMin: 1565
   birthYearMax: 1617
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Beijing (Shuntian Fu)
   - category: 2
     value: Chongzhen Emperor
+  - category: 6
+    value: square gauze cap / baotou
   maleNames:
   - Menglong
   - Zhenheng
@@ -48,6 +51,81 @@ MonoBehaviour:
   - Xiangjun
   - Yujing
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: pale daopao robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: topknot with wangjin
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: neat moustache and beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: square gauze cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: tasselled sitao sash
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: ao and horse-face skirt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: high flat bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: baotou
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 1

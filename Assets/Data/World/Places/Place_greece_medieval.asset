@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Byzantine Mystras
   nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1430
   birthYearMin: 1360
   birthYearMax: 1412
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Mystras (Despotate of Morea)
   - category: 2
     value: Despot Theodore II
+  - category: 6
+    value: Palaiologan hat / fakiolion
   maleNames:
   - Georgios
   - Demetrios
@@ -48,6 +51,85 @@ MonoBehaviour:
   - Euphrosyne
   - Anna
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: buttoned kabbadion
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: long centre-parted hair
+        leakable: 0
+        wig: 0
+        back: 1
+        covers: 
+      facialHair:
+        label: long full beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: Palaiologan hat
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: gilt-mounted belt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: damask over-dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: pinned-up hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: fakiolion
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: lunate earrings
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 3
+    - 5
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 5
+    - colour: brown
+      weight: 4
+    - colour: blond
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 5

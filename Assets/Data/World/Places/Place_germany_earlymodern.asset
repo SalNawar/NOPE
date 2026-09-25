@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Renaissance Nuremberg
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1525
   birthYearMin: 1455
   birthYearMax: 1507
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Nuremberg (Reichsstadt)
   - category: 2
     value: Emperor Charles V
+  - category: 6
+    value: Barett
   maleNames:
   - Sebald
   - Willibald
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Apollonia
   - Margaretha
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: fur-collared Schaube
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: short Kolbe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: short rounded beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: Barett
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: gold chain
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: slashed gown and Goller
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: plaits in gold net
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: Barett
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: layered gold chains
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 4
+    - 5
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 4
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 3

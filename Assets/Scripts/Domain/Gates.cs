@@ -262,4 +262,7 @@ public static class FlagKeys
 
     /// <summary>Set at the end of the shift that completed a one-shot narrative dialog ("dlg:{id}:done").</summary>
     public static string DialogDone(string dialogId) => $"dlg:{dialogId}:done";
+
+    /// <summary>Set when a once-per-run premade is presented ("premade:{id}:met"); a met premade never rolls again, and a forced slot for them holds an ordinary traveller.</summary>
+    public static string PremadeMet(string premadeId) => $"premade:{premadeId}:met";
 }

@@ -20,6 +20,12 @@ public static class Seeds
     /// <summary>Salt for a traveller's dialog stream ("DIAG").</summary>
     public const int DialogSalt = 0x44494147;
 
+    /// <summary>Salt for a traveller's look stream ("LOOK").</summary>
+    public const int LookSalt = 0x4C4F4F4B;
+
+    /// <summary>Salt for a slot's premade roll ("LGND").</summary>
+    public const int LegendarySalt = 0x4C474E44;
+
     /// <summary>The day's seed: same run + same day = same seed.</summary>
     public static int Day(int runSeed, int day)
     {
@@ -67,4 +73,17 @@ public static class Seeds
     /// or who lies.
     /// </summary>
     public static int ForDialog(int caseSeed) => Mix(caseSeed, DialogSalt);
+
+    /// <summary>
+    /// Seed for one traveller's look draws (gender when unknown, skin, face,
+    /// hair colour), apart from the case and lie streams so look tuning never
+    /// changes who travellers are or who lies.
+    /// </summary>
+    public static int ForLooks(int caseSeed) => Mix(caseSeed, LookSalt);
+
+    /// <summary>
+    /// Seed for one slot's premade roll and pick, apart from the case stream so
+    /// authoring a premade never reshuffles a day's travellers.
+    /// </summary>
+    public static int ForLegendary(int caseSeed) => Mix(caseSeed, LegendarySalt);
 }

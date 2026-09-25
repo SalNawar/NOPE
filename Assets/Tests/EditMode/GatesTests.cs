@@ -208,6 +208,7 @@ public class GatesTests
     {
         Assert.AreEqual("trig:x:fired", FlagKeys.TriggerFired("x"));
         Assert.AreEqual("dlg:x:done", FlagKeys.DialogDone("x"));
+        Assert.AreEqual("premade:x:met", FlagKeys.PremadeMet("x"));
     }
 
     private static GateSnapshot LeaderSnap(string leaderId) => new GateSnapshot(

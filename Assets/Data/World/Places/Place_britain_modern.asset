@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Post-war Britain
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1950
   birthYearMin: 1880
   birthYearMax: 1932
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: London (Westminster)
   - category: 2
     value: King George VI
+  - category: 6
+    value: flat cap / headscarf
   maleNames:
   - Ronald
   - Kenneth
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Pamela
   - Irene
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: tweed and Fair Isle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: short back and sides
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: flat cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: college scarf
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: twinset and tweed skirt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: pin-curl set
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: headscarf
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: pearl strand
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 4
+    - 3
+    - 1
+    - 1
+    - 1
+    hair:
+    - colour: black
+      weight: 2
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 4.1

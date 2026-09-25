@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEditor;
@@ -418,7 +419,7 @@ public static partial class OfficeSceneUIBuilder
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
-        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, the desk with papers, scanner and reacting props, traveller + wheel + speech bubble, booth input rules, HUD, citation, briefing/results, claim, document + book windows, interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
+        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, the desk with papers (passport photo), scanner and reacting props, the layered traveller + wheel + speech bubble, booth input rules, HUD, citation, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
     }
 
     // -----------------------------
@@ -428,8 +429,9 @@ public static partial class OfficeSceneUIBuilder
     private static DocumentWindowController BuildDocumentWindow(Transform layer)
     {
         // Rebuilt fresh each run: visitor papers read as SCANNED documents —
-        // a white page with a photo corner on a dark scanner backing — so they
-        // never look like just another OS window.
+        // a white page with a photo corner (the traveller's photo on a photo
+        // document) on a dark scanner backing — so they never look like just
+        // another OS window.
         DestroyChildIfPresent(layer, "DocumentWindowTemplate");
         Transform win = Panel(layer, "DocumentWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), new Color(0.13f, 0.14f, 0.17f, 1f));
         WindowShell s = BuildWindowShell(win, "Document");
@@ -437,7 +439,7 @@ public static partial class OfficeSceneUIBuilder
         Transform page = Panel(win, "ScanPage", new Vector2(0.025f, 0.115f), new Vector2(0.975f, 0.85f), Vector2.zero, Vector2.zero, new Color(0.97f, 0.96f, 0.92f, 1f));
         page.SetSiblingIndex(1); // render after the header, behind the rows
         Transform photo = Panel(page, "PhotoBox", new Vector2(0.76f, 0.66f), new Vector2(0.96f, 0.96f), Vector2.zero, Vector2.zero, new Color(0.55f, 0.56f, 0.58f, 1f));
-        Text(photo, "Label", "PHOTO", 13, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, new Color(0.25f, 0.26f, 0.28f, 1f));
+        TravellerPortraitView portrait = BuildPortrait(photo);
 
         // Footer page label needs light ink on the dark backing.
         s.page.color = new Color(0.85f, 0.86f, 0.88f, 1f);
@@ -450,9 +452,44 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "nextButton", s.next);
         SetRef(so, "fieldRowsRoot", s.rowsRoot);
         SetRef(so, "fieldRowTemplate", s.rowTemplate);
+        SetRef(so, "photoBox", photo.gameObject);
+        SetRef(so, "photo", portrait);
+        so.FindProperty("photoInset").floatValue = PhotoRowInset;
         so.ApplyModifiedProperties();
         win.gameObject.SetActive(false);
         return c;
+    }
+
+    /// <summary>Extra right padding of a photo page's rows (px), so none runs under the photo box.</summary>
+    private const float PhotoRowInset = 120f;
+
+    /// <summary>
+    /// The scanned page's photo: a 4:5 Portrait fitted inside the box, holding
+    /// one full-size, non-raycast Image per LookLayer in stack order, wired to
+    /// its TravellerPortraitView.
+    /// </summary>
+    private static TravellerPortraitView BuildPortrait(Transform box)
+    {
+        Transform portrait = Panel(box, "Portrait", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        AspectRatioFitter fitter = portrait.GetComponent<AspectRatioFitter>() ?? portrait.gameObject.AddComponent<AspectRatioFitter>();
+        fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
+        fitter.aspectRatio = LookCanvas.PhotoAspect;
+
+        var layers = new List<Object>();
+        foreach (LookLayer layer in System.Enum.GetValues(typeof(LookLayer)))
+        {
+            Image image = Panel(portrait, layer.ToString(), Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Color.white).GetComponent<Image>();
+            image.raycastTarget = false;
+            image.preserveAspect = false;
+            image.enabled = false;
+            layers.Add(image);
+        }
+
+        TravellerPortraitView view = portrait.GetComponent<TravellerPortraitView>() ?? portrait.gameObject.AddComponent<TravellerPortraitView>();
+        var so = new SerializedObject(view);
+        SerializedArrays.Set(so, "layers", layers);
+        so.ApplyModifiedProperties();
+        return view;
     }
 
     private static ReferenceBookWindowController BuildBookWindow(Transform layer)
@@ -1143,9 +1180,8 @@ public static partial class OfficeSceneUIBuilder
         PlaceSprite(booth, "Desk", desk, new Vector3(0f, OfficeCamPosition.y, 0f), OfficeViewCoverWidth(desk), -10);
 
         // The traveller stands behind the desk, whose far edge hides the
-        // placeholder's lower part; shown from presentation until the decision.
-        SpriteRenderer traveller = PlaceSprite(booth, "Traveller", EnsureOfficeSprite("traveller", new Color(0.49f, 0.42f, 0.86f), 60, 110), new Vector3(0f, 0.5f, 2f), 2f, -20);
-        BuildTravellerView(traveller);
+        // figure below the hips; shown from presentation until the decision.
+        BuildTraveller(booth);
 
         // Desk props (their clicks and reactions: BuildDeskInteraction). The plant
         // and the mug stand at their named slots (decoration hooks).
@@ -1411,19 +1447,16 @@ public static partial class OfficeSceneUIBuilder
     private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
 
     /// <summary>Placeholder arrow outline, in top-left pixel coordinates of a 32x32 cursor.</summary>
-    private static readonly Vector2[] ArrowCursorShape =
+    private static readonly (float x, float y)[] ArrowCursorShape =
     {
-        new Vector2(0, 0), new Vector2(0, 22), new Vector2(5, 17), new Vector2(9, 26),
-        new Vector2(12, 25), new Vector2(8, 16), new Vector2(15, 16),
+        (0, 0), (0, 22), (5, 17), (9, 26), (12, 25), (8, 16), (15, 16),
     };
 
     /// <summary>Placeholder pointing hand (fingertip at 12,1), top-left pixel coordinates.</summary>
-    private static readonly Vector2[] HandCursorShape =
+    private static readonly (float x, float y)[] HandCursorShape =
     {
-        new Vector2(10, 1), new Vector2(13, 1), new Vector2(14, 2), new Vector2(14, 12),
-        new Vector2(21, 13), new Vector2(23, 15), new Vector2(23, 25), new Vector2(19, 30),
-        new Vector2(10, 30), new Vector2(6, 24), new Vector2(5, 18), new Vector2(7, 17),
-        new Vector2(10, 19),
+        (10, 1), (13, 1), (14, 2), (14, 12), (21, 13), (23, 15), (23, 25), (19, 30),
+        (10, 30), (6, 24), (5, 18), (7, 17), (10, 19),
     };
 
     /// <summary>
@@ -1503,7 +1536,7 @@ public static partial class OfficeSceneUIBuilder
     /// Returns the cursor texture named <paramref name="artName"/> (final art, anywhere
     /// under Assets) or a generated placeholder, with Cursor import settings applied.
     /// </summary>
-    private static Texture2D EnsureCursorTexture(string artName, Vector2[] placeholderShape)
+    private static Texture2D EnsureCursorTexture(string artName, (float x, float y)[] placeholderShape)
     {
         const int size = 32;
         Texture2D art = FindAssetByName<Texture2D>(artName);
@@ -1527,27 +1560,14 @@ public static partial class OfficeSceneUIBuilder
 
 
     /// <summary>Placeholder cursor pixel: white inside the polygon, 1 px black edge, clear outside.</summary>
-    private static Color32 CursorPixel(Vector2[] polygon, int x, int y, int size)
+    private static Color32 CursorPixel((float x, float y)[] polygon, int x, int y, int size)
     {
-        bool Inside(int px, int py) => InPolygon(polygon, px + 0.5f, (size - 1 - py) + 0.5f);
+        bool Inside(int px, int py) => PixelShapes.InPolygon(polygon, px + 0.5f, (size - 1 - py) + 0.5f);
 
         if (!Inside(x, y))
             return new Color32(0, 0, 0, 0);
         bool edge = !Inside(x - 1, y) || !Inside(x + 1, y) || !Inside(x, y - 1) || !Inside(x, y + 1);
         return edge ? new Color32(0, 0, 0, 255) : new Color32(255, 255, 255, 255);
-    }
-
-    /// <summary>Even-odd point-in-polygon test.</summary>
-    private static bool InPolygon(Vector2[] polygon, float px, float py)
-    {
-        bool inside = false;
-        for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
-        {
-            if ((polygon[i].y > py) != (polygon[j].y > py) &&
-                px < (polygon[j].x - polygon[i].x) * (py - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x)
-                inside = !inside;
-        }
-        return inside;
     }
 
     /// <summary>

@@ -7,8 +7,10 @@ using UnityEngine.UI;
 /// another, and both are highlighted and shown side by side in a compare bar so
 /// the player can spot a mismatch themselves — no automatic verdict. A third
 /// click starts a new comparison. Document field rows, reference-book entry
-/// rows, Citizen Records rows and interview transcript answer rows call
-/// <see cref="Select"/>.
+/// rows, Citizen Records rows, interview transcript answer rows and the
+/// traveller wheel's look menu (a garment) call <see cref="Select"/>. MATCH is
+/// decided on each side's CompareEvidence.MatchValue (a garment shows its item
+/// but matches on its place's Culture value).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
@@ -133,7 +135,7 @@ public sealed class CompareController : MonoBehaviour
 
         if (_a.set && _b.set)
         {
-            bool match = ValuesMatch(_a.value, _b.value);
+            bool match = DiscrepancyLog.ValuesMatch(_a.evidence.MatchValue(_a.value), _b.evidence.MatchValue(_b.value));
             compareText.color = match ? matchColor : mismatchColor;
             string verdict = match ? "MATCH" : "MISMATCH";
             compareText.text = $"{verdict}    {_a.label}:  {_a.value}    vs    {_b.label}:  {_b.value}";
@@ -148,13 +150,6 @@ public sealed class CompareController : MonoBehaviour
             compareText.color = neutralColor;
             compareText.text = string.Empty;
         }
-    }
-
-    /// <summary>Case-insensitive, trimmed equality for two displayed values.</summary>
-    private static bool ValuesMatch(string a, string b)
-    {
-        return string.Equals((a ?? string.Empty).Trim(), (b ?? string.Empty).Trim(),
-            System.StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>Clears highlights and the compare bar.</summary>

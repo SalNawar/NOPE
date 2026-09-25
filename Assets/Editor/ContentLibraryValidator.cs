@@ -41,6 +41,7 @@ public static class ContentLibraryValidator
 
             Debug.Log($"[ContentLibraryValidator] Validating '{path}'...");
             totalIssues += ValidateLibrary(lib);
+            ReportCharacterArt(lib);
         }
 
         if (totalIssues == 0)
@@ -83,17 +84,20 @@ public static class ContentLibraryValidator
         issues += CheckDuplicateIds(Ids(lib.Profiles, p => p.id), "Profiles", lib);
         issues += CheckDuplicateIds(Ids(lib.Questions, q => q.question != null ? q.question.id : null), "Questions", lib);
         issues += CheckDuplicateIds(Ids(lib.Dialogs, d => d.dialog != null ? d.dialog.id : null), "Dialogs", lib);
+        issues += CheckDuplicateIds(Ids(lib.Legendaries, l => l.id), "Legendaries", lib);
 
         // --- Day plans ---
         issues += CheckDuplicateDayNumbers(lib);
-        issues += CheckDayPlanLegendaryRanges(lib);
+        issues += CheckDayPlanLegendaries(lib);
 
         // --- Cross references ---
         issues += CheckLegendaryReferences(lib);
         issues += CheckNationEraProfiles(lib);
 
-        // --- World model (places and the days that use them) ---
+        // --- World model (places, dress and the days that use them) ---
         issues += CheckPlaces(lib);
+        issues += CheckCultureUnique(lib);
+        issues += CheckLookRules(lib);
         issues += CheckDayPlanPlaces(lib);
 
         // --- Interview (wording, questions, dialogs, menus), upgrade ids, tell channels, small talk ---
@@ -164,6 +168,8 @@ public static class ContentLibraryValidator
             InterviewQuestion question = q.question;
             if (!Forgery.IsProvableCategory(question.category, books))
                 Error($"Question '{question.id}' asks about {question.category}: answers in this category can never be proven (no reference book covers it, and it is not a birth date).", q);
+            if (question.category == Looks.EvidenceCategory)
+                Error($"Question '{question.id}' asks about Culture; dress is looked at on the traveller wheel, never asked.", q);
             if (!asked.Add(question.category))
                 Error($"Question '{question.id}' asks about {question.category} again (one question per category).", q);
             if (!Interview.HoldsToken(question.answer?.text, Interview.ValueToken))
@@ -215,8 +221,10 @@ public static class ContentLibraryValidator
 
         bool smallTalk = (lib.Eras ?? Array.Empty<EraSO>()).Any(e => e != null && e.smallTalk != null && e.smallTalk.Count > 0) ||
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
+        var premadeDialogs = new HashSet<string>(lib.Legendaries.Where(l => l != null && !string.IsNullOrWhiteSpace(l.dialogId)).Select(l => l.dialogId));
+        int bound = lib.Dialogs.Count(d => d != null && d.dialog != null && premadeDialogs.Contains(d.dialog.id));
         foreach (string problem in DialogChecks.MenuProblems(lib.Questions.Count(q => q != null), smallTalk, MaxRequestedDocuments(TravellerBlueprints(lib)),
-                                                             lib.Dialogs.Count(d => d != null), lines.menuCapacity))
+                                                             lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
             Error(problem, lib);
 
         return issues;
@@ -251,7 +259,7 @@ public static class ContentLibraryValidator
                   .DefaultIfEmpty(0)
                   .Max();
 
-    /// <summary>Every blueprint a traveller can come from: the day plans' possible and forced ones and the legendaries' overrides (nulls included). The office builder counts the same blueprints.</summary>
+    /// <summary>Every blueprint a traveller can come from: the day plans' possible and forced ones (nulls included); premades use the day's. The office builder counts the same blueprints.</summary>
     public static IEnumerable<CaseBlueprintSO> TravellerBlueprints(ContentLibrarySO lib)
     {
         foreach (DayPlanSO plan in lib.DayPlans)
@@ -266,10 +274,6 @@ public static class ContentLibraryValidator
             foreach (CaseBlueprintSO blueprint in plan.ForcedBlueprints)
                 yield return blueprint;
         }
-
-        foreach (LegendarySO legend in lib.Legendaries)
-            if (legend != null)
-                yield return legend.blueprintOverride;
     }
 
     /// <summary>
@@ -594,11 +598,17 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>Fact categories every place must have (papers + books + questions).</summary>
+    /// <summary>Fact categories every place must have (papers + books + questions + dress).</summary>
     private static readonly ClueCategory[] RequiredFacts =
-        { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics };
+        { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics, ClueCategory.Culture };
 
-    /// <summary>Reports places with missing or duplicate facts, no names, or unset / inverted birth years.</summary>
+    /// <summary>
+    /// Reports places with missing or duplicate facts, no names, unset or
+    /// inverted birth years, no year, a Culture fact that is not the one the
+    /// wardrobe gives (or wider than a book row), a gender look without outfit,
+    /// hair or signature item, look weights with no positive sum, and (a
+    /// warning) a signature that is the whole outfit, which can never leak.
+    /// </summary>
     private static int CheckPlaces(ContentLibrarySO lib)
     {
         int issues = 0;
@@ -640,7 +650,51 @@ public static class ContentLibraryValidator
                 Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has birthYearMin {place.birthYearMin} > birthYearMax {place.birthYearMax}.", place);
                 issues++;
             }
+
+            issues += CheckPlaceLook(place, lib);
         }
+
+        return issues;
+    }
+
+    /// <summary>A place's look: year, the derived Culture fact, both genders' looks and the weights.</summary>
+    private static int CheckPlaceLook(NationEraProfileSO place, ContentLibrarySO lib)
+    {
+        int issues = 0;
+        void Error(string message)
+        {
+            Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' {message} in '{lib.name}'.", place);
+            issues++;
+        }
+
+        if (place.year == 0)
+            Error("has no year (travellers' ages are measured against it; run Tools > TimeDesk > Generate World)");
+
+        string culture = place.facts?.FirstOrDefault(f => f != null && f.category == Looks.EvidenceCategory)?.value;
+        string derived = Looks.CultureValue(place.wardrobe);
+        if (derived == null || culture != derived)
+            Error($"has Culture '{culture}', but its wardrobe gives '{derived}' (run Tools > TimeDesk > Generate World)");
+        else if (culture.Length > FactTable.MaxValueLength)
+            Error($"has Culture '{culture}', wider than a book row ({FactTable.MaxValueLength} characters)");
+
+        foreach (TravellerGender gender in new[] { TravellerGender.Male, TravellerGender.Female })
+        {
+            GenderLook look = place.wardrobe?.For(gender);
+            if (look == null || !look.outfit.IsPresent || !look.hair.IsPresent || look.Signature == null || !look.Signature.IsPresent)
+            {
+                Error($"has no {gender} outfit, hair or signature item");
+                continue;
+            }
+
+            if (look.signature == LookSlot.Outfit)
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has the whole outfit as its {gender} signature, so it can never leak as a dress tell ('{lib.name}').", place);
+                issues++;
+            }
+        }
+
+        if (place.looks == null || place.looks.skin == null || place.looks.skin.Sum() <= 0f || place.looks.hair == null || place.looks.hair.Sum(h => h != null ? h.weight : 0f) <= 0f)
+            Error("has look weights (skin or hair) with no positive sum");
 
         return issues;
     }
@@ -651,8 +705,11 @@ public static class ContentLibraryValidator
     /// Future era is exempt, and once per nation with a Future place), a Future
     /// day that does not allow every nation with a Future place, a nation+era
     /// rule naming the Future (it would forbid nothing on most days), rules no
-    /// place of the day can break, and legendaries whose place is outside the
-    /// day's world (their papers would print placeholders).
+    /// place of the day can break, premades (pooled or forced) whose claim or
+    /// true place is outside the day's world, forced slots beyond the queue, a
+    /// premade forced twice, a forced premade in the first half of a day with
+    /// rules (a warning: it takes a slot a guaranteed violator could need), and
+    /// a day allowing dress tells without a Costume Guide.
     /// </summary>
     private static int CheckDayPlanPlaces(ContentLibrarySO lib)
     {
@@ -726,16 +783,50 @@ public static class ContentLibraryValidator
                 }
             }
 
-            foreach (LegendarySO legend in plan.AvailableLegendaries ?? Array.Empty<LegendarySO>())
+            var forced = plan.ForcedCases.Where(f => f != null && f.legendary != null).ToList();
+            foreach (LegendarySO legend in (plan.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Concat(forced.Select(f => f.legendary)))
             {
                 if (legend == null || legend.nation == null || legend.trueEra == null)
                     continue;
 
                 if (!today.Any(p => p.nation == legend.nation && p.era == legend.trueEra))
                 {
-                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' lists legendary '{legend.displayName}' whose place ({legend.nation.id}, {legend.trueEra.id}) is not in the day's world; their papers would print placeholders.", plan);
+                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' lists premade '{legend.displayName}' whose place ({legend.nation.id}, {legend.trueEra.id}) is not in the day's world; their papers would print placeholders.", plan);
                     issues++;
                 }
+
+                if (legend.truePlace != null && !today.Contains(legend.truePlace))
+                {
+                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' lists premade '{legend.displayName}', authored as a liar from '{legend.truePlace.name}', which is not in the day's world; they would stay honest.", plan);
+                    issues++;
+                }
+            }
+
+            foreach (ForcedCaseSlot slot in forced)
+            {
+                if (slot.caseIndex1Based < 1 || slot.caseIndex1Based > plan.VisitorsCount)
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, outside its queue of {plan.VisitorsCount}.", plan);
+                    issues++;
+                }
+
+                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Count > 0 && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
+                {
+                    Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.", plan);
+                    issues++;
+                }
+            }
+
+            foreach (IGrouping<LegendarySO, ForcedCaseSlot> twice in forced.GroupBy(f => f.legendary).Where(g => g.Count() > 1))
+            {
+                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{twice.Key.displayName}' {twice.Count()} times.", plan);
+                issues++;
+            }
+
+            if (plan.TellChannels.Contains(TellChannel.Appearance) && !lib.ReferenceBookCategories().Contains(Looks.EvidenceCategory))
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' allows dress tells, but no reference book covers Culture (the Costume Guide), so none can be proven or generated.", plan);
+                issues++;
             }
         }
 
@@ -830,11 +921,8 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>
-    /// Reports DayPlan.AvailableLegendaries entries that are null, or whose
-    /// legendary's [minDay, maxDay] range can never include that day.
-    /// </summary>
-    private static int CheckDayPlanLegendaryRanges(ContentLibrarySO lib)
+    /// <summary>Reports DayPlan.AvailableLegendaries entries that are null.</summary>
+    private static int CheckDayPlanLegendaries(ContentLibrarySO lib)
     {
         int issues = 0;
 
@@ -851,13 +939,6 @@ public static class ContentLibraryValidator
                 {
                     Debug.LogError($"[ContentLibraryValidator] DayPlan {plan.DayNumber} ('{plan.name}') AvailableLegendaries[{i}] is null in '{lib.name}'.", plan);
                     issues++;
-                    continue;
-                }
-
-                if (plan.DayNumber < legend.minDay || plan.DayNumber > legend.maxDay)
-                {
-                    Debug.LogWarning($"[ContentLibraryValidator] DayPlan {plan.DayNumber} ('{plan.name}') lists legendary '{legend.displayName}' but its valid range is {legend.minDay}-{legend.maxDay} — it can never be rolled on this day.", plan);
-                    issues++;
                 }
             }
         }
@@ -865,7 +946,12 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>Reports legendaries with missing era/archetype/nation references or an inverted day range.</summary>
+    /// <summary>
+    /// Reports premades with missing era, archetype or nation references, an
+    /// id that is not a key token, a blank name, an unreadable birth date or
+    /// one outside the claimed place's birth years, a true place equal to the
+    /// claim, or a record note too long for the Records box.
+    /// </summary>
     private static int CheckLegendaryReferences(ContentLibrarySO lib)
     {
         int issues = 0;
@@ -895,13 +981,110 @@ public static class ContentLibraryValidator
                 issues++;
             }
 
-            if (legend.minDay > legend.maxDay)
+            void Error(string message)
             {
-                Debug.LogError($"[ContentLibraryValidator] {label} has minDay ({legend.minDay}) > maxDay ({legend.maxDay}) in '{lib.name}'.", legend);
+                Debug.LogError($"[ContentLibraryValidator] {label} {message} in '{lib.name}'.", legend);
                 issues++;
             }
+
+            if (!LookKeys.IsToken(legend.id))
+                Error($"has id '{legend.id}', which is not a key token (lowercase letters and digits)");
+            if (string.IsNullOrWhiteSpace(legend.displayName))
+                Error("has a blank name");
+
+            NationEraProfileSO claim = legend.nation != null && legend.trueEra != null ? lib.GetProfile(legend.nation, legend.trueEra) : null;
+            if (!BirthDates.TryParse(legend.birthDate, out _, out _, out int year))
+                Error($"has an unreadable birth date '{legend.birthDate}'");
+            else if (claim != null && (year < claim.birthYearMin || year > claim.birthYearMax))
+                Error($"is born in {year}, outside '{claim.name}''s birth years {claim.birthYearMin}..{claim.birthYearMax}");
+
+            if (legend.truePlace != null && legend.truePlace == claim)
+                Error("has its claimed place as its true place");
+            if ((legend.recordNote ?? string.Empty).Length > Premades.MaxNoteLength)
+                Error($"has a record note longer than {Premades.MaxNoteLength} characters");
         }
 
+        return issues;
+    }
+
+    /// <summary>
+    /// Reports what makes dress tells unfair or impossible: two places sharing
+    /// a Culture value (a dress proof must name one place) and item labels that
+    /// read as another place's signature for the same gender (Looks.LabelProblems).
+    /// </summary>
+    private static int CheckCultureUnique(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        var seen = new List<(NationEraProfileSO place, string value)>();
+        foreach (NationEraProfileSO place in lib.Profiles)
+        {
+            string value = place?.facts?.FirstOrDefault(f => f != null && f.category == Looks.EvidenceCategory)?.value;
+            if (string.IsNullOrWhiteSpace(value))
+                continue;
+
+            foreach ((NationEraProfileSO other, string otherValue) in seen)
+            {
+                if (DiscrepancyLog.ValuesMatch(value, otherValue))
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Places '{other.name}' and '{place.name}' share the Culture value '{value}' in '{lib.name}'; a dress proof must name one place.", place);
+                    issues++;
+                }
+            }
+
+            seen.Add((place, value));
+        }
+
+        var wardrobes = lib.Profiles.Where(p => p != null).Select(p => (p.id, p.wardrobe)).ToList();
+        foreach (string problem in Looks.LabelProblems(wardrobes))
+        {
+            Debug.LogError($"[ContentLibraryValidator] Wardrobe labels in '{lib.name}': {problem}", lib);
+            issues++;
+        }
+
+        return issues;
+    }
+
+    /// <summary>
+    /// Logs (never counted as an issue) how many character art keys have final
+    /// art at CharacterArt.AssetFolder: the bases, every place's garments and
+    /// every premade's expressions, with the first 20 missing names (the rest
+    /// are drawn as placeholders at runtime).
+    /// </summary>
+    private static void ReportCharacterArt(ContentLibrarySO lib)
+    {
+        var keys = new List<string>(LookKeys.Bases(lib.LookRules));
+        foreach (NationEraProfileSO place in lib.Profiles)
+            if (place != null && place.nation != null && place.era != null)
+                keys.AddRange(LookKeys.Required(place.nation.id, place.era.id, place.wardrobe));
+        foreach (LegendarySO premade in lib.Legendaries)
+            if (premade != null)
+                keys.AddRange(LookKeys.PremadeSet(premade.id));
+
+        List<string> distinct = keys.Distinct().ToList();
+        List<string> missing = distinct.Where(k => !System.IO.File.Exists($"{CharacterArt.AssetFolder}/{k}.png")).ToList();
+        int total = distinct.Count;
+        Debug.Log($"[ContentLibraryValidator] Character art: {total - missing.Count}/{total} key(s) have final art in {CharacterArt.AssetFolder}; placeholders are drawn for the rest{(missing.Count > 0 ? $" (first missing: {string.Join(", ", missing.Take(20))})" : string.Empty)}.");
+    }
+
+    /// <summary>Reports look rules a traveller's look cannot be composed from: a face band with no face, no grey age, no premade garment label.</summary>
+    private static int CheckLookRules(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        void Error(string message)
+        {
+            Debug.LogError($"[ContentLibraryValidator] {message} in '{lib.name}' (run Tools > TimeDesk > Generate World).", lib);
+            issues++;
+        }
+
+        LookRules rules = lib.LookRules ?? new LookRules();
+        if (rules.faceBands == null || rules.faceBands.Count == 0)
+            Error("Look rules have no face bands");
+        else if (rules.faceBands.Any(b => b == null || b.faces == null || b.faces.Count == 0))
+            Error("A look-rule face band has no face");
+        if (rules.greyFromAge <= 0)
+            Error("Look rules have no grey age (greyFromAge must be above 0)");
+        if (string.IsNullOrWhiteSpace(rules.wholeFigureLabel))
+            Error("Look rules have no whole-figure label (a premade's garment)");
         return issues;
     }
 

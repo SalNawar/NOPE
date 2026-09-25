@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Elizabethan England
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1600
   birthYearMin: 1530
   birthYearMax: 1582
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: London (Whitehall Palace)
   - category: 2
     value: Queen Elizabeth I
+  - category: 6
+    value: capotain hat / hat over coif
   maleNames:
   - Humphrey
   - Ambrose
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Joan
   - Agnes
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: doublet and ruff
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: brushed-up short hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: pick-a-devant beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: capotain hat
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: gown and lace ruff
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: pinned-up hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: hat over coif
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: pomander girdle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 5
+    - 4
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 4.1

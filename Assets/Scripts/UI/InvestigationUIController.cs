@@ -8,8 +8,9 @@ using UnityEngine.UI;
 /// <summary>
 /// Orchestrates the office investigation: shows the visitor's travel claim and
 /// today's directives, runs the interview on the traveller wheel (document
-/// requests, today's questions and narrative dialogs, with the transcript
-/// window and the traveller's replies in the wheel's bubble), hands each
+/// requests, today's questions, a look at the traveller's garments, which go
+/// into the compare bar, and narrative dialogs, with the transcript window and
+/// the traveller's replies in the wheel's bubble), hands each
 /// document over as a physical paper on the desk (whose scan opens its
 /// window) or, where no desk is wired, straight to its draggable window,
 /// builds a shelf of reference books the player can open/stow, and offers the
@@ -116,6 +117,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The current traveller's interview (null before the first case).</summary>
     private DialogRunner _runner;
 
+    /// <summary>Character art (set by GameManager): the passport photos on the papers and the scanned pages.</summary>
+    private CharacterArt _art;
+
+    /// <summary>Raised with a premade's new expression when a line they say carries one (the booth figure changes).</summary>
+    public event Action<string> TravellerExpressionChanged;
+
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
 
@@ -134,6 +141,15 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     public bool InterviewReachable =>
         !RichMode || (interactionPanel != null && transcriptWindow != null && transcriptChrome != null);
+
+    /// <summary>
+    /// True when a traveller's garments can be looked at and compared: always
+    /// in the text fallback (which prints the dress); in the rich desk only
+    /// when the wheel's ring (its "Look >" menu) and the compare bar are wired.
+    /// When false, GameManager generates no dress tell that day.
+    /// </summary>
+    public bool AppearanceReachable =>
+        !RichMode || (interactionPanel != null && compareController != null);
 
     // Fallback state
     private bool _fallbackBuilt;
@@ -165,6 +181,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
         if (RichMode && !InterviewReachable)
             Debug.LogWarning("[InvestigationUIController] Traveller wheel or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the wheel's look menu or the compare bar no garment could be compared, so the day leaks no dress.
+        if (RichMode && !AppearanceReachable)
+            Debug.LogWarning("[InvestigationUIController] Traveller wheel or compare bar not wired (interactionPanel or compareController): garments cannot be looked at and no dress tell is generated today. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Without the desk every document still reaches the PC, as its window.
         if (RichMode && !DeskReachable)
@@ -238,6 +258,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _day = day;
     }
 
+    /// <summary>Injects the character art the passport photos are drawn with.</summary>
+    public void SetCharacterArt(CharacterArt art)
+    {
+        _art = art;
+    }
+
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
     private void RefreshScannerText()
     {
@@ -248,7 +274,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         {
             scannerText.text =
                 "No deviations documented.\n\n" +
-                "Compare a document field or a traveller's answer against the claimed place's reference entry, " +
+                "Compare a document field, a traveller's answer or a garment they wear against the claimed place's reference entry, " +
                 "the entry it really belongs to, or the Citizen Record to log evidence.";
             return;
         }
@@ -348,13 +374,14 @@ public sealed class InvestigationUIController : MonoBehaviour
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
-                clone.SetDocument(doc, compareController);
+                clone.SetDocument(doc, compareController, inst.look, _art);
                 _docWindows.Add(clone.gameObject);
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : "Document",
                     holder = inst.visitorGivenName,
-                    handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest
+                    handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
+                    showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
                 i++;
             }
@@ -362,7 +389,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (DeskReachable)
         {
-            desk.BeginCase(_caseDocuments);
+            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
         }
         else
         {
@@ -382,10 +409,12 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// Starts the traveller's interview: the hub with a request per document
-    /// handed over on request, and, when the interview is reachable, today's questions, small talk and
-    /// offered dialogs (without a wired transcript nothing spoken could be read,
-    /// so only the requests remain). The transcript starts with the opener and
-    /// the claim.
+    /// handed over on request, "Look >" (the traveller's garments) when
+    /// garments can be compared, and, when the interview is reachable, today's
+    /// questions, small talk and offered dialogs (a premade's own dialog only
+    /// while they are at the desk; without a wired transcript nothing spoken
+    /// could be read, so only the requests and the look remain). The
+    /// transcript starts with the opener and the claim.
     /// </summary>
     private void StartInterview(CaseInstance inst, IReadOnlyList<CaseDocument> documents)
     {
@@ -406,12 +435,14 @@ public sealed class InvestigationUIController : MonoBehaviour
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
             answers = inst != null ? inst.answers : null,
-            smallTalk = reachable && inst != null ? inst.smallTalk : null
+            smallTalk = reachable && inst != null ? inst.smallTalk : null,
+            garments = AppearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null
         };
 
+        string premadeDialog = inst != null && inst.legendarySource != null ? inst.legendarySource.dialogId : null;
         DialogGraph graph = InterviewScript.Build(_day.Lines,
             reachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
-            reachable ? _day.OfferedDialogs() : Array.Empty<AuthoredDialog>(),
+            reachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
             interviewCase);
         _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
 
@@ -441,10 +472,13 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// Plays one interview choice: the transcript shows its lines; a document
     /// request hands that document over (a paper onto the desk, or straight to
     /// its window where no desk is wired) and closes the wheel so the player can
-    /// take it; any other choice opens the transcript; the traveller's reply, when
+    /// take it; a look at a garment puts it into the compare bar (the player
+    /// then compares it with a Costume Guide row on the PC) and closes the
+    /// wheel; any other choice opens the transcript; the traveller's reply, when
     /// the choice adds one, goes to the wheel's bubble (the spoken reveal point;
     /// a choice without one, such as "Ask about home >" or "&lt; Back", leaves the
-    /// last reply up); a finished dialog is recorded for the end of the shift.
+    /// last reply up), and its last expression changes a premade's picture; a
+    /// finished dialog is recorded for the end of the shift.
     /// </summary>
     private void Choose(string choiceId)
     {
@@ -469,6 +503,12 @@ public sealed class InvestigationUIController : MonoBehaviour
             if (wheel != null)
                 wheel.Close();
         }
+        else if (choice.Action == DialogAction.InspectGarment)
+        {
+            LookAt(choice.GarmentIndex);
+            if (wheel != null)
+                wheel.Close();
+        }
         else if (transcriptChrome != null)
         {
             transcriptChrome.Open();
@@ -478,10 +518,30 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (wheel != null && reply.Length > 0)
             wheel.Say(DisplayText.For(reply, TextMedium.Spoken));
 
+        string expression = InterviewScript.ExpressionSince(_runner.Transcript, before);
+        if (expression != null)
+            TravellerExpressionChanged?.Invoke(expression);
+
         if (choice.Action == DialogAction.CompleteDialog)
             _day.Complete(choice.DialogId, choice.EffectName);
 
         RefreshChoices();
+    }
+
+    /// <summary>
+    /// Puts one of the current traveller's garments into the compare bar: its
+    /// slot as the label, its item name as the shown value, and as evidence its
+    /// place's Culture value (a tell for a liar's dress tell).
+    /// </summary>
+    private void LookAt(int garmentIndex)
+    {
+        IReadOnlyList<Garment> garments = _currentCase != null && _currentCase.look != null ? _currentCase.look.Garments : null;
+        if (compareController == null || garments == null || garmentIndex < 0 || garmentIndex >= garments.Count)
+            return;
+
+        Garment g = garments[garmentIndex];
+        compareController.Select($"Traveller · {Looks.SlotLabel(g.Slot)}", g.Label, null,
+                                 CompareEvidence.ForAppearance(Looks.EvidenceCategory, g.Value, g.IsTell));
     }
 
     /// <summary>
@@ -631,8 +691,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// The text fallback's body: the papers, the traveller's agency record (so
-    /// a birth-date tell can be spotted without the Records app), their answers
-    /// to today's questions, and the claimed place's entry in each book.
+    /// a birth-date tell can be spotted without the Records app), the
+    /// traveller's dress (each garment with its place's Culture value), their
+    /// answers to today's questions, and the claimed place's entry in each book.
     /// </summary>
     private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts, CitizenRegistry registry, InterviewDay day)
     {
@@ -662,6 +723,14 @@ public sealed class InvestigationUIController : MonoBehaviour
                 sb.AppendLine($"    Origin: {record.origin}");
             }
             sb.AppendLine();
+
+            if (inst.look != null && inst.look.Garments.Count > 0)
+            {
+                sb.AppendLine("— TRAVELLER'S DRESS —");
+                foreach (Garment g in inst.look.Garments)
+                    sb.AppendLine($"    {Looks.SlotLabel(g.Slot)}: {g.Label} ({g.Value})");
+                sb.AppendLine();
+            }
 
             if (day != null)
             {

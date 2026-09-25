@@ -319,6 +319,57 @@ public class DiscrepancyLogTests
             ClaimNation, ClaimEra));
     }
 
+    // -----------------------------
+    // Worn garments (the look menu)
+    // -----------------------------
+
+    /// <summary>A garment: a liar's dress tell by default, valued with its place's Culture fact.</summary>
+    private static CompareEvidence Wears(string value = "top hat / poke bonnet", bool isTell = true) =>
+        CompareEvidence.ForAppearance(ClueCategory.Culture, value, isTell);
+
+    [Test]
+    public void DressTell_VsTheClaimsRow_ProvesAMismatch_WornByTheTraveller()
+    {
+        Discrepancy d = DiscrepancyLog.Prove(Wears(), Entry("norvik", "medieval", "chonmage / shimada", ClueCategory.Culture), ClaimNation, ClaimEra);
+
+        Assert.NotNull(d);
+        Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
+        Assert.AreEqual(EvidenceKind.Appearance, d.source);
+        Assert.AreEqual("DRESS INCORRECT — traveller wears: \"top hat / poke bonnet\"  /  expected: \"chonmage / shimada\"", d.Summary);
+    }
+
+    [Test]
+    public void DressTell_VsTheTrueHomesRow_ProvesTheOrigin_WornByTheTraveller()
+    {
+        Discrepancy d = DiscrepancyLog.Prove(Entry("britain", "industrial", "top hat / poke bonnet", ClueCategory.Culture), Wears(), ClaimNation, ClaimEra);
+
+        Assert.NotNull(d);
+        Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
+        Assert.AreEqual(EvidenceKind.Appearance, d.source);
+        StringAssert.Contains("DRESS INCORRECT — traveller wears \"top hat / poke bonnet\", which belongs to britain — industrial", d.Summary);
+    }
+
+    [Test]
+    public void HonestGarment_NeverRegisters_AndGarmentsProveNothingAgainstStatements()
+    {
+        Assert.IsNull(DiscrepancyLog.Prove(Wears("chonmage / shimada", false), Entry("norvik", "medieval", "wesekh collar", ClueCategory.Culture), ClaimNation, ClaimEra));
+        Assert.IsNull(DiscrepancyLog.Prove(Entry("latia", "rome", "chonmage / shimada", ClueCategory.Culture), Wears("chonmage / shimada", false), ClaimNation, ClaimEra));
+        Assert.IsNull(DiscrepancyLog.Prove(Wears(), Entry("latia", "rome", "wesekh collar", ClueCategory.Culture), ClaimNation, ClaimEra), "a third place's row");
+        Assert.IsNull(DiscrepancyLog.Prove(Wears(), TellDocField(), ClaimNation, ClaimEra), "garment vs papers");
+        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), Wears(), ClaimNation, ClaimEra), "garment vs answer");
+        Assert.IsNull(DiscrepancyLog.Prove(Wears(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra), "another category's row");
+    }
+
+    [Test]
+    public void MatchValue_IsTheEvidenceValue_WhenASideCarriesEvidence_ElseTheShownText()
+    {
+        Assert.AreEqual("shown", default(CompareEvidence).MatchValue("shown"), "no evidence: the text shown");
+        Assert.AreEqual("top hat / poke bonnet", Wears().MatchValue("top hat"), "a garment shows its item and matches on its place's value");
+        Assert.AreEqual("Aqueduct", TellDocField().MatchValue("Aqueduct"));
+        Assert.AreEqual("Longship", Entry("norvik", "medieval", "Longship").MatchValue("Longship"));
+        Assert.IsTrue(DiscrepancyLog.ValuesMatch(Wears().MatchValue("top hat"), Entry("b", "i", " TOP HAT / poke bonnet ", ClueCategory.Culture).MatchValue("x")));
+    }
+
     [Test]
     public void AnswerVsPapers_AndAnswerVsAnswer_ProveNothing()
     {
@@ -375,7 +426,7 @@ public class DiscrepancyLogTests
     [TestCase(ClueCategory.Technology, "DEVICE")]
     [TestCase(ClueCategory.Currency, "CURRENCY")]
     [TestCase(ClueCategory.Geography, "CAPITAL")]
-    [TestCase(ClueCategory.Culture, "CULTURE")]
+    [TestCase(ClueCategory.Culture, "DRESS")]
     [TestCase(ClueCategory.Name, "NAME")]
     [TestCase(ClueCategory.BirthDate, "BIRTH DATE")]
     public void ClueLabels_Report_OneLabelPerCategory(ClueCategory category, string expected)

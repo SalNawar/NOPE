@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Qing Shanghai
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1880
   birthYearMin: 1810
   birthYearMax: 1862
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Peking (Jingshi)
   - category: 2
     value: Guangxu Emperor
+  - category: 6
+    value: guapimao cap / meile band
   maleNames:
   - Guanying
   - Tingshu
@@ -48,6 +51,81 @@ MonoBehaviour:
   - Suzhen
   - Meiying
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: changshan and magua
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: queue
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: guapimao cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: trimmed ao and skirt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: low flat bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: meile band
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: white jade bangle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 1

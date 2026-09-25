@@ -20,13 +20,17 @@ public sealed class InterviewCase
 
     /// <summary>The traveller's small-talk line; null means no small talk.</summary>
     public LineText smallTalk;
+
+    /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
+    public IReadOnlyList<Garment> garments;
 }
 
 /// <summary>
 /// Builds a traveller's interview graph: the hub (document requests, "Ask
-/// about home >", today's narrative dialogs), the ask menu ("&lt; Back"
-/// first, then the questions and small talk) and every authored dialog's
-/// nodes. Pure, so every menu and line is tested headless.
+/// about home >", "Look >", today's narrative dialogs), the ask menu ("&lt;
+/// Back" first, then the questions and small talk), the look menu ("&lt;
+/// Back" first, then one choice per visible garment) and every authored
+/// dialog's nodes. Pure, so every menu and line is tested headless.
 /// </summary>
 public static class InterviewScript
 {
@@ -35,6 +39,9 @@ public static class InterviewScript
 
     /// <summary>The ask menu's id.</summary>
     public const string AskNodeId = "ask";
+
+    /// <summary>The look menu's id.</summary>
+    public const string LookNodeId = "look";
 
     /// <summary>The id of the desk's opener line, composed per case at runtime (Generate World reserves it).</summary>
     public const string IntroLineId = "case.intro";
@@ -99,14 +106,38 @@ public static class InterviewScript
     }
 
     /// <summary>
+    /// The expression a premade shows after transcript line <paramref name="from"/>:
+    /// that of the last Traveller line at or after it that carries one; null
+    /// when none does (or for no transcript). A from below 0 counts as 0.
+    /// </summary>
+    public static string ExpressionSince(IReadOnlyList<DialogLine> transcript, int from)
+    {
+        string expression = null;
+        if (transcript == null)
+            return expression;
+
+        for (int i = from < 0 ? 0 : from; i < transcript.Count; i++)
+        {
+            DialogLine line = transcript[i];
+            if (line != null && line.Speaker == DialogSpeaker.Traveller && !string.IsNullOrEmpty(line.Expression))
+                expression = line.Expression;
+        }
+
+        return expression;
+    }
+
+    /// <summary>
     /// The traveller's graph. Hub: "request:{i}" per document handed over on
     /// request (one-shot, hands document i over), then "ask" when the ask menu has a question or
-    /// small talk, then "dlg:{id}" per dialog (one-shot). Ask: "back" first
-    /// (so an overlong menu can never hide the way back), then "q:{id}" per
-    /// question the traveller has an answer for (one-shot), then "smalltalk".
-    /// Authored nodes become "{dialogId}/{nodeId}" and their choices
-    /// "{dialogId}.{choiceId}" (the desk speaks the label); an ending choice
-    /// returns to the hub and completes the dialog with its effect.
+    /// small talk, then "look" when the traveller has a visible garment, then
+    /// "dlg:{id}" per dialog (one-shot). Ask: "back" first (so an overlong
+    /// menu can never hide the way back), then "q:{id}" per question the
+    /// traveller has an answer for (one-shot), then "smalltalk". Look: "back"
+    /// first, then "look:{i}" per garment, labelled with the item's name
+    /// (InspectGarment, never one-shot, no line). Authored nodes become
+    /// "{dialogId}/{nodeId}" and their choices "{dialogId}.{choiceId}" (the
+    /// desk speaks the label); every authored line keeps its expression; an
+    /// ending choice returns to the hub and completes the dialog with its effect.
     /// </summary>
     public static DialogGraph Build(InterviewLines lines, IReadOnlyList<InterviewQuestion> questions,
                                     IReadOnlyList<AuthoredDialog> dialogs, InterviewCase c)
@@ -177,6 +208,16 @@ public static class InterviewScript
         if (ask.Choices.Count > 1)
             hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId });
 
+        var look = new DialogNode { Id = LookNodeId };
+        look.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
+        IReadOnlyList<Garment> garments = c != null && c.garments != null ? c.garments : new Garment[0];
+        for (int i = 0; i < garments.Count; i++)
+            if (garments[i] != null)
+                look.Choices.Add(new DialogChoice { Id = $"look:{i}", Label = garments[i].Label, Action = DialogAction.InspectGarment, GarmentIndex = i });
+
+        if (look.Choices.Count > 1)
+            hub.Choices.Add(new DialogChoice { Id = "look", Label = lines.lookLabel, Next = LookNodeId });
+
         if (dialogs != null)
         {
             foreach (AuthoredDialog d in dialogs)
@@ -193,6 +234,7 @@ public static class InterviewScript
 
         graph.Add(hub);
         graph.Add(ask);
+        graph.Add(look);
         return graph;
     }
 
@@ -203,7 +245,7 @@ public static class InterviewScript
         if (node.lines != null)
             foreach (ScriptLine line in node.lines)
                 if (line != null)
-                    built.Lines.Add(new DialogLine(line.id, line.speaker, line.text));
+                    built.Lines.Add(new DialogLine(line.id, line.speaker, line.text, line.expression));
 
         if (node.choices == null)
             return built;
@@ -219,7 +261,7 @@ public static class InterviewScript
             if (choice.lines != null)
                 foreach (ScriptLine line in choice.lines)
                     if (line != null)
-                        runtime.Lines.Add(new DialogLine(line.id, line.speaker, line.text));
+                        runtime.Lines.Add(new DialogLine(line.id, line.speaker, line.text, line.expression));
 
             if (!string.IsNullOrEmpty(choice.next))
             {
@@ -384,12 +426,14 @@ public static class DialogChecks
 
     /// <summary>
     /// Menus larger than the traveller wheel shows: the ask menu (1 back + the
-    /// questions + 1 when there is small talk) or the hub (the most documents
-    /// one traveller hands over on request + 1 ask entry + every dialog,
-    /// counted as offered at once). Skipped when <paramref name="maxChoices"/>
-    /// is 0 or less.
+    /// questions + 1 when there is small talk), the look menu (1 back + one
+    /// garment per LookSlot) or the hub (the most documents one traveller hands
+    /// over on request + the ask entry + the look entry + every dialog bound to
+    /// no premade, counted as offered at once, + 1 when any dialog is bound to
+    /// a premade: at most one premade stands at the desk). Skipped when
+    /// <paramref name="maxChoices"/> is 0 or less.
     /// </summary>
-    public static List<string> MenuProblems(int questions, bool smallTalk, int maxRequestedDocuments, int dialogs, int maxChoices)
+    public static List<string> MenuProblems(int questions, bool smallTalk, int maxRequestedDocuments, int dialogs, int premadeDialogs, int maxChoices)
     {
         var problems = new List<string>();
         if (maxChoices <= 0)
@@ -399,9 +443,13 @@ public static class DialogChecks
         if (ask > maxChoices)
             problems.Add($"The ask menu holds {ask} choices (< Back, {questions} question(s){(smallTalk ? ", small talk" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 
-        int hub = maxRequestedDocuments + 1 + dialogs;
+        int look = 1 + Looks.Slots.Count;
+        if (look > maxChoices)
+            problems.Add($"The look menu holds up to {look} choices (< Back, one per garment slot); the traveller wheel shows at most {maxChoices}.");
+
+        int hub = maxRequestedDocuments + 2 + dialogs + (premadeDialogs > 0 ? 1 : 0);
         if (hub > maxChoices)
-            problems.Add($"The hub holds {hub} choices ({maxRequestedDocuments} document request(s), the ask entry, {dialogs} dialog(s)); the traveller wheel shows at most {maxChoices}.");
+            problems.Add($"The hub holds {hub} choices ({maxRequestedDocuments} document request(s), the ask and look entries, {dialogs} dialog(s){(premadeDialogs > 0 ? ", one premade's dialog" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 
         return problems;
     }

@@ -8,9 +8,9 @@ using UnityEngine;
 /// Owns:
 /// - Day identity (dayNumber)
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
-/// - Procedural generation knobs (blueprints, eras, legendary chance)
+/// - Procedural generation knobs (blueprints, eras, the premade pool and chance)
 /// - Where today's liars may leak tells (tell count and tell channels)
-/// - Forced cases (e.g., "3rd case on day 2 is X")
+/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
 /// - Event rules (fixed or random placement, including "random but after N cases")
 /// </summary>
 [CreateAssetMenu(menuName = "TimeDesk/Day/Day Plan", fileName = "DayPlan_")]
@@ -43,10 +43,10 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Countries travellers may come from today (empty = every country with a place in today's eras).</summary>
     [SerializeField] private NationSO[] allowedNations;
 
-    /// <summary>Base chance per case to become legendary (0..1).</summary>
+    /// <summary>Base chance per slot to hold a premade from the day's pool (0..1; written by Generate World).</summary>
     [SerializeField, Range(0f, 1f)] private float legendaryBaseChance = 0.05f;
 
-    /// <summary>Legendary candidates available this day (filtered by min/max day).</summary>
+    /// <summary>The premades that may roll this day (written by Generate World from days[].premades).</summary>
     [SerializeField] private LegendarySO[] availableLegendaries;
 
     /// <summary>
@@ -77,7 +77,7 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
 
-    /// <summary>Forced case blueprints by slot index (1-based).</summary>
+    /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
     /// <summary>Event rules (fixed or random placement).</summary>
@@ -95,11 +95,14 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Public read-only era weights.</summary>
     public IReadOnlyList<EraWeight> EraWeights => eraWeights;
 
-    /// <summary>Public read-only legendary chance.</summary>
+    /// <summary>The chance per slot to roll a premade from the pool.</summary>
     public float LegendaryBaseChance => legendaryBaseChance;
 
-    /// <summary>Public read-only legendaries list.</summary>
+    /// <summary>The premades that may roll this day.</summary>
     public IReadOnlyList<LegendarySO> AvailableLegendaries => availableLegendaries;
+
+    /// <summary>The forced slots, in authored order.</summary>
+    public IReadOnlyList<ForcedCaseSlot> ForcedCases => forcedCases;
 
     /// <summary>Tells each liar leaks today (at least 1).</summary>
     public int TellCount => tellCount;
@@ -178,6 +181,25 @@ public sealed class DayPlanSO : ScriptableObject
         }
 
         blueprint = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Tries to get the premade forced into the given case slot (1-based).
+    /// Returns true if the slot names a premade.
+    /// </summary>
+    public bool TryGetForcedPremade(int caseIndex1Based, out LegendarySO premade)
+    {
+        foreach (ForcedCaseSlot slot in forcedCases)
+        {
+            if (slot != null && slot.caseIndex1Based == caseIndex1Based && slot.legendary != null)
+            {
+                premade = slot.legendary;
+                return true;
+            }
+        }
+
+        premade = null;
         return false;
     }
 
@@ -267,8 +289,9 @@ public sealed class DayPlanSO : ScriptableObject
 }
 
 /// <summary>
-/// Forces a specific blueprint into a specific case slot (1-based).
-/// Example: "case 3 is tutorial blueprint".
+/// Forces a blueprint, a premade or both into a case slot (1-based), written
+/// by Generate World from world_source.json days[].forced. Example: "case 3
+/// of day 1 is Senenmut".
 /// </summary>
 [Serializable]
 public sealed class ForcedCaseSlot
@@ -276,8 +299,11 @@ public sealed class ForcedCaseSlot
     /// <summary>1-based case slot index.</summary>
     [Min(1)] public int caseIndex1Based = 1;
 
-    /// <summary>The case blueprint that must appear in this slot.</summary>
+    /// <summary>The case blueprint that must appear in this slot (null = the day's pick).</summary>
     public CaseBlueprintSO caseBlueprint;
+
+    /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
+    public LegendarySO legendary;
 }
 
 /// <summary>

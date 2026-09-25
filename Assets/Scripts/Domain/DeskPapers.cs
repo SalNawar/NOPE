@@ -29,6 +29,9 @@ public sealed class CaseDocument
     /// <summary>When the traveller hands it over.</summary>
     public DocumentHandOver handOver;
 
+    /// <summary>True when the paper carries the traveller's photo (DocumentTemplateSO.showsPhoto).</summary>
+    public bool showsPhoto;
+
     /// <summary>True when the document is handed over only on request (it then gets a hub request).</summary>
     public bool Requested => DocumentHandOvers.IsRequested(handOver);
 }

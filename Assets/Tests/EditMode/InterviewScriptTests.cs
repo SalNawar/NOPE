@@ -19,6 +19,7 @@ public class InterviewScriptTests
         requestPrompt = new LineText("interview.requestPrompt", "Your {document}, please."),
         requestReply = new LineText("interview.requestReply", "Here you are."),
         askLabel = "Ask about home >",
+        lookLabel = "Look >",
         backLabel = "< Back",
         smallTalkLabel = "Small talk",
         smallTalkPrompt = new LineText("interview.smallTalkPrompt", "How is life back home?")
@@ -477,16 +478,136 @@ public class InterviewScriptTests
     [Test]
     public void MenuProblems_TheAskMenu_BackPlusQuestionsPlusSmallTalk()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 2, 2, 8), "< Back + 6 questions + small talk = 8");
-        StringAssert.Contains("The ask menu holds 9 choices", Only(DialogChecks.MenuProblems(7, true, 2, 2, 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(7, false, 2, 2, 8), "without small talk, 7 questions fit");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 2, 2, 0, 8), "< Back + 6 questions + small talk = 8");
+        StringAssert.Contains("The ask menu holds 9 choices", Only(DialogChecks.MenuProblems(7, true, 2, 2, 0, 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(7, false, 2, 2, 0, 8), "without small talk, 7 questions fit");
     }
 
     [Test]
-    public void MenuProblems_TheHub_RequestedDocumentsPlusAskPlusDialogs()
+    public void MenuProblems_TheHub_RequestedDocumentsPlusAskPlusLookPlusDialogs_PremadeDialogsCountOnce()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 5, maxChoices: 8), "2 requests + ask + 5 dialogs = 8");
-        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 6, maxChoices: 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 0), "no capacity, no check");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 3, premadeDialogs: 3, maxChoices: 8),
+                                 "2 requests + ask + look + 3 dialogs + one premade's dialog = 8");
+        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 4, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 3, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 99, 0), "no capacity, no check");
+    }
+
+    [Test]
+    public void MenuProblems_TheLookMenu_BackPlusOneChoicePerGarmentSlot()
+    {
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, 0, 0, 0, 6), "< Back + 5 slots = 6");
+        StringAssert.Contains("The look menu holds up to 6 choices", Only(DialogChecks.MenuProblems(0, false, 0, 0, 0, 5), "the traveller wheel shows at most 5"));
+    }
+
+    // -----------------------------
+    // The look menu and expressions
+    // -----------------------------
+
+    private static InterviewCase Dressed(params Garment[] garments)
+    {
+        InterviewCase c = Case();
+        c.garments = garments;
+        return c;
+    }
+
+    [Test]
+    public void Hub_OffersLook_AfterAsk_BeforeTheDialogs_WhenTheTravellerHasAGarment()
+    {
+        DialogGraph graph = Build(Dressed(new Garment(LookSlot.Outfit, "pleated linen kilt", "wesekh collar", false),
+                                          new Garment(LookSlot.Headwear, "top hat", "top hat / poke bonnet", true)));
+        DialogNode hub = graph.Node(InterviewScript.HubNodeId);
+        CollectionAssert.AreEqual(new[] { "request:0", "request:1", "ask", "look", "dlg:dlg_rumour" }, Ids(hub.Choices));
+        DialogChoice look = hub.Choices[3];
+        Assert.AreEqual("Look >", look.Label);
+        Assert.AreEqual(InterviewScript.LookNodeId, look.Next);
+        Assert.IsFalse(look.OneShot);
+        CollectionAssert.IsEmpty(look.Lines);
+
+        DialogNode menu = graph.Node(InterviewScript.LookNodeId);
+        CollectionAssert.AreEqual(new[] { "back", "look:0", "look:1" }, Ids(menu.Choices));
+        Assert.AreEqual(DialogChoiceKind.Back, menu.Choices[0].Kind);
+        Assert.AreEqual(InterviewScript.HubNodeId, menu.Choices[0].Next);
+        CollectionAssert.AreEqual(new[] { "< Back", "pleated linen kilt", "top hat" }, menu.Choices.Select(c => c.Label).ToArray());
+        for (int i = 1; i < menu.Choices.Count; i++)
+        {
+            DialogChoice garment = menu.Choices[i];
+            Assert.AreEqual(DialogAction.InspectGarment, garment.Action);
+            Assert.AreEqual(i - 1, garment.GarmentIndex);
+            Assert.IsFalse(garment.OneShot, "a garment can be looked at again");
+            Assert.IsTrue(string.IsNullOrEmpty(garment.Next), "looking stays on the look menu");
+            CollectionAssert.IsEmpty(garment.Lines, "looking adds no transcript line");
+        }
+    }
+
+    [Test]
+    public void Hub_HasNoLookEntry_WithoutGarments()
+    {
+        CollectionAssert.DoesNotContain(Ids(Build(Dressed()).Node(InterviewScript.HubNodeId).Choices), "look");
+        CollectionAssert.DoesNotContain(Ids(Build().Node(InterviewScript.HubNodeId).Choices), "look", "no garments listed");
+    }
+
+    [Test]
+    public void ALookChoice_StaysOffered_AfterItIsChosen()
+    {
+        var runner = new DialogRunner(Build(Dressed(new Garment(LookSlot.Hair, "Caesar crop", "Caesar crop / nodus roll", false))), null);
+        runner.Choose("look");
+        Assert.IsNotNull(runner.Choose("look:0"));
+        Assert.IsNotNull(runner.Choose("look:0"), "again");
+        CollectionAssert.AreEqual(new[] { "back", "look:0" }, Ids(runner.Choices));
+    }
+
+    [Test]
+    public void ExpressionSince_IsTheLastTravellerLineWithOne_FromTheIndex()
+    {
+        var transcript = new List<DialogLine>
+        {
+            new DialogLine("a", DialogSpeaker.Traveller, "Hello.", "happy"),
+            new DialogLine("b", DialogSpeaker.Desk, "Why?", "angry"),
+            new DialogLine("c", DialogSpeaker.Traveller, "Because.", "worried"),
+            new DialogLine("d", DialogSpeaker.Traveller, "Well.", ""),
+            new DialogLine("e", DialogSpeaker.Traveller, "Hm.")
+        };
+        Assert.AreEqual("worried", InterviewScript.ExpressionSince(transcript, 0), "the last one wins; blank and null lines keep it");
+        Assert.AreEqual("worried", InterviewScript.ExpressionSince(transcript, -3));
+        Assert.IsNull(InterviewScript.ExpressionSince(transcript, 3), "no line since then carries one");
+        Assert.IsNull(InterviewScript.ExpressionSince(transcript.GetRange(1, 1), 0), "the desk never has one");
+        Assert.IsNull(InterviewScript.ExpressionSince(null, 0));
+    }
+
+    [Test]
+    public void Expressions_OfNodeLinesAndChoiceLines_ReachTheRuntimeLines_TheDeskAndAnswersHaveNone()
+    {
+        var dialog = new AuthoredDialog
+        {
+            id = "dlg_senenmut",
+            label = "Ask about the temple >",
+            nodes =
+            {
+                new ScriptNode
+                {
+                    id = "start",
+                    lines = { new ScriptLine { id = "dlg_senenmut.start.1", speaker = DialogSpeaker.Traveller, text = "Three terraces.", expression = "happy" } },
+                    choices =
+                    {
+                        new ScriptChoice
+                        {
+                            id = "more", label = "And if she is not?", next = "",
+                            lines = { new ScriptLine { id = "dlg_senenmut.more.1", speaker = DialogSpeaker.Traveller, text = "Then my name is chiselled off.", expression = "worried" } }
+                        }
+                    }
+                }
+            }
+        };
+
+        DialogGraph graph = Build(dialogs: new[] { dialog });
+        Assert.AreEqual("happy", graph.Node("dlg_senenmut/start").Lines[0].Expression);
+        DialogChoice more = graph.Node("dlg_senenmut/start").Choices[0];
+        Assert.IsNull(more.Lines[0].Expression, "the desk's label line");
+        Assert.AreEqual("worried", more.Lines[1].Expression);
+
+        DialogNode ask = graph.Node(InterviewScript.AskNodeId);
+        Assert.IsTrue(ask.Choices.SelectMany(c => c.Lines).All(l => l.Expression == null), "prompts, answers and small talk carry no expression");
+        Assert.IsTrue(graph.Node(InterviewScript.HubNodeId).Choices.SelectMany(c => c.Lines).All(l => l.Expression == null), "requests carry none");
     }
 }

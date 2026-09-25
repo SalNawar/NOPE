@@ -21,7 +21,10 @@ public enum DialogAction
     HandOverDocument,
 
     /// <summary>A narrative dialog ends: it is recorded for the end of the shift (DialogChoice.DialogId, EffectName).</summary>
-    CompleteDialog
+    CompleteDialog,
+
+    /// <summary>The player looks at one of the traveller's garments (DialogChoice.GarmentIndex): it goes into the compare bar.</summary>
+    InspectGarment
 }
 
 /// <summary>What a choice is, for renderers: the wheel puts Back in its centre. Piece 8 appends kinds.</summary>
@@ -37,13 +40,13 @@ public enum DialogChoiceKind
 /// <summary>One transcript line. Immutable; an answer line also carries the fact it states.</summary>
 public sealed class DialogLine
 {
-    /// <summary>A spoken line.</summary>
-    public DialogLine(string id, DialogSpeaker speaker, string text)
-        : this(id, speaker, text, false, default, null, false)
+    /// <summary>A spoken line, optionally with the expression a premade shows while saying it.</summary>
+    public DialogLine(string id, DialogSpeaker speaker, string text, string expression = null)
+        : this(id, speaker, text, false, default, null, false, expression)
     {
     }
 
-    private DialogLine(string id, DialogSpeaker speaker, string text, bool isAnswer, ClueCategory category, string value, bool isTell)
+    private DialogLine(string id, DialogSpeaker speaker, string text, bool isAnswer, ClueCategory category, string value, bool isTell, string expression)
     {
         Id = id;
         Speaker = speaker;
@@ -52,11 +55,12 @@ public sealed class DialogLine
         Category = category;
         Value = value;
         IsTell = isTell;
+        Expression = expression;
     }
 
-    /// <summary>A traveller's answer line: its sentence, plus the answer's category, canonical value and tell flag.</summary>
+    /// <summary>A traveller's answer line: its sentence, plus the answer's category, canonical value and tell flag (no expression).</summary>
     public static DialogLine Answer(string id, string text, InterviewAnswer a) =>
-        new DialogLine(id, DialogSpeaker.Traveller, text, true, a != null ? a.category : default, a != null ? a.value : null, a != null && a.isTell);
+        new DialogLine(id, DialogSpeaker.Traveller, text, true, a != null ? a.category : default, a != null ? a.value : null, a != null && a.isTell, null);
 
     /// <summary>Stable id (the transcript names its row Line_{Id}).</summary>
     public string Id { get; }
@@ -78,6 +82,9 @@ public sealed class DialogLine
 
     /// <summary>True when the answer is a liar's Answer tell.</summary>
     public bool IsTell { get; }
+
+    /// <summary>The expression a premade shows while saying the line (a LookKeys.Expressions token), or null.</summary>
+    public string Expression { get; }
 }
 
 /// <summary>One choice the player can pick at a node.</summary>
@@ -106,6 +113,9 @@ public sealed class DialogChoice
 
     /// <summary>HandOverDocument: index of the document in paper order.</summary>
     public int DocumentIndex = -1;
+
+    /// <summary>InspectGarment: index of the garment in the traveller's look (TravellerLook.Garments).</summary>
+    public int GarmentIndex = -1;
 
     /// <summary>CompleteDialog: the finished dialog's id.</summary>
     public string DialogId;

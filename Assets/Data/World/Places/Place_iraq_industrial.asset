@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Ottoman Iraq (Baghdad Vilayet)
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1870
   birthYearMin: 1800
   birthYearMax: 1852
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Baghdad (vilayet seat)
   - category: 2
     value: Sultan Abdulaziz
+  - category: 6
+    value: chfiyya / abaya veil
   maleNames:
   - Hamdi
   - Shukri
@@ -48,6 +51,83 @@ MonoBehaviour:
   - Zahra
   - Maryam
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: zaboun and camel aba
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: close crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: moustache, short beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: chfiyya
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: brocade dress and abaya
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: long braids
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: abaya veil
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: filigree bangles
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 4
+    - 3
+    - 1
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

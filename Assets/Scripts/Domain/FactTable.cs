@@ -47,7 +47,7 @@ public readonly struct FactRow
 /// </summary>
 public sealed class FactTable
 {
-    /// <summary>The widest fact value a book row shows; every place fact and history value fits (checked by Generate World and the content validator).</summary>
+    /// <summary>The widest fact value a book row shows; every place fact, history value and derived Culture value fits (checked by Generate World and the content validator).</summary>
     public const int MaxValueLength = 28;
 
     /// <summary>Fact values per place and category.</summary>

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-/// <summary>One of today's places as the lie rules see it: its ids and birth years.</summary>
+/// <summary>One of today's places as the lie rules see it: its ids, birth years and whether its dress can leak.</summary>
 public readonly struct HomeCandidate
 {
     /// <summary>Nation id of the place (matches NationSO.id).</summary>
@@ -15,13 +15,17 @@ public readonly struct HomeCandidate
     /// <summary>Latest birth year of a traveller from here (negative = BCE).</summary>
     public readonly int BirthYearMax;
 
+    /// <summary>This place's signature garment can leak onto the traveller's claimed look (Looks.CanLeak).</summary>
+    public readonly bool AppearanceLeakable;
+
     /// <summary>Creates a candidate.</summary>
-    public HomeCandidate(string nationId, string eraId, int birthYearMin, int birthYearMax)
+    public HomeCandidate(string nationId, string eraId, int birthYearMin, int birthYearMax, bool appearanceLeakable = false)
     {
         NationId = nationId;
         EraId = eraId;
         BirthYearMin = birthYearMin;
         BirthYearMax = birthYearMax;
+        AppearanceLeakable = appearanceLeakable;
     }
 }
 
@@ -31,7 +35,7 @@ public enum LieOutcome
     /// <summary>The traveller really comes from the place they claim.</summary>
     Honest,
 
-    /// <summary>The traveller comes from another of today's places; their papers or answers leak tells.</summary>
+    /// <summary>The traveller comes from another of today's places; their papers, answers or dress leak tells.</summary>
     Liar,
 
     /// <summary>The roll said liar, but no other place today could give a tell; the traveller stays honest.</summary>
@@ -45,10 +49,13 @@ public enum TellChannel
     Papers,
 
     /// <summary>The spoken answer to the category's question gives the true home's value; the papers show the cover.</summary>
-    Answer
+    Answer,
+
+    /// <summary>The liar's dress: a dress tell is the true home's signature garment, worn over the claimed look.</summary>
+    Appearance
 }
 
-/// <summary>The outcome of one traveller's lie roll: the true home and the tells the liar leaks, on the papers or in speech.</summary>
+/// <summary>The outcome of one traveller's lie roll: the true home and the tells the liar leaks, on the papers, in speech or in dress.</summary>
 public sealed class LiePlan
 {
     /// <summary>Shared empty tell list.</summary>
@@ -94,8 +101,9 @@ public sealed class LiePlan
 
     /// <summary>
     /// Rewrites every field whose category is a Papers tell with the tell's
-    /// value and flags it as an anachronism. An Answer tell leaves the papers
-    /// on the cover. Changes nothing for an Honest or NoPossibleLie plan.
+    /// value and flags it as an anachronism. An Answer or Appearance tell
+    /// leaves the papers on the cover. Changes nothing for an Honest or
+    /// NoPossibleLie plan.
     /// </summary>
     public void ApplyTo(IEnumerable<DocumentField> fields)
     {
@@ -115,7 +123,7 @@ public sealed class LiePlan
 
 /// <summary>
 /// Who lies about their home, where they really come from, and which tells
-/// they leak on their papers or in their answers. Pure and seeded, so every
+/// they leak on their papers, in their answers or in their dress. Pure and seeded, so every
 /// rule and the draw order are tested headless. Draws on the traveller's lie
 /// stream (Seeds.ForLies), in this order: the roll; for a liar, the home; one
 /// pick per tell (a category/channel option); then the birth year when
@@ -123,7 +131,7 @@ public sealed class LiePlan
 /// </summary>
 public static class Lies
 {
-    /// <summary>One way a home can leak a category: on the papers or in an answer.</summary>
+    /// <summary>One way a home can leak a category: on the papers, in an answer or in dress.</summary>
     private readonly struct TellOption
     {
         /// <summary>The leaked category.</summary>
@@ -141,11 +149,12 @@ public static class Lies
     }
 
     /// <summary>
-    /// Whether a traveller may lie at all: not a legendary, a claim today's
-    /// rules allow, and papers to leak tells on. Exempt travellers make no draw.
+    /// Whether a traveller may lie at all: not an honest premade (premades are
+    /// honest unless authored as liars), a claim today's rules allow, and
+    /// papers to leak tells on. Exempt travellers make no draw.
     /// </summary>
-    public static bool MayLie(bool isLegendary, bool claimAllowed, IReadOnlyList<DocumentField> papers) =>
-        !isLegendary && claimAllowed && papers != null && papers.Count > 0;
+    public static bool MayLie(bool honestPremade, bool claimAllowed, IReadOnlyList<DocumentField> papers) =>
+        !honestPremade && claimAllowed && papers != null && papers.Count > 0;
 
     /// <summary>
     /// Rolls one traveller's lie. With probability <paramref name="liarChance"/>
@@ -154,7 +163,9 @@ public static class Lies
     /// Forgery.IsProvableTell holds: Papers for a category the papers print
     /// (first-appearance order), then Answer for one of
     /// <paramref name="answerTellCategories"/> (today's question categories that
-    /// may carry an Answer tell, in question order; InterviewDay.AnswerTellCategories).
+    /// may carry an Answer tell, in question order; InterviewDay.AnswerTellCategories),
+    /// then Appearance for Culture (Looks.EvidenceCategory) when the place's
+    /// HomeCandidate.AppearanceLeakable holds.
     /// The true home is picked uniformly among the places with at least one
     /// open option, and max(1, min(<paramref name="tellCount"/>, the distinct
     /// categories among the home's options)) tells are picked one uniform
@@ -174,6 +185,7 @@ public static class Lies
 
         bool papersOpen = Allows(channels, TellChannel.Papers);
         bool answersOpen = Allows(channels, TellChannel.Answer);
+        bool dressOpen = Allows(channels, TellChannel.Appearance);
         List<ClueCategory> printed = papersOpen ? PrintedCategories(papers) : new List<ClueCategory>();
         List<ClueCategory> asked = answersOpen ? Distinct(answerTellCategories) : new List<ClueCategory>();
 
@@ -195,6 +207,9 @@ public static class Lies
                 foreach (ClueCategory category in asked)
                     if (Forgery.IsProvableTell(category, claimNationId, claimEraId, coverBirthDate, place, facts, bookCategories))
                         options.Add(new TellOption(category, TellChannel.Answer));
+                if (dressOpen && place.AppearanceLeakable &&
+                    Forgery.IsProvableTell(Looks.EvidenceCategory, claimNationId, claimEraId, coverBirthDate, place, facts, bookCategories))
+                    options.Add(new TellOption(Looks.EvidenceCategory, TellChannel.Appearance));
 
                 if (options.Count > 0)
                 {

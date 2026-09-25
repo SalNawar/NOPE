@@ -3,7 +3,7 @@ using System.Collections.Generic;
 /// <summary>A traveller's gender, as far as the agency can tell from their name.</summary>
 public enum TravellerGender
 {
-    /// <summary>Not derivable: legendaries, "Subject #n", or a name on both lists or neither.</summary>
+    /// <summary>Not derivable: "Subject #n", or a name on both lists or neither (premades carry an authored gender).</summary>
     Unknown,
 
     /// <summary>The name is on the claimed place's male list.</summary>
