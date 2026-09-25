@@ -7,8 +7,10 @@ using UnityEngine;
 /// <summary>
 /// Phase 6 editor tool: scans every ContentLibrarySO asset in the project and
 /// reports data issues to the console — null array entries, duplicate or
-/// missing IDs, duplicate day numbers, dangling cross-references, and
-/// interview content the office could not use (questions, dialogs, menus).
+/// missing IDs, duplicate day numbers, dangling cross-references, interview
+/// content the office could not use (questions, dialogs, menus), the Future
+/// and history (Future places, leader effects, history values, SetFact only
+/// in one-shot history-rule triggers), and trigger, effect and ending fields.
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
 public static class ContentLibraryValidator
@@ -100,6 +102,13 @@ public static class ContentLibraryValidator
         issues += CheckTellChannels(lib);
         issues += CheckSmallTalk(lib);
 
+        // --- The Future and history; trigger, effect and ending fields ---
+        issues += CheckFuture(lib);
+        issues += CheckTriggers(lib);
+        issues += CheckEffects(lib);
+        issues += CheckHistoryValues(lib);
+        issues += CheckEndings(lib);
+
         return issues;
     }
 
@@ -107,6 +116,10 @@ public static class ContentLibraryValidator
     public static string DialogEffectOpError(string dialogId, string choiceId, string effectName, EffectOpType op) =>
         $"Dialog '{dialogId}' choice '{choiceId}' names effect '{effectName}', whose {op} op would already act this evening and in a replay of the day; " +
         "dialog effects may only hold instant ops and briefing/news lines (timed modifiers from dialogs are piece 4/5 work)";
+
+    /// <summary>The error for a dialog effect holding a history-only op (EffectOps.HistoryOnly; Generate World reports the same text).</summary>
+    public static string DialogHistoryOpError(string dialogId, string choiceId, string effectName, EffectOpType op) =>
+        $"Dialog '{dialogId}' choice '{choiceId}' names effect '{effectName}', whose {op} op may only run in a history rule at night";
 
     /// <summary>
     /// Reports interview content the office could not use: blank wording or
@@ -184,8 +197,12 @@ public static class ContentLibraryValidator
                     }
 
                     foreach (EffectOp op in fx.ops)
+                    {
                         if (op != null && EffectOps.ActsWhileActive(op.type))
                             Error(DialogEffectOpError(dialog.id, choice.id, choice.effect, op.type) + ".", d);
+                        if (op != null && EffectOps.HistoryOnly(op.type))
+                            Error(DialogHistoryOpError(dialog.id, choice.id, choice.effect, op.type) + ".", d);
+                    }
 
                     if (fx.defaultDurationDays < 0 && fx.ops.Any(op => op != null && (op.type == EffectOpType.BriefingLine || op.type == EffectOpType.NewsLine)))
                     {
@@ -346,6 +363,237 @@ public static class ContentLibraryValidator
         return issues;
     }
 
+    /// <summary>
+    /// The Future: at most one era is the Future, and then every nation has a
+    /// place in it (errors); every nation's leader effect is a UI-channel
+    /// effect whose Cue op is its culture cue (CultureCue), and no Future place
+    /// has baselines, which would put it in the dominance tiers (warnings).
+    /// </summary>
+    private static int CheckFuture(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        EraSO[] futures = (lib.Eras ?? Array.Empty<EraSO>()).Where(e => e != null && e.isFuture).ToArray();
+        if (futures.Length > 1)
+        {
+            Debug.LogError($"[ContentLibraryValidator] More than one era is the Future ({string.Join(", ", futures.Select(e => e.id))}) in '{lib.name}'.", lib);
+            issues++;
+        }
+
+        foreach (NationSO nation in lib.Nations)
+        {
+            if (nation == null)
+                continue;
+
+            if (futures.Length == 1 && lib.GetProfile(nation, futures[0]) == null)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Nation '{nation.id}' has no Future place, so it could lead with no Future to open in '{lib.name}'.", nation);
+                issues++;
+            }
+
+            EffectSO fx = nation.leaderEffect;
+            bool cue = fx != null && fx.channel == EffectChannel.UI &&
+                       fx.ops.Any(op => op != null && op.type == EffectOpType.Cue && CultureCue.TryParse(op.stringParam, out string id) && id == nation.id);
+            if (!cue)
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Nation '{nation.id}' has no leader effect broadcasting '{CultureCue.Format(nation.id)}' on the UI channel, so its lead shows no culture (run Tools > TimeDesk > Generate World) in '{lib.name}'.", nation);
+                issues++;
+            }
+        }
+
+        foreach (NationEraProfileSO place in lib.Profiles)
+        {
+            if (place != null && place.era != null && place.era.isFuture && place.baselines != null && place.baselines.Count > 0)
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Future place '{place.name}' has baselines, so it would join the dominance tiers and their news in '{lib.name}'.", place);
+                issues++;
+            }
+        }
+
+        return issues;
+    }
+
+    /// <summary>
+    /// Every trigger condition names what its type needs (a profile and an
+    /// attribute, an attribute, a nation, a key): without it the condition can
+    /// never pass. A trigger whose outcome effect holds a history-only op must
+    /// be one-shot (a repeatable one would latch an edit every night).
+    /// </summary>
+    private static int CheckTriggers(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        foreach (TimelineTriggerSO t in lib.Triggers)
+        {
+            if (t == null)
+                continue;
+
+            foreach (TriggerCondition c in t.conditions ?? new List<TriggerCondition>())
+            {
+                string missing = c == null ? null : MissingReference(c);
+                if (missing != null)
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Trigger '{t.name}' has a {c.type} condition without {missing}, so it can never pass in '{lib.name}'.", t);
+                    issues++;
+                }
+            }
+
+            bool history = (t.outcomes ?? new List<TriggerOutcome>()).Any(o => o != null && o.effect != null && o.effect.ops.Any(op => op != null && EffectOps.HistoryOnly(op.type)));
+            if (history && !t.oneShot)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Trigger '{t.name}' latches history (SetFact) but is not one-shot, so it would latch an edit and print its line every night in '{lib.name}'.", t);
+                issues++;
+            }
+        }
+
+        return issues;
+    }
+
+    /// <summary>What a condition of this type needs and lacks ("a profile and an attribute", "a nation", ...), or null when it has it.</summary>
+    private static string MissingReference(TriggerCondition c)
+    {
+        switch (c.type)
+        {
+            case TriggerConditionType.AttributeScoreAtLeast:
+            case TriggerConditionType.AttributeScoreAtMost:
+            case TriggerConditionType.AttributeIsDominant:
+            case TriggerConditionType.AttributeIsSupporting:
+                return c.profile != null && c.attribute != null ? null : "a profile and an attribute";
+            case TriggerConditionType.NationScoreAtLeast:
+            case TriggerConditionType.NationIsLeader:
+                return c.nation != null ? null : "a nation";
+            case TriggerConditionType.GlobalAttrAtLeast:
+            case TriggerConditionType.GlobalAttrAtMost:
+                return c.attribute != null ? null : "an attribute";
+            case TriggerConditionType.CounterAtLeast:
+            case TriggerConditionType.FlagSet:
+            case TriggerConditionType.FlagNotSet:
+            case TriggerConditionType.UpgradeOwned:
+                return !string.IsNullOrWhiteSpace(c.key) ? null : "a key";
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>
+    /// Effects: duplicate asset names (lookups are by name); AddAttributeScore
+    /// needs a profile and an attribute, AddNationScore a nation, SetFact a
+    /// profile, an editable category and a value. An effect with a history-only
+    /// op must be a trigger outcome and never a slot outcome, upgrade unlock,
+    /// tier, leader or dialog effect (those run by day or at Home, not latched
+    /// at night).
+    /// </summary>
+    private static int CheckEffects(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        void Error(string message, UnityEngine.Object context)
+        {
+            Debug.LogError($"[ContentLibraryValidator] {message} in '{lib.name}'.", context);
+            issues++;
+        }
+
+        foreach (IGrouping<string, EffectSO> dup in lib.Effects.Where(e => e != null).GroupBy(e => e.name, StringComparer.OrdinalIgnoreCase).Where(g => g.Count() > 1))
+            Error($"Effect asset name '{dup.Key}' is listed {dup.Count()} times (effects are looked up by name)", dup.First());
+
+        var triggerEffects = new HashSet<EffectSO>(lib.Triggers.Where(t => t != null).SelectMany(t => t.outcomes ?? new List<TriggerOutcome>()).Where(o => o != null && o.effect != null).Select(o => o.effect));
+        var dayEffects = new Dictionary<EffectSO, string>();
+        void Day(EffectSO fx, string owner)
+        {
+            if (fx != null && !dayEffects.ContainsKey(fx))
+                dayEffects.Add(fx, owner);
+        }
+        foreach (SlotOutcomeSO s in lib.SlotOutcomes)
+            if (s != null) Day(s.effect, $"slot outcome '{s.name}'");
+        foreach (UpgradeSO u in lib.Upgrades)
+            if (u != null) Day(u.unlockEffect, $"upgrade '{u.name}'");
+        foreach (NationEraProfileSO p in lib.Profiles)
+            foreach (AttributeBaseline b in p?.baselines ?? new List<AttributeBaseline>())
+                if (b != null)
+                {
+                    Day(b.dominantEffect, $"a tier of '{p.name}'");
+                    Day(b.supportingEffect, $"a tier of '{p.name}'");
+                }
+        foreach (NationSO n in lib.Nations)
+            if (n != null) Day(n.leaderEffect, $"the leader of '{n.name}'");
+        foreach (DialogSO d in lib.Dialogs)
+            foreach (ScriptChoice choice in (d?.dialog?.nodes ?? new List<ScriptNode>()).Where(n => n != null).SelectMany(n => n.choices ?? new List<ScriptChoice>()))
+                if (choice != null) Day(lib.GetEffectByAssetName(choice.effect), $"dialog '{d.name}'");
+
+        foreach (EffectSO fx in lib.Effects)
+        {
+            if (fx == null)
+                continue;
+
+            foreach (EffectOp op in fx.ops)
+            {
+                if (op == null)
+                    continue;
+                if (op.type == EffectOpType.AddAttributeScore && (op.profile == null || op.attribute == null))
+                    Error($"Effect '{fx.name}' has an AddAttributeScore op without a profile and an attribute", fx);
+                if (op.type == EffectOpType.AddNationScore && op.nation == null)
+                    Error($"Effect '{fx.name}' has an AddNationScore op without a nation", fx);
+                if (op.type == EffectOpType.SetFact && (op.profile == null || !History.IsEditable(op.category) || string.IsNullOrWhiteSpace(op.stringParam)))
+                    Error($"Effect '{fx.name}' has a SetFact op without a profile, an editable category and a value", fx);
+            }
+
+            if (!fx.ops.Any(op => op != null && EffectOps.HistoryOnly(op.type)))
+                continue;
+            if (!triggerEffects.Contains(fx))
+                Error($"Effect '{fx.name}' holds a history-only op (SetFact) but no trigger fires it", fx);
+            if (dayEffects.TryGetValue(fx, out string owner))
+                Error($"Effect '{fx.name}' holds a history-only op (SetFact) but is also {owner}'s effect, which does not latch at night", fx);
+        }
+
+        return issues;
+    }
+
+    /// <summary>History values keep every book value unique: HistoryChecks over every SetFact op against the authored facts (no history).</summary>
+    private static int CheckHistoryValues(ContentLibrarySO lib)
+    {
+        var edits = new List<FactEdit>();
+        foreach (EffectSO fx in lib.Effects)
+            foreach (EffectOp op in fx?.ops ?? new List<EffectOp>())
+                if (op != null && op.type == EffectOpType.SetFact && op.profile != null && op.profile.nation != null && op.profile.era != null)
+                    edits.Add(new FactEdit(op.profile.nation.id, op.profile.era.id, op.category, op.stringParam, 0, EditCause.Rule, fx.name));
+
+        List<string> problems = HistoryChecks.Problems(edits, lib.BuildWorldFacts(null));
+        foreach (string problem in problems)
+            Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
+        return problems.Count;
+    }
+
+    /// <summary>
+    /// Endings: an attribute ending needs an attribute and a threshold above 0,
+    /// a day ending a threshold of at least 1; an attribute ending without any
+    /// day ending could never fire (an epilogue replaces a reached milestone).
+    /// </summary>
+    private static int CheckEndings(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        foreach (EndingSO e in lib.Endings)
+        {
+            if (e == null)
+                continue;
+            if (e.conditionType == EndingConditionType.AttrTotalAtLeast && (e.attribute == null || e.threshold <= 0f))
+            {
+                Debug.LogError($"[ContentLibraryValidator] Ending '{e.name}' (AttrTotalAtLeast) needs an attribute and a threshold above 0 in '{lib.name}'.", e);
+                issues++;
+            }
+            if (e.conditionType == EndingConditionType.DayAtLeast && e.threshold < 1f)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Ending '{e.name}' (DayAtLeast) needs a threshold of at least 1 in '{lib.name}'.", e);
+                issues++;
+            }
+        }
+
+        if (lib.Endings.Any(e => e != null && e.conditionType == EndingConditionType.AttrTotalAtLeast) &&
+            !lib.Endings.Any(e => e != null && e.conditionType == EndingConditionType.DayAtLeast))
+        {
+            Debug.LogWarning($"[ContentLibraryValidator] '{lib.name}' has attribute endings but no day ending: an epilogue only replaces a reached milestone, so they could never fire.", lib);
+            issues++;
+        }
+
+        return issues;
+    }
+
     /// <summary>Fact categories every place must have (papers + books + questions).</summary>
     private static readonly ClueCategory[] RequiredFacts =
         { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Politics };
@@ -399,34 +647,75 @@ public static class ContentLibraryValidator
 
     /// <summary>
     /// Reports day plans whose weighted eras have no place today (eras x allowed
-    /// nations), rules no place of the day can break, and legendaries whose
-    /// place is outside the day's world (their papers would print placeholders).
+    /// nations; checked once per possible Future: with no leader, where the
+    /// Future era is exempt, and once per nation with a Future place), a Future
+    /// day that does not allow every nation with a Future place, a nation+era
+    /// rule naming the Future (it would forbid nothing on most days), rules no
+    /// place of the day can break, and legendaries whose place is outside the
+    /// day's world (their papers would print placeholders).
     /// </summary>
     private static int CheckDayPlanPlaces(ContentLibrarySO lib)
     {
         int issues = 0;
+        EraSO future = lib.FutureEra;
+        List<NationSO> futureNations = future == null ? new List<NationSO>()
+            : lib.Nations.Where(n => n != null && lib.GetProfile(n, future) != null).ToList();
 
         foreach (DayPlanSO plan in lib.DayPlans)
         {
             if (plan == null)
                 continue;
 
-            List<NationEraProfileSO> today = lib.TodaysProfiles(plan, null);
-            if (today.Count == 0)
+            bool futureDay = future != null && plan.EraWeights != null && plan.EraWeights.Any(w => w.era == future && w.weight > 0f);
+            var leaders = new List<string> { null };
+            if (futureDay)
+                leaders.AddRange(futureNations.Select(n => n.id));
+
+            bool empty = false;
+            foreach (string leader in leaders)
             {
-                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' has no places (its eras x allowed nations match no place).", plan);
-                issues++;
-                continue;
+                List<NationEraProfileSO> world = lib.TodaysProfiles(plan, leader);
+                string when = futureDay ? (leader == null ? " with no leader" : $" with '{leader}' leading") : string.Empty;
+                if (world.Count == 0)
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' has no places{when} (its eras x allowed nations match no place).", plan);
+                    issues++;
+                    empty = true;
+                    continue;
+                }
+
+                foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
+                {
+                    if (w.era != null && w.weight > 0f && !(leader == null && w.era == future) && world.All(p => p.era != w.era))
+                    {
+                        Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights era '{w.era.id}' but none of its allowed nations has a place there{when}.", plan);
+                        issues++;
+                    }
+                }
             }
 
-            foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
+            if (futureDay)
             {
-                if (w.era != null && w.weight > 0f && today.All(p => p.era != w.era))
+                foreach (NationSO n in futureNations.Where(n => !plan.AllowsNation(n)))
                 {
-                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights era '{w.era.id}' but none of its allowed nations has a place there.", plan);
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights the Future but does not allow '{n.id}', so a {n.id} lead would open no Future that day.", plan);
                     issues++;
                 }
             }
+
+            foreach (TravelRuleSO rule in plan.ActiveTravelRules)
+            {
+                if (rule != null && future != null && rule.type == TravelRuleType.NationEraForbidden && rule.era == future)
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' uses rule '{rule.name}', a nation+era rule on the Future: that place is in the world only while its nation leads, so the rule would usually forbid nothing.", plan);
+                    issues++;
+                }
+            }
+
+            if (empty)
+                continue;
+
+            List<NationEraProfileSO> today = lib.TodaysProfiles(plan, null);
 
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
             {

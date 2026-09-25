@@ -10,18 +10,22 @@ using Object = UnityEngine.Object;
 /// Tools > TimeDesk > Generate World. The one authoritative world generator:
 /// reads the hand-maintained world source (Assets/Data/World/world_source.json)
 /// and creates or updates the eras, nations, places (NationEraProfileSO with
-/// facts, names, birth years and small talk), travel rules and day plans (tell
-/// count and tell channels), the interview (its wording and menu capacity,
-/// questions, narrative dialogs, and a one-shot unlock-announcement trigger
-/// for every gated question), points the case blueprint at the listed
-/// archetypes, then sets every world array of the content library
+/// facts, names, birth years and small talk; the eight Future places), travel
+/// rules and day plans (tell count and tell channels), the interview (its
+/// wording and menu capacity, questions, narrative dialogs, and a one-shot
+/// unlock-announcement trigger for every gated question), the history (one
+/// leader effect per country, one one-shot trigger and SetFact effect per
+/// history rule, the templated history lines), points the case blueprint at
+/// the listed archetypes, then sets every world array of the content library
 /// explicitly. Idempotent: re-running converges to the source file. It owns
-/// the Eras/Nations/Places/Rules/Interview folders under Assets/Data/World
-/// (assets there that the source no longer lists go to the OS trash) and only
-/// drops missing references elsewhere, so hand-authored content (legendaries,
-/// effects, triggers) survives a re-run. The authored assets the source points
-/// at (library, blueprint, attributes, archetypes, books) must already exist;
-/// every reference, id and line is checked before anything is written.
+/// the Eras/Nations/Places/Rules/Interview/History folders under
+/// Assets/Data/World (assets there that the source no longer lists go to the
+/// OS trash), merges its generated triggers and effects after the
+/// hand-authored ones and only drops missing references elsewhere, so
+/// hand-authored content (legendaries, effects, triggers) survives a re-run.
+/// The authored assets the source points at (library, blueprint, attributes,
+/// archetypes, books) must already exist; every reference, id and line is
+/// checked before anything is written.
 /// </summary>
 public static class WorldContentGenerator
 {
@@ -32,10 +36,13 @@ public static class WorldContentGenerator
     private const string WorldRoot = "Assets/Data/World";
 
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
-    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview" };
+    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History" };
 
     /// <summary>Folder of the generated interview assets (questions, dialogs, unlock triggers).</summary>
     private const string InterviewFolder = WorldRoot + "/Interview";
+
+    /// <summary>Folder of the generated history assets (leader effects, history-rule triggers and effects).</summary>
+    private const string HistoryFolder = WorldRoot + "/History";
 
     /// <summary>Reads the source, checks every reference, then writes the world. Aborts (writing nothing) on any error.</summary>
     [MenuItem("Tools/TimeDesk/Generate World")]
@@ -48,6 +55,7 @@ public static class WorldContentGenerator
         var errors = new List<string>();
         Authored authored = LoadAuthored(src.content, errors);
         CheckReferences(src, authored, errors);
+        CheckHistory(src, authored, errors);
         CheckInterview(src, authored, errors);
         if (errors.Count > 0)
         {
@@ -62,15 +70,22 @@ public static class WorldContentGenerator
 
         var written = new HashSet<string>();
 
-        // --- Eras and nations ---
+        // --- Eras, leader effects and nations ---
         var eras = src.eras.ToDictionary(e => e.id, e => MakeEra(e, written));
-        var nations = src.countries.ToDictionary(c => c.id, c => MakeNation(c, written));
+        EffectSO[] leaderEffects = src.countries.Select(c => MakeLeaderEffect(c, written)).ToArray();
+        var nations = src.countries.Select((c, i) => (c, i)).ToDictionary(x => x.c.id, x => MakeNation(x.c, leaderEffects[x.i], written));
 
         // --- Places ---
         var places = src.places
             .Select(p => MakePlace(p, nations[p.country], eras[p.era], src.countries.First(c => c.id == p.country),
                                    authored.attributes, src.travellerAgeMin, src.travellerAgeMax, written))
             .ToArray();
+        var refs = new ConditionRefs(places.ToDictionary(p => p.id), authored.attributes, nations);
+
+        // --- History rules: one SetFact effect and one one-shot trigger each ---
+        HistoryRuleData[] ruleData = src.history?.rules ?? Array.Empty<HistoryRuleData>();
+        EffectSO[] historyEffects = ruleData.Select(r => MakeHistoryEffect(r, refs, written)).ToArray();
+        TimelineTriggerSO[] historyTriggers = ruleData.Select((r, i) => MakeHistoryTrigger(r, historyEffects[i], refs, written)).ToArray();
 
         // --- Rules, blueprint, day plans ---
         var rules = src.rules.ToDictionary(r => r.asset, r => MakeRule(r, nations, eras, written));
@@ -84,9 +99,9 @@ public static class WorldContentGenerator
 
         // --- Interview: questions, dialogs, unlock announcements ---
         QuestionData[] questionData = src.questions ?? Array.Empty<QuestionData>();
-        QuestionSO[] questions = questionData.Select(q => MakeQuestion(q, written)).ToArray();
-        DialogSO[] dialogs = (src.dialogs ?? Array.Empty<DialogData>()).Select(d => MakeDialog(d, written)).ToArray();
-        TimelineTriggerSO[] unlocks = questionData.Where(IsGated).Select(q => MakeUnlockTrigger(q, written)).ToArray();
+        QuestionSO[] questions = questionData.Select(q => MakeQuestion(q, refs, written)).ToArray();
+        DialogSO[] dialogs = (src.dialogs ?? Array.Empty<DialogData>()).Select(d => MakeDialog(d, refs, written)).ToArray();
+        TimelineTriggerSO[] unlocks = questionData.Where(IsGated).Select(q => MakeUnlockTrigger(q, refs, written)).ToArray();
 
         // Re-saving the book covers keeps their YAML in the current shape.
         foreach (ReferenceBookSO book in authored.books)
@@ -94,14 +109,16 @@ public static class WorldContentGenerator
 
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
-                    BuildLines(src.interview), questions, dialogs, unlocks);
+                    BuildLines(src.interview), questions, dialogs, unlocks, BuildHistoryLines(src.history?.lines),
+                    historyTriggers, historyEffects, leaderEffects);
 
         int pruned = PruneOwnedFolders(written);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places, {rules.Count} rules, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers; {pruned} unlisted generated asset(s) moved to the trash.");
+        int futurePlaces = src.places.Count(p => src.eras.Any(e => e.future && e.id == p.era));
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
@@ -210,6 +227,103 @@ public static class WorldContentGenerator
     }
 
     /// <summary>
+    /// Checks the Future and the history section before anything is written:
+    /// at most one Future era, and then exactly one place of every country in
+    /// it; every place fact fits a book row (FactTable.MaxValueLength); the
+    /// history lines are ASCII and hold their tokens; history rules have
+    /// unique lower-case ids, ASCII text, conditions whose references resolve,
+    /// edits of known places and categories, and values HistoryChecks proves
+    /// unique against every place's facts and every other rule.
+    /// </summary>
+    private static void CheckHistory(WorldSource src, Authored authored, List<string> errors)
+    {
+        EraData[] futures = src.eras.Where(e => e.future).ToArray();
+        if (futures.Length > 1)
+            errors.Add($"Only one era may be the Future; {string.Join(", ", futures.Select(e => e.id))} all set \"future\".");
+        if (futures.Length == 1)
+            foreach (CountryData c in src.countries)
+            {
+                int count = src.places.Count(p => p.country == c.id && p.era == futures[0].id);
+                if (count != 1)
+                    errors.Add($"Country '{c.id}' needs exactly one place in the Future era '{futures[0].id}' (it has {count}): the leader's Future place is in the world while it leads.");
+            }
+
+        var eraNames = src.eras.ToDictionary(e => e.id, e => e.displayName);
+        var baseWorld = new FactTable();
+        foreach (PlaceData p in src.places)
+        {
+            foreach (FactData f in p.facts ?? Array.Empty<FactData>())
+            {
+                if ((f.value ?? string.Empty).Length > FactTable.MaxValueLength)
+                    errors.Add($"Place '{PlaceId(p)}' {f.category} '{f.value}' is {f.value.Length} characters long; a book row holds at most {FactTable.MaxValueLength}.");
+                if (ParseEnum(f.category, out ClueCategory category) && !string.IsNullOrWhiteSpace(p.country) && !string.IsNullOrWhiteSpace(p.era))
+                    baseWorld.Add(p.country, p.era, OriginLabels.Format(p.displayName, eraNames.TryGetValue(p.era, out string era) ? era : null), category, f.value);
+            }
+        }
+
+        HistoryData h = src.history;
+        if (h == null)
+            return;
+
+        foreach ((string field, string text, string[] tokens) in new[]
+                 {
+                     ("leaderGained", h.lines?.leaderGained, new[] { History.NationToken, Interview.PlaceToken }),
+                     ("leaderLost", h.lines?.leaderLost, new[] { History.NationToken }),
+                     ("carry", h.lines?.carry, new[] { Interview.ValueToken, Interview.PlaceToken })
+                 })
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                errors.Add($"history.lines.{field} is blank.");
+            CheckAscii($"history.{field}", text, errors);
+            foreach (string token in tokens)
+                if (!string.IsNullOrWhiteSpace(text) && !Interview.HoldsToken(text, token))
+                    errors.Add($"history.lines.{field} must hold {Interview.Placeholder(token)}.");
+        }
+
+        var ruleIds = new HashSet<string>();
+        var placeIds = new HashSet<string>(src.places.Select(PlaceId));
+        var edits = new List<FactEdit>();
+        foreach (HistoryRuleData r in h.rules ?? Array.Empty<HistoryRuleData>())
+        {
+            string owner = $"History rule '{r.id}'";
+            if (string.IsNullOrWhiteSpace(r.id) || r.id.Any(ch => !(ch >= 'a' && ch <= 'z') && !(ch >= '0' && ch <= '9') && ch != '_'))
+                errors.Add($"{owner} needs an id of lower-case letters, digits and '_' (its fired flag and asset names come from it).");
+            else if (!ruleIds.Add(r.id))
+                errors.Add($"History rule id '{r.id}' is listed twice.");
+
+            foreach ((string field, string text) in new[] { ("name", r.name), ("news", r.news) })
+            {
+                if (string.IsNullOrWhiteSpace(text))
+                    errors.Add($"{owner} has a blank {field}.");
+                CheckAscii($"history.{r.id}.{field}", text, errors);
+            }
+
+            if (r.conditions == null || r.conditions.Length == 0)
+                errors.Add($"{owner} needs at least one condition (it would fire on the first night).");
+            CheckConditions(r.conditions, owner, false, authored, src, errors);
+
+            if (r.edits == null || r.edits.Length == 0)
+                errors.Add($"{owner} needs at least one edit.");
+            foreach (EditData e in r.edits ?? Array.Empty<EditData>())
+            {
+                CheckAscii($"history.{r.id}.edit", e.value, errors);
+                if (!placeIds.Contains(e.place ?? string.Empty))
+                    errors.Add($"{owner} edits unknown place '{e.place}' (a place id is \"{{country}}_{{era}}\").");
+                else if (!ParseEnum(e.category, out ClueCategory category))
+                    errors.Add($"{owner} edits unknown category '{e.category}'.");
+                else
+                {
+                    PlaceData p = src.places.First(x => PlaceId(x) == e.place);
+                    edits.Add(new FactEdit(p.country, p.era, category, e.value, 0, EditCause.Rule, r.id));
+                }
+            }
+        }
+
+        foreach (string problem in HistoryChecks.Problems(edits, baseWorld))
+            errors.Add(problem);
+    }
+
+    /// <summary>
     /// Checks each day's tell channels and the interview sections (wording,
     /// questions, dialogs, small talk) before anything is written: tokens,
     /// provable categories, gates and announcements, dialog structure and
@@ -250,12 +364,7 @@ public static class WorldContentGenerator
                 ids.Add(id, owner);
         }
 
-        void Ascii(string id, string text)
-        {
-            char bad = (text ?? string.Empty).FirstOrDefault(ch => ch > 127);
-            if (bad != default)
-                errors.Add($"'{id}' holds the non-ASCII character '{bad}'; authored interview text must be ASCII (new glyphs dirty the TMP fallback atlas).");
-        }
+        void Ascii(string id, string text) => CheckAscii(id, text, errors);
 
         // --- The interview's wording and limits ---
         var wording = new (string field, string text)[]
@@ -330,7 +439,7 @@ public static class WorldContentGenerator
             else if (!gated && !string.IsNullOrWhiteSpace(q.announce))
                 errors.Add($"{owner} is askable from day 1 without conditions, so nothing announces it; drop its \"announce\" line.");
 
-            CheckConditions(q.conditions, owner, true, authored, errors);
+            CheckConditions(q.conditions, owner, true, authored, src, errors);
 
             Ascii($"{q.id}.label", q.label);
             Ascii(QuestionLineId(q.id, PromptPart), q.prompt);
@@ -371,7 +480,7 @@ public static class WorldContentGenerator
             if (string.IsNullOrWhiteSpace(d.label))
                 errors.Add($"{owner} has a blank label.");
             Ascii($"{d.id}.label", d.label);
-            CheckConditions(d.conditions, owner, false, authored, errors);
+            CheckConditions(d.conditions, owner, false, authored, src, errors);
 
             void Lines(LineData[] lines, string lineOwner)
             {
@@ -409,8 +518,12 @@ public static class WorldContentGenerator
                     }
 
                     foreach (EffectOp op in fx.ops)
+                    {
                         if (op != null && EffectOps.ActsWhileActive(op.type))
                             errors.Add(ContentLibraryValidator.DialogEffectOpError(d.id, c.id, c.effect, op.type) + ".");
+                        if (op != null && EffectOps.HistoryOnly(op.type))
+                            errors.Add(ContentLibraryValidator.DialogHistoryOpError(d.id, c.id, c.effect, op.type) + ".");
+                    }
                 }
             }
 
@@ -503,14 +616,32 @@ public static class WorldContentGenerator
                 Fits(SmallTalkId(PlaceId(p), i), p.smallTalk[i], Interview.ValueToken, 0);
     }
 
-    /// <summary>
-    /// A condition list's problems: an unknown type; a type that needs a
-    /// profile, attribute or nation reference (not nameable in the source yet);
-    /// DayAtLeast inside a question (its day is "fromDay"); an unknown upgrade;
-    /// a blank flag or counter key.
-    /// </summary>
-    private static void CheckConditions(ConditionData[] conditions, string owner, bool isQuestion, Authored authored, List<string> errors)
+    /// <summary>Authored text must be ASCII: new glyphs dirty the TMP fallback atlas (interview and history text alike).</summary>
+    private static void CheckAscii(string id, string text, List<string> errors)
     {
+        char bad = (text ?? string.Empty).FirstOrDefault(ch => ch > 127);
+        if (bad != default)
+            errors.Add($"'{id}' holds the non-ASCII character '{bad}'; authored text must be ASCII (new glyphs dirty the TMP fallback atlas).");
+    }
+
+    /// <summary>
+    /// A condition list's problems: an unknown type; a reference the type
+    /// needs that is missing or unknown (a place and an attribute for the
+    /// place-attribute types, a nation for NationScoreAtLeast and
+    /// NationIsLeader, an attribute for the global totals); DayAtLeast inside
+    /// a question (its day is "fromDay"); an unknown upgrade; a blank flag or
+    /// counter key.
+    /// </summary>
+    private static void CheckConditions(ConditionData[] conditions, string owner, bool isQuestion, Authored authored, WorldSource src, List<string> errors)
+    {
+        var placeIds = new HashSet<string>(src.places.Select(PlaceId));
+        var countryIds = new HashSet<string>(src.countries.Select(c => c.id));
+        void Needs(bool ok, string type, string field, string value)
+        {
+            if (!ok)
+                errors.Add($"{owner} has a {type} condition whose \"{field}\" ('{value}') names nothing in world_source.json.");
+        }
+
         foreach (ConditionData c in conditions ?? Array.Empty<ConditionData>())
         {
             if (!ParseEnum(c.type, out TriggerConditionType type))
@@ -525,8 +656,16 @@ public static class WorldContentGenerator
                 case TriggerConditionType.AttributeScoreAtMost:
                 case TriggerConditionType.AttributeIsDominant:
                 case TriggerConditionType.AttributeIsSupporting:
+                    Needs(c.place != null && placeIds.Contains(c.place), c.type, "place", c.place);
+                    Needs(c.attribute != null && authored.attributes.ContainsKey(c.attribute), c.type, "attribute", c.attribute);
+                    break;
                 case TriggerConditionType.NationScoreAtLeast:
-                    errors.Add($"{owner} uses a {type} condition, which needs a profile, attribute or nation reference; world_source.json cannot name those until piece 5 (history) adds id resolution.");
+                case TriggerConditionType.NationIsLeader:
+                    Needs(c.nation != null && countryIds.Contains(c.nation), c.type, "nation", c.nation);
+                    break;
+                case TriggerConditionType.GlobalAttrAtLeast:
+                case TriggerConditionType.GlobalAttrAtMost:
+                    Needs(c.attribute != null && authored.attributes.ContainsKey(c.attribute), c.type, "attribute", c.attribute);
                     break;
                 case TriggerConditionType.DayAtLeast:
                     if (isQuestion)
@@ -571,8 +710,8 @@ public static class WorldContentGenerator
 
     /// <summary>
     /// The longest value a {value} of this category can take: the longest fact
-    /// of any place, or for a birth date the longest registered date the
-    /// places' birth years give.
+    /// of any place or history-rule edit, or for a birth date the longest
+    /// registered date the places' birth years give.
     /// </summary>
     private static int LongestValue(WorldSource src, ClueCategory category)
     {
@@ -597,6 +736,11 @@ public static class WorldContentGenerator
                     longest = Math.Max(longest, (f.value ?? string.Empty).Length);
         }
 
+        foreach (HistoryRuleData r in src.history?.rules ?? Array.Empty<HistoryRuleData>())
+            foreach (EditData e in r.edits ?? Array.Empty<EditData>())
+                if (e.category == category.ToString())
+                    longest = Math.Max(longest, (e.value ?? string.Empty).Length);
+
         return longest;
     }
 
@@ -613,19 +757,74 @@ public static class WorldContentGenerator
         era.id = e.id;
         era.displayName = e.displayName;
         era.order = e.order;
+        era.isFuture = e.future;
         era.smallTalk = SmallTalk(e.id, e.smallTalk);
         EditorUtility.SetDirty(era);
         return era;
     }
 
-    private static NationSO MakeNation(CountryData c, HashSet<string> written)
+    private static NationSO MakeNation(CountryData c, EffectSO leaderEffect, HashSet<string> written)
     {
         NationSO nation = LoadOrCreate<NationSO>($"{WorldRoot}/Nations/Nation_{c.id}.asset", written);
         nation.id = c.id;
         nation.displayName = c.displayName;
+        nation.leaderEffect = leaderEffect;
         EditorUtility.SetDirty(nation);
         return nation;
     }
+
+    /// <summary>Writes History/Effect_Leader_{id}.asset: the permanent UI-channel effect whose cue culture:{id} broadcasts the country as the present culture while it leads.</summary>
+    private static EffectSO MakeLeaderEffect(CountryData c, HashSet<string> written)
+    {
+        EffectSO fx = LoadOrCreate<EffectSO>($"{HistoryFolder}/Effect_Leader_{c.id}.asset", written);
+        fx.displayName = $"Leader: {c.displayName}";
+        fx.channel = EffectChannel.UI;
+        fx.defaultDurationDays = -1;
+        fx.ops = new List<EffectOp> { new EffectOp { type = EffectOpType.Cue, stringParam = CultureCue.Format(c.id) } };
+        EditorUtility.SetDirty(fx);
+        return fx;
+    }
+
+    /// <summary>Writes History/Effect_History_{id}.asset: one SetFact op per edit of the rule (latched when its trigger fires).</summary>
+    private static EffectSO MakeHistoryEffect(HistoryRuleData r, ConditionRefs refs, HashSet<string> written)
+    {
+        EffectSO fx = LoadOrCreate<EffectSO>($"{HistoryFolder}/Effect_History_{r.id}.asset", written);
+        fx.displayName = r.name;
+        fx.channel = EffectChannel.General;
+        fx.defaultDurationDays = 1;
+        fx.ops = (r.edits ?? Array.Empty<EditData>()).Select(e => new EffectOp
+        {
+            type = EffectOpType.SetFact,
+            profile = refs.places[e.place],
+            category = (ClueCategory)Enum.Parse(typeof(ClueCategory), e.category),
+            stringParam = e.value
+        }).ToList();
+        EditorUtility.SetDirty(fx);
+        return fx;
+    }
+
+    /// <summary>Writes History/Trigger_History_{id}.asset: a one-shot trigger with the rule's conditions, news line and effect ("history_{id}").</summary>
+    private static TimelineTriggerSO MakeHistoryTrigger(HistoryRuleData r, EffectSO effect, ConditionRefs refs, HashSet<string> written)
+    {
+        TimelineTriggerSO t = LoadOrCreate<TimelineTriggerSO>($"{HistoryFolder}/Trigger_History_{r.id}.asset", written);
+        t.id = $"history_{r.id}";
+        t.displayName = r.name;
+        t.description = "Generated from world_source.json history.rules.";
+        t.oneShot = true;
+        t.newsLineOnFire = r.news;
+        t.conditions = Conditions(r.conditions, refs).ToList();
+        t.outcomes = new List<TriggerOutcome> { new TriggerOutcome { effect = effect, durationDaysOverride = 0 } };
+        EditorUtility.SetDirty(t);
+        return t;
+    }
+
+    /// <summary>The templated history lines with their ids ("history.leaderGained", ...).</summary>
+    private static HistoryLines BuildHistoryLines(HistoryLinesData l) => new HistoryLines
+    {
+        leaderGained = new LineText("history.leaderGained", l?.leaderGained),
+        leaderLost = new LineText("history.leaderLost", l?.leaderLost),
+        carry = new LineText("history.carry", l?.carry)
+    };
 
     private static NationEraProfileSO MakePlace(PlaceData p, NationSO nation, EraSO era, CountryData country,
                                                 Dictionary<string, AttributeSO> attributes, int ageMin, int ageMax,
@@ -646,10 +845,14 @@ public static class WorldContentGenerator
             .ToList();
 
         // Starting attribute scores follow the country's theme. No tier effects:
-        // 40 places x tiers would flood the morning paper (history is piece 5).
-        place.baselines = (country.baselines ?? Array.Empty<BaselineData>())
-            .Select(b => new AttributeBaseline { attribute = attributes[b.attribute], baseScore = b.score })
-            .ToList();
+        // 40 places x tiers would flood the morning paper. Future places get no
+        // baselines, so they never join the tiers or their news (history ranks
+        // nations by influence instead).
+        place.baselines = era.isFuture
+            ? new List<AttributeBaseline>()
+            : (country.baselines ?? Array.Empty<BaselineData>())
+                .Select(b => new AttributeBaseline { attribute = attributes[b.attribute], baseScore = b.score })
+                .ToList();
 
         EditorUtility.SetDirty(place);
         return place;
@@ -797,34 +1000,52 @@ public static class WorldContentGenerator
             ? new[] { new TriggerCondition { type = TriggerConditionType.DayAtLeast, threshold = threshold } }
             : Array.Empty<TriggerCondition>();
 
-    /// <summary>The authored conditions as trigger conditions.</summary>
-    private static IEnumerable<TriggerCondition> Conditions(ConditionData[] conditions) =>
+    /// <summary>The authored conditions as trigger conditions, their place, attribute and nation ids resolved (questions, dialogs and history rules alike).</summary>
+    private static IEnumerable<TriggerCondition> Conditions(ConditionData[] conditions, ConditionRefs refs) =>
         (conditions ?? Array.Empty<ConditionData>()).Select(c => new TriggerCondition
         {
             type = (TriggerConditionType)Enum.Parse(typeof(TriggerConditionType), c.type),
             key = c.key,
-            threshold = c.threshold
+            threshold = c.threshold,
+            profile = c.place != null && refs.places.TryGetValue(c.place, out NationEraProfileSO p) ? p : null,
+            attribute = c.attribute != null && refs.attributes.TryGetValue(c.attribute, out AttributeSO a) ? a : null,
+            nation = c.nation != null && refs.nations.TryGetValue(c.nation, out NationSO n) ? n : null
         });
+
+    /// <summary>The generated places, the authored attributes and the generated nations by id: what condition and edit ids resolve to.</summary>
+    private sealed class ConditionRefs
+    {
+        public readonly Dictionary<string, NationEraProfileSO> places;
+        public readonly Dictionary<string, AttributeSO> attributes;
+        public readonly Dictionary<string, NationSO> nations;
+
+        public ConditionRefs(Dictionary<string, NationEraProfileSO> places, Dictionary<string, AttributeSO> attributes, Dictionary<string, NationSO> nations)
+        {
+            this.places = places;
+            this.attributes = attributes;
+            this.nations = nations;
+        }
+    }
 
     /// <summary>True when a question is gated (fromDay above 1 or any authored condition), so an unlock trigger announces it.</summary>
     private static bool IsGated(QuestionData q) => q.fromDay > 1 || (q.conditions != null && q.conditions.Length > 0);
 
     /// <summary>Writes Interview/Question_{id}.asset: the question and its day-start conditions (DayAtLeast fromDay when fromDay > 1, plus the authored ones).</summary>
-    private static QuestionSO MakeQuestion(QuestionData q, HashSet<string> written)
+    private static QuestionSO MakeQuestion(QuestionData q, ConditionRefs refs, HashSet<string> written)
     {
         QuestionSO so = LoadOrCreate<QuestionSO>($"{InterviewFolder}/Question_{q.id}.asset", written);
         so.question = BuildQuestion(q);
-        so.conditions = DayGate(q.fromDay, q.fromDay).Concat(Conditions(q.conditions)).ToList();
+        so.conditions = DayGate(q.fromDay, q.fromDay).Concat(Conditions(q.conditions, refs)).ToList();
         EditorUtility.SetDirty(so);
         return so;
     }
 
     /// <summary>Writes Interview/Dialog_{id}.asset: the dialog and its conditions.</summary>
-    private static DialogSO MakeDialog(DialogData d, HashSet<string> written)
+    private static DialogSO MakeDialog(DialogData d, ConditionRefs refs, HashSet<string> written)
     {
         DialogSO so = LoadOrCreate<DialogSO>($"{InterviewFolder}/Dialog_{d.id}.asset", written);
         so.dialog = BuildDialog(d);
-        so.conditions = Conditions(d.conditions).ToList();
+        so.conditions = Conditions(d.conditions, refs).ToList();
         EditorUtility.SetDirty(so);
         return so;
     }
@@ -836,7 +1057,7 @@ public static class WorldContentGenerator
     /// (DayAtLeast Gates.UnlockNight(fromDay) when fromDay > 1) and when the
     /// question's own conditions hold.
     /// </summary>
-    private static TimelineTriggerSO MakeUnlockTrigger(QuestionData q, HashSet<string> written)
+    private static TimelineTriggerSO MakeUnlockTrigger(QuestionData q, ConditionRefs refs, HashSet<string> written)
     {
         TimelineTriggerSO t = LoadOrCreate<TimelineTriggerSO>($"{InterviewFolder}/Trigger_Unlock_{q.id}.asset", written);
         t.id = $"unlock_{q.id}";
@@ -844,7 +1065,7 @@ public static class WorldContentGenerator
         t.description = $"Generated by Generate World: announces the {q.label} question in the morning paper of the first day it can be asked.";
         t.oneShot = true;
         t.newsLineOnFire = q.announce;
-        t.conditions = DayGate(q.fromDay, Gates.UnlockNight(q.fromDay)).Concat(Conditions(q.conditions)).ToList();
+        t.conditions = DayGate(q.fromDay, Gates.UnlockNight(q.fromDay)).Concat(Conditions(q.conditions, refs)).ToList();
         t.outcomes = new List<TriggerOutcome>();
         EditorUtility.SetDirty(t);
         return t;
@@ -855,13 +1076,17 @@ public static class WorldContentGenerator
         Enum.TryParse(text, out value) && Enum.IsDefined(typeof(T), value);
 
     /// <summary>
-    /// Sets every world array of the library and the interview (authoritative),
-    /// rewires the triggers (the hand-authored ones kept in order, then the
-    /// generated unlock triggers) and drops missing references from the rest.
+    /// Sets every world array of the library, the interview and the history
+    /// lines (authoritative), rewires the triggers (the hand-authored ones kept
+    /// in order, then the generated unlock triggers, then the history-rule
+    /// triggers) and the effects (the hand-authored ones kept in order, then
+    /// the history-rule effects, then the leader effects), and drops missing
+    /// references from the rest.
     /// </summary>
     private static void WireLibrary(ContentLibrarySO lib, DayPlanSO[] days, EraSO[] eras, NationSO[] nations, NationEraProfileSO[] places,
                                     ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
-                                    InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks)
+                                    InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks,
+                                    HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects)
     {
         var so = new SerializedObject(lib);
         SetArray(so, "dayPlans", days);
@@ -874,10 +1099,11 @@ public static class WorldContentGenerator
         so.FindProperty("interview").boxedValue = interview;
         SetArray(so, "questions", questions);
         SetArray(so, "dialogs", dialogs);
-        SetArray(so, "timelineTriggers", AuthoredTriggers(so).Concat(unlocks).ToArray());
+        so.FindProperty("historyLines").boxedValue = historyLines;
+        SetArray(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(historyTriggers).ToArray());
+        SetArray(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
         DropMissing(so, "clues");
         DropMissing(so, "legendaries");
-        DropMissing(so, "effects");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }
@@ -971,15 +1197,16 @@ public static class WorldContentGenerator
         return asset;
     }
 
-    /// <summary>The library's current triggers that are not generated here (non-null, outside the Interview folder), in order.</summary>
-    private static List<Object> AuthoredTriggers(SerializedObject so)
+    /// <summary>The library array's current entries that are not generated here (non-null, outside the Interview and History folders), in order.</summary>
+    private static List<Object> HandAuthored(SerializedObject so, string prop)
     {
         var kept = new List<Object>();
-        SerializedProperty p = so.FindProperty("timelineTriggers");
+        SerializedProperty p = so.FindProperty(prop);
         for (int i = 0; i < p.arraySize; i++)
         {
             Object o = p.GetArrayElementAtIndex(i).objectReferenceValue;
-            if (o != null && !AssetDatabase.GetAssetPath(o).StartsWith(InterviewFolder + "/"))
+            string path = o != null ? AssetDatabase.GetAssetPath(o) : null;
+            if (o != null && !path.StartsWith(InterviewFolder + "/") && !path.StartsWith(HistoryFolder + "/"))
                 kept.Add(o);
         }
         return kept;
@@ -1012,6 +1239,7 @@ public static class WorldContentGenerator
         public InterviewData interview;
         public QuestionData[] questions;
         public DialogData[] dialogs;
+        public HistoryData history;
     }
 
     /// <summary>Authored assets the world is wired into (asset paths).</summary>
@@ -1027,7 +1255,8 @@ public static class WorldContentGenerator
 
     [Serializable] private sealed class AttributeData { public string id; public string asset; }
 
-    [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public string[] smallTalk; }
+    /// <summary>An era; "future" marks the office's own time (at most one).</summary>
+    [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public bool future; public string[] smallTalk; }
 
     [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; }
 
@@ -1103,7 +1332,20 @@ public static class WorldContentGenerator
 
     [Serializable] private sealed class OverrideData { public string era; public string prompt; public string answer; }
 
-    [Serializable] private sealed class ConditionData { public string type; public string key; public float threshold; }
+    /// <summary>A gate condition; place ("{country}_{era}"), attribute and nation are ids the generator resolves.</summary>
+    [Serializable] private sealed class ConditionData { public string type; public string key; public float threshold; public string place; public string attribute; public string nation; }
+
+    /// <summary>The history section: the templated news lines and the authored history rules.</summary>
+    [Serializable] private sealed class HistoryData { public HistoryLinesData lines; public HistoryRuleData[] rules; }
+
+    /// <summary>The templated history lines ({nation}, {place}, {value}).</summary>
+    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; }
+
+    /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits and prints its news line.</summary>
+    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; }
+
+    /// <summary>A fact edit: place ("{country}_{era}"), category and the new value.</summary>
+    [Serializable] private sealed class EditData { public string place; public string category; public string value; }
 
     /// <summary>A narrative dialog; one-shot unless "repeatable" is true.</summary>
     [Serializable] private sealed class DialogData
