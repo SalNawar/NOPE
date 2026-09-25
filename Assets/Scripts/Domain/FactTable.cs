@@ -43,10 +43,13 @@ public readonly struct FactRow
 /// label) and the reference books read. Built once per day (a snapshot), so
 /// papers and books always agree; Citizen Records carry the claimed place's
 /// label the case took from here. Pure and string-keyed, so it is tested headless;
-/// history-dependent facts (a later feature) change what goes in, not how it is read.
+/// history changes what goes in (ContentLibrarySO.FillFacts), not how it is read.
 /// </summary>
 public sealed class FactTable
 {
+    /// <summary>The widest fact value a book row shows; every place fact and history value fits (checked by Generate World and the content validator).</summary>
+    public const int MaxValueLength = 28;
+
     /// <summary>Fact values per place and category.</summary>
     private readonly Dictionary<(string nation, string era, ClueCategory category), string> _values =
         new Dictionary<(string, string, ClueCategory), string>();
@@ -95,4 +98,32 @@ public sealed class FactTable
     /// <summary>All rows of a category in insertion order (empty when none).</summary>
     public IReadOnlyList<FactRow> Rows(ClueCategory category) =>
         _rows.TryGetValue(category, out List<FactRow> list) ? list : NoRows;
+
+    /// <summary>
+    /// Another place of this category with this value (the uniqueness question
+    /// behind provable tells and history checks): the first row of
+    /// <paramref name="category"/> outside (<paramref name="nationId"/>,
+    /// <paramref name="eraId"/>) whose value DiscrepancyLog.ValuesMatch
+    /// <paramref name="value"/>. False, with a default row, when none or the
+    /// value is blank.
+    /// </summary>
+    public bool TryFindOtherPlaceWith(ClueCategory category, string nationId, string eraId, string value, out FactRow row)
+    {
+        row = default;
+        if (string.IsNullOrWhiteSpace(value))
+            return false;
+
+        foreach (FactRow r in Rows(category))
+        {
+            if (r.NationId == nationId && r.EraId == eraId)
+                continue;
+            if (DiscrepancyLog.ValuesMatch(r.Value, value))
+            {
+                row = r;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

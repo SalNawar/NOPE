@@ -76,4 +76,33 @@ public class FactTableTests
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
     }
+
+    [Test]
+    public void TryFindOtherPlaceWith_MatchesLikeTheScanner_ButNeverThePlaceItself()
+    {
+        FactTable t = Today();
+        Assert.IsTrue(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", "  silver SHEKEL ", out FactRow row),
+                      "another case and leading/trailing spaces still match (DiscrepancyLog.ValuesMatch)");
+        Assert.AreEqual("iraq", row.NationId);
+        Assert.AreEqual("Babylonia (Ancient)", row.OriginLabel);
+
+        Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", "Deben", out _), "the place's own row never counts");
+        Assert.IsTrue(t.TryFindOtherPlaceWith(ClueCategory.Currency, "iraq", "ancient", "Deben", out _));
+    }
+
+    [Test]
+    public void TryFindOtherPlaceWith_FalseForInternalSpacing_AnotherCategory_AndBlank()
+    {
+        FactTable t = Today();
+        Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", "Silver  shekel", out _), "ValuesMatch only trims and ignores case");
+        Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Language, "egypt", "ancient", "Silver shekel", out _), "another category's equal value");
+        Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", " ", out FactRow none));
+        Assert.IsNull(none.NationId);
+    }
+
+    [Test]
+    public void MaxValueLength_Is28()
+    {
+        Assert.AreEqual(28, FactTable.MaxValueLength);
+    }
 }

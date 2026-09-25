@@ -54,13 +54,6 @@ public static class Forgery
         if (string.IsNullOrEmpty(claimValue) || string.IsNullOrEmpty(homeValue) || DiscrepancyLog.ValuesMatch(claimValue, homeValue))
             return false;
 
-        foreach (FactRow row in facts.Rows(category))
-        {
-            bool homesOwnRow = row.NationId == home.NationId && row.EraId == home.EraId;
-            if (!homesOwnRow && DiscrepancyLog.ValuesMatch(row.Value, homeValue))
-                return false;
-        }
-
-        return true;
+        return !facts.TryFindOtherPlaceWith(category, home.NationId, home.EraId, homeValue, out _);
     }
 }
