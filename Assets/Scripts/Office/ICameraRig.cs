@@ -1,5 +1,5 @@
 /// <summary>
-/// Abstraction over the camera so view-state logic is testable without
+/// Abstraction over the camera so view-state logic is decoupled from
 /// Cinemachine. Implemented for real by CinemachineCameraRig.
 /// </summary>
 public interface ICameraRig
@@ -9,4 +9,7 @@ public interface ICameraRig
 
     /// <summary>Frames the close-up monitor view.</summary>
     void ShowMonitor();
+
+    /// <summary>True when the rig shows that view's camera and no blend is running.</summary>
+    bool IsSettled(OfficeView view);
 }

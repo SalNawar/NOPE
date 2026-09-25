@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 /// <summary>
 /// Fake-OS desktop shell: the Start button toggles a small menu offering
-/// Settings (opens an empty stub window) and Power (quits the game). Wire from
-/// the editor builder. All fields are optional / null-safe.
+/// Settings (opens an empty stub window), Turn off screen (darkens the live
+/// monitor; only where one is wired) and Quit game. Wire from the editor
+/// builder. All fields are optional / null-safe.
 /// </summary>
 public sealed class DesktopShell : MonoBehaviour
 {
@@ -17,8 +19,15 @@ public sealed class DesktopShell : MonoBehaviour
     /// <summary>Start-menu "Settings" entry.</summary>
     [SerializeField] private Button settingsButton;
 
-    /// <summary>Start-menu "Power" entry (quits).</summary>
-    [SerializeField] private Button powerButton;
+    /// <summary>Start-menu "Quit game" entry; quits. (Formerly "Power", which quit too, so every scene's saved entry keeps quitting.)</summary>
+    [FormerlySerializedAs("powerButton")]
+    [SerializeField] private Button quitButton;
+
+    /// <summary>Start-menu "Turn off screen" entry; optional, with the monitor screen.</summary>
+    [SerializeField] private Button screenOffButton;
+
+    /// <summary>The live monitor the "Turn off screen" entry darkens (wired with the entry).</summary>
+    [SerializeField] private MonitorScreen monitorScreen;
 
     /// <summary>Settings window opened by the Settings entry (empty stub).</summary>
     [SerializeField] private OSWindowChrome settingsWindow;
@@ -32,8 +41,10 @@ public sealed class DesktopShell : MonoBehaviour
             startButton.onClick.AddListener(ToggleStartMenu);
         if (settingsButton != null)
             settingsButton.onClick.AddListener(OpenSettings);
-        if (powerButton != null)
-            powerButton.onClick.AddListener(Quit);
+        if (quitButton != null)
+            quitButton.onClick.AddListener(Quit);
+        if (screenOffButton != null)
+            screenOffButton.onClick.AddListener(TurnOffScreen);
     }
 
     /// <summary>Shows/hides the Start menu.</summary>
@@ -48,6 +59,15 @@ public sealed class DesktopShell : MonoBehaviour
     {
         if (settingsWindow != null)
             settingsWindow.Open();
+        if (startMenu != null)
+            startMenu.SetActive(false);
+    }
+
+    /// <summary>Turns the monitor's screen off (a screen held on by a pending citation slip stays on) and closes the Start menu.</summary>
+    public void TurnOffScreen()
+    {
+        if (monitorScreen != null)
+            monitorScreen.TurnOff();
         if (startMenu != null)
             startMenu.SetActive(false);
     }

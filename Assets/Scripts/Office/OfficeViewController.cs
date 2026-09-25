@@ -8,46 +8,67 @@ public enum OfficeView
     /// <summary>Wide booth view from the agent's POV (default).</summary>
     OfficeFocus,
 
-    /// <summary>Close-up on the CRT; the desktop UI is interactive.</summary>
+    /// <summary>Close-up on the CRT; the desktop takes input once the push-in settles.</summary>
     MonitorFocus
 }
 
 /// <summary>
-/// Drives the office's two camera states. Logic is decoupled from Cinemachine
-/// via <see cref="ICameraRig"/> so it is unit-testable; the desktop Canvas is
-/// shown only in MonitorFocus. Tapping the CRT/READY sign calls FocusMonitor;
-/// a desktop "back" affordance calls FocusOffice.
+/// Drives the office's two camera states through <see cref="ICameraRig"/> and
+/// reports when the rig has settled on a view (the desktop's input waits for
+/// it). With a live monitor wired (MonitorScreen) the desktop canvas stays
+/// active on the CRT and BoothCoordinator gates its input; without one (the
+/// hybrid scene) the desktop is shown only in MonitorFocus. Clicking the CRT
+/// calls FocusMonitor; Escape, a click outside the screen and the desktop's
+/// "&lt; Desk" button call FocusOffice.
 /// </summary>
 public sealed class OfficeViewController : MonoBehaviour
 {
     /// <summary>Cinemachine rig (a CinemachineCameraRig MonoBehaviour).</summary>
     [SerializeField] private MonoBehaviour cameraRigBehaviour;
 
-    /// <summary>The screen-space desktop canvas, shown only in MonitorFocus.</summary>
+    /// <summary>The desktop canvas's object: shown only in MonitorFocus when no live monitor is wired (the hybrid scene's full-screen desktop); left active otherwise.</summary>
     [SerializeField] private GameObject desktopRoot;
+
+    /// <summary>
+    /// Optional: the live desktop on the CRT. When set, the desktop canvas
+    /// stays active (the booth coordinator gates its input); when not (the
+    /// hybrid scene), it is shown only in MonitorFocus.
+    /// </summary>
+    [SerializeField] private MonitorScreen monitorScreen;
 
     private ICameraRig _rig;
 
     /// <summary>The current view state.</summary>
     public OfficeView Current { get; private set; } = OfficeView.OfficeFocus;
 
+    /// <summary>True once the rig shows the current view with no blend running (at once with no rig).</summary>
+    public bool IsSettled { get; private set; }
+
     /// <summary>Raised after the view changes to the given state.</summary>
     public event Action<OfficeView> ViewChanged;
 
+    /// <summary>Raised once per view change, when the rig first shows that view with no blend running.</summary>
+    public event Action<OfficeView> Settled;
+
     private void Awake()
     {
-        if (_rig == null)
-            _rig = cameraRigBehaviour as ICameraRig;
-
-        ApplyState(force: true);
+        _rig = cameraRigBehaviour as ICameraRig;
+        ApplyState();
     }
 
     /// <summary>
-    /// Escape pulls back to the booth from the monitor (temporary "back"
-    /// affordance until the desktop has a dedicated minimize-to-office control).
+    /// The settle poll first, in either view and only while unsettled (no
+    /// allocation); then Escape leaves the monitor, like the desktop's
+    /// "&lt; Desk" button and a click outside the screen.
     /// </summary>
     private void Update()
     {
+        if (!IsSettled && _rig != null && _rig.IsSettled(Current))
+        {
+            IsSettled = true;
+            Settled?.Invoke(Current);
+        }
+
         if (Current != OfficeView.MonitorFocus)
             return;
 
@@ -56,24 +77,11 @@ public sealed class OfficeViewController : MonoBehaviour
             FocusOffice();
     }
 
-    /// <summary>Test seam: inject a fake rig + desktop and apply the default state.</summary>
-    public void InitForTest(ICameraRig rig, GameObject desktop)
-    {
-        _rig = rig;
-        desktopRoot = desktop;
-        Current = OfficeView.OfficeFocus;
-        ApplyState(force: true);
-    }
-
     /// <summary>Pushes in to the monitor (no-op if already there).</summary>
     public void FocusMonitor() => SetView(OfficeView.MonitorFocus);
 
     /// <summary>Pulls back to the booth (no-op if already there).</summary>
     public void FocusOffice() => SetView(OfficeView.OfficeFocus);
-
-    /// <summary>Toggles between the two views.</summary>
-    public void Toggle() =>
-        SetView(Current == OfficeView.OfficeFocus ? OfficeView.MonitorFocus : OfficeView.OfficeFocus);
 
     private void SetView(OfficeView view)
     {
@@ -81,23 +89,29 @@ public sealed class OfficeViewController : MonoBehaviour
             return;
 
         Current = view;
-        ApplyState(force: false);
+        ApplyState();
         ViewChanged?.Invoke(Current);
     }
 
-    private void ApplyState(bool force)
+    /// <summary>Shows the view on the rig (unsettled until the poll sees it); with no rig the view is settled at once.</summary>
+    private void ApplyState()
     {
         bool monitor = Current == OfficeView.MonitorFocus;
 
-        if (desktopRoot != null)
+        if (monitorScreen == null && desktopRoot != null)
             desktopRoot.SetActive(monitor);
 
-        if (_rig != null)
+        if (_rig == null)
         {
-            if (monitor)
-                _rig.ShowMonitor();
-            else
-                _rig.ShowOffice();
+            IsSettled = true;
+            Settled?.Invoke(Current);
+            return;
         }
+
+        IsSettled = false;
+        if (monitor)
+            _rig.ShowMonitor();
+        else
+            _rig.ShowOffice();
     }
 }
