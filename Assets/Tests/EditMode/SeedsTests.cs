@@ -126,4 +126,43 @@ public class SeedsTests
         Assert.AreNotEqual(Seeds.Mix(5, 9), Seeds.Mix(5, 10));
         Assert.AreNotEqual(Seeds.Mix(5, 9), Seeds.Mix(6, 9));
     }
+
+    /// <summary>
+    /// Audit R2-004: the night's slot spins drew from the unseeded
+    /// UnityEngine.Random, so a run did not replay and Continue (Home reloads
+    /// from the save made before it) rerolled a spin. They draw from their own
+    /// stream of the run and the day, apart from every other stream and from
+    /// the day's raw stream the family conditions draw from.
+    /// </summary>
+    [Test]
+    public void SlotStream_IsDeterministic_AndApartFromEveryOtherStream_NightByNight()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        int slot = Seeds.ForSlot(daySeed);
+
+        Assert.AreEqual(slot, Seeds.ForSlot(daySeed), "the same run and day give the same spins");
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed), slot);
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(slot), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(night => Seeds.ForSlot(Seeds.Day(12345, night))).ToList(), "each night its own spins");
+        Assert.AreNotEqual(slot, Seeds.ForSlot(Seeds.Day(999, 2)), "each run its own spins");
+    }
+
+    /// <summary>The day's raw seed and every stream of the day: violators, and each of 20 travellers' case, clue, lie, dialog, look and premade streams.</summary>
+    private static List<int> EveryOtherStream(int daySeed)
+    {
+        var streams = new List<int> { daySeed, Seeds.ForViolators(daySeed) };
+        foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
+            streams.AddRange(new[] { caseSeed, Seeds.ForClues(caseSeed), Seeds.ForLies(caseSeed), Seeds.ForDialog(caseSeed), Seeds.ForLooks(caseSeed), Seeds.ForLegendary(caseSeed) });
+        return streams;
+    }
+
+    /// <summary>The first ten values a seed's stream draws.</summary>
+    private static float[] TenDraws(int seed)
+    {
+        var rng = new SeededRandom(seed);
+        var values = new float[10];
+        for (int i = 0; i < values.Length; i++)
+            values[i] = rng.Value();
+        return values;
+    }
 }
