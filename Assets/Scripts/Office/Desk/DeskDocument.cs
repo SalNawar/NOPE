@@ -79,11 +79,21 @@ public sealed class DeskDocument : MonoBehaviour
             group.sortingOrder = order;
     }
 
-    /// <summary>Lets the paper be dragged and clicked, or not.</summary>
-    public void SetLive(bool live)
+    /// <summary>
+    /// Lets the paper be dragged and clicked, or not. <paramref name="raycastable"/>
+    /// false also takes it out of the raycast (spec R38): papers sort above the
+    /// focus exit zone, so a paper the booth has put away, showing at the edge
+    /// of the focused view on a wide screen, must let the click that leaves
+    /// focus through. A paper inert only for itself (sliding, scanning) stays
+    /// raycastable and still covers what lies under it.
+    /// </summary>
+    public void SetLive(bool live, bool raycastable)
     {
         if (drag != null)
+        {
             drag.enabled = live;
+            drag.SetRaycastable(raycastable);
+        }
         if (click != null)
             click.Interactable = live;
     }

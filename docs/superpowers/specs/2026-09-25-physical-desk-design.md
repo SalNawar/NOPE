@@ -88,6 +88,7 @@ Claude made these under Saleh's instruction "dont stop until you finish everythi
 | R35 (refines R11, K21) | **Camera wiring never freezes the booth.** `CinemachineCameraRig` gets a serialized `brain`, set by the builder from Main Camera; without one (the hybrid scene) it looks the brain up in `Start` and warns once when none exists. `IsSettled` is true with no brain, and `OfficeViewController.IsSettled` is true with no rig. The monitor framing applies only when `brain.OutputCamera.orthographic`. | `CinemachineCore.FindPotentialTargetBrain` sees only brains that registered in their own `OnEnable` (`CinemachineBrain.cs:206-211`, `ActiveBrainCount` :418), and no execution order ties Main Camera to `OfficeRoot`, so a lookup in the rig's `Awake` can miss. `LensSettings.Orthographic` reads `m_OrthoFromCamera`, filled only when the camera state is pulled (`LensSettings.cs:169-170, 258-263`). A booth that never settles would keep every live input off. |
 | R36 (refines K5, V4) | **The drop outcome is Domain.** `DeskPapers.Drop(i, overScanner)` returns `Stays`, `Scanning` or `Refused` and starts the scan itself; `DeskController` only animates the outcome. A paper is live only while `CanDrag` holds and it is not sliding. | MonoBehaviours orchestrate and render; they do not decide (MERGE_CRITERIA). A paper grabbed mid-slide would fight the slide, and the slide's done callback could snap it away after the drop. |
 | R37 (refines K8) | **A glass zone keeps clicks on the screen inside focus.** `CRTMonitor/ScreenAnchor/GlassZone`: a hidden `SpriteRenderer`, a `BoxCollider2D` of `glassSize` and a `Clickable` that is never interactable, at `glassOrder` (between the exit zone and the bezel), active with the exit zone. | With the screen off the desktop raycaster is off, so a click on the dark glass would hit the exit zone under it and leave focus, against "a click outside the screen". A collider with no renderer reports order 0 (ugui `Physics2DRaycaster.cs:69-104`), below the exit zone, so the zone needs a renderer. The never-interactable `Clickable` takes the click with no hand cursor. |
+| R38 (refines K8, R7, R36) | **Papers the booth puts away take no raycasts.** While `BoothInput.PapersLive` is false (focused, blending, a newsletter up, the wheel open), and while they leave at the decision, the papers' colliders are off: `DeskDocument.SetLive(live, raycastable)` passes the flag to `DeskDraggable.SetRaycastable`, which owns the proxy, keeps it off during a drag either way and applies the flag when the drag ends. A paper inert only for itself (sliding, scanning) keeps its collider. The rules never put the exit zone up while the papers take input (tested: `BoothRulesTests`). | Papers sort above the exit zone (30 and up against 10), and a raycast reports the group's order (R8), so an inert paper under the pointer takes the click and its non-interactable `Clickable` drops it. At 16:9 no paper shows in the focused view: the desk rectangle keeps a paper's right edge at x ≤ 3.65 and the view starts at x ≈ 3.66. On a wider screen it starts further left (x ≈ 3.05 at 2560 × 1080), so a paper at the desk's right end shows as a strip at the view's lower left and would swallow the click that leaves focus. Shrinking the desk rectangle cannot cover every aspect. A sliding or scanning paper still covers what lies under it (step 5.6: a press on the sliding permit hits the permit). |
 
 ## 1. Behaviour
 
@@ -105,7 +106,7 @@ Claude made these under Saleh's instruction "dont stop until you finish everythi
 - **Click the CRT:** the camera pushes in (0.6 s, `focusBlendSeconds`) until the glass fills 85% of the view's height (`monitorFill`, or of its width on narrow screens). The bezel and slivers of desk stay visible around it.
 - **The desktop takes clicks only once the push-in has settled.** Clicks during a blend do nothing.
 - **While focused**, only the desktop and the bezel power button respond. The desk props, the papers and the traveller are inert.
-- **Leave** with Escape, a click anywhere outside the screen, or the taskbar's "< Desk" button. A click on the screen itself never leaves, even while it is dark (R37). Leaving clears the desktop's keyboard focus (a Records search field stops taking keys).
+- **Leave** with Escape, a click anywhere outside the screen, or the taskbar's "< Desk" button. A click on the screen itself never leaves, even while it is dark (R37). On a screen wider than 16:9 a paper at the desk's right end can show at the left edge of the focused view; it takes no clicks while focused, so a click on it leaves too (R38). Leaving clears the desktop's keyboard focus (a Records search field stops taking keys).
 - READY no longer zooms in. After every decision the camera pulls back to the booth as today (`GameManager.cs:386-392`).
 
 ### 1.3 Screen power
@@ -180,7 +181,7 @@ Claude made these under Saleh's instruction "dont stop until you finish everythi
 | Focused, settled, screen off | no | no | yes | yes | no | no | no |
 | Citation slip pending (the traveller has left) | as the view's row | as the view's row | no | as the view's row | as the view's row | – | no |
 
-While a citation slip is pending, the screen is held on (R31), so the "screen off" row cannot occur; the slip holds the clock until acknowledged, as today. While focused, the exit zone's column also governs the glass zone (R37): a click on the glass, lit or dark, never leaves focus.
+While a citation slip is pending, the screen is held on (R31), so the "screen off" row cannot occur; the slip holds the clock until acknowledged, as today. While focused, the exit zone's column also governs the glass zone (R37): a click on the glass, lit or dark, never leaves focus. Where the Papers column says no, the papers take no clicks at all, and a click on one reaches what lies under it (R38).
 
 ### 1.10 The desktop at 4:3
 
@@ -469,10 +470,11 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
   - `void Init(DeskSurface surface)`;
   - `event Action<DeskDraggable> DragBegan`;
   - `event Action<DeskDraggable, Vector3> DragEnded`, carrying the projected pointer point, or the paper's position when the projection fails;
-  - `Vector3 PickUpPosition`.
+  - `Vector3 PickUpPosition`;
+  - `void SetRaycastable(bool raycastable)`: the proxy's state outside a drag; during a drag the flag is only remembered (R38).
 - **Begin:** records the pick-up position and the grab offset, and turns the proxy off.
 - **Drag:** `position = surface.Clamp(projected + offset)`.
-- **End:** turns the proxy back on and raises `DragEnded`.
+- **End:** turns the proxy back on (unless the owner has taken the object out of the raycast, R38) and raises `DragEnded`.
 - **When disabled** (by the owner), the EventSystem sends it nothing (`ExecuteEvents.ShouldSendToComponent` requires `isActiveAndEnabled`, ugui `ExecuteEvents.cs:304-314`).
 
 **`DeskDocument`** (the paper; on a `SortingGroup` root):
@@ -481,7 +483,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
   - `int Index` (read by `DeskController` to map a drag or click to its paper);
   - `void Bind(int index, CaseDocument doc)`: the title and the holder are the canonical strings (the paper stays in its source script; the scanned copy is what piece 9 translates, R19);
   - `void SetOrder(int order)`;
-  - `void SetLive(bool live)`: `drag.enabled` and `click.Interactable`;
+  - `void SetLive(bool live, bool raycastable)`: `drag.enabled`, `click.Interactable` and `drag.SetRaycastable(raycastable)` (R38);
   - `void SlideTo(Vector3 target, float seconds, Action done)`: a linear move in `Update`, only while sliding;
   - `bool IsSliding` (read by `DeskController`'s liveness rule, R36).
 
@@ -505,9 +507,9 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 - **`void BeginDay(int day)`:** keeps the day and resets the day's scan count.
 - **`void BeginCase(IReadOnlyList<CaseDocument> docs)`:** creates `DeskPapers(docs, config.scanSeconds)`, and hands over every `ArrivalIndices` paper.
 - **`void HandOver(int i)`** (its one caller, `InvestigationUIController.Choose`, needs no result; a paper that cannot be handed over is `DeskPapers.HandOver`'s tested "no change"): calls `DeskPapers.HandOver(i)`; when that succeeds, it clones the template under `paperRoot`, binds it, places it at the hand-over point, adds it to the `PaperStack`, and slides it to `surface.PointAt(config.paperSpawnSlots[k % n])`, where k is the count of papers handed over so far this case.
-- **`void EndCase()`:** calls `ReturnAll()`, slides every paper to the hand-over point, destroys it, and clears the stack.
+- **`void EndCase()`:** calls `ReturnAll()`, slides every paper, inert and out of the raycast, to the hand-over point, destroys it, and clears the stack.
 - **`void SetPapersLive(bool live)`:** remembers the flag (also for new papers) and re-applies each paper's liveness.
-- **Liveness (R36):** a paper is live when `live && DeskPapers.CanDrag(i) && !paper.IsSliding`. Every slide (hand-over, back from the scanner, back from a refused drop, to the bed, and away at `EndCase`) re-applies the paper's liveness when it starts, so a sliding paper is inert, and again in its done callback.
+- **Liveness (R36, R38):** a paper is live when `live && DeskPapers.CanDrag(i) && !paper.IsSliding`, and in the raycast when `live`. Every slide (hand-over, back from the scanner, back from a refused drop, to the bed, and away at `EndCase`) re-applies the paper's liveness when it starts, so a sliding paper is inert, and again in its done callback.
 - **Drag begin:** the paper's order becomes `heldPaperOrder`.
 - **Drag end:** `DeskPapers.Drop(i, scanner.Contains(point))` decides, and the controller animates the outcome:
   - `Scanning`: the paper slides to the bed and is inert while scanning;
@@ -996,7 +998,7 @@ Line numbers are the current file's.
 
 - **:11:** append "; desk interactions (papers, scans, the wheel) draw no random numbers and never change generation".
 - **:17:** "World-space booth (back wall, partitions, desk, CRT with its live desktop and power button, READY sign, desk scanner and props; the traveller appears when READY is tapped and leaves at the decision) with Cinemachine office/monitor cameras".
-- **:18:** "Click the CRT → the camera pushes in until the screen fills most of the view (`DeskConfigSO`: fill 0.85, 0.6 s); the desktop takes input only once the push-in settles; while focused only the desktop and the bezel power button take input; leave with Escape, a click outside the screen or the taskbar '< Desk' button (input table tested: `BoothRulesTests`; framing tested: `MonitorFramingTests`)".
+- **:18:** "Click the CRT → the camera pushes in until the screen fills most of the view (`DeskConfigSO`: fill 0.85, 0.6 s); the desktop takes input only once the push-in settles; while focused only the desktop and the bezel power button take input; leave with Escape, a click outside the screen (also on a paper showing at the edge of a screen wider than 16:9: papers take no clicks while focused) or the taskbar '< Desk' button (input table, and that the exit zone is never up while the papers take input, tested: `BoothRulesTests`; framing tested: `MonitorFramingTests`)".
 - **New after :18:**
   - "Live monitor: the PC desktop is drawn on the CRT glass in the booth view (4:3, 1440×1080 units, masked to the screen), and keeps running while you work at the desk; between travellers it reads 'Waiting for the next traveller'";
   - "Screen power: the bezel button (both views) or Start ▸ Turn off screen darkens the screen; the PC keeps running (scans open windows, the clock ticks); a new traveller or a finished scan wakes it (`DeskConfigSO` toggles); while a citation slip waits for Acknowledge the screen stays on and cannot be turned off (power, wake and hold rules tested: `PcScreenTests`; the power button's citation row tested: `BoothRulesTests`)".
@@ -1211,6 +1213,7 @@ Line numbers are the current file's.
 
 - **Readability.** At fill 0.85 the desktop's 18 pt text is about 15 px at 1080p and 10 px at 720p. The 720p screenshot decides. The fallbacks are a higher fill (less bezel) and the logged CRT art request (K2 option C). Text sizes are not changed in this piece.
 - **4:3 and narrower displays** cut the right-bezel power button (the framing's half-width at 4:3 is 1.38, while the button needs 1.49). The game targets 16:9/16:10; the art request moves the button onto a front-facing bezel.
+- **Displays wider than 16:9** show the desk's right end at the left of the focused view (at 2560 × 1080 a paper there shows as a strip up to about 300 px wide). The paper takes no clicks while focused (R38), so a click on it still leaves focus; the framing is unchanged.
 - **Always-active desktop canvas.** Every controller under it now wakes at scene load instead of at the first focus: `DayFlowUIController` (which removes the analysis's latent START SHIFT ordering hazard), `InvestigationUIController`, `CompareController`, `DesktopShell`, and `DesktopIcon.Start`'s upgrade check. The play-through covers each.
 - **World-space UI under the URP 2D Renderer.** A World Space canvas renders in the 2D renderer's transparent sorting by sorting layer and order, and is unlit. The screenshots confirm order against the CRT and the papers, and the `RectMask2D` clipping. The fallback is a dedicated sorting layer for the screen.
 - **Input routing** depends on the bands (§2.16). A wrong value would let booth clicks pass through the screen, or the exit zone swallow the desktop or the glass. The builder's band check, the raycast-resolved press targets and play-through steps 6–10 catch it.
@@ -1375,3 +1378,9 @@ Run in the branch's own Unity 6000.4.11f1 editor through temporary `-executeMeth
 
   A re-run (the plan's "Merging this branch", step 3) needs the same corrections. Observed, not fixed, because it has been true since before piece 7 and is outside this plan: READY is interactable from scene load, so a press between START SHIFT and the first slot's start is a silent no-op.
 - Balance (§7): the scripted play-through forces closing time, so it measures no throughput. Scans take 1.5 s each (1.49 shift minutes at the shipped clock rate), and a queue or shift-length retune stays a later decision (V9).
+
+## 10. Final review (2026-09-25)
+
+Five findings from the review after §9, each re-checked against the code at `6856c50` before it was fixed. The fixes change no scene or asset, so the builder is not re-run; the offline suite passes after each one.
+
+- **Inert papers swallowed the click that leaves focus on screens wider than 16:9** (fixed): a paper at the desk's right end shows at the left of the focused view there, and its collider, above the exit zone, took the click. R38: papers the booth puts away take no raycasts; `BoothRulesTests` pins that the exit zone is never up while the papers take input. §1.2, §1.9, §2.9, §3.4 (:18), §7. The collider switch itself is Assembly-CSharp; a merge re-run can check it with the Game view at 2560 × 1080 (focus, then press on a paper dragged to the desk's right end: the view leaves focus).

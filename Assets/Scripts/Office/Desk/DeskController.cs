@@ -10,7 +10,8 @@ using UnityEngine;
 /// to where it was picked up), runs the scan timer and raises ScanFinished,
 /// stacks papers by sorting order, returns them at the decision, and shows the
 /// day-1 scan note. A paper takes input only while BoothCoordinator allows
-/// papers, DeskPapers lets it be dragged and it is not sliding.
+/// papers, DeskPapers lets it be dragged and it is not sliding; while the booth
+/// does not allow papers they take no raycasts at all (spec R38).
 /// </summary>
 public sealed class DeskController : MonoBehaviour
 {
@@ -139,7 +140,7 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>The decision: every paper goes back (a running scan is cancelled), slides inert to the traveller's side and is destroyed.</summary>
+    /// <summary>The decision: every paper goes back (a running scan is cancelled), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
     public void EndCase()
     {
         if (_state == null)
@@ -152,7 +153,7 @@ public sealed class DeskController : MonoBehaviour
                 continue;
 
             DeskDocument leaving = paper;
-            leaving.SetLive(false);
+            leaving.SetLive(false, false);
             leaving.SlideTo(handOverPoint.position, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
         }
 
@@ -162,7 +163,7 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Allows the papers input or not (BoothCoordinator); remembered for papers handed over later.</summary>
+    /// <summary>Allows the papers input or not (BoothCoordinator); remembered for papers handed over later. Papers not allowed take no raycasts (spec R38).</summary>
     public void SetPapersLive(bool live)
     {
         _live = live;
@@ -213,9 +214,9 @@ public sealed class DeskController : MonoBehaviour
         ApplyLive(paper);
     }
 
-    /// <summary>A paper takes input while papers are allowed, DeskPapers lets it be dragged and it is not sliding.</summary>
+    /// <summary>A paper takes input while papers are allowed, DeskPapers lets it be dragged and it is not sliding; it is in the raycast while papers are allowed.</summary>
     private void ApplyLive(DeskDocument paper) =>
-        paper.SetLive(_live && _state != null && _state.CanDrag(paper.Index) && !paper.IsSliding);
+        paper.SetLive(_live && _state != null && _state.CanDrag(paper.Index) && !paper.IsSliding, _live);
 
     /// <summary>Stack order: the base order plus the paper's place; the held paper above them all.</summary>
     private void ApplyOrders()

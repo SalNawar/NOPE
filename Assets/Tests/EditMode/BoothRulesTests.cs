@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 
@@ -108,6 +109,29 @@ public class BoothRulesTests
                 if (i != 2)
                     Assert.AreEqual(a[i], b[i], $"{row.Name}: output {i} must not depend on the citation");
         }
+    }
+
+    /// <summary>
+    /// Papers sort above the focus exit zone (the sorting bands) and take
+    /// raycasts only while PapersLive holds (spec R38), so this is what keeps a
+    /// paper showing at the edge of the focused view, on a screen wider than
+    /// 16:9, from swallowing the click that leaves focus. Every context, the
+    /// citation included.
+    /// </summary>
+    [Test]
+    public void TheFocusExit_IsNeverUp_WhileThePapersTakeInput_InAnyContext()
+    {
+        var wrong = new List<string>();
+        foreach (BoothPhase phase in (BoothPhase[])Enum.GetValues(typeof(BoothPhase)))
+            for (int bits = 0; bits < 32; bits++)
+            {
+                var c = new BoothContext((bits & 1) != 0, (bits & 2) != 0, (bits & 4) != 0, phase, (bits & 8) != 0, (bits & 16) != 0);
+                BoothInput o = BoothRules.Evaluate(c);
+                if (o.FocusExitLive && o.PapersLive)
+                    wrong.Add($"{phase}, focused {c.Focused}, settled {c.Settled}, screen {c.ScreenOn}, wheel {c.WheelOpen}, citation {c.CitationPending}");
+            }
+
+        Assert.IsEmpty(wrong, $"The exit zone is up with live papers above it: {string.Join("; ", wrong)}");
     }
 
     [Test]
