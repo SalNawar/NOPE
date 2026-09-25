@@ -5,16 +5,21 @@ using System.Collections.Generic;
 /// types out at a set speed; once fully shown it stays the hold when nothing
 /// follows, or the minimum (never more than the hold) before the next queued
 /// line replaces it. A new line never cuts the one being shown before its
-/// minimum. Each line may carry a premade's expression. Pure, so the pacing is
-/// tested headless; TravellerWheel ticks it and draws it.
+/// minimum. Each line may carry a premade's expression and a reveal time (its
+/// translation flip, piece 9): it counts as fully shown at the later of its
+/// typing and its reveal, and EndReveal ends the reveal early. Pure, so the
+/// pacing is tested headless; TravellerWheel ticks it and draws it.
 /// </summary>
 public sealed class SpeechQueue
 {
     private readonly float _charsPerSecond;
     private readonly float _minSeconds;
     private readonly float _holdSeconds;
-    private readonly Queue<(string text, string expression)> _waiting = new Queue<(string text, string expression)>();
+    private readonly Queue<(string text, string expression, float reveal)> _waiting = new Queue<(string text, string expression, float reveal)>();
     private float _elapsed;
+
+    /// <summary>Seconds from the shown line's start until its reveal is done.</summary>
+    private float _reveal;
 
     /// <summary>
     /// A queue typing <paramref name="charsPerSecond"/> characters a second (0
@@ -42,7 +47,7 @@ public sealed class SpeechQueue
         {
             if (Text == null)
                 return 0;
-            if (_charsPerSecond <= 0f || _elapsed >= RevealSeconds)
+            if (_charsPerSecond <= 0f || _elapsed >= TypeSeconds)
                 return Text.Length;
             return (int)(_elapsed * _charsPerSecond);
         }
@@ -54,24 +59,36 @@ public sealed class SpeechQueue
     /// <summary>The expression of the latest started line that carries one (a blank one keeps it); null before any, and after <see cref="Clear"/>.</summary>
     public string Expression { get; private set; }
 
-    /// <summary>Seconds the shown line takes to type out.</summary>
-    private float RevealSeconds => _charsPerSecond > 0f && Text != null ? Text.Length / _charsPerSecond : 0f;
+    /// <summary>Seconds since the shown line started (0 when nothing shows): the clock of its translation flip.</summary>
+    public float LineSeconds => Text != null ? _elapsed : 0f;
 
-    /// <summary>When the shown line goes, from its start: the minimum after it is typed when a line waits, else the hold.</summary>
-    private float EndSeconds => RevealSeconds + (_waiting.Count > 0 ? _minSeconds : _holdSeconds);
+    /// <summary>Seconds the shown line takes to type out.</summary>
+    private float TypeSeconds => _charsPerSecond > 0f && Text != null ? Text.Length / _charsPerSecond : 0f;
+
+    /// <summary>When the shown line goes, from its start: once typed and revealed, the minimum when a line waits, else the hold.</summary>
+    private float EndSeconds => (TypeSeconds > _reveal ? TypeSeconds : _reveal) + (_waiting.Count > 0 ? _minSeconds : _holdSeconds);
 
     /// <summary>
-    /// Queues a line (a blank one is ignored). It starts at once when nothing
+    /// Queues a line (a blank one is ignored) that counts as fully shown
+    /// <paramref name="revealSeconds"/> after it starts if its typing ends
+    /// sooner (negative or NaN counts as 0). It starts at once when nothing
     /// shows, or when the shown line has already been up its minimum.
     /// </summary>
-    public void Say(string text, string expression)
+    public void Say(string text, string expression, float revealSeconds = 0f)
     {
         if (string.IsNullOrWhiteSpace(text))
             return;
 
-        _waiting.Enqueue((text, expression));
+        _waiting.Enqueue((text, expression, revealSeconds > 0f ? revealSeconds : 0f));
         if (Text == null || _elapsed >= EndSeconds)
             StartNext(0f);
+    }
+
+    /// <summary>The shown line's reveal counts as done now: its hold starts at the later of now and the end of its typing (the skip).</summary>
+    public void EndReveal()
+    {
+        if (Text != null && _reveal > _elapsed)
+            _reveal = _elapsed;
     }
 
     /// <summary>Advances time by <paramref name="seconds"/> (non-positive or NaN is ignored), starting queued lines as their turn comes; one tick may pass several lines.</summary>
@@ -105,13 +122,14 @@ public sealed class SpeechQueue
     public string Clear()
     {
         string pending = null;
-        foreach (var (_, expression) in _waiting)
+        foreach (var (_, expression, _) in _waiting)
             if (!string.IsNullOrWhiteSpace(expression))
                 pending = expression;
 
         _waiting.Clear();
         Text = null;
         _elapsed = 0f;
+        _reveal = 0f;
         Expression = null;
         return pending;
     }
@@ -119,9 +137,10 @@ public sealed class SpeechQueue
     /// <summary>Puts the next queued line up, <paramref name="elapsed"/> seconds into it.</summary>
     private void StartNext(float elapsed)
     {
-        (string text, string expression) = _waiting.Dequeue();
+        (string text, string expression, float reveal) = _waiting.Dequeue();
         Text = text;
         _elapsed = elapsed;
+        _reveal = reveal;
         LineNumber++;
         if (!string.IsNullOrWhiteSpace(expression))
             Expression = expression;
