@@ -15,6 +15,15 @@ This piece is the basic, extensible version. Every place has a tongue. From day 
 
 Line numbers refer to those commits. The office move still has uncommitted edits to `TravellerWheel`, `OverlayCallout`, `DeskController` and more, so the piece-9 plan re-reads every file before anchoring an edit, and the implemented code wins over this text. Nothing here depends on the builder-built 2D booth.
 
+**Re-check before building (2026-09-25, `main` at `d998ab5`, where pieces 4, 5, 6, 8 and the office move have merged).** Every name above exists as written: `DisplayText.For(string, TextMedium)` with its three callers (`DocumentWindowController.cs:144`, `TranscriptWindowController.cs:46`, `TravellerWheel.cs:190`); `SpeechQueue.Say(text, expression)`; `TravellerWheel.Say(IReadOnlyList<DialogLine>)`, fed only traveller lines by `InterviewScript.SaidSince`; `OverlayCallout.Show`/`Reveal`; `RuntimeFonts.Resolve(ThemeSO, string)`; `CultureThemeService` (its `_fonts` made once in `Configure`); `SettingsWindowController` with the language pair; `UiLanguagePreference`; `Gates.UnlockNight`, `MakeUnlockTrigger`, `DayGate`; `OfficeScenes`. The line numbers below are updated to `d998ab5`. What the re-check changed:
+- **The Home shop.** `HomeManager.HandleBuyUpgrade` refreshes the shop by calling `ShowShop` again, so the page resets only when the shop panel opens (it was hidden); the re-show after a purchase keeps the page. The shop's rows container does not control its children's heights (`HomeSceneBuilder`, `childControlHeight` off), so each runtime row keeps a new `RectTransform`'s 100 px height and its 44 px `LayoutElement` is ignored: four upgrades already overflow the 360 px area. `CreateRow` and `CreateLabelRow` now size their row to that height, so seven rows fit (§2.5).
+- **Generated library entries.** The generator's `HandAuthored` keeps every library entry outside the Interview and History folders; the Translation folder joins that exclusion, so the translators and the notice are re-appended on every run, never kept as hand-authored (§2.7).
+- **The Settings window** is 580 × 400 (`BuildOSWindow`'s default); the note with its extra sentence would not fit a 16%-high box, so the window grows to 580 × 520 and its rows are re-anchored (§2.6).
+- **The office move.** The scan wakes the PC (`BoothCoordinator.HandleScanFinished` → `PcScreen.Wake`) but does not open the PC frame: the desktop, and with it the flip, shows on the office PC's cloned screen, and in the frame when that is open. The reveal point stays the scan (§7 updated).
+- **R6 detail.** Setting a TMP text's font resets its material to the font's default, so `TextFlip` restores the text's own font *and* material.
+- **Script fonts.** `RuntimeFonts` caches one result per key, so a script's font is resolved once with a sample of every cell of every tongue written in that script (a sample of the first tongue alone would leave the others unchecked, and their letters could reach TMP's global fallback).
+- **The glyph spike** (§6 step 3, run first; §6.1). Hieroglyphs, cuneiform and runes draw from Segoe UI Historic through the OS-font path, supplementary-plane cells included; no tongue needs the fallback cipher on this machine. The spike also found a piece-6 bug: `ArabicShaper` gives a hamza that follows a dual-joining letter its final form, which does not exist (`'\0'`), and TMP stops reading the text at that character. The Arabic table maps `y` to hamza, so "by" hit it. `ArabicShaper` now joins a letter to the previous one only when the letter itself joins (tested: `ArabicShaperTests`).
+
 ## 0. Decisions
 
 Claude made these under Saleh's instruction, working from the code named above; they bind this piece and are open to Saleh's review. The R rows below the table settle details the decisions leave open.
@@ -364,7 +373,7 @@ public static class DisplayText
 
 **`TimelineService`**: `public static TranslationDay BuildTranslationDay(ContentLibrarySO lib, WorldState world) => new TranslationDay(lib != null ? lib.Translation.rules : null, Snapshot(world, null));`. It is the day-start snapshot of `BuildInterviewDay`, reused.
 
-**`GameManager`** (CRLF): where it injects the interview day (157-178), it also calls `investigationUI.SetTranslation(TimelineService.BuildTranslationDay(contentLibrary, _worldState), contentLibrary.Translation)`. It logs one warning when `!Translation.HasData`: "[GameManager] The content library has no translation data: every tongue reads as English. Run Tools > TimeDesk > Generate World."
+**`GameManager`** (CRLF): where it injects the interview day (162-190), it also calls `investigationUI.SetTranslation(TimelineService.BuildTranslationDay(contentLibrary, _worldState), contentLibrary.Translation)`. It logs one warning when `!Translation.HasData`: "[GameManager] The content library has no translation data: every tongue reads as English. Run Tools > TimeDesk > Generate World."
 
 **`RuntimeFonts`** (piece 6): a new `public Result Resolve(string key, IReadOnlyList<FontCandidate> candidates, string sample)` holds today's candidate loop, cache and coverage check, keyed by `key`. `Resolve(ThemeSO theme, string sample)` becomes: no runtime font → default; else `Resolve(theme.cultureId, theme.fonts, sample)`. Assets are named `Runtime {key} ({name})`.
 
@@ -375,7 +384,7 @@ public static class DisplayText
 - `CaseTranslation ForCase(CaseInstance inst)`: returns `CaseTranslation.None` unless `day.Foreign(inst.tongueId)`.
 - Otherwise it builds, once per tongue per day:
   - the `ForeignText` (the parsed table and the script's direction);
-  - its font: `CultureThemeService.Instance.Fonts.Resolve("script:" + script.id, script.fonts, sample)`, where the sample is the table's cells plus a–z and A–Z.
+  - its font, once per script: `CultureThemeService.Instance.Fonts.Resolve("script:" + script.id, script.fonts, sample)`, where the sample is the cells of every tongue written in that script plus a–z and A–Z.
 - When the table does not parse, the service or its fonts are missing, or `Covers` is false: it uses the fallback table (left to right) and no font, and logs one warning per script: "[Translation] No font draws the {script} script (tried: {tried}; missing {missing}): {tongue} shows in the fallback cipher. Install one of the fonts or add a candidate in world_source.json translation.scripts."
 - It reads `MotionPreference.Reduced` and formats the placeholder `UiText.Format("compare.untranslated", tongue.displayName, pack.displayName)`.
 
@@ -407,7 +416,7 @@ public sealed class CaseTranslation
 The Domain decisions (`Translation.InTongue`, `TranslationDay`) are applied by the presenter. The Visuals decisions are applied by `DisplayText`. `CaseTranslation` only pairs them up for one case.
 
 **`TextFlip`** (new, plain class) drives one `TMP_Text`:
-- `Show(TMP_Text text, string canonical, Reveal reveal, CaseTranslation tr)`: remembers the text's own font the first time, writes `DisplayText.For`, and sets the font per R6.
+- `Show(TMP_Text text, string canonical, Reveal reveal, CaseTranslation tr)`: remembers the text's own font and material the first time, writes `DisplayText.For`, and sets the font per R6.
 - `bool Tick(float elapsed)`: rebuilds the `Reveal` at `elapsed` and recomposes only when `DisplayText.Progress` changes (R8). When the text settles it restores the text's own font and returns false.
 - `Complete()`: shows the settled text in the text's own font.
 - `static void Write(TMP_Text text, string canonical, Reveal reveal, CaseTranslation tr)`: the same writing and font rule for a text that never animates (transcript rows).
@@ -420,10 +429,10 @@ The Domain decisions (`Translation.InTongue`, `TranslationDay`) are applied by t
 - **New:** `SetTranslation(TranslationDay day, TranslationSettings settings)` creates the presenter. Its doc says "the day-start translation, injected by GameManager".
 - **`ShowRich`:**
   - `_caseTranslation = _presenter != null ? _presenter.ForCase(inst) : CaseTranslation.None`;
-  - `clone.SetDocument(doc, compareController, inst.look, _art, _caseTranslation)` (374);
+  - `clone.SetDocument(doc, compareController, inst.look, _art, _caseTranslation)` (378);
   - before `StartInterview`, `wheel.SetTranslation(_caseTranslation)` when a wheel is wired.
 - **`StartInterview`:** `transcriptWindow.Bind(..., compareController, _caseTranslation)`.
-- **`OpenDocumentWindow`** (560) also calls the document controller's `Reveal()`: the written reveal point. The per-case document controllers are kept in a list beside `_docWindows`.
+- **`OpenDocumentWindow`** (564) also calls the document controller's `Reveal()`: the written reveal point. The per-case document controllers are kept in a list beside `_docWindows`.
 - **The text fallback** is unchanged (canonical, R14).
 
 **`DocumentWindowController`:**
@@ -464,18 +473,20 @@ The Domain decisions (`Translation.InTongue`, `TranslationDay`) are applied by t
 **`HomeUIController`:**
 - New `[SerializeField, Min(1)] private int shopRowsPerPage = 6;` ("Upgrades per shop page; the rows area fits 7 rows with the pager") and `private int _shopPage;`.
 - `BuildShopRows` shows `Paging.First..End` of the upgrade list. When `PageCount > 1` it adds a pager row through the existing `CreateRow`: label "Page {n}/{m}", button "Next >", which advances `_shopPage` (wrapping round) and rebuilds.
-- `ShowShop` resets the page to 0. A purchase rebuilds on the same page.
+- `ShowShop` resets the page to 0 when the shop panel opens (it was hidden). The re-show after a purchase (`HomeManager.HandleBuyUpgrade` calls `ShowShop` again) keeps the page, clamped.
+- `CreateRow` and `CreateLabelRow` set their row's height to its `LayoutElement` height (the rows container does not control child heights, so rows were 100 px tall).
 - Home keeps English literals (piece 6 R9/O1(b)).
 
 **`PagedRowsWindow`:** calls `Paging` (T9).
 
 ### 2.6 Builder (`OfficeSceneUIBuilder.cs`, LF)
 
-`BuildSettingsWindow` (piece 6, 1746-1765) adds, re-applied on every run like the rest:
-- `MotionLabel`: key `settings.motion`, anchors (0.05, 0.37)–(0.95, 0.46), 17 pt, `WindowBody`;
-- `FullMotionButton` (`settings.motionFull`): anchors (0.05, 0.22)–(0.48, 0.35);
-- `ReducedMotionButton` (`settings.motionReduced`): anchors (0.52, 0.22)–(0.95, 0.35);
-- `NoteText` moves to (0.05, 0.03)–(0.95, 0.19).
+`BuildSettingsWindow` (piece 6, 1485-1504) builds the window at 580 × 520 (was the 580 × 400 default) and adds, re-applied on every run like the rest:
+- the language rows move up: `Body` (0.05, 0.78)–(0.95, 0.87), the language buttons (0.05, 0.64)–(0.48, 0.76) and (0.52, 0.64)–(0.95, 0.76);
+- `MotionLabel`: key `settings.motion`, anchors (0.05, 0.50)–(0.95, 0.59), 20 pt like the language label, `WindowBody`;
+- `FullMotionButton` (`settings.motionFull`): anchors (0.05, 0.36)–(0.48, 0.48);
+- `ReducedMotionButton` (`settings.motionReduced`): anchors (0.52, 0.36)–(0.95, 0.48);
+- `NoteText` moves to (0.05, 0.04)–(0.95, 0.32).
 
 It wires `fullMotionButton` and `reducedMotionButton`. Theme tags are stamped as for the language pair. Build Office UI rebuilds `OfficeGameplay.unity`. Nothing else in the builder changes: the flip works on the existing texts at runtime.
 
@@ -522,7 +533,7 @@ It wires `fullMotionButton` and `reducedMotionButton`. Theme tags are stamped as
   - `MakeTranslator(pack, kind)` writes `Translation/Upgrade_Tr_{PackPascal}_{Papers|Speech}.asset` (id, display name and description per R13, cost, no `unlockEffect`);
   - `MakeTranslationNotice` writes `Translation/Trigger_TranslationNotice.asset` when `fromDay > 1`: id `translation_notice`, one-shot, `newsLineOnFire = announce`, conditions `DayGate(fromDay, Gates.UnlockNight(fromDay))`;
   - the library's `translation` is written from the data.
-- **`WireLibrary`** per R12. `OwnedFolders` gains `Translation`. The summary log counts translators.
+- **`WireLibrary`** per R12. `OwnedFolders` gains `Translation`, and `HandAuthored` skips it like the Interview and History folders. The summary log counts translators.
 
 **`ContentLibraryValidator`** (LF) gains `CheckTranslation(lib)`:
 - the same `Translation.Problems` over `lib.Translation` and every place's `tongue`;
@@ -606,6 +617,7 @@ No rule reads a code constant. The only fixed numbers are `TableSize` (the alpha
 | `Assets/Scripts/Domain/TranslationContent.cs`, `Translation.cs` (+metas) | Domain | new §2.2 |
 | `Assets/Scripts/Visuals/Pseudoscript.cs`, `FlipSequence.cs`, `Paging.cs` (+metas) | Visuals | new §2.3 |
 | `Assets/Scripts/Visuals/DisplayText.cs` | Visuals | `ForeignText`, `Reveal`, the new `For` family; `TextMedium` removed |
+| `Assets/Scripts/Visuals/ArabicShaper.cs`, `Assets/Tests/EditMode/ArabicShaperTests.cs` | Visuals | the hamza fix (re-check) |
 | `Assets/Scripts/Visuals/SpeechQueue.cs` | Visuals | the reveal time, `LineSeconds`, `EndReveal` |
 | `Assets/Scripts/UI/Translation.meta` and `UI/Translation/{TranslationSettings,TranslationPresenter,CaseTranslation,TextFlip,MotionPreference}.cs` (+metas) | Assembly-CSharp | new §2.4 |
 | `ContentLibrarySO.cs`, `Timeline/NationEraProfileSO.cs`, `CaseInstance.cs`, `CaseFactory.cs`, `Timeline/TimelineService.cs`, `GameManager.cs` | Assembly-CSharp | §2.4 |
@@ -826,13 +838,22 @@ Line numbers are from `e8b8290`; the plan re-finds each line.
    - delete the `_TimeDesk*` files;
    - append the verification record to this spec.
 
+### 6.1 Glyph spike (run before any code, 2026-09-25)
+
+A temporary editor script resolved each script's chain through piece 6's `RuntimeFonts` (a `ThemeSO` per script in memory), checked every cell of every table, and rendered "Silver shekel (by weight) 1897" and the full table per tongue with TMP into `SCRATCH/p9_tongues.png`:
+- **Hieroglyphs, cuneiform and runes:** `file seguihis.ttf` loads for all three; every cell (the supplementary-plane ones included) is in the runtime asset with a non-empty glyph; TMP counts one character per surrogate pair (30 characters for the 30-character line, R4). The rendered glyphs are real signs, not tofu. Hieroglyphs are thin line drawings in Segoe UI Historic and read faint at small sizes (§7).
+- **Arabic** (`tahoma.ttf`), **Han** (`msyh.ttc`) and **Kana** (`YuGothR.ttc`) load and cover their tables; **Greek** and the Latin-letter tongues draw with the runtime LiberationSans (è, æ, þ, ƿ, ð, ä, ö, ü, ß included, from `LiberationSans.ttf`, whose cmap has them).
+- **Decision:** no tongue uses the fallback cipher on this machine; the cipher stays for machines without a font (§1.9).
+- **Found:** the Arabic sample line stopped after 13 characters: `ArabicShaper` wrote `'\0'` for a hamza after `ك` ("by"), fixed as recorded in the re-check above. A first run also resolved each tongue with its own sample under a shared script key, so later tongues of a script were never checked: the reason for the per-script sample.
+- The tracked `LiberationSans SDF` and its fallback files were unchanged.
+
 ## 7. Risks
 
 - **The translators may feel weak.** Blind comparison proves every tell, so a translator buys reading speed and comprehension, not proof. That is intentional for the basic version (T5, T11). If playtests agree it is too weak, the lever is a manual-decode time cost (§4) or cheaper prices. Either way the game never becomes harder than today for a player who buys nothing, except that on day 2 they must compare values they cannot read.
 - **Day 2 carries a lot.** Answer tells, premades and foreign text all arrive together. `translation.fromDay` is the knob; raising it to 3 or 4 is content only.
 - **Width.** Han and kana cells are full-width, so a foreign value can be about twice as wide as its English form. Document values and transcript rows already auto-size (piece 3 R10); §6 step 6.4 checks overflow. If a row overflows, a later table can use half-width forms, or the rows' minimum size can drop.
 - **Right-to-left motion.** TMP reveals characters in string (visual) order, so an Arabic line types from its left end, and a finished flip snaps from right-aligned runs to left-to-right English (R5). This is cosmetic, and belongs to the "flesh it out later" pass (type a shaped prefix instead of `maxVisibleCharacters`).
-- **A flip can play unseen.** The scan wakes the PC, but the player may still be looking at the booth. The flip is short and reopening shows English, so nothing is lost.
+- **A flip can play unseen.** The scan wakes the PC but does not open the PC frame (the office move), so unless the frame is open the flip plays on the office PC's cloned screen. The flip is short and reopening shows English, so nothing is lost. If playtests want every flip seen up close, the lever is to start the papers' flip when the frame first shows the window (a view event into `InvestigationUIController`).
 - **Supplementary-plane glyphs.** Reading the code, TMP handles surrogate pairs (`TMP_FontAssetUtilities.GetCodePoint` in `HasCharacters`, and TMP's text parsing), but the glyphs have not been rendered yet. §6 step 3 is a spike with a content-only fallback.
 - **Fonts elsewhere.** The macOS and Linux names in the chains are unverified; the fallback cipher and its warning cover a missing font. Segoe UI Historic ships with Windows 10 and 11.
 - **The same chains authored twice.** The Arabic and CJK chains appear in piece 6's cultures and in piece 9's scripts. They are separate concerns (UI style against the script's glyphs) but can drift apart; §4 lists the fix.
