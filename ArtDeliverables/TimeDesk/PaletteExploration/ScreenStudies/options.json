@@ -1,0 +1,99 @@
+{
+  "type": "generated screenshot paint-overs, not runtime captures",
+  "first": {
+    "n": 1,
+    "name": "Walnut, navy and clay"
+  },
+  "options": [
+    {
+      "n": 2,
+      "name": "Oak, petrol and burgundy",
+      "desk": "natural medium honey-brown oak",
+      "pad": "muted deep petrol-blue #365B61",
+      "crt": "warm pale-grey plastic #CDCAC1",
+      "phone": "muted burgundy plastic #79484D",
+      "lamp": "ivory enamel",
+      "metal": "satin neutral nickel"
+    },
+    {
+      "n": 3,
+      "name": "Walnut, cognac and teal",
+      "desk": "natural medium walnut brown",
+      "pad": "cognac tan leather #9A704E",
+      "crt": "aged ivory plastic #DCD3B9",
+      "phone": "dark charcoal plastic #383D3D",
+      "lamp": "muted teal enamel #406D69",
+      "metal": "antique bronze"
+    },
+    {
+      "n": 4,
+      "name": "Mahogany, slate and cream",
+      "desk": "natural muted reddish-brown mahogany",
+      "pad": "warm slate-grey felt #626662",
+      "crt": "oyster-grey plastic #D0CFC3",
+      "phone": "dark navy plastic #394B60",
+      "lamp": "cream enamel",
+      "metal": "brushed steel"
+    },
+    {
+      "n": 5,
+      "name": "Chestnut, navy and oxblood",
+      "desk": "natural chestnut-brown wood",
+      "pad": "desaturated navy leather #405269",
+      "crt": "aged beige plastic #DACBAD",
+      "phone": "muted oxblood bakelite #784B50",
+      "lamp": "forest-green enamel #395B48",
+      "metal": "satin aluminium"
+    },
+    {
+      "n": 6,
+      "name": "Walnut, olive and ivory",
+      "desk": "natural dark walnut brown",
+      "pad": "muted olive leather #727753",
+      "crt": "ivory plastic #E0D5BC",
+      "phone": "warm grey plastic #85847B",
+      "lamp": "dark charcoal enamel",
+      "metal": "small bronze details"
+    },
+    {
+      "n": 7,
+      "name": "Elm, chocolate and clay",
+      "desk": "natural light tan-brown elm wood",
+      "pad": "dark chocolate leather #594338",
+      "crt": "grey-ivory plastic #D9D6C7",
+      "phone": "dusty terracotta plastic #B77F66",
+      "lamp": "bottle-green enamel #3A6054",
+      "metal": "subtle aged brass"
+    },
+    {
+      "n": 8,
+      "name": "Oak, blue-grey and wine",
+      "desk": "natural dark oak brown",
+      "pad": "muted blue-grey felt #6D7F88",
+      "crt": "warm cream plastic #E0D5BE",
+      "phone": "charcoal plastic #3C4145",
+      "lamp": "faded wine-red enamel #7B4D53",
+      "metal": "satin nickel"
+    },
+    {
+      "n": 9,
+      "name": "Oak, plum and moss",
+      "desk": "natural pale warm oak brown",
+      "pad": "dark desaturated plum leather #625260",
+      "crt": "warm light-grey plastic #D0D0C5",
+      "phone": "muted moss-green plastic #7D866A",
+      "lamp": "ivory enamel",
+      "metal": "dark gunmetal"
+    },
+    {
+      "n": 10,
+      "name": "Dark walnut, tobacco and petrol",
+      "desk": "natural very dark walnut brown, still wood not black paint",
+      "pad": "tobacco leather #957653",
+      "crt": "warm-grey plastic #C5C3B9",
+      "phone": "ivory plastic #DCD0B5",
+      "lamp": "dark petrol enamel #3C6265",
+      "metal": "small antique brass details"
+    }
+  ]
+}

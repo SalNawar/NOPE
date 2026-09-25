@@ -6,4 +6,4 @@ Selected raw candidates: male base, female base, male Athens outfit (3 of 406). 
 
 These are unprocessed source images. No game-ready character layers have been delivered or hooked into Unity. All source references and selected prompts are saved. Exact registration, colour normalization and in-game validation remain outstanding.
 
-Saleh asked for ten new game palette directions. Character generation is paused for that art-direction choice so the remaining cast does not bake in a palette he dislikes. No room or desk assets were changed in this character-art pass.
+Saleh asked for ten new game palette directions, then explicitly instructed that character generation stay stopped until the office colour/material task is done. The first colour studies were rejected for monochrome grading and arbitrary recolouring. Continue only the material-led office style task; do not resume character generation while it remains unresolved. No room or desk assets were changed in this character-art pass.

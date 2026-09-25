@@ -1,5 +1,7 @@
 # Ten palette directions — 2026-09-25
 
+SUPERSEDED: these initial palettes were rejected. Follow [CURRENT_DIRECTION.md](CURRENT_DIRECTION.md), which records the no-green rule, ReStory desk reference, actual-screen format and character-generation pause.
+
 Concept exploration only; no Unity materials or lighting changed. Retro-futurist Art Deco bureaucracy crossed with Windows 95/98. Six colours per option, in this order: ink/shadow, architecture, furniture, trim, hardware/paper, signal. Concept images illustrate relationships; this text and palette JSON hold the exact intended swatches.
 
 ## 01 Cobalt Ministry
@@ -61,5 +63,4 @@ ink and deep shadow: #232B28 · main architecture: #8B9061 · desk and furniture
 Deep indigo halls, blue steel desks, coral signals and chrome.
 
 ink and deep shadow: #161E30 · main architecture: #3C5277 · desk and furniture: #29384D · Art Deco trim: #A1B2B7 · CRT plastic and paper: #DBDCD3 · screen and signal accent: #E09A85
-
 
