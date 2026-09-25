@@ -27,7 +27,7 @@ public sealed class TravellerView : MonoBehaviour
             figure.Show(look, art);
     }
 
-    /// <summary>A premade's picture changes to what they say (the expression of their last line).</summary>
+    /// <summary>A premade's picture changes to what they say (TravellerWheel, as each line with an expression starts in the speech bubble).</summary>
     public void SetExpression(string expression)
     {
         if (figure != null)

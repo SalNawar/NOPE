@@ -4,10 +4,11 @@ using UnityEngine;
 /// <summary>
 /// A timed label on the office overlay canvas that takes no clicks, projected
 /// at a followed transform plus an offset (OverlayProjection): the traveller's
-/// speech bubble (TravellerWheel.Say) and the desk props' tooltips
-/// (DeskReaction). The host stays active; its Panel child is shown and hidden.
-/// It hides when its time is up, when the followed object is destroyed, or when
-/// that object leaves the view. Callers apply DisplayText.
+/// speech bubble (TravellerWheel, which types each line out with Reveal and
+/// times it itself) and the desk props' tooltips (DeskReaction). The host stays
+/// active; its Panel child is shown and hidden. It hides when its time is up,
+/// when the followed object is destroyed, or when that object leaves the view.
+/// Callers apply DisplayText.
 /// </summary>
 public sealed class OverlayCallout : MonoBehaviour
 {
@@ -31,7 +32,11 @@ public sealed class OverlayCallout : MonoBehaviour
         Hide();
     }
 
-    /// <summary>Shows <paramref name="text"/> (as given) over <paramref name="follow"/> plus <paramref name="offset"/> for <paramref name="seconds"/>, restarting the timer; a blank text or a null follow hides it.</summary>
+    /// <summary>
+    /// Shows all of <paramref name="text"/> (as given) over <paramref name="follow"/>
+    /// plus <paramref name="offset"/> for <paramref name="seconds"/> (infinity:
+    /// until hidden), restarting the timer; a blank text or a null follow hides it.
+    /// </summary>
     public void Show(string text, Transform follow, Vector2 offset, float seconds)
     {
         if (string.IsNullOrWhiteSpace(text) || follow == null || panel == null)
@@ -41,13 +46,23 @@ public sealed class OverlayCallout : MonoBehaviour
         }
 
         if (label != null)
+        {
             label.text = text;
+            label.maxVisibleCharacters = text.Length;
+        }
         _follow = follow;
         _offset = offset;
         _remaining = seconds;
         panel.gameObject.SetActive(true);
         if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset))
             Hide();
+    }
+
+    /// <summary>Shows only the first <paramref name="characters"/> characters of the text (the rest keep their place, so the box does not reflow as a line types out).</summary>
+    public void Reveal(int characters)
+    {
+        if (label != null)
+            label.maxVisibleCharacters = characters < 0 ? 0 : characters;
     }
 
     /// <summary>Hides the box.</summary>

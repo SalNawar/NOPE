@@ -27,14 +27,76 @@ public enum DialogAction
     InspectGarment
 }
 
-/// <summary>What a choice is, for renderers: the wheel puts Back in its centre. Piece 8 appends kinds.</summary>
+/// <summary>
+/// What a choice is, for renderers: the wheel orders its ring by kind, shows
+/// each kind's icon and puts Back in its centre. A sub-menu entry takes the
+/// kind of what it opens ("Ask about home >" is a Question). Append only.
+/// </summary>
 public enum DialogChoiceKind
 {
-    /// <summary>An ordinary choice (a ring item).</summary>
+    /// <summary>A reply inside a narrative dialog (and any choice not given a kind).</summary>
     Normal,
 
     /// <summary>The way back to the hub (the wheel's centre).</summary>
-    Back
+    Back,
+
+    /// <summary>Something the desk asks the traveller to do: hand a document over, or a spoken request.</summary>
+    Request,
+
+    /// <summary>A question about home, small talk, or the ask menu's entry.</summary>
+    Question,
+
+    /// <summary>A look at a garment, or the look menu's entry.</summary>
+    Look,
+
+    /// <summary>The entry that starts a narrative dialog.</summary>
+    Dialog
+}
+
+/// <summary>The wheel's rules for kinds: one order for every menu, and each kind's icon file name. Pure, so both are tested headless.</summary>
+public static class DialogChoiceKinds
+{
+    /// <summary>Where a kind sorts: Back 0, Request 1, Question 2, Look 3, Dialog 4, Normal 5.</summary>
+    public static int Rank(DialogChoiceKind kind)
+    {
+        switch (kind)
+        {
+            case DialogChoiceKind.Back: return 0;
+            case DialogChoiceKind.Request: return 1;
+            case DialogChoiceKind.Question: return 2;
+            case DialogChoiceKind.Look: return 3;
+            case DialogChoiceKind.Dialog: return 4;
+            default: return 5;
+        }
+    }
+
+    /// <summary>
+    /// The choices as the wheel shows them: grouped by <see cref="Rank"/>, in
+    /// their given order within a kind (a stable sort), nulls dropped; a new
+    /// list (empty for null).
+    /// </summary>
+    public static IReadOnlyList<DialogChoice> Arrange(IReadOnlyList<DialogChoice> choices)
+    {
+        var order = new List<int>();
+        for (int i = 0; choices != null && i < choices.Count; i++)
+            if (choices[i] != null)
+                order.Add(i);
+
+        // List.Sort is not stable: ties keep their given position.
+        order.Sort((a, b) =>
+        {
+            int byKind = Rank(choices[a].Kind).CompareTo(Rank(choices[b].Kind));
+            return byKind != 0 ? byKind : a.CompareTo(b);
+        });
+
+        var arranged = new List<DialogChoice>(order.Count);
+        foreach (int i in order)
+            arranged.Add(choices[i]);
+        return arranged;
+    }
+
+    /// <summary>The kind's icon file name, "wheel_" + the kind in lower case ("wheel_request"); final art by that name replaces the placeholder.</summary>
+    public static string IconName(DialogChoiceKind kind) => "wheel_" + kind.ToString().ToLowerInvariant();
 }
 
 /// <summary>One transcript line. Immutable; an answer line also carries the fact it states.</summary>

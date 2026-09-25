@@ -97,8 +97,26 @@ public class InterviewScriptTests
         }
     };
 
-    private static DialogGraph Build(InterviewCase c = null, IReadOnlyList<InterviewQuestion> questions = null, IReadOnlyList<AuthoredDialog> dialogs = null) =>
-        InterviewScript.Build(Lines(), questions ?? Questions(), dialogs ?? new[] { Rumour() }, c ?? Case());
+    private static InterviewRequest Spoken(string id, string label, string prompt, string reply) => new InterviewRequest
+    {
+        id = id,
+        label = label,
+        prompt = new LineText($"interview.requests.{id}.prompt", prompt),
+        reply = new LineText($"interview.requests.{id}.reply", reply)
+    };
+
+    /// <summary>The wording plus two spoken requests, "Step closer" and "Speak up".</summary>
+    private static InterviewLines LinesWithRequests()
+    {
+        InterviewLines lines = Lines();
+        lines.requests.Add(Spoken("step_closer", "Step closer", "Step closer to the glass, please.", "Like this?"));
+        lines.requests.Add(Spoken("speak_up", "Speak up", "Speak up, please.", "Sorry. Is this better?"));
+        return lines;
+    }
+
+    private static DialogGraph Build(InterviewCase c = null, IReadOnlyList<InterviewQuestion> questions = null, IReadOnlyList<AuthoredDialog> dialogs = null,
+                                     InterviewLines lines = null) =>
+        InterviewScript.Build(lines ?? Lines(), questions ?? Questions(), dialogs ?? new[] { Rumour() }, c ?? Case());
 
     private static string[] Ids(IEnumerable<DialogChoice> choices) => choices.Select(c => c.Id).ToArray();
 
@@ -167,12 +185,74 @@ public class InterviewScriptTests
     }
 
     [Test]
-    public void Back_IsTheOnlyChoiceOfKindBack()
+    public void EveryChoice_HasItsKind_ASubMenuEntryTakingTheKindOfWhatItOpens()
     {
-        DialogGraph graph = Build();
-        foreach (string node in new[] { InterviewScript.HubNodeId, InterviewScript.AskNodeId, "dlg_rumour/start", "dlg_rumour/detail" })
+        DialogGraph graph = Build(Dressed(new Garment(LookSlot.Hair, "Caesar crop", "Caesar crop / nodus roll", false)), lines: LinesWithRequests());
+        var expected = new Dictionary<string, DialogChoiceKind>
+        {
+            ["request:0"] = DialogChoiceKind.Request, ["request:1"] = DialogChoiceKind.Request,
+            ["act:step_closer"] = DialogChoiceKind.Request, ["act:speak_up"] = DialogChoiceKind.Request,
+            ["ask"] = DialogChoiceKind.Question, ["look"] = DialogChoiceKind.Look, ["dlg:dlg_rumour"] = DialogChoiceKind.Dialog,
+            ["back"] = DialogChoiceKind.Back, ["q:q_currency"] = DialogChoiceKind.Question, ["q:q_capital"] = DialogChoiceKind.Question,
+            ["smalltalk"] = DialogChoiceKind.Question, ["look:0"] = DialogChoiceKind.Look,
+            ["dlg_rumour.more"] = DialogChoiceKind.Normal, ["dlg_rumour.ignore"] = DialogChoiceKind.Normal, ["dlg_rumour.noted"] = DialogChoiceKind.Normal
+        };
+
+        var seen = new HashSet<string>();
+        foreach (string node in new[] { InterviewScript.HubNodeId, InterviewScript.AskNodeId, InterviewScript.LookNodeId, "dlg_rumour/start", "dlg_rumour/detail" })
+        {
             foreach (DialogChoice choice in graph.Node(node).Choices)
-                Assert.AreEqual(choice.Id == "back" ? DialogChoiceKind.Back : DialogChoiceKind.Normal, choice.Kind, $"{node}: {choice.Id}");
+            {
+                Assert.AreEqual(expected[choice.Id], choice.Kind, $"{node}: {choice.Id}");
+                seen.Add(choice.Id);
+            }
+        }
+
+        CollectionAssert.AreEquivalent(expected.Keys, seen, "every kind of choice was built");
+    }
+
+    [Test]
+    public void Hub_SpokenRequests_FollowTheDocumentRequests_BeforeAsk()
+    {
+        DialogNode hub = Build(lines: LinesWithRequests()).Node(InterviewScript.HubNodeId);
+        CollectionAssert.AreEqual(new[] { "request:0", "request:1", "act:step_closer", "act:speak_up", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
+        CollectionAssert.AreEqual(new[] { "Step closer", "Speak up" }, hub.Choices.Skip(2).Take(2).Select(c => c.Label).ToArray());
+    }
+
+    [Test]
+    public void ASpokenRequest_SpeaksPromptAndReply_IsOneShot_AndDoesNothingElse()
+    {
+        DialogChoice closer = Build(lines: LinesWithRequests()).Node(InterviewScript.HubNodeId).Choices[2];
+        Assert.AreEqual(DialogAction.None, closer.Action, "no mechanic: the traveller only answers");
+        Assert.AreEqual(-1, closer.DocumentIndex);
+        Assert.IsTrue(closer.OneShot);
+        Assert.IsTrue(string.IsNullOrEmpty(closer.Next), "stays on the hub");
+        CollectionAssert.AreEqual(new[] { "interview.requests.step_closer.prompt", "interview.requests.step_closer.reply" }, LineIds(closer.Lines));
+        Assert.AreEqual(DialogSpeaker.Desk, closer.Lines[0].Speaker);
+        Assert.AreEqual("Step closer to the glass, please.", closer.Lines[0].Text);
+        Assert.AreEqual(DialogSpeaker.Traveller, closer.Lines[1].Speaker);
+        Assert.AreEqual("Like this?", closer.Lines[1].Text);
+        Assert.IsFalse(closer.Lines[1].IsAnswer, "a reply to a request is never evidence");
+
+        var runner = new DialogRunner(Build(lines: LinesWithRequests()), null);
+        Assert.IsNotNull(runner.Choose("act:step_closer"));
+        CollectionAssert.DoesNotContain(Ids(runner.Choices), "act:step_closer", "asked once per traveller");
+        CollectionAssert.Contains(Ids(runner.Choices), "act:speak_up");
+    }
+
+    [Test]
+    public void Hub_HasNoSpokenRequest_WithoutAny_AndSkipsEmptyEntries()
+    {
+        CollectionAssert.IsEmpty(Ids(Build().Node(InterviewScript.HubNodeId).Choices).Where(id => id.StartsWith("act:")));
+
+        InterviewLines lines = LinesWithRequests();
+        lines.requests.Insert(0, null);
+        CollectionAssert.AreEqual(new[] { "act:step_closer", "act:speak_up" },
+                                  Ids(Build(lines: lines).Node(InterviewScript.HubNodeId).Choices).Where(id => id.StartsWith("act:")).ToArray());
+
+        InterviewLines none = Lines();
+        none.requests = null;
+        CollectionAssert.IsEmpty(Ids(Build(lines: none).Node(InterviewScript.HubNodeId).Choices).Where(id => id.StartsWith("act:")));
     }
 
     [Test]
@@ -258,7 +338,7 @@ public class InterviewScriptTests
     }
 
     // -----------------------------
-    // The traveller's reply (SpokenSince)
+    // The traveller's reply (SaidSince)
     // -----------------------------
 
     private static readonly DialogLine[] Said3 =
@@ -273,35 +353,38 @@ public class InterviewScriptTests
     };
 
     [Test]
-    public void SpokenSince_JoinsTheTravellersLines_InOrder_SkippingTheDesk()
+    public void SaidSince_IsTheTravellersLines_InOrder_SkippingTheDesk()
     {
-        Assert.AreEqual("Only a rumour.\nA courier carries them.", InterviewScript.SpokenSince(Said3, 4));
-        Assert.AreEqual("We trade with Deben.\nOnly a rumour.\nA courier carries them.", InterviewScript.SpokenSince(Said3, 2));
+        CollectionAssert.AreEqual(new[] { "dlg.1", "dlg.2" }, LineIds(InterviewScript.SaidSince(Said3, 4)));
+        CollectionAssert.AreEqual(new[] { "q.answer", "dlg.1", "dlg.2" }, LineIds(InterviewScript.SaidSince(Said3, 2)));
+        Assert.AreSame(Said3[3], InterviewScript.SaidSince(Said3, 2)[0], "the lines themselves, with their expressions");
     }
 
     [Test]
-    public void SpokenSince_LeavesOutLinesBeforeFrom_AndCountsANegativeFromAsZero()
+    public void SaidSince_LeavesOutLinesBeforeFrom_AndCountsANegativeFromAsZero()
     {
-        Assert.AreEqual("A courier carries them.", InterviewScript.SpokenSince(Said3, 6));
-        Assert.AreEqual("I request passage home.\nWe trade with Deben.\nOnly a rumour.\nA courier carries them.", InterviewScript.SpokenSince(Said3, -3));
+        CollectionAssert.AreEqual(new[] { "dlg.2" }, LineIds(InterviewScript.SaidSince(Said3, 6)));
+        CollectionAssert.AreEqual(new[] { "case.claim", "q.answer", "dlg.1", "dlg.2" }, LineIds(InterviewScript.SaidSince(Said3, -3)));
     }
 
     [Test]
-    public void SpokenSince_IsEmpty_AtOrPastTheEnd_ForDeskLinesOnly_AndForNoTranscript()
+    public void SaidSince_IsEmpty_AtOrPastTheEnd_ForDeskLinesOnly_AndForNoTranscript()
     {
-        Assert.AreEqual(string.Empty, InterviewScript.SpokenSince(Said3, 7));
-        Assert.AreEqual(string.Empty, InterviewScript.SpokenSince(Said3, 99));
-        Assert.AreEqual(string.Empty, InterviewScript.SpokenSince(new[] { Said3[0], Said3[2] }, 0));
-        Assert.AreEqual(string.Empty, InterviewScript.SpokenSince(null, 0));
+        CollectionAssert.IsEmpty(InterviewScript.SaidSince(Said3, 7));
+        CollectionAssert.IsEmpty(InterviewScript.SaidSince(Said3, 99));
+        CollectionAssert.IsEmpty(InterviewScript.SaidSince(new[] { Said3[0], null, Said3[2] }, 0));
+        CollectionAssert.IsEmpty(InterviewScript.SaidSince(null, 0));
     }
 
     [Test]
-    public void SpokenSince_AfterARequest_IsTheTravellersReply()
+    public void SaidSince_AfterARequest_IsTheTravellersReply_AndFromTheStart_IsTheClaim()
     {
         var runner = new DialogRunner(Build(), InterviewScript.Opening(Case()));
+        CollectionAssert.AreEqual(new[] { InterviewScript.ClaimLineId }, LineIds(InterviewScript.SaidSince(runner.Transcript, 0)), "what the traveller says on arrival");
+
         int before = runner.Transcript.Count;
         runner.Choose("request:0");
-        Assert.AreEqual("Here you are.", InterviewScript.SpokenSince(runner.Transcript, before));
+        Assert.AreEqual("Here you are.", InterviewScript.SaidSince(runner.Transcript, before).Single().Text);
     }
 
     // -----------------------------
@@ -478,26 +561,36 @@ public class InterviewScriptTests
     [Test]
     public void MenuProblems_TheAskMenu_BackPlusQuestionsPlusSmallTalk()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 2, 2, 0, 8), "< Back + 6 questions + small talk = 8");
-        StringAssert.Contains("The ask menu holds 9 choices", Only(DialogChecks.MenuProblems(7, true, 2, 2, 0, 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(7, false, 2, 2, 0, 8), "without small talk, 7 questions fit");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, 2, 0, 2, 0, 8), "< Back + 6 questions + small talk = 8");
+        StringAssert.Contains("The ask menu holds 9 choices", Only(DialogChecks.MenuProblems(7, true, 2, 0, 2, 0, 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(7, false, 2, 0, 2, 0, 8), "without small talk, 7 questions fit");
     }
 
     [Test]
     public void MenuProblems_TheHub_RequestedDocumentsPlusAskPlusLookPlusDialogs_PremadeDialogsCountOnce()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 3, premadeDialogs: 3, maxChoices: 8),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 0, dialogs: 3, premadeDialogs: 3, maxChoices: 8),
                                  "2 requests + ask + look + 3 dialogs + one premade's dialog = 8");
-        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 4, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, dialogs: 3, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 99, 0), "no capacity, no check");
+        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 0, dialogs: 3, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 99, 99, 0), "no capacity, no check");
+    }
+
+    [Test]
+    public void MenuProblems_TheHub_CountsEverySpokenRequest()
+    {
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+                                 "the starter content: 1 document request + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");
+        string problem = Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+                              "the traveller wheel shows at most 8");
+        StringAssert.Contains("The hub holds 9 choices (1 document request(s), 3 spoken request(s), the ask and look entries, 2 dialog(s), one premade's dialog)", problem);
     }
 
     [Test]
     public void MenuProblems_TheLookMenu_BackPlusOneChoicePerGarmentSlot()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, 0, 0, 0, 6), "< Back + 5 slots = 6");
-        StringAssert.Contains("The look menu holds up to 6 choices", Only(DialogChecks.MenuProblems(0, false, 0, 0, 0, 5), "the traveller wheel shows at most 5"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, 0, 0, 0, 0, 6), "< Back + 5 slots = 6");
+        StringAssert.Contains("The look menu holds up to 6 choices", Only(DialogChecks.MenuProblems(0, false, 0, 0, 0, 0, 5), "the traveller wheel shows at most 5"));
     }
 
     // -----------------------------
@@ -555,24 +648,6 @@ public class InterviewScriptTests
         Assert.IsNotNull(runner.Choose("look:0"));
         Assert.IsNotNull(runner.Choose("look:0"), "again");
         CollectionAssert.AreEqual(new[] { "back", "look:0" }, Ids(runner.Choices));
-    }
-
-    [Test]
-    public void ExpressionSince_IsTheLastTravellerLineWithOne_FromTheIndex()
-    {
-        var transcript = new List<DialogLine>
-        {
-            new DialogLine("a", DialogSpeaker.Traveller, "Hello.", "happy"),
-            new DialogLine("b", DialogSpeaker.Desk, "Why?", "angry"),
-            new DialogLine("c", DialogSpeaker.Traveller, "Because.", "worried"),
-            new DialogLine("d", DialogSpeaker.Traveller, "Well.", ""),
-            new DialogLine("e", DialogSpeaker.Traveller, "Hm.")
-        };
-        Assert.AreEqual("worried", InterviewScript.ExpressionSince(transcript, 0), "the last one wins; blank and null lines keep it");
-        Assert.AreEqual("worried", InterviewScript.ExpressionSince(transcript, -3));
-        Assert.IsNull(InterviewScript.ExpressionSince(transcript, 3), "no line since then carries one");
-        Assert.IsNull(InterviewScript.ExpressionSince(transcript.GetRange(1, 1), 0), "the desk never has one");
-        Assert.IsNull(InterviewScript.ExpressionSince(null, 0));
     }
 
     [Test]

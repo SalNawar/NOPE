@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// today's directives, runs the interview on the traveller wheel (document
 /// requests, today's questions, a look at the traveller's garments, which go
 /// into the compare bar, and narrative dialogs, with the transcript window and
-/// the traveller's replies in the wheel's bubble), hands each
+/// the traveller's claim and replies in the wheel's bubble), hands each
 /// document over as a physical paper on the desk (whose scan opens its
 /// window) or, where no desk is wired, straight to its draggable window,
 /// builds a shelf of reference books the player can open/stow, and offers the
@@ -65,7 +65,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
     [SerializeField] private DeskController desk;
 
-    /// <summary>The traveller wheel: closed after a hand-over, and it shows the traveller's replies.</summary>
+    /// <summary>The traveller wheel: closed after a hand-over; it gives the ring its icons and says the traveller's lines (the claim on arrival, then each reply).</summary>
     [SerializeField] private TravellerWheel wheel;
 
     /// <summary>Shown on the desktop between travellers.</summary>
@@ -119,9 +119,6 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>Character art (set by GameManager): the passport photos on the papers and the scanned pages.</summary>
     private CharacterArt _art;
-
-    /// <summary>Raised with a premade's new expression when a line they say carries one (the booth figure changes).</summary>
-    public event Action<string> TravellerExpressionChanged;
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
@@ -414,7 +411,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// questions, small talk and offered dialogs (a premade's own dialog only
     /// while they are at the desk; without a wired transcript nothing spoken
     /// could be read, so only the requests and the look remain). The
-    /// transcript starts with the opener and the claim.
+    /// transcript starts with the opener and the claim, and the traveller says
+    /// the claim in the wheel's bubble.
     /// </summary>
     private void StartInterview(CaseInstance inst, IReadOnlyList<CaseDocument> documents)
     {
@@ -450,19 +448,32 @@ public sealed class InvestigationUIController : MonoBehaviour
             transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController);
 
         RefreshChoices();
+
+        if (wheel != null)
+            wheel.Say(InterviewScript.SaidSince(_runner.Transcript, 0));
     }
 
-    /// <summary>Shows the current interview node's choices on the traveller wheel ("&lt; Back" in its centre).</summary>
+    /// <summary>
+    /// Shows the current interview node's choices on the traveller wheel,
+    /// grouped by kind (DialogChoiceKinds.Arrange), each with its kind's icon
+    /// when the wheel is wired ("&lt; Back" in its centre).
+    /// </summary>
     private void RefreshChoices()
     {
         if (interactionPanel == null || _runner == null)
             return;
 
         var actions = new List<InteractionAction>();
-        foreach (DialogChoice choice in _runner.Choices)
+        foreach (DialogChoice choice in DialogChoiceKinds.Arrange(_runner.Choices))
         {
             string id = choice.Id;
-            actions.Add(new InteractionAction { label = choice.Label, centre = choice.Kind == DialogChoiceKind.Back, execute = () => Choose(id) });
+            actions.Add(new InteractionAction
+            {
+                label = choice.Label,
+                centre = choice.Kind == DialogChoiceKind.Back,
+                icon = wheel != null ? wheel.IconFor(choice.Kind) : null,
+                execute = () => Choose(id)
+            });
         }
 
         interactionPanel.SetActions(actions);
@@ -474,11 +485,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// its window where no desk is wired) and closes the wheel so the player can
     /// take it; a look at a garment puts it into the compare bar (the player
     /// then compares it with a Costume Guide row on the PC) and closes the
-    /// wheel; any other choice opens the transcript; the traveller's reply, when
-    /// the choice adds one, goes to the wheel's bubble (the spoken reveal point;
-    /// a choice without one, such as "Ask about home >" or "&lt; Back", leaves the
-    /// last reply up), and its last expression changes a premade's picture; a
-    /// finished dialog is recorded for the end of the shift.
+    /// wheel; any other choice opens the transcript; the traveller's lines, when
+    /// the choice adds some, go to the wheel's bubble (the spoken reveal point),
+    /// queued after what they are saying, each changing a premade's picture as
+    /// it starts (a choice without one, such as "Ask about home >" or "&lt;
+    /// Back", adds nothing); a finished dialog is recorded for the end of the
+    /// shift.
     /// </summary>
     private void Choose(string choiceId)
     {
@@ -514,13 +526,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             transcriptChrome.Open();
         }
 
-        string reply = InterviewScript.SpokenSince(_runner.Transcript, before);
-        if (wheel != null && reply.Length > 0)
-            wheel.Say(DisplayText.For(reply, TextMedium.Spoken));
-
-        string expression = InterviewScript.ExpressionSince(_runner.Transcript, before);
-        if (expression != null)
-            TravellerExpressionChanged?.Invoke(expression);
+        if (wheel != null)
+            wheel.Say(InterviewScript.SaidSince(_runner.Transcript, before));
 
         if (choice.Action == DialogAction.CompleteDialog)
             _day.Complete(choice.DialogId, choice.EffectName);
