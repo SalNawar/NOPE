@@ -34,10 +34,11 @@ using UnityEngine.UI;
 ///   office overlay canvas  [TravellerWheel, OverlayCallout, SpeechBubbleInput,
 ///   OfficeCaseHud, StampTray]
 /// - The Office root: click boxes for the art's props, the physical desk
-///   (papers, the scanner), the traveller, the READY sign, the readouts and
-///   the office's input rules, all put on the art office at load by the
-///   binder through the scene contract  [OfficeSceneBinder, DeskController,
-///   DeskReaction, TravellerView, BoothCoordinator]
+///   (papers, the scanner, the mat's click), the desk view's camera, the
+///   traveller, the READY sign, the readouts and the office's input rules,
+///   all put on the art office at load by the binder through the scene
+///   contract  [OfficeSceneBinder, DeskController, DeskView, DeskReaction,
+///   TravellerView, BoothCoordinator]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
 /// Safe to re-run: finds existing pieces by name and only fills gaps (some
@@ -176,11 +177,11 @@ public static partial class OfficeSceneUIBuilder
         FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
         OfficeCaseHud caseHud = BuildOfficeCaseHud(officeCanvas.transform, out GameObject officeCompareStrip, out TMP_Text officeCompareText);
         PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
-        OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble);
+        OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble, true);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
         BuildBubbleInput(speechBubble, wheel);
         InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
-        OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip);
+        OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
         StampTray stampTray = BuildStampTray(officeCanvas.transform, deskConfig);
 
         // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the claim tag's place (they never show together).

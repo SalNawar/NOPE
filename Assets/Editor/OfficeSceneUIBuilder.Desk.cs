@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,10 +14,11 @@ using UnityEngine.UI;
 /// overlay canvas, the traveller wheel and the overlay callouts, and the
 /// Office root: the click boxes the office binder puts on the art's props at
 /// load, the desk (its plane, the paper template with its face, the desk
-/// catcher and the paper examiner, the scanner and its stand-in machine, the
-/// day-1 notes), the traveller, the READY sign, the readouts, the decoration
-/// slots, the booth coordinator and the binder; on the overlay the office
-/// case HUD and the stamp tray (piece 10). Nothing here
+/// catcher, the mat's click and the paper examiner, the scanner and its
+/// stand-in machine, the day-1 notes), the desk view's camera, the traveller,
+/// the READY sign, the readouts, the decoration slots, the booth coordinator
+/// and the binder; on the overlay the office case HUD and the stamp tray
+/// (piece 10). Nothing here
 /// knows where the art puts things: the binder reads the scene contract at
 /// load. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
 /// its order.
@@ -555,6 +557,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The desk, the scanner and the notes.
         DeskController desk = BuildDesk(office, config, pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint);
+        DeskView deskView = BuildDeskView(office, config, desk.transform.Find("ViewCatcher").GetComponent<ClickCatcher>());
         var soScanner = new SerializedObject(scanner);
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
@@ -625,6 +628,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "examiner", desk.transform.Find("Examiner").GetComponent<PaperExaminer>());
         SetRef(so, "stampTray", stampTray);
         SetRef(so, "hud", caseHud);
+        SetRef(so, "deskView", deskView);
         so.ApplyModifiedProperties();
 
         // The binder puts all of it on the art office at load.
@@ -637,6 +641,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "examiner", desk.transform.Find("Examiner").GetComponent<PaperExaminer>());
         SetRef(soBinder, "stampTray", stampTray);
         SetRef(soBinder, "deskCatcher", desk.transform.Find("Catcher").GetComponent<BoxCollider>());
+        SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());
+        SetRef(soBinder, "deskView", deskView);
         SetRef(soBinder, "screenClone", screen.GetComponent<PcScreenClone>());
         SetRef(soBinder, "pc", pc);
         SetRef(soBinder, "pcPower", pcPower);
@@ -724,7 +730,9 @@ public static partial class OfficeSceneUIBuilder
     /// with its Papers root, the HandOver point, the inactive paper template,
     /// the decoration slots, the Catcher (a click on the desk puts held papers
     /// back; a box on the Interactable layer the binder sizes under the desk
-    /// plane, inactive until papers are held) and the Examiner (poses held
+    /// plane, inactive until papers are held), the ViewCatcher (the mat's
+    /// click, the desk view's toggle: the same box, inactive until DeskView
+    /// makes it live) and the Examiner (poses held
     /// papers; the PC frame bounds their region); Office/Scanner (the
     /// DeskScanner, its click box, Clickable and reaction, and a stand-in
     /// flatbed machine the binder shows where the art has no scanner); the
@@ -766,6 +774,13 @@ public static partial class OfficeSceneUIBuilder
         catcher.gameObject.AddComponent<BoxCollider>();
         ClickCatcher deskCatcher = catcher.gameObject.AddComponent<ClickCatcher>();
         catcher.gameObject.SetActive(false);
+
+        DestroyChildIfPresent(deskTransform, "ViewCatcher");
+        Transform viewCatcher = EnsureChild(deskTransform, "ViewCatcher");
+        viewCatcher.gameObject.layer = OfficeLayers.InteractableLayer;
+        viewCatcher.gameObject.AddComponent<BoxCollider>();
+        viewCatcher.gameObject.AddComponent<ClickCatcher>();
+        viewCatcher.gameObject.SetActive(false);
 
         DestroyChildIfPresent(deskTransform, "Examiner");
         PaperExaminer examiner = EnsureChild(deskTransform, "Examiner").gameObject.AddComponent<PaperExaminer>();
@@ -1234,12 +1249,38 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
+    /// The desk view (piece 10 section 11), rebuilt each run: Office/DeskView
+    /// (DeskView, wired to the desk tuning and the mat's click) and its inactive
+    /// Camera child, a CinemachineCamera at priority 0 that the office binder
+    /// poses from the art's camera and the mat at load.
+    /// </summary>
+    private static DeskView BuildDeskView(Transform office, DeskConfigSO config, ClickCatcher mat)
+    {
+        DestroyChildIfPresent(office, "DeskView");
+        Transform host = EnsureChild(office, "DeskView");
+        Transform cameraHost = EnsureChild(host, "Camera");
+        CinemachineCamera deskCamera = cameraHost.gameObject.AddComponent<CinemachineCamera>();
+        deskCamera.Priority = 0;
+        cameraHost.gameObject.SetActive(false);
+
+        DeskView deskView = host.gameObject.AddComponent<DeskView>();
+        var so = new SerializedObject(deskView);
+        SetRef(so, "config", config);
+        SetRef(so, "deskCamera", deskCamera);
+        SetRef(so, "mat", mat);
+        so.ApplyModifiedProperties();
+        return deskView;
+    }
+
+    /// <summary>
     /// An overlay callout (a timed label that takes no clicks) under the office
     /// overlay canvas, rebuilt each run: an always-active full-screen host with
     /// no graphic, and its Panel child (anchors and pivot (0.5, 0.5), raycast
-    /// targets off, inactive) holding an auto-sized label.
+    /// targets off, inactive) holding an auto-sized label; with
+    /// <paramref name="keepOnScreen"/> it waits at the screen's edge while its
+    /// object is out of view (the speech bubble), else it hides (the tooltip).
     /// </summary>
-    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role)
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen)
     {
         DestroyChildIfPresent(overlay, name);
         Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -1258,6 +1299,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(callout);
         SetRef(so, "panel", panel);
         SetRef(so, "label", label);
+        so.FindProperty("keepOnScreen").boolValue = keepOnScreen;
         so.ApplyModifiedProperties();
 
         panel.gameObject.SetActive(false);
