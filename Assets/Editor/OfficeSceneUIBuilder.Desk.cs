@@ -74,6 +74,9 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A paper row's label ink (quieter than its value, dark enough to read at 720p).</summary>
     private static readonly Color PaperLabelInk = new Color(0.25f, 0.23f, 0.2f, 1f);
 
+    /// <summary>The day-1 scan note's box (metres): two lines of the note at the size one line of the old, shorter note had.</summary>
+    private static readonly Vector2 ScanHintBox = new Vector2(0.78f, 0.13f);
+
     /// <summary>The smallest auto-size of a paper row's texts (TMP world units: a few millimetres).</summary>
     private const float PaperTextMinSize = 0.03f;
 
@@ -744,6 +747,9 @@ public static partial class OfficeSceneUIBuilder
         soScanner.ApplyModifiedProperties();
 
         scanHint = FloatingNote(office, "ScanHint");
+        // Piece 10's longer note ("Click a paper to read it; drag it onto the scanner to open it on the PC.") wraps onto two lines, so it keeps its size.
+        ((RectTransform)scanHint.transform).sizeDelta = ScanHintBox;
+        scanHint.textWrappingMode = TextWrappingModes.Normal;
 
         Transform deskTransform = EnsureChild(office, "Desk");
         DeskSurface surface = GetOrAdd<DeskSurface>(deskTransform.gameObject);
