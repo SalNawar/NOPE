@@ -1,12 +1,16 @@
 using TMPro;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 /// <summary>
 /// The office builder's booth and desk parts (the physical desk, piece 7):
 /// the live monitor on the CRT, the traveller wheel and the overlay callouts,
-/// the desk tuning asset and the shared hit-zone helpers. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
+/// the desk (its surface, the paper template, the scanner and the day-1
+/// notes), the reacting props, the decoration slots, the traveller's view and
+/// hit zone, the booth coordinator, the desk tuning assets and the shared
+/// hit-zone helpers. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
 /// its order (geometry before the objects that wire to it).
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -28,6 +32,95 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The focus exit zone around the screen (crt sprite units): larger than any focused view, so a click anywhere outside the screen leaves focus.</summary>
     private static readonly Vector2 FocusExitSize = new Vector2(8f, 6f);
+
+    /// <summary>Where the desk reactions live (created by the builder when missing; a designer's edits are kept).</summary>
+    private const string DeskReactionFolder = "Assets/Data/Config/DeskReactions";
+
+    /// <summary>The highest sorting order of a desk prop (the till's number): the focus exit zone must sit above it.</summary>
+    private const int HighestPropOrder = 6;
+
+    /// <summary>The desk rectangle paper centres stay in (world centre): left of the CRT, reaching the scanner.</summary>
+    private static readonly Vector3 DeskSurfaceCentre = new Vector3(-2.25f, -4.15f, 0f);
+
+    /// <summary>The desk rectangle's size (world units): x -7.4..2.9 keeps paper centres left of the CRT, y -5.9..-2.4.</summary>
+    private static readonly Vector2 DeskSurfaceSize = new Vector2(10.3f, 3.5f);
+
+    /// <summary>Where papers slide in from and back to (world units): just past the desk rectangle's far edge, below the traveller.</summary>
+    private static readonly Vector3 PaperHandOverPoint = new Vector3(0f, -2.3f, 0f);
+
+    /// <summary>The placeholder paper's colour.</summary>
+    private static readonly Color PaperCream = new Color(0.95f, 0.92f, 0.82f, 1f);
+
+    /// <summary>The paper's reserved photo box (hidden until piece 4 fills it).</summary>
+    private static readonly Color PhotoGrey = new Color(0.55f, 0.56f, 0.58f, 1f);
+
+    /// <summary>The scanner's glass bed centre, in the tray sprite's own units.</summary>
+    private static readonly Vector2 ScannerBedCentre = new Vector2(0.1f, 0.3f);
+
+    /// <summary>The day-1 scan note just below the tray (tray sprite units: centre and box).</summary>
+    private static readonly Vector2 ScanHintCentre = new Vector2(0f, -1.35f);
+
+    /// <summary>The scan note's box (tray sprite units).</summary>
+    private static readonly Vector2 ScanHintSize = new Vector2(6.6f, 0.6f);
+
+    /// <summary>The scan note's order: above the tray, under the papers.</summary>
+    private const int ScanHintOrder = 4;
+
+    /// <summary>The day-1 wheel note above the traveller's head (world centre).</summary>
+    private static readonly Vector2 WheelHintCentre = new Vector2(0f, 2.75f);
+
+    /// <summary>The wheel note's box (world units).</summary>
+    private static readonly Vector2 WheelHintSize = new Vector2(4.4f, 0.5f);
+
+    /// <summary>The wheel note's order: over the back wall and the desk art, under every prop.</summary>
+    private const int WheelHintOrder = -9;
+
+    /// <summary>The desk notes' ink.</summary>
+    private static readonly Color NoteInk = new Color(0.12f, 0.14f, 0.18f, 1f);
+
+    /// <summary>Where the wheel and the bubble centre on the placeholder traveller (its chest), world units.</summary>
+    private static readonly Vector3 TravellerAnchorWorld = new Vector3(0f, 1f, 2f);
+
+    /// <summary>The desk art's far edge in world units (desk_deep.png's first opaque row): the traveller is hidden below it.</summary>
+    private const float DeskArtFarEdgeY = -0.84f;
+
+    /// <summary>The traveller hit zone's order: just above the traveller (-20).</summary>
+    private const int TravellerZoneOrder = -19;
+
+    /// <summary>The calendar hit zone over the sheet painted on the left partition (partition sprite units: centre and size).</summary>
+    private static readonly Vector2 CalendarZoneCentre = new Vector2(0.35f, 3.1f);
+
+    /// <summary>The calendar hit zone's size (partition sprite units).</summary>
+    private static readonly Vector2 CalendarZoneSize = new Vector2(2.4f, 3.6f);
+
+    /// <summary>The calendar hit zone's order: just above the partition (-50).</summary>
+    private const int CalendarZoneOrder = -49;
+
+    /// <summary>The desk's named spots (decoration hooks, item 7): the plant and the mug stand at theirs; the rest are empty for now.</summary>
+    private static readonly (string id, DeskSlotKind kind, Vector3 position)[] DeskSlots =
+    {
+        ("plant", DeskSlotKind.Decoration, new Vector3(-7.5f, -1.15f, 0f)),
+        ("mug", DeskSlotKind.Decoration, new Vector3(-6.5f, -4.8f, 0f)),
+        ("photo", DeskSlotKind.Decoration, new Vector3(2.4f, -1.6f, 0f)),
+        ("free_1", DeskSlotKind.Free, new Vector3(-6.8f, -5.6f, 0f)),
+        ("free_2", DeskSlotKind.Free, new Vector3(2.5f, -5.6f, 0f)),
+    };
+
+    /// <summary>Returns a desk reaction asset, creating it with a kind and a tooltip when missing (a designer's edits are kept).</summary>
+    private static DeskReactionSO EnsureDeskReaction(string name, ReactionKind kind, string tooltip)
+    {
+        string path = $"{DeskReactionFolder}/{name}.asset";
+        DeskReactionSO reaction = AssetDatabase.LoadAssetAtPath<DeskReactionSO>(path);
+        if (reaction != null)
+            return reaction;
+
+        EnsureFolderTree(DeskReactionFolder);
+        reaction = ScriptableObject.CreateInstance<DeskReactionSO>();
+        reaction.kind = kind;
+        reaction.tooltip = tooltip;
+        AssetDatabase.CreateAsset(reaction, path);
+        return reaction;
+    }
 
     /// <summary>Returns Desk_Default, creating it with the spec's defaults when missing (a designer's edits are kept).</summary>
     private static DeskConfigSO EnsureDeskConfig()
@@ -187,6 +280,289 @@ public static partial class OfficeSceneUIBuilder
         if (calls != null)
             calls.ClearArray();
         return calls;
+    }
+
+    /// <summary>The named desk spots under OfficeRoot/DeskSlots, each with its DeskSlot id and kind. Idempotent.</summary>
+    private static Transform BuildDeskSlots(Transform booth)
+    {
+        Transform root = EnsureChild(booth, "DeskSlots");
+        root.localPosition = Vector3.zero;
+        root.localRotation = Quaternion.identity;
+        root.localScale = Vector3.one;
+
+        foreach ((string id, DeskSlotKind kind, Vector3 position) in DeskSlots)
+        {
+            Transform slot = EnsureChild(root, id);
+            slot.localPosition = position;
+            DeskSlot component = slot.GetComponent<DeskSlot>();
+            if (component == null)
+                component = slot.gameObject.AddComponent<DeskSlot>();
+            var so = new SerializedObject(component);
+            so.FindProperty("slotId").stringValue = id;
+            so.FindProperty("kind").enumValueIndex = (int)kind;
+            so.ApplyModifiedProperties();
+        }
+
+        return root;
+    }
+
+    /// <summary>The traveller's view on the placeholder: its figure (hidden until presented) and the anchor the wheel and the bubble centre on. Idempotent.</summary>
+    private static void BuildTravellerView(SpriteRenderer traveller)
+    {
+        Transform anchor = EnsureChild(traveller.transform, "Anchor");
+        anchor.position = TravellerAnchorWorld;
+        anchor.localRotation = Quaternion.identity;
+        anchor.localScale = Vector3.one;
+
+        TravellerView view = traveller.GetComponent<TravellerView>();
+        if (view == null)
+            view = traveller.gameObject.AddComponent<TravellerView>();
+        var so = new SerializedObject(view);
+        SerializedProperty figure = so.FindProperty("figure");
+        figure.arraySize = 1;
+        figure.GetArrayElementAtIndex(0).objectReferenceValue = traveller;
+        SetRef(so, "anchor", anchor);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>
+    /// The desk: the scanner on the tray (its sprite's size is the drop area)
+    /// with the day-1 scan note below it; OfficeRoot/DeskSurface (the rectangle
+    /// paper centres stay in) with its Papers root, the HandOver point on the
+    /// traveller's side and the inactive PaperTemplate; and the DeskController
+    /// wired to them. Idempotent.
+    /// </summary>
+    private static void BuildDesk(Transform booth, SpriteRenderer tray, DeskConfigSO config)
+    {
+        DeskScanner scanner = tray.GetComponent<DeskScanner>();
+        if (scanner == null)
+            scanner = tray.gameObject.AddComponent<DeskScanner>();
+        var soScanner = new SerializedObject(scanner);
+        soScanner.FindProperty("dropSize").vector2Value = tray.sprite != null ? (Vector2)tray.sprite.bounds.size : Vector2.zero;
+        soScanner.FindProperty("bedCentre").vector2Value = ScannerBedCentre;
+        soScanner.ApplyModifiedProperties();
+
+        TextMeshPro scanHint = WorldText(tray.transform, "ScanHint", "", NoteInk, ScanHintCentre, ScanHintSize, 0f, 5f, ScanHintOrder);
+        scanHint.fontStyle = FontStyles.Bold;
+        scanHint.gameObject.SetActive(false);
+
+        Transform surfaceTransform = EnsureChild(booth, "DeskSurface");
+        surfaceTransform.position = DeskSurfaceCentre;
+        surfaceTransform.localRotation = Quaternion.identity;
+        surfaceTransform.localScale = Vector3.one;
+        DeskSurface surface = surfaceTransform.GetComponent<DeskSurface>();
+        if (surface == null)
+            surface = surfaceTransform.gameObject.AddComponent<DeskSurface>();
+        var soSurface = new SerializedObject(surface);
+        soSurface.FindProperty("size").vector2Value = DeskSurfaceSize;
+        soSurface.ApplyModifiedProperties();
+
+        Transform papers = EnsureChild(surfaceTransform, "Papers");
+        papers.localPosition = Vector3.zero;
+        Transform handOver = EnsureChild(surfaceTransform, "HandOver");
+        handOver.position = PaperHandOverPoint;
+        DeskDocument template = BuildPaperTemplate(surfaceTransform, config);
+
+        DeskController desk = surfaceTransform.GetComponent<DeskController>();
+        if (desk == null)
+            desk = surfaceTransform.gameObject.AddComponent<DeskController>();
+        var so = new SerializedObject(desk);
+        SetRef(so, "surface", surface);
+        SetRef(so, "scanner", scanner);
+        SetRef(so, "paperTemplate", template);
+        SetRef(so, "paperRoot", papers);
+        SetRef(so, "handOverPoint", handOver);
+        SetRef(so, "scanHint", scanHint);
+        SetRef(so, "config", config);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>
+    /// The inactive paper every handed-over document clones: a SortingGroup root
+    /// carrying the paper sprite (1.5 units wide), a click box fitted to it, a
+    /// Clickable, a DeskDraggable (the box is its proxy) and the DeskDocument;
+    /// the title and holder texts inside the group; the hidden photo slot. Idempotent.
+    /// </summary>
+    private static DeskDocument BuildPaperTemplate(Transform surface, DeskConfigSO config)
+    {
+        Sprite paperSprite = EnsureOfficeSprite("paper", PaperCream, 150, 200);
+        SpriteRenderer paper = PlaceSprite(surface, "PaperTemplate", paperSprite, Vector3.zero, 1.5f, 0);
+
+        SortingGroup group = paper.GetComponent<SortingGroup>();
+        if (group == null)
+            group = paper.gameObject.AddComponent<SortingGroup>();
+        group.sortingLayerID = SortingLayer.NameToID("Default");
+        group.sortingOrder = config.paperBaseOrder;
+
+        Clickable click = EnsureClickable(paper);
+        DeskDraggable drag = paper.GetComponent<DeskDraggable>();
+        if (drag == null)
+            drag = paper.gameObject.AddComponent<DeskDraggable>();
+        var soDrag = new SerializedObject(drag);
+        SetRef(soDrag, "proxy", paper.GetComponent<BoxCollider2D>());
+        soDrag.ApplyModifiedProperties();
+
+        TextMeshPro title = WorldText(paper.transform, "Title", "Document", Ink, new Vector2(0f, 0.72f), new Vector2(1.3f, 0.28f), 0f, 3f, 2);
+        TextMeshPro holder = WorldText(paper.transform, "Holder", "Name", Ink, new Vector2(0f, 0.42f), new Vector2(1.3f, 0.24f), 0f, 2.4f, 3);
+        SpriteRenderer photo = PlaceSprite(paper.transform, "PhotoSlot", paperSprite, new Vector3(0f, -0.25f, 0f), 0.6f, 1);
+        photo.color = PhotoGrey;
+        photo.gameObject.SetActive(false);
+
+        DeskDocument doc = paper.GetComponent<DeskDocument>();
+        if (doc == null)
+            doc = paper.gameObject.AddComponent<DeskDocument>();
+        var so = new SerializedObject(doc);
+        SetRef(so, "title", title);
+        SetRef(so, "holder", holder);
+        SetRef(so, "photoSlot", photo.gameObject);
+        SetRef(so, "click", click);
+        SetRef(so, "drag", drag);
+        SetRef(so, "group", group);
+        so.ApplyModifiedProperties();
+
+        paper.gameObject.SetActive(false);
+        return doc;
+    }
+
+    /// <summary>
+    /// The booth's clicks, after every prop exists (the wall clock is built by
+    /// BuildShiftClockReadouts): each prop's click box and reaction (the reaction
+    /// assets are created once), the calendar and traveller hit zones, the
+    /// wheel's openers (the traveller and the desk intercom) and its traveller,
+    /// the decor props' ids, the day-1 wheel note, and the BoothCoordinator wired
+    /// to all of it; then the desk's checks (sorting bands, paper spawn slots).
+    /// Idempotent.
+    /// </summary>
+    private static BoothCoordinator BuildDeskInteraction(OfficeViewController view, MonitorScreen screen, DeskConfigSO config, TravellerWheel wheel,
+                                                         OverlayCallout tooltip, TMP_Text trayClockText, ContentLibrarySO library)
+    {
+        Transform booth = view.transform;
+        Transform trayTransform = booth.Find("ScannerTray");
+        Transform tillTransform = booth.Find("CreditsTill");
+        Transform stabilityTransform = booth.Find("StabilityMonitor");
+        Transform partition = booth.Find("LeftPartition");
+
+        Clickable stamp = BuildProp(booth.Find("DeskStamp"), EnsureDeskReaction("Reaction_Stamp", ReactionKind.Squash, ""), tooltip, null, null);
+        Clickable mug = BuildProp(booth.Find("DeskMug"), EnsureDeskReaction("Reaction_Mug", ReactionKind.Wobble, ""), tooltip, null, null);
+        Clickable plant = BuildProp(booth.Find("DeskPlant"), EnsureDeskReaction("Reaction_Plant", ReactionKind.Wobble, ""), tooltip, null, null);
+        Clickable poster = BuildProp(booth.Find("ReactivePoster"), EnsureDeskReaction("Reaction_Poster", ReactionKind.Wobble, ""), tooltip, null, null);
+        Clickable intercom = BuildProp(booth.Find("DeskIntercom"), EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), tooltip, null, null);
+        Clickable tray = BuildProp(trayTransform, EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null, null);
+        Clickable till = BuildProp(tillTransform, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "Credits: {value}"), tooltip,
+                                   ReadoutText(tillTransform, "CreditsNumber"), tillTransform.GetComponent<AudioSource>());
+        Clickable stability = BuildProp(stabilityTransform, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "Timeline stability: {value}"), tooltip,
+                                        ReadoutText(stabilityTransform, "StabilityPercent"), null);
+        Clickable clock = BuildProp(booth.Find("WallClock"), EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "{value}"), tooltip, trayClockText, null);
+
+        // The calendar is painted on the left partition: a hit zone over its sheet.
+        Clickable calendar = EnsureHitZone(partition, "CalendarZone", CalendarZoneCentre, CalendarZoneSize, CalendarZoneOrder);
+        WireReaction(calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "Day {value}"), tooltip, ReadoutText(partition, "DayNumber"), null);
+        AssetDatabase.SaveAssets();
+
+        // A finished scan pulses the scanner.
+        var soScanner = new SerializedObject(trayTransform.GetComponent<DeskScanner>());
+        SetRef(soScanner, "reaction", trayTransform.GetComponent<DeskReaction>());
+        soScanner.ApplyModifiedProperties();
+
+        // Decoration hooks: the decor props' ids.
+        SetDeskItem(booth.Find("DeskStamp"), "stamp");
+        SetDeskItem(booth.Find("DeskMug"), "mug");
+        SetDeskItem(booth.Find("DeskPlant"), "plant");
+        SetDeskItem(booth.Find("ReactivePoster"), "poster");
+
+        // The traveller: a hit zone over the part above the desk art's far edge,
+        // a child with its own hidden renderer (piece 4's layered root has none).
+        // It and the desk intercom open the wheel, which centres on its anchor.
+        Transform traveller = booth.Find("Traveller");
+        Bounds art = traveller.GetComponent<SpriteRenderer>().sprite.bounds;
+        float bottom = Mathf.Max(traveller.InverseTransformPoint(new Vector3(0f, DeskArtFarEdgeY, 0f)).y, art.min.y);
+        Clickable travellerZone = EnsureHitZone(traveller, "TravellerHitZone", new Vector3(art.center.x, (bottom + art.max.y) / 2f, 0f),
+                                                new Vector2(art.size.x, art.max.y - bottom), TravellerZoneOrder);
+        WirePersistentVoid(travellerZone, "onClick", wheel, nameof(TravellerWheel.Open));
+        WirePersistentVoid(intercom, "onClick", wheel, nameof(TravellerWheel.Open));
+        var soWheel = new SerializedObject(wheel);
+        SetRef(soWheel, "traveller", traveller.GetComponent<TravellerView>());
+        soWheel.ApplyModifiedProperties();
+
+        // The day-1 wheel note above the traveller's head (the coordinator sets its text and shows it).
+        TextMeshPro wheelHint = WorldText(booth, "WheelHint", "", NoteInk, WheelHintCentre, WheelHintSize, 0f, 5f, WheelHintOrder);
+        wheelHint.fontStyle = FontStyles.Bold;
+        wheelHint.gameObject.SetActive(false);
+
+        // The booth coordinator applies the input rules to all of it.
+        Transform crt = booth.Find("CRTMonitor");
+        BoothCoordinator coordinator = booth.GetComponent<BoothCoordinator>();
+        if (coordinator == null)
+            coordinator = booth.gameObject.AddComponent<BoothCoordinator>();
+        var so = new SerializedObject(coordinator);
+        SetRef(so, "view", view);
+        SetRef(so, "screen", screen);
+        SetRef(so, "desk", booth.Find("DeskSurface").GetComponent<DeskController>());
+        SetRef(so, "wheel", wheel);
+        SetRef(so, "crt", crt.GetComponent<Clickable>());
+        SetRef(so, "powerButton", crt.Find("PowerButton").GetComponent<Clickable>());
+        SetRef(so, "focusExit", crt.Find("FocusExitZone").GetComponent<Clickable>());
+        SetRef(so, "glassZone", crt.Find("ScreenAnchor/GlassZone").GetComponent<Clickable>());
+        SetRef(so, "travellerHitZone", travellerZone);
+        Clickable[] props = { stamp, mug, plant, poster, intercom, tray, till, stability, clock, calendar };
+        SerializedProperty propList = so.FindProperty("props");
+        propList.arraySize = props.Length;
+        for (int i = 0; i < props.Length; i++)
+            propList.GetArrayElementAtIndex(i).objectReferenceValue = props[i];
+        SetRef(so, "wheelHint", wheelHint);
+        SetRef(so, "config", config);
+        so.ApplyModifiedProperties();
+
+        // Checks: input and drawing order agree; every paper a traveller carries has a spawn slot.
+        int maxPapers = library != null ? ContentLibraryValidator.MaxDocuments(ContentLibraryValidator.TravellerBlueprints(library)) : 0;
+        foreach (string problem in SortingBands.Problems(HighestPropOrder, config.focusExitOrder, config.glassOrder, config.bezelOrder,
+                                                         config.screenCanvasOrder, config.paperBaseOrder, maxPapers, config.heldPaperOrder))
+            Debug.LogError($"[TimeDesk] The desk's sorting bands overlap: {problem}; fix the orders in Desk_Default.");
+        int slots = config.paperSpawnSlots != null ? config.paperSpawnSlots.Length : 0;
+        if (slots < maxPapers)
+            Debug.LogError($"[TimeDesk] The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");
+
+        return coordinator;
+    }
+
+    /// <summary>Makes a booth sprite a reacting prop: a click box fitted to its art and a DeskReaction.</summary>
+    private static Clickable BuildProp(Transform prop, DeskReactionSO reaction, OverlayCallout tooltip, TMP_Text readout, AudioSource audioSource)
+    {
+        Clickable click = EnsureClickable(prop.GetComponent<SpriteRenderer>());
+        WireReaction(click, reaction, tooltip, readout, audioSource);
+        return click;
+    }
+
+    /// <summary>Adds or rewires a clickable's DeskReaction (its readout and audio source are optional).</summary>
+    private static void WireReaction(Clickable click, DeskReactionSO reaction, OverlayCallout tooltip, TMP_Text readout, AudioSource audioSource)
+    {
+        DeskReaction component = click.GetComponent<DeskReaction>();
+        if (component == null)
+            component = click.gameObject.AddComponent<DeskReaction>();
+        var so = new SerializedObject(component);
+        SetRef(so, "reaction", reaction);
+        SetRef(so, "readout", readout);
+        SetRef(so, "tooltip", tooltip);
+        SetRef(so, "audioSource", audioSource);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>A readout's text under a prop, or null.</summary>
+    private static TMP_Text ReadoutText(Transform prop, string name)
+    {
+        Transform t = prop.Find(name);
+        return t != null ? t.GetComponent<TMP_Text>() : null;
+    }
+
+    /// <summary>Gives a decor prop its DeskItem id.</summary>
+    private static void SetDeskItem(Transform prop, string id)
+    {
+        DeskItem item = prop.GetComponent<DeskItem>();
+        if (item == null)
+            item = prop.gameObject.AddComponent<DeskItem>();
+        var so = new SerializedObject(item);
+        so.FindProperty("itemId").stringValue = id;
+        so.ApplyModifiedProperties();
     }
 
     /// <summary>

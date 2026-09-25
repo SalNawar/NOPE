@@ -23,6 +23,10 @@ using UnityEngine.UI;
 /// - The traveller wheel (the interview's choices around the traveller), the
 ///   speech bubble and the desk tooltip on the office overlay canvas
 ///   [TravellerWheel, OverlayCallout]
+/// - The physical desk: papers and the desk scanner, reacting props,
+///   decoration slots, the traveller (shown while at the desk) and its hit
+///   zone, and the booth's input rules  [DeskController, DeskReaction,
+///   TravellerView, BoothCoordinator]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
 /// Safe to re-run: finds existing pieces by name and only fills gaps. It builds
@@ -329,6 +333,10 @@ public static partial class OfficeSceneUIBuilder
             shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
         BuildShiftClockReadouts(shiftClock, trayClockText);
 
+        // The booth's clicks, once every prop exists (the wall clock above):
+        // reactions, hit zones, the wheel's openers and notes, the coordinator.
+        BoothCoordinator booth = BuildDeskInteraction(officeView, monitorScreen, deskConfig, wheel, deskTooltip, trayClockText, library);
+
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
         SetRef(soOffice, "moneyText", moneyText);
@@ -377,6 +385,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "recordsWindow", records);
         SetRef(soInvest, "transcriptWindow", transcript);
         SetRef(soInvest, "transcriptChrome", transcriptChrome);
+        SetRef(soInvest, "desk", officeView.transform.Find("DeskSurface").GetComponent<DeskController>());
         SetRef(soInvest, "wheel", wheel);
         SetRef(soInvest, "idleScreen", idleScreen);
         // The 4:3 desktop: documents cascade on the left, clear of the icon
@@ -404,10 +413,12 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soGm, "officeView", officeView);
         SetRef(soGm, "readySign", GameObject.Find("OfficeRoot")?.transform.Find("ReadySign")?.GetComponent<Clickable>());
         SetRef(soGm, "shiftClock", shiftClock);
+        SetRef(soGm, "travellerView", officeView.transform.Find("Traveller").GetComponent<TravellerView>());
+        SetRef(soGm, "booth", booth);
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
-        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, HUD, citation, briefing/results, claim, document + book windows, traveller wheel + interview transcript, speech bubble, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
+        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, the desk with papers, scanner and reacting props, traveller + wheel + speech bubble, booth input rules, HUD, citation, briefing/results, claim, document + book windows, interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
     }
 
     // -----------------------------
@@ -1107,8 +1118,10 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster
-    /// and the live monitor (BuildMonitorScreen), and wires OfficeViewController,
+    /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster,
+    /// the live monitor (BuildMonitorScreen), the traveller's view, the desk
+    /// slots and the desk (BuildDesk: its surface, the paper template, the
+    /// scanner and its note), and wires OfficeViewController,
     /// the camera rig, the CRT's click (focus) and the focus exit zone; READY's
     /// saved focus call is cleared (READY only releases GameManager's gate). The
     /// painted art is laid out as in the art pass's 2D composition: the back
@@ -1129,14 +1142,18 @@ public static partial class OfficeSceneUIBuilder
         Sprite desk = BoothArt("desk_deep");
         PlaceSprite(booth, "Desk", desk, new Vector3(0f, OfficeCamPosition.y, 0f), OfficeViewCoverWidth(desk), -10);
 
-        // The traveller stands behind the desk, whose far edge hides the placeholder's lower part.
-        PlaceSprite(booth, "Traveller", EnsureOfficeSprite("traveller", new Color(0.49f, 0.42f, 0.86f), 60, 110), new Vector3(0f, 0.5f, 2f), 2f, -20);
+        // The traveller stands behind the desk, whose far edge hides the
+        // placeholder's lower part; shown from presentation until the decision.
+        SpriteRenderer traveller = PlaceSprite(booth, "Traveller", EnsureOfficeSprite("traveller", new Color(0.49f, 0.42f, 0.86f), 60, 110), new Vector3(0f, 0.5f, 2f), 2f, -20);
+        BuildTravellerView(traveller);
 
-        // Desk props (decoration only).
+        // Desk props (their clicks and reactions: BuildDeskInteraction). The plant
+        // and the mug stand at their named slots (decoration hooks).
+        Transform slots = BuildDeskSlots(booth);
         PlaceSprite(booth, "DeskIntercom", BoothArt("intercom"), new Vector3(-6.3f, -1.8f, 0f), 2.1f, 1);
-        PlaceSprite(booth, "ScannerTray", BoothArt("scanner_tray"), new Vector3(-4.6f, -3.1f, 0f), 3.8f, 2);
-        PlaceSprite(booth, "DeskPlant", BoothArt("desk_plant"), new Vector3(-7.5f, -1.15f, 0f), 1.8f, 3);
-        PlaceSprite(booth, "DeskMug", BoothArt("desk_mug"), new Vector3(-6.5f, -4.8f, 0f), 0.85f, 5);
+        SpriteRenderer tray = PlaceSprite(booth, "ScannerTray", BoothArt("scanner_tray"), new Vector3(-4.6f, -3.1f, 0f), 3.8f, 2);
+        PlaceSprite(booth, "DeskPlant", BoothArt("desk_plant"), booth.InverseTransformPoint(slots.Find("plant").position), 1.8f, 3);
+        PlaceSprite(booth, "DeskMug", BoothArt("desk_mug"), booth.InverseTransformPoint(slots.Find("mug").position), 0.85f, 5);
         PlaceSprite(booth, "DeskStamp", BoothArt("desk_stamp"), new Vector3(-2.2f, -4.3f, 0f), 0.8f, 5);
 
         // Interactables: CRT (right of the desk) and READY sign (centre).
@@ -1202,6 +1219,9 @@ public static partial class OfficeSceneUIBuilder
         WireClickToFocusMonitor(crtClick, view);
         WirePersistentVoid(crt.transform.Find("FocusExitZone").GetComponent<Clickable>(), "onClick", view, nameof(OfficeViewController.FocusOffice));
         ClearPersistentCalls(signClick, "onClick");
+
+        // The desk: its surface, the paper template, the scanner and its note.
+        BuildDesk(booth, tray, config);
 
         // Diegetic readouts + a timeline-reactive poster. The desktop's old
         // "< Office" button is replaced by the taskbar's "< Desk" (BuildDesktopShell).
@@ -1274,8 +1294,13 @@ public static partial class OfficeSceneUIBuilder
 
     // ----------------------------- Shift clock (booth + tray) -----------------------------
 
-    /// <summary>Hit buffer size for the booth's Physics2DRaycaster (non-allocating raycasts).</summary>
-    private const int BoothRaycastHits = 8;
+    /// <summary>
+    /// Hit buffer size for the booth's Physics2DRaycaster (non-allocating
+    /// raycasts): one point can cross up to 8 stacked papers plus the scanner,
+    /// a prop, the traveller zone and the exit zone, and hits are cut before
+    /// they are sorted.
+    /// </summary>
+    private const int BoothRaycastHits = 16;
 
     /// <summary>Ink colour of the placeholder wall clock.</summary>
     private static readonly Color32 ClockInk = new Color32(30, 28, 26, 255);
