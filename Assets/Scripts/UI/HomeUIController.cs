@@ -10,7 +10,9 @@ using UnityEngine.UI;
 /// upgrade shop, slot machine, and the sleep prompt that hands off to the
 /// next day. All references are optional; unwired panels are skipped so the
 /// flow degrades gracefully (HomeManager just calls straight through).
-/// Dynamic rows (family members, shop items) are spawned at runtime.
+/// Dynamic rows (family members, shop items) are spawned at runtime; the shop
+/// shows its upgrades a page at a time (Paging), with a pager row when they
+/// do not fit one page.
 /// </summary>
 public sealed class HomeUIController : MonoBehaviour
 {
@@ -56,6 +58,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Continues to the slot machine.</summary>
     [SerializeField] private Button shopContinueButton;
 
+    /// <summary>Upgrades per shop page; the rows area fits 7 rows with the pager.</summary>
+    [SerializeField, Min(1)] private int shopRowsPerPage = 6;
+
     [Header("Slot Panel")]
     /// <summary>Root of the slot machine panel.</summary>
     [SerializeField] private GameObject slotPanel;
@@ -90,6 +95,9 @@ public sealed class HomeUIController : MonoBehaviour
 
     /// <summary>Spawned shop item rows (cleared/rebuilt on refresh).</summary>
     private readonly List<GameObject> _shopRows = new();
+
+    /// <summary>The shop page shown (0-based): reset when the shop opens, kept when a purchase re-shows it.</summary>
+    private int _shopPage;
 
     /// <summary>Pending callback for the expenses continue button.</summary>
     private Action _onExpensesContinue;
@@ -251,8 +259,10 @@ public sealed class HomeUIController : MonoBehaviour
 
     /// <summary>
     /// Shows the upgrade shop: one row per upgrade with its (discounted) cost
-    /// and a Buy button. Invokes onBuy(upgrade) when purchased, onContinue
-    /// when the player moves on to the slot machine (or immediately if unwired).
+    /// and a Buy button, a page at a time. Invokes onBuy(upgrade) when
+    /// purchased, onContinue when the player moves on to the slot machine (or
+    /// immediately if unwired). Opening the shop shows its first page; showing
+    /// it again while open (after a purchase) keeps the page.
     /// </summary>
     public void ShowShop(WorldState world, ContentLibrarySO lib, Action<UpgradeSO> onBuy, Action onContinue)
     {
@@ -272,12 +282,14 @@ public sealed class HomeUIController : MonoBehaviour
             shopBodyText.text = $"Balance: {world.money} {UiText.Currency(UiText.WalletForm.Inline)}";
         }
 
+        if (!shopPanel.activeSelf)
+            _shopPage = 0;
         BuildShopRows(world, lib, onBuy);
 
         shopPanel.SetActive(true);
     }
 
-    /// <summary>Rebuilds the shop item rows (name + cost, Buy/Owned button).</summary>
+    /// <summary>Rebuilds the shop page's item rows (name + cost, Buy/Owned button), then a pager row ("Page n/m", "Next >", wrapping round) when there is more than one page.</summary>
     private void BuildShopRows(WorldState world, ContentLibrarySO lib, Action<UpgradeSO> onBuy)
     {
         if (shopRowsRoot == null)
@@ -285,7 +297,10 @@ public sealed class HomeUIController : MonoBehaviour
 
         ClearRows(_shopRows);
 
-        IReadOnlyList<UpgradeSO> upgrades = lib != null ? lib.Upgrades : System.Array.Empty<UpgradeSO>();
+        var upgrades = new List<UpgradeSO>();
+        foreach (UpgradeSO u in lib != null ? lib.Upgrades : System.Array.Empty<UpgradeSO>())
+            if (u != null)
+                upgrades.Add(u);
 
         if (upgrades.Count == 0)
         {
@@ -293,10 +308,11 @@ public sealed class HomeUIController : MonoBehaviour
             return;
         }
 
-        foreach (UpgradeSO upgrade in upgrades)
+        _shopPage = Paging.Clamp(_shopPage, upgrades.Count, shopRowsPerPage);
+        int end = Paging.End(_shopPage, upgrades.Count, shopRowsPerPage);
+        for (int i = Paging.First(_shopPage, upgrades.Count, shopRowsPerPage); i < end; i++)
         {
-            if (upgrade == null)
-                continue;
+            UpgradeSO upgrade = upgrades[i];
 
             bool owned = world.HasUpgrade(upgrade.id);
             float discountPercent = lib != null
@@ -318,6 +334,16 @@ public sealed class HomeUIController : MonoBehaviour
                 () => onBuy?.Invoke(capturedUpgrade));
 
             _shopRows.Add(row);
+        }
+
+        int pages = Paging.PageCount(upgrades.Count, shopRowsPerPage);
+        if (pages > 1)
+        {
+            _shopRows.Add(CreateRow(shopRowsRoot, $"Page {_shopPage + 1}/{pages}", "Next >", true, () =>
+            {
+                _shopPage = (_shopPage + 1) % pages;
+                BuildShopRows(world, lib, onBuy);
+            }));
         }
     }
 
@@ -448,6 +474,9 @@ public sealed class HomeUIController : MonoBehaviour
         layout.preferredHeight = 36f;
         layout.flexibleWidth = 1f;
 
+        // The rows containers do not control their children's heights: the row takes its own.
+        ((RectTransform)row.transform).sizeDelta = new Vector2(0f, layout.preferredHeight);
+
         var text = row.AddComponent<TextMeshProUGUI>();
         text.text = label;
         text.fontSize = 22;
@@ -466,6 +495,9 @@ public sealed class HomeUIController : MonoBehaviour
         var rowLayout = row.AddComponent<LayoutElement>();
         rowLayout.preferredHeight = 44f;
         rowLayout.flexibleWidth = 1f;
+
+        // The rows containers do not control their children's heights: the row takes its own.
+        ((RectTransform)row.transform).sizeDelta = new Vector2(0f, rowLayout.preferredHeight);
 
         var hLayout = row.AddComponent<HorizontalLayoutGroup>();
         hLayout.childForceExpandWidth = false;
