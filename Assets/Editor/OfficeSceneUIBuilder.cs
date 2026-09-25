@@ -49,7 +49,8 @@ using UnityEngine.UI;
 /// canvases is logged as an error, and so is a text that does not reach its
 /// contrast minimum on what it is drawn on in any theme (UiContrastCheck).
 /// It opens the gameplay layer alone, builds
-/// it, saves it and lists it after the art office in the build settings; it
+/// it, saves it and keeps the build settings in boot order (the title, the
+/// art office, this layer, Home: BuildScenes.Order); it
 /// refuses while any open scene has unsaved changes. The Office root and the
 /// desktop's place are in OfficeSceneUIBuilder.Desk.cs.
 /// </summary>
@@ -90,6 +91,12 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The art office the gameplay layer loads on (the art side's scene; the builder never opens it).</summary>
     private const string ArtScenePath = "Assets/Scenes/OfficeScene.unity";
+
+    /// <summary>The title scene, which a player build boots (first in the build list).</summary>
+    private const string TitleScenePath = "Assets/Scenes/TitleScene.unity";
+
+    /// <summary>The Home scene (last of the shipped scenes in the build list).</summary>
+    private const string HomeScenePath = "Assets/Scenes/HomeScene.unity";
 
     /// <summary>
     /// Opens the gameplay layer alone (creating it on the first run), builds and

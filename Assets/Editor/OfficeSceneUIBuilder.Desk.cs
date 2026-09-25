@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Cinemachine;
 using UnityEditor;
@@ -220,19 +221,19 @@ public static partial class OfficeSceneUIBuilder
         Debug.LogError($"[TimeDesk] No free layer for '{name}'.");
     }
 
-    /// <summary>Puts the gameplay layer in the build list right after the art office (whose load brings it).</summary>
+    /// <summary>
+    /// Keeps the build list in boot order (BuildScenes.Order, audit R3-001): the
+    /// title first (a player build boots it), then the art office, the gameplay
+    /// layer (whose load the art office brings) and Home, each enabled; every
+    /// other listed scene stays after them, disabled (the legacy Test_DayLoop).
+    /// Written only when it changes.
+    /// </summary>
     private static void EnsureBuildSettings()
     {
-        var scenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
-        scenes.RemoveAll(s => s.path == GameplayScenePath);
-        int art = scenes.FindIndex(s => s.path == ArtScenePath);
-        var gameplay = new EditorBuildSettingsScene(GameplayScenePath, true);
-        if (art >= 0)
-            scenes.Insert(art + 1, gameplay);
-        else
-            scenes.Add(gameplay);
-
-        EditorBuildSettingsScene[] list = scenes.ToArray();
+        EditorBuildSettingsScene[] list = BuildScenes
+            .Order(EditorBuildSettings.scenes.Select(s => new BuildScene(s.path, s.enabled)), TitleScenePath, ArtScenePath, GameplayScenePath, HomeScenePath)
+            .Select(s => new EditorBuildSettingsScene(s.Path, s.Enabled))
+            .ToArray();
         bool same = list.Length == EditorBuildSettings.scenes.Length;
         for (int i = 0; same && i < list.Length; i++)
             same = list[i].path == EditorBuildSettings.scenes[i].path && list[i].enabled == EditorBuildSettings.scenes[i].enabled;
