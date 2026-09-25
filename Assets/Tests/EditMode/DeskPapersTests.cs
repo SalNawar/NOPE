@@ -14,7 +14,7 @@ public class DeskPapersTests
     private const float Scan = 1.5f;
 
     private static CaseDocument Doc(string name, DocumentHandOver handOver) =>
-        new CaseDocument { name = name, holder = "Nefertari", handOver = handOver };
+        new CaseDocument { name = name, handOver = handOver };
 
     private static DeskPapers Papers(float scanSeconds = Scan) => new DeskPapers(new[]
     {

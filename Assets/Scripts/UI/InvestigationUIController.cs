@@ -96,7 +96,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     private readonly List<DocumentWindowController> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
 
-    /// <summary>The current traveller's documents in paper order (name, holder, hand-over).</summary>
+    /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new();
 
     /// <summary>Each current document's written reveal, in paper order (shared by its scanned window and its desk paper).</summary>
@@ -406,7 +406,6 @@ public sealed class InvestigationUIController : MonoBehaviour
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
-                    holder = inst.visitorGivenName,
                     fields = doc != null ? doc.fields : null,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
@@ -417,7 +416,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (DeskReachable)
         {
-            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
+            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art, _caseTranslation, _clocks);
         }
         else
         {

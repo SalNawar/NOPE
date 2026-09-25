@@ -4,13 +4,15 @@ using UnityEngine;
 /// Tuning for the physical desk in the office (pieces 7 and the office move):
 /// screen power, the desktop's clone on the PC, the scanner, the papers on the
 /// desk, the traveller, the traveller wheel and its speech bubble's pacing
-/// (piece 8), and the day-1 desk notes. Geometry that belongs to the art
+/// (piece 8), the day-1 desk notes, and papers read in the hand (piece 10:
+/// the paper's face, the examine pose). Geometry that belongs to the art
 /// (where the desk, the PC, the scanner and the traveller are) comes from the
 /// art scene's anchors (OfficeSceneContractSO), so another office supplies its
 /// own. Created and assigned by Tools > TimeDesk > Build Office UI
 /// (Assets/Data/Config/Desk_Default.asset). Every knob is read at runtime; the
-/// checks on them (paper spawn slots, the wheel's fit) run only in the
-/// builder: re-run it after changing the spawn slots or a wheel size.
+/// checks on them (paper spawn slots, the wheel's fit, the paper face's
+/// capacity) run only in the builder: re-run it after changing the spawn
+/// slots, a wheel size or the face.
 /// </summary>
 [CreateAssetMenu(fileName = "Desk_Default", menuName = "TimeDesk/Office/Desk Config")]
 public sealed class DeskConfigSO : ScriptableObject
@@ -105,6 +107,10 @@ public sealed class DeskConfigSO : ScriptableObject
 
     /// <summary>Where the bubble's centre sits from the traveller's anchor (overlay reference px): above the head, clear of the wheel's top item (radius y + half an item + half the bubble).</summary>
     public Vector2 bubbleOffset = new Vector2(0f, 290f);
+
+    [Header("Examine (piece 10)")]
+    /// <summary>A desk paper's face: its title band, rows (a label over a value) and photo, as fractions of the paper (read at runtime; Build Office UI builds the photo frame from it and checks that every document template's rows fit).</summary>
+    public PaperFaceTuning face = new PaperFaceTuning();
 
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>

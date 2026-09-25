@@ -53,7 +53,7 @@ public class InterviewScriptTests
     }
 
     private static CaseDocument Doc(string name, DocumentHandOver handOver = DocumentHandOver.OnRequest) =>
-        new CaseDocument { name = name, holder = "Nefertari", handOver = handOver };
+        new CaseDocument { name = name, handOver = handOver };
 
     private static InterviewCase Case(bool smallTalk = true, string intro = "Next! Step forward, sir.", CaseDocument[] documents = null) => new InterviewCase
     {

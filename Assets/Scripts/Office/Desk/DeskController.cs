@@ -42,6 +42,8 @@ public sealed class DeskController : MonoBehaviour
 
     private readonly PaperStack _stack = new PaperStack();
     private IReadOnlyList<CaseDocument> _documents = Array.Empty<CaseDocument>();
+    private CaseTranslation _translation = CaseTranslation.None;
+    private IReadOnlyList<RevealClock> _clocks = Array.Empty<RevealClock>();
     private TravellerLook _look;
     private CharacterArt _art;
     private DeskPapers _state;
@@ -93,10 +95,12 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Starts a case's papers (a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the desk.</summary>
-    public void BeginCase(IReadOnlyList<CaseDocument> docs, TravellerLook look, CharacterArt art)
+    /// <summary>Starts a case's papers (a photo document shows <paramref name="look"/>; each paper's values show in the traveller's translation on its document's reveal clock, shared with the scanned copy); the documents handed over on arrival slide onto the desk.</summary>
+    public void BeginCase(IReadOnlyList<CaseDocument> docs, TravellerLook look, CharacterArt art, CaseTranslation translation, IReadOnlyList<RevealClock> clocks)
     {
         _documents = docs ?? Array.Empty<CaseDocument>();
+        _translation = translation ?? CaseTranslation.None;
+        _clocks = clocks ?? Array.Empty<RevealClock>();
         _look = look;
         _art = art;
         _state = new DeskPapers(_documents, config.scanSeconds);
@@ -126,7 +130,7 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = Instantiate(paperTemplate, paperRoot);
         paper.transform.position = handOverPoint.position;
         paper.gameObject.SetActive(true);
-        paper.Bind(i, _documents[i]);
+        paper.Bind(i, _documents[i], _translation, i < _clocks.Count ? _clocks[i] : null, config);
         paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art, config.travellerTint);
 
         DeskDraggable drag = paper.GetComponent<DeskDraggable>();
