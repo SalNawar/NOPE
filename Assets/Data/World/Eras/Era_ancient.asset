@@ -15,6 +15,7 @@ MonoBehaviour:
   id: ancient
   displayName: Ancient
   order: 0
+  isFuture: 0
   smallTalk:
   - id: ancient.smalltalk.1
     text: The harvest was good this year, thanks be to the gods.

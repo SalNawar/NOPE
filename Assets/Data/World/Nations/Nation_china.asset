@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NationSO
   id: china
   displayName: China
+  leaderEffect: {fileID: 11400000, guid: c38bd9addbc926e4da0d0a966f836f40, type: 2}

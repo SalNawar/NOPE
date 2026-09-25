@@ -18,5 +18,5 @@ MonoBehaviour:
     golden age of art blossoms across every era you touched.
   conditionType: 2
   attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
-  threshold: 200
+  threshold: 41
   priority: 50

@@ -16,6 +16,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ced3437a82eeb15429bf683a5c6e9751, type: 2}
   - {fileID: 11400000, guid: 4e74002e2c3a92841baf8d90b01a110e, type: 2}
   - {fileID: 11400000, guid: 1be00b469a273c54e9cfd0c1d8f819f3, type: 2}
+  - {fileID: 11400000, guid: 0653bc62c7819e34081ac6e795aa31de, type: 2}
+  - {fileID: 11400000, guid: aa8945a0cbaf7e541abfd7080990320f, type: 2}
+  - {fileID: 11400000, guid: deafb8e7c80635c439458e5d10fb7813, type: 2}
   eras:
   - {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
   - {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
@@ -33,6 +36,25 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 5ab449e622cfeb847bc6cab15cc1cf7e, type: 2}
   - {fileID: 11400000, guid: d84dddd24193a8849840cf0d983a4c4f, type: 2}
   - {fileID: 11400000, guid: 8400fe10969c4ecc8639da5d1a9e8484, type: 2}
+  - {fileID: 11400000, guid: d81aebfeda3115d48b93bf628c05e41b, type: 2}
+  - {fileID: 11400000, guid: 92b204384f449134fac99c7114fe827f, type: 2}
+  - {fileID: 11400000, guid: 7197e27cfd59a82418412be3e324947f, type: 2}
+  - {fileID: 11400000, guid: 81284e4285ebc6041836ea89756a7a34, type: 2}
+  - {fileID: 11400000, guid: 07141c6d6777c9b43981e665c7b2c314, type: 2}
+  - {fileID: 11400000, guid: 23b10c6fa34d5944a802e697a7a1c5ee, type: 2}
+  - {fileID: 11400000, guid: 909cd1d984d043648bff65b31b042403, type: 2}
+  - {fileID: 11400000, guid: 18811a487b40f2c4e9a99b40fd859ec4, type: 2}
+  - {fileID: 11400000, guid: a90bef86fe34c0a45b5c39ae844ce54e, type: 2}
+  - {fileID: 11400000, guid: 0dc691958e7d94c43a5b91c6d73df636, type: 2}
+  - {fileID: 11400000, guid: c7db0569adee270418a8787fa94ce7c4, type: 2}
+  - {fileID: 11400000, guid: 1edb0ebb45e7ac845b7ac23a97dcd87c, type: 2}
+  - {fileID: 11400000, guid: 136e76ea283226747b9ff36ae84eda84, type: 2}
+  - {fileID: 11400000, guid: e05b62c69932d8f48aa54ffda14f0f21, type: 2}
+  - {fileID: 11400000, guid: 4f84546cf1434c94c9c52f2f3967a048, type: 2}
+  - {fileID: 11400000, guid: c38bd9addbc926e4da0d0a966f836f40, type: 2}
+  - {fileID: 11400000, guid: 0427ddfd52ef9f44399303d8efdb776d, type: 2}
+  - {fileID: 11400000, guid: 45d31dd445a578d4b8debc6bca6ffcb5, type: 2}
+  - {fileID: 11400000, guid: a3366697a6d85ae469db3cc4f92bbc9c, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 00c95d5dbdd51e945a9157454c034cb6, type: 2}
   - {fileID: 11400000, guid: 4310a94e0a8291a4380d458bff90205e, type: 2}
@@ -92,6 +114,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9fad693479e57784c83c3e4e47c33786, type: 2}
   - {fileID: 11400000, guid: bb191997bafbd4e499d98487cf7059ab, type: 2}
   - {fileID: 11400000, guid: 497aafc3a0eb9f449abc80a30bbb44c0, type: 2}
+  - {fileID: 11400000, guid: b95e0e512564b604c8f2a7538725dd01, type: 2}
+  - {fileID: 11400000, guid: 0787fec0dd0041e4c9efee6351002140, type: 2}
+  - {fileID: 11400000, guid: a1eff7b42543db341892c3c1fdc7f416, type: 2}
+  - {fileID: 11400000, guid: 6902ca752bbc37040920364e8c9406fe, type: 2}
+  - {fileID: 11400000, guid: b3e750b375086004e87384b38f81a378, type: 2}
+  - {fileID: 11400000, guid: 0c157507cd2e4614f94277fcd38a3a9b, type: 2}
+  - {fileID: 11400000, guid: 9311420a726870d4da1511ec92f32edb, type: 2}
+  - {fileID: 11400000, guid: 7544b90382d3ffc4192f4db2b87e50f2, type: 2}
   archetypes:
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
   - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
@@ -106,6 +136,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3fb011a0dec4c94bb1a24978e1bcf78, type: 2}
   - {fileID: 11400000, guid: 5b4a14c18c1434d44bc1e220e94d34d2, type: 2}
   - {fileID: 11400000, guid: e654e3aa0bc6bae449fcdca1aaaef69b, type: 2}
+  - {fileID: 11400000, guid: f3311937c05234244bf44a92a293d6f7, type: 2}
+  - {fileID: 11400000, guid: 88aef9a8d18732e45ac561cedb654dfc, type: 2}
+  - {fileID: 11400000, guid: e02e4ea69ba6373499a8c5195d9220bf, type: 2}
+  - {fileID: 11400000, guid: 9728b8a6daa193f4894f0ea2fe53f3fc, type: 2}
+  - {fileID: 11400000, guid: 1c3ea024386f4804290fb7b277567974, type: 2}
+  - {fileID: 11400000, guid: 69c99e86d5c767248b10ebb86e4e497a, type: 2}
+  - {fileID: 11400000, guid: 4b7a3ccc3285d0347ba0653a1f0fbcf2, type: 2}
+  - {fileID: 11400000, guid: 579b7ac5895fec640b493b7d8f9283df, type: 2}
+  - {fileID: 11400000, guid: 6b74a891385ac0a46bbf79dcc2ca07ac, type: 2}
+  - {fileID: 11400000, guid: f026e60f7ffde19419c8bf8c4d2cbcae, type: 2}
+  - {fileID: 11400000, guid: cdf048f2b241d984da5b4fed9cd1852a, type: 2}
   slotOutcomes:
   - {fileID: 11400000, guid: cb2cd8c5f1c374845a8b2fff345e8611, type: 2}
   - {fileID: 11400000, guid: cea4755b11e6eb9458b38a903853ca50, type: 2}
@@ -163,3 +204,15 @@ MonoBehaviour:
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
   - {fileID: 11400000, guid: bcda9ea69ca7a6a4ebabdc7ddf5b030a, type: 2}
+  historyLines:
+    leaderGained:
+      id: history.leaderGained
+      text: 'HISTORY: {nation} now dominates the timeline. The Future belongs to
+        {place}.'
+    leaderLost:
+      id: history.leaderLost
+      text: 'HISTORY: {nation} no longer dominates the timeline. The Future is unsettled
+        until a new power rises.'
+    carry:
+      id: history.carry
+      text: 'HISTORY: travellers brought {value} to {place}.'

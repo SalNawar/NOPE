@@ -20,3 +20,9 @@ MonoBehaviour:
   extraStabilityLossLegendary: 10
   stabilityGainPerCorrect: 0
   firedAtStability: 0
+  leaderFloor: 4
+  leaderKeepFloor: 2
+  leaderMargin: 2
+  carryThreshold: 1
+  carryCategory: 3
+  maxHistoryNewsPerNight: 3

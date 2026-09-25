@@ -20,9 +20,9 @@ MonoBehaviour:
   newsLineOnFire: 'Breaking: a wave of scientific breakthroughs sweeps across the
     timeline!'
   conditions:
-  - type: 3
+  - type: 12
     key: 
-    threshold: 150
+    threshold: 15
     attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
     profile: {fileID: 0}
     nation: {fileID: 0}

@@ -15,4 +15,9 @@ MonoBehaviour:
   id: future
   displayName: Future
   order: 5
-  smallTalk: []
+  isFuture: 1
+  smallTalk:
+  - id: future.smalltalk.1
+    text: The maglev was late again. Some things never change.
+  - id: future.smalltalk.2
+    text: Everyone at home says the timeline feels different lately.

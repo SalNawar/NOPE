@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_china_future
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: china_future
+  displayName: Shanghai Megacity
+  nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
+  era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  birthYearMin: 2080
+  birthYearMax: 2132
+  facts:
+  - category: 4
+    value: Digital yuan (e-CNY)
+  - category: 0
+    value: Mandarin (pinyin-first)
+  - category: 3
+    value: Maglev commuter pod
+  - category: 5
+    value: Shanghai (Pudong capital)
+  - category: 2
+    value: Premier Chen Yuming
+  maleNames:
+  - Haoyu
+  - Zihan
+  - Yichen
+  - Junjie
+  - Tianyi
+  - Minghao
+  - Zhiyuan
+  - Bowen
+  femaleNames:
+  - Ruoxi
+  - Yutong
+  - Xinyi
+  - Shiyu
+  - Jiaxin
+  - Mengqi
+  - Wanting
+  - Yuxi
+  smallTalk: []
+  baselines: []

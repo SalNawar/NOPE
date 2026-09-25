@@ -15,6 +15,7 @@ MonoBehaviour:
   id: industrial
   displayName: Industrial
   order: 3
+  isFuture: 0
   smallTalk:
   - id: industrial.smalltalk.1
     text: The smoke never lifts over the mills.

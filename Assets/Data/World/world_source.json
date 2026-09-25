@@ -84,7 +84,12 @@
     {
       "id": "future",
       "displayName": "Future",
-      "order": 5
+      "order": 5,
+      "future": true,
+      "smallTalk": [
+        "The maglev was late again. Some things never change.",
+        "Everyone at home says the timeline feels different lately."
+      ]
     }
   ],
   "countries": [
@@ -2205,6 +2210,398 @@
         "Irmgard",
         "Trude"
       ]
+    },
+    {
+      "country": "egypt",
+      "era": "future",
+      "displayName": "Nile Arcology",
+      "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Nile credit (digital)"
+        },
+        {
+          "category": "Language",
+          "value": "Cairene Arabic-English"
+        },
+        {
+          "category": "Technology",
+          "value": "Solar desalination tower"
+        },
+        {
+          "category": "Geography",
+          "value": "New Administrative Capital"
+        },
+        {
+          "category": "Politics",
+          "value": "Speaker Amira Nasser"
+        }
+      ],
+      "maleNames": [
+        "Omar",
+        "Karim",
+        "Youssef",
+        "Adam",
+        "Ziad",
+        "Hamza",
+        "Seif",
+        "Malik"
+      ],
+      "femaleNames": [
+        "Nour",
+        "Farida",
+        "Salma",
+        "Malak",
+        "Jana",
+        "Laila",
+        "Hana",
+        "Rania"
+      ]
+    },
+    {
+      "country": "iraq",
+      "era": "future",
+      "displayName": "Baghdad Garden City",
+      "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Mesopotamian dinar token"
+        },
+        {
+          "category": "Language",
+          "value": "Unified Iraqi Arabic"
+        },
+        {
+          "category": "Technology",
+          "value": "Vertical date-palm farm"
+        },
+        {
+          "category": "Geography",
+          "value": "Baghdad (Garden City)"
+        },
+        {
+          "category": "Politics",
+          "value": "President Layla Kareem"
+        }
+      ],
+      "maleNames": [
+        "Ali",
+        "Mustafa",
+        "Haider",
+        "Yusuf",
+        "Mahdi",
+        "Sajjad",
+        "Zaid",
+        "Ammar"
+      ],
+      "femaleNames": [
+        "Zahra",
+        "Maryam",
+        "Ruqaya",
+        "Sara",
+        "Dania",
+        "Tabarak",
+        "Hawraa",
+        "Aya"
+      ]
+    },
+    {
+      "country": "greece",
+      "era": "future",
+      "displayName": "Aegean Commonwealth",
+      "moment": "An island commonwealth running on wave power, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Aegean euro-drachma"
+        },
+        {
+          "category": "Language",
+          "value": "Pan-Hellenic Greek"
+        },
+        {
+          "category": "Technology",
+          "value": "Wave-power island grid"
+        },
+        {
+          "category": "Geography",
+          "value": "Athens (Commonwealth seat)"
+        },
+        {
+          "category": "Politics",
+          "value": "Archon Eleni Pappas"
+        }
+      ],
+      "maleNames": [
+        "Nikos",
+        "Giorgos",
+        "Kostas",
+        "Dimitris",
+        "Alexandros",
+        "Petros",
+        "Stavros",
+        "Yannis"
+      ],
+      "femaleNames": [
+        "Eleni",
+        "Maria",
+        "Sofia",
+        "Katerina",
+        "Despina",
+        "Ioanna",
+        "Anastasia",
+        "Chrysa"
+      ]
+    },
+    {
+      "country": "italy",
+      "era": "future",
+      "displayName": "Mediterranean Union Rome",
+      "moment": "Rome as the seat of a Mediterranean Union, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Mediterranean lira (eLira)"
+        },
+        {
+          "category": "Language",
+          "value": "Standard Italian (voice)"
+        },
+        {
+          "category": "Technology",
+          "value": "3D-printed stone vaults"
+        },
+        {
+          "category": "Geography",
+          "value": "Rome (Union capital)"
+        },
+        {
+          "category": "Politics",
+          "value": "Consul Marco Ferri"
+        }
+      ],
+      "maleNames": [
+        "Leonardo",
+        "Francesco",
+        "Tommaso",
+        "Lorenzo",
+        "Mattia",
+        "Riccardo",
+        "Gabriele",
+        "Edoardo"
+      ],
+      "femaleNames": [
+        "Aurora",
+        "Giulia",
+        "Ginevra",
+        "Beatrice",
+        "Alice",
+        "Vittoria",
+        "Chiara",
+        "Martina"
+      ]
+    },
+    {
+      "country": "china",
+      "era": "future",
+      "displayName": "Shanghai Megacity",
+      "moment": "Shanghai as a megacity capital linked by maglev, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Digital yuan (e-CNY)"
+        },
+        {
+          "category": "Language",
+          "value": "Mandarin (pinyin-first)"
+        },
+        {
+          "category": "Technology",
+          "value": "Maglev commuter pod"
+        },
+        {
+          "category": "Geography",
+          "value": "Shanghai (Pudong capital)"
+        },
+        {
+          "category": "Politics",
+          "value": "Premier Chen Yuming"
+        }
+      ],
+      "maleNames": [
+        "Haoyu",
+        "Zihan",
+        "Yichen",
+        "Junjie",
+        "Tianyi",
+        "Minghao",
+        "Zhiyuan",
+        "Bowen"
+      ],
+      "femaleNames": [
+        "Ruoxi",
+        "Yutong",
+        "Xinyi",
+        "Shiyu",
+        "Jiaxin",
+        "Mengqi",
+        "Wanting",
+        "Yuxi"
+      ]
+    },
+    {
+      "country": "japan",
+      "era": "future",
+      "displayName": "Neo-Tokyo Bay",
+      "moment": "Neo-Tokyo built out over the bay, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Crypto-yen (J-coin)"
+        },
+        {
+          "category": "Language",
+          "value": "Tokyo Japanese (kana-first)"
+        },
+        {
+          "category": "Technology",
+          "value": "Companion robot"
+        },
+        {
+          "category": "Geography",
+          "value": "Neo-Tokyo (Bay Capital)"
+        },
+        {
+          "category": "Politics",
+          "value": "Prime Minister Hana Sato"
+        }
+      ],
+      "maleNames": [
+        "Haruto",
+        "Sota",
+        "Ren",
+        "Minato",
+        "Yuto",
+        "Riku",
+        "Kaito",
+        "Asahi"
+      ],
+      "femaleNames": [
+        "Himari",
+        "Yui",
+        "Mei",
+        "Tsumugi",
+        "Rin",
+        "Sakura",
+        "Koharu",
+        "Mio"
+      ]
+    },
+    {
+      "country": "britain",
+      "era": "future",
+      "displayName": "Thames Barrier London",
+      "moment": "London behind a great Thames barrier, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Sterling token (GBT)"
+        },
+        {
+          "category": "Language",
+          "value": "Global English"
+        },
+        {
+          "category": "Technology",
+          "value": "Fusion reactor (Thames)"
+        },
+        {
+          "category": "Geography",
+          "value": "London (Thames Barrier)"
+        },
+        {
+          "category": "Politics",
+          "value": "First Minister Ada Clarke"
+        }
+      ],
+      "maleNames": [
+        "Oliver",
+        "Noah",
+        "Arlo",
+        "Theo",
+        "Leo",
+        "Oscar",
+        "Idris",
+        "Rohan"
+      ],
+      "femaleNames": [
+        "Olivia",
+        "Amelia",
+        "Isla",
+        "Ava",
+        "Freya",
+        "Ivy",
+        "Aisha",
+        "Priya"
+      ]
+    },
+    {
+      "country": "germany",
+      "era": "future",
+      "displayName": "Rhine-Ruhr Metropole",
+      "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
+      "year": 2150,
+      "facts": [
+        {
+          "category": "Currency",
+          "value": "Euro-mark (digital)"
+        },
+        {
+          "category": "Language",
+          "value": "Standard German (Denglisch)"
+        },
+        {
+          "category": "Technology",
+          "value": "Hydrogen hyperloop"
+        },
+        {
+          "category": "Geography",
+          "value": "Cologne (Rhine-Ruhr seat)"
+        },
+        {
+          "category": "Politics",
+          "value": "Chancellor Lena Vogt"
+        }
+      ],
+      "maleNames": [
+        "Emil",
+        "Finn",
+        "Paul",
+        "Elias",
+        "Mats",
+        "Ben",
+        "Leon",
+        "Jonas"
+      ],
+      "femaleNames": [
+        "Emilia",
+        "Mia",
+        "Lina",
+        "Clara",
+        "Ella",
+        "Frieda",
+        "Leni",
+        "Yasmin"
+      ]
     }
   ],
   "rules": [
@@ -2228,6 +2625,27 @@
       "country": "japan",
       "era": "earlymodern",
       "description": "Sakoku seal: no travel to Tokugawa Edo today."
+    },
+    {
+      "asset": "Rule_NoIndustrialBritain",
+      "type": "NationEraForbidden",
+      "country": "britain",
+      "era": "industrial",
+      "description": "Cholera quarantine: no travel to Victorian Britain today."
+    },
+    {
+      "asset": "Rule_NoModernGermany",
+      "type": "NationEraForbidden",
+      "country": "germany",
+      "era": "modern",
+      "description": "Border closed: no travel to Weimar Berlin today."
+    },
+    {
+      "asset": "Rule_NoModernJapan",
+      "type": "NationEraForbidden",
+      "country": "japan",
+      "era": "modern",
+      "description": "Typhoon warning: no travel to Showa Tokyo today."
     }
   ],
   "days": [
@@ -2311,6 +2729,115 @@
       "rules": [
         "Rule_NoMedievalChina",
         "Rule_NoEarlyModernJapan"
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day4",
+      "day": 4,
+      "queue": 12,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer"
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoIndustrialBritain"
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day5",
+      "day": 5,
+      "queue": 13,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer"
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoModernGermany",
+        "Rule_NoAncientEgypt"
+      ]
+    },
+    {
+      "asset": "DayPlan_Inv_Day6",
+      "day": 6,
+      "queue": 14,
+      "tells": 1,
+      "channels": [
+        "Papers",
+        "Answer"
+      ],
+      "eras": [
+        {
+          "era": "ancient",
+          "weight": 1
+        },
+        {
+          "era": "medieval",
+          "weight": 1
+        },
+        {
+          "era": "earlymodern",
+          "weight": 1
+        },
+        {
+          "era": "industrial",
+          "weight": 1
+        },
+        {
+          "era": "modern",
+          "weight": 1
+        },
+        {
+          "era": "future",
+          "weight": 1
+        }
+      ],
+      "countries": [],
+      "rules": [
+        "Rule_NoModernJapan"
       ]
     }
   ],
@@ -2503,5 +3030,215 @@
         }
       ]
     }
-  ]
+  ],
+  "history": {
+    "lines": {
+      "leaderGained": "HISTORY: {nation} now dominates the timeline. The Future belongs to {place}.",
+      "leaderLost": "HISTORY: {nation} no longer dominates the timeline. The Future is unsettled until a new power rises.",
+      "carry": "HISTORY: travellers brought {value} to {place}."
+    },
+    "rules": [
+      {
+        "id": "movable_type_florence",
+        "name": "Movable type reaches Florence",
+        "news": "HISTORY: Florentine printers set type the Chinese way, years before Gutenberg.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "china"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_medieval",
+            "category": "Technology",
+            "value": "Chinese movable type press"
+          }
+        ]
+      },
+      {
+        "id": "yen_reichsmark",
+        "name": "The yen backs the Reichsmark",
+        "news": "HISTORY: Weimar Berlin's banks peg the Reichsmark to the yen.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "japan"
+          }
+        ],
+        "edits": [
+          {
+            "place": "germany_modern",
+            "category": "Currency",
+            "value": "Yen-backed Reichsmark"
+          }
+        ]
+      },
+      {
+        "id": "roman_aljabr",
+        "name": "Al-jabr reaches Rome",
+        "news": "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "iraq"
+          }
+        ],
+        "edits": [
+          {
+            "place": "italy_ancient",
+            "category": "Technology",
+            "value": "Al-jabr reckoning tables"
+          }
+        ]
+      },
+      {
+        "id": "sterling_cairo",
+        "name": "Sterling on the Nile",
+        "news": "HISTORY: Khedivate Cairo now trades in British sterling.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "britain"
+          }
+        ],
+        "edits": [
+          {
+            "place": "egypt_industrial",
+            "category": "Currency",
+            "value": "British pound sterling"
+          }
+        ]
+      },
+      {
+        "id": "greek_thebes",
+        "name": "Greek scribes in Thebes",
+        "news": "HISTORY: New Kingdom scribes now write in Greek.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "greece"
+          }
+        ],
+        "edits": [
+          {
+            "place": "egypt_ancient",
+            "category": "Language",
+            "value": "Greek-Egyptian (Koine)"
+          }
+        ]
+      },
+      {
+        "id": "mark_britain",
+        "name": "The mark crosses the Channel",
+        "news": "HISTORY: Post-war Britain pays in Deutsche Marks.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "germany"
+          }
+        ],
+        "edits": [
+          {
+            "place": "britain_modern",
+            "category": "Currency",
+            "value": "Deutsche Mark & shilling"
+          }
+        ]
+      },
+      {
+        "id": "florin_mystras",
+        "name": "Florins in the Morea",
+        "news": "HISTORY: Mystras now trades in Florentine florins.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "italy"
+          }
+        ],
+        "edits": [
+          {
+            "place": "greece_medieval",
+            "category": "Currency",
+            "value": "Florentine florin (Morea)"
+          }
+        ]
+      },
+      {
+        "id": "hieroglyphs_babylon",
+        "name": "Hieroglyphs in Babylon",
+        "news": "HISTORY: Babylon's scribes carve hieroglyphs beside their cuneiform.",
+        "conditions": [
+          {
+            "type": "NationIsLeader",
+            "nation": "egypt"
+          }
+        ],
+        "edits": [
+          {
+            "place": "iraq_ancient",
+            "category": "Language",
+            "value": "Hieroglyphic Akkadian"
+          }
+        ]
+      },
+      {
+        "id": "babbage_engine",
+        "name": "The analytical engine runs",
+        "news": "HISTORY: Babbage's analytical engine hums in Victorian London.",
+        "conditions": [
+          {
+            "type": "GlobalAttrAtLeast",
+            "attribute": "science",
+            "threshold": 22
+          }
+        ],
+        "edits": [
+          {
+            "place": "britain_industrial",
+            "category": "Technology",
+            "value": "Babbage analytical engine"
+          }
+        ]
+      },
+      {
+        "id": "athenian_steam",
+        "name": "Steam in Athens",
+        "news": "HISTORY: Athenian engineers put the steam engine to work.",
+        "conditions": [
+          {
+            "type": "AttributeIsDominant",
+            "place": "greece_ancient",
+            "attribute": "science"
+          }
+        ],
+        "edits": [
+          {
+            "place": "greece_ancient",
+            "category": "Technology",
+            "value": "Aeolipile steam engine"
+          }
+        ]
+      },
+      {
+        "id": "elected_pharaoh",
+        "name": "An elected pharaoh",
+        "news": "HISTORY: Thebes votes: Hatshepsut now rules as an elected pharaoh.",
+        "conditions": [
+          {
+            "type": "GlobalAttrAtLeast",
+            "attribute": "democracy",
+            "threshold": 12
+          }
+        ],
+        "edits": [
+          {
+            "place": "egypt_ancient",
+            "category": "Politics",
+            "value": "Elected Pharaoh Hatshepsut"
+          }
+        ]
+      }
+    ]
+  }
 }

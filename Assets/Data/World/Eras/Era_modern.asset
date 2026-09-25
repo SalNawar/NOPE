@@ -15,6 +15,7 @@ MonoBehaviour:
   id: modern
   displayName: Modern
   order: 4
+  isFuture: 0
   smallTalk:
   - id: modern.smalltalk.1
     text: The news never stops, day or night.

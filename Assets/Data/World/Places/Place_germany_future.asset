@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_germany_future
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: germany_future
+  displayName: Rhine-Ruhr Metropole
+  nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
+  era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  birthYearMin: 2080
+  birthYearMax: 2132
+  facts:
+  - category: 4
+    value: Euro-mark (digital)
+  - category: 0
+    value: Standard German (Denglisch)
+  - category: 3
+    value: Hydrogen hyperloop
+  - category: 5
+    value: Cologne (Rhine-Ruhr seat)
+  - category: 2
+    value: Chancellor Lena Vogt
+  maleNames:
+  - Emil
+  - Finn
+  - Paul
+  - Elias
+  - Mats
+  - Ben
+  - Leon
+  - Jonas
+  femaleNames:
+  - Emilia
+  - Mia
+  - Lina
+  - Clara
+  - Ella
+  - Frieda
+  - Leni
+  - Yasmin
+  smallTalk: []
+  baselines: []

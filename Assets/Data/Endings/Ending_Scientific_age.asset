@@ -18,5 +18,5 @@ MonoBehaviour:
     with new machines, new power, new possibilities.
   conditionType: 2
   attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
-  threshold: 200
+  threshold: 26
   priority: 50

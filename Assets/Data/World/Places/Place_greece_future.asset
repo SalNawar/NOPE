@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_greece_future
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: greece_future
+  displayName: Aegean Commonwealth
+  nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  birthYearMin: 2080
+  birthYearMax: 2132
+  facts:
+  - category: 4
+    value: Aegean euro-drachma
+  - category: 0
+    value: Pan-Hellenic Greek
+  - category: 3
+    value: Wave-power island grid
+  - category: 5
+    value: Athens (Commonwealth seat)
+  - category: 2
+    value: Archon Eleni Pappas
+  maleNames:
+  - Nikos
+  - Giorgos
+  - Kostas
+  - Dimitris
+  - Alexandros
+  - Petros
+  - Stavros
+  - Yannis
+  femaleNames:
+  - Eleni
+  - Maria
+  - Sofia
+  - Katerina
+  - Despina
+  - Ioanna
+  - Anastasia
+  - Chrysa
+  smallTalk: []
+  baselines: []
