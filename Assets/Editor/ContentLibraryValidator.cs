@@ -628,7 +628,8 @@ public static class ContentLibraryValidator
     /// wardrobe gives (or wider than a book row), a gender look without outfit,
     /// hair or signature item, an item art nation that is not a key token,
     /// look weights with no positive sum, and (a warning) a signature that is
-    /// the whole outfit, which can never leak.
+    /// the whole outfit, which can never leak (except on a Future place, whose
+    /// culture-shaped outfit is its signature by design).
     /// </summary>
     private static int CheckPlaces(ContentLibrarySO lib)
     {
@@ -707,7 +708,8 @@ public static class ContentLibraryValidator
                 continue;
             }
 
-            if (look.signature == LookSlot.Outfit)
+            // A Future place's signature is its outfit by design, so a Future home never leaks dress (characters spec R27).
+            if (look.signature == LookSlot.Outfit && (place.era == null || !place.era.isFuture))
             {
                 Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has the whole outfit as its {gender} signature, so it can never leak as a dress tell ('{lib.name}').", place);
                 issues++;
