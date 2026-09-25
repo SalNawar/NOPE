@@ -10,7 +10,10 @@ using UnityEngine.UI;
 /// <summary>
 /// One-click builder for the full Office investigation scene.
 /// Creates and wires everything needed for a playable shift:
-/// - Canvas + EventSystem (new Input System)
+/// - The PC desktop: a World Space canvas drawn live on the CRT's glass
+///   (1440 x 1080 units at 4:3), with screen power and a focus push-in
+///   [MonitorScreen, OfficeViewController, CinemachineCameraRig]; EventSystem
+///   (new Input System)
 /// - HUD (day/money/stability), citation slip, verdict line  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: claim banner, directives, draggable/multi-page document
@@ -21,8 +24,9 @@ using UnityEngine.UI;
 ///   ContentLibrary_Main and a Day Plan
 /// Safe to re-run: finds existing pieces by name and only fills gaps. It builds
 /// only Assets/Scenes/OfficeScene.unity and refuses any other active scene.
+/// The booth and desk parts are in OfficeSceneUIBuilder.Desk.cs.
 /// </summary>
-public static class OfficeSceneUIBuilder
+public static partial class OfficeSceneUIBuilder
 {
     // Windows XP "Luna" palette
     private static readonly Color XpBlue = new Color(0.13f, 0.34f, 0.86f, 1f);    // taskbar / title-bar base
@@ -41,10 +45,10 @@ public static class OfficeSceneUIBuilder
     private const int VLayoutPadding = 6;
 
     /// <summary>
-    /// The reference resolution of both canvas scalers, which never scale a
-    /// canvas below it (ConfigureScaler); every layout is authored against it,
-    /// so what fits at this size (the intercom's fit reads its height) fits on
-    /// every screen.
+    /// The reference resolution of the office overlay canvas's scaler, which
+    /// never scales the canvas below it (ConfigureScaler); every overlay layout
+    /// is authored against it, so what fits at this size fits on every screen.
+    /// (The desktop is a World Space canvas of DesktopSize units with no scaler.)
     /// </summary>
     private static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
 
@@ -116,9 +120,8 @@ public static class OfficeSceneUIBuilder
         Button citationContinue = MakeButton(citation, "ContinueButton", "Acknowledge", new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.24f));
         citation.gameObject.SetActive(false);
 
-        // Briefing + Results — newsletter panels on the office overlay canvas so
-        // they read in the booth view, not inside the PC desktop (which is hidden
-        // outside MonitorFocus).
+        // Briefing + Results: newsletter panels on the office overlay canvas, so
+        // they read over the booth view, not on the small live desktop.
         Canvas officeCanvas = EnsureOfficeOverlayCanvas();
         DestroyChildIfPresent(root, "BriefingPanel");
         DestroyChildIfPresent(root, "ResultsPanel");
@@ -129,6 +132,9 @@ public static class OfficeSceneUIBuilder
             "START SHIFT", out TMP_Text briefingTitle, out TMP_Text briefingBody, out Button startShift);
         Transform results = BuildNewsletter(officeCanvas.transform, "ResultsPanel", "SHIFT LEDGER — EVENING EDITION",
             "GO HOME", out TMP_Text resultsTitle, out TMP_Text resultsBody, out Button goHome);
+
+        // The desk tuning (created once): the monitor push-in, screen power, sorting bands.
+        DeskConfigSO deskConfig = EnsureDeskConfig();
 
         DayFlowUIController dayFlow = Object.FindFirstObjectByType<DayFlowUIController>();
         if (dayFlow == null)
@@ -305,13 +311,14 @@ public static class OfficeSceneUIBuilder
         GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
         if (gameManager == null) gameManager = new GameObject("GameManager").AddComponent<GameManager>();
 
-        // Booth + cameras + view controller (new). The existing Canvas becomes
-        // the Monitor-Focus desktop, hidden until the CRT is focused.
-        OfficeViewController officeView = BuildBooth(canvas);
+        // Booth + cameras + view controller. The desktop canvas is drawn live on
+        // the CRT's glass (BuildMonitorScreen), always active; its input is gated.
+        OfficeViewController officeView = BuildBooth(canvas, deskConfig, out MonitorScreen monitorScreen);
 
         // Fake-OS desktop shell: NEW apps only (existing document/reference/compare
-        // windows are launched by the investigation icon grid), plus a Start menu.
-        BuildDesktopShell(canvas, bookShelf, windowLayer, library);
+        // windows are launched by the investigation icon grid), plus a Start menu
+        // and the taskbar's way back to the desk.
+        BuildDesktopShell(canvas, bookShelf, windowLayer, library, officeView, monitorScreen);
 
         // Cursor + hover highlight settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
@@ -390,7 +397,7 @@ public static class OfficeSceneUIBuilder
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
-        Debug.Log("[TimeDesk] Office investigation desk built and wired (HUD, citation, briefing/results, claim, document + book windows, intercom + interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
+        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, HUD, citation, briefing/results, claim, document + book windows, intercom + interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
     }
 
     // -----------------------------
@@ -552,37 +559,53 @@ public static class OfficeSceneUIBuilder
 
     private static readonly Vector2 Center = new Vector2(0.5f, 0.5f);
 
+    /// <summary>The desktop canvas's object name (the office overlay canvas is another Canvas).</summary>
+    private const string DesktopCanvasName = "Canvas";
+
+    /// <summary>
+    /// The desktop canvas, found by its name: a World Space canvas of
+    /// <see cref="DesktopSize"/> units (BuildMonitorScreen puts it on the CRT's
+    /// glass), masked to its rect (dragged windows never draw over the bezel).
+    /// A canvas scaler only serves a screen-space canvas, so it has none.
+    /// </summary>
     private static Canvas EnsureCanvas()
     {
-        // The desktop canvas — never the office overlay canvas, which hosts the
-        // briefing/results newsletters and stays visible outside MonitorFocus.
         Canvas canvas = null;
-        foreach (Canvas c in Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None))
+        foreach (Canvas c in Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None))
         {
-            if (c.gameObject.name == "OfficeOverlayCanvas")
-                continue;
-            canvas = c;
-            break;
+            if (c.gameObject.name == DesktopCanvasName)
+            {
+                canvas = c;
+                break;
+            }
         }
         if (canvas == null)
         {
-            var go = new GameObject("Canvas", typeof(RectTransform));
+            var go = new GameObject(DesktopCanvasName, typeof(RectTransform));
             canvas = go.AddComponent<Canvas>();
-            go.AddComponent<CanvasScaler>();
             go.AddComponent<GraphicRaycaster>();
         }
-        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        ConfigureScaler(canvas.GetComponent<CanvasScaler>() ?? canvas.gameObject.AddComponent<CanvasScaler>());
+        canvas.renderMode = RenderMode.WorldSpace;
+        CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+        if (scaler != null)
+            Object.DestroyImmediate(scaler);
         if (canvas.GetComponent<GraphicRaycaster>() == null) canvas.gameObject.AddComponent<GraphicRaycaster>();
+        if (canvas.GetComponent<RectMask2D>() == null) canvas.gameObject.AddComponent<RectMask2D>();
+
+        var rt = (RectTransform)canvas.transform;
+        rt.anchorMin = Center;
+        rt.anchorMax = Center;
+        rt.pivot = Center;
+        rt.sizeDelta = DesktopSize;
         return canvas;
     }
 
     /// <summary>
-    /// Scales a canvas with the screen from the reference resolution, and
-    /// never below it: Expand keeps the canvas at least 1920x1080 in both
-    /// dimensions (a screen wider than 16:9 gets more width, a narrower one
-    /// more height), so a layout that fits at the reference size, such as the
-    /// intercom's choices, fits on every screen.
+    /// Scales the office overlay canvas (the newsletters, and the booth's
+    /// overlay UI) with the screen from the reference resolution, and never
+    /// below it: Expand keeps the canvas at least 1920x1080 in both dimensions
+    /// (a screen wider than 16:9 gets more width, a narrower one more height),
+    /// so a layout that fits at the reference size fits on every screen.
     /// </summary>
     private static void ConfigureScaler(CanvasScaler scaler)
     {
@@ -772,9 +795,9 @@ public static class OfficeSceneUIBuilder
     // ----------------------------- Office newsletter panels -----------------------------
 
     /// <summary>
-    /// Overlay canvas for office-view UI (the briefing/results newsletters).
-    /// Separate from the desktop canvas, which OfficeViewController hides
-    /// outside MonitorFocus.
+    /// Overlay canvas for booth-view UI (the briefing/results newsletters),
+    /// drawn over the booth and the live desktop, which is a World Space canvas
+    /// on the CRT's glass.
     /// </summary>
     private static Canvas EnsureOfficeOverlayCanvas()
     {
@@ -993,11 +1016,8 @@ public static class OfficeSceneUIBuilder
     /// <summary>Orthographic half-height of the office view (y -7..5 around the camera).</summary>
     private const float OfficeOrthoSize = 6f;
 
-    /// <summary>Orthographic half-height of the monitor close-up, which frames the CRT's glass.</summary>
-    private const float MonitorOrthoSize = 1.4f;
-
-    /// <summary>Centre of the CRT's glass in the crt sprite's own units (the monitor camera aims at it).</summary>
-    private static readonly Vector2 CrtGlassCentre = new Vector2(-0.15f, 0.05f);
+    /// <summary>Centre of the largest 4:3 rectangle inside the CRT's glass, in the crt sprite's own units (the screen anchor and the monitor camera sit on it).</summary>
+    private static readonly Vector2 CrtGlassCentre = new Vector2(-0.144f, 0.054f);
 
     /// <summary>Booth art beyond the drop-in placeholders: the deep desk, the calendar partition and the desk props.</summary>
     private const string BoothArtFolder = "Assets/Art/Office/Booth";
@@ -1045,13 +1065,15 @@ public static class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster,
-    /// and wires OfficeViewController + the CRT/READY clickables. The painted art
-    /// is laid out as in the art pass's 2D composition: the back wall and the deep
-    /// desk cover the whole office view, partitions frame it, and the props sit on
-    /// the desk and partitions. Idempotent.
+    /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster
+    /// and the live monitor (BuildMonitorScreen), and wires OfficeViewController,
+    /// the camera rig, the CRT's click (focus) and the focus exit zone; READY's
+    /// saved focus call is cleared (READY only releases GameManager's gate). The
+    /// painted art is laid out as in the art pass's 2D composition: the back
+    /// wall and the deep desk cover the whole office view, partitions frame it,
+    /// and the props sit on the desk and partitions. Idempotent.
     /// </summary>
-    private static OfficeViewController BuildBooth(Canvas desktopCanvas)
+    private static OfficeViewController BuildBooth(Canvas desktopCanvas, DeskConfigSO config, out MonitorScreen screen)
     {
         // Root for all booth world objects.
         GameObject root = GameObject.Find("OfficeRoot") ?? new GameObject("OfficeRoot");
@@ -1082,12 +1104,6 @@ public static class OfficeSceneUIBuilder
         SpriteRenderer sign = PlaceSprite(booth, "ReadySign", EnsureOfficeSprite("sign", new Color(0.79f, 0.76f, 0.58f), 96, 50), new Vector3(0f, -2f, 0f), 2.3f, 2);
         Clickable signClick = EnsureClickable(sign);
 
-        // Cameras: the booth view, and a close-up on the CRT's glass.
-        GameObject camsRoot = GameObject.Find("Cameras") ?? new GameObject("Cameras");
-        CinemachineCamera officeCam = EnsureVcam(camsRoot.transform, "OfficeVCam", OfficeCamPosition, OfficeOrthoSize);
-        Vector3 glass = crt.transform.TransformPoint(CrtGlassCentre);
-        CinemachineCamera monitorCam = EnsureVcam(camsRoot.transform, "MonitorVCam", new Vector3(glass.x, glass.y, OfficeCamPosition.z), MonitorOrthoSize);
-
         // Brain + 2D raycaster on the Main Camera.
         Camera main = Camera.main;
         if (main == null)
@@ -1105,6 +1121,19 @@ public static class OfficeSceneUIBuilder
         // A fixed hit buffer keeps the UI module's per-frame booth raycast allocation-free.
         raycaster.maxRayIntersections = BoothRaycastHits;
 
+        // The live monitor: the desktop canvas on the glass, its power button and LED, the focus zones.
+        screen = BuildMonitorScreen(crt, desktopCanvas, main, config);
+
+        // Cameras: the booth view, and a push-in on the glass. The monitor camera
+        // starts framed for the reference aspect; the rig reframes it for the
+        // screen's aspect on every push-in (MonitorFraming, the fill knob).
+        GameObject camsRoot = GameObject.Find("Cameras") ?? new GameObject("Cameras");
+        CinemachineCamera officeCam = EnsureVcam(camsRoot.transform, "OfficeVCam", OfficeCamPosition, OfficeOrthoSize);
+        Vector3 glass = screen.GlassCentre;
+        Vector2 glassSize = screen.GlassWorldSize;
+        float monitorOrtho = MonitorFraming.OrthoSize(glassSize.x, glassSize.y, ReferenceResolution.x / ReferenceResolution.y, config.monitorFill);
+        CinemachineCamera monitorCam = EnsureVcam(camsRoot.transform, "MonitorVCam", new Vector3(glass.x, glass.y, OfficeCamPosition.z), monitorOrtho);
+
         // Camera rig + view controller on OfficeRoot.
         CinemachineCameraRig rig = root.GetComponent<CinemachineCameraRig>();
         if (rig == null)
@@ -1112,6 +1141,9 @@ public static class OfficeSceneUIBuilder
         var soRig = new SerializedObject(rig);
         SetRef(soRig, "officeCam", officeCam);
         SetRef(soRig, "monitorCam", monitorCam);
+        SetRef(soRig, "brain", main.GetComponent<CinemachineBrain>());
+        SetRef(soRig, "monitorScreen", screen);
+        SetRef(soRig, "config", config);
         soRig.ApplyModifiedProperties();
 
         OfficeViewController view = root.GetComponent<OfficeViewController>();
@@ -1120,17 +1152,20 @@ public static class OfficeSceneUIBuilder
         var soView = new SerializedObject(view);
         SetRef(soView, "cameraRigBehaviour", rig);
         SetRef(soView, "desktopRoot", desktopCanvas.gameObject);
+        SetRef(soView, "monitorScreen", screen);
         soView.ApplyModifiedProperties();
 
-        // CRT click -> focus monitor; READY click is wired to GameManager's gate,
-        // but also focuses the monitor so the player lands on the desktop.
+        // The CRT's click pushes in; a click outside the screen pulls back.
+        // READY only releases GameManager's gate (no zoom): its saved focus call goes.
         WireClickToFocusMonitor(crtClick, view);
-        WireClickToFocusMonitor(signClick, view);
+        WirePersistentVoid(crt.transform.Find("FocusExitZone").GetComponent<Clickable>(), "onClick", view, nameof(OfficeViewController.FocusOffice));
+        ClearPersistentCalls(signClick, "onClick");
 
-        // Diegetic readouts + a timeline-reactive poster + the desktop Back button.
+        // Diegetic readouts + a timeline-reactive poster. The desktop's old
+        // "< Office" button is replaced by the taskbar's "< Desk" (BuildDesktopShell).
         BuildReadouts(booth, calendarPartition.transform);
         BuildReactiveProp(booth);
-        BuildBackToOfficeButton(desktopCanvas, view);
+        DestroyChildIfPresent(desktopCanvas.transform, "BackToOfficeButton");
 
         return view;
     }
@@ -1448,21 +1483,16 @@ public static class OfficeSceneUIBuilder
         return inside;
     }
 
-    /// <summary>Adds a visible "Back to Office" button to the desktop canvas.</summary>
-    private static void BuildBackToOfficeButton(Canvas desktopCanvas, OfficeViewController view)
-    {
-        Button back = MakeButton(desktopCanvas.transform, "BackToOfficeButton", "< Office",
-            new Vector2(0.005f, 0.93f), new Vector2(0.105f, 0.99f), new Color(0.2f, 0.3f, 0.5f, 0.95f));
-        WirePersistentVoid(back, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
-    }
-
     /// <summary>
     /// Builds the fake-OS desktop shell: a left column of icons (some unlock-gated
     /// by a library upgrade id, reported when the library does not know it) that
-    /// open placeholder windows with min/max/close chrome, plus a Start menu
-    /// (Settings + Power) wired to a DesktopShell on the canvas. Idempotent.
+    /// open placeholder windows with min/max/close chrome, a Start menu
+    /// (Settings, Turn off screen and Quit game) wired to a DesktopShell on the
+    /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here, after
+    /// the view exists). Idempotent.
     /// </summary>
-    private static void BuildDesktopShell(Canvas canvas, Transform iconGrid, Transform windowLayer, ContentLibrarySO library)
+    private static void BuildDesktopShell(Canvas canvas, Transform iconGrid, Transform windowLayer, ContentLibrarySO library,
+                                          OfficeViewController view, MonitorScreen screen)
     {
         Transform root = canvas.transform;
 
@@ -1501,15 +1531,24 @@ public static class OfficeSceneUIBuilder
         OSWindowChrome settings = BuildOSWindow(windowLayer, "SettingsWindow", "Settings", "Settings (empty for now).");
 
         // Rebuilt from scratch each run: the entries need fixed LayoutElement
-        // heights or the vertical layout collapses them on top of each other.
+        // heights or the vertical layout collapses them on top of each other
+        // (three 46-px entries, 4 px apart, 6 px padding: 158 px).
         DestroyChildIfPresent(root, "StartMenu");
-        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.14f, 0f), new Vector2(0f, 96f), new Vector2(0f, 112f), new Color(0.1f, 0.12f, 0.18f, 0.97f));
+        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.2f, 0f), new Vector2(0f, 119f), new Vector2(0f, 158f), new Color(0.1f, 0.12f, 0.18f, 0.97f));
         AddVLayout(startMenu, 4f);
         Button settingsEntry = MakeButton(startMenu, "SettingsEntry", "Settings", Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f));
         SetLayoutHeight(settingsEntry, 46f);
-        Button powerEntry = MakeButton(startMenu, "PowerEntry", "Power", Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f));
-        SetLayoutHeight(powerEntry, 46f);
+        Button screenOffEntry = MakeButton(startMenu, "ScreenOffEntry", "Turn off screen", Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f));
+        SetLayoutHeight(screenOffEntry, 46f);
+        Button quitEntry = MakeButton(startMenu, "QuitEntry", "Quit game", Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f));
+        SetLayoutHeight(quitEntry, 46f);
         startMenu.gameObject.SetActive(false);
+
+        // The taskbar's way back to the booth, next to Start.
+        Transform taskbar = root.Find("Taskbar");
+        Button deskButton = MakeButton(taskbar, "DeskButton", "< Desk", new Vector2(0.125f, 0.1f), new Vector2(0.245f, 0.9f), new Color(0.2f, 0.3f, 0.5f, 0.95f));
+        SetAnchors(deskButton.transform, new Vector2(0.125f, 0.1f), new Vector2(0.245f, 0.9f));
+        WirePersistentVoid(deskButton, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
 
         Button startBtn = null;
         Transform taskbarStart = root.Find("Taskbar/StartButton");
@@ -1530,7 +1569,9 @@ public static class OfficeSceneUIBuilder
         SetRef(soShell, "startButton", startBtn);
         SetRef(soShell, "startMenu", startMenu.gameObject);
         SetRef(soShell, "settingsButton", settingsEntry);
-        SetRef(soShell, "powerButton", powerEntry);
+        SetRef(soShell, "quitButton", quitEntry);
+        SetRef(soShell, "screenOffButton", screenOffEntry);
+        SetRef(soShell, "monitorScreen", screen);
         SetRef(soShell, "settingsWindow", settings);
         soShell.ApplyModifiedProperties();
     }
@@ -1708,16 +1749,16 @@ public static class OfficeSceneUIBuilder
 
     /// <summary>
     /// Wires a single persistent, parameterless (Void) call on a UnityEvent
-    /// serialized property (e.g. Clickable "onClick" or Button "m_OnClick").
+    /// serialized property (e.g. Clickable "onClick" or Button "m_OnClick"),
+    /// replacing the calls ClearPersistentCalls empties.
     /// </summary>
     private static void WirePersistentVoid(Object host, string eventProp, Object target, string method)
     {
         var so = new SerializedObject(host);
-        SerializedProperty calls = so.FindProperty(eventProp + ".m_PersistentCalls.m_Calls");
+        SerializedProperty calls = ClearPersistentCalls(so, eventProp);
         if (calls == null)
             return;
 
-        calls.ClearArray();
         calls.InsertArrayElementAtIndex(0);
         SerializedProperty call = calls.GetArrayElementAtIndex(0);
         call.FindPropertyRelative("m_Target").objectReferenceValue = target;
