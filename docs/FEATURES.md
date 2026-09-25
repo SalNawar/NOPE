@@ -29,7 +29,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Start menu: Settings (stub window) + Power (quit); fixed-height entries
 - [ ] Desktop icon grid top-left; reference book icons + app icons (a document's window gets an icon at the top of the grid the first time it opens)
 - [ ] Upgrade-gated icons (Lexicon needs Archive Access, Material needs Advanced Scanner) dim until the upgrade is owned; the builder reports icon upgrade ids the library does not know
-- [ ] Draggable windows; min/max/close chrome on ALL windows (app, document, reference)
+- [ ] Draggable windows; min/max/close chrome on ALL windows (app, document, reference); windows stay inside the screen while dragged (a window taller than the screen keeps its title bar visible) (clamp tested: `DeskGeometryTests`)
 - [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Notes
 - [ ] Clue Log = Case Notes: Interview, the current traveller's transcript (speaker + line, 8 per page, long lines wrap onto two, jumps to the newest page); answer rows are compare-clickable; every intercom choice except a document request opens it (questions, small talk, dialog replies, "Ask about home >" and "< Back"); it closes with every new case
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)

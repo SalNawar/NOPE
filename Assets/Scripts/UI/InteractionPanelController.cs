@@ -10,15 +10,19 @@ public struct InteractionAction
     /// <summary>Button label.</summary>
     public string label;
 
+    /// <summary>Shown in the panel's centre slot when it has one (the wheel's "&lt; Back"); otherwise listed like any action.</summary>
+    public bool centre;
+
     /// <summary>Invoked when the player issues the action.</summary>
     public Action execute;
 }
 
 /// <summary>
-/// The intercom: a vertical list of actions the player can issue to the
-/// traveller. Actions are the current interview node's choices (requests,
-/// questions, dialog replies), supplied per step by the investigation
-/// controller; the panel only renders buttons.
+/// A list of the interview's current choices: the traveller wheel's ring
+/// (laid out by RadialLayoutGroup), or a plain vertical list (the hybrid
+/// scene's intercom). Actions are the current interview node's choices
+/// (requests, questions, dialog replies), supplied per step by the
+/// investigation controller; the panel only renders buttons.
 /// </summary>
 public sealed class InteractionPanelController : MonoBehaviour
 {
@@ -27,6 +31,9 @@ public sealed class InteractionPanelController : MonoBehaviour
 
     /// <summary>Disabled template button cloned per action.</summary>
     [SerializeField] private Button actionButtonTemplate;
+
+    /// <summary>Optional: where centre actions go (the traveller wheel); none keeps every action in the list.</summary>
+    [SerializeField] private Transform centreSlot;
 
     private readonly List<GameObject> _spawned = new();
 
@@ -46,7 +53,8 @@ public sealed class InteractionPanelController : MonoBehaviour
 
         foreach (InteractionAction action in actions)
         {
-            Button btn = Instantiate(actionButtonTemplate, actionsRoot);
+            Transform parent = action.centre && centreSlot != null ? centreSlot : actionsRoot;
+            Button btn = Instantiate(actionButtonTemplate, parent);
             btn.gameObject.SetActive(true);
             _spawned.Add(btn.gameObject);
 
@@ -59,12 +67,21 @@ public sealed class InteractionPanelController : MonoBehaviour
         }
     }
 
-    /// <summary>Removes all spawned action buttons.</summary>
+    /// <summary>
+    /// Removes all spawned action buttons. Each is deactivated first: Destroy
+    /// waits for the end of the frame, and a layout group must never count a
+    /// dying button with the new ones.
+    /// </summary>
     public void Clear()
     {
         foreach (GameObject go in _spawned)
-            if (go != null)
-                Destroy(go);
+        {
+            if (go == null)
+                continue;
+
+            go.SetActive(false);
+            Destroy(go);
+        }
         _spawned.Clear();
     }
 }

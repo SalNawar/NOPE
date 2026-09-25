@@ -224,6 +224,7 @@ public sealed class HoverHighlighter : MonoBehaviour
 
         if (!_worldOutlines.TryGetValue(sr, out WorldOutline o))
         {
+            PurgeDeadOutlines();
             o = new WorldOutline();
             _worldOutlines[sr] = o;
         }
@@ -290,6 +291,21 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>Drops outlines whose sprites went away with an unloaded scene.</summary>
     private void HandleSceneUnloaded(Scene scene)
     {
+        PurgeDeadOutlines();
+
+        _lastHitObject = null;
+        _lastCandidate = null;
+        _hovered = null;
+    }
+
+    /// <summary>
+    /// Drops the outlines of destroyed renderers (an unloaded scene's sprites,
+    /// the papers of a finished case) with their generated sprites and textures.
+    /// Runs when a scene unloads and before a new outline is created, so the
+    /// cache holds at most the last case's dead papers.
+    /// </summary>
+    private void PurgeDeadOutlines()
+    {
         var dead = new List<SpriteRenderer>();
         foreach (KeyValuePair<SpriteRenderer, WorldOutline> pair in _worldOutlines)
         {
@@ -302,10 +318,6 @@ public sealed class HoverHighlighter : MonoBehaviour
             DestroyOutlineSprite(_worldOutlines[key]);
             _worldOutlines.Remove(key);
         }
-
-        _lastHitObject = null;
-        _lastCandidate = null;
-        _hovered = null;
     }
 
     /// <summary>Destroys a generated outline sprite and its texture.</summary>
