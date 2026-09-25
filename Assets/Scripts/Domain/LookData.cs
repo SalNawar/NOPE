@@ -44,8 +44,18 @@ public sealed class LookItem
     /// <summary>Garment slots this item hides (a turban covers the hair).</summary>
     public List<LookSlot> covers = new();
 
+    /// <summary>
+    /// Key token that replaces the place's nation in this item's art file
+    /// names, so places of one era share a drawing ("neutral" gives
+    /// hair_{g}_neutral_future_{colour}); blank = the item's own place.
+    /// </summary>
+    public string artNation;
+
     /// <summary>True when there is an item (a non-blank label).</summary>
     public bool IsPresent => !string.IsNullOrWhiteSpace(label);
+
+    /// <summary>The nation token this item's art is filed under: <see cref="artNation"/>, or the place's nation when that is blank (the one home of the override).</summary>
+    public string ArtNation(string placeNationId) => string.IsNullOrWhiteSpace(artNation) ? placeNationId : artNation;
 }
 
 /// <summary>What one gender of a place wears, and which slot holds its signature item.</summary>
