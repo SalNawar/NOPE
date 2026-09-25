@@ -1,6 +1,6 @@
 # Office palette: 20 colours
 
-2026-09-26. This proposal responds to the repeated-blue feedback. It supersedes the earlier blue-heavy screen study. It is not yet an approved Unity material change.
+2026-09-26. This proposal responds to the repeated-blue feedback. It supersedes the earlier blue-heavy screen study. The colours and textures are now applied in Unity, with the PC explicitly excluded. See [applied report](../Applied/README.md) and [actual GameView](../Applied/runtime.png).
 
 ![Exact colour swatches](palette-20.svg)
 
@@ -10,7 +10,7 @@ These are exact sRGB **base colours**, not an indexed limit on rendered pixels. 
 
 | # | Colour | Hex | Role |
 |---|---|---|---|
-| 01 | Porcelain | `#F0EFEB` | PC shell, mouse and stapler |
+| 01 | Porcelain | `#F0EFEB` | Mouse and stapler; PC excluded from implementation |
 | 02 | Paper | `#FFF2D9` | Forms and key legends |
 | 03 | Graphite | `#353239` | Lamp shade, NEXT housing, cables |
 | 04 | Ink | `#211F26` | Screens, lettering and deep seams |
@@ -33,14 +33,20 @@ These are exact sRGB **base colours**, not an indexed limit on rendered pixels. 
 
 ## Screen application
 
-Mood assessment: warm, nostalgic and welcoming, with a strange sci-fi focal point. The dystopian atmosphere is still weak. Proposed target for further discussion: a comfortable personal desk inside an imposing, impersonal institution. Lighting, architectural scale and repeated crowds should carry that tension; avoid making the palette uniformly dull. This mood target has not yet been approved.
+The user clarified the setting: an ill-maintained government building offers compulsory travel into the past as an opportunity to pay debt. It should look pleasant on the surface but feel disturbing. Screens 03 and 04 develop this direction using selective neglect and optimistic debt-relief messaging. See [current mood and layout](MOOD_AND_LAYOUT.md) for confirmed setting, proposed storytelling and the five requested desk-layout changes. These remain generated previews. The later Unity pass applied colours/textures and crowd clearance only; desk-layout and storytelling additions remain concepts.
+
+Latest preview:
+
+![Current mood and desk layout](screen-04-layout.png)
+
+Earlier colour-only study:
 
 ![Screen paint-over](screen-02.png)
 
 Generated with the built-in image tool using the original Unity screenshot for layout and the previous study for quiet wood/lighting. The exact prompt is in [screen-02.prompt.md](screen-02.prompt.md). The paint-over illustrates colour relationships; the swatches/JSON define exact values. It is not a runtime capture or a promise of pixel-perfect geometry preservation. The earlier lamp drift has been corrected to a banker's lamp in the preview. Preserve the actual in-game geometry, floor, placements and glass transmission during implementation.
 
-No blanket hue replacement: the desk pad is burgundy leather, till aubergine enamel, phone coral plastic, tray lavender plastic, cup mustard ceramic, and lamp charcoal metal. PC/mouse/stapler use neutral porcelain; warm lighting must not turn the PC into yellowed beige. Portal energy is the only strong blue area; its casing stays coherent aluminium. Independently coloured buildings remain visible through glass.
+No blanket hue replacement: the desk pad is burgundy leather, till aubergine enamel, phone coral plastic, tray lavender plastic, cup mustard ceramic, and lamp charcoal metal. Mouse/stapler use neutral porcelain. The user later explicitly excluded the PC, so its current materials and appearance are preserved. Portal energy is the only strong blue area; its casing stays coherent aluminium. Independently coloured buildings remain visible through glass.
 
-Keep the tabletop quiet: broad smooth walnut boards, very faint grain and soft value changes. Use normal material logic for related repeats (paper, metal, wood), and distinct coloured finishes for unrelated large props. Preserve the original floor; Stone is only a reference to its existing colour. Character work stays paused.
+Keep the tabletop quiet: broad smooth walnut boards, very faint grain and soft value changes. Use normal material logic for related repeats (paper, metal, wood), and distinct coloured finishes for unrelated large props. Preserve the original floor; Stone is only a reference to its existing colour. Character generation resumed after the applied office pass was verified.
 
-Only the earlier four flag SpriteRenderer conversions are applied in Unity. This folder contains the palette proposal, deterministic SVG swatches, machine-readable JSON, and generated screen illustration. No Unity assets were modified by this revision.
+This folder preserves the palette guide and generated concepts. Applied Unity changes and validation are recorded in ../Applied/. The earlier four flag SpriteRenderers are retained.

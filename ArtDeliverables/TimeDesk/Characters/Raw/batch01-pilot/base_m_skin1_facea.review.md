@@ -1,6 +1,6 @@
 # Raw pilot review — superseded first candidate
 
-The notes below describe the first generation, now preserved as `revisions/base_m_skin1_facea_initial.png`. The canonical base was replaced on 2026-09-25 by a second generation from the original figure guide. Its measured visible bounds are x297–726, y254–1499, closer to the target scalp y260 / soles y1490. It is still a raw candidate needing exact registration and colour normalization, not an approved game-ready layer. A working magenta mannequin has been generated from it for the clothing pilot. Character production is paused while Saleh chooses a new game palette.
+The notes below describe the first generation, now preserved as `revisions/base_m_skin1_facea_initial.png`. The canonical base was replaced on 2026-09-25 by a second generation from the original figure guide. Its measured visible bounds are x297–726, y254–1499, closer to the target scalp y260 / soles y1490. It is still a raw candidate needing exact registration and colour normalization, not an approved game-ready layer. A working magenta mannequin has been generated from it for the clothing pilot. Character production resumed on 2026-09-26 after the office material pass; see Production/STATUS.md and REVIEW_2026-09-26.md.
 
 First generation, built-in image tool, 25 September 2026. Saved unchanged as `base_m_skin1_facea.png` (1024 × 1536, RGB PNG). Prompt and both source references are preserved alongside it / under `Characters/References`.
 
