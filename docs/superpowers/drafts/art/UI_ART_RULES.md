@@ -98,7 +98,7 @@ The papers the traveller hands over lie on the desk as lit quads 0.26 x 0.34 m (
 
 The room and its props are the art side's models. The game finds them through the named-anchor contract (`docs/SCENE_CONTRACT_GAMEPLAY.md`) and never edits the art scene.
 
-- **The scanner.** Until the art has one, the gameplay layer shows a stand-in flatbed (0.40 x 0.32 m) at the default pose (1.08, 1.06, -0.33). An art scanner needs:
+- **The scanner.** Until the art has one, the gameplay layer shows a stand-in flatbed (0.40 x 0.32 m) at the default pose (1.02, 1.06, -0.46). An art scanner needs:
   - an empty `Anchor_Scanner` (under the `GameplayAnchors` root) with the scanner model's renderers under it; when the anchor has renderers, the stand-in hides;
   - its footprint becomes the **drop area**: the world-aligned bounds of every active renderer under the anchor, so keep the model square to the desk and keep cables and stands out of it (they would enlarge the area), about 0.40 x 0.32 m like the stand-in (a paper is 0.26 x 0.34 m);
   - a **flat top**: the top of those bounds (plus 2 mm) is where a scanned paper lies, so a lid is closed flat or left off (a raised lid would float the paper at its height);
