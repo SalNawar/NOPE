@@ -1411,19 +1411,16 @@ public static partial class OfficeSceneUIBuilder
     private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
 
     /// <summary>Placeholder arrow outline, in top-left pixel coordinates of a 32x32 cursor.</summary>
-    private static readonly Vector2[] ArrowCursorShape =
+    private static readonly (float x, float y)[] ArrowCursorShape =
     {
-        new Vector2(0, 0), new Vector2(0, 22), new Vector2(5, 17), new Vector2(9, 26),
-        new Vector2(12, 25), new Vector2(8, 16), new Vector2(15, 16),
+        (0, 0), (0, 22), (5, 17), (9, 26), (12, 25), (8, 16), (15, 16),
     };
 
     /// <summary>Placeholder pointing hand (fingertip at 12,1), top-left pixel coordinates.</summary>
-    private static readonly Vector2[] HandCursorShape =
+    private static readonly (float x, float y)[] HandCursorShape =
     {
-        new Vector2(10, 1), new Vector2(13, 1), new Vector2(14, 2), new Vector2(14, 12),
-        new Vector2(21, 13), new Vector2(23, 15), new Vector2(23, 25), new Vector2(19, 30),
-        new Vector2(10, 30), new Vector2(6, 24), new Vector2(5, 18), new Vector2(7, 17),
-        new Vector2(10, 19),
+        (10, 1), (13, 1), (14, 2), (14, 12), (21, 13), (23, 15), (23, 25), (19, 30),
+        (10, 30), (6, 24), (5, 18), (7, 17), (10, 19),
     };
 
     /// <summary>
@@ -1503,7 +1500,7 @@ public static partial class OfficeSceneUIBuilder
     /// Returns the cursor texture named <paramref name="artName"/> (final art, anywhere
     /// under Assets) or a generated placeholder, with Cursor import settings applied.
     /// </summary>
-    private static Texture2D EnsureCursorTexture(string artName, Vector2[] placeholderShape)
+    private static Texture2D EnsureCursorTexture(string artName, (float x, float y)[] placeholderShape)
     {
         const int size = 32;
         Texture2D art = FindAssetByName<Texture2D>(artName);
@@ -1527,27 +1524,14 @@ public static partial class OfficeSceneUIBuilder
 
 
     /// <summary>Placeholder cursor pixel: white inside the polygon, 1 px black edge, clear outside.</summary>
-    private static Color32 CursorPixel(Vector2[] polygon, int x, int y, int size)
+    private static Color32 CursorPixel((float x, float y)[] polygon, int x, int y, int size)
     {
-        bool Inside(int px, int py) => InPolygon(polygon, px + 0.5f, (size - 1 - py) + 0.5f);
+        bool Inside(int px, int py) => PixelShapes.InPolygon(polygon, px + 0.5f, (size - 1 - py) + 0.5f);
 
         if (!Inside(x, y))
             return new Color32(0, 0, 0, 0);
         bool edge = !Inside(x - 1, y) || !Inside(x + 1, y) || !Inside(x, y - 1) || !Inside(x, y + 1);
         return edge ? new Color32(0, 0, 0, 255) : new Color32(255, 255, 255, 255);
-    }
-
-    /// <summary>Even-odd point-in-polygon test.</summary>
-    private static bool InPolygon(Vector2[] polygon, float px, float py)
-    {
-        bool inside = false;
-        for (int i = 0, j = polygon.Length - 1; i < polygon.Length; j = i++)
-        {
-            if ((polygon[i].y > py) != (polygon[j].y > py) &&
-                px < (polygon[j].x - polygon[i].x) * (py - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x)
-                inside = !inside;
-        }
-        return inside;
     }
 
     /// <summary>
