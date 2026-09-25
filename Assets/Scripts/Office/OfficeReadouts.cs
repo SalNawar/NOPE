@@ -8,8 +8,10 @@ using UnityEngine;
 /// its own colour while stability is healthy. The texts are the art
 /// office's own (the office binder hands them over through Bind), or the
 /// gameplay layer's fallback HUD where the art has none. Polls WorldState each
-/// frame from the RunManager so it stays decoupled from GameManager. Every
-/// target is optional and null-safe.
+/// frame from the RunManager so it stays decoupled from GameManager, and (as
+/// ShiftClockReadouts) formats a text only when its value changes, so the
+/// office allocates nothing per frame (audit R5-004: re-formatting every frame
+/// allocated about 100 B). Every target is optional and null-safe.
 /// </summary>
 public sealed class OfficeReadouts : MonoBehaviour
 {
@@ -41,6 +43,15 @@ public sealed class OfficeReadouts : MonoBehaviour
     /// <summary>True once we have a baseline money value.</summary>
     private bool _hasLast;
 
+    /// <summary>The day last written (int.MinValue: none yet, so the next frame writes).</summary>
+    private int _shownDay = int.MinValue;
+
+    /// <summary>The stability last written (NaN: none yet; NaN equals nothing, so the next frame writes).</summary>
+    private float _shownStability = float.NaN;
+
+    /// <summary>The credits last written (int.MinValue: none yet).</summary>
+    private int _shownMoney = int.MinValue;
+
     /// <summary>Sets the texts the readouts write (the office binder: the art's, or the fallback HUD's; null skips one).</summary>
     public void Bind(TMP_Text day, TMP_Text stability, TMP_Text credits)
     {
@@ -49,6 +60,9 @@ public sealed class OfficeReadouts : MonoBehaviour
         _creditsText = credits;
         if (stability != null)
             _stabilityColour = stability.color;
+        _shownDay = int.MinValue;
+        _shownStability = float.NaN;
+        _shownMoney = int.MinValue;
     }
 
     private void Update()
@@ -59,26 +73,36 @@ public sealed class OfficeReadouts : MonoBehaviour
         Apply(RunManager.Instance.World);
     }
 
-    /// <summary>Refreshes every readout from world state (null-safe).</summary>
+    /// <summary>Refreshes every readout from world state (null-safe): a text is re-formatted only when its value changed since it was last written; the stability tint is kept every frame.</summary>
     private void Apply(WorldState world)
     {
         if (world == null)
             return;
 
-        if (_dayText != null)
+        if (_dayText != null && world.day != _shownDay)
+        {
             _dayText.text = world.day.ToString("00");
+            _shownDay = world.day;
+        }
 
         if (_stabilityText != null)
         {
-            _stabilityText.text = $"{world.timelineStability:0}%";
+            if (world.timelineStability != _shownStability)
+            {
+                _stabilityText.text = $"{world.timelineStability:0}%";
+                _shownStability = world.timelineStability;
+            }
             _stabilityText.color =
                 world.timelineStability < redBelow ? redColor :
                 world.timelineStability < amberBelow ? amberColor :
                 _stabilityColour;
         }
 
-        if (_creditsText != null)
+        if (_creditsText != null && world.money != _shownMoney)
+        {
             _creditsText.text = world.money.ToString();
+            _shownMoney = world.money;
+        }
 
         if (_hasLast && world.money > _lastMoney &&
             creditsDing != null && creditsDing.clip != null)
