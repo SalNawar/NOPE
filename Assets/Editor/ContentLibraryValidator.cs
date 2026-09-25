@@ -606,8 +606,9 @@ public static class ContentLibraryValidator
     /// Reports places with missing or duplicate facts, no names, unset or
     /// inverted birth years, no year, a Culture fact that is not the one the
     /// wardrobe gives (or wider than a book row), a gender look without outfit,
-    /// hair or signature item, look weights with no positive sum, and (a
-    /// warning) a signature that is the whole outfit, which can never leak.
+    /// hair or signature item, an item art nation that is not a key token,
+    /// look weights with no positive sum, and (a warning) a signature that is
+    /// the whole outfit, which can never leak.
     /// </summary>
     private static int CheckPlaces(ContentLibrarySO lib)
     {
@@ -657,7 +658,7 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>A place's look: year, the derived Culture fact, both genders' looks and the weights.</summary>
+    /// <summary>A place's look: year, the derived Culture fact, both genders' looks, their items' art nations and the weights.</summary>
     private static int CheckPlaceLook(NationEraProfileSO place, ContentLibrarySO lib)
     {
         int issues = 0;
@@ -690,6 +691,13 @@ public static class ContentLibraryValidator
             {
                 Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has the whole outfit as its {gender} signature, so it can never leak as a dress tell ('{lib.name}').", place);
                 issues++;
+            }
+
+            foreach (LookSlot slot in Looks.Slots)
+            {
+                LookItem item = look.Item(slot);
+                if (item != null && item.IsPresent && !string.IsNullOrEmpty(item.artNation) && !LookKeys.IsToken(item.artNation))
+                    Error($"files its {gender} {Looks.SlotLabel(slot)} '{item.label}' under art nation '{item.artNation}', which is not a key token (lowercase letters and digits)");
             }
         }
 
@@ -1047,8 +1055,9 @@ public static class ContentLibraryValidator
     /// <summary>
     /// Logs (never counted as an issue) how many character art keys have final
     /// art at CharacterArt.AssetFolder: the bases, every place's garments and
-    /// every premade's expressions, with the first 20 missing names (the rest
-    /// are drawn as placeholders at runtime).
+    /// every premade's expressions, each distinct name once (a drawing places
+    /// share through an item's artNation counts once), with the first 20
+    /// missing names (the rest are drawn as placeholders at runtime).
     /// </summary>
     private static void ReportCharacterArt(ContentLibrarySO lib)
     {
