@@ -13,7 +13,7 @@ public sealed class CitizenRecord
     /// <summary>Recorded date of birth.</summary>
     public string birthDate;
 
-    /// <summary>Where/when this citizen belongs ("Latia — Ancient Rome").</summary>
+    /// <summary>The registered origin label (a liar's is their claimed cover origin; records never show a true home).</summary>
     public string origin;
 
     /// <summary>Clerk's note — flavor now, easter eggs and plot hooks later.</summary>

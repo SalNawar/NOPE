@@ -1,0 +1,152 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_japan_industrial
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: japan_industrial
+  displayName: Meiji Nagoya
+  nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
+  era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1899
+  tongue: japanese
+  birthYearMin: 1829
+  birthYearMax: 1881
+  facts:
+  - category: 4
+    value: Yen (gold standard, 1897)
+  - category: 0
+    value: Japanese (Nagoya dialect)
+  - category: 3
+    value: Toyoda power loom (1896)
+  - category: 5
+    value: Tokyo City (Tokyo-shi)
+  - category: 2
+    value: Emperor Meiji (Mutsuhito)
+  - category: 6
+    value: bowler hat / sokuhatsu
+  maleNames:
+  - Kinjiro
+  - Tokujiro
+  - Seitaro
+  - Kumakichi
+  - Tomekichi
+  - Heisaku
+  - Tsunekichi
+  - Yasujiro
+  femaleNames:
+  - Ume
+  - Haru
+  - Hana
+  - Masa
+  - Tome
+  - Fusa
+  - Shizu
+  - Toshi
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: haori and hakama
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: zangiri crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: trimmed moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: bowler hat
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 1
+      outfit:
+        label: yagasuri and hakama
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: sokuhatsu
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4.2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

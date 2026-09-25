@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -89,15 +91,46 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.EndArea();
     }
 
-    /// <summary>Cheats tab: day skip, money/stability adjust, flags, force legendary, upgrades.</summary>
+    /// <summary>Cheats tab: day skip, history (force leader), money/stability adjust, flags, force legendary, upgrades.</summary>
     private void DrawCheatsTab(RunManager run, WorldState world, ContentLibrarySO lib)
     {
         GUILayout.Label("Day flow");
 
-        if (GUILayout.Button("Skip Day (nightly resolve + advance)"))
+        if (GUILayout.Button("Skip Day (sleep: endings + nightly resolve + advance)"))
         {
-            Debug.Log("[DebugPanelController] Cheat: Skip Day requested.");
-            run.AdvanceToNextDay();
+            Debug.Log("[DebugPanelController] Cheat: Skip Day requested (through Sleep).");
+            run.Sleep();
+        }
+
+        if (lib != null)
+        {
+            GUILayout.Space(6f);
+            GUILayout.Label("History (force leader)");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("No leader"))
+            {
+                Debug.Log("[DebugPanelController] Cheat: No leader.");
+                HistoryService.ForceLeader(world, lib, null);
+            }
+
+            int shown = 1;
+            foreach (NationSO nation in lib.Nations)
+            {
+                if (nation == null)
+                    continue;
+                if (shown++ % 5 == 0)
+                {
+                    GUILayout.EndHorizontal();
+                    GUILayout.BeginHorizontal();
+                }
+                if (GUILayout.Button(nation.displayName))
+                {
+                    Debug.Log($"[DebugPanelController] Cheat: Force leader '{nation.id}'.");
+                    HistoryService.ForceLeader(world, lib, nation.id);
+                }
+            }
+            GUILayout.EndHorizontal();
+            GUILayout.Label("Kept every night this session; the Future follows at the next office day.");
         }
 
         GUILayout.Space(6f);
@@ -206,7 +239,7 @@ public sealed class DebugPanelController : MonoBehaviour
         }
     }
 
-    /// <summary>Timeline Inspector tab: live scores, dominance tiers, active effects.</summary>
+    /// <summary>Timeline Inspector tab: live scores, dominance tiers, active effects, history.</summary>
     private void DrawInspectorTab(WorldState world, ContentLibrarySO lib)
     {
         if (GUILayout.Button("Dump full state to console"))
@@ -244,6 +277,43 @@ public sealed class DebugPanelController : MonoBehaviour
 
             GUILayout.Label($"  {name} — {entry.sourceLabel} (started day {entry.startDay}, {remaining})");
         }
+
+        GUILayout.Space(6f);
+        foreach (string line in HistorySummary(world))
+            GUILayout.Label(line);
+
+        GUILayout.Space(6f);
+        foreach (string line in CultureSummary())
+            GUILayout.Label(line);
+    }
+
+    /// <summary>The present culture as the inspector prints it (piece 6): the cue's culture, the theme, label language, font, wallet word and missing UI strings.</summary>
+    private static IEnumerable<string> CultureSummary()
+    {
+        CultureThemeService s = CultureThemeService.Instance;
+        if (s == null)
+        {
+            yield return "Present culture: no theme service (run Tools > TimeDesk > Generate World)";
+            yield break;
+        }
+        yield return $"Present culture: {s.ActiveCultureId ?? "neutral"} (cue)";
+        yield return $"Theme: {s.ActiveTheme.displayName} · labels: {s.Language} · font: {s.FontName} · wallet: {UiText.Currency(UiText.WalletForm.Label)}";
+        yield return $"Missing UI strings: {s.Strings.MissingKeys.Count}";
+    }
+
+    /// <summary>The history as the inspector and the state dump print it: leader, ranking, fact edits, pending carries.</summary>
+    private static IEnumerable<string> HistorySummary(WorldState world)
+    {
+        HistoryState h = world.history;
+        string forced = !string.IsNullOrEmpty(DevToolsState.ForcedLeaderId) ? " (forced)" : string.Empty;
+        yield return $"History: leader '{h.leaderId}' (since day {h.leaderSinceDay}){forced}";
+        yield return $"Ranking: {string.Join(", ", h.ranking.Select(r => $"{r.id} {r.score:0.#}"))}";
+        yield return $"Fact edits ({h.factEdits.Count}):";
+        foreach (FactEdit e in h.factEdits.Where(e => e != null))
+            yield return $"  {e.nationId}_{e.eraId} {e.category} = '{e.value}' (from day {e.sinceDay}, {e.cause}: {e.source})";
+        yield return $"Pending carries ({h.pendingCarries.Count}):";
+        foreach (CarryRecord c in h.pendingCarries.Where(c => c != null))
+            yield return $"  {c.fromNationId}_{c.fromEraId} -> {c.toNationId}_{c.toEraId}: '{c.value}' ({c.category}, day {c.day})";
     }
 
     /// <summary>Adds to world.money and logs the change.</summary>
@@ -299,6 +369,9 @@ public sealed class DebugPanelController : MonoBehaviour
             string name = effect != null ? effect.displayName : entry.effectId;
             sb.AppendLine($"  {name} — {entry.sourceLabel} (startDay={entry.startDay}, durationDays={entry.durationDays})");
         }
+
+        foreach (string line in HistorySummary(world))
+            sb.AppendLine(line);
 
         Debug.Log(sb.ToString());
     }

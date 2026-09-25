@@ -8,8 +8,9 @@ using UnityEngine;
 /// - If WorldState.endingId is set: shows the ending panel (display name +
 ///   body from the matching EndingSO) with a New Run option that clears the
 ///   save and starts fresh.
-/// - Otherwise: shows the title panel with Continue (only if a save exists)
-///   and New Run.
+/// - Otherwise: shows the title panel with Continue (only if a save exists;
+///   it resumes where the save was made: Home after the end-of-shift save,
+///   otherwise the Office) and New Run.
 ///
 /// If TitleUIController has no panels wired, degrades straight to the office
 /// scene so the loop stays playable before the title UI is built.
@@ -51,19 +52,19 @@ public sealed class TitleSceneController : MonoBehaviour
         }
 
         // No title UI wired yet: keep the loop playable.
-        Debug.Log("[TitleSceneController] <<< Exiting Start (no title UI wired, loading Office directly).");
-        run.LoadOfficeScene();
+        Debug.Log("[TitleSceneController] <<< Exiting Start (no title UI wired, resuming the run directly).");
+        run.ResumeRun();
     }
 
-    /// <summary>Resumes the current (saved) run.</summary>
+    /// <summary>Resumes the current (saved) run where the save was made (RunManager.ResumeRun).</summary>
     private void HandleContinue()
     {
         Debug.Log("[TitleSceneController] >>> Entering HandleContinue.");
 
         if (RunManager.HasInstance)
         {
-            Debug.Log("[TitleSceneController] <<< Exiting HandleContinue (loading Office).");
-            RunManager.Instance.LoadOfficeScene();
+            Debug.Log("[TitleSceneController] <<< Exiting HandleContinue (RunManager.ResumeRun).");
+            RunManager.Instance.ResumeRun();
         }
         else
         {

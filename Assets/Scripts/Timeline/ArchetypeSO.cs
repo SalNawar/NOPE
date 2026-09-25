@@ -23,9 +23,6 @@ public sealed class ArchetypeSO : ScriptableObject
     /// </summary>
     public string[] tags;
 
-    /// <summary>Optional visitor name pool; falls back to "Subject #N".</summary>
-    public string[] namePool;
-
     /// <summary>Relative weight for procedural archetype selection (before effect modifiers).</summary>
     [Min(0f)]
     public float baseWeight = 1f;

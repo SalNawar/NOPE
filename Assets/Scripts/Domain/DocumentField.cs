@@ -21,9 +21,10 @@ public sealed class DocumentFieldSpec
 
 /// <summary>
 /// A runtime, concrete field on a generated document: the label the visitor's
-/// papers show, the value printed, and whether that value is an anachronism
-/// (inconsistent with the claimed nation+era per the reference books).
-/// Reference type so generation can flag forgeries after the list is built.
+/// papers show, the value printed, and whether that value is a liar's tell
+/// (anachronistic for the claimed nation+era per the reference books or the
+/// agency record). Reference type so generation can apply a lie's tells after
+/// the list is built.
 /// </summary>
 public sealed class DocumentField
 {
@@ -39,6 +40,6 @@ public sealed class DocumentField
     /// <summary>0-based page this field is on.</summary>
     public int page;
 
-    /// <summary>True if this value is forged/anachronistic for the claim.</summary>
+    /// <summary>True if this value is a liar's tell (anachronistic for the claim).</summary>
     public bool isAnachronism;
 }

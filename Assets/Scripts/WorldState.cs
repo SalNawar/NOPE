@@ -53,7 +53,7 @@ public sealed class WorldState
     /// <summary>Bonus added to legendary chance per case (0..1).</summary>
     public float legendaryChanceBonus;
 
-    /// <summary>Additive modifier to contradiction/forgery chance for generated cases.</summary>
+    /// <summary>Additive modifier to the liar chance (and the legacy per-clue contradiction chance).</summary>
     public float forgeryChanceModifier;
 
     /// <summary>Multiplier applied to case pay (1 = normal).</summary>
@@ -63,7 +63,7 @@ public sealed class WorldState
     // Unlocks, flags, counters
     // -----------------------------
 
-    /// <summary>Unlocked upgrade IDs for gating clue generation and shop state.</summary>
+    /// <summary>Unlocked upgrade IDs for gating clue generation, interview questions and shop state.</summary>
     public List<string> unlockedUpgradeIds = new();
 
     /// <summary>Arbitrary boolean story/consequence flags (e.g., "Tyrant_Rises").</summary>
@@ -87,6 +87,12 @@ public sealed class WorldState
 
     /// <summary>Resolved "tomorrow package" computed at sleep (briefing, news, modifiers).</summary>
     public TomorrowPackage tomorrow = new();
+
+    /// <summary>History: the timeline leader, latched fact edits and pending carries (piece 5; an old save loads it empty).</summary>
+    public HistoryState history = new();
+
+    /// <summary>Where Continue resumes: the Office until the day's shift ends, Home after the end-of-shift save (a save without it resumes in the Office).</summary>
+    public RunPhase phase = RunPhase.Office;
 
     // -----------------------------
     // Flag helpers
@@ -157,6 +163,16 @@ public sealed class WorldState
         if (!string.IsNullOrEmpty(upgradeId) && !unlockedUpgradeIds.Contains(upgradeId))
             unlockedUpgradeIds.Add(upgradeId);
     }
+}
+
+/// <summary>Where a saved run resumes. Serialized as ints: append only.</summary>
+public enum RunPhase
+{
+    /// <summary>The day's office shift (or the start of a run).</summary>
+    Office,
+
+    /// <summary>After the day's end-of-shift save: the Home phase, then sleep.</summary>
+    Home
 }
 
 /// <summary>Serializable named counter.</summary>

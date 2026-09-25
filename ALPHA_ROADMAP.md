@@ -73,8 +73,9 @@ This doc is the handoff state for any work session. Update the checkboxes as pha
 - [ ] Phase 6 — Dev tools: in-game debug panel (skip day, +money, set flags,
       force legendary, unlock upgrades), timeline inspector (live scores/dominance/
       active effects), editor ContentLibrary validator menu item.
-- [x] Phase 7 — Content pass: editor tool Tools > TimeDesk > Generate Phase 7 Content
-      (Assets/Editor/Phase7ContentGenerator.cs) authors Day 2-3 plans, 6 archetypes,
+- [x] Phase 7 — Content pass (generator since removed; its archetypes, attributes,
+      upgrades, slot outcomes, endings and triggers remain as authored assets, and
+      Tools > TimeDesk > Generate World now builds the world) authored Day 2-3 plans, 6 archetypes,
       5 nations x era profiles (Greece/NGermany/Japan/Egypt/China) with 3 attributes
       (Democracy, Science, Art) and 30 dominant/supporting BriefingLine effects,
       21 nation legendaries (3 per nation) + 6 unaffiliated "famous" legendaries

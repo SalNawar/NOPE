@@ -28,4 +28,19 @@ public class ReadyGateTests
 
         Assert.AreEqual(0, released);
     }
+
+    [Test]
+    public void Disarm_CancelsTheWait_WithoutFiring()
+    {
+        var gate = new ReadyGate();
+        int released = 0;
+        gate.Released += () => released++;
+
+        gate.Arm();
+        gate.Disarm();
+        gate.Release();
+
+        Assert.IsFalse(gate.IsArmed);
+        Assert.AreEqual(0, released);
+    }
 }

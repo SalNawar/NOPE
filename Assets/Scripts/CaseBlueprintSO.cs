@@ -25,7 +25,11 @@ public sealed class CaseBlueprintSO : ScriptableObject
     /// <summary>Maximum number of clue lines to inject into the case.</summary>
     [SerializeField, Min(0)] private int totalCluesMax = 4;
 
-    /// <summary>Chance per clue line to be a contradiction (lie/anachronism).</summary>
+    /// <summary>
+    /// Chance per traveller to be a liar (plus the WorldState and effect
+    /// modifiers). The legacy clue path also reads it as the chance per clue
+    /// line to be a contradiction.
+    /// </summary>
     [Header("Lie / Misdirection")]
     [SerializeField, Range(0f, 1f)] private float contradictionChance = 0.25f;
 

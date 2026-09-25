@@ -2,29 +2,11 @@
 using UnityEngine;
 
 /// <summary>
-/// Condition type for an ending. Unused fields are ignored per type
-/// (see EndingService for evaluation logic).
-/// </summary>
-public enum EndingConditionType
-{
-    /// <summary>Timeline stability has dropped to GameConfigSO.firedAtStability or below.</summary>
-    Fired,
-
-    /// <summary>Player money has dropped to GameConfigSO.bankruptcyMoneyThreshold or below.</summary>
-    Bankrupt,
-
-    /// <summary>A global attribute total (TimelineKeys.GlobalAttr) is >= threshold. Uses attribute + threshold.</summary>
-    AttrTotalAtLeast,
-
-    /// <summary>Current day is >= threshold. Uses threshold.</summary>
-    DayAtLeast
-}
-
-/// <summary>
-/// A possible run outcome ("fired", "bankrupt", "timeline collapses into chaos",
-/// "you survived to retirement"). EndingService.Evaluate checks every EndingSO in
-/// the content library each time a game-over check runs and picks the
-/// highest-priority match.
+/// A possible run outcome ("fired", "bankrupt", "you survived to retirement",
+/// an attribute epilogue). EndingService.Evaluate checks every EndingSO in the
+/// content library each time an ending check runs; EndingRules.Select picks:
+/// failures at any check, and at the day boundary the milestone (Retirement),
+/// which an attribute ending whose total is reached replaces as its epilogue.
 /// </summary>
 [CreateAssetMenu(fileName = "Ending_", menuName = "TimeDesk/Endings/Ending", order = 30)]
 public sealed class EndingSO : ScriptableObject

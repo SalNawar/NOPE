@@ -1,3 +1,6 @@
+// TimeDesk (office move): an editor-only wizard outside an Editor folder breaks
+// player builds; wrapped so only the editor compiles it. Art-owned file.
+#if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
 using System.Collections;
@@ -44,3 +47,4 @@ public class ReplaceGameObjects : ScriptableWizard
  
     }
 }
+#endif

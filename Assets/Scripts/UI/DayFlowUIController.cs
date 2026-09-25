@@ -77,7 +77,7 @@ public sealed class DayFlowUIController : MonoBehaviour
         _onStartShift = onStartShift;
 
         if (briefingTitleText != null)
-            briefingTitleText.text = $"Day {world.day} — Morning Briefing";
+            briefingTitleText.text = UiText.Format("briefing.title", world.day);
 
         if (briefingBodyText != null)
         {
@@ -85,20 +85,20 @@ public sealed class DayFlowUIController : MonoBehaviour
 
             if (world.tomorrow.briefingLines.Count == 0 && world.tomorrow.newsLines.Count == 0)
             {
-                sb.AppendLine("No directives. Process subjects accurately.");
+                sb.AppendLine(UiText.Get("briefing.empty"));
             }
             else
             {
                 foreach (string line in world.tomorrow.briefingLines)
-                    sb.AppendLine("• " + line);
+                    sb.AppendLine(UiText.Format("list.bullet", line));
 
                 if (world.tomorrow.newsLines.Count > 0)
                 {
                     sb.AppendLine();
-                    sb.AppendLine("— TIMELINE NEWS —");
+                    sb.AppendLine(UiText.Get("briefing.newsHeader"));
 
                     foreach (string line in world.tomorrow.newsLines)
-                        sb.AppendLine("• " + line);
+                        sb.AppendLine(UiText.Format("list.bullet", line));
                 }
             }
 
@@ -123,28 +123,28 @@ public sealed class DayFlowUIController : MonoBehaviour
         _onGoHome = onGoHome;
 
         if (resultsTitleText != null)
-            resultsTitleText.text = $"Day {world.day} — Shift Report";
+            resultsTitleText.text = UiText.Format("results.title", world.day);
 
         if (resultsBodyText != null)
         {
             var sb = new System.Text.StringBuilder();
-            sb.AppendLine($"Subjects processed: {ledger.verdicts.Count}");
-            sb.AppendLine($"Correct: {ledger.CorrectCount}   Wrong: {ledger.WrongCount}");
+            sb.AppendLine(UiText.Format("results.processed", ledger.verdicts.Count));
+            sb.AppendLine(UiText.Format("results.correctWrong", ledger.CorrectCount, ledger.WrongCount));
             sb.AppendLine();
-            sb.AppendLine($"Pay earned: +{ledger.TotalPay}");
+            sb.AppendLine(UiText.Format("results.pay", ledger.TotalPay));
 
             if (ledger.TotalPenalties > 0)
-                sb.AppendLine($"Citation penalties: -{ledger.TotalPenalties}");
+                sb.AppendLine(UiText.Format("results.penalties", ledger.TotalPenalties));
 
-            sb.AppendLine($"Net: {ledger.NetMoney:+0;-0;0} credits   (Balance: {world.money})");
+            sb.AppendLine(UiText.Format("results.net", ledger.NetMoney, UiText.Currency(UiText.WalletForm.Inline), world.money));
             sb.AppendLine();
-            sb.AppendLine($"Timeline stability: {world.timelineStability:0}% ({ledger.TotalStabilityDelta:+0.#;-0.#;0} today)");
+            sb.AppendLine(UiText.Format("results.stability", world.timelineStability, ledger.TotalStabilityDelta));
 
             if (world.citationsToday > 0)
-                sb.AppendLine($"Citations today: {world.citationsToday}");
+                sb.AppendLine(UiText.Format("results.citations", world.citationsToday));
 
             if (ledger.UnprovenDenialCount > 0)
-                sb.AppendLine($"Undocumented denials: {ledger.UnprovenDenialCount} (scan the evidence before denying)");
+                sb.AppendLine(UiText.Format("results.unproven", ledger.UnprovenDenialCount));
 
             resultsBodyText.text = sb.ToString();
         }

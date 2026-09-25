@@ -1,0 +1,690 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567a3555c681439ea7087bd38a206262, type: 3}
+  m_Name: Strings_en
+  m_EditorClassIdentifier: Assembly-CSharp::UiStringTableSO
+  language: en
+  rightToLeft: 0
+  entries:
+  - key: accept
+    text: ACCEPT
+    gloss: 1
+    tier: 1
+  - key: deny
+    text: DENY
+    gloss: 1
+    tier: 1
+  - key: taskbar.start
+    text: start
+    gloss: 0
+    tier: 1
+  - key: startmenu.settings
+    text: Settings
+    gloss: 0
+    tier: 1
+  - key: startmenu.screenOff
+    text: Turn off screen
+    gloss: 0
+    tier: 1
+  - key: startmenu.quit
+    text: Quit game
+    gloss: 0
+    tier: 1
+  - key: briefing.masthead
+    text: THE TEMPORAL TIMES
+    gloss: 0
+    tier: 1
+  - key: briefing.start
+    text: START SHIFT
+    gloss: 1
+    tier: 1
+  - key: results.masthead
+    text: "SHIFT LEDGER \u2014 EVENING EDITION"
+    gloss: 0
+    tier: 1
+  - key: results.goHome
+    text: GO HOME
+    gloss: 1
+    tier: 1
+  - key: records.title
+    text: Citizen Records
+    gloss: 0
+    tier: 1
+  - key: records.search
+    text: SEARCH
+    gloss: 1
+    tier: 1
+  - key: compare.match
+    text: MATCH
+    gloss: 2
+    tier: 1
+  - key: compare.mismatch
+    text: MISMATCH
+    gloss: 2
+    tier: 1
+  - key: citation.title
+    text: TIMELINE DEVIATION NOTICE
+    gloss: 0
+    tier: 1
+  - key: citation.acknowledge
+    text: Acknowledge
+    gloss: 1
+    tier: 1
+  - key: window.directives
+    text: Directives
+    gloss: 0
+    tier: 1
+  - key: window.scanner
+    text: Deviation Report
+    gloss: 0
+    tier: 1
+  - key: window.settings
+    text: Settings
+    gloss: 0
+    tier: 1
+  - key: icon.directives
+    text: Directives
+    gloss: 0
+    tier: 1
+  - key: icon.scanner
+    text: Deviation Report
+    gloss: 0
+    tier: 1
+  - key: icon.records
+    text: Records
+    gloss: 0
+    tier: 1
+  - key: icon.internet
+    text: Internet
+    gloss: 0
+    tier: 1
+  - key: icon.lexicon
+    text: Lexicon
+    gloss: 0
+    tier: 1
+  - key: icon.dialect
+    text: Dialect
+    gloss: 0
+    tier: 1
+  - key: icon.material
+    text: Material
+    gloss: 0
+    tier: 1
+  - key: icon.notes
+    text: Notes
+    gloss: 0
+    tier: 1
+  - key: icon.clueLog
+    text: Clue Log
+    gloss: 0
+    tier: 1
+  - key: tray.day
+    text: Day {0}
+    gloss: 0
+    tier: 1
+  - key: tray.stability
+    text: 'Stability: {0:0}%'
+    gloss: 0
+    tier: 1
+  - key: taskbar.desk
+    text: < Desk
+    gloss: 1
+    tier: 1
+  - key: briefing.title
+    text: "Day {0} \u2014 Morning Briefing"
+    gloss: 0
+    tier: 1
+  - key: results.title
+    text: "Day {0} \u2014 Shift Report"
+    gloss: 0
+    tier: 1
+  - key: briefing.newsHeader
+    text: "\u2014 TIMELINE NEWS \u2014"
+    gloss: 0
+    tier: 1
+  - key: wallet.credits
+    text: Credits
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsInline
+    text: credits
+    gloss: 0
+    tier: 0
+  - key: wallet.creditsShort
+    text: cr
+    gloss: 0
+    tier: 0
+  - key: tray.money
+    text: '{0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: verdict.correct
+    text: CORRECT  (+{0} {1})
+    gloss: 0
+    tier: 0
+  - key: verdict.wrong
+    text: WRONG  ({0:+0.#;-0.#} stability)
+    gloss: 0
+    tier: 0
+  - key: verdict.wrongPenalty
+    text: WRONG  ({0:+0.#;-0.#} stability, -{1} {2})
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleCorrect
+    text: Correct
+    gloss: 0
+    tier: 0
+  - key: verdict.simpleWrong
+    text: Wrong
+    gloss: 0
+    tier: 0
+  - key: day.complete
+    text: Day {0} complete.
+    gloss: 0
+    tier: 0
+  - key: idle.waiting
+    text: Waiting for the next traveller
+    gloss: 0
+    tier: 0
+  - key: window.minimize
+    text: _
+    gloss: 0
+    tier: 0
+  - key: window.maximize
+    text: '[]'
+    gloss: 0
+    tier: 0
+  - key: window.close
+    text: X
+    gloss: 0
+    tier: 0
+  - key: window.prev
+    text: <
+    gloss: 0
+    tier: 0
+  - key: window.next
+    text: '>'
+    gloss: 0
+    tier: 0
+  - key: window.page
+    text: Page {0}/{1}
+    gloss: 0
+    tier: 0
+  - key: window.transcript
+    text: 'Case Notes: Interview'
+    gloss: 0
+    tier: 0
+  - key: window.internet
+    text: Internet - News
+    gloss: 0
+    tier: 0
+  - key: window.lexicon
+    text: Lexicon
+    gloss: 0
+    tier: 0
+  - key: window.dialect
+    text: Dialect
+    gloss: 0
+    tier: 0
+  - key: window.material
+    text: Material Analysis
+    gloss: 0
+    tier: 0
+  - key: window.notes
+    text: Sticky Notes
+    gloss: 0
+    tier: 0
+  - key: body.internet
+    text: Today's news feed. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: body.lexicon
+    text: Wikipedia-style era glossary. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: body.dialect
+    text: Notes on accents and phrasing. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: body.material
+    text: Flags tech/materials beyond the claimed era. (upgrade)
+    gloss: 0
+    tier: 0
+  - key: body.notes
+    text: Your notes. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: settings.language
+    text: UI language
+    gloss: 0
+    tier: 0
+  - key: settings.followHistory
+    text: Follow history
+    gloss: 0
+    tier: 0
+  - key: settings.alwaysEnglish
+    text: Always English
+    gloss: 0
+    tier: 0
+  - key: settings.motion
+    text: Motion
+    gloss: 0
+    tier: 0
+  - key: settings.motionFull
+    text: Full
+    gloss: 0
+    tier: 0
+  - key: settings.motionReduced
+    text: Reduced
+    gloss: 0
+    tier: 0
+  - key: settings.note
+    text: Colours, fonts and the wallpaper always follow history. A language change
+      applies the next time the office opens. Reduced motion shows translations at
+      once.
+    gloss: 0
+    tier: 0
+  - key: briefing.empty
+    text: No directives. Process subjects accurately.
+    gloss: 0
+    tier: 0
+  - key: list.bullet
+    text: "\u2022 {0}"
+    gloss: 0
+    tier: 0
+  - key: results.processed
+    text: 'Subjects processed: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.correctWrong
+    text: 'Correct: {0}   Wrong: {1}'
+    gloss: 0
+    tier: 0
+  - key: results.pay
+    text: 'Pay earned: +{0}'
+    gloss: 0
+    tier: 0
+  - key: results.penalties
+    text: 'Citation penalties: -{0}'
+    gloss: 0
+    tier: 0
+  - key: results.net
+    text: 'Net: {0:+0;-0;0} {1}   (Balance: {2})'
+    gloss: 0
+    tier: 0
+  - key: results.stability
+    text: 'Timeline stability: {0:0}% ({1:+0.#;-0.#;0} today)'
+    gloss: 0
+    tier: 0
+  - key: results.citations
+    text: 'Citations today: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.unproven
+    text: 'Undocumented denials: {0} (log a deviation before denying)'
+    gloss: 0
+    tier: 0
+  - key: scanner.idle
+    text: 'No deviations documented.
+
+
+      Compare a document field, a traveller''s
+      answer or a garment they wear against the claimed place''s reference entry,
+      the entry it really belongs to, or the Citizen Record to log evidence.'
+    gloss: 0
+    tier: 0
+  - key: scanner.summary
+    text: '{0} deviation(s) documented. Denial is justified.'
+    gloss: 0
+    tier: 0
+  - key: directives.none
+    text: 'Directives: all destinations cleared today.'
+    gloss: 0
+    tier: 0
+  - key: directives.header
+    text: 'Directives (deny violators):'
+    gloss: 0
+    tier: 0
+  - key: claim.banner
+    text: '{0}
+
+      "{1}"'
+    gloss: 0
+    tier: 0
+  - key: document.untitled
+    text: Document
+    gloss: 0
+    tier: 0
+  - key: document.compareLabel
+    text: "{0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: book.untitled
+    text: Reference
+    gloss: 0
+    tier: 0
+  - key: book.compareLabel
+    text: '{0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: book.revisedLabel
+    text: '{0}  [revised]'
+    gloss: 0
+    tier: 0
+  - key: compare.deviationLogged
+    text: "\u25CF  DEVIATION LOGGED \u2014 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.alreadyDocumented
+    text: "\u25CF  ALREADY DOCUMENTED \u2014 {0} is in the Deviation Report"
+    gloss: 0
+    tier: 0
+  - key: compare.pair
+    text: '{0}    {1}:  {2}    vs    {3}:  {4}'
+    gloss: 0
+    tier: 0
+  - key: compare.pickAnother
+    text: '{0}:  {1}    vs    (pick another value to compare)'
+    gloss: 0
+    tier: 0
+  - key: compare.travellerLabel
+    text: "Traveller \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.untranslated
+    text: (untranslated {0}; {1} Translator)
+    gloss: 0
+    tier: 0
+  - key: slot.Outfit
+    text: OUTFIT
+    gloss: 0
+    tier: 0
+  - key: slot.Hair
+    text: HAIR
+    gloss: 0
+    tier: 0
+  - key: slot.FacialHair
+    text: FACIAL HAIR
+    gloss: 0
+    tier: 0
+  - key: slot.Headwear
+    text: HEADWEAR
+    gloss: 0
+    tier: 0
+  - key: slot.Accessory
+    text: ACCESSORY
+    gloss: 0
+    tier: 0
+  - key: records.placeholder
+    text: "Type a full name\u2026"
+    gloss: 0
+    tier: 0
+  - key: records.idle
+    text: Type a citizen's name and press SEARCH.
+    gloss: 0
+    tier: 0
+  - key: records.noRecord
+    text: NO RECORD matching "{0}".
+    gloss: 0
+    tier: 0
+  - key: records.onFile
+    text: 'RECORD ON FILE:'
+    gloss: 0
+    tier: 0
+  - key: records.origin
+    text: 'Origin:  {0}'
+    gloss: 0
+    tier: 0
+  - key: records.compare.name
+    text: "Records \xB7 Name"
+    gloss: 0
+    tier: 0
+  - key: records.compare.born
+    text: "Records \xB7 Born"
+    gloss: 0
+    tier: 0
+  - key: citation.unproven
+    text: Deviation denied without documented evidence. Log a deviation from the
+      papers, the traveller's answers or their dress before denying.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong
+    text: Approved a disguised traveller or a forbidden destination.
+    gloss: 0
+    tier: 0
+  - key: citation.deniedWrong
+    text: Denied a legitimate, permitted traveler.
+    gloss: 0
+    tier: 0
+  - key: citation.misrouted
+    text: 'Subject misrouted: sent to ''{0}'', belonged to ''{1}''.'
+    gloss: 0
+    tier: 0
+  - key: citation.warning
+    text: "Warning {0}/{1} \u2014 no pay deduction."
+    gloss: 0
+    tier: 0
+  - key: citation.penalty
+    text: 'Penalty: -{0} {1}.'
+    gloss: 0
+    tier: 0
+  - key: citation.stability
+    text: Stability {0:+0.#;-0.#}
+    gloss: 0
+    tier: 0
+  - key: citation.layout
+    text: '{0}
+
+      {1}
+
+      {2}
+
+      {3}'
+    gloss: 0
+    tier: 0
+  - key: rule.unknownPlace
+    text: '?'
+    gloss: 0
+    tier: 0
+  - key: rule.eraForbidden
+    text: No travel permitted to {0}.
+    gloss: 0
+    tier: 0
+  - key: rule.nationForbidden
+    text: No travel permitted to {0}.
+    gloss: 0
+    tier: 0
+  - key: rule.nationEraForbidden
+    text: No travel permitted to {0} in {1}.
+    gloss: 0
+    tier: 0
+  - key: rule.generic
+    text: Travel restriction in effect.
+    gloss: 0
+    tier: 0
+  - key: desk.scanHint
+    text: Drag papers onto the scanner to read them on the PC.
+    gloss: 0
+    tier: 0
+  - key: desk.wheelHint
+    text: Click the traveller to talk and ask for papers.
+    gloss: 0
+    tier: 0
+  - key: desk.readyCaption
+    text: NEXT
+    gloss: 0
+    tier: 0
+  - key: tooltip.credits
+    text: '{1}: {0}'
+    gloss: 0
+    tier: 0
+  - key: tooltip.day
+    text: Day {0}
+    gloss: 0
+    tier: 0
+  - key: tooltip.stability
+    text: 'Timeline stability: {0}'
+    gloss: 0
+    tier: 0
+  - key: tooltip.value
+    text: '{0}'
+    gloss: 0
+    tier: 0
+  - key: fallback.claim
+    text: '{0}
+
+      "{1}"
+
+
+      {2}'
+    gloss: 0
+    tier: 0
+  - key: fallback.documents
+    text: "\u2014 DOCUMENTS PRESENTED \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.dress
+    text: "\u2014 TRAVELLER'S DRESS \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.garment
+    text: '    {0}: {1} ({2})'
+    gloss: 0
+    tier: 0
+  - key: fallback.document
+    text: '[{0}]'
+    gloss: 0
+    tier: 0
+  - key: fallback.field
+    text: '    {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: fallback.record
+    text: "\u2014 AGENCY RECORD \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.noRecord
+    text: '    No record on file.'
+    gloss: 0
+    tier: 0
+  - key: fallback.recordName
+    text: '    Name: {0}'
+    gloss: 0
+    tier: 0
+  - key: fallback.recordBorn
+    text: '    Born: {0}'
+    gloss: 0
+    tier: 0
+  - key: fallback.recordOrigin
+    text: '    Origin: {0}'
+    gloss: 0
+    tier: 0
+  - key: fallback.interview
+    text: "\u2014 INTERVIEW \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.answer
+    text: '    {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: fallback.reference
+    text: "\u2014 REFERENCE (claimed place) \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.bookEntry
+    text: '{0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: fallback.noEntry
+    text: (no entry)
+    gloss: 0
+    tier: 0
+  - key: fallback.accept
+    text: ACCEPT (approve travel)
+    gloss: 0
+    tier: 0
+  - key: fallback.deny
+    text: DENY (refuse travel)
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.papers
+    text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  expected: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.said
+    text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  expected: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.claimMismatch.worn
+    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  expected: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.papers
+    text: "{0} INCORRECT \u2014 papers show \"{1}\", which belongs to {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.said
+    text: "{0} INCORRECT \u2014 traveller said \"{1}\", which belongs to {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.foreignOrigin.worn
+    text: "{0} INCORRECT \u2014 traveller wears \"{1}\", which belongs to {2}"
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.papers
+    text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  agency records: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.said
+    text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  agency records: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.worn
+    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  agency records: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: category.Language
+    text: LANGUAGE
+    gloss: 0
+    tier: 0
+  - key: category.Material
+    text: MATERIAL
+    gloss: 0
+    tier: 0
+  - key: category.Politics
+    text: RULER
+    gloss: 0
+    tier: 0
+  - key: category.Technology
+    text: DEVICE
+    gloss: 0
+    tier: 0
+  - key: category.Currency
+    text: CURRENCY
+    gloss: 0
+    tier: 0
+  - key: category.Geography
+    text: CAPITAL
+    gloss: 0
+    tier: 0
+  - key: category.Culture
+    text: DRESS
+    gloss: 0
+    tier: 0
+  - key: category.Name
+    text: NAME
+    gloss: 0
+    tier: 0
+  - key: category.BirthDate
+    text: BIRTH DATE
+    gloss: 0
+    tier: 0

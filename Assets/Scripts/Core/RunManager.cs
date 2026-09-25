@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public sealed class RunManager : MonoBehaviour
 {
-    /// <summary>Resources path of the RunConfigSO asset.</summary>
-    private const string ConfigResourcePath = "RunConfig";
+    /// <summary>Resources path of the RunConfigSO asset (shared with other boot-time loaders).</summary>
+    public const string ConfigResourcePath = "RunConfig";
 
     /// <summary>Singleton instance (null until first GetOrCreate).</summary>
     public static RunManager Instance { get; private set; }
@@ -107,6 +107,9 @@ public sealed class RunManager : MonoBehaviour
             }
         }
 
+        // Rank the baselines now, so the first night reports only what day 1 changed.
+        TimelineService.SeedDominance(World, Library, Config.gameConfig);
+
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
     }
 
@@ -127,6 +130,11 @@ public sealed class RunManager : MonoBehaviour
 
         World = loaded;
         DevToolsState.ResetAll();
+
+        // The present culture's cue from the saved history, idempotently (an
+        // older save may lack it; piece 6 Z5).
+        if (Library != null)
+            HistoryService.RebuildLeaderEffect(World, Library, World.day);
         Debug.Log($"[RunManager] Continued run (day {World.day}).");
         return true;
     }
@@ -154,29 +162,64 @@ public sealed class RunManager : MonoBehaviour
 
     /// <summary>
     /// Deterministic seed for the current day, derived from the run seed.
-    /// Same run + same day = same schedule and cases.
+    /// Same run + same day = same schedule and cases (see Seeds).
     /// </summary>
-    public int GetDaySeed()
-    {
-        unchecked
-        {
-            return World.runSeed * 397 ^ World.day * 7919;
-        }
-    }
+    public int GetDaySeed() => Seeds.Day(World.runSeed, World.day);
 
     /// <summary>
-    /// The DayPlan for the current day, from the content library.
+    /// The DayPlan for the current day, from the content library (its own or
+    /// the latest earlier plan, ContentLibrarySO.GetDayPlan).
     /// Returns null if no plan exists for this day (caller decides fallback).
     /// </summary>
     public DayPlanSO GetCurrentDayPlan() =>
         Library != null ? Library.GetDayPlan(World.day) : null;
 
     /// <summary>
-    /// Advances to the next day: runs the nightly timeline resolve (dominance,
-    /// triggers, effect expiry, tomorrow package), resets daily values, saves,
-    /// and reloads the office.
+    /// Opens the scene the saved run resumes in: Home after the end-of-shift
+    /// save (GoHomeOrAdvance), otherwise the Office.
     /// </summary>
-    public void AdvanceToNextDay()
+    public void ResumeRun()
+    {
+        Debug.Log($"[RunManager] ResumeRun (day {World.day}, phase {World.phase}).");
+
+        if (World.phase == RunPhase.Home)
+            GoHomeOrAdvance();
+        else
+            LoadOfficeScene();
+    }
+
+    /// <summary>
+    /// End of the Home phase: the day-boundary ending check first (failures,
+    /// the Retirement milestone and the attribute epilogues); an ending is saved
+    /// and shown on the title scene; otherwise the nightly resolve and the next
+    /// day (AdvanceToNextDay). Home's Sleep, the no-Home path of
+    /// GoHomeOrAdvance and the debug panel's Skip Day all come here.
+    /// </summary>
+    public void Sleep()
+    {
+        Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.#}).");
+
+        EndingSO ending = EndingService.Evaluate(World, Library, Config != null ? Config.gameConfig : null, EndingMoment.DayBoundary);
+        if (ending != null)
+        {
+            Debug.Log($"[RunManager] <<< Exiting Sleep (ending '{ending.id}' ({ending.displayName}); saving and loading the title scene).");
+            World.endingId = ending.id;
+            SaveNow();
+            LoadTitleScene();
+            return;
+        }
+
+        Debug.Log("[RunManager] <<< Exiting Sleep (no ending, advancing to the next day).");
+        AdvanceToNextDay();
+    }
+
+    /// <summary>
+    /// Advances to the next day: runs the nightly timeline resolve (dominance,
+    /// the timeline leader, triggers and history rules, carries, effect
+    /// expiry, tomorrow package), resets daily values, returns the resume
+    /// point to the Office, saves, and reloads the office. Called by Sleep.
+    /// </summary>
+    private void AdvanceToNextDay()
     {
         Debug.Log($"[RunManager] >>> Entering AdvanceToNextDay (day {World.day} -> {World.day + 1}).");
 
@@ -185,6 +228,7 @@ public sealed class RunManager : MonoBehaviour
 
         World.day++;
         World.citationsToday = 0;
+        World.phase = RunPhase.Office;
 
         Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.#}; saving and loading Office).");
 
@@ -210,10 +254,10 @@ public sealed class RunManager : MonoBehaviour
     // Scene transitions
     // -----------------------------
 
-    /// <summary>Loads the office scene.</summary>
+    /// <summary>Loads the art office; its load brings the gameplay layer on top (OfficeScenes).</summary>
     public void LoadOfficeScene()
     {
-        Debug.Log($"[RunManager] LoadOfficeScene -> '{Config.officeSceneName}'.");
+        Debug.Log($"[RunManager] LoadOfficeScene -> '{Config.officeSceneName}' (+ '{Config.officeGameplaySceneName}' on top).");
         SceneManager.LoadScene(Config.officeSceneName);
     }
 
@@ -232,9 +276,10 @@ public sealed class RunManager : MonoBehaviour
     }
 
     /// <summary>
-    /// End-of-shift handoff: goes to the Home scene if it's in Build Settings,
-    /// otherwise (Home not built yet) advances straight to the next day so the
-    /// core loop stays playable.
+    /// End-of-shift handoff (and Continue after the end-of-shift save): goes to
+    /// the Home scene if it's in Build Settings, otherwise (Home not built yet)
+    /// sleeps at once (day-boundary endings, then the next day) so the core
+    /// loop stays playable.
     /// </summary>
     public void GoHomeOrAdvance()
     {
@@ -249,8 +294,8 @@ public sealed class RunManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"[RunManager] Scene '{Config.homeSceneName}' not in Build Settings — skipping Home phase and advancing to day {World.day + 1}.");
-            AdvanceToNextDay();
+            Debug.LogWarning($"[RunManager] Scene '{Config.homeSceneName}' not in Build Settings — skipping Home phase and sleeping (day {World.day}).");
+            Sleep();
         }
     }
 }

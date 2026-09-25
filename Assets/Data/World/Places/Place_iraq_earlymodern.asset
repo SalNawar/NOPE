@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_iraq_earlymodern
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: iraq_earlymodern
+  displayName: Ottoman Baghdad
+  nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
+  era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1720
+  tongue: arabic
+  birthYearMin: 1650
+  birthYearMax: 1702
+  facts:
+  - category: 4
+    value: Kurus & Persian abbasi
+  - category: 0
+    value: Baghdadi Arabic; Turkish
+  - category: 3
+    value: Quffa (Tigris coracle)
+  - category: 5
+    value: Baghdad (Ottoman eyalet)
+  - category: 2
+    value: Sultan Ahmed III
+  - category: 6
+    value: checked turban / futa shawl
+  maleNames:
+  - Sulayman
+  - Abdullah
+  - Husayn
+  - Abd al-Qadir
+  - Dawud
+  - Hormizd
+  - Sasson
+  - Umar
+  femaleNames:
+  - Rabia
+  - Hafsa
+  - Nuriya
+  - Masuda
+  - Sara
+  - Fatima
+  - Zaynab
+  - Asiya
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: zaboun and striped aba
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: full beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: checked turban
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 3
+      outfit:
+        label: striped dress and aba
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: pinned braids
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: futa shawl
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+        artNation: 
+      accessory:
+        label: qilada necklace
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 4
+    - 3
+    - 1
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 2.5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

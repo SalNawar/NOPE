@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_britain_medieval
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: britain_medieval
+  displayName: Anglo-Saxon England
+  nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
+  era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1050
+  tongue: oldenglish
+  birthYearMin: 980
+  birthYearMax: 1032
+  facts:
+  - category: 4
+    value: Silver penny (pening)
+  - category: 0
+    value: Late Old English
+  - category: 3
+    value: Tide-dial sundial
+  - category: 5
+    value: Winchester (royal treasury)
+  - category: 2
+    value: King Edward the Confessor
+  - category: 6
+    value: disc brooch / headrail
+  maleNames:
+  - Aelfric
+  - Godric
+  - Leofwine
+  - Wulfric
+  - Eadric
+  - Osgod
+  - Brihtwold
+  - Aelfwine
+  femaleNames:
+  - Aelfgifu
+  - Eadgifu
+  - Leofrun
+  - Wulfrun
+  - Godgifu
+  - Wulfgyth
+  - Aelfflaed
+  - Leofgyth
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: cyrtel and leg bindings
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: collar-length hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: long English moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: disc brooch
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 3
+      outfit:
+        label: bell-sleeved overgown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: low nape coil
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: headrail
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 5
+    - 4
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 4.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

@@ -1292,7 +1292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   orchestrator: {fileID: 1765128657}
   contentLibrary: {fileID: 11400000, guid: 64331f3cb4087d54ca99e7a3cca0cd20, type: 2}
-  dayPlan: {fileID: 11400000, guid: bfea62606a5a00545830ab1ff827f7d7, type: 2}
+  dayPlan: {fileID: 11400000, guid: ced3437a82eeb15429bf683a5c6e9751, type: 2}
   officeUI: {fileID: 163059358}
   seed: 12345
 --- !u!4 &1594067498
@@ -1627,7 +1627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DayOrchestrator
   eventDirector: {fileID: 1765128656}
-  dayPlan: {fileID: 11400000, guid: bfea62606a5a00545830ab1ff827f7d7, type: 2}
+  dayPlan: {fileID: 11400000, guid: ced3437a82eeb15429bf683a5c6e9751, type: 2}
 --- !u!4 &1765128658
 Transform:
   m_ObjectHideFlags: 0

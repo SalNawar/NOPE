@@ -1,32 +1,14 @@
-using Unity.Cinemachine;
 using UnityEngine;
 
 /// <summary>
-/// Real <see cref="ICameraRig"/> backed by two Cinemachine cameras. Raises the
-/// active camera's priority so the CinemachineBrain blends the push-in.
+/// Retired (the office move): the push-in camera rig. Kept as an empty
+/// component only because the art office (OfficeScene.unity, the art side's)
+/// still carries one on its leftover OfficeRoot, and a deleted script would
+/// log a missing-script warning on every office load. It does nothing; the
+/// art side deletes OfficeRoot (docs/SCENE_CONTRACT_GAMEPLAY.md), then this
+/// file goes too.
 /// </summary>
-public sealed class CinemachineCameraRig : MonoBehaviour, ICameraRig
+[AddComponentMenu("")]
+public sealed class CinemachineCameraRig : MonoBehaviour
 {
-    /// <summary>Wide booth camera.</summary>
-    [SerializeField] private CinemachineCamera officeCam;
-
-    /// <summary>Close-up monitor camera.</summary>
-    [SerializeField] private CinemachineCamera monitorCam;
-
-    private const int Active = 20;
-    private const int Idle = 10;
-
-    /// <summary>Raises the office camera above the monitor camera.</summary>
-    public void ShowOffice()
-    {
-        if (officeCam != null) officeCam.Priority = Active;
-        if (monitorCam != null) monitorCam.Priority = Idle;
-    }
-
-    /// <summary>Raises the monitor camera above the office camera.</summary>
-    public void ShowMonitor()
-    {
-        if (officeCam != null) officeCam.Priority = Idle;
-        if (monitorCam != null) monitorCam.Priority = Active;
-    }
 }

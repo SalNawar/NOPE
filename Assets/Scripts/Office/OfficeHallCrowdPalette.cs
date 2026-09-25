@@ -31,6 +31,10 @@ public sealed class OfficeHallCrowdPalette : MonoBehaviour
 
     private void Refresh()
     {
+        // Main loads gameplay additively and disables the art scene's legacy day driver.
+        // Bind the active gameplay driver once it is available, retaining the editor reference.
+        if (Application.isPlaying && (!orchestrator || !orchestrator.isActiveAndEnabled))
+            orchestrator = UnityEngine.Object.FindAnyObjectByType<DayOrchestrator>();
         float blend=preview==PreviewMode.Morning?0:preview==PreviewMode.Evening?1:
             BlendAt(orchestrator?orchestrator.ShiftProgress:0,eveningStartsAt,eveningFullAt);
         if(Mathf.Approximately(appliedBlend,blend))return;

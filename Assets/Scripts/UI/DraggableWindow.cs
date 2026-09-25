@@ -5,7 +5,11 @@ using UnityEngine.EventSystems;
 /// Makes a UI window draggable by a header bar, brings it to the front when
 /// touched, and supports stow/restore. Attach to the HEADER object (which needs
 /// a raycast-target Graphic, e.g. an Image) and point <see cref="windowRoot"/>
-/// at the window panel that should move. Investigation documents and reference
+/// at the window panel that should move. The pointer is read in the window's
+/// parent space (RectTransformUtility with the press camera), so a drag is
+/// right on an overlay canvas and on the CRT's world-space desktop alike, and
+/// the window is kept inside its parent while dragged (one taller than the
+/// parent keeps its title bar visible). Investigation documents and reference
 /// books use this so the player can arrange papers like a Papers, Please booth.
 /// </summary>
 public sealed class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHandler, IPointerDownHandler
@@ -14,7 +18,6 @@ public sealed class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHan
     [SerializeField] private RectTransform windowRoot;
 
     private RectTransform _self;
-    private Canvas _canvas;
     private Vector2 _pointerStart;
     private Vector2 _windowStart;
 
@@ -27,8 +30,6 @@ public sealed class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHan
 
         if (windowRoot == null)
             windowRoot = _self.parent as RectTransform ?? _self;
-
-        _canvas = GetComponentInParent<Canvas>();
     }
 
     /// <summary>Brings the window above its siblings.</summary>
@@ -38,8 +39,10 @@ public sealed class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHan
             windowRoot.SetAsLastSibling();
     }
 
+    /// <summary>A press anywhere on the header brings the window to the front.</summary>
     public void OnPointerDown(PointerEventData eventData) => BringToFront();
 
+    /// <summary>Starts a drag: remembers where the window and the pointer were.</summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
         BringToFront();
@@ -48,17 +51,17 @@ public sealed class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHan
             return;
 
         _windowStart = windowRoot.anchoredPosition;
-        _pointerStart = eventData.position;
+        TryPointer(eventData, out _pointerStart);
     }
 
+    /// <summary>Moves the window with the pointer, kept inside its parent.</summary>
     public void OnDrag(PointerEventData eventData)
     {
-        if (windowRoot == null)
+        if (windowRoot == null || !TryPointer(eventData, out Vector2 pointer))
             return;
 
-        float scale = _canvas != null && _canvas.scaleFactor > 0f ? _canvas.scaleFactor : 1f;
-        Vector2 delta = (eventData.position - _pointerStart) / scale;
-        windowRoot.anchoredPosition = _windowStart + delta;
+        windowRoot.anchoredPosition = _windowStart + (pointer - _pointerStart);
+        KeepInsideParent();
     }
 
     /// <summary>Shows the window and brings it forward.</summary>
@@ -88,5 +91,27 @@ public sealed class DraggableWindow : MonoBehaviour, IBeginDragHandler, IDragHan
             Stow();
         else
             Open();
+    }
+
+    /// <summary>The pointer in the window's parent space (the press camera: null on an overlay canvas, the world camera on the CRT).</summary>
+    private bool TryPointer(PointerEventData eventData, out Vector2 local)
+    {
+        local = Vector2.zero;
+        return windowRoot.parent is RectTransform parent &&
+               RectTransformUtility.ScreenPointToLocalPointInRectangle(parent, eventData.position, eventData.pressEventCamera, out local);
+    }
+
+    /// <summary>Moves the window back inside its parent's rect, per axis (RectClamp): a window taller than the parent keeps its top, the title bar, inside.</summary>
+    private void KeepInsideParent()
+    {
+        if (!(windowRoot.parent is RectTransform parent))
+            return;
+
+        Rect bounds = parent.rect;
+        Rect own = windowRoot.rect;
+        Vector3 at = windowRoot.localPosition;
+        float dx = RectClamp.Shift(at.x + own.xMin, at.x + own.xMax, bounds.xMin, bounds.xMax, false);
+        float dy = RectClamp.Shift(at.y + own.yMin, at.y + own.yMax, bounds.yMin, bounds.yMax, true);
+        windowRoot.anchoredPosition += new Vector2(dx, dy);
     }
 }

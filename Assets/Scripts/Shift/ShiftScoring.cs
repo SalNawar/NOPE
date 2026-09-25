@@ -57,8 +57,8 @@ public static class ShiftScoring
     /// <summary>
     /// Resolves a binary ACCEPT/DENY decision (investigation feature) into a
     /// CaseVerdict and applies its consequences. Correct = the player's choice
-    /// matches CaseInstance.ShouldAccept (accept a genuine, permitted traveler;
-    /// deny a forgery or a rule-breaking destination).
+    /// matches CaseInstance.ShouldAccept (accept an honest, permitted traveller;
+    /// deny a liar or a rule-breaking destination).
     /// </summary>
     public static CaseVerdict ResolveDecision(
         CaseInstance inst,
@@ -71,7 +71,7 @@ public static class ShiftScoring
     {
         bool shouldAccept = inst != null && inst.ShouldAccept;
 
-        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, forged={inst?.isForged}, claimAllowed={inst?.claimAllowedByRules}, evidence={evidenceCount}).");
+        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, liar={inst?.IsLiar}, claimAllowed={inst?.claimAllowedByRules}, evidence={evidenceCount}).");
 
         var verdict = new CaseVerdict
         {
@@ -82,7 +82,8 @@ public static class ShiftScoring
             wasLegendary = inst != null && inst.isLegendary,
             accepted = accepted,
             shouldAccept = shouldAccept,
-            wasForged = inst != null && inst.isForged,
+            wasLiar = inst != null && inst.IsLiar,
+            trueHomeLabel = inst != null ? inst.HomeLabel : string.Empty,
             claimAllowed = inst == null || inst.claimAllowedByRules,
             claimSummary = inst != null ? inst.claimLine : string.Empty,
             evidenceCount = Mathf.Max(0, evidenceCount),
@@ -95,12 +96,11 @@ public static class ShiftScoring
             return verdict;
         }
 
-        // Evidence gate: denying a forger must be backed by documented scanner
+        // Evidence gate: denying a liar must be backed by documented scanner
         // evidence. Directive violations are exempt (the daily rules are public
         // knowledge), and evidenceCount < 0 means the evidence system is not
         // active in this scene (fallback UI) so the gate is skipped.
-        if (config.requireEvidenceToDeny && evidenceCount == 0 &&
-            !accepted && inst != null && inst.isForged && inst.claimAllowedByRules)
+        if (inst != null && VerdictRules.IsUnprovenDenial(config.requireEvidenceToDeny, evidenceCount, accepted, inst.IsLiar, inst.claimAllowedByRules))
         {
             verdict.correct = false;
             verdict.unprovenDenial = true;
@@ -138,29 +138,19 @@ public static class ShiftScoring
         v.stabilityDelta = -stabilityLoss;
         world.timelineStability += v.stabilityDelta;
 
-        string mistake = v.unprovenDenial
-            ? "Deviation denied without documented evidence. Scan the papers next time."
-            : v.accepted
-                ? "Approved travel on forged or forbidden papers."
-                : "Denied a legitimate, permitted traveler.";
+        string mistake = UiText.Get(v.unprovenDenial ? "citation.unproven" : v.accepted ? "citation.acceptedWrong" : "citation.deniedWrong");
 
         if (world.citationsToday <= config.freeWarningsPerDay)
         {
             v.wasFreeWarning = true;
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n{mistake}\n" +
-                $"Warning {world.citationsToday}/{config.freeWarningsPerDay} — no pay deduction.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(mistake, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
         }
         else
         {
             int penalizedIndex = world.citationsToday - config.freeWarningsPerDay;
             v.moneyPenalty = config.GetCitationPenalty(penalizedIndex);
             world.money -= v.moneyPenalty;
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n{mistake}\n" +
-                $"Penalty: -{v.moneyPenalty} credits.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(mistake, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
         }
 
         Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={v.stabilityDelta:0.#}, money={world.money}.");
@@ -201,14 +191,11 @@ public static class ShiftScoring
         v.stabilityDelta = -stabilityLoss;
         world.timelineStability += v.stabilityDelta;
 
+        string misrouted = UiText.Format("citation.misrouted", v.chosenEraId, v.trueEraId);
         if (world.citationsToday <= config.freeWarningsPerDay)
         {
             v.wasFreeWarning = true;
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n" +
-                $"Subject misrouted: sent to '{v.chosenEraId}', belonged to '{v.trueEraId}'.\n" +
-                $"Warning {world.citationsToday}/{config.freeWarningsPerDay} — no pay deduction.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(misrouted, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
 
             Debug.Log($"[ShiftScoring] ApplyWrong: free warning {world.citationsToday}/{config.freeWarningsPerDay}, stabilityDelta={v.stabilityDelta:0.#} (legendary={v.wasLegendary}), no pay deduction.");
         }
@@ -218,13 +205,13 @@ public static class ShiftScoring
             v.moneyPenalty = config.GetCitationPenalty(penalizedIndex);
             world.money -= v.moneyPenalty;
 
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n" +
-                $"Subject misrouted: sent to '{v.chosenEraId}', belonged to '{v.trueEraId}'.\n" +
-                $"Penalty: -{v.moneyPenalty} credits.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(misrouted, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
 
             Debug.Log($"[ShiftScoring] ApplyWrong: citation #{world.citationsToday} (penalized index {penalizedIndex}), moneyPenalty={v.moneyPenalty}, stabilityDelta={v.stabilityDelta:0.#} (legendary={v.wasLegendary}), money={world.money}.");
         }
     }
+
+    /// <summary>A citation slip's text: the title, the mistake, the warning or penalty line and the stability change (UI string keys; piece 6).</summary>
+    private static string Citation(string mistake, string consequence, float stabilityDelta) =>
+        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake, consequence, UiText.Format("citation.stability", stabilityDelta));
 }

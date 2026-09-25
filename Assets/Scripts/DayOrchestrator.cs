@@ -9,7 +9,8 @@ using UnityEngine;
 /// - Notify GameManager a case slot started
 /// - Wait until GameManager resolves the case
 /// - AfterCase events
-/// - Next case slot
+/// - Next case slot, until the queue is empty or the booth closes
+/// Slot sequencing around closing time lives in the pure DaySlotSequencer.
 /// This class has NO UI dependencies.
 /// </summary>
 public sealed class DayOrchestrator : MonoBehaviour
@@ -26,15 +27,12 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// <summary>World state for the current run.</summary>
     private WorldState _worldState;
 
-    /// <summary>1-based case index in the current day.</summary>
-    private int _caseIndex1Based;
-
-    /// <summary>True while the orchestrator is waiting for a case to be resolved.</summary>
-    private bool _waitingForCaseResolution;
+    /// <summary>Per-slot state for today (null until StartDay).</summary>
+    private DaySlotSequencer _slots;
 
     /// <summary>Presentation-only progress through the current shift, from opening to closing.</summary>
-    public float ShiftProgress => dayPlan == null ? 0f :
-        Mathf.InverseLerp(1f, Mathf.Max(2, dayPlan.VisitorsCount), _caseIndex1Based);
+    public float ShiftProgress => _slots == null ? 0f :
+        Mathf.InverseLerp(1f, Mathf.Max(2, _slots.TotalSlots), _slots.CurrentSlot);
 
     /// <summary>Handle for the currently running day loop coroutine.</summary>
     private Coroutine _dayLoopRoutine;
@@ -51,8 +49,8 @@ public sealed class DayOrchestrator : MonoBehaviour
     public event Action<int> OnCaseSlotEnded;
 
     /// <summary>
-    /// Fired once after the last case slot of the day resolves.
-    /// GameManager uses this to start the end-of-day flow.
+    /// Fired once when the day is over: after the last slot resolves, or when
+    /// the booth closes. GameManager uses this to start the end-of-day flow.
     /// </summary>
     public event Action OnDayCompleted;
 
@@ -93,7 +91,7 @@ public sealed class DayOrchestrator : MonoBehaviour
             return;
         }
 
-        _caseIndex1Based = 1;
+        _slots = new DaySlotSequencer(dayPlan.VisitorsCount);
 
         // Resolve random placements once. This keeps the runtime loop simple and debuggable.
         _resolvedSchedule = dayPlan != null ? dayPlan.ResolveSchedule(seed) : null;
@@ -102,7 +100,7 @@ public sealed class DayOrchestrator : MonoBehaviour
         if (eventDirector != null && _worldState != null)
             eventDirector.Init(new DayEventContext(this, _worldState));
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting StartDay (starting day loop with {Mathf.Max(1, dayPlan.VisitorsCount)} case slot(s)).");
+        Debug.Log($"[DayOrchestrator] <<< Exiting StartDay (starting day loop with a queue of {_slots.TotalSlots}).");
 
         // Start the day loop.
         _dayLoopRoutine = StartCoroutine(DayLoop());
@@ -113,7 +111,26 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     public void MarkCaseResolved()
     {
-        _waitingForCaseResolution = false;
+        _slots?.MarkResolved();
+    }
+
+    /// <summary>
+    /// Closing time with a traveller at the desk: finish the current case slot
+    /// normally, then end the day instead of starting the next one.
+    /// </summary>
+    public void CloseAfterCurrentSlot()
+    {
+        _slots?.CloseAfterCurrentSlot();
+    }
+
+    /// <summary>
+    /// Closing time with nobody at the desk: end the day at once. If the loop is
+    /// waiting on a slot whose traveller was never called in, that slot is
+    /// abandoned (no slot-ended or after-case events).
+    /// </summary>
+    public void CloseNow()
+    {
+        _slots?.CloseNow();
     }
 
     /// <summary>
@@ -122,25 +139,35 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     private IEnumerator DayLoop()
     {
-        if (dayPlan == null)
+        if (dayPlan == null || _slots == null)
             yield break;
 
-        int total = Mathf.Max(1, dayPlan.VisitorsCount);
+        int total = _slots.TotalSlots;
 
         Debug.Log($"[DayOrchestrator] >>> Entering DayLoop (day {_worldState?.day}, {total} case slot(s)).");
 
-        while (_caseIndex1Based <= total)
+        // True once the current slot's before-case events ran (for the closing report).
+        bool beforeEventsRan = false;
+
+        while (_slots.CanStartSlot)
         {
-            Debug.Log($"[DayOrchestrator] >>> Entering case slot {_caseIndex1Based}/{total}.");
+            int slot = _slots.CurrentSlot;
+            Debug.Log($"[DayOrchestrator] >>> Entering case slot {slot}/{total}.");
 
             // 1) BeforeCase events
-            yield return RunScheduledEvents(DayEventTrigger.BeforeCase, _caseIndex1Based);
+            yield return RunScheduledEvents(DayEventTrigger.BeforeCase, slot);
+            beforeEventsRan = true;
 
-            // 2) Notify gameplay layer to start this case slot.
-            _waitingForCaseResolution = true;
-            OnCaseSlotStarted?.Invoke(_caseIndex1Based);
+            // The booth may have closed while those events ran.
+            if (_slots.CloseRequested)
+                break;
 
-            // 3) Wait until gameplay layer resolves the case.
+            // 2) Notify gameplay layer to start this case slot. The wait begins first
+            // so a CloseNow() raised synchronously by a listener is honoured.
+            _slots.BeginWaiting();
+            OnCaseSlotStarted?.Invoke(slot);
+
+            // 3) Wait until gameplay layer resolves the case (or the booth closes).
             // If you forget to call MarkCaseResolved(), the day will pause here indefinitely.
 #if UNITY_EDITOR
             float waitStart = Time.realtimeSinceStartup;
@@ -148,31 +175,75 @@ public sealed class DayOrchestrator : MonoBehaviour
             yield return new WaitUntil(() =>
             {
 #if UNITY_EDITOR
-                if (_waitingForCaseResolution && Time.realtimeSinceStartup - waitStart > 30f)
+                if (_slots.IsWaiting && Time.realtimeSinceStartup - waitStart > 30f)
                 {
-                    Debug.LogWarning($"DayOrchestrator is still waiting for MarkCaseResolved() after 30 seconds (case slot {_caseIndex1Based}).");
+                    Debug.LogWarning($"DayOrchestrator is still waiting for MarkCaseResolved() after 30 seconds (case slot {slot}).");
                     waitStart = float.PositiveInfinity; // Warn once.
                 }
 #endif
-                return _waitingForCaseResolution == false;
+                return !_slots.IsWaiting;
             });
 
+            // Closed before this traveller was called in: skip the slot's end and after-case events.
+            if (_slots.SlotAbandoned)
+            {
+                Debug.Log($"[DayOrchestrator] Case slot {slot} abandoned at closing time.");
+                break;
+            }
+
             // 4) Notify slot ended.
-            OnCaseSlotEnded?.Invoke(_caseIndex1Based);
+            OnCaseSlotEnded?.Invoke(slot);
 
             // 5) AfterCase events
-            yield return RunScheduledEvents(DayEventTrigger.AfterCase, _caseIndex1Based);
+            yield return RunScheduledEvents(DayEventTrigger.AfterCase, slot);
 
-            Debug.Log($"[DayOrchestrator] <<< Exiting case slot {_caseIndex1Based}/{total}.");
+            Debug.Log($"[DayOrchestrator] <<< Exiting case slot {slot}/{total}.");
 
             // 6) Advance
-            _caseIndex1Based++;
+            _slots.Advance();
+            beforeEventsRan = false;
         }
 
-        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, invoking OnDayCompleted).");
+        if (_slots.CloseRequested)
+            WarnAboutUnreachedContent(_slots.CurrentSlot, beforeEventsRan, total);
 
-        // All case slots resolved: the shift is over.
+        Debug.Log($"[DayOrchestrator] <<< Exiting DayLoop (day {_worldState?.day} complete, closedEarly={_slots.CloseRequested}, invoking OnDayCompleted).");
+
+        // Queue done or booth closed: the shift is over.
         OnDayCompleted?.Invoke();
+    }
+
+    /// <summary>
+    /// Closing time cut the queue short: warns (for designers) about scheduled
+    /// events, forced cases and forced premades placed in slots the player
+    /// never reached (a premade met on an earlier day left an ordinary
+    /// traveller in its slot, so it is not named).
+    /// </summary>
+    private void WarnAboutUnreachedContent(int firstUnreachedSlot, bool firstSlotBeforeEventsRan, int total)
+    {
+        var missed = new System.Collections.Generic.List<string>();
+        for (int s = Mathf.Max(1, firstUnreachedSlot); s <= total; s++)
+        {
+            foreach (DayEventTrigger trigger in new[] { DayEventTrigger.BeforeCase, DayEventTrigger.AfterCase })
+            {
+                if (s == firstUnreachedSlot && firstSlotBeforeEventsRan && trigger == DayEventTrigger.BeforeCase)
+                    continue;
+
+                var events = _resolvedSchedule?.Get(trigger, s);
+                if (events != null)
+                    missed.AddRange(events.Where(e => e != null).Select(e => $"{e.name} ({trigger}, slot {s})"));
+            }
+
+            if (dayPlan != null && dayPlan.TryGetForcedCase(s, out CaseBlueprintSO forced) && forced != null)
+                missed.Add($"forced case {forced.name} (slot {s})");
+
+            if (dayPlan != null && dayPlan.TryGetForcedPremade(s, out LegendarySO premade) &&
+                Premades.SlotSource(true, _worldState != null && _worldState.HasFlag(FlagKeys.PremadeMet(premade.id)), false) == PremadeSlot.Forced)
+                missed.Add($"forced premade {premade.displayName} (slot {s})");
+        }
+
+        if (missed.Count > 0)
+            Debug.LogWarning($"[DayOrchestrator] The booth closed before slot {firstUnreachedSlot}; never reached: {string.Join(", ", missed)}. Place scheduled content in earlier slots or shorten the queue.");
     }
 
     /// <summary>

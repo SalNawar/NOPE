@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_egypt_earlymodern
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: egypt_earlymodern
+  displayName: Ottoman Egypt
+  nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1700
+  tongue: arabic
+  birthYearMin: 1630
+  birthYearMax: 1682
+  facts:
+  - category: 4
+    value: Silver medin (para)
+  - category: 0
+    value: Egyptian Arabic; Turkish
+  - category: 3
+    value: Yemeni coffee (qahwa)
+  - category: 5
+    value: Cairo (Ottoman eyalet)
+  - category: 2
+    value: Sultan Mustafa II
+  - category: 6
+    value: red-crown turban / tartur
+  maleNames:
+  - Ridwan
+  - Uthman
+  - Zulfiqar
+  - Abd al-Rahman
+  - Qasim
+  - Shahin
+  - Hasan
+  - Mikhail
+  femaleNames:
+  - Nafisa
+  - Amina
+  - Ruqayya
+  - Safiyya
+  - Salha
+  - Hawa
+  - Zulaykha
+  - Dimyana
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: quftan and gibba
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: short rounded beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: red-crown turban
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+        artNation: 
+      accessory:
+        label: shawl sash
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 3
+      outfit:
+        label: brocade entari
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: curtain of thin plaits
+        leakable: 0
+        wig: 0
+        back: 1
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: tartur
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: disc-drop earrings
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 3
+    - 4
+    - 2
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

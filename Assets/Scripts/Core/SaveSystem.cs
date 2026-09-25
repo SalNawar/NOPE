@@ -9,7 +9,14 @@ using UnityEngine;
 public static class SaveSystem
 {
     /// <summary>Bump when WorldState shape changes incompatibly.</summary>
-    private const int SaveVersion = 1;
+    private const int SaveVersion = 2;
+
+    /// <summary>
+    /// Oldest save version that can still be continued. Version 2 replaced the
+    /// made-up world with real places (all place and era ids changed), so
+    /// version 1 saves are ignored and the Title offers only New Run.
+    /// </summary>
+    private const int MinCompatibleVersion = 2;
 
     /// <summary>Save file name (single slot).</summary>
     private const string FileName = "nope_save.json";
@@ -27,12 +34,38 @@ public static class SaveSystem
         public WorldState world;
     }
 
-    /// <summary>Returns true if a save file exists.</summary>
+    /// <summary>Returns true if a save file exists that this build can continue (older versions are ignored with a warning).</summary>
     public static bool HasSave()
     {
-        bool exists = File.Exists(SavePath);
-        Debug.Log($"[SaveSystem] HasSave: {exists} ('{SavePath}').");
-        return exists;
+        if (!File.Exists(SavePath))
+        {
+            Debug.Log($"[SaveSystem] HasSave: false (no file at '{SavePath}').");
+            return false;
+        }
+
+        int version = ReadVersion();
+        if (version < MinCompatibleVersion)
+        {
+            Debug.LogWarning($"[SaveSystem] Ignoring the save at '{SavePath}': version {version} predates the real-world content (needs {MinCompatibleVersion}+). Start a new run.");
+            return false;
+        }
+
+        Debug.Log($"[SaveSystem] HasSave: true ('{SavePath}', version {version}).");
+        return true;
+    }
+
+    /// <summary>The save file's version, or -1 if it is missing or unreadable.</summary>
+    private static int ReadVersion()
+    {
+        try
+        {
+            SaveFile file = JsonUtility.FromJson<SaveFile>(File.ReadAllText(SavePath));
+            return file != null ? file.version : -1;
+        }
+        catch (Exception)
+        {
+            return -1;
+        }
     }
 
     /// <summary>
@@ -82,7 +115,7 @@ public static class SaveSystem
 
         if (!HasSave())
         {
-            Debug.Log("[SaveSystem] <<< Exiting Load — no save file present.");
+            Debug.Log("[SaveSystem] <<< Exiting Load — no save this build can continue.");
             return null;
         }
 

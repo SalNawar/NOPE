@@ -15,6 +15,9 @@ public sealed class RunConfigSO : ScriptableObject
     /// <summary>Gameplay tuning (pay, citations, stability).</summary>
     public GameConfigSO gameConfig;
 
+    /// <summary>Game cursor + hover outline look, used in every scene (see InteractionFeedbackBootstrap).</summary>
+    public InteractionFeedbackSO interactionFeedback;
+
     [Header("Starting values")]
     /// <summary>Money the player starts a new run with.</summary>
     public int startingMoney = 50;
@@ -28,8 +31,14 @@ public sealed class RunConfigSO : ScriptableObject
     public int startingDay = 1;
 
     [Header("Scenes")]
-    /// <summary>Scene containing the office/shift loop.</summary>
+    /// <summary>The art office (owned by the art side); loading it loads the gameplay layer on top (OfficeScenes).</summary>
     public string officeSceneName = "OfficeScene";
+
+    /// <summary>The office's gameplay layer (the shift loop, the PC, the desk, the traveller), loaded additively on the art office.</summary>
+    public string officeGameplaySceneName = "OfficeGameplay";
+
+    /// <summary>Where the gameplay layer finds its places in the art office, and the art office's leftover gameplay objects it switches off.</summary>
+    public OfficeSceneContractSO officeContract;
 
     /// <summary>Scene containing the home phase (expenses/shop/slot).</summary>
     public string homeSceneName = "HomeScene";

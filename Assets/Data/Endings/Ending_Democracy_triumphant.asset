@@ -18,5 +18,5 @@ MonoBehaviour:
     voices. Democratic ideals now ripple across the whole timeline.
   conditionType: 2
   attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
-  threshold: 200
+  threshold: 9
   priority: 50

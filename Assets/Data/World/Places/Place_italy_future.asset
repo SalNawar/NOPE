@@ -1,0 +1,144 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_italy_future
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: italy_future
+  displayName: Mediterranean Union Rome
+  nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
+  era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  year: 2150
+  tongue: italian
+  birthYearMin: 2080
+  birthYearMax: 2132
+  facts:
+  - category: 4
+    value: Mediterranean lira (eLira)
+  - category: 0
+    value: Standard Italian (voice)
+  - category: 3
+    value: 3D-printed stone vaults
+  - category: 5
+    value: Rome (Union capital)
+  - category: 2
+    value: Consul Marco Ferri
+  - category: 6
+    value: clavus-stripe wrap
+  maleNames:
+  - Leonardo
+  - Francesco
+  - Tommaso
+  - Lorenzo
+  - Mattia
+  - Riccardo
+  - Gabriele
+  - Edoardo
+  femaleNames:
+  - Aurora
+  - Giulia
+  - Ginevra
+  - Beatrice
+  - Alice
+  - Vittoria
+  - Chiara
+  - Martina
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 0
+      outfit:
+        label: clavus-stripe wrap
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short textured crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: short trimmed beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 0
+      outfit:
+        label: clavus-stripe wrap
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: sleek low bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
+  baselines: []

@@ -48,7 +48,7 @@ Style anchors already in the repo (attach to ChatGPT as reference): `ArtDelivera
 2. **partition.png**: placeholder 120x240, deliver **480x960**, transparent. One tall privacy-booth partition angled toward the viewer. The SAME file is used left and right, so make it symmetric or set Flip X on `RightPartition`.
 3. **desk.png**: placeholder 400x90, deliver **1600x360**, transparent. Clerk's desk front edge, worn laminate, memorabilia only at the far edges (centre and right stay clear for the sign and CRT).
 4. **traveller.png**: placeholder 60x110, deliver **240x440**, transparent. Default generic traveller at the counter, neutral pose.
-5. **crt.png**: placeholder 150x130, deliver **600x520**, transparent. Beige 90s CRT on a swivel base, tube depth on the RIGHT, glass turned LEFT toward the player, dim screen glow. Clickable, so clear silhouette.
+5. **crt.png**: placeholder 150x130, deliver **600x520**, transparent. Beige 90s CRT on a swivel base, tube depth on the RIGHT, glass turned LEFT toward the player, dim screen glow. Clickable, so clear silhouette. **Art request (piece 7):** a front-facing CRT whose glass is a large, blank 4:3 rectangle (the game draws the live desktop in the glass's inscribed 4:3 rectangle), with a power button and an LED on its bezel.
 6. **sign.png**: placeholder 96x50, deliver **384x200**, transparent. Standing desk placard "READY / NEXT" (this text may be baked). Clickable.
 7. **calendar.png**: placeholder 80x100, deliver **320x400**, transparent. Wall tear-off calendar, "DAY" header strip, big BLANK middle for the day number.
 8. **stabilitymonitor.png**: placeholder 110x80, deliver **440x320**, transparent. Timeline stability wall device. The game TINTS the whole sprite green/amber/red, so draw it in light greys and white. Blank display for the percentage.
@@ -79,8 +79,10 @@ These are **full 1672x941 scene layers**, not cropped props, so they will not li
 
 - **queue_bg.png** 1600x600 transparent: line of waiting silhouettes (toga, armour, robe, futuristic suit).
 - **queue_silhouette_01..06.png** 200x400 transparent.
-- **intercom.png** 320x240 transparent: desk intercom box (clicked to request documents).
-- **scanner_tray.png** 600x200 transparent: document slot on the desk.
+- **intercom.png** 320x240 transparent: desk intercom box (clicked to open the traveller wheel).
+- **scanner_tray.png** 600x200 transparent: desk scanner: drop papers on its glass bed.
+- **paper.png** 150x200 (in `Assets/Art/Office/Placeholder/`, piece 7): a blank paper sheet the desk's papers use; later one paper stock per document kind.
+- **crt_power.png** 28x28 and **crt_led.png** 8x8 (in `Assets/Art/Office/Placeholder/`, piece 7): the CRT bezel's power button and LED (draw the LED white: the game tints it on and off).
 - **desk_mug.png, desk_photo.png, desk_plant.png, desk_stamp.png** 200x200 transparent.
 - **lighting_overlay_warm.png / _cold.png / _alarm.png** 1920x1080 transparent, low opacity mood tints.
 
@@ -108,7 +110,9 @@ Window and shell chrome (9-slice friendly: flat stretchable middle, detail only 
 - start_menu_panel.png 256x384
 - tray_bg.png 256x40, tray_day / tray_credits / tray_stability.png 24x24
 - cursor_arrow.png, cursor_hand.png 32x32
-- btn_back_to_office.png 200x48 ("< Office")
+- cursor_grab.png, cursor_grabbing.png 32x32 (over and while dragging a desk paper; piece 7 shows the hand for now)
+- btn_desk_normal / _hover / _pressed.png 176x32, no text (the game prints "< Desk"): the taskbar's way back to the desk, next to Start (piece 7)
+- **Retired in piece 7:** btn_back_to_office.png 200x48 ("< Office"). The live office's desktop no longer has this button (the taskbar's "< Desk" above replaces it); only the preserved hybrid scene keeps one until it adopts the desk. Nothing will load it.
 
 ## C. Investigation UI: `Assets/Art/UI/Investigation/`
 
@@ -116,7 +120,7 @@ Window and shell chrome (9-slice friendly: flat stretchable middle, detail only 
 - **page_blank.png** 800x1100 white scanned page with paper grain.
 - **photo_frame.png** 240x300.
 - **claim_banner.png** 1200x96 (blank).
-- **intercom_panel.png** 600x400, **intercom_button_normal/_hover.png** 400x64.
+- **Retired in piece 7:** **intercom_panel.png** 600x400, **intercom_button_normal/_hover.png** 400x64. The PC intercom panel is gone from the live office (the traveller wheel replaces it, section I); only the preserved hybrid scene keeps one until it adopts the desk. Nothing will load them.
 - **compare_bar_neutral / _match / _mismatch / _deviation.png** 1200x64 (grey, green, amber, red, no text).
 - **btn_accept_normal/_hover/_pressed.png**, **btn_deny_normal/_hover/_pressed.png** 300x96, or stamps **stamp_approved.png**, **stamp_denied.png** 400x200.
 - **refbook_page.png** 800x1100, **refbook_cover_currency / _language / _technology.png** 400x560.
@@ -198,12 +202,21 @@ Body (240x440) + portrait (240x300) each, more ornate, subtle gold rim. Names fo
 - Nation emblems (reuse `<Nation>_seal.png` for the fictional six).
 - HUD: **icon_money.png**, **icon_stability.png**, **icon_day.png**, **icon_warning.png**.
 
+## I. Office overlay (piece 7): `Assets/Art/UI/Office/`
+
+Transparent PNG, 9-slice friendly (flat stretchable middle, detail only at corners/edges), no text: the game prints every label. The game draws these as flat panels today; piece 6 (the UI theme) decides whether the overlay takes theme art, and these files are its skins if it does.
+
+- **wheel_item_normal.png**, **wheel_item_hover.png** 240x44: one choice of the traveller wheel (click the traveller or the desk intercom); up to 8 sit on an ellipse around the traveller. Replaces the retired intercom buttons.
+- **wheel_centre_normal.png**, **wheel_centre_hover.png** 150x44: the wheel's centre button ("< Back" in a sub-menu).
+- **speech_bubble.png** 420x110: the traveller's reply, shown up and to the right of the traveller; tail pointing down-left toward them.
+- **desk_tooltip.png** 360x60: the small readout shown above a clicked desk object (credits, day, stability, time).
+
 ---
 
 # Totals and suggested order
 
 1. Tier 1 booth props + wallpaper: 11 files. Immediate payoff, zero code.
-2. Desktop UI (B) + Investigation UI (C): about 60 files.
+2. Desktop UI (B), Investigation UI (C) and the office overlay (I): about 70 files.
 3. Visitors (D): 72 investigation files, 42 legendary files.
 4. Day flow (E), Home (F), Title/endings (G), icons (H): about 50 files.
 5. Timeline poster variants: 18 files.

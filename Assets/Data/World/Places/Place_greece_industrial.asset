@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_greece_industrial
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: greece_industrial
+  displayName: Athens, Kingdom of Greece
+  nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1860
+  tongue: greek
+  birthYearMin: 1790
+  birthYearMax: 1842
+  facts:
+  - category: 4
+    value: Royal drachma (100 lepta)
+  - category: 0
+    value: Greek; official Katharevousa
+  - category: 3
+    value: Electric telegraph (1859)
+  - category: 5
+    value: Athens (Kingdom of Greece)
+  - category: 2
+    value: King Otto (Othon)
+  - category: 6
+    value: fesi
+  maleNames:
+  - Georgios
+  - Ioannis
+  - Dimitrios
+  - Nikolaos
+  - Spyridon
+  - Athanasios
+  - Panagiotis
+  - Anastasios
+  femaleNames:
+  - Aikaterini
+  - Kalliopi
+  - Angeliki
+  - Smaragda
+  - Eirini
+  - Evanthia
+  - Chrysoula
+  - Panagiota
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: fustanella
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short tapered hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: upturned moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: fesi
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: red silk sash
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 3
+      outfit:
+        label: Amalia dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: braids round the crown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: fesi
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: gold disc necklace
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 3
+    - 5
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 5
+    - colour: brown
+      weight: 4
+    - colour: blond
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

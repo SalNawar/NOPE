@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_greece_medieval
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: greece_medieval
+  displayName: Byzantine Mystras
+  nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1430
+  tongue: greek
+  birthYearMin: 1360
+  birthYearMax: 1412
+  facts:
+  - category: 4
+    value: Silver stavraton
+  - category: 0
+    value: Late Byzantine Greek
+  - category: 3
+    value: Morean silk (sericulture)
+  - category: 5
+    value: Mystras (Despotate of Morea)
+  - category: 2
+    value: Despot Theodore II
+  - category: 6
+    value: Palaiologan hat / fakiolion
+  maleNames:
+  - Georgios
+  - Demetrios
+  - Michael
+  - Nikephoros
+  - Ioannes
+  - Leon
+  - Gregorios
+  - Stephanos
+  femaleNames:
+  - Eirene
+  - Theodora
+  - Eudokia
+  - Helene
+  - Kale
+  - Thomais
+  - Euphrosyne
+  - Anna
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: buttoned kabbadion
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: long centre-parted hair
+        leakable: 0
+        wig: 0
+        back: 1
+        covers: 
+        artNation: 
+      facialHair:
+        label: long full beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: Palaiologan hat
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: gilt-mounted belt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 3
+      outfit:
+        label: damask over-dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: pinned-up hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: fakiolion
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+        artNation: 
+      accessory:
+        label: lunate earrings
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 3
+    - 5
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 5
+    - colour: brown
+      weight: 4
+    - colour: blond
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

@@ -13,136 +13,159 @@ MonoBehaviour:
   m_Name: ContentLibrary_Main
   m_EditorClassIdentifier: Assembly-CSharp::ContentLibrarySO
   dayPlans:
+  - {fileID: 11400000, guid: ced3437a82eeb15429bf683a5c6e9751, type: 2}
   - {fileID: 11400000, guid: 4e74002e2c3a92841baf8d90b01a110e, type: 2}
   - {fileID: 11400000, guid: 1be00b469a273c54e9cfd0c1d8f819f3, type: 2}
-  - {fileID: 11400000, guid: ced3437a82eeb15429bf683a5c6e9751, type: 2}
-  - {fileID: 11400000, guid: bfea62606a5a00545830ab1ff827f7d7, type: 2}
-  - {fileID: 11400000, guid: b26d57db8c754984184f105095ca5f9a, type: 2}
-  - {fileID: 11400000, guid: 0057712f1b5733c46b2f6013ef13166b, type: 2}
+  - {fileID: 11400000, guid: 0653bc62c7819e34081ac6e795aa31de, type: 2}
+  - {fileID: 11400000, guid: aa8945a0cbaf7e541abfd7080990320f, type: 2}
+  - {fileID: 11400000, guid: deafb8e7c80635c439458e5d10fb7813, type: 2}
   eras:
-  - {fileID: 11400000, guid: 1429e32ed45d69047b1c2e1845cec32f, type: 2}
-  - {fileID: 11400000, guid: 2661fc4b2d99029488f87620a9c2783c, type: 2}
-  - {fileID: 11400000, guid: 92ec7282f025987438c5f87a30835c14, type: 2}
-  - {fileID: 11400000, guid: 1a7547c3a853dee4a8d445477bd23c83, type: 2}
-  - {fileID: 11400000, guid: 009218bc8d7ba8b42923c6ac873e270e, type: 2}
-  - {fileID: 11400000, guid: 534846cde921ef949a1905cece8a8d6f, type: 2}
-  - {fileID: 11400000, guid: a66b025b152f6e048b2667fbc96ec12e, type: 2}
-  - {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
-  clues:
-  - {fileID: 11400000, guid: 5e2f56d0fe678db4e8daa3b91794aa3c, type: 2}
-  - {fileID: 11400000, guid: 22dbdecfbd8c67841b4505043881b012, type: 2}
-  - {fileID: 11400000, guid: e2b62114ba0b5044a830fad2657b56d1, type: 2}
-  - {fileID: 11400000, guid: 25a01742cc5d7de479b05df400b9b32e, type: 2}
+  - {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
+  - {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  - {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  - {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  - {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  - {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  clues: []
   legendaries:
-  - {fileID: 11400000, guid: c9383b92271c3f64e93056a31290854f, type: 2}
-  - {fileID: 11400000, guid: 7100ab66fe9b22e47be46fa4cb614979, type: 2}
-  - {fileID: 11400000, guid: 7d3bc4919303df2479f533ff0aa22fc6, type: 2}
-  - {fileID: 11400000, guid: bc4efd5aa3132224fa54545c07706c2b, type: 2}
-  - {fileID: 11400000, guid: f014cb42bb6a1984d9ec7a196e85dbbd, type: 2}
-  - {fileID: 11400000, guid: b9c4c1452bcdce44bb387204bc8712bb, type: 2}
-  - {fileID: 11400000, guid: 7a0c210e3baa49442a18808174405150, type: 2}
-  - {fileID: 11400000, guid: a303a57081222b14fad2e330477fc217, type: 2}
-  - {fileID: 11400000, guid: 17fef6f8808b3764691a730154d7aee8, type: 2}
-  - {fileID: 11400000, guid: d588e1cfebd2f504b95055eb9e198fdd, type: 2}
-  - {fileID: 11400000, guid: 7d855b29216cf7e42967a5c3814d909c, type: 2}
-  - {fileID: 11400000, guid: e4afcd1b9fa19aa409195f763e4f52ea, type: 2}
-  - {fileID: 11400000, guid: aa1366f2779d7ca42bfd4653c09fe0aa, type: 2}
-  - {fileID: 11400000, guid: 6e654aac532d18d4098e94ad281f7a9f, type: 2}
-  - {fileID: 11400000, guid: e73e305a7a8b09e4080ba2f63b7aa532, type: 2}
-  - {fileID: 11400000, guid: 286813f188c601942b058a01f3730d1b, type: 2}
-  - {fileID: 11400000, guid: 5f4d79b91bbb3ea44b985a4a675068a5, type: 2}
-  - {fileID: 11400000, guid: d1ced6199db1f404da4573565bac51d5, type: 2}
-  - {fileID: 11400000, guid: 8af025f41e1564645999c4bdeda3c9f4, type: 2}
-  - {fileID: 11400000, guid: 9d900551242d7a74f91fca47ee710830, type: 2}
-  - {fileID: 11400000, guid: c4860477026abe147b084204949db31b, type: 2}
+  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
+  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
+  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
+  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
+  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
+  - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
+  - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
   effects:
-  - {fileID: 11400000, guid: 74a022e3a8d184141823ff418a6dacd8, type: 2}
-  - {fileID: 11400000, guid: b403f4f77cbd66540893156074fe1fcb, type: 2}
-  - {fileID: 11400000, guid: afd305280edd66b4eaf1000a53de2343, type: 2}
-  - {fileID: 11400000, guid: 1348549e3557a7e4f8b5876821845137, type: 2}
-  - {fileID: 11400000, guid: 693845529befc20499e51c97c3371737, type: 2}
-  - {fileID: 11400000, guid: a8e5652a001d2a749b671ebe48f7947c, type: 2}
-  - {fileID: 11400000, guid: d7b261f98c8402b4283ad46492724ce3, type: 2}
-  - {fileID: 11400000, guid: d0e60f5ddbe51834aafa4f7d0d23e1cd, type: 2}
-  - {fileID: 11400000, guid: a688bf46ea8a0474abdc122c71af8ab9, type: 2}
-  - {fileID: 11400000, guid: 82d0b65f74d50c34397b01b113ebd1d3, type: 2}
-  - {fileID: 11400000, guid: 60c2f60d7240d3741aa180f32eeb0af7, type: 2}
-  - {fileID: 11400000, guid: 2b4e7226074b11a4a8e6ff4466ebc932, type: 2}
-  - {fileID: 11400000, guid: 59b6ed2f6363f4b49ac0d0ea6a4fee9f, type: 2}
-  - {fileID: 11400000, guid: 6caf1a628e612604ab8aaf51b93e084b, type: 2}
-  - {fileID: 11400000, guid: 54452ea4f70505c448a772141763fac1, type: 2}
-  - {fileID: 11400000, guid: f19c5d70a19c29d4ea83cd427b5f5873, type: 2}
-  - {fileID: 11400000, guid: af62ac4295b0c7c4fbec4e8cf9b0c0dc, type: 2}
-  - {fileID: 11400000, guid: 3d8426f7562ca624fb2827cd1e15fa64, type: 2}
-  - {fileID: 11400000, guid: d75fc26e9a8769546b0ce8c54ec03ba4, type: 2}
-  - {fileID: 11400000, guid: 5e0172ae36c156d429a2917710c9a31e, type: 2}
-  - {fileID: 11400000, guid: 88afb86db7d34fd49ae581f426a8190c, type: 2}
-  - {fileID: 11400000, guid: 063645ae28f737b48940d3131953d056, type: 2}
-  - {fileID: 11400000, guid: a044b71064a91fa4397e94c9199c301c, type: 2}
-  - {fileID: 11400000, guid: d879ab0741e9cf843b4ff51f7c19acd7, type: 2}
-  - {fileID: 11400000, guid: e2ad388d56d78ff47bfe0648c14393d4, type: 2}
-  - {fileID: 11400000, guid: df72751bcf32ad34b92179f336da5eb2, type: 2}
-  - {fileID: 11400000, guid: 5e8707bb7824bc04897f50345abbd106, type: 2}
-  - {fileID: 11400000, guid: 0c5cd184a2d519844bf5b39ef86390c9, type: 2}
-  - {fileID: 11400000, guid: 4477dd037b40e3c4295b67ff8c46993a, type: 2}
-  - {fileID: 11400000, guid: 5b309929d0a26d14dbeaad56fa9a4964, type: 2}
   - {fileID: 11400000, guid: 42e1353d8857b2f41a8b91b0a6aa2c3d, type: 2}
   - {fileID: 11400000, guid: 0305c253639018445aab40a9a8999063, type: 2}
   - {fileID: 11400000, guid: 0ccbbc48b44738946aa53c9ba0b76dcd, type: 2}
   - {fileID: 11400000, guid: 204fc91addc6bfb438d1eff353f9b074, type: 2}
   - {fileID: 11400000, guid: 5ab449e622cfeb847bc6cab15cc1cf7e, type: 2}
   - {fileID: 11400000, guid: d84dddd24193a8849840cf0d983a4c4f, type: 2}
+  - {fileID: 11400000, guid: 8400fe10969c4ecc8639da5d1a9e8484, type: 2}
+  - {fileID: 11400000, guid: d81aebfeda3115d48b93bf628c05e41b, type: 2}
+  - {fileID: 11400000, guid: 92b204384f449134fac99c7114fe827f, type: 2}
+  - {fileID: 11400000, guid: 7197e27cfd59a82418412be3e324947f, type: 2}
+  - {fileID: 11400000, guid: 81284e4285ebc6041836ea89756a7a34, type: 2}
+  - {fileID: 11400000, guid: 07141c6d6777c9b43981e665c7b2c314, type: 2}
+  - {fileID: 11400000, guid: 23b10c6fa34d5944a802e697a7a1c5ee, type: 2}
+  - {fileID: 11400000, guid: 909cd1d984d043648bff65b31b042403, type: 2}
+  - {fileID: 11400000, guid: 18811a487b40f2c4e9a99b40fd859ec4, type: 2}
+  - {fileID: 11400000, guid: a90bef86fe34c0a45b5c39ae844ce54e, type: 2}
+  - {fileID: 11400000, guid: 0dc691958e7d94c43a5b91c6d73df636, type: 2}
+  - {fileID: 11400000, guid: c7db0569adee270418a8787fa94ce7c4, type: 2}
+  - {fileID: 11400000, guid: 1edb0ebb45e7ac845b7ac23a97dcd87c, type: 2}
+  - {fileID: 11400000, guid: 136e76ea283226747b9ff36ae84eda84, type: 2}
+  - {fileID: 11400000, guid: e05b62c69932d8f48aa54ffda14f0f21, type: 2}
+  - {fileID: 11400000, guid: 4f84546cf1434c94c9c52f2f3967a048, type: 2}
+  - {fileID: 11400000, guid: c38bd9addbc926e4da0d0a966f836f40, type: 2}
+  - {fileID: 11400000, guid: 0427ddfd52ef9f44399303d8efdb776d, type: 2}
+  - {fileID: 11400000, guid: 45d31dd445a578d4b8debc6bca6ffcb5, type: 2}
+  - {fileID: 11400000, guid: a3366697a6d85ae469db3cc4f92bbc9c, type: 2}
   upgrades:
   - {fileID: 11400000, guid: 00c95d5dbdd51e945a9157454c034cb6, type: 2}
   - {fileID: 11400000, guid: 4310a94e0a8291a4380d458bff90205e, type: 2}
   - {fileID: 11400000, guid: f163b89b65df0ff4bb129a518b6ee741, type: 2}
+  - {fileID: 11400000, guid: 1c15365f5ee847309cf3bf46489df055, type: 2}
+  - {fileID: 11400000, guid: 64dd5072307794d4db6d7042353661ca, type: 2}
+  - {fileID: 11400000, guid: 2d7c9c249f77acc439c7ffd23bdffa5e, type: 2}
+  - {fileID: 11400000, guid: 2b852508ea777bc41a28f9dc645538b0, type: 2}
+  - {fileID: 11400000, guid: 4d8e82e5d30485748834bd8ec3ea126c, type: 2}
+  - {fileID: 11400000, guid: 425102795edca4549a869be97bc38fa4, type: 2}
+  - {fileID: 11400000, guid: 3c2b2e7640f956248bbdcd0a5072ae91, type: 2}
+  - {fileID: 11400000, guid: ec9c846f344b29e438d2c505f6a3048b, type: 2}
+  - {fileID: 11400000, guid: 0a6982e0eb5e73c43884da142bd88222, type: 2}
   attributes:
   - {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
   - {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
   - {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
-  - {fileID: 11400000, guid: 7856e800e12697943a82b4065806d049, type: 2}
-  - {fileID: 11400000, guid: 221ac107b1db9f942b9e01fb0b1d945a, type: 2}
-  - {fileID: 11400000, guid: 8742e5c7a4b6fc642b8f5b740b3ecdd8, type: 2}
-  - {fileID: 11400000, guid: ddecce0363fd06a4db7de634dfd00dc8, type: 2}
   nations:
-  - {fileID: 11400000, guid: 7c13f4721332a834c885a38fe7073d35, type: 2}
-  - {fileID: 11400000, guid: a298490feda01eb48a907b7a053264d3, type: 2}
-  - {fileID: 11400000, guid: 123086b691b7d0a44a04746ef5ef5dbf, type: 2}
-  - {fileID: 11400000, guid: c759b5e80745f6c4fba1ea24dd7b2d76, type: 2}
-  - {fileID: 11400000, guid: 48e27bc8d747c164c9769dba812b62e6, type: 2}
-  - {fileID: 11400000, guid: a0661620f94d00a49b194676d97f54f2, type: 2}
-  - {fileID: 11400000, guid: 59111cc525334e443bbd9b88df7bf5b3, type: 2}
-  - {fileID: 11400000, guid: 8e59452b84a490343b59794ccbb65b80, type: 2}
-  - {fileID: 11400000, guid: 3458694a47649164393173710d69ca2f, type: 2}
-  - {fileID: 11400000, guid: 123c315c180ca5941bcf8a748c8fc6b0, type: 2}
-  - {fileID: 11400000, guid: 97dbccdd0e63fc243b694c74f359dbdb, type: 2}
+  - {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  - {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
+  - {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  - {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
+  - {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
+  - {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
+  - {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
+  - {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   nationEraProfiles:
-  - {fileID: 11400000, guid: 4f05ac74eac13d14f992fcf6a62ed42b, type: 2}
-  - {fileID: 11400000, guid: 8b3312e785665b848b631ddd2f75114c, type: 2}
-  - {fileID: 11400000, guid: 8ce5b0cd01db6064398169e96c95fb86, type: 2}
-  - {fileID: 11400000, guid: fc5bc9be37d9be747bbc5b83621f39d7, type: 2}
-  - {fileID: 11400000, guid: 79f4e7a6d4413a846bc069b8f1bc75ec, type: 2}
-  - {fileID: 11400000, guid: 9976c56a41095f440a7f617602630aff, type: 2}
-  - {fileID: 11400000, guid: 5a739605bf36c424abad51b138cb83c0, type: 2}
-  - {fileID: 11400000, guid: 2a886246048dcfd4aa5ad1fb867f9562, type: 2}
-  - {fileID: 11400000, guid: 5ae61419b82bfa64a94895d5dce9c7a5, type: 2}
-  - {fileID: 11400000, guid: 36016c744cefa5345ac03da8c1c84413, type: 2}
-  - {fileID: 11400000, guid: 3ae768eabaffaf2468d3fce44a8745ec, type: 2}
+  - {fileID: 11400000, guid: 5f6e6311b2f4cc241a56a011b37769c1, type: 2}
+  - {fileID: 11400000, guid: 099be47d2e68444499576be3f45fbd30, type: 2}
+  - {fileID: 11400000, guid: aeb06a5ef6d0fa6408695d2cdf41b891, type: 2}
+  - {fileID: 11400000, guid: dd26bd086168a3c42af31e542ba3c485, type: 2}
+  - {fileID: 11400000, guid: 1eb3909ff092a184496ca94d7380527f, type: 2}
+  - {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}
+  - {fileID: 11400000, guid: 9b9a1dc515459b14aabe6a79a3bb06f3, type: 2}
+  - {fileID: 11400000, guid: 718823ce9a5a0634685c9bf11efcc544, type: 2}
+  - {fileID: 11400000, guid: 165d1c91fd2649c419aa9b94867bc6ec, type: 2}
+  - {fileID: 11400000, guid: 9b1a42034a97c30448299c7bb5d612b2, type: 2}
+  - {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
+  - {fileID: 11400000, guid: 93680f3a1393d56498706822045daa46, type: 2}
+  - {fileID: 11400000, guid: ac394fa39ace06246b04bbeda9fe3ed8, type: 2}
+  - {fileID: 11400000, guid: 81b8ec5c0a41a2b48a33faf2b4ad15c9, type: 2}
+  - {fileID: 11400000, guid: 3ac2bbee12428b7459cfa63abc0425d2, type: 2}
+  - {fileID: 11400000, guid: 863aba0c80035a64d8cfe5228c534551, type: 2}
+  - {fileID: 11400000, guid: fa321dd8c532ec740a28cd4a6a44ff56, type: 2}
+  - {fileID: 11400000, guid: 8bc70947aaacfc24ab40664dd9d45ca6, type: 2}
+  - {fileID: 11400000, guid: c3a68fa353acd9b4faa9c6b1bcf7f7ff, type: 2}
+  - {fileID: 11400000, guid: b68b4b21dc28b0c41adece59119aa246, type: 2}
+  - {fileID: 11400000, guid: 328f1ea526ae977468a306ecd444c41c, type: 2}
+  - {fileID: 11400000, guid: d9d04a2eb65361449ba7281cbab00627, type: 2}
+  - {fileID: 11400000, guid: 607c88935eb6ffd4d8af3b56c7acaa6b, type: 2}
+  - {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}
+  - {fileID: 11400000, guid: c1762057de95ff640b6678d17d63fb5f, type: 2}
+  - {fileID: 11400000, guid: 7e67b75883f58a049886b8db8d1bcc87, type: 2}
+  - {fileID: 11400000, guid: ace2f3be1c3e53a49b377927b343ed15, type: 2}
+  - {fileID: 11400000, guid: 2c519605fba5bc041a47b830c9b120fb, type: 2}
+  - {fileID: 11400000, guid: 818eb0723bf59c54c95864aed6ac4a24, type: 2}
+  - {fileID: 11400000, guid: d0a42dcb62ff2374a960973f76427f5b, type: 2}
+  - {fileID: 11400000, guid: a291f65aea0a9e447aafbfdcf8e536a6, type: 2}
+  - {fileID: 11400000, guid: 0c808aaf5298a6d419cdaf752fef7156, type: 2}
+  - {fileID: 11400000, guid: 913de20918bf9e749b6a8f147296b5c6, type: 2}
+  - {fileID: 11400000, guid: 0f4b98a0c149f6c438b6ff24cae43f67, type: 2}
+  - {fileID: 11400000, guid: 36224045c942e254bad4369748544cfd, type: 2}
+  - {fileID: 11400000, guid: e5a4ac28cd4e7274ca13879cb57e92b1, type: 2}
+  - {fileID: 11400000, guid: cfe1066d87587814c97e1f987e9b7c0c, type: 2}
+  - {fileID: 11400000, guid: 9fad693479e57784c83c3e4e47c33786, type: 2}
+  - {fileID: 11400000, guid: bb191997bafbd4e499d98487cf7059ab, type: 2}
+  - {fileID: 11400000, guid: 497aafc3a0eb9f449abc80a30bbb44c0, type: 2}
+  - {fileID: 11400000, guid: b95e0e512564b604c8f2a7538725dd01, type: 2}
+  - {fileID: 11400000, guid: 0787fec0dd0041e4c9efee6351002140, type: 2}
+  - {fileID: 11400000, guid: a1eff7b42543db341892c3c1fdc7f416, type: 2}
+  - {fileID: 11400000, guid: 6902ca752bbc37040920364e8c9406fe, type: 2}
+  - {fileID: 11400000, guid: b3e750b375086004e87384b38f81a378, type: 2}
+  - {fileID: 11400000, guid: 0c157507cd2e4614f94277fcd38a3a9b, type: 2}
+  - {fileID: 11400000, guid: 9311420a726870d4da1511ec92f32edb, type: 2}
+  - {fileID: 11400000, guid: 7544b90382d3ffc4192f4db2b87e50f2, type: 2}
   archetypes:
-  - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
-  - {fileID: 11400000, guid: 322dd872b153b1442b6dc557666a1b31, type: 2}
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
-  - {fileID: 11400000, guid: 49896eb7768f7d7478adbfbaf25102e7, type: 2}
+  - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
   - {fileID: 11400000, guid: 4ecaec54e9ac6c64588519617bd49e3b, type: 2}
+  - {fileID: 11400000, guid: 322dd872b153b1442b6dc557666a1b31, type: 2}
+  - {fileID: 11400000, guid: 49896eb7768f7d7478adbfbaf25102e7, type: 2}
   - {fileID: 11400000, guid: da73973847718a44bae58351b1e5ec41, type: 2}
-  - {fileID: 11400000, guid: 2b72306525545af429d4406d35b8117a, type: 2}
-  - {fileID: 11400000, guid: 037a374c8da872c49927573b142f5a02, type: 2}
-  - {fileID: 11400000, guid: 640e3d609c682ef45b7db445a250b559, type: 2}
-  - {fileID: 11400000, guid: e6fa9a09c04b5424ab8c6b60aea01d66, type: 2}
   timelineTriggers:
   - {fileID: 11400000, guid: 980f3b06ffcb15e4898bbec157072d81, type: 2}
   - {fileID: 11400000, guid: b88af8ce247b44a479d9f321a9b04a5f, type: 2}
   - {fileID: 11400000, guid: 9ff9da122c991fc459d831c09cd523eb, type: 2}
+  - {fileID: 11400000, guid: c3fb011a0dec4c94bb1a24978e1bcf78, type: 2}
+  - {fileID: 11400000, guid: 5b4a14c18c1434d44bc1e220e94d34d2, type: 2}
+  - {fileID: 11400000, guid: e654e3aa0bc6bae449fcdca1aaaef69b, type: 2}
+  - {fileID: 11400000, guid: f13d3ee5d615e02498845a500b2e25d5, type: 2}
+  - {fileID: 11400000, guid: f3311937c05234244bf44a92a293d6f7, type: 2}
+  - {fileID: 11400000, guid: 88aef9a8d18732e45ac561cedb654dfc, type: 2}
+  - {fileID: 11400000, guid: e02e4ea69ba6373499a8c5195d9220bf, type: 2}
+  - {fileID: 11400000, guid: 9728b8a6daa193f4894f0ea2fe53f3fc, type: 2}
+  - {fileID: 11400000, guid: 1c3ea024386f4804290fb7b277567974, type: 2}
+  - {fileID: 11400000, guid: 69c99e86d5c767248b10ebb86e4e497a, type: 2}
+  - {fileID: 11400000, guid: 4b7a3ccc3285d0347ba0653a1f0fbcf2, type: 2}
+  - {fileID: 11400000, guid: 579b7ac5895fec640b493b7d8f9283df, type: 2}
+  - {fileID: 11400000, guid: 6b74a891385ac0a46bbf79dcc2ca07ac, type: 2}
+  - {fileID: 11400000, guid: f026e60f7ffde19419c8bf8c4d2cbcae, type: 2}
+  - {fileID: 11400000, guid: cdf048f2b241d984da5b4fed9cd1852a, type: 2}
   slotOutcomes:
   - {fileID: 11400000, guid: cb2cd8c5f1c374845a8b2fff345e8611, type: 2}
   - {fileID: 11400000, guid: cea4755b11e6eb9458b38a903853ca50, type: 2}
@@ -160,3 +183,822 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3438e9ab0eb7f3b46a1831faa3e18ff7, type: 2}
   - {fileID: 11400000, guid: 328addec7472ed04f9815f8dff341e86, type: 2}
   - {fileID: 11400000, guid: b398af720f28a704285a043ddd17caac, type: 2}
+  - {fileID: 11400000, guid: f4a8944939c8454f90f50df9a7898f2c, type: 2}
+  - {fileID: 11400000, guid: 2fb3a1caac37490aac9f1df4ff62901a, type: 2}
+  - {fileID: 11400000, guid: 1e0cac879e5b4c6391ca8a166f781240, type: 2}
+  interview:
+    deskName: DESK
+    opener:
+      id: interview.opener
+      text: Next! Step forward, {honorific}.
+    openerLegendary:
+      id: interview.openerLegendary
+      text: 'Priority arrival: {name}.'
+    claim:
+      id: interview.claim
+      text: I request passage home to {place}.
+    honorificMale: sir
+    honorificFemale: madam
+    honorificUnknown: traveller
+    requestLabel: Request {document}
+    requestPrompt:
+      id: interview.requestPrompt
+      text: Your {document}, please.
+    requestReply:
+      id: interview.requestReply
+      text: Here you are.
+    askLabel: Ask about home >
+    backLabel: < Back
+    smallTalkLabel: Small talk
+    lookLabel: Look >
+    smallTalkPrompt:
+      id: interview.smallTalkPrompt
+      text: How is life back home?
+    requests:
+    - id: step_closer
+      label: Step closer
+      prompt:
+        id: interview.requests.step_closer.prompt
+        text: Step closer to the glass, please.
+      reply:
+        id: interview.requests.step_closer.reply
+        text: Like this?
+    - id: speak_up
+      label: Speak up
+      prompt:
+        id: interview.requests.speak_up.prompt
+        text: Speak up, please. I can barely hear you.
+      reply:
+        id: interview.requests.speak_up.reply
+        text: Sorry. Is this better?
+    menuCapacity: 8
+  questions:
+  - {fileID: 11400000, guid: eb47f92eb6aa00d4cb626ee29787a348, type: 2}
+  - {fileID: 11400000, guid: 37fad6847b586444a948159a953fddd5, type: 2}
+  - {fileID: 11400000, guid: 1562f77be6cc1814aaef56e11a8aafc2, type: 2}
+  - {fileID: 11400000, guid: 2fc68eb6daa19434a8bd8e9e0a36ad4a, type: 2}
+  - {fileID: 11400000, guid: 5e062f2ca111eaf42843494b0fa32990, type: 2}
+  - {fileID: 11400000, guid: 4e129f565a2b6744d8a133e8c39bda8f, type: 2}
+  dialogs:
+  - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
+  - {fileID: 11400000, guid: bcda9ea69ca7a6a4ebabdc7ddf5b030a, type: 2}
+  - {fileID: 11400000, guid: 611adeb2169076c4882c5daaecbd3e8a, type: 2}
+  historyLines:
+    leaderGained:
+      id: history.leaderGained
+      text: 'HISTORY: {nation} now dominates the timeline. The Future belongs to
+        {place}.'
+    leaderLost:
+      id: history.leaderLost
+      text: 'HISTORY: {nation} no longer dominates the timeline. The Future is unsettled
+        until a new power rises.'
+    carry:
+      id: history.carry
+      text: 'HISTORY: travellers brought {value} to {place}.'
+  lookRules:
+    faceBands:
+    - minAge: 18
+      faces:
+      - a
+      - b
+    - minAge: 35
+      faces:
+      - c
+    - minAge: 60
+      faces:
+      - d
+    greyFromAge: 60
+    wholeFigureLabel: Period dress
+    confusable:
+    - placeA: greece_ancient
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: greece_industrial
+      slot: 3
+      gender: m
+    - placeA: iraq_medieval
+      placeB: japan_medieval
+      slot: 3
+      gender: m
+    - placeA: china_earlymodern
+      placeB: greece_earlymodern
+      slot: 3
+      gender: m
+    - placeA: china_modern
+      placeB: britain_modern
+      slot: 3
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: britain_industrial
+      slot: 3
+      gender: m
+    - placeA: egypt_medieval
+      placeB: egypt_earlymodern
+      slot: 3
+      gender: m
+    - placeA: germany_industrial
+      placeB: germany_modern
+      slot: 3
+      gender: m
+    - placeA: iraq_ancient
+      placeB: greece_medieval
+      slot: 2
+      gender: m
+    - placeA: iraq_ancient
+      placeB: germany_medieval
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: greece_modern
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: greece_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: italy_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: egypt_modern
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: egypt_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: iraq_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: britain_ancient
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: britain_medieval
+      slot: 2
+      gender: m
+    - placeA: egypt_modern
+      placeB: iraq_medieval
+      slot: 4
+      gender: m
+    - placeA: iraq_industrial
+      placeB: iraq_modern
+      slot: 3
+      gender: f
+    - placeA: iraq_earlymodern
+      placeB: iraq_industrial
+      slot: 3
+      gender: f
+    - placeA: iraq_earlymodern
+      placeB: iraq_modern
+      slot: 3
+      gender: f
+    - placeA: egypt_industrial
+      placeB: egypt_medieval
+      slot: 3
+      gender: f
+    - placeA: iraq_medieval
+      placeB: egypt_medieval
+      slot: 3
+      gender: f
+    - placeA: iraq_medieval
+      placeB: egypt_industrial
+      slot: 3
+      gender: f
+    - placeA: china_earlymodern
+      placeB: china_industrial
+      slot: 3
+      gender: f
+    - placeA: italy_earlymodern
+      placeB: china_earlymodern
+      slot: 3
+      gender: f
+    - placeA: italy_earlymodern
+      placeB: china_industrial
+      slot: 3
+      gender: f
+    - placeA: egypt_modern
+      placeB: britain_modern
+      slot: 3
+      gender: f
+    - placeA: egypt_modern
+      placeB: greece_earlymodern
+      slot: 3
+      gender: f
+    - placeA: greece_ancient
+      placeB: egypt_modern
+      slot: 3
+      gender: f
+    - placeA: greece_ancient
+      placeB: greece_earlymodern
+      slot: 3
+      gender: f
+    - placeA: greece_industrial
+      placeB: greece_earlymodern
+      slot: 3
+      gender: f
+    - placeA: germany_ancient
+      placeB: italy_industrial
+      slot: 4
+      gender: f
+    - placeA: iraq_modern
+      placeB: greece_industrial
+      slot: 4
+      gender: f
+    - placeA: iraq_modern
+      placeB: iraq_earlymodern
+      slot: 4
+      gender: f
+    - placeA: greece_ancient
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_ancient
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_ancient
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: iraq_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: italy_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: japan_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: egypt_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: greece_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: germany_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: egypt_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: britain_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: egypt_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: iraq_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: britain_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: germany_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: china_ancient
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_ancient
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_ancient
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: iraq_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: italy_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: japan_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: italy_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: germany_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: italy_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: japan_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: britain_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: germany_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: iraq_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: britain_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: germany_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_ancient
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: iraq_medieval
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: italy_medieval
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: japan_medieval
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: egypt_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: greece_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: germany_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: egypt_industrial
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: britain_industrial
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: egypt_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: iraq_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: britain_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: germany_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+  cultureUi:
+    readingLanguage: en
+    glossPercent: 60
+    labelMinScale: 0.55
+    contrast:
+      text: 4.5
+      largeText: 3
+      glyph: 3
+      hint: 3
+      outline: 3
+      minTextFillAlpha: 0.7
+    latinFallbackFont: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+  neutralTheme: {fileID: 11400000, guid: f032433ed1b73e54587158f6e2a9f58d, type: 2}
+  themes:
+  - {fileID: 11400000, guid: 05c9fef960155b04f9a1031bf36cdf02, type: 2}
+  - {fileID: 11400000, guid: 43b13b2e24c3ebc43bf6a697194ba40f, type: 2}
+  - {fileID: 11400000, guid: a746b164e71be2740a8e21b86e6dacac, type: 2}
+  - {fileID: 11400000, guid: 71efb6d6b9d4ee444b7883e8503ec995, type: 2}
+  - {fileID: 11400000, guid: eda503670e37ea2449655c141856bc10, type: 2}
+  - {fileID: 11400000, guid: ddf9246411686e74890e782d22e98f17, type: 2}
+  - {fileID: 11400000, guid: c1c7d5be86608c24987e864f34f1d7f7, type: 2}
+  - {fileID: 11400000, guid: 7b6dc1f731e2a6746aeeba3b93bceadb, type: 2}
+  stringTables:
+  - {fileID: 11400000, guid: 21f972943dd9bf646bbb5bb5989c17d4, type: 2}
+  - {fileID: 11400000, guid: cf6c72fc05710f34da352b6e457bc35c, type: 2}
+  - {fileID: 11400000, guid: 647426fcd11a64c48bce8be2ca6782f0, type: 2}
+  - {fileID: 11400000, guid: 11cab4f6556a9f4449b52e5cc900dc4c, type: 2}
+  - {fileID: 11400000, guid: e6d4c206672662643b3275bb5c81d3ee, type: 2}
+  - {fileID: 11400000, guid: 5318bdc9b8a286c4cb0663f271791f7d, type: 2}
+  - {fileID: 11400000, guid: 7e9502c7ac4b26848bf53f9db563cc89, type: 2}
+  translation:
+    rules:
+      fromDay: 2
+      tongues:
+      - id: english
+        displayName: English
+        script: latin
+        pack: 
+        glyphs: 
+      - id: egyptian
+        displayName: Egyptian
+        script: hieroglyphs
+        pack: near_east
+        glyphs: "\U0001313F\U000130C0\U0001337F\U000130A7\U000131CB\U00013191\U000133BC\U00013254\U000131CC\U00013193\U000133A1\U000130ED\U00013153\U00013216\U0001309D\U000132AA\U0001320E\U0001308B\U000132F4\U000133CF\U00013171\U0001339B\U000133F2\U0001340D\U000133ED\U00013283"
+      - id: akkadian
+        displayName: Akkadian
+        script: cuneiform
+        pack: near_east
+        glyphs: "\U00012000\U00012040\U000121A0\U00012055\U0001208A\U0001227F\U000120B5\U00012129\U0001213F\U00012156\U00012157\U000121B7\U00012220\U0001223E\U00012311\U0001227A\U000122E1\U0001228F\U00012293\U000122EB\U0001230B\U0001224C\U00012292\U000121AA\U00012140\U0001235D"
+      - id: arabic
+        displayName: Arabic
+        script: arabic
+        pack: near_east
+        glyphs: "\u0639\u0643\u0633\u0631\u064A\u0642\u062C\u062D\u0627\u0634\u062A\u0646\u0645\u0644\u0648\u0628\u0637\u062F\u0641\u062E\u0647\u0632\u063A\u0636\u0621\u0630"
+      - id: greek
+        displayName: Greek
+        script: greek
+        pack: mediterranean
+        glyphs: "\u03BF\u03BB\u03BC\u03BD\u03B1\u03BE\u03C0\u03C1\u03B7\u03C3\u03C4\u03C6\u03C7\u03C8\u03C5\u03C2\u03AC\u03AD\u03B2\u03B3\u03B9\u03B4\u03B6\u03B8\u03C9\u03BA"
+      - id: latin
+        displayName: Latin
+        script: latin
+        pack: mediterranean
+        glyphs: ifghojklumnpqrystvwxazbced
+      - id: italian
+        displayName: Italian
+        script: latin
+        pack: mediterranean
+        glyphs: "ohjkulmn\xE8pqrstavwxzbecdfig"
+      - id: chinese
+        displayName: Chinese
+        script: han
+        pack: east_asia
+        glyphs: "\u5B89\u6587\u5C71\u6C34\u8863\u65E5\u6708\u5929\u4E00\u5730\u6728\u706B\u91D1\u77F3\u6B27\u7530\u4E2D\u5927\u5C0F\u4E0A\u4E4C\u4E0B\u53E3\u5FC3\u7531\u738B"
+      - id: japanese
+        displayName: Japanese
+        script: kana
+        pack: east_asia
+        glyphs: "\u3042\u304B\u304D\u304F\u3048\u3051\u3053\u3055\u3044\u3057\u3059\u305B\u305D\u305F\u304A\u3061\u3064\u3066\u3068\u306A\u3046\u306B\u306E\u306F\u3084\u307E"
+      - id: brittonic
+        displayName: Brittonic
+        script: latin
+        pack: north_europe
+        glyphs: wpqrastveyxzbcidfghjoklmun
+      - id: oldenglish
+        displayName: Old English
+        script: latin
+        pack: north_europe
+        glyphs: "umnpyqrs\xE6\xFEv\u01BFxzebc\xF0fgihjkol"
+      - id: germanic
+        displayName: Proto-Germanic
+        script: runic
+        pack: north_europe
+        glyphs: "\u16DF\u16B7\u16B9\u16BA\u16A8\u16BE\u16C3\u16C8\u16D6\u16C9\u16CA\u16CF\u16D2\u16D7\u16A2\u16DA\u16DC\u16DE\u16B4\u16E6\u16C1\u16A0\u16A6\u16B1\u16C7\u16B2"
+      - id: german
+        displayName: German
+        script: latin
+        pack: north_europe
+        glyphs: "eklminpq\xF6r\xDFtvwuxzbcd\xFCfgh\xE4j"
+      packs:
+      - id: near_east
+        displayName: Near East
+      - id: mediterranean
+        displayName: Mediterranean
+      - id: east_asia
+        displayName: East Asia
+      - id: north_europe
+        displayName: Northern Europe
+    scripts:
+    - id: latin
+      rightToLeft: 0
+      fonts: []
+    - id: greek
+      rightToLeft: 0
+      fonts: []
+    - id: arabic
+      rightToLeft: 1
+      fonts:
+      - file: tahoma.ttf
+        face: 0
+        family: Tahoma
+        style: Regular
+      - file: arial.ttf
+        face: 0
+        family: Arial
+        style: Regular
+      - file: 
+        face: 0
+        family: Geeza Pro
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Arabic
+        style: Regular
+    - id: han
+      rightToLeft: 0
+      fonts:
+      - file: msyh.ttc
+        face: 0
+        family: Microsoft YaHei
+        style: Regular
+      - file: simsun.ttc
+        face: 0
+        family: SimSun
+        style: Regular
+      - file: 
+        face: 0
+        family: PingFang SC
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans CJK SC
+        style: Regular
+    - id: kana
+      rightToLeft: 0
+      fonts:
+      - file: YuGothR.ttc
+        face: 0
+        family: Yu Gothic
+        style: Regular
+      - file: msgothic.ttc
+        face: 0
+        family: MS Gothic
+        style: Regular
+      - file: 
+        face: 0
+        family: Hiragino Sans
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans CJK JP
+        style: Regular
+    - id: hieroglyphs
+      rightToLeft: 0
+      fonts:
+      - file: seguihis.ttf
+        face: 0
+        family: Segoe UI Historic
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Egyptian Hieroglyphs
+        style: Regular
+    - id: cuneiform
+      rightToLeft: 0
+      fonts:
+      - file: seguihis.ttf
+        face: 0
+        family: Segoe UI Historic
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Cuneiform
+        style: Regular
+    - id: runic
+      rightToLeft: 0
+      fonts:
+      - file: seguihis.ttf
+        face: 0
+        family: Segoe UI Historic
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Runic
+        style: Regular
+    flip:
+      startDelay: 0.3
+      letterInterval: 0.04
+      letterSeconds: 0.12
+      scrambleSteps: 2
+      rowStagger: 0.15
+    fallbackGlyphs: olmnupqrystvwxazbcdfeghjik

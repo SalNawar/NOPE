@@ -6,8 +6,11 @@ using UnityEngine.UI;
 /// Visual-only click-to-compare (Papers, Please style). Click one value, then
 /// another, and both are highlighted and shown side by side in a compare bar so
 /// the player can spot a mismatch themselves — no automatic verdict. A third
-/// click starts a new comparison. Document field rows and reference-book entry
-/// rows call <see cref="Select"/>.
+/// click starts a new comparison. Document field rows, reference-book entry
+/// rows, Citizen Records rows, interview transcript answer rows and the
+/// traveller wheel's look menu (a garment) call <see cref="Select"/>. MATCH is
+/// decided on each side's CompareEvidence.MatchValue (a garment shows its item
+/// but matches on its place's Culture value).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
@@ -54,11 +57,13 @@ public sealed class CompareController : MonoBehaviour
             compareBar.SetActive(false);
     }
 
-    /// <summary>Registers a clicked value for comparison (no typed evidence).</summary>
-    public void Select(string label, string value, Image highlight) =>
-        Select(label, value, highlight, default);
-
-    /// <summary>Registers a clicked value for comparison, with typed evidence.</summary>
+    /// <summary>
+    /// Registers a clicked value for comparison, with typed evidence.
+    /// <paramref name="value"/> is the text the bar shows for this side: the
+    /// canonical value, or an untranslated statement's placeholder (piece 9);
+    /// with typed evidence, MATCH is decided on CompareEvidence.MatchValue, the
+    /// canonical value; never DisplayText output.
+    /// </summary>
     public void Select(string label, string value, Image highlight, CompareEvidence evidence)
     {
         // Clicking the same row again clears the comparison.
@@ -83,6 +88,15 @@ public sealed class CompareController : MonoBehaviour
             PairCompared?.Invoke(_a.evidence, _b.evidence);
     }
 
+    /// <summary>The present culture's compare colours (CultureThemeService at scene load; piece 6).</summary>
+    public void ApplyTheme(Color match, Color mismatch, Color neutral, Color highlight)
+    {
+        matchColor = match;
+        mismatchColor = mismatch;
+        neutralColor = neutral;
+        highlightColor = highlight;
+    }
+
     /// <summary>
     /// Replaces the compare bar verdict after a discrepancy registers, so an
     /// origin-proof never reads as a friendly green MATCH.
@@ -93,7 +107,20 @@ public sealed class CompareController : MonoBehaviour
             return;
 
         compareText.color = mismatchColor;
-        compareText.text = $"●  DEVIATION LOGGED — {summary}";
+        compareText.text = UiText.Format("compare.deviationLogged", summary);
+    }
+
+    /// <summary>
+    /// Replaces the compare bar verdict when a pair proves a category that is
+    /// already in the Deviation Report, so a second proof visibly adds nothing.
+    /// </summary>
+    public void ShowAlreadyDocumented(string categoryLabel)
+    {
+        if (compareText == null)
+            return;
+
+        compareText.color = neutralColor;
+        compareText.text = UiText.Format("compare.alreadyDocumented", categoryLabel);
     }
 
     private Slot Fill(string label, string value, Image g, CompareEvidence evidence)
@@ -119,28 +146,21 @@ public sealed class CompareController : MonoBehaviour
 
         if (_a.set && _b.set)
         {
-            bool match = ValuesMatch(_a.value, _b.value);
+            bool match = DiscrepancyLog.ValuesMatch(_a.evidence.MatchValue(_a.value), _b.evidence.MatchValue(_b.value));
             compareText.color = match ? matchColor : mismatchColor;
-            string verdict = match ? "MATCH" : "MISMATCH";
-            compareText.text = $"{verdict}    {_a.label}:  {_a.value}    vs    {_b.label}:  {_b.value}";
+            string verdict = UiText.Get(match ? "compare.match" : "compare.mismatch");
+            compareText.text = UiText.Format("compare.pair", verdict, _a.label, _a.value, _b.label, _b.value);
         }
         else if (_a.set)
         {
             compareText.color = neutralColor;
-            compareText.text = $"{_a.label}:  {_a.value}    vs    (pick another value to compare)";
+            compareText.text = UiText.Format("compare.pickAnother", _a.label, _a.value);
         }
         else
         {
             compareText.color = neutralColor;
             compareText.text = string.Empty;
         }
-    }
-
-    /// <summary>Case-insensitive, trimmed equality for two displayed values.</summary>
-    private static bool ValuesMatch(string a, string b)
-    {
-        return string.Equals((a ?? string.Empty).Trim(), (b ?? string.Empty).Trim(),
-            System.StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>Clears highlights and the compare bar.</summary>

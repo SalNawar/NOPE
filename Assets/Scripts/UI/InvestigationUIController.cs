@@ -7,8 +7,17 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Orchestrates the office investigation: shows the visitor's travel claim and
-/// today's directives, spawns a draggable window per document, builds a shelf of
-/// reference books the player can open/stow, and offers the binary Accept/Deny.
+/// today's directives, runs the interview on the traveller wheel (document
+/// requests, today's questions, a look at the traveller's garments, which go
+/// into the compare bar, and narrative dialogs, with the transcript window and
+/// the traveller's claim and replies in the wheel's bubble), hands each
+/// document over as a physical paper on the desk (whose scan opens its
+/// window) or, where no desk is wired, straight to its draggable window,
+/// builds a shelf of reference books the player can open/stow, and offers the
+/// binary Accept/Deny. From translation's first day a traveller's papers and
+/// speech are in their claimed place's tongue (piece 9): the day's
+/// TranslationPresenter says how each traveller's text shows, and the scan
+/// is the papers' reveal point.
 ///
 /// Two modes:
 /// - RICH: when the desk has been built (document/book/shelf templates wired by
@@ -42,23 +51,85 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private OSWindowChrome scannerWindow;
 
     [Header("Interaction / records")]
-    /// <summary>Intercom panel listing per-case traveller actions.</summary>
+    /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
     [SerializeField] private InteractionPanelController interactionPanel;
 
     /// <summary>Citizen Records app (registry injected per day).</summary>
     [SerializeField] private CitizenRecordsWindowController recordsWindow;
 
+    [Header("Interview")]
+    /// <summary>Case Notes: Interview, the current traveller's transcript (answer rows are compare-clickable).</summary>
+    [SerializeField] private TranscriptWindowController transcriptWindow;
+
+    /// <summary>The transcript window's chrome; every interview choice but a document request opens it.</summary>
+    [SerializeField] private OSWindowChrome transcriptChrome;
+
+    [Header("Desk")]
+    /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
+    [SerializeField] private DeskController desk;
+
+    /// <summary>The traveller wheel: closed after a hand-over; it gives the ring its icons and says the traveller's lines (the claim on arrival, then each reply).</summary>
+    [SerializeField] private TravellerWheel wheel;
+
+    /// <summary>Shown on the desktop between travellers.</summary>
+    [SerializeField] private GameObject idleScreen;
+
+    [Header("Window layout")]
+    /// <summary>Where the first document window opens (desktop units from the centre). The builder writes the 4:3 layout; this default is the 16:9 one.</summary>
+    [SerializeField] private Vector2 documentWindowOrigin = new Vector2(-330f, 140f);
+
+    /// <summary>Offset from one document window to the next.</summary>
+    [SerializeField] private Vector2 documentWindowStep = new Vector2(620f, 0f);
+
+    /// <summary>Where the first book window opens.</summary>
+    [SerializeField] private Vector2 bookWindowOrigin = new Vector2(-380f, -150f);
+
+    /// <summary>Horizontal step between the three book windows of a row.</summary>
+    [SerializeField] private float bookWindowColumnStep = 320f;
+
+    /// <summary>Offset from one row of book windows to the next.</summary>
+    [SerializeField] private Vector2 bookWindowRowStep = new Vector2(40f, 40f);
+
     private Action<bool> _onDecision;
-    private readonly List<GameObject> _docWindows = new();
+
+    /// <summary>The current traveller's document windows, in paper order.</summary>
+    private readonly List<DocumentWindowController> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
+
+    /// <summary>The current traveller's documents in paper order (name, holder, hand-over).</summary>
+    private readonly List<CaseDocument> _caseDocuments = new();
+
+    /// <summary>Papers whose window already has a desktop icon this case.</summary>
+    private readonly HashSet<int> _iconedDocuments = new();
     private bool _booksBuilt;
-    private string _directives = "Directives: all destinations cleared.";
+    private string _directives = string.Empty;
+
+    /// <summary>Today's facts (set by GameManager; the books render these rows).</summary>
+    private FactTable _facts;
+
+    /// <summary>Today's citizen registry (set by GameManager; the text fallback prints the current traveller's record).</summary>
+    private CitizenRegistry _registry;
 
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new();
 
     /// <summary>The case currently on the desk (null between cases).</summary>
     private CaseInstance _currentCase;
+
+    /// <summary>Today's interview (set by GameManager): askable questions, offered dialogs, wording and the shift's dialog outcomes.</summary>
+    private InterviewDay _day;
+
+    /// <summary>The current traveller's interview (null before the first case).</summary>
+    private DialogRunner _runner;
+
+    /// <summary>Character art (set by GameManager): the passport photos on the papers and the scanned pages.</summary>
+    private CharacterArt _art;
+
+    /// <summary>Today's translation (set by GameManager; null = everything plain).</summary>
+    private TranslationPresenter _translation;
+
+    /// <summary>The current traveller's translation (None between cases and when nothing is foreign).</summary>
+    private CaseTranslation _caseTranslation = CaseTranslation.None;
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
@@ -68,6 +139,25 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// scoring may gate denials on documented evidence.
     /// </summary>
     public bool EvidenceSystemActive => RichMode && compareController != null;
+
+    /// <summary>
+    /// True when a traveller's answers can be read: always in the text
+    /// fallback; in the rich desk only when the wheel's ring, the transcript
+    /// window and its chrome are wired. When false, GameManager computes no answers
+    /// and generates no spoken tell that day. (Serialized references are
+    /// compared with != null: an unassigned one is Unity's fake null.)
+    /// </summary>
+    public bool InterviewReachable =>
+        !RichMode || (interactionPanel != null && transcriptWindow != null && transcriptChrome != null);
+
+    /// <summary>
+    /// True when a traveller's garments can be looked at and compared: always
+    /// in the text fallback (which prints the dress); in the rich desk only
+    /// when the wheel's ring (its "Look >" menu) and the compare bar are wired.
+    /// When false, GameManager generates no dress tell that day.
+    /// </summary>
+    public bool AppearanceReachable =>
+        !RichMode || (interactionPanel != null && compareController != null);
 
     // Fallback state
     private bool _fallbackBuilt;
@@ -79,8 +169,18 @@ public sealed class InvestigationUIController : MonoBehaviour
         documentWindowTemplate != null && windowLayer != null &&
         acceptButton != null && denyButton != null;
 
+    /// <summary>True when documents become physical papers: the rich desk with the desk and all its parts wired (a partly wired desk takes the window path, so papers always reach the PC).</summary>
+    private bool DeskReachable => RichMode && desk != null && desk.IsReachable;
+
     private void Awake()
     {
+        // A leftover copy in the art office (from before the gameplay moved into its own scene) does nothing.
+        if (OfficeScenes.IsArtOffice(gameObject.scene))
+        {
+            enabled = false;
+            return;
+        }
+
         if (documentWindowTemplate != null) documentWindowTemplate.gameObject.SetActive(false);
         if (bookWindowTemplate != null) bookWindowTemplate.gameObject.SetActive(false);
         if (bookShelfButtonTemplate != null) bookShelfButtonTemplate.gameObject.SetActive(false);
@@ -88,43 +188,101 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (compareController != null)
             compareController.PairCompared += HandlePairCompared;
+
+        // Birth-date tells are proven only against Citizen Records (RecordMismatch).
+        if (EvidenceSystemActive && recordsWindow == null)
+            Debug.LogWarning("[InvestigationUIController] Citizen Records not wired: birth-date tells cannot be proven. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
+        if (RichMode && !InterviewReachable)
+            Debug.LogWarning("[InvestigationUIController] Traveller wheel or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the wheel's look menu or the compare bar no garment could be compared, so the day leaks no dress.
+        if (RichMode && !AppearanceReachable)
+            Debug.LogWarning("[InvestigationUIController] Traveller wheel or compare bar not wired (interactionPanel or compareController): garments cannot be looked at and no dress tell is generated today. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the desk every document still reaches the PC, as its window.
+        if (RichMode && !DeskReachable)
+            Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents open on the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
+
+        if (DeskReachable)
+            desk.ScanFinished += OpenDocumentWindow;
+
+        if (idleScreen != null)
+            idleScreen.SetActive(true);
     }
 
     private void OnDestroy()
     {
         if (compareController != null)
             compareController.PairCompared -= HandlePairCompared;
+
+        if (DeskReachable)
+            desk.ScanFinished -= OpenDocumentWindow;
     }
 
     /// <summary>
-    /// Auto-registers a true contradiction when the player compares a forged
-    /// document field against the reference entry that disproves it.
+    /// Documents a true contradiction when the player compares a liar's tell
+    /// against the reference entry or record that disproves it; proving an
+    /// already documented category again only says so in the compare bar.
     /// </summary>
     private void HandlePairCompared(CompareEvidence a, CompareEvidence b)
     {
         if (_currentCase == null)
             return;
 
-        Discrepancy found = _discrepancies.TryRegister(a, b,
+        Discrepancy proof = DiscrepancyLog.Prove(a, b,
             _currentCase.claimedNation != null ? _currentCase.claimedNation.id : null,
             _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null);
-        if (found == null)
+        if (proof == null)
             return;
+
+        if (!_discrepancies.Add(proof))
+        {
+            if (compareController != null)
+                compareController.ShowAlreadyDocumented(UiText.Category(proof.category));
+            return;
+        }
 
         RefreshScannerText();
 
         if (compareController != null)
-            compareController.ShowDeviation(found.Summary);
+            compareController.ShowDeviation(UiText.Deviation(proof));
 
         if (scannerWindow != null)
             scannerWindow.Open();
     }
 
-    /// <summary>Injects the day's citizen registry into the Records app.</summary>
+    /// <summary>Injects the day's citizen registry into the Records app and the text fallback.</summary>
     public void SetCitizenRegistry(CitizenRegistry registry)
     {
+        _registry = registry;
         if (recordsWindow != null)
             recordsWindow.SetRegistry(registry);
+    }
+
+    /// <summary>Injects today's facts (the reference books render these rows).</summary>
+    public void SetFacts(FactTable facts)
+    {
+        _facts = facts;
+    }
+
+    /// <summary>Injects today's interview (questions, dialogs and wording, fixed at day start).</summary>
+    public void SetInterviewDay(InterviewDay day)
+    {
+        _day = day;
+    }
+
+    /// <summary>Injects the character art the passport photos are drawn with.</summary>
+    public void SetCharacterArt(CharacterArt art)
+    {
+        _art = art;
+    }
+
+    /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings.</summary>
+    public void SetTranslation(TranslationDay day, TranslationSettings settings)
+    {
+        _translation = new TranslationPresenter(day, settings);
     }
 
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
@@ -135,19 +293,16 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (_discrepancies.Count == 0)
         {
-            scannerText.text =
-                "No deviations documented.\n\n" +
-                "Compare a document field against the matching reference entry " +
-                "for the claimed era to log evidence.";
+            scannerText.text = UiText.Get("scanner.idle");
             return;
         }
 
         var sb = new StringBuilder();
         foreach (Discrepancy d in _discrepancies.Items)
-            sb.AppendLine("• " + d.Summary);
+            sb.AppendLine(UiText.Format("list.bullet", UiText.Deviation(d)));
 
         sb.AppendLine();
-        sb.AppendLine($"{_discrepancies.Count} deviation(s) documented. Denial is justified.");
+        sb.AppendLine(UiText.Format("scanner.summary", _discrepancies.Count));
         scannerText.text = sb.ToString();
     }
 
@@ -162,12 +317,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     private static string BuildDirectives(IReadOnlyList<TravelRuleSO> rules)
     {
         if (rules == null || rules.Count == 0)
-            return "Directives: all destinations cleared today.";
+            return UiText.Get("directives.none");
 
-        var sb = new StringBuilder("Directives (deny violators):\n");
+        var sb = new StringBuilder(UiText.Get("directives.header") + "\n");
         foreach (TravelRuleSO r in rules)
             if (r != null)
-                sb.AppendLine("• " + r.Summary());
+                sb.AppendLine(UiText.Format("list.bullet", r.Summary()));
         return sb.ToString();
     }
 
@@ -185,11 +340,12 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowFallback(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases).</summary>
+    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line.</summary>
     public void Hide()
     {
         if (root != null) root.SetActive(false);
         if (_fallbackPanel != null) _fallbackPanel.SetActive(false);
+        if (idleScreen != null) idleScreen.SetActive(true);
     }
 
     // -----------------------------
@@ -199,9 +355,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
         if (root != null) root.SetActive(true);
+        if (idleScreen != null) idleScreen.SetActive(false);
 
         if (claimText != null)
-            claimText.text = inst != null ? $"{inst.visitorDisplayName}\n\"{inst.claimLine}\"" : string.Empty;
+            claimText.text = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
 
         if (directivesText != null)
             directivesText.text = _directives;
@@ -210,20 +367,25 @@ public sealed class InvestigationUIController : MonoBehaviour
         // (A pin system will later let the player keep chosen windows open.)
         CloseAllWindows();
 
-        foreach (GameObject w in _docWindows)
+        foreach (DocumentWindowController w in _docWindows)
             if (w != null)
-                Destroy(w);
+                Destroy(w.gameObject);
         _docWindows.Clear();
 
         foreach (GameObject ic in _docIcons)
             if (ic != null)
                 Destroy(ic);
         _docIcons.Clear();
+        _iconedDocuments.Clear();
+        _caseDocuments.Clear();
 
-        // Documents are handed over via intercom actions ("Request Passport"),
-        // not desktop icons: the windows spawn hidden and open on request.
-        var actions = new List<InteractionAction>();
+        // The traveller's tongue decides how their papers and speech show today.
+        _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
 
+        // Documents are handed over, never taken: those marked "on arrival" when
+        // the traveller steps up, the others through the traveller wheel. With
+        // the desk, each becomes a paper whose scan opens its window; without
+        // it, the window opens at the hand-over. Windows spawn hidden.
         if (inst != null)
         {
             int i = 0;
@@ -232,29 +394,33 @@ public sealed class InvestigationUIController : MonoBehaviour
                 DocumentWindowController clone = Instantiate(documentWindowTemplate, windowLayer);
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
-                    rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
-                clone.SetDocument(doc, compareController);
-                _docWindows.Add(clone.gameObject);
-
-                string docName = doc != null && doc.template != null ? doc.template.displayName : "Document";
-                GameObject window = clone.gameObject;
-                actions.Add(new InteractionAction
+                    rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
+                clone.SetDocument(doc, compareController, inst.look, _art, _caseTranslation);
+                _docWindows.Add(clone);
+                _caseDocuments.Add(new CaseDocument
                 {
-                    label = $"Request {docName}",
-                    execute = () =>
-                    {
-                        if (window == null)
-                            return;
-                        window.SetActive(true);
-                        window.transform.SetAsLastSibling();
-                    }
+                    name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
+                    holder = inst.visitorGivenName,
+                    handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
+                    showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
                 i++;
             }
         }
 
-        if (interactionPanel != null)
-            interactionPanel.SetActions(actions);
+        if (DeskReachable)
+        {
+            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
+        }
+        else
+        {
+            foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
+                OpenDocumentWindow(i);
+        }
+
+        if (wheel != null)
+            wheel.SetTranslation(_caseTranslation);
+        StartInterview(inst, _caseDocuments);
 
         BuildBookShelf(lib);
 
@@ -262,6 +428,173 @@ public sealed class InvestigationUIController : MonoBehaviour
             compareController.Clear();
 
         WireDecisionButtons(acceptButton, denyButton);
+    }
+
+    /// <summary>
+    /// Starts the traveller's interview: the hub with a request per document
+    /// handed over on request, "Look >" (the traveller's garments) when
+    /// garments can be compared, and, when the interview is reachable, today's
+    /// questions, small talk and offered dialogs (a premade's own dialog only
+    /// while they are at the desk; without a wired transcript nothing spoken
+    /// could be read, so only the requests and the look remain). The
+    /// transcript starts with the opener and the claim, and the traveller says
+    /// the claim in the wheel's bubble.
+    /// </summary>
+    private void StartInterview(CaseInstance inst, IReadOnlyList<CaseDocument> documents)
+    {
+        _runner = null;
+        if (_day == null)
+        {
+            Debug.LogError("[InvestigationUIController] No interview day was injected (GameManager.SetInterviewDay), so the traveller wheel is empty.", this);
+            if (interactionPanel != null)
+                interactionPanel.Clear();
+            return;
+        }
+
+        bool reachable = InterviewReachable;
+        var interviewCase = new InterviewCase
+        {
+            introLine = inst != null ? inst.introLine : null,
+            claimLine = inst != null ? inst.claimLine : null,
+            claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
+            documents = documents,
+            answers = inst != null ? inst.answers : null,
+            smallTalk = reachable && inst != null ? inst.smallTalk : null,
+            garments = AppearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null
+        };
+
+        string premadeDialog = inst != null && inst.legendarySource != null ? inst.legendarySource.dialogId : null;
+        DialogGraph graph = InterviewScript.Build(_day.Lines,
+            reachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
+            reachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
+            interviewCase);
+        _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
+
+        if (transcriptWindow != null)
+            transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController, _caseTranslation);
+
+        RefreshChoices();
+
+        if (wheel != null)
+            wheel.Say(InterviewScript.SaidSince(_runner.Transcript, 0));
+    }
+
+    /// <summary>
+    /// Shows the current interview node's choices on the traveller wheel,
+    /// grouped by kind (DialogChoiceKinds.Arrange), each with its kind's icon
+    /// when the wheel is wired ("&lt; Back" in its centre).
+    /// </summary>
+    private void RefreshChoices()
+    {
+        if (interactionPanel == null || _runner == null)
+            return;
+
+        var actions = new List<InteractionAction>();
+        foreach (DialogChoice choice in DialogChoiceKinds.Arrange(_runner.Choices))
+        {
+            string id = choice.Id;
+            actions.Add(new InteractionAction
+            {
+                label = choice.Label,
+                centre = choice.Kind == DialogChoiceKind.Back,
+                icon = wheel != null ? wheel.IconFor(choice.Kind) : null,
+                execute = () => Choose(id)
+            });
+        }
+
+        interactionPanel.SetActions(actions);
+    }
+
+    /// <summary>
+    /// Plays one interview choice: the transcript shows its lines; a document
+    /// request hands that document over (a paper onto the desk, or straight to
+    /// its window where no desk is wired) and closes the wheel so the player can
+    /// take it; a look at a garment puts it into the compare bar (the player
+    /// then compares it with a Costume Guide row on the PC) and closes the
+    /// wheel; any other choice opens the transcript; the traveller's lines, when
+    /// the choice adds some, go to the wheel's bubble (the spoken reveal point),
+    /// queued after what they are saying, each changing a premade's picture as
+    /// it starts (a choice without one, such as "Ask about home >" or "&lt;
+    /// Back", adds nothing); a finished dialog is recorded for the end of the
+    /// shift.
+    /// </summary>
+    private void Choose(string choiceId)
+    {
+        if (_runner == null)
+            return;
+
+        int before = _runner.Transcript.Count;
+        DialogChoice choice = _runner.Choose(choiceId);
+        if (choice == null)
+            return;
+
+        if (transcriptWindow != null)
+            transcriptWindow.Refresh();
+
+        if (choice.Action == DialogAction.HandOverDocument)
+        {
+            if (DeskReachable)
+                desk.HandOver(choice.DocumentIndex);
+            else
+                OpenDocumentWindow(choice.DocumentIndex);
+
+            if (wheel != null)
+                wheel.Close();
+        }
+        else if (choice.Action == DialogAction.InspectGarment)
+        {
+            LookAt(choice.GarmentIndex);
+            if (wheel != null)
+                wheel.Close();
+        }
+        else if (transcriptChrome != null)
+        {
+            transcriptChrome.Open();
+        }
+
+        if (wheel != null)
+            wheel.Say(InterviewScript.SaidSince(_runner.Transcript, before));
+
+        if (choice.Action == DialogAction.CompleteDialog)
+            _day.Complete(choice.DialogId, choice.EffectName);
+
+        RefreshChoices();
+    }
+
+    /// <summary>
+    /// Puts one of the current traveller's garments into the compare bar: its
+    /// slot as the label, its item name as the shown value, and as evidence its
+    /// place's Culture value (a tell for a liar's dress tell).
+    /// </summary>
+    private void LookAt(int garmentIndex)
+    {
+        IReadOnlyList<Garment> garments = _currentCase != null && _currentCase.look != null ? _currentCase.look.Garments : null;
+        if (compareController == null || garments == null || garmentIndex < 0 || garmentIndex >= garments.Count)
+            return;
+
+        Garment g = garments[garmentIndex];
+        compareController.Select(UiText.Format("compare.travellerLabel", UiText.Slot(g.Slot)), g.Label, null,
+                                 CompareEvidence.ForAppearance(Looks.EvidenceCategory, g.Value, g.IsTell));
+    }
+
+    /// <summary>
+    /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
+    /// or a hand-over where no desk is wired: the written reveal point, where
+    /// a translated paper starts flipping into English the first time). The
+    /// first time it opens this case, the paper also gets a desktop icon at
+    /// the top of the grid, which reopens the window after it is closed.
+    /// </summary>
+    private void OpenDocumentWindow(int index)
+    {
+        DocumentWindowController window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
+        if (window == null)
+            return;
+
+        window.gameObject.SetActive(true);
+        window.transform.SetAsLastSibling();
+        window.Reveal();
+        if (_iconedDocuments.Add(index))
+            AddDesktopIcon(_caseDocuments[index].name, window.gameObject, true);
     }
 
     /// <summary>
@@ -299,9 +632,9 @@ public sealed class InvestigationUIController : MonoBehaviour
                 continue;
 
             ReferenceBookWindowController win = Instantiate(bookWindowTemplate, windowLayer);
-            win.SetBook(book, compareController);
+            win.SetBook(book, _facts, compareController);
             if (win.transform is RectTransform rt)
-                rt.anchoredPosition = new Vector2(-380f + i * 320f, -150f);
+                rt.anchoredPosition = bookWindowOrigin + new Vector2((i % 3) * bookWindowColumnStep, 0f) + (i / 3) * bookWindowRowStep;
             GameObject winGo = win.gameObject;
             winGo.SetActive(false);
 
@@ -359,7 +692,13 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     private void Decide(bool accepted)
     {
+        if (DeskReachable)
+            desk.EndCase();
         Hide();
+
+        // No case is on the desk from here: cleared before the callback, which
+        // may present the next traveller at once (no READY sign wired).
+        _currentCase = null;
         Action<bool> cb = _onDecision;
         _onDecision = null;
         cb?.Invoke(accepted);
@@ -378,42 +717,80 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (_fallbackClaim != null)
             _fallbackClaim.text = inst != null
-                ? $"{inst.visitorDisplayName}\n\"{inst.claimLine}\"\n\n{_directives}"
+                ? UiText.Format("fallback.claim", inst.visitorDisplayName, inst.claimLine, _directives)
                 : string.Empty;
 
         if (_fallbackBody != null)
-            _fallbackBody.text = BuildFallbackBody(inst, lib);
+            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts, _registry, _day);
     }
 
-    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib)
+    /// <summary>
+    /// The text fallback's body: the papers, the traveller's agency record (so
+    /// a birth-date tell can be spotted without the Records app), the
+    /// traveller's dress (each garment with its place's Culture value), their
+    /// answers to today's questions, and the claimed place's entry in each book.
+    /// </summary>
+    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts, CitizenRegistry registry, InterviewDay day)
     {
         var sb = new StringBuilder();
 
         if (inst != null)
         {
-            sb.AppendLine("— DOCUMENTS PRESENTED —");
+            sb.AppendLine(UiText.Get("fallback.documents"));
             foreach (DocumentInstance doc in inst.documents)
             {
-                sb.AppendLine($"[{(doc.template != null ? doc.template.displayName : "Document")}]");
+                sb.AppendLine(UiText.Format("fallback.document", doc.template != null ? doc.template.displayName : UiText.Get("document.untitled")));
                 foreach (DocumentField f in doc.fields)
-                    sb.AppendLine($"    {f.label}: {f.value}");
+                    sb.AppendLine(UiText.Format("fallback.field", f.label, f.value));
             }
             sb.AppendLine();
+
+            sb.AppendLine(UiText.Get("fallback.record"));
+            CitizenRecord record = registry != null ? registry.Find(inst.visitorGivenName) : null;
+            if (record == null)
+            {
+                sb.AppendLine(UiText.Get("fallback.noRecord"));
+            }
+            else
+            {
+                sb.AppendLine(UiText.Format("fallback.recordName", record.fullName));
+                sb.AppendLine(UiText.Format("fallback.recordBorn", record.birthDate));
+                sb.AppendLine(UiText.Format("fallback.recordOrigin", record.origin));
+            }
+            sb.AppendLine();
+
+            if (inst.look != null && inst.look.Garments.Count > 0)
+            {
+                sb.AppendLine(UiText.Get("fallback.dress"));
+                foreach (Garment g in inst.look.Garments)
+                    sb.AppendLine(UiText.Format("fallback.garment", UiText.Slot(g.Slot), g.Label, g.Value));
+                sb.AppendLine();
+            }
+
+            if (day != null)
+            {
+                sb.AppendLine(UiText.Get("fallback.interview"));
+                string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
+                foreach (InterviewQuestion q in day.Questions)
+                {
+                    InterviewAnswer answer = inst.answers.Find(a => a.category == q.category);
+                    if (answer == null)
+                        continue;
+                    sb.AppendLine(InterviewScript.PromptLine(q, eraId).Text);
+                    sb.AppendLine(UiText.Format("fallback.answer", inst.visitorGivenName, InterviewScript.AnswerLine(q, eraId, answer).Text));
+                }
+                sb.AppendLine();
+            }
         }
 
         if (lib != null && lib.ReferenceBooks.Count > 0)
         {
-            sb.AppendLine("— REFERENCE BOOKS (cross-check) —");
+            sb.AppendLine(UiText.Get("fallback.reference"));
+            string nationId = inst != null && inst.claimedNation != null ? inst.claimedNation.id : null;
+            string eraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null;
             foreach (ReferenceBookSO book in lib.ReferenceBooks)
-            {
-                if (book == null)
-                    continue;
-                sb.AppendLine($"[{book.displayName}]");
-                if (book.entries != null)
-                    foreach (ReferenceEntry e in book.entries)
-                        if (e != null)
-                            sb.AppendLine($"    {(e.nation != null ? e.nation.displayName : "Any")} — {(e.era != null ? e.era.displayName : "?")}: {e.value}");
-            }
+                if (book != null)
+                    sb.AppendLine(UiText.Format("fallback.bookEntry", book.displayName, (facts != null ? facts.Get(nationId, eraId, book.category) : null) ?? UiText.Get("fallback.noEntry")));
         }
 
         return sb.ToString();
@@ -436,18 +813,33 @@ public sealed class InvestigationUIController : MonoBehaviour
         Stretch((RectTransform)_fallbackPanel.transform, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.92f));
         Image bg = _fallbackPanel.AddComponent<Image>();
         bg.color = new Color(0.09f, 0.11f, 0.16f, 0.98f);
+        Tag(_fallbackPanel, ThemeRoleId.Panel, ThemeTextKind.Body, null);
 
         _fallbackClaim = NewText(_fallbackPanel.transform, "Claim", 24, TextAlignmentOptions.TopLeft,
             new Vector2(0.04f, 0.78f), new Vector2(0.96f, 0.97f));
+        Tag(_fallbackClaim.gameObject, ThemeRoleId.Panel, ThemeTextKind.Body, null);
         _fallbackBody = NewText(_fallbackPanel.transform, "Body", 20, TextAlignmentOptions.TopLeft,
             new Vector2(0.04f, 0.16f), new Vector2(0.96f, 0.76f));
+        Tag(_fallbackBody.gameObject, ThemeRoleId.Panel, ThemeTextKind.Body, null);
 
-        Button accept = NewButton(_fallbackPanel.transform, "AcceptButton", "ACCEPT (approve travel)",
+        Button accept = NewButton(_fallbackPanel.transform, "AcceptButton", "fallback.accept", ThemeRoleId.AcceptButton,
             new Vector2(0.06f, 0.04f), new Vector2(0.48f, 0.13f), new Color(0.15f, 0.4f, 0.2f, 1f));
-        Button deny = NewButton(_fallbackPanel.transform, "DenyButton", "DENY (refuse travel)",
+        Button deny = NewButton(_fallbackPanel.transform, "DenyButton", "fallback.deny", ThemeRoleId.DenyButton,
             new Vector2(0.52f, 0.04f), new Vector2(0.94f, 0.13f), new Color(0.45f, 0.16f, 0.16f, 1f));
 
         WireDecisionButtons(accept, deny);
+
+        // The panel is built after the scene loaded: theme it now.
+        if (CultureThemeService.Instance != null)
+            CultureThemeService.Instance.ApplyTo(_fallbackPanel);
+    }
+
+    /// <summary>Tags a fallback graphic with its theme role (a label key only for keyed button labels).</summary>
+    private static void Tag(GameObject go, ThemeRoleId role, ThemeTextKind kind, string labelKey)
+    {
+        ThemeTag tag = go.AddComponent<ThemeTag>();
+        bool isText = go.TryGetComponent(out TMP_Text _);
+        tag.Configure(role, isText ? ThemePart.Ink : ThemePart.Fill, labelKey, FontStyles.Normal, kind, !string.IsNullOrEmpty(labelKey));
     }
 
     // -----------------------------
@@ -480,17 +872,19 @@ public sealed class InvestigationUIController : MonoBehaviour
         return t;
     }
 
-    private static Button NewButton(Transform parent, string name, string label, Vector2 min, Vector2 max, Color color)
+    private static Button NewButton(Transform parent, string name, string labelKey, ThemeRoleId role, Vector2 min, Vector2 max, Color color)
     {
         GameObject go = NewUI(name, parent);
         Stretch((RectTransform)go.transform, min, max);
         Image img = go.AddComponent<Image>();
         img.color = color;
+        Tag(go, role, ThemeTextKind.Button, null);
         Button btn = go.AddComponent<Button>();
         btn.targetGraphic = img;
 
         TMP_Text t = NewText(go.transform, "Label", 22, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
-        t.text = label;
+        t.text = UiText.Get(labelKey);
+        Tag(t.gameObject, role, ThemeTextKind.Button, labelKey);
         return btn;
     }
 }

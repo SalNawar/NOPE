@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_greece_modern
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: greece_modern
+  displayName: Metapolitefsi Athens
+  nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1975
+  tongue: greek
+  birthYearMin: 1905
+  birthYearMax: 1957
+  facts:
+  - category: 4
+    value: Drachma (1954 new drachma)
+  - category: 0
+    value: Demotic Greek (polytonic)
+  - category: 3
+    value: "Frapp\xE9 coffee shaker"
+  - category: 5
+    value: Athens (Hellenic Republic)
+  - category: 2
+    value: President K. Tsatsos
+  - category: 6
+    value: tagari bag
+  maleNames:
+  - Giorgos
+  - Kostas
+  - Nikos
+  - Giannis
+  - Dimitris
+  - Vasilis
+  - Takis
+  - Manolis
+  femaleNames:
+  - Maria
+  - Eleni
+  - Katerina
+  - Georgia
+  - Sofia
+  - Dimitra
+  - Despina
+  - Voula
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: corduroy and flares
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: shaggy 1970s cut
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: thick full moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: tagari bag
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 4
+      outfit:
+        label: embroidered blouse
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: long loose hair
+        leakable: 0
+        wig: 0
+        back: 1
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: tagari bag
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 3
+    - 5
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 5
+    - colour: brown
+      weight: 4
+    - colour: blond
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 3.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

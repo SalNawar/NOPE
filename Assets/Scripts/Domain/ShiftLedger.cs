@@ -2,13 +2,17 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// Records every verdict of the current shift for the end-of-day report.
-/// Pure data — no Unity dependencies. Rebuilt fresh each day.
+/// Records every verdict of the current shift for the end-of-day report, and
+/// every narrative dialog completed this shift. Pure data — no Unity
+/// dependencies. Rebuilt fresh each day.
 /// </summary>
 public sealed class ShiftLedger
 {
     /// <summary>All verdicts issued this shift, in order.</summary>
     public readonly List<CaseVerdict> verdicts = new();
+
+    /// <summary>Narrative dialogs completed this shift, in order (applied at the end of the shift; DialogOutcomes).</summary>
+    public readonly List<DialogOutcome> dialogOutcomes = new();
 
     /// <summary>Total money earned this shift (pay only).</summary>
     public int TotalPay
@@ -49,7 +53,7 @@ public sealed class ShiftLedger
     /// <summary>Number of wrong sends.</summary>
     public int WrongCount => verdicts.Count - CorrectCount;
 
-    /// <summary>Denials of real forgers made without documented evidence.</summary>
+    /// <summary>Denials of liars made without documented evidence.</summary>
     public int UnprovenDenialCount
     {
         get
@@ -73,6 +77,23 @@ public sealed class ShiftLedger
 }
 
 /// <summary>
+/// A narrative dialog completed this shift; its effect is applied at the end
+/// of the shift (DialogOutcomes).
+/// </summary>
+[Serializable]
+public sealed class DialogOutcome
+{
+    /// <summary>The completed dialog's id.</summary>
+    public string dialogId;
+
+    /// <summary>EffectSO asset name the ending choice named (empty = none).</summary>
+    public string effectName;
+
+    /// <summary>True when the dialog is one-shot per run (the end of the shift sets its done flag).</summary>
+    public bool oneShot;
+}
+
+/// <summary>
 /// The outcome of a single case decision, fully resolved.
 /// </summary>
 [Serializable]
@@ -87,7 +108,7 @@ public sealed class CaseVerdict
     /// <summary>Era the player chose.</summary>
     public string chosenEraId;
 
-    /// <summary>The correct era.</summary>
+    /// <summary>The claimed era, where the traveller is sent (the correct era on the legacy era-pick path). A liar's real home is <see cref="trueHomeLabel"/>.</summary>
     public string trueEraId;
 
     /// <summary>True if the send was correct.</summary>
@@ -124,11 +145,14 @@ public sealed class CaseVerdict
     /// <summary>True if the player accepted (approved travel); false = denied.</summary>
     public bool accepted;
 
-    /// <summary>True if accepting was the correct call (genuine + allowed).</summary>
+    /// <summary>True if accepting was the correct call (honest + allowed).</summary>
     public bool shouldAccept;
 
-    /// <summary>True if the case's documents were forged (had an anachronism).</summary>
-    public bool wasForged;
+    /// <summary>True if the traveller lied about their home.</summary>
+    public bool wasLiar;
+
+    /// <summary>Where the traveller really comes from: the claimed place for an honest traveller.</summary>
+    public string trueHomeLabel = string.Empty;
 
     /// <summary>True if the claimed destination was permitted by today's rules.</summary>
     public bool claimAllowed = true;
@@ -139,6 +163,6 @@ public sealed class CaseVerdict
     /// <summary>Discrepancies documented in the scanner when the decision was made.</summary>
     public int evidenceCount;
 
-    /// <summary>True if a real forger was denied without documented evidence.</summary>
+    /// <summary>True if a liar was denied without documented evidence.</summary>
     public bool unprovenDenial;
 }

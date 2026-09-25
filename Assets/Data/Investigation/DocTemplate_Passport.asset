@@ -28,3 +28,5 @@ MonoBehaviour:
   - category: 0
     label: Native Tongue
     page: 0
+  handOver: 1
+  showsPhoto: 1

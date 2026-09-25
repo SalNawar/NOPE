@@ -2,50 +2,34 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>The two camera states of the office scene.</summary>
+/// <summary>The two views of the office.</summary>
 public enum OfficeView
 {
-    /// <summary>Wide booth view from the agent's POV (default).</summary>
+    /// <summary>The office from the agent's chair (default).</summary>
     OfficeFocus,
 
-    /// <summary>Close-up on the CRT; the desktop UI is interactive.</summary>
+    /// <summary>The PC frame is open over the office; the desktop takes input.</summary>
     MonitorFocus
 }
 
 /// <summary>
-/// Drives the office's two camera states. Logic is decoupled from Cinemachine
-/// via <see cref="ICameraRig"/> so it is unit-testable; the desktop Canvas is
-/// shown only in MonitorFocus. Tapping the CRT/READY sign calls FocusMonitor;
-/// a desktop "back" affordance calls FocusOffice.
+/// The office's two views: clicking the PC opens its frame over the office
+/// (MonitorFocus); Escape, a click outside the frame, its close button and the
+/// desktop's "&lt; Desk" button close it (OfficeFocus). The camera never moves.
+/// BoothCoordinator reads the view to gate the office's input.
 /// </summary>
 public sealed class OfficeViewController : MonoBehaviour
 {
-    /// <summary>Cinemachine rig (a CinemachineCameraRig MonoBehaviour).</summary>
-    [SerializeField] private MonoBehaviour cameraRigBehaviour;
+    /// <summary>The PC frame the monitor view opens.</summary>
+    [SerializeField] private PcFrame frame;
 
-    /// <summary>The screen-space desktop canvas, shown only in MonitorFocus.</summary>
-    [SerializeField] private GameObject desktopRoot;
-
-    private ICameraRig _rig;
-
-    /// <summary>The current view state.</summary>
+    /// <summary>The current view.</summary>
     public OfficeView Current { get; private set; } = OfficeView.OfficeFocus;
 
-    /// <summary>Raised after the view changes to the given state.</summary>
+    /// <summary>Raised after the view changes.</summary>
     public event Action<OfficeView> ViewChanged;
 
-    private void Awake()
-    {
-        if (_rig == null)
-            _rig = cameraRigBehaviour as ICameraRig;
-
-        ApplyState(force: true);
-    }
-
-    /// <summary>
-    /// Escape pulls back to the booth from the monitor (temporary "back"
-    /// affordance until the desktop has a dedicated minimize-to-office control).
-    /// </summary>
+    /// <summary>Escape closes the frame, like its close button and a click outside it.</summary>
     private void Update()
     {
         if (Current != OfficeView.MonitorFocus)
@@ -56,24 +40,11 @@ public sealed class OfficeViewController : MonoBehaviour
             FocusOffice();
     }
 
-    /// <summary>Test seam: inject a fake rig + desktop and apply the default state.</summary>
-    public void InitForTest(ICameraRig rig, GameObject desktop)
-    {
-        _rig = rig;
-        desktopRoot = desktop;
-        Current = OfficeView.OfficeFocus;
-        ApplyState(force: true);
-    }
-
-    /// <summary>Pushes in to the monitor (no-op if already there).</summary>
+    /// <summary>Opens the PC frame (no-op if open).</summary>
     public void FocusMonitor() => SetView(OfficeView.MonitorFocus);
 
-    /// <summary>Pulls back to the booth (no-op if already there).</summary>
+    /// <summary>Closes the PC frame (no-op if closed).</summary>
     public void FocusOffice() => SetView(OfficeView.OfficeFocus);
-
-    /// <summary>Toggles between the two views.</summary>
-    public void Toggle() =>
-        SetView(Current == OfficeView.OfficeFocus ? OfficeView.MonitorFocus : OfficeView.OfficeFocus);
 
     private void SetView(OfficeView view)
     {
@@ -81,23 +52,8 @@ public sealed class OfficeViewController : MonoBehaviour
             return;
 
         Current = view;
-        ApplyState(force: false);
+        if (frame != null)
+            frame.SetOpen(view == OfficeView.MonitorFocus);
         ViewChanged?.Invoke(Current);
-    }
-
-    private void ApplyState(bool force)
-    {
-        bool monitor = Current == OfficeView.MonitorFocus;
-
-        if (desktopRoot != null)
-            desktopRoot.SetActive(monitor);
-
-        if (_rig != null)
-        {
-            if (monitor)
-                _rig.ShowMonitor();
-            else
-                _rig.ShowOffice();
-        }
     }
 }

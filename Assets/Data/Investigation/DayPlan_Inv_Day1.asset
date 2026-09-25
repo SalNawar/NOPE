@@ -13,18 +13,25 @@ MonoBehaviour:
   m_Name: DayPlan_Inv_Day1
   m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
   dayNumber: 1
-  visitorsCount: 5
+  visitorsCount: 8
   possibleBlueprints:
   - {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
   eraWeights:
-  - era: {fileID: 11400000, guid: 534846cde921ef949a1905cece8a8d6f, type: 2}
+  - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
     weight: 1
-  - era: {fileID: 11400000, guid: a66b025b152f6e048b2667fbc96ec12e, type: 2}
-    weight: 1
-  - era: {fileID: 11400000, guid: c00bd156485a1444aa29d5bc8a3bb718, type: 2}
-    weight: 1
+  allowedNations:
+  - {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  - {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
+  - {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  - {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   legendaryBaseChance: 0.05
   availableLegendaries: []
+  tellCount: 1
+  tellChannels: 00000000
   activeTravelRules: []
-  forcedCases: []
+  guaranteeRuleViolators: 1
+  forcedCases:
+  - caseIndex1Based: 3
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
   eventRules: []

@@ -50,18 +50,24 @@
     <Analyzer Include="E:\unity\NOPE\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d\Runtime\MVVM\SourceGenerators\netstandard2.0\MVVMSourceGenerators.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\WorldContentGenerator.Culture.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneContractTools.cs" />
     <Compile Include="Assets\Editor\OfficeArt\PackAssetCatalog.cs" />
-    <Compile Include="Assets\Editor\Phase7ContentGenerator.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.Translation.cs" />
     <Compile Include="Assets\Editor\HomeSceneBuilder.cs" />
     <Compile Include="Assets\Editor\OfficeSceneUIBuilder.cs" />
     <Compile Include="Assets\Editor\ContentLibraryValidator.cs" />
+    <Compile Include="Assets\Editor\SerializedArrays.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Desk.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeDeskAnime.cs" />
+    <Compile Include="Assets\Editor\PlaceholderPng.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeSurfaceAudit.cs" />
     <Compile Include="Assets\Editor\OfficeArt\ImportedOfficeBuilder.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeHallCrowds.cs" />
+    <Compile Include="Assets\Editor\CharacterArtImporter.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeDeskClean.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.cs" />
     <Compile Include="Assets\Editor\TitleSceneBuilder.cs" />
-    <Compile Include="Assets\Editor\InvestigationContentGenerator.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeCrtStudy.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -1242,6 +1248,10 @@
     <ProjectReference Include="TimeDesk.Domain.csproj">
       <Project>{07f1fae5-9363-3bf3-8705-90744a60f216}</Project>
       <Name>TimeDesk.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="TimeDesk.Visuals.csproj">
+      <Project>{63f18b42-170a-b3a9-f343-042342fc1080}</Project>
+      <Name>TimeDesk.Visuals</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_britain_modern
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: britain_modern
+  displayName: Post-war Britain
+  nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
+  era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1950
+  tongue: english
+  birthYearMin: 1880
+  birthYearMax: 1932
+  facts:
+  - category: 4
+    value: "\xA31 note & half-crown (\xA3sd)"
+  - category: 0
+    value: British English
+  - category: 3
+    value: NHS spectacles
+  - category: 5
+    value: London (Westminster)
+  - category: 2
+    value: King George VI
+  - category: 6
+    value: flat cap / headscarf
+  maleNames:
+  - Ronald
+  - Kenneth
+  - Dennis
+  - Leslie
+  - Stanley
+  - Norman
+  - Derek
+  - Raymond
+  femaleNames:
+  - Doreen
+  - Joyce
+  - Sheila
+  - Brenda
+  - Maureen
+  - Audrey
+  - Pamela
+  - Irene
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: tweed and Fair Isle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short back and sides
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: flat cap
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: college scarf
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 3
+      outfit:
+        label: twinset and tweed skirt
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: pin-curl set
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: headscarf
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: pearl strand
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 4
+    - 3
+    - 1
+    - 1
+    - 1
+    hair:
+    - colour: black
+      weight: 2
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 4.1
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 4
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

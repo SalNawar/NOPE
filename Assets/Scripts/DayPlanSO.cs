@@ -7,9 +7,10 @@ using UnityEngine;
 /// Designer-authored plan for a single day.
 /// Owns:
 /// - Day identity (dayNumber)
-/// - How many cases happen that day (visitorsCount)
-/// - Procedural generation knobs (blueprints, eras, legendary chance)
-/// - Forced cases (e.g., "3rd case on day 2 is X")
+/// - How many travellers queue that day (visitorsCount; the shift clock may close first)
+/// - Procedural generation knobs (blueprints, eras, the premade pool and chance)
+/// - Where today's liars may leak tells (tell count and tell channels)
+/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
 /// - Event rules (fixed or random placement, including "random but after N cases")
 /// </summary>
 [CreateAssetMenu(menuName = "TimeDesk/Day/Day Plan", fileName = "DayPlan_")]
@@ -26,7 +27,7 @@ public sealed class DayPlanSO : ScriptableObject
     // Day flow
     // -----------------------------
 
-    /// <summary>Total number of cases/visitors for this day.</summary>
+    /// <summary>Queue size: most travellers this day can hold. The shift clock usually closes the booth first.</summary>
     [SerializeField, Min(1)] private int visitorsCount = 6;
 
     // -----------------------------
@@ -36,14 +37,32 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Blueprints available for procedural cases.</summary>
     [SerializeField] private CaseBlueprintSO[] possibleBlueprints;
 
-    /// <summary>Weighted set of eras to pick the TRUE era from (optional).</summary>
+    /// <summary>Weighted set of eras to pick the claimed (home) era from (optional).</summary>
     [SerializeField] private EraWeight[] eraWeights;
 
-    /// <summary>Base chance per case to become legendary (0..1).</summary>
+    /// <summary>Countries travellers may come from today (empty = every country with a place in today's eras).</summary>
+    [SerializeField] private NationSO[] allowedNations;
+
+    /// <summary>Base chance per slot to hold a premade from the day's pool (0..1; written by Generate World).</summary>
     [SerializeField, Range(0f, 1f)] private float legendaryBaseChance = 0.05f;
 
-    /// <summary>Legendary candidates available this day (filtered by min/max day).</summary>
+    /// <summary>The premades that may roll this day (written by Generate World from days[].premades).</summary>
     [SerializeField] private LegendarySO[] availableLegendaries;
+
+    /// <summary>
+    /// How many tells each liar's disguise leaks today (at least 1; capped per
+    /// liar at the categories that can carry a tell). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json.
+    /// </summary>
+    [SerializeField, Min(1)] private int tellCount = 1;
+
+    /// <summary>
+    /// Where today's liars may leak tells: Papers (their documents) and/or
+    /// Answer (their answers to today's questions). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json days[].channels;
+    /// the default keeps a day plan that does not set it on papers-only tells.
+    /// </summary>
+    [SerializeField] private TellChannel[] tellChannels = { TellChannel.Papers };
 
     // -----------------------------
     // Scripted overrides
@@ -52,7 +71,13 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Travel restrictions active this day (announced in the briefing).</summary>
     [SerializeField] private TravelRuleSO[] activeTravelRules;
 
-    /// <summary>Forced case blueprints by slot index (1-based).</summary>
+    /// <summary>
+    /// Each active rule sends at least one violator, placed in the first half
+    /// of the queue, so the day's directives are always tested.
+    /// </summary>
+    [SerializeField] private bool guaranteeRuleViolators = true;
+
+    /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
     /// <summary>Event rules (fixed or random placement).</summary>
@@ -70,14 +95,57 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Public read-only era weights.</summary>
     public IReadOnlyList<EraWeight> EraWeights => eraWeights;
 
-    /// <summary>Public read-only legendary chance.</summary>
+    /// <summary>The chance per slot to roll a premade from the pool.</summary>
     public float LegendaryBaseChance => legendaryBaseChance;
 
-    /// <summary>Public read-only legendaries list.</summary>
+    /// <summary>The premades that may roll this day.</summary>
     public IReadOnlyList<LegendarySO> AvailableLegendaries => availableLegendaries;
+
+    /// <summary>The forced slots, in authored order.</summary>
+    public IReadOnlyList<ForcedCaseSlot> ForcedCases => forcedCases;
+
+    /// <summary>Tells each liar leaks today (at least 1).</summary>
+    public int TellCount => tellCount;
+
+    /// <summary>Where today's liars may leak tells (empty when unset).</summary>
+    public IReadOnlyList<TellChannel> TellChannels => tellChannels ?? Array.Empty<TellChannel>();
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
+
+    /// <summary>Whether each active rule is guaranteed a violator in the first half of the queue.</summary>
+    public bool GuaranteeRuleViolators => guaranteeRuleViolators;
+
+    /// <summary>Every forced case's blueprint (set slots only, in authored order); the content validator counts their documents.</summary>
+    public IEnumerable<CaseBlueprintSO> ForcedBlueprints
+    {
+        get
+        {
+            foreach (ForcedCaseSlot slot in forcedCases)
+                if (slot != null && slot.caseBlueprint != null)
+                    yield return slot.caseBlueprint;
+        }
+    }
+
+    /// <summary>True when travellers may come from this country today.</summary>
+    public bool AllowsNation(NationSO nation) =>
+        nation != null && (allowedNations == null || allowedNations.Length == 0 || Array.IndexOf(allowedNations, nation) >= 0);
+
+    /// <summary>True when this era can appear today (a positive era weight, or no weights at all).</summary>
+    public bool IncludesEra(EraSO era)
+    {
+        if (era == null)
+            return false;
+
+        if (eraWeights == null || eraWeights.Length == 0)
+            return true;
+
+        foreach (EraWeight w in eraWeights)
+            if (w.era == era && w.weight > 0f)
+                return true;
+
+        return false;
+    }
 
     /// <summary>
     /// Returns true if every active rule permits travel to the claimed nation+era.
@@ -113,6 +181,25 @@ public sealed class DayPlanSO : ScriptableObject
         }
 
         blueprint = null;
+        return false;
+    }
+
+    /// <summary>
+    /// Tries to get the premade forced into the given case slot (1-based).
+    /// Returns true if the slot names a premade.
+    /// </summary>
+    public bool TryGetForcedPremade(int caseIndex1Based, out LegendarySO premade)
+    {
+        foreach (ForcedCaseSlot slot in forcedCases)
+        {
+            if (slot != null && slot.caseIndex1Based == caseIndex1Based && slot.legendary != null)
+            {
+                premade = slot.legendary;
+                return true;
+            }
+        }
+
+        premade = null;
         return false;
     }
 
@@ -202,8 +289,9 @@ public sealed class DayPlanSO : ScriptableObject
 }
 
 /// <summary>
-/// Forces a specific blueprint into a specific case slot (1-based).
-/// Example: "case 3 is tutorial blueprint".
+/// Forces a blueprint, a premade or both into a case slot (1-based), written
+/// by Generate World from world_source.json days[].forced. Example: "case 3
+/// of day 1 is Senenmut".
 /// </summary>
 [Serializable]
 public sealed class ForcedCaseSlot
@@ -211,12 +299,15 @@ public sealed class ForcedCaseSlot
     /// <summary>1-based case slot index.</summary>
     [Min(1)] public int caseIndex1Based = 1;
 
-    /// <summary>The case blueprint that must appear in this slot.</summary>
+    /// <summary>The case blueprint that must appear in this slot (null = the day's pick).</summary>
     public CaseBlueprintSO caseBlueprint;
+
+    /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
+    public LegendarySO legendary;
 }
 
 /// <summary>
-/// Weighted era entry used by DayPlanSO to pick the TRUE era.
+/// Weighted era entry used by DayPlanSO to pick the claimed (home) era.
 /// </summary>
 [Serializable]
 public struct EraWeight
@@ -248,10 +339,10 @@ public enum EventPlacement
     /// <summary>Fixed index (e.g., before case #3).</summary>
     FixedCaseIndex,
 
-    /// <summary>Random index in [1..VisitorsCount].</summary>
+    /// <summary>Random index in [1..VisitorsCount] (slots past closing time are never reached).</summary>
     RandomAny,
 
-    /// <summary>Random index in [minCasesBefore+1..VisitorsCount].</summary>
+    /// <summary>Random index in [minCasesBefore+1..VisitorsCount] (slots past closing time are never reached).</summary>
     RandomAfterMinCases
 }
 

@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567a3555c681439ea7087bd38a206262, type: 3}
+  m_Name: Strings_ja
+  m_EditorClassIdentifier: Assembly-CSharp::UiStringTableSO
+  language: ja
+  rightToLeft: 0
+  entries:
+  - key: accept
+    text: "\u627F\u8A8D"
+    gloss: 0
+    tier: 0
+  - key: deny
+    text: "\u5374\u4E0B"
+    gloss: 0
+    tier: 0
+  - key: taskbar.start
+    text: "\u30B9\u30BF\u30FC\u30C8"
+    gloss: 0
+    tier: 0
+  - key: startmenu.settings
+    text: "\u8A2D\u5B9A"
+    gloss: 0
+    tier: 0
+  - key: startmenu.screenOff
+    text: "\u753B\u9762\u30AA\u30D5"
+    gloss: 0
+    tier: 0
+  - key: startmenu.quit
+    text: "\u30B2\u30FC\u30E0\u7D42\u4E86"
+    gloss: 0
+    tier: 0
+  - key: briefing.masthead
+    text: "\u6642\u7A7A\u65B0\u5831"
+    gloss: 0
+    tier: 0
+  - key: briefing.start
+    text: "\u52E4\u52D9\u958B\u59CB"
+    gloss: 0
+    tier: 0
+  - key: results.masthead
+    text: "\u52E4\u52D9\u53F0\u5E33 \u2014 \u5915\u520A"
+    gloss: 0
+    tier: 0
+  - key: results.goHome
+    text: "\u5E30\u5B85"
+    gloss: 0
+    tier: 0
+  - key: records.title
+    text: "\u4F4F\u6C11\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: records.search
+    text: "\u691C\u7D22"
+    gloss: 0
+    tier: 0
+  - key: compare.match
+    text: "\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: compare.mismatch
+    text: "\u4E0D\u4E00\u81F4"
+    gloss: 0
+    tier: 0
+  - key: citation.title
+    text: "\u6642\u9593\u7DDA\u9038\u8131\u901A\u77E5"
+    gloss: 0
+    tier: 0
+  - key: citation.acknowledge
+    text: "\u4E86\u89E3"
+    gloss: 0
+    tier: 0
+  - key: window.directives
+    text: "\u6307\u793A"
+    gloss: 0
+    tier: 0
+  - key: window.scanner
+    text: "\u9038\u8131\u5831\u544A"
+    gloss: 0
+    tier: 0
+  - key: window.settings
+    text: "\u8A2D\u5B9A"
+    gloss: 0
+    tier: 0
+  - key: icon.directives
+    text: "\u6307\u793A"
+    gloss: 0
+    tier: 0
+  - key: icon.scanner
+    text: "\u9038\u8131\u5831\u544A"
+    gloss: 0
+    tier: 0
+  - key: icon.records
+    text: "\u8A18\u9332"
+    gloss: 0
+    tier: 0
+  - key: icon.internet
+    text: "\u30A4\u30F3\u30BF\u30FC\u30CD\u30C3\u30C8"
+    gloss: 0
+    tier: 0
+  - key: icon.lexicon
+    text: "\u7528\u8A9E\u96C6"
+    gloss: 0
+    tier: 0
+  - key: icon.dialect
+    text: "\u65B9\u8A00"
+    gloss: 0
+    tier: 0
+  - key: icon.material
+    text: "\u7D20\u6750"
+    gloss: 0
+    tier: 0
+  - key: icon.notes
+    text: "\u30E1\u30E2"
+    gloss: 0
+    tier: 0
+  - key: icon.clueLog
+    text: "\u624B\u304C\u304B\u308A"
+    gloss: 0
+    tier: 0
+  - key: tray.day
+    text: "{0}\u65E5\u76EE"
+    gloss: 0
+    tier: 0
+  - key: tray.stability
+    text: "\u5B89\u5B9A\u5EA6\uFF1A{0:0}%"
+    gloss: 0
+    tier: 0
+  - key: taskbar.desk
+    text: "< \u30C7\u30B9\u30AF"
+    gloss: 0
+    tier: 0
+  - key: briefing.title
+    text: "{0}\u65E5\u76EE \u2014 \u671D\u306E\u30D6\u30EA\u30FC\u30D5\u30A3\u30F3\u30B0"
+    gloss: 0
+    tier: 0
+  - key: results.title
+    text: "{0}\u65E5\u76EE \u2014 \u52E4\u52D9\u5831\u544A"
+    gloss: 0
+    tier: 0
+  - key: briefing.newsHeader
+    text: "\u2014 \u6642\u9593\u7DDA\u30CB\u30E5\u30FC\u30B9 \u2014"
+    gloss: 0
+    tier: 0

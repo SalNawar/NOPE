@@ -20,10 +20,16 @@ MonoBehaviour:
   newsLineOnFire: Reports indicate democratic institutions are crumbling across the
     timeline.
   conditions:
-  - type: 4
+  - type: 13
     key: 
-    threshold: 20
+    threshold: -6
     attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    profile: {fileID: 0}
+    nation: {fileID: 0}
+  - type: 8
+    key: 
+    threshold: 3
+    attribute: {fileID: 0}
     profile: {fileID: 0}
     nation: {fileID: 0}
   outcomes:

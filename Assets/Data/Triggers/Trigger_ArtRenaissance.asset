@@ -19,9 +19,9 @@ MonoBehaviour:
   oneShot: 1
   newsLineOnFire: A renaissance of artistic movements ripples through every era.
   conditions:
-  - type: 3
+  - type: 12
     key: 
-    threshold: 150
+    threshold: 20
     attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
     profile: {fileID: 0}
     nation: {fileID: 0}

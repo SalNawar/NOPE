@@ -3,34 +3,37 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Stable score-key builders so every system reads/writes the same keys.
+/// Score-key builders over the content types, so every system reads and
+/// writes the same keys; the grammar itself lives in Domain ScoreKey.
 /// </summary>
 public static class TimelineKeys
 {
     /// <summary>Score of an attribute inside an authored profile.</summary>
-    public static string ProfileAttr(NationEraProfileSO profile, AttributeSO attr) =>
-        $"attr:{profile.id}:{attr.id}";
+    public static string ProfileAttr(NationEraProfileSO profile, AttributeSO attr) => ScoreKey.ProfileAttr(profile.id, attr.id);
 
     /// <summary>Score of an attribute at an unauthored nation+era destination.</summary>
-    public static string AdHocAttr(NationSO nation, EraSO era, AttributeSO attr) =>
-        $"attr:{nation.id}@{era.id}:{attr.id}";
+    public static string AdHocAttr(NationSO nation, EraSO era, AttributeSO attr) => ScoreKey.AdHocAttr(nation.id, era.id, attr.id);
 
     /// <summary>Global score of an attribute across the whole timeline.</summary>
-    public static string GlobalAttr(AttributeSO attr) => $"attrTotal:{attr.id}";
+    public static string GlobalAttr(AttributeSO attr) => ScoreKey.GlobalAttr(attr.id);
 
     /// <summary>Global score of a nation.</summary>
-    public static string Nation(NationSO nation) => $"nation:{nation.id}";
+    public static string Nation(NationSO nation) => ScoreKey.Nation(nation.id);
 
     /// <summary>Dominance bookkeeping key for a profile attribute.</summary>
-    public static string Dominance(NationEraProfileSO profile, AttributeSO attr) =>
-        $"{profile.id}:{attr.id}";
+    public static string Dominance(NationEraProfileSO profile, AttributeSO attr) => ScoreKey.Dominance(profile.id, attr.id);
 }
 
 /// <summary>
 /// Core timeline logic:
 /// - ApplyVerdictImpacts: every send moves attribute/nation scores (during shift).
-/// - NightlyResolve: recompute dominance tiers, fire triggers, expire effects,
-///   build the deterministic "tomorrow package" (run at sleep, before day++).
+/// - NightlyResolve: recompute dominance tiers, latch the timeline leader, fire
+///   triggers (history rules latch fact edits), promote carries, expire
+///   effects, build the deterministic "tomorrow package" (run at sleep, before day++).
+/// - BuildInterviewDay: the day's interview, its questions and dialogs gated
+///   on a snapshot of the day-start world (run at day start).
+/// - BuildTranslationDay: which tongues are foreign and translated today, read
+///   from the same day-start snapshot (run at day start).
 /// All state lives in WorldState; this class is stateless.
 /// </summary>
 public static class TimelineService
@@ -44,8 +47,10 @@ public static class TimelineService
 
     /// <summary>
     /// Applies the timeline impacts of one decision. The visitor physically goes
-    /// to the CHOSEN era, so impacts land on (case nation, chosen era) — authored
-    /// profile if one exists, ad-hoc score keys otherwise.
+    /// to the CHOSEN era, so impacts land on (claimed nation, chosen era): where
+    /// the traveller is sent, liar or not — authored profile if one exists,
+    /// ad-hoc score keys otherwise. The attribute keys it writes are what
+    /// history counts as influence (HistoryService).
     /// Also bumps tag counters used by trigger conditions.
     /// </summary>
     public static void ApplyVerdictImpacts(
@@ -125,7 +130,9 @@ public static class TimelineService
 
     /// <summary>
     /// Runs the full nightly resolve. Call at sleep, BEFORE world.day increments.
-    /// Order: dominance -> tier effects -> triggers -> expiry -> tomorrow package.
+    /// Order: dominance (news only for tomorrow's places) -> tier effects ->
+    /// the timeline leader -> triggers (history rules latch here) -> carries ->
+    /// expiry -> tomorrow package.
     /// </summary>
     public static void NightlyResolve(WorldState world, ContentLibrarySO lib, GameConfigSO config)
     {
@@ -140,9 +147,11 @@ public static class TimelineService
         int tomorrow = world.day + 1;
         var news = new List<string>();
 
-        RecomputeDominance(world, lib, config, news);
+        RecomputeDominance(world, lib, config, news, TomorrowPlaces(world, lib));
         RebuildTierEffects(world, lib, tomorrow);
+        int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
         EvaluateTriggers(world, lib, tomorrow, news);
+        HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news);
 
@@ -150,10 +159,37 @@ public static class TimelineService
     }
 
     /// <summary>
-    /// Recomputes dominant/supporting attributes per authored profile and
-    /// reports tier changes as news lines.
+    /// Ranks every place's attributes from the baselines alone, without news.
+    /// Called once when a run starts, so the first night reports exactly the
+    /// tier changes the player's day-1 sends caused.
     /// </summary>
-    private static void RecomputeDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config, List<string> news)
+    public static void SeedDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config)
+    {
+        if (world == null || lib == null)
+            return;
+
+        RecomputeDominance(world, lib, config, null, null);
+    }
+
+    /// <summary>
+    /// Tomorrow's places as the dominance news filter reads them (the plan
+    /// tomorrow uses, without a Future place: Future places are never ranked);
+    /// empty when there is no plan.
+    /// </summary>
+    private static HashSet<NationEraProfileSO> TomorrowPlaces(WorldState world, ContentLibrarySO lib) =>
+        new HashSet<NationEraProfileSO>(lib.TodaysProfiles(lib.GetDayPlan(world.day + 1), null));
+
+    /// <summary>
+    /// Recomputes dominant/supporting attributes per authored profile (places
+    /// with baselines; Future places have none) and reports a newly DOMINANT
+    /// attribute as news, only for <paramref name="tomorrowPlaces"/> (none when
+    /// <paramref name="news"/> or the set is null, or when no earlier ranking
+    /// exists to compare with). Tiers rank baseline + delta (they describe a
+    /// place); influence ranks deltas only (it describes the player's
+    /// deviation). Both are night snapshots through ScoreRanking.
+    /// </summary>
+    private static void RecomputeDominance(WorldState world, ContentLibrarySO lib, GameConfigSO config, List<string> news,
+                                           HashSet<NationEraProfileSO> tomorrowPlaces)
     {
         Debug.Log("[TimelineService] >>> Entering RecomputeDominance.");
 
@@ -163,43 +199,38 @@ public static class TimelineService
         var newDominant = new List<string>();
         var newSupporting = new List<string>();
 
+        // Only changes against an earlier ranking are news: SeedDominance ranks
+        // the baselines at run start, and a run without that seed stays silent
+        // on its first night instead of announcing every place's starting tiers.
+        bool announce = news != null && tomorrowPlaces != null &&
+                        (world.timeline.dominantKeys.Count > 0 || world.timeline.supportingKeys.Count > 0);
+
         foreach (NationEraProfileSO profile in lib.Profiles)
         {
             if (profile == null || profile.baselines == null || profile.baselines.Count == 0)
                 continue;
 
-            // Rank this profile's attributes by current score.
-            var ranked = new List<(AttributeSO attr, float score)>();
+            // This profile's attributes (baseline + delta) in baseline order, tiered by the Domain ranking.
+            List<AttributeSO> attrs = profile.baselines.Where(b => b != null && b.attribute != null).Select(b => b.attribute).ToList();
+            var scores = attrs.Select(a => new RankedScore(a.id, GetProfileAttributeScore(world, profile, a))).ToList();
+            DominanceTier[] tiers = DominanceTiers.Classify(scores, dominantCount, supportingCount);
 
-            foreach (AttributeBaseline b in profile.baselines)
+            Debug.Log($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", attrs.Select((a, i) => $"{a.displayName}={scores[i].score:0.#} ({tiers[i]})"))}.");
+
+            for (int i = 0; i < attrs.Count; i++)
             {
-                if (b == null || b.attribute == null)
-                    continue;
+                string key = TimelineKeys.Dominance(profile, attrs[i]);
 
-                ranked.Add((b.attribute, GetProfileAttributeScore(world, profile, b.attribute)));
-            }
-
-            ranked.Sort((a, b) => b.score.CompareTo(a.score));
-
-            Debug.Log($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", ranked.Select(r => $"{r.attr.displayName}={r.score:0.#}"))}.");
-
-            for (int i = 0; i < ranked.Count; i++)
-            {
-                string key = TimelineKeys.Dominance(profile, ranked[i].attr);
-
-                if (i < dominantCount)
+                if (tiers[i] == DominanceTier.Dominant)
                 {
                     newDominant.Add(key);
 
-                    if (!world.timeline.dominantKeys.Contains(key))
-                        news.Add($"{ranked[i].attr.displayName} is now DOMINANT in {profile.displayName}.");
+                    if (announce && tomorrowPlaces.Contains(profile) && !world.timeline.dominantKeys.Contains(key))
+                        news.Add($"{attrs[i].displayName} is now DOMINANT in {profile.displayName}.");
                 }
-                else if (i < dominantCount + supportingCount)
+                else if (tiers[i] == DominanceTier.Supporting)
                 {
                     newSupporting.Add(key);
-
-                    if (!world.timeline.supportingKeys.Contains(key) && !world.timeline.dominantKeys.Contains(key))
-                        news.Add($"{ranked[i].attr.displayName} is rising in {profile.displayName}.");
                 }
             }
         }
@@ -207,7 +238,7 @@ public static class TimelineService
         world.timeline.dominantKeys = newDominant;
         world.timeline.supportingKeys = newSupporting;
 
-        Debug.Log($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, newsAdded={news.Count}).");
+        Debug.Log($"[TimelineService] <<< Exiting RecomputeDominance (dominant={newDominant.Count}, supporting={newSupporting.Count}, announced={announce}).");
     }
 
     /// <summary>
@@ -219,8 +250,7 @@ public static class TimelineService
     {
         Debug.Log("[TimelineService] >>> Entering RebuildTierEffects.");
 
-        int removed = world.timeline.activeEffects.RemoveAll(e =>
-            e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(TierSourcePrefix));
+        int removed = RemoveEffectsFrom(world, TierSourcePrefix);
 
         int activated = 0;
 
@@ -255,6 +285,15 @@ public static class TimelineService
 
         Debug.Log($"[TimelineService] <<< Exiting RebuildTierEffects (removed {removed} old tier effect(s), activated {activated} new).");
     }
+
+    /// <summary>
+    /// One idempotent-rebuild step: an effect family (dominance tiers, the
+    /// timeline leader) removes its own active entries, whose source label
+    /// starts with <paramref name="sourcePrefix"/>, before re-activating.
+    /// Returns how many were removed.
+    /// </summary>
+    internal static int RemoveEffectsFrom(WorldState world, string sourcePrefix) =>
+        world.timeline.activeEffects.RemoveAll(e => e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(sourcePrefix, System.StringComparison.Ordinal));
 
     /// <summary>
     /// Evaluates all triggers; fires those whose conditions all pass.
@@ -305,44 +344,152 @@ public static class TimelineService
         Debug.Log($"[TimelineService] <<< Exiting EvaluateTriggers ({fired}/{total} fired).");
     }
 
-    /// <summary>Returns true if every condition on the trigger passes.</summary>
-    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world)
+    /// <summary>
+    /// The day's interview from the library's questions and dialogs and the
+    /// day-start world (glue only; InterviewDay decides what is askable and
+    /// offered): each item's conditions projected with ToGates, and one
+    /// snapshot of the world holding the scores every question's and dialog's
+    /// conditions read. Null library entries are skipped.
+    /// </summary>
+    public static InterviewDay BuildInterviewDay(ContentLibrarySO lib, WorldState world, ShiftLedger ledger)
     {
-        foreach (TriggerCondition c in trigger.conditions)
+        var conditions = new List<TriggerCondition>();
+        var questions = new List<Gated<InterviewQuestion>>();
+        foreach (QuestionSO q in lib.Questions)
         {
-            if (c == null)
+            if (q == null)
                 continue;
-
-            bool pass = c.type switch
-            {
-                TriggerConditionType.CounterAtLeast => world.GetCounter(c.key) >= c.threshold,
-                TriggerConditionType.FlagSet => world.HasFlag(c.key),
-                TriggerConditionType.FlagNotSet => !world.HasFlag(c.key),
-                TriggerConditionType.AttributeScoreAtLeast =>
-                    c.profile != null && c.attribute != null &&
-                    GetProfileAttributeScore(world, c.profile, c.attribute) >= c.threshold,
-                TriggerConditionType.AttributeScoreAtMost =>
-                    c.profile != null && c.attribute != null &&
-                    GetProfileAttributeScore(world, c.profile, c.attribute) <= c.threshold,
-                TriggerConditionType.AttributeIsDominant =>
-                    c.profile != null && c.attribute != null &&
-                    world.timeline.dominantKeys.Contains(TimelineKeys.Dominance(c.profile, c.attribute)),
-                TriggerConditionType.AttributeIsSupporting =>
-                    c.profile != null && c.attribute != null &&
-                    world.timeline.supportingKeys.Contains(TimelineKeys.Dominance(c.profile, c.attribute)),
-                TriggerConditionType.NationScoreAtLeast =>
-                    c.nation != null &&
-                    world.timeline.GetScore(TimelineKeys.Nation(c.nation)) >= c.threshold,
-                TriggerConditionType.DayAtLeast => world.day >= c.threshold,
-                TriggerConditionType.StabilityAtMost => world.timelineStability <= c.threshold,
-                _ => false
-            };
-
-            if (!pass)
-                return false;
+            if (q.conditions != null)
+                conditions.AddRange(q.conditions);
+            questions.Add(new Gated<InterviewQuestion>(q.question, ToGates(q.conditions)));
         }
 
-        return true;
+        var dialogs = new List<Gated<AuthoredDialog>>();
+        foreach (DialogSO d in lib.Dialogs)
+        {
+            if (d == null)
+                continue;
+            if (d.conditions != null)
+                conditions.AddRange(d.conditions);
+            dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
+        }
+
+        var premadeDialogs = new List<string>();
+        foreach (LegendarySO premade in lib.Legendaries)
+            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
+                premadeDialogs.Add(premade.dialogId);
+
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs);
+    }
+
+    /// <summary>
+    /// Today's translation (piece 9): which tongues are foreign and which are
+    /// translated, from the library's rules (none without translation data:
+    /// nothing is foreign) and the day-start snapshot BuildInterviewDay also reads.
+    /// </summary>
+    public static TranslationDay BuildTranslationDay(ContentLibrarySO lib, WorldState world) =>
+        new TranslationDay(lib != null && lib.Translation.HasData ? lib.Translation.rules : null, Snapshot(world, null));
+
+    /// <summary>
+    /// Returns true if every condition on the trigger passes (Gates.AllPass):
+    /// one snapshot per trigger, so a trigger sees the flags that earlier
+    /// triggers set tonight.
+    /// </summary>
+    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) =>
+        Gates.AllPass(ToGates(trigger.conditions), Snapshot(world, trigger.conditions));
+
+    /// <summary>
+    /// A condition as the Domain gates read it: its type, threshold and plain
+    /// key (the counter, flag or upgrade key; the profile-attribute score key,
+    /// the dominance key, the nation score key, the nation id or the global
+    /// attribute key for the reference types; null when a needed reference is
+    /// missing, which never passes).
+    /// </summary>
+    private static GateCondition ToGate(TriggerCondition c)
+    {
+        string key;
+        switch (c.type)
+        {
+            case TriggerConditionType.CounterAtLeast:
+            case TriggerConditionType.FlagSet:
+            case TriggerConditionType.FlagNotSet:
+            case TriggerConditionType.UpgradeOwned:
+                key = c.key;
+                break;
+            case TriggerConditionType.AttributeScoreAtLeast:
+            case TriggerConditionType.AttributeScoreAtMost:
+                key = c.profile != null && c.attribute != null ? TimelineKeys.ProfileAttr(c.profile, c.attribute) : null;
+                break;
+            case TriggerConditionType.AttributeIsDominant:
+            case TriggerConditionType.AttributeIsSupporting:
+                key = c.profile != null && c.attribute != null ? TimelineKeys.Dominance(c.profile, c.attribute) : null;
+                break;
+            case TriggerConditionType.NationScoreAtLeast:
+                key = c.nation != null ? TimelineKeys.Nation(c.nation) : null;
+                break;
+            case TriggerConditionType.NationIsLeader:
+                key = c.nation != null ? c.nation.id : null;
+                break;
+            case TriggerConditionType.GlobalAttrAtLeast:
+            case TriggerConditionType.GlobalAttrAtMost:
+                key = c.attribute != null ? TimelineKeys.GlobalAttr(c.attribute) : null;
+                break;
+            default:
+                key = null;
+                break;
+        }
+
+        return new GateCondition(c.type, key, c.threshold);
+    }
+
+    /// <summary>The non-null conditions projected with <see cref="ToGate"/>, in order (empty for null).</summary>
+    private static List<GateCondition> ToGates(IEnumerable<TriggerCondition> conditions)
+    {
+        var gates = new List<GateCondition>();
+        if (conditions != null)
+            foreach (TriggerCondition c in conditions)
+                if (c != null)
+                    gates.Add(ToGate(c));
+        return gates;
+    }
+
+    /// <summary>
+    /// Copies what gates read from the world: day, stability, flags, owned
+    /// upgrades, counters, dominance tiers and the timeline leader, plus the
+    /// scores the given conditions read, each under its gate key with the value
+    /// it has now (GetProfileAttributeScore for profile scores, so the baseline
+    /// formula keeps one home; the timeline score for nations and global totals).
+    /// </summary>
+    private static GateSnapshot Snapshot(WorldState world, IEnumerable<TriggerCondition> conditions)
+    {
+        var scores = new List<KeyValuePair<string, float>>();
+        if (conditions != null)
+        {
+            foreach (TriggerCondition c in conditions)
+            {
+                if (c == null)
+                    continue;
+
+                if ((c.type == TriggerConditionType.AttributeScoreAtLeast || c.type == TriggerConditionType.AttributeScoreAtMost) &&
+                    c.profile != null && c.attribute != null)
+                    scores.Add(new KeyValuePair<string, float>(TimelineKeys.ProfileAttr(c.profile, c.attribute), GetProfileAttributeScore(world, c.profile, c.attribute)));
+                else if (c.type == TriggerConditionType.NationScoreAtLeast && c.nation != null)
+                    scores.Add(new KeyValuePair<string, float>(TimelineKeys.Nation(c.nation), world.timeline.GetScore(TimelineKeys.Nation(c.nation))));
+                else if ((c.type == TriggerConditionType.GlobalAttrAtLeast || c.type == TriggerConditionType.GlobalAttrAtMost) && c.attribute != null)
+                    scores.Add(new KeyValuePair<string, float>(TimelineKeys.GlobalAttr(c.attribute), world.timeline.GetScore(TimelineKeys.GlobalAttr(c.attribute))));
+            }
+        }
+
+        return new GateSnapshot(
+            world.day,
+            world.timelineStability,
+            world.flags,
+            world.unlockedUpgradeIds,
+            world.counters.Where(e => e != null).Select(e => new KeyValuePair<string, int>(e.key, e.value)),
+            scores,
+            world.timeline.dominantKeys,
+            world.timeline.supportingKeys,
+            world.history.leaderId);
     }
 
     /// <summary>
@@ -381,6 +528,12 @@ public static class TimelineService
                         if (op.nation != null)
                             world.timeline.AddScore(TimelineKeys.Nation(op.nation), op.floatParam);
                         break;
+                    case EffectOpType.SetFact:
+                        // A history rule's fact edit, latched for good from startDay (tomorrow at night).
+                        if (op.profile != null && op.profile.nation != null && op.profile.era != null)
+                            History.Latch(world.history, new FactEdit(op.profile.nation.id, op.profile.era.id, op.category, op.stringParam,
+                                                                      startDay, EditCause.Rule, sourceLabel));
+                        break;
                 }
             }
         }
@@ -409,8 +562,8 @@ public static class TimelineService
     }
 
     /// <summary>
-    /// Builds the deterministic tomorrow package: dominance/trigger news plus
-    /// briefing/news lines contributed by effects active tomorrow.
+    /// Builds the deterministic tomorrow package: dominance, history and
+    /// trigger news plus briefing/news lines contributed by effects active tomorrow.
     /// </summary>
     private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news)
     {

@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_germany_future
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: germany_future
+  displayName: Rhine-Ruhr Metropole
+  nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
+  era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  year: 2150
+  tongue: german
+  birthYearMin: 2080
+  birthYearMax: 2132
+  facts:
+  - category: 4
+    value: Euro-mark (digital)
+  - category: 0
+    value: Standard German (Denglisch)
+  - category: 3
+    value: Hydrogen hyperloop
+  - category: 5
+    value: Cologne (Rhine-Ruhr seat)
+  - category: 2
+    value: Chancellor Lena Vogt
+  - category: 6
+    value: Bauhaus colour panels
+  maleNames:
+  - Emil
+  - Finn
+  - Paul
+  - Elias
+  - Mats
+  - Ben
+  - Leon
+  - Jonas
+  femaleNames:
+  - Emilia
+  - Mia
+  - Lina
+  - Clara
+  - Ella
+  - Frieda
+  - Leni
+  - Yasmin
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 0
+      outfit:
+        label: Bauhaus colour panels
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short textured crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: short trimmed beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 0
+      outfit:
+        label: Bauhaus colour panels
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: sleek low bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 4
+    - 5
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 4
+    - colour: red
+      weight: 1
+  baselines: []

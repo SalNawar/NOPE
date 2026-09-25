@@ -1,0 +1,142 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_egypt_future
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: egypt_future
+  displayName: Nile Arcology
+  nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
+  era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  year: 2150
+  tongue: arabic
+  birthYearMin: 2080
+  birthYearMax: 2132
+  facts:
+  - category: 4
+    value: Nile credit (digital)
+  - category: 0
+    value: Cairene Arabic-English
+  - category: 3
+    value: Solar desalination tower
+  - category: 5
+    value: New Administrative Capital
+  - category: 2
+    value: Speaker Amira Nasser
+  - category: 6
+    value: bead-row yoke linen
+  maleNames:
+  - Omar
+  - Karim
+  - Youssef
+  - Adam
+  - Ziad
+  - Hamza
+  - Seif
+  - Malik
+  femaleNames:
+  - Nour
+  - Farida
+  - Salma
+  - Malak
+  - Jana
+  - Laila
+  - Hana
+  - Rania
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 0
+      outfit:
+        label: bead-row yoke linen
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short textured crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: short trimmed beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 0
+      outfit:
+        label: bead-row yoke linen
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: sleek low bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 3
+    - 4
+    - 2
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
+  baselines: []

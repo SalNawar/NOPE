@@ -71,3 +71,14 @@ Layers are organizational/depth groups; they are not necessarily fullscreen PNGs
 5. Booth, 3D functional props and display planes.
 6. Explicit Inspector wiring to gameplay/time/history systems; no catch-all installers.
 7. User tests in Unity. Codex does not run tests, Play mode or UI automation.
+
+## Amendment (piece 7, 2026-09-25): new code anchors
+Source: docs/superpowers/specs/2026-09-25-physical-desk-design.md. Added to "Existing code anchors (read, not changed)"; each is a scene component whose geometry is data, so the 3D props supply their own numbers at adoption:
+- `MonitorScreen` on the PC's glass: the screen plane (a `ScreenAnchor` at the glass's centre) and the glass rectangle's size, screen power and the bezel LED; the desktop is a World Space canvas on that plane.
+- `DeskSurface`: the desk plane and the rectangle papers stay in.
+- `DeskScanner`: the scanner's drop area and glass bed.
+- `DeskSlot` anchors (plant, mug, photo, free spots) and `DeskItem` ids on decor props.
+- `TravellerView.Anchor` (where the traveller wheel and the speech bubble centre) and the `TravellerHitZone` child.
+- `BoothCoordinator`, which applies the booth's input rules.
+- The focus framing is computed from the glass (orthographic now; a perspective adapter at adoption).
+The 4:3 CRT requirement above ("Match the CRT front to a 4:3 screen") is confirmed: the desktop is 1440 x 1080 units. `Clickable` still needs a `Collider2D`, so 3D papers and props need proxies at adoption.

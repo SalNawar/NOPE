@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1122b6ef48d8ba541aa8872e3e649632, type: 3}
+  m_Name: Place_italy_industrial
+  m_EditorClassIdentifier: Assembly-CSharp::NationEraProfileSO
+  id: italy_industrial
+  displayName: Bologna, Kingdom of Italy
+  nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
+  era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1895
+  tongue: italian
+  birthYearMin: 1825
+  birthYearMax: 1877
+  facts:
+  - category: 4
+    value: Italian lira (100 centesimi)
+  - category: 0
+    value: Bolognese dialect; Italian
+  - category: 3
+    value: Safety bicycle
+  - category: 5
+    value: Rome (Kingdom of Italy)
+  - category: 2
+    value: King Umberto I
+  - category: 6
+    value: silk scarf / coral beads
+  maleNames:
+  - Giuseppe
+  - Luigi
+  - Enrico
+  - Augusto
+  - Alfredo
+  - Ettore
+  - Arturo
+  - Cesare
+  femaleNames:
+  - Giuseppina
+  - Teresa
+  - Ada
+  - Elvira
+  - Adele
+  - Ida
+  - Clelia
+  - Amelia
+  smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: suit and tabarro
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: pomaded side parting
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: Umbertine moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: wide black felt hat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: silk scarf
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 4
+      outfit:
+        label: dress and black scialle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: high curled chignon
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: coral beads
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
+  baselines:
+  - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
+    baseScore: 2
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
+    baseScore: 3
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}
+  - attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
+    baseScore: 5
+    dominantEffect: {fileID: 0}
+    supportingEffect: {fileID: 0}

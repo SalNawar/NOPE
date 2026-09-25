@@ -3,6 +3,7 @@
     "rootNamespace": "",
     "references": [
         "TimeDesk.Domain",
+        "TimeDesk.Visuals",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],
