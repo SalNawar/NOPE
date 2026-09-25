@@ -1,0 +1,10 @@
+{
+    "success": true,
+    "installedObjects": 19,
+    "errors": [],
+    "rayHits": [
+        "OfficeRoot/CRTMonitor",
+        "OfficeRoot/ReadySign"
+    ],
+    "note": "Camera-ray hit targets plus existing event checks; no full gameplay-day test."
+}

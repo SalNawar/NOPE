@@ -1,0 +1,160 @@
+{
+  "source": "ReStory_CRT_closeup.png",
+  "dimensions": [
+    430,
+    453
+  ],
+  "method": "Per-channel median of screenshot pixels in each rectangle. Display-referred colour; includes light, shadow, grading and compression. These are NOT material albedo values.",
+  "samples": [
+    {
+      "region": "Warm upper bezel strip",
+      "sample_rect_pixels": [
+        120,
+        37,
+        174,
+        41
+      ],
+      "median_srgb": [
+        181,
+        141,
+        93
+      ],
+      "hex": "#B58D5D"
+    },
+    {
+      "region": "Bezel lower face",
+      "sample_rect_pixels": [
+        130,
+        167,
+        145,
+        172
+      ],
+      "median_srgb": [
+        124,
+        95,
+        68
+      ],
+      "hex": "#7C5F44"
+    },
+    {
+      "region": "Monitor rear side in shadow",
+      "sample_rect_pixels": [
+        46,
+        64,
+        55,
+        96
+      ],
+      "median_srgb": [
+        54,
+        34,
+        23
+      ],
+      "hex": "#362217"
+    },
+    {
+      "region": "System front in shadow",
+      "sample_rect_pixels": [
+        87,
+        229,
+        110,
+        239
+      ],
+      "median_srgb": [
+        71,
+        56,
+        43
+      ],
+      "hex": "#47382B"
+    },
+    {
+      "region": "Desk wood midtone",
+      "sample_rect_pixels": [
+        342,
+        293,
+        372,
+        312
+      ],
+      "median_srgb": [
+        74,
+        46,
+        25
+      ],
+      "hex": "#4A2E19"
+    },
+    {
+      "region": "Till green front",
+      "sample_rect_pixels": [
+        278,
+        213,
+        311,
+        222
+      ],
+      "median_srgb": [
+        39,
+        49,
+        32
+      ],
+      "hex": "#273120"
+    },
+    {
+      "region": "Mousepad teal",
+      "sample_rect_pixels": [
+        255,
+        345,
+        270,
+        357
+      ],
+      "median_srgb": [
+        34,
+        44,
+        45
+      ],
+      "hex": "#222C2D"
+    },
+    {
+      "region": "Teal key group",
+      "sample_rect_pixels": [
+        179,
+        288,
+        184,
+        292
+      ],
+      "median_srgb": [
+        73,
+        78,
+        71
+      ],
+      "hex": "#494E47"
+    },
+    {
+      "region": "Orange spacebar",
+      "sample_rect_pixels": [
+        126,
+        296,
+        147,
+        299
+      ],
+      "median_srgb": [
+        105,
+        57,
+        27
+      ],
+      "hex": "#69391B"
+    },
+    {
+      "region": "Screen sky blue",
+      "sample_rect_pixels": [
+        130,
+        60,
+        175,
+        80
+      ],
+      "median_srgb": [
+        59,
+        105,
+        173
+      ],
+      "hex": "#3B69AD"
+    }
+  ]
+}

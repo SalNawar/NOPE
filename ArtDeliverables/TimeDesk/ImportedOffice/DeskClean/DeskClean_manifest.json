@@ -1,0 +1,407 @@
+{
+  "materials": {
+    "DeskClean_ABS": {
+      "color": [
+        0.7725490196078432,
+        0.7215686274509804,
+        0.6196078431372549
+      ],
+      "smoothness": 0.25,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Case": {
+      "color": [
+        0.6392156862745098,
+        0.596078431372549,
+        0.5137254901960784
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Grey": {
+      "color": [
+        0.6784313725490196,
+        0.6862745098039216,
+        0.6235294117647059
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Green": {
+      "color": [
+        0.28627450980392155,
+        0.41568627450980394,
+        0.3764705882352941
+      ],
+      "smoothness": 0.31999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_GreenDark": {
+      "color": [
+        0.20392156862745098,
+        0.29411764705882354,
+        0.27450980392156865
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Teal": {
+      "color": [
+        0.3607843137254902,
+        0.5058823529411764,
+        0.47058823529411764
+      ],
+      "smoothness": 0.27,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Rubber": {
+      "color": [
+        0.17647058823529413,
+        0.2,
+        0.18823529411764706
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Dark": {
+      "color": [
+        0.20392156862745098,
+        0.23529411764705882,
+        0.2235294117647059
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Paper": {
+      "color": [
+        0.8588235294117647,
+        0.8196078431372549,
+        0.7294117647058823
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Manila": {
+      "color": [
+        0.788235294117647,
+        0.7254901960784313,
+        0.5490196078431373
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Wood": {
+      "color": [
+        0.5372549019607843,
+        0.39215686274509803,
+        0.2823529411764706
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Orange": {
+      "color": [
+        0.7333333333333333,
+        0.4980392156862745,
+        0.28627450980392155
+      ],
+      "smoothness": 0.27,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Metal": {
+      "color": [
+        0.6666666666666666,
+        0.6627450980392157,
+        0.6
+      ],
+      "smoothness": 0.53,
+      "metallic": 0.62,
+      "texture": null
+    },
+    "DeskClean_Brass": {
+      "color": [
+        0.6313725490196078,
+        0.5411764705882353,
+        0.38823529411764707
+      ],
+      "smoothness": 0.44999999999999996,
+      "metallic": 0.42,
+      "texture": null
+    },
+    "DeskClean_Glass": {
+      "color": [
+        0.15294117647058825,
+        0.2,
+        0.2
+      ],
+      "smoothness": 0.52,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Ink": {
+      "color": [
+        0.3137254901960784,
+        0.35294117647058826,
+        0.3176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Pad": {
+      "color": [
+        0.3568627450980392,
+        0.3333333333333333,
+        0.28627450980392155
+      ],
+      "smoothness": 0.09999999999999998,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_PadEdge": {
+      "color": [
+        0.18823529411764706,
+        0.17647058823529413,
+        0.15294117647058825
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    }
+  },
+  "models": [
+    {
+      "name": "Clean_Mouse",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Mouse.fbx",
+      "nodes": {
+        "Clean_Mouse__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_Mouse__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Mouse__DeskClean_Grey": "DeskClean_Grey",
+        "Clean_Mouse__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Mouse__DeskClean_GreenDark": "DeskClean_GreenDark"
+      },
+      "triangles": 8332
+    },
+    {
+      "name": "Clean_Till",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Till.fbx",
+      "nodes": {
+        "Clean_Till__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Till__DeskClean_Green": "DeskClean_Green",
+        "Clean_Till__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Till__DeskClean_Metal": "DeskClean_Metal",
+        "Clean_Till__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Till__DeskClean_Glass": "DeskClean_Glass",
+        "Clean_Till__DeskClean_Manila": "DeskClean_Manila"
+      },
+      "triangles": 19408
+    },
+    {
+      "name": "Clean_Inkpad",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Inkpad.fbx",
+      "nodes": {
+        "Clean_Inkpad__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Inkpad__DeskClean_Green": "DeskClean_Green",
+        "Clean_Inkpad__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Inkpad__DeskClean_Brass": "DeskClean_Brass",
+        "Clean_Inkpad__DeskClean_Metal": "DeskClean_Metal",
+        "Clean_Inkpad__DeskClean_Rubber": "DeskClean_Rubber"
+      },
+      "triangles": 3684
+    },
+    {
+      "name": "Clean_FormSorter",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_FormSorter.fbx",
+      "nodes": {
+        "Clean_FormSorter__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_FormSorter__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_FormSorter__DeskClean_Green": "DeskClean_Green",
+        "Clean_FormSorter__DeskClean_Paper": "DeskClean_Paper",
+        "Clean_FormSorter__DeskClean_Manila": "DeskClean_Manila",
+        "Clean_FormSorter__DeskClean_Orange": "DeskClean_Orange",
+        "Clean_FormSorter__DeskClean_Brass": "DeskClean_Brass"
+      },
+      "triangles": 8152
+    },
+    {
+      "name": "Clean_ComputerMedia",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_ComputerMedia.fbx",
+      "nodes": {
+        "Clean_ComputerMedia__DeskClean_Manila": "DeskClean_Manila",
+        "Clean_ComputerMedia__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_ComputerMedia__DeskClean_Metal": "DeskClean_Metal",
+        "Clean_ComputerMedia__DeskClean_Paper": "DeskClean_Paper",
+        "Clean_ComputerMedia__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_ComputerMedia__DeskClean_Green": "DeskClean_Green"
+      },
+      "triangles": 3752
+    },
+    {
+      "name": "Clean_Tray",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Tray.fbx",
+      "nodes": {
+        "Clean_Tray__DeskClean_Green": "DeskClean_Green",
+        "Clean_Tray__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Tray__DeskClean_Rubber": "DeskClean_Rubber"
+      },
+      "triangles": 1344
+    },
+    {
+      "name": "Clean_PaperBundle",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_PaperBundle.fbx",
+      "nodes": {
+        "Clean_PaperBundle__DeskClean_Manila": "DeskClean_Manila",
+        "Clean_PaperBundle__DeskClean_Paper": "DeskClean_Paper",
+        "Clean_PaperBundle__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_PaperBundle__DeskClean_Metal": "DeskClean_Metal"
+      },
+      "triangles": 4668
+    },
+    {
+      "name": "Clean_Stamp",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Stamp.fbx",
+      "nodes": {
+        "Clean_Stamp__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Stamp__DeskClean_Wood": "DeskClean_Wood",
+        "Clean_Stamp__DeskClean_Brass": "DeskClean_Brass"
+      },
+      "triangles": 1952
+    },
+    {
+      "name": "Clean_Next",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Next.fbx",
+      "nodes": {
+        "Clean_Next__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Next__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Next__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_Next__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Next__DeskClean_Glass": "DeskClean_Glass",
+        "Clean_Next__DeskClean_Orange": "DeskClean_Orange"
+      },
+      "triangles": 2272
+    },
+    {
+      "name": "Clean_Keyboard",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Keyboard.fbx",
+      "nodes": {
+        "Clean_Keyboard__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_Keyboard__DeskClean_Case": "DeskClean_Case",
+        "Clean_Keyboard__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Keyboard__DeskClean_Grey": "DeskClean_Grey",
+        "Clean_Keyboard__DeskClean_Teal": "DeskClean_Teal",
+        "Clean_Keyboard__DeskClean_Orange": "DeskClean_Orange",
+        "Clean_Keyboard__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Keyboard__DeskClean_Ink": "DeskClean_Ink",
+        "Clean_Keyboard__DeskClean_Paper": "DeskClean_Paper"
+      },
+      "triangles": 22797
+    },
+    {
+      "name": "Clean_Phone",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Phone.fbx",
+      "nodes": {
+        "Clean_Phone__DeskClean_Green": "DeskClean_Green",
+        "Clean_Phone__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Phone__DeskClean_Case": "DeskClean_Case",
+        "Clean_Phone__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_Phone__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Phone__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Phone__DeskClean_Ink": "DeskClean_Ink"
+      },
+      "triangles": 13271
+    },
+    {
+      "name": "Clean_Calculator",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Calculator.fbx",
+      "nodes": {
+        "Clean_Calculator__DeskClean_Case": "DeskClean_Case",
+        "Clean_Calculator__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Calculator__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_Calculator__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Calculator__DeskClean_Teal": "DeskClean_Teal",
+        "Clean_Calculator__DeskClean_Orange": "DeskClean_Orange",
+        "Clean_Calculator__DeskClean_Paper": "DeskClean_Paper",
+        "Clean_Calculator__DeskClean_Ink": "DeskClean_Ink"
+      },
+      "triangles": 5188
+    },
+    {
+      "name": "Clean_Lamp",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Lamp.fbx",
+      "nodes": {
+        "Clean_Lamp__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Lamp__DeskClean_Brass": "DeskClean_Brass",
+        "Clean_Lamp__DeskClean_Green": "DeskClean_Green",
+        "Clean_Lamp__DeskClean_Paper": "DeskClean_Paper",
+        "Clean_Lamp__DeskClean_Orange": "DeskClean_Orange",
+        "Clean_Lamp__DeskClean_Rubber": "DeskClean_Rubber"
+      },
+      "triangles": 4468
+    },
+    {
+      "name": "Clean_PenPot",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_PenPot.fbx",
+      "nodes": {
+        "Clean_PenPot__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_PenPot__DeskClean_Wood": "DeskClean_Wood",
+        "Clean_PenPot__DeskClean_Metal": "DeskClean_Metal",
+        "Clean_PenPot__DeskClean_Orange": "DeskClean_Orange",
+        "Clean_PenPot__DeskClean_Teal": "DeskClean_Teal",
+        "Clean_PenPot__DeskClean_Green": "DeskClean_Green"
+      },
+      "triangles": 3596
+    },
+    {
+      "name": "Clean_Stapler",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Stapler.fbx",
+      "nodes": {
+        "Clean_Stapler__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Stapler__DeskClean_Case": "DeskClean_Case",
+        "Clean_Stapler__DeskClean_Metal": "DeskClean_Metal",
+        "Clean_Stapler__DeskClean_ABS": "DeskClean_ABS"
+      },
+      "triangles": 1132
+    },
+    {
+      "name": "Clean_Binder",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Binder.fbx",
+      "nodes": {
+        "Clean_Binder__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Binder__DeskClean_Paper": "DeskClean_Paper",
+        "Clean_Binder__DeskClean_Green": "DeskClean_Green",
+        "Clean_Binder__DeskClean_Metal": "DeskClean_Metal",
+        "Clean_Binder__DeskClean_Dark": "DeskClean_Dark"
+      },
+      "triangles": 1892
+    },
+    {
+      "name": "Clean_Keys",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Keys.fbx",
+      "nodes": {
+        "Clean_Keys__DeskClean_Metal": "DeskClean_Metal"
+      },
+      "triangles": 2528
+    },
+    {
+      "name": "Clean_Blotter",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Blotter.fbx",
+      "nodes": {
+        "Clean_Blotter__DeskClean_PadEdge": "DeskClean_PadEdge",
+        "Clean_Blotter__DeskClean_Pad": "DeskClean_Pad"
+      },
+      "triangles": 344
+    }
+  ]
+}

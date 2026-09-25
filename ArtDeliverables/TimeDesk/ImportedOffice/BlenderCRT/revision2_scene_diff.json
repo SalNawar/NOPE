@@ -1,0 +1,42 @@
+{
+  "baseline": "23aa6e1",
+  "existing_documents_changed": [
+    {
+      "id": "9583987",
+      "type": "4",
+      "name": "Retro CRT",
+      "removed": false
+    },
+    {
+      "id": "404366523",
+      "type": "4",
+      "name": "MonitorVCam",
+      "removed": false
+    },
+    {
+      "id": "486590549",
+      "type": "1001",
+      "name": "",
+      "removed": false
+    },
+    {
+      "id": "783206714",
+      "type": "4",
+      "name": "CRTMonitor",
+      "removed": false
+    },
+    {
+      "id": "783206716",
+      "type": "61",
+      "name": "CRTMonitor",
+      "removed": false
+    },
+    {
+      "id": "1609914246",
+      "type": "1001",
+      "name": "",
+      "removed": false
+    }
+  ],
+  "added_document_count": 2
+}
