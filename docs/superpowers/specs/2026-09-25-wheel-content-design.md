@@ -46,7 +46,7 @@ Baseline: `compile_check.py` 0 errors, the offline runner `passed 576, failed 0`
 - `DeskConfigSO`: `bubbleCharsPerSecond` (40), `bubbleMinSeconds` (1.5); `bubbleSeconds` (4) now means "once fully shown, when nothing follows".
 - `TravellerWheel`: owns the `SpeechQueue` and the icon sprites. `Say(IReadOnlyList<DialogLine>)` queues the lines (through `DisplayText`, Spoken) while the wheel may open. `LateUpdate` ticks the queue, shows each new line on the bubble, reveals its characters and sets the traveller's expression. `SetCanOpen(false)` clears the queue (applying W8's pending expression). `IconFor(kind)`: the art sprite or the placeholder (cached; placeholders destroyed with the wheel).
 - `OverlayCallout`: `Reveal(int characters)` (TMP `maxVisibleCharacters`); `Show` reveals everything again; an infinite time never runs out (the wheel times lines itself).
-- `InteractionAction.icon` (optional); `InteractionPanelController` draws it in a square (`iconSize`, 28 reference px, a serialized layout value like the ring's radii) at the button's left and insets the label.
+- `InteractionAction.icon` (optional); `InteractionPanelController` draws it in a square (`iconSize` 28 and `iconPadding` 8 reference px, serialized layout values like the ring's radii, read with their defaults from the existing scene) at the button's left and insets the label past it.
 - `InvestigationUIController`: renders `DialogChoiceKinds.Arrange(choices)` with the wheel's icons; `Choose` hands `SaidSince(before)` to the wheel; `StartInterview` hands it the opening's traveller line (the claim, W7).
 - `GameManager`: the expression forwarder is removed (W8).
 
@@ -81,4 +81,16 @@ Nothing here was run in a scene (by instruction). The move must check, at the 19
 
 ## 7. Verification record
 
-*(filled in when the piece is verified)*
+Commits on `feat/wheel-content`: `0b2bb49` (this spec), `4805445` (`SpeechQueue`, `WheelIconPlaceholder` and their tests), `1bf1b16` (kinds, order, icons, spoken requests, the paced bubble, the pipeline checks, FEATURES), `72ce2f9` (the two spoken requests and the regenerated library), then this record.
+
+- **Offline:** `compile_check.py` 0 errors in every project at each code commit (`4805445` checked on its own snapshot: 593 tests); the runner `passed 602, failed 0` (576 before: 6 tests replaced, 32 added).
+- **Unity (`_TimeDeskP8Automation`, no scene opened; report `p8_automation_report.txt`):**
+  - Generate World logs no error or warning; the first run changes only `ContentLibrary_Main` (the two requests, with ids `interview.requests.{id}.prompt` / `.reply`), a second run changes nothing; Validate Content Library reports no issues; menu capacity 8.
+  - Case generation, days 1-3 for seeds 12345 and 999 (60 travellers, with looks, premades, openers, claims and small talk), is byte-identical to the dump taken before any piece-8 code (`p8_baseline_cases.txt` = `p8_cases_now.txt`), and two dumps in one session are identical.
+  - Real travellers' menus, built as the office builds them (seed 12345 day 1 slots 1 and 3, day 2 slot 6; seed 999 day 3 slot 1): each says its claim on arrival; each hub is `request:1`, `act:step_closer`, `act:speak_up`, `ask`, `look` (and a dialog), already in kind order, at most 6 of 8; the ask and look menus start with Back; "Step closer" is answered "Like this?" and leaves the hub; Senenmut's dialog opens with his happy line and offers two Normal replies.
+  - `Desk_Default` (unchanged on disk) reads 40 cps, a 1.5 s minimum and the 4 s hold.
+  - The six placeholder glyphs, drawn on the wheel's button colour (`p8_icons.png`): dot, left arrow, paper with a folded corner, balloon, eye, two balloons; all distinct.
+  - The EditMode suite in Unity: 730 passed, 2 failed, both third-party UnitySkills tests that depend on the editor's state: the known `PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly` and `SkillsModeManagerTests.Migration_RepeatLoad_IsIdempotent_NoDuplicateAuditEvent` (an EditorPrefs migration flag shared by every editor on this machine). Every TimeDesk test passed.
+- **Not run, by instruction:** anything in a scene (no play mode, screenshots or builder runs). §6 lists what the move to the art office must check.
+
+**Self-review (as a skeptical reviewer, before this record):** the whole diff was re-read for correctness, dead code and doc drift. Fixed before committing: an expression could be skipped when a line started and ended within one long frame (the wheel now applies the latest expression whenever a new line has started, whether or not one is still showing); FEATURES claimed scene checks that have not run (now "waits for the move", pointing at §6); the Clue Log entry said every choice but a document request opens the transcript, but a look at a garment does not (corrected, and "Look >" named); the validator missed `lookLabel` (W10); stale docs on `InterviewLines`, `CheckInterview` and `TravellerView`. Kept on purpose: a reply queues behind the line being shown (W6), so a player who clicks through many questions quickly reads their answers in order, each at least the minimum, while the transcript is already complete.
