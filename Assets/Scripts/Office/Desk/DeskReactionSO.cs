@@ -15,7 +15,7 @@ public sealed class DeskReactionSO : ScriptableObject
     /// <summary>Seconds the animation takes.</summary>
     [Min(0.05f)] public float seconds = 0.35f;
 
-    /// <summary>How strong the animation is (scale fraction, offset in local units, 30 degrees per unit of wobble).</summary>
+    /// <summary>How strong the animation is (a scale fraction, a nudge's bob in metres, 30 degrees of tilt per unit of wobble).</summary>
     public float amplitude = 0.12f;
 
     /// <summary>Optional: played through the prop's AudioSource (the project has no clips yet).</summary>

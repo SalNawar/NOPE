@@ -24,13 +24,15 @@ public sealed class OverlayCallout : MonoBehaviour
     private Vector2 _offset;
     private float _remaining;
 
-    /// <summary>Resolves the camera and the overlay canvas once, and hides the box (never this host).</summary>
+    /// <summary>Resolves the overlay canvas once, and hides the box (never this host). The office camera comes from the office binder (SetCamera).</summary>
     private void Awake()
     {
-        _camera = Camera.main;
         _canvasRect = OverlayProjection.CanvasRectOf(this);
         Hide();
     }
+
+    /// <summary>The office camera the box is placed through (the office binder's, from the art office).</summary>
+    public void SetCamera(Camera office) => _camera = office;
 
     /// <summary>
     /// Shows all of <paramref name="text"/> (as given) over <paramref name="follow"/>

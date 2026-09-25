@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Look of the interaction feedback: the game cursor (arrow, and a hand over
-/// anything clickable) and the hover outline on booth objects and desktop UI.
+/// anything clickable) and the hover outline on office objects and desktop UI.
 /// </summary>
 [CreateAssetMenu(fileName = "InteractionFeedback_", menuName = "TimeDesk/UI/Interaction Feedback", order = 10)]
 public sealed class InteractionFeedbackSO : ScriptableObject
@@ -21,12 +21,15 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     public Vector2 handHotspot = new Vector2(12f, 1f);
 
     [Header("Hover outline")]
-    /// <summary>Outline colour for booth objects (world sprites).</summary>
+    /// <summary>Outline colour for office objects (the 3D outline).</summary>
     public Color outlineColor = Color.white;
 
-    /// <summary>Booth outline thickness in world units.</summary>
-    [Min(0.005f)]
-    public float worldOutlineWidth = 0.05f;
+    /// <summary>The office objects' outline thickness in metres (how far the outline hull stands out of the mesh).</summary>
+    [Min(0.0005f)]
+    public float worldOutlineWidth = 0.006f;
+
+    /// <summary>The outline hull's material (TimeDesk/HoverHull: the mesh again, pushed out along its normals, back faces only, unlit).</summary>
+    public Material outlineMaterial;
 
     /// <summary>
     /// Outline colour for desktop UI that carries no theme tag (the Title and
@@ -36,7 +39,4 @@ public sealed class InteractionFeedbackSO : ScriptableObject
 
     /// <summary>UI outline offset in pixels (uGUI Outline effect distance).</summary>
     public Vector2 uiOutlineDistance = new Vector2(2f, -2f);
-
-    /// <summary>Unlit sprite material for booth outlines, so lighting never dims the highlight.</summary>
-    public Material outlineMaterial;
 }

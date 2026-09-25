@@ -106,14 +106,4 @@ public sealed class ShiftClock
         whole = ((whole % MinutesPerDay) + MinutesPerDay) % MinutesPerDay;
         return $"{whole / 60:00}:{whole % 60:00}";
     }
-
-    /// <summary>Clock-hand angles in degrees, clockwise from 12 o'clock.</summary>
-    public static (float hourDegrees, float minuteDegrees) HandAngles(float minuteOfDay)
-    {
-        const float minutesPerDial = 12f * 60f;
-        float m = ((minuteOfDay % MinutesPerDay) + MinutesPerDay) % MinutesPerDay;
-        float minuteDegrees = (m % 60f) / 60f * 360f;
-        float hourDegrees = (m % minutesPerDial) / minutesPerDial * 360f;
-        return (hourDegrees, minuteDegrees);
-    }
 }

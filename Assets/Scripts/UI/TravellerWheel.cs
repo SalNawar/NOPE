@@ -65,9 +65,10 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// Runs at load (the host is active): applies the knobs to the ring, its
     /// centre and the speech pacing, sizes the ring to the box around every
-    /// item (so the projection keeps it on screen), caches the camera and the
-    /// overlay canvas's rect (the per-frame placement looks nothing up) and
-    /// closes the wheel (never deactivating this host).
+    /// item (so the projection keeps it on screen), caches the overlay canvas's
+    /// rect (the per-frame placement looks nothing up) and closes the wheel
+    /// (never deactivating this host). The office camera comes from the office
+    /// binder (SetCamera), once the art office is there.
     /// </summary>
     private void Awake()
     {
@@ -91,7 +92,6 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             _speech = new SpeechQueue(config.bubbleCharsPerSecond, config.bubbleMinSeconds, config.bubbleSeconds);
         }
 
-        _camera = Camera.main;
         _canvasRect = OverlayProjection.CanvasRectOf(this);
         if (catcher != null)
             catcher.SetActive(false);
@@ -124,6 +124,9 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (kb != null && kb.escapeKey.wasPressedThisFrame)
             Close();
     }
+
+    /// <summary>The office camera the ring and the bubble are placed through (the office binder's, from the art office).</summary>
+    public void SetCamera(Camera office) => _camera = office;
 
     /// <summary>Opens the wheel over the traveller, unless it may not open or is open (the traveller hit zone's and the desk intercom's persistent call).</summary>
     public void Open()

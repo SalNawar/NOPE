@@ -1,29 +1,20 @@
 using UnityEngine;
 
 /// <summary>
-/// Tuning for the physical desk (piece 7): the monitor push-in, screen power,
-/// the scanner, the papers, the sorting bands, the traveller wheel and its
-/// speech bubble's pacing (piece 8), and the day-1 desk notes. Geometry that belongs to the art
-/// (the glass rectangle, the desk rectangle, the scanner's drop area, the
-/// anchors) stays in scene components, so another office supplies its own.
-/// Created and assigned by Tools > TimeDesk > Build Office UI
-/// (Assets/Data/Config/Desk_Default.asset). Every knob is read at runtime
-/// except four sorting orders (the exit zone, the glass zone, the bezel and
-/// the screen canvas), which the builder writes into the scene. The checks on
-/// these knobs (sorting bands, paper spawn slots, the wheel's fit) also run
-/// only in the builder: re-run it after changing a sorting order, the spawn
-/// slots or a wheel size.
+/// Tuning for the physical desk in the office (pieces 7 and the office move):
+/// screen power, the desktop's clone on the PC, the scanner, the papers on the
+/// desk, the traveller, the traveller wheel and its speech bubble's pacing
+/// (piece 8), and the day-1 desk notes. Geometry that belongs to the art
+/// (where the desk, the PC, the scanner and the traveller are) comes from the
+/// art scene's anchors (OfficeSceneContractSO), so another office supplies its
+/// own. Created and assigned by Tools > TimeDesk > Build Office UI
+/// (Assets/Data/Config/Desk_Default.asset). Every knob is read at runtime; the
+/// checks on them (paper spawn slots, the wheel's fit) run only in the
+/// builder: re-run it after changing the spawn slots or a wheel size.
 /// </summary>
 [CreateAssetMenu(fileName = "Desk_Default", menuName = "TimeDesk/Office/Desk Config")]
 public sealed class DeskConfigSO : ScriptableObject
 {
-    [Header("Monitor focus")]
-    /// <summary>How much of the view's height (or width, on narrow screens) the CRT's glass fills when focused.</summary>
-    [Range(0.5f, 1f)] public float monitorFill = 0.85f;
-
-    /// <summary>Seconds the camera takes to push in or pull back (the brain's default blend).</summary>
-    [Min(0f)] public float focusBlendSeconds = 0.6f;
-
     [Header("Screen power")]
     /// <summary>True when the screen is on at the start of a shift.</summary>
     public bool screenStartsOn = true;
@@ -31,50 +22,57 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Which events turn a dark screen on.</summary>
     public PcWakeRules wake = new PcWakeRules();
 
-    /// <summary>The bezel LED's colour while the screen is on.</summary>
+    /// <summary>The frame's power LED colour while the screen is on.</summary>
     public Color ledOnColor = new Color(0.35f, 0.95f, 0.45f, 1f);
 
-    /// <summary>The bezel LED's colour while the screen is off.</summary>
+    /// <summary>The frame's power LED colour while the screen is off.</summary>
     public Color ledOffColor = new Color(0.15f, 0.17f, 0.15f, 1f);
+
+    [Header("The desktop's clone on the PC")]
+    /// <summary>Pixel size of the render texture the office PC's screen shows (the 4:3 desktop).</summary>
+    public Vector2Int cloneResolution = new Vector2Int(1024, 768);
+
+    /// <summary>Brightness of the clone on the glass (1 = as rendered; a CRT glows a little under the room's light).</summary>
+    [Range(0.2f, 2f)] public float cloneBrightness = 1f;
+
+    /// <summary>How much of the glass the fitted desktop fills (below 1 keeps the picture off a curved glass's rounded edges).</summary>
+    [Range(0.5f, 1f)] public float cloneFill = 0.92f;
 
     [Header("Scanner")]
     /// <summary>Seconds a desk scan takes (the shift clock keeps running).</summary>
     [Min(0.1f)] public float scanSeconds = 1.5f;
 
-    /// <summary>The day-1 note on the scanner tray: a UI string key (world_source.json ui.strings; empty = no note).</summary>
+    /// <summary>The day-1 note above the scanner: a UI string key (world_source.json ui.strings; empty = no note).</summary>
     public string scanHintKey = "desk.scanHint";
 
     /// <summary>The last day the scanner note shows (0 = never).</summary>
     [Min(0)] public int scanHintUntilDay = 1;
 
     [Header("Papers")]
-    /// <summary>Where handed-over papers land, 0..1 across the desk rectangle (reused in order when a traveller has more papers). Read at runtime; Build Office UI checks that every paper a traveller carries has a slot.</summary>
+    /// <summary>A paper's size on the desk in metres (width, depth): larger than life, so its title reads from the chair.</summary>
+    public Vector2 paperSize = new Vector2(0.26f, 0.34f);
+
+    /// <summary>Where handed-over papers land, 0..1 across the desk anchor's rectangle (reused in order when a traveller has more papers). Read at runtime; Build Office UI checks that every paper a traveller carries has a slot.</summary>
     public Vector2[] paperSpawnSlots =
     {
-        new Vector2(0.58f, 0.71f), new Vector2(0.76f, 0.66f), new Vector2(0.62f, 0.29f), new Vector2(0.84f, 0.26f)
+        new Vector2(0.5f, 0.62f), new Vector2(0.74f, 0.5f), new Vector2(0.27f, 0.45f), new Vector2(0.55f, 0.28f)
     };
 
     /// <summary>Seconds a paper takes to slide (hand-over, back from the scanner, away at the decision).</summary>
     [Min(0f)] public float paperSlideSeconds = 0.25f;
 
-    [Header("Sorting bands (Default layer; re-run Build Office UI after a change)")]
-    /// <summary>The focus exit zone's order: above every desk prop. Written into the scene by Build Office UI; a change takes effect when it runs again.</summary>
-    public int focusExitOrder = 10;
+    /// <summary>Height between two stacked papers in metres (each paper above the desk adds one step).</summary>
+    [Min(0.0002f)] public float paperStackStep = 0.0015f;
 
-    /// <summary>The glass zone's order: above the exit zone, below the bezel. Written into the scene by Build Office UI; a change takes effect when it runs again.</summary>
-    public int glassOrder = 11;
+    /// <summary>How high a dragged paper is lifted above the stack, in metres.</summary>
+    [Min(0f)] public float heldPaperLift = 0.02f;
 
-    /// <summary>The CRT bezel's power button and LED. Written into the scene by Build Office UI; a change takes effect when it runs again.</summary>
-    public int bezelOrder = 12;
+    [Header("Traveller")]
+    /// <summary>The traveller figure's height in metres (feet at the traveller anchor).</summary>
+    [Min(0.5f)] public float travellerHeight = 1.8f;
 
-    /// <summary>The desktop canvas on the glass. Written into the scene by Build Office UI; a change takes effect when it runs again.</summary>
-    public int screenCanvasOrder = 20;
-
-    /// <summary>The bottom paper of the stack (each paper above adds 1). Read at runtime; Build Office UI checks it against the other bands.</summary>
-    public int paperBaseOrder = 30;
-
-    /// <summary>The paper being dragged: above every stacked paper. Read at runtime; Build Office UI checks it against the other bands.</summary>
-    public int heldPaperOrder = 60;
+    /// <summary>Tint on the traveller's layers and photo (the art is unlit; this sits it into the room's light).</summary>
+    public Color travellerTint = new Color(0.9f, 0.88f, 0.84f, 1f);
 
     [Header("Traveller wheel (overlay reference px; Build Office UI checks the fit)")]
     /// <summary>The ring's horizontal and vertical radii (read at runtime; Build Office UI checks that the content's menu fits).</summary>
@@ -105,6 +103,10 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The least seconds a line stays up once fully shown before the next line replaces it (never more than bubbleSeconds).</summary>
     [Min(0f)] public float bubbleMinSeconds = 1.5f;
 
-    /// <summary>Where the bubble sits from the traveller's anchor (overlay reference px).</summary>
-    public Vector2 bubbleOffset = new Vector2(650f, 100f);
+    /// <summary>Where the bubble's centre sits from the traveller's anchor (overlay reference px): above the head, clear of the wheel's top item (radius y + half an item + half the bubble).</summary>
+    public Vector2 bubbleOffset = new Vector2(0f, 290f);
+
+    [Header("READY sign")]
+    /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
+    public string readyCaptionKey = "desk.readyCaption";
 }

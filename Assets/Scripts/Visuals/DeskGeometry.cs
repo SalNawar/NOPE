@@ -21,6 +21,28 @@ public readonly struct DeskRect
         _halfHeight = Math.Max(height, 0f) / 2f;
     }
 
+    /// <summary>The centre's x.</summary>
+    public float CentreX => _centreX;
+
+    /// <summary>The centre's y.</summary>
+    public float CentreY => _centreY;
+
+    /// <summary>The width (never negative).</summary>
+    public float Width => 2f * _halfWidth;
+
+    /// <summary>The height (never negative).</summary>
+    public float Height => 2f * _halfHeight;
+
+    /// <summary>The smallest rectangle holding both (the desk's paper area and the scanner's drop area).</summary>
+    public static DeskRect Union(DeskRect a, DeskRect b)
+    {
+        float minX = Math.Min(a._centreX - a._halfWidth, b._centreX - b._halfWidth);
+        float maxX = Math.Max(a._centreX + a._halfWidth, b._centreX + b._halfWidth);
+        float minY = Math.Min(a._centreY - a._halfHeight, b._centreY - b._halfHeight);
+        float maxY = Math.Max(a._centreY + a._halfHeight, b._centreY + b._halfHeight);
+        return new DeskRect((minX + maxX) / 2f, (minY + maxY) / 2f, maxX - minX, maxY - minY);
+    }
+
     /// <summary>True when the point lies inside or on an edge.</summary>
     public bool Contains(float x, float y) =>
         x >= _centreX - _halfWidth && x <= _centreX + _halfWidth &&
@@ -85,34 +107,4 @@ public sealed class PaperStack
 
     /// <summary>The paper's place from the bottom (0), or -1 when it is not stacked.</summary>
     public int IndexOf(int id) => _order.IndexOf(id);
-}
-
-/// <summary>The booth's sorting bands on the Default layer, checked by the builder so input and drawing order agree.</summary>
-public static class SortingBands
-{
-    /// <summary>
-    /// Every band that does not sit strictly above the one below it: props &lt;
-    /// focus exit zone &lt; glass zone &lt; bezel &lt; screen canvas &lt; paper
-    /// base, and the held paper above the top stacked paper (paper base +
-    /// <paramref name="maxPapers"/> - 1). Each problem names both bands and
-    /// their values; empty when the bands are sound.
-    /// </summary>
-    public static List<string> Problems(int maxPropOrder, int focusExitOrder, int glassOrder, int bezelOrder,
-                                        int screenCanvasOrder, int paperBaseOrder, int maxPapers, int heldPaperOrder)
-    {
-        var problems = new List<string>();
-        void Above(string upper, int upperOrder, string lower, int lowerOrder)
-        {
-            if (upperOrder <= lowerOrder)
-                problems.Add($"the {upper} ({upperOrder}) must sit above the {lower} ({lowerOrder})");
-        }
-
-        Above("focus exit zone", focusExitOrder, "highest prop order", maxPropOrder);
-        Above("glass zone", glassOrder, "focus exit zone", focusExitOrder);
-        Above("bezel", bezelOrder, "glass zone", glassOrder);
-        Above("screen canvas", screenCanvasOrder, "bezel", bezelOrder);
-        Above("paper base", paperBaseOrder, "screen canvas", screenCanvasOrder);
-        Above("held paper", heldPaperOrder, "top paper order", paperBaseOrder + maxPapers - 1);
-        return problems;
-    }
 }

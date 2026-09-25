@@ -163,6 +163,13 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     private void Awake()
     {
+        // A leftover copy in the art office (from before the gameplay moved into its own scene) does nothing.
+        if (OfficeScenes.IsArtOffice(gameObject.scene))
+        {
+            enabled = false;
+            return;
+        }
+
         if (documentWindowTemplate != null) documentWindowTemplate.gameObject.SetActive(false);
         if (bookWindowTemplate != null) bookWindowTemplate.gameObject.SetActive(false);
         if (bookShelfButtonTemplate != null) bookShelfButtonTemplate.gameObject.SetActive(false);

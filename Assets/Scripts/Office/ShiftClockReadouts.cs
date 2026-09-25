@@ -2,53 +2,47 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Shows the shift clock: HH:MM in the monitor's taskbar tray and the hands of
-/// the booth's wall clock. Polls the driver each frame (as OfficeReadouts polls
-/// WorldState). Every reference is optional and null-safe.
+/// Shows the shift clock as HH:MM in the desktop's taskbar tray and on the
+/// office's digital clock (the art office's own text, handed over by the
+/// office binder through Bind, or the fallback HUD's). Polls the driver each
+/// frame (as OfficeReadouts polls WorldState) and writes only when the minute
+/// changes. Every reference is optional and null-safe.
 /// </summary>
 public sealed class ShiftClockReadouts : MonoBehaviour
 {
     /// <summary>Today's shift clock host.</summary>
     [SerializeField] private ShiftClockDriver driver;
 
-    [Header("Monitor taskbar tray")]
-    /// <summary>Tray clock text ("09:00").</summary>
+    /// <summary>Tray clock text on the desktop's taskbar ("09:00").</summary>
     [SerializeField] private TMP_Text trayClockText;
 
-    [Header("Booth wall clock")]
-    /// <summary>Hour hand; its pivot must sit at the dial centre, pointing to 12 at rotation 0.</summary>
-    [SerializeField] private Transform hourHand;
+    /// <summary>The office's digital clock text.</summary>
+    private TMP_Text _officeClockText;
 
-    /// <summary>Minute hand; same pivot rule as the hour hand.</summary>
-    [SerializeField] private Transform minuteHand;
-
-    /// <summary>Whole minute last written to the tray (avoids a string per frame).</summary>
+    /// <summary>Whole minute last written (avoids a string per frame).</summary>
     private int _shownMinute = -1;
+
+    /// <summary>Sets the office clock's text (the office binder: the art's digital clock, or the fallback HUD's).</summary>
+    public void Bind(TMP_Text officeClock)
+    {
+        _officeClockText = officeClock;
+        _shownMinute = -1;
+    }
 
     private void Update()
     {
         if (driver == null || driver.Clock == null)
             return;
 
-        Apply(driver.Clock.CurrentMinute);
-    }
+        int whole = Mathf.FloorToInt(driver.Clock.CurrentMinute);
+        if (whole == _shownMinute)
+            return;
 
-    /// <summary>Shows a minute of day on every wired readout.</summary>
-    public void Apply(float minuteOfDay)
-    {
-        (float hourDegrees, float minuteDegrees) = ShiftClock.HandAngles(minuteOfDay);
-
-        // Unity's z rotation turns counter-clockwise; clock hands turn clockwise.
-        if (hourHand != null)
-            hourHand.localRotation = Quaternion.Euler(0f, 0f, -hourDegrees);
-        if (minuteHand != null)
-            minuteHand.localRotation = Quaternion.Euler(0f, 0f, -minuteDegrees);
-
-        int whole = Mathf.FloorToInt(minuteOfDay);
-        if (trayClockText != null && whole != _shownMinute)
-        {
-            trayClockText.text = ShiftClock.Format(minuteOfDay);
-            _shownMinute = whole;
-        }
+        string text = ShiftClock.Format(driver.Clock.CurrentMinute);
+        if (trayClockText != null)
+            trayClockText.text = text;
+        if (_officeClockText != null)
+            _officeClockText.text = text;
+        _shownMinute = whole;
     }
 }

@@ -3,11 +3,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// Drags a desk object across a DeskSurface with the EventSystem (its
-/// Collider2D proxy is found by the Physics2DRaycaster): the pointer is
+/// Drags a desk object across a DeskSurface with the EventSystem (its collider
+/// proxy is found by the office camera's PhysicsRaycaster): the pointer is
 /// projected onto the desk plane and the object's centre stays inside the desk
-/// rectangle. The proxy is off during the drag, so the release is never over
-/// the object itself (no click follows a drag) and the drop is decided by the
+/// area. The proxy is off during the drag, so the release is never over the
+/// object itself (no click follows a drag) and the drop is decided by the
 /// projected pointer (DragEnded). While disabled by its owner the EventSystem
 /// sends it nothing; while its owner takes it out of the raycast
 /// (SetRaycastable) the proxy is off too, so clicks reach what lies under it.
@@ -16,7 +16,7 @@ using UnityEngine.EventSystems;
 public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     /// <summary>The collider the raycaster finds (off while dragged, and while out of the raycast).</summary>
-    [SerializeField] private Collider2D proxy;
+    [SerializeField] private Collider proxy;
 
     private DeskSurface _surface;
     private Vector3 _grabOffset;
@@ -37,9 +37,9 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
 
     /// <summary>
     /// Puts the object in the raycast or takes it out (DeskDocument: a paper
-    /// the booth puts away, so a click on it reaches what lies under it, such
-    /// as the focus exit zone). The proxy stays off during a drag either way,
-    /// and follows this when the drag ends.
+    /// the office has put away, so a click on it reaches what lies under it).
+    /// The proxy stays off during a drag either way, and follows this when the
+    /// drag ends.
     /// </summary>
     public void SetRaycastable(bool raycastable)
     {
@@ -56,7 +56,6 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _grabOffset = Vector3.zero;
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
             _grabOffset = transform.position - point;
-
         if (proxy != null)
             proxy.enabled = false;
         DragBegan?.Invoke(this);
@@ -75,7 +74,6 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         _dragging = false;
         if (proxy != null)
             proxy.enabled = _raycastable;
-
         Vector3 released = transform.position;
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
             released = point;

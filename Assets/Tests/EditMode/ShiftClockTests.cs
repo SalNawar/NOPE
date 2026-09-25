@@ -136,17 +136,6 @@ public class ShiftClockTests
         Assert.AreEqual(expected, ShiftClock.Format(minute));
     }
 
-    [TestCase(180f, 90f, 0f)]      // 03:00
-    [TestCase(570f, 285f, 180f)]   // 09:30
-    [TestCase(945f, 112.5f, 270f)] // 15:45
-    [TestCase(720f, 0f, 0f)]       // 12:00
-    public void HandAngles_AreClockwiseDegreesFromTwelve(float minute, float hourDeg, float minuteDeg)
-    {
-        (float hour, float min) = ShiftClock.HandAngles(minute);
-        Assert.AreEqual(hourDeg, hour, 1e-3f);
-        Assert.AreEqual(minuteDeg, min, 1e-3f);
-    }
-
     [Test]
     public void Constructor_RejectsInvalidShifts()
     {

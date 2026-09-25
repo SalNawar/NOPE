@@ -8,10 +8,11 @@ using UnityEngine;
 /// to the spawn slots, lets the player drag them (DeskDraggable), decides each
 /// drop through DeskPapers (it stays, it scans on the scanner, or it slides back
 /// to where it was picked up), runs the scan timer and raises ScanFinished,
-/// stacks papers by sorting order, returns them at the decision, and shows the
+/// stacks papers by height (each place in the stack lifts a sheet one step, a
+/// held paper above them all), returns them at the decision, and shows the
 /// day-1 scan note. A paper takes input only while BoothCoordinator allows
-/// papers, DeskPapers lets it be dragged and it is not sliding; while the booth
-/// does not allow papers they take no raycasts at all (spec R38).
+/// papers, DeskPapers lets it be dragged and it is not sliding; while the
+/// office does not allow papers they take no raycasts at all (spec R38).
 /// </summary>
 public sealed class DeskController : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The day-1 note on the scanner tray (its text comes from the config).</summary>
     [SerializeField] private TMP_Text scanHint;
 
-    /// <summary>The desk tuning (scan time, spawn slots, slide time, paper orders, the note).</summary>
+    /// <summary>The desk tuning (scan time, spawn slots, slide time, the stack's heights, the photo's tint, the note).</summary>
     [SerializeField] private DeskConfigSO config;
 
     /// <summary>The case's papers by index (null until handed over).</summary>
@@ -126,7 +127,7 @@ public sealed class DeskController : MonoBehaviour
         paper.transform.position = handOverPoint.position;
         paper.gameObject.SetActive(true);
         paper.Bind(i, _documents[i]);
-        paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art);
+        paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art, config.travellerTint);
 
         DeskDraggable drag = paper.GetComponent<DeskDraggable>();
         drag.Init(surface);
@@ -136,7 +137,7 @@ public sealed class DeskController : MonoBehaviour
 
         _papers[i] = paper;
         _stack.Add(i);
-        ApplyOrders();
+        ApplyStack();
 
         Vector2[] slots = config.paperSpawnSlots;
         Vector3 target = slots != null && slots.Length > 0 ? surface.PointAt(slots[_handedOver % slots.Length]) : surface.transform.position;
@@ -181,7 +182,7 @@ public sealed class DeskController : MonoBehaviour
     {
         DeskDocument paper = drag.GetComponent<DeskDocument>();
         _held = paper.Index;
-        paper.SetOrder(config.heldPaperOrder);
+        ApplyStack();
     }
 
     /// <summary>DeskPapers decides the drop; the paper slides to the bed (scanning), back to its pick-up point (refused), or stays; it goes on top either way.</summary>
@@ -201,7 +202,7 @@ public sealed class DeskController : MonoBehaviour
         }
 
         _stack.BringToFront(paper.Index);
-        ApplyOrders();
+        ApplyStack();
         RefreshHint();
     }
 
@@ -209,7 +210,7 @@ public sealed class DeskController : MonoBehaviour
     private void BringToFront(DeskDocument paper)
     {
         _stack.BringToFront(paper.Index);
-        ApplyOrders();
+        ApplyStack();
     }
 
     /// <summary>Slides a paper; it is inert while sliding, and its liveness is re-applied when it lands.</summary>
@@ -223,12 +224,13 @@ public sealed class DeskController : MonoBehaviour
     private void ApplyLive(DeskDocument paper) =>
         paper.SetLive(_live && _state != null && _state.CanDrag(paper.Index) && !paper.IsSliding, _live);
 
-    /// <summary>Stack order: the base order plus the paper's place; the held paper above them all.</summary>
-    private void ApplyOrders()
+    /// <summary>Stack heights: one step per place from the desk (the bottom paper one step up); the held paper lifted above the whole stack.</summary>
+    private void ApplyStack()
     {
+        float top = _papers.Count * config.paperStackStep;
         foreach (DeskDocument paper in _papers)
             if (paper != null)
-                paper.SetOrder(paper.Index == _held ? config.heldPaperOrder : config.paperBaseOrder + _stack.IndexOf(paper.Index));
+                paper.SetLift(paper.Index == _held ? top + config.heldPaperLift : (_stack.IndexOf(paper.Index) + 1) * config.paperStackStep);
     }
 
     /// <summary>The day-1 scan note (DeskHints): re-evaluated at every hand-over, drop, finished scan and case end.</summary>

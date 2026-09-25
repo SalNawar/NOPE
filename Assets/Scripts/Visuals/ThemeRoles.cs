@@ -139,7 +139,10 @@ public enum ThemeRoleId
     DiegeticBookRow,
 
     /// <summary>Diegetic: the traveller's speech bubble (spoken evidence).</summary>
-    DiegeticBubble
+    DiegeticBubble,
+
+    /// <summary>Diegetic: a physical device drawn as UI (the PC frame's bezel, its LED and brand plate): it looks like the office's hardware whatever the culture.</summary>
+    DiegeticDevice
 }
 
 /// <summary>The rule that keeps theming off evidence (piece 6 Z4).</summary>

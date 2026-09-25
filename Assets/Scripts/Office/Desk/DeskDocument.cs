@@ -1,19 +1,22 @@
 using System;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
 
 /// <summary>
-/// A physical paper on the desk: a SortingGroup root carrying its sprite, its
-/// collider, a Clickable and a DeskDraggable (so the hover outline follows the
-/// paper and a raycast reports the group's order). It shows the document's
-/// title, the holder's name and, on a photo document, the traveller's photo;
-/// every field is read on the scanned PC copy. The texts stay in their source script (piece 9
-/// translates the scanned copy, not the paper). Slides are linear moves in
-/// Update, only while sliding.
+/// A physical paper on the desk: a root on the desk plane carrying its
+/// Clickable and DeskDraggable, and a Sheet child lying flat, lifted by the
+/// paper's place in the stack (so the top paper is nearest the camera and wins
+/// the raycast), with the lit paper quad, the collider, the document's title,
+/// the holder's name and, on a photo document, the traveller's photo. Every
+/// field is read on the scanned PC copy. The texts stay in their source script
+/// (piece 9 translates the scanned copy, not the paper). Slides are linear
+/// moves in Update, only while sliding.
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour
 {
+    /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider, texts and photo.</summary>
+    [SerializeField] private Transform sheet;
+
     /// <summary>The document's title ("Travel Passport").</summary>
     [SerializeField] private TextMeshPro title;
 
@@ -31,9 +34,6 @@ public sealed class DeskDocument : MonoBehaviour
 
     /// <summary>The paper's drag.</summary>
     [SerializeField] private DeskDraggable drag;
-
-    /// <summary>The paper's sorting group (its order is the paper's place in the stack).</summary>
-    [SerializeField] private SortingGroup group;
 
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
@@ -75,29 +75,31 @@ public sealed class DeskDocument : MonoBehaviour
             holder.text = doc != null ? doc.holder : string.Empty;
     }
 
-    /// <summary>Shows the traveller's photo in the frame; a null look hides the frame (a document without a photo).</summary>
-    public void ShowPhoto(TravellerLook look, CharacterArt art)
+    /// <summary>Shows the traveller's photo in the frame (tinted into the room's light); a null look hides the frame (a document without a photo).</summary>
+    public void ShowPhoto(TravellerLook look, CharacterArt art, Color tint)
     {
         if (photoSlot != null)
             photoSlot.SetActive(look != null);
         if (photo != null)
+        {
             photo.Show(look, art);
+            photo.SetTint(tint);
+        }
     }
 
-    /// <summary>Sets the paper's sorting order (its place in the stack, or the held order).</summary>
-    public void SetOrder(int order)
+    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a held paper's lift), in metres.</summary>
+    public void SetLift(float height)
     {
-        if (group != null)
-            group.sortingOrder = order;
+        if (sheet != null)
+            sheet.localPosition = new Vector3(0f, height, 0f);
     }
 
     /// <summary>
     /// Lets the paper be dragged and clicked, or not. <paramref name="raycastable"/>
-    /// false also takes it out of the raycast (spec R38): papers sort above the
-    /// focus exit zone, so a paper the booth has put away, showing at the edge
-    /// of the focused view on a wide screen, must let the click that leaves
-    /// focus through. A paper inert only for itself (sliding, scanning) stays
-    /// raycastable and still covers what lies under it.
+    /// false also takes it out of the raycast: a paper the office has put away
+    /// (the frame open, the wheel open, a newsletter up) must let clicks through
+    /// to what lies under it. A paper inert only for itself (sliding,
+    /// scanning) stays raycastable and still covers what lies under it.
     /// </summary>
     public void SetLive(bool live, bool raycastable)
     {

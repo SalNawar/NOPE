@@ -6,8 +6,8 @@ using UnityEngine;
 /// offset (canvas reference px), clamped inside the canvas. The target needs
 /// anchors and pivot (0.5, 0.5) under a full-screen parent (the builder sets
 /// both). Used by the traveller wheel and the overlay callouts, which resolve
-/// their canvas once (CanvasRectOf) and their camera at Awake, so the per-frame
-/// placement looks nothing up.
+/// their canvas once (CanvasRectOf) and get the office camera from the office
+/// binder, so the per-frame placement looks nothing up.
 /// </summary>
 public static class OverlayProjection
 {

@@ -254,10 +254,10 @@ public sealed class RunManager : MonoBehaviour
     // Scene transitions
     // -----------------------------
 
-    /// <summary>Loads the office scene.</summary>
+    /// <summary>Loads the art office; its load brings the gameplay layer on top (OfficeScenes).</summary>
     public void LoadOfficeScene()
     {
-        Debug.Log($"[RunManager] LoadOfficeScene -> '{Config.officeSceneName}'.");
+        Debug.Log($"[RunManager] LoadOfficeScene -> '{Config.officeSceneName}' (+ '{Config.officeGameplaySceneName}' on top).");
         SceneManager.LoadScene(Config.officeSceneName);
     }
 

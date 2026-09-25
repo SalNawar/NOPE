@@ -4,28 +4,25 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// The PC's screen on the CRT: the desktop canvas drawn live on the glass, its
-/// power (PcScreen: the display and the desktop's input go dark, the PC keeps
-/// running) and the bezel LED. The glass rectangle is scene data, so another
-/// monitor only changes numbers. BoothCoordinator gates the desktop's input
-/// (SetInteractive) and holds the screen on while a citation slip waits.
+/// The PC's screen: the desktop canvas (shown in the PC frame and cloned live
+/// onto the office PC's glass), its power (PcScreen: the display and the
+/// desktop's input go dark on both, the PC keeps running) and the frame's LED.
+/// BoothCoordinator gates the desktop's input (SetInteractive) and holds the
+/// screen on while a citation slip waits.
 /// </summary>
 public sealed class MonitorScreen : MonoBehaviour
 {
-    /// <summary>The World Space desktop canvas on the glass.</summary>
+    /// <summary>The World Space desktop canvas (on the desktop's own layer, drawn by the frame and clone cameras).</summary>
     [SerializeField] private Canvas desktopCanvas;
 
     /// <summary>The desktop canvas's raycaster (off unless the desktop may take input).</summary>
     [SerializeField] private GraphicRaycaster desktopRaycaster;
 
-    /// <summary>The ScreenAnchor at the glass's centre; its local XY is the screen plane.</summary>
-    [SerializeField] private Transform glass;
+    /// <summary>The frame's power LED, tinted with the power state.</summary>
+    [SerializeField] private Graphic powerLed;
 
-    /// <summary>The glass rectangle in the anchor's local units (the desktop canvas fills it).</summary>
-    [SerializeField] private Vector2 glassSize;
-
-    /// <summary>The bezel LED, tinted with the power state.</summary>
-    [SerializeField] private SpriteRenderer powerLed;
+    /// <summary>The desktop's clone on the office PC (dark with the screen).</summary>
+    [SerializeField] private PcScreenClone clone;
 
     /// <summary>The desk tuning (the start state, the wake rules, the LED colours).</summary>
     [SerializeField] private DeskConfigSO config;
@@ -37,19 +34,6 @@ public sealed class MonitorScreen : MonoBehaviour
 
     /// <summary>Raised after the screen turns on or off.</summary>
     public event Action PowerChanged;
-
-    /// <summary>The glass's centre in world space.</summary>
-    public Vector3 GlassCentre => glass != null ? glass.position : transform.position;
-
-    /// <summary>The glass rectangle's size in world units.</summary>
-    public Vector2 GlassWorldSize
-    {
-        get
-        {
-            Vector3 scale = glass != null ? glass.lossyScale : transform.lossyScale;
-            return new Vector2(glassSize.x * Mathf.Abs(scale.x), glassSize.y * Mathf.Abs(scale.y));
-        }
-    }
 
     private void Awake()
     {
@@ -73,7 +57,7 @@ public sealed class MonitorScreen : MonoBehaviour
         _screen.Changed -= HandleChanged;
     }
 
-    /// <summary>Turns the screen on or off (the bezel button's persistent call); a held screen stays on.</summary>
+    /// <summary>Turns the screen on or off (the power buttons' persistent call); a held screen stays on.</summary>
     public void TogglePower() => _screen.Toggle();
 
     /// <summary>Turns the screen off (Start > Turn off screen); a held screen stays on.</summary>
@@ -94,7 +78,6 @@ public sealed class MonitorScreen : MonoBehaviour
     {
         if (desktopRaycaster != null)
             desktopRaycaster.enabled = on;
-
         if (on || desktopCanvas == null)
             return;
 
@@ -110,12 +93,14 @@ public sealed class MonitorScreen : MonoBehaviour
         PowerChanged?.Invoke();
     }
 
-    /// <summary>Shows or hides the desktop (the painted glass shows when off) and tints the LED.</summary>
+    /// <summary>Shows or hides the desktop in the frame and on the office PC, and tints the LED.</summary>
     private void Apply()
     {
         bool on = _screen.IsOn;
         if (desktopCanvas != null)
             desktopCanvas.enabled = on;
+        if (clone != null)
+            clone.SetOn(on);
         if (powerLed != null && config != null)
             powerLed.color = on ? config.ledOnColor : config.ledOffColor;
     }

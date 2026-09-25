@@ -1,20 +1,25 @@
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
-using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// One-click builder for the full Office investigation scene.
-/// Creates and wires everything needed for a playable shift:
-/// - The PC desktop: a World Space canvas drawn live on the CRT's glass
-///   (1440 x 1080 units at 4:3), with screen power and a focus push-in
-///   [MonitorScreen, OfficeViewController, CinemachineCameraRig]; EventSystem
-///   (new Input System)
+/// One-click builder of the office's gameplay layer,
+/// Assets/Scenes/OfficeGameplay.unity, which loads additively on top of the
+/// art office (Assets/Scenes/OfficeScene.unity, the art side's; never opened
+/// or written here). Creates and wires everything needed for a playable shift:
+/// - The PC desktop: a World Space canvas (1440 x 1080 units at 4:3) on its
+///   own layer far from the office, drawn by the frame camera into the PC
+///   frame (a ReStory-style monitor over the office, opened by clicking the
+///   PC) and by the clone camera onto the office PC's glass, with screen
+///   power [MonitorScreen, PcScreenClone, PcFrame, OfficeViewController];
+///   EventSystem (new Input System)
 /// - HUD (day/money/stability), citation slip, verdict line  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: claim banner, directives, draggable/multi-page document
@@ -22,20 +27,23 @@ using UnityEngine.UI;
 ///   transcript, a visual compare bar, and Accept/Deny buttons, laid out for
 ///   the 4:3 desktop  [InvestigationUIController + CompareController]
 /// - The traveller wheel (the interview's choices around the traveller), the
-///   speech bubble and the desk tooltip on the office overlay canvas
-///   [TravellerWheel, OverlayCallout]
-/// - The physical desk: papers and the desk scanner, reacting props,
-///   decoration slots, the traveller (shown while at the desk) and its hit
-///   zone, and the booth's input rules  [DeskController, DeskReaction,
-///   TravellerView, BoothCoordinator]
+///   speech bubble, the desk tooltip and the fallback HUD on the office
+///   overlay canvas  [TravellerWheel, OverlayCallout]
+/// - The Office root: click boxes for the art's props, the physical desk
+///   (papers, the scanner), the traveller, the READY sign, the readouts and
+///   the office's input rules, all put on the art office at load by the
+///   binder through the scene contract  [OfficeSceneBinder, DeskController,
+///   DeskReaction, TravellerView, BoothCoordinator]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
-/// Safe to re-run: finds existing pieces by name and only fills gaps. Every UI
-/// graphic it makes (and each existing one of those names) gets a ThemeTag
-/// (piece 6: role, label key, style, fit), which CultureThemeService applies
-/// at runtime; an untagged graphic on the two canvases is logged as an error.
-/// It builds only Assets/Scenes/OfficeScene.unity and refuses any other active scene.
-/// The booth and desk parts are in OfficeSceneUIBuilder.Desk.cs.
+/// Safe to re-run: finds existing pieces by name and only fills gaps (some
+/// overlay and window parts are rebuilt each run). Every UI graphic it makes
+/// gets a ThemeTag (piece 6: role, label key, style, fit), which
+/// CultureThemeService applies at runtime; an untagged graphic on the two
+/// canvases is logged as an error. It opens the gameplay layer alone, builds
+/// it, saves it and lists it after the art office in the build settings; it
+/// refuses while any open scene has unsaved changes. The Office root and the
+/// desktop's place are in OfficeSceneUIBuilder.Desk.cs.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
@@ -66,50 +74,56 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Transcript rows per page: the book row height (34 px) and spacing fit 8 in the window's row area.</summary>
     private const int TranscriptRowsPerPage = 8;
 
-    /// <summary>
-    /// The one scene this builder owns. Other scenes share its object names
-    /// (OfficeScene_HybridArt keeps its own camera and 3D props), so the builder
-    /// refuses to run anywhere else.
-    /// </summary>
-    private const string OfficeScenePath = "Assets/Scenes/OfficeScene.unity";
+    /// <summary>The one scene this builder writes: the office's gameplay layer.</summary>
+    private const string GameplayScenePath = "Assets/Scenes/OfficeGameplay.unity";
 
-    /// <summary>Builds and wires the office in the open scene; refuses (with an error) unless that scene is <see cref="OfficeScenePath"/>.</summary>
+    /// <summary>The gameplay layer's scene name (RunConfig.officeGameplaySceneName).</summary>
+    private const string GameplaySceneName = "OfficeGameplay";
+
+    /// <summary>The art office the gameplay layer loads on (the art side's scene; the builder never opens it).</summary>
+    private const string ArtScenePath = "Assets/Scenes/OfficeScene.unity";
+
+    /// <summary>
+    /// Opens the gameplay layer alone (creating it on the first run), builds and
+    /// wires it, saves it and lists it after the art office in the build
+    /// settings. Refuses (with an error, changing nothing) in play mode or while
+    /// an open scene has unsaved changes.
+    /// </summary>
     [MenuItem("Tools/TimeDesk/Build Office UI (HUD + Panels)")]
     public static void Build()
     {
-        string activeScene = EditorSceneManager.GetActiveScene().path;
-        if (activeScene != OfficeScenePath)
+        if (EditorApplication.isPlaying)
         {
-            Debug.LogError($"[TimeDesk] Build Office UI only builds {OfficeScenePath}; the active scene is '{activeScene}'. Open {OfficeScenePath} and run it again. Nothing was changed.");
+            Debug.LogError("[TimeDesk] Build Office UI does not run in play mode. Nothing was changed.");
             return;
         }
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).isDirty)
+            {
+                Debug.LogError($"[TimeDesk] Save or discard the changes in '{SceneManager.GetSceneAt(i).path}' first: Build Office UI opens {GameplayScenePath} alone. Nothing was changed.");
+                return;
+            }
+        }
+
+        EnsureLayer(OfficeLayers.Interactable);
+        EnsureLayer(OfficeLayers.PcDesktop);
+        Scene scene = File.Exists(GameplayScenePath)
+            ? EditorSceneManager.OpenScene(GameplayScenePath, OpenSceneMode.Single)
+            : EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
         Canvas canvas = EnsureCanvas();
         Transform root = canvas.transform;
         EnsureEventSystem();
         ContentLibrarySO library = FindAssetByName<ContentLibrarySO>("ContentLibrary_Main") ?? FindFirstAsset<ContentLibrarySO>();
 
-        // Hide leftovers from older builds (replaced by the investigation desk +
-        // XP taskbar). Left in the scene, just inactive.
-        foreach (string legacy in new[] { "CaseView", "HUD" })
-        {
-            Transform leg = root.Find(legacy);
-            if (leg != null)
-                leg.gameObject.SetActive(false);
-        }
-
         // --- OfficeUIController (HUD + citation + verdict only; case display is the investigation desk) ---
         OfficeUIController officeUI = Object.FindFirstObjectByType<OfficeUIController>();
-        if (officeUI != null && officeUI.GetComponent<Canvas>() != null)
-        {
-            Object.DestroyImmediate(officeUI);
-            officeUI = null;
-        }
         if (officeUI == null)
         {
             Transform existing = root.Find("OfficeUI");
             if (existing != null)
-                officeUI = existing.GetComponent<OfficeUIController>() ?? existing.gameObject.AddComponent<OfficeUIController>();
+                officeUI = GetOrAdd<OfficeUIController>(existing.gameObject);
             else
             {
                 var go = new GameObject("OfficeUI", typeof(RectTransform));
@@ -118,12 +132,6 @@ public static partial class OfficeSceneUIBuilder
                 officeUI = go.AddComponent<OfficeUIController>();
             }
         }
-
-        // Leftovers of the pre-investigation era UI under the OfficeUIController's
-        // object: a live monitor would show them. Its HUD and citation wiring stay
-        // (Test_DayLoop runs the legacy fields from its own scene).
-        foreach (string leftover in new[] { "VisitorText", "Doc1Text", "Doc2Text", "ResultText", "EraButtonsRoot" })
-            DestroyChildIfPresent(officeUI.transform, leftover);
 
         // XP desktop wallpaper (behind everything), the idle line between
         // travellers + taskbar with system-tray HUD.
@@ -147,10 +155,8 @@ public static partial class OfficeSceneUIBuilder
         citation.gameObject.SetActive(false);
 
         // Briefing + Results: newsletter panels on the office overlay canvas, so
-        // they read over the booth view, not on the small live desktop.
+        // they read over the office, not on the PC's desktop.
         Canvas officeCanvas = EnsureOfficeOverlayCanvas();
-        DestroyChildIfPresent(root, "BriefingPanel");
-        DestroyChildIfPresent(root, "ResultsPanel");
         DestroyChildIfPresent(officeCanvas.transform, "BriefingPanel");
         DestroyChildIfPresent(officeCanvas.transform, "ResultsPanel");
 
@@ -159,16 +165,32 @@ public static partial class OfficeSceneUIBuilder
         Transform results = BuildNewsletter(officeCanvas.transform, "ResultsPanel", "results.masthead",
             "results.goHome", out TMP_Text resultsTitle, out TMP_Text resultsBody, out Button goHome);
 
-        // The desk tuning (created once): the monitor push-in, screen power, sorting bands, the wheel.
+        // The desk tuning and the scene contract (created once): screen power, the
+        // clone, the papers, the traveller, the wheel; where the art's places are.
         DeskConfigSO deskConfig = EnsureDeskConfig();
+        OfficeSceneContractSO contract = EnsureOfficeContract();
 
-        // Booth-view overlays, rebuilt each run with always-active hosts: the
-        // traveller's speech bubble, the desk props' tooltip, and the traveller
-        // wheel (the interview's choices; its ring replaces the retired intercom).
+        // The office root and the desktop's own place (its cameras and screen).
+        OfficeViewController officeView = EnsureOfficeRoot();
+        MonitorScreen monitorScreen = BuildPcDesktop(canvas, deskConfig, out Camera frameCamera);
+
+        // Office overlays, rebuilt each run with always-active hosts, above the
+        // newsletters: the fallback HUD, the PC frame, the traveller's speech
+        // bubble, the desk props' tooltip, and the traveller wheel (the
+        // interview's choices).
+        FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
+        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
         OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble);
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
         InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
+
+        var soView = new SerializedObject(officeView);
+        SetRef(soView, "frame", pcFrame);
+        soView.ApplyModifiedProperties();
+        var soScreen = new SerializedObject(monitorScreen);
+        SetRef(soScreen, "powerLed", powerLed);
+        soScreen.ApplyModifiedProperties();
 
         DayFlowUIController dayFlow = Object.FindFirstObjectByType<DayFlowUIController>();
         if (dayFlow == null)
@@ -181,8 +203,8 @@ public static partial class OfficeSceneUIBuilder
         // --- Investigation desk ---
         // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled overlay.
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        InvestigationUIController invest = investHost.GetComponent<InvestigationUIController>() ?? investHost.gameObject.AddComponent<InvestigationUIController>();
-        CompareController compare = investHost.GetComponent<CompareController>() ?? investHost.gameObject.AddComponent<CompareController>();
+        InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
+        CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
 
         Transform investRoot = Panel(investHost, "InvestigationRoot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, DeskDimColor, ThemeRoleId.DeskDim);
         Transform windowLayer = Panel(investRoot, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -202,8 +224,6 @@ public static partial class OfficeSceneUIBuilder
 
         // Directives live in a sticky-note window (closed by default) opened
         // from a desktop icon, instead of a note that is always open.
-        DestroyChildIfPresent(investRoot, "DirectivesNote");
-        DestroyChildIfPresent(investRoot, "Directives"); // stray text from older builds
         OSWindowChrome directivesWindow = BuildOSWindow(windowLayer, "DirectivesWindow", "window.directives", null,
             UiText.Get("directives.none"), new Vector2(430f, 360f), ThemeRoleId.StickyNote);
         Image directivesImg = directivesWindow.GetComponent<Image>();
@@ -220,9 +240,6 @@ public static partial class OfficeSceneUIBuilder
             UiText.Get("scanner.idle"), new Vector2(560f, 420f));
         TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
         BuildDesktopIcon(bookShelf, "IconScanner", "icon.scanner", scannerWindow, "");
-
-        // The intercom panel is retired: the traveller wheel's ring shows the interview.
-        DestroyChildIfPresent(investRoot, "IntercomPanel");
 
         // Citizen Records app: the agency's master record of every (fake)
         // human. Registry content is injected per day by GameManager.
@@ -259,12 +276,11 @@ public static partial class OfficeSceneUIBuilder
         soRecords.ApplyModifiedProperties();
         BuildDesktopIcon(bookShelf, "IconRecords", "icon.records", recordsChrome, "");
 
-        // Case Notes: Interview — the current traveller's transcript, in the
-        // retired Clue Log placeholder's slot. Rebuilt fresh each run (like
-        // Records), so its row template always has the transcript layout and
-        // the window layer keeps a stable order. Opened by every interview
-        // choice but a document request; answer rows are compare-clickable.
-        DestroyChildIfPresent(windowLayer, "IconClueLogWindow");
+        // Case Notes: Interview — the current traveller's transcript. Rebuilt
+        // fresh each run (like Records), so its row template always has the
+        // transcript layout and the window layer keeps a stable order. Opened by
+        // every interview choice but a document request; answer rows are
+        // compare-clickable.
         DestroyChildIfPresent(windowLayer, "TranscriptWindow");
         Transform transcriptWin = Panel(windowLayer, "TranscriptWindow", Center, Center, new Vector2(395f, 60f), new Vector2(620f, 460f), Paper, ThemeRoleId.WindowBody);
         WindowShell transcriptShell = BuildWindowShell(transcriptWin, "window.transcript", null, ThemeRoleId.WindowBody, ThemeRoleId.DiegeticRow, false);
@@ -326,32 +342,32 @@ public static partial class OfficeSceneUIBuilder
 
         DayOrchestrator orchestrator = Object.FindFirstObjectByType<DayOrchestrator>();
         if (orchestrator == null) orchestrator = new GameObject("DaySystem").AddComponent<DayOrchestrator>();
-        DayEventDirector eventDirector = orchestrator.GetComponent<DayEventDirector>() ?? orchestrator.gameObject.AddComponent<DayEventDirector>();
+        DayEventDirector eventDirector = GetOrAdd<DayEventDirector>(orchestrator.gameObject);
 
         GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
         if (gameManager == null) gameManager = new GameObject("GameManager").AddComponent<GameManager>();
 
-        // Booth + cameras + view controller. The desktop canvas is drawn live on
-        // the CRT's glass (BuildMonitorScreen), always active; its input is gated.
-        OfficeViewController officeView = BuildBooth(canvas, deskConfig, out MonitorScreen monitorScreen);
-
         // Fake-OS desktop shell: NEW apps only (existing document/reference/compare
         // windows are launched by the investigation icon grid), plus a Start menu
-        // and the taskbar's way back to the desk.
+        // and the taskbar's way back to the office.
         BuildDesktopShell(canvas, bookShelf, windowLayer, library, officeView, monitorScreen);
 
-        // Cursor + hover highlight settings (a persistent highlighter uses them in every scene).
+        // Cursor + hover outline settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
 
-        // Shift clock: driver beside the GameManager, tray + wall-clock readouts.
+        // Shift clock: driver beside the GameManager (its readouts are on the Office root).
         ShiftClockDriver shiftClock = gameManager.GetComponent<ShiftClockDriver>();
         if (shiftClock == null)
             shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
-        BuildShiftClockReadouts(shiftClock, trayClockText);
 
-        // The booth's clicks, once every prop exists (the wall clock above):
-        // reactions, hit zones, the wheel's openers and notes, the coordinator.
-        BoothCoordinator booth = BuildDeskInteraction(officeView, monitorScreen, deskConfig, wheel, deskTooltip, trayClockText, library);
+        // The Office root: every click box, the desk, the traveller, the readouts,
+        // the input rules and the binder that puts them on the art office at load.
+        BoothCoordinator booth = BuildOffice(officeView, monitorScreen, framePower, deskConfig, contract, wheel,
+                                             new[] { speechBubble, deskTooltip }, deskTooltip, trayClockText, shiftClock, library,
+                                             fallbackHud, out Clickable readySign);
+
+        // The desktop's own layer covers everything under its place (the canvas's windows and templates included).
+        SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer);
 
         // --- Wire everything ---
         var soOffice = new SerializedObject(officeUI);
@@ -402,12 +418,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "recordsWindow", records);
         SetRef(soInvest, "transcriptWindow", transcript);
         SetRef(soInvest, "transcriptChrome", transcriptChrome);
-        SetRef(soInvest, "desk", officeView.transform.Find("DeskSurface").GetComponent<DeskController>());
+        SetRef(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         SetRef(soInvest, "wheel", wheel);
         SetRef(soInvest, "idleScreen", idleScreen);
         // The 4:3 desktop: documents cascade on the left, clear of the icon
-        // column; books open in two staggered rows (the fields' defaults are
-        // the 16:9 layout a scene that is not rebuilt keeps).
+        // column; books open in two staggered rows.
         soInvest.FindProperty("documentWindowOrigin").vector2Value = new Vector2(-195f, 150f);
         soInvest.FindProperty("documentWindowStep").vector2Value = new Vector2(40f, -40f);
         soInvest.FindProperty("bookWindowOrigin").vector2Value = new Vector2(-180f, -150f);
@@ -428,15 +443,18 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soGm, "investigationUI", invest);
         SetRef(soGm, "dayFlowUI", dayFlow);
         SetRef(soGm, "officeView", officeView);
-        SetRef(soGm, "readySign", GameObject.Find("OfficeRoot")?.transform.Find("ReadySign")?.GetComponent<Clickable>());
+        SetRef(soGm, "readySign", readySign);
         SetRef(soGm, "shiftClock", shiftClock);
         SetRef(soGm, "travellerView", officeView.transform.Find("Traveller").GetComponent<TravellerView>());
         SetRef(soGm, "booth", booth);
         soGm.ApplyModifiedProperties();
 
         CheckThemeTags(canvas, officeCanvas);
-        EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
-        Debug.Log("[TimeDesk] Office investigation desk built and wired (every UI graphic theme-tagged, live monitor on the CRT with screen power, the desk with papers (passport photo), scanner and reacting props, the layered traveller + wheel + speech bubble, booth input rules, HUD, citation, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene, GameplayScenePath);
+        EnsureBuildSettings();
+        AssetDatabase.SaveAssets();
+        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (passport photo), scanner and reacting props, the layered traveller + wheel + speech bubble, the office's input rules, the binder and its scene contract, HUD, citation, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare, Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
     }
 
     // -----------------------------
@@ -461,7 +479,7 @@ public static partial class OfficeSceneUIBuilder
         // Footer page label needs light ink on the dark backing.
         s.page.color = new Color(0.85f, 0.86f, 0.88f, 1f);
 
-        DocumentWindowController c = win.GetComponent<DocumentWindowController>() ?? win.gameObject.AddComponent<DocumentWindowController>();
+        DocumentWindowController c = GetOrAdd<DocumentWindowController>(win.gameObject);
         var so = new SerializedObject(c);
         SetRef(so, "titleText", s.title);
         SetRef(so, "pageText", s.page);
@@ -488,9 +506,11 @@ public static partial class OfficeSceneUIBuilder
     private static TravellerPortraitView BuildPortrait(Transform box)
     {
         Transform portrait = Panel(box, "Portrait", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        AspectRatioFitter fitter = portrait.GetComponent<AspectRatioFitter>() ?? portrait.gameObject.AddComponent<AspectRatioFitter>();
+        AspectRatioFitter fitter = GetOrAdd<AspectRatioFitter>(portrait.gameObject);
         fitter.aspectMode = AspectRatioFitter.AspectMode.FitInParent;
         fitter.aspectRatio = LookCanvas.PhotoAspect;
+        fitter.enabled = false; // re-enabled: the fitter sizes the rect now (the size Panel reset), as on a fresh build
+        fitter.enabled = true;
 
         var layers = new List<Object>();
         foreach (LookLayer layer in System.Enum.GetValues(typeof(LookLayer)))
@@ -502,7 +522,7 @@ public static partial class OfficeSceneUIBuilder
             layers.Add(image);
         }
 
-        TravellerPortraitView view = portrait.GetComponent<TravellerPortraitView>() ?? portrait.gameObject.AddComponent<TravellerPortraitView>();
+        TravellerPortraitView view = GetOrAdd<TravellerPortraitView>(portrait.gameObject);
         var so = new SerializedObject(view);
         SerializedArrays.Set(so, "layers", layers);
         so.ApplyModifiedProperties();
@@ -513,7 +533,7 @@ public static partial class OfficeSceneUIBuilder
     {
         Transform win = Panel(layer, "BookWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), Paper, ThemeRoleId.WindowBody);
         WindowShell s = BuildWindowShell(win, null, UiText.Get("book.untitled"), ThemeRoleId.WindowBody, ThemeRoleId.DiegeticBookRow, true);
-        ReferenceBookWindowController c = win.GetComponent<ReferenceBookWindowController>() ?? win.gameObject.AddComponent<ReferenceBookWindowController>();
+        ReferenceBookWindowController c = GetOrAdd<ReferenceBookWindowController>(win.gameObject);
         var so = new SerializedObject(c);
         SetRef(so, "titleText", s.title);
         SetRef(so, "pageText", s.page);
@@ -547,7 +567,7 @@ public static partial class OfficeSceneUIBuilder
         // XP title bar (drag handle) with gloss highlight + window controls.
         Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -15f), new Vector2(0f, 30f), HeaderBar, ThemeRoleId.TitleBar);
         Panel(header, "Gloss", new Vector2(0f, 0.5f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.14f), ThemeRoleId.TitleGloss);
-        DraggableWindow drag = header.GetComponent<DraggableWindow>() ?? header.gameObject.AddComponent<DraggableWindow>();
+        DraggableWindow drag = GetOrAdd<DraggableWindow>(header.gameObject);
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "windowRoot", (RectTransform)win);
         soDrag.ApplyModifiedProperties();
@@ -652,8 +672,8 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The desktop canvas, found by its name: a World Space canvas of
-    /// <see cref="DesktopSize"/> units (BuildMonitorScreen puts it on the CRT's
-    /// glass), masked to its rect (dragged windows never draw over the bezel).
+    /// <see cref="DesktopSize"/> units (BuildPcDesktop puts it on its own layer,
+    /// away from the office), masked to its rect (dragged windows never leave the screen).
     /// A canvas scaler only serves a screen-space canvas, so it has none.
     /// </summary>
     private static Canvas EnsureCanvas()
@@ -689,8 +709,8 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Scales the office overlay canvas (the newsletters, and the booth's
-    /// overlay UI) with the screen from the reference resolution, and never
+    /// Scales the office overlay canvas (the newsletters, the PC frame, the
+    /// wheel and the callouts) with the screen from the reference resolution, and never
     /// below it: Expand keeps the canvas at least 1920x1080 in both dimensions
     /// (a screen wider than 16:9 gets more width, a narrower one more height),
     /// so a layout that fits at the reference size fits on every screen.
@@ -730,7 +750,7 @@ public static partial class OfficeSceneUIBuilder
 
     private static void AddVLayout(Transform t, float spacing)
     {
-        var l = t.GetComponent<VerticalLayoutGroup>() ?? t.gameObject.AddComponent<VerticalLayoutGroup>();
+        var l = GetOrAdd<VerticalLayoutGroup>(t.gameObject);
         l.spacing = spacing;
         l.padding = new RectOffset(VLayoutPadding, VLayoutPadding, VLayoutPadding, VLayoutPadding);
         l.childAlignment = TextAnchor.UpperCenter;
@@ -742,7 +762,7 @@ public static partial class OfficeSceneUIBuilder
 
     private static void AddHLayout(Transform t, float spacing)
     {
-        var l = t.GetComponent<HorizontalLayoutGroup>() ?? t.gameObject.AddComponent<HorizontalLayoutGroup>();
+        var l = GetOrAdd<HorizontalLayoutGroup>(t.gameObject);
         l.spacing = spacing;
         l.childAlignment = TextAnchor.MiddleCenter;
         l.childForceExpandWidth = true;
@@ -998,14 +1018,10 @@ public static partial class OfficeSceneUIBuilder
         fitter.aspectRatio = wall != null ? wall.rect.width / wall.rect.height : ReferenceResolution.x / ReferenceResolution.y;
         desk.SetAsFirstSibling();
 
-        // Between travellers the live monitor reads this, large enough for the booth view, on
-        // a strip so it never reads off the wallpaper (piece 6 R18; the idle line of older
-        // builds moves onto the strip).
+        // Between travellers the desktop reads this, large enough for the office PC's
+        // clone, on a strip so it never reads off the wallpaper (piece 6 R18).
         Transform strip = Panel(root, "IdleScreen", new Vector2(0.05f, 0.38f), new Vector2(0.95f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
         strip.GetComponent<Image>().raycastTarget = false;
-        Transform oldIdle = root.Find("IdleText");
-        if (oldIdle != null)
-            oldIdle.SetParent(strip, false);
         TMP_Text idle = Text(strip, "IdleText", null, 80, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
                              ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading, true);
         SetAnchors(idle.transform, new Vector2(0.03f, 0f), new Vector2(0.97f, 1f));
@@ -1029,9 +1045,9 @@ public static partial class OfficeSceneUIBuilder
     // ----------------------------- Office newsletter panels -----------------------------
 
     /// <summary>
-    /// Overlay canvas for booth-view UI (the briefing/results newsletters),
-    /// drawn over the booth and the live desktop, which is a World Space canvas
-    /// on the CRT's glass.
+    /// Overlay canvas for the office's UI (the briefing/results newsletters, the
+    /// PC frame, the wheel, the callouts), drawn over the office and the PC
+    /// frame's desktop.
     /// </summary>
     private static Canvas EnsureOfficeOverlayCanvas()
     {
@@ -1132,7 +1148,7 @@ public static partial class OfficeSceneUIBuilder
         return chrome;
     }
 
-    // ----------------------------- Office booth (world-space) -----------------------------
+    // ----------------------------- Placeholder art -----------------------------
 
     /// <summary>
     /// Returns a flat-color placeholder Sprite at Assets/Art/Office/Placeholder/{name}.png,
@@ -1160,305 +1176,9 @@ public static partial class OfficeSceneUIBuilder
         return sr;
     }
 
-    /// <summary>Where the office camera sits; the booth art is laid out for its view.</summary>
-    private static readonly Vector3 OfficeCamPosition = new Vector3(0f, -1f, -10f);
-
-    /// <summary>Orthographic half-height of the office view (y -7..5 around the camera).</summary>
-    private const float OfficeOrthoSize = 6f;
-
-    /// <summary>Centre of the largest 4:3 rectangle inside the CRT's glass, in the crt sprite's own units (the screen anchor and the monitor camera sit on it).</summary>
-    private static readonly Vector2 CrtGlassCentre = new Vector2(-0.144f, 0.054f);
-
-    /// <summary>Booth art beyond the drop-in placeholders: the deep desk, the calendar partition and the desk props.</summary>
-    private const string BoothArtFolder = "Assets/Art/Office/Booth";
-
-    /// <summary>
-    /// Places a booth sprite <paramref name="width"/> world units wide (a uniform
-    /// scale from the sprite's own size, so art of another resolution or pixels
-    /// per unit keeps the layout), centred on <paramref name="centre"/>.
-    /// </summary>
-    private static SpriteRenderer PlaceSprite(Transform parent, string name, Sprite sprite, Vector3 centre, float width, int sortingOrder, bool flipX = false)
-    {
-        SpriteRenderer sr = EnsureSprite(parent, name, sprite, centre, sortingOrder);
-        float scale = sprite != null ? width / sprite.bounds.size.x : 1f;
-        sr.transform.localScale = new Vector3(scale, scale, 1f);
-        sr.flipX = flipX;
-        return sr;
-    }
-
-    /// <summary>
-    /// The width at which a sprite, scaled uniformly and centred on the office
-    /// camera, covers its whole view at the reference aspect (no black edges).
-    /// </summary>
-    private static float OfficeViewCoverWidth(Sprite sprite)
-    {
-        if (sprite == null)
-            return 0f;
-        float viewHeight = 2f * OfficeOrthoSize;
-        float viewWidth = viewHeight * ReferenceResolution.x / ReferenceResolution.y;
-        Vector2 size = sprite.bounds.size;
-        return size.x * Mathf.Max(viewWidth / size.x, viewHeight / size.y);
-    }
-
-    /// <summary>
-    /// Loads booth art from <see cref="BoothArtFolder"/> (no placeholder is made
-    /// for it); warns and returns null when the file is missing, leaving that
-    /// booth sprite empty.
-    /// </summary>
-    private static Sprite BoothArt(string file)
-    {
-        string path = $"{BoothArtFolder}/{file}.png";
-        Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-        if (sprite == null)
-            Debug.LogWarning($"[TimeDesk] Missing booth art {path}; its booth sprite is left empty.");
-        return sprite;
-    }
-
-    /// <summary>
-    /// Builds the world-space booth, two Cinemachine cameras, a Physics2DRaycaster,
-    /// the live monitor (BuildMonitorScreen), the traveller's view, the desk
-    /// slots and the desk (BuildDesk: its surface, the paper template, the
-    /// scanner and its note), and wires OfficeViewController,
-    /// the camera rig, the CRT's click (focus) and the focus exit zone; READY's
-    /// saved focus call is cleared (READY only releases GameManager's gate). The
-    /// painted art is laid out as in the art pass's 2D composition: the back
-    /// wall and the deep desk cover the whole office view, partitions frame it,
-    /// and the props sit on the desk and partitions. Idempotent.
-    /// </summary>
-    private static OfficeViewController BuildBooth(Canvas desktopCanvas, DeskConfigSO config, out MonitorScreen screen)
-    {
-        // Root for all booth world objects.
-        GameObject root = GameObject.Find("OfficeRoot") ?? new GameObject("OfficeRoot");
-        Transform booth = root.transform;
-
-        // Set dressing. The left partition has the day calendar painted on it.
-        Sprite backWall = EnsureOfficeSprite("backwall", new Color(0.17f, 0.17f, 0.22f), 400, 240);
-        PlaceSprite(booth, "BackWall", backWall, new Vector3(0f, OfficeCamPosition.y, 5f), OfficeViewCoverWidth(backWall), -100);
-        SpriteRenderer calendarPartition = PlaceSprite(booth, "LeftPartition", BoothArt("partition_calendar"), new Vector3(-9f, 0f, 5f), 3.8f, -50);
-        PlaceSprite(booth, "RightPartition", EnsureOfficeSprite("partition", new Color(0.24f, 0.24f, 0.30f), 120, 240), new Vector3(9f, 0f, 5f), 3.4f, -50, flipX: true);
-        Sprite desk = BoothArt("desk_deep");
-        PlaceSprite(booth, "Desk", desk, new Vector3(0f, OfficeCamPosition.y, 0f), OfficeViewCoverWidth(desk), -10);
-
-        // The traveller stands behind the desk, whose far edge hides the
-        // figure below the hips; shown from presentation until the decision.
-        BuildTraveller(booth);
-
-        // Desk props (their clicks and reactions: BuildDeskInteraction). The plant
-        // and the mug stand at their named slots (decoration hooks).
-        Transform slots = BuildDeskSlots(booth);
-        PlaceSprite(booth, "DeskIntercom", BoothArt("intercom"), new Vector3(-6.3f, -1.8f, 0f), 2.1f, 1);
-        SpriteRenderer tray = PlaceSprite(booth, "ScannerTray", BoothArt("scanner_tray"), new Vector3(-4.6f, -3.1f, 0f), 3.8f, 2);
-        PlaceSprite(booth, "DeskPlant", BoothArt("desk_plant"), booth.InverseTransformPoint(slots.Find("plant").position), 1.8f, 3);
-        PlaceSprite(booth, "DeskMug", BoothArt("desk_mug"), booth.InverseTransformPoint(slots.Find("mug").position), 0.85f, 5);
-        PlaceSprite(booth, "DeskStamp", BoothArt("desk_stamp"), new Vector3(-2.2f, -4.3f, 0f), 0.8f, 5);
-
-        // Interactables: CRT (right of the desk) and READY sign (centre).
-        SpriteRenderer crt = PlaceSprite(booth, "CRTMonitor", EnsureOfficeSprite("crt", new Color(0.85f, 0.81f, 0.65f), 150, 130), new Vector3(6f, -1.7f, 0f), 5.2f, 0);
-        Clickable crtClick = EnsureClickable(crt);
-
-        SpriteRenderer sign = PlaceSprite(booth, "ReadySign", EnsureOfficeSprite("sign", new Color(0.79f, 0.76f, 0.58f), 96, 50), new Vector3(0f, -2f, 0f), 2.3f, 2);
-        Clickable signClick = EnsureClickable(sign);
-
-        // Brain + 2D raycaster on the Main Camera.
-        Camera main = Camera.main;
-        if (main == null)
-        {
-            var mc = new GameObject("Main Camera", typeof(Camera));
-            mc.tag = "MainCamera";
-            main = mc.GetComponent<Camera>();
-        }
-        main.orthographic = true;
-        if (main.GetComponent<CinemachineBrain>() == null) main.gameObject.AddComponent<CinemachineBrain>();
-        Physics2DRaycaster raycaster = main.GetComponent<Physics2DRaycaster>();
-        if (raycaster == null)
-            raycaster = main.gameObject.AddComponent<Physics2DRaycaster>();
-
-        // A fixed hit buffer keeps the UI module's per-frame booth raycast allocation-free.
-        raycaster.maxRayIntersections = BoothRaycastHits;
-
-        // The live monitor: the desktop canvas on the glass, its power button and LED, the focus zones.
-        screen = BuildMonitorScreen(crt, desktopCanvas, main, config);
-
-        // Cameras: the booth view, and a push-in on the glass. The monitor camera
-        // starts framed for the reference aspect; the rig reframes it for the
-        // screen's aspect on every push-in (MonitorFraming, the fill knob).
-        GameObject camsRoot = GameObject.Find("Cameras") ?? new GameObject("Cameras");
-        CinemachineCamera officeCam = EnsureVcam(camsRoot.transform, "OfficeVCam", OfficeCamPosition, OfficeOrthoSize);
-        Vector3 glass = screen.GlassCentre;
-        Vector2 glassSize = screen.GlassWorldSize;
-        float monitorOrtho = MonitorFraming.OrthoSize(glassSize.x, glassSize.y, ReferenceResolution.x / ReferenceResolution.y, config.monitorFill);
-        CinemachineCamera monitorCam = EnsureVcam(camsRoot.transform, "MonitorVCam", new Vector3(glass.x, glass.y, OfficeCamPosition.z), monitorOrtho);
-
-        // Camera rig + view controller on OfficeRoot.
-        CinemachineCameraRig rig = root.GetComponent<CinemachineCameraRig>();
-        if (rig == null)
-            rig = root.AddComponent<CinemachineCameraRig>();
-        var soRig = new SerializedObject(rig);
-        SetRef(soRig, "officeCam", officeCam);
-        SetRef(soRig, "monitorCam", monitorCam);
-        SetRef(soRig, "brain", main.GetComponent<CinemachineBrain>());
-        SetRef(soRig, "monitorScreen", screen);
-        SetRef(soRig, "config", config);
-        soRig.ApplyModifiedProperties();
-
-        OfficeViewController view = root.GetComponent<OfficeViewController>();
-        if (view == null)
-            view = root.AddComponent<OfficeViewController>();
-        var soView = new SerializedObject(view);
-        SetRef(soView, "cameraRigBehaviour", rig);
-        SetRef(soView, "desktopRoot", desktopCanvas.gameObject);
-        SetRef(soView, "monitorScreen", screen);
-        soView.ApplyModifiedProperties();
-
-        // The CRT's click pushes in; a click outside the screen pulls back.
-        // READY only releases GameManager's gate (no zoom): its saved focus call goes.
-        WireClickToFocusMonitor(crtClick, view);
-        WirePersistentVoid(crt.transform.Find("FocusExitZone").GetComponent<Clickable>(), "onClick", view, nameof(OfficeViewController.FocusOffice));
-        ClearPersistentCalls(signClick, "onClick");
-
-        // The desk: its surface, the paper template, the scanner and its note.
-        BuildDesk(booth, tray, config);
-
-        // Diegetic readouts + a timeline-reactive poster. The desktop's old
-        // "< Office" button is replaced by the taskbar's "< Desk" (BuildDesktopShell).
-        BuildReadouts(booth, calendarPartition.transform);
-        BuildReactiveProp(booth);
-        DestroyChildIfPresent(desktopCanvas.transform, "BackToOfficeButton");
-
-        return view;
-    }
-
-    /// <summary>
-    /// Builds the in-world Day calendar (painted on the given partition),
-    /// Stability monitor, and Credits till, and wires an OfficeReadouts component
-    /// on OfficeRoot. Each number auto-sizes inside the blank area of its art.
-    /// Idempotent.
-    /// </summary>
-    private static void BuildReadouts(Transform root, Transform calendarPartition)
-    {
-        // Day — the calendar sheet painted on the left partition, drawn in
-        // perspective, so the number tilts with it. Older builds hung a separate
-        // calendar sprite (with the number) instead.
-        DestroyChildIfPresent(root, "DayCalendar");
-        TextMeshPro dayText = WorldText(calendarPartition, "DayNumber", "01", new Color(0.19f, 0.29f, 0.33f),
-            new Vector2(0.38f, 2.79f), new Vector2(1.9f, 2f), -13f, 16f, -39);
-
-        // Stability — TVA-style monitor on the right partition (the sprite is the lamp).
-        SpriteRenderer lamp = PlaceSprite(root, "StabilityMonitor", EnsureOfficeSprite("stabilitymonitor", Color.white, 110, 80), new Vector3(8.5f, 2f, 5f), 2f, -40);
-        TextMeshPro stabText = WorldText(lamp.transform, "StabilityPercent", "100%", new Color(0.19f, 0.29f, 0.33f),
-            new Vector2(0f, 0.02f), new Vector2(0.6f, 0.36f), 0f, 3f, -39);
-
-        // Credits — cash till on the desk below the CRT (with an AudioSource for the ding).
-        SpriteRenderer till = PlaceSprite(root, "CreditsTill", EnsureOfficeSprite("till", new Color(0.55f, 0.5f, 0.42f), 110, 80), new Vector3(7f, -4.8f, 0f), 2.5f, 5);
-        TextMeshPro creditsText = WorldText(till.transform, "CreditsNumber", "0", new Color(0.8f, 1f, 0.85f),
-            new Vector2(0.05f, 0.19f), new Vector2(0.36f, 0.13f), -3f, 1.4f, 6);
-        AudioSource ding = till.GetComponent<AudioSource>();
-        if (ding == null)
-            ding = till.gameObject.AddComponent<AudioSource>();
-        ding.playOnAwake = false;
-
-        // OfficeReadouts on the root, wired to all three.
-        OfficeReadouts readouts = root.GetComponent<OfficeReadouts>();
-        if (readouts == null)
-            readouts = root.gameObject.AddComponent<OfficeReadouts>();
-        var so = new SerializedObject(readouts);
-        SetRef(so, "dayText", dayText);
-        SetRef(so, "stabilityText", stabText);
-        SetRef(so, "stabilityLamp", lamp);
-        SetRef(so, "creditsText", creditsText);
-        SetRef(so, "creditsDing", ding);
-        so.ApplyModifiedProperties();
-    }
-
-    /// <summary>
-    /// Adds a booth poster that reacts to the timeline (Visuals cue channel).
-    /// Ships with a default sprite (poster.png, shown while no mapped cue is
-    /// active) and an empty mapping list for the designer.
-    /// </summary>
-    private static void BuildReactiveProp(Transform root)
-    {
-        // On the back wall's panel left of the traveller, clear of the desk's far edge.
-        SpriteRenderer poster = PlaceSprite(root, "ReactivePoster", EnsureOfficeSprite("poster", new Color(0.5f, 0.45f, 0.6f), 80, 110), new Vector3(-5.6f, 0.08f, 5f), 1.1f, -40);
-        TimelineReactiveSprite reactive = poster.GetComponent<TimelineReactiveSprite>();
-        if (reactive == null)
-            reactive = poster.gameObject.AddComponent<TimelineReactiveSprite>();
-        var so = new SerializedObject(reactive);
-        SetRef(so, "target", poster);
-        SetRef(so, "defaultSprite", poster.sprite);
-        so.ApplyModifiedProperties();
-    }
-
-    // ----------------------------- Shift clock (booth + tray) -----------------------------
-
-    /// <summary>
-    /// Hit buffer size for the booth's Physics2DRaycaster (non-allocating
-    /// raycasts): one point can cross up to 8 stacked papers plus the scanner,
-    /// a prop, the traveller zone and the exit zone, and hits are cut before
-    /// they are sorted.
-    /// </summary>
-    private const int BoothRaycastHits = 16;
-
-    /// <summary>Ink colour of the placeholder wall clock.</summary>
-    private static readonly Color32 ClockInk = new Color32(30, 28, 26, 255);
-
-    /// <summary>
-    /// Builds the booth wall clock (face plus hour and minute hands; placeholder
-    /// art until the real clock pieces land) and wires ShiftClockReadouts on
-    /// OfficeRoot to the driver, the tray clock and the hands. Idempotent.
-    /// </summary>
-    private static void BuildShiftClockReadouts(ShiftClockDriver driver, TMP_Text trayClockText)
-    {
-        GameObject root = GameObject.Find("OfficeRoot");
-        if (root == null)
-        {
-            Debug.LogWarning("[TimeDesk] No OfficeRoot, so the wall clock was not built (the booth is built first in Build()).");
-            return;
-        }
-
-        // On the back wall's window mullion right of the traveller.
-        SpriteRenderer face = PlaceSprite(root.transform, "WallClock",
-            EnsureOfficeShape("clock_face", 100, 100, new Vector2(0.5f, 0.5f), ClockFacePixel),
-            new Vector3(4f, 3.2f, 5f), 1.3f, -40);
-        SpriteRenderer hourHand = EnsureSprite(face.transform, "HourHand",
-            EnsureOfficeShape("clock_hand_hour", 8, 30, new Vector2(0.5f, 0.1f), (x, y) => ClockInk),
-            new Vector3(0f, 0f, -0.01f), -39);
-        SpriteRenderer minuteHand = EnsureSprite(face.transform, "MinuteHand",
-            EnsureOfficeShape("clock_hand_minute", 6, 42, new Vector2(0.5f, 0.07f), (x, y) => ClockInk),
-            new Vector3(0f, 0f, -0.02f), -38);
-
-        ShiftClockReadouts readouts = root.GetComponent<ShiftClockReadouts>();
-        if (readouts == null)
-            readouts = root.AddComponent<ShiftClockReadouts>();
-        var so = new SerializedObject(readouts);
-        SetRef(so, "driver", driver);
-        SetRef(so, "trayClockText", trayClockText);
-        SetRef(so, "hourHand", hourHand.transform);
-        SetRef(so, "minuteHand", minuteHand.transform);
-        so.ApplyModifiedProperties();
-    }
-
-    /// <summary>Placeholder clock face: cream dial, dark rim, hour ticks, centre cap.</summary>
-    private static Color32 ClockFacePixel(int x, int y)
-    {
-        float dx = x - 49.5f;
-        float dy = y - 49.5f;
-        float d = Mathf.Sqrt(dx * dx + dy * dy);
-        if (d > 49f)
-            return new Color32(0, 0, 0, 0);
-        if (d > 45f)
-            return ClockInk;
-        float angle = Mathf.Repeat(Mathf.Atan2(dy, dx) * Mathf.Rad2Deg, 30f);
-        if (d > 37f && (angle < 2.5f || angle > 27.5f))
-            return ClockInk;
-        if (d < 3f)
-            return ClockInk;
-        return new Color32(242, 237, 220, 255);
-    }
-
     /// <summary>
     /// Returns a placeholder Sprite at Assets/Art/Office/Placeholder/{name}.png drawn
-    /// by a pixel function, with a custom pivot (e.g. clock hands pivot at their
-    /// base). Created once; swap the PNG for final art and keep the .meta (the pivot lives there).
+    /// by a pixel function, with a custom pivot. Created once; swap the PNG for final art and keep the .meta (the pivot lives there).
     /// </summary>
     private static Sprite EnsureOfficeShape(string name, int w, int h, Vector2 pivot, System.Func<int, int, Color32> pixel)
     {
@@ -1500,9 +1220,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Settings asset for the cursor and hover outline.</summary>
     private const string InteractionFeedbackPath = "Assets/Data/Config/InteractionFeedback_Default.asset";
 
-    /// <summary>URP's unlit sprite material (outlines ignore 2D lighting).</summary>
-    private const string UnlitSpriteMaterialPath = "Packages/com.unity.render-pipelines.universal/Runtime/Materials/Sprite-Unlit-Default.mat";
-
     /// <summary>Where generated placeholder cursors live (never mistaken for final art).</summary>
     private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
 
@@ -1522,7 +1239,7 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// Ensures the interaction-feedback settings (cursor art by file name when
     /// present, placeholders otherwise, with click points derived from the art;
-    /// unlit outline material) and assigns them to RunConfig, from which
+    /// the office objects' outline hull material) and assigns them to RunConfig, from which
     /// InteractionFeedbackBootstrap builds the one persistent HoverHighlighter
     /// used in every scene. Idempotent.
     /// </summary>
@@ -1556,8 +1273,10 @@ public static partial class OfficeSceneUIBuilder
                 settings.handHotspot = DetectHotspot(hand, CursorHotspot.Kind.Fingertip, settings.handHotspot);
             }
         }
-        if (settings.outlineMaterial == null)
-            settings.outlineMaterial = AssetDatabase.LoadAssetAtPath<Material>(UnlitSpriteMaterialPath);
+        // The 3D hover outline: the hull material (an older build's sprite material is replaced).
+        Material hull = EnsureMaterial("HoverHull", "TimeDesk/HoverHull", null);
+        if (settings.outlineMaterial == null || settings.outlineMaterial.shader == null || settings.outlineMaterial.shader.name != "TimeDesk/HoverHull")
+            settings.outlineMaterial = hull;
         EditorUtility.SetDirty(settings);
 
         RunConfigSO runConfig = FindAssetByName<RunConfigSO>("RunConfig");
@@ -1692,7 +1411,7 @@ public static partial class OfficeSceneUIBuilder
         SetLayoutHeight(quitEntry, 46f);
         startMenu.gameObject.SetActive(false);
 
-        // The taskbar's way back to the booth, next to Start.
+        // The taskbar's way back to the office (closes the PC frame), next to Start.
         Transform taskbar = root.Find("Taskbar");
         Button deskButton = MakeButton(taskbar, "DeskButton", null, new Vector2(0.125f, 0.1f), new Vector2(0.245f, 0.9f), new Color(0.2f, 0.3f, 0.5f, 0.95f),
                                        ThemeRoleId.DeskButton, "taskbar.desk");
@@ -1878,62 +1597,8 @@ public static partial class OfficeSceneUIBuilder
         text.margin = new Vector4(3f, 2f, 3f, 2f);
     }
 
-    /// <summary>Makes a booth sprite clickable: a Clickable whose click box fits the visible art.</summary>
-    private static Clickable EnsureClickable(SpriteRenderer sr)
-    {
-        BoxCollider2D box = sr.GetComponent<BoxCollider2D>();
-        if (box == null)
-            box = sr.gameObject.AddComponent<BoxCollider2D>();
-        FitColliderToArt(box, sr.sprite);
-        Clickable c = sr.GetComponent<Clickable>();
-        if (c == null)
-            c = sr.gameObject.AddComponent<Clickable>();
-        return c;
-    }
 
-    /// <summary>
-    /// Sizes a click box to the visible art: the bounds of the sprite's physics
-    /// shape (traced from its alpha at import), or the whole sprite when it has
-    /// none. Applied on every build, so swapped art never keeps an old hit area.
-    /// </summary>
-    private static void FitColliderToArt(BoxCollider2D box, Sprite sprite)
-    {
-        if (sprite == null)
-            return;
 
-        Bounds bounds = sprite.bounds;
-        bool traced = false;
-        var outline = new System.Collections.Generic.List<Vector2>();
-        for (int i = 0; i < sprite.GetPhysicsShapeCount(); i++)
-        {
-            sprite.GetPhysicsShape(i, outline);
-            foreach (Vector2 p in outline)
-            {
-                if (!traced)
-                    bounds = new Bounds(p, Vector3.zero);
-                bounds.Encapsulate(p);
-                traced = true;
-            }
-        }
-        box.offset = bounds.center;
-        box.size = bounds.size;
-    }
-
-    private static CinemachineCamera EnsureVcam(Transform parent, string name, Vector3 pos, float orthoSize)
-    {
-        Transform existing = parent.Find(name);
-        GameObject go = existing != null ? existing.gameObject : new GameObject(name);
-        if (existing == null) go.transform.SetParent(parent, false);
-        go.transform.position = pos;
-        var cam = go.GetComponent<CinemachineCamera>();
-        if (cam == null)
-            cam = go.AddComponent<CinemachineCamera>();
-        cam.Lens.OrthographicSize = orthoSize;
-        return cam;
-    }
-
-    private static void WireClickToFocusMonitor(Clickable clickable, OfficeViewController view)
-        => WirePersistentVoid(clickable, "onClick", view, nameof(OfficeViewController.FocusMonitor));
 
     /// <summary>
     /// Wires a single persistent, parameterless (Void) call on a UnityEvent
@@ -1957,43 +1622,6 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
     }
 
-    /// <summary>
-    /// Creates (or finds) a world-space TextMeshPro readout under a sprite, fitted
-    /// to a blank area of its art: <paramref name="centre"/> and <paramref name="size"/>
-    /// are in the sprite's own units, <paramref name="tilt"/> (degrees) follows the
-    /// art's perspective, and the text auto-sizes on one line, never above
-    /// <paramref name="maxFontSize"/>, so no value spills out of the art.
-    /// </summary>
-    private static TextMeshPro WorldText(Transform parent, string name, string content, Color color, Vector2 centre, Vector2 size, float tilt, float maxFontSize, int sortingOrder)
-    {
-        Transform existing = parent.Find(name);
-        GameObject go = existing != null ? existing.gameObject : new GameObject(name, typeof(TextMeshPro));
-        if (existing == null)
-            go.transform.SetParent(parent, false);
-        go.transform.localPosition = new Vector3(centre.x, centre.y, -0.1f);
-        go.transform.localRotation = Quaternion.Euler(0f, 0f, tilt);
-
-        TextMeshPro tmp = go.GetComponent<TextMeshPro>();
-        if (tmp == null)
-            tmp = go.AddComponent<TextMeshPro>();
-        tmp.text = content;
-        tmp.enableAutoSizing = true;
-        tmp.fontSizeMax = maxFontSize;
-        tmp.fontSizeMin = maxFontSize * 0.1f;
-        tmp.fontSize = maxFontSize;
-        tmp.textWrappingMode = TextWrappingModes.NoWrap;
-        tmp.color = color;
-        tmp.alignment = TextAlignmentOptions.Center;
-
-        if (go.transform is RectTransform rt)
-            rt.sizeDelta = size;
-
-        MeshRenderer mr = go.GetComponent<MeshRenderer>();
-        if (mr != null)
-            mr.sortingOrder = sortingOrder;
-
-        return tmp;
-    }
 
     private static void DestroyChildIfPresent(Transform parent, string name)
     {

@@ -21,6 +21,7 @@ public class ThemeRolesTests
     [TestCase(ThemeRoleId.DiegeticBacking)]
     [TestCase(ThemeRoleId.DiegeticBookRow)]
     [TestCase(ThemeRoleId.DiegeticBubble)]
+    [TestCase(ThemeRoleId.DiegeticDevice)]
     public void EvidenceRoles_AreDiegetic(ThemeRoleId role)
     {
         Assert.IsTrue(ThemeRoles.IsDiegetic(role));

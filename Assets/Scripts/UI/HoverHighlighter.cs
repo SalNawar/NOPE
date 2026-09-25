@@ -11,14 +11,17 @@ using UnityEngine.UI;
 /// it reads what the pointer is over from the EventSystem (reusing the Input
 /// System UI module's own raycast) and, when that changes, moves the hover
 /// highlight and swaps the cursor: an outline and hand cursor on any
-/// interactable Clickable (booth sprite) or Selectable (UI), the arrow
-/// elsewhere. A Clickable whose sprite is hidden (a hit zone over other art)
-/// gets the hand cursor but no outline. Objects need no setup of their own.
+/// interactable Clickable (an office object) or Selectable (UI), the arrow
+/// elsewhere. An office object's outline is its meshes drawn again as a hull
+/// (the outline material: pushed out along the normals, back faces only)
+/// through Graphics.RenderMesh, every frame while hovered: no scene objects,
+/// no renderer features, the art's own objects untouched. A Clickable with no
+/// outline renderers (a hit zone) gets the hand cursor only.
 /// </summary>
 public sealed class HoverHighlighter : MonoBehaviour
 {
-    /// <summary>Upper bound on the generated ring width, keeping outline generation cheap.</summary>
-    private const int MaxRingWidthPx = 64;
+    private static readonly int ColorId = Shader.PropertyToID("_Color");
+    private static readonly int WidthId = Shader.PropertyToID("_Width");
 
     /// <summary>Cursor textures and outline look.</summary>
     [SerializeField] private InteractionFeedbackSO settings;
@@ -26,8 +29,11 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>Reused raycast results (fallback path only).</summary>
     private readonly List<RaycastResult> _hits = new List<RaycastResult>();
 
-    /// <summary>Generated outlines per booth sprite renderer.</summary>
-    private readonly Dictionary<SpriteRenderer, WorldOutline> _worldOutlines = new Dictionary<SpriteRenderer, WorldOutline>();
+    /// <summary>The hovered object's meshes and their renderers (rebuilt when the target changes).</summary>
+    private readonly List<(Mesh mesh, Renderer renderer)> _hull = new List<(Mesh, Renderer)>();
+
+    /// <summary>The outline material with the settings' colour and width (made once).</summary>
+    private Material _hullMaterial;
 
     /// <summary>Reused pointer data for the fallback raycast.</summary>
     private PointerEventData _pointerData;
@@ -50,19 +56,6 @@ public sealed class HoverHighlighter : MonoBehaviour
     /// <summary>True once a cursor was set by this component.</summary>
     private bool _cursorApplied;
 
-    /// <summary>Generated outline for one booth sprite (rebuilt when its sprite changes).</summary>
-    private sealed class WorldOutline
-    {
-        /// <summary>Sprite the outline was built from.</summary>
-        public Sprite source;
-
-        /// <summary>Generated outline sprite (null if generation failed).</summary>
-        public Sprite outline;
-
-        /// <summary>Child renderer that shows the outline.</summary>
-        public SpriteRenderer renderer;
-    }
-
     /// <summary>Assigns the look (call before the component first enables).</summary>
     public void Configure(InteractionFeedbackSO feedback)
     {
@@ -73,6 +66,12 @@ public sealed class HoverHighlighter : MonoBehaviour
     {
         if (settings == null)
             Debug.LogWarning("HoverHighlighter: no InteractionFeedbackSO assigned, so there is no custom cursor or hover outline. Run Tools > TimeDesk > Build Office UI.", this);
+        else if (settings.outlineMaterial != null && _hullMaterial == null)
+        {
+            _hullMaterial = new Material(settings.outlineMaterial) { name = settings.outlineMaterial.name + " (hover)" };
+            _hullMaterial.SetColor(ColorId, settings.outlineColor);
+            _hullMaterial.SetFloat(WidthId, settings.worldOutlineWidth);
+        }
 
         SceneManager.sceneUnloaded += HandleSceneUnloaded;
     }
@@ -91,6 +90,7 @@ public sealed class HoverHighlighter : MonoBehaviour
             SetHighlighted(_hovered, true);
         }
 
+        DrawHull();
         ApplyCursor(_hovered != null);
     }
 
@@ -106,13 +106,8 @@ public sealed class HoverHighlighter : MonoBehaviour
 
     private void OnDestroy()
     {
-        foreach (WorldOutline o in _worldOutlines.Values)
-        {
-            DestroyOutlineSprite(o);
-            if (o.renderer != null)
-                Destroy(o.renderer.gameObject);
-        }
-        _worldOutlines.Clear();
+        if (_hullMaterial != null)
+            Destroy(_hullMaterial);
     }
 
     /// <summary>The interactable under the pointer, or null (hierarchy walk only when the hit object changes).</summary>
@@ -148,8 +143,8 @@ public sealed class HoverHighlighter : MonoBehaviour
             _pointerData = new PointerEventData(eventSystem);
             _pointerDataOwner = eventSystem;
         }
-        _pointerData.position = pointer.position.ReadValue();
 
+        _pointerData.position = pointer.position.ReadValue();
         _hits.Clear();
         eventSystem.RaycastAll(_pointerData, _hits);
         return _hits.Count > 0 ? _hits[0].gameObject : null;
@@ -165,6 +160,7 @@ public sealed class HoverHighlighter : MonoBehaviour
             if (t.TryGetComponent(out Selectable selectable))
                 return selectable;
         }
+
         return null;
     }
 
@@ -178,25 +174,23 @@ public sealed class HoverHighlighter : MonoBehaviour
         return false;
     }
 
-    /// <summary>Turns the highlight on a target on or off.</summary>
+    /// <summary>Turns the highlight on a target on or off: an office object's outline meshes, or a UI element's outline effect.</summary>
     private void SetHighlighted(Component target, bool on)
     {
-        if (target == null)
-            return;
-
         if (target is Clickable clickable)
         {
-            if (!clickable.TryGetComponent(out SpriteRenderer sr))
+            _hull.Clear();
+            if (!on || clickable == null)
                 return;
 
-            // A hidden sprite is a hit zone over other art: no outline of its shape.
-            bool show = on && sr.enabled;
-            WorldOutline outline = show ? EnsureWorldOutline(sr) : Lookup(sr);
-            if (outline != null && outline.renderer != null)
-                outline.renderer.enabled = show && outline.outline != null;
+            foreach (Renderer r in clickable.Outline)
+                if (r != null && r.TryGetComponent(out MeshFilter filter) && filter.sharedMesh != null)
+                    _hull.Add((filter.sharedMesh, r));
         }
-        else if (target is Selectable selectable && selectable.targetGraphic != null)
+        else if (target is Selectable selectable && selectable != null && selectable.targetGraphic != null
+                 && (selectable.targetGraphic.color.a > 0f || !on))
         {
+            // A transparent graphic (a click area) gets no outline: the outline copies its quad opaque.
             GameObject host = selectable.targetGraphic.gameObject;
             if (!host.TryGetComponent(out HoverUIOutline uiOutline))
             {
@@ -217,66 +211,21 @@ public sealed class HoverHighlighter : MonoBehaviour
         }
     }
 
-    /// <summary>Existing outline for a renderer, or null.</summary>
-    private WorldOutline Lookup(SpriteRenderer sr) =>
-        _worldOutlines.TryGetValue(sr, out WorldOutline o) ? o : null;
-
-    /// <summary>Creates or refreshes the outline child for a booth sprite.</summary>
-    private WorldOutline EnsureWorldOutline(SpriteRenderer sr)
+    /// <summary>Draws the hovered office object's outline hull this frame (every submesh of every visible outline renderer).</summary>
+    private void DrawHull()
     {
-        if (sr.sprite == null)
-            return null;
+        if (_hullMaterial == null || _hull.Count == 0)
+            return;
 
-        if (!_worldOutlines.TryGetValue(sr, out WorldOutline o))
+        var parameters = new RenderParams(_hullMaterial);
+        foreach ((Mesh mesh, Renderer renderer) in _hull)
         {
-            PurgeDeadOutlines();
-            o = new WorldOutline();
-            _worldOutlines[sr] = o;
+            if (renderer == null || !renderer.enabled || !renderer.gameObject.activeInHierarchy)
+                continue;
+            Matrix4x4 matrix = renderer.localToWorldMatrix;
+            for (int s = 0; s < mesh.subMeshCount; s++)
+                Graphics.RenderMesh(parameters, mesh, s, matrix);
         }
-
-        if (o.renderer == null)
-        {
-            var child = new GameObject("HoverOutline");
-            child.transform.SetParent(sr.transform, false);
-            o.renderer = child.AddComponent<SpriteRenderer>();
-        }
-
-        // Rebuild only when the sprite changed (e.g. the timeline poster swapped art).
-        if (o.source != sr.sprite)
-        {
-            DestroyOutlineSprite(o);
-            o.source = sr.sprite;
-            try
-            {
-                o.outline = SpriteOutlineBuilder.Build(sr.sprite, RingWidthPx(sr));
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogWarning($"HoverHighlighter: could not build an outline for '{sr.sprite.name}' ({e.Message}).", sr);
-            }
-        }
-
-        SpriteRenderer r = o.renderer;
-        r.sprite = o.outline;
-        r.sortingLayerID = sr.sortingLayerID;
-        r.sortingOrder = sr.sortingOrder + 1;
-        r.flipX = sr.flipX;
-        r.flipY = sr.flipY;
-        r.color = settings.outlineColor;
-        if (settings.outlineMaterial != null)
-            r.sharedMaterial = settings.outlineMaterial;
-        return o;
-    }
-
-    /// <summary>Ring width in source pixels for the configured world-space width.</summary>
-    private int RingWidthPx(SpriteRenderer sr)
-    {
-        Vector3 s = sr.transform.lossyScale;
-        float scale = Mathf.Max(Mathf.Abs(s.x), Mathf.Abs(s.y));
-        if (scale <= 0f)
-            return 1;
-
-        return Mathf.Clamp(Mathf.RoundToInt(settings.worldOutlineWidth * sr.sprite.pixelsPerUnit / scale), 1, MaxRingWidthPx);
     }
 
     /// <summary>Sets the arrow or the hand cursor (only on change).</summary>
@@ -293,48 +242,12 @@ public sealed class HoverHighlighter : MonoBehaviour
         _cursorApplied = true;
     }
 
-    /// <summary>Drops outlines whose sprites went away with an unloaded scene.</summary>
+    /// <summary>Forgets the hover when a scene unloads (its objects are gone).</summary>
     private void HandleSceneUnloaded(Scene scene)
     {
-        PurgeDeadOutlines();
-
+        _hull.Clear();
         _lastHitObject = null;
         _lastCandidate = null;
         _hovered = null;
-    }
-
-    /// <summary>
-    /// Drops the outlines of destroyed renderers (an unloaded scene's sprites,
-    /// the papers of a finished case) with their generated sprites and textures.
-    /// Runs when a scene unloads and before a new outline is created, so the
-    /// cache holds at most the last case's dead papers.
-    /// </summary>
-    private void PurgeDeadOutlines()
-    {
-        var dead = new List<SpriteRenderer>();
-        foreach (KeyValuePair<SpriteRenderer, WorldOutline> pair in _worldOutlines)
-        {
-            if (pair.Key == null)
-                dead.Add(pair.Key);
-        }
-
-        foreach (SpriteRenderer key in dead)
-        {
-            DestroyOutlineSprite(_worldOutlines[key]);
-            _worldOutlines.Remove(key);
-        }
-    }
-
-    /// <summary>Destroys a generated outline sprite and its texture.</summary>
-    private static void DestroyOutlineSprite(WorldOutline o)
-    {
-        if (o.outline == null)
-            return;
-
-        Texture2D texture = o.outline.texture;
-        Destroy(o.outline);
-        if (texture != null)
-            Destroy(texture);
-        o.outline = null;
     }
 }

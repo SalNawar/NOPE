@@ -88,6 +88,14 @@ public sealed class GameManager : MonoBehaviour
     {
         Debug.Log("[GameManager] >>> Entering Start.");
 
+        // The art office still holds a leftover copy of this manager from before
+        // the gameplay moved into its own scene: that copy never runs a shift.
+        if (OfficeScenes.IsArtOffice(gameObject.scene))
+        {
+            enabled = false;
+            return;
+        }
+
         if (orchestrator == null || contentLibrary == null || officeUI == null)
         {
             Debug.LogError("GameManager missing references (orchestrator/contentLibrary/officeUI).");

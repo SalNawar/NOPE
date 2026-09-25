@@ -55,6 +55,16 @@ public sealed class LookSpriteStack : MonoBehaviour
         layers[(int)LookLayer.Whole].sprite = SpriteOf(_look.WholeKey(expression));
     }
 
+    /// <summary>Tints every layer (the art is unlit: the tint sits it into the room's light).</summary>
+    public void SetTint(Color tint)
+    {
+        if (layers == null)
+            return;
+        foreach (SpriteRenderer layer in layers)
+            if (layer != null)
+                layer.color = tint;
+    }
+
     /// <summary>Empties every layer and forgets the look.</summary>
     public void Clear()
     {

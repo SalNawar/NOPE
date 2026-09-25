@@ -1,23 +1,23 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
-/// Applies BoothRules and the wake rules to the booth: from the view, its
-/// settling, the screen's power, the shift's phase (set by GameManager), the
-/// wheel and a pending citation slip, it decides which of the desktop, the
-/// CRT, the bezel power button, the focus exit and glass zones, the desk
-/// props, the papers, the traveller and the wheel take input; it wakes the
-/// screen for a presented traveller and a finished scan, holds it on for a
-/// citation slip, and shows the day-1 wheel note. Every reference is optional:
-/// a missing view counts as the booth, settled; a missing screen counts as on.
-/// Event-driven (no per-frame code).
+/// Applies BoothRules and the wake rules to the office: from the view (the PC
+/// frame open or not), the screen's power, the shift's phase (set by
+/// GameManager), the wheel and a pending citation slip, it decides which of the
+/// desktop, the PC, the power buttons, the desk props, the papers, the
+/// traveller and the wheel take input; it wakes the screen for a presented
+/// traveller and a finished scan, holds it on for a citation slip, and shows
+/// the day-1 wheel note. Every reference is optional: a missing view counts as
+/// the office view; a missing screen counts as on. Event-driven (no per-frame code).
 /// </summary>
 public sealed class BoothCoordinator : MonoBehaviour
 {
-    /// <summary>The office view (focus, settling).</summary>
+    /// <summary>The office view (the PC frame open or not).</summary>
     [SerializeField] private OfficeViewController view;
 
-    /// <summary>The live monitor (power, desktop input).</summary>
+    /// <summary>The PC's screen (power, desktop input).</summary>
     [SerializeField] private MonitorScreen screen;
 
     /// <summary>The papers and the scanner.</summary>
@@ -26,22 +26,19 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The traveller wheel.</summary>
     [SerializeField] private TravellerWheel wheel;
 
-    /// <summary>The CRT's click (focus).</summary>
+    /// <summary>The office PC's click (opens the frame).</summary>
     [SerializeField] private Clickable crt;
 
-    /// <summary>The bezel power button.</summary>
+    /// <summary>The office PC's power knob.</summary>
     [SerializeField] private Clickable powerButton;
 
-    /// <summary>The zone around the screen that leaves focus.</summary>
-    [SerializeField] private Clickable focusExit;
-
-    /// <summary>The inert zone over the glass that keeps a click on a dark screen inside focus.</summary>
-    [SerializeField] private Clickable glassZone;
+    /// <summary>The PC frame's power button.</summary>
+    [SerializeField] private Selectable framePowerButton;
 
     /// <summary>The traveller's hit zone (opens the wheel).</summary>
     [SerializeField] private Clickable travellerHitZone;
 
-    /// <summary>The desk props (stamp, mug, plant, poster, intercom, scanner tray, till, stability monitor, wall clock, calendar).</summary>
+    /// <summary>The desk props (stamp, intercom, scanner, till, stability monitor, calendar, clock and the flavour props).</summary>
     [SerializeField] private Clickable[] props;
 
     /// <summary>The day-1 note above the traveller.</summary>
@@ -64,10 +61,7 @@ public sealed class BoothCoordinator : MonoBehaviour
     private void OnEnable()
     {
         if (view != null)
-        {
             view.ViewChanged += HandleView;
-            view.Settled += HandleView;
-        }
         if (screen != null)
             screen.PowerChanged += Apply;
         if (wheel != null)
@@ -79,10 +73,7 @@ public sealed class BoothCoordinator : MonoBehaviour
     private void OnDisable()
     {
         if (view != null)
-        {
             view.ViewChanged -= HandleView;
-            view.Settled -= HandleView;
-        }
         if (screen != null)
             screen.PowerChanged -= Apply;
         if (wheel != null)
@@ -113,7 +104,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         Apply();
     }
 
-    /// <summary>A citation slip waits for Acknowledge (or no longer does): it holds the screen on and makes the power button inert.</summary>
+    /// <summary>A citation slip waits for Acknowledge (or no longer does): it holds the screen on and makes the power buttons inert.</summary>
     public void SetCitationPending(bool pending)
     {
         _citationPending = pending;
@@ -138,10 +129,9 @@ public sealed class BoothCoordinator : MonoBehaviour
         Apply();
     }
 
-    /// <summary>The rules' input for the booth as it is now.</summary>
+    /// <summary>The rules' input for the office as it is now.</summary>
     private BoothContext Context() => new BoothContext(
         view != null && view.Current == OfficeView.MonitorFocus,
-        view == null || view.IsSettled,
         screen == null || screen.IsOn,
         _phase,
         wheel != null && wheel.IsOpen,
@@ -160,10 +150,8 @@ public sealed class BoothCoordinator : MonoBehaviour
             crt.Interactable = input.CrtFocusable;
         if (powerButton != null)
             powerButton.Interactable = input.PowerButtonLive;
-        if (focusExit != null)
-            focusExit.gameObject.SetActive(input.FocusExitLive);
-        if (glassZone != null)
-            glassZone.gameObject.SetActive(input.FocusExitLive);
+        if (framePowerButton != null)
+            framePowerButton.interactable = input.PowerButtonLive;
         if (props != null)
             foreach (Clickable prop in props)
                 if (prop != null)
