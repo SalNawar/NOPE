@@ -23,7 +23,7 @@ Before any country leads, the desk is "neutral": today's XP-style blue look with
 4. **No real people, no real brands.** Crowds, if any, are tiny, faceless and civilian.
 5. **Chrome is greyscale.** Anything that is part of the PC's interface (window frames, title bars, taskbar, buttons, icon backgrounds) is drawn in **neutral grey only**, from white to mid grey, with no colour at all: the game tints it with the culture's colours. Keep a flat middle and even borders so it can stretch (9-slice). No text or letter-shaped icons.
 6. **Documents are not themed.** Passports, permits, reference books, Citizen Records and the passport photo frame keep their own look whatever culture leads. Any field where the game prints a value stays empty.
-7. **Style.** The same clean, simple look as the characters: flat colour areas, one soft shade tone, clean outlines, very little texture. Wallpapers may use soft gradients for the sky. Calm and low in contrast: windows and text sit on top.
+7. **Style.** The same cel look as the characters and the office's cel-shaded desk: flat colour areas, each with one hard-edged shade tone, clean outlines, very little texture. Wallpapers may use soft gradients for the sky. Calm and low in contrast: windows and text sit on top.
 8. **Lighting.** Soft, even daylight. No lens flare, no strong sun, no dramatic sunset or night scene (the office has its own lighting).
 
 ## Wallpapers (4:3)
@@ -123,7 +123,7 @@ RULES FOR EVERY IMAGE
 - Absolutely no text: no letters, numbers, words, captions, signage, logos, watermarks, signatures and no fake writing or calligraphy. Anything that would carry writing (signs, screens, book covers, banners, brand plates) is left blank.
 - No flags or flag colour stripes, coats of arms, eagles, rising-sun rays, a red sun disc, chrysanthemum crests, dragons, stars, party, regime or military symbols, and no hate symbols. Never put green, white and red, or black-red-gold, or black-white-red side by side as bands or stripes.
 - No religious buildings, symbols or text. No real people, no real brands; any people are tiny, faceless civilians.
-- Style: clean, simple 2D illustration with flat colour areas, one soft shade tone, clean outlines and very little texture. Soft gradients are fine for skies. Calm and low in contrast.
+- Style: clean 2D cel-style illustration with flat colour areas, each with one hard-edged shade tone, clean outlines and very little texture. Soft gradients are fine for skies. Calm and low in contrast.
 - Lighting: soft, even daylight. No lens flare, no dramatic sunset, no night scene.
 - Use the colours I give you as the main palette.
 
