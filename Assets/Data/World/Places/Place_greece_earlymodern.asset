@@ -32,7 +32,7 @@ MonoBehaviour:
   - category: 2
     value: Sultan Mustafa II
   - category: 6
-    value: kalpak / pafti buckle
+    value: kalpak / silver chest chains
   maleNames:
   - Emmanouil
   - Balanos
@@ -121,7 +121,7 @@ MonoBehaviour:
         covers: 
         artNation: 
       accessory:
-        label: pafti buckle
+        label: silver chest chains
         leakable: 1
         wig: 0
         back: 0
