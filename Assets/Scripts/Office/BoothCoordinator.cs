@@ -160,7 +160,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         wheel != null && wheel.IsOpen,
         _citationPending,
         stampTray != null && stampTray.IsOpen,
-        desk != null && desk.HeldCount > 0);
+        desk != null && desk.HeldCount > 0,
+        false);
 
     /// <summary>Applies the rules. The wheel and the stamp tray first: closing either changes the context the rest reads (their OpenChanged re-applies too, harmlessly).</summary>
     private void Apply()

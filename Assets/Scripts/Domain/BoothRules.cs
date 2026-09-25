@@ -35,8 +35,11 @@ public readonly struct BoothContext
     /// <summary>At least one paper is held in the hand (piece 10).</summary>
     public readonly bool PapersHeld;
 
+    /// <summary>The camera is tilted forward over the desk (the desk view, piece 10 section 11).</summary>
+    public readonly bool DeskView;
+
     /// <summary>Creates a context.</summary>
-    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool stampOpen, bool papersHeld)
+    public BoothContext(bool focused, bool screenOn, BoothPhase phase, bool wheelOpen, bool citationPending, bool stampOpen, bool papersHeld, bool deskView)
     {
         Focused = focused;
         ScreenOn = screenOn;
@@ -45,6 +48,7 @@ public readonly struct BoothContext
         CitationPending = citationPending;
         StampOpen = stampOpen;
         PapersHeld = papersHeld;
+        DeskView = deskView;
     }
 }
 
@@ -87,11 +91,21 @@ public readonly struct BoothInput
     /// <summary>The office case HUD (the claim tag and the office compare strip) shows: the office view while a traveller is at the desk.</summary>
     public readonly bool CaseHudVisible;
 
+    /// <summary>A click on the mat tilts the camera into the desk view and back: the props are live and no paper is held (with papers held the desk catcher takes the click).</summary>
+    public readonly bool DeskViewToggleLive;
+
+    /// <summary>Escape and a right-click on empty space return from the desk view: the desk view is on and the mat's toggle is live (Escape closes the frame, the wheel or the stamp tray and puts held papers back first).</summary>
+    public readonly bool DeskViewReturnLive;
+
+    /// <summary>The desk view may stay: no newsletter (false returns to the normal view).</summary>
+    public readonly bool DeskViewAllowed;
+
     /// <summary>Creates an output set.</summary>
     public BoothInput(bool desktopInteractive, bool crtFocusable, bool powerButtonLive,
                       bool propsLive, bool papersLive, bool wheelAllowed, bool travellerLive,
                       bool heldPapersLive, bool deskCatcherLive, bool examineEscapeLive,
-                      bool stampTrayAllowed, bool caseHudVisible)
+                      bool stampTrayAllowed, bool caseHudVisible,
+                      bool deskViewToggleLive, bool deskViewReturnLive, bool deskViewAllowed)
     {
         DesktopInteractive = desktopInteractive;
         CrtFocusable = crtFocusable;
@@ -105,18 +119,22 @@ public readonly struct BoothInput
         ExamineEscapeLive = examineEscapeLive;
         StampTrayAllowed = stampTrayAllowed;
         CaseHudVisible = caseHudVisible;
+        DeskViewToggleLive = deskViewToggleLive;
+        DeskViewReturnLive = deskViewReturnLive;
+        DeskViewAllowed = deskViewAllowed;
     }
 }
 
 /// <summary>
 /// The booth's input table (the physical-desk spec section 1.9 as the office
 /// move changed it: the PC opens a frame over the office at once, with no
-/// camera blend; piece 10 adds the stamp tray and papers held in the hand):
-/// from the frame, the screen's power, the shift's phase, the wheel, a pending
-/// citation slip, the stamp tray and held papers, which of the desktop, the PC,
-/// the power buttons, the props, the papers (on the desk and in the hand), the
-/// desk catcher, Escape, the wheel, the stamp tray, the traveller and the case
-/// HUD take input or show. Pure, so every row is tested headless;
+/// camera blend; piece 10 adds the stamp tray, papers held in the hand and the
+/// desk view): from the frame, the screen's power, the shift's phase, the
+/// wheel, a pending citation slip, the stamp tray, held papers and the desk
+/// view, which of the desktop, the PC, the power buttons, the props, the
+/// papers (on the desk and in the hand), the desk catcher, Escape, the wheel,
+/// the stamp tray, the traveller, the case HUD, the mat and the desk view's
+/// return take input or show. Pure, so every row is tested headless;
 /// BoothCoordinator applies it.
 /// </summary>
 public static class BoothRules
@@ -131,6 +149,7 @@ public static class BoothRules
         bool office = !c.Focused && atDesk;
         bool papers = props && atDesk;
         bool catcher = papers && c.PapersHeld;
+        bool mat = props && !c.PapersHeld;
         return new BoothInput(
             desktopInteractive: c.Focused && c.ScreenOn && !newsletter,
             crtFocusable: !c.Focused && !newsletter && !modal,
@@ -143,6 +162,9 @@ public static class BoothRules
             deskCatcherLive: catcher,
             examineEscapeLive: catcher,
             stampTrayAllowed: office,
-            caseHudVisible: office);
+            caseHudVisible: office,
+            deskViewToggleLive: mat,
+            deskViewReturnLive: c.DeskView && mat,
+            deskViewAllowed: !newsletter);
     }
 }
