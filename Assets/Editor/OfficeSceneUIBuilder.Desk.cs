@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -51,8 +52,14 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The placeholder paper's colour.</summary>
     private static readonly Color PaperCream = new Color(0.95f, 0.92f, 0.82f, 1f);
 
-    /// <summary>The paper's reserved photo box (hidden until piece 4 fills it).</summary>
+    /// <summary>The paper's photo frame (shown only on a photo document).</summary>
     private static readonly Color PhotoGrey = new Color(0.55f, 0.56f, 0.58f, 1f);
+
+    /// <summary>The photo's height as a share of its frame's.</summary>
+    private const float PhotoFill = 0.92f;
+
+    /// <summary>The photo's first layer order in the paper's sorting group: above the frame (1), the title (2) and the holder (3).</summary>
+    private const int PhotoFirstOrder = 4;
 
     /// <summary>The scanner's glass bed centre, in the tray sprite's own units.</summary>
     private static readonly Vector2 ScannerBedCentre = new Vector2(0.1f, 0.3f);
@@ -78,8 +85,20 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The desk notes' ink.</summary>
     private static readonly Color NoteInk = new Color(0.12f, 0.14f, 0.18f, 1f);
 
-    /// <summary>Where the wheel and the bubble centre on the placeholder traveller (its chest), world units.</summary>
-    private static readonly Vector3 TravellerAnchorWorld = new Vector3(0f, 1f, 2f);
+    /// <summary>The traveller's spot behind the desk (world): the Traveller object, a scale-1 parent of the anchor, the hit zone and the figure.</summary>
+    private static readonly Vector3 TravellerSpot = new Vector3(0f, 0f, 2f);
+
+    /// <summary>Where a new figure's feet stand (world): below the desk art, so its far edge (-0.84) crosses the hips.</summary>
+    private static readonly Vector3 TravellerFeetWorld = new Vector3(0f, -3.9f, 2f);
+
+    /// <summary>A new figure's canvas height in world units (head top near 2.5, the purple placeholder's place and size).</summary>
+    private const float TravellerCanvasHeight = 8f;
+
+    /// <summary>The figure's sorting group order: over the back wall (-100) and the partitions (-50), under the desk (-10).</summary>
+    private const int TravellerOrder = -20;
+
+    /// <summary>How far above the head top (canvas px) the hit zone reaches: tall hats and buns.</summary>
+    private const int TravellerHatReach = 120;
 
     /// <summary>The desk art's far edge in world units (desk_deep.png's first opaque row): the traveller is hidden below it.</summary>
     private const float DeskArtFarEdgeY = -0.84f;
@@ -306,11 +325,51 @@ public static partial class OfficeSceneUIBuilder
         return root;
     }
 
-    /// <summary>The traveller's view on the placeholder: its figure (hidden until presented) and the anchor the wheel and the bubble centre on. Idempotent.</summary>
-    private static void BuildTravellerView(SpriteRenderer traveller)
+    /// <summary>
+    /// The traveller: OfficeRoot/Traveller (TravellerView, scale 1) with its
+    /// Figure (a SortingGroup with one SpriteRenderer per LookLayer, the
+    /// LookSpriteStack) and the Anchor at the figure's shoulders. Existing-wins:
+    /// the figure is placed only when it is created (feet at
+    /// <see cref="TravellerFeetWorld"/>, canvas <see cref="TravellerCanvasHeight"/>
+    /// tall); a placed figure keeps its transform, and the anchor (and, in
+    /// BuildDeskInteraction, the hit zone) follow it. An earlier build's
+    /// placeholder sprite on Traveller is removed (traveller.png stays). Idempotent.
+    /// </summary>
+    private static void BuildTraveller(Transform booth)
     {
-        Transform anchor = EnsureChild(traveller.transform, "Anchor");
-        anchor.position = TravellerAnchorWorld;
+        bool created = booth.Find("Traveller") == null;
+        Transform traveller = EnsureChild(booth, "Traveller");
+        SpriteRenderer placeholder = traveller.GetComponent<SpriteRenderer>();
+        if (created || placeholder != null)
+        {
+            if (placeholder != null)
+                Object.DestroyImmediate(placeholder);
+            traveller.localPosition = TravellerSpot;
+            traveller.localRotation = Quaternion.identity;
+            traveller.localScale = Vector3.one;
+        }
+
+        Transform figure = traveller.Find("Figure");
+        if (figure == null)
+        {
+            figure = EnsureChild(traveller, "Figure");
+            figure.position = TravellerFeetWorld;
+            figure.localRotation = Quaternion.identity;
+            figure.localScale = Vector3.one * TravellerCanvasHeight;
+        }
+
+        SortingGroup group = figure.GetComponent<SortingGroup>();
+        if (group == null)
+            group = figure.gameObject.AddComponent<SortingGroup>();
+        group.sortingOrder = TravellerOrder;
+
+        LookSpriteStack stack = figure.GetComponent<LookSpriteStack>();
+        if (stack == null)
+            stack = figure.gameObject.AddComponent<LookSpriteStack>();
+        WireLayers(stack, figure, 0, false);
+
+        Transform anchor = EnsureChild(traveller, "Anchor");
+        anchor.position = figure.TransformPoint(0f, LookCanvas.LocalY(LookCanvas.Shoulders), 0f);
         anchor.localRotation = Quaternion.identity;
         anchor.localScale = Vector3.one;
 
@@ -318,10 +377,30 @@ public static partial class OfficeSceneUIBuilder
         if (view == null)
             view = traveller.gameObject.AddComponent<TravellerView>();
         var so = new SerializedObject(view);
-        SerializedProperty figure = so.FindProperty("figure");
-        figure.arraySize = 1;
-        figure.GetArrayElementAtIndex(0).objectReferenceValue = traveller;
+        SetRef(so, "figure", stack);
         SetRef(so, "anchor", anchor);
+        so.ApplyModifiedProperties();
+    }
+
+    /// <summary>
+    /// One empty SpriteRenderer child per LookLayer under <paramref name="parent"/>
+    /// (named after the layer, at its origin, ordered <paramref name="firstOrder"/>
+    /// + the layer), wired to the stack in layer order; <paramref name="photo"/>
+    /// makes it show photo crops.
+    /// </summary>
+    private static void WireLayers(LookSpriteStack stack, Transform parent, int firstOrder, bool photo)
+    {
+        var layers = new List<Object>();
+        foreach (LookLayer layer in System.Enum.GetValues(typeof(LookLayer)))
+        {
+            SpriteRenderer sr = EnsureSprite(parent, layer.ToString(), null, Vector3.zero, firstOrder + (int)layer);
+            sr.enabled = false;
+            layers.Add(sr);
+        }
+
+        var so = new SerializedObject(stack);
+        SerializedArrays.Set(so, "layers", layers);
+        so.FindProperty("photo").boolValue = photo;
         so.ApplyModifiedProperties();
     }
 
@@ -408,6 +487,16 @@ public static partial class OfficeSceneUIBuilder
         photo.color = PhotoGrey;
         photo.gameObject.SetActive(false);
 
+        // The photo: crop sprites one unit tall, scaled to fill the frame's height.
+        Transform portrait = EnsureChild(photo.transform, "Photo");
+        portrait.localPosition = Vector3.zero;
+        portrait.localRotation = Quaternion.identity;
+        portrait.localScale = Vector3.one * (paperSprite.bounds.size.y * PhotoFill);
+        LookSpriteStack stack = portrait.GetComponent<LookSpriteStack>();
+        if (stack == null)
+            stack = portrait.gameObject.AddComponent<LookSpriteStack>();
+        WireLayers(stack, portrait, PhotoFirstOrder, true);
+
         DeskDocument doc = paper.GetComponent<DeskDocument>();
         if (doc == null)
             doc = paper.gameObject.AddComponent<DeskDocument>();
@@ -415,6 +504,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "title", title);
         SetRef(so, "holder", holder);
         SetRef(so, "photoSlot", photo.gameObject);
+        SetRef(so, "photo", stack);
         SetRef(so, "click", click);
         SetRef(so, "drag", drag);
         SetRef(so, "group", group);
@@ -470,14 +560,19 @@ public static partial class OfficeSceneUIBuilder
         SetDeskItem(booth.Find("DeskPlant"), "plant");
         SetDeskItem(booth.Find("ReactivePoster"), "poster");
 
-        // The traveller: a hit zone over the part above the desk art's far edge,
-        // a child with its own hidden renderer (piece 4's layered root has none).
-        // It and the desk intercom open the wheel, which centres on its anchor.
+        // The traveller: a hit zone over the figure above the desk art's far
+        // edge (arms' reach wide, up into the headroom for hats), a child of
+        // Traveller outside the figure's sorting group with its own hidden
+        // renderer. It follows the figure's placement. It and the desk
+        // intercom open the wheel, which centres on the traveller's anchor.
         Transform traveller = booth.Find("Traveller");
-        Bounds art = traveller.GetComponent<SpriteRenderer>().sprite.bounds;
-        float bottom = Mathf.Max(traveller.InverseTransformPoint(new Vector3(0f, DeskArtFarEdgeY, 0f)).y, art.min.y);
-        Clickable travellerZone = EnsureHitZone(traveller, "TravellerHitZone", new Vector3(art.center.x, (bottom + art.max.y) / 2f, 0f),
-                                                new Vector2(art.size.x, art.max.y - bottom), TravellerZoneOrder);
+        Transform figure = traveller.Find("Figure");
+        Vector3 left = traveller.InverseTransformPoint(figure.TransformPoint(LookCanvas.LocalX(LookCanvas.CenterX - LookCanvas.ArmReach), 0f, 0f));
+        Vector3 right = traveller.InverseTransformPoint(figure.TransformPoint(LookCanvas.LocalX(LookCanvas.CenterX + LookCanvas.ArmReach), 0f, 0f));
+        float top = traveller.InverseTransformPoint(figure.TransformPoint(0f, LookCanvas.LocalY(LookCanvas.HeadTop - TravellerHatReach), 0f)).y;
+        float bottom = Mathf.Max(traveller.InverseTransformPoint(new Vector3(0f, DeskArtFarEdgeY, 0f)).y, traveller.InverseTransformPoint(figure.position).y);
+        Clickable travellerZone = EnsureHitZone(traveller, "TravellerHitZone", new Vector3((left.x + right.x) / 2f, (bottom + top) / 2f, 0f),
+                                                new Vector2(right.x - left.x, top - bottom), TravellerZoneOrder);
         WirePersistentVoid(travellerZone, "onClick", wheel, nameof(TravellerWheel.Open));
         WirePersistentVoid(intercom, "onClick", wheel, nameof(TravellerWheel.Open));
         var soWheel = new SerializedObject(wheel);
