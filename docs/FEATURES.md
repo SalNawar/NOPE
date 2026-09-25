@@ -36,7 +36,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 ## Fake-OS desktop
 
-- [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability / Clock) and a "< Desk" button
+- [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability / Clock) and a "< Desk" button: the neutral theme; while a country leads the Future its theme replaces the colours, fonts, wallpaper and flavour labels (see The PC reacts to history)
 - [ ] Start menu: Settings (UI language: Follow history / Always English, remembered per player outside the run save, applied at the next office load; colours, fonts and wallpaper follow history either way (from the next office build: piece 6 did not rebuild the committed 2D OfficeScene, which the move to the new office replaces)), Turn off screen, Quit game; fixed-height entries
 - [ ] Desktop icon grid top-left; reference book icons + app icons (a document's window gets an icon at the top of the grid the first time it opens)
 - [ ] Upgrade-gated icons (Lexicon needs Archive Access, Material needs Advanced Scanner) dim until the upgrade is owned; the builder reports icon upgrade ids the library does not know
@@ -66,14 +66,14 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Passport carries identity fields: Full Name + Date of Birth (checked against Citizen Records)
 - [ ] Reference book windows list TODAY's places only (country then era, paged), read from the day's `FactTable` snapshot — the same values printed on papers (table tested: `FactTableTests`; the day's place filter is covered by the content validator and the Unity world check)
 - [ ] Reference books: Currency Ledger, Tongues & Scripts, Index of Devices, Capitals Gazetteer, Rulers & Regents (all on the desktop from day 1; five book windows open in two staggered rows)
-- [ ] Click-to-compare any two values; MATCH/MISMATCH bar (visual, no auto-verdict); auto-sized text
+- [ ] Click-to-compare any two values; MATCH/MISMATCH bar (visual, no auto-verdict; the words in the culture's language with the English in brackets, colours per theme); auto-sized text
 - [ ] Deviation Report (the desktop app formerly titled "Scanner"): true contradictions auto-register from a document field or a traveller's answer (tested: `DiscrepancyLogTests`)
   - [ ] Mismatch proof: a liar's tell (printed or spoken) ≠ claimed-era reference entry
   - [ ] Match proof: a liar's tell (printed or spoken) = a *different* era/nation's entry (origin proof); it names the traveller's true home
   - [ ] Record proof: a birth-date tell (printed or spoken) ≠ agency citizen record (tested)
   - [ ] Junk comparisons never register (wrong category, foreign-era mismatch, honest fields and answers, answer vs papers, answer vs answer)
   - [ ] One discrepancy per category from any source; a second proof of a documented category shows "ALREADY DOCUMENTED" in the compare bar and adds nothing; cleared per case; window auto-opens on first find
-  - [ ] Compare bar flips to a red "DEVIATION LOGGED — …" verdict when evidence registers (never a green MATCH)
+  - [ ] Compare bar flips to a "DEVIATION LOGGED — …" verdict in the theme's mismatch colour when evidence registers (red on the neutral desk, slate under China; never a MATCH)
   - [ ] Reports say where the tell was ("papers show …" / "traveller said …") and label Geography CAPITAL, Politics RULER, Technology DEVICE and birth dates BIRTH DATE (the key choice tested: `DiscrepancyLogTests`; the English words and sentences live in the UI string table)
 - [ ] Accept / Deny decision buttons, each with a fixed tick or cross that never changes with the culture (Accept always left (from the next office build: piece 6 did not rebuild the committed 2D OfficeScene, which the move to the new office replaces)); the verdict line sits on a strip while it shows
 - [ ] Fallback text-mode investigation when the rich desk isn't built (papers, the traveller's agency record, their answers to today's questions, and the claimed place's entry in each book)
@@ -121,7 +121,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 ## The PC reacts to history
 
-- [ ] Present culture: the timeline leader's culture (piece 5); before any country leads the PC is neutral (today's XP look). One persistent `CultureThemeService` applies the culture's theme to every `ThemeTag` in a scene when it loads (before its first Start, so the briefing never flashes the neutral look; `GameManager.Start` re-applies once the run exists), never during a shift; any scene's UI can be themed by tagging it (the office's is tagged by the builder)
+- [ ] Present culture: the timeline leader's culture (piece 5); before any country leads the PC is neutral (today's XP look). One persistent `CultureThemeService` applies the culture's theme to every `ThemeTag` in a scene when it loads (before its first Start, so the briefing never flashes the neutral look; `GameManager.Start` re-applies once the run exists), never during a shift; any scene's UI can be themed by tagging it (the office builder tags the office's, from the next office build: piece 6 did not rebuild the committed 2D OfficeScene, so today's office keeps its built look; checked outside a scene: the themes, strings, fonts and Arabic shaping, see the spec's verification record)
 - [ ] A theme sets each tagged graphic's colours by role, the wallpaper, the fonts (styles: italics stripped for CJK and Arabic, small caps or bold additions), the 34 flavour labels in the culture's language with an English gloss on the decision controls (Accept, Deny, START SHIFT, GO HOME, SEARCH, Acknowledge, "< Desk"; MATCH/MISMATCH in brackets), the compare colours (China's MISMATCH is slate) and the hover rings; evidence (document, book, record and transcript rows, the scanned page, the speech bubble) keeps its look (the diegetic rule tested: `ThemeRolesTests`)
 - [ ] UI strings: every UI string of the office comes from the `world_source.json` tables through `UiText` (148 keys; the rest of the text is content and stays English), numbers formatted in the invariant culture, Arabic shaped and ordered for display and never broken inside a phrase (tested: `UiStringsTests`, `ArabicShaperTests`); the deviation lines and category words are keys Domain chooses (tested: `DiscrepancyLogTests`)
 - [ ] Fonts: installed OS fonts at runtime per culture, tried in order (a font file, then the family), ending in a runtime LiberationSans built from the project's TTF (Greece's font); never bundled or saved; a culture whose labels no font draws shows English labels in its colours, with a warning (the choice tested: `CultureChoiceTests`)

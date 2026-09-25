@@ -114,7 +114,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
         UiStringTableSO reading = ReadingTable();
         UiStringTableSO cultureTable = ActiveTheme.language != ui.readingLanguage ? Library.GetStringTable(ActiveTheme.language) : null;
 
-        RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, Sample(reading, cultureTable));
+        RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, Sample(reading, cultureTable, ui.glossPercent));
         Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, UiLanguagePreference.AlwaysEnglish, font.Covers);
         if (Language == LabelLanguage.EnglishNoFont)
             WarnOnce("font:" + ActiveTheme.cultureId, $"[CultureThemeService] No installed font draws the '{ActiveTheme.cultureId}' labels (missing {font.Missing}; tried {font.Tried}); the desk shows English labels in its colours.");
@@ -181,13 +181,13 @@ public sealed class CultureThemeService : TimelineCueReceiver
     }
 
     /// <summary>What the culture font must draw: the culture's labels (shaped when right to left), the English glosses and the number characters.</summary>
-    private static string Sample(UiStringTableSO reading, UiStringTableSO culture)
+    private static string Sample(UiStringTableSO reading, UiStringTableSO culture, int glossPercent)
     {
         var sb = new StringBuilder(NumberSample);
         if (culture == null)
             return sb.ToString();
 
-        var glossed = new UiStrings(reading?.entries, culture.entries, culture.rightToLeft, 60);
+        var glossed = new UiStrings(reading?.entries, culture.entries, culture.rightToLeft, glossPercent);
         foreach (UiStringEntry e in culture.entries)
             if (e != null && !string.IsNullOrEmpty(e.key))
                 sb.Append(glossed.Get(e.key));

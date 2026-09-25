@@ -28,6 +28,9 @@ public static class UiText
     /// <summary>The reading-only lookup used when no theme service runs.</summary>
     private static UiStrings _readingOnly;
 
+    /// <summary>The table entries <see cref="_readingOnly"/> was built from (rebuilt when Generate World replaces them).</summary>
+    private static List<UiStringEntry> _readingEntries;
+
     /// <summary>The library RunConfig names (for the fallback lookup and FitLabel).</summary>
     private static ContentLibrarySO _configLibrary;
 
@@ -90,12 +93,12 @@ public static class UiText
         if (service != null && service.Strings != null)
             return service.Strings;
 
-        if (_readingOnly == null)
+        ContentLibrarySO library = Library();
+        UiStringTableSO table = library != null ? library.GetStringTable(library.CultureUi.readingLanguage) : null;
+        if (table != null && (_readingOnly == null || !ReferenceEquals(table.entries, _readingEntries)))
         {
-            ContentLibrarySO library = Library();
-            UiStringTableSO table = library != null ? library.GetStringTable(library.CultureUi.readingLanguage) : null;
-            if (table != null)
-                _readingOnly = new UiStrings(table.entries, null, false, library.CultureUi.glossPercent);
+            _readingEntries = table.entries;
+            _readingOnly = new UiStrings(table.entries, null, false, library.CultureUi.glossPercent);
         }
         return _readingOnly;
     }

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Fake-OS desktop shell: the Start button toggles a small menu offering
-/// Settings (opens an empty stub window), Turn off screen (darkens the live
+/// Settings (opens the Settings window: the UI language choice, piece 6), Turn off screen (darkens the live
 /// monitor; only where one is wired) and Quit game. Wire from the editor
 /// builder. All fields are optional / null-safe.
 /// </summary>
@@ -29,7 +29,7 @@ public sealed class DesktopShell : MonoBehaviour
     /// <summary>The live monitor the "Turn off screen" entry darkens (wired with the entry).</summary>
     [SerializeField] private MonitorScreen monitorScreen;
 
-    /// <summary>Settings window opened by the Settings entry (empty stub).</summary>
+    /// <summary>Settings window opened by the Settings entry (the UI language choice, SettingsWindowController).</summary>
     [SerializeField] private OSWindowChrome settingsWindow;
 
     private void Start()

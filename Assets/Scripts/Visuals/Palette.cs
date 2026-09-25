@@ -193,8 +193,11 @@ public static class Palette
     /// <summary>Parses a role name (exact case); an unknown one adds a problem.</summary>
     private static bool TryRole(string name, string where, List<string> problems, out ThemeRoleId role)
     {
-        if (!string.IsNullOrEmpty(name) && Enum.TryParse(name, false, out role) && Enum.IsDefined(typeof(ThemeRoleId), role) && !char.IsDigit(name[0]))
+        if (name != null && Array.IndexOf(Enum.GetNames(typeof(ThemeRoleId)), name) >= 0)
+        {
+            role = (ThemeRoleId)Enum.Parse(typeof(ThemeRoleId), name);
             return true;
+        }
         role = default;
         problems.Add($"{where}: unknown role '{name}'.");
         return false;

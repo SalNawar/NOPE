@@ -76,10 +76,11 @@ public class PaletteTests
     public void UnknownSeedsRolesAndBadHex_EachAddOneProblem()
     {
         var problems = new List<string>();
-        Resolve(new[] { Rule("Taskbar", "nope", "text"), Rule("NoSuchRole", "bar", "text"), Rule("7", "bar", "text") },
+        Resolve(new[] { Rule("Taskbar", "nope", "text"), Rule("NoSuchRole", "bar", "text"), Rule("7", "bar", "text"), Rule("ScreenStrip, Taskbar", "bar", "text") },
                 new[] { new PaletteOverride { role = "Ghost", fill = "#000000" }, new PaletteOverride { role = "Taskbar", fill = "#GG0000" } },
                 false, problems);
-        Assert.AreEqual(5, problems.Count, string.Join(" | ", problems));
+        Assert.AreEqual(6, problems.Count, string.Join(" | ", problems));
+        Assert.IsTrue(problems.Any(p => p.Contains("'ScreenStrip, Taskbar'")), "a flags-style list is not a role name");
         Assert.IsTrue(problems.Any(p => p.Contains("'nope'")));
         Assert.IsTrue(problems.Any(p => p.Contains("'NoSuchRole'")));
         Assert.IsTrue(problems.Any(p => p.Contains("'7'")));
