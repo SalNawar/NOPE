@@ -8,7 +8,7 @@ This page is for ChatGPT. It lists everything you need to draw the art for "Time
 |---|---|---|
 | [CHARACTER_ART_BRIEF_v2.md](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/superpowers/drafts/art/CHARACTER_ART_BRIEF_v2.md) | The character brief: the rules, the layers, every prompt, and the batches in order | All character work |
 | [CHATGPT_MESSAGE.md](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/superpowers/drafts/art/CHATGPT_MESSAGE.md) | The first message and the first two images (the base man and woman) | The very first chat |
-| [character_guide_v2_1024x1536.png](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/superpowers/drafts/art/character_guide_v2_1024x1536.png) | The figure guide: where the figure stands on the 1024 x 1536 canvas | Attached to the base-figure prompts |
+| [character_guide_v2_1024x1536.png](https://media.githubusercontent.com/media/SalNawar/NOPE/main/docs/superpowers/drafts/art/character_guide_v2_1024x1536.png) | The figure guide: where the figure stands on the 1024 x 1536 canvas | Attached to the base-figure prompts |
 | [UI_ART_RULES.md](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/superpowers/drafts/art/UI_ART_RULES.md) | Wallpapers, wheel icons and the 2D layers drawn over the office | UI art only (a separate Project) |
 
 Saleh also attaches `office_style_reference.png`, a screenshot of the game's office. It is a **style reference only**: match its colour range and contrast so the figures sit in that room. Never draw the room.
