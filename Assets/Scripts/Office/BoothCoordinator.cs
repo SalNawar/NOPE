@@ -135,7 +135,9 @@ public sealed class BoothCoordinator : MonoBehaviour
         screen == null || screen.IsOn,
         _phase,
         wheel != null && wheel.IsOpen,
-        _citationPending);
+        _citationPending,
+        false,
+        false);
 
     /// <summary>Applies the rules. The wheel first: closing it changes the context the rest reads (its OpenChanged re-applies too, harmlessly).</summary>
     private void Apply()
