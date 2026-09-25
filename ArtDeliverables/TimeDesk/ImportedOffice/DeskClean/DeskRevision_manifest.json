@@ -1,0 +1,247 @@
+{
+  "materials": {
+    "DeskClean_ABS": {
+      "color": [
+        0.7725490196078432,
+        0.7215686274509804,
+        0.6196078431372549
+      ],
+      "smoothness": 0.25,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Case": {
+      "color": [
+        0.6392156862745098,
+        0.596078431372549,
+        0.5137254901960784
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Grey": {
+      "color": [
+        0.6784313725490196,
+        0.6862745098039216,
+        0.6235294117647059
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Green": {
+      "color": [
+        0.28627450980392155,
+        0.41568627450980394,
+        0.3764705882352941
+      ],
+      "smoothness": 0.31999999999999995,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_GreenDark": {
+      "color": [
+        0.20392156862745098,
+        0.29411764705882354,
+        0.27450980392156865
+      ],
+      "smoothness": 0.21999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Teal": {
+      "color": [
+        0.3607843137254902,
+        0.5058823529411764,
+        0.47058823529411764
+      ],
+      "smoothness": 0.27,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Rubber": {
+      "color": [
+        0.17647058823529413,
+        0.2,
+        0.18823529411764706
+      ],
+      "smoothness": 0.07999999999999996,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Dark": {
+      "color": [
+        0.20392156862745098,
+        0.23529411764705882,
+        0.2235294117647059
+      ],
+      "smoothness": 0.17000000000000004,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Paper": {
+      "color": [
+        0.8588235294117647,
+        0.8196078431372549,
+        0.7294117647058823
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Manila": {
+      "color": [
+        0.788235294117647,
+        0.7254901960784313,
+        0.5490196078431373
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Wood": {
+      "color": [
+        0.5372549019607843,
+        0.39215686274509803,
+        0.2823529411764706
+      ],
+      "smoothness": 0.24,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Orange": {
+      "color": [
+        0.7333333333333333,
+        0.4980392156862745,
+        0.28627450980392155
+      ],
+      "smoothness": 0.27,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Metal": {
+      "color": [
+        0.6666666666666666,
+        0.6627450980392157,
+        0.6
+      ],
+      "smoothness": 0.53,
+      "metallic": 0.62,
+      "texture": null
+    },
+    "DeskClean_Brass": {
+      "color": [
+        0.6313725490196078,
+        0.5411764705882353,
+        0.38823529411764707
+      ],
+      "smoothness": 0.44999999999999996,
+      "metallic": 0.42,
+      "texture": null
+    },
+    "DeskClean_Glass": {
+      "color": [
+        0.15294117647058825,
+        0.2,
+        0.2
+      ],
+      "smoothness": 0.52,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Ink": {
+      "color": [
+        0.3137254901960784,
+        0.35294117647058826,
+        0.3176470588235294
+      ],
+      "smoothness": 0.14,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_Pad": {
+      "color": [
+        0.3568627450980392,
+        0.3333333333333333,
+        0.28627450980392155
+      ],
+      "smoothness": 0.09999999999999998,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_PadEdge": {
+      "color": [
+        0.18823529411764706,
+        0.17647058823529413,
+        0.15294117647058825
+      ],
+      "smoothness": 0.08999999999999997,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_PhoneBody": {
+      "color": [
+        0.38823529411764707,
+        0.47843137254901963,
+        0.4117647058823529
+      ],
+      "smoothness": 0.31000000000000005,
+      "metallic": 0,
+      "texture": null
+    },
+    "DeskClean_PhoneDial": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.19999999999999996,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\3DreaMax Studio\\036_Retro Office Props Pack Vol-1\\Art\\Textures\\2K\\T_Landline_Phone_Basecolor.png"
+    },
+    "DeskClean_Paper2D": {
+      "color": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "smoothness": 0.06000000000000005,
+      "metallic": 0,
+      "texture": "E:\\unity\\NOPE\\Assets\\Art\\Office\\DeskClean\\Textures\\PaperDetail2D.png"
+    }
+  },
+  "models": [
+    {
+      "name": "Clean_Phone",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Phone.fbx",
+      "nodes": {
+        "Clean_Phone__DeskClean_PhoneDial": "DeskClean_PhoneDial",
+        "Clean_Phone__DeskClean_Rubber": "DeskClean_Rubber",
+        "Clean_Phone__DeskClean_PhoneBody": "DeskClean_PhoneBody",
+        "Clean_Phone__DeskClean_Metal": "DeskClean_Metal"
+      },
+      "triangles": 6838
+    },
+    {
+      "name": "Clean_Mouse",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Mouse.fbx",
+      "nodes": {
+        "Clean_Mouse__DeskClean_ABS": "DeskClean_ABS",
+        "Clean_Mouse__DeskClean_Dark": "DeskClean_Dark",
+        "Clean_Mouse__DeskClean_Grey": "DeskClean_Grey",
+        "Clean_Mouse__DeskClean_GreenDark": "DeskClean_GreenDark",
+        "Clean_Mouse__DeskClean_Rubber": "DeskClean_Rubber"
+      },
+      "triangles": 9052
+    },
+    {
+      "name": "Clean_Paper2D",
+      "assetPath": "Assets/Art/Office/DeskClean/Models/Clean_Paper2D.fbx",
+      "nodes": {
+        "Clean_Paper2D__DeskClean_Paper2D": "DeskClean_Paper2D"
+      },
+      "triangles": 2
+    }
+  ]
+}

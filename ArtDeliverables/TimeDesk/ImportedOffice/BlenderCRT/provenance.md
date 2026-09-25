@@ -1,3 +1,5 @@
+> This first study predates the two detailed user references. It remains comparison evidence. The later reconstruction and its separate Blender source are described in [REVISION2_REVIEW.md](REVISION2_REVIEW.md); neither study is user-approved final art.
+
 # CRT style study provenance
 
 - Style source: user-selected `ReStory_current_reference.png`; see `../RESTORY_STYLE_GUIDE.md`.

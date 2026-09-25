@@ -30,6 +30,10 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// <summary>Per-slot state for today (null until StartDay).</summary>
     private DaySlotSequencer _slots;
 
+    /// <summary>Presentation-only progress through the current shift, from opening to closing.</summary>
+    public float ShiftProgress => _slots == null ? 0f :
+        Mathf.InverseLerp(1f, Mathf.Max(2, _slots.TotalSlots), _slots.CurrentSlot);
+
     /// <summary>Handle for the currently running day loop coroutine.</summary>
     private Coroutine _dayLoopRoutine;
 

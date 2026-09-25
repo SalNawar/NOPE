@@ -7,14 +7,19 @@ def discover():
  def probe(port):
   try:
    base=f'http://127.0.0.1:{port}'
-   health=json.load(urllib.request.urlopen(base+'/health',timeout=1))
+   health=json.load(urllib.request.urlopen(base+'/health',timeout=4))
    if health.get('projectName')=='NOPE' and health.get('serverRunning'):return base
   except Exception:pass
  with concurrent.futures.ThreadPoolExecutor(max_workers=11) as executor:
   for base in executor.map(probe,range(8090,8101)):
    if base:return base
  raise RuntimeError('No responsive NOPE UnitySkills server')
-BASE=discover()
+for _boot in range(4):
+ try:
+  BASE=discover();break
+ except RuntimeError:
+  if _boot==3:raise
+  time.sleep(.5)
 def call(skill,**args):
  req=urllib.request.Request(BASE+'/skill/'+skill,data=json.dumps(args).encode(),headers=HEADERS)
  raw=json.load(urllib.request.urlopen(req,timeout=60))

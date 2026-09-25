@@ -1,0 +1,18 @@
+{
+  "states": [
+    "MonitorFocus",
+    "OfficeFocus",
+    "MonitorFocus",
+    "OfficeFocus"
+  ],
+  "note": "Existing events checked, plus camera rays recorded separately; not a full day playthrough.",
+  "shader": {
+    "shaderName": "Universal Render Pipeline/Lit",
+    "hasErrors": false,
+    "messageCount": 0
+  },
+  "console": {
+    "count": 0,
+    "logs": []
+  }
+}
