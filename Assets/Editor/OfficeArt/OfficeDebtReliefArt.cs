@@ -17,7 +17,7 @@ public static partial class OfficeDebtReliefArt
     const string ScenePath = "Assets/Scenes/OfficeScene.unity";
     static readonly string[] ProtectedRoots = {
         "ImportedOfficeDress/Desk/Retro CRT", "HybridOffice/Booth/Finish_PC",
-        "OfficeRoot/CRTMonitor", "HybridOffice/Hall/Blender_HallFloor",
+        OfficeContract.AnchorRoot, "HybridOffice/Hall/Blender_HallFloor",
         "ImportedOfficeDress/Hall floor"
     };
     [Serializable] public class MaterialInfo
@@ -106,5 +106,30 @@ public static partial class OfficeDebtReliefArt
         if (File.Exists(ReportFolder + "/before.json")) throw new InvalidOperationException("Before capture already exists; preserve the baseline.");
         File.WriteAllText(ReportFolder + "/before.json", JsonUtility.ToJson(Capture(), true));
         Debug.Log("Debt-relief art baseline captured; scene unchanged.");
+    }
+    /// <summary>
+    /// Re-stamps the protected and gameplay hashes of both baselines (Applied/before.json and
+    /// LayoutWear/before.json) from the open scene, keeping their renderer records: Apply Colours
+    /// still reads the original materials from them, so never re-capture instead. Run it once after
+    /// an intentional change outside the art passes (the 2026-09-26 code cleanup, deleting the legacy
+    /// gameplay objects the scene contract lists, pruning disabled pack children); the validators
+    /// then guard against the next unintended change.
+    /// </summary>
+    [MenuItem("Tools/Office Art/Debt Relief/Refresh Baseline Hashes")]
+    public static void RefreshBaselineHashes()
+    {
+        CheckScene();
+        string protectedNow = ProtectedHash(), gameplayNow = GameplayHash();
+        var refreshed = new List<string>();
+        foreach (var path in new[] { ReportFolder + "/before.json", LayoutReport + "/before.json" })
+        {
+            if (!File.Exists(path)) continue;
+            var baseline = JsonUtility.FromJson<AuditReport>(File.ReadAllText(path));
+            baseline.protectedHash = protectedNow; baseline.gameplayHash = gameplayNow;
+            File.WriteAllText(path, JsonUtility.ToJson(baseline, true));
+            refreshed.Add(path);
+        }
+        if (refreshed.Count == 0) throw new InvalidOperationException("No baseline to refresh: run Capture Before first.");
+        Debug.Log("Debt-relief baseline hashes refreshed from the open scene: " + string.Join(", ", refreshed));
     }
 }

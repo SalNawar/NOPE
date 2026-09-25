@@ -16,6 +16,7 @@ public static class OfficeHallCrowds
     const string Root = "OfficeHallCrowds";
     const string ReportFolder = "ArtDeliverables/TimeDesk/HallCrowds";
     const int ExpectedGroups = 19;
+    const string FloorPath = "HybridOffice/Hall/Blender_HallFloor/Hall_Floor__Hall_Floor";
 
     [MenuItem("Tools/Office Art/Hall Crowds/Preview Morning")]
     public static void Morning()=>Preview(OfficeHallCrowdPalette.PreviewMode.Morning);
@@ -25,7 +26,9 @@ public static class OfficeHallCrowds
     public static void Automatic()=>Preview(OfficeHallCrowdPalette.PreviewMode.Automatic);
     static void Preview(OfficeHallCrowdPalette.PreviewMode mode)
     {
-        var palette=GameObject.Find(Root).GetComponent<OfficeHallCrowdPalette>();
+        var root=GameObject.Find(Root);
+        var palette=root?root.GetComponent<OfficeHallCrowdPalette>():null;
+        if(!palette)throw new InvalidOperationException("No "+Root+" with an OfficeHallCrowdPalette in the open scene: open OfficeScene.");
         if(!EditorApplication.isPlaying)Undo.RecordObject(palette,"Crowd palette preview");
         palette.SetPreview(mode);EditorUtility.SetDirty(palette);SceneView.RepaintAll();
     }
@@ -39,15 +42,23 @@ public static class OfficeHallCrowds
     {
         var report=new Check();var root=GameObject.Find(Root);
         if(!root)throw new InvalidOperationException("Crowds are not installed.");
-        var camera=GameObject.Find("Main Camera").GetComponent<Camera>();
+        // "Main Camera" is the scene contract's OfficeCamera: the view the gameplay layer plays through.
+        var cameraObject=GameObject.Find("Main Camera");
+        var camera=cameraObject?cameraObject.GetComponent<Camera>():null;
+        if(!camera)throw new InvalidOperationException("No Main Camera (the scene contract's OfficeCamera) in the open scene.");
+        var floor=GameObject.Find(FloorPath);
+        var floorRenderer=floor?floor.GetComponent<Renderer>():null;
+        if(!floorRenderer)throw new InvalidOperationException("Missing the hall floor "+FloorPath+".");
+        var palette=root.GetComponent<OfficeHallCrowdPalette>();
+        if(!palette)throw new InvalidOperationException(Root+" has no OfficeHallCrowdPalette.");
         var planes=GeometryUtility.CalculateFrustumPlanes(camera);
         var cards=root.GetComponentsInChildren<MeshRenderer>().Where(r=>r.name=="Merged silhouettes").ToArray();
         report.groups=root.transform.childCount;report.renderers=root.GetComponentsInChildren<Renderer>().Length;
         report.uniqueCompositions=cards.Select(r=>r.GetComponent<MeshFilter>().sharedMesh).Distinct().Count();
         report.visibleGroups=cards.Count(r=>GeometryUtility.TestPlanesAABB(planes,r.bounds));
         report.colliders=root.GetComponentsInChildren<Collider>(true).Length;
-        report.floorTop=GameObject.Find("HybridOffice/Hall/Blender_HallFloor/Hall_Floor__Hall_Floor").GetComponent<Renderer>().bounds.max.y;
-        var palette=root.GetComponent<OfficeHallCrowdPalette>();report.eveningBlend=palette.EveningBlend;report.mode=palette.Preview.ToString();
+        report.floorTop=floorRenderer.bounds.max.y;
+        report.eveningBlend=palette.EveningBlend;report.mode=palette.Preview.ToString();
         if(report.groups!=ExpectedGroups || report.uniqueCompositions!=6)report.errors.Add("Expected all placements and six authored compositions.");
         if(report.colliders!=0)report.errors.Add("Background crowds must not intercept gameplay input.");
         foreach(var r in cards)
@@ -58,7 +69,6 @@ public static class OfficeHallCrowds
             if(r.transform.position.z<7)report.errors.Add("Crowd entered the desk foreground.");
         }
         var so=new SerializedObject(palette);
-        if(!so.FindProperty("orchestrator").objectReferenceValue)report.errors.Add("Missing shift binding.");
         var entries=so.FindProperty("groups");
         var block=new MaterialPropertyBlock();
         for(int i=0;i<entries.arraySize;i++)

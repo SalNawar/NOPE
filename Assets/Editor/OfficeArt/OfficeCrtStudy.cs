@@ -10,6 +10,7 @@ using Object = UnityEngine.Object;
 public static class OfficeCrtStudy
 {
     const string Folder="Assets/Art/Office/ImportedOffice";
+    const string PcRoot="ImportedOfficeDress/Desk/Retro CRT";
 
     [MenuItem("Tools/Office Art/Apply Rebuilt CRT Study")]
     public static void ApplyRebuilt()
@@ -19,9 +20,17 @@ public static class OfficeCrtStudy
         const string path=Folder+"/Models/CRT_Rebuilt.fbx";
         var asset=AssetDatabase.LoadAssetAtPath<GameObject>(path);
         if(!asset)throw new InvalidOperationException("Run rebuild_crt.py in Blender first.");
-        var pivot=GameObject.Find("ImportedOfficeDress/Desk/Retro CRT").transform;
+        // The gameplay layer finds the PC's glass by name (scene contract PCScreen): check before touching the scene.
+        if(!asset.GetComponentsInChildren<Renderer>(true).Any(r=>OfficeContract.IsScreenName(r.name)))
+            throw new InvalidOperationException("CRT_Rebuilt.fbx has no object named Glass or Screen, so the gameplay layer would find no PC glass (docs/SCENE_CONTRACT_GAMEPLAY.md, PCScreen). Keep CRT2_Glass in rebuild_crt.py. Nothing was changed.");
+        var pivotObject=GameObject.Find(PcRoot);
+        if(!pivotObject)throw new InvalidOperationException("Missing "+PcRoot+" (the scene contract's PCScreen fallback). Nothing was changed.");
+        var pivot=pivotObject.transform;
         var original=pivot.Find("Computer");
-        var target=original.GetComponentInChildren<Renderer>(true).bounds;
+        var originalRenderer=original?original.GetComponentInChildren<Renderer>(true):null;
+        if(!originalRenderer)throw new InvalidOperationException("Missing "+PcRoot+"/Computer, the pack computer the study is fitted to. Nothing was changed.");
+        var target=originalRenderer.bounds;
+        if(target.size==Vector3.zero)throw new InvalidOperationException("The pack computer's bounds are empty (it is inactive), so the study cannot be fitted to it. Nothing was changed.");
         var importer=(ModelImporter)AssetImporter.GetAtPath(path);
         importer.materialImportMode=ModelImporterMaterialImportMode.None;
         importer.importNormals=ModelImporterNormals.Import;
@@ -60,17 +69,13 @@ public static class OfficeCrtStudy
         }
         var screen=renderers.Single(r=>r.name=="CRT2_Glass");
         Vector3 center=screen.bounds.center;
-        var proxy=GameObject.Find("OfficeRoot/CRTMonitor");
-        Undo.RecordObject(proxy.transform,"Align rebuilt CRT click target");proxy.transform.position=center;
-        var collider=proxy.GetComponent<BoxCollider2D>();Undo.RecordObject(collider,"Fit rebuilt CRT click target");
-        collider.size=new Vector2(screen.bounds.size.x,screen.bounds.size.y);
-        var zoom=GameObject.Find("Cameras/MonitorVCam").transform;
-        Undo.RecordObject(zoom,"Align rebuilt CRT focus");
-        zoom.position=center+(pivot.rotation*Vector3.back)*.87f+Vector3.up*.035f;zoom.LookAt(center);
+        // No click proxy or focus camera to align: at load the gameplay binder derives the PC's click box
+        // and the PC frame from this glass (scene contract PCScreen). Report the glass it will use.
+        var (glass,_)=OfficeAnchors.FindGlass(pivot);
         AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
         bounds=renderers[0].bounds;foreach(var r in renderers.Skip(1))bounds.Encapsulate(r.bounds);
         File.WriteAllText("ArtDeliverables/TimeDesk/ImportedOffice/BlenderCRT/revision2_unity_alignment.txt",
-            $"Original bounds: {target}\nRebuilt bounds: {bounds}\nScreen center: {center}\nClick target: {proxy.transform.position}\nCollider size: {collider.size}\nFocus camera: {zoom.position}\n");
+            $"Original bounds: {target}\nRebuilt bounds: {bounds}\nScreen center: {center}\nGameplay PC glass (scene contract PCScreen): {(glass?glass.name:"none")}\n");
     }
 
     static Material Material(string name,Color color,float smoothness)
