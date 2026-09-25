@@ -1282,7 +1282,7 @@ The rendered audit (the readability pass's job) stays the final word. It gains t
 | Item | File | Size | Tier | Notes |
 |---|---|---|---|---|
 | Agency seal | `Assets/Art/UI/Forms/agency_seal.png` | 512 × 512 | 2 | Greyscale, Temporal Customs' own abstract mark (for example an hourglass in a ring). Not a flag, crest or nation's emblem, and no letters. Printed at 10 % behind the header. Placeholder: a code-drawn ring. |
-| A face per document kind (the traveller-types spec's eight TC forms) | `Assets/Art/Office/Placeholder/paper.png` becomes `Assets/Art/UI/Forms/paper_<form number>.png` | 1024 × 1339 | 2 | Paper tone, printed border, a guilloche band behind the header, perhaps a kind's tint (visa, contract, displacement papers). **No boxes or lines**: the code draws them. The 2026-09-25 decision "one face per document kind" stands. |
+| A face per document kind (the traveller-types spec's ten TC forms) | `Assets/Art/Office/Placeholder/paper.png` becomes `Assets/Art/UI/Forms/paper_<form number>.png` | 1024 × 1339 | 2 | Paper tone, printed border, a guilloche band behind the header, perhaps a kind's tint (visa, contract, displacement papers). **No boxes or lines**: the code draws them. The 2026-09-25 decision "one face per document kind" stands. |
 | Agency page face | `Assets/Art/UI/Forms/paper_agency.png` | 1024 × 1339 | 2 | Every PC page kind: plain agency paper. Tiled vertically on flow pages. |
 | Photo frame | code-drawn box | – | – | As the asset list already says. |
 | Verdict ink marks | `stamp_accept.png`, `stamp_deny.png` (already listed) | 400 × 200 | 2 | They land in the stamp area. |
