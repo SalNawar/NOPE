@@ -6,7 +6,7 @@
   "wardrobe": "costume_research.json + brief_review.json (68 fixes, 22 issues) -> tools/wardrobe_v2.json",
   "premades": "piece4_decisions.md Amendment A1 (cast after the review of brief v2: Cecilia Gallerani replaces Alessandra Strozzi)",
   "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E",
-  "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F"
+  "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'"
  },
  "assetFolder": "Assets/Art/Characters/Resources/Characters",
  "extension": ".png",

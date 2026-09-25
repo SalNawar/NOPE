@@ -1,231 +1,265 @@
 # Time Sorter: Art & UI Asset List for ChatGPT
 
-Every visual the game needs, written so it can be pasted into ChatGPT section by section. Each item says what to draw, the size and format, and exactly where the file goes in `E:\unity\NOPE` so the game picks it up.
+*Rewritten 2026-09-25 for the 3D office; replaces the 2026-09-23 list. Checked against `main` at `da3ab90`: every path, placeholder and size below was read from the code, the builders, the scenes and the files. A copy lives in Saleh's Google Drive; `ArtDeliverables/TimeDesk/Reference/ART_ASSET_LIST.md` is the old 2026-09-23 export and is superseded by this file.*
 
-Based on the repo state on 23 Sep 2026 (ALPHA_ROADMAP.md, docs/FEATURES.md, the office scene spec, `OfficeSceneUIBuilder.cs`, and the content in `Assets/Data`).
+Every piece of art the game needs today: what it is, where the player sees it, the file, the size to deliver, and whether the game already loads it.
 
-## How to read this page
+## How to use this list
 
-- **Tier 1: Drop-in.** The code already loads these files by path. Replace the PNG and the game uses it. No code changes.
-- **Tier 2: Needs a hook.** The game currently draws these with flat colored Unity UI or has no slot for them yet. Generate them into the listed folder now; a small loader (`ArtLibrary`, loads by name from these paths) has to be added before they show up.
-- Items marked ⚠️ need a decision before generating.
+- Find the item, check its tier and status, and draw it at the **Deliver** size.
+- **Tier 1: drop-in.** The game already loads this exact file. Replace the PNG in place and keep its `.meta` (it holds the import settings and every reference). No code change.
+- **Tier 2: needs a hook.** The game draws a flat panel, or nothing, there today. The art can be made now; Claude adds the slot to the builder when it lands. Save the ChatGPT original in `ArtDeliverables/TimeDesk/UI/Raw/` under the file name given.
+- **Tier 3: Blender.** A 3D model from the art side, not a ChatGPT image. Listed so the list is complete.
+- **Status:** *placeholder* (the game's generated stand-in), *interim* (older art from the 2026-09-24 batch: the old painted style or baked text; not final), *missing* (no file), *code-drawn* (no file; the game draws a flat themed panel), *done*.
+- Sizes are pixels. "At 1080p" means the 1920 × 1080 reference canvas the office overlay is laid out on.
+- Every decision the first version marked ⚠️ is made (Saleh, 2026-09-25: "yes to all"); see "Decisions".
 
-## Paste this first into ChatGPT (style brief)
+## How the art docs fit together
 
-```
-You are producing 2D game art for "Time Sorter", a Papers, Please-style game.
-The player is a clerk at a time-travel border desk who inspects travellers'
-documents and accepts or denies their trip to another era.
+| Art | Where its rules live |
+|---|---|
+| Characters: the layered travellers and the ten premades | [CHARACTER_ART_BRIEF_v2.md](https://github.com/SalNawar/NOPE/blob/main/docs/superpowers/drafts/art/CHARACTER_ART_BRIEF_v2.md), with [CHARACTER_ART_CONTRACT.md](https://github.com/SalNawar/NOPE/blob/main/docs/CHARACTER_ART_CONTRACT.md) and [coverage.json](https://github.com/SalNawar/NOPE/blob/main/docs/superpowers/drafts/art/coverage.json). Not repeated here. |
+| The rules for all UI art: the culture wallpapers, the wheel icons, the 2D layers over the office (PC close-up frame, speech bubble, paper faces), posters (deferred) | [UI_ART_RULES.md](https://github.com/SalNawar/NOPE/blob/main/docs/superpowers/drafts/art/UI_ART_RULES.md), with the piece-6 [UI_ART_CONTRACT.md](https://github.com/SalNawar/NOPE/blob/main/docs/UI_ART_CONTRACT.md) |
+| The office and its 3D props | The Blender side (art branch), placed through [SCENE_CONTRACT_GAMEPLAY.md](https://github.com/SalNawar/NOPE/blob/main/docs/SCENE_CONTRACT_GAMEPLAY.md) |
+| Everything else | This list |
+| The start page for ChatGPT | [README.md](https://github.com/SalNawar/NOPE/blob/main/docs/superpowers/drafts/art/README.md) |
 
-Style rules for EVERY asset:
-- 2D painted illustration, slightly muted palette, retro 1990s bureaucratic
-  office mixed with light sci-fi (beige CRT tech, stamped paperwork, dim booth).
-- Consistent light source from top-left.
-- Props and characters: transparent PNG background, object fully inside the
-  canvas, no drop shadow outside the object, no cropping.
-- Backgrounds: opaque PNG.
-- NEVER bake numbers or changing text into art. Where the game prints text
-  (day number, money, percentages, names, fields), leave a clean blank area.
-- Exact pixel sizes are given per asset. Keep the aspect ratio exactly.
-- Deliver one file per asset, named exactly as specified.
-```
+Where this list and the code disagree, the code wins.
 
-Style anchors already in the repo (attach to ChatGPT as reference): `ArtDeliverables/TimeDesk/Concepts/office-direction-v1.png` and `desktop-direction-v1.png`.
+## Style for all 2D UI and illustration art
 
----
+The same cel look as the characters and the office's cel-shaded "Desk Anime" desk: flat colour areas, each with **one hard-edged shade tone**, clean outlines, very little texture, and neutral, even lighting (no light direction, glow or cast shadow). The hard rules of UI_ART_RULES apply to every image: no baked text, no flags or symbols of power, no religious symbols, no real people or brands, interface chrome in greyscale (the game tints it), and documents never themed. Transparent PNG unless an item says opaque.
 
-# TIER 1: Drop-in assets (work automatically)
+## 1. The office (Blender side, Tier 3)
 
-## Import rule for every Tier 1 file
+The room and every prop in it are the art side's 3D models in `Assets/Scenes/OfficeScene.unity`. The gameplay layer finds them by name through the scene contract and never edits the art scene.
 
-1. Overwrite the existing PNG **with the same file name**. Do NOT delete the `.png.meta` next to it (it keeps the GUID, so every scene reference survives).
-2. In Unity, select the file: Texture Type = Sprite (2D and UI), Sprite Mode = Single, Mesh Type = Full Rect, Pivot = Center.
-3. **Pixels Per Unit** = 100 x (new width / placeholder width). World size comes from pixel size at PPU 100. Easiest: ask ChatGPT for exactly 4x the placeholder size and set PPU = **400** on all of them.
+| Prop | Anchor, and what the game finds today (art `58bda15`) | Status |
+|---|---|---|
+| The desk and its mat (the papers lie on it) | `DeskSurface`: `HybridOffice/Booth/Finish_Mat` | done |
+| The PC (its glass renderer or material named `Glass` or `Screen`) | `PCScreen`: `ImportedOfficeDress/Desk/Retro CRT` | done |
+| The PC's power knob | `PCPower`: `.../Rebuilt CRT/CRT2_Orange` | done |
+| **The scanner** | `Scanner`: nothing yet. The gameplay layer shows a stand-in flatbed (0.40 × 0.32 m) at the default pose (1.02, 1.06, −0.46). | **missing**: an `Anchor_Scanner` with the model's renderers under it, about 0.40 × 0.32 m, square to the desk, a flat top, nothing sticking out of its footprint (UI_ART_RULES, "3D office props") |
+| The NEXT sign and its caption text | `NextSign`: `HybridOffice/Booth/Blender_Next`; caption `NextLabel` | done |
+| The intercom (opens the traveller wheel) | `Intercom`: `ImportedOfficeDress/Desk/Clerk hotline` | done |
+| Stamp, till, stability monitor, calendar, clock | `HybridOffice/Booth/Blender_Stamp`, `Finish_Till`, `Blender_Stability`, `Blender_DayCalendar`, `Blender_Clock` | done |
+| Calculator, pen pot, stapler | `ImportedOfficeDress/Desk/Desk calculator`, `Pen pot`, `Forms stapler` | done |
+| The readouts (day, stability, credits, shift clock) | text objects `DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay` | done: faces stay blank, the game writes the text |
+| Where the traveller stands, where papers are handed over | `Traveller`, `HandOver`: default poses | optional: `Tools > TimeDesk > Add Gameplay Anchors (art office)` adds the anchors to move |
+| The hall crowds behind the glass | `OfficeHallCrowds` (atlas `Assets/Art/Office/HallCrowds/Textures/CrowdGroups_Atlas.png`) | done (art `5eee9bd`) |
+| The wall exhibits and the city outside | `HybridOffice/Exhibits`, `HybridOffice/Exterior` | done |
+| A poster frame | none | deferred: the culture posters return when the art side adds a frame with an anchor |
+| Desk decoration spots | the gameplay layer's empty slots `photo`, `free_1`, `free_2` | no art planned; any decoration would be a 3D model |
 
-## Office booth: `Assets/Art/Office/Placeholder/`
+## 2. The 2D layers over the office
 
-1. **backwall.png**: placeholder 400x240, deliver **1600x960**, opaque. The wall behind the counter, seen from the clerk's seat: waiting hall of a time-travel customs office, rope barriers, departure board, faint era clocks. Keep the lower centre calm (the traveller stands there).
-2. **partition.png**: placeholder 120x240, deliver **480x960**, transparent. One tall privacy-booth partition angled toward the viewer. The SAME file is used left and right, so make it symmetric or set Flip X on `RightPartition`.
-3. **desk.png**: placeholder 400x90, deliver **1600x360**, transparent. Clerk's desk front edge, worn laminate, memorabilia only at the far edges (centre and right stay clear for the sign and CRT).
-4. **traveller.png**: placeholder 60x110, deliver **240x440**, transparent. Default generic traveller at the counter, neutral pose.
-5. **crt.png**: placeholder 150x130, deliver **600x520**, transparent. Beige 90s CRT on a swivel base, tube depth on the RIGHT, glass turned LEFT toward the player, dim screen glow. Clickable, so clear silhouette. **Art request (piece 7):** a front-facing CRT whose glass is a large, blank 4:3 rectangle (the game draws the live desktop in the glass's inscribed 4:3 rectangle), with a power button and an LED on its bezel.
-6. **sign.png**: placeholder 96x50, deliver **384x200**, transparent. Standing desk placard "READY / NEXT" (this text may be baked). Clickable.
-7. **calendar.png**: placeholder 80x100, deliver **320x400**, transparent. Wall tear-off calendar, "DAY" header strip, big BLANK middle for the day number.
-8. **stabilitymonitor.png**: placeholder 110x80, deliver **440x320**, transparent. Timeline stability wall device. The game TINTS the whole sprite green/amber/red, so draw it in light greys and white. Blank display for the percentage.
-9. **till.png**: placeholder 110x80, deliver **440x320**, transparent. Retro cash register / credits till with a blank display window.
-10. **poster.png**: placeholder 80x110, deliver **320x440**. Default neutral agency poster ("Keep the Timeline Clean" style, no real logos).
+Drawn on the office overlay canvas (1920 × 1080 reference; it scales with the screen).
 
-## Desktop wallpaper: `Assets/Art/Generated/`
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| PC frame bezel | Clicking the PC opens a front-facing monitor left of centre, 1240 × 1060 at 1080p; the desktop shows through its 4:3 glass | `Assets/Art/Office/Placeholder/pc_frame.png` | builder placeholder, 620 × 530 | **1860 × 1590**, the glass a transparent hole at x 90–1770, y 90–1350 from the top left; best rendered from the Blender CRT (UI_ART_RULES, "The PC close-up frame") | 1 | placeholder |
+| Close X | the frame's top-right corner, 64 × 64 | `Assets/Art/Office/Placeholder/pc_close.png` | builder placeholder, 48 × 48 | 96 × 96 | 1 | placeholder |
+| Power button | the frame's chin, 64 × 64 | `Assets/Art/Office/Placeholder/crt_power.png` | builder placeholder, 28 × 28 | 96 × 96 | 1 | placeholder |
+| Power LED | the frame's chin, 18 × 18 | `Assets/Art/Office/Placeholder/crt_led.png` | a white disc, 8 × 8, tinted on and off by the game | keep | 1 | done |
+| Brand plate | the frame's chin | none: the game prints "CHRONODESK 2150" | – | keep that part of the chin blank | – | – |
+| Speech bubble | above the traveller's head, 420 × 110 | `ArtDeliverables/TimeDesk/UI/Raw/speech_bubble.png` | code-drawn cream panel | a 9-slice body: white or light grey (the game tints it cream), rounded corners inside the outer 32 px, a clean 2 to 3 px dark outline, no shadow. Ask ChatGPT for 1024 × 1024; Claude scales it to 128 × 128 | 2 | code-drawn |
+| Speech bubble tail | under the bubble's bottom centre | `ArtDeliverables/TimeDesk/UI/Raw/speech_bubble_tail.png` | none | about 32 × 24 on screen, pointing down; deliver 64 × 48 | 2 | missing |
+| Wheel choices and the "< Back" centre | on an ellipse around the traveller, 240 × 44 and 150 × 44 | the UI kit's `ui_button.png` (section 3) | code-drawn themed buttons | from the kit | 2 | code-drawn, later |
+| Desk tooltip | above a clicked prop (credits, day, stability, time), 360 × 60 | the UI kit's `tooltip.png` (section 3) | code-drawn yellow panel | from the kit | 2 | code-drawn, later |
 
-11. **xp_bliss.png**: placeholder 960x540, deliver **1920x1080**, opaque. Wallpaper of the in-game OS on the CRT. Calm landscape with a subtle sci-fi element (candidate exists: `ArtDeliverables/TimeDesk/Desktop/wallpaper-orbit-coast.png`). Keep top-left clear for icons.
+- The wheel's icons are in section 8.
+- **Drawn by code, no art:** the fallback HUD (it shows only when the art office lacks a readout) and the floating hints.
+- **Piece 10 (desk examination, being built now)** adds the claim tag (1100 × 64) and an office compare strip (1200 × 56) at the top of the overlay, the stamp tray (Accept and Deny above the 3D stamp), and moves the verdict line and the citation slip onto the overlay. All are code-drawn themed panels with no art slot planned; the citation slip's art (section 5) follows it there.
 
-## Timeline poster variants (semi-automatic)
+## 3. The PC desktop
 
-The wall poster (`ReactivePoster`, component `TimelineReactiveSprite`) swaps sprite when a Visuals cue fires. Generate into `Assets/Art/Office/Placeholder/Posters/`, 320x440 each, then add each to the component's **Mappings** list once in the Inspector (cueId = file name without `poster_` and `.png`). No cue strings are authored in the Effect assets yet, so a `Cue` op must be added to each matching Effect.
+A 4:3 canvas of 1440 × 1080, seen in the PC frame (its glass is 1120 × 840 at 1080p) and cloned small onto the office PC's screen. The culture theme recolours and refonts everything here except the documents.
 
-- Dominant attribute per nation (15): `poster_dom_greece_democracy`, `poster_dom_greece_science`, `poster_dom_greece_art`, same three for `germany`, `japan`, `egypt`, `china`.
-- Triggers (3): `poster_science_boom`, `poster_democracy_collapse`, `poster_art_renaissance`.
-- ⚠️ The "NGermany" era must not use real Nazi-era symbols or insignia. Invented iconography only.
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Neutral wallpaper | behind the desktop until a country leads history | `Assets/Art/Generated/xp_bliss.png` (via `Theme_neutral`) | 1920 × 1080; the 4:3 desktop shows its middle 1440 × 1080 | keep | 1 | done |
+| Culture wallpapers × 8 | behind the desktop from the morning after a country leads | `Assets/Art/Culture/<id>/wallpaper.png` for `egypt`, `iraq`, `greece`, `italy`, `china`, `japan`, `britain`, `germany` (via `Theme_<id>`) | Generate World placeholders, 960 × 540 | **1440 × 1080**: ask ChatGPT for 1536 × 1024 and Claude crops the middle (UI_ART_RULES, "Wallpapers" and "The eight cultures") | 1 | placeholder |
+| Desktop icons × 17 | the icon column at the left: two columns of 82 × 60 tiles, text-only today | `Assets/Art/UI/Desktop/icon_<id>.png` (ids below) | 12 interim (128 × 128, a cream plate with a blue glyph), 5 missing | 128 × 128, a bold greyscale glyph on transparent (in an 82 × 60 tile it would show about 25 px tall in the frame), no plate | 2 | interim / missing |
+| Cursors: arrow, hand | everywhere: the game's cursor, the hand over anything clickable | `Assets/Art/UI/Desktop/cursor_arrow.png`, `cursor_hand.png` (found by name, set in `InteractionFeedback_Default`) | interim 32 × 32 | 32 × 32; the tip (arrow) and the fingertip (hand) are the click point: the stored points are (3, 2) and (13, 3), so Claude re-measures them when new art lands | 1 | interim |
+| Cursors: grab, grabbing | over a desk paper and while dragging it | `cursor_grab.png`, `cursor_grabbing.png` | none (the hand shows) | 32 × 32 | 2 | missing, later |
+| UI kit × 9 | every window, button, bar and menu (table below) | `Assets/Art/UI/Desktop/` | code-drawn themed panels | greyscale 9-slice pieces | 2 | later |
 
-## Existing art in `ArtDeliverables/TimeDesk/`
+**Desktop icon ids.** Apps: `directives` (Directives), `scanner` (Deviation Report), `citizen_records` (Records), `cluelog` (Clue Log, the interview transcript), `internet`, `lexicon`, `dialect`, `material`, `notes`. Reference books: `currency` (Currency Ledger), `language` (Tongues & Scripts), `technology` (Index of Devices), `capital` (Capitals Gazetteer), `ruler` (Rulers & Regents), `culture` (Costume Guide). A traveller's documents: `passport` (Travel Passport), `permit` (Transit Permit). Interim art exists for the nine apps and the first three books; `capital`, `ruler`, `culture`, `passport` and `permit` are missing.
 
-These are **full 1672x941 scene layers**, not cropped props, so they will not line up if dropped in directly. Crop each to its object and resize to the Tier 1 size, or use them as ChatGPT reference. Mapping: 01-waiting-hall → backwall, 03-partition-frame → partition, 05-desk → desk, 06-crt → crt, 07-credits-till → till, 09-ready-sign → sign, 10-calendar → calendar, 11-stability-monitor → stabilitymonitor, Timeline/poster-neutral → poster, Characters/traveller-explorer (1024x1536) → traveller. Not used anywhere yet: 02-queue, 08-intercom, Desktop/icons-4x4, Desktop/window-frame.
+**The UI kit (later).** UI_ART_RULES rule 5: greyscale only (white to mid grey), a flat middle and even borders so each piece stretches, no text or letter-shaped glyphs. The culture theme tints every piece. Not needed until Claude adds the theme slots.
 
----
+| Piece | Used by | Now | Deliver |
+|---|---|---|---|
+| `window_frame.png` | every window's body and border | interim 256 × 256 (coloured) | 128 × 128, 9-slice |
+| `window_titlebar.png` | the 30-unit title bars | interim 256 × 32 (coloured) | 128 × 32 |
+| `ui_button.png` | every code button: minimise, maximise, close, Prev and Next, Search, the Settings choices, the Start menu entries, "< Desk", Accept and Deny, the wheel, the newsletter and Home buttons | interim `btn_min`, `btn_max`, `btn_close` (normal, hover, pressed; 24 × 24, glyphs baked) | 128 × 48, text-free (hover and pressed come from the tint) |
+| `taskbar.png` | the taskbar, 36 units high | interim 256 × 40 (coloured) | 128 × 40 |
+| `start_button.png` | the Start button (the game prints "start") | interim `start_button_normal`/`_pressed` 120 × 40, "Start" baked | 128 × 40, text-free |
+| `tray_bg.png` | the tray (day, credits, stability, clock) | interim 256 × 40 | 128 × 32 |
+| `start_menu_panel.png` | the Start menu | interim 256 × 384 | 128 × 128 |
+| `input_field.png` | the Records search box | none | 128 × 48 |
+| `tooltip.png` | the desk tooltip (section 2) | none | 128 × 64 |
 
-# TIER 2: Assets that need a loader hook
+**Drawn by code, no art:** the idle line between travellers, the claim banner, the verdict line, the compare bar, the list rows, the Settings window's contents, and the Accept and Deny glyphs (a fixed tick and cross, piece 6).
 
-## A. Office extras: `Assets/Art/Office/Booth/`
+## 4. Documents
 
-- **queue_bg.png** 1600x600 transparent: line of waiting silhouettes (toga, armour, robe, futuristic suit).
-- **queue_silhouette_01..06.png** 200x400 transparent.
-- **intercom.png** 320x240 transparent: desk intercom box (clicked to open the traveller wheel).
-- **scanner_tray.png** 600x200 transparent: desk scanner: drop papers on its glass bed.
-- **paper.png** 150x200 (in `Assets/Art/Office/Placeholder/`, piece 7): a blank paper sheet the desk's papers use; later one paper stock per document kind.
-- **crt_power.png** 28x28 and **crt_led.png** 8x8 (in `Assets/Art/Office/Placeholder/`, piece 7): the CRT bezel's power button and LED (draw the LED white: the game tints it on and off).
-- **desk_mug.png, desk_photo.png, desk_plant.png, desk_stamp.png** 200x200 transparent.
-- **lighting_overlay_warm.png / _cold.png / _alarm.png** 1920x1080 transparent, low opacity mood tints.
+A traveller hands over a **Travel Passport** (with the photo) and a **Transit Permit**. Each lies on the desk as a paper (0.26 × 0.34 m); a scan opens its copy in a window on the PC. From piece 10 a click lifts a paper up close to read. The game prints every field and places the photo, so the faces are text-free (UI_ART_RULES, "The document paper faces").
 
-## B. Fake OS desktop UI: `Assets/Art/UI/Desktop/`
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Paper face | every paper on the desk; from piece 10 held up to read (up to 670 px tall at 1080p) | `Assets/Art/Office/Placeholder/paper.png` (the `_BaseMap` of `Assets/Art/Office/Gameplay/Materials/Paper.mat`) | builder placeholder, 150 × 200, plain cream | **1024 × 1339** (at least 784 × 1024): a paper tone and a printed border, perhaps a guilloche band behind the title; no labels, lines, boxes, emblems or seals. Claude turns mipmaps on when it lands | 1 | placeholder |
+| Passport face, permit face | one face per document kind instead of one for all | set by the paper faces' own brief, which follows piece 10 | none | as the paper face | 2 | waits on piece 10 |
+| Photo frame | the passport photo's 4:5 window: on the desk paper and on the scanned copy | with the faces' brief (it may be printed on the passport face instead) | code-drawn grey box | 4:5, for example 480 × 600 with a transparent window | 2 | code-drawn |
+| The scanned copy | the document window on the PC: a page on a dark backing | the hook reuses the paper face | code-drawn | no separate art | 2 | code-drawn |
+| Reference book covers × 6 | nowhere today: a book is a text tile and a window | `Assets/Art/UI/Investigation/refbook_cover_<id>.png` for `currency`, `language`, `technology`, `capital`, `ruler`, `culture` | 3 interim (400 × 560, titles baked), 3 missing | 400 × 560, a closed cover with a simple motif, no title | 2 | interim / missing |
+| Verdict ink marks | on a paper after the verdict | `stamp_accept.png`, `stamp_deny.png` (new names) | none | 400 × 200, transparent, a text-free tick mark and cross mark | 2 | missing |
 
-Transparent PNG. Icons 128x128, readable at 48x48.
+- **The stamp itself** is the Blender prop (section 1). The PC's Accept and Deny buttons are code-drawn, and so is piece 10's stamp tray.
+- **Drawn by code, no art:** the reference book pages, Citizen Records, the Deviation Report, the Directives sticky note and the transcript. All are windows, so they take the UI kit.
 
-- icon_currency.png (Currency Ledger)
-- icon_language.png (Tongues & Scripts)
-- icon_technology.png (Index of Devices)
-- icon_directives.png (sticky-note travel rules)
-- icon_citizen_records.png
-- icon_scanner.png (Deviation Report)
-- icon_compare.png
-- icon_internet.png
-- icon_lexicon.png, icon_dialect.png, icon_material.png (upgrade-gated; code dims them)
-- icon_cluelog.png, icon_notes.png
-- icon_settings.png, icon_power.png
+## 5. The day flow
 
-Window and shell chrome (9-slice friendly: flat stretchable middle, detail only at corners/edges):
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Morning briefing sheet | "The Temporal Times", over the office at the start of each day, 700 × 780 | `Assets/Art/UI/DayFlow/temporal_times_paper.png` | interim 1200 × 1600, ruled; the live panel is code-drawn | 1400 × 1560, a newsprint sheet, text-free (the game prints the masthead, the title and the news) | 2 | interim |
+| Shift ledger sheet | "Shift Ledger: Evening Edition", over the office at the end of the shift, 700 × 780 | `Assets/Art/UI/DayFlow/shift_ledger_paper.png` | interim 1200 × 1600, ruled | 1400 × 1560, text-free | 2 | interim |
+| Citation slip | "Timeline Deviation Notice" after a wrong verdict, centre, 560 × 320 (on the desktop today; on the office overlay from piece 10) | `Assets/Art/UI/Investigation/citation_slip.png` | interim 600 × 800 (portrait, ruled); the live panel is a code-drawn red panel | 1120 × 640, a light paper slip with a printed border, text-free | 2 | interim |
 
-- window_frame.png 256x256, window_titlebar.png 256x32
-- btn_min / btn_max / btn_close in `_normal`, `_hover`, `_pressed` (24x24, 9 files)
-- taskbar.png 256x40, start_button_normal / _pressed.png 120x40 ("Start" baked)
-- start_menu_panel.png 256x384
-- tray_bg.png 256x40, tray_day / tray_credits / tray_stability.png 24x24
-- cursor_arrow.png, cursor_hand.png 32x32
-- cursor_grab.png, cursor_grabbing.png 32x32 (over and while dragging a desk paper; piece 7 shows the hand for now)
-- btn_desk_normal / _hover / _pressed.png 176x32, no text (the game prints "< Desk"): the taskbar's way back to the desk, next to Start (piece 7)
-- **Retired in piece 7:** btn_back_to_office.png 200x48 ("< Office"). The live office's desktop no longer has this button (the taskbar's "< Desk" above replaces it); only the preserved hybrid scene keeps one until it adopts the desk. Nothing will load it.
+- The two sheets' "Start shift" and "Go home" buttons take the UI kit's button.
+- **Drawn by code, no art:** the verdict line and the idle line.
 
-## C. Investigation UI: `Assets/Art/UI/Investigation/`
+## 6. Home
 
-- **scanner_backing.png** 1024x1024 opaque dark scanner glass.
-- **page_blank.png** 800x1100 white scanned page with paper grain.
-- **photo_frame.png** 240x300.
-- **claim_banner.png** 1200x96 (blank).
-- **Retired in piece 7:** **intercom_panel.png** 600x400, **intercom_button_normal/_hover.png** 400x64. The PC intercom panel is gone from the live office (the traveller wheel replaces it, section I); only the preserved hybrid scene keeps one until it adopts the desk. Nothing will load them.
-- **compare_bar_neutral / _match / _mismatch / _deviation.png** 1200x64 (grey, green, amber, red, no text).
-- **btn_accept_normal/_hover/_pressed.png**, **btn_deny_normal/_hover/_pressed.png** 300x96, or stamps **stamp_approved.png**, **stamp_denied.png** 400x200.
-- **refbook_page.png** 800x1100, **refbook_cover_currency / _language / _technology.png** 400x560.
-- **citizen_records_frame.png** 1000x700, **agency_logo.png** 256x256 (invented seal).
-- **deviation_report_form.png** 800x1100.
-- **directives_sticky.png** 400x400.
-- **citation_slip.png** 600x800.
+`Assets/Scenes/HomeScene.unity`. The Tier 1 art here is wired in the scene by hand (the Home builder makes only the panels), so a file replaced in place keeps working.
 
-### Per-nation document kits: `Assets/Art/UI/Documents/<Nation>/`
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Home background | behind every Home panel, full screen | `Assets/Art/Home/home_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted, warm lamp light | 1920 × 1080, opaque, redrawn in the cel style | 1 | interim |
+| Expenses panel | the day's bills and the family rows, 760 × 600 | `Assets/Art/Home/panel_expenses.png` (`ExpensesPanel`) | interim 800 × 1000, stretched to 760 × 600 | 1520 × 1200, a text-free paper panel | 1 | interim |
+| Shop panel | the upgrade shop, 760 × 600 | `Assets/Art/Home/panel_shop.png` (`ShopPanel`) | interim 800 × 1000, stretched | 1520 × 1200 | 1 | interim |
+| Slot panel | the slot machine, 560 × 360 | `Assets/Art/Home/panel_slot.png` | code-drawn | 1120 × 720 | 2 | code-drawn |
+| Sleep panel | "Turn in", 560 × 320 | `Assets/Art/Home/panel_sleep.png` | code-drawn | 1120 × 640 | 2 | code-drawn |
+| Slot machine | in the slot panel | `Assets/Art/Home/slot_machine.png` | interim 800 × 1000, portrait: it does not fit the landscape panel | a landscape machine that fills the 560 × 360 panel: 1000 × 640, the reels in the middle, no lever in the picture | 2 | interim |
+| Slot lever | beside the machine | `Assets/Art/Home/slot_lever.png` | interim 200 × 600 | 160 × 480, standing at the machine's right edge | 2 | interim |
+| Slot outcome symbols × 5 | the result of a spin | `Assets/Art/Home/slot_<outcome id>.png` for `small_win`, `jackpot_cash`, `busted_machine`, `forgery_warning`, `legendary_omen` | 5 interim at 256 × 256; two still carry older names (`slot_jackpot`, `slot_busted`) | 256 × 256 | 2 | interim |
+| Upgrade icons × 12 | one per shop row (the rows are text today) | `Assets/Art/Home/upgrade_<id>.png` (ids below) | 3 interim at 256 × 256 (`upgrade_archive_access`, and `upgrade_advanced_scanner` and `upgrade_diplomatic_contacts` under older names), 9 missing | 256 × 256, for about 48 px in a shop row | 2 | interim / missing |
+| Family portraits | the family rows: the Partner and the Kid (`RunConfig.startingFamilyMembers`), whose condition runs from 0 to 10 | `Assets/Art/Home/family_<member>_<band>.png` | none: the rows are text | 512 × 512, in the character style; 2 members × 3 condition bands | 2 | missing |
 
-For each of **Aegyptus, Albion, Helios, Latia, Norvik, Solaris**:
+**Upgrade ids (12).** `adv_scanner` (Advanced Scanner), `archive_access` (Archive Access), `diplo_contacts` (Diplomatic Contacts), `interview_protocols` (Interview Protocols), and the eight translators: `tr_near_east_written` and `tr_near_east_spoken` (Near East Translator: Papers, Speech), `tr_mediterranean_written`, `tr_mediterranean_spoken`, `tr_east_asia_written`, `tr_east_asia_spoken`, `tr_north_europe_written`, `tr_north_europe_spoken`.
 
-- `<Nation>_passport_stock.png` 800x1100 (fields blank: Full Name, Date of Birth, Coin of Issue, Native Tongue)
-- `<Nation>_permit_stock.png` 800x1100 (fields blank: Declared Device, Bond Currency)
-- `<Nation>_seal.png` 256x256
-- `<Nation>_border.png` 800x1100 transparent overlay
+- **Drawn by code, no art:** the HUD line and the rows. The buttons take the UI kit's button.
 
-24 files. Era flavour: Rome (Aegyptus, Latia), Medieval (Albion, Norvik), Future (Helios, Solaris).
+## 7. Title and endings
 
-## D. Characters: `Assets/Art/Characters/`
+`Assets/Scenes/TitleScene.unity`. The Tier 1 art is wired in the scene by hand.
 
-### Visitors (investigation cast)
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Title background | the first screen, full screen | `Assets/Art/Title/title_bg.png` (`Canvas/ArtBackground`) | interim 1920 × 1080, painted (an older office, warm light) | 1920 × 1080, opaque, redrawn in the cel style showing the 3D office (from a render the art side makes) | 1 | interim |
+| Logo | the title panel's top (the printed title is switched off; the logo is the title) | `Assets/Art/Title/logo_time_sorter.png` (`TitlePanel/ArtLogo`, keeps its aspect) | interim 1200 × 400, "TIME SORTER" lettered | 1800 × 600, the lettered wordmark "TIME SORTER" (the one place lettering is allowed) in the cel style | 1 | interim |
+| Title buttons | Continue and New Run on the title, New Run on the ending panel; the sprite swaps on hover; their labels are off | `Assets/Art/Title/btn_continue_normal.png`, `btn_continue_hover.png`, `btn_new_run_normal.png`, `btn_new_run_hover.png` | interim 400 × 100, English baked, stretched to 1152 × 162 (title) and 304 × 73 (ending panel) | a text-free 9-slice face, 512 × 128, normal and hover; Claude then switches the three buttons to sliced with their labels on | 1 | interim |
+| Ending panel | the run's ending, 760 × 520 | `Assets/Art/Title/ending_panel.png` | interim 1200 × 800, not wired | 1520 × 1040, text-free | 2 | interim |
+| Ending illustrations × 6 | behind the ending text | `Assets/Art/Title/ending_<id>.png` for `fired`, `bankrupt`, `retirement`, `scientific_age`, `democracy_triumphant`, `artistic_golden_age` | interim 1600 × 900, painted, not wired (an ending has no picture field yet) | 1920 × 1080, opaque, redrawn in the cel style; Claude adds the ending's picture field | 2 | interim |
 
-Nations: Aegyptus, Albion, Helios, Latia, Norvik, Solaris. Archetypes: Diplomat, Merchant, Mystic, Warrior. **24 visitors**, each:
+## 8. Icons
 
-- `Visitors/<Nation>/<Nation>_<Archetype>_body.png` 240x440 transparent
-- `Visitors/<Nation>/<Nation>_<Archetype>_idle2.png` 240x440 (second idle frame)
-- `Visitors/<Nation>/<Nation>_<Archetype>_portrait.png` 240x300 (passport photo, flat light background)
+| Item | Where it shows | File | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| Wheel icons × 6 | at the left of each traveller-wheel choice, 28 px at 1080p, on a dark blue button | `Assets/Art/UI/Resources/WheelIcons/wheel_<kind>.png` for `request` (a sheet of paper or an open hand), `question` (a speech balloon), `look` (an eye), `dialog` (two balloons), `back` (an arrow pointing left), `normal` (a small dot) | white glyphs of the same shapes drawn at run time, 32 × 32, never on disk; the folder does not exist yet | 64 × 64, white on transparent, imported as Sprite (2D and UI) | 1 | missing |
 
-⚠️ Alternative: layered parts per nation (backdrop, body, head, hair, outfit, accessory) to mix faces. Pick one approach.
+- The desktop icons are in section 3, the upgrade icons in section 6.
+- **Every icon:** a bold, simple silhouette that reads at 24 px; no letters, question marks or exclamation marks; a white or grey glyph on transparent (the game may tint it); no plate behind it unless the item says so.
 
-### Timeline cast (Phase 7 content)
+## Characters (pointer)
 
-Archetypes Artist, Diplomat, Merchant, Scientist, Soldier, Wanderer across Greece, N. Germany, Japan, Egypt, China. ⚠️ Decide whether these real-world nations stay or merge into the fictional six. If they stay: same body/idle2/portrait trio into `Visitors/<Nation>/`.
+About 880 files (50 bases, 759 garments, 31 Future outfits, 40 premade expressions) from about 406 ChatGPT images, at `Assets/Art/Characters/Resources/Characters/<key>.png`, 1024 × 1536. Tier 1: the game loads each by key at run time and draws a 256 × 384 placeholder until it lands. Status: missing (the folder does not exist yet). Everything else is in the character brief and `coverage.json`.
 
-### Legendary visitors: `Assets/Art/Characters/Legendaries/`
+## Totals
 
-Body (240x440) + portrait (240x300) each, more ornate, subtle gold rim. Names follow asset ids (e.g. `Legendary_Greece_Philosopher_body.png`).
+New 2D files (the Blender scanner and the characters are counted apart):
 
-- Greece: Calliope Demarch (orator), Theron the Stargazer (philosopher), Phidian Marcos (sculptor)
-- N. Germany: Doctor Ilse Vahn (engineer), Colonel Reinhardt Voss (officer), Greta Brandt (painter). ⚠️ No real insignia.
-- Japan: Renji Tachibana (illustrator), Hideo Kanzaki (inventor), Sachiko Imari (reformer)
-- Egypt: Senmet Khare (architect), Amara Sett (painter), Nefru Tahan (vizier)
-- China: Wen Zhirong (inventor), Magistrate Lian Bo (official), Mei Qiulan (painter)
-- Wanderers: The Alchemist, The Iconoclast, The Idealist, The Muse, The Tyrant, The Visionary
+| Section | Tier 1 | Tier 2 | Files |
+|---|---|---|---|
+| 1. The office (Blender) | – | – | the scanner model (Tier 3) |
+| 2. 2D layers over the office | 3 | 2 | 5 |
+| 3. PC desktop | 10 | 28 | 38 |
+| 4. Documents | 1 | 11 | 12 |
+| 5. Day flow | 0 | 3 | 3 |
+| 6. Home | 3 | 27 | 30 |
+| 7. Title and endings | 6 | 7 | 13 |
+| 8. Icons | 6 | 0 | 6 |
+| **Total** | **29** | **78** | **107** |
 
-21 legendaries, 42 files.
+- Every decision was answered yes, so all 107 are wanted.
+- Also: the scanner (1 Blender model) and about 880 character files (the brief).
 
-## E. Newsletters and day flow: `Assets/Art/UI/DayFlow/`
+## Suggested order
 
-- **temporal_times_paper.png** 1200x1600, **temporal_times_masthead.png** 1200x240 ("THE TEMPORAL TIMES" baked)
-- **shift_ledger_paper.png** 1200x1600, **shift_ledger_header.png** 1200x200 ("SHIFT LEDGER")
-- **btn_start_shift.png**, **btn_go_home.png** 360x96, normal + hover
-- **stamp_citation.png** 300x300
+What the player sees first comes first. Within a step, the Tier 1 files come first: they pay off with no code.
 
-## F. Home scene: `Assets/Art/Home/`
+1. **The title screen:** background, logo, buttons (6, Tier 1).
+2. **The morning briefing** sheet (1).
+3. **The office:** the scanner (Blender) and the travellers (the character brief's batches, its own track).
+4. **At the desk:** the wheel icons (6, Tier 1), the paper face (1, Tier 1), the speech bubble and its tail (2).
+5. **The PC:** the frame, close X and power button (3, Tier 1); the culture wallpapers (8, Tier 1; the first one shows from day 2 at the earliest); the desktop icons (17).
+6. **The end of the shift:** the citation slip and the shift ledger (2).
+7. **Home:** the background and the two panels (3, Tier 1); the upgrade icons (12); the slot machine, lever and symbols (7) with the slot and sleep panels (2); the family (6).
+8. **The endings:** the panel and the six illustrations (7).
+9. **Polish:** the UI kit (9), the cursors (2 Tier 1 and 2 Tier 2), the document faces and photo frame after piece 10 (3), the book covers (6), the ink marks (2).
 
-- **home_bg.png** 1920x1080 opaque: cramped apartment at night, bills on the table, slot machine in the corner, bed doorway.
-- **panel_expenses.png** 800x1000.
-- **panel_shop.png** 800x1000 + 256x256 icons: **upgrade_advanced_scanner.png**, **upgrade_archive_access.png**, **upgrade_diplomatic_contacts.png**.
-- **slot_machine.png** 800x1000, **slot_lever.png**, reel symbols 256x256: **slot_small_win.png**, **slot_jackpot.png**, **slot_busted.png**, **slot_forgery_warning.png**, **slot_legendary_omen.png**.
-- **btn_sleep.png** 360x96.
-- Family: ⚠️ confirm member count/roles from `RunConfig.startingFamilyMembers`. Per member `family_<role>_portrait.png` 256x256 plus condition variants ⚠️ (confirm condition names in `HomeEconomy`).
+## Decisions (Saleh, 2026-09-25: "yes to all")
 
-## G. Title and endings: `Assets/Art/Title/`
+1. **Title background:** redrawn in the cel style, showing the 3D office (from a render the art side makes).
+2. **Logo:** the lettered "TIME SORTER" wordmark, the one image allowed to carry lettering.
+3. **Title buttons:** text-free 9-slice faces with the game's labels on (one button look everywhere).
+4. **Home background and ending illustrations:** redrawn in the cel style.
+5. **Desktop icons:** the 17 tiles get pictures, greyscale and tinted by the culture (rule 5); Claude changes the tile layout when they land.
+6. **Paper faces:** one face per document kind (passport, permit), with the photo frame; drawn from the faces' own brief after piece 10.
+7. **Reference book covers:** shown on the book's tile and at the top of its window.
+8. **Verdict ink mark:** a text-free tick or cross mark lands on the papers after the verdict.
+9. **Translator icons:** eight, one per region and kind (papers, speech).
+10. **Family:** the Partner and the Kid are drawn in the character style, three condition bands each.
+11. **Slot machine:** "yes" did not pick between the two options here, so Claude chose a **landscape machine** drawn for the 560 × 360 panel: the Home screen's 800 × 600 layout has no room for a taller panel.
 
-- **title_bg.png** 1920x1080 opaque.
-- **logo_time_sorter.png** 1200x400 transparent.
-- **btn_continue.png**, **btn_new_run.png** 400x100, normal + hover.
-- **ending_panel.png** 1200x800.
-- Endings 1600x900: **ending_fired.png**, **ending_bankrupt.png**, **ending_retirement.png**, **ending_scientific_age.png**, **ending_democracy_triumphant.png**, **ending_artistic_golden_age.png**.
+## Retired (don't make these)
 
-## H. Shared icons: `Assets/Art/UI/Icons/`
+Many retired files still sit in `Assets/Art` from the 2026-09-24 batch. Several are referenced only by the art scene's leftover 2D booth and old canvases (switched off when the office loads) and by the recovery scenes, so they stay on disk until the art side deletes those leftovers ([SCENE_CONTRACT_GAMEPLAY.md](https://github.com/SalNawar/NOPE/blob/main/docs/SCENE_CONTRACT_GAMEPLAY.md), "What the art scene must not do").
 
-256x256 transparent.
+| Old item (2026-09-23 list) | Files on disk | Why it is retired |
+|---|---|---|
+| The style brief: "2D painted illustration", light from the top left; the pixels-per-unit import rule (PPU 400) | – | Replaced by the cel style above. The office is 3D, so no sprite is sized in world units. |
+| Booth props: `backwall`, `partition`, `desk`, `crt` (and the front-facing CRT request), `sign`, `calendar`, `stabilitymonitor`, `till`, `poster` | `Assets/Art/Office/Placeholder/`; also `Office/Booth/desk_deep.png`, `partition_calendar.png` | The office and its props are the art side's 3D models (section 1). |
+| `traveller.png` (240 × 440) | `Assets/Art/Office/Placeholder/traveller.png` (60 × 110) | Unused by the game: travellers are layered figures (the character brief). |
+| A new 1920 × 1080 desktop wallpaper | – | The desktop is 4:3. `xp_bliss.png` stays as the neutral wallpaper; the eight culture wallpapers are the new art. |
+| Timeline poster variants (18 then; 27 files now) | `Assets/Art/Office/Placeholder/Posters/` | The 3D office has no poster frame; posters are deferred (UI_ART_RULES, "Posters: later"). |
+| Crops of the existing `ArtDeliverables` scene layers (01-waiting-hall to 11-stability-monitor, 02-queue, 08-intercom, Desktop/icons-4x4, window-frame, traveller-explorer) | `ArtDeliverables/TimeDesk/` | Layers of the 2D booth; nothing to crop now. |
+| `queue_bg`, `queue_silhouette_01` to `06` | – | The art side's 3D hall crowds. |
+| `intercom.png`, `scanner_tray.png`, `desk_mug`, `desk_photo`, `desk_plant`, `desk_stamp` | `Assets/Art/Office/Booth/` | 3D props: the Clerk hotline, the scanner model (section 1), the art side's desk. |
+| `lighting_overlay_warm`, `_cold`, `_alarm` | `Assets/Art/Office/Booth/` | The 3D office lights itself; there is no overlay slot. |
+| `btn_back_to_office`, `intercom_panel`, `intercom_button_normal`/`_hover` | `UI/Desktop/`, `UI/Investigation/` | Retired in piece 7: the taskbar's "< Desk" and the traveller wheel replace them. |
+| `btn_desk_normal`/`_hover`/`_pressed`, `wheel_item_*`, `wheel_centre_*`, `desk_tooltip`, `speech_bubble` (420 × 110) | – | Replaced by the UI kit's button and tooltip (section 3) and the 9-slice speech bubble (section 2). |
+| `btn_min`/`btn_max`/`btn_close` (9 states), `start_button_normal`/`_pressed` | `UI/Desktop/` | Replaced by the kit's text-free `ui_button.png` and `start_button.png`. |
+| `icon_compare` | `UI/Desktop/` | There is no Compare app: comparing is the compare bar. |
+| `icon_settings`, `icon_power`, `tray_day`, `tray_credits`, `tray_stability` | `UI/Desktop/` | The Start menu and the tray print text. |
+| `scanner_backing`, `page_blank`, `refbook_page`, `claim_banner`, `compare_bar_neutral`/`_match`/`_mismatch`/`_deviation`, `citizen_records_frame`, `deviation_report_form`, `directives_sticky` | `UI/Investigation/` | Code-drawn themed windows and strips; the scanned copy reuses the paper face. |
+| `btn_accept`, `btn_deny` (normal, hover, pressed) | `UI/Investigation/` | Baked words. The decision buttons are themed per culture with fixed code glyphs (piece 6). |
+| `stamp_approved`, `stamp_denied`, `stamp_citation` | `UI/Investigation/`, `UI/DayFlow/` | Baked words, which break the language switch; the text-free ink marks (section 4) replace them. |
+| `agency_logo`, the nation seals | `UI/Investigation/` | Paper faces carry no emblems or seals. |
+| Per-nation document kits (Aegyptus, Albion, Helios, Latia, Norvik, Solaris; 24 files then), and the 128 kit files now on disk | `UI/Documents/<Country>/<Ancient/Old/Modern/Future>/` | The invented nations are gone; the game has six eras, not these four; the stocks bake text and field lines; the paper face is text-free with a code layout (section 4). |
+| Visitor trios, 240 × 440 (72 files), and the timeline cast | – | Characters are layered 1024 × 1536 figures (the character brief). |
+| 21 invented legendaries (42 files) | – | The ten premades, real people drawn whole, replace them (the brief, section 11). |
+| `temporal_times_masthead`, `shift_ledger_header` | `UI/DayFlow/` | The game prints the mastheads. |
+| `btn_start_shift`, `btn_go_home`, `btn_sleep` | `UI/DayFlow/`, `Home/` | Baked words; the kit's button replaces them. |
+| Era icons (`era_rome`, `era_medieval`, `era_future` then; `era_ancient`, `_old`, `_modern`, `_future` on disk) | `UI/Icons/` | No screen shows eras as icons, and the game has six eras. |
+| Attribute icons (7 then; 6 on disk) | `UI/Icons/` | No screen shows attributes as icons; the game has three (democracy, science, art). |
+| `icon_money`, `icon_stability`, `icon_day`, `icon_warning` | `UI/Icons/` | The office readouts are the art side's 3D displays; the tray prints text. |
+| The `ArtLibrary` loader | – | Each hook goes into the builder that owns its screen. |
 
-- Eras: **era_rome.png**, **era_medieval.png**, **era_future.png** (+ Greece, NGermany, Japan, Egypt, China if the timeline cast stays).
-- Attributes: **attr_democracy.png**, **attr_science.png**, **attr_art.png**, **attr_industry.png**, **attr_militarism.png**, **attr_mysticism.png**, **attr_philosophy.png**.
-- Nation emblems (reuse `<Nation>_seal.png` for the fictional six).
-- HUD: **icon_money.png**, **icon_stability.png**, **icon_day.png**, **icon_warning.png**.
+## Delivery checklist
 
-## I. Office overlay (piece 7): `Assets/Art/UI/Office/`
-
-Transparent PNG, 9-slice friendly (flat stretchable middle, detail only at corners/edges), no text: the game prints every label. The game draws these as flat panels today; piece 6 (the UI theme) decides whether the overlay takes theme art, and these files are its skins if it does.
-
-- **wheel_item_normal.png**, **wheel_item_hover.png** 240x44: one choice of the traveller wheel (click the traveller or the desk intercom); up to 8 sit on an ellipse around the traveller. Replaces the retired intercom buttons.
-- **wheel_centre_normal.png**, **wheel_centre_hover.png** 150x44: the wheel's centre button ("< Back" in a sub-menu).
-- **speech_bubble.png** 420x110: the traveller's reply, shown up and to the right of the traveller; tail pointing down-left toward them.
-- **desk_tooltip.png** 360x60: the small readout shown above a clicked desk object (credits, day, stability, time).
-
----
-
-# Totals and suggested order
-
-1. Tier 1 booth props + wallpaper: 11 files. Immediate payoff, zero code.
-2. Desktop UI (B), Investigation UI (C) and the office overlay (I): about 70 files.
-3. Visitors (D): 72 investigation files, 42 legendary files.
-4. Day flow (E), Home (F), Title/endings (G), icons (H): about 50 files.
-5. Timeline poster variants: 18 files.
-
-# Hand-off checklist per batch
-
-- File names match exactly.
-- Sizes match exactly; transparent where stated.
-- No numbers or changing text baked in.
-- Tier 1: overwrite in place, keep `.meta`, set PPU.
-- Tier 2: drop into the folder; unused until the `ArtLibrary` loader is added.
-- Commit PNG **and** `.png.meta` together (PR #2 was rejected for missing metas).
+- File names exactly as listed; sizes as listed; transparent unless the item says opaque.
+- No text, letters or numbers in any image, except the logo's "TIME SORTER" wordmark.
+- Tier 1: overwrite the file in place and keep its `.meta`.
+- Tier 2: save the original in `ArtDeliverables/TimeDesk/UI/Raw/`; Claude wires it.
+- Commit each PNG with its `.meta`.

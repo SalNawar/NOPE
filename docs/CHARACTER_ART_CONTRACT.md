@@ -2,7 +2,7 @@
 
 *Piece 4 (characters), 2026-09-25. The binding technical contract between the game and the character art. The detailed ChatGPT brief (`docs/superpowers/drafts/art/CHARACTER_ART_BRIEF_v2.md`, with `coverage.json` and `character_guide_v2_1024x1536.png`) follows this file; where they disagree, this file and the code win.*
 
-It supersedes the older character contracts: `ART_ASSET_LIST.md` §D (visitor trios, legendary pairs) and its Tier-1 `traveller.png`, and `PRODUCTION_PLAN.md`'s character direction. `Assets/Art/Office/Placeholder/traveller.png` is retired: no new art goes there (it stays on disk until the booth rework, because older scenes reference it).
+It supersedes the older character contracts: the 2026-09-23 `ART_ASSET_LIST.md` §D (visitor trios, legendary pairs) and its Tier-1 `traveller.png` (the list was rewritten for the 3D office on 2026-09-25 and points here), and `PRODUCTION_PLAN.md`'s character direction. `Assets/Art/Office/Placeholder/traveller.png` is retired and unused by the game: no new art goes there. Its only references are the art scene's leftover 2D booth (`OfficeRoot/Traveller` in `OfficeScene.unity`, switched off when the office loads) and the recovery scenes (`Assets/_Recovery/`); it goes when the art side deletes them (`docs/SCENE_CONTRACT_GAMEPLAY.md`).
 
 ## 1. Style
 
@@ -39,7 +39,7 @@ Put each file at `Assets/Art/Characters/Resources/Characters/{key}.png`. Import 
 ## 6. Drawing rules that keep dress tells fair
 
 - A signature item is always an item, never an absence ("clean-shaven", "bareheaded").
-- A leakable item reads on its own at the booth's size, front-visible, not hanging off another layer; outfits are complete on their own and hold nothing above the chin.
+- A leakable item reads on its own at the size the office shows a traveller (behind the desk, from the head to the waist: the head about 58 px tall at 1920 × 1080 and 39 px at 1280 × 720, one canvas pixel about 0.36 and 0.24 screen pixels; the brief's "Where the player sees a traveller"), front-visible, on the head, face, neck, shoulders or upper chest, not hanging off another layer; outfits are complete on their own and hold nothing above the chin.
 - Headwear is sized over full hair; heads carry no make-up; skins 2–5 are recoloured from skin 1 with ornaments masked first.
 - Items named alike in the Costume Guide must not look alike: the confusable pairs in `world_source.json` (`looks.confusable`) keep such pairs from leaking, but the art should keep them apart too.
 
