@@ -1,14 +1,14 @@
 # Current art direction — 2026-09-26
 
-This file supersedes the earlier palette studies. The latest user request authorized applying colours and textures, clearing crowds from the teleporter, and resuming character generation. The PC is explicitly protected.
+This file supersedes the earlier palette studies. The latest correction requires the five desk-layout notes and visible worn surfaces to be applied to the scene as well as the colours and clear teleporter. The PC is explicitly protected.
 
 ## Applied state
 
-The material pass is saved in OfficeScene and the scanner's dedicated material assets. See [applied report](Applied/README.md), [actual Unity Play-mode capture](Applied/runtime.png) and [validation](Applied/validation.json).
+The material pass is saved in OfficeScene and the scanner's dedicated material assets. See [current applied report](Applied/LayoutWear/README.md), [actual Unity Play-mode capture](Applied/LayoutWear/runtime.png) and [validation](Applied/LayoutWear/validation.json).
 
 The plain office pad is burgundy; phone coral; till aubergine; tray lavender; cup mustard; lamp and NEXT housing charcoal. Quiet walnut replaces noisy desk grain. Metal portal casing stays coherent, with blue energy. Buildings have separate plausible finishes and window glass transmits the background. Nineteen anonymous crowd groups remain, moved aside to leave the portal and central approach clear.
 
-The PC and restored original floor are unchanged, as are gameplay component data and desk transforms. Existing four flag SpriteRenderers remain. The five desk-layout edits remain in screen-04-layout.png only; they were excluded when the latest implementation scope narrowed to colours/textures/crowd clearance. No debt posters, new interface or fictional account text were installed.
+The PC, restored original floor and gameplay component data are unchanged. Existing four flag SpriteRenderers remain. All five desk notes are now applied: phone right, NEXT close to the mat, lamp behind NEXT, calculator facing the player, and mouse wire hidden. Repaired plaster, worn cork and handling scuffs are installed on eleven renderers. No debt posters, new interface or fictional account text were installed.
 
 ## Material and mood rules
 

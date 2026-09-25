@@ -33,7 +33,7 @@ These are exact sRGB **base colours**, not an indexed limit on rendered pixels. 
 
 ## Screen application
 
-The user clarified the setting: an ill-maintained government building offers compulsory travel into the past as an opportunity to pay debt. It should look pleasant on the surface but feel disturbing. Screens 03 and 04 develop this direction using selective neglect and optimistic debt-relief messaging. See [current mood and layout](MOOD_AND_LAYOUT.md) for confirmed setting, proposed storytelling and the five requested desk-layout changes. These remain generated previews. The later Unity pass applied colours/textures and crowd clearance only; desk-layout and storytelling additions remain concepts.
+The user clarified the setting: an ill-maintained government building offers compulsory travel into the past as an opportunity to pay debt. It should look pleasant on the surface but feel disturbing. Screens 03 and 04 develop this direction using selective neglect and optimistic debt-relief messaging. See [current mood and layout](MOOD_AND_LAYOUT.md) for confirmed setting, proposed storytelling and the five requested desk-layout changes. These remain generated previews. The later Unity pass applied colours/textures and crowd clearance only; the five desk-layout notes and worn surfaces were applied in the subsequent [correction](../Applied/LayoutWear/README.md). Storytelling additions remain concepts.
 
 Latest preview:
 

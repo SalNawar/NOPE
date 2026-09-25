@@ -2,7 +2,7 @@
 
 2026-09-26. Branch: art. Scene: Assets/Scenes/OfficeScene.unity.
 
-The latest user request authorized colours/textures, a clear teleporter approach, and resumed character generation. The PC remains unchanged. Desk-layout requests remain in the earlier screen-04 preview only.
+The initial pass applied colours/textures and crowd clearance. The user then corrected the omitted desk layout and wear: **all five notes and worn surfaces are now installed**. See [current follow-up report and Game view](LayoutWear/README.md). The PC remains unchanged.
 
 ## Installed result
 
@@ -34,4 +34,4 @@ Assets/Editor/OfficeArt/OfficeDebtReliefArt*.cs contains editor-only authoring, 
 
 Menu: Tools > Office Art > Debt Relief. Capture Before preserves the first baseline; Apply Colours Textures And Clear Portal uses original material references from that baseline; Validate Colours checks protected content and crowd clearance. Save Scanner Finishes persists the separately loaded prop.
 
-Do not run broad office/desk/crowd rebuilders: they can restore earlier generated layouts or assignments. No layout edits, debt posters, new PC interface or lore text were installed. The original PC appearance is intentionally retained under the user's explicit exception.
+Do not run broad office/desk/crowd rebuilders: they can restore earlier generated layouts or assignments. The follow-up in LayoutWear applies the layout and worn materials. No debt posters, new PC interface or lore text were installed. The original PC appearance is intentionally retained under the user's explicit exception.

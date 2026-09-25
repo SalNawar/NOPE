@@ -1,4 +1,4 @@
-> HISTORICAL BRIEF — superseded by the later request to apply colours/textures, clear the teleporter and resume characters. No message was sent to Claude. See Applied/README.md for installed scope; the desk layout and storytelling additions below remain concepts.
+> HISTORICAL BRIEF — superseded by the later request to apply colours/textures, clear the teleporter and resume characters. No message was sent to Claude. See Applied/README.md for installed scope; the five desk-layout notes and worn surfaces were subsequently applied in Applied/LayoutWear. Storytelling additions remain concepts.
 
 # Claude handoff: office art direction
 

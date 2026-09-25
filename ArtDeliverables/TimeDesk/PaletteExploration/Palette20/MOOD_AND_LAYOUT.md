@@ -1,6 +1,6 @@
 # Debt-relief building: mood and layout
 
-2026-09-26. These are generated screen paint-overs, not Unity captures. The twenty exact colour values remain in palette-20.json. These revisions were concepts. A later pass applied the colours/textures and crowd clearance in Unity; see ../Applied/README.md. Desk transforms remain unchanged.
+2026-09-26. These are generated screen paint-overs, not Unity captures. The twenty exact colour values remain in palette-20.json. These revisions were concepts. A later pass applied the colours/textures and crowd clearance in Unity; see ../Applied/README.md. The later LayoutWear correction also applies all five desk notes to the actual scene; see ../Applied/LayoutWear/README.md.
 
 ## User-confirmed setting
 

@@ -248,6 +248,8 @@ public static partial class OfficeDebtReliefArt
         if(ProtectedHash()!=protectedBefore||GameplayHash()!=gameplayBefore)
             throw new InvalidOperationException("Protected PC/floor/gameplay changed; do not save the scene.");
         Undo.CollapseUndoOperations(undo);EditorSceneManager.MarkSceneDirty(Scene);EditorSceneManager.SaveScene(Scene);
+        // Preserve the subsequently approved layout and wear when refreshing the palette.
+        if(File.Exists(LayoutReport+"/before.json"))ApplyDeskNotesAndWear();
         ValidateColours();
     }
     // This prop is loaded by OfficeGameplay, so persist its dedicated material assets too.
@@ -281,10 +283,12 @@ public static partial class OfficeDebtReliefArt
     {
         CheckScene(); var before=JsonUtility.FromJson<AuditReport>(File.ReadAllText(ReportFolder+"/before.json"));var after=Capture();
         var v=new ColourValidation{pcAndFloorUnchanged=before.protectedHash==after.protectedHash,gameplayUnchanged=before.gameplayHash==after.gameplayHash,deskTransformsUnchanged=true};
+        bool onlyRequestedDeskChanges=true;
         foreach(var a in after.renderers.Where(x=>x.path.StartsWith("HybridOffice/Booth/")||x.path.StartsWith("ImportedOfficeDress/Desk/")))
         {
             var old=before.renderers.FirstOrDefault(x=>x.path==a.path);
-            if(old==null||(old.position-a.position).sqrMagnitude>.000001f||(old.rotation-a.rotation).sqrMagnitude>.000001f||(old.scale-a.scale).sqrMagnitude>.000001f)v.deskTransformsUnchanged=false;
+            if(old==null||(old.position-a.position).sqrMagnitude>.000001f||(old.rotation-a.rotation).sqrMagnitude>.000001f||(old.scale-a.scale).sqrMagnitude>.000001f)
+            {v.deskTransformsUnchanged=false;if(!RequestedDeskChange(a.path))onlyRequestedDeskChanges=false;}
         }
         var cam=Camera.main; var portal=PortalRect(cam);
         foreach(var r in Require("OfficeHallCrowds").GetComponentsInChildren<Renderer>().Where(r=>r.name=="Merged silhouettes"))
@@ -292,7 +296,7 @@ public static partial class OfficeDebtReliefArt
         v.assignedMaterials=after.renderers.SelectMany(r=>r.materials).Count(m=>m.path.StartsWith(ArtFolder));
         if(!v.pcAndFloorUnchanged)v.errors.Add("Protected PC or floor differs from baseline.");
         if(!v.gameplayUnchanged)v.errors.Add("Gameplay component data changed.");
-        if(!v.deskTransformsUnchanged)v.errors.Add("Desk layout changed outside the narrowed material scope.");
+        if(!v.deskTransformsUnchanged&&!onlyRequestedDeskChanges)v.errors.Add("Desk layout changed outside the four requested prop roots.");
         if(v.portalOverlaps!=0)v.errors.Add("Crowd still overlaps portal in the office view.");
         if(v.crowdGroups!=19)v.errors.Add("Crowd group count changed.");
         if(v.assignedMaterials<100)v.errors.Add("Material pass incomplete.");
