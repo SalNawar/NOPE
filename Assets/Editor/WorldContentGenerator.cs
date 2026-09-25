@@ -210,7 +210,12 @@ public static partial class WorldContentGenerator
         return asset;
     }
 
-    /// <summary>Every id the source uses must resolve; enum strings must parse.</summary>
+    /// <summary>
+    /// Every id the source uses must resolve; enum strings must parse; the day
+    /// plans' asset names, days and queues must be sound (DayPlans.Problems,
+    /// the validator's rule) and the travellers' age range too
+    /// (BirthDates.AgeRangeProblem): audit R6-001.
+    /// </summary>
     private static void CheckReferences(WorldSource src, Authored authored, List<string> errors)
     {
         var eraIds = new HashSet<string>(src.eras.Select(e => e.id));
@@ -265,6 +270,11 @@ public static partial class WorldContentGenerator
             if (d.tells < 1)
                 errors.Add($"Day '{d.asset}' needs \"tells\" of at least 1.");
         }
+
+        errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
+        string ages = BirthDates.AgeRangeProblem(src.travellerAgeMin, src.travellerAgeMax);
+        if (ages != null)
+            errors.Add(ages);
     }
 
     /// <summary>

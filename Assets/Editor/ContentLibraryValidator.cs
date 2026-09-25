@@ -90,7 +90,7 @@ public static class ContentLibraryValidator
         issues += CheckDuplicateIds(Ids(lib.Legendaries, l => l.id), "Legendaries", lib);
 
         // --- Day plans ---
-        issues += CheckDuplicateDayNumbers(lib);
+        issues += CheckDayPlanEntries(lib);
         issues += CheckDayPlanLegendaries(lib);
 
         // --- Cross references ---
@@ -1071,26 +1071,21 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>Reports duplicate DayPlan.DayNumber values and gaps in the day sequence.</summary>
-    private static int CheckDuplicateDayNumbers(ContentLibrarySO lib)
+    /// <summary>
+    /// Reports the day plans' identity and size problems (DayPlans.Problems,
+    /// the rule Generate World checks its source with: a blank or repeated
+    /// asset name, a day below 1 or planned twice, a queue below 1) and gaps
+    /// in the day sequence.
+    /// </summary>
+    private static int CheckDayPlanEntries(ContentLibrarySO lib)
     {
-        int issues = 0;
-        var seen = new HashSet<int>();
-        var reported = new HashSet<int>();
-
-        foreach (DayPlanSO plan in lib.DayPlans)
-        {
-            if (plan == null)
-                continue;
-
-            int day = plan.DayNumber;
-
-            if (!seen.Add(day) && reported.Add(day))
-            {
-                Debug.LogError($"[ContentLibraryValidator] Duplicate DayPlan for day {day} in '{lib.name}' (asset '{plan.name}').", plan);
-                issues++;
-            }
-        }
+        List<string> problems = DayPlans.Problems(lib.DayPlans
+            .Where(p => p != null)
+            .Select(p => new DayPlanEntry(p.name, p.DayNumber, p.VisitorsCount))
+            .ToList());
+        foreach (string problem in problems)
+            Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
+        int issues = problems.Count;
 
         List<int> days = lib.DayPlans
             .Where(p => p != null)

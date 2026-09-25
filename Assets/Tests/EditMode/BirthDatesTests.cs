@@ -2,6 +2,17 @@ using NUnit.Framework;
 
 public class BirthDatesTests
 {
+    /// <summary>Audit R6-001: the travellers' age range (world_source.json) is checked before any place's birth years are written from it.</summary>
+    [TestCase(18, 70, null)]
+    [TestCase(18, 18, null)]
+    [TestCase(1, 90, null)]
+    [TestCase(70, 18, "travellerAgeMin 70 and travellerAgeMax 18: travellers' ages need 1 <= travellerAgeMin <= travellerAgeMax.")]
+    [TestCase(0, 70, "travellerAgeMin 0 and travellerAgeMax 70: travellers' ages need 1 <= travellerAgeMin <= travellerAgeMax.")]
+    public void AgeRangeProblem_NeedsAPositiveMinimumNotAboveTheMaximum(int min, int max, string expected)
+    {
+        Assert.AreEqual(expected, BirthDates.AgeRangeProblem(min, max));
+    }
+
     [TestCase(12, 2, 830, "12 Mar 830")]
     [TestCase(3, 5, -1450, "3 Jun 1450 BCE")]
     [TestCase(28, 11, 1962, "28 Dec 1962")]
