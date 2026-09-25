@@ -8,8 +8,11 @@ using UnityEngine.UI;
 /// line (speaker, sentence), paged like the reference books and always
 /// showing the newest page. Only answer rows are clickable: a click puts the
 /// answer's canonical fact value into the compare bar as the traveller's
-/// statement. Sentences are shown through DisplayText (the spoken reveal
-/// point); the compared value stays canonical. Rows are named Line_{id}.
+/// statement. Sentences are shown through DisplayText: from translation's
+/// first day the traveller's lines are in their claimed place's tongue and
+/// show in English only with the region's Speech translator (settled, never
+/// animated); an untranslated answer shows in the bar as the placeholder,
+/// while its evidence stays the canonical value. Rows are named Line_{id}.
 /// </summary>
 public sealed class TranscriptWindowController : PagedRowsWindow
 {
@@ -17,14 +20,16 @@ public sealed class TranscriptWindowController : PagedRowsWindow
     private string _deskName = string.Empty;
     private string _travellerName = string.Empty;
     private CompareController _compare;
+    private CaseTranslation _translation = CaseTranslation.None;
 
-    /// <summary>Shows a traveller's transcript (the runner's live, append-only list) on its newest page.</summary>
-    public void Bind(IReadOnlyList<DialogLine> transcript, string deskName, string travellerName, CompareController compare)
+    /// <summary>Shows a traveller's transcript (the runner's live, append-only list) on its newest page, in their translation.</summary>
+    public void Bind(IReadOnlyList<DialogLine> transcript, string deskName, string travellerName, CompareController compare, CaseTranslation translation)
     {
         _lines = transcript ?? System.Array.Empty<DialogLine>();
         _deskName = deskName ?? string.Empty;
         _travellerName = travellerName ?? string.Empty;
         _compare = compare;
+        _translation = translation ?? CaseTranslation.None;
         ShowLastPage();
     }
 
@@ -42,8 +47,8 @@ public sealed class TranscriptWindowController : PagedRowsWindow
 
         if (texts.Length > 0 && texts[0] != null)
             texts[0].text = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
-        if (texts.Length > 1 && texts[1] != null)
-            texts[1].text = DisplayText.For(line.Text, Reveal.Plain, null, false);
+        if (texts.Length > 1)
+            TextFlip.Write(texts[1], line.Text, _translation.Line(line.Speaker), _translation);
 
         if (button == null)
             return;
@@ -54,8 +59,8 @@ public sealed class TranscriptWindowController : PagedRowsWindow
             return;
 
         string label = UiText.Format("compare.travellerLabel", UiText.Category(line.Category));
-        string value = line.Value;
+        string shown = _translation.Shown(Translation.InTongue(line.Speaker), _translation.SpeechTranslated, line.Value);
         CompareEvidence evidence = CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell);
-        button.onClick.AddListener(() => _compare.Select(label, value, background, evidence));
+        button.onClick.AddListener(() => _compare.Select(label, shown, background, evidence));
     }
 }

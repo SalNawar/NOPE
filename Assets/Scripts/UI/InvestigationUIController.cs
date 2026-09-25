@@ -14,7 +14,10 @@ using UnityEngine.UI;
 /// document over as a physical paper on the desk (whose scan opens its
 /// window) or, where no desk is wired, straight to its draggable window,
 /// builds a shelf of reference books the player can open/stow, and offers the
-/// binary Accept/Deny.
+/// binary Accept/Deny. From translation's first day a traveller's papers and
+/// speech are in their claimed place's tongue (piece 9): the day's
+/// TranslationPresenter says how each traveller's text shows, and the scan
+/// is the papers' reveal point.
 ///
 /// Two modes:
 /// - RICH: when the desk has been built (document/book/shelf templates wired by
@@ -88,7 +91,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private Vector2 bookWindowRowStep = new Vector2(40f, 40f);
 
     private Action<bool> _onDecision;
-    private readonly List<GameObject> _docWindows = new();
+
+    /// <summary>The current traveller's document windows, in paper order.</summary>
+    private readonly List<DocumentWindowController> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
 
     /// <summary>The current traveller's documents in paper order (name, holder, hand-over).</summary>
@@ -119,6 +124,12 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>Character art (set by GameManager): the passport photos on the papers and the scanned pages.</summary>
     private CharacterArt _art;
+
+    /// <summary>Today's translation (set by GameManager; null = everything plain).</summary>
+    private TranslationPresenter _translation;
+
+    /// <summary>The current traveller's translation (None between cases and when nothing is foreign).</summary>
+    private CaseTranslation _caseTranslation = CaseTranslation.None;
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
@@ -268,6 +279,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _art = art;
     }
 
+    /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings.</summary>
+    public void SetTranslation(TranslationDay day, TranslationSettings settings)
+    {
+        _translation = new TranslationPresenter(day, settings);
+    }
+
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
     private void RefreshScannerText()
     {
@@ -350,9 +367,9 @@ public sealed class InvestigationUIController : MonoBehaviour
         // (A pin system will later let the player keep chosen windows open.)
         CloseAllWindows();
 
-        foreach (GameObject w in _docWindows)
+        foreach (DocumentWindowController w in _docWindows)
             if (w != null)
-                Destroy(w);
+                Destroy(w.gameObject);
         _docWindows.Clear();
 
         foreach (GameObject ic in _docIcons)
@@ -361,6 +378,9 @@ public sealed class InvestigationUIController : MonoBehaviour
         _docIcons.Clear();
         _iconedDocuments.Clear();
         _caseDocuments.Clear();
+
+        // The traveller's tongue decides how their papers and speech show today.
+        _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
 
         // Documents are handed over, never taken: those marked "on arrival" when
         // the traveller steps up, the others through the traveller wheel. With
@@ -375,8 +395,8 @@ public sealed class InvestigationUIController : MonoBehaviour
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
-                clone.SetDocument(doc, compareController, inst.look, _art);
-                _docWindows.Add(clone.gameObject);
+                clone.SetDocument(doc, compareController, inst.look, _art, _caseTranslation);
+                _docWindows.Add(clone);
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
@@ -398,6 +418,8 @@ public sealed class InvestigationUIController : MonoBehaviour
                 OpenDocumentWindow(i);
         }
 
+        if (wheel != null)
+            wheel.SetTranslation(_caseTranslation);
         StartInterview(inst, _caseDocuments);
 
         BuildBookShelf(lib);
@@ -449,7 +471,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
 
         if (transcriptWindow != null)
-            transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController);
+            transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController, _caseTranslation);
 
         RefreshChoices();
 
@@ -557,20 +579,22 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
-    /// or a hand-over where no desk is wired: the written reveal point). The
+    /// or a hand-over where no desk is wired: the written reveal point, where
+    /// a translated paper starts flipping into English the first time). The
     /// first time it opens this case, the paper also gets a desktop icon at
     /// the top of the grid, which reopens the window after it is closed.
     /// </summary>
     private void OpenDocumentWindow(int index)
     {
-        GameObject window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
+        DocumentWindowController window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
         if (window == null)
             return;
 
-        window.SetActive(true);
+        window.gameObject.SetActive(true);
         window.transform.SetAsLastSibling();
+        window.Reveal();
         if (_iconedDocuments.Add(index))
-            AddDesktopIcon(_caseDocuments[index].name, window, true);
+            AddDesktopIcon(_caseDocuments[index].name, window.gameObject, true);
     }
 
     /// <summary>

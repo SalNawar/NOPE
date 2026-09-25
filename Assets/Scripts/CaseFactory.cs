@@ -244,6 +244,7 @@ public sealed class CaseFactory
             archetype = archetype,
             nation = nation,
             originLabel = originLabel,
+            tongueId = place != null && place.tongue != null ? place.tongue : string.Empty,
             visitorDisplayName = visitorName,
             visitorGivenName = givenName,
             trueBirthDate = birthDate,

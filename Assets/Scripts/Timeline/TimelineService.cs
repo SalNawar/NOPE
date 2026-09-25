@@ -32,6 +32,8 @@ public static class TimelineKeys
 ///   effects, build the deterministic "tomorrow package" (run at sleep, before day++).
 /// - BuildInterviewDay: the day's interview, its questions and dialogs gated
 ///   on a snapshot of the day-start world (run at day start).
+/// - BuildTranslationDay: which tongues are foreign and translated today, read
+///   from the same day-start snapshot (run at day start).
 /// All state lives in WorldState; this class is stateless.
 /// </summary>
 public static class TimelineService
@@ -379,6 +381,14 @@ public static class TimelineService
 
         return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs);
     }
+
+    /// <summary>
+    /// Today's translation (piece 9): which tongues are foreign and which are
+    /// translated, from the library's rules (none without translation data:
+    /// nothing is foreign) and the day-start snapshot BuildInterviewDay also reads.
+    /// </summary>
+    public static TranslationDay BuildTranslationDay(ContentLibrarySO lib, WorldState world) =>
+        new TranslationDay(lib != null && lib.Translation.HasData ? lib.Translation.rules : null, Snapshot(world, null));
 
     /// <summary>
     /// Returns true if every condition on the trigger passes (Gates.AllPass):

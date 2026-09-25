@@ -8,14 +8,14 @@ using UnityEngine.TextCore.LowLevel;
 using Object = UnityEngine.Object;
 
 /// <summary>
-/// The culture themes' fonts (piece 6 U8, R5): each theme's OS font
-/// candidates tried in order (a font file found through
-/// Font.GetPathsToOSFonts, then the family name), ending in a runtime
-/// LiberationSans asset built in memory from the project's own TTF (Greece's
-/// font). Fonts are read from the player's system at runtime and never saved,
-/// never added to TMP_Settings and never chained to the tracked LiberationSans
-/// assets. Results are cached per theme for the session; Dispose destroys
-/// every asset created.
+/// The culture themes' fonts (piece 6 U8, R5) and the translation scripts'
+/// fonts (piece 9): each key's OS font candidates tried in order (a font file
+/// found through Font.GetPathsToOSFonts, then the family name), ending in a
+/// runtime LiberationSans asset built in memory from the project's own TTF
+/// (Greece's font). Fonts are read from the player's system at runtime and
+/// never saved, never added to TMP_Settings and never chained to the tracked
+/// LiberationSans assets. Results are cached per key (a culture id, or
+/// "script:{id}") for the session; Dispose destroys every asset created.
 /// </summary>
 public sealed class RuntimeFonts : IDisposable
 {
@@ -64,24 +64,32 @@ public sealed class RuntimeFonts : IDisposable
         _latinSource = latinSource;
     }
 
-    /// <summary>
-    /// The theme's font: none for a theme without runtime fonts; else the first
-    /// candidate that loads (with the runtime Latin asset as its fallback), or
-    /// the Latin asset itself; then whether it draws <paramref name="sample"/>
-    /// (which also prewarms its atlas). Cached per theme.
-    /// </summary>
+    /// <summary>The theme's font: none for a theme without runtime fonts; else its candidates resolved under its culture id.</summary>
     public Result Resolve(ThemeSO theme, string sample)
     {
         if (theme == null || !theme.runtimeFont)
             return new Result(null, "default", true, string.Empty, string.Empty);
-        if (_cache.TryGetValue(theme.cultureId ?? string.Empty, out Result cached))
+        return Resolve(theme.cultureId, theme.fonts, sample);
+    }
+
+    /// <summary>
+    /// The font for a key (a culture id, or "script:{id}" for a translation
+    /// script): the first candidate that loads (with the runtime Latin asset as
+    /// its fallback), or the Latin asset itself; then whether it draws
+    /// <paramref name="sample"/> (which also prewarms its atlas). Cached per key,
+    /// so the first sample for a key must hold everything it will draw.
+    /// </summary>
+    public Result Resolve(string key, IReadOnlyList<FontCandidate> candidates, string sample)
+    {
+        key ??= string.Empty;
+        if (_cache.TryGetValue(key, out Result cached))
             return cached;
 
         TMP_FontAsset latin = Latin();
         TMP_FontAsset asset = null;
         string name = null;
         var tried = new List<string>();
-        foreach (FontCandidate c in theme.fonts)
+        foreach (FontCandidate c in candidates ?? new List<FontCandidate>())
         {
             if (c == null)
                 continue;
@@ -111,7 +119,7 @@ public sealed class RuntimeFonts : IDisposable
 
         if (asset != null)
         {
-            asset.name = $"Runtime {theme.cultureId} ({name})";
+            asset.name = $"Runtime {key} ({name})";
             asset.hideFlags = HideFlags.DontSave;
             _created.Add(asset);
             if (latin != null)
@@ -132,7 +140,7 @@ public sealed class RuntimeFonts : IDisposable
         }
 
         var result = new Result(asset, name, covers, missing, string.Join(", ", tried.Append("LiberationSans")));
-        _cache[theme.cultureId ?? string.Empty] = result;
+        _cache[key] = result;
         return result;
     }
 

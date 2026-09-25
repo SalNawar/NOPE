@@ -5,10 +5,10 @@ using UnityEngine;
 /// A timed label on the office overlay canvas that takes no clicks, projected
 /// at a followed transform plus an offset (OverlayProjection): the traveller's
 /// speech bubble (TravellerWheel, which types each line out with Reveal and
-/// times it itself) and the desk props' tooltips (DeskReaction). The host stays
-/// active; its Panel child is shown and hidden. It hides when its time is up,
-/// when the followed object is destroyed, or when that object leaves the view.
-/// Callers apply DisplayText.
+/// times it itself, and flips a translated line through its Label) and the
+/// desk props' tooltips (DeskReaction). The host stays active; its Panel child
+/// is shown and hidden. It hides when its time is up, when the followed object
+/// is destroyed, or when that object leaves the view. Callers apply DisplayText.
 /// </summary>
 public sealed class OverlayCallout : MonoBehaviour
 {
@@ -20,6 +20,9 @@ public sealed class OverlayCallout : MonoBehaviour
 
     private Camera _camera;
     private RectTransform _canvasRect;
+
+    /// <summary>The callout's text, for a caller that animates it (the wheel's translation flip).</summary>
+    public TMP_Text Label => label;
     private Transform _follow;
     private Vector2 _offset;
     private float _remaining;

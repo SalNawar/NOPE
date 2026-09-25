@@ -11,7 +11,11 @@ using UnityEngine.InputSystem;
 /// the traveller or the desk intercom while BoothCoordinator allows it, each
 /// choice with its kind's icon; and the traveller's speech: their lines in a
 /// speech bubble beside them, one after another, typed out and paced
-/// (SpeechQueue), each changing a premade's expression as it starts. This host
+/// (SpeechQueue), each changing a premade's expression as it starts; from
+/// translation's first day a line is in the claimed place's tongue, and with
+/// the region's Speech translator its letters flip into English behind the
+/// typing (its hold starts once the flip ends; opening the wheel finishes the
+/// flip at once). This host
 /// is always active (so it wakes at load and paces the bubble while the ring is
 /// closed); its Catcher child, a full-screen click-to-close area holding the
 /// ring, is shown only while the wheel is open. Escape or a click outside the
@@ -47,6 +51,12 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     private Camera _camera;
     private RectTransform _canvasRect;
     private SpeechQueue _speech;
+
+    /// <summary>The current traveller's translation (their lines' tongue and the Speech translator).</summary>
+    private CaseTranslation _translation = CaseTranslation.None;
+
+    /// <summary>Drives the bubble's text through the translation flip.</summary>
+    private readonly TextFlip _flip = new TextFlip();
 
     /// <summary>The speech queue's LineNumber last drawn (a change means a new line started).</summary>
     private int _drawnLine;
@@ -128,12 +138,18 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>The office camera the ring and the bubble are placed through (the office binder's, from the art office).</summary>
     public void SetCamera(Camera office) => _camera = office;
 
-    /// <summary>Opens the wheel over the traveller, unless it may not open or is open (the traveller hit zone's and the desk intercom's persistent call).</summary>
+    /// <summary>The current traveller's translation (InvestigationUIController sets it before they speak).</summary>
+    public void SetTranslation(CaseTranslation translation) => _translation = translation ?? CaseTranslation.None;
+
+    /// <summary>Opens the wheel over the traveller, unless it may not open or is open (the traveller hit zone's and the desk intercom's persistent call); a line flipping in the bubble shows its English at once.</summary>
     public void Open()
     {
         if (!_canOpen || IsOpen || catcher == null)
             return;
 
+        _flip.Complete();
+        if (_speech != null)
+            _speech.EndReveal();
         catcher.SetActive(true);
         Place();
         OpenChanged?.Invoke();
@@ -172,22 +188,26 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
 
         if (bubble != null)
             bubble.Hide();
+        _flip.Release();
         _bubbleUp = false;
     }
 
     /// <summary>
     /// The traveller says <paramref name="lines"/> in the speech bubble, after
-    /// whatever they are saying (each through DisplayText as spoken); nothing
-    /// while the wheel may not open (the transcript holds every line anyway).
+    /// whatever they are saying; a line that flips into English counts as
+    /// fully shown once its flip ends; nothing while the wheel may not open
+    /// (the transcript holds every line anyway).
     /// </summary>
     public void Say(IReadOnlyList<DialogLine> lines)
     {
         if (!_canOpen || _speech == null || lines == null)
             return;
 
+        Reveal flip = _translation.Bubble(0f);
         foreach (DialogLine line in lines)
             if (line != null)
-                _speech.Say(DisplayText.For(line.Text, Reveal.Plain, null, false), line.Expression);
+                _speech.Say(line.Text, line.Expression,
+                    flip.Kind == RevealKind.Flipping ? DisplayText.Remaining(line.Text, flip, _translation.Timing, _translation.ReducedMotion) : 0f);
 
         ShowSpeech();
     }
@@ -227,8 +247,10 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>
     /// Draws the speech queue: when a line has started since the last draw, a
     /// premade shows the latest expression said (even if that line already
-    /// ended within one long frame) and the bubble shows the current line; the
-    /// line types out; the bubble hides once nothing is being said.
+    /// ended within one long frame) and the bubble shows the current line in
+    /// its translation (DisplayText: plain, untranslated, or flipping on the
+    /// line's clock); the line types out; the bubble hides once nothing is
+    /// being said.
     /// </summary>
     private void ShowSpeech()
     {
@@ -243,7 +265,10 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (!_speech.Showing)
         {
             if (_bubbleUp)
+            {
                 bubble.Hide();
+                _flip.Release();
+            }
             _bubbleUp = false;
             return;
         }
@@ -251,7 +276,12 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (started || !_bubbleUp)
         {
             bubble.Show(_speech.Text, traveller != null ? traveller.Anchor : null, config.bubbleOffset, float.PositiveInfinity);
+            _flip.Show(bubble.Label, _speech.Text, _translation.Bubble(_speech.LineSeconds), _translation);
             _bubbleUp = true;
+        }
+        else
+        {
+            _flip.Tick(_speech.LineSeconds);
         }
 
         bubble.Reveal(_speech.VisibleCharacters);

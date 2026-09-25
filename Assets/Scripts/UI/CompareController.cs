@@ -57,7 +57,13 @@ public sealed class CompareController : MonoBehaviour
             compareBar.SetActive(false);
     }
 
-    /// <summary>Registers a clicked value for comparison, with typed evidence; value is the canonical value (it drives MATCH/MISMATCH; never display text).</summary>
+    /// <summary>
+    /// Registers a clicked value for comparison, with typed evidence.
+    /// <paramref name="value"/> is the text the bar shows for this side: the
+    /// canonical value, or an untranslated statement's placeholder (piece 9);
+    /// with typed evidence, MATCH is decided on CompareEvidence.MatchValue, the
+    /// canonical value; never DisplayText output.
+    /// </summary>
     public void Select(string label, string value, Image highlight, CompareEvidence evidence)
     {
         // Clicking the same row again clears the comparison.

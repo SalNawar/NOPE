@@ -44,6 +44,9 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>The resolved font, for the inspector ("default" for the project font).</summary>
     public string FontName { get; private set; } = "default";
 
+    /// <summary>The session's runtime fonts, also used by translation for its script fonts (piece 9); null before Configure.</summary>
+    public RuntimeFonts Fonts => _fonts;
+
     /// <summary>The themed texts' font; null = the project's default TMP font.</summary>
     private TMP_FontAsset _font;
 

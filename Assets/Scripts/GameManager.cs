@@ -188,6 +188,11 @@ public sealed class GameManager : MonoBehaviour
             investigationUI.SetFacts(_today.Facts);
             investigationUI.SetInterviewDay(interview);
             investigationUI.SetCharacterArt(_characterArt);
+
+            // Today's translation, fixed at day start like the interview (a translator bought tonight counts tomorrow).
+            if (!contentLibrary.Translation.HasData)
+                Debug.LogWarning("[GameManager] The content library has no translation data: every tongue reads as English. Run Tools > TimeDesk > Generate World.");
+            investigationUI.SetTranslation(TimelineService.BuildTranslationDay(contentLibrary, _worldState), contentLibrary.Translation);
         }
 
         // Initial HUD state.
