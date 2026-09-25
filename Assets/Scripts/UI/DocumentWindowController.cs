@@ -44,7 +44,7 @@ public sealed class DocumentWindowController : MonoBehaviour
         _page = 0;
 
         if (titleText != null)
-            titleText.text = doc != null && doc.template != null ? doc.template.displayName : "Document";
+            titleText.text = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled");
 
         ShowPage(0);
     }
@@ -59,7 +59,7 @@ public sealed class DocumentWindowController : MonoBehaviour
         _page = Mathf.Clamp(page, 0, pages - 1);
 
         if (pageText != null)
-            pageText.text = $"Page {_page + 1}/{pages}";
+            pageText.text = UiText.Format("window.page", _page + 1, pages);
 
         if (prevButton != null)
             prevButton.interactable = _page > 0;
@@ -99,8 +99,8 @@ public sealed class DocumentWindowController : MonoBehaviour
             Image bg = row.GetComponent<Image>();
             Button btn = row.GetComponent<Button>();
 
-            string docName = _doc.template != null ? _doc.template.displayName : "Document";
-            string label = $"{docName} · {f.label}";
+            string docName = _doc.template != null ? _doc.template.displayName : UiText.Get("document.untitled");
+            string label = UiText.Format("document.compareLabel", docName, f.label);
             string value = f.value;
             DocumentField field = f;
 

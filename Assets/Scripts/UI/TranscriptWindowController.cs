@@ -53,7 +53,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (!line.IsAnswer || _compare == null)
             return;
 
-        string label = $"Traveller · {ClueLabels.Report(line.Category)}";
+        string label = UiText.Format("compare.travellerLabel", UiText.Category(line.Category));
         string value = line.Value;
         CompareEvidence evidence = CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell);
         button.onClick.AddListener(() => _compare.Select(label, value, background, evidence));

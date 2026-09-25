@@ -59,19 +59,19 @@ public sealed class TravelRuleSO : ScriptableObject
         if (!string.IsNullOrWhiteSpace(description))
             return description;
 
-        string e = era != null ? era.displayName : "?";
-        string n = nation != null ? nation.displayName : "?";
+        string e = era != null ? era.displayName : UiText.Get("rule.unknownPlace");
+        string n = nation != null ? nation.displayName : UiText.Get("rule.unknownPlace");
 
         switch (type)
         {
             case TravelRuleType.EraForbidden:
-                return $"No travel permitted to {e}.";
+                return UiText.Format("rule.eraForbidden", e);
             case TravelRuleType.NationForbidden:
-                return $"No travel permitted to {n}.";
+                return UiText.Format("rule.nationForbidden", n);
             case TravelRuleType.NationEraForbidden:
-                return $"No travel permitted to {n} in {e}.";
+                return UiText.Format("rule.nationEraForbidden", n, e);
             default:
-                return "Travel restriction in effect.";
+                return UiText.Get("rule.generic");
         }
     }
 }

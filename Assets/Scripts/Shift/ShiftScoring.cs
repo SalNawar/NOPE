@@ -138,29 +138,19 @@ public static class ShiftScoring
         v.stabilityDelta = -stabilityLoss;
         world.timelineStability += v.stabilityDelta;
 
-        string mistake = v.unprovenDenial
-            ? "Deviation denied without documented evidence. Log a deviation from the papers or the traveller's answers before denying."
-            : v.accepted
-                ? "Approved a disguised traveller or a forbidden destination."
-                : "Denied a legitimate, permitted traveler.";
+        string mistake = UiText.Get(v.unprovenDenial ? "citation.unproven" : v.accepted ? "citation.acceptedWrong" : "citation.deniedWrong");
 
         if (world.citationsToday <= config.freeWarningsPerDay)
         {
             v.wasFreeWarning = true;
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n{mistake}\n" +
-                $"Warning {world.citationsToday}/{config.freeWarningsPerDay} — no pay deduction.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(mistake, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
         }
         else
         {
             int penalizedIndex = world.citationsToday - config.freeWarningsPerDay;
             v.moneyPenalty = config.GetCitationPenalty(penalizedIndex);
             world.money -= v.moneyPenalty;
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n{mistake}\n" +
-                $"Penalty: -{v.moneyPenalty} credits.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(mistake, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
         }
 
         Debug.Log($"[ShiftScoring] ApplyWrongDecision: accepted={v.accepted}, citationsToday={world.citationsToday}, penalty={v.moneyPenalty}, stabilityDelta={v.stabilityDelta:0.#}, money={world.money}.");
@@ -201,14 +191,11 @@ public static class ShiftScoring
         v.stabilityDelta = -stabilityLoss;
         world.timelineStability += v.stabilityDelta;
 
+        string misrouted = UiText.Format("citation.misrouted", v.chosenEraId, v.trueEraId);
         if (world.citationsToday <= config.freeWarningsPerDay)
         {
             v.wasFreeWarning = true;
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n" +
-                $"Subject misrouted: sent to '{v.chosenEraId}', belonged to '{v.trueEraId}'.\n" +
-                $"Warning {world.citationsToday}/{config.freeWarningsPerDay} — no pay deduction.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(misrouted, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
 
             Debug.Log($"[ShiftScoring] ApplyWrong: free warning {world.citationsToday}/{config.freeWarningsPerDay}, stabilityDelta={v.stabilityDelta:0.#} (legendary={v.wasLegendary}), no pay deduction.");
         }
@@ -218,13 +205,13 @@ public static class ShiftScoring
             v.moneyPenalty = config.GetCitationPenalty(penalizedIndex);
             world.money -= v.moneyPenalty;
 
-            v.citationText =
-                $"TIMELINE DEVIATION NOTICE\n" +
-                $"Subject misrouted: sent to '{v.chosenEraId}', belonged to '{v.trueEraId}'.\n" +
-                $"Penalty: -{v.moneyPenalty} credits.\n" +
-                $"Stability {v.stabilityDelta:+0.#;-0.#}";
+            v.citationText = Citation(misrouted, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
 
             Debug.Log($"[ShiftScoring] ApplyWrong: citation #{world.citationsToday} (penalized index {penalizedIndex}), moneyPenalty={v.moneyPenalty}, stabilityDelta={v.stabilityDelta:0.#} (legendary={v.wasLegendary}), money={world.money}.");
         }
     }
+
+    /// <summary>A citation slip's text: the title, the mistake, the warning or penalty line and the stability change (UI string keys; piece 6).</summary>
+    private static string Citation(string mistake, string consequence, float stabilityDelta) =>
+        UiText.Format("citation.layout", UiText.Get("citation.title"), mistake, consequence, UiText.Format("citation.stability", stabilityDelta));
 }

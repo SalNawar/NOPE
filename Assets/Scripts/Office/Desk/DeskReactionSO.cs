@@ -21,8 +21,8 @@ public sealed class DeskReactionSO : ScriptableObject
     /// <summary>Optional: played through the prop's AudioSource (the project has no clips yet).</summary>
     public AudioClip clip;
 
-    /// <summary>The tooltip ("{value}" is the prop's readout text); empty = no tooltip.</summary>
-    [TextArea] public string tooltip;
+    /// <summary>The tooltip: a UI string key whose {0} is the prop's readout text and {1} the wallet's word (world_source.json ui.strings; empty = no tooltip).</summary>
+    public string tooltipKey;
 
     /// <summary>Seconds the tooltip stays up.</summary>
     [Min(0.1f)] public float tooltipSeconds = 2.5f;

@@ -130,6 +130,11 @@ public sealed class RunManager : MonoBehaviour
 
         World = loaded;
         DevToolsState.ResetAll();
+
+        // The present culture's cue from the saved history, idempotently (an
+        // older save may lack it; piece 6 Z5).
+        if (Library != null)
+            HistoryService.RebuildLeaderEffect(World, Library, World.day);
         Debug.Log($"[RunManager] Continued run (day {World.day}).");
         return true;
     }

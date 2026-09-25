@@ -148,29 +148,6 @@ public sealed class Discrepancy
         return "deviation." + how + "." + (statement == EvidenceKind.Answer ? "said" : "papers");
     }
 
-    /// <summary>Player-facing report line ("CAPITAL INCORRECT — traveller said: ..."), naming where the tell was stated.</summary>
-    public string Summary
-    {
-        get
-        {
-            string what = ClueLabels.Report(category);
-            bool said = source == EvidenceKind.Answer;
-            switch (provedBy)
-            {
-                case DiscrepancyProof.ForeignOrigin:
-                    return said
-                        ? $"{what} INCORRECT — traveller said \"{documentValue}\", which belongs to {actualOrigin}"
-                        : $"{what} INCORRECT — papers show \"{documentValue}\", which belongs to {actualOrigin}";
-                case DiscrepancyProof.RecordMismatch:
-                    return $"{what} INCORRECT — {Stated(said)}: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
-                default:
-                    return $"{what} INCORRECT — {Stated(said)}: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
-            }
-        }
-    }
-
-    /// <summary>Who stated the value, as a mismatch line names it.</summary>
-    private static string Stated(bool said) => said ? "traveller said" : "papers";
 }
 
 /// <summary>

@@ -41,8 +41,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds a desk scan takes (the shift clock keeps running).</summary>
     [Min(0.1f)] public float scanSeconds = 1.5f;
 
-    /// <summary>The day-1 note on the scanner tray (ASCII; empty = no note).</summary>
-    public string scanHint = "Drag papers onto the scanner to read them on the PC.";
+    /// <summary>The day-1 note on the scanner tray: a UI string key (world_source.json ui.strings; empty = no note).</summary>
+    public string scanHintKey = "desk.scanHint";
 
     /// <summary>The last day the scanner note shows (0 = never).</summary>
     [Min(0)] public int scanHintUntilDay = 1;
@@ -89,8 +89,8 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The least gap between two ring items, or an item and the centre (the builder's fit check).</summary>
     [Min(0f)] public float wheelItemGap = 8f;
 
-    /// <summary>The day-1 note above the traveller (ASCII; empty = no note).</summary>
-    public string wheelHint = "Click the traveller to talk and ask for papers.";
+    /// <summary>The day-1 note above the traveller: a UI string key (world_source.json ui.strings; empty = no note).</summary>
+    public string wheelHintKey = "desk.wheelHint";
 
     /// <summary>The last day the wheel note shows (0 = never).</summary>
     [Min(0)] public int wheelHintUntilDay = 1;

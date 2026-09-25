@@ -58,7 +58,7 @@ public sealed class BoothCoordinator : MonoBehaviour
     private void Awake()
     {
         if (wheelHint != null && config != null)
-            wheelHint.text = config.wheelHint;
+            wheelHint.text = UiText.Get(config.wheelHintKey);
     }
 
     private void OnEnable()
@@ -174,6 +174,6 @@ public sealed class BoothCoordinator : MonoBehaviour
             travellerHitZone.Interactable = input.TravellerLive;
         if (wheelHint != null)
             wheelHint.gameObject.SetActive(config != null &&
-                DeskHints.WheelHintVisible(config.wheelHint, _day, config.wheelHintUntilDay, _wheelOpenedToday, _phase == BoothPhase.TravellerAtDesk));
+                DeskHints.WheelHintVisible(config.wheelHintKey, _day, config.wheelHintUntilDay, _wheelOpenedToday, _phase == BoothPhase.TravellerAtDesk));
     }
 }

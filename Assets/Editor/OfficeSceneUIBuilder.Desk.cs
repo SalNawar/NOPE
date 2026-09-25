@@ -106,8 +106,8 @@ public static partial class OfficeSceneUIBuilder
         ("free_2", DeskSlotKind.Free, new Vector3(2.5f, -5.6f, 0f)),
     };
 
-    /// <summary>Returns a desk reaction asset, creating it with a kind and a tooltip when missing (a designer's edits are kept).</summary>
-    private static DeskReactionSO EnsureDeskReaction(string name, ReactionKind kind, string tooltip)
+    /// <summary>Returns a desk reaction asset, creating it with a kind and a tooltip key when missing (a designer's edits are kept).</summary>
+    private static DeskReactionSO EnsureDeskReaction(string name, ReactionKind kind, string tooltipKey)
     {
         string path = $"{DeskReactionFolder}/{name}.asset";
         DeskReactionSO reaction = AssetDatabase.LoadAssetAtPath<DeskReactionSO>(path);
@@ -117,7 +117,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceholderPng.EnsureFolderTree(DeskReactionFolder);
         reaction = ScriptableObject.CreateInstance<DeskReactionSO>();
         reaction.kind = kind;
-        reaction.tooltip = tooltip;
+        reaction.tooltipKey = tooltipKey;
         AssetDatabase.CreateAsset(reaction, path);
         return reaction;
     }
@@ -448,15 +448,15 @@ public static partial class OfficeSceneUIBuilder
         Clickable poster = BuildProp(booth.Find("ReactivePoster"), EnsureDeskReaction("Reaction_Poster", ReactionKind.Wobble, ""), tooltip, null, null);
         Clickable intercom = BuildProp(booth.Find("DeskIntercom"), EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), tooltip, null, null);
         Clickable tray = BuildProp(trayTransform, EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null, null);
-        Clickable till = BuildProp(tillTransform, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "Credits: {value}"), tooltip,
+        Clickable till = BuildProp(tillTransform, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "tooltip.credits"), tooltip,
                                    ReadoutText(tillTransform, "CreditsNumber"), tillTransform.GetComponent<AudioSource>());
-        Clickable stability = BuildProp(stabilityTransform, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "Timeline stability: {value}"), tooltip,
+        Clickable stability = BuildProp(stabilityTransform, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), tooltip,
                                         ReadoutText(stabilityTransform, "StabilityPercent"), null);
-        Clickable clock = BuildProp(booth.Find("WallClock"), EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "{value}"), tooltip, trayClockText, null);
+        Clickable clock = BuildProp(booth.Find("WallClock"), EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), tooltip, trayClockText, null);
 
         // The calendar is painted on the left partition: a hit zone over its sheet.
         Clickable calendar = EnsureHitZone(partition, "CalendarZone", CalendarZoneCentre, CalendarZoneSize, CalendarZoneOrder);
-        WireReaction(calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "Day {value}"), tooltip, ReadoutText(partition, "DayNumber"), null);
+        WireReaction(calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), tooltip, ReadoutText(partition, "DayNumber"), null);
         AssetDatabase.SaveAssets();
 
         // A finished scan pulses the scanner.

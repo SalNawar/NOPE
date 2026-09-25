@@ -23,6 +23,9 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>Shows the result after the player chooses.</summary>
     [SerializeField] private TMP_Text resultText;
 
+    /// <summary>The verdict line's strip; shown only while the line has text (piece 6 R18).</summary>
+    [SerializeField] private GameObject resultBackdrop;
+
     [Header("Era Buttons")]
     /// <summary>Parent transform where era buttons will be spawned.</summary>
     [SerializeField] private Transform eraButtonsRoot;
@@ -96,8 +99,7 @@ public sealed class OfficeUIController : MonoBehaviour
         if (visitorText != null)
             visitorText.text = $"{inst.visitorDisplayName}\n{inst.introLine}";
 
-        if (resultText != null)
-            resultText.text = string.Empty;
+        SetResult(string.Empty);
 
         // Documents (support 0, 1, or 2+ docs safely).
         if (doc1Text != null)
@@ -198,10 +200,15 @@ public sealed class OfficeUIController : MonoBehaviour
     /// <summary>
     /// Updates the result label (call from GameManager after validation).
     /// </summary>
-    public void SetResultText(string text)
+    public void SetResultText(string text) => SetResult(text);
+
+    /// <summary>Writes the verdict line and shows its strip only while it has text.</summary>
+    private void SetResult(string text)
     {
         if (resultText != null)
             resultText.text = text;
+        if (resultBackdrop != null)
+            resultBackdrop.SetActive(!string.IsNullOrEmpty(text));
     }
 
     /// <summary>
@@ -214,13 +221,13 @@ public sealed class OfficeUIController : MonoBehaviour
             return;
 
         if (moneyText != null)
-            moneyText.text = $"Credits: {world.money}";
+            moneyText.text = UiText.Format("tray.money", UiText.Currency(UiText.WalletForm.Label), world.money);
 
         if (stabilityText != null)
-            stabilityText.text = $"Stability: {world.timelineStability:0}%";
+            stabilityText.text = UiText.Format("tray.stability", world.timelineStability);
 
         if (dayText != null)
-            dayText.text = $"Day {world.day}";
+            dayText.text = UiText.Format("tray.day", world.day);
     }
 
     /// <summary>
@@ -236,12 +243,12 @@ public sealed class OfficeUIController : MonoBehaviour
             return;
         }
 
-        if (resultText != null)
-        {
-            resultText.text = verdict.correct
-                ? $"CORRECT  (+{verdict.payAwarded} credits)"
-                : $"WRONG  ({verdict.stabilityDelta:+0.#;-0.#} stability{(verdict.moneyPenalty > 0 ? $", -{verdict.moneyPenalty} credits" : string.Empty)})";
-        }
+        string credits = UiText.Currency(UiText.WalletForm.Inline);
+        SetResult(verdict.correct
+            ? UiText.Format("verdict.correct", verdict.payAwarded, credits)
+            : verdict.moneyPenalty > 0
+                ? UiText.Format("verdict.wrongPenalty", verdict.stabilityDelta, verdict.moneyPenalty, credits)
+                : UiText.Format("verdict.wrong", verdict.stabilityDelta));
 
         bool canShowSlip = verdict.citationIssued && citationPanel != null && citationText != null;
 

@@ -55,10 +55,6 @@ public sealed class CompareController : MonoBehaviour
             compareBar.SetActive(false);
     }
 
-    /// <summary>Registers a clicked value for comparison (no typed evidence); value is the canonical value (it drives MATCH/MISMATCH; never display text).</summary>
-    public void Select(string label, string value, Image highlight) =>
-        Select(label, value, highlight, default);
-
     /// <summary>Registers a clicked value for comparison, with typed evidence; value is the canonical value (it drives MATCH/MISMATCH; never display text).</summary>
     public void Select(string label, string value, Image highlight, CompareEvidence evidence)
     {
@@ -84,6 +80,15 @@ public sealed class CompareController : MonoBehaviour
             PairCompared?.Invoke(_a.evidence, _b.evidence);
     }
 
+    /// <summary>The present culture's compare colours (CultureThemeService at scene load; piece 6).</summary>
+    public void ApplyTheme(Color match, Color mismatch, Color neutral, Color highlight)
+    {
+        matchColor = match;
+        mismatchColor = mismatch;
+        neutralColor = neutral;
+        highlightColor = highlight;
+    }
+
     /// <summary>
     /// Replaces the compare bar verdict after a discrepancy registers, so an
     /// origin-proof never reads as a friendly green MATCH.
@@ -94,7 +99,7 @@ public sealed class CompareController : MonoBehaviour
             return;
 
         compareText.color = mismatchColor;
-        compareText.text = $"●  DEVIATION LOGGED — {summary}";
+        compareText.text = UiText.Format("compare.deviationLogged", summary);
     }
 
     /// <summary>
@@ -107,7 +112,7 @@ public sealed class CompareController : MonoBehaviour
             return;
 
         compareText.color = neutralColor;
-        compareText.text = $"●  ALREADY DOCUMENTED — {categoryLabel} is in the Deviation Report";
+        compareText.text = UiText.Format("compare.alreadyDocumented", categoryLabel);
     }
 
     private Slot Fill(string label, string value, Image g, CompareEvidence evidence)
@@ -135,13 +140,13 @@ public sealed class CompareController : MonoBehaviour
         {
             bool match = ValuesMatch(_a.value, _b.value);
             compareText.color = match ? matchColor : mismatchColor;
-            string verdict = match ? "MATCH" : "MISMATCH";
-            compareText.text = $"{verdict}    {_a.label}:  {_a.value}    vs    {_b.label}:  {_b.value}";
+            string verdict = UiText.Get(match ? "compare.match" : "compare.mismatch");
+            compareText.text = UiText.Format("compare.pair", verdict, _a.label, _a.value, _b.label, _b.value);
         }
         else if (_a.set)
         {
             compareText.color = neutralColor;
-            compareText.text = $"{_a.label}:  {_a.value}    vs    (pick another value to compare)";
+            compareText.text = UiText.Format("compare.pickAnother", _a.label, _a.value);
         }
         else
         {

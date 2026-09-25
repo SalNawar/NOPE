@@ -16,7 +16,13 @@ public abstract class TimelineCueReceiver : MonoBehaviour
     [SerializeField] private EffectChannel channel = EffectChannel.Visuals;
 
     /// <summary>Channel this receiver listens to (read-only).</summary>
-    public EffectChannel Channel => channel;
+    public EffectChannel Channel => ListenChannel;
+
+    /// <summary>
+    /// The channel Refresh reads: the inspector's by default; a subclass
+    /// created at runtime (the culture theme service, on UI) overrides it.
+    /// </summary>
+    protected virtual EffectChannel ListenChannel => channel;
 
     /// <summary>
     /// Refreshes cues on scene start (i.e., each day / scene load).
@@ -39,7 +45,7 @@ public abstract class TimelineCueReceiver : MonoBehaviour
         }
 
         RunManager run = RunManager.Instance;
-        List<string> cues = TimelineEffects.GetCues(run.World, run.Library, channel);
+        List<string> cues = TimelineEffects.GetCues(run.World, run.Library, ListenChannel);
         OnCuesChanged(cues);
     }
 

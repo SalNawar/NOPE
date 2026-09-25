@@ -6,7 +6,7 @@ using UnityEngine;
 /// (ReactionCurve, relative to the rest pose captured at Awake), an optional
 /// sound (when the reaction has a clip and the prop an AudioSource) and an
 /// optional tooltip that shows a live readout's text (the calendar's day, the
-/// till's credits...) through the overlay tooltip callout.
+/// till's money in the wallet's word...) through the overlay tooltip callout.
 /// </summary>
 [RequireComponent(typeof(Clickable))]
 public sealed class DeskReaction : MonoBehaviour
@@ -14,7 +14,7 @@ public sealed class DeskReaction : MonoBehaviour
     /// <summary>The reaction's tuning.</summary>
     [SerializeField] private DeskReactionSO reaction;
 
-    /// <summary>Optional: the live text the tooltip's {value} shows.</summary>
+    /// <summary>Optional: the live text the tooltip's {0} shows.</summary>
     [SerializeField] private TMP_Text readout;
 
     /// <summary>The overlay tooltip (shared by every prop).</summary>
@@ -37,7 +37,7 @@ public sealed class DeskReaction : MonoBehaviour
         GetComponent<Clickable>().onClick.AddListener(Play);
     }
 
-    /// <summary>Plays the reaction: the animation, the clip when there is one and a source, and the tooltip when its template is not blank.</summary>
+    /// <summary>Plays the reaction: the animation, the clip when there is one and a source, and the tooltip when its key is not blank.</summary>
     public void Play()
     {
         if (reaction == null)
@@ -49,8 +49,8 @@ public sealed class DeskReaction : MonoBehaviour
         if (reaction.clip != null && audioSource != null)
             audioSource.PlayOneShot(reaction.clip);
 
-        if (tooltip != null && !string.IsNullOrWhiteSpace(reaction.tooltip))
-            tooltip.Show(Interview.Fill(reaction.tooltip, Interview.ValueToken, readout != null ? readout.text : string.Empty),
+        if (tooltip != null && !string.IsNullOrWhiteSpace(reaction.tooltipKey))
+            tooltip.Show(UiText.Format(reaction.tooltipKey, readout != null ? readout.text : string.Empty, UiText.Currency(UiText.WalletForm.Label)),
                          transform, reaction.tooltipOffset, reaction.tooltipSeconds);
     }
 

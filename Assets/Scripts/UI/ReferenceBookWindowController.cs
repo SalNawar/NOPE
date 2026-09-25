@@ -6,8 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// Renders a reference book as a flippable window. Its rows are today's facts
 /// for the book's category (FactTable.Rows), each a clickable "place : value"
-/// row the player can compare against a traveller's statement. Paging and
-/// row cloning are PagedRowsWindow's.
+/// row the player can compare against a traveller's statement; a row whose
+/// value history changed shows "[revised]" after its place (FactTable.IsChanged;
+/// the value and the evidence stay canonical). Paging and row cloning are
+/// PagedRowsWindow's.
 /// </summary>
 public sealed class ReferenceBookWindowController : PagedRowsWindow
 {
@@ -22,7 +24,7 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
         _facts = facts;
         _compare = compare;
 
-        SetTitle(book != null ? book.displayName : "Reference");
+        SetTitle(book != null ? book.displayName : UiText.Get("book.untitled"));
         ShowPage(0);
     }
 
@@ -39,11 +41,13 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
         FactRow fact = Rows()[index];
 
         if (texts.Length > 0 && texts[0] != null)
-            texts[0].text = fact.OriginLabel;
+            texts[0].text = _facts.IsChanged(fact.NationId, fact.EraId, fact.Category)
+                ? UiText.Format("book.revisedLabel", fact.OriginLabel)
+                : fact.OriginLabel;
         if (texts.Length > 1 && texts[1] != null)
             texts[1].text = fact.Value;
 
-        string label = $"{(_book != null ? _book.displayName : "Reference")}: {fact.OriginLabel}";
+        string label = UiText.Format("book.compareLabel", _book != null ? _book.displayName : UiText.Get("book.untitled"), fact.OriginLabel);
         string value = fact.Value;
         CompareEvidence evidence = fact.ToEvidence();
 
