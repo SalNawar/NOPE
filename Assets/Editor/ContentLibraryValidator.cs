@@ -369,9 +369,11 @@ public static class ContentLibraryValidator
 
     /// <summary>
     /// The Future: at most one era is the Future, and then every nation has a
-    /// place in it (errors); every nation's leader effect is a UI-channel
-    /// effect whose Cue op is its culture cue (CultureCue), and no Future place
-    /// has baselines, which would put it in the dominance tiers (warnings).
+    /// place in it; no premade claims (trueEra) or comes from (truePlace) the
+    /// Future, which is in the world only while its nation leads (errors);
+    /// every nation's leader effect is a UI-channel effect whose Cue op is its
+    /// culture cue (CultureCue), and no Future place has baselines, which
+    /// would put it in the dominance tiers (warnings).
     /// </summary>
     private static int CheckFuture(ContentLibrarySO lib)
     {
@@ -409,6 +411,24 @@ public static class ContentLibraryValidator
             if (place != null && place.era != null && place.era.isFuture && place.baselines != null && place.baselines.Count > 0)
             {
                 Debug.LogWarning($"[ContentLibraryValidator] Future place '{place.name}' has baselines, so it would join the dominance tiers and their news in '{lib.name}'.", place);
+                issues++;
+            }
+        }
+
+        foreach (LegendarySO legend in lib.Legendaries)
+        {
+            if (legend == null)
+                continue;
+
+            if (legend.trueEra != null && legend.trueEra.isFuture)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Premade '{legend.name}' ({legend.displayName}) claims the Future, whose place is in the world only while its nation leads; no premade may claim or come from the Future in '{lib.name}'.", legend);
+                issues++;
+            }
+
+            if (legend.truePlace != null && legend.truePlace.era != null && legend.truePlace.era.isFuture)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Premade '{legend.name}' ({legend.displayName}) comes from the Future place '{legend.truePlace.name}', which is in the world only while its nation leads; no premade may claim or come from the Future in '{lib.name}'.", legend);
                 issues++;
             }
         }
