@@ -79,6 +79,18 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The day-1 scan note's box (metres): two lines of the note at the size one line of the old, shorter note had.</summary>
     private static readonly Vector2 ScanHintBox = new Vector2(0.78f, 0.13f);
 
+    /// <summary>The day-1 wheel note's box (metres): two lines, twice the size of the old one-line note (it floats above the traveller, far from the camera).</summary>
+    private static readonly Vector2 WheelHintBox = new Vector2(1.2f, 0.23f);
+
+    /// <summary>The wheel note's largest size (TMP world units): room for its two lines at twice the old note's size.</summary>
+    private const float WheelHintMaxSize = 1f;
+
+    /// <summary>The day-1 notes' backing (the readability fix): a dark, mostly opaque plate behind the light text, so it reads over the pale morning crowds and the evening palette.</summary>
+    private static readonly Color NoteBackingColour = new Color(0.07f, 0.08f, 0.1f, 0.85f);
+
+    /// <summary>The margin of a note's backing around its text (metres).</summary>
+    private static readonly Vector2 NoteBackingMargin = new Vector2(0.04f, 0.02f);
+
     /// <summary>The smallest auto-size of a paper row's texts (TMP world units: a few millimetres).</summary>
     private const float PaperTextMinSize = 0.03f;
 
@@ -577,7 +589,10 @@ public static partial class OfficeSceneUIBuilder
         var soWheel = new SerializedObject(wheel);
         SetRef(soWheel, "traveller", traveller);
         soWheel.ApplyModifiedProperties();
-        TextMeshPro wheelHint = FloatingNote(office, "WheelHint");
+        TextMeshPro wheelHint = FloatingNote(office, "WheelHint", true);
+        ((RectTransform)wheelHint.transform).sizeDelta = WheelHintBox;
+        wheelHint.textWrappingMode = TextWrappingModes.Normal;
+        wheelHint.fontSizeMax = WheelHintMaxSize;
 
         // The props: a click box and a reaction each (the binder hands them the art prop and its readout).
         Transform propsRoot = EnsureChild(office, "Props");
@@ -763,7 +778,7 @@ public static partial class OfficeSceneUIBuilder
         soScanner.FindProperty("bedCentre").vector3Value = new Vector3(0f, 0.056f, 0.01f);
         soScanner.ApplyModifiedProperties();
 
-        scanHint = FloatingNote(office, "ScanHint");
+        scanHint = FloatingNote(office, "ScanHint", true);
         // Piece 10's longer note ("Click a paper to read it; drag it onto the scanner to open it on the PC.") wraps onto two lines, so it keeps its size.
         ((RectTransform)scanHint.transform).sizeDelta = ScanHintBox;
         scanHint.textWrappingMode = TextWrappingModes.Normal;
@@ -948,8 +963,14 @@ public static partial class OfficeSceneUIBuilder
         return tmp;
     }
 
-    /// <summary>A note floating in the office (the binder places it and turns it to the camera): light text on a dark backing, auto-sized, inactive until shown. Idempotent.</summary>
-    private static TextMeshPro FloatingNote(Transform parent, string name)
+    /// <summary>
+    /// A note floating in the office (the binder places it and turns it to the
+    /// camera): light text with a dark outline, auto-sized, inactive until
+    /// shown; with <paramref name="backing"/> (the day-1 hints) a dark plate
+    /// behind it (a Backing quad in FloatingNote_Backing, fitted to the text by
+    /// NoteBacking). Idempotent.
+    /// </summary>
+    private static TextMeshPro FloatingNote(Transform parent, string name, bool backing = false)
     {
         DestroyChildIfPresent(parent, name);
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
@@ -965,9 +986,33 @@ public static partial class OfficeSceneUIBuilder
         tmp.color = NoteInk;
         tmp.fontStyle = FontStyles.Bold;
         tmp.fontSharedMaterial = NoteMaterial(tmp.font);
+        if (backing)
+        {
+            PrimitivePart(go.transform, "Backing", PrimitiveType.Quad, new Vector3(0f, 0f, 0.002f), Vector3.one, NoteBackingMaterial());
+            MeshRenderer plate = go.transform.Find("Backing").GetComponent<MeshRenderer>();
+            plate.shadowCastingMode = ShadowCastingMode.Off;
+            plate.receiveShadows = false;
+            NoteBacking fit = go.AddComponent<NoteBacking>();
+            var so = new SerializedObject(fit);
+            SetRef(so, "text", tmp);
+            SetRef(so, "backing", plate.transform);
+            so.FindProperty("margin").vector2Value = NoteBackingMargin;
+            so.ApplyModifiedProperties();
+        }
         go.SetActive(false);
         return tmp;
     }
+
+    /// <summary>The day-1 notes' backing material: unlit, transparent, dark, drawn before the notes' text. Created once; a designer's edits are kept.</summary>
+    private static Material NoteBackingMaterial() =>
+        EnsureMaterial("FloatingNote_Backing", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetColor("_BaseColor", NoteBackingColour);
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            m.SetFloat("_QueueOffset", -10f);
+            BaseShaderGUI.SetMaterialKeywords(m);
+        });
 
     /// <summary>
     /// The floating notes' shared font material: the font's own with a dark
