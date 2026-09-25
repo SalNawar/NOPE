@@ -29,6 +29,9 @@ public sealed class OfficeViewController : MonoBehaviour
     /// <summary>Raised after the view changes.</summary>
     public event Action<OfficeView> ViewChanged;
 
+    /// <summary>The frame the view last changed (an Escape of that frame is not taken: one Escape does one thing).</summary>
+    private int _changedFrame;
+
     /// <summary>Escape closes the frame, like its close button and a click outside it.</summary>
     private void Update()
     {
@@ -36,7 +39,7 @@ public sealed class OfficeViewController : MonoBehaviour
             return;
 
         Keyboard kb = Keyboard.current;
-        if (kb != null && kb.escapeKey.wasPressedThisFrame)
+        if (kb != null && kb.escapeKey.wasPressedThisFrame && _changedFrame < Time.frameCount)
             FocusOffice();
     }
 
@@ -52,6 +55,7 @@ public sealed class OfficeViewController : MonoBehaviour
             return;
 
         Current = view;
+        _changedFrame = Time.frameCount;
         if (frame != null)
             frame.SetOpen(view == OfficeView.MonitorFocus);
         ViewChanged?.Invoke(Current);

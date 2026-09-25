@@ -222,6 +222,9 @@ public sealed class InvestigationUIController : MonoBehaviour
             desk.FieldPicked += HandleFieldPicked;
         }
 
+        if (wheel != null)
+            wheel.LineClicked += HandleLineClicked;
+
         if (idleScreen != null)
             idleScreen.SetActive(true);
     }
@@ -237,6 +240,9 @@ public sealed class InvestigationUIController : MonoBehaviour
             desk.PaperExamined -= Sighted;
             desk.FieldPicked -= HandleFieldPicked;
         }
+
+        if (wheel != null)
+            wheel.LineClicked -= HandleLineClicked;
     }
 
     /// <summary>
@@ -649,6 +655,21 @@ public sealed class InvestigationUIController : MonoBehaviour
             _docWindows[index].Refresh();
         if (DeskReachable)
             desk.RefreshPaper(index);
+    }
+
+    /// <summary>The bubble's answer picked at the desk: it goes into the compare as the transcript's row would (the same pick), lighting the bubble while it shows.</summary>
+    private void HandleLineClicked(DialogLine line)
+    {
+        if (_runner == null || compareController == null || line == null || !line.IsAnswer)
+            return;
+
+        IReadOnlyList<DialogLine> transcript = _runner.Transcript;
+        for (int i = 0; i < transcript.Count; i++)
+            if (transcript[i] == line)
+            {
+                compareController.Select(EvidencePicks.ForAnswer(i, line, _caseTranslation), wheel.BubbleHighlightNow);
+                return;
+            }
     }
 
     /// <summary>A held paper's row picked at the desk: the document's flip finishes on both surfaces, then the row goes into the compare (the same pick as its scanned copy's row).</summary>
