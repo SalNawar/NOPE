@@ -128,16 +128,6 @@ public sealed class DocumentInstance
     /// <summary>Structured, checkable fields (investigation feature).</summary>
     public readonly List<DocumentField> fields = new();
 
-    /// <summary>Number of pages this document spans (1-based count).</summary>
-    public int PageCount
-    {
-        get
-        {
-            int max = 1;
-            foreach (DocumentField f in fields)
-                if (f != null && f.page + 1 > max)
-                    max = f.page + 1;
-            return max;
-        }
-    }
+    /// <summary>Number of pages this document spans (1-based count; DocumentRows.PageCount).</summary>
+    public int PageCount => DocumentRows.PageCount(fields);
 }

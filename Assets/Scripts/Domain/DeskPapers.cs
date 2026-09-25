@@ -26,6 +26,9 @@ public sealed class CaseDocument
     /// <summary>The name the paper shows: the traveller's registered given name.</summary>
     public string holder;
 
+    /// <summary>The document's fields: the rows its paper shows (DocumentRows).</summary>
+    public IReadOnlyList<DocumentField> fields;
+
     /// <summary>When the traveller hands it over.</summary>
     public DocumentHandOver handOver;
 

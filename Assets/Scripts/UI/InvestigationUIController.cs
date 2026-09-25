@@ -401,6 +401,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
                     holder = inst.visitorGivenName,
+                    fields = doc != null ? doc.fields : null,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
