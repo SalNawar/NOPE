@@ -55,7 +55,7 @@ public sealed class OfficeSceneContractSO : ScriptableObject
     public AnchorSpec[] anchors =
     {
         new AnchorSpec(OfficeAnchorId.PCScreen, new[] { "ImportedOfficeDress/Desk/Retro CRT" }, true, new Vector3(-1.64f, 1.43f, -0.13f), 160f),
-        new AnchorSpec(OfficeAnchorId.PCPower, null, true, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.PCPower, new[] { "ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange" }, true, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.DeskSurface, new[] { "HybridOffice/Booth/Finish_Mat" }, true, new Vector3(0f, 1.07f, -0.52f)),
         new AnchorSpec(OfficeAnchorId.Scanner, null, true, new Vector3(1.02f, 1.06f, -0.46f), 180f),
         new AnchorSpec(OfficeAnchorId.Traveller, null, true, new Vector3(0f, 0f, 1.6f), 180f),
