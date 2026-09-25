@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: queue
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: guapimao cap
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 3
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: low flat bun
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: meile band
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: white jade bangle
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 1

@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: short crop
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: full beard
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: kalpak
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: striped sash
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 4
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: two front braids
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: cap and tsemberi
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: pafti buckle
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 1

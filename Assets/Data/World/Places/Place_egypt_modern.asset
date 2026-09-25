@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: combed-back hair
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: thick moustache
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: fringed shal
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 3
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: smooth plaited hair
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: mandil
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: gold bangles
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 0

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Thames Barrier London
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  year: 2150
   birthYearMin: 2080
   birthYearMax: 2132
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: London (Thames Barrier)
   - category: 2
     value: First Minister Ada Clarke
+  - category: 6
+    value: tweed-grid frock coat
   maleNames:
   - Oliver
   - Noah
@@ -48,4 +51,95 @@ MonoBehaviour:
   - Aisha
   - Priya
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 0
+      outfit:
+        label: tweed-grid frock coat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short textured crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: short trimmed beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 0
+      outfit:
+        label: tweed-grid frock coat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: sleek low bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 5
+    - 4
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
   baselines: []

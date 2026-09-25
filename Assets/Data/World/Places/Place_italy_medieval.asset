@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: rounded short crop
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: mazzocchio hat
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 3
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: drawn-back coil
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: ghirlanda
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: pearl pendant jewel
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 1

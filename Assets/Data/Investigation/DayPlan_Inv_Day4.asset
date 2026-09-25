@@ -27,9 +27,18 @@ MonoBehaviour:
     weight: 1
   allowedNations: []
   legendaryBaseChance: 0.05
-  availableLegendaries: []
+  availableLegendaries:
+  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
+  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
+  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
+  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
+  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
+  - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
+  - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
   tellCount: 1
-  tellChannels: 0000000001000000
+  tellChannels: 000000000100000002000000
   activeTravelRules:
   - {fileID: 11400000, guid: 715dc87bb156a1644811671799952619, type: 2}
   guaranteeRuleViolators: 1

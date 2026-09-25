@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: fringed chin-length hair
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: Gugel hood
         leakable: 1
         wig: 0
         back: 0
         covers: 01000000
+        artNation: 
       accessory:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 3
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: pinned plaits
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: Kruseler veil
         leakable: 1
         wig: 0
         back: 0
         covers: 01000000
+        artNation: 
       accessory:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 4

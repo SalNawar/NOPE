@@ -291,6 +291,12 @@ MonoBehaviour:
     hasInk: 1
     ink: {r: 0.101960786, g: 0.09019608, b: 0.078431375, a: 1}
     textClass: 0
+  - role: 45
+    hasFill: 1
+    fill: {r: 1, g: 1, b: 1, a: 1}
+    hasInk: 1
+    ink: {r: 0.36862746, g: 0.32941177, b: 0.27450982, a: 1}
+    textClass: 0
   ringDark: {r: 0.03529412, g: 0.18039216, b: 0.4392157, a: 1}
   ringLight: {r: 1, g: 0.84313726, b: 0.43137255, a: 1}
   wallpaper: {fileID: 21300000, guid: 3b76634ee0f0e304ba0958315f4369f4, type: 3}

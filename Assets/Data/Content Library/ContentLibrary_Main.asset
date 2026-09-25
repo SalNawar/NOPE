@@ -27,7 +27,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   - {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
   clues: []
-  legendaries: []
+  legendaries:
+  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
+  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
+  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
+  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
+  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
+  - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
+  - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
   effects:
   - {fileID: 11400000, guid: 42e1353d8857b2f41a8b91b0a6aa2c3d, type: 2}
   - {fileID: 11400000, guid: 0305c253639018445aab40a9a8999063, type: 2}
@@ -166,6 +176,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b398af720f28a704285a043ddd17caac, type: 2}
   - {fileID: 11400000, guid: f4a8944939c8454f90f50df9a7898f2c, type: 2}
   - {fileID: 11400000, guid: 2fb3a1caac37490aac9f1df4ff62901a, type: 2}
+  - {fileID: 11400000, guid: 1e0cac879e5b4c6391ca8a166f781240, type: 2}
   interview:
     deskName: DESK
     opener:
@@ -190,6 +201,7 @@ MonoBehaviour:
     askLabel: Ask about home >
     backLabel: < Back
     smallTalkLabel: Small talk
+    lookLabel: Look >
     smallTalkPrompt:
       id: interview.smallTalkPrompt
       text: How is life back home?
@@ -221,6 +233,7 @@ MonoBehaviour:
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}
   - {fileID: 11400000, guid: bcda9ea69ca7a6a4ebabdc7ddf5b030a, type: 2}
+  - {fileID: 11400000, guid: 611adeb2169076c4882c5daaecbd3e8a, type: 2}
   historyLines:
     leaderGained:
       id: history.leaderGained
@@ -233,6 +246,541 @@ MonoBehaviour:
     carry:
       id: history.carry
       text: 'HISTORY: travellers brought {value} to {place}.'
+  lookRules:
+    faceBands:
+    - minAge: 18
+      faces:
+      - a
+      - b
+    - minAge: 35
+      faces:
+      - c
+    - minAge: 60
+      faces:
+      - d
+    greyFromAge: 60
+    wholeFigureLabel: Period dress
+    confusable:
+    - placeA: greece_ancient
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: greece_industrial
+      slot: 3
+      gender: m
+    - placeA: iraq_medieval
+      placeB: japan_medieval
+      slot: 3
+      gender: m
+    - placeA: china_earlymodern
+      placeB: greece_earlymodern
+      slot: 3
+      gender: m
+    - placeA: china_modern
+      placeB: britain_modern
+      slot: 3
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: britain_industrial
+      slot: 3
+      gender: m
+    - placeA: egypt_medieval
+      placeB: egypt_earlymodern
+      slot: 3
+      gender: m
+    - placeA: germany_industrial
+      placeB: germany_modern
+      slot: 3
+      gender: m
+    - placeA: iraq_ancient
+      placeB: greece_medieval
+      slot: 2
+      gender: m
+    - placeA: iraq_ancient
+      placeB: germany_medieval
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: greece_modern
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: greece_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: italy_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: egypt_modern
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: egypt_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: iraq_industrial
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: britain_ancient
+      slot: 2
+      gender: m
+    - placeA: germany_modern
+      placeB: britain_medieval
+      slot: 2
+      gender: m
+    - placeA: egypt_modern
+      placeB: iraq_medieval
+      slot: 4
+      gender: m
+    - placeA: iraq_industrial
+      placeB: iraq_modern
+      slot: 3
+      gender: f
+    - placeA: iraq_earlymodern
+      placeB: iraq_industrial
+      slot: 3
+      gender: f
+    - placeA: iraq_earlymodern
+      placeB: iraq_modern
+      slot: 3
+      gender: f
+    - placeA: egypt_industrial
+      placeB: egypt_medieval
+      slot: 3
+      gender: f
+    - placeA: iraq_medieval
+      placeB: egypt_medieval
+      slot: 3
+      gender: f
+    - placeA: iraq_medieval
+      placeB: egypt_industrial
+      slot: 3
+      gender: f
+    - placeA: china_earlymodern
+      placeB: china_industrial
+      slot: 3
+      gender: f
+    - placeA: italy_earlymodern
+      placeB: china_earlymodern
+      slot: 3
+      gender: f
+    - placeA: italy_earlymodern
+      placeB: china_industrial
+      slot: 3
+      gender: f
+    - placeA: egypt_modern
+      placeB: britain_modern
+      slot: 3
+      gender: f
+    - placeA: egypt_modern
+      placeB: greece_earlymodern
+      slot: 3
+      gender: f
+    - placeA: greece_ancient
+      placeB: egypt_modern
+      slot: 3
+      gender: f
+    - placeA: greece_ancient
+      placeB: greece_earlymodern
+      slot: 3
+      gender: f
+    - placeA: greece_industrial
+      placeB: greece_earlymodern
+      slot: 3
+      gender: f
+    - placeA: germany_ancient
+      placeB: italy_industrial
+      slot: 4
+      gender: f
+    - placeA: iraq_modern
+      placeB: greece_industrial
+      slot: 4
+      gender: f
+    - placeA: iraq_modern
+      placeB: iraq_earlymodern
+      slot: 4
+      gender: f
+    - placeA: greece_ancient
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_ancient
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_medieval
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_earlymodern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_industrial
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: china_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_modern
+      placeB: germany_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_ancient
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: iraq_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: italy_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: japan_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: egypt_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: greece_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: germany_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: egypt_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: britain_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: egypt_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: iraq_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: britain_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: germany_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: china_ancient
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_medieval
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: italy_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: japan_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_industrial
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: iraq_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: china_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: britain_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: germany_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: m
+    - placeA: greece_ancient
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_ancient
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: iraq_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: italy_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: japan_medieval
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: italy_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: britain_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: germany_earlymodern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: egypt_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: italy_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: japan_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: britain_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: germany_industrial
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: iraq_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: china_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: britain_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: germany_modern
+      placeB: japan_earlymodern
+      slot: 1
+      gender: m
+    - placeA: greece_ancient
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: iraq_medieval
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: italy_medieval
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: japan_medieval
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: egypt_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: greece_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: germany_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: egypt_industrial
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: britain_industrial
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: egypt_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: iraq_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: britain_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: germany_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
   cultureUi:
     readingLanguage: en
     glossPercent: 60

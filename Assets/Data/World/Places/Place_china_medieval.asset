@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: crown topknot
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: thin moustache and beard
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: winged futou
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: plaque belt
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 3
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: tall gaoji bun
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: crescent comb
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 1

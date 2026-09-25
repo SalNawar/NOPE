@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: combed side parting
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: orange headphones
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 4
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: Seiko-chan cut
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: orange headphones
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 1

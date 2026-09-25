@@ -60,30 +60,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: swept-back mane
         leakable: 0
         wig: 0
         back: 1
         covers: 
+        artNation: 
       facialHair:
         label: long drooping moustache
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: torc
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
     female:
       signature: 4
       outfit:
@@ -92,30 +97,35 @@ MonoBehaviour:
         wig: 0
         back: 0
         covers: 
+        artNation: 
       hair:
         label: two thick braids
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       facialHair:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       headwear:
         label: 
         leakable: 0
         wig: 0
         back: 0
         covers: 
+        artNation: 
       accessory:
         label: torc
         leakable: 1
         wig: 0
         back: 0
         covers: 
+        artNation: 
   looks:
     skin:
     - 5

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Mediterranean Union Rome
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
+  year: 2150
   birthYearMin: 2080
   birthYearMax: 2132
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Rome (Union capital)
   - category: 2
     value: Consul Marco Ferri
+  - category: 6
+    value: clavus-stripe wrap
   maleNames:
   - Leonardo
   - Francesco
@@ -48,4 +51,93 @@ MonoBehaviour:
   - Chiara
   - Martina
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 0
+      outfit:
+        label: clavus-stripe wrap
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: short textured crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: short trimmed beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+    female:
+      signature: 0
+      outfit:
+        label: clavus-stripe wrap
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      hair:
+        label: sleek low bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: neutral
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
   baselines: []

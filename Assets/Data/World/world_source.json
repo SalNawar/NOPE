@@ -7704,6 +7704,11 @@
           "role": "DiegeticBubble",
           "fill": "#FAF7EDF7",
           "ink": "#1A1714"
+        },
+        {
+          "role": "DiegeticDevice",
+          "fill": "#FFFFFF",
+          "ink": "#5E5446"
         }
       ],
       "art": [
@@ -8436,6 +8441,12 @@
       {
         "key": "desk.wheelHint",
         "text": "Click the traveller to talk and ask for papers.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.readyCaption",
+        "text": "NEXT",
         "gloss": "None",
         "tier": "Full"
       },

@@ -324,9 +324,9 @@ MonoBehaviour:
     text: 'No deviations documented.
 
 
-      Compare a document field or a traveller''s
-      answer against the claimed place''s reference entry, the entry it really belongs
-      to, or the Citizen Record to log evidence.'
+      Compare a document field, a traveller''s
+      answer or a garment they wear against the claimed place''s reference entry,
+      the entry it really belongs to, or the Citizen Record to log evidence.'
     gloss: 0
     tier: 0
   - key: scanner.summary
@@ -387,6 +387,26 @@ MonoBehaviour:
     text: "Traveller \xB7 {0}"
     gloss: 0
     tier: 0
+  - key: slot.Outfit
+    text: OUTFIT
+    gloss: 0
+    tier: 0
+  - key: slot.Hair
+    text: HAIR
+    gloss: 0
+    tier: 0
+  - key: slot.FacialHair
+    text: FACIAL HAIR
+    gloss: 0
+    tier: 0
+  - key: slot.Headwear
+    text: HEADWEAR
+    gloss: 0
+    tier: 0
+  - key: slot.Accessory
+    text: ACCESSORY
+    gloss: 0
+    tier: 0
   - key: records.placeholder
     text: "Type a full name\u2026"
     gloss: 0
@@ -417,7 +437,7 @@ MonoBehaviour:
     tier: 0
   - key: citation.unproven
     text: Deviation denied without documented evidence. Log a deviation from the
-      papers or the traveller's answers before denying.
+      papers, the traveller's answers or their dress before denying.
     gloss: 0
     tier: 0
   - key: citation.acceptedWrong
@@ -482,6 +502,10 @@ MonoBehaviour:
     text: Click the traveller to talk and ask for papers.
     gloss: 0
     tier: 0
+  - key: desk.readyCaption
+    text: NEXT
+    gloss: 0
+    tier: 0
   - key: tooltip.credits
     text: '{1}: {0}'
     gloss: 0
@@ -509,6 +533,14 @@ MonoBehaviour:
     tier: 0
   - key: fallback.documents
     text: "\u2014 DOCUMENTS PRESENTED \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.dress
+    text: "\u2014 TRAVELLER'S DRESS \u2014"
+    gloss: 0
+    tier: 0
+  - key: fallback.garment
+    text: '    {0}: {1} ({2})'
     gloss: 0
     tier: 0
   - key: fallback.document
@@ -575,6 +607,10 @@ MonoBehaviour:
     text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  expected: \"{2}\""
     gloss: 0
     tier: 0
+  - key: deviation.claimMismatch.worn
+    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  expected: \"{2}\""
+    gloss: 0
+    tier: 0
   - key: deviation.foreignOrigin.papers
     text: "{0} INCORRECT \u2014 papers show \"{1}\", which belongs to {2}"
     gloss: 0
@@ -583,12 +619,20 @@ MonoBehaviour:
     text: "{0} INCORRECT \u2014 traveller said \"{1}\", which belongs to {2}"
     gloss: 0
     tier: 0
+  - key: deviation.foreignOrigin.worn
+    text: "{0} INCORRECT \u2014 traveller wears \"{1}\", which belongs to {2}"
+    gloss: 0
+    tier: 0
   - key: deviation.recordMismatch.papers
     text: "{0} INCORRECT \u2014 papers: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.said
     text: "{0} INCORRECT \u2014 traveller said: \"{1}\"  /  agency records: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.recordMismatch.worn
+    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  agency records: \"{2}\""
     gloss: 0
     tier: 0
   - key: category.Language
@@ -616,7 +660,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: category.Culture
-    text: CULTURE
+    text: DRESS
     gloss: 0
     tier: 0
   - key: category.Name
