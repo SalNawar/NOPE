@@ -142,6 +142,54 @@ public static class Palette
             .Select(r => new ContrastPair(r.Role.ToString(), r.Ink.Value, r.Fill.Value, r.TextClass))
             .ToList();
 
+    /// <summary>
+    /// The diegetic texts a theme's chrome sits behind, as contrast pairs (all
+    /// at the Text minimum): the rows of the scanned page, the records, the
+    /// transcript and the books, with and without the theme's selection
+    /// highlight, the record's labels, note and origin on the theme's window
+    /// body, the scanner footer and the speech bubble. Diegetic colours come from
+    /// <paramref name="neutral"/> (only it names them); a pair whose colours are
+    /// missing is skipped (Missing reports those roles). Translucent fills are
+    /// composited over what they sit on.
+    /// </summary>
+    public static List<ContrastPair> DiegeticPairs(IReadOnlyList<ResolvedRole> theme, IReadOnlyList<ResolvedRole> neutral)
+    {
+        Rgba? body = Find(theme, ThemeRoleId.WindowBody, true), highlight = Find(theme, ThemeRoleId.SelectionHighlight, true);
+        Rgba? paper = Find(neutral, ThemeRoleId.DiegeticPaper, true);
+        Rgba? row = Find(neutral, ThemeRoleId.DiegeticRow, true), rowInk = Find(neutral, ThemeRoleId.DiegeticRow, false);
+        Rgba? book = Find(neutral, ThemeRoleId.DiegeticBookRow, true), bookInk = Find(neutral, ThemeRoleId.DiegeticBookRow, false);
+        Rgba? label = Find(neutral, ThemeRoleId.DiegeticLabel, false), note = Find(neutral, ThemeRoleId.DiegeticNote, false);
+        Rgba? backing = Find(neutral, ThemeRoleId.DiegeticBacking, true), backingInk = Find(neutral, ThemeRoleId.DiegeticBacking, false);
+        Rgba? bubble = Find(neutral, ThemeRoleId.DiegeticBubble, true), bubbleInk = Find(neutral, ThemeRoleId.DiegeticBubble, false);
+
+        var pairs = new List<ContrastPair>();
+        void Add(string name, Rgba? ink, Rgba? fill, Rgba? under = null)
+        {
+            if (ink.HasValue && fill.HasValue && (under.HasValue || fill.Value.A >= 1f))
+                pairs.Add(new ContrastPair(name, ink.Value, under.HasValue ? Contrast.Over(fill.Value, under.Value) : fill.Value, ContrastClass.Text));
+        }
+
+        Add("SelectionHighlight on a document row", rowInk, highlight, paper);
+        Add("SelectionHighlight on a record or transcript row", rowInk, highlight, body);
+        Add("SelectionHighlight on a book row", bookInk, highlight, body);
+        Add("DiegeticRow on the scanned page", rowInk, row, paper);
+        Add("DiegeticRow on the window body", rowInk, row, body);
+        Add("DiegeticLabel on a record row", label, row.HasValue && body.HasValue ? Contrast.Over(row.Value, body.Value) : (Rgba?)null);
+        Add("DiegeticNote on the window body", note, body);
+        Add("DiegeticRow text on the window body", rowInk, body);
+        Add("DiegeticBookRow on the window body", bookInk, book, body);
+        Add("DiegeticBacking", backingInk, backing);
+        Add("DiegeticBubble", bubbleInk, bubble.HasValue ? bubble.Value.WithAlpha(1f) : (Rgba?)null);
+        return pairs;
+    }
+
+    /// <summary>A role's fill or ink in a resolved theme, or null.</summary>
+    private static Rgba? Find(IReadOnlyList<ResolvedRole> roles, ThemeRoleId role, bool fill)
+    {
+        ResolvedRole r = (roles ?? Array.Empty<ResolvedRole>()).FirstOrDefault(x => x != null && x.Role == role);
+        return r == null ? null : fill ? r.Fill : r.Ink;
+    }
+
     /// <summary>Parses a role name (exact case); an unknown one adds a problem.</summary>
     private static bool TryRole(string name, string where, List<string> problems, out ThemeRoleId role)
     {

@@ -83,6 +83,7 @@ public static partial class OfficeSceneUIBuilder
         Canvas canvas = EnsureCanvas();
         Transform root = canvas.transform;
         EnsureEventSystem();
+        ContentLibrarySO library = FindAssetByName<ContentLibrarySO>("ContentLibrary_Main") ?? FindFirstAsset<ContentLibrarySO>();
 
         // Hide leftovers from older builds (replaced by the investigation desk +
         // XP taskbar). Left in the scene, just inactive.
@@ -122,7 +123,7 @@ public static partial class OfficeSceneUIBuilder
 
         // XP desktop wallpaper (behind everything), the idle line between
         // travellers + taskbar with system-tray HUD.
-        GameObject idleScreen = BuildDesktop(root);
+        GameObject idleScreen = BuildDesktop(root, library);
         BuildTaskbar(root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
 
         // Verdict line (result text)
@@ -290,7 +291,6 @@ public static partial class OfficeSceneUIBuilder
         investRoot.gameObject.SetActive(false);
 
         // --- Content + logic objects ---
-        ContentLibrarySO library = FindAssetByName<ContentLibrarySO>("ContentLibrary_Main") ?? FindFirstAsset<ContentLibrarySO>();
         DayPlanSO dayPlan = null;
         if (library != null)
         {
@@ -790,15 +790,18 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The wallpaper (behind everything; it envelopes the 4:3 desktop at its own
-    /// aspect, the overflow clipped by the canvas's mask) and, right above it,
-    /// the idle line shown between travellers (inactive; the investigation
-    /// controller shows it). Returns the idle line's object.
+    /// aspect, the overflow clipped by the canvas's mask; the neutral theme's,
+    /// which Generate World ensures) and, right above it, the idle line shown
+    /// between travellers (inactive; the investigation controller shows it).
+    /// Returns the idle line's object.
     /// </summary>
-    private static GameObject BuildDesktop(Transform root)
+    private static GameObject BuildDesktop(Transform root, ContentLibrarySO library)
     {
         Transform desk = Panel(root, "Desktop", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.23f, 0.45f, 0.74f, 1f));
         Image img = desk.GetComponent<Image>();
-        Sprite wall = EnsureWallpaper();
+        Sprite wall = library != null && library.NeutralTheme != null ? library.NeutralTheme.wallpaper : null;
+        if (wall == null)
+            Debug.LogWarning("[TimeDesk] The content library has no neutral theme wallpaper, so the desktop shows its plain colour. Run Tools > TimeDesk > Generate World, then build again.");
         if (img != null && wall != null)
         {
             img.sprite = wall;
@@ -936,82 +939,6 @@ public static partial class OfficeSceneUIBuilder
         return chrome;
     }
 
-    /// <summary>
-    /// The wallpaper sprite (a generated placeholder when the art is missing),
-    /// with mipmaps on: the live monitor shows it small in the booth view, where
-    /// a texture without mipmaps shimmers (K18).
-    /// </summary>
-    private static Sprite EnsureWallpaper()
-    {
-        const string assetPath = "Assets/Art/Generated/xp_bliss.png";
-        if (AssetDatabase.LoadAssetAtPath<Sprite>(assetPath) == null)
-            GenerateWallpaper(assetPath);
-
-        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp && !imp.mipmapEnabled)
-        {
-            imp.mipmapEnabled = true;
-            imp.SaveAndReimport();
-        }
-        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-    }
-
-    /// <summary>Writes the placeholder wallpaper (an XP "Bliss"-like hill and sky) as a sprite.</summary>
-    private static void GenerateWallpaper(string assetPath)
-    {
-        EnsureFolderTree("Assets/Art/Generated");
-
-        int W = 960, H = 540;
-        var tex = new Texture2D(W, H, TextureFormat.RGB24, false);
-        for (int y = 0; y < H; y++)
-        {
-            float fy = (float)y / H; // 0 bottom .. 1 top
-            for (int x = 0; x < W; x++)
-            {
-                float fx = (float)x / W;
-                float hill = 0.30f + 0.05f * Mathf.Sin(fx * 6.2831f * 1.4f) + 0.03f * Mathf.Sin(fx * 6.2831f * 3.1f + 1.2f);
-                Color c;
-                if (fy < hill)
-                {
-                    float t = Mathf.InverseLerp(0f, hill, fy);
-                    c = Color.Lerp(new Color(0.27f, 0.45f, 0.15f), new Color(0.49f, 0.69f, 0.26f), t);
-                }
-                else
-                {
-                    float t = Mathf.InverseLerp(hill, 1f, fy);
-                    c = Color.Lerp(new Color(0.78f, 0.9f, 1f), new Color(0.2f, 0.43f, 0.76f), t);
-                    c = Color.Lerp(c, Color.white, Clouds(fx, fy));
-                }
-                tex.SetPixel(x, y, c);
-            }
-        }
-        tex.Apply();
-
-        System.IO.File.WriteAllBytes(System.IO.Path.Combine(Application.dataPath, "Art/Generated/xp_bliss.png"), tex.EncodeToPNG());
-        Object.DestroyImmediate(tex);
-
-        AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
-        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
-        {
-            imp.textureType = TextureImporterType.Sprite;
-            imp.spriteImportMode = SpriteImportMode.Single;
-            imp.SaveAndReimport();
-        }
-    }
-
-    private static float Clouds(float fx, float fy)
-    {
-        float c = Blob(fx, fy, 0.22f, 0.82f, 0.13f, 0.05f)
-                + Blob(fx, fy, 0.6f, 0.9f, 0.16f, 0.05f)
-                + Blob(fx, fy, 0.82f, 0.73f, 0.1f, 0.04f);
-        return Mathf.Clamp01(c);
-    }
-
-    private static float Blob(float fx, float fy, float cx, float cy, float rx, float ry)
-    {
-        float dx = (fx - cx) / rx, dy = (fy - cy) / ry;
-        return Mathf.Clamp01(1f - (dx * dx + dy * dy)) * 0.85f;
-    }
-
     // ----------------------------- Office booth (world-space) -----------------------------
 
     /// <summary>
@@ -1022,29 +949,6 @@ public static partial class OfficeSceneUIBuilder
     {
         Color32 c32 = color;
         return EnsureOfficeShape(name, w, h, new Vector2(0.5f, 0.5f), (x, y) => c32);
-    }
-
-    /// <summary>
-    /// Writes a generated placeholder PNG (pixels from a function, row 0 = bottom)
-    /// to an asset path and imports it. Callers apply their own importer settings.
-    /// </summary>
-    private static void WritePlaceholderPng(string assetPath, int w, int h, System.Func<int, int, Color32> pixel)
-    {
-        EnsureFolderTree(System.IO.Path.GetDirectoryName(assetPath).Replace('\\', '/'));
-
-        var tex = new Texture2D(w, h, TextureFormat.RGBA32, false);
-        var pixels = new Color32[w * h];
-        for (int y = 0; y < h; y++)
-            for (int x = 0; x < w; x++)
-                pixels[y * w + x] = pixel(x, y);
-        tex.SetPixels32(pixels);
-        tex.Apply();
-
-        string projectRoot = System.IO.Directory.GetParent(Application.dataPath).FullName;
-        System.IO.File.WriteAllBytes(System.IO.Path.Combine(projectRoot, assetPath), tex.EncodeToPNG());
-        Object.DestroyImmediate(tex);
-
-        AssetDatabase.ImportAsset(assetPath, ImportAssetOptions.ForceUpdate);
     }
 
     /// <summary>Creates (or finds) a world-space sprite GameObject under a parent.</summary>
@@ -1371,7 +1275,7 @@ public static partial class OfficeSceneUIBuilder
         if (existing != null)
             return existing;
 
-        WritePlaceholderPng(assetPath, w, h, pixel);
+        PlaceholderPng.Write(assetPath, w, h, pixel);
         if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp)
         {
             imp.textureType = TextureImporterType.Sprite;
@@ -1438,7 +1342,7 @@ public static partial class OfficeSceneUIBuilder
         InteractionFeedbackSO settings = AssetDatabase.LoadAssetAtPath<InteractionFeedbackSO>(InteractionFeedbackPath);
         if (settings == null)
         {
-            EnsureFolderTree("Assets/Data/Config");
+            PlaceholderPng.EnsureFolderTree("Assets/Data/Config");
             settings = ScriptableObject.CreateInstance<InteractionFeedbackSO>();
             AssetDatabase.CreateAsset(settings, InteractionFeedbackPath);
         }
@@ -1510,7 +1414,7 @@ public static partial class OfficeSceneUIBuilder
         string path = art != null ? AssetDatabase.GetAssetPath(art) : $"{PlaceholderCursorFolder}/placeholder_{artName}.png";
 
         if (art == null && AssetDatabase.LoadAssetAtPath<Texture2D>(path) == null)
-            WritePlaceholderPng(path, size, size, (x, y) => CursorPixel(placeholderShape, x, y, size));
+            PlaceholderPng.Write(path, size, size, (x, y) => CursorPixel(placeholderShape, x, y, size));
 
         if (AssetImporter.GetAtPath(path) is TextureImporter imp &&
             (imp.textureType != TextureImporterType.Cursor || !imp.isReadable || imp.mipmapEnabled))
@@ -1884,17 +1788,6 @@ public static partial class OfficeSceneUIBuilder
         Transform t = parent.Find(name);
         if (t != null)
             Object.DestroyImmediate(t.gameObject);
-    }
-
-    private static void EnsureFolderTree(string path)
-    {
-        if (AssetDatabase.IsValidFolder(path))
-            return;
-        string parent = System.IO.Path.GetDirectoryName(path).Replace('\\', '/');
-        string leaf = System.IO.Path.GetFileName(path);
-        if (!AssetDatabase.IsValidFolder(parent))
-            EnsureFolderTree(parent);
-        AssetDatabase.CreateFolder(parent, leaf);
     }
 
     private static T FindAssetByName<T>(string assetName) where T : Object

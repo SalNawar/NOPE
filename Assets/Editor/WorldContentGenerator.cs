@@ -15,19 +15,22 @@ using Object = UnityEngine.Object;
 /// wording and menu capacity, questions, narrative dialogs, and a one-shot
 /// unlock-announcement trigger for every gated question), the history (one
 /// leader effect per country, one one-shot trigger and SetFact effect per
-/// history rule, the templated history lines), points the case blueprint at
-/// the listed archetypes, then sets every world array of the content library
-/// explicitly. Idempotent: re-running converges to the source file. It owns
-/// the Eras/Nations/Places/Rules/Interview/History folders under
-/// Assets/Data/World (assets there that the source no longer lists go to the
-/// OS trash), merges its generated triggers and effects after the
+/// history rule, the templated history lines), the culture themes and UI
+/// string tables (WorldContentGenerator.Culture.cs: one theme per country plus
+/// the neutral one, each passing the contrast check), points the case
+/// blueprint at the listed archetypes, then sets every world array of the
+/// content library explicitly. Idempotent: re-running converges to the source
+/// file. It owns the Eras/Nations/Places/Rules/Interview/History/Culture
+/// folders under Assets/Data/World (assets there that the source no longer
+/// lists go to the OS trash), may create (never replace) the culture
+/// wallpapers and the neutral wallpaper, merges its generated triggers and effects after the
 /// hand-authored ones and only drops missing references elsewhere, so
 /// hand-authored content (legendaries, effects, triggers) survives a re-run.
 /// The authored assets the source points at (library, blueprint, attributes,
 /// archetypes, books) must already exist; every reference, id and line is
 /// checked before anything is written.
 /// </summary>
-public static class WorldContentGenerator
+public static partial class WorldContentGenerator
 {
     /// <summary>The researched world data.</summary>
     private const string SourcePath = "Assets/Data/World/world_source.json";
@@ -36,7 +39,7 @@ public static class WorldContentGenerator
     private const string WorldRoot = "Assets/Data/World";
 
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
-    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History" };
+    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History", "Culture" };
 
     /// <summary>Folder of the generated interview assets (questions, dialogs, unlock triggers).</summary>
     private const string InterviewFolder = WorldRoot + "/Interview";
@@ -57,6 +60,7 @@ public static class WorldContentGenerator
         CheckReferences(src, authored, errors);
         CheckHistory(src, authored, errors);
         CheckInterview(src, authored, errors);
+        CulturePlan culture = PlanCulture(src, errors);
         if (errors.Count > 0)
         {
             foreach (string e in errors)
@@ -103,6 +107,9 @@ public static class WorldContentGenerator
         DialogSO[] dialogs = (src.dialogs ?? Array.Empty<DialogData>()).Select(d => MakeDialog(d, refs, written)).ToArray();
         TimelineTriggerSO[] unlocks = questionData.Where(IsGated).Select(q => MakeUnlockTrigger(q, refs, written)).ToArray();
 
+        // --- Culture: string tables, themes, placeholder wallpapers ---
+        (ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables) = WriteCulture(culture, written);
+
         // Re-saving the book covers keeps their YAML in the current shape.
         foreach (ReferenceBookSO book in authored.books)
             EditorUtility.SetDirty(book);
@@ -110,7 +117,7 @@ public static class WorldContentGenerator
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
                     BuildLines(src.interview), questions, dialogs, unlocks, BuildHistoryLines(src.history?.lines),
-                    historyTriggers, historyEffects, leaderEffects);
+                    historyTriggers, historyEffects, leaderEffects, culture.ui, neutralTheme, themes, stringTables);
 
         int pruned = PruneOwnedFolders(written);
 
@@ -118,7 +125,7 @@ public static class WorldContentGenerator
         AssetDatabase.Refresh();
 
         int futurePlaces = src.places.Count(p => src.eras.Any(e => e.future && e.id == p.era));
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
@@ -1080,13 +1087,15 @@ public static class WorldContentGenerator
     /// lines (authoritative), rewires the triggers (the hand-authored ones kept
     /// in order, then the generated unlock triggers, then the history-rule
     /// triggers) and the effects (the hand-authored ones kept in order, then
-    /// the history-rule effects, then the leader effects), and drops missing
-    /// references from the rest.
+    /// the history-rule effects, then the leader effects), sets the culture UI
+    /// knobs, the neutral theme, the culture themes (country order) and the
+    /// string tables, and drops missing references from the rest.
     /// </summary>
     private static void WireLibrary(ContentLibrarySO lib, DayPlanSO[] days, EraSO[] eras, NationSO[] nations, NationEraProfileSO[] places,
                                     ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
                                     InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks,
-                                    HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects)
+                                    HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects,
+                                    UiData ui, ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables)
     {
         var so = new SerializedObject(lib);
         SetArray(so, "dayPlans", days);
@@ -1102,6 +1111,14 @@ public static class WorldContentGenerator
         so.FindProperty("historyLines").boxedValue = historyLines;
         SetArray(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(historyTriggers).ToArray());
         SetArray(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
+        so.FindProperty("cultureUi.readingLanguage").stringValue = ui.readingLanguage;
+        so.FindProperty("cultureUi.glossPercent").intValue = ui.glossPercent;
+        so.FindProperty("cultureUi.labelMinScale").floatValue = ui.labelMinScale;
+        so.FindProperty("cultureUi.contrast").boxedValue = ui.contrast;
+        so.FindProperty("cultureUi.latinFallbackFont").objectReferenceValue = AssetDatabase.LoadAssetAtPath<Font>(ui.latinFallbackFont);
+        so.FindProperty("neutralTheme").objectReferenceValue = neutralTheme;
+        SetArray(so, "themes", themes);
+        SetArray(so, "stringTables", stringTables);
         DropMissing(so, "clues");
         DropMissing(so, "legendaries");
         so.ApplyModifiedProperties();
@@ -1240,6 +1257,7 @@ public static class WorldContentGenerator
         public QuestionData[] questions;
         public DialogData[] dialogs;
         public HistoryData history;
+        public UiData ui;
     }
 
     /// <summary>Authored assets the world is wired into (asset paths).</summary>
@@ -1258,7 +1276,7 @@ public static class WorldContentGenerator
     /// <summary>An era; "future" marks the office's own time (at most one).</summary>
     [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public bool future; public string[] smallTalk; }
 
-    [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; }
+    [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; public CultureData culture; }
 
     [Serializable] private sealed class BaselineData { public string attribute; public float score; }
 

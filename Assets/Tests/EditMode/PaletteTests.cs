@@ -122,6 +122,46 @@ public class PaletteTests
         Assert.IsTrue(Palette.Missing(roles, true).Contains(ThemeRoleId.DiegeticBubble));
     }
 
+    private static ResolvedRole Role(ThemeRoleId role, string fill, string ink)
+    {
+        Rgba.TryParseHex(fill ?? "", out Rgba f);
+        Rgba.TryParseHex(ink ?? "", out Rgba i);
+        return new ResolvedRole { Role = role, Fill = fill != null ? f : (Rgba?)null, Ink = ink != null ? i : (Rgba?)null };
+    }
+
+    private static readonly List<ResolvedRole> NeutralDiegetic = new List<ResolvedRole>
+    {
+        Role(ThemeRoleId.DiegeticPaper, "#F7F5EB", null),
+        Role(ThemeRoleId.DiegeticRow, "#FFFFFFB3", "#1A1714"),
+        Role(ThemeRoleId.DiegeticBookRow, "#FFFFFF0A", "#1A1714"),
+        Role(ThemeRoleId.DiegeticLabel, null, "#595240"),
+        Role(ThemeRoleId.DiegeticNote, null, "#594D33"),
+        Role(ThemeRoleId.DiegeticBacking, "#21242B", "#D9DBE0"),
+        Role(ThemeRoleId.DiegeticBubble, "#FAF7EDF7", "#1A1714")
+    };
+
+    [Test]
+    public void DiegeticPairs_CheckEvidenceTextOnTheThemesWindowAndHighlight()
+    {
+        var light = new List<ResolvedRole> { Role(ThemeRoleId.WindowBody, "#ECE9D8", "#1A1714"), Role(ThemeRoleId.SelectionHighlight, "#FFEB59B3", null) };
+        List<ContrastPair> pairs = Palette.DiegeticPairs(light, NeutralDiegetic);
+        Assert.AreEqual(11, pairs.Count);
+        Assert.IsTrue(pairs.All(p => p.Class == ContrastClass.Text && p.Fill.A >= 1f));
+        Assert.IsEmpty(Contrast.Problems(pairs, new Rgba(0f, 0f, 0f), new Rgba(1f, 1f, 1f), new ContrastRules()));
+
+        var dark = new List<ResolvedRole> { Role(ThemeRoleId.WindowBody, "#101010", "#FFFFFF"), Role(ThemeRoleId.SelectionHighlight, "#FFEB59B3", null) };
+        List<string> problems = Contrast.Problems(Palette.DiegeticPairs(dark, NeutralDiegetic), new Rgba(0f, 0f, 0f), new Rgba(1f, 1f, 1f), new ContrastRules());
+        Assert.IsTrue(problems.Any(p => p.Contains("DiegeticNote on the window body")), string.Join(" | ", problems));
+        Assert.IsTrue(problems.Any(p => p.Contains("DiegeticBookRow on the window body")));
+    }
+
+    [Test]
+    public void DiegeticPairs_SkipMissingColours()
+    {
+        Assert.AreEqual(3, Palette.DiegeticPairs(new List<ResolvedRole>(), NeutralDiegetic).Count, "only the scanned page's rows, the backing and the bubble need no theme colour");
+        Assert.IsEmpty(Palette.DiegeticPairs(null, null));
+    }
+
     [Test]
     public void Pairs_SkipRolesWithoutAClassOrWithoutBothColours()
     {

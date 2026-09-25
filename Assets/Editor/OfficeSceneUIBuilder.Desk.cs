@@ -114,7 +114,7 @@ public static partial class OfficeSceneUIBuilder
         if (reaction != null)
             return reaction;
 
-        EnsureFolderTree(DeskReactionFolder);
+        PlaceholderPng.EnsureFolderTree(DeskReactionFolder);
         reaction = ScriptableObject.CreateInstance<DeskReactionSO>();
         reaction.kind = kind;
         reaction.tooltip = tooltip;
@@ -129,7 +129,7 @@ public static partial class OfficeSceneUIBuilder
         if (config != null)
             return config;
 
-        EnsureFolderTree("Assets/Data/Config");
+        PlaceholderPng.EnsureFolderTree("Assets/Data/Config");
         config = ScriptableObject.CreateInstance<DeskConfigSO>();
         AssetDatabase.CreateAsset(config, DeskConfigPath);
         AssetDatabase.SaveAssets();

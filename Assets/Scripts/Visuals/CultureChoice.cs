@@ -45,6 +45,20 @@ public static class CultureChoice
     public static string Wallet(string cultureId, string futureCurrency, string fallback) =>
         !string.IsNullOrWhiteSpace(cultureId) && !string.IsNullOrWhiteSpace(futureCurrency) ? futureCurrency : fallback;
 
+    /// <summary>
+    /// True when a label holds a character the Latin fallback font cannot draw:
+    /// anything above U+03FF except general punctuation (U+2000–U+206F). The
+    /// runtime LiberationSans draws Latin and Greek, so such a culture needs an
+    /// OS font candidate.
+    /// </summary>
+    public static bool NeedsOsFont(string text)
+    {
+        foreach (char c in text ?? string.Empty)
+            if (c > '\u03FF' && (c < '\u2000' || c > '\u206F'))
+                return true;
+        return false;
+    }
+
     /// <summary>A text's style: the builder's style, italics dropped when the theme strips them (CJK, Arabic), plus the theme's addition (TMP FontStyles as int flags).</summary>
     public static int ComposeStyle(int baseStyle, int italicFlag, bool stripItalic, int add) =>
         (stripItalic ? baseStyle & ~italicFlag : baseStyle) | add;

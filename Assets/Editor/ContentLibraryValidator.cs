@@ -10,7 +10,8 @@ using UnityEngine;
 /// missing IDs, duplicate day numbers, dangling cross-references, interview
 /// content the office could not use (questions, dialogs, menus), the Future
 /// and history (Future places, leader effects, history values, SetFact only
-/// in one-shot history-rule triggers), and trigger, effect and ending fields.
+/// in one-shot history-rule triggers), trigger, effect and ending fields, and
+/// the culture themes and UI string tables (contrast included).
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
 public static class ContentLibraryValidator
@@ -108,6 +109,9 @@ public static class ContentLibraryValidator
         issues += CheckEffects(lib);
         issues += CheckHistoryValues(lib);
         issues += CheckEndings(lib);
+
+        // --- The culture themes and UI string tables (piece 6) ---
+        issues += CheckCulture(lib);
 
         return issues;
     }
@@ -593,6 +597,101 @@ public static class ContentLibraryValidator
 
         return issues;
     }
+
+    /// <summary>
+    /// The culture themes and UI string tables (piece 6): the neutral theme, the
+    /// reading table and the Latin fallback font exist; every nation has a theme
+    /// (a missing one is a warning: that culture stays neutral); no culture id
+    /// twice; every theme's language has a table and every culture table passes
+    /// UiStrings.TableProblems; every theme has a colour for every role and
+    /// passes the contrast check with its stored palette and rings (the same
+    /// pairs as Generate World); a theme whose labels need an OS font names one;
+    /// a missing wallpaper is a warning.
+    /// </summary>
+    private static int CheckCulture(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        void Error(string message)
+        {
+            Debug.LogError($"[ContentLibraryValidator] {message} in '{lib.name}' (Tools > TimeDesk > Generate World writes the culture assets).", lib);
+            issues++;
+        }
+
+        CultureUiSettings ui = lib.CultureUi;
+        ThemeSO neutral = lib.NeutralTheme;
+        UiStringTableSO reading = lib.GetStringTable(ui.readingLanguage);
+        if (ui.latinFallbackFont == null)
+            Error("No Latin fallback font (cultureUi.latinFallbackFont)");
+        if (neutral == null)
+            Error("No neutral theme");
+        if (reading == null)
+            Error($"No UI string table for the reading language '{ui.readingLanguage}'");
+        if (neutral == null || reading == null)
+            return issues;
+
+        foreach (string problem in UiStrings.TableProblems(reading.entries, null, false))
+            Error($"UI string table '{reading.language}': {problem}");
+
+        foreach (NationSO nation in lib.Nations)
+        {
+            if (nation != null && lib.GetThemeByCultureId(nation.id) == null)
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Nation '{nation.id}' has no theme in '{lib.name}': its culture stays neutral.", lib);
+                issues++;
+            }
+        }
+
+        List<ThemeSO> themes = lib.Themes.Prepend(neutral).Where(t => t != null).ToList();
+        foreach (string id in themes.GroupBy(t => t.cultureId).Where(g => g.Count() > 1).Select(g => g.Key))
+            Error($"Culture id '{id}' has more than one theme");
+
+        List<ResolvedRole> neutralRoles = Roles(neutral);
+        foreach (ThemeSO theme in themes)
+        {
+            bool isNeutral = theme == neutral;
+            UiStringTableSO table = lib.GetStringTable(theme.language);
+            if (table == null)
+                Error($"Theme '{theme.cultureId}' has no UI string table for its language '{theme.language}'");
+            else if (table != reading)
+                foreach (string problem in UiStrings.TableProblems(reading.entries, table.entries, table.rightToLeft))
+                    Error($"UI string table '{table.language}': {problem}");
+
+            List<ResolvedRole> roles = Roles(theme);
+            foreach (ThemeRoleId missing in Palette.Missing(roles, isNeutral))
+                Error($"Theme '{theme.cultureId}' has no colour for role '{missing}'");
+            if (!isNeutral)
+                foreach (ResolvedRole r in roles.Where(r => ThemeRoles.IsDiegetic(r.Role)))
+                    Error($"Theme '{theme.cultureId}' colours the diegetic role '{r.Role}' (only the neutral theme may)");
+
+            List<ContrastPair> pairs = Palette.Pairs(roles).Concat(Palette.DiegeticPairs(roles, neutralRoles)).ToList();
+            foreach (string problem in Contrast.Problems(pairs, ToRgba(theme.ringDark), ToRgba(theme.ringLight), ui.contrast ?? new ContrastRules()))
+                Error($"Theme '{theme.cultureId}': {problem}");
+
+            if (theme.runtimeFont && table != null && table.entries.Any(e => CultureChoice.NeedsOsFont(e.text)) && theme.fonts.Count == 0)
+                Error($"Theme '{theme.cultureId}' has labels the Latin fallback cannot draw but no font candidate");
+
+            if (theme.wallpaper == null)
+            {
+                Debug.LogWarning($"[ContentLibraryValidator] Theme '{theme.cultureId}' has no wallpaper in '{lib.name}': the desktop shows its plain colour.", theme);
+                issues++;
+            }
+        }
+
+        return issues;
+    }
+
+    /// <summary>A stored theme's palette as resolved roles (for the shared contrast pairs).</summary>
+    private static List<ResolvedRole> Roles(ThemeSO theme) =>
+        theme.palette.Where(e => e != null).Select(e => new ResolvedRole
+        {
+            Role = e.role,
+            Fill = e.hasFill ? ToRgba(e.fill) : (Rgba?)null,
+            Ink = e.hasInk ? ToRgba(e.ink) : (Rgba?)null,
+            TextClass = e.textClass
+        }).ToList();
+
+    /// <summary>A theme colour from an engine colour.</summary>
+    private static Rgba ToRgba(Color c) => new Rgba(c.r, c.g, c.b, c.a);
 
     /// <summary>Fact categories every place must have (papers + books + questions).</summary>
     private static readonly ClueCategory[] RequiredFacts =

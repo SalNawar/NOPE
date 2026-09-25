@@ -72,6 +72,19 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Wording of the templated history news (written by Generate World from world_source.json "history.lines").</summary>
     [SerializeField] private HistoryLines historyLines = new();
 
+    [Header("Culture (piece 6)")]
+    /// <summary>The culture UI knobs (written by Generate World from world_source.json "ui").</summary>
+    [SerializeField] private CultureUiSettings cultureUi = new();
+
+    /// <summary>The PC's look before any country leads the Future (generated).</summary>
+    [SerializeField] private ThemeSO neutralTheme;
+
+    /// <summary>One theme per nation, in library nation order (generated).</summary>
+    [SerializeField] private ThemeSO[] themes;
+
+    /// <summary>The UI string tables: the reading language's and one per culture language (generated).</summary>
+    [SerializeField] private UiStringTableSO[] stringTables;
+
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
@@ -147,7 +160,8 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// The only code that turns place facts into table rows: history is
     /// resolved before Add (History.Resolve), so papers, books, tells and
     /// answers all follow it. It is also the only code that sees a fact's
-    /// authored and resolved values together (piece 6 marks revised rows here).
+    /// authored and resolved values together, so it also marks the rows history
+    /// revised (History.IsRevised; the books show them, piece 6).
     /// </summary>
     private static void FillFacts(FactTable table, IEnumerable<NationEraProfileSO> places, HistoryState history)
     {
@@ -157,8 +171,13 @@ public sealed class ContentLibrarySO : ScriptableObject
                 continue;
 
             foreach (ProfileFact f in p.facts)
-                if (f != null)
-                    table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, History.Resolve(history, p.nation.id, p.era.id, f.category, f.value));
+            {
+                if (f == null)
+                    continue;
+                table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, History.Resolve(history, p.nation.id, p.era.id, f.category, f.value));
+                if (History.IsRevised(history, p.nation.id, p.era.id, f.category, f.value))
+                    table.MarkChanged(p.nation.id, p.era.id, f.category);
+            }
         }
     }
 
@@ -230,6 +249,18 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The templated history news wording (never null).</summary>
     public HistoryLines HistoryLines => historyLines ?? new HistoryLines();
 
+    /// <summary>The culture UI knobs (never null).</summary>
+    public CultureUiSettings CultureUi => cultureUi ?? new CultureUiSettings();
+
+    /// <summary>The PC's look before any country leads the Future (null until Generate World ran).</summary>
+    public ThemeSO NeutralTheme => neutralTheme;
+
+    /// <summary>The culture themes, in library nation order.</summary>
+    public IReadOnlyList<ThemeSO> Themes => themes ?? System.Array.Empty<ThemeSO>();
+
+    /// <summary>The UI string tables.</summary>
+    public IReadOnlyList<UiStringTableSO> StringTables => stringTables ?? System.Array.Empty<UiStringTableSO>();
+
     /// <summary>The office's own time: the first era marked isFuture, or null when the content has none.</summary>
     public EraSO FutureEra => eras?.FirstOrDefault(e => e != null && e.isFuture);
 
@@ -266,6 +297,12 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Cached lookup: place (profile) id -> place asset.</summary>
     private Dictionary<string, NationEraProfileSO> _profileById;
 
+    /// <summary>Cached lookup: culture id ("neutral" or a nation id) -> theme.</summary>
+    private Dictionary<string, ThemeSO> _themeById;
+
+    /// <summary>Cached lookup: language -> UI string table.</summary>
+    private Dictionary<string, UiStringTableSO> _tableByLanguage;
+
     /// <summary>
     /// Clears cached lookups when the asset is loaded/reloaded.
     /// This prevents stale dictionaries after domain reloads.
@@ -288,6 +325,8 @@ public sealed class ContentLibrarySO : ScriptableObject
         _endingById = null;
         _nationById = null;
         _profileById = null;
+        _themeById = null;
+        _tableByLanguage = null;
     }
 
     /// <summary>
@@ -321,6 +360,26 @@ public sealed class ContentLibrarySO : ScriptableObject
 
         EnsureLookups();
         return _profileById.TryGetValue(id, out NationEraProfileSO profile) ? profile : null;
+    }
+
+    /// <summary>The theme of a culture id ("neutral" or a nation id), or null for an unknown or blank id.</summary>
+    public ThemeSO GetThemeByCultureId(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        EnsureLookups();
+        return _themeById.TryGetValue(id, out ThemeSO theme) ? theme : null;
+    }
+
+    /// <summary>The UI string table of a language ("en"), or null for an unknown or blank one.</summary>
+    public UiStringTableSO GetStringTable(string language)
+    {
+        if (string.IsNullOrWhiteSpace(language))
+            return null;
+
+        EnsureLookups();
+        return _tableByLanguage.TryGetValue(language, out UiStringTableSO table) ? table : null;
     }
 
     /// <summary>
@@ -391,6 +450,16 @@ public sealed class ContentLibrarySO : ScriptableObject
         _endingById = new Dictionary<string, EndingSO>(StringComparer.OrdinalIgnoreCase);
         _nationById = new Dictionary<string, NationSO>(StringComparer.OrdinalIgnoreCase);
         _profileById = new Dictionary<string, NationEraProfileSO>(StringComparer.OrdinalIgnoreCase);
+        _themeById = new Dictionary<string, ThemeSO>(StringComparer.OrdinalIgnoreCase);
+        _tableByLanguage = new Dictionary<string, UiStringTableSO>(StringComparer.Ordinal);
+
+        foreach (ThemeSO t in Themes.Prepend(neutralTheme))
+            if (t != null && !string.IsNullOrWhiteSpace(t.cultureId))
+                _themeById.TryAdd(t.cultureId, t);
+
+        foreach (UiStringTableSO table in StringTables)
+            if (table != null && !string.IsNullOrWhiteSpace(table.language))
+                _tableByLanguage.TryAdd(table.language, table);
 
         if (nations != null)
             foreach (NationSO n in nations)

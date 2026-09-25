@@ -35,6 +35,18 @@ public class CultureChoiceTests
         Assert.AreEqual(expected, CultureChoice.Wallet(cultureId, currency, fallback));
     }
 
+    [TestCase("ANNEHMEN", false)]
+    [TestCase("ΕΓΚΡΙΣΗ", false, Description = "Greek: the Latin fallback draws it")]
+    [TestCase("SHIFT LEDGER — EVENING EDITION", false, Description = "general punctuation")]
+    [TestCase("قبول", true)]
+    [TestCase("批准", true)]
+    [TestCase("稳定度：{0:0}%", true)]
+    [TestCase(null, false)]
+    public void NeedsOsFont_BeyondLatinAndGreek(string text, bool expected)
+    {
+        Assert.AreEqual(expected, CultureChoice.NeedsOsFont(text));
+    }
+
     [Test]
     public void ComposeStyle_StripsItalicsAndAdds()
     {
