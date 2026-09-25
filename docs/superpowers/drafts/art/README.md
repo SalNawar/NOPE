@@ -17,7 +17,7 @@ Saleh also attaches `office_style_reference.png`, a screenshot of the game's off
 
 - **Your standing rules are Block A** (section 5, "Block A: paste into the Project instructions"). Follow them in every reply.
 - **The prompt shapes are in section 9.** The batches, in the order to draw them, start at section 12 ("Batch order"), with Batch 1 (the pilot) in section 13. For each place, Saleh first sends its **PAIR** block. Answer READY, then draw one image per reply.
-- **Premade characters** (named historical people, drawn whole) have their own rules, **Block P** in section 11, used in a separate Project.
+- **Premade characters** (named historical people, drawn whole) have their own rules, **Block P** in section 11, used in a separate Project. They share the travellers' style, so the two kinds look like one cast.
 - **Section 1** says where the player sees a traveller: from the head to the waist behind the desk, with the head only about 58 px tall, plus the passport photo. Anything that identifies a look must sit on the head, face, neck, shoulders or upper chest, in bold shapes.
 - **Section 10** lists what never to draw.
 - **Skip everything addressed to Claude or to reviewers:** "Notes for Claude's processing", "Review only" lines, the "What changed" sections and Appendices A to F. They are for the game's import and review, not for drawing.
@@ -27,6 +27,6 @@ Saleh also attaches `office_style_reference.png`, a screenshot of the game's off
 - **Every layer is its own full 1024 x 1536 portrait**, with the figure in exactly the same place, so the game can stack them. Keep the size line of every prompt.
 - **One image per reply.** Draw only what the prompt asks for, where the guide or mannequin puts it.
 - **Background:** flat pure green #00FF00. Never use bright green or lime (dark bottle or olive green is fine), magenta, pink, purple or violet in the art, and paint every fabric opaque.
-- **Style:** clean, simple 2D with flat colours, one soft shade tone, clean dark-brown outlines and neutral, even front lighting (no light direction, glow or shadows).
+- **Style:** cute, soft 2D anime-style characters (expressive anime eyes, a small, simple nose and mouth, clean rounded faces, hair in clean stylised locks; adults, never chibi) with flat cel colours, one hard-edged shade tone, clean dark-brown outlines and neutral, even front lighting (no light direction, glow or shadows). The head size and body proportions stay exactly the figure guide's. The travellers and the premades share this one style (brief, section 2).
 - **No text, letters, numbers, logos, flags, insignia, uniforms, weapons, royal regalia or religious items.** Civilian clothes only, respectful, never a caricature.
 - **If an image is wrong,** Saleh regenerates it or resends the prompt. Never edit your own image: every edit redraws the whole figure and it drifts.

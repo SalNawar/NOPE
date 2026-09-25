@@ -1,6 +1,8 @@
 """Builds art/CHARACTER_ART_BRIEF_v2.md and art/coverage.json from art/tools/wardrobe_v2.json.
 Run data_v2.py first. Key grammar = piece-4 spec LookKeys (section 2.3) + piece-5 R18 (artNation).
-v2.1 (2026-09-25): revised for the 3D office (the desk-view sizes below are measured in the art office at main d5844d0)."""
+v2.1 (2026-09-25): revised for the 3D office (the desk-view sizes below are measured in the art office at main d5844d0).
+v2.2 (2026-09-25): the ReStory style (cute 2D anime-style faces, flat cel colours) for both kinds of character, the
+layered travellers and the premades; the head size and body proportions stay the guide's (LookCanvas)."""
 import json, sys
 from pathlib import Path
 
@@ -23,6 +25,18 @@ COLOURS = ["black", "brown", "blond", "red", "grey"]
 SKINS = [1, 2, 3, 4, 5]
 FACES = ["a", "b", "c", "d"]
 EXPRESSIONS = ["neutral", "happy", "angry", "worried"]
+# v2.2: how faces a-d differ in the anime style, which tends to give everyone one face. They keep face a's head
+# outline and feature positions (the beards, caps and glasses are fitted to them: Batch 2), so they differ inside it.
+FACE_AGE = {"a": "a young adult in their 20s", "b": "a different young adult in their 20s",
+            "c": "middle-aged, 40s to 50s", "d": "elderly, 60s and up"}
+FACE_LOOK = {"a": "soft, round cheeks and chin; large, round eyes; gently curved brows; a small, short nose",
+             "b": "slimmer cheeks and a more defined chin; narrower, longer eyes; straight, thicker brows; a longer, "
+                  "straighter nose",
+             "c": "fuller cheeks and a firmer, squarer chin; steady eyes with a small line at each outer corner; heavier, "
+                  "lower brows; a broader nose; a few lines on the forehead and beside the mouth",
+             "d": "softer, slightly hollow cheeks and a softer jawline; smaller eyes under heavier lids, with wrinkles at "
+                  "the corners; thin, lighter eyebrows; a longer nose; wrinkles on the forehead and cheeks"}
+def face_drawn(v): return f"{FACE_AGE[v]}: {FACE_LOOK[v]}"
 SLOTWORD = {"Outfit": "outfit", "Hair": "hair", "FacialHair": "facial hair", "Headwear": "headwear", "Accessory": "accessory"}
 # Skin swatches (review 2 finding 41): ChatGPT gets them in prompt 9.2, Claude recolours bodies 2-5 to them.
 SKIN_WORD = {1: "very light", 2: "light", 3: "medium olive", 4: "brown", 5: "deep brown"}
@@ -48,12 +62,18 @@ DESK = {
 DESK_VISIBLE_TO = 760   # canvas y where the NEXT sign's top cuts the figure (the waist)
 READ_ZONE_TO = 630      # canvas y of mid-chest: held papers (piece 10) cover the figure's sides below about here
 
-# Shared by Block A (layers) and Block P (premades), so the two never drift apart.
-STYLE_BULLETS = f"""- Clean, friendly 2D character art like the customers in a cozy shop-counter game: soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature.
-- Simple textures: flat colour areas, each with ONE soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
+# Shared by Block A (layers) and Block P (premades), so the two never drift apart. v2.2 (2026-09-25): the ReStory style,
+# the same for both kinds of character; the head size and body proportions stay the guide's (LookCanvas).
+STYLE_BULLETS = f"""- Cute, soft 2D anime-style characters, like the customers of a cozy shop-counter game: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair drawn in clean stylised shapes and locks. Every character is an adult who looks their age: never chibi, never childlike.
+- The head size and body proportions are fixed by the attached guide, mannequin or base figure (adult proportions, about seven and a half heads tall; see CANVAS). The style changes only the face and the rendering: never enlarge the head, and never shorten or lengthen the body.
+- Faces stay individual: give each face the face shape, eye shape, brows and nose its prompt describes, never one anime face for everyone. Paint every skin tone exactly as given, never lighter. Every culture is drawn in this same style: never a caricature, never an exoticised version of a people.
+- One cast: the game's layered travellers and its named historical characters are drawn in two separate Projects but must look like one cast, with the same eyes, line, shading and colour treatment, so neither kind ever stands out from the other at the desk.
+- Everything reads small: in the game the head is only about {DESK[1080]['head']} px tall on screen, so keep the eyes, brows, mouth, hair shapes and headwear simple, bold and clear.
+- Flat cel colours: each colour area has ONE hard-edged shade tone (the same hue, about 20% darker, with a crisp edge and no soft blending) and at most one small highlight. No fabric grain, brush or paper texture, noise, gradient or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
 - A clean, even dark-brown outline ({OUTLINE_HEX}, 2-3 px) around every piece and its main folds.
 - Neutral, even lighting: plain white light from the front. Shade only to show form (under the chin, inside folds, under a brim), the same on both sides. No light direction, no rim light, no glow, no cast shadow, no ground shadow, no warm or cool tint.
 - Gently muted, natural period colours. Nothing neon.
+- No manga symbols: no sweat drops, anger marks, blush lines, sparkles, tears or speed lines. A face shows feeling only through its eyes, brows and mouth.
 - Front view: standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
 - When I attach a STYLE REFERENCE image, match its line weight, shading and pattern scale, and never copy its clothing."""
 CANVAS_BULLETS = """- Portrait, 1024 x 1536 px. The figure stays exactly where the attached guide, mannequin or base figure puts it: same top of head, chin, shoulders, waist, hips, knees and feet, same centre line. Never move, resize, turn or re-pose it.
@@ -270,9 +290,9 @@ w = out.append
 
 RULES_A = RULE_BULLETS.format(likeness=", and no likeness of any real person")
 D1080, D720 = DESK[1080], DESK[720]
-w(f"""# Time Sorter: Character Art Brief v2.1 (for ChatGPT)
+w(f"""# Time Sorter: Character Art Brief v2.2 (for ChatGPT)
 
-*2026-09-24, revised the same day after the review of v2 (Appendix E), and on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: simpler, like ReStory with simpler textures, neutral even lighting.*
+*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), and again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
 
 **The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png`: the game no longer uses that file. It stays on disk only because the art scene's leftover 2D booth (`OfficeRoot`, switched off when the office loads) and the art side's recovery scenes still reference it, and it goes when the art side deletes those leftovers (`docs/SCENE_CONTRACT_GAMEPLAY.md`).
 
@@ -283,13 +303,27 @@ Files that go with this brief (all in this folder, except the office screenshot)
 - `{OFFICE_REF}`: a screenshot of the game's office that Saleh takes once (Unity's Game view at 1920 x 1080, the office with no traveller at the desk, saved as a PNG). It is a **style reference only**: ChatGPT matches its colour range and contrast so the figures sit in that room, and never draws the room. Attach it where a prompt's "Attached:" line names it.
 - `character_guide_v2_1024x1536.png`: the figure guide. Attach it in Batch 1.
 - `mannequin_m.png` and `mannequin_f.png`: Claude makes these from your approved Batch 1 figures.
-- `style_card.png`: Claude makes it from the approved pilot (Batch 1, Step 4). Every garment prompt attaches it from then on as a style reference.
+- `style_card.png`: Claude makes it from the approved pilot (Batch 1, Step 4). Every garment prompt and the premade prompt (9.10) attach it from then on as a style reference.
 - `premadebase_m_skin[N].png` and `premadebase_f_skin[N].png`: Claude makes these after Batch 2 (the approved body and head of each skin tone, lined up). The premade prompts attach them.
 - `CHATGPT_MESSAGE.md`: the short message that starts the work.
 - `UI_ART_RULES.md`: the rules for the desktop wallpapers, the 2D layers over the office (the PC frame, the speech bubble, the paper faces) and other UI art (a separate track).
 - `coverage.json`: every file name the game needs, so the delivery can be checked by a script.
 
 Attach whatever each prompt's "Attached:" line names.
+
+## What changed in v2.2 (2026-09-25): the ReStory style
+
+v2.1 named the 2D customers of *ReStory: Chill Electronics Repairs* as its reference, then steered away from them: realistic proportions, a ban on large heads and eyes, and a ban on anime styling in Showa Tokyo's DO NOT DRAW. ReStory's customers are cute 2D anime-style characters with a soft, rounded, illustrative look, standing in a detailed 3D shop. That is this game's own set-up (flat 2D travellers in a 3D office), and the art side now cel-shades the office's desk props (`NOPE/Desk Anime`). Saleh asked for that style for both kinds of character: the generated travellers and the premades. Every change:
+
+1. **The style (section 2, Block A, Block P).** The shared STYLE text of both blocks is rewritten: cute, soft 2D anime-style characters (expressive anime eyes, larger than realistic, with one simple highlight; a small, simple nose and mouth; clean rounded face shapes; hair in clean stylised shapes and locks), flat cel colours with one hard-edged shade tone, the same dark-brown outline and the same neutral, even front lighting. Adults who look their age, never chibi. No manga symbols (sweat drops, anger marks, blush lines); section 10 says so too.
+2. **One cast.** The style applies the same way to both kinds of character, and section 2 and both blocks say so: the same eyes, line, shading and colour treatment, so a premade never stands out from a generated traveller at the desk. The premade prompt (9.10) now attaches the style card too, and Claude compares each premade with the pilot's Athens travellers (section 11).
+3. **The proportions do not change.** The head size and body proportions stay the figure guide's and `LookCanvas`'s (the mannequins, every layer and the passport crop depend on them): the style changes the face and the rendering only. Batch 1, Step 1 now rejects a base figure whose head is too big for its body.
+4. **Faces stay distinct.** Section 7 and prompts 9.1 and 9.3 say how faces a to d differ (cheeks and chin, eye shape, brows, nose, the lines of age) inside face a's head outline, which Batch 2 still requires. The skin tones stay exactly their swatches (the style never lightens a darker skin), and every culture gets the same style.
+5. **Premade expressions** (prompt 9.11, Block P): anime-expressive but dignified, because they are real people; each premade keeps the features its description gives (Socrates' snub nose and full lips, for example).
+6. **Showa Tokyo.** Its DO NOT DRAW bans "cosplay, idol-costume or anime-costume cliches" in place of the old anime ban, which would now ban the style itself, and adds "a school-uniform look": in this style its office outfit (a blouse with a bow at the collar and a pleated skirt) could drift into one. Every other DO NOT DRAW and review line was checked against the new style; none contradicts it.
+7. **`CHATGPT_MESSAGE.md` and `README.md`** carry the new style rules; the first image is still the bald base man, now in this style.
+
+Nothing else changes: the layers, canvas and landmarks, the green background and colour rules, the leak items and MUST READ lines, section 1's desk view and sizes, the file names, the batch order and files, and every key in `coverage.json`.
 
 ## What changed in v2.1 (2026-09-25): revised for the 3D office
 
@@ -316,7 +350,7 @@ The v2 brief was written for the old flat 2D booth. The game now runs in the art
 
 ## What changed since v1
 
-- **Style.** Clean, simple 2D characters with flat colours and very little texture, and **neutral, even lighting** (the game stands the flat figure in its 3D office and tones it to the room's light). v1 asked for painterly shading lit from the top-left.
+- **Style.** Cute, soft 2D anime-style characters (since v2.2) with flat cel colours and very little texture, the same for travellers and premades, and **neutral, even lighting** (the game stands the flat figure in its 3D office and tones it to the room's light). v1 asked for painterly shading lit from the top-left.
 - **File names follow the game's key grammar** (section 8). Hair and facial hair come out in five baked colours (Claude makes them from your medium-brown drawing). The Future uses the same pattern as every other era (`outfit_m_china_future`), and all Future travellers share one neutral hairstyle.
 - **A hair-back layer.** Hair that shows beside the neck behind the shoulders is split off by Claude and drawn behind the body, so it never covers a collar or shawl.
 - **All 68 data fixes and all 22 practicality fixes from the v1 review are in** (Appendices A to C say how, and the few that were adapted and why).
@@ -327,7 +361,7 @@ The v2 brief was written for the old flat 2D booth. The game now runs in the art
 
 ## 1. How characters work in the game
 
-- **Two kinds of character.** *Generated* travellers are built from layers, so the game can make thousands of different people. *Premade* characters (named historical people) are drawn whole, with four expressions.
+- **Two kinds of character.** *Generated* travellers are built from layers, so the game can make thousands of different people. *Premade* characters (named historical people) are drawn whole, with four expressions. Both kinds share one style (section 2), so they look like one cast.
 - **The layers, bottom first:** hair back, body, outfit, head, facial hair, hair, headwear, accessory. You draw seven kinds of image; Claude makes the hair-back layer from your hair drawing.
 - **Every layer is a full 1024 x 1536 image with the figure in exactly the same spot**, so the game stacks them with no adjusting.
 - **Every country and era has its own look.** Honest travellers wear only their claimed place's look. A liar's disguise leaks exactly **one** item from their real home, like a Victorian top hat on someone claiming to be from Edo Japan. The player picks that garment by name in the traveller wheel's Look menu and compares it with a reference book on the office PC, the **Costume Guide**, which lists one "leak item" per gender for each place. That is why every look has LEAK ITEMS: they must be recognisable at the desk's size (below), different from every other place's, and make sense on their own over any other place's clothes.
@@ -349,16 +383,20 @@ The game is set in the art side's 3D office. A traveller is the stack of flat 2D
 
 ## 2. The look
 
-The reference is the 2D customers who walk up to the counter in *ReStory: Chill Electronics Repairs*: clean, soft, friendly 2D characters. We go **simpler** than that: flat colours, one soft shade tone, almost no texture. Never name any game in a prompt; Block A describes the look in words, and a named game pulls ChatGPT towards that game's look.
+The reference is the 2D customers who walk up to the counter in *ReStory: Chill Electronics Repairs*: cute, soft 2D anime-style characters with a rounded, illustrative look, standing in a detailed 3D shop. That is this game's set-up too (flat 2D travellers in a 3D office), and the art side already shades the office's desk props with an anime cel shader (`NOPE/Desk Anime`: `ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/ANIME_SHADER.md`). So the characters follow ReStory's customers: anime faces, flat cel colours, almost no texture. Never name any game in a prompt; Block A describes the look in words, and a named game pulls ChatGPT towards that game's look.
 
-- **Shapes and faces:** soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature of any people.
-- **Textures:** flat colour areas, each with one soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photo detail. Patterns (stripes, checks, borders, embroidery) are clean, bold, flat shapes that still read when the head is {D1080['head']} px tall (section 1).
+- **One cast, two kinds.** The style is the same for both kinds of character: the generated travellers, built from layers (Block A), and the premades, drawn whole (Block P, section 11). Both blocks carry the same STYLE text, written once by `tools/build_v2.py`, and both say the two kinds must look like one cast: the same eyes, line, shading and colour treatment, so a premade never stands out from a generated traveller at the desk.
+- **Faces and hair:** cute, soft and anime-style: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair in clean stylised shapes and locks. Adults who look their age, never chibi or childlike.
+- **Proportions: the guide's, exactly.** The head size and body proportions are fixed by the figure guide and the game's `LookCanvas` (section 3; the figure is about seven and a half heads tall): the mannequins, every layer, the premades and the passport crop depend on them. The style changes the face and the rendering, never the head size or the body.
+- **Reads small:** every look stays recognisable when the head is {D1080['head']} px tall (section 1). The anime face helps: big, clear eyes and simple, bold shapes survive at that size, where fine realistic features blur.
+- **Respect:** never a caricature of any people. The five skin tones stay exactly their swatches (the style never lightens a darker skin tone), and the four faces a to d stay clearly different in cheeks and chin, eye shape, brows and nose (section 7), because anime styling tends to give everyone the same face. Every culture gets this same style: no exoticised styling, and no cosplay or anime-costume cliches.
+- **Textures:** flat cel colours: each colour area has one hard-edged shade tone (the same hue, about 20% darker, with a crisp edge, never blended) and at most one small highlight. No fabric grain, brush or paper texture, noise or photo detail. Patterns (stripes, checks, borders, embroidery) are clean, bold, flat shapes that still read when the head is {D1080['head']} px tall (section 1).
 - **Outline:** a clean, even dark-brown line ({OUTLINE_HEX}, 2 to 3 px) around every piece and its main folds.
 - **Lighting: neutral and even.** Plain white light from the front. Shading only shows form (under the chin, inside folds, under a brim), the same on both sides. No light direction, rim light, glow, cast or ground shadow, and no warm or cool tint. The game stands the flat, unlit figure in its lit 3D office and tones it to the room's light (a warm grey tint today), so any light baked into the drawing would fight the room's.
 - **The room:** `{OFFICE_REF}` shows the office the figures stand in. ChatGPT matches its colour range and contrast (so a figure never looks pasted in), never its lighting, and never draws the room.
 - **Colour:** gently muted, natural period dyes. Nothing neon.
-- **Pose:** front view, standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
-- **One style across about 40 chats.** After the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, plus a small swatch of folds, a pattern band and the outline weight. Every garment prompt attaches it as a style reference only, so line weight, shading depth and pattern scale stay the same in every chat.
+- **Pose and expression:** front view, standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer. The premades' other three expressions (prompt 9.11) are anime-expressive but dignified, because they are real historical people. No manga symbols on any face (sweat drops, anger marks, blush lines, sparkles, tears, speed lines).
+- **One style across about 40 chats.** After the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, plus a small swatch of folds showing their one hard-edged shade tone, a pattern band and the outline weight. Every garment prompt attaches it as a style reference only, and so does the premade prompt (9.10), so line weight, shading depth and pattern scale stay the same in every chat and in both Projects.
 
 ## 3. Canvas, pivot and the figure guide
 
@@ -440,14 +478,14 @@ A liar's leaked item is drawn over the claimed look, so every item must make sen
 
 **Skin tones** (5): """ + ", ".join(f"{n} {SKIN_WORD[n]} `{SKIN_HEX[n]}`" for n in SKINS) + f""". Every culture uses several tones; the game picks them by weights per place, so a skin tone never points to a country. ChatGPT gets the swatches in prompt 9.2, and Claude recolours bodies 2 to 5 from the approved tone-1 body to the same swatches, so heads and bodies agree.
 
-**Faces** (4), chosen by the traveller's age:
+**Faces** (4), chosen by the traveller's age. In the anime style (section 2) faces easily come out alike, so each face has its own cheeks and chin, eye shape, brows and nose. All four keep face a's head outline and feature positions (within a few pixels: Batch 2), because the beards, caps and glasses are fitted to them, so they differ inside that outline:
 
 | Face | Age | Drawn as |
 |---|---|---|
-| a | 18 to 34 | a young adult in their 20s |
-| b | 18 to 34 | a different young adult in their 20s |
-| c | 35 to 59 | middle-aged, 40s to 50s, a few lines |
-| d | 60 and over | elderly, 60s and up, wrinkles, lighter eyebrows (the game also turns the hair grey) |
+| a | 18 to 34 | {face_drawn('a')} |
+| b | 18 to 34 | {face_drawn('b')} |
+| c | 35 to 59 | {face_drawn('c')} |
+| d | 60 and over | {face_drawn('d')} (the game also turns the hair grey) |
 
 **Hair colours** (5, baked by Claude, never drawn by ChatGPT): black, brown, blond, red, grey. You draw every natural hairstyle and beard once, in medium brown; Claude masks any ornaments and bakes the five colours into five files. Wigs are costume and keep the colour you draw (one file, no variants).
 
@@ -495,6 +533,7 @@ Attach the office screenshot here once per chat; ChatGPT keeps it in mind for th
 ```
 Attached: character_guide_v2_1024x1536.png (the Time Sorter figure guide) and {OFFICE_ATTACH}.
 Draw a BASE FIGURE: a [man / woman] in their 20s, skin tone [1 very light], bald (no hair at all, smooth scalp), ears visible, no makeup, neutral expression, looking at the viewer.
+Face: {FACE_LOOK['a']}.
 Follow the guide's pose, proportions and landmark lines: the top of the head on the TOP OF HEAD line, the chin on the CHIN line, the soles of the feet on the bottom line, centred on the dashed centre line.
 Clothing: only [plain light-grey fitted shorts ending mid-thigh / a plain light-grey strapless bandeau covering only the bust, and plain light-grey fitted shorts ending mid-thigh]. Bare feet.
 Remove all guide lines, labels and the grey silhouette. Flat pure green #00FF00 background.
@@ -515,7 +554,7 @@ Claude keeps only the head from these; the bodies for tones 2 to 5 are recoloure
 
 ```
 Attached: my approved base figure base_[m / f]_skin[N]_facea.png.
-Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [b: a different young adult in their 20s / c: middle-aged, 40s to 50s, a few lines / d: elderly, 60s and up, wrinkles, lighter eyebrows]. Still bald, ears visible, no makeup, neutral expression, looking at the viewer. Do not move, turn or resize the head.
+Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [""" + " / ".join(f"{v}: {face_drawn(v)}" for v in FACES[1:]) + f"""]. Still bald, ears visible, no makeup, neutral expression, looking at the viewer. Do not move, turn or resize the head, and keep its outline: only the cheeks and chin may be a little rounder or more defined, as described.
 {SIZE_LINE}
 ```
 
@@ -576,7 +615,7 @@ Keep the magenta mannequin, the green background and the outfit's cut, fit and o
 ### 9.10 Premade character (Batches 3, 6 and 8)
 
 ```
-Attached: premadebase_[m / f]_skin[N].png (the lined-up base figure) and {OFFICE_ATTACH}.
+Attached: premadebase_[m / f]_skin[N].png (the lined-up base figure), {STYLE_ATTACH} and {OFFICE_ATTACH}.
 Dress this exact figure as a complete PREMADE CHARACTER, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories: [the character's description from its batch section]. Hands stay open and empty. Neutral expression, looking at the viewer. Flat pure green #00FF00 background.
 Do not draw: [the character's "do not draw" line].
 {SIZE_LINE}
@@ -586,7 +625,7 @@ Do not draw: [the character's "do not draw" line].
 
 ```
 Attached: my approved premade_[id]_neutral.png.
-Keep everything exactly the same (pose, clothing, position, background) and change ONLY the facial expression to [happy: a warm, open smile / angry: lowered, frowning brows and pressed lips / worried: raised inner brows and a tight, uncertain mouth].
+Keep everything exactly the same (pose, clothing, position, background) and change ONLY the facial expression to [happy: a warm, open smile with softly curved, smiling eyes / angry: lowered, frowning brows, narrowed eyes and pressed lips / worried: raised inner brows, wide, uncertain eyes and a small, tight mouth]. Make it clear and expressive in the anime style, but dignified: no comic distortion of the face and no manga symbols (sweat drops, anger marks, blush lines, tears).
 {SIZE_LINE}
 ```
 
@@ -603,6 +642,7 @@ These hold for every image, on top of each PAIR block's own DO NOT DRAW list.
 - **No skin-colour tells:** never tie a skin tone or hair colour to a culture, never tint or shade skin inside an outfit, hair or headwear layer, never draw skin anywhere except on the base figures and heads, and never draw makeup on the heads.
 - **No held props:** hands stay open and empty.
 - **No caricature:** no stereotyped features, no "Hollywood" versions of a culture, no ragged or comic poverty.
+- **No manga symbols:** no sweat drops, anger marks, blush lines, sparkles, tears or speed lines on any face.
 - **No colour the cut-out eats:** no bright green, lime, magenta, pink, purple or violet; nothing see-through; no holes cut through fabric (lattice, perforation and laser-cut motifs are printed or stitched on solid cloth); no checkerboard.
 - **No lighting effects:** no glow, rim light, cast or ground shadow, or coloured mood light, and no shade painted onto the magenta mannequin.
 - **No room:** nothing from the office screenshot (no walls, desk, furniture, floor, window or its lighting); the background is always flat green.
@@ -645,9 +685,11 @@ CHARACTERS
 - Draw each character on the attached base figure, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories.
 - Draw hair, beards and wigs in the colour the description gives (grey for an elderly character).
 - Dress each character exactly as described: the civilian dress of their own place and time.
+- Draw every face in the shared style, but keep the features its description gives (such as a snub nose, full lips, a firm jaw or the lines of age): they make each person recognisable.
+- Each character's first image has a neutral expression. When I ask for happy, angry or worried, change only the expression: anime-expressive but dignified, because these are real people. Show feeling through the eyes, brows and mouth only; no comic distortion and no manga symbols.
 ```
 
-**Rules for every premade:** the same style, canvas, neutral lighting, green background and "do not draw" rules as everyone else; period-accurate civilian dress of their claimed place and moment, **including that place's Costume Guide item for their gender** (the Look menu lists a premade's whole picture as one garment, "Period dress", valued with the claim's Costume Guide entry, and from day 3 the player compares dress with the Guide, so an honest premade must look like its row, and the item must show above the desk); the age shown below; hands open and empty. Every description was checked against its place's ChatGPT DO NOT DRAW line and contradicts nothing in it; paste the premade's own "Do not draw" line with prompt 9.10.
+**Rules for every premade:** the same style as the generated travellers (section 2: one cast, with the same eyes, line, shading and colour treatment; Claude compares each premade with the pilot's Athens travellers at the desk, and one that stands out is redrawn), and the same canvas, neutral lighting, green background and "do not draw" rules as everyone else; period-accurate civilian dress of their claimed place and moment, **including that place's Costume Guide item for their gender** (the Look menu lists a premade's whole picture as one garment, "Period dress", valued with the claim's Costume Guide entry, and from day 3 the player compares dress with the Guide, so an honest premade must look like its row, and the item must show above the desk); anime-expressive but dignified expressions (prompt 9.11); the age shown below; hands open and empty. Every description was checked against its place's ChatGPT DO NOT DRAW line and contradicts nothing in it; paste the premade's own "Do not draw" line with prompt 9.10.
 
 **The cast** (Amendment A1: about half women, at most ten). The drawing descriptions are in Batches 3, 6 and 8 (sections 15, 18 and 20).
 
@@ -706,7 +748,7 @@ This small batch proves the pieces stack, the cut-out works and the style is rig
 - `base_m_skin1_facea.png`
 - `base_f_skin1_facea.png`
 
-**Send to Claude.** Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre. Claude splits each figure into a body and a head, recolours the approved body to the four other skin swatches (section 7), and sends back `mannequin_m.png` and `mannequin_f.png`. Keep them in your art folder.
+**Send to Claude.** Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre. Do reject one whose head is too big for its body (easy in this style: with the top of the head and the soles on their lines, the chin sits clearly below the CHIN line), because the head size is fixed. Claude splits each figure into a body and a head, recolours the approved body to the four other skin swatches (section 7), and sends back `mannequin_m.png` and `mannequin_f.png`. Keep them in your art folder.
 
 **Step 2.** In a new chat, send this PAIR block with prompt 9.0, then use prompts 9.4 to 9.8 for each file below it. The style card does not exist yet, so for this pilot only, attach the mannequin alone and leave the style card out of each prompt's "Attached:" line.
 
@@ -715,7 +757,7 @@ This small batch proves the pieces stack, the cut-out works and the style is rig
 
 **Send to Claude.** Claude stacks everything in Unity: the figure behind the desk in the game's office, the passport photo, and the whole canvas. If the pieces line up and the style is right, go on. If not, we fix the prompts before making more.
 
-**Step 4 (style card).** Once the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, with a small swatch of folds, a pattern band and the outline weight, all on the green background. From now on every garment prompt (9.4 to 9.8) attaches it next to the mannequin, as a style reference only.
+**Step 4 (style card).** Once the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, with a small swatch of folds showing their one hard-edged shade tone, a pattern band and the outline weight, all on the green background. From now on every garment prompt (9.4 to 9.8) attaches it next to the mannequin, and every premade prompt (9.10) next to the base figure, as a style reference only.
 """)
 
 # ---------------------------------------------------------------- Batch 2
@@ -1152,7 +1194,7 @@ cov = {
         "wardrobe": "costume_research.json + brief_review.json (68 fixes, 22 issues) -> tools/wardrobe_v2.json",
         "premades": "piece4_decisions.md Amendment A1 (cast after the review of brief v2: Cecilia Gallerani replaces Alessandra Strozzi)",
         "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E",
-        "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F",
+        "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'",
     },
     "assetFolder": "Assets/Art/Characters/Resources/Characters",
     "extension": ".png",

@@ -9,7 +9,7 @@
    an outfit moved into it, the one hair-back test, colour and wording fixes.
 5. Applies the v2.1 edits (2026-09-25, the 3D office): the desk and its NEXT sign hide the traveller below the waist,
    so every leak item sits on the head, face, neck, shoulders or upper chest, and every MUST READ line names only
-   what shows above the desk.
+   what shows above the desk. v2.2 (2026-09-25, the ReStory style) changes one DO NOT DRAW entry (Showa Tokyo).
 6. Adds the piece-4 wardrobe proposals: a short label for every item, the signature slot per gender, leakable, wig,
    back and covers flags, ornaments to mask before recolouring, confusable pairs (hand-authored and generated), the
    DO NOT DRAW split, and the Future wardrobes.
@@ -963,7 +963,10 @@ AVOID_SPLIT = {
     ("china_modern", 1): ("a star or badge on the cap, a green army-style uniform, armbands", "PLA or Red Guard imagery"),
     ("china_modern", 2): ("a book in the hands, slogans or any text", "Little Red Book or propaganda"),
     ("china_modern", 5): ("conical straw hat (douli)", "'coolie' stereotype or any caricature"),
-    ("japan_modern", 3): ("anime or manga styling; samurai or geisha looks", None),
+    # v2.2 (the ReStory style): the brief draws everyone in a cute anime style, so a ban on anime styling would ban the
+    # style itself; the research's worry (anime caricature) becomes costume cliches, plus the school uniform the office
+    # outfit (blouse with a bow, pleated skirt) could drift into in this style.
+    ("japan_modern", 3): ("cosplay, idol-costume or anime-costume cliches; a school-uniform look; samurai or geisha looks", None),
     ("britain_modern", 7): (None, "a likeness of Alan Turing"),
     ("germany_modern", 0): ("any uniform, armband or insignia", "swastika or any other regime symbol"),
     ("germany_modern", 1): ("brown or black shirts, jackboots, leather trench coats", "secret-police stereotype"),
