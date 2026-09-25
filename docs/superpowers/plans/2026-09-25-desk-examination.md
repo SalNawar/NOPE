@@ -415,6 +415,15 @@ Edit `OfficeSceneUIBuilder.Desk.cs` and `OfficeSceneUIBuilder.cs` (spec §3.5). 
 - [ ] **Step 3: Commit** `docs(spec): examine the papers at the desk, verification record`.
 - [ ] **Step 4:** `git status --short` is clean (untracked `*.sln`/csproj aside) and `git log --oneline origin/main..` lists this piece's commits. **Stop here.** The orchestrator reviews, fast-forwards `main` and pushes.
 
+### Task 17 (scope addition): the desk view (spec §11, T1–T6)
+
+- [ ] **Step 1 (Domain, tests first):** `BoothRulesTests`: the context gains `deskView`; three columns (`M` the mat toggles, `X` Escape and the right-click return, `V` the desk view allowed) on every row, new rows for the desk view (office, no traveller, papers held, wheel, stamp tray, frame open, newsletter); "the desk view changes no other output"; the frame test covers the new outputs. See them fail to compile, then add `BoothContext.DeskView` and the outputs to `BoothRules`. Commit `feat(domain): the booth's input table knows the desk view`.
+- [ ] **Step 2 (Visuals, tests first):** `DeskViewPoseTests`: the pitch aims at the mat's centre from the moved pose (forward shortens the depth, rise adds height), plus the pitch knob; it stays between 0 and 89°; the seconds are the knob's, 0 under Reduced Motion or a negative knob. Then `DeskViewTuning` and `DeskViewPose`. Commit `feat(visuals): the desk view's pose`.
+- [ ] **Step 3 (glue):** `OverlayProjection.TryPlace(..., keepOnScreen)`, `OverlayCallout.keepOnScreen`, the wheel's ring; `DeskConfigSO.deskView`; `DeskView`; `BoothCoordinator` (the context, the outputs, the return at NEXT); `OfficeSceneBinder` (the view catcher, `DeskView.Bind`). `docs/FEATURES.md` in the same commit. Compile; offline tests. Commit `feat(office): a click on the mat tilts the camera over the desk`.
+- [ ] **Step 4 (builder):** `Office/DeskView` with its inactive `Camera` child (`CinemachineCamera`, priority 0), `Office/Desk/ViewCatcher` (inactive), the references, the bubble's `keepOnScreen`. Commit `build(office): the desk view's camera and the mat's catcher`.
+- [ ] **Step 5 (Unity, job files):** the pass job (Generate World idempotent, validator, builds ×3 equal by semantic dump, wiring checks for the new objects, the art office byte-unchanged, player scripts, the EditMode suite). Commit the rebuilt `OfficeGameplay.unity` (`feat(scene): the desk view`).
+- [ ] **Step 6 (Unity, job files):** the play-through gains the desk view's checks (§11 T6) and its screenshots `p10_desk_view_{1080,2560,720}`; judge them. Record in §13.
+
 ## Expected commits (in order)
 
 1. `docs(spec): examine the papers at the desk (piece 10) design`
@@ -434,7 +443,13 @@ Edit `OfficeSceneUIBuilder.Desk.cs` and `OfficeSceneUIBuilder.cs` (spec §3.5). 
 15. `build(office): the paper face, the examiner, the stamp tray, the office case HUD and the overlay verdict`
 16. `feat(scene): examine papers at the desk; bubble picks, the stamp and the office case HUD`
 17. `fix(…)` commits from the play-through, if any
-18. `docs(spec): examine the papers at the desk, verification record`
+18. `docs(spec,plan): the desk view (scope addition)`
+19. `feat(domain): the booth's input table knows the desk view`
+20. `feat(visuals): the desk view's pose`
+21. `feat(office): a click on the mat tilts the camera over the desk`
+22. `build(office): the desk view's camera and the mat's catcher`
+23. `feat(scene): the desk view`
+24. `docs(spec): examine the papers at the desk, verification record`
 
 ## Risks for the implementer
 
