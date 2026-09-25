@@ -48,6 +48,49 @@ public class ContrastTests
         Assert.AreEqual(1f, half.A, 1e-6);
     }
 
+    [TestCase(23.9f, false, ContrastClass.Text)]
+    [TestCase(24f, false, ContrastClass.LargeText)]
+    [TestCase(40f, false, ContrastClass.LargeText)]
+    [TestCase(18.6f, true, ContrastClass.Text)]
+    [TestCase(18.66f, true, ContrastClass.LargeText)]
+    [TestCase(20f, false, ContrastClass.Text)]
+    [TestCase(15.6f, true, ContrastClass.Text)]
+    public void ClassFor_LargeFrom18PointOr14PointBold_AsDrawnOnA1080pScreen(float pixels, bool bold, ContrastClass expected) =>
+        Assert.AreEqual(expected, Contrast.ClassFor(pixels, bold));
+
+    [Test]
+    public void WorstRatio_OnAnOpaqueStack_IsTheRatioOnWhatItMakes()
+    {
+        Assert.AreEqual(Contrast.Ratio(White, Hex("#2157DB")), Contrast.WorstRatio(White, new[] { Hex("#2157DB") }), 1e-6, "one opaque layer");
+        Assert.AreEqual(Contrast.Ratio(White, Hex("#2157DB")), Contrast.WorstRatio(White, new[] { Hex("#2157DB"), White }), 1e-6, "the nearest opaque layer hides the rest");
+        Rgba mixed = Contrast.Over(Black.WithAlpha(0.5f), White);
+        Assert.AreEqual(Contrast.Ratio(White, mixed), Contrast.WorstRatio(White, new[] { Black.WithAlpha(0.5f), White }), 1e-6, "a half-dark film over a white panel");
+        Assert.AreEqual(Contrast.Ratio(Contrast.Over(Black.WithAlpha(0.5f), White), White), Contrast.WorstRatio(Black.WithAlpha(0.5f), new[] { White }), 1e-6,
+                        "a translucent ink is composited over the backdrop first");
+    }
+
+    /// <summary>A translucent stack (a strip over the 3D office or a wallpaper) must read whatever shows behind it: the worse of black and white behind.</summary>
+    [Test]
+    public void WorstRatio_ThroughATranslucentStack_TakesTheWorseOfBlackAndWhiteBehind()
+    {
+        Rgba strip = Hex("#0F2E6BCC"); // the neutral claim strip, 80 % opaque
+        Rgba overWhite = Contrast.Over(strip, White), overBlack = Contrast.Over(strip, Black);
+        double expected = Math.Min(Contrast.Ratio(White, overWhite), Contrast.Ratio(White, overBlack));
+        Assert.AreEqual(expected, Contrast.WorstRatio(White, new[] { strip }), 1e-6);
+        Assert.Greater(Contrast.WorstRatio(White, new[] { strip }), 4.5, "white on the claim strip reads over anything");
+        Assert.AreEqual(1d, Contrast.WorstRatio(White, new Rgba[0]), 1e-6, "no backing at all: white text on a white room fails");
+        Assert.AreEqual(1d, Contrast.WorstRatio(White, null), 1e-6);
+    }
+
+    /// <summary>The light-on-light the fix removes: the Home rows' white labels on the cream panel, and a light ink on a pale strip, fail body text.</summary>
+    [Test]
+    public void LightOnLight_FailsBodyText()
+    {
+        Assert.Less(Contrast.WorstRatio(White, new[] { Hex("#F4EDDB") }), 1.5, "white on cream");
+        Assert.Less(Contrast.WorstRatio(Hex("#C4C2B6"), new[] { Hex("#FFFFFF33") }), 3.0, "a light note on a faint film over a pale crowd");
+        Assert.GreaterOrEqual(Contrast.WorstRatio(Hex("#304A54"), new[] { Hex("#F4EDDB") }), 4.5, "the panel's own dark ink on cream reads");
+    }
+
     [Test]
     public void Problems_ReportsTextBelowItsClass_WithNameAndNumbers()
     {
