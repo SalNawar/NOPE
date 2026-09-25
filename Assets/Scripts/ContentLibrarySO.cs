@@ -92,6 +92,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The UI string tables: the reading language's and one per culture language (generated).</summary>
     [SerializeField] private UiStringTableSO[] stringTables;
 
+    [Header("Translation (piece 9)")]
+    /// <summary>The tongues, packs, scripts, flip knobs and fallback cipher (written by Generate World from world_source.json "translation").</summary>
+    [SerializeField] private TranslationSettings translation = new();
+
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
@@ -267,6 +271,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The UI string tables.</summary>
     public IReadOnlyList<UiStringTableSO> StringTables => stringTables ?? System.Array.Empty<UiStringTableSO>();
+
+    /// <summary>What translation reads at runtime (piece 9): the rules, the scripts, the flip's knobs and the fallback cipher (empty until Generate World ran).</summary>
+    public TranslationSettings Translation => translation ?? new TranslationSettings();
 
     /// <summary>The office's own time: the first era marked isFuture, or null when the content has none.</summary>
     public EraSO FutureEra => eras?.FirstOrDefault(e => e != null && e.isFuture);

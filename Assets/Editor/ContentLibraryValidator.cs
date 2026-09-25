@@ -10,8 +10,10 @@ using UnityEngine;
 /// missing IDs, duplicate day numbers, dangling cross-references, interview
 /// content the office could not use (questions, dialogs, menus), the Future
 /// and history (Future places, leader effects, history values, SetFact only
-/// in one-shot history-rule triggers), trigger, effect and ending fields, and
-/// the culture themes and UI string tables (contrast included).
+/// in one-shot history-rule triggers), trigger, effect and ending fields, the
+/// culture themes and UI string tables (contrast included), and the
+/// translation (tongues, tables, every place's tongue, the translators, the
+/// notice).
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
 public static class ContentLibraryValidator
@@ -116,6 +118,9 @@ public static class ContentLibraryValidator
 
         // --- The culture themes and UI string tables (piece 6) ---
         issues += CheckCulture(lib);
+
+        // --- Translation (piece 9) ---
+        issues += CheckTranslation(lib);
 
         return issues;
     }
@@ -718,6 +723,42 @@ public static class ContentLibraryValidator
             }
         }
 
+        return issues;
+    }
+
+    /// <summary>
+    /// Translation (piece 9): the rules Generate World also checks, over the
+    /// library's settings and every place's tongue (TranslationSettings.Problems),
+    /// both translators of every pack among the upgrades, and the notice
+    /// trigger when foreign text starts after day 1. A library with no
+    /// translation data is one error (every tongue would read as English).
+    /// </summary>
+    private static int CheckTranslation(ContentLibrarySO lib)
+    {
+        int issues = 0;
+        void Error(string message)
+        {
+            Debug.LogError($"[ContentLibraryValidator] Translation: {message.TrimEnd('.')} in '{lib.name}' (Tools > TimeDesk > Generate World writes the translation).", lib);
+            issues++;
+        }
+
+        TranslationSettings translation = lib.Translation;
+        if (!translation.HasData)
+        {
+            Error("no translation data, so every tongue reads as English");
+            return issues;
+        }
+
+        foreach (string problem in translation.Problems(lib.Profiles.Where(p => p != null).Select(p => new KeyValuePair<string, string>(p.id, p.tongue))))
+            Error(problem);
+
+        foreach (TranslatorPack pack in translation.rules.packs.Where(p => p != null && !string.IsNullOrWhiteSpace(p.id)))
+            foreach (TranslatorKind kind in new[] { TranslatorKind.Written, TranslatorKind.Spoken })
+                if (lib.GetUpgradeById(Translation.UpgradeId(pack.id, kind)) == null)
+                    Error($"pack '{pack.id}' has no '{Translation.UpgradeId(pack.id, kind)}' upgrade");
+
+        if (translation.rules.fromDay > 1 && !lib.Triggers.Any(t => t != null && t.id == WorldContentGenerator.TranslationNoticeId))
+            Error($"foreign text starts on day {translation.rules.fromDay} but no '{WorldContentGenerator.TranslationNoticeId}' trigger announces it");
         return issues;
     }
 

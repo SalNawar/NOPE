@@ -19,16 +19,20 @@ using Object = UnityEngine.Object;
 /// history (one leader effect per country, one one-shot trigger and SetFact
 /// effect per history rule, the templated history lines), the culture themes
 /// and UI string tables (WorldContentGenerator.Culture.cs: one theme per
-/// country plus the neutral one, each passing the contrast check), points the
-/// case blueprint at the listed archetypes, then sets every world array of the
-/// content library and its look rules explicitly. Idempotent: re-running
-/// converges to the source file. It owns the
-/// Eras/Nations/Places/Rules/Interview/History/Premades/Culture folders under
-/// Assets/Data/World (assets there that the source no longer lists go to the
-/// OS trash), may create (never replace) the culture wallpapers and the
-/// neutral wallpaper, merges its generated triggers and effects after the
-/// hand-authored ones and only drops missing references elsewhere, so
-/// hand-authored content (effects, triggers) survives a re-run. The authored
+/// country plus the neutral one, each passing the contrast check), the
+/// translation (WorldContentGenerator.Translation.cs: every place's tongue,
+/// the library's tongues, scripts, flip knobs and fallback cipher, one Papers
+/// and one Speech translator upgrade per pack and the one-shot notice
+/// trigger), points the case blueprint at the listed archetypes, then sets
+/// every world array of the content library and its look rules explicitly.
+/// Idempotent: re-running converges to the source file. It owns the
+/// Eras/Nations/Places/Rules/Interview/History/Premades/Culture/Translation
+/// folders under Assets/Data/World (assets there that the source no longer
+/// lists go to the OS trash), may create (never replace) the culture
+/// wallpapers and the neutral wallpaper, merges its generated triggers,
+/// effects and upgrades after the hand-authored ones and only drops missing
+/// references elsewhere, so hand-authored content (effects, triggers,
+/// upgrades) survives a re-run. The authored
 /// assets the source points at (library, blueprint, attributes, archetypes,
 /// books, forced blueprints) must already exist; every reference, id and line
 /// is checked before anything is written.
@@ -42,7 +46,7 @@ public static partial class WorldContentGenerator
     private const string WorldRoot = "Assets/Data/World";
 
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
-    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History", "Premades", "Culture" };
+    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "History", "Premades", "Culture", "Translation" };
 
     /// <summary>Folder of the generated interview assets (questions, dialogs, unlock triggers).</summary>
     private const string InterviewFolder = WorldRoot + "/Interview";
@@ -65,6 +69,7 @@ public static partial class WorldContentGenerator
         CheckInterview(src, authored, errors);
         CheckCharacters(src, authored, errors);
         CulturePlan culture = PlanCulture(src, errors);
+        CheckTranslation(src, authored, errors);
         if (errors.Count > 0)
         {
             foreach (string e in errors)
@@ -121,6 +126,12 @@ public static partial class WorldContentGenerator
         // --- Culture: string tables, themes, placeholder wallpapers ---
         (ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables) = WriteCulture(culture, written);
 
+        // --- Translation: a Papers and a Speech translator per pack, the notice ---
+        UpgradeSO[] translators = src.translation.packs
+            .SelectMany(p => new[] { MakeTranslator(p, TranslatorKind.Written, src.translation, written), MakeTranslator(p, TranslatorKind.Spoken, src.translation, written) })
+            .ToArray();
+        TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, written);
+
         // Re-saving the book covers keeps their YAML in the current shape.
         foreach (ReferenceBookSO book in authored.books)
             EditorUtility.SetDirty(book);
@@ -128,7 +139,8 @@ public static partial class WorldContentGenerator
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
                     BuildLines(src.interview), questions, dialogs, unlocks, BuildHistoryLines(src.history?.lines),
-                    historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables);
+                    historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
+                    translators, notices, BuildTranslation(src.translation));
 
         int pruned = PruneOwnedFolders(written);
 
@@ -136,7 +148,7 @@ public static partial class WorldContentGenerator
         AssetDatabase.Refresh();
 
         int futurePlaces = src.places.Count(p => src.eras.Any(e => e.future && e.id == p.era));
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues.Length} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
@@ -1198,6 +1210,7 @@ public static partial class WorldContentGenerator
         place.nation = nation;
         place.era = era;
         place.year = p.year;
+        place.tongue = p.tongue;
         (place.birthYearMin, place.birthYearMax) = BirthYears(p, ageMin, ageMax);
         place.maleNames = p.maleNames ?? Array.Empty<string>();
         place.femaleNames = p.femaleNames ?? Array.Empty<string>();
@@ -1560,18 +1573,21 @@ public static partial class WorldContentGenerator
     /// Sets every world array of the library, the interview, the history
     /// lines, the premades and the look rules (authoritative), rewires the
     /// triggers (the hand-authored ones kept in order, then the generated
-    /// unlock triggers, then the history-rule triggers) and the effects (the
-    /// hand-authored ones kept in order, then the history-rule effects, then
-    /// the leader effects), sets the culture UI knobs, the neutral theme, the
-    /// culture themes (country order) and the string tables, and drops missing
-    /// references from the rest.
+    /// unlock triggers, then the translation notice, then the history-rule
+    /// triggers), the effects (the hand-authored ones kept in order, then the
+    /// history-rule effects, then the leader effects) and the upgrades (the
+    /// hand-authored ones kept in order, then the translators in pack order,
+    /// Papers before Speech), sets the culture UI knobs, the neutral theme,
+    /// the culture themes (country order), the string tables and the
+    /// translation settings, and drops missing references from the rest.
     /// </summary>
     private static void WireLibrary(ContentLibrarySO lib, DayPlanSO[] days, EraSO[] eras, NationSO[] nations, NationEraProfileSO[] places,
                                     ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
                                     InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks,
                                     HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects,
                                     LegendarySO[] premades, LookRules lookRules,
-                                    UiData ui, ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables)
+                                    UiData ui, ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables,
+                                    UpgradeSO[] translators, TimelineTriggerSO[] notices, TranslationSettings translation)
     {
         var so = new SerializedObject(lib);
         SerializedArrays.Set(so, "dayPlans", days);
@@ -1585,7 +1601,8 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "questions", questions);
         SerializedArrays.Set(so, "dialogs", dialogs);
         so.FindProperty("historyLines").boxedValue = historyLines;
-        SerializedArrays.Set(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(historyTriggers).ToArray());
+        SerializedArrays.Set(so, "timelineTriggers", HandAuthored(so, "timelineTriggers").Concat(unlocks).Concat(notices).Concat(historyTriggers).ToArray());
+        SerializedArrays.Set(so, "upgrades", HandAuthored(so, "upgrades").Concat(translators).ToArray());
         SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
         SerializedArrays.Set(so, "legendaries", premades);
         so.FindProperty("lookRules").boxedValue = lookRules;
@@ -1597,6 +1614,7 @@ public static partial class WorldContentGenerator
         so.FindProperty("neutralTheme").objectReferenceValue = neutralTheme;
         SerializedArrays.Set(so, "themes", themes);
         SerializedArrays.Set(so, "stringTables", stringTables);
+        so.FindProperty("translation").boxedValue = translation;
         SerializedArrays.DropMissing(so, "clues");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
@@ -1658,7 +1676,7 @@ public static partial class WorldContentGenerator
         return asset;
     }
 
-    /// <summary>The library array's current entries that are not generated here (non-null, outside the Interview and History folders), in order.</summary>
+    /// <summary>The library array's current entries that are not generated here (non-null, outside the Interview, History and Translation folders), in order.</summary>
     private static List<Object> HandAuthored(SerializedObject so, string prop)
     {
         var kept = new List<Object>();
@@ -1667,7 +1685,7 @@ public static partial class WorldContentGenerator
         {
             Object o = p.GetArrayElementAtIndex(i).objectReferenceValue;
             string path = o != null ? AssetDatabase.GetAssetPath(o) : null;
-            if (o != null && !path.StartsWith(InterviewFolder + "/") && !path.StartsWith(HistoryFolder + "/"))
+            if (o != null && !path.StartsWith(InterviewFolder + "/") && !path.StartsWith(HistoryFolder + "/") && !path.StartsWith(TranslationFolder + "/"))
                 kept.Add(o);
         }
         return kept;
@@ -1704,6 +1722,7 @@ public static partial class WorldContentGenerator
         public HistoryData history;
         public PremadeData[] premades;
         public UiData ui;
+        public TranslationData translation;
     }
 
     /// <summary>The shared look knobs: face bands, grey age, the premade garment label, confusable place pairs.</summary>
@@ -1793,6 +1812,7 @@ public static partial class WorldContentGenerator
         public string era;
         public string displayName;
         public int year;
+        public string tongue;
         public FactData[] facts;
         public string[] maleNames;
         public string[] femaleNames;

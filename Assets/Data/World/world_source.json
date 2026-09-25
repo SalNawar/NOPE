@@ -2312,6 +2312,7 @@
       "displayName": "New Kingdom Egypt",
       "moment": "Thebes during the reign of Hatshepsut, c. 1470 BCE (her architect Senenmut; 'scribes of the fields' re-measuring land with knotted ropes after each Nile flood)",
       "year": -1470,
+      "tongue": "egyptian",
       "facts": [
         {
           "category": "Currency",
@@ -2398,6 +2399,7 @@
       "displayName": "Mamluk Egypt",
       "moment": "Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)",
       "year": 1340,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -2490,6 +2492,7 @@
       "displayName": "Ottoman Egypt",
       "moment": "Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly cutting of the Khalij canal dam at the Nile flood)",
       "year": 1700,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -2580,6 +2583,7 @@
       "displayName": "Khedivate of Egypt",
       "moment": "Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the building of the new irrigation canal network",
       "year": 1869,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -2667,6 +2671,7 @@
       "displayName": "Nasser's Egypt",
       "moment": "Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam under construction 1960-70; Suez Canal nationalised 1956)",
       "year": 1962,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -2750,6 +2755,7 @@
       "displayName": "Babylonia",
       "moment": "Babylon under Hammurabi, c. 1760 BCE (the law code, clay contracts sealed with cylinder seals)",
       "year": -1760,
+      "tongue": "akkadian",
       "facts": [
         {
           "category": "Currency",
@@ -2836,6 +2842,7 @@
       "displayName": "Abbasid Baghdad",
       "moment": "Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom; translation and algebra)",
       "year": 830,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -2922,6 +2929,7 @@
       "displayName": "Ottoman Baghdad",
       "moment": "Baghdad under the governor Hasan Pasha (1704-1723), whose household grew into the Mamluk regime, c. 1720 (notaries recording contracts for the qadi court registers)",
       "year": 1720,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -3011,6 +3019,7 @@
       "displayName": "Ottoman Iraq (Baghdad Vilayet)",
       "moment": "Baghdad under the reforming governor Midhat Pasha, c. 1870 (Iraq's first printing press and first newspaper, al-Zawra, 1869)",
       "year": 1870,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -3100,6 +3109,7 @@
       "displayName": "Kingdom of Iraq",
       "moment": "Baghdad c. 1956, the Development Board's modernist building boom (commissions for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up",
       "year": 1956,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -3186,6 +3196,7 @@
       "displayName": "Periclean Athens",
       "moment": "Athens in the age of Pericles and Socrates, c. 430 BCE",
       "year": -430,
+      "tongue": "greek",
       "facts": [
         {
           "category": "Currency",
@@ -3272,6 +3283,7 @@
       "displayName": "Byzantine Mystras",
       "moment": "Mystras, capital of the Byzantine Despotate of the Morea, in the circle of the philosopher Gemistos Plethon, c. 1430",
       "year": 1430,
+      "tongue": "greek",
       "facts": [
         {
           "category": "Currency",
@@ -3362,6 +3374,7 @@
       "displayName": "Ottoman Ioannina",
       "moment": "Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule, c. 1700",
       "year": 1700,
+      "tongue": "greek",
       "facts": [
         {
           "category": "Currency",
@@ -3448,6 +3461,7 @@
       "displayName": "Athens, Kingdom of Greece",
       "moment": "Athens, new capital of the independent Greek kingdom, c. 1860",
       "year": 1860,
+      "tongue": "greek",
       "facts": [
         {
           "category": "Currency",
@@ -3534,6 +3548,7 @@
       "displayName": "Metapolitefsi Athens",
       "moment": "Athens after the fall of the junta and the restoration of democracy, c. 1975",
       "year": 1975,
+      "tongue": "greek",
       "facts": [
         {
           "category": "Currency",
@@ -3615,6 +3630,7 @@
       "displayName": "Republican Rome",
       "moment": "Rome in the last years of the Republic, under Julius Caesar, c. 50 BCE",
       "year": -50,
+      "tongue": "latin",
       "facts": [
         {
           "category": "Currency",
@@ -3692,6 +3708,7 @@
       "displayName": "Florentine Republic",
       "moment": "Florence of the Medici bank, during the Council of Florence, 1439",
       "year": 1439,
+      "tongue": "italian",
       "facts": [
         {
           "category": "Currency",
@@ -3772,6 +3789,7 @@
       "displayName": "Sforza Milan",
       "moment": "Milan under Ludovico Sforza, while Leonardo da Vinci painted the Last Supper and designed machines, c. 1495",
       "year": 1495,
+      "tongue": "italian",
       "facts": [
         {
           "category": "Currency",
@@ -3852,6 +3870,7 @@
       "displayName": "Bologna, Kingdom of Italy",
       "moment": "Bologna and Pontecchio, where young Guglielmo Marconi ran his first radio experiments, 1895",
       "year": 1895,
+      "tongue": "italian",
       "facts": [
         {
           "category": "Currency",
@@ -3935,6 +3954,7 @@
       "displayName": "Dolce Vita Rome",
       "moment": "Rome during the economic miracle, the year of 'La Dolce Vita', 1960",
       "year": 1960,
+      "tongue": "italian",
       "facts": [
         {
           "category": "Currency",
@@ -4012,6 +4032,7 @@
       "displayName": "Eastern Han Luoyang",
       "moment": "Luoyang, the Eastern Han capital, c. 105 CE, when Cai Lun presented his improved paper to the court",
       "year": 105,
+      "tongue": "chinese",
       "facts": [
         {
           "category": "Currency",
@@ -4092,6 +4113,7 @@
       "displayName": "Northern Song Kaifeng",
       "moment": "Kaifeng, the Northern Song capital, c. 1075. This is the era of Shen Kuo, scholar-official and envoy to the Liao, and of the magnetic compass and movable type.",
       "year": 1075,
+      "tongue": "chinese",
       "facts": [
         {
           "category": "Currency",
@@ -4175,6 +4197,7 @@
       "displayName": "Late Ming Suzhou",
       "moment": "Suzhou and Jiangnan in the late Ming, c. 1635, during the printing and publishing boom that produced Song Yingxing's illustrated technology encyclopedia Tiangong Kaiwu (1637)",
       "year": 1635,
+      "tongue": "chinese",
       "facts": [
         {
           "category": "Currency",
@@ -4258,6 +4281,7 @@
       "displayName": "Qing Shanghai",
       "moment": "Shanghai in the late Qing, c. 1880: the Shenbao newspaper, the Jiangnan Arsenal translation bureau and the first telegraph lines",
       "year": 1880,
+      "tongue": "chinese",
       "facts": [
         {
           "category": "Currency",
@@ -4338,6 +4362,7 @@
       "displayName": "Beijing, People's Republic",
       "moment": "Beijing, c. 1972, when Tu Youyou's Project 523 team isolated artemisinin at the Academy of Traditional Chinese Medicine",
       "year": 1972,
+      "tongue": "chinese",
       "facts": [
         {
           "category": "Currency",
@@ -4418,6 +4443,7 @@
       "displayName": "Kofun Yamato",
       "moment": "Yamato (the Nara–Osaka plain) in the Kofun period, c. 450 CE, the age of the great keyhole tombs and haniwa clay figures",
       "year": 450,
+      "tongue": "japanese",
       "facts": [
         {
           "category": "Currency",
@@ -4495,6 +4521,7 @@
       "displayName": "Muromachi Kyoto",
       "moment": "Kyoto under the Ashikaga shogunate, c. 1400: Kitayama culture, Noh theatre, and Japanese folding fans exported to Ming China",
       "year": 1400,
+      "tongue": "japanese",
       "facts": [
         {
           "category": "Currency",
@@ -4575,6 +4602,7 @@
       "displayName": "Tokugawa Edo",
       "moment": "Edo and Sunpu at the founding of the Tokugawa shogunate, c. 1610, in Tokugawa Ieyasu's time. He received a Spanish mechanical clock in 1611.",
       "year": 1610,
+      "tongue": "japanese",
       "facts": [
         {
           "category": "Currency",
@@ -4652,6 +4680,7 @@
       "displayName": "Meiji Nagoya",
       "moment": "Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered wooden loom (1896) and Japan's rapid industrialisation",
       "year": 1899,
+      "tongue": "japanese",
       "facts": [
         {
           "category": "Currency",
@@ -4729,6 +4758,7 @@
       "displayName": "Showa Tokyo",
       "moment": "Tokyo during the Walkman boom, c. 1980, as Akio Morita's Sony took Japanese electronics global",
       "year": 1980,
+      "tongue": "japanese",
       "facts": [
         {
           "category": "Currency",
@@ -4806,6 +4836,7 @@
       "displayName": "Iron Age Britain",
       "moment": "Camulodunum (Colchester), the trading capital of the Catuvellauni under Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury goods were arriving from Roman Gaul",
       "year": 20,
+      "tongue": "brittonic",
       "facts": [
         {
           "category": "Currency",
@@ -4887,6 +4918,7 @@
       "displayName": "Anglo-Saxon England",
       "moment": "London under Edward the Confessor, c. 1050: a North Sea port trading wool and silver, where laws of the time mention merchants from Flanders, Normandy and the German Empire",
       "year": 1050,
+      "tongue": "oldenglish",
       "facts": [
         {
           "category": "Currency",
@@ -4970,6 +5002,7 @@
       "displayName": "Elizabethan England",
       "moment": "The Royal Exchange in London, c. 1600, the year the East India Company received its charter",
       "year": 1600,
+      "tongue": "english",
       "facts": [
         {
           "category": "Currency",
@@ -5056,6 +5089,7 @@
       "displayName": "Victorian Britain",
       "moment": "London in 1843, when Ada Lovelace published her notes on Babbage's Analytical Engine, as the Cooke-Wheatstone electric telegraph spread and just before Railway Mania (1845-47)",
       "year": 1843,
+      "tongue": "english",
       "facts": [
         {
           "category": "Currency",
@@ -5142,6 +5176,7 @@
       "displayName": "Post-war Britain",
       "moment": "Manchester, c. 1950, where Alan Turing was working on the university's pioneering stored-program computer (the Manchester Mark 1, built commercially by Ferranti)",
       "year": 1950,
+      "tongue": "english",
       "facts": [
         {
           "category": "Currency",
@@ -5252,6 +5287,7 @@
       "displayName": "Germania",
       "moment": "Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described in Tacitus' Germania",
       "year": 98,
+      "tongue": "germanic",
       "facts": [
         {
           "category": "Currency",
@@ -5329,6 +5365,7 @@
       "displayName": "Holy Roman Empire (Rhineland)",
       "moment": "The Rhine cities of Strasbourg and Mainz, c. 1440, when Johannes Gutenberg was running his first experiments with movable metal type",
       "year": 1440,
+      "tongue": "german",
       "facts": [
         {
           "category": "Currency",
@@ -5412,6 +5449,7 @@
       "displayName": "Renaissance Nuremberg",
       "moment": "Nuremberg c. 1525: Duerer's city and Europe's hub of printing and precision instruments (Henlein's early portable spring-driven clocks, Behaim's globe), the year the city council adopted the Reformation as Luther's printed pamphlets spread",
       "year": 1525,
+      "tongue": "german",
       "facts": [
         {
           "category": "Currency",
@@ -5498,6 +5536,7 @@
       "displayName": "Wilhelmine Germany",
       "moment": "Berlin c. 1899, during the boom in German electrical engineering (Siemens, AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent dress-reform exhibition opened",
       "year": 1899,
+      "tongue": "german",
       "facts": [
         {
           "category": "Currency",
@@ -5581,6 +5620,7 @@
       "displayName": "Weimar Berlin",
       "moment": "Berlin c. 1926, the Weimar Republic's golden age of science and design: Einstein directs the Kaiser Wilhelm Institute for Physics, and the Bauhaus has just moved to Dessau",
       "year": 1926,
+      "tongue": "german",
       "facts": [
         {
           "category": "Currency",
@@ -5676,6 +5716,7 @@
       "displayName": "Nile Arcology",
       "moment": "Solar arcologies along the Nile, 2150, the year the office keeps",
       "year": 2150,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -5751,6 +5792,7 @@
       "displayName": "Baghdad Garden City",
       "moment": "Baghdad replanted as a garden city of vertical farms, 2150",
       "year": 2150,
+      "tongue": "arabic",
       "facts": [
         {
           "category": "Currency",
@@ -5826,6 +5868,7 @@
       "displayName": "Aegean Commonwealth",
       "moment": "An island commonwealth running on wave power, 2150",
       "year": 2150,
+      "tongue": "greek",
       "facts": [
         {
           "category": "Currency",
@@ -5901,6 +5944,7 @@
       "displayName": "Mediterranean Union Rome",
       "moment": "Rome as the seat of a Mediterranean Union, 2150",
       "year": 2150,
+      "tongue": "italian",
       "facts": [
         {
           "category": "Currency",
@@ -5976,6 +6020,7 @@
       "displayName": "Shanghai Megacity",
       "moment": "Shanghai as a megacity capital linked by maglev, 2150",
       "year": 2150,
+      "tongue": "chinese",
       "facts": [
         {
           "category": "Currency",
@@ -6051,6 +6096,7 @@
       "displayName": "Neo-Tokyo Bay",
       "moment": "Neo-Tokyo built out over the bay, 2150",
       "year": 2150,
+      "tongue": "japanese",
       "facts": [
         {
           "category": "Currency",
@@ -6126,6 +6172,7 @@
       "displayName": "Thames Barrier London",
       "moment": "London behind a great Thames barrier, 2150",
       "year": 2150,
+      "tongue": "english",
       "facts": [
         {
           "category": "Currency",
@@ -6201,6 +6248,7 @@
       "displayName": "Rhine-Ruhr Metropole",
       "moment": "The Rhine-Ruhr grown into one hydrogen metropole, 2150",
       "year": 2150,
+      "tongue": "german",
       "facts": [
         {
           "category": "Currency",
@@ -8127,8 +8175,26 @@
         "tier": "Full"
       },
       {
+        "key": "settings.motion",
+        "text": "Motion",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.motionFull",
+        "text": "Full",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.motionReduced",
+        "text": "Reduced",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.note",
-        "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens.",
+        "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens. Reduced motion shows translations at once.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8279,6 +8345,12 @@
       {
         "key": "compare.travellerLabel",
         "text": "Traveller · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.untranslated",
+        "text": "(untranslated {0}; {1} Translator)",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9543,6 +9615,293 @@
             "text": "— 時間線ニュース —"
           }
         ]
+      }
+    ]
+  },
+  "translation": {
+    "fromDay": 2,
+    "announce": "Budget cuts close the interpreter pool. From today, foreign papers and speech reach the desk untranslated; translators are sold at Home. The scanner still compares untranslated text with the books.",
+    "flip": {
+      "startDelay": 0.3,
+      "letterInterval": 0.04,
+      "letterSeconds": 0.12,
+      "scrambleSteps": 2,
+      "rowStagger": 0.15
+    },
+    "fallbackGlyphs": "olmnupqrystvwxazbcdfeghjik",
+    "scripts": [
+      {
+        "id": "latin",
+        "rightToLeft": false,
+        "fonts": []
+      },
+      {
+        "id": "greek",
+        "rightToLeft": false,
+        "fonts": []
+      },
+      {
+        "id": "arabic",
+        "rightToLeft": true,
+        "fonts": [
+          {
+            "file": "tahoma.ttf",
+            "face": 0,
+            "family": "Tahoma",
+            "style": "Regular"
+          },
+          {
+            "file": "arial.ttf",
+            "face": 0,
+            "family": "Arial",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Geeza Pro",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans Arabic",
+            "style": "Regular"
+          }
+        ]
+      },
+      {
+        "id": "han",
+        "rightToLeft": false,
+        "fonts": [
+          {
+            "file": "msyh.ttc",
+            "face": 0,
+            "family": "Microsoft YaHei",
+            "style": "Regular"
+          },
+          {
+            "file": "simsun.ttc",
+            "face": 0,
+            "family": "SimSun",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans CJK SC",
+            "style": "Regular"
+          }
+        ]
+      },
+      {
+        "id": "kana",
+        "rightToLeft": false,
+        "fonts": [
+          {
+            "file": "YuGothR.ttc",
+            "face": 0,
+            "family": "Yu Gothic",
+            "style": "Regular"
+          },
+          {
+            "file": "msgothic.ttc",
+            "face": 0,
+            "family": "MS Gothic",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Hiragino Sans",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans CJK JP",
+            "style": "Regular"
+          }
+        ]
+      },
+      {
+        "id": "hieroglyphs",
+        "rightToLeft": false,
+        "fonts": [
+          {
+            "file": "seguihis.ttf",
+            "face": 0,
+            "family": "Segoe UI Historic",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans Egyptian Hieroglyphs",
+            "style": "Regular"
+          }
+        ]
+      },
+      {
+        "id": "cuneiform",
+        "rightToLeft": false,
+        "fonts": [
+          {
+            "file": "seguihis.ttf",
+            "face": 0,
+            "family": "Segoe UI Historic",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans Cuneiform",
+            "style": "Regular"
+          }
+        ]
+      },
+      {
+        "id": "runic",
+        "rightToLeft": false,
+        "fonts": [
+          {
+            "file": "seguihis.ttf",
+            "face": 0,
+            "family": "Segoe UI Historic",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans Runic",
+            "style": "Regular"
+          }
+        ]
+      }
+    ],
+    "packs": [
+      {
+        "id": "near_east",
+        "displayName": "Near East",
+        "writtenCost": 100,
+        "spokenCost": 80
+      },
+      {
+        "id": "mediterranean",
+        "displayName": "Mediterranean",
+        "writtenCost": 100,
+        "spokenCost": 80
+      },
+      {
+        "id": "east_asia",
+        "displayName": "East Asia",
+        "writtenCost": 100,
+        "spokenCost": 80
+      },
+      {
+        "id": "north_europe",
+        "displayName": "Northern Europe",
+        "writtenCost": 100,
+        "spokenCost": 80
+      }
+    ],
+    "tongues": [
+      {
+        "id": "english",
+        "displayName": "English",
+        "script": "latin",
+        "pack": "",
+        "glyphs": ""
+      },
+      {
+        "id": "egyptian",
+        "displayName": "Egyptian",
+        "script": "hieroglyphs",
+        "pack": "near_east",
+        "glyphs": "𓄿𓃀𓍿𓂧𓇋𓆑𓎼𓉔𓇌𓆓𓎡𓃭𓅓𓈖𓂝𓊪𓈎𓂋𓋴𓏏𓅱𓎛𓏲𓐍𓏭𓊃"
+      },
+      {
+        "id": "akkadian",
+        "displayName": "Akkadian",
+        "script": "cuneiform",
+        "pack": "near_east",
+        "glyphs": "𒀀𒁀𒆠𒁕𒂊𒉿𒂵𒄩𒄿𒅖𒅗𒆷𒈠𒈾𒌑𒉺𒋡𒊏𒊓𒋫𒌋𒉌𒊒𒆪𒅀𒍝"
+      },
+      {
+        "id": "arabic",
+        "displayName": "Arabic",
+        "script": "arabic",
+        "pack": "near_east",
+        "glyphs": "عكسريقجحاشتنملوبطدفخهزغضءذ"
+      },
+      {
+        "id": "greek",
+        "displayName": "Greek",
+        "script": "greek",
+        "pack": "mediterranean",
+        "glyphs": "ολμναξπρηστφχψυςάέβγιδζθωκ"
+      },
+      {
+        "id": "latin",
+        "displayName": "Latin",
+        "script": "latin",
+        "pack": "mediterranean",
+        "glyphs": "ifghojklumnpqrystvwxazbced"
+      },
+      {
+        "id": "italian",
+        "displayName": "Italian",
+        "script": "latin",
+        "pack": "mediterranean",
+        "glyphs": "ohjkulmnèpqrstavwxzbecdfig"
+      },
+      {
+        "id": "chinese",
+        "displayName": "Chinese",
+        "script": "han",
+        "pack": "east_asia",
+        "glyphs": "安文山水衣日月天一地木火金石欧田中大小上乌下口心由王"
+      },
+      {
+        "id": "japanese",
+        "displayName": "Japanese",
+        "script": "kana",
+        "pack": "east_asia",
+        "glyphs": "あかきくえけこさいしすせそたおちつてとなうにのはやま"
+      },
+      {
+        "id": "brittonic",
+        "displayName": "Brittonic",
+        "script": "latin",
+        "pack": "north_europe",
+        "glyphs": "wpqrastveyxzbcidfghjoklmun"
+      },
+      {
+        "id": "oldenglish",
+        "displayName": "Old English",
+        "script": "latin",
+        "pack": "north_europe",
+        "glyphs": "umnpyqrsæþvƿxzebcðfgihjkol"
+      },
+      {
+        "id": "germanic",
+        "displayName": "Proto-Germanic",
+        "script": "runic",
+        "pack": "north_europe",
+        "glyphs": "ᛟᚷᚹᚺᚨᚾᛃᛈᛖᛉᛊᛏᛒᛗᚢᛚᛜᛞᚴᛦᛁᚠᚦᚱᛇᚲ"
+      },
+      {
+        "id": "german",
+        "displayName": "German",
+        "script": "latin",
+        "pack": "north_europe",
+        "glyphs": "eklminpqörßtvwuxzbcdüfghäj"
       }
     ]
   }
