@@ -100,12 +100,19 @@ public readonly struct BoothInput
     /// <summary>The desk view may stay: no newsletter (false returns to the normal view).</summary>
     public readonly bool DeskViewAllowed;
 
+    /// <summary>The "▲ Back" control shows at the top of the office overlay and the mouse wheel rolled up returns from the desk view: the desk view is on and the props are live (no frame, newsletter, wheel or stamp tray), papers held or not.</summary>
+    public readonly bool DeskViewBackLive;
+
+    /// <summary>The mouse wheel rolled down over the empty mat tilts into the desk view: the view is normal and the mat's toggle is live (the pointer must be on the mat, not on UI: DeskView checks it).</summary>
+    public readonly bool DeskViewScrollInLive;
+
     /// <summary>Creates an output set.</summary>
     public BoothInput(bool desktopInteractive, bool crtFocusable, bool powerButtonLive,
                       bool propsLive, bool papersLive, bool wheelAllowed, bool travellerLive,
                       bool heldPapersLive, bool deskCatcherLive, bool examineEscapeLive,
                       bool stampTrayAllowed, bool caseHudVisible,
-                      bool deskViewToggleLive, bool deskViewReturnLive, bool deskViewAllowed)
+                      bool deskViewToggleLive, bool deskViewReturnLive, bool deskViewAllowed,
+                      bool deskViewBackLive, bool deskViewScrollInLive)
     {
         DesktopInteractive = desktopInteractive;
         CrtFocusable = crtFocusable;
@@ -122,6 +129,8 @@ public readonly struct BoothInput
         DeskViewToggleLive = deskViewToggleLive;
         DeskViewReturnLive = deskViewReturnLive;
         DeskViewAllowed = deskViewAllowed;
+        DeskViewBackLive = deskViewBackLive;
+        DeskViewScrollInLive = deskViewScrollInLive;
     }
 }
 
@@ -133,8 +142,9 @@ public readonly struct BoothInput
 /// wheel, a pending citation slip, the stamp tray, held papers and the desk
 /// view, which of the desktop, the PC, the power buttons, the props, the
 /// papers (on the desk and in the hand), the desk catcher, Escape, the wheel,
-/// the stamp tray, the traveller, the case HUD, the mat and the desk view's
-/// return take input or show. Pure, so every row is tested headless;
+/// the stamp tray, the traveller, the case HUD, the mat, the desk view's
+/// return, its "▲ Back" control and the mouse wheel take input or show. Pure,
+/// so every row is tested headless;
 /// BoothCoordinator applies it.
 /// </summary>
 public static class BoothRules
@@ -165,6 +175,8 @@ public static class BoothRules
             caseHudVisible: office,
             deskViewToggleLive: mat,
             deskViewReturnLive: c.DeskView && mat,
-            deskViewAllowed: !newsletter);
+            deskViewAllowed: !newsletter,
+            deskViewBackLive: c.DeskView && props,
+            deskViewScrollInLive: mat && !c.DeskView);
     }
 }
