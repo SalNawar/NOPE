@@ -95,6 +95,51 @@ public class LookKeysTests
     }
 
     [Test]
+    public void ArtNation_IsTheItemsOverride_ElseThePlacesNation()
+    {
+        Assert.AreEqual("egypt", new LookItem { label = "bob" }.ArtNation("egypt"));
+        Assert.AreEqual("egypt", new LookItem { label = "bob", artNation = " " }.ArtNation("egypt"));
+        Assert.AreEqual("neutral", new LookItem { label = "bob", artNation = "neutral" }.ArtNation("egypt"));
+    }
+
+    /// <summary>A Future place's wardrobe: its own outfit, the hair (with a back) and the men's facial hair filed under <paramref name="artNation"/>.</summary>
+    private static PlaceWardrobe Future(string outfit, string artNation) => new PlaceWardrobe
+    {
+        male = new GenderLook
+        {
+            signature = LookSlot.Outfit,
+            outfit = new LookItem { label = outfit + " coat" },
+            hair = new LookItem { label = "neat short cut", back = true, artNation = artNation },
+            facialHair = new LookItem { label = "short stubble", artNation = artNation }
+        },
+        female = new GenderLook
+        {
+            signature = LookSlot.Outfit,
+            outfit = new LookItem { label = outfit + " gown" },
+            hair = new LookItem { label = "sleek bob", artNation = artNation }
+        }
+    };
+
+    [Test]
+    public void Required_FilesAnArtNationItemUnderIt_SoPlacesSharingItShareTheNames_WithTheSameCounts()
+    {
+        string[] china = LookKeys.Required("china", "future", Future("pankou", "neutral")).ToArray();
+        string[] egypt = LookKeys.Required("egypt", "future", Future("yoke", "neutral")).ToArray();
+
+        // Men: outfit 1 + (hairback + hair) x 5 + facial hair 5; women: outfit 1 + hair 5.
+        Assert.AreEqual(1 + 10 + 5 + 1 + 5, china.Length);
+        Assert.AreEqual(LookKeys.Required("china", "future", Future("pankou", null)).Count(), china.Length, "the override changes names, not counts");
+        CollectionAssert.Contains(china, "hair_m_neutral_future_black");
+        CollectionAssert.Contains(china, "hairback_m_neutral_future_grey");
+        CollectionAssert.Contains(china, "facialhair_m_neutral_future_red");
+        CollectionAssert.Contains(china, "hair_f_neutral_future_blond");
+        CollectionAssert.Contains(china, "outfit_m_china_future");
+        CollectionAssert.AreEqual(china.Where(k => !k.StartsWith("outfit_")).ToArray(), egypt.Where(k => !k.StartsWith("outfit_")).ToArray(), "one shared drawing set");
+        CollectionAssert.IsEmpty(china.Intersect(egypt).Where(k => k.StartsWith("outfit_")), "each place keeps its own outfit");
+        CollectionAssert.DoesNotContain(LookKeys.Required("china", "future", Future("pankou", null)).ToArray(), "hair_m_neutral_future_black");
+    }
+
+    [Test]
     public void Bases_TenBodiesAndAHeadPerSkinAndFace()
     {
         var rules = new LookRules

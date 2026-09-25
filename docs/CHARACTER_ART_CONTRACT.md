@@ -30,7 +30,7 @@ Bottom first: hair back, body, outfit, head, facial hair, hair, headwear, access
 | Facial hair | `facialhair_{g}_{nation}_{era}_{colour}`, always coloured (a wig never strips the beard's colour) |
 | Premade | `premade_{id}_{expression}` (neutral, happy, angry, worried) |
 
-Nation, era and premade ids are lowercase letters and digits. A Future place (piece 5) uses the ordinary grammar with era `future`; one drawing shared by several places is written under each place's names. The suffix `_v{N}` is reserved for outfit variants. Colour variants are baked files (the game never tints).
+Nation, era and premade ids are lowercase letters and digits. A Future place (piece 5) uses the ordinary grammar with era `future`. An item may be filed under a shared art nation instead of its place's nation (`artNation` in `world_source.json`, a key token), so places of one era share one drawing: the eight Future places draw only their own culture-shaped outfits (`outfit_{g}_{country}_future`) and share one neutral hair per gender and one men's beard (`hair_{g}_neutral_future_{colour}`, `facialhair_m_neutral_future_{colour}`). The suffix `_v{N}` is reserved for outfit variants. Colour variants are baked files (the game never tints).
 
 ## 5. Delivery
 

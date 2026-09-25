@@ -801,11 +801,13 @@ public static class WorldContentGenerator
     /// Checks the character data before anything is written: the looks
     /// section, every country's and place's look weights, every wardrobe
     /// (both genders, outfit and hair, a real signature item, label length and
-    /// ASCII, covers, wig and back only on hair, the per-gender label rule),
+    /// ASCII, covers, wig and back only on hair, art nations that are key
+    /// tokens, the per-gender label rule),
     /// the derived Culture values (no authored Culture fact, within the fact
     /// width, unique), no Culture question, ids usable in art keys, the
-    /// premades (ids, names, gender, places, birth dates, archetype, dialog,
-    /// intro, record note, impacts), each day's premade pool, forced slots and
+    /// premades (ids, names, gender, places, never a Future place, birth
+    /// dates, archetype, dialog, intro, record note, impacts), each day's
+    /// premade pool, forced slots and
     /// chance, and dialog line expressions. A forced premade in the first half
     /// of a day with rules is a warning (it takes a slot a guaranteed violator
     /// could need).
@@ -909,6 +911,7 @@ public static class WorldContentGenerator
         var premadeIds = new HashSet<string>();
         var premadeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         var premadesById = new Dictionary<string, PremadeData>();
+        var futureEras = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
         foreach (PremadeData m in src.premades ?? Array.Empty<PremadeData>())
         {
             string owner = $"Premade '{m.id}'";
@@ -934,6 +937,13 @@ public static class WorldContentGenerator
                 errors.Add($"{owner} claims unknown place '{m.place}'.");
             if (!string.IsNullOrEmpty(m.truePlace) && (!placeIds.Contains(m.truePlace) || m.truePlace == m.place))
                 errors.Add($"{owner} has true place '{m.truePlace}', which must be another existing place (or empty for an honest premade).");
+
+            // A Future place is in the world only while its nation leads (history spec R22).
+            PlaceData home = string.IsNullOrEmpty(m.truePlace) ? null : src.places.FirstOrDefault(p => PlaceId(p) == m.truePlace);
+            if (place != null && futureEras.Contains(place.era))
+                errors.Add($"{owner} claims the Future place '{m.place}', which is in the world only while its nation leads; no premade may claim or come from the Future.");
+            if (home != null && futureEras.Contains(home.era))
+                errors.Add($"{owner} comes from the Future place '{m.truePlace}', which is in the world only while its nation leads; no premade may claim or come from the Future.");
 
             if (!BirthDates.TryParse(m.birthDate, out _, out _, out int year))
                 errors.Add($"{owner} has unreadable birth date '{m.birthDate}' (\"14 Mar 1505 BCE\").");
@@ -1033,7 +1043,7 @@ public static class WorldContentGenerator
         }
     }
 
-    /// <summary>A gender's look: outfit and hair present, a real signature item, labels within the cap and ASCII, covers naming other slots, wig and back only on hair.</summary>
+    /// <summary>A gender's look: outfit and hair present, a real signature item, labels within the cap and ASCII, covers naming other slots, wig and back only on hair, an art nation (when given) that is a key token.</summary>
     private static void CheckGenderLook(GenderLookData g, string owner, List<string> errors)
     {
         if (!ParseEnum(g.signature, out LookSlot signature))
@@ -1063,6 +1073,8 @@ public static class WorldContentGenerator
             foreach (string c in item.covers ?? Array.Empty<string>())
                 if (!ParseEnum(c, out LookSlot covered) || covered == slot)
                     errors.Add($"{owner} {slot} '{item.label}' covers '{c}' (another slot's name).");
+            if (!string.IsNullOrEmpty(item.artNation) && !LookKeys.IsToken(item.artNation))
+                errors.Add($"{owner} {slot} '{item.label}' has artNation '{item.artNation}', which is not a key token (lowercase letters and digits; it replaces the nation in the item's art file names).");
         }
     }
 
@@ -1232,6 +1244,7 @@ public static class WorldContentGenerator
             leakable = i.leakable,
             wig = i.wig,
             back = i.back,
+            artNation = i.artNation,
             covers = (i.covers ?? Array.Empty<string>()).Where(c => ParseEnum(c, out LookSlot _)).Select(c => (LookSlot)Enum.Parse(typeof(LookSlot), c)).ToList()
         };
 
@@ -1706,8 +1719,8 @@ public static class WorldContentGenerator
         public ItemData accessory;
     }
 
-    /// <summary>A worn item; the flags read false when missing.</summary>
-    [Serializable] private sealed class ItemData { public string label; public bool leakable; public bool wig; public bool back; public string[] covers; }
+    /// <summary>A worn item; the flags read false when missing, and a missing artNation files its art under the place's own nation.</summary>
+    [Serializable] private sealed class ItemData { public string label; public bool leakable; public bool wig; public bool back; public string[] covers; public string artNation; }
 
     /// <summary>A premade: missing truePlace, intro, recordNote and dialog mean none; missing repeatable means once per run.</summary>
     [Serializable] private sealed class PremadeData

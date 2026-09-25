@@ -85,6 +85,8 @@ public static class LookKeys
     /// outfit, headwear and accessory; hair (and hair back) in every colour, or
     /// one uncoloured key each for a wig; facial hair in every colour (a leaked
     /// hairstyle keeps the traveller's colour, so any colour can meet any item).
+    /// Each item is filed under its art nation (LookItem.ArtNation), so places
+    /// that share a drawing list the same names.
     /// </summary>
     public static IEnumerable<string> Required(string nationId, string eraId, PlaceWardrobe wardrobe)
     {
@@ -105,8 +107,8 @@ public static class LookKeys
                 foreach (string colour in coloured ? HairColours : new string[] { null })
                 {
                     if (slot == LookSlot.Hair && item.back)
-                        yield return Garment(LookLayer.HairBack, gender, nationId, eraId, colour).Name;
-                    yield return Garment(layer, gender, nationId, eraId, colour).Name;
+                        yield return Garment(LookLayer.HairBack, gender, item.ArtNation(nationId), eraId, colour).Name;
+                    yield return Garment(layer, gender, item.ArtNation(nationId), eraId, colour).Name;
                 }
             }
         }

@@ -20,6 +20,13 @@ public class LooksTests
     private static LookItem Item(string label, bool leakable = false, bool wig = false, bool back = false, params LookSlot[] covers) =>
         new LookItem { label = label, leakable = leakable, wig = wig, back = back, covers = covers.ToList() };
 
+    /// <summary>Files an item's art under another nation token (LookItem.artNation).</summary>
+    private static LookItem Art(LookItem item, string artNation)
+    {
+        item.artNation = artNation;
+        return item;
+    }
+
     private static GenderLook Look(LookSlot signature, LookItem outfit, LookItem hair, LookItem facialHair = null, LookItem headwear = null, LookItem accessory = null) =>
         new GenderLook
         {
@@ -150,6 +157,30 @@ public class LooksTests
         var required = new HashSet<string>(LookKeys.Required("britain", "industrial", London()).Concat(LookKeys.Required("japan", "earlymodern", egypt)));
         foreach (LookPart part in look.Parts.Where(p => p.GarmentIndex >= 0))
             Assert.IsTrue(required.Contains(part.Key.Name), part.Key.Name);
+    }
+
+    [Test]
+    public void AnArtNationItem_IsDrawnUnderIt_WithTheTravellersColour_AndEveryKeyIsRequired()
+    {
+        PlaceWardrobe future = London();
+        future.male.hair = Art(Item("neat short cut", back: true), "neutral");
+        Art(future.male.facialHair, "neutral");
+        LookSource shanghai = Source("china", "future", future);
+        TravellerLook look = Compose(TravellerGender.Male, claim: shanghai);
+        Assert.AreEqual("hair_m_neutral_future_brown", look.PartOn(LookLayer.Hair).Value.Key.Name);
+        Assert.AreEqual("hairback_m_neutral_future_brown", look.PartOn(LookLayer.HairBack).Value.Key.Name);
+        Assert.AreEqual("facialhair_m_neutral_future_brown", look.PartOn(LookLayer.FacialHair).Value.Key.Name);
+        Assert.AreEqual("outfit_m_china_future", look.PartOn(LookLayer.Outfit).Value.Key.Name, "an item without the override keeps its place's nation");
+        Assert.AreEqual("neat short cut", look.Garments.Single(g => g.Slot == LookSlot.Hair).Label);
+
+        var required = new HashSet<string>(LookKeys.Required("china", "future", future).Concat(LookKeys.Bases(Rules())));
+        foreach (LookKey key in look.Keys)
+            Assert.IsTrue(required.Contains(key.Name), key.Name);
+
+        PlaceWardrobe home = Edo();
+        Art(home.male.hair, "shared");
+        Assert.AreEqual("hair_m_shared_earlymodern_brown", Compose(TravellerGender.Male, Home(home)).PartOn(LookLayer.Hair).Value.Key.Name,
+                        "a leaked item: its own art nation with its home's era");
     }
 
     [Test]
@@ -342,6 +373,32 @@ public class LooksTests
         LookRules otherSlot = Rules();
         otherSlot.confusable.Add(new ConfusablePair { placeA = "britain_industrial", placeB = "japan_earlymodern", slot = LookSlot.Headwear, gender = "" });
         Assert.IsTrue(Looks.CanLeak(Claim(), Home(), TravellerGender.Male, otherSlot), "another slot's pair");
+    }
+
+    [Test]
+    public void CanLeak_RefusesALeakDrawnFromTheSameArtAsTheDisguisesItem()
+    {
+        LookRules rules = Rules();
+        PlaceWardrobe home = Edo();
+        Art(home.male.hair, "shared");
+        Art(home.female.accessory, "shared");
+        PlaceWardrobe claim = London();
+        Art(claim.male.hair, "shared");
+        Art(claim.female.accessory, "shared");
+
+        LookSource sameEra = Source("japan", "industrial", home);
+        Assert.IsFalse(Looks.CanLeak(Claim(claim), sameEra, TravellerGender.Male, rules), "hair_m_shared_industrial either way: an invisible tell");
+        Assert.IsFalse(Looks.CanLeak(Claim(claim), sameEra, TravellerGender.Female, rules), "accessory_f_shared_industrial either way");
+        Assert.IsTrue(Looks.CanLeak(Claim(claim), Home(home), TravellerGender.Male, rules), "the same art nation in another era is another drawing");
+        Assert.IsTrue(Looks.CanLeak(Claim(), sameEra, TravellerGender.Male, rules), "without the override two places never share a drawing");
+
+        PlaceWardrobe wig = London();
+        wig.male.hair = Art(Item("side-parted curls", wig: true), "shared");
+        Assert.IsTrue(Looks.CanLeak(Claim(wig), sameEra, TravellerGender.Male, rules), "a wig and a coloured hairstyle are different files");
+
+        PlaceWardrobe bare = London();
+        bare.female.accessory = new LookItem();
+        Assert.IsTrue(Looks.CanLeak(Claim(bare), sameEra, TravellerGender.Female, rules), "the disguise has nothing in that slot");
     }
 
     // -----------------------------

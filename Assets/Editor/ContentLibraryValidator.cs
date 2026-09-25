@@ -386,9 +386,11 @@ public static class ContentLibraryValidator
 
     /// <summary>
     /// The Future: at most one era is the Future, and then every nation has a
-    /// place in it (errors); every nation's leader effect is a UI-channel
-    /// effect whose Cue op is its culture cue (CultureCue), and no Future place
-    /// has baselines, which would put it in the dominance tiers (warnings).
+    /// place in it; no premade claims (trueEra) or comes from (truePlace) the
+    /// Future, which is in the world only while its nation leads (errors);
+    /// every nation's leader effect is a UI-channel effect whose Cue op is its
+    /// culture cue (CultureCue), and no Future place has baselines, which
+    /// would put it in the dominance tiers (warnings).
     /// </summary>
     private static int CheckFuture(ContentLibrarySO lib)
     {
@@ -426,6 +428,24 @@ public static class ContentLibraryValidator
             if (place != null && place.era != null && place.era.isFuture && place.baselines != null && place.baselines.Count > 0)
             {
                 Debug.LogWarning($"[ContentLibraryValidator] Future place '{place.name}' has baselines, so it would join the dominance tiers and their news in '{lib.name}'.", place);
+                issues++;
+            }
+        }
+
+        foreach (LegendarySO legend in lib.Legendaries)
+        {
+            if (legend == null)
+                continue;
+
+            if (legend.trueEra != null && legend.trueEra.isFuture)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Premade '{legend.name}' ({legend.displayName}) claims the Future, whose place is in the world only while its nation leads; no premade may claim or come from the Future in '{lib.name}'.", legend);
+                issues++;
+            }
+
+            if (legend.truePlace != null && legend.truePlace.era != null && legend.truePlace.era.isFuture)
+            {
+                Debug.LogError($"[ContentLibraryValidator] Premade '{legend.name}' ({legend.displayName}) comes from the Future place '{legend.truePlace.name}', which is in the world only while its nation leads; no premade may claim or come from the Future in '{lib.name}'.", legend);
                 issues++;
             }
         }
@@ -623,8 +643,10 @@ public static class ContentLibraryValidator
     /// Reports places with missing or duplicate facts, no names, unset or
     /// inverted birth years, no year, a Culture fact that is not the one the
     /// wardrobe gives (or wider than a book row), a gender look without outfit,
-    /// hair or signature item, look weights with no positive sum, and (a
-    /// warning) a signature that is the whole outfit, which can never leak.
+    /// hair or signature item, an item art nation that is not a key token,
+    /// look weights with no positive sum, and (a warning) a signature that is
+    /// the whole outfit, which can never leak (except on a Future place, whose
+    /// culture-shaped outfit is its signature by design).
     /// </summary>
     private static int CheckPlaces(ContentLibrarySO lib)
     {
@@ -674,7 +696,7 @@ public static class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>A place's look: year, the derived Culture fact, both genders' looks and the weights.</summary>
+    /// <summary>A place's look: year, the derived Culture fact, both genders' looks, their items' art nations and the weights.</summary>
     private static int CheckPlaceLook(NationEraProfileSO place, ContentLibrarySO lib)
     {
         int issues = 0;
@@ -703,10 +725,18 @@ public static class ContentLibraryValidator
                 continue;
             }
 
-            if (look.signature == LookSlot.Outfit)
+            // A Future place's signature is its outfit by design, so a Future home never leaks dress (characters spec R27).
+            if (look.signature == LookSlot.Outfit && (place.era == null || !place.era.isFuture))
             {
                 Debug.LogWarning($"[ContentLibraryValidator] Place '{place.name}' has the whole outfit as its {gender} signature, so it can never leak as a dress tell ('{lib.name}').", place);
                 issues++;
+            }
+
+            foreach (LookSlot slot in Looks.Slots)
+            {
+                LookItem item = look.Item(slot);
+                if (item != null && item.IsPresent && !string.IsNullOrEmpty(item.artNation) && !LookKeys.IsToken(item.artNation))
+                    Error($"files its {gender} {Looks.SlotLabel(slot)} '{item.label}' under art nation '{item.artNation}', which is not a key token (lowercase letters and digits)");
             }
         }
 
@@ -1064,8 +1094,9 @@ public static class ContentLibraryValidator
     /// <summary>
     /// Logs (never counted as an issue) how many character art keys have final
     /// art at CharacterArt.AssetFolder: the bases, every place's garments and
-    /// every premade's expressions, with the first 20 missing names (the rest
-    /// are drawn as placeholders at runtime).
+    /// every premade's expressions, each distinct name once (a drawing places
+    /// share through an item's artNation counts once), with the first 20
+    /// missing names (the rest are drawn as placeholders at runtime).
     /// </summary>
     private static void ReportCharacterArt(ContentLibrarySO lib)
     {
