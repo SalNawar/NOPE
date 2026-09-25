@@ -7310,7 +7310,7 @@
         "fill": "chromeDeep",
         "alpha": 0.8,
         "ink": "chromeInk",
-        "textClass": "LargeText"
+        "textClass": "Text"
       },
       {
         "role": "Taskbar",
@@ -7331,7 +7331,7 @@
         "fill": "accent",
         "alpha": 1,
         "ink": "accentInk",
-        "textClass": "LargeText"
+        "textClass": "Text"
       },
       {
         "role": "Tray",
@@ -7429,7 +7429,7 @@
         "fill": "chromeDeep",
         "alpha": 0.8,
         "ink": "chromeInk",
-        "textClass": "LargeText"
+        "textClass": "Text"
       },
       {
         "role": "Alert",
@@ -7586,7 +7586,7 @@
         },
         {
           "name": "accent",
-          "hex": "#3D993B"
+          "hex": "#2E7D32"
         },
         {
           "name": "accentInk",
@@ -7622,7 +7622,7 @@
         },
         {
           "name": "reject",
-          "hex": "#DB402E"
+          "hex": "#C43C2C"
         },
         {
           "name": "rejectInk",

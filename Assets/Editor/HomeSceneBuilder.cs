@@ -12,7 +12,10 @@ using UnityEngine.UI;
 /// slot machine, and the sleep prompt. Unlike OfficeSceneUIBuilder, this
 /// script creates the Canvas, EventSystem, HomeManager and HomeUIController
 /// objects from scratch if they don't already exist (HomeScene starts as an
-/// empty scene). Safe to re-run: skips/finds pieces that already exist (by name).
+/// empty scene). Safe to re-run: skips/finds pieces that already exist (by name),
+/// except the HUD's backing strip, which it keeps as it builds it (the
+/// readability fix: the HUD's white texts read over the room's art on it); it
+/// then checks every text's contrast on what it is drawn on (UiContrastCheck).
 /// </summary>
 public static class HomeSceneBuilder
 {
@@ -84,6 +87,7 @@ public static class HomeSceneBuilder
             new Vector2(0.4f, 0f), new Vector2(0.6f, 1f));
         TMP_Text stabilityText = FindOrCreateText(hud, "StabilityText", "Stability: 100%", 28, TextAlignmentOptions.Right,
             new Vector2(0.8f, 0f), new Vector2(1f, 1f));
+        EnsureHudBacking(hud);
 
         // --- Expenses panel ---
         Transform expenses = FindOrCreatePanel(uiRoot, "ExpensesPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -181,8 +185,45 @@ public static class HomeSceneBuilder
         slot.gameObject.SetActive(false);
         sleep.gameObject.SetActive(false);
 
+        UiContrastCheck.Check(canvas, canvas.GetComponent<CanvasScaler>() is CanvasScaler s && s.referenceResolution.y > 0f ? 1080f / s.referenceResolution.y : 1f, null, null);
         EditorSceneManager.MarkSceneDirty(homeUI.gameObject.scene);
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
+    }
+
+    /// <summary>The HUD's height on its dark strip (reference px), centred on the HUD's texts.</summary>
+    private const float HudBackingHeight = 64f;
+
+    /// <summary>The HUD's strip: dark and mostly opaque, so the white day, wallet and stability read over any part of the room's art.</summary>
+    private static readonly Color HudBackingColour = new Color(0.06f, 0.07f, 0.1f, 0.72f);
+
+    /// <summary>
+    /// The HUD's backing strip, drawn first under the HUD (full width,
+    /// <see cref="HudBackingHeight"/> tall, centred on its texts; no raycasts):
+    /// created once, its place and colour re-applied on every build.
+    /// </summary>
+    private static void EnsureHudBacking(Transform hud)
+    {
+        Transform existing = hud.Find("Backing");
+        GameObject go = existing != null ? existing.gameObject : new GameObject("Backing", typeof(RectTransform));
+        if (existing == null)
+        {
+            go.transform.SetParent(hud, false);
+            Undo.RegisterCreatedObjectUndo(go, "Create HUD Backing");
+        }
+        go.transform.SetAsFirstSibling();
+
+        var rt = (RectTransform)go.transform;
+        rt.anchorMin = new Vector2(0f, 0.5f);
+        rt.anchorMax = new Vector2(1f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = Vector2.zero;
+        rt.sizeDelta = new Vector2(0f, HudBackingHeight);
+
+        Image img = go.GetComponent<Image>();
+        if (img == null)
+            img = go.AddComponent<Image>();
+        img.color = HudBackingColour;
+        img.raycastTarget = false;
     }
 
     /// <summary>Finds a child panel by name or creates it with the given anchors.</summary>

@@ -46,7 +46,9 @@ using UnityEngine.UI;
 /// overlay and window parts are rebuilt each run). Every UI graphic it makes
 /// gets a ThemeTag (piece 6: role, label key, style, fit), which
 /// CultureThemeService applies at runtime; an untagged graphic on the two
-/// canvases is logged as an error. It opens the gameplay layer alone, builds
+/// canvases is logged as an error, and so is a text that does not reach its
+/// contrast minimum on what it is drawn on in any theme (UiContrastCheck).
+/// It opens the gameplay layer alone, builds
 /// it, saves it and lists it after the art office in the build settings; it
 /// refuses while any open scene has unsaved changes. The Office root and the
 /// desktop's place are in OfficeSceneUIBuilder.Desk.cs.
@@ -55,9 +57,9 @@ public static partial class OfficeSceneUIBuilder
 {
     // Windows XP "Luna" palette
     private static readonly Color XpBlue = new Color(0.13f, 0.34f, 0.86f, 1f);    // taskbar / title-bar base
-    private static readonly Color XpGreen = new Color(0.24f, 0.6f, 0.23f, 1f);    // Start button
+    private static readonly Color XpGreen = new Color(0.18f, 0.49f, 0.2f, 1f);    // Start button (#2E7D32: white reads on it)
     private static readonly Color XpFace = new Color(0.925f, 0.913f, 0.847f, 1f); // #ECE9D8 control face
-    private static readonly Color XpRed = new Color(0.86f, 0.25f, 0.18f, 1f);     // close button
+    private static readonly Color XpRed = new Color(0.77f, 0.235f, 0.17f, 1f);    // close button (#C43C2C: white reads on it)
     private static readonly Color Tooltip = new Color(1f, 1f, 0.88f, 1f);         // #FFFFE1 info yellow
 
     private static readonly Color PanelNavy = new Color(0.1f, 0.12f, 0.2f, 0.97f);
@@ -475,6 +477,7 @@ public static partial class OfficeSceneUIBuilder
         soGm.ApplyModifiedProperties();
 
         CheckThemeTags(canvas, officeCanvas);
+        CheckContrast(library, canvas, officeCanvas);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
@@ -878,6 +881,27 @@ public static partial class OfficeSceneUIBuilder
                 Debug.LogError($"[TimeDesk] '{PathOf(g.transform)}' has no ThemeTag; give it a role in OfficeSceneUIBuilder (piece 6).", g);
             }
         }
+    }
+
+    /// <summary>
+    /// The readability check (UiContrastCheck): every text on the desktop and
+    /// the overlay against what it is drawn on, in the neutral theme and each
+    /// culture's; the desktop is drawn at the glass's height on a 1080p screen.
+    /// </summary>
+    private static void CheckContrast(ContentLibrarySO library, Canvas desktop, Canvas overlay)
+    {
+        if (library == null || library.NeutralTheme == null)
+        {
+            Debug.LogWarning("[TimeDesk] No content library themes: the readability check is skipped. Run Tools > TimeDesk > Generate World, then build again.");
+            return;
+        }
+
+        var themes = new List<ThemeSO> { library.NeutralTheme };
+        foreach (ThemeSO theme in library.Themes)
+            if (theme != null)
+                themes.Add(theme);
+        UiContrastCheck.Check(desktop, FrameGlass.height / DesktopSize.y, themes, library.CultureUi);
+        UiContrastCheck.Check(overlay, 1f, themes, library.CultureUi);
     }
 
     /// <summary>A transform's scene path.</summary>

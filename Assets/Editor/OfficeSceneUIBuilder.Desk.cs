@@ -73,8 +73,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The desk notes' ink.</summary>
     private static readonly Color NoteInk = new Color(0.96f, 0.95f, 0.88f, 1f);
 
-    /// <summary>A paper row's label ink (quieter than its value, dark enough to read at 720p).</summary>
-    private static readonly Color PaperLabelInk = new Color(0.25f, 0.23f, 0.2f, 1f);
+    /// <summary>A paper row's label ink: a shade lighter than its value's (Ink), dark enough to reach 4.5:1 on the held paper as drawn under the art's tonemapping, the picked row's highlight included (the readability fix).</summary>
+    private static readonly Color PaperLabelInk = new Color(0.115f, 0.105f, 0.09f, 1f);
 
     /// <summary>The day-1 scan note's box (metres): two lines of the note at the size one line of the old, shorter note had.</summary>
     private static readonly Vector2 ScanHintBox = new Vector2(0.78f, 0.13f);
@@ -392,6 +392,7 @@ public static partial class OfficeSceneUIBuilder
         closeRect.sizeDelta = new Vector2(64f, 64f);
         closeRect.anchoredPosition = new Vector2(-14f, -14f);
         close.GetComponent<Image>().sprite = EnsureOfficeShape("pc_close", 48, 48, Center, CloseButtonPixel);
+        Object.DestroyImmediate(close.transform.Find("Label").gameObject); // its cross is drawn in the sprite: no text
         WirePersistentVoid(close, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
 
         powerButton = MakeButton(frame, "PowerButton", "", new Vector2(1f, 0f), new Vector2(1f, 0f), Color.white, ThemeRoleId.DiegeticDevice);
@@ -400,6 +401,7 @@ public static partial class OfficeSceneUIBuilder
         powerRect.sizeDelta = new Vector2(64f, 64f);
         powerRect.anchoredPosition = new Vector2(-70f, 46f);
         powerButton.GetComponent<Image>().sprite = EnsureOfficeShape("crt_power", 28, 28, Center, PowerButtonPixel);
+        Object.DestroyImmediate(powerButton.transform.Find("Label").gameObject); // its symbol is drawn in the sprite: no text
 
         powerLed = Panel(frame, "PowerLed", new Vector2(1f, 0f), new Vector2(1f, 0f), Vector2.zero, new Vector2(18f, 18f), Color.white, ThemeRoleId.DiegeticDevice).GetComponent<Image>();
         ((RectTransform)powerLed.transform).anchoredPosition = new Vector2(-170f, 78f);
