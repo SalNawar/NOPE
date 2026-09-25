@@ -9,9 +9,12 @@ using UnityEngine.EventSystems;
 /// area. The proxy is off during the drag, so the release is never over the
 /// object itself (no click follows a drag) and the drop is decided by the
 /// projected pointer (DragEnded). While disabled by its owner the EventSystem
-/// sends it nothing; while its owner takes it out of the raycast
-/// (SetRaycastable) the proxy is off too, so clicks reach what lies under it.
-/// Generic: papers use it now, decoration later.
+/// sends it nothing, so disabling it mid-drag ends the drag at once
+/// (DragCancelled; audit R5-002: the drag used to stay open for good, the proxy
+/// off); the moves and the release of that press are ignored if it is enabled
+/// again before the button comes up. While its owner takes it out of the
+/// raycast (SetRaycastable) the proxy is off too, so clicks reach what lies
+/// under it. Generic: papers use it now, decoration later.
 /// </summary>
 public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -28,6 +31,9 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
 
     /// <summary>Raised when a drag ends, with the pointer projected onto the desk (or the object's position when the projection fails).</summary>
     public event Action<DeskDraggable, Vector3> DragEnded;
+
+    /// <summary>Raised when a drag is cut short: the object was disabled mid-drag (its owner took its input away, or it is being destroyed), so no release will come.</summary>
+    public event Action<DeskDraggable> DragCancelled;
 
     /// <summary>Where the object was when the last drag started.</summary>
     public Vector3 PickUpPosition { get; private set; }
@@ -64,16 +70,20 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         DragBegan?.Invoke(this);
     }
 
-    /// <summary>Follows the projected pointer, the centre clamped to the desk.</summary>
+    /// <summary>Follows the projected pointer, the centre clamped to the desk (nothing once the drag was cut short).</summary>
     public void OnDrag(PointerEventData eventData)
     {
+        if (!_dragging)
+            return;
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
             transform.position = _surface.Clamp(point + _grabOffset);
     }
 
-    /// <summary>Turns the proxy back on (unless the object is out of the raycast) and reports where the pointer was released.</summary>
+    /// <summary>Turns the proxy back on (unless the object is out of the raycast) and reports where the pointer was released (nothing once the drag was cut short).</summary>
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (!_dragging)
+            return;
         _dragging = false;
         if (proxy != null)
             proxy.enabled = _raycastable;
@@ -81,5 +91,16 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
         if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
             released = point;
         DragEnded?.Invoke(this, released);
+    }
+
+    /// <summary>A drag cut short: disabled, the object gets no release from the EventSystem, so the drag ends here, the proxy follows the raycast again and DragCancelled says so.</summary>
+    private void OnDisable()
+    {
+        if (!_dragging)
+            return;
+        _dragging = false;
+        if (proxy != null)
+            proxy.enabled = _raycastable;
+        DragCancelled?.Invoke(this);
     }
 }

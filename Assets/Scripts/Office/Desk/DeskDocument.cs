@@ -344,21 +344,23 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     }
 
     /// <summary>
-    /// Lets the paper be dragged and clicked, or not. <paramref name="raycastable"/>
+    /// Lets the paper be clicked (<paramref name="clickable"/>) and dragged
+    /// (<paramref name="draggable"/>), or not: a held paper beside the open
+    /// frame takes clicks but no drag (BoothRules.HeldDragOutLive). <paramref name="raycastable"/>
     /// false also takes it out of the raycast: a paper the office has put away
     /// (the frame open, the wheel open, a newsletter up) must let clicks through
     /// to what lies under it. A paper inert only for itself (sliding,
     /// scanning) stays raycastable and still covers what lies under it.
     /// </summary>
-    public void SetLive(bool live, bool raycastable)
+    public void SetLive(bool clickable, bool draggable, bool raycastable)
     {
         if (drag != null)
         {
-            drag.enabled = live;
+            drag.enabled = draggable;
             drag.SetRaycastable(raycastable);
         }
         if (click != null)
-            click.Interactable = live;
+            click.Interactable = clickable;
     }
 
     /// <summary>Slides the paper to a world point in <paramref name="seconds"/> (a linear move), then calls <paramref name="done"/>.</summary>

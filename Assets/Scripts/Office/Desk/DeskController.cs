@@ -25,8 +25,11 @@ using UnityEngine.UI;
 /// bubble, the wheel), sending the paper held longest back when nothing
 /// shows whole. A paper on the
 /// desk takes input only while BoothCoordinator allows papers, DeskPapers lets
-/// it be dragged and it is not sliding; a held paper while held papers are
-/// allowed; papers not allowed take no raycasts at all (spec R38).
+/// it be dragged and it is not sliding; a held paper takes clicks while held
+/// papers are allowed and a drag out of the hand only while the drag-out is
+/// (BoothRules.HeldDragOutLive: never beside the open frame, audit R5-001);
+/// papers not allowed take no raycasts at all (spec R38). A drag cut short (the
+/// paper disabled mid-drag) sends it back to where it was picked up.
 /// </summary>
 public sealed class DeskController : MonoBehaviour
 {
@@ -72,6 +75,7 @@ public sealed class DeskController : MonoBehaviour
     private DeskPapers _state;
     private bool _live;
     private bool _heldLive;
+    private bool _heldDragOutLive;
     private bool _escapeLive;
 
     /// <summary>The frame Escape became able to put papers back (an Escape that closed the frame, the wheel or the tray in the same frame is not taken again).</summary>
@@ -188,6 +192,7 @@ public sealed class DeskController : MonoBehaviour
         drag.Init(surface);
         drag.DragBegan += HandleDragBegan;
         drag.DragEnded += HandleDragEnded;
+        drag.DragCancelled += HandleDragCancelled;
         paper.Clicked += HandlePaperClicked;
 
         _papers[i] = paper;
@@ -226,7 +231,7 @@ public sealed class DeskController : MonoBehaviour
 
             DeskDocument leaving = paper;
             leaving.SetExamined(false);
-            leaving.SetLive(false, false);
+            leaving.SetLive(false, false, false);
             leaving.SlideTo(handOverPoint.position, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
         }
 
@@ -244,10 +249,11 @@ public sealed class DeskController : MonoBehaviour
         ApplyLiveAll();
     }
 
-    /// <summary>Allows the papers held in the hand input or not (BoothCoordinator: BoothRules.HeldPapersLive).</summary>
-    public void SetHeldLive(bool live)
+    /// <summary>Allows the papers held in the hand clicks (BoothCoordinator: BoothRules.HeldPapersLive) and the drag out of the hand (BoothRules.HeldDragOutLive), or not.</summary>
+    public void SetHeldLive(bool live, bool dragOutLive)
     {
         _heldLive = live;
+        _heldDragOutLive = dragOutLive;
         ApplyLiveAll();
     }
 
@@ -491,6 +497,24 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
+    /// <summary>
+    /// A drag cut short (the paper disabled mid-drag: its input taken away, or
+    /// the case torn down, so no release comes): a paper still on the desk
+    /// slides back to where it was picked up, on top, as a refused drop does;
+    /// a paper already given back is left to the teardown.
+    /// </summary>
+    private void HandleDragCancelled(DeskDraggable drag)
+    {
+        DeskDocument paper = drag.GetComponent<DeskDocument>();
+        _dragged = -1;
+        if (paper == null || _state == null || !_state.CanDrag(paper.Index) || _state.IsHeld(paper.Index))
+            return;
+
+        Slide(paper, drag.PickUpPosition);
+        _stack.BringToFront(paper.Index);
+        ApplyStack();
+    }
+
     /// <summary>Slides a paper; it is inert while sliding, and its liveness is re-applied when it lands.</summary>
     private void Slide(DeskDocument paper, Vector3 target)
     {
@@ -505,13 +529,17 @@ public sealed class DeskController : MonoBehaviour
                 ApplyLive(paper);
     }
 
-    /// <summary>A held paper takes input (and raycasts) while held papers are allowed; a paper on the desk takes input while papers are allowed, DeskPapers lets it be dragged and it is not sliding, and is in the raycast while papers are allowed.</summary>
+    /// <summary>A held paper takes clicks (and raycasts) while held papers are allowed and drags out of the hand while the drag-out is; a paper on the desk takes input while papers are allowed, DeskPapers lets it be dragged and it is not sliding, and is in the raycast while papers are allowed.</summary>
     private void ApplyLive(DeskDocument paper)
     {
         if (_state != null && _state.IsHeld(paper.Index))
-            paper.SetLive(_heldLive, _heldLive);
-        else
-            paper.SetLive(_live && _state != null && _state.CanDrag(paper.Index) && !paper.IsSliding, _live);
+        {
+            paper.SetLive(_heldLive, _heldDragOutLive, _heldLive);
+            return;
+        }
+
+        bool live = _live && _state != null && _state.CanDrag(paper.Index) && !paper.IsSliding;
+        paper.SetLive(live, live, _live);
     }
 
     /// <summary>Stack heights: one step per place from the desk (the bottom paper one step up); the dragged paper lifted above the whole stack (a held paper's sheet is the examiner's).</summary>

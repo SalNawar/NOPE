@@ -13,7 +13,8 @@ using NUnit.Framework;
 /// allowed, case hUd visible, then (the desk view, spec 11) the Mat toggles
 /// the desk view, Escape and the right-click return from it (X), the desk
 /// View allowed, then (the readability fix) the "▲ Back" control and the wheel
-/// rolled up (B), the wheel rolled down over the mat (I) ('1' = true).
+/// rolled up (B), the wheel rolled down over the mat (I), then (audit R5-001)
+/// a held paper's drag Out of the hand (O) ('1' = true).
 /// </summary>
 public class BoothRulesTests
 {
@@ -33,29 +34,29 @@ public class BoothRulesTests
     /// <summary>The rows of the input table (the citation row is tested separately).</summary>
     private static readonly Row[] Rows =
     {
-        //                                          focused screen phase                      wheel  stamp  held          DCPRAWT HKESU MXV BI
-        R("newsletter, office view",                false,  true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00"),
-        R("newsletter, frame open",                 true,   true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00"),
-        R("office, no traveller",                   false,  true,  BoothPhase.NoTraveller,     false, false, false,        "0111000 00000 101 01"),
-        R("office, traveller at the desk",          false,  true,  BoothPhase.TravellerAtDesk, false, false, false,        "0111111 10011 101 01"),
-        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, false,        "0000010 00011 001 00"),
-        R("frame open, screen on",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false,        "1010000 10000 001 00"),
-        R("frame open, screen off",                 true,   false, BoothPhase.TravellerAtDesk, false, false, false,        "0010000 10000 001 00"),
-        R("frame open, no traveller",               true,   true,  BoothPhase.NoTraveller,     false, false, false,        "1010000 00000 001 00"),
-        R("office, papers held",                    false,  true,  BoothPhase.TravellerAtDesk, false, false, true,         "0111111 11111 001 00"),
-        R("stamp tray open",                        false,  true,  BoothPhase.TravellerAtDesk, false, true,  false,        "0000010 00011 001 00"),
-        R("stamp tray open, papers held",           false,  true,  BoothPhase.TravellerAtDesk, false, true,  true,         "0000010 00011 001 00"),
-        R("wheel open, papers held",                false,  true,  BoothPhase.TravellerAtDesk, true,  false, true,         "0000010 00011 001 00"),
-        R("frame open, papers held",                true,   true,  BoothPhase.TravellerAtDesk, false, false, true,         "1010000 10000 001 00"),
-        R("office, no traveller, papers held",      false,  true,  BoothPhase.NoTraveller,     false, false, true,         "0111000 00000 001 00"),
-        //                                          focused screen phase                      wheel  stamp  held   desk   DCPRAWT HKESU MXV BI
-        R("desk view, traveller at the desk",       false,  true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "0111111 10011 111 10"),
-        R("desk view, no traveller",                false,  true,  BoothPhase.NoTraveller,     false, false, false, true,  "0111000 00000 111 10"),
-        R("desk view, papers held",                 false,  true,  BoothPhase.TravellerAtDesk, false, false, true,  true,  "0111111 11111 001 10"),
-        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  false, false, true,  "0000010 00011 001 00"),
-        R("desk view, stamp tray open",             false,  true,  BoothPhase.TravellerAtDesk, false, true,  false, true,  "0000010 00011 001 00"),
-        R("desk view, frame open",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "1010000 10000 001 00"),
-        R("desk view, newsletter",                  false,  true,  BoothPhase.Newsletter,      false, false, false, true,  "0000000 00000 000 00"),
+        //                                          focused screen phase                      wheel  stamp  held          DCPRAWT HKESU MXV BI O
+        R("newsletter, office view",                false,  true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00 0"),
+        R("newsletter, frame open",                 true,   true,  BoothPhase.Newsletter,      false, false, false,        "0000000 00000 000 00 0"),
+        R("office, no traveller",                   false,  true,  BoothPhase.NoTraveller,     false, false, false,        "0111000 00000 101 01 0"),
+        R("office, traveller at the desk",          false,  true,  BoothPhase.TravellerAtDesk, false, false, false,        "0111111 10011 101 01 1"),
+        R("wheel open",                             false,  true,  BoothPhase.TravellerAtDesk, true,  false, false,        "0000010 00011 001 00 0"),
+        R("frame open, screen on",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false,        "1010000 10000 001 00 0"),
+        R("frame open, screen off",                 true,   false, BoothPhase.TravellerAtDesk, false, false, false,        "0010000 10000 001 00 0"),
+        R("frame open, no traveller",               true,   true,  BoothPhase.NoTraveller,     false, false, false,        "1010000 00000 001 00 0"),
+        R("office, papers held",                    false,  true,  BoothPhase.TravellerAtDesk, false, false, true,         "0111111 11111 001 00 1"),
+        R("stamp tray open",                        false,  true,  BoothPhase.TravellerAtDesk, false, true,  false,        "0000010 00011 001 00 0"),
+        R("stamp tray open, papers held",           false,  true,  BoothPhase.TravellerAtDesk, false, true,  true,         "0000010 00011 001 00 0"),
+        R("wheel open, papers held",                false,  true,  BoothPhase.TravellerAtDesk, true,  false, true,         "0000010 00011 001 00 0"),
+        R("frame open, papers held",                true,   true,  BoothPhase.TravellerAtDesk, false, false, true,         "1010000 10000 001 00 0"),
+        R("office, no traveller, papers held",      false,  true,  BoothPhase.NoTraveller,     false, false, true,         "0111000 00000 001 00 0"),
+        //                                          focused screen phase                      wheel  stamp  held   desk   DCPRAWT HKESU MXV BI O
+        R("desk view, traveller at the desk",       false,  true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "0111111 10011 111 10 1"),
+        R("desk view, no traveller",                false,  true,  BoothPhase.NoTraveller,     false, false, false, true,  "0111000 00000 111 10 0"),
+        R("desk view, papers held",                 false,  true,  BoothPhase.TravellerAtDesk, false, false, true,  true,  "0111111 11111 001 10 1"),
+        R("desk view, wheel open",                  false,  true,  BoothPhase.TravellerAtDesk, true,  false, false, true,  "0000010 00011 001 00 0"),
+        R("desk view, stamp tray open",             false,  true,  BoothPhase.TravellerAtDesk, false, true,  false, true,  "0000010 00011 001 00 0"),
+        R("desk view, frame open",                  true,   true,  BoothPhase.TravellerAtDesk, false, false, false, true,  "1010000 10000 001 00 0"),
+        R("desk view, newsletter",                  false,  true,  BoothPhase.Newsletter,      false, false, false, true,  "0000000 00000 000 00 0"),
     };
 
     /// <summary>The outputs in the order of the expected strings.</summary>
@@ -65,7 +66,8 @@ public class BoothRulesTests
         o.PropsLive, o.PapersLive, o.WheelAllowed, o.TravellerLive,
         o.HeldPapersLive, o.DeskCatcherLive, o.ExamineEscapeLive, o.StampTrayAllowed, o.CaseHudVisible,
         o.DeskViewToggleLive, o.DeskViewReturnLive, o.DeskViewAllowed,
-        o.DeskViewBackLive, o.DeskViewScrollInLive
+        o.DeskViewBackLive, o.DeskViewScrollInLive,
+        o.HeldDragOutLive
     };
 
     private static void CheckColumn(int column, string output)
@@ -125,6 +127,27 @@ public class BoothRulesTests
         CheckColumn(7, "HeldPapersLive");
         Assert.IsTrue(BoothRules.Evaluate(new BoothContext(true, false, BoothPhase.TravellerAtDesk, false, false, false, true, false)).HeldPapersLive,
             "beside the open frame, even on a dark screen");
+    }
+
+    /// <summary>
+    /// A held paper dragged out of the hand drops onto the desk, so the drag
+    /// needs the desk's papers live: never beside the open frame, where held
+    /// papers still take clicks but a press-and-move on one starts no drag and
+    /// it stays held (audit R5-001: that drag disabled the paper mid-drag and
+    /// stranded it, lifted and inert, until the decision).
+    /// </summary>
+    [Test]
+    public void HeldDragOutLive_OnlyWhileTheDeskPapersAreLive_NeverBesideTheOpenFrame()
+    {
+        CheckColumn(17, "HeldDragOutLive");
+        foreach (BoothContext c in AllContexts())
+        {
+            BoothInput o = BoothRules.Evaluate(c);
+            string name = $"{c.Phase}, focused {c.Focused}, wheel {c.WheelOpen}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}";
+            Assert.AreEqual(o.HeldPapersLive && o.PapersLive, o.HeldDragOutLive, name);
+            if (c.Focused)
+                Assert.IsFalse(o.HeldDragOutLive, $"beside the open frame: {name}");
+        }
     }
 
     [Test]
@@ -260,7 +283,8 @@ public class BoothRulesTests
     /// the desk, PC click, wheel, traveller, desk catcher, stamp tray, case
     /// HUD, mat or desk view return in any context (the citation, the stamp,
     /// held papers and the desk view included). Only papers held in the hand
-    /// stay live, beside the frame (piece 10 X10).
+    /// stay live, beside the frame (piece 10 X10), for clicks: never for a drag
+    /// out of the hand (audit R5-001).
     /// </summary>
     [Test]
     public void WithTheFrameOpen_NothingInTheOfficeTakesInput_InAnyContext()
@@ -273,7 +297,8 @@ public class BoothRulesTests
             BoothInput o = BoothRules.Evaluate(c);
             if (o.CrtFocusable || o.PropsLive || o.PapersLive || o.WheelAllowed || o.TravellerLive ||
                 o.DeskCatcherLive || o.ExamineEscapeLive || o.StampTrayAllowed || o.CaseHudVisible ||
-                o.DeskViewToggleLive || o.DeskViewReturnLive || o.DeskViewBackLive || o.DeskViewScrollInLive)
+                o.DeskViewToggleLive || o.DeskViewReturnLive || o.DeskViewBackLive || o.DeskViewScrollInLive ||
+                o.HeldDragOutLive)
                 wrong.Add($"{c.Phase}, screen {c.ScreenOn}, wheel {c.WheelOpen}, citation {c.CitationPending}, stamp {c.StampOpen}, held {c.PapersHeld}, desk view {c.DeskView}");
         }
 
@@ -286,6 +311,6 @@ public class BoothRulesTests
         BoothContext c = default;
         Assert.AreEqual(BoothPhase.NoTraveller, c.Phase, "NoTraveller is the first phase, the default before Start");
         Assert.IsFalse(c.DeskView, "the normal view is the default");
-        CollectionAssert.AreEqual(new[] { false, true, true, true, false, false, false, false, false, false, false, false, true, false, true, false, true }, Outputs(BoothRules.Evaluate(c)));
+        CollectionAssert.AreEqual(new[] { false, true, true, true, false, false, false, false, false, false, false, false, true, false, true, false, true, false }, Outputs(BoothRules.Evaluate(c)));
     }
 }

@@ -204,7 +204,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (desk != null)
         {
             desk.SetPapersLive(input.PapersLive);
-            desk.SetHeldLive(input.HeldPapersLive);
+            desk.SetHeldLive(input.HeldPapersLive, input.HeldDragOutLive);
             desk.SetDeskCatcherLive(input.DeskCatcherLive);
             desk.SetExamineEscapeLive(input.ExamineEscapeLive);
         }

@@ -106,13 +106,21 @@ public readonly struct BoothInput
     /// <summary>The mouse wheel rolled down over the empty mat tilts into the desk view: the view is normal and the mat's toggle is live (the pointer must be on the mat, not on UI: DeskView checks it).</summary>
     public readonly bool DeskViewScrollInLive;
 
+    /// <summary>
+    /// A paper held in the hand can be dragged out onto the desk: held papers
+    /// are live and so are the papers on the desk (a drag-out drops the paper
+    /// there). Never beside the open frame, where held papers take clicks but a
+    /// press-and-move on one starts no drag, so it stays held (audit R5-001).
+    /// </summary>
+    public readonly bool HeldDragOutLive;
+
     /// <summary>Creates an output set.</summary>
     public BoothInput(bool desktopInteractive, bool crtFocusable, bool powerButtonLive,
                       bool propsLive, bool papersLive, bool wheelAllowed, bool travellerLive,
                       bool heldPapersLive, bool deskCatcherLive, bool examineEscapeLive,
                       bool stampTrayAllowed, bool caseHudVisible,
                       bool deskViewToggleLive, bool deskViewReturnLive, bool deskViewAllowed,
-                      bool deskViewBackLive, bool deskViewScrollInLive)
+                      bool deskViewBackLive, bool deskViewScrollInLive, bool heldDragOutLive)
     {
         DesktopInteractive = desktopInteractive;
         CrtFocusable = crtFocusable;
@@ -131,6 +139,7 @@ public readonly struct BoothInput
         DeskViewAllowed = deskViewAllowed;
         DeskViewBackLive = deskViewBackLive;
         DeskViewScrollInLive = deskViewScrollInLive;
+        HeldDragOutLive = heldDragOutLive;
     }
 }
 
@@ -143,7 +152,8 @@ public readonly struct BoothInput
 /// view, which of the desktop, the PC, the power buttons, the props, the
 /// papers (on the desk and in the hand), the desk catcher, Escape, the wheel,
 /// the stamp tray, the traveller, the case HUD, the mat, the desk view's
-/// return, its "▲ Back" control and the mouse wheel take input or show. Pure,
+/// return, its "▲ Back" control, the mouse wheel and a held paper's drag out
+/// of the hand take input or show. Pure,
 /// so every row is tested headless;
 /// BoothCoordinator applies it.
 /// </summary>
@@ -160,6 +170,7 @@ public static class BoothRules
         bool papers = props && atDesk;
         bool catcher = papers && c.PapersHeld;
         bool mat = props && !c.PapersHeld;
+        bool held = atDesk && !modal;
         return new BoothInput(
             desktopInteractive: c.Focused && c.ScreenOn && !newsletter,
             crtFocusable: !c.Focused && !newsletter && !modal,
@@ -168,7 +179,7 @@ public static class BoothRules
             papersLive: papers,
             wheelAllowed: office,
             travellerLive: office && !modal,
-            heldPapersLive: atDesk && !modal,
+            heldPapersLive: held,
             deskCatcherLive: catcher,
             examineEscapeLive: catcher,
             stampTrayAllowed: office,
@@ -177,6 +188,7 @@ public static class BoothRules
             deskViewReturnLive: c.DeskView && mat,
             deskViewAllowed: !newsletter,
             deskViewBackLive: c.DeskView && props,
-            deskViewScrollInLive: mat && !c.DeskView);
+            deskViewScrollInLive: mat && !c.DeskView,
+            heldDragOutLive: held && papers);
     }
 }
