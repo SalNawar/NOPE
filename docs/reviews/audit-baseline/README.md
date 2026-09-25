@@ -55,7 +55,7 @@ ignored) and exits 1. `--allow key,...` accepts named, documented regressions.
    ends on an untitled scene; never restore a scene that is open in the editor, or it
    stops with a modal "modified externally" dialog:
    `git checkout -- Assets/Data Assets/Scenes ProjectSettings "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset" *.csproj`.
-   The play and profile jobs back up and restore the player's save, the UI language and
+   The play and profile jobs back up and restore the player's save slot (`SaveSystem.Files`: the save, its temp file and its backup), the UI language and
    motion preferences, and the run config's seed (set in memory only).
 4. Diff against the baseline:
 

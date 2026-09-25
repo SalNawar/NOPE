@@ -98,13 +98,17 @@ public static class _TimeDeskAuditPlay
         File.WriteAllText(TranscriptPath, string.Empty);
         File.WriteAllText(WarningsPath, string.Empty);
 
-        bool hadSave = File.Exists(SaveSystem.SavePath);
-        if (hadSave)
+        // The player's save slot (the save, its temp file and its backup) is set aside and restored at the end.
+        int hadSave = 0;
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
         {
-            File.Copy(SaveSystem.SavePath, SaveBackup, true);
-            File.Delete(SaveSystem.SavePath);
+            if (!File.Exists(SaveSystem.Files[i]))
+                continue;
+            hadSave |= 1 << i;
+            File.Copy(SaveSystem.Files[i], SaveBackup + i, true);
+            File.Delete(SaveSystem.Files[i]);
         }
-        SessionState.SetInt(HadSaveKey, hadSave ? 1 : 0);
+        SessionState.SetInt(HadSaveKey, hadSave);
         SessionState.SetString(PrefKey, PlayerPrefs.HasKey(UiLanguagePref) ? PlayerPrefs.GetString(UiLanguagePref) : "<absent>");
         SessionState.SetString(MotionKey, PlayerPrefs.HasKey(MotionPref) ? PlayerPrefs.GetString(MotionPref) : "<absent>");
         PlayerPrefs.DeleteKey(UiLanguagePref);
@@ -744,15 +748,19 @@ public static class _TimeDeskAuditPlay
     private static void Finish()
     {
         PlayModeWindow.SetCustomRenderingResolution((uint)SessionState.GetInt(ViewWidthKey, 1920), (uint)SessionState.GetInt(ViewHeightKey, 1080), ViewName);
-        bool hadSave = SessionState.GetInt(HadSaveKey, 0) == 1;
-        if (hadSave && File.Exists(SaveBackup))
+        int hadSave = SessionState.GetInt(HadSaveKey, 0);
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
         {
-            File.Copy(SaveBackup, SaveSystem.SavePath, true);
-            File.Delete(SaveBackup);
-        }
-        else if (!hadSave && File.Exists(SaveSystem.SavePath))
-        {
-            File.Delete(SaveSystem.SavePath);
+            bool had = (hadSave & (1 << i)) != 0;
+            if (had && File.Exists(SaveBackup + i))
+            {
+                File.Copy(SaveBackup + i, SaveSystem.Files[i], true);
+                File.Delete(SaveBackup + i);
+            }
+            else if (!had && File.Exists(SaveSystem.Files[i]))
+            {
+                File.Delete(SaveSystem.Files[i]);
+            }
         }
         foreach ((string key, string pref) in new[] { (PrefKey, UiLanguagePref), (MotionKey, MotionPref) })
         {
