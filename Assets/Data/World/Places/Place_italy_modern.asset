@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Dolce Vita Rome
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1960
   birthYearMin: 1890
   birthYearMax: 1942
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Rome (Italian Republic)
   - category: 2
     value: President Giovanni Gronchi
+  - category: 6
+    value: dark shades / cat-eye shades
   maleNames:
   - Mario
   - Franco
@@ -48,6 +51,85 @@ MonoBehaviour:
   - Giuliana
   - Anna Maria
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: slim mohair suit
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: slicked-back hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: dark shades
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: print sheath dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: bouffant
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: cat-eye shades
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Holy Roman Empire (Rhineland)
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1440
   birthYearMin: 1370
   birthYearMax: 1422
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Frankfurt (royal election)
   - category: 2
     value: King Frederick III
+  - category: 6
+    value: Gugel hood / Kruseler veil
   maleNames:
   - Henne
   - Tilman
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Else
   - Katherine
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: pleated Tappert gown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: fringed chin-length hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: Gugel hood
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: high-waisted gown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: pinned plaits
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: Kruseler veil
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 01000000
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 4
+    - 5
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 4
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 3

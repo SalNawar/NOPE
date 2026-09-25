@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Abbasid Baghdad
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 830
   birthYearMin: 760
   birthYearMax: 812
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Baghdad (Madinat al-Salam)
   - category: 2
     value: Caliph al-Ma'mun
+  - category: 6
+    value: qalansuwa / veil with isaba
   maleNames:
   - Ja'far
   - Yahya
@@ -48,6 +51,83 @@ MonoBehaviour:
   - Lubaba
   - Sukayna
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: black durra'a robe
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: smooth nape-length hair
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: rounded beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: qalansuwa
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: taylasan shawl
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: qamis with tiraz bands
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: S-curl side locks
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: veil with isaba
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: pearl choker
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 0
+    - 1
+    - 4
+    - 3
+    - 1
+    hair:
+    - colour: black
+      weight: 8
+    - colour: brown
+      weight: 2
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

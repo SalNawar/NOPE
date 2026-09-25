@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Germania
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
+  year: 98
   birthYearMin: 28
   birthYearMax: 80
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Semnones' sacred grove
   - category: 2
     value: Tribal kings & war-chiefs
+  - category: 6
+    value: Suebian knot / amber beads
   maleNames:
   - Segimundus
   - Sesithacus
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Gambara
   - Hariso
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 1
+      outfit:
+        label: twill tunic and trousers
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: Suebian knot
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: full short beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: linen peplos dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: low bound knot
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: amber beads
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 4
+    - 5
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 4
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 3

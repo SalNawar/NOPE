@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Tokugawa Edo
   nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  year: 1610
   birthYearMin: 1540
   birthYearMax: 1592
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Edo (shogunate seat)
   - category: 2
     value: Shogun Tokugawa Hidetada
+  - category: 6
+    value: chasen-mage / Nagoya-obi
   maleNames:
   - Kichibei
   - Chobei
@@ -48,6 +51,81 @@ MonoBehaviour:
   - Oume
   - Okiku
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 1
+      outfit:
+        label: kataginu and hakama
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: chasen-mage
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: thin moustache and beard
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: Keicho kosode
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: tamamusubi loop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: Nagoya-obi
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

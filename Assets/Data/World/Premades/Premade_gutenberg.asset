@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_gutenberg
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: gutenberg
+  displayName: Johannes Gutenberg
+  birthDate: 24 Jun 1400
+  gender: 1
+  trueEra: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  archetype: {fileID: 11400000, guid: 322dd872b153b1442b6dc557666a1b31, type: 2}
+  nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 
+  recordNote: Goldsmith of Mainz. Business in Strasbourg undisclosed.
+  dialogId: 
+  oncePerRun: 1

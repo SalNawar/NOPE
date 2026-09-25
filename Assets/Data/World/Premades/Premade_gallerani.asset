@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_gallerani
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: gallerani
+  displayName: Cecilia Gallerani
+  birthDate: 3 Mar 1473
+  gender: 2
+  trueEra: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+  archetype: {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
+  nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 
+  recordNote: Lady of the Milanese court. Sat for a portrait with an ermine.
+  dialogId: 
+  oncePerRun: 1

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Bologna, Kingdom of Italy
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1895
   birthYearMin: 1825
   birthYearMax: 1877
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Rome (Kingdom of Italy)
   - category: 2
     value: King Umberto I
+  - category: 6
+    value: silk scarf / coral beads
   maleNames:
   - Giuseppe
   - Luigi
@@ -48,6 +51,85 @@ MonoBehaviour:
   - Clelia
   - Amelia
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: suit and tabarro
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: pomaded side parting
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: Umbertine moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: wide black felt hat
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: silk scarf
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: dress and black scialle
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: high curled chignon
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: coral beads
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

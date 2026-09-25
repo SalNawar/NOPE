@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Showa Tokyo
   nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+  year: 1980
   birthYearMin: 1910
   birthYearMax: 1962
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Tokyo Metropolis (Tokyo-to)
   - category: 2
     value: Emperor Hirohito (Showa)
+  - category: 6
+    value: orange headphones
   maleNames:
   - Hiroshi
   - Takashi
@@ -48,6 +51,81 @@ MonoBehaviour:
   - Kumiko
   - Yumiko
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: salaryman suit
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: combed side parting
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: orange headphones
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: office waistcoat set
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: Seiko-chan cut
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: orange headphones
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 5
+    - 3
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 10
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

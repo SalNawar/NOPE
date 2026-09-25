@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Florentine Republic
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+  year: 1439
   birthYearMin: 1369
   birthYearMax: 1421
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Florence (Republic)
   - category: 2
     value: Cosimo de' Medici (de facto)
+  - category: 6
+    value: mazzocchio hat / ghirlanda
   maleNames:
   - Giovanni
   - Antonio
@@ -48,6 +51,85 @@ MonoBehaviour:
   - Lisa
   - Cecca
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: red lucco gown
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: rounded short crop
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: mazzocchio hat
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: gamurra and giornea
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: drawn-back coil
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: ghirlanda
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: pearl pendant jewel
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 1
+    - 4
+    - 4
+    - 1
+    - 0
+    hair:
+    - colour: black
+      weight: 4
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 2

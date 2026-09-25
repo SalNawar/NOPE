@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Iron Age Britain
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
+  year: 20
   birthYearMin: -50
   birthYearMax: 2
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: Camulodunum (Colchester)
   - category: 2
     value: King Cunobelinus
+  - category: 6
+    value: torc
   maleNames:
   - Cunovindus
   - Cintusmus
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Tancorix
   - Verctissa
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 4
+      outfit:
+        label: checked tunic and bracae
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: swept-back mane
+        leakable: 0
+        wig: 0
+        back: 1
+        covers: 
+      facialHair:
+        label: long drooping moustache
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: torc
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 4
+      outfit:
+        label: checked wool dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: two thick braids
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: torc
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 5
+    - 4
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 4.1

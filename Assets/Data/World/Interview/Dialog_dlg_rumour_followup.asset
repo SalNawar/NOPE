@@ -22,6 +22,7 @@ MonoBehaviour:
       - id: dlg_rumour_followup.start.1
         speaker: 1
         text: Calculators? I saw nothing. Nothing at all.
+        expression: 
       choices:
       - id: bye
         label: Of course. Next!

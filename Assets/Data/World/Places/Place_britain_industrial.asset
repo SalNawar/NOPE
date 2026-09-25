@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Victorian Britain
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+  year: 1843
   birthYearMin: 1773
   birthYearMax: 1825
   facts:
@@ -29,6 +30,8 @@ MonoBehaviour:
     value: London (Buckingham Palace)
   - category: 2
     value: Queen Victoria
+  - category: 6
+    value: top hat / poke bonnet
   maleNames:
   - Josiah
   - Samuel
@@ -48,6 +51,87 @@ MonoBehaviour:
   - Mary Ann
   - Louisa
   smallTalk: []
+  wardrobe:
+    male:
+      signature: 3
+      outfit:
+        label: frock coat and stock
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: curled side parting
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: mutton-chop whiskers
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: top hat
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: watch chain
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+    female:
+      signature: 3
+      outfit:
+        label: plaid day dress
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      hair:
+        label: ringlets and bun
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      facialHair:
+        label: 
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+      headwear:
+        label: poke bonnet
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+      accessory:
+        label: Paisley shawl
+        leakable: 0
+        wig: 0
+        back: 0
+        covers: 
+  looks:
+    skin:
+    - 5
+    - 4
+    - 1
+    - 0
+    - 0
+    hair:
+    - colour: black
+      weight: 1
+    - colour: brown
+      weight: 5
+    - colour: blond
+      weight: 3
+    - colour: red
+      weight: 1
   baselines:
   - attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
     baseScore: 4.1

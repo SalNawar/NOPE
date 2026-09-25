@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3468ee994c214946889c560775574ff, type: 3}
+  m_Name: Premade_aspasia
+  m_EditorClassIdentifier: Assembly-CSharp::LegendarySO
+  id: aspasia
+  displayName: Aspasia
+  birthDate: 12 Sep 470 BCE
+  gender: 2
+  trueEra: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
+  archetype: {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
+  nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
+  authoredImpacts: []
+  truePlace: {fileID: 0}
+  introLine: 
+  recordNote: Teacher of rhetoric. Keeps the company of Athens' first citizen.
+  dialogId: 
+  oncePerRun: 1

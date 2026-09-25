@@ -30,5 +30,8 @@ MonoBehaviour:
   tellChannels: 00000000
   activeTravelRules: []
   guaranteeRuleViolators: 1
-  forcedCases: []
+  forcedCases:
+  - caseIndex1Based: 3
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
   eventRules: []

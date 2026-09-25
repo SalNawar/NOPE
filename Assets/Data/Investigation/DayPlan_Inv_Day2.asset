@@ -29,11 +29,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   - {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   legendaryBaseChance: 0.05
-  availableLegendaries: []
+  availableLegendaries:
+  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
+  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
+  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
+  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
   tellCount: 1
   tellChannels: 0000000001000000
   activeTravelRules:
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
   guaranteeRuleViolators: 1
-  forcedCases: []
+  forcedCases:
+  - caseIndex1Based: 6
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   eventRules: []
