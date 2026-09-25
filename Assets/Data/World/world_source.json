@@ -1,6 +1,943 @@
 {
   "travellerAgeMin": 18,
   "travellerAgeMax": 70,
+  "looks": {
+    "faceBands": [
+      {
+        "minAge": 18,
+        "faces": [
+          "a",
+          "b"
+        ]
+      },
+      {
+        "minAge": 35,
+        "faces": [
+          "c"
+        ]
+      },
+      {
+        "minAge": 60,
+        "faces": [
+          "d"
+        ]
+      }
+    ],
+    "greyFromAge": 60,
+    "wholeFigureLabel": "Period dress",
+    "confusable": [
+      {
+        "a": "greece_ancient",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "short forward-brushed crops look alike (spec 2.14)"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "greece_industrial",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "tarboush vs fesi: both red fez-type caps (research note 15)"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "japan_medieval",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "two tall black caps (research note 6)"
+      },
+      {
+        "a": "china_earlymodern",
+        "b": "greece_earlymodern",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "tall black caps; check at thumbnail (research note 11)"
+      },
+      {
+        "a": "china_modern",
+        "b": "britain_modern",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "soft peaked caps (research note 20)"
+      },
+      {
+        "a": "britain_earlymodern",
+        "b": "britain_industrial",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "capotain vs top hat: two tall black narrow-brimmed hats"
+      },
+      {
+        "a": "egypt_medieval",
+        "b": "egypt_earlymodern",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "two big white turbans; only the red crown tells them apart"
+      },
+      {
+        "a": "germany_industrial",
+        "b": "germany_modern",
+        "slot": "Headwear",
+        "gender": "m",
+        "why": "Homburg vs the pinched soft felt hat: two dark dented felt hats"
+      },
+      {
+        "a": "iraq_ancient",
+        "b": "greece_medieval",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "chest-length curled beard vs the Byzantine long full beard"
+      },
+      {
+        "a": "iraq_ancient",
+        "b": "germany_medieval",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "the Gugel's neck and cape hide most of a chest-length beard"
+      },
+      {
+        "a": "germany_modern",
+        "b": "greece_modern",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs thick full moustache (same day-5 world)"
+      },
+      {
+        "a": "germany_modern",
+        "b": "greece_industrial",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs thick upturned moustache"
+      },
+      {
+        "a": "germany_modern",
+        "b": "italy_industrial",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs full, thick Umbertine moustache (research note 19)"
+      },
+      {
+        "a": "germany_modern",
+        "b": "egypt_modern",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs thick, neat moustache"
+      },
+      {
+        "a": "germany_modern",
+        "b": "egypt_industrial",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs full, groomed moustache"
+      },
+      {
+        "a": "germany_modern",
+        "b": "iraq_industrial",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs heavy moustache (with a short beard)"
+      },
+      {
+        "a": "germany_modern",
+        "b": "britain_ancient",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs long drooping moustache past the mouth corners"
+      },
+      {
+        "a": "germany_modern",
+        "b": "britain_medieval",
+        "slot": "FacialHair",
+        "gender": "m",
+        "why": "walrus vs long full English moustache"
+      },
+      {
+        "a": "egypt_modern",
+        "b": "iraq_medieval",
+        "slot": "Accessory",
+        "gender": "m",
+        "why": "long dark fringed shal vs dark taylasan, both ends down the chest"
+      },
+      {
+        "a": "iraq_industrial",
+        "b": "iraq_modern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "both are a black 'abaya over the head"
+      },
+      {
+        "a": "iraq_earlymodern",
+        "b": "iraq_industrial",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "black futa head-shawl vs black 'abaya over a black futa"
+      },
+      {
+        "a": "iraq_earlymodern",
+        "b": "iraq_modern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "black futa head-shawl vs black 'abaya over the head"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "egypt_medieval",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "white tarha veil over both shoulders vs white izar hood"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "egypt_medieval",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "light khimar veil vs white izar hood (only the 'isaba band differs)"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "egypt_industrial",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "light khimar veil vs white tarha veil (only the 'isaba band differs)"
+      },
+      {
+        "a": "china_earlymodern",
+        "b": "china_industrial",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "two black brow bands"
+      },
+      {
+        "a": "italy_earlymodern",
+        "b": "china_earlymodern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "dark brow bands with a central jewel (research note 14)"
+      },
+      {
+        "a": "italy_earlymodern",
+        "b": "china_industrial",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "dark brow bands with a central jewel"
+      },
+      {
+        "a": "egypt_modern",
+        "b": "britain_modern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "two triangular headscarves (research note 22)"
+      },
+      {
+        "a": "egypt_modern",
+        "b": "greece_earlymodern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "coloured headscarves tied at the back"
+      },
+      {
+        "a": "greece_ancient",
+        "b": "egypt_modern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "patterned sakkos vs mandil: cloth covering the back of the head"
+      },
+      {
+        "a": "greece_ancient",
+        "b": "greece_earlymodern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "patterned sakkos vs patterned tsemberi"
+      },
+      {
+        "a": "greece_industrial",
+        "b": "greece_earlymodern",
+        "slot": "Headwear",
+        "gender": "f",
+        "why": "two small red caps on the crown"
+      },
+      {
+        "a": "germany_ancient",
+        "b": "italy_industrial",
+        "slot": "Accessory",
+        "gender": "f",
+        "why": "chunky orange amber vs red coral beads"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "greece_industrial",
+        "slot": "Accessory",
+        "gender": "f",
+        "why": "plain gold discs at the neck (coin pendant vs disc necklace)"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "iraq_earlymodern",
+        "slot": "Accessory",
+        "gender": "f",
+        "why": "plain gold discs at the neck (coin pendant vs qilada)"
+      },
+      {
+        "a": "greece_ancient",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the petasos hat"
+      },
+      {
+        "a": "china_ancient",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the jieze cap"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the qalansuwa"
+      },
+      {
+        "a": "greece_medieval",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the Palaiologan hat"
+      },
+      {
+        "a": "italy_medieval",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the mazzocchio hat"
+      },
+      {
+        "a": "china_medieval",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the winged futou"
+      },
+      {
+        "a": "japan_medieval",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the eboshi cap"
+      },
+      {
+        "a": "greece_earlymodern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the kalpak"
+      },
+      {
+        "a": "italy_earlymodern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the red berretta"
+      },
+      {
+        "a": "china_earlymodern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the square gauze cap"
+      },
+      {
+        "a": "britain_earlymodern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the capotain hat"
+      },
+      {
+        "a": "germany_earlymodern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the Barett"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the tarboush"
+      },
+      {
+        "a": "greece_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the fesi"
+      },
+      {
+        "a": "italy_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the wide black felt hat"
+      },
+      {
+        "a": "china_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the guapimao cap"
+      },
+      {
+        "a": "japan_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the bowler hat"
+      },
+      {
+        "a": "britain_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the top hat"
+      },
+      {
+        "a": "germany_industrial",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the Homburg"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the sidara"
+      },
+      {
+        "a": "china_modern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the navy cap"
+      },
+      {
+        "a": "britain_modern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the flat cap"
+      },
+      {
+        "a": "germany_modern",
+        "b": "germany_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Suebian knot hidden under the broad soft felt hat"
+      },
+      {
+        "a": "greece_ancient",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the sakkos snood"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the veil with isaba"
+      },
+      {
+        "a": "italy_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the ghirlanda"
+      },
+      {
+        "a": "japan_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the ichime-gasa"
+      },
+      {
+        "a": "egypt_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the tartur"
+      },
+      {
+        "a": "greece_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the cap and tsemberi"
+      },
+      {
+        "a": "germany_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the Barett"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the tarha veil"
+      },
+      {
+        "a": "britain_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the poke bonnet"
+      },
+      {
+        "a": "egypt_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the mandil"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the abaya over the head"
+      },
+      {
+        "a": "britain_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the headscarf"
+      },
+      {
+        "a": "germany_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the cloche"
+      },
+      {
+        "a": "china_ancient",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the jieze cap"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the qalansuwa"
+      },
+      {
+        "a": "greece_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the Palaiologan hat"
+      },
+      {
+        "a": "italy_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the mazzocchio hat"
+      },
+      {
+        "a": "china_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the winged futou"
+      },
+      {
+        "a": "japan_medieval",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the eboshi cap"
+      },
+      {
+        "a": "greece_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the kalpak"
+      },
+      {
+        "a": "italy_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the red berretta"
+      },
+      {
+        "a": "china_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the square gauze cap"
+      },
+      {
+        "a": "britain_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the capotain hat"
+      },
+      {
+        "a": "germany_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the Barett"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the tarboush"
+      },
+      {
+        "a": "greece_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the fesi"
+      },
+      {
+        "a": "italy_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the wide black felt hat"
+      },
+      {
+        "a": "china_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the guapimao cap"
+      },
+      {
+        "a": "japan_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the bowler hat"
+      },
+      {
+        "a": "britain_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the top hat"
+      },
+      {
+        "a": "germany_industrial",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the Homburg"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the sidara"
+      },
+      {
+        "a": "china_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the navy cap"
+      },
+      {
+        "a": "britain_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the flat cap"
+      },
+      {
+        "a": "germany_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "Caesar crop hidden under the broad soft felt hat"
+      },
+      {
+        "a": "greece_ancient",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the petasos hat"
+      },
+      {
+        "a": "china_ancient",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the jieze cap"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the qalansuwa"
+      },
+      {
+        "a": "greece_medieval",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the Palaiologan hat"
+      },
+      {
+        "a": "italy_medieval",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the mazzocchio hat"
+      },
+      {
+        "a": "china_medieval",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the winged futou"
+      },
+      {
+        "a": "japan_medieval",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the eboshi cap"
+      },
+      {
+        "a": "greece_earlymodern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the kalpak"
+      },
+      {
+        "a": "italy_earlymodern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the red berretta"
+      },
+      {
+        "a": "china_earlymodern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the square gauze cap"
+      },
+      {
+        "a": "britain_earlymodern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the capotain hat"
+      },
+      {
+        "a": "germany_earlymodern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the Barett"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the tarboush"
+      },
+      {
+        "a": "greece_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the fesi"
+      },
+      {
+        "a": "italy_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the wide black felt hat"
+      },
+      {
+        "a": "china_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the guapimao cap"
+      },
+      {
+        "a": "japan_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the bowler hat"
+      },
+      {
+        "a": "britain_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the top hat"
+      },
+      {
+        "a": "germany_industrial",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the Homburg"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the sidara"
+      },
+      {
+        "a": "china_modern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the navy cap"
+      },
+      {
+        "a": "britain_modern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the flat cap"
+      },
+      {
+        "a": "germany_modern",
+        "b": "japan_earlymodern",
+        "slot": "Hair",
+        "gender": "m",
+        "why": "chasen-mage hidden under the broad soft felt hat"
+      },
+      {
+        "a": "greece_ancient",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the sakkos snood"
+      },
+      {
+        "a": "iraq_medieval",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the veil with isaba"
+      },
+      {
+        "a": "italy_medieval",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the ghirlanda"
+      },
+      {
+        "a": "japan_medieval",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the ichime-gasa"
+      },
+      {
+        "a": "egypt_earlymodern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the tartur"
+      },
+      {
+        "a": "greece_earlymodern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the cap and tsemberi"
+      },
+      {
+        "a": "germany_earlymodern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the Barett"
+      },
+      {
+        "a": "egypt_industrial",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the tarha veil"
+      },
+      {
+        "a": "britain_industrial",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the poke bonnet"
+      },
+      {
+        "a": "egypt_modern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the mandil"
+      },
+      {
+        "a": "iraq_modern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the abaya over the head"
+      },
+      {
+        "a": "britain_modern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the headscarf"
+      },
+      {
+        "a": "germany_modern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the cloche"
+      }
+    ]
+  },
   "content": {
     "library": "Assets/Data/Content Library/ContentLibrary_Main.asset",
     "blueprint": "Assets/Data/Investigation/CaseBlueprint_Investigation.asset",
@@ -32,7 +969,8 @@
       "Assets/Data/Investigation/RefBook_Language.asset",
       "Assets/Data/Investigation/RefBook_Technology.asset",
       "Assets/Data/Investigation/RefBook_Capital.asset",
-      "Assets/Data/Investigation/RefBook_Ruler.asset"
+      "Assets/Data/Investigation/RefBook_Ruler.asset",
+      "Assets/Data/Investigation/RefBook_Culture.asset"
     ]
   },
   "eras": [
@@ -104,7 +1042,26 @@
           "attribute": "art",
           "score": 4.0
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          0,
+          1,
+          3,
+          4,
+          2
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 8
+          },
+          {
+            "colour": "brown",
+            "weight": 2
+          }
+        ]
+      }
     },
     {
       "id": "iraq",
@@ -122,7 +1079,26 @@
           "attribute": "art",
           "score": 2.5
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          0,
+          1,
+          4,
+          3,
+          1
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 8
+          },
+          {
+            "colour": "brown",
+            "weight": 2
+          }
+        ]
+      }
     },
     {
       "id": "greece",
@@ -140,7 +1116,30 @@
           "attribute": "art",
           "score": 3.1
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          1,
+          3,
+          5,
+          1,
+          0
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 5
+          },
+          {
+            "colour": "brown",
+            "weight": 4
+          },
+          {
+            "colour": "blond",
+            "weight": 1
+          }
+        ]
+      }
     },
     {
       "id": "italy",
@@ -158,7 +1157,30 @@
           "attribute": "art",
           "score": 5.0
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          1,
+          4,
+          4,
+          1,
+          0
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 4
+          },
+          {
+            "colour": "brown",
+            "weight": 5
+          },
+          {
+            "colour": "blond",
+            "weight": 1
+          }
+        ]
+      }
     },
     {
       "id": "china",
@@ -176,7 +1198,22 @@
           "attribute": "art",
           "score": 3.0
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          1,
+          5,
+          3,
+          1,
+          0
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 10
+          }
+        ]
+      }
     },
     {
       "id": "japan",
@@ -194,7 +1231,22 @@
           "attribute": "art",
           "score": 4.0
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          1,
+          5,
+          3,
+          1,
+          0
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 10
+          }
+        ]
+      }
     },
     {
       "id": "britain",
@@ -212,7 +1264,34 @@
           "attribute": "art",
           "score": 2.0
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          5,
+          4,
+          1,
+          0,
+          0
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 1
+          },
+          {
+            "colour": "brown",
+            "weight": 5
+          },
+          {
+            "colour": "blond",
+            "weight": 3
+          },
+          {
+            "colour": "red",
+            "weight": 1
+          }
+        ]
+      }
     },
     {
       "id": "germany",
@@ -230,7 +1309,34 @@
           "attribute": "art",
           "score": 3.1
         }
-      ]
+      ],
+      "looks": {
+        "skin": [
+          4,
+          5,
+          1,
+          0,
+          0
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 1
+          },
+          {
+            "colour": "brown",
+            "weight": 5
+          },
+          {
+            "colour": "blond",
+            "weight": 4
+          },
+          {
+            "colour": "red",
+            "weight": 1
+          }
+        ]
+      }
     }
   ],
   "places": [
@@ -284,7 +1390,41 @@
       ],
       "smallTalk": [
         "The Nile rose right on time; the fields are black and rich."
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "pleated linen kilt"
+          },
+          "hair": {
+            "label": "bobbed wig",
+            "wig": true
+          },
+          "accessory": {
+            "label": "wesekh collar",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "linen sheath dress"
+          },
+          "hair": {
+            "label": "tripartite wig",
+            "wig": true,
+            "back": true
+          },
+          "headwear": {
+            "label": "lotus fillet"
+          },
+          "accessory": {
+            "label": "wesekh collar",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "egypt",
@@ -333,7 +1473,50 @@
         "Tatar",
         "Sitt al-Wuzara",
         "Maryam"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "qamis and farajiyya"
+          },
+          "hair": {
+            "label": "short crop"
+          },
+          "facialHair": {
+            "label": "rounded beard"
+          },
+          "headwear": {
+            "label": "imama turban",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "fringed silk girdle"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "qamis and white izar"
+          },
+          "hair": {
+            "label": "pinned braids"
+          },
+          "headwear": {
+            "label": "izar hood",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "filigree collar"
+          }
+        }
+      }
     },
     {
       "country": "egypt",
@@ -382,7 +1565,48 @@
         "Hawa",
         "Zulaykha",
         "Dimyana"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "quftan and gibba"
+          },
+          "hair": {
+            "label": "short crop"
+          },
+          "facialHair": {
+            "label": "short rounded beard"
+          },
+          "headwear": {
+            "label": "red-crown turban",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "shawl sash"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "brocade entari"
+          },
+          "hair": {
+            "label": "curtain of thin plaits",
+            "back": true
+          },
+          "headwear": {
+            "label": "tartur",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "disc-drop earrings"
+          }
+        }
+      }
     },
     {
       "country": "egypt",
@@ -431,7 +1655,45 @@
         "Zakiya",
         "Jalila",
         "Aisha"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "black stambouline"
+          },
+          "hair": {
+            "label": "short trimmed hair"
+          },
+          "facialHair": {
+            "label": "groomed moustache"
+          },
+          "headwear": {
+            "label": "tarboush",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "gold watch chain"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "striped yelek robe"
+          },
+          "hair": {
+            "label": "curtain of thin plaits",
+            "back": true
+          },
+          "headwear": {
+            "label": "tarha veil",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "kirdan choker"
+          }
+        }
+      }
     },
     {
       "country": "egypt",
@@ -480,7 +1742,41 @@
         "Mervat",
         "Nagwa",
         "Sanaa"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "galabiya and jacket"
+          },
+          "hair": {
+            "label": "combed-back hair"
+          },
+          "facialHair": {
+            "label": "thick moustache"
+          },
+          "accessory": {
+            "label": "fringed shal",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "printed galabiya"
+          },
+          "hair": {
+            "label": "smooth plaited hair"
+          },
+          "headwear": {
+            "label": "mandil",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "gold bangles"
+          }
+        }
+      }
     },
     {
       "country": "iraq",
@@ -532,7 +1828,41 @@
       ],
       "smallTalk": [
         "The scribes are busy; every jar of barley gets its tablet."
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "FacialHair",
+          "outfit": {
+            "label": "fringed wool wrap"
+          },
+          "hair": {
+            "label": "low chignon"
+          },
+          "facialHair": {
+            "label": "curled beard",
+            "leakable": true
+          },
+          "headwear": {
+            "label": "wool fillet"
+          },
+          "accessory": {
+            "label": "cylinder seal"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "fringed shawl-dress"
+          },
+          "hair": {
+            "label": "braid crown"
+          },
+          "headwear": {
+            "label": "gold fillet",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "iraq",
@@ -581,7 +1911,44 @@
         "Maymuna",
         "Lubaba",
         "Sukayna"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "black durra'a robe"
+          },
+          "hair": {
+            "label": "smooth nape-length hair"
+          },
+          "facialHair": {
+            "label": "rounded beard"
+          },
+          "headwear": {
+            "label": "qalansuwa",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "taylasan shawl"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "qamis with tiraz bands"
+          },
+          "hair": {
+            "label": "S-curl side locks"
+          },
+          "headwear": {
+            "label": "veil with isaba",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "pearl choker"
+          }
+        }
+      }
     },
     {
       "country": "iraq",
@@ -630,7 +1997,47 @@
         "Fatima",
         "Zaynab",
         "Asiya"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "zaboun and striped aba"
+          },
+          "hair": {
+            "label": "short crop"
+          },
+          "facialHair": {
+            "label": "full beard"
+          },
+          "headwear": {
+            "label": "checked turban",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "striped dress and aba"
+          },
+          "hair": {
+            "label": "pinned braids"
+          },
+          "headwear": {
+            "label": "futa shawl",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "qilada necklace"
+          }
+        }
+      }
     },
     {
       "country": "iraq",
@@ -679,7 +2086,47 @@
         "Habiba",
         "Zahra",
         "Maryam"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "zaboun and camel aba"
+          },
+          "hair": {
+            "label": "close crop"
+          },
+          "facialHair": {
+            "label": "moustache, short beard"
+          },
+          "headwear": {
+            "label": "chfiyya",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "brocade dress and abaya"
+          },
+          "hair": {
+            "label": "long braids"
+          },
+          "headwear": {
+            "label": "abaya veil",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "filigree bangles"
+          }
+        }
+      }
     },
     {
       "country": "iraq",
@@ -728,7 +2175,44 @@
         "Munira",
         "Wijdan",
         "Salima"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "light wool suit"
+          },
+          "hair": {
+            "label": "side-parted short hair"
+          },
+          "facialHair": {
+            "label": "trimmed moustache"
+          },
+          "headwear": {
+            "label": "sidara",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "horn-rimmed glasses"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "1950s dress and abaya"
+          },
+          "hair": {
+            "label": "permed curls"
+          },
+          "headwear": {
+            "label": "abaya over the head"
+          },
+          "accessory": {
+            "label": "gold coin pendant",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "greece",
@@ -780,7 +2264,41 @@
       ],
       "smallTalk": [
         "Everyone argues in the agora, and nobody agrees."
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "chiton and himation"
+          },
+          "hair": {
+            "label": "forward curls"
+          },
+          "facialHair": {
+            "label": "rounded beard"
+          },
+          "headwear": {
+            "label": "petasos hat",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "pera pouch"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Ionic chiton"
+          },
+          "hair": {
+            "label": "wavy low bun"
+          },
+          "headwear": {
+            "label": "sakkos snood",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "greece",
@@ -829,7 +2347,48 @@
         "Thomais",
         "Euphrosyne",
         "Anna"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "buttoned kabbadion"
+          },
+          "hair": {
+            "label": "long centre-parted hair",
+            "back": true
+          },
+          "facialHair": {
+            "label": "long full beard"
+          },
+          "headwear": {
+            "label": "Palaiologan hat",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "gilt-mounted belt"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "damask over-dress"
+          },
+          "hair": {
+            "label": "pinned-up hair"
+          },
+          "headwear": {
+            "label": "fakiolion",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "lunate earrings"
+          }
+        }
+      }
     },
     {
       "country": "greece",
@@ -878,7 +2437,44 @@
         "Zafeira",
         "Despo",
         "Lenio"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "anteri and fur coat"
+          },
+          "hair": {
+            "label": "short crop"
+          },
+          "facialHair": {
+            "label": "full beard"
+          },
+          "headwear": {
+            "label": "kalpak",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "striped sash"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "anteri and zipouni"
+          },
+          "hair": {
+            "label": "two front braids"
+          },
+          "headwear": {
+            "label": "cap and tsemberi"
+          },
+          "accessory": {
+            "label": "pafti buckle",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "greece",
@@ -927,7 +2523,44 @@
         "Evanthia",
         "Chrysoula",
         "Panagiota"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "fustanella"
+          },
+          "hair": {
+            "label": "short tapered hair"
+          },
+          "facialHair": {
+            "label": "upturned moustache"
+          },
+          "headwear": {
+            "label": "fesi",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "red silk sash"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Amalia dress"
+          },
+          "hair": {
+            "label": "braids round the crown"
+          },
+          "headwear": {
+            "label": "fesi",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "gold disc necklace"
+          }
+        }
+      }
     },
     {
       "country": "greece",
@@ -976,7 +2609,39 @@
         "Dimitra",
         "Despina",
         "Voula"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "corduroy and flares"
+          },
+          "hair": {
+            "label": "shaggy 1970s cut"
+          },
+          "facialHair": {
+            "label": "thick full moustache"
+          },
+          "accessory": {
+            "label": "tagari bag",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "embroidered blouse"
+          },
+          "hair": {
+            "label": "long loose hair",
+            "back": true
+          },
+          "accessory": {
+            "label": "tagari bag",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "italy",
@@ -1028,7 +2693,32 @@
       ],
       "smallTalk": [
         "The Senate talks, the legions march."
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "toga and tunica"
+          },
+          "hair": {
+            "label": "Caesar crop",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "stola and palla"
+          },
+          "hair": {
+            "label": "nodus roll",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "pearl monile"
+          }
+        }
+      }
     },
     {
       "country": "italy",
@@ -1077,7 +2767,38 @@
         "Bartolomea",
         "Lisa",
         "Cecca"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "red lucco gown"
+          },
+          "hair": {
+            "label": "rounded short crop"
+          },
+          "headwear": {
+            "label": "mazzocchio hat",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "gamurra and giornea"
+          },
+          "hair": {
+            "label": "drawn-back coil"
+          },
+          "headwear": {
+            "label": "ghirlanda",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "pearl pendant jewel"
+          }
+        }
+      }
     },
     {
       "country": "italy",
@@ -1126,7 +2847,38 @@
         "Angela",
         "Cecilia",
         "Isotta"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "coral pitocco"
+          },
+          "hair": {
+            "label": "zazzera bob"
+          },
+          "headwear": {
+            "label": "red berretta",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "laced-sleeve gamurra"
+          },
+          "hair": {
+            "label": "smooth centre parting"
+          },
+          "headwear": {
+            "label": "lenza",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "jet bead necklace"
+          }
+        }
+      }
     },
     {
       "country": "italy",
@@ -1175,7 +2927,41 @@
         "Ida",
         "Clelia",
         "Amelia"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "suit and tabarro"
+          },
+          "hair": {
+            "label": "pomaded side parting"
+          },
+          "facialHair": {
+            "label": "Umbertine moustache"
+          },
+          "headwear": {
+            "label": "wide black felt hat"
+          },
+          "accessory": {
+            "label": "silk scarf",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "dress and black scialle"
+          },
+          "hair": {
+            "label": "high curled chignon"
+          },
+          "accessory": {
+            "label": "coral beads",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "italy",
@@ -1224,7 +3010,35 @@
         "Luciana",
         "Giuliana",
         "Anna Maria"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "slim mohair suit"
+          },
+          "hair": {
+            "label": "slicked-back hair"
+          },
+          "accessory": {
+            "label": "dark shades",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "print sheath dress"
+          },
+          "hair": {
+            "label": "bouffant"
+          },
+          "accessory": {
+            "label": "cat-eye shades",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "china",
@@ -1273,7 +3087,38 @@
         "Jiao",
         "Ling",
         "Rong"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "zhiju wrap robe"
+          },
+          "hair": {
+            "label": "Han topknot"
+          },
+          "facialHair": {
+            "label": "moustache and goatee"
+          },
+          "headwear": {
+            "label": "jieze cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "quju wrap robe"
+          },
+          "hair": {
+            "label": "low looped bun"
+          },
+          "accessory": {
+            "label": "bi-disc pendant",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "china",
@@ -1322,7 +3167,41 @@
         "Qiniang",
         "Yuniang",
         "Huiniang"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "round-collared robe"
+          },
+          "hair": {
+            "label": "crown topknot"
+          },
+          "facialHair": {
+            "label": "thin moustache and beard"
+          },
+          "headwear": {
+            "label": "winged futou",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "plaque belt"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "beizi coat and skirt"
+          },
+          "hair": {
+            "label": "tall gaoji bun"
+          },
+          "headwear": {
+            "label": "crescent comb",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "china",
@@ -1371,7 +3250,41 @@
         "Xiaowan",
         "Xiangjun",
         "Yujing"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "pale daopao robe"
+          },
+          "hair": {
+            "label": "topknot with wangjin"
+          },
+          "facialHair": {
+            "label": "neat moustache and beard"
+          },
+          "headwear": {
+            "label": "square gauze cap",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "tasselled sitao sash"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "ao and horse-face skirt"
+          },
+          "hair": {
+            "label": "high flat bun"
+          },
+          "headwear": {
+            "label": "baotou",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "china",
@@ -1420,7 +3333,38 @@
         "Baozhu",
         "Suzhen",
         "Meiying"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "changshan and magua"
+          },
+          "hair": {
+            "label": "queue"
+          },
+          "headwear": {
+            "label": "guapimao cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "trimmed ao and skirt"
+          },
+          "hair": {
+            "label": "low flat bun"
+          },
+          "headwear": {
+            "label": "meile band",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "white jade bangle"
+          }
+        }
+      }
     },
     {
       "country": "china",
@@ -1469,7 +3413,38 @@
         "Weihong",
         "Hongying",
         "Lijuan"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Zhongshan suit"
+          },
+          "hair": {
+            "label": "side-parted crop"
+          },
+          "headwear": {
+            "label": "navy cap",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "khaki satchel"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "Zhongshan jacket"
+          },
+          "hair": {
+            "label": "clipped bob"
+          },
+          "accessory": {
+            "label": "khaki satchel",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "japan",
@@ -1518,7 +3493,35 @@
         "Karahime",
         "Nakatsuhime",
         "Oiratsume"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "kinu and tied hakama"
+          },
+          "hair": {
+            "label": "mizura",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "magatama necklace"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "kinu and mo skirt"
+          },
+          "hair": {
+            "label": "board chignon"
+          },
+          "accessory": {
+            "label": "magatama beads",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "japan",
@@ -1567,7 +3570,38 @@
         "Chiyo",
         "Tomoe",
         "Iwa"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "hitatare and hakama"
+          },
+          "hair": {
+            "label": "motodori topknot"
+          },
+          "facialHair": {
+            "label": "moustache and chin tuft"
+          },
+          "headwear": {
+            "label": "eboshi cap",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "tsubo-shozoku robes"
+          },
+          "hair": {
+            "label": "long tied-back hair"
+          },
+          "headwear": {
+            "label": "ichime-gasa",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "japan",
@@ -1616,7 +3650,35 @@
         "Osen",
         "Oume",
         "Okiku"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "kataginu and hakama"
+          },
+          "hair": {
+            "label": "chasen-mage",
+            "leakable": true
+          },
+          "facialHair": {
+            "label": "thin moustache and beard"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "Keicho kosode"
+          },
+          "hair": {
+            "label": "tamamusubi loop"
+          },
+          "accessory": {
+            "label": "Nagoya-obi",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "japan",
@@ -1665,7 +3727,35 @@
         "Fusa",
         "Shizu",
         "Toshi"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "haori and hakama"
+          },
+          "hair": {
+            "label": "zangiri crop"
+          },
+          "facialHair": {
+            "label": "trimmed moustache"
+          },
+          "headwear": {
+            "label": "bowler hat",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "yagasuri and hakama"
+          },
+          "hair": {
+            "label": "sokuhatsu",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "japan",
@@ -1714,7 +3804,35 @@
         "Emiko",
         "Kumiko",
         "Yumiko"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "salaryman suit"
+          },
+          "hair": {
+            "label": "combed side parting"
+          },
+          "accessory": {
+            "label": "orange headphones",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "office waistcoat set"
+          },
+          "hair": {
+            "label": "Seiko-chan cut"
+          },
+          "accessory": {
+            "label": "orange headphones",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "britain",
@@ -1763,7 +3881,39 @@
         "Cunoarda",
         "Tancorix",
         "Verctissa"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "checked tunic and bracae"
+          },
+          "hair": {
+            "label": "swept-back mane",
+            "back": true
+          },
+          "facialHair": {
+            "label": "long drooping moustache"
+          },
+          "accessory": {
+            "label": "torc",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "checked wool dress"
+          },
+          "hair": {
+            "label": "two thick braids"
+          },
+          "accessory": {
+            "label": "torc",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "britain",
@@ -1812,7 +3962,41 @@
         "Wulfgyth",
         "Aelfflaed",
         "Leofgyth"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "cyrtel and leg bindings"
+          },
+          "hair": {
+            "label": "collar-length hair"
+          },
+          "facialHair": {
+            "label": "long English moustache"
+          },
+          "accessory": {
+            "label": "disc brooch",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "bell-sleeved overgown"
+          },
+          "hair": {
+            "label": "low nape coil"
+          },
+          "headwear": {
+            "label": "headrail",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          }
+        }
+      }
     },
     {
       "country": "britain",
@@ -1861,7 +4045,44 @@
         "Dorothy",
         "Joan",
         "Agnes"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "doublet and ruff"
+          },
+          "hair": {
+            "label": "brushed-up short hair"
+          },
+          "facialHair": {
+            "label": "pick-a-devant beard"
+          },
+          "headwear": {
+            "label": "capotain hat",
+            "leakable": true
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "gown and lace ruff"
+          },
+          "hair": {
+            "label": "pinned-up hair"
+          },
+          "headwear": {
+            "label": "hat over coif",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          },
+          "accessory": {
+            "label": "pomander girdle"
+          }
+        }
+      }
     },
     {
       "country": "britain",
@@ -1910,7 +4131,44 @@
         "Charlotte",
         "Mary Ann",
         "Louisa"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "frock coat and stock"
+          },
+          "hair": {
+            "label": "curled side parting"
+          },
+          "facialHair": {
+            "label": "mutton-chop whiskers"
+          },
+          "headwear": {
+            "label": "top hat",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "watch chain"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "plaid day dress"
+          },
+          "hair": {
+            "label": "ringlets and bun"
+          },
+          "headwear": {
+            "label": "poke bonnet",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "Paisley shawl"
+          }
+        }
+      }
     },
     {
       "country": "britain",
@@ -1959,7 +4217,68 @@
         "Audrey",
         "Pamela",
         "Irene"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "tweed and Fair Isle"
+          },
+          "hair": {
+            "label": "short back and sides"
+          },
+          "headwear": {
+            "label": "flat cap",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "college scarf"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "twinset and tweed skirt"
+          },
+          "hair": {
+            "label": "pin-curl set"
+          },
+          "headwear": {
+            "label": "headscarf",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "pearl strand"
+          }
+        }
+      },
+      "looks": {
+        "skin": [
+          4,
+          3,
+          1,
+          1,
+          1
+        ],
+        "hair": [
+          {
+            "colour": "black",
+            "weight": 2
+          },
+          {
+            "colour": "brown",
+            "weight": 5
+          },
+          {
+            "colour": "blond",
+            "weight": 3
+          },
+          {
+            "colour": "red",
+            "weight": 1
+          }
+        ]
+      }
     },
     {
       "country": "germany",
@@ -2008,7 +4327,35 @@
         "Waluburg",
         "Gambara",
         "Hariso"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Hair",
+          "outfit": {
+            "label": "twill tunic and trousers"
+          },
+          "hair": {
+            "label": "Suebian knot",
+            "leakable": true
+          },
+          "facialHair": {
+            "label": "full short beard"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "linen peplos dress"
+          },
+          "hair": {
+            "label": "low bound knot"
+          },
+          "accessory": {
+            "label": "amber beads",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "germany",
@@ -2057,7 +4404,41 @@
         "Meckil",
         "Else",
         "Katherine"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "pleated Tappert gown"
+          },
+          "hair": {
+            "label": "fringed chin-length hair"
+          },
+          "headwear": {
+            "label": "Gugel hood",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "high-waisted gown"
+          },
+          "hair": {
+            "label": "pinned plaits"
+          },
+          "headwear": {
+            "label": "Kruseler veil",
+            "leakable": true,
+            "covers": [
+              "Hair"
+            ]
+          }
+        }
+      }
     },
     {
       "country": "germany",
@@ -2106,7 +4487,44 @@
         "Ottilia",
         "Apollonia",
         "Margaretha"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "fur-collared Schaube"
+          },
+          "hair": {
+            "label": "short Kolbe"
+          },
+          "facialHair": {
+            "label": "short rounded beard"
+          },
+          "headwear": {
+            "label": "Barett",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "gold chain"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "slashed gown and Goller"
+          },
+          "hair": {
+            "label": "plaits in gold net"
+          },
+          "headwear": {
+            "label": "Barett",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "layered gold chains"
+          }
+        }
+      }
     },
     {
       "country": "germany",
@@ -2155,7 +4573,41 @@
         "Frieda",
         "Emma",
         "Clara"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Gehrock and Stehkragen"
+          },
+          "hair": {
+            "label": "brush cut"
+          },
+          "facialHair": {
+            "label": "turned-up moustache"
+          },
+          "headwear": {
+            "label": "Homburg",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "pince-nez"
+          }
+        },
+        "f": {
+          "signature": "Accessory",
+          "outfit": {
+            "label": "Reformkleid"
+          },
+          "hair": {
+            "label": "soft low chignon"
+          },
+          "accessory": {
+            "label": "Jugendstil pendant",
+            "leakable": true
+          }
+        }
+      }
     },
     {
       "country": "germany",
@@ -2204,7 +4656,53 @@
         "Elfriede",
         "Irmgard",
         "Trude"
-      ]
+      ],
+      "wardrobe": {
+        "m": {
+          "signature": "FacialHair",
+          "outfit": {
+            "label": "rumpled suit and coat"
+          },
+          "hair": {
+            "label": "brushed-back hair"
+          },
+          "facialHair": {
+            "label": "walrus moustache",
+            "leakable": true
+          },
+          "headwear": {
+            "label": "broad soft felt hat"
+          },
+          "accessory": {
+            "label": "round spectacles"
+          }
+        },
+        "f": {
+          "signature": "Headwear",
+          "outfit": {
+            "label": "Bauhaus drop-waist dress"
+          },
+          "hair": {
+            "label": "Bubikopf bob"
+          },
+          "headwear": {
+            "label": "cloche",
+            "leakable": true
+          },
+          "accessory": {
+            "label": "Bauhaus necklace"
+          }
+        }
+      },
+      "looks": {
+        "skin": [
+          4,
+          4,
+          1,
+          1,
+          0
+        ]
+      }
     }
   ],
   "rules": [
@@ -2251,7 +4749,16 @@
         "greece",
         "italy"
       ],
-      "rules": []
+      "rules": [],
+      "premades": [],
+      "forced": [
+        {
+          "slot": 3,
+          "premade": "senenmut",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05
     },
     {
       "asset": "DayPlan_Inv_Day2",
@@ -2282,7 +4789,21 @@
       ],
       "rules": [
         "Rule_NoAncientEgypt"
-      ]
+      ],
+      "premades": [
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi"
+      ],
+      "forced": [
+        {
+          "slot": 6,
+          "premade": "socrates",
+          "blueprint": ""
+        }
+      ],
+      "premadeChance": 0.05
     },
     {
       "asset": "DayPlan_Inv_Day3",
@@ -2291,7 +4812,8 @@
       "tells": 1,
       "channels": [
         "Papers",
-        "Answer"
+        "Answer",
+        "Appearance"
       ],
       "eras": [
         {
@@ -2311,7 +4833,20 @@
       "rules": [
         "Rule_NoMedievalChina",
         "Rule_NoEarlyModernJapan"
-      ]
+      ],
+      "premades": [
+        "socrates",
+        "aspasia",
+        "banzhao",
+        "arib",
+        "khwarizmi",
+        "gutenberg",
+        "leonardo",
+        "lanyer",
+        "gallerani"
+      ],
+      "forced": [],
+      "premadeChance": 0.05
     }
   ],
   "interview": {
@@ -2328,6 +4863,7 @@
     "askLabel": "Ask about home >",
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
+    "lookLabel": "Look >",
     "smallTalkPrompt": "How is life back home?",
     "menuCapacity": 8,
     "maxLineChars": 100
@@ -2502,6 +5038,202 @@
           ]
         }
       ]
+    },
+    {
+      "id": "dlg_senenmut",
+      "label": "Ask about the temple >",
+      "conditions": [],
+      "nodes": [
+        {
+          "id": "start",
+          "lines": [
+            {
+              "id": "dlg_senenmut.start.1",
+              "speaker": "Traveller",
+              "expression": "happy",
+              "text": "My temple at Deir el-Bahari rises in three terraces. The Pharaoh will be pleased."
+            }
+          ],
+          "choices": [
+            {
+              "id": "more",
+              "label": "And if she is not?",
+              "lines": [],
+              "next": "worried",
+              "effect": ""
+            },
+            {
+              "id": "bye",
+              "label": "Safe travels.",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        },
+        {
+          "id": "worried",
+          "lines": [
+            {
+              "id": "dlg_senenmut.worried.1",
+              "speaker": "Traveller",
+              "expression": "worried",
+              "text": "Then my name will be chiselled off every wall. Let us hope your stamp is kind."
+            }
+          ],
+          "choices": [
+            {
+              "id": "done",
+              "label": "Next!",
+              "lines": [],
+              "next": "",
+              "effect": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "premades": [
+    {
+      "id": "senenmut",
+      "name": "Senenmut",
+      "gender": "Male",
+      "place": "egypt_ancient",
+      "truePlace": "",
+      "birthDate": "14 Mar 1505 BCE",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Steward of the Pharaoh's household and architect of her temple.",
+      "dialog": "dlg_senenmut",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "socrates",
+      "name": "Socrates",
+      "gender": "Male",
+      "place": "greece_ancient",
+      "truePlace": "italy_ancient",
+      "birthDate": "6 Jun 470 BCE",
+      "archetype": "wanderer",
+      "intro": "Priority arrival: Socrates of Athens. He asks more questions than you do.",
+      "recordNote": "Philosopher. Known to question officials at length.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "aspasia",
+      "name": "Aspasia",
+      "gender": "Female",
+      "place": "greece_ancient",
+      "truePlace": "",
+      "birthDate": "12 Sep 470 BCE",
+      "archetype": "diplomat",
+      "intro": "",
+      "recordNote": "Teacher of rhetoric. Keeps the company of Athens' first citizen.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "banzhao",
+      "name": "Ban Zhao",
+      "gender": "Female",
+      "place": "china_ancient",
+      "truePlace": "",
+      "birthDate": "3 Feb 45",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Court historian and tutor to the empress. Finishing her brother's history.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "arib",
+      "name": "Arib al-Ma'muniyya",
+      "gender": "Female",
+      "place": "iraq_medieval",
+      "truePlace": "",
+      "birthDate": "20 May 797",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Singer and poet of the caliph's court. Travels with her own musicians.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "khwarizmi",
+      "name": "Muhammad al-Khwarizmi",
+      "gender": "Male",
+      "place": "iraq_medieval",
+      "truePlace": "",
+      "birthDate": "3 Apr 780",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Scholar of the House of Wisdom. Writes on calculation.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "gutenberg",
+      "name": "Johannes Gutenberg",
+      "gender": "Male",
+      "place": "germany_medieval",
+      "truePlace": "",
+      "birthDate": "24 Jun 1400",
+      "archetype": "scientist",
+      "intro": "",
+      "recordNote": "Goldsmith of Mainz. Business in Strasbourg undisclosed.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "leonardo",
+      "name": "Leonardo da Vinci",
+      "gender": "Male",
+      "place": "italy_earlymodern",
+      "truePlace": "",
+      "birthDate": "15 Apr 1452",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Painter and engineer in the service of the Duke of Milan.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "lanyer",
+      "name": "Aemilia Lanyer",
+      "gender": "Female",
+      "place": "britain_earlymodern",
+      "truePlace": "",
+      "birthDate": "27 Jan 1569",
+      "archetype": "artist",
+      "intro": "",
+      "recordNote": "Poet of London, raised in a countess's household.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
+    },
+    {
+      "id": "gallerani",
+      "name": "Cecilia Gallerani",
+      "gender": "Female",
+      "place": "italy_earlymodern",
+      "truePlace": "",
+      "birthDate": "3 Mar 1473",
+      "archetype": "diplomat",
+      "intro": "",
+      "recordNote": "Lady of the Milanese court. Sat for a portrait with an ermine.",
+      "dialog": "",
+      "repeatable": false,
+      "impacts": []
     }
   ]
 }

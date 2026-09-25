@@ -139,7 +139,7 @@ public static class ShiftScoring
         world.timelineStability += v.stabilityDelta;
 
         string mistake = v.unprovenDenial
-            ? "Deviation denied without documented evidence. Log a deviation from the papers or the traveller's answers before denying."
+            ? "Deviation denied without documented evidence. Log a deviation from the papers, the traveller's answers or their dress before denying."
             : v.accepted
                 ? "Approved a disguised traveller or a forbidden destination."
                 : "Denied a legitimate, permitted traveler.";

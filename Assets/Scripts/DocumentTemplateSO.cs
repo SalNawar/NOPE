@@ -29,4 +29,7 @@ public sealed class DocumentTemplateSO : ScriptableObject
     /// <summary>When the traveller hands this document over: when they step up (OnArrival) or when asked (OnRequest).</summary>
     [Header("Desk")]
     public DocumentHandOver handOver = DocumentHandOver.OnRequest;
+
+    /// <summary>The first page carries the traveller's photo (a 4:5 crop of how they look), on the scanned page and on the paper. Only the Travel Passport does.</summary>
+    public bool showsPhoto;
 }

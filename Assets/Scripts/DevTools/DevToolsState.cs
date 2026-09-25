@@ -8,9 +8,8 @@ using UnityEngine;
 public static class DevToolsState
 {
     /// <summary>
-    /// When true, CaseFactory.TryRollLegendary forces the next case to be a
-    /// legendary (if any legendary is available for the current day) and
-    /// then resets this flag back to false.
+    /// When true, the next slot that rolls a premade (CaseFactory.RollPremade)
+    /// holds one from the day's pool (if any can roll) and this flag resets.
     /// </summary>
     public static bool ForceLegendaryNextCase;
 

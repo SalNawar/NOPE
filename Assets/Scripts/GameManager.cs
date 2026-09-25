@@ -146,14 +146,17 @@ public sealed class GameManager : MonoBehaviour
         // them may carry a spoken tell, and the offered dialogs.
         InterviewDay interview = BuildInterviewDay();
 
-        // Generate all cases up-front (seeded: same run + same day + same
-        // interview wiring = same travellers). Where nothing spoken can be read,
-        // no answer is computed and no tell is spoken.
+        // Generate all cases up-front (seeded: same run + same day + same met
+        // premades + same interview wiring = same travellers). Where nothing
+        // spoken can be read, no answer is computed and no tell is spoken;
+        // where no garment can be looked at, no dress tell is generated.
         bool spoken = investigationUI != null && investigationUI.InterviewReachable;
+        bool dress = investigationUI != null && investigationUI.AppearanceReachable;
         _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed,
             spoken ? interview.AskableCategories : System.Array.Empty<ClueCategory>(),
-            spoken ? interview.AnswerTellCategories : System.Array.Empty<ClueCategory>());
-        Debug.Log($"[GameManager] Interview: spoken={spoken}, askable=[{string.Join(", ", interview.AskableCategories)}], spoken tells may come from [{string.Join(", ", interview.AnswerTellCategories)}], dialogs offered={interview.OfferedDialogs(null).Count}.");
+            spoken ? interview.AnswerTellCategories : System.Array.Empty<ClueCategory>(),
+            dress);
+        Debug.Log($"[GameManager] Interview: spoken={spoken}, dress={dress}, askable=[{string.Join(", ", interview.AskableCategories)}], spoken tells may come from [{string.Join(", ", interview.AnswerTellCategories)}], dialogs offered={interview.OfferedDialogs(null).Count}.");
 
         // Investigation: surface today's travel directives (rules to deny), the
         // agency's citizen records for today's visitors, today's facts and interview.

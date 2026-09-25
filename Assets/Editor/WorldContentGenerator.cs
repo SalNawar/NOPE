@@ -10,18 +10,21 @@ using Object = UnityEngine.Object;
 /// Tools > TimeDesk > Generate World. The one authoritative world generator:
 /// reads the hand-maintained world source (Assets/Data/World/world_source.json)
 /// and creates or updates the eras, nations, places (NationEraProfileSO with
-/// facts, names, birth years and small talk), travel rules and day plans (tell
-/// count and tell channels), the interview (its wording and menu capacity,
+/// year, facts plus the Culture fact derived from the wardrobe, names, birth
+/// years, small talk, wardrobe and look weights), travel rules, premade
+/// characters, day plans (tell count and tell channels, the premade pool,
+/// forced slots and chance), the interview (its wording and menu capacity,
 /// questions, narrative dialogs, and a one-shot unlock-announcement trigger
 /// for every gated question), points the case blueprint at the listed
-/// archetypes, then sets every world array of the content library
-/// explicitly. Idempotent: re-running converges to the source file. It owns
-/// the Eras/Nations/Places/Rules/Interview folders under Assets/Data/World
-/// (assets there that the source no longer lists go to the OS trash) and only
-/// drops missing references elsewhere, so hand-authored content (legendaries,
-/// effects, triggers) survives a re-run. The authored assets the source points
-/// at (library, blueprint, attributes, archetypes, books) must already exist;
-/// every reference, id and line is checked before anything is written.
+/// archetypes, then sets every world array of the content library and its
+/// look rules explicitly. Idempotent: re-running converges to the source
+/// file. It owns the Eras/Nations/Places/Rules/Interview/Premades folders
+/// under Assets/Data/World (assets there that the source no longer lists go to
+/// the OS trash) and only drops missing references elsewhere, so
+/// hand-authored content (effects, triggers) survives a re-run. The authored
+/// assets the source points at (library, blueprint, attributes, archetypes,
+/// books, forced blueprints) must already exist; every reference, id and line
+/// is checked before anything is written.
 /// </summary>
 public static class WorldContentGenerator
 {
@@ -32,7 +35,7 @@ public static class WorldContentGenerator
     private const string WorldRoot = "Assets/Data/World";
 
     /// <summary>Generator-owned folders (under <see cref="WorldRoot"/>).</summary>
-    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview" };
+    private static readonly string[] OwnedFolders = { "Eras", "Nations", "Places", "Rules", "Interview", "Premades" };
 
     /// <summary>Folder of the generated interview assets (questions, dialogs, unlock triggers).</summary>
     private const string InterviewFolder = WorldRoot + "/Interview";
@@ -46,9 +49,10 @@ public static class WorldContentGenerator
             return;
 
         var errors = new List<string>();
-        Authored authored = LoadAuthored(src.content, errors);
+        Authored authored = LoadAuthored(src.content, src.days, errors);
         CheckReferences(src, authored, errors);
         CheckInterview(src, authored, errors);
+        CheckCharacters(src, authored, errors);
         if (errors.Count > 0)
         {
             foreach (string e in errors)
@@ -72,15 +76,22 @@ public static class WorldContentGenerator
                                    authored.attributes, src.travellerAgeMin, src.travellerAgeMax, written))
             .ToArray();
 
-        // --- Rules, blueprint, day plans ---
+        // --- Rules, premades, blueprint, day plans ---
         var rules = src.rules.ToDictionary(r => r.asset, r => MakeRule(r, nations, eras, written));
 
+        var placesById = places.ToDictionary(p => p.id);
+        var archetypesById = authored.archetypes.ToDictionary(a => a.id);
+        var premades = (src.premades ?? Array.Empty<PremadeData>())
+            .Select(m => MakePremade(m, placesById, archetypesById, authored.attributes, written))
+            .ToArray();
+        var premadesById = premades.ToDictionary(m => m.id);
+
         var soBlueprint = new SerializedObject(authored.blueprint);
-        SetArray(soBlueprint, "archetypePool", authored.archetypes);
+        SerializedArrays.Set(soBlueprint, "archetypePool", authored.archetypes);
         soBlueprint.ApplyModifiedProperties();
         EditorUtility.SetDirty(authored.blueprint);
 
-        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored.blueprint, eras, nations, rules)).ToArray();
+        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById)).ToArray();
 
         // --- Interview: questions, dialogs, unlock announcements ---
         QuestionData[] questionData = src.questions ?? Array.Empty<QuestionData>();
@@ -94,14 +105,14 @@ public static class WorldContentGenerator
 
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
-                    BuildLines(src.interview), questions, dialogs, unlocks);
+                    BuildLines(src.interview), questions, dialogs, unlocks, premades, BuildLookRules(src.looks));
 
         int pruned = PruneOwnedFolders(written);
 
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places, {rules.Count} rules, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places, {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
@@ -116,9 +127,10 @@ public static class WorldContentGenerator
         public Dictionary<string, AttributeSO> attributes = new Dictionary<string, AttributeSO>();
         public ArchetypeSO[] archetypes;
         public ReferenceBookSO[] books;
+        public Dictionary<string, CaseBlueprintSO> forcedBlueprints = new Dictionary<string, CaseBlueprintSO>();
     }
 
-    private static Authored LoadAuthored(ContentData content, List<string> errors)
+    private static Authored LoadAuthored(ContentData content, DayData[] days, List<string> errors)
     {
         var a = new Authored();
         if (content == null)
@@ -141,6 +153,16 @@ public static class WorldContentGenerator
 
         a.archetypes = (content.archetypes ?? Array.Empty<string>()).Select(p => Require<ArchetypeSO>(p, "archetype", errors)).Where(x => x != null).ToArray();
         a.books = (content.books ?? Array.Empty<string>()).Select(p => Require<ReferenceBookSO>(p, "reference book", errors)).Where(x => x != null).ToArray();
+
+        foreach (DayData d in days ?? Array.Empty<DayData>())
+            foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
+                if (!string.IsNullOrEmpty(f.blueprint) && !a.forcedBlueprints.ContainsKey(f.blueprint))
+                {
+                    CaseBlueprintSO blueprint = Require<CaseBlueprintSO>(f.blueprint, $"forced blueprint of day '{d.asset}'", errors);
+                    if (blueprint != null)
+                        a.forcedBlueprints[f.blueprint] = blueprint;
+                }
+
         return a;
     }
 
@@ -263,7 +285,8 @@ public static class WorldContentGenerator
             ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary), ("claim", iv.claim),
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
             ("requestLabel", iv.requestLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
-            ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel), ("smallTalkPrompt", iv.smallTalkPrompt)
+            ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel), ("smallTalkPrompt", iv.smallTalkPrompt),
+            ("lookLabel", iv.lookLabel)
         };
         foreach ((string field, string text) in wording)
         {
@@ -439,7 +462,9 @@ public static class WorldContentGenerator
         // --- Menus: the traveller wheel must show every choice ---
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
-        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)), dialogs.Length, 0, iv.menuCapacity))
+        var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
+        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)),
+                                                             dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
 
         // --- Line length: every line the transcript can show fits two lines of a row ---
@@ -455,7 +480,7 @@ public static class WorldContentGenerator
         }
 
         int longestHonorific = new[] { iv.honorificMale, iv.honorificFemale, iv.honorificUnknown }.Max(h => (h ?? string.Empty).Length);
-        int longestName = authored.library != null ? authored.library.Legendaries.Where(l => l != null).Select(l => (l.displayName ?? string.Empty).Length).DefaultIfEmpty(0).Max() : 0;
+        int longestName = (src.premades ?? Array.Empty<PremadeData>()).Select(m => (m.name ?? string.Empty).Length).DefaultIfEmpty(0).Max();
         int longestDocument = DocumentTemplates(authored).Select(t => (t.displayName ?? string.Empty).Length).DefaultIfEmpty(0).Max();
         var eraNames = src.eras.ToDictionary(e => e.id, e => e.displayName);
         int longestPlace = src.places.Select(p => OriginLabels.Format(p.displayName, eraNames.TryGetValue(p.era ?? string.Empty, out string era) ? era : null).Length)
@@ -546,7 +571,7 @@ public static class WorldContentGenerator
         }
     }
 
-    /// <summary>The document templates a traveller can carry: the wired blueprint's and every listed legendary's override's.</summary>
+    /// <summary>The document templates a traveller can carry: the wired blueprint's and every forced blueprint's.</summary>
     private static List<DocumentTemplateSO> DocumentTemplates(Authored authored)
     {
         var templates = new List<DocumentTemplateSO>();
@@ -556,16 +581,13 @@ public static class WorldContentGenerator
         return templates;
     }
 
-    /// <summary>The wired blueprint and the listed legendaries' overrides (non-null).</summary>
+    /// <summary>The wired blueprint and every day's forced blueprints (non-null).</summary>
     private static List<CaseBlueprintSO> Blueprints(Authored authored)
     {
         var blueprints = new List<CaseBlueprintSO>();
         if (authored.blueprint != null)
             blueprints.Add(authored.blueprint);
-        if (authored.library != null)
-            foreach (LegendarySO legend in authored.library.Legendaries)
-                if (legend != null && legend.blueprintOverride != null)
-                    blueprints.Add(legend.blueprintOverride);
+        blueprints.AddRange(authored.forcedBlueprints.Values);
         return blueprints;
     }
 
@@ -600,8 +622,302 @@ public static class WorldContentGenerator
         return longest;
     }
 
-    /// <summary>A place's birth-year range: its year minus the oldest and the youngest traveller age (MakePlace writes it, LongestValue measures it).</summary>
+    /// <summary>A place's birth-year range: its year minus the oldest and the youngest traveller age (MakePlace writes it, LongestValue measures it, CheckCharacters bounds premades by it).</summary>
     private static (int min, int max) BirthYears(PlaceData p, int ageMin, int ageMax) => (p.year - ageMax, p.year - ageMin);
+
+
+    /// <summary>
+    /// Checks the character data before anything is written: the looks
+    /// section, every country's and place's look weights, every wardrobe
+    /// (both genders, outfit and hair, a real signature item, label length and
+    /// ASCII, covers, wig and back only on hair, the per-gender label rule),
+    /// the derived Culture values (no authored Culture fact, within the fact
+    /// width, unique), no Culture question, ids usable in art keys, the
+    /// premades (ids, names, gender, places, birth dates, archetype, dialog,
+    /// intro, record note, impacts), each day's premade pool, forced slots and
+    /// chance, and dialog line expressions. A forced premade in the first half
+    /// of a day with rules is a warning (it takes a slot a guaranteed violator
+    /// could need).
+    /// </summary>
+    private static void CheckCharacters(WorldSource src, Authored authored, List<string> errors)
+    {
+        LooksData looks = src.looks;
+        if (looks == null || looks.faceBands == null || looks.faceBands.Length == 0)
+        {
+            errors.Add("\"looks\" needs faceBands (each with a minAge and at least one face).");
+        }
+        else
+        {
+            for (int i = 0; i < looks.faceBands.Length; i++)
+            {
+                FaceBandData band = looks.faceBands[i];
+                if (band.faces == null || band.faces.Length == 0)
+                    errors.Add($"looks.faceBands[{i}] has no faces (Looks.Compose picks one per traveller).");
+                foreach (string face in band.faces ?? Array.Empty<string>())
+                    if (face == null || face.Length != 1 || face[0] < 'a' || face[0] > 'z')
+                        errors.Add($"looks.faceBands[{i}] face '{face}' must be one lowercase letter.");
+                if (i > 0 && band.minAge <= looks.faceBands[i - 1].minAge)
+                    errors.Add($"looks.faceBands[{i}] minAge {band.minAge} does not ascend.");
+            }
+
+            if (looks.faceBands[0].minAge > src.travellerAgeMin)
+                errors.Add($"looks.faceBands[0] minAge {looks.faceBands[0].minAge} is above travellerAgeMin {src.travellerAgeMin}.");
+        }
+
+        if (looks == null || looks.greyFromAge <= 0)
+            errors.Add("looks.greyFromAge must be above 0 (a missing value reads 0).");
+        if (looks == null || string.IsNullOrWhiteSpace(looks.wholeFigureLabel) || looks.wholeFigureLabel.Length > Looks.MaxLabelLength || !IsAscii(looks.wholeFigureLabel))
+            errors.Add($"looks.wholeFigureLabel must be ASCII, non-blank and at most {Looks.MaxLabelLength} characters.");
+
+        var placeIds = new HashSet<string>(src.places.Select(PlaceId));
+        foreach (ConfusableData c in looks?.confusable ?? Array.Empty<ConfusableData>())
+        {
+            if (!placeIds.Contains(c.a ?? string.Empty) || !placeIds.Contains(c.b ?? string.Empty))
+                errors.Add($"looks.confusable pair '{c.a}'/'{c.b}' names an unknown place.");
+            if (!ParseEnum(c.slot, out LookSlot _))
+                errors.Add($"looks.confusable pair '{c.a}'/'{c.b}' has unknown slot '{c.slot}'.");
+            if (!string.IsNullOrEmpty(c.gender) && c.gender != LookKeys.Male && c.gender != LookKeys.Female)
+                errors.Add($"looks.confusable pair '{c.a}'/'{c.b}' has gender '{c.gender}' (\"m\", \"f\" or empty).");
+        }
+
+        foreach (EraData e in src.eras)
+            if (!LookKeys.IsToken(e.id))
+                errors.Add($"Era id '{e.id}' is not a key token (lowercase letters and digits).");
+        foreach (CountryData c in src.countries)
+        {
+            if (!LookKeys.IsToken(c.id))
+                errors.Add($"Country id '{c.id}' is not a key token (lowercase letters and digits).");
+            CheckWeights(c.looks, $"Country '{c.id}'", true, errors);
+        }
+
+        // --- Wardrobes and the derived Culture values ---
+        var wardrobes = new List<(string placeId, PlaceWardrobe wardrobe)>();
+        var cultures = new List<(string placeId, string value)>();
+        foreach (PlaceData p in src.places)
+        {
+            string pid = PlaceId(p);
+            CheckWeights(p.looks, $"Place '{pid}'", false, errors);
+            foreach (FactData f in p.facts ?? Array.Empty<FactData>())
+                if (f.category == Looks.EvidenceCategory.ToString())
+                    errors.Add($"Place '{pid}' authors a {f.category} fact; Culture is derived from the wardrobe's signature items.");
+
+            if (p.wardrobe == null || p.wardrobe.m == null || p.wardrobe.f == null)
+            {
+                errors.Add($"Place '{pid}' needs a wardrobe with \"m\" and \"f\".");
+                continue;
+            }
+
+            CheckGenderLook(p.wardrobe.m, $"Place '{pid}' m", errors);
+            CheckGenderLook(p.wardrobe.f, $"Place '{pid}' f", errors);
+            PlaceWardrobe wardrobe = ToWardrobe(p.wardrobe);
+            wardrobes.Add((pid, wardrobe));
+
+            string culture = Looks.CultureValue(wardrobe);
+            if (culture == null)
+                continue;
+            if (culture.Length > FactTable.MaxValueLength)
+                errors.Add($"Place '{pid}' Culture value '{culture}' is {culture.Length} characters; a book row holds {FactTable.MaxValueLength}. Shorten a signature label.");
+            foreach ((string other, string value) in cultures)
+                if (DiscrepancyLog.ValuesMatch(value, culture))
+                    errors.Add($"Places '{other}' and '{pid}' share the Culture value '{culture}'; a dress tell must name one place.");
+            cultures.Add((pid, culture));
+        }
+
+        foreach (string problem in Looks.LabelProblems(wardrobes))
+            errors.Add($"Wardrobe labels: {problem}");
+
+        foreach (QuestionData q in src.questions ?? Array.Empty<QuestionData>())
+            if (q.category == Looks.EvidenceCategory.ToString())
+                errors.Add($"Question '{q.id}' asks about Culture; dress is looked at on the traveller wheel, never asked.");
+
+        // --- Premades ---
+        var archetypeIds = new HashSet<string>((authored.archetypes ?? Array.Empty<ArchetypeSO>()).Select(a => a.id));
+        var dialogIds = new HashSet<string>((src.dialogs ?? Array.Empty<DialogData>()).Select(d => d.id));
+        var names = new HashSet<string>(src.places.SelectMany(p => (p.maleNames ?? Array.Empty<string>()).Concat(p.femaleNames ?? Array.Empty<string>())),
+                                        StringComparer.OrdinalIgnoreCase);
+        var premadeIds = new HashSet<string>();
+        var premadeNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var premadesById = new Dictionary<string, PremadeData>();
+        foreach (PremadeData m in src.premades ?? Array.Empty<PremadeData>())
+        {
+            string owner = $"Premade '{m.id}'";
+            if (!LookKeys.IsToken(m.id))
+                errors.Add($"{owner}: the id must be a key token (lowercase letters and digits).");
+            else if (!premadeIds.Add(m.id))
+                errors.Add($"{owner} is listed twice.");
+            else
+                premadesById[m.id] = m;
+
+            if (string.IsNullOrWhiteSpace(m.name) || !IsAscii(m.name))
+                errors.Add($"{owner} needs an ASCII name.");
+            else if (!premadeNames.Add(m.name))
+                errors.Add($"{owner} shares the name '{m.name}' with another premade.");
+            else if (names.Contains(m.name))
+                errors.Add($"{owner}: '{m.name}' is in a place's name list, so a generated traveller could take it.");
+
+            if (!ParseEnum(m.gender, out TravellerGender gender) || gender == TravellerGender.Unknown)
+                errors.Add($"{owner} needs gender Male or Female.");
+
+            PlaceData place = src.places.FirstOrDefault(p => PlaceId(p) == m.place);
+            if (place == null)
+                errors.Add($"{owner} claims unknown place '{m.place}'.");
+            if (!string.IsNullOrEmpty(m.truePlace) && (!placeIds.Contains(m.truePlace) || m.truePlace == m.place))
+                errors.Add($"{owner} has true place '{m.truePlace}', which must be another existing place (or empty for an honest premade).");
+
+            if (!BirthDates.TryParse(m.birthDate, out _, out _, out int year))
+                errors.Add($"{owner} has unreadable birth date '{m.birthDate}' (\"14 Mar 1505 BCE\").");
+            else if (place != null)
+            {
+                (int min, int max) = BirthYears(place, src.travellerAgeMin, src.travellerAgeMax);
+                if (year < min || year > max)
+                    errors.Add($"{owner} is born in {year}, outside '{m.place}''s birth years {min}..{max}.");
+            }
+
+            if (!archetypeIds.Contains(m.archetype ?? string.Empty))
+                errors.Add($"{owner} names unknown archetype '{m.archetype}' (content.archetypes by id).");
+            if (!string.IsNullOrEmpty(m.dialog) && !dialogIds.Contains(m.dialog))
+                errors.Add($"{owner} names unknown dialog '{m.dialog}'.");
+            if (!IsAscii(m.intro))
+                errors.Add($"{owner}: its intro must be ASCII.");
+            if (src.interview != null && (m.intro ?? string.Empty).Length > src.interview.maxLineChars)
+                errors.Add($"{owner}: its intro is {m.intro.Length} characters; the transcript holds at most {src.interview.maxLineChars} (interview.maxLineChars).");
+            if (!IsAscii(m.recordNote) || (m.recordNote ?? string.Empty).Length > Premades.MaxNoteLength)
+                errors.Add($"{owner}: its record note must be ASCII and at most {Premades.MaxNoteLength} characters.");
+            foreach (ImpactData impact in m.impacts ?? Array.Empty<ImpactData>())
+            {
+                if (!authored.attributes.ContainsKey(impact.attribute ?? string.Empty))
+                    errors.Add($"{owner} has an impact on unknown attribute '{impact.attribute}'.");
+                if (impact.onCorrect == 0f && impact.onWrong == 0f)
+                    errors.Add($"{owner} has an impact on '{impact.attribute}' with both deltas 0 (a missing delta reads 0).");
+            }
+        }
+
+        // --- Days: pools, forced slots, chance ---
+        foreach (DayData d in src.days)
+        {
+            string owner = $"Day '{d.asset}'";
+            var world = new HashSet<string>(src.places
+                .Where(p => (d.eras ?? Array.Empty<EraWeightData>()).Any(w => w.era == p.era && w.weight > 0f) &&
+                            (d.countries == null || d.countries.Length == 0 || d.countries.Contains(p.country)))
+                .Select(PlaceId));
+
+            void InWorld(string premadeId, string how)
+            {
+                if (!premadesById.TryGetValue(premadeId ?? string.Empty, out PremadeData m))
+                {
+                    errors.Add($"{owner} {how} unknown premade '{premadeId}'.");
+                    return;
+                }
+                if (!world.Contains(m.place))
+                    errors.Add($"{owner} {how} premade '{m.id}', whose claim '{m.place}' is not in the day's world.");
+                if (!string.IsNullOrEmpty(m.truePlace) && !world.Contains(m.truePlace))
+                    errors.Add($"{owner} {how} premade '{m.id}', whose true place '{m.truePlace}' is not in the day's world.");
+            }
+
+            string[] pool = d.premades ?? Array.Empty<string>();
+            foreach (string id in pool)
+                InWorld(id, "pools");
+            if (pool.Distinct().Count() != pool.Length)
+                errors.Add($"{owner} pools a premade twice.");
+            if (d.premadeChance < 0f || d.premadeChance > 1f || (pool.Length > 0 && d.premadeChance <= 0f))
+                errors.Add($"{owner} needs \"premadeChance\" in 0..1, above 0 with a pool (a missing value reads 0).");
+
+            var slots = new HashSet<int>();
+            var forcedPremades = new HashSet<string>();
+            foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
+            {
+                if (f.slot < 1 || f.slot > d.queue)
+                    errors.Add($"{owner} forces slot {f.slot}, outside its queue of {d.queue} (a missing slot reads 0).");
+                if (!slots.Add(f.slot))
+                    errors.Add($"{owner} forces slot {f.slot} twice.");
+                if (string.IsNullOrEmpty(f.premade) && string.IsNullOrEmpty(f.blueprint))
+                    errors.Add($"{owner} forces slot {f.slot} with neither a premade nor a blueprint.");
+                if (string.IsNullOrEmpty(f.premade))
+                    continue;
+
+                InWorld(f.premade, "forces");
+                if (!forcedPremades.Add(f.premade))
+                    errors.Add($"{owner} forces premade '{f.premade}' twice.");
+                if (pool.Contains(f.premade))
+                    errors.Add($"{owner} both forces and pools premade '{f.premade}'.");
+                if (d.rules != null && d.rules.Length > 0 && f.slot <= ViolatorSlots.Window(d.queue))
+                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
+            }
+        }
+
+        // --- Dialog line expressions: only on traveller lines ---
+        foreach (DialogData d in src.dialogs ?? Array.Empty<DialogData>())
+        {
+            IEnumerable<LineData> lines = (d.nodes ?? Array.Empty<NodeData>())
+                .SelectMany(n => (n.lines ?? Array.Empty<LineData>()).Concat((n.choices ?? Array.Empty<ChoiceData>()).SelectMany(c => c.lines ?? Array.Empty<LineData>())));
+            foreach (LineData line in lines)
+            {
+                if (string.IsNullOrEmpty(line.expression))
+                    continue;
+                if (!LookKeys.Expressions.Contains(line.expression))
+                    errors.Add($"Dialog '{d.id}' line '{line.id}' has unknown expression '{line.expression}' ({string.Join(", ", LookKeys.Expressions)}).");
+                if (line.speaker != DialogSpeaker.Traveller.ToString())
+                    errors.Add($"Dialog '{d.id}' line '{line.id}' gives the desk an expression; only traveller lines have one.");
+            }
+        }
+    }
+
+    /// <summary>A gender's look: outfit and hair present, a real signature item, labels within the cap and ASCII, covers naming other slots, wig and back only on hair.</summary>
+    private static void CheckGenderLook(GenderLookData g, string owner, List<string> errors)
+    {
+        if (!ParseEnum(g.signature, out LookSlot signature))
+        {
+            errors.Add($"{owner} has unknown signature slot '{g.signature}'.");
+            return;
+        }
+
+        var items = new (LookSlot slot, ItemData item)[]
+        {
+            (LookSlot.Outfit, g.outfit), (LookSlot.Hair, g.hair), (LookSlot.FacialHair, g.facialHair), (LookSlot.Headwear, g.headwear), (LookSlot.Accessory, g.accessory)
+        };
+        foreach ((LookSlot slot, ItemData item) in items)
+        {
+            bool present = item != null && !string.IsNullOrWhiteSpace(item.label);
+            if ((slot == LookSlot.Outfit || slot == LookSlot.Hair) && !present)
+                errors.Add($"{owner} has no {slot}.");
+            if (slot == signature && !present)
+                errors.Add($"{owner}'s signature {slot} has no item (a signature is never an absence).");
+            if (!present)
+                continue;
+
+            if (item.label.Length > Looks.MaxLabelLength || !IsAscii(item.label))
+                errors.Add($"{owner} {slot} '{item.label}' must be ASCII and at most {Looks.MaxLabelLength} characters.");
+            if ((item.wig || item.back) && slot != LookSlot.Hair)
+                errors.Add($"{owner} {slot} '{item.label}' is marked wig or back, which only hair can be.");
+            foreach (string c in item.covers ?? Array.Empty<string>())
+                if (!ParseEnum(c, out LookSlot covered) || covered == slot)
+                    errors.Add($"{owner} {slot} '{item.label}' covers '{c}' (another slot's name).");
+        }
+    }
+
+    /// <summary>Look weights: 5 non-negative skin weights with a positive sum and hair colours other than grey with a positive sum (a place's lists are optional overrides).</summary>
+    private static void CheckWeights(LooksWeightData looks, string owner, bool required, List<string> errors)
+    {
+        float[] skin = looks?.skin ?? Array.Empty<float>();
+        if (required || skin.Length > 0)
+        {
+            if (skin.Length != LookKeys.SkinTones || skin.Any(x => x < 0f) || skin.Sum() <= 0f)
+                errors.Add($"{owner} needs looks.skin: {LookKeys.SkinTones} non-negative weights with a positive sum.");
+        }
+
+        HairWeightData[] hair = looks?.hair ?? Array.Empty<HairWeightData>();
+        if (required || hair.Length > 0)
+        {
+            if (hair.Length == 0 || hair.Any(h => h.weight < 0f) || hair.Sum(h => h.weight) <= 0f)
+                errors.Add($"{owner} needs looks.hair: colour weights with a positive sum.");
+            foreach (HairWeightData h in hair)
+                if (!LookKeys.HairColours.Contains(h.colour) || h.colour == LookKeys.Grey)
+                    errors.Add($"{owner} weights hair colour '{h.colour}' ({string.Join(", ", LookKeys.HairColours.Where(c => c != LookKeys.Grey))}; grey comes with age).");
+        }
+    }
+
+    /// <summary>True when the text is null or ASCII.</summary>
+    private static bool IsAscii(string text) => (text ?? string.Empty).All(ch => ch <= 127);
 
     // -----------------------------
     // Builders
@@ -636,14 +952,20 @@ public static class WorldContentGenerator
         place.displayName = p.displayName;
         place.nation = nation;
         place.era = era;
+        place.year = p.year;
         (place.birthYearMin, place.birthYearMax) = BirthYears(p, ageMin, ageMax);
         place.maleNames = p.maleNames ?? Array.Empty<string>();
         place.femaleNames = p.femaleNames ?? Array.Empty<string>();
         place.smallTalk = SmallTalk(place.id, p.smallTalk);
 
+        place.wardrobe = ToWardrobe(p.wardrobe);
+        place.looks = EffectiveLooks(country.looks, p.looks);
+
+        // The authored facts, then the Culture fact derived from the wardrobe (one source of truth).
         place.facts = (p.facts ?? Array.Empty<FactData>())
             .Select(f => new ProfileFact { category = (ClueCategory)Enum.Parse(typeof(ClueCategory), f.category), value = f.value })
             .ToList();
+        place.facts.Add(new ProfileFact { category = Looks.EvidenceCategory, value = Looks.CultureValue(place.wardrobe) });
 
         // Starting attribute scores follow the country's theme. No tier effects:
         // 40 places x tiers would flood the morning paper (history is piece 5).
@@ -653,6 +975,90 @@ public static class WorldContentGenerator
 
         EditorUtility.SetDirty(place);
         return place;
+    }
+
+    /// <summary>A source wardrobe as the asset stores it (a missing item is an empty one; flags read false when missing).</summary>
+    private static PlaceWardrobe ToWardrobe(WardrobeData w) => new PlaceWardrobe
+    {
+        male = ToGenderLook(w?.m),
+        female = ToGenderLook(w?.f)
+    };
+
+    private static GenderLook ToGenderLook(GenderLookData g) => new GenderLook
+    {
+        signature = g != null && ParseEnum(g.signature, out LookSlot s) ? s : LookSlot.Outfit,
+        outfit = ToItem(g?.outfit),
+        hair = ToItem(g?.hair),
+        facialHair = ToItem(g?.facialHair),
+        headwear = ToItem(g?.headwear),
+        accessory = ToItem(g?.accessory)
+    };
+
+    private static LookItem ToItem(ItemData i) => i == null || string.IsNullOrWhiteSpace(i.label)
+        ? new LookItem { label = string.Empty }
+        : new LookItem
+        {
+            label = i.label.Trim(),
+            leakable = i.leakable,
+            wig = i.wig,
+            back = i.back,
+            covers = (i.covers ?? Array.Empty<string>()).Where(c => ParseEnum(c, out LookSlot _)).Select(c => (LookSlot)Enum.Parse(typeof(LookSlot), c)).ToList()
+        };
+
+    /// <summary>A place's effective look weights: the country's, with each of the place's non-empty lists over it.</summary>
+    private static LookWeights EffectiveLooks(LooksWeightData country, LooksWeightData place)
+    {
+        float[] skin = place?.skin != null && place.skin.Length > 0 ? place.skin : country?.skin ?? new float[LookKeys.SkinTones];
+        HairWeightData[] hair = place?.hair != null && place.hair.Length > 0 ? place.hair : country?.hair ?? Array.Empty<HairWeightData>();
+        return new LookWeights
+        {
+            skin = (float[])skin.Clone(),
+            hair = hair.Select(h => new HairColourWeight { colour = h.colour, weight = h.weight }).ToList()
+        };
+    }
+
+    /// <summary>The shared look knobs.</summary>
+    private static LookRules BuildLookRules(LooksData l) => new LookRules
+    {
+        faceBands = l.faceBands.Select(b => new FaceBand { minAge = b.minAge, faces = b.faces.ToList() }).ToList(),
+        greyFromAge = l.greyFromAge,
+        wholeFigureLabel = l.wholeFigureLabel,
+        confusable = (l.confusable ?? Array.Empty<ConfusableData>()).Select(c => new ConfusablePair
+        {
+            placeA = c.a,
+            placeB = c.b,
+            slot = (LookSlot)Enum.Parse(typeof(LookSlot), c.slot),
+            gender = c.gender ?? string.Empty
+        }).ToList()
+    };
+
+    /// <summary>Writes Premades/Premade_{id}.asset: every field (once per run unless repeatable; impacts move the nation's score unless skipNationScore).</summary>
+    private static LegendarySO MakePremade(PremadeData m, Dictionary<string, NationEraProfileSO> places, Dictionary<string, ArchetypeSO> archetypes,
+                                           Dictionary<string, AttributeSO> attributes, HashSet<string> written)
+    {
+        LegendarySO premade = LoadOrCreate<LegendarySO>($"{WorldRoot}/Premades/Premade_{m.id}.asset", written);
+        NationEraProfileSO claim = places[m.place];
+        premade.id = m.id;
+        premade.displayName = m.name;
+        premade.birthDate = m.birthDate;
+        premade.gender = (TravellerGender)Enum.Parse(typeof(TravellerGender), m.gender);
+        premade.trueEra = claim.era;
+        premade.nation = claim.nation;
+        premade.archetype = archetypes[m.archetype];
+        premade.truePlace = string.IsNullOrEmpty(m.truePlace) ? null : places[m.truePlace];
+        premade.introLine = m.intro ?? string.Empty;
+        premade.recordNote = m.recordNote ?? string.Empty;
+        premade.dialogId = m.dialog ?? string.Empty;
+        premade.oncePerRun = !m.repeatable;
+        premade.authoredImpacts = (m.impacts ?? Array.Empty<ImpactData>()).Select(i => new TimelineImpact
+        {
+            attribute = attributes[i.attribute],
+            deltaOnCorrect = i.onCorrect,
+            deltaOnWrong = i.onWrong,
+            alsoAffectsNationScore = !i.skipNationScore
+        }).ToList();
+        EditorUtility.SetDirty(premade);
+        return premade;
     }
 
     private static TravelRuleSO MakeRule(RuleData r, Dictionary<string, NationSO> nations, Dictionary<string, EraSO> eras, HashSet<string> written)
@@ -667,12 +1073,13 @@ public static class WorldContentGenerator
     }
 
     /// <summary>
-    /// Writes the day's queue, tell count, tell channels, eras, countries and
-    /// rules. Legendary settings are left to their authors (missing legendaries
-    /// are dropped).
+    /// Writes the day's queue, tell count, tell channels, eras, countries,
+    /// rules, the premade pool and chance, and the forced slots (premade,
+    /// blueprint or both; authoritative).
     /// </summary>
-    private static DayPlanSO MakeDay(DayData d, string folder, CaseBlueprintSO blueprint, Dictionary<string, EraSO> eras,
-                                     Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules)
+    private static DayPlanSO MakeDay(DayData d, string folder, Authored authored, Dictionary<string, EraSO> eras,
+                                     Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules,
+                                     Dictionary<string, LegendarySO> premades)
     {
         DayPlanSO plan = LoadOrCreate<DayPlanSO>($"{folder}/{d.asset}.asset", null);
         var so = new SerializedObject(plan);
@@ -684,10 +1091,22 @@ public static class WorldContentGenerator
         tellChannels.arraySize = channels.Length;
         for (int i = 0; i < channels.Length; i++)
             tellChannels.GetArrayElementAtIndex(i).enumValueIndex = (int)(TellChannel)Enum.Parse(typeof(TellChannel), channels[i]);
-        SetArray(so, "possibleBlueprints", new Object[] { blueprint });
-        DropMissing(so, "availableLegendaries");
-        SetArray(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
-        SetArray(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
+        SerializedArrays.Set(so, "possibleBlueprints", new Object[] { authored.blueprint });
+        SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
+        so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
+        SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
+        SerializedArrays.Set(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
+
+        ForcedData[] forcedData = d.forced ?? Array.Empty<ForcedData>();
+        SerializedProperty forced = so.FindProperty("forcedCases");
+        forced.arraySize = forcedData.Length;
+        for (int i = 0; i < forcedData.Length; i++)
+        {
+            SerializedProperty el = forced.GetArrayElementAtIndex(i);
+            el.FindPropertyRelative("caseIndex1Based").intValue = forcedData[i].slot;
+            el.FindPropertyRelative("caseBlueprint").objectReferenceValue = string.IsNullOrEmpty(forcedData[i].blueprint) ? null : authored.forcedBlueprints[forcedData[i].blueprint];
+            el.FindPropertyRelative("legendary").objectReferenceValue = string.IsNullOrEmpty(forcedData[i].premade) ? null : premades[forcedData[i].premade];
+        }
 
         EraWeightData[] weightsData = d.eras ?? Array.Empty<EraWeightData>();
         SerializedProperty weights = so.FindProperty("eraWeights");
@@ -742,6 +1161,7 @@ public static class WorldContentGenerator
         askLabel = i.askLabel,
         backLabel = i.backLabel,
         smallTalkLabel = i.smallTalkLabel,
+        lookLabel = i.lookLabel,
         smallTalkPrompt = new LineText(InterviewLineId("smallTalkPrompt"), i.smallTalkPrompt),
         menuCapacity = i.menuCapacity
     };
@@ -788,7 +1208,8 @@ public static class WorldContentGenerator
         {
             id = l.id,
             speaker = ParseEnum(l.speaker, out DialogSpeaker speaker) ? speaker : DialogSpeaker.Traveller,
-            text = l.text
+            text = l.text,
+            expression = l.expression ?? string.Empty
         }).ToList();
 
     /// <summary>A day gate at <paramref name="threshold"/> when the question starts after day 1, else nothing.</summary>
@@ -855,29 +1276,32 @@ public static class WorldContentGenerator
         Enum.TryParse(text, out value) && Enum.IsDefined(typeof(T), value);
 
     /// <summary>
-    /// Sets every world array of the library and the interview (authoritative),
-    /// rewires the triggers (the hand-authored ones kept in order, then the
-    /// generated unlock triggers) and drops missing references from the rest.
+    /// Sets every world array of the library, the interview, the premades and
+    /// the look rules (authoritative), rewires the triggers (the hand-authored
+    /// ones kept in order, then the generated unlock triggers) and drops
+    /// missing references from the rest.
     /// </summary>
     private static void WireLibrary(ContentLibrarySO lib, DayPlanSO[] days, EraSO[] eras, NationSO[] nations, NationEraProfileSO[] places,
                                     ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
-                                    InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks)
+                                    InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks,
+                                    LegendarySO[] premades, LookRules lookRules)
     {
         var so = new SerializedObject(lib);
-        SetArray(so, "dayPlans", days);
-        SetArray(so, "eras", eras);
-        SetArray(so, "nations", nations);
-        SetArray(so, "nationEraProfiles", places);
-        SetArray(so, "archetypes", archetypes);
-        SetArray(so, "attributes", attributes);
-        SetArray(so, "referenceBooks", books);
+        SerializedArrays.Set(so, "dayPlans", days);
+        SerializedArrays.Set(so, "eras", eras);
+        SerializedArrays.Set(so, "nations", nations);
+        SerializedArrays.Set(so, "nationEraProfiles", places);
+        SerializedArrays.Set(so, "archetypes", archetypes);
+        SerializedArrays.Set(so, "attributes", attributes);
+        SerializedArrays.Set(so, "referenceBooks", books);
         so.FindProperty("interview").boxedValue = interview;
-        SetArray(so, "questions", questions);
-        SetArray(so, "dialogs", dialogs);
-        SetArray(so, "timelineTriggers", AuthoredTriggers(so).Concat(unlocks).ToArray());
-        DropMissing(so, "clues");
-        DropMissing(so, "legendaries");
-        DropMissing(so, "effects");
+        SerializedArrays.Set(so, "questions", questions);
+        SerializedArrays.Set(so, "dialogs", dialogs);
+        SerializedArrays.Set(so, "timelineTriggers", AuthoredTriggers(so).Concat(unlocks).ToArray());
+        SerializedArrays.Set(so, "legendaries", premades);
+        so.FindProperty("lookRules").boxedValue = lookRules;
+        SerializedArrays.DropMissing(so, "clues");
+        SerializedArrays.DropMissing(so, "effects");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }
@@ -925,39 +1349,6 @@ public static class WorldContentGenerator
         return src;
     }
 
-    private static void SetArray(SerializedObject so, string prop, IReadOnlyList<Object> values)
-    {
-        SerializedProperty p = so.FindProperty(prop);
-        if (p == null)
-        {
-            Debug.LogError($"[WorldContentGenerator] '{so.targetObject.name}' has no serialized field '{prop}'.");
-            return;
-        }
-        p.arraySize = values.Count;
-        for (int i = 0; i < values.Count; i++)
-            p.GetArrayElementAtIndex(i).objectReferenceValue = values[i];
-    }
-
-    /// <summary>Removes null (deleted) references from an object array property.</summary>
-    private static void DropMissing(SerializedObject so, string prop)
-    {
-        SerializedProperty p = so.FindProperty(prop);
-        if (p == null)
-        {
-            Debug.LogError($"[WorldContentGenerator] '{so.targetObject.name}' has no serialized field '{prop}'.");
-            return;
-        }
-
-        var kept = new List<Object>();
-        for (int i = 0; i < p.arraySize; i++)
-        {
-            Object o = p.GetArrayElementAtIndex(i).objectReferenceValue;
-            if (o != null)
-                kept.Add(o);
-        }
-        SetArray(so, prop, kept);
-    }
-
     /// <summary>Loads or creates an asset; records its path in <paramref name="written"/> (when given) so pruning keeps it.</summary>
     private static T LoadOrCreate<T>(string path, HashSet<string> written) where T : ScriptableObject
     {
@@ -1003,6 +1394,7 @@ public static class WorldContentGenerator
     {
         public int travellerAgeMin = 18;
         public int travellerAgeMax = 70;
+        public LooksData looks;
         public ContentData content;
         public EraData[] eras;
         public CountryData[] countries;
@@ -1012,7 +1404,66 @@ public static class WorldContentGenerator
         public InterviewData interview;
         public QuestionData[] questions;
         public DialogData[] dialogs;
+        public PremadeData[] premades;
     }
+
+    /// <summary>The shared look knobs: face bands, grey age, the premade garment label, confusable place pairs.</summary>
+    [Serializable] private sealed class LooksData
+    {
+        public FaceBandData[] faceBands;
+        public int greyFromAge;
+        public string wholeFigureLabel;
+        public ConfusableData[] confusable;
+    }
+
+    [Serializable] private sealed class FaceBandData { public int minAge; public string[] faces; }
+
+    /// <summary>Two places whose items in a slot look alike ("why" is a note for reviewers).</summary>
+    [Serializable] private sealed class ConfusableData { public string a; public string b; public string slot; public string gender; }
+
+    /// <summary>Skin weights (tones 1..5) and hair colour weights; on a place, each non-empty list overrides the country's.</summary>
+    [Serializable] private sealed class LooksWeightData { public float[] skin; public HairWeightData[] hair; }
+
+    [Serializable] private sealed class HairWeightData { public string colour; public float weight; }
+
+    [Serializable] private sealed class WardrobeData { public GenderLookData m; public GenderLookData f; }
+
+    /// <summary>One gender's look; a missing item is none.</summary>
+    [Serializable] private sealed class GenderLookData
+    {
+        public string signature;
+        public ItemData outfit;
+        public ItemData hair;
+        public ItemData facialHair;
+        public ItemData headwear;
+        public ItemData accessory;
+    }
+
+    /// <summary>A worn item; the flags read false when missing.</summary>
+    [Serializable] private sealed class ItemData { public string label; public bool leakable; public bool wig; public bool back; public string[] covers; }
+
+    /// <summary>A premade: missing truePlace, intro, recordNote and dialog mean none; missing repeatable means once per run.</summary>
+    [Serializable] private sealed class PremadeData
+    {
+        public string id;
+        public string name;
+        public string gender;
+        public string place;
+        public string truePlace;
+        public string birthDate;
+        public string archetype;
+        public string intro;
+        public string recordNote;
+        public string dialog;
+        public bool repeatable;
+        public ImpactData[] impacts;
+    }
+
+    /// <summary>A premade's timeline impact; a missing skipNationScore means the delta also moves the nation's score.</summary>
+    [Serializable] private sealed class ImpactData { public string attribute; public float onCorrect; public float onWrong; public bool skipNationScore; }
+
+    /// <summary>A forced slot: a premade id, a blueprint asset path, or both.</summary>
+    [Serializable] private sealed class ForcedData { public int slot; public string premade; public string blueprint; }
 
     /// <summary>Authored assets the world is wired into (asset paths).</summary>
     [Serializable] private sealed class ContentData
@@ -1029,7 +1480,7 @@ public static class WorldContentGenerator
 
     [Serializable] private sealed class EraData { public string id; public string displayName; public int order; public string[] smallTalk; }
 
-    [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; }
+    [Serializable] private sealed class CountryData { public string id; public string displayName; public BaselineData[] baselines; public LooksWeightData looks; }
 
     [Serializable] private sealed class BaselineData { public string attribute; public float score; }
 
@@ -1046,6 +1497,8 @@ public static class WorldContentGenerator
         public string[] maleNames;
         public string[] femaleNames;
         public string[] smallTalk;
+        public WardrobeData wardrobe;
+        public LooksWeightData looks;
     }
 
     [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; }
@@ -1064,6 +1517,12 @@ public static class WorldContentGenerator
         public EraWeightData[] eras;
         public string[] countries;
         public string[] rules;
+        /// <summary>Premade ids that may roll this day.</summary>
+        public string[] premades;
+        /// <summary>Forced slots (premade and/or blueprint).</summary>
+        public ForcedData[] forced;
+        /// <summary>Chance per slot of a pooled premade (required above 0 with a pool).</summary>
+        public float premadeChance;
     }
 
     /// <summary>The interview's wording (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>
@@ -1083,6 +1542,7 @@ public static class WorldContentGenerator
         public string backLabel;
         public string smallTalkLabel;
         public string smallTalkPrompt;
+        public string lookLabel;
         public int menuCapacity;
         public int maxLineChars;
     }
@@ -1117,7 +1577,7 @@ public static class WorldContentGenerator
 
     [Serializable] private sealed class NodeData { public string id; public LineData[] lines; public ChoiceData[] choices; }
 
-    [Serializable] private sealed class LineData { public string id; public string speaker; public string text; }
+    [Serializable] private sealed class LineData { public string id; public string speaker; public string text; public string expression; }
 
     [Serializable] private sealed class ChoiceData { public string id; public string label; public LineData[] lines; public string next; public string effect; }
 }

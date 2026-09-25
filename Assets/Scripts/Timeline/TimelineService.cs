@@ -358,7 +358,12 @@ public static class TimelineService
             dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
         }
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, null);
+        var premadeDialogs = new List<string>();
+        foreach (LegendarySO premade in lib.Legendaries)
+            if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
+                premadeDialogs.Add(premade.dialogId);
+
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs);
     }
 
     /// <summary>

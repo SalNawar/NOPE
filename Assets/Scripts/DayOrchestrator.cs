@@ -211,7 +211,9 @@ public sealed class DayOrchestrator : MonoBehaviour
 
     /// <summary>
     /// Closing time cut the queue short: warns (for designers) about scheduled
-    /// events and forced cases placed in slots the player never reached.
+    /// events, forced cases and forced premades placed in slots the player
+    /// never reached (a premade met on an earlier day left an ordinary
+    /// traveller in its slot, so it is not named).
     /// </summary>
     private void WarnAboutUnreachedContent(int firstUnreachedSlot, bool firstSlotBeforeEventsRan, int total)
     {
@@ -230,6 +232,10 @@ public sealed class DayOrchestrator : MonoBehaviour
 
             if (dayPlan != null && dayPlan.TryGetForcedCase(s, out CaseBlueprintSO forced) && forced != null)
                 missed.Add($"forced case {forced.name} (slot {s})");
+
+            if (dayPlan != null && dayPlan.TryGetForcedPremade(s, out LegendarySO premade) &&
+                Premades.SlotSource(true, _worldState != null && _worldState.HasFlag(FlagKeys.PremadeMet(premade.id)), false) == PremadeSlot.Forced)
+                missed.Add($"forced premade {premade.displayName} (slot {s})");
         }
 
         if (missed.Count > 0)

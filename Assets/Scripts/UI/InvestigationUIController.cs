@@ -135,6 +135,15 @@ public sealed class InvestigationUIController : MonoBehaviour
     public bool InterviewReachable =>
         !RichMode || (interactionPanel != null && transcriptWindow != null && transcriptChrome != null);
 
+    /// <summary>
+    /// True when a traveller's garments can be looked at and compared: always
+    /// in the text fallback (which prints the dress); in the rich desk only
+    /// when the wheel's ring (its "Look >" menu) and the compare bar are wired.
+    /// When false, GameManager generates no dress tell that day.
+    /// </summary>
+    public bool AppearanceReachable =>
+        !RichMode || (interactionPanel != null && compareController != null);
+
     // Fallback state
     private bool _fallbackBuilt;
     private GameObject _fallbackPanel;
@@ -165,6 +174,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
         if (RichMode && !InterviewReachable)
             Debug.LogWarning("[InvestigationUIController] Traveller wheel or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the wheel's look menu or the compare bar no garment could be compared, so the day leaks no dress.
+        if (RichMode && !AppearanceReachable)
+            Debug.LogWarning("[InvestigationUIController] Traveller wheel or compare bar not wired (interactionPanel or compareController): garments cannot be looked at and no dress tell is generated today. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Without the desk every document still reaches the PC, as its window.
         if (RichMode && !DeskReachable)
