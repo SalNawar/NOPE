@@ -1024,7 +1024,7 @@ Line numbers are the current file's.
 - **:54:** "A paper's scanned copy renders as a SCANNED page (white page + photo placeholder on dark scanner backing), multi-page, structured fields".
 - **:59:** "Deviation Report (the desktop app formerly titled 'Scanner'): …".
 - **:76:** "The clock pauses only while a citation slip is shown, and the slip keeps the PC screen on until acknowledged (the interview, scans and camera moves take real time and cost nothing else)".
-- **:82:** "white outline on visible booth clickables (CRT, READY, desk props, papers; a clickable whose sprite is hidden, a hit zone over other art such as the traveller, the calendar or the power button, gets the hand cursor only)".
+- **:82:** "white outline on visible booth clickables (CRT and its power button, READY, desk props, papers; a clickable whose sprite is hidden, a hit zone over other art such as the traveller, the calendar or the focus exit zone, gets the hand cursor only; the glass zone, which only keeps a click on the screen from leaving focus, shows the arrow)". The power button is a visible sprite (`EnsureClickable`, §2.15), so it gets the outline; the hit zones are the ones `EnsureHitZone` builds with a hidden renderer (the exit, calendar and traveller zones, and the glass zone, which is never interactable).
 - **:101-102:** "no menu is fuller than the traveller wheel shows (requests count only documents handed over on request)".
 - **:103:**
   - "it reports a traveller wheel that fits fewer choices than the content's menu capacity, a desk with fewer paper slots than a traveller's papers, and overlapping sorting bands (bands tested: `DeskGeometryTests`)";
@@ -1328,6 +1328,7 @@ The implementation plan (`docs/superpowers/plans/2026-09-25-physical-desk.md`) s
 - **One home per rule:** `CaseDocuments.ArrivalIndices` (the desk and the no-desk path) and `DocumentHandOvers.IsRequested` (`CaseDocument.Requested` and the validator) (§2.4, §2.11, §2.14, §5); `WirePersistentVoid` clears through `ClearPersistentCalls` (§2.15 item 4).
 - **`OverlayProjection` takes the canvas rect** each caller resolves once at `Awake` (`CanvasRectOf`), so nothing is looked up per frame (§2.10).
 - **The reply bubble** changes only for a choice that adds a traveller line; "Ask about home >" and "< Back" leave the last reply up (§1.7, §2.11).
+- **The hover line** (§3.4, FEATURES :82) names the focus exit zone, not the power button, among the hand-cursor-only hit zones, and says the glass zone shows the arrow (R37). The power button is a visible sprite and is outlined (added to the line in the final review, §10).
 
 ## 9. Verification (2026-09-25)
 
@@ -1384,3 +1385,4 @@ Run in the branch's own Unity 6000.4.11f1 editor through temporary `-executeMeth
 Five findings from the review after §9, each re-checked against the code at `6856c50` before it was fixed. The fixes change no scene or asset, so the builder is not re-run; the offline suite passes after each one.
 
 - **Inert papers swallowed the click that leaves focus on screens wider than 16:9** (fixed): a paper at the desk's right end shows at the left of the focused view there, and its collider, above the exit zone, took the click. R38: papers the booth puts away take no raycasts; `BoothRulesTests` pins that the exit zone is never up while the papers take input. §1.2, §1.9, §2.9, §3.4 (:18), §7. The collider switch itself is Assembly-CSharp; a merge re-run can check it with the Game view at 2560 × 1080 (focus, then press on a paper dragged to the desk's right end: the view leaves focus).
+- **§3.4's hover line named the power button as a hand-cursor-only hit zone** (fixed, docs only): the button is a visible sprite with the white outline, and the plan and FEATURES already named the focus exit zone and the glass zone's arrow. §3.4 (:82) now says what FEATURES says, both list the power button among the outlined clickables, and the departure is recorded under "Implementation plan departures".

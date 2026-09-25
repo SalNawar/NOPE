@@ -90,7 +90,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 ## Interaction feedback
 
 - [ ] Game cursor in every scene: arrow, or a hand over anything clickable (`InteractionFeedbackSO` via `RunConfig`; click points derived from the cursor art) (tested: `CursorHotspotTests`)
-- [ ] Hover highlight: white outline on visible booth clickables (CRT, READY, desk props, papers; a clickable whose sprite is hidden, a hit zone over other art such as the traveller, the calendar or the focus exit zone, gets the hand cursor only; the glass zone, which only keeps a click on the screen from leaving focus, shows the arrow), XP-amber outline on desktop UI buttons and icons (tested: `OutlineMaskTests`)
+- [ ] Hover highlight: white outline on visible booth clickables (CRT and its power button, READY, desk props, papers; a clickable whose sprite is hidden, a hit zone over other art such as the traveller, the calendar or the focus exit zone, gets the hand cursor only; the glass zone, which only keeps a click on the screen from leaving focus, shows the arrow), XP-amber outline on desktop UI buttons and icons (tested: `OutlineMaskTests`)
 - [ ] Hover outlines need Rectangle (not Tight/rotated) atlas packing on clickable sprites; otherwise a warning is logged
 
 ## Scoring & consequences
