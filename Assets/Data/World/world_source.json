@@ -116,12 +116,6 @@
         "runtimeFont": true,
         "fonts": [
           {
-            "file": "segoeui.ttf",
-            "face": 0,
-            "family": "Segoe UI",
-            "style": "Regular"
-          },
-          {
             "file": "tahoma.ttf",
             "face": 0,
             "family": "Tahoma",
@@ -266,12 +260,6 @@
         "language": "ar",
         "runtimeFont": true,
         "fonts": [
-          {
-            "file": "segoeui.ttf",
-            "face": 0,
-            "family": "Segoe UI",
-            "style": "Regular"
-          },
           {
             "file": "tahoma.ttf",
             "face": 0,
