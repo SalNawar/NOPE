@@ -210,6 +210,36 @@ public class GatesTests
         Assert.AreEqual("dlg:x:done", FlagKeys.DialogDone("x"));
     }
 
+    private static GateSnapshot LeaderSnap(string leaderId) => new GateSnapshot(
+        3, 40f, null, null, null,
+        new[] { new KeyValuePair<string, float>("attrTotal:art", 20f), new KeyValuePair<string, float>("attrTotal:democracy", -6f) },
+        null, null, leaderId);
+
+    [Test]
+    public void NationIsLeader_ReadsTheLeader_AndNeedsAKey()
+    {
+        Assert.IsTrue(Passes(TriggerConditionType.NationIsLeader, "china", 0f, LeaderSnap("china")));
+        Assert.IsFalse(Passes(TriggerConditionType.NationIsLeader, "japan", 0f, LeaderSnap("china")), "another nation");
+        Assert.IsFalse(Passes(TriggerConditionType.NationIsLeader, "china", 0f, LeaderSnap(null)), "no leader");
+        Assert.IsFalse(Passes(TriggerConditionType.NationIsLeader, "china", 0f, LeaderSnap("")), "no leader (blank)");
+        Assert.IsFalse(Passes(TriggerConditionType.NationIsLeader, null, 0f, LeaderSnap("china")), "an unresolved reference never passes");
+        Assert.IsNull(Snap().LeaderId, "the leader is an optional trailing argument");
+    }
+
+    [Test]
+    public void GlobalAttr_ComparesTheTotal_AMissingTotalReadsZero()
+    {
+        GateSnapshot s = LeaderSnap(null);
+        Assert.IsTrue(Passes(TriggerConditionType.GlobalAttrAtLeast, "attrTotal:art", 20f, s));
+        Assert.IsFalse(Passes(TriggerConditionType.GlobalAttrAtLeast, "attrTotal:art", 20.5f, s));
+        Assert.IsTrue(Passes(TriggerConditionType.GlobalAttrAtMost, "attrTotal:democracy", -6f, s));
+        Assert.IsFalse(Passes(TriggerConditionType.GlobalAttrAtMost, "attrTotal:democracy", -6.5f, s));
+        Assert.IsTrue(Passes(TriggerConditionType.GlobalAttrAtMost, "attrTotal:science", 0f, s), "a missing total reads 0");
+        Assert.IsFalse(Passes(TriggerConditionType.GlobalAttrAtMost, "attrTotal:science", -6f, s), "the Democratic Collapse trap: at -6 nothing fires before any send");
+        Assert.IsFalse(Passes(TriggerConditionType.GlobalAttrAtLeast, null, -100f, s), "an unresolved reference never passes");
+        Assert.IsFalse(Passes(TriggerConditionType.GlobalAttrAtMost, null, 100f, s), "an unresolved reference never passes");
+    }
+
     [Test]
     public void TriggerConditionType_KeepsItsSerializedInts()
     {
@@ -224,5 +254,8 @@ public class GatesTests
         Assert.AreEqual(8, (int)TriggerConditionType.DayAtLeast);
         Assert.AreEqual(9, (int)TriggerConditionType.StabilityAtMost);
         Assert.AreEqual(10, (int)TriggerConditionType.UpgradeOwned);
+        Assert.AreEqual(11, (int)TriggerConditionType.NationIsLeader);
+        Assert.AreEqual(12, (int)TriggerConditionType.GlobalAttrAtLeast, "the retuned Art Renaissance and Science Boom assets store 12");
+        Assert.AreEqual(13, (int)TriggerConditionType.GlobalAttrAtMost, "the retuned Democratic Collapse asset stores 13");
     }
 }

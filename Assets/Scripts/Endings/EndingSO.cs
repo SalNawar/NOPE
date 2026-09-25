@@ -2,25 +2,6 @@
 using UnityEngine;
 
 /// <summary>
-/// Condition type for an ending. Unused fields are ignored per type
-/// (see EndingService for evaluation logic).
-/// </summary>
-public enum EndingConditionType
-{
-    /// <summary>Timeline stability has dropped to GameConfigSO.firedAtStability or below.</summary>
-    Fired,
-
-    /// <summary>Player money has dropped to GameConfigSO.bankruptcyMoneyThreshold or below.</summary>
-    Bankrupt,
-
-    /// <summary>A global attribute total (TimelineKeys.GlobalAttr) is >= threshold. Uses attribute + threshold.</summary>
-    AttrTotalAtLeast,
-
-    /// <summary>Current day is >= threshold. Uses threshold.</summary>
-    DayAtLeast
-}
-
-/// <summary>
 /// A possible run outcome ("fired", "bankrupt", "timeline collapses into chaos",
 /// "you survived to retirement"). EndingService.Evaluate checks every EndingSO in
 /// the content library each time a game-over check runs and picks the

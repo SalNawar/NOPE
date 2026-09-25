@@ -23,6 +23,7 @@ public class EffectOpsTests
     [TestCase(EffectOpType.Cue, true)]
     [TestCase(EffectOpType.BriefingLine, false)]
     [TestCase(EffectOpType.NewsLine, false)]
+    [TestCase(EffectOpType.SetFact, false)]
     public void ActsWhileActive_OnlyTheContinuousModifiersAndCues(EffectOpType type, bool expected)
     {
         Assert.AreEqual(expected, EffectOps.ActsWhileActive(type));
@@ -48,5 +49,13 @@ public class EffectOpsTests
         Assert.AreEqual(14, (int)EffectOpType.Cue);
         Assert.AreEqual(15, (int)EffectOpType.BriefingLine);
         Assert.AreEqual(16, (int)EffectOpType.NewsLine);
+        Assert.AreEqual(17, (int)EffectOpType.SetFact);
+    }
+
+    [Test]
+    public void HistoryOnly_JustSetFact()
+    {
+        foreach (EffectOpType type in System.Enum.GetValues(typeof(EffectOpType)))
+            Assert.AreEqual(type == EffectOpType.SetFact, EffectOps.HistoryOnly(type), type.ToString());
     }
 }

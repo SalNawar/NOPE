@@ -44,7 +44,16 @@ public enum TriggerConditionType
     StabilityAtMost,
 
     /// <summary>The upgrade is owned (WorldState.HasUpgrade). key = UpgradeSO.id; never the 'upgrade:x' flag an unlock effect may set.</summary>
-    UpgradeOwned
+    UpgradeOwned,
+
+    /// <summary>The nation currently leads the timeline (WorldState.history.leaderId). key = nation id.</summary>
+    NationIsLeader,
+
+    /// <summary>The global attribute total (attrTotal:{id}, deltas only; a missing total reads 0) >= threshold. key = the attrTotal key.</summary>
+    GlobalAttrAtLeast,
+
+    /// <summary>The global attribute total (a missing total reads 0, so a threshold >= 0 passes before any send) <= threshold. key = the attrTotal key.</summary>
+    GlobalAttrAtMost
 }
 
 /// <summary>One gate condition as the rules read it: its type and the plain key and threshold it compares.</summary>
@@ -53,7 +62,7 @@ public readonly struct GateCondition
     /// <summary>What the condition tests.</summary>
     public readonly TriggerConditionType Type;
 
-    /// <summary>The counter, flag, upgrade, score or dominance key; null means an unresolved reference.</summary>
+    /// <summary>The counter, flag, upgrade, score, dominance or nation key; null means an unresolved reference.</summary>
     public readonly string Key;
 
     /// <summary>Numeric threshold (counters, scores, day, stability).</summary>
@@ -70,7 +79,7 @@ public readonly struct GateCondition
 
 /// <summary>
 /// A frozen copy of what gates read: day, stability, flags, owned upgrades,
-/// counters, scores and dominance tiers. The constructor copies every
+/// counters, scores, dominance tiers and the timeline leader. The constructor copies every
 /// collection, so later changes to the world never change an evaluation. A
 /// null or blank argument reads false or 0, and a missing counter or score
 /// reads 0 (like WorldState.HasFlag/GetCounter and TimelineStateData.GetScore).
@@ -95,15 +104,17 @@ public sealed class GateSnapshot
     /// <summary>Score values by key (the first entry of a key wins, like TimelineStateData.GetScore).</summary>
     private readonly Dictionary<string, float> _scores = new Dictionary<string, float>();
 
-    /// <summary>Copies the given state. Null collections count as empty.</summary>
+    /// <summary>Copies the given state. Null collections count as empty; a null or blank leader is none.</summary>
     public GateSnapshot(int day, float stability,
                         IEnumerable<string> flags, IEnumerable<string> upgradeIds,
                         IEnumerable<KeyValuePair<string, int>> counters,
                         IEnumerable<KeyValuePair<string, float>> scores,
-                        IEnumerable<string> dominantKeys, IEnumerable<string> supportingKeys)
+                        IEnumerable<string> dominantKeys, IEnumerable<string> supportingKeys,
+                        string leaderId = null)
     {
         Day = day;
         Stability = stability;
+        LeaderId = string.IsNullOrWhiteSpace(leaderId) ? null : leaderId;
         _flags = Copy(flags);
         _upgrades = Copy(upgradeIds);
         _dominant = Copy(dominantKeys);
@@ -125,6 +136,9 @@ public sealed class GateSnapshot
 
     /// <summary>Timeline stability (0..100).</summary>
     public float Stability { get; }
+
+    /// <summary>The nation leading the timeline (WorldState.history.leaderId); null when none.</summary>
+    public string LeaderId { get; }
 
     /// <summary>True when the flag is set.</summary>
     public bool HasFlag(string flag) => !string.IsNullOrEmpty(flag) && _flags.Contains(flag);
@@ -182,6 +196,9 @@ public static class Gates
             case TriggerConditionType.DayAtLeast: return s.Day >= c.Threshold;
             case TriggerConditionType.StabilityAtMost: return s.Stability <= c.Threshold;
             case TriggerConditionType.UpgradeOwned: return s.HasUpgrade(c.Key);
+            case TriggerConditionType.NationIsLeader: return c.Key != null && s.LeaderId != null && string.Equals(s.LeaderId, c.Key, System.StringComparison.Ordinal);
+            case TriggerConditionType.GlobalAttrAtLeast: return c.Key != null && s.Score(c.Key) >= c.Threshold;
+            case TriggerConditionType.GlobalAttrAtMost: return c.Key != null && s.Score(c.Key) <= c.Threshold;
             default: return false;
         }
     }

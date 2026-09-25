@@ -58,7 +58,12 @@ public enum EffectOpType
     BriefingLine,
 
     /// <summary>stringParam = line added to tomorrow's newsletter</summary>
-    NewsLine
+    NewsLine,
+
+    // ---- Instant, history rules only ----
+
+    /// <summary>Instant: profile = the target place, category = the fact, stringParam = the new value. History rules only (EffectOps.HistoryOnly).</summary>
+    SetFact
 }
 
 /// <summary>Rules over effect ops, pure so they are tested headless.</summary>
@@ -67,9 +72,10 @@ public static class EffectOps
     /// <summary>
     /// True for the continuous ops that change play for as long as the effect
     /// is active (legendary, liar and pay bonuses, visitor and blueprint
-    /// weights, shop discounts, cues); false for the instant ops and for
-    /// BriefingLine/NewsLine, which act once or only through the next
-    /// morning's paper. A narrative dialog's effect may hold only the latter.
+    /// weights, shop discounts, cues); false for the instant ops (SetFact
+    /// included, see <see cref="HistoryOnly"/>) and for BriefingLine/NewsLine,
+    /// which act once or only through the next morning's paper. A narrative
+    /// dialog's effect may hold only the latter.
     /// </summary>
     public static bool ActsWhileActive(EffectOpType type)
     {
@@ -87,4 +93,12 @@ public static class EffectOps
                 return false;
         }
     }
+
+    /// <summary>
+    /// Ops only a history rule's effect may hold: a night-latched fact write
+    /// (SetFact). Generate World rejects them in dialog effects; the content
+    /// validator rejects them in slot-outcome, upgrade, tier, leader and dialog
+    /// effects and in a trigger that is not one-shot.
+    /// </summary>
+    public static bool HistoryOnly(EffectOpType type) => type == EffectOpType.SetFact;
 }
