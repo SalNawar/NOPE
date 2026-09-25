@@ -42,3 +42,9 @@ Physical intercom and document slot are Tier 2 extras, not verified physical int
 
 ## Hybrid production supersedes earlier flat-scene approach
 See ../TimeDesk/HybridScene/SCENE_CONTRACT.md for the current layer/model/animation separation and source-code integration notes. Image mockups are concept references, not 3D assets. Megabuildings must be locked independently; cars must never be baked into buildings or hall. No removed installers are to be recreated.
+
+## Amendment (piece 7, 2026-09-25)
+Source: docs/superpowers/specs/2026-09-25-physical-desk-design.md (the physical desk and the traveller wheel).
+- Supersedes line 10 ("do not invent physical scanning mechanics") and the deferred extras' "Physical intercom and document slot ... The PC currently hosts intercom requests and scanned-document investigation": the desk has physical papers the player drags, a working scanner tray (a paper dropped on its glass bed opens its scanned copy on the PC) and an intercom speaker that opens the traveller wheel.
+- Supersedes the READY/NEXT line's "focus binding": READY only calls the next traveller; clicking the CRT focuses the PC.
+- The CRT needs a power button and an LED on its bezel, and a blank glass whose inscribed 4:3 rectangle the game fills with the live desktop.

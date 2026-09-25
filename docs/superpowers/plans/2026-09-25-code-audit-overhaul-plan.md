@@ -6,7 +6,7 @@ refactor spaghetti and redundant code, remove hard-coded values and garbage code
 rewrite for efficiency, eliminate dependencies, write tests and make sure the code passes
 them. This document is the plan, written BEFORE execution.
 
-**Runs after:** pieces 7 (physical desk), 8 (traveller wheel), 4 (characters), 5 (history),
+**Runs after:** pieces 7 (physical desk), 8 (traveller wheel content: piece 7 ships the basic wheel), 4 (characters), 5 (history),
 6 (UI reacts), 9 (translation) are merged to main. The ChatGPT/art work (art brief, adopting
 Codex's hybrid office) stays last, after this overhaul, unless Saleh reorders.
 

@@ -6,6 +6,25 @@ Saleh: "everything the bg of your pc the font color and style even approve and r
 
 The office PC now belongs to the present that history produced. Piece 5 decides, each night, which country leads the Future. From the next morning the desk takes on that country's culture: the wallpaper, the window and taskbar colours, the fonts, Accept and Deny (colour, not position), the newspaper mastheads and a set of about 30 short labels in that country's language, with a small English gloss on every control that decides a case. The wallet is paid in the Future currency. Evidence never changes: papers, books, records and answers keep their canonical Latin values, so every comparison works exactly as before. Before any country leads, the desk keeps today's neutral XP look, which becomes one theme among nine.
 
+## Amendments from piece 7 (2026-09-25), read first
+
+Piece 7 (the physical desk and the basic traveller wheel, `docs/superpowers/specs/2026-09-25-physical-desk-design.md`) lands before this piece and changes the surfaces this draft themes. Piece 6 re-decides the rows below before its plan; this draft's own lines are otherwise not edited.
+
+- **Surfaces** (U11 :27, the surfaces table :94-97): the intercom panel row goes. The traveller wheel (its ring buttons and centre slot), the speech bubble and the desk tooltip (one `OverlayCallout` component, two instances) are new overlay surfaces; themed or neutral is piece 6's decision (piece 7 builds them neutral).
+- **Theme roles 13, 17 and 18** (:297, :301-302): the intercom's `ActionButtonTemplate`, `IntercomPanel` and its title are gone. The wheel's ring buttons replace role 13; roles 17 and 18 have no target.
+- **Keys** (:492-494, :506, :508, :511, :528, :543, :743, :748, :756, :759); every player-visible string piece 7 adds or changes:
+  - `intercom.title` and `intercom.actionSample` go (with the flavour row at :748);
+  - `window.scanner` and `icon.scanner` read "Deviation Report" (the flavour rows :756 and :759 are translated again);
+  - `window.material` reads "Material Analysis";
+  - `compare.intercomLabel` becomes a traveller label, "Traveller · {0}";
+  - `desktop.back` ("< Office", :506) goes with the desktop's Back button; the taskbar's "< Desk" is a new key;
+  - `startmenu.power` ("Power", :511, flavour row :743) reads "Quit game"; "Turn off screen" is a new key;
+  - `results.unproven` (:528) ends "(log a deviation before denying)";
+  - new keys: the idle line "Waiting for the next traveller", the scan note "Drag papers onto the scanner to read them on the PC.", the wheel note "Click the traveller to talk and ask for papers.", and the four tooltip templates "Credits: {0}", "Day {0}", "Timeline stability: {0}", "{0}".
+- **Copy held in ScriptableObjects** (`DeskConfigSO.scanHint` and `wheelHint`, the `DeskReactionSO.tooltip` templates) is UI copy, not content and not diegetic evidence (Z4 covers documents, books and records), so it becomes keys under this draft's R2: piece 6 decides whether the fields then hold a key or move into the table. Its key walk must include these fields, which a walk of the builder and the code would not find.
+- **The apply walk** (:423) **and the completeness check** (:599): the desktop canvas is a World Space canvas, always active, under `OfficeRoot/CRTMonitor/ScreenAnchor`; the overlay canvas gains `TravellerWheel` and two `OverlayCallout`s (`SpeechBubble`, `DeskTooltip`); the world gains the scan and wheel notes (world TMP texts).
+- **Verification** (:1020): "READY, focus the monitor": READY no longer focuses; click the CRT.
+
 Line numbers refer to `efe385d` on `feat/identity-lies` (piece 2 implemented). Pieces 3, 4 and 5 land in between and move lines; the piece-6 plan re-reads every file before anchoring an edit, and the implemented code wins over this text. Names from piece 3 are its spec's (`scratchpad/specs/2026-09-24-dialog-questions-design.md`, committed at `fbf4905`). Pieces 4 and 5 were drafted in parallel with this spec: names from them are their draft specs' (`scratchpad/specs/2026-09-24-characters-design.md`, `scratchpad/specs/2026-09-24-history-facts-design.md`), within their decision files (`piece4_decisions.md`, `piece5_decisions.md`). §2.2 states the piece-5 contract exactly as piece 5's §2.16 offers it, and the plan's first task fills in the implemented names (§2.2 binding tables).
 
 ## 0. Decisions

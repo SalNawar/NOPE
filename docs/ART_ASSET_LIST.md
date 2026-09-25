@@ -48,7 +48,7 @@ Style anchors already in the repo (attach to ChatGPT as reference): `ArtDelivera
 2. **partition.png**: placeholder 120x240, deliver **480x960**, transparent. One tall privacy-booth partition angled toward the viewer. The SAME file is used left and right, so make it symmetric or set Flip X on `RightPartition`.
 3. **desk.png**: placeholder 400x90, deliver **1600x360**, transparent. Clerk's desk front edge, worn laminate, memorabilia only at the far edges (centre and right stay clear for the sign and CRT).
 4. **traveller.png**: placeholder 60x110, deliver **240x440**, transparent. Default generic traveller at the counter, neutral pose.
-5. **crt.png**: placeholder 150x130, deliver **600x520**, transparent. Beige 90s CRT on a swivel base, tube depth on the RIGHT, glass turned LEFT toward the player, dim screen glow. Clickable, so clear silhouette.
+5. **crt.png**: placeholder 150x130, deliver **600x520**, transparent. Beige 90s CRT on a swivel base, tube depth on the RIGHT, glass turned LEFT toward the player, dim screen glow. Clickable, so clear silhouette. **Art request (piece 7):** a front-facing CRT whose glass is a large, blank 4:3 rectangle (the game draws the live desktop in the glass's inscribed 4:3 rectangle), with a power button and an LED on its bezel.
 6. **sign.png**: placeholder 96x50, deliver **384x200**, transparent. Standing desk placard "READY / NEXT" (this text may be baked). Clickable.
 7. **calendar.png**: placeholder 80x100, deliver **320x400**, transparent. Wall tear-off calendar, "DAY" header strip, big BLANK middle for the day number.
 8. **stabilitymonitor.png**: placeholder 110x80, deliver **440x320**, transparent. Timeline stability wall device. The game TINTS the whole sprite green/amber/red, so draw it in light greys and white. Blank display for the percentage.
@@ -79,8 +79,10 @@ These are **full 1672x941 scene layers**, not cropped props, so they will not li
 
 - **queue_bg.png** 1600x600 transparent: line of waiting silhouettes (toga, armour, robe, futuristic suit).
 - **queue_silhouette_01..06.png** 200x400 transparent.
-- **intercom.png** 320x240 transparent: desk intercom box (clicked to request documents).
-- **scanner_tray.png** 600x200 transparent: document slot on the desk.
+- **intercom.png** 320x240 transparent: desk intercom box (clicked to open the traveller wheel).
+- **scanner_tray.png** 600x200 transparent: desk scanner: drop papers on its glass bed.
+- **paper.png** 150x200 (in `Assets/Art/Office/Placeholder/`, piece 7): a blank paper sheet the desk's papers use; later one paper stock per document kind.
+- **crt_power.png** 28x28 and **crt_led.png** 8x8 (in `Assets/Art/Office/Placeholder/`, piece 7): the CRT bezel's power button and LED (draw the LED white: the game tints it on and off).
 - **desk_mug.png, desk_photo.png, desk_plant.png, desk_stamp.png** 200x200 transparent.
 - **lighting_overlay_warm.png / _cold.png / _alarm.png** 1920x1080 transparent, low opacity mood tints.
 
@@ -108,6 +110,7 @@ Window and shell chrome (9-slice friendly: flat stretchable middle, detail only 
 - start_menu_panel.png 256x384
 - tray_bg.png 256x40, tray_day / tray_credits / tray_stability.png 24x24
 - cursor_arrow.png, cursor_hand.png 32x32
+- cursor_grab.png, cursor_grabbing.png 32x32 (over and while dragging a desk paper; piece 7 shows the hand for now)
 - btn_back_to_office.png 200x48 ("< Office")
 
 ## C. Investigation UI: `Assets/Art/UI/Investigation/`

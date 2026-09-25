@@ -4,6 +4,23 @@
 
 Travellers get a body. A generated traveller is drawn from stacked layers (body, head, hair, facial hair, outfit, headwear, accessory) chosen from the place they **claim**; skin and hair colour follow the claim and are never tells. A liar's disguise can now leak through their dress: one garment, the signature item of their true home, worn over the claimed look. The player sees the traveller in a new desktop **Visitor** window, clicks a garment and compares it with a new reference book, the **Costume Guide**, exactly like a paper field or a spoken answer. The passport gains a photo cropped from the same figure. Premade characters (named, whole-drawn, with four expressions) join the queue on story slots or by chance; one of them is an authored liar. Everything runs on generated placeholder art until the ChatGPT art lands, and final art drops in by file name with no code change.
 
+## Amendments from piece 7 (2026-09-25), read first
+
+Piece 7 (the physical desk and the basic traveller wheel, `docs/superpowers/specs/2026-09-25-physical-desk-design.md`) lands before this piece and removes premises this draft relies on. Piece 4 re-decides the rows below before its plan; this draft's own lines are otherwise not edited.
+
+- **The booth figure is clickable; garments are inspected through the traveller wheel** (C4 :27, §1.2 :100-106, R12 :67, R14 :69, C8 :31 (its Visitor-window use), C18 :41 ("In the Visitor window a premade is one clickable region"), §2.9 `TravellerPortraitView` as the Visitor window :427-437, §2.11 the Visitor fields and `ShowRich` opening :469-481, §2.12 the Visitor window block :500-509, §3.3 the FEATURES :35/:827 lines :819 and :827, §6 :926-927, §7 UI crowding :946):
+  - C4's premise ("the desktop canvas and the booth are never visible together") is false: the desktop is drawn live on the CRT in the booth view, and clicking the booth figure opens the traveller wheel (piece-7 K20).
+  - Garments are inspected through the wheel ("Look >", piece-8 content once this piece exists): each visible garment is a choice, and its observation becomes a compare-clickable transcript row carrying `EvidenceKind.Appearance` (the item's label as text, the Culture value as evidence).
+  - The Visitor window, its auto-open (R12) and `VisitorReachable` (R14) are dropped; Appearance tells are gated by `InterviewReachable`.
+  - `TravellerPortraitView` stays only for the passport photo.
+- **`TravellerView` exists** (C19 :42, §2.9 `TravellerView` :421-425, §2.10 :441 and :457-460): piece 7 created `Assets/Scripts/Characters/TravellerView.cs` with `Show()`/`Clear()`, `figure` and `Anchor`; this piece extends it (`Show(look, art)`, the layer renderers) instead of creating it. `GameManager.travellerView` exists; its `Show`/`Clear` calls sit in `GameManager.SetTravellerAtDesk`.
+- **The builder keeps the anchor and the hit zone** (R11 :66, §2.12 `BuildTraveller` :493-499): when it replaces the placeholder with layer children it must keep `Traveller/Anchor` and `Traveller/TravellerHitZone`, and refit the hit zone to the figure (a child with its own hidden renderer: a collider on the `SortingGroup` root would report order 0).
+- **Speech bubbles** (W12 :50, §4 :845): delivered, minimal, by piece 7 (one `OverlayCallout`, shown by `TravellerWheel.Say`); polish goes to piece 8; walk-in and walk-out stay with the booth rework.
+- **"Clickable booth figure"** (§4 :849, not scheduled): delivered by piece 7.
+- **The passport photo** (C20 and R13, :43 and :68) also fills the physical paper's reserved `DeskDocument.photoSlot`.
+- **Both pieces edit `DocumentTemplateSO`** (`handOver` in piece 7, `showsPhoto` here), and **`ContentLibraryValidator.TravellerBlueprints` is now public** (piece 7), which R15 (`blueprintOverride` removed) edits: the plan re-reads both.
+- **Line numbers and paths:** the builder anchors this draft cites are stale again (piece 7 adds `Assets/Editor/OfficeSceneUIBuilder.Desk.cs`), as are the `DocumentWindowController` photo layout (the window stays) and the menu-capacity wording ("intercom" is now "the traveller wheel").
+
 Line numbers refer to `efe385d` on `feat/identity-lies` (piece 2, Tasks 1–12 committed). Piece 3 (`docs/superpowers/specs/2026-09-24-dialog-questions-design.md`, committed on `feat/dialog-questions` at `fbf4905`, under review, not yet implemented) lands between that commit and this piece; where this spec names piece-3 code it uses that spec's names:
 - `TellChannel { Papers, Answer }`, `Lies.Plan(..., papers, answerTellCategories, channels, facts, bookCategories, rng)`, `LiePlan.ChannelOf`/`TellValue`;
 - `EvidenceKind.Answer`, `CompareEvidence.ForAnswer`, `Discrepancy.source`, `DiscrepancyLog.Prove`/`Add`, `ClueLabels.Report`;
