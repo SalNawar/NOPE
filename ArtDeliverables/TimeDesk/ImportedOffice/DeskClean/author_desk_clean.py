@@ -3,7 +3,6 @@ Reuses editable project props where useful and reconstructs the desk equipment.
 """
 import sys,math,json
 from pathlib import Path
-from mathutils import Matrix
 P=Path('E:/unity/NOPE');HERE=P/'ArtDeliverables/TimeDesk/ImportedOffice/DeskClean'
 sys.path.insert(0,str(P/'ArtDeliverables/TimeDesk/HybridScene/BlenderOffice'))
 import artlib as A
@@ -53,7 +52,7 @@ def load(source,names):
             if o.type=='MESH':
                 for f in o.data.polygons:f.use_smooth=True
     return dst.collections
-load(P/'ArtDeliverables/TimeDesk/DeskFinish/DeskFinish.blend',['Finish_Mouse','Finish_Till','Finish_Inkpad','Finish_FormSorter','Finish_ComputerMedia','Finish_Tray','Finish_PaperBundle'])
+load(P/'ArtDeliverables/TimeDesk/DeskFinish/DeskFinish.blend',['Finish_Mouse','Finish_Till','Finish_Inkpad','Finish_FormSorter','Finish_Tray','Finish_PaperBundle'])
 load(P/'ArtDeliverables/TimeDesk/HybridScene/BlenderOffice/Booth_Hardware.blend',['Office_Stamp','Office_Next'])
 A.current=A.collections['Clean_Mouse']
 for o in list(A.current.objects):
@@ -97,31 +96,10 @@ for row,labels in enumerate([['7','8','9'],['4','5','6'],['1','2','3'],['0','.',
 text_top('Keyboard maker','OFFICE / INPUT',(.23,.036,.088),.004)
 for i in range(3):box('Status lens',(.201+i*.021,.037,.074),(.006,.002,.003),m('Teal'),.001)
 tube('Keyboard flex',[(.21,.026,.112),(.26,.013,.16),(.30,.006,.27)],.0022,m('Rubber'))
-# Compact rotary office phone, with smoothly joined handset forms and a real dial.
-group('Clean_Phone');wedge('Telephone rounded base',.235,.182,.026,.079,'Green')
-box('Phone lower seam',(0,.010,0),(.225,.020,.171),m('GreenDark'),.010)
-for x in [-.087,.087]:box('Handset cradle',(x,.098,.046),(.035,.053,.037),m('Green'),.010)
-# Transverse handset is assembled from a sculpted grip and rounded ear/mouth pieces.
-grip=box('Receiver central grip',(0,.130,.046),(.198,.030,.042),m('Green'),.014)
-for x in [-.104,.104]:
-    ob=box('Receiver ear cap',(x,.118,.046),(.071,.050,.067),m('Green'),.020)
-    box('Receiver inner cushion',(x,.095,.046),(.053,.010,.049),m('GreenDark'),.012)
-dial_y=.062;dial_z=-.026
-prior=set(A.current.objects)
-cylinder('Dial surround',(0,dial_y,dial_z),.064,.012,m('Case'),'y',64)
-cylinder('Dial ivory face',(0,dial_y+.007,dial_z),.058,.008,m('ABS'),'y',64)
-cylinder('Dial centre',(0,dial_y+.012,dial_z),.028,.004,m('Case'),'y',64)
-text_top('Telephone dial badge','OFFICE',(0,dial_y+.0145,dial_z),.005)
-for i in range(10):
-    angle=math.radians(20+i*29);x=math.sin(angle)*.044;z=dial_z+math.cos(angle)*.044
-    cylinder('Finger well',(x,dial_y+.012,z),.007,.003,m('Dark'),'y',24)
-    text_top('Dial number',str((i+1)%10),(math.sin(angle)*.054,dial_y+.0128,dial_z+math.cos(angle)*.054),.004)
-pivot=Vector(v((0,dial_y,dial_z)))
-tilt=Matrix.Translation(pivot)@Matrix.Rotation(-math.atan(.053/.182),4,'X')@Matrix.Translation(-pivot)
-for part in set(A.current.objects)-prior:part.matrix_world=tilt@part.matrix_world
-coil=[(-.144+math.cos(t)*.006,.017+math.sin(t)*.006,.045-t/(math.tau*18)*.145) for t in [j*math.tau/10 for j in range(181)]]
-phone_cord=tube('Coiled phone cable',[(-.133,.111,.046),(-.147,.050,.045)]+coil+[(-.11,.012,-.121),(-.082,.018,-.095)],.0018,m('Rubber'))
-phone_cord.data.resolution_u=2;phone_cord.data.bevel_resolution=2
+# Refine the pack silhouette and preserve its original dial UVs.
+sys.path.insert(0,str(HERE))
+import refine_phone
+refine_phone.build(A)
 # Readable calculator with quiet broad panels and softly capped functional keys.
 group('Clean_Calculator');wedge('Calculator housing',.124,.190,.016,.040,'Case')
 box('Calculator lower seam',(0,.008,0),(.120,.014,.184),m('Dark'),.006)
@@ -196,3 +174,7 @@ result=A.export_library('DeskClean')
 for item in result['models']:item['assetPath']='Assets/Art/Office/DeskClean/Models/'+item['name']+'.fbx'
 (HERE/'DeskClean_manifest.json').write_text(json.dumps(result,indent=2))
 print('EXPORTED',[(x['name'],x['triangles']) for x in result['models']])
+
+# Rebuild the connected cable and 2D paper after the full library export.
+import runpy
+runpy.run_path(str(HERE / "revise_desktop.py"), run_name="__main__")

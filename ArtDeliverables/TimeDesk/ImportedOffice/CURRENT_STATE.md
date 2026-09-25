@@ -1,4 +1,12 @@
-# Current state — desk task completed
+# Current state — custom anime desk shader
+
+The user rejected the previous phone and said the objects still lacked anime shading. A new custom shader, `NOPE/Desk Anime`, now replaces the PBR lighting on the desk and CRT. This is the current direction; the completion claims below describe the earlier checkpoint and are superseded by this revision.
+
+The curved pack phone replaces the primitive reconstruction, has clean materials and is separated from the till. The mouse cable reaches the computer; floppy disks are removed. Spare forms are the first two-triangle 2D prop trial, rendered from our Blender assets and lit with the same shader. The original room, floor, desk, lighting, boards and exterior remain preserved.
+
+See `DeskClean/ANIME_SHADER.md`, `DeskClean/anime_validation.json`, and the current Game view `../DeskFinish/Iterations/65_anime_desk.png`. The shader is reusable for other game props; it is currently installed only on the desktop. Do not claim the user has approved this shader or exact ReStory parity.
+
+## Previous PBR checkpoint (historical)
 
 25 September 2026, branch `art`.
 

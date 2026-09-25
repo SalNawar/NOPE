@@ -68,7 +68,7 @@ The reference screen supplies a large blue/green accent. Our blank office-view s
 
 ## 4. Material and shader treatment
 
-Use stable lit materials with consistent shadow, depth and normal passes. Nonmetallic plastic and coatings are the default. Introduce a custom shader only to solve an observed problem.
+The user explicitly requested a custom anime shader after judging the PBR pass insufficient. Use `NOPE/Desk Anime` for the current desk: three controlled diffuse tones, cool shadows, warm light, selective graphic highlights and restrained contours. Keep consistent shadow, depth and normal passes. See `DeskClean/ANIME_SHADER.md` for the actual material controls and reproduction. The roughness table below remains useful for Blender source previews; the Unity anime shader uses graphic highlight controls instead of a PBR specular lobe.
 
 | Surface | Proposed starting response | Visual check |
 | --- | --- | --- |

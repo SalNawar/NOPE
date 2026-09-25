@@ -1,0 +1,15 @@
+{
+  "CRT": "MonitorFocus",
+  "Back after CRT": "OfficeFocus",
+  "NEXT": "MonitorFocus",
+  "Back after NEXT": "OfficeFocus",
+  "shader": {
+    "shaderName": "NOPE/Desk Anime",
+    "hasErrors": false,
+    "messageCount": 0
+  },
+  "console": {
+    "count": 0,
+    "logs": []
+  }
+}

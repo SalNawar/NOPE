@@ -1,5 +1,7 @@
 # Completed desk art pass
 
+> Historical PBR checkpoint. The user subsequently rejected the primitive phone and requested an actual anime shader. The current phone, connected mouse cable, removed floppy disks and 2D paper trial are documented in `ANIME_SHADER.md`; `anime_validation.json` and capture `65_anime_desk.png` supersede the corresponding claims below.
+
 Final scene: `Assets/Scenes/OfficeScene.unity`. Final Game view: `../../DeskFinish/Iterations/60_desk_complete.png`.
 
 The user approved the softer, clean direction and requested completion of all desk props, with particular attention to the undersized phone and pen cup. The pass covers **20 placements**: the rebuilt CRT plus 19 other placements using 18 distinct models. A buried duplicate newspaper was deactivated.
