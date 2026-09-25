@@ -8506,7 +8506,7 @@
       },
       {
         "key": "desk.scanHint",
-        "text": "Drag papers onto the scanner to read them on the PC.",
+        "text": "Click a paper to read it; drag it onto the scanner to open it on the PC.",
         "gloss": "None",
         "tier": "Full"
       },

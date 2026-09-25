@@ -20,15 +20,19 @@ using UnityEngine.UI;
 ///   PC) and by the clone camera onto the office PC's glass, with screen
 ///   power [MonitorScreen, PcScreenClone, PcFrame, OfficeViewController];
 ///   EventSystem (new Input System)
-/// - HUD (day/money/stability), citation slip, verdict line  [OfficeUIController]
+/// - HUD (day/money/stability) on the desktop's taskbar; the citation slip and
+///   the verdict line on the office overlay (piece 10)  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: claim banner, directives, draggable/multi-page document
 ///   windows, a reference-book shelf with openable book windows, the interview
 ///   transcript, a visual compare bar, and Accept/Deny buttons, laid out for
 ///   the 4:3 desktop  [InvestigationUIController + CompareController]
 /// - The traveller wheel (the interview's choices around the traveller), the
-///   speech bubble, the desk tooltip and the fallback HUD on the office
-///   overlay canvas  [TravellerWheel, OverlayCallout]
+///   speech bubble (its answer pickable, above the wheel), the desk tooltip,
+///   the fallback HUD, the office case HUD (the claim tag and the office
+///   compare strip) and the stamp tray (Accept and Deny at the desk) on the
+///   office overlay canvas  [TravellerWheel, OverlayCallout, SpeechBubbleInput,
+///   OfficeCaseHud, StampTray]
 /// - The Office root: click boxes for the art's props, the physical desk
 ///   (papers, the scanner), the traveller, the READY sign, the readouts and
 ///   the office's input rules, all put on the art office at load by the
@@ -138,21 +142,10 @@ public static partial class OfficeSceneUIBuilder
         GameObject idleScreen = BuildDesktop(root, library);
         BuildTaskbar(root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
 
-        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18).
-        Transform verdictStrip = Panel(root, "VerdictStrip", new Vector2(0.25f, 0.855f), new Vector2(0.75f, 0.925f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
-        verdictStrip.GetComponent<Image>().raycastTarget = false;
-        TMP_Text verdictText = Text(root, "VerdictText", "", 26, TextAlignmentOptions.Center, new Vector2(0.25f, 0.86f), new Vector2(0.75f, 0.92f), Color.white,
-                                    ThemeRoleId.ScreenStrip, fit: true);
-        if (verdictStrip.GetSiblingIndex() > verdictText.transform.GetSiblingIndex())
-            verdictStrip.SetSiblingIndex(verdictText.transform.GetSiblingIndex()); // drawn behind the line
-        verdictStrip.gameObject.SetActive(false);
-
-        // Citation slip
-        Transform citation = Panel(root, "CitationPanel", Center, Center, Vector2.zero, new Vector2(560f, 320f), new Color(0.85f, 0.2f, 0.15f, 0.96f), ThemeRoleId.Alert);
-        TMP_Text citationText = Text(citation, "CitationText", UiText.Get("citation.title"), 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.28f), new Vector2(0.95f, 0.95f), Color.white,
-                                     ThemeRoleId.Alert);
-        Button citationContinue = MakeButton(citation, "ContinueButton", null, new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.24f), null, ThemeRoleId.Button, "citation.acknowledge");
-        citation.gameObject.SetActive(false);
+        // The verdict line and the citation slip moved to the office overlay (piece 10): the desktop keeps no copy.
+        DestroyChildIfPresent(root, "VerdictStrip");
+        DestroyChildIfPresent(root, "VerdictText");
+        DestroyChildIfPresent(root, "CitationPanel");
 
         // Briefing + Results: newsletter panels on the office overlay canvas, so
         // they read over the office, not on the PC's desktop.
@@ -175,15 +168,39 @@ public static partial class OfficeSceneUIBuilder
         MonitorScreen monitorScreen = BuildPcDesktop(canvas, deskConfig, out Camera frameCamera);
 
         // Office overlays, rebuilt each run with always-active hosts, above the
-        // newsletters: the fallback HUD, the PC frame, the traveller's speech
-        // bubble, the desk props' tooltip, and the traveller wheel (the
-        // interview's choices).
+        // newsletters, bottom to top: the fallback HUD, the office case HUD (the
+        // claim tag and the office compare strip), the PC frame, the traveller
+        // wheel (the interview's choices), the traveller's speech bubble (above
+        // the wheel, its answer pickable), the desk props' tooltip, the stamp
+        // tray, the verdict line and the citation slip.
         FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
+        OfficeCaseHud caseHud = BuildOfficeCaseHud(officeCanvas.transform, out GameObject officeCompareStrip, out TMP_Text officeCompareText);
         PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
         OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble);
-        OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
+        BuildBubbleInput(speechBubble, wheel);
         InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
+        OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip);
+        StampTray stampTray = BuildStampTray(officeCanvas.transform, deskConfig);
+
+        // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the claim tag's place (they never show together).
+        DestroyChildIfPresent(officeCanvas.transform, "VerdictStrip");
+        Transform verdictStrip = Panel(officeCanvas.transform, "VerdictStrip", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -ClaimStripTop - ClaimStripSize.y / 2f),
+                                       ClaimStripSize, ScreenStripColor, ThemeRoleId.ScreenStrip);
+        ((RectTransform)verdictStrip).pivot = Center;
+        verdictStrip.GetComponent<Image>().raycastTarget = false;
+        TMP_Text verdictText = Text(verdictStrip, "VerdictText", "", 26, TextAlignmentOptions.Center, new Vector2(0.02f, 0.04f), new Vector2(0.98f, 0.96f), Color.white,
+                                    ThemeRoleId.ScreenStrip, fit: true);
+        verdictText.raycastTarget = false;
+        verdictStrip.gameObject.SetActive(false);
+
+        // Citation slip (over the office and the frame; it still holds the day until Acknowledge).
+        DestroyChildIfPresent(officeCanvas.transform, "CitationPanel");
+        Transform citation = Panel(officeCanvas.transform, "CitationPanel", Center, Center, Vector2.zero, new Vector2(560f, 320f), new Color(0.85f, 0.2f, 0.15f, 0.96f), ThemeRoleId.Alert);
+        TMP_Text citationText = Text(citation, "CitationText", UiText.Get("citation.title"), 24, TextAlignmentOptions.Center, new Vector2(0.05f, 0.28f), new Vector2(0.95f, 0.95f), Color.white,
+                                     ThemeRoleId.Alert);
+        Button citationContinue = MakeButton(citation, "ContinueButton", null, new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.24f), null, ThemeRoleId.Button, "citation.acknowledge");
+        citation.gameObject.SetActive(false);
 
         var soView = new SerializedObject(officeView);
         SetRef(soView, "frame", pcFrame);
@@ -364,7 +381,7 @@ public static partial class OfficeSceneUIBuilder
         // the input rules and the binder that puts them on the art office at load.
         BoothCoordinator booth = BuildOffice(officeView, monitorScreen, framePower, deskConfig, contract, wheel,
                                              new[] { speechBubble, deskTooltip }, deskTooltip, trayClockText, shiftClock, library,
-                                             fallbackHud, out Clickable readySign);
+                                             fallbackHud, pcFrame, stampTray, caseHud, out Clickable readySign);
 
         // The desktop's own layer covers everything under its place (the canvas's windows and templates included).
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer);
@@ -395,6 +412,8 @@ public static partial class OfficeSceneUIBuilder
         var soCompare = new SerializedObject(compare);
         SetRef(soCompare, "compareBar", compareBar.gameObject);
         SetRef(soCompare, "compareText", compareText);
+        SetRef(soCompare, "officeBar", officeCompareStrip);
+        SetRef(soCompare, "officeText", officeCompareText);
         SetColor(soCompare, "matchColor", new Color(0.05f, 0.45f, 0.12f, 1f));
         SetColor(soCompare, "mismatchColor", new Color(0.72f, 0.1f, 0.08f, 1f));
         SetColor(soCompare, "neutralColor", new Color(0.18f, 0.15f, 0.05f, 1f));
@@ -419,6 +438,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "transcriptWindow", transcript);
         SetRef(soInvest, "transcriptChrome", transcriptChrome);
         SetRef(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
+        SetRef(soInvest, "hud", caseHud);
+        SetRef(soInvest, "stampTray", stampTray);
         SetRef(soInvest, "wheel", wheel);
         SetRef(soInvest, "idleScreen", idleScreen);
         // The 4:3 desktop: documents cascade on the left, clear of the icon
@@ -454,7 +475,7 @@ public static partial class OfficeSceneUIBuilder
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
         AssetDatabase.SaveAssets();
-        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (passport photo), scanner and reacting props, the layered traveller + wheel + speech bubble, the office's input rules, the binder and its scene contract, HUD, citation, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare, Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
+        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (PC bar + office strip), Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
     }
 
     // -----------------------------
