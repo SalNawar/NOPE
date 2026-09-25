@@ -244,7 +244,7 @@ Many retired files still sit in `Assets/Art` from the 2026-09-24 batch. Several 
 | `icon_settings`, `icon_power`, `tray_day`, `tray_credits`, `tray_stability` | `UI/Desktop/` | The Start menu and the tray print text. |
 | `scanner_backing`, `page_blank`, `refbook_page`, `claim_banner`, `compare_bar_neutral`/`_match`/`_mismatch`/`_deviation`, `citizen_records_frame`, `deviation_report_form`, `directives_sticky` | `UI/Investigation/` | Code-drawn themed windows and strips; the scanned copy reuses the paper face. |
 | `btn_accept`, `btn_deny` (normal, hover, pressed) | `UI/Investigation/` | Baked words. The decision buttons are themed per culture with fixed code glyphs (piece 6). |
-| `stamp_approved`, `stamp_denied`, `stamp_citation` | `UI/Investigation/`, `UI/DayFlow/` | Baked words, which break the language switch; see decision 8. |
+| `stamp_approved`, `stamp_denied`, `stamp_citation` | `UI/Investigation/`, `UI/DayFlow/` | Baked words, which break the language switch; the text-free ink marks (section 4) replace them. |
 | `agency_logo`, the nation seals | `UI/Investigation/` | Paper faces carry no emblems or seals. |
 | Per-nation document kits (Aegyptus, Albion, Helios, Latia, Norvik, Solaris; 24 files then), and the 128 kit files now on disk | `UI/Documents/<Country>/<Ancient/Old/Modern/Future>/` | The invented nations are gone; the game has six eras, not these four; the stocks bake text and field lines; the paper face is text-free with a code layout (section 4). |
 | Visitor trios, 240 × 440 (72 files), and the timeline cast | – | Characters are layered 1024 × 1536 figures (the character brief). |
