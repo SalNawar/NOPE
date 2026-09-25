@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 5d93d941bc930a6449f82a7a220f997c
+guid: 7b6d7fb026745144b978a51da954bbfd
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3023272610396077320
-    second: clock_hand_hour_0
+      213: -9213327780057577850
+    second: pc_close_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -50,7 +50,7 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 9
-  spritePivot: {x: 0.5, y: 0.1}
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: clock_hand_hour_0
+      name: pc_close_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 8
-        height: 30
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 80d73d1db62d4f920800000000000000
-      internalID: 3023272610396077320
+      spriteID: 6860e66c23fa32080800000000000000
+      internalID: -9213327780057577850
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      clock_hand_hour_0: 3023272610396077320
+      pc_close_0: -9213327780057577850
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

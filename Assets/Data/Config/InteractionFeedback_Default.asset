@@ -17,7 +17,7 @@ MonoBehaviour:
   handCursor: {fileID: 2800000, guid: 2ea1bf8102771ac4dafd659fe61e0ee4, type: 3}
   handHotspot: {x: 13, y: 3}
   outlineColor: {r: 1, g: 1, b: 1, a: 1}
-  worldOutlineWidth: 0.05
+  worldOutlineWidth: 0.006
+  outlineMaterial: {fileID: 2100000, guid: fa1265badcebd1040b22d80a19c395da, type: 2}
   uiOutlineColor: {r: 0.98, g: 0.72, b: 0.2, a: 1}
   uiOutlineDistance: {x: 2, y: -2}
-  outlineMaterial: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}

@@ -19,6 +19,8 @@ MonoBehaviour:
   startingStability: 100
   startingDay: 1
   officeSceneName: OfficeScene
+  officeGameplaySceneName: OfficeGameplay
+  officeContract: {fileID: 11400000, guid: f809aca13615892438afed83b80737f7, type: 2}
   homeSceneName: HomeScene
   titleSceneName: TitleScene
   fixedRunSeed: 0

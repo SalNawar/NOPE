@@ -1,0 +1,158 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c203aa088387174dbcc56269ab408a3, type: 3}
+  m_Name: OfficeSceneContract
+  m_EditorClassIdentifier: Assembly-CSharp::OfficeSceneContractSO
+  anchors:
+  - id: 0
+    fallbacks:
+    - ImportedOfficeDress/Desk/Retro CRT
+    hasDefault: 1
+    defaultPosition: {x: -1.64, y: 1.43, z: -0.13}
+    defaultYaw: 160
+  - id: 1
+    fallbacks: []
+    hasDefault: 1
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 2
+    fallbacks:
+    - HybridOffice/Booth/Finish_Mat
+    hasDefault: 1
+    defaultPosition: {x: 0, y: 1.07, z: -0.52}
+    defaultYaw: 0
+  - id: 3
+    fallbacks: []
+    hasDefault: 1
+    defaultPosition: {x: 1.08, y: 1.06, z: -0.33}
+    defaultYaw: 180
+  - id: 4
+    fallbacks: []
+    hasDefault: 1
+    defaultPosition: {x: 0, y: 0, z: 1.6}
+    defaultYaw: 180
+  - id: 5
+    fallbacks: []
+    hasDefault: 1
+    defaultPosition: {x: 0.45, y: 1.07, z: 0.95}
+    defaultYaw: 0
+  - id: 6
+    fallbacks:
+    - HybridOffice/Booth/Blender_Next
+    hasDefault: 1
+    defaultPosition: {x: 0, y: 1.06, z: 0.64}
+    defaultYaw: 180
+  - id: 7
+    fallbacks:
+    - ImportedOfficeDress/Desk/Clerk hotline
+    - HybridOffice/Booth/Finish_Intercom
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 8
+    fallbacks:
+    - HybridOffice/Booth/Blender_Stamp
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 9
+    fallbacks:
+    - HybridOffice/Booth/Finish_Till
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 10
+    fallbacks:
+    - HybridOffice/Booth/Blender_Stability
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 11
+    fallbacks:
+    - HybridOffice/Booth/Blender_DayCalendar
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 12
+    fallbacks:
+    - HybridOffice/Booth/Blender_Clock
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 13
+    fallbacks:
+    - DayNumber
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 14
+    fallbacks:
+    - StabilityPercent
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 15
+    fallbacks:
+    - CreditsNumber
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 16
+    fallbacks:
+    - ShiftClockDisplay
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 17
+    fallbacks:
+    - NextLabel
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 18
+    fallbacks:
+    - Main Camera
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 19
+    fallbacks:
+    - Cameras/OfficeVCam
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 20
+    fallbacks:
+    - ImportedOfficeDress/Desk/Desk calculator
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 21
+    fallbacks:
+    - ImportedOfficeDress/Desk/Pen pot
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  - id: 22
+    fallbacks:
+    - ImportedOfficeDress/Desk/Forms stapler
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
+  legacyRoots:
+  - GameManager
+  - DaySystem
+  - EventSystem
+  - Canvas
+  - OfficeOverlayCanvas
+  - OfficeRoot
+  - Cameras/MonitorVCam
