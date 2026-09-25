@@ -33,7 +33,7 @@ MonoBehaviour:
   - id: 3
     fallbacks: []
     hasDefault: 1
-    defaultPosition: {x: 1.08, y: 1.06, z: -0.33}
+    defaultPosition: {x: 1.02, y: 1.06, z: -0.46}
     defaultYaw: 180
   - id: 4
     fallbacks: []
