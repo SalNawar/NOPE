@@ -56,7 +56,7 @@ public class DeskViewPoseTests
         var t = new DeskViewTuning();
         Assert.AreEqual(0.6f, t.forward, Eps);
         Assert.AreEqual(0.3f, t.rise, Eps);
-        Assert.AreEqual(0f, t.pitch, Eps);
+        Assert.AreEqual(-4f, t.pitch, Eps);
         Assert.AreEqual(0.35f, t.seconds, Eps);
     }
 }

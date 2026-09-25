@@ -10,7 +10,8 @@ using UnityEngine;
 /// binder, so the per-frame placement looks nothing up. A point outside the
 /// view is refused, or, for a caller that keeps on screen (the speech bubble
 /// and the wheel's ring, whose traveller's head the desk view tilts above the
-/// top), placed at the screen's edge.
+/// top), placed at the screen's edge; such a caller also keeps a band at the
+/// canvas's top clear (the office case HUD's strips).
 /// </summary>
 public static class OverlayProjection
 {
@@ -23,12 +24,13 @@ public static class OverlayProjection
 
     /// <summary>
     /// Places <paramref name="target"/> inside <paramref name="canvasRect"/>
-    /// (its root canvas's rect); false (the target unmoved) when a reference is
+    /// (its root canvas's rect) and below its top <paramref name="topInset"/>
+    /// (canvas reference px); false (the target unmoved) when a reference is
     /// missing, the point is behind the camera, or it is outside the viewport
     /// and <paramref name="keepOnScreen"/> is false (with it true, the point is
     /// taken at the viewport's nearest edge).
     /// </summary>
-    public static bool TryPlace(RectTransform target, RectTransform canvasRect, Camera camera, Vector3 world, Vector2 offset, bool keepOnScreen = false)
+    public static bool TryPlace(RectTransform target, RectTransform canvasRect, Camera camera, Vector3 world, Vector2 offset, bool keepOnScreen = false, float topInset = 0f)
     {
         if (target == null || canvasRect == null || camera == null)
             return false;
@@ -54,7 +56,7 @@ public static class OverlayProjection
         Rect bounds = canvasRect.rect;
         Vector2 half = target.rect.size * 0.5f;
         at.x += RectClamp.Shift(at.x - half.x, at.x + half.x, bounds.xMin, bounds.xMax, false);
-        at.y += RectClamp.Shift(at.y - half.y, at.y + half.y, bounds.yMin, bounds.yMax, false);
+        at.y += RectClamp.Shift(at.y - half.y, at.y + half.y, bounds.yMin, bounds.yMax - topInset, false);
         target.anchoredPosition = at;
         return true;
     }

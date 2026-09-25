@@ -36,6 +36,9 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
     /// <summary>The ring's root (anchors and pivot (0.5, 0.5)), placed over the traveller.</summary>
     [SerializeField] private RectTransform ring;
 
+    /// <summary>The band at the overlay's top the ring never covers (canvas reference px): the office case HUD's strips, when the desk view puts the traveller's head above the screen.</summary>
+    [SerializeField] private float ringTopInset;
+
     /// <summary>The ring's layout.</summary>
     [SerializeField] private RadialLayoutGroup layout;
 
@@ -394,10 +397,10 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         bubble.Reveal(_speech.VisibleCharacters);
     }
 
-    /// <summary>Centres the ring on the traveller's anchor, kept on the screen when the anchor is above it (the desk view); with no traveller or anchor it stays centred on the screen.</summary>
+    /// <summary>Centres the ring on the traveller's anchor, kept on the screen and below the case HUD's strips when the anchor is above it (the desk view); with no traveller or anchor it stays centred on the screen.</summary>
     private void Place()
     {
         if (ring != null && traveller != null && traveller.Anchor != null)
-            OverlayProjection.TryPlace(ring, _canvasRect, _camera, traveller.Anchor.position, Vector2.zero, true);
+            OverlayProjection.TryPlace(ring, _canvasRect, _camera, traveller.Anchor.position, Vector2.zero, true, ringTopInset);
     }
 }

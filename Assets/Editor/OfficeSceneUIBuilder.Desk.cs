@@ -1139,6 +1139,9 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 CompareStripSize = new Vector2(1200f, 56f);
     private const float CompareStripTop = 88f;
 
+    /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips and a gap (the desk view clamps both to the top).</summary>
+    private static readonly float CaseHudClearance = CompareStripTop + CompareStripSize.y + 8f;
+
     /// <summary>The stamp tray's panel (reference px).</summary>
     private static readonly Vector2 StampTraySize = new Vector2(420f, 96f);
 
@@ -1278,7 +1281,8 @@ public static partial class OfficeSceneUIBuilder
     /// no graphic, and its Panel child (anchors and pivot (0.5, 0.5), raycast
     /// targets off, inactive) holding an auto-sized label; with
     /// <paramref name="keepOnScreen"/> it waits at the screen's edge while its
-    /// object is out of view (the speech bubble), else it hides (the tooltip).
+    /// object is out of view, below the case HUD's strips (the speech bubble),
+    /// else it hides (the tooltip).
     /// </summary>
     private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen)
     {
@@ -1300,6 +1304,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "panel", panel);
         SetRef(so, "label", label);
         so.FindProperty("keepOnScreen").boolValue = keepOnScreen;
+        so.FindProperty("topInset").floatValue = keepOnScreen ? CaseHudClearance : 0f;
         so.ApplyModifiedProperties();
 
         panel.gameObject.SetActive(false);
@@ -1355,6 +1360,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "centreSlot", centre);
         SetRef(so, "bubble", bubble);
         SetRef(so, "config", config);
+        so.FindProperty("ringTopInset").floatValue = CaseHudClearance;
         so.ApplyModifiedProperties();
 
         catcher.gameObject.SetActive(false);

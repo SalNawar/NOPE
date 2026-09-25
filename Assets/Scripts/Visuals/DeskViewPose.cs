@@ -15,8 +15,8 @@ public sealed class DeskViewTuning
     /// <summary>Metres the desk view rises above the normal view (negative lowers it).</summary>
     public float rise = 0.3f;
 
-    /// <summary>Degrees the desk view pitches past aiming at the mat's centre (positive looks further down).</summary>
-    public float pitch;
+    /// <summary>Degrees the desk view pitches past aiming at the mat's centre (positive looks further down; the default -4 keeps the floor under the desk's front edge out of the view's bottom).</summary>
+    public float pitch = -4f;
 
     /// <summary>Seconds of the blend into the desk view and back (0 or less cuts).</summary>
     public float seconds = 0.35f;
