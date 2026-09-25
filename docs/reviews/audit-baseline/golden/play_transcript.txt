@@ -1,0 +1,2199 @@
+RUN fixed seed 12345; title scene TitleScene
+== DAY 1
+   briefing: Day 1 — Morning Briefing
+   | No directives. Process subjects accurately.
+   world: day=1 runSeed=12345 daySeed=4904586 money=50 stability=100 leader='' upgrades=[] phase=Office
+   plan: DayPlan_Inv_Day1 visitors=8
+-- d1 slot 1: 'Lysimache (Merchant)' claims 'Periclean Athens (Ancient)' role=Merchant gender=Female liar=False home='Periclean Athens (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Lysimache, Date of Birth=8 Feb 466 BCE, Coin of Issue=Silver drachma (owl), Native Tongue=Attic Greek ; Transit Permit: Declared Device=Klepsydra (water clock), Bond Currency=Silver drachma (owl)
+   look: f skin2 face-c black | Outfit:Ionic chiton; Hair:wavy low bun; Headwear:sakkos snood
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Periclean Athens (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver drachma (owl). <Currency=Silver drachma (owl)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Attic Greek. <Language=Attic Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Klepsydra (water clock). <Technology=Klepsydra (water clock)>
+   [Desk] How is life back home?
+   [Traveller] Everyone argues in the agora, and nobody agrees.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":1,"visitorName":"Lysimache (Merchant)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Periclean Athens (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Periclean Athens (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=60 stability=100 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d1 slot 2: 'Aemilia (Soldier)' claims 'Republican Rome (Ancient)' role=Soldier gender=Female liar=False home='Republican Rome (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Aemilia, Date of Birth=21 Dec 86 BCE, Coin of Issue=Silver denarius, Native Tongue=Late Republican Latin ; Transit Permit: Declared Device=Roman concrete, Bond Currency=Silver denarius
+   look: f skin2 face-c black | Outfit:stola and palla; Hair:nodus roll; Accessory:pearl monile
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Republican Rome (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver denarius. <Currency=Silver denarius>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Republican Latin. <Language=Late Republican Latin>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Roman concrete. <Technology=Roman concrete>
+   [Desk] How is life back home?
+   [Traveller] The Senate talks, the legions march.
+   evidence count 0; plan: MISTAKE deny an honest traveller
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":2,"visitorName":"Aemilia (Soldier)","chosenEraId":"ancient","trueEraId":"ancient","correct":false,"wasLegendary":false,"payAwarded":0,"moneyPenalty":0,"stabilityDelta":-5.0,"citationIssued":true,"wasFreeWarning":true,"firedNow":false,"citationText":"TIMELINE DEVIATION NOTICE\nDenied a legitimate, permitted traveler.\nWarning 1/1 — no pay deduction.\nStability -5","accepted":false,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Republican Rome (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Republican Rome (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=60 stability=95 citationsToday=1 ending=''
+   citation slip: TIMELINE DEVIATION NOTICE / Denied a legitimate, permitted traveler. / Warning 1/1 — no pay deduction. / Stability -5
+   verdict line: WRONG  (-5 stability)
+-- d1 slot 3: 'Senenmut' claims 'New Kingdom Egypt (Ancient)' role=Artist gender=Male liar=False home='New Kingdom Egypt (Ancient)' allowed=True shouldAccept=True premade=senenmut tells=[]
+   papers: Travel Passport: Full Name=Senenmut, Date of Birth=14 Mar 1505 BCE, Coin of Issue=Deben (copper, by weight), Native Tongue=Middle Egyptian, hieroglyphs ; Transit Permit: Declared Device=Papyrus & reed brush, Bond Currency=Deben (copper, by weight)
+   look: premade senenmut | Outfit:Period dress
+   [Desk] Priority arrival: Senenmut.
+   [Traveller] I request passage home to New Kingdom Egypt (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Deben (copper, by weight). <Currency=Deben (copper, by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Middle Egyptian, hieroglyphs. <Language=Middle Egyptian, hieroglyphs>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Papyrus & reed brush. <Technology=Papyrus & reed brush>
+   [Desk] How is life back home?
+   [Traveller] The Nile rose right on time; the fields are black and rich.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":3,"visitorName":"Senenmut","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":true,"payAwarded":25,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"New Kingdom Egypt (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to New Kingdom Egypt (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=85 stability=95 citationsToday=1 ending=''
+   verdict line: CORRECT  (+25 credits)
+-- d1 slot 4: 'Amat-Mamu (Diplomat)' claims 'Babylonia (Ancient)' role=Diplomat gender=Female liar=True home='Periclean Athens (Ancient)' allowed=True shouldAccept=False premade=none tells=[BirthDate/Papers]
+   papers: Travel Passport: Full Name=Amat-Mamu, Date of Birth=17 Mar 497 BCE[TELL], Coin of Issue=Silver shekel (by weight), Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Silver shekel (by weight)
+   look: f skin2 face-c black | Outfit:fringed shawl-dress; Hair:braid crown; Headwear:gold fillet
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   evidence: BirthDate RecordMismatch from DocumentField value='17 Mar 497 BCE' expected='17 Mar 1801 BCE' origin='' | BIRTH DATE INCORRECT — papers: "17 Mar 497 BCE"  /  agency records: "17 Mar 1801 BCE"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":4,"visitorName":"Amat-Mamu (Diplomat)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Periclean Athens (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=95 stability=95 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d1 slot 5: 'Theano (Diplomat)' claims 'Periclean Athens (Ancient)' role=Diplomat gender=Female liar=True home='Republican Rome (Ancient)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Theano, Date of Birth=22 Dec 449 BCE, Coin of Issue=Silver denarius[TELL], Native Tongue=Attic Greek ; Transit Permit: Declared Device=Klepsydra (water clock), Bond Currency=Silver denarius[TELL]
+   look: f skin3 face-b black | Outfit:Ionic chiton; Hair:wavy low bun; Headwear:sakkos snood
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Periclean Athens (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver drachma (owl). <Currency=Silver drachma (owl)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Attic Greek. <Language=Attic Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Klepsydra (water clock). <Technology=Klepsydra (water clock)>
+   [Desk] How is life back home?
+   [Traveller] Everyone argues in the agora, and nobody agrees.
+   evidence: Currency ClaimMismatch from DocumentField value='Silver denarius' expected='Silver drachma (owl)' origin='' | CURRENCY INCORRECT — papers: "Silver denarius"  /  expected: "Silver drachma (owl)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":5,"visitorName":"Theano (Diplomat)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Republican Rome (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Periclean Athens (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=105 stability=95 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d1 slot 6: 'Charmides (Merchant)' claims 'Periclean Athens (Ancient)' role=Merchant gender=Male liar=False home='Periclean Athens (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Charmides, Date of Birth=2 Jun 451 BCE, Coin of Issue=Silver drachma (owl), Native Tongue=Attic Greek ; Transit Permit: Declared Device=Klepsydra (water clock), Bond Currency=Silver drachma (owl)
+   look: m skin2 face-b black | Outfit:chiton and himation; Hair:forward curls; FacialHair:rounded beard; Headwear:petasos hat; Accessory:pera pouch
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Periclean Athens (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver drachma (owl). <Currency=Silver drachma (owl)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Attic Greek. <Language=Attic Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Klepsydra (water clock). <Technology=Klepsydra (water clock)>
+   [Desk] How is life back home?
+   [Traveller] Everyone argues in the agora, and nobody agrees.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":6,"visitorName":"Charmides (Merchant)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Periclean Athens (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Periclean Athens (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=115 stability=95 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d1 slot 7: 'Ahatum (Artist)' claims 'Babylonia (Ancient)' role=Artist gender=Female liar=False home='Babylonia (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Ahatum, Date of Birth=5 Aug 1802 BCE, Coin of Issue=Silver shekel (by weight), Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Silver shekel (by weight)
+   look: f skin3 face-c black | Outfit:fringed shawl-dress; Hair:braid crown; Headwear:gold fillet
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":7,"visitorName":"Ahatum (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Babylonia (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=125 stability=95 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d1 slot 8: 'Awil-ili (Artist)' claims 'Babylonia (Ancient)' role=Artist gender=Male liar=False home='Babylonia (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Awil-ili, Date of Birth=2 Jun 1816 BCE, Coin of Issue=Silver shekel (by weight), Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Silver shekel (by weight)
+   look: m skin5 face-c black | Outfit:fringed wool wrap; Hair:low chignon; FacialHair:curled beard; Headwear:wool fillet; Accessory:cylinder seal
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":8,"visitorName":"Awil-ili (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Babylonia (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=135 stability=95 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- day 1 shift report (8 presented)
+   Day 1 — Shift Report
+   | Subjects processed: 8
+   | Correct: 7   Wrong: 1
+   | Pay earned: +85
+   | Net: +85 credits   (Balance: 135)
+   | Timeline stability: 95% (-5 today)
+   | Citations today: 1
+   ledger: 8 verdicts, correct 7, wrong 1, pay 85, penalties 0, stability -5, unproven 0
+   save day1_shift: 8453 chars sha1 a203cff4c512c1778d1ee666a2774168bb54a765
+== HOME night 1
+   expense report: baseAmount=10 memberAmount=10 conditionAmount=0 total=20 memberCount=2
+   | Today's expenses:
+   |   Rent & utilities: -10
+   |   Family upkeep (2): -10
+   | Total: -20 credits   (Balance: 115)
+   family: Partner=0, Kid=1; money=115
+   sleep | Get some rest. Tomorrow's briefing will reflect tonight's choices.
+   after sleep: day=2 money=115 stability=95 ending='' leader=''
+   save night1_sleep: 9875 chars sha1 ec378582dcce6241071c295071da89fcbb3d9e38
+== DAY 2
+   briefing: Day 2 — Morning Briefing
+   | — TIMELINE NEWS —
+   | • Art is now DOMINANT in Babylonia.
+   | • Art is now DOMINANT in Periclean Athens.
+   | • BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.
+   | • Budget cuts close the interpreter pool. From today, foreign papers and speech reach the desk untranslated; translators are sold at Home. The scanner still compares untranslated text with the books.
+   world: day=2 runSeed=12345 daySeed=4912571 money=115 stability=95 leader='' upgrades=[] phase=Office
+   plan: DayPlan_Inv_Day2 visitors=10
+-- d2 slot 1: 'Shat-Aya (Artist)' claims 'Babylonia (Ancient)' role=Artist gender=Female liar=False home='Babylonia (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Shat-Aya, Date of Birth=20 May 1783 BCE, Coin of Issue=Silver shekel (by weight), Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Silver shekel (by weight)
+   look: f skin2 face-a brown | Outfit:fringed shawl-dress; Hair:braid crown; Headwear:gold fillet
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Babylon (Babili). <Geography=Babylon (Babili)>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   [Traveller] News? Only a rumour: someone sells pocket calculators to the ancients.
+   [Desk] Tell me more.
+   [Traveller] They say a courier from your own century carries them. Watch for anyone who counts too fast.
+   [Desk] Noted. Thank you.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":1,"visitorName":"Shat-Aya (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Babylonia (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=125 stability=95 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 2: 'Tuya (Artist)' claims 'New Kingdom Egypt (Ancient)' role=Artist gender=Female liar=False home='New Kingdom Egypt (Ancient)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Tuya, Date of Birth=16 Dec 1513 BCE, Coin of Issue=Deben (copper, by weight), Native Tongue=Middle Egyptian, hieroglyphs ; Transit Permit: Declared Device=Papyrus & reed brush, Bond Currency=Deben (copper, by weight)
+   look: f skin4 face-c black | Outfit:linen sheath dress; Hair:tripartite wig; Headwear:lotus fillet; Accessory:wesekh collar
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to New Kingdom Egypt (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Deben (copper, by weight). <Currency=Deben (copper, by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Middle Egyptian, hieroglyphs. <Language=Middle Egyptian, hieroglyphs>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Papyrus & reed brush. <Technology=Papyrus & reed brush>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Thebes (Waset). <Geography=Thebes (Waset)>
+   [Desk] How is life back home?
+   [Traveller] The Nile rose right on time; the fields are black and rich.
+   evidence count 0; plan: deny (a travel rule)
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":2,"visitorName":"Tuya (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"New Kingdom Egypt (Ancient)","claimAllowed":false,"claimSummary":"I request passage home to New Kingdom Egypt (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=135 stability=95 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 3: 'Hunayn (Artist)' claims 'Abbasid Baghdad (Medieval)' role=Artist gender=Male liar=False home='Abbasid Baghdad (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Hunayn, Date of Birth=19 Mar 760, Coin of Issue=Abbasid silver dirham, Native Tongue=Arabic; Persian; Aramaic ; Transit Permit: Declared Device=Paper (Baghdad mills), Bond Currency=Abbasid silver dirham
+   look: m skin4 face-d grey | Outfit:black durra'a robe; Hair:smooth nape-length hair; FacialHair:rounded beard; Headwear:qalansuwa; Accessory:taylasan shawl
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Abbasid Baghdad (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Abbasid silver dirham. <Currency=Abbasid silver dirham>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Arabic; Persian; Aramaic. <Language=Arabic; Persian; Aramaic>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Paper (Baghdad mills). <Technology=Paper (Baghdad mills)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (Madinat al-Salam). <Geography=Baghdad (Madinat al-Salam)>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":3,"visitorName":"Hunayn (Artist)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Abbasid Baghdad (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Abbasid Baghdad (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=145 stability=95 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 4: 'Djehuty (Soldier)' claims 'New Kingdom Egypt (Ancient)' role=Soldier gender=Male liar=False home='New Kingdom Egypt (Ancient)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Djehuty, Date of Birth=9 Oct 1521 BCE, Coin of Issue=Deben (copper, by weight), Native Tongue=Middle Egyptian, hieroglyphs ; Transit Permit: Declared Device=Papyrus & reed brush, Bond Currency=Deben (copper, by weight)
+   look: m skin4 face-c brown | Outfit:pleated linen kilt; Hair:bobbed wig; Accessory:wesekh collar
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to New Kingdom Egypt (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Deben (copper, by weight). <Currency=Deben (copper, by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Middle Egyptian, hieroglyphs. <Language=Middle Egyptian, hieroglyphs>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Papyrus & reed brush. <Technology=Papyrus & reed brush>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Thebes (Waset). <Geography=Thebes (Waset)>
+   [Desk] How is life back home?
+   [Traveller] The Nile rose right on time; the fields are black and rich.
+   evidence count 0; plan: deny (a travel rule)
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":4,"visitorName":"Djehuty (Soldier)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"New Kingdom Egypt (Ancient)","claimAllowed":false,"claimSummary":"I request passage home to New Kingdom Egypt (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=155 stability=95 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 5: 'Ubar-Shamash (Artist)' claims 'Babylonia (Ancient)' role=Artist gender=Male liar=False home='Babylonia (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Ubar-Shamash, Date of Birth=28 Apr 1801 BCE, Coin of Issue=Silver shekel (by weight), Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Silver shekel (by weight)
+   look: m skin4 face-c black | Outfit:fringed wool wrap; Hair:low chignon; FacialHair:curled beard; Headwear:wool fillet; Accessory:cylinder seal
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Babylon (Babili). <Geography=Babylon (Babili)>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":5,"visitorName":"Ubar-Shamash (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Babylonia (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=165 stability=95 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 6: 'Socrates' claims 'Periclean Athens (Ancient)' role=Wanderer gender=Male liar=True home='Republican Rome (Ancient)' allowed=True shouldAccept=False premade=socrates tells=[Technology/Answer]
+   papers: Travel Passport: Full Name=Socrates, Date of Birth=6 Jun 470 BCE, Coin of Issue=Silver drachma (owl), Native Tongue=Attic Greek ; Transit Permit: Declared Device=Klepsydra (water clock), Bond Currency=Silver drachma (owl)
+   look: premade socrates | Outfit:Period dress
+   [Desk] Priority arrival: Socrates of Athens. He asks more questions than you do.
+   [Traveller] I request passage home to Periclean Athens (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver drachma (owl). <Currency=Silver drachma (owl)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Attic Greek. <Language=Attic Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Roman concrete. <Technology=Roman concrete TELL>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Athens (city-state). <Geography=Athens (city-state)>
+   [Desk] How is life back home?
+   [Traveller] Everyone argues in the agora, and nobody agrees.
+   evidence count 0; plan: MISTAKE accept a liar
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":6,"visitorName":"Socrates","chosenEraId":"ancient","trueEraId":"ancient","correct":false,"wasLegendary":true,"payAwarded":0,"moneyPenalty":0,"stabilityDelta":-15.0,"citationIssued":true,"wasFreeWarning":true,"firedNow":false,"citationText":"TIMELINE DEVIATION NOTICE\nApproved a disguised traveller or a forbidden destination.\nWarning 1/1 — no pay deduction.\nStability -15","accepted":true,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Republican Rome (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Periclean Athens (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=165 stability=80 citationsToday=1 ending=''
+   citation slip: TIMELINE DEVIATION NOTICE / Approved a disguised traveller or a forbidden destination. / Warning 1/1 — no pay deduction. / Stability -15
+   verdict line: WRONG  (-15 stability)
+-- d2 slot 7: 'Awil-Ninurta (Artist)' claims 'Babylonia (Ancient)' role=Artist gender=Male liar=True home='Northern Song Kaifeng (Medieval)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Awil-Ninurta, Date of Birth=14 May 1800 BCE, Coin of Issue=Copper cash (Xining Yuanbao)[TELL], Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Copper cash (Xining Yuanbao)[TELL]
+   look: m skin4 face-c black | Outfit:fringed wool wrap; Hair:low chignon; FacialHair:curled beard; Headwear:wool fillet; Accessory:cylinder seal
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Babylon (Babili). <Geography=Babylon (Babili)>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   evidence: Currency ClaimMismatch from DocumentField value='Copper cash (Xining Yuanbao)' expected='Silver shekel (by weight)' origin='' | CURRENCY INCORRECT — papers: "Copper cash (Xining Yuanbao)"  /  expected: "Silver shekel (by weight)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":7,"visitorName":"Awil-Ninurta (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Northern Song Kaifeng (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=175 stability=80 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 8: 'Buran (Soldier)' claims 'Abbasid Baghdad (Medieval)' role=Soldier gender=Female liar=True home='Republican Rome (Ancient)' allowed=True shouldAccept=False premade=none tells=[Technology/Answer]
+   papers: Travel Passport: Full Name=Buran, Date of Birth=25 Jul 786, Coin of Issue=Abbasid silver dirham, Native Tongue=Arabic; Persian; Aramaic ; Transit Permit: Declared Device=Paper (Baghdad mills), Bond Currency=Abbasid silver dirham
+   look: f skin3 face-c black | Outfit:qamis with tiraz bands; Hair:S-curl side locks; Headwear:veil with isaba; Accessory:pearl choker
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Abbasid Baghdad (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Abbasid silver dirham. <Currency=Abbasid silver dirham>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Arabic; Persian; Aramaic. <Language=Arabic; Persian; Aramaic>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Roman concrete. <Technology=Roman concrete TELL>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (Madinat al-Salam). <Geography=Baghdad (Madinat al-Salam)>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence: Technology ClaimMismatch from Answer value='Roman concrete' expected='Paper (Baghdad mills)' origin='' | DEVICE INCORRECT — traveller said: "Roman concrete"  /  expected: "Paper (Baghdad mills)"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":8,"visitorName":"Buran (Soldier)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Republican Rome (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Abbasid Baghdad (Medieval).","evidenceCount":1,"unprovenDenial":false}
+   world: money=185 stability=80 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 9: 'Amat-Mamu (Scientist)' claims 'Babylonia (Ancient)' role=Scientist gender=Female liar=True home='Eastern Han Luoyang (Ancient)' allowed=True shouldAccept=False premade=none tells=[Geography/Answer]
+   papers: Travel Passport: Full Name=Amat-Mamu, Date of Birth=13 Mar 1778 BCE, Coin of Issue=Silver shekel (by weight), Native Tongue=Old Babylonian (cuneiform) ; Transit Permit: Declared Device=Cylinder seal, Bond Currency=Silver shekel (by weight)
+   look: f skin4 face-b black | Outfit:fringed shawl-dress; Hair:braid crown; Headwear:gold fillet
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Babylonia (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Old Babylonian (cuneiform). <Language=Old Babylonian (cuneiform)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Cylinder seal. <Technology=Cylinder seal>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Luoyang. <Geography=Luoyang TELL>
+   [Desk] How is life back home?
+   [Traveller] The scribes are busy; every jar of barley gets its tablet.
+   evidence: Geography ClaimMismatch from Answer value='Luoyang' expected='Babylon (Babili)' origin='' | CAPITAL INCORRECT — traveller said: "Luoyang"  /  expected: "Babylon (Babili)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":9,"visitorName":"Amat-Mamu (Scientist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Eastern Han Luoyang (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Babylonia (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=195 stability=80 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- d2 slot 10: 'Riovassus (Artist)' claims 'Iron Age Britain (Ancient)' role=Artist gender=Male liar=True home='Florentine Republic (Medieval)' allowed=True shouldAccept=False premade=none tells=[Language/Answer]
+   papers: Travel Passport: Full Name=Riovassus, Date of Birth=22 Oct 7 BCE, Coin of Issue=Gold stater (corn-ear), Native Tongue=Common Brittonic ; Transit Permit: Declared Device=Essedum (war chariot), Bond Currency=Gold stater (corn-ear)
+   look: m skin1 face-a red | Outfit:checked tunic and bracae; Hair:swept-back mane; FacialHair:long drooping moustache; Accessory:torc
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Iron Age Britain (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Gold stater (corn-ear). <Currency=Gold stater (corn-ear)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Florentine Tuscan (volgare). <Language=Florentine Tuscan (volgare) TELL>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Essedum (war chariot). <Technology=Essedum (war chariot)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Camulodunum (Colchester). <Geography=Camulodunum (Colchester)>
+   [Desk] How is life back home?
+   [Traveller] The roads are safe, as long as you travel by day.
+   evidence: Language ClaimMismatch from Answer value='Florentine Tuscan (volgare)' expected='Common Brittonic' origin='' | LANGUAGE INCORRECT — traveller said: "Florentine Tuscan (volgare)"  /  expected: "Common Brittonic"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":10,"visitorName":"Riovassus (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Florentine Republic (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Iron Age Britain (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=205 stability=80 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 credits)
+-- day 2 shift report (10 presented)
+   Day 2 — Shift Report
+   | Subjects processed: 10
+   | Correct: 9   Wrong: 1
+   | Pay earned: +90
+   | Net: +90 credits   (Balance: 205)
+   | Timeline stability: 80% (-15 today)
+   | Citations today: 1
+   ledger: 10 verdicts, correct 9, wrong 1, pay 90, penalties 0, stability -15, unproven 0
+   dialog outcome: {"dialogId":"dlg_rumour","effectName":"Effect_Dialog_RumourHeard","oneShot":true}
+   save day2_shift: 11733 chars sha1 2513b9c78faed670fafad25c9640aa9ec8146d25
+== HOME night 2
+   expense report: baseAmount=10 memberAmount=10 conditionAmount=1 total=21 memberCount=2
+   | Today's expenses:
+   |   Rent & utilities: -10
+   |   Family upkeep (2): -10
+   |   Medical drain: -1
+   | Total: -21 credits   (Balance: 184)
+   family: Partner=0, Kid=1; money=184
+   bought interview_protocols: owned=True money=64
+   sleep | Get some rest. Tomorrow's briefing will reflect tonight's choices.
+   after sleep: day=3 money=64 stability=80 ending='' leader='iraq'
+   save night2_sleep: 13008 chars sha1 52a4c5a69b658d83f1701b29fb7d09cab9cc1bb0
+== DAY 3
+   briefing: ﺔﻴﺣﺎﺒﺼﻟﺍ ﺔﻃﺎﺣﻹﺍ — 3 ﻡﻮﻴﻟﺍ
+   | • A traveller's tip: someone is smuggling pocket calculators into the past. Keep your eyes open.
+   | — ﻲﻨﻣﺰﻟﺍ ﻂﺨﻟﺍ ﺭﺎﺒﺧﺃ —
+   | • Art is now DOMINANT in Abbasid Baghdad.
+   | • HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).
+   | • BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.
+   | • BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.
+   | • HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.
+   | • HISTORY: travellers brought Roman concrete to Periclean Athens (Ancient).
+   world: day=3 runSeed=12345 daySeed=4887720 money=64 stability=80 leader='iraq' upgrades=[interview_protocols] phase=Office
+   plan: DayPlan_Inv_Day3 visitors=12
+-- d3 slot 1: 'Peter (Merchant)' claims 'Holy Roman Empire (Rhineland) (Medieval)' role=Merchant gender=Male liar=False home='Holy Roman Empire (Rhineland) (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Peter, Date of Birth=24 Apr 1395, Coin of Issue=Rhenish gulden & Albus, Native Tongue=Early New High German ; Transit Permit: Declared Device=Aachen pilgrim mirror, Bond Currency=Rhenish gulden & Albus
+   look: m skin1 face-c blond | Outfit:pleated Tappert gown; Headwear:Gugel hood
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Holy Roman Empire (Rhineland) (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Rhenish gulden & Albus. <Currency=Rhenish gulden & Albus>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early New High German. <Language=Early New High German>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Aachen pilgrim mirror. <Technology=Aachen pilgrim mirror>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Frankfurt (royal election). <Geography=Frankfurt (royal election)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Frederick III. <Politics=King Frederick III>
+   [Desk] When were you born?
+   [Traveller] I was born on 24 Apr 1395. <BirthDate=24 Apr 1395>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   [Traveller] Calculators? I saw nothing. Nothing at all.
+   [Desk] Of course. Next!
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":1,"visitorName":"Peter (Merchant)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Holy Roman Empire (Rhineland) (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Holy Roman Empire (Rhineland) (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=74 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 2: 'Arib al-Ma'muniyya' claims 'Abbasid Baghdad (Medieval)' role=Artist gender=Female liar=False home='Abbasid Baghdad (Medieval)' allowed=True shouldAccept=True premade=arib tells=[]
+   papers: Travel Passport: Full Name=Arib al-Ma'muniyya, Date of Birth=20 May 797, Coin of Issue=Abbasid silver dirham, Native Tongue=Arabic; Persian; Aramaic ; Transit Permit: Declared Device=Paper (Baghdad mills), Bond Currency=Abbasid silver dirham
+   look: premade arib | Outfit:Period dress
+   [Desk] Priority arrival: Arib al-Ma'muniyya.
+   [Traveller] I request passage home to Abbasid Baghdad (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Abbasid silver dirham. <Currency=Abbasid silver dirham>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Arabic; Persian; Aramaic. <Language=Arabic; Persian; Aramaic>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Paper (Baghdad mills). <Technology=Paper (Baghdad mills)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (Madinat al-Salam). <Geography=Baghdad (Madinat al-Salam)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Caliph al-Ma'mun. <Politics=Caliph al-Ma'mun>
+   [Desk] When were you born?
+   [Traveller] I was born on 20 May 797. <BirthDate=20 May 797>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":2,"visitorName":"Arib al-Ma'muniyya","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":true,"payAwarded":25,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Abbasid Baghdad (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Abbasid Baghdad (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=99 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+25 Mesopotamian dinar token)
+-- d3 slot 3: 'Tuquztimur (Diplomat)' claims 'Mamluk Egypt (Medieval)' role=Diplomat gender=Male liar=False home='Mamluk Egypt (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Tuquztimur, Date of Birth=22 Sep 1318, Coin of Issue=Dirham nuqra & copper fulus, Native Tongue=Arabic; Kipchak Turkic court ; Transit Permit: Declared Device=Carrier pigeon post, Bond Currency=Dirham nuqra & copper fulus
+   look: m skin4 face-b brown | Outfit:qamis and farajiyya; FacialHair:rounded beard; Headwear:imama turban; Accessory:fringed silk girdle
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Mamluk Egypt (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Dirham nuqra & copper fulus. <Currency=Dirham nuqra & copper fulus>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Arabic; Kipchak Turkic court. <Language=Arabic; Kipchak Turkic court>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Carrier pigeon post. <Technology=Carrier pigeon post>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Cairo (Mamluk Citadel). <Geography=Cairo (Mamluk Citadel)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Sultan al-Nasir Muhammad. <Politics=Sultan al-Nasir Muhammad>
+   [Desk] When were you born?
+   [Traveller] I was born on 22 Sep 1318. <BirthDate=22 Sep 1318>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":3,"visitorName":"Tuquztimur (Diplomat)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Mamluk Egypt (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Mamluk Egypt (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=109 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 4: 'Chaoyun (Soldier)' claims 'Northern Song Kaifeng (Medieval)' role=Soldier gender=Female liar=False home='Northern Song Kaifeng (Medieval)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Chaoyun, Date of Birth=8 Jan 1015, Coin of Issue=Copper cash (Xining Yuanbao), Native Tongue=Late Middle Chinese (Song) ; Transit Permit: Declared Device=Bi Sheng clay movable type, Bond Currency=Copper cash (Xining Yuanbao)
+   look: f skin4 face-d grey | Outfit:beizi coat and skirt; Hair:tall gaoji bun; Headwear:crescent comb
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Northern Song Kaifeng (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Copper cash (Xining Yuanbao). <Currency=Copper cash (Xining Yuanbao)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Middle Chinese (Song). <Language=Late Middle Chinese (Song)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Bi Sheng clay movable type. <Technology=Bi Sheng clay movable type>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Kaifeng (Bianjing). <Geography=Kaifeng (Bianjing)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Emperor Shenzong of Song. <Politics=Emperor Shenzong of Song>
+   [Desk] When were you born?
+   [Traveller] I was born on 8 Jan 1015. <BirthDate=8 Jan 1015>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence count 0; plan: deny (a travel rule)
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":4,"visitorName":"Chaoyun (Soldier)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"Northern Song Kaifeng (Medieval)","claimAllowed":false,"claimSummary":"I request passage home to Northern Song Kaifeng (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=119 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 5: 'Guangqi (Soldier)' claims 'Late Ming Suzhou (Early modern)' role=Soldier gender=Male liar=False home='Late Ming Suzhou (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Guangqi, Date of Birth=1 Sep 1575, Coin of Issue=Silver taels, Chongzhen cash, Native Tongue=Wu Chinese (Suzhou dialect) ; Transit Permit: Declared Device=Suanpan abacus, Bond Currency=Silver taels, Chongzhen cash
+   look: m skin3 face-d grey | Outfit:pale daopao robe; Hair:topknot with wangjin; FacialHair:neat moustache and beard; Headwear:square gauze cap; Accessory:tasselled sitao sash
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Late Ming Suzhou (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver taels, Chongzhen cash. <Currency=Silver taels, Chongzhen cash>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Wu Chinese (Suzhou dialect). <Language=Wu Chinese (Suzhou dialect)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Suanpan abacus. <Technology=Suanpan abacus>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Beijing (Shuntian Fu). <Geography=Beijing (Shuntian Fu)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Chongzhen Emperor. <Politics=Chongzhen Emperor>
+   [Desk] When were you born?
+   [Traveller] I was born on 1 Sep 1575. <BirthDate=1 Sep 1575>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":5,"visitorName":"Guangqi (Soldier)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Late Ming Suzhou (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Late Ming Suzhou (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=129 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 6: 'Kichibei (Scientist)' claims 'Tokugawa Edo (Early modern)' role=Scientist gender=Male liar=False home='Tokugawa Edo (Early modern)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Kichibei, Date of Birth=9 Feb 1558, Coin of Issue=Keicho koban & chogin, Native Tongue=Early Modern Japanese ; Transit Permit: Declared Device=Tanegashima matchlock, Bond Currency=Keicho koban & chogin
+   look: m skin3 face-c black | Outfit:kataginu and hakama; Hair:chasen-mage; FacialHair:thin moustache and beard
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Tokugawa Edo (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Keicho koban & chogin. <Currency=Keicho koban & chogin>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early Modern Japanese. <Language=Early Modern Japanese>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Tanegashima matchlock. <Technology=Tanegashima matchlock>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Edo (shogunate seat). <Geography=Edo (shogunate seat)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Shogun Tokugawa Hidetada. <Politics=Shogun Tokugawa Hidetada>
+   [Desk] When were you born?
+   [Traveller] I was born on 9 Feb 1558. <BirthDate=9 Feb 1558>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: deny (a travel rule)
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":6,"visitorName":"Kichibei (Scientist)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"Tokugawa Edo (Early modern)","claimAllowed":false,"claimSummary":"I request passage home to Tokugawa Edo (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=139 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 7: 'Tomoe (Scientist)' claims 'Muromachi Kyoto (Medieval)' role=Scientist gender=Female liar=False home='Muromachi Kyoto (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Tomoe, Date of Birth=20 Aug 1331, Coin of Issue=Toraisen (imported cash), Native Tongue=Late Middle Japanese (Kyoto) ; Transit Permit: Declared Device=Folding fan (sensu), Bond Currency=Toraisen (imported cash)
+   look: f skin4 face-d grey | Outfit:tsubo-shozoku robes; Hair:long tied-back hair; Headwear:ichime-gasa
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Muromachi Kyoto (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Toraisen (imported cash). <Currency=Toraisen (imported cash)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Middle Japanese (Kyoto). <Language=Late Middle Japanese (Kyoto)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Folding fan (sensu). <Technology=Folding fan (sensu)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Kyoto (Heian-kyo). <Geography=Kyoto (Heian-kyo)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Emperor Go-Komatsu. <Politics=Emperor Go-Komatsu>
+   [Desk] When were you born?
+   [Traveller] I was born on 20 Aug 1331. <BirthDate=20 Aug 1331>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":7,"visitorName":"Tomoe (Scientist)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Muromachi Kyoto (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Muromachi Kyoto (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=149 stability=80 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 8: 'Ambrogio (Diplomat)' claims 'Sforza Milan (Early modern)' role=Diplomat gender=Male liar=True home='Kofun Yamato (Ancient)' allowed=True shouldAccept=False premade=none tells=[Hair/Dress]
+   papers: Travel Passport: Full Name=Ambrogio, Date of Birth=27 Jun 1457, Coin of Issue=Milanese silver testone, Native Tongue=Milanese Lombard ; Transit Permit: Declared Device=Milanese plate armour, Bond Currency=Milanese silver testone
+   look: m skin4 face-c brown; dress tell: Hair 'mizura' | Outfit:coral pitocco; Hair:mizura[TELL]; Headwear:red berretta
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Sforza Milan (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Milanese silver testone. <Currency=Milanese silver testone>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Milanese Lombard. <Language=Milanese Lombard>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Milanese plate armour. <Technology=Milanese plate armour>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Milan (Duchy of Milan). <Geography=Milan (Duchy of Milan)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Duke Ludovico Sforza. <Politics=Duke Ludovico Sforza>
+   [Desk] When were you born?
+   [Traveller] I was born on 27 Jun 1457. <BirthDate=27 Jun 1457>
+   [Desk] How is life back home?
+   [Traveller] The post rides faster than ever.
+   evidence count 0; plan: MISTAKE deny a liar without evidence
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":8,"visitorName":"Ambrogio (Diplomat)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":false,"wasLegendary":false,"payAwarded":0,"moneyPenalty":0,"stabilityDelta":-5.0,"citationIssued":true,"wasFreeWarning":true,"firedNow":false,"citationText":"ﻲﻨﻣﺯ ﻑﺍﺮﺤﻧﺍ ﺭﺎﻌﺷﺇ\nDeviation denied without documented evidence. Log a deviation from the papers, the traveller's answers or their dress before denying.\nWarning 1/1 — no pay deduction.\nStability -5","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Kofun Yamato (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Sforza Milan (Early modern).","evidenceCount":0,"unprovenDenial":true}
+   world: money=149 stability=75 citationsToday=1 ending=''
+   citation slip: ﻲﻨﻣﺯ ﻑﺍﺮﺤﻧﺍ ﺭﺎﻌﺷﺇ / Deviation denied without documented evidence. Log a deviation from the papers, the traveller's answers or their dress before denying. / Warning 1/1 — no pay deduction. / Stability -5
+   verdict line: WRONG  (-5 stability)
+-- d3 slot 9: 'Bechte (Soldier)' claims 'Holy Roman Empire (Rhineland) (Medieval)' role=Soldier gender=Female liar=False home='Holy Roman Empire (Rhineland) (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Bechte, Date of Birth=21 Jul 1413, Coin of Issue=Rhenish gulden & Albus, Native Tongue=Early New High German ; Transit Permit: Declared Device=Aachen pilgrim mirror, Bond Currency=Rhenish gulden & Albus
+   look: f skin1 face-b red | Outfit:high-waisted gown; Headwear:Kruseler veil
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Holy Roman Empire (Rhineland) (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Rhenish gulden & Albus. <Currency=Rhenish gulden & Albus>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early New High German. <Language=Early New High German>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Aachen pilgrim mirror. <Technology=Aachen pilgrim mirror>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Frankfurt (royal election). <Geography=Frankfurt (royal election)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Frederick III. <Politics=King Frederick III>
+   [Desk] When were you born?
+   [Traveller] I was born on 21 Jul 1413. <BirthDate=21 Jul 1413>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":9,"visitorName":"Bechte (Soldier)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Holy Roman Empire (Rhineland) (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Holy Roman Empire (Rhineland) (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=159 stability=75 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 10: 'Weiye (Soldier)' claims 'Late Ming Suzhou (Early modern)' role=Soldier gender=Male liar=True home='Elizabethan England (Early modern)' allowed=True shouldAccept=False premade=none tells=[Headwear/Dress]
+   papers: Travel Passport: Full Name=Weiye, Date of Birth=3 Nov 1598, Coin of Issue=Silver taels, Chongzhen cash, Native Tongue=Wu Chinese (Suzhou dialect) ; Transit Permit: Declared Device=Suanpan abacus, Bond Currency=Silver taels, Chongzhen cash
+   look: m skin2 face-c black; dress tell: Headwear 'capotain hat' | Outfit:pale daopao robe; Hair:topknot with wangjin; FacialHair:neat moustache and beard; Headwear:capotain hat[TELL]; Accessory:tasselled sitao sash
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Late Ming Suzhou (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver taels, Chongzhen cash. <Currency=Silver taels, Chongzhen cash>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Wu Chinese (Suzhou dialect). <Language=Wu Chinese (Suzhou dialect)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Suanpan abacus. <Technology=Suanpan abacus>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Beijing (Shuntian Fu). <Geography=Beijing (Shuntian Fu)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Chongzhen Emperor. <Politics=Chongzhen Emperor>
+   [Desk] When were you born?
+   [Traveller] I was born on 3 Nov 1598. <BirthDate=3 Nov 1598>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence: Culture ClaimMismatch from Appearance value='capotain hat / hat over coif' expected='square gauze cap / baotou' origin='' | DRESS INCORRECT — traveller wears: "capotain hat / hat over coif"  /  expected: "square gauze cap / baotou"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":10,"visitorName":"Weiye (Soldier)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Elizabethan England (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Late Ming Suzhou (Early modern).","evidenceCount":1,"unprovenDenial":false}
+   world: money=169 stability=75 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 11: 'Quintus (Soldier)' claims 'Republican Rome (Ancient)' role=Soldier gender=Male liar=True home='Germania (Ancient)' allowed=True shouldAccept=False premade=none tells=[Geography/Answer]
+   papers: Travel Passport: Full Name=Quintus, Date of Birth=27 Jun 69 BCE, Coin of Issue=Silver denarius, Native Tongue=Late Republican Latin ; Transit Permit: Declared Device=Al-jabr reckoning tables, Bond Currency=Silver denarius
+   look: m skin2 face-a brown | Outfit:toga and tunica; Hair:Caesar crop
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Republican Rome (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver denarius. <Currency=Silver denarius>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Republican Latin. <Language=Late Republican Latin>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Al-jabr reckoning tables. <Technology=Al-jabr reckoning tables>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Semnones' sacred grove. <Geography=Semnones' sacred grove TELL>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Consuls Paullus & Marcellus. <Politics=Consuls Paullus & Marcellus>
+   [Desk] When were you born?
+   [Traveller] I was born on 27 Jun 69 BCE. <BirthDate=27 Jun 69 BCE>
+   [Desk] How is life back home?
+   [Traveller] The Senate talks, the legions march.
+   evidence: Geography ClaimMismatch from Answer value='Semnones' sacred grove' expected='Rome (Roman Republic)' origin='' | CAPITAL INCORRECT — traveller said: "Semnones' sacred grove"  /  expected: "Rome (Roman Republic)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":11,"visitorName":"Quintus (Soldier)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Germania (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Republican Rome (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=179 stability=75 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d3 slot 12: 'Ridwan (Soldier)' claims 'Ottoman Egypt (Early modern)' role=Soldier gender=Male liar=False home='Ottoman Egypt (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Ridwan, Date of Birth=5 Oct 1635, Coin of Issue=Silver medin (para), Native Tongue=Egyptian Arabic; Turkish ; Transit Permit: Declared Device=Yemeni coffee (qahwa), Bond Currency=Silver medin (para)
+   look: m skin3 face-d grey | Outfit:quftan and gibba; FacialHair:short rounded beard; Headwear:red-crown turban; Accessory:shawl sash
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Ottoman Egypt (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver medin (para). <Currency=Silver medin (para)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Egyptian Arabic; Turkish. <Language=Egyptian Arabic; Turkish>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Yemeni coffee (qahwa). <Technology=Yemeni coffee (qahwa)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Cairo (Ottoman eyalet). <Geography=Cairo (Ottoman eyalet)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Sultan Mustafa II. <Politics=Sultan Mustafa II>
+   [Desk] When were you born?
+   [Traveller] I was born on 5 Oct 1635. <BirthDate=5 Oct 1635>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":12,"visitorName":"Ridwan (Soldier)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Ottoman Egypt (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Ottoman Egypt (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=189 stability=75 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- day 3 shift report (12 presented)
+   ﺔﺑﻭﺎﻨﻤﻟﺍ ﺮﻳﺮﻘﺗ — 3 ﻡﻮﻴﻟﺍ
+   | Subjects processed: 12
+   | Correct: 11   Wrong: 1
+   | Pay earned: +125
+   | Net: +125 Mesopotamian dinar token   (Balance: 189)
+   | Timeline stability: 75% (-5 today)
+   | Citations today: 1
+   | Undocumented denials: 1 (log a deviation before denying)
+   ledger: 12 verdicts, correct 11, wrong 1, pay 125, penalties 0, stability -5, unproven 1
+   dialog outcome: {"dialogId":"dlg_rumour_followup","effectName":"","oneShot":true}
+   save day3_shift: 17089 chars sha1 3f04352e8bf0fd85172bfda5ffb5914b0d94993f
+== HOME night 3
+   expense report: baseAmount=10 memberAmount=10 conditionAmount=1 total=21 memberCount=2
+   | Today's expenses:
+   |   Rent & utilities: -10
+   |   Family upkeep (2): -10
+   |   Medical drain: -1
+   | Total: -21 Mesopotamian dinar token   (Balance: 168)
+   family: Partner=0, Kid=1; money=168
+   bought tr_near_east_written: owned=True money=68
+   sleep | Get some rest. Tomorrow's briefing will reflect tonight's choices.
+   after sleep: day=4 money=68 stability=75 ending='' leader='iraq'
+   save night3_sleep: 15885 chars sha1 d898a3878788606b8700ea7490e128519b8adf5c
+== DAY 4
+   briefing: ﺔﻴﺣﺎﺒﺼﻟﺍ ﺔﻃﺎﺣﻹﺍ — 4 ﻡﻮﻴﻟﺍ
+   | No directives. Process subjects accurately.
+   world: day=4 runSeed=12345 daySeed=4895705 money=68 stability=75 leader='iraq' upgrades=[interview_protocols,tr_near_east_written] phase=Office
+   plan: DayPlan_Inv_Day4 visitors=12
+-- d4 slot 1: 'Tora (Diplomat)' claims 'Muromachi Kyoto (Medieval)' role=Diplomat gender=Female liar=True home='New Kingdom Egypt (Ancient)' allowed=True shouldAccept=False premade=none tells=[BirthDate/Papers]
+   papers: Travel Passport: Full Name=Tora, Date of Birth=8 Feb 1493 BCE[TELL], Coin of Issue=Toraisen (imported cash), Native Tongue=Late Middle Japanese (Kyoto) ; Transit Permit: Declared Device=Folding fan (sensu), Bond Currency=Toraisen (imported cash)
+   look: f skin2 face-c black | Outfit:tsubo-shozoku robes; Hair:long tied-back hair; Headwear:ichime-gasa
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Muromachi Kyoto (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Toraisen (imported cash). <Currency=Toraisen (imported cash)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Middle Japanese (Kyoto). <Language=Late Middle Japanese (Kyoto)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Folding fan (sensu). <Technology=Folding fan (sensu)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Kyoto (Heian-kyo). <Geography=Kyoto (Heian-kyo)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Emperor Go-Komatsu. <Politics=Emperor Go-Komatsu>
+   [Desk] When were you born?
+   [Traveller] I was born on 8 Feb 1365. <BirthDate=8 Feb 1365>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence: BirthDate RecordMismatch from DocumentField value='8 Feb 1493 BCE' expected='8 Feb 1365' origin='' | BIRTH DATE INCORRECT — papers: "8 Feb 1493 BCE"  /  agency records: "8 Feb 1365"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":1,"visitorName":"Tora (Diplomat)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"New Kingdom Egypt (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Muromachi Kyoto (Medieval).","evidenceCount":1,"unprovenDenial":false}
+   world: money=78 stability=75 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 2: 'Helene (Soldier)' claims 'Byzantine Mystras (Medieval)' role=Soldier gender=Female liar=False home='Byzantine Mystras (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Helene, Date of Birth=3 Nov 1384, Coin of Issue=Silver stavraton, Native Tongue=Late Byzantine Greek ; Transit Permit: Declared Device=Morean silk (sericulture), Bond Currency=Silver stavraton
+   look: f skin2 face-c black | Outfit:damask over-dress; Headwear:fakiolion; Accessory:lunate earrings
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Byzantine Mystras (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver stavraton. <Currency=Silver stavraton>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Byzantine Greek. <Language=Late Byzantine Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Morean silk (sericulture). <Technology=Morean silk (sericulture)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Mystras (Despotate of Morea). <Geography=Mystras (Despotate of Morea)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Despot Theodore II. <Politics=Despot Theodore II>
+   [Desk] When were you born?
+   [Traveller] I was born on 3 Nov 1384. <BirthDate=3 Nov 1384>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":2,"visitorName":"Helene (Soldier)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Byzantine Mystras (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Byzantine Mystras (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=88 stability=75 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 3: 'Giacomo (Soldier)' claims 'Sforza Milan (Early modern)' role=Soldier gender=Male liar=False home='Sforza Milan (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Giacomo, Date of Birth=2 Mar 1437, Coin of Issue=Milanese silver testone, Native Tongue=Milanese Lombard ; Transit Permit: Declared Device=Milanese plate armour, Bond Currency=Milanese silver testone
+   look: m skin2 face-c brown | Outfit:coral pitocco; Hair:zazzera bob; Headwear:red berretta
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Sforza Milan (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Milanese silver testone. <Currency=Milanese silver testone>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Milanese Lombard. <Language=Milanese Lombard>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Milanese plate armour. <Technology=Milanese plate armour>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Milan (Duchy of Milan). <Geography=Milan (Duchy of Milan)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Duke Ludovico Sforza. <Politics=Duke Ludovico Sforza>
+   [Desk] When were you born?
+   [Traveller] I was born on 2 Mar 1437. <BirthDate=2 Mar 1437>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":3,"visitorName":"Giacomo (Soldier)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Sforza Milan (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Sforza Milan (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=98 stability=75 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 4: 'Eliza (Scientist)' claims 'Victorian Britain (Industrial)' role=Scientist gender=Female liar=False home='Victorian Britain (Industrial)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Eliza, Date of Birth=16 Nov 1778, Coin of Issue=Gold sovereign (£sd), Native Tongue=Victorian English ; Transit Permit: Declared Device=Penny Red postage stamp, Bond Currency=Gold sovereign (£sd)
+   look: f skin1 face-d grey | Outfit:plaid day dress; Hair:ringlets and bun; Headwear:poke bonnet; Accessory:Paisley shawl
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Victorian Britain (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Gold sovereign (£sd). <Currency=Gold sovereign (£sd)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Victorian English. <Language=Victorian English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Penny Red postage stamp. <Technology=Penny Red postage stamp>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is London (Buckingham Palace). <Geography=London (Buckingham Palace)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Queen Victoria. <Politics=Queen Victoria>
+   [Desk] When were you born?
+   [Traveller] I was born on 16 Nov 1778. <BirthDate=16 Nov 1778>
+   [Desk] How is life back home?
+   [Traveller] Everyone talks about the railway.
+   evidence count 0; plan: MISTAKE accept a rule violator
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":4,"visitorName":"Eliza (Scientist)","chosenEraId":"industrial","trueEraId":"industrial","correct":false,"wasLegendary":false,"payAwarded":0,"moneyPenalty":0,"stabilityDelta":-5.0,"citationIssued":true,"wasFreeWarning":true,"firedNow":false,"citationText":"ﻲﻨﻣﺯ ﻑﺍﺮﺤﻧﺍ ﺭﺎﻌﺷﺇ\nApproved a disguised traveller or a forbidden destination.\nWarning 1/1 — no pay deduction.\nStability -5","accepted":true,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"Victorian Britain (Industrial)","claimAllowed":false,"claimSummary":"I request passage home to Victorian Britain (Industrial).","evidenceCount":0,"unprovenDenial":false}
+   world: money=98 stability=70 citationsToday=1 ending=''
+   citation slip: ﻲﻨﻣﺯ ﻑﺍﺮﺤﻧﺍ ﺭﺎﻌﺷﺇ / Approved a disguised traveller or a forbidden destination. / Warning 1/1 — no pay deduction. / Stability -5
+   verdict line: WRONG  (-5 stability)
+-- d4 slot 5: 'Gerhard (Merchant)' claims 'Holy Roman Empire (Rhineland) (Medieval)' role=Merchant gender=Male liar=True home='Tokugawa Edo (Early modern)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Gerhard, Date of Birth=15 Aug 1389, Coin of Issue=Keicho koban & chogin[TELL], Native Tongue=Early New High German ; Transit Permit: Declared Device=Aachen pilgrim mirror, Bond Currency=Keicho koban & chogin[TELL]
+   look: m skin1 face-c blond | Outfit:pleated Tappert gown; Headwear:Gugel hood
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Holy Roman Empire (Rhineland) (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Rhenish gulden & Albus. <Currency=Rhenish gulden & Albus>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early New High German. <Language=Early New High German>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Aachen pilgrim mirror. <Technology=Aachen pilgrim mirror>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Frankfurt (royal election). <Geography=Frankfurt (royal election)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Frederick III. <Politics=King Frederick III>
+   [Desk] When were you born?
+   [Traveller] I was born on 15 Aug 1389. <BirthDate=15 Aug 1389>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence: Currency ClaimMismatch from DocumentField value='Keicho koban & chogin' expected='Rhenish gulden & Albus' origin='' | CURRENCY INCORRECT — papers: "Keicho koban & chogin"  /  expected: "Rhenish gulden & Albus"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":5,"visitorName":"Gerhard (Merchant)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Tokugawa Edo (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Holy Roman Empire (Rhineland) (Medieval).","evidenceCount":1,"unprovenDenial":false}
+   world: money=108 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 6: 'Phanostrate (Merchant)' claims 'Periclean Athens (Ancient)' role=Merchant gender=Female liar=True home='Babylonia (Ancient)' allowed=True shouldAccept=False premade=none tells=[Currency/Answer]
+   papers: Travel Passport: Full Name=Phanostrate, Date of Birth=19 Jul 475 BCE, Coin of Issue=Silver drachma (owl), Native Tongue=Attic Greek ; Transit Permit: Declared Device=Roman concrete, Bond Currency=Silver drachma (owl)
+   look: f skin3 face-c black | Outfit:Ionic chiton; Hair:wavy low bun; Headwear:sakkos snood
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Periclean Athens (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver shekel (by weight). <Currency=Silver shekel (by weight) TELL>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Attic Greek. <Language=Attic Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Roman concrete. <Technology=Roman concrete>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Athens (city-state). <Geography=Athens (city-state)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Strategos Pericles. <Politics=Strategos Pericles>
+   [Desk] When were you born?
+   [Traveller] I was born on 19 Jul 475 BCE. <BirthDate=19 Jul 475 BCE>
+   [Desk] How is life back home?
+   [Traveller] Everyone argues in the agora, and nobody agrees.
+   evidence: Currency ClaimMismatch from Answer value='Silver shekel (by weight)' expected='Silver drachma (owl)' origin='' | CURRENCY INCORRECT — traveller said: "Silver shekel (by weight)"  /  expected: "Silver drachma (owl)"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":6,"visitorName":"Phanostrate (Merchant)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Babylonia (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Periclean Athens (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=118 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 7: 'Alfredo (Soldier)' claims 'Bologna, Kingdom of Italy (Industrial)' role=Soldier gender=Male liar=False home='Bologna, Kingdom of Italy (Industrial)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Alfredo, Date of Birth=4 Dec 1836, Coin of Issue=Italian lira (100 centesimi), Native Tongue=Bolognese dialect; Italian ; Transit Permit: Declared Device=Safety bicycle, Bond Currency=Italian lira (100 centesimi)
+   look: m skin1 face-c black | Outfit:suit and tabarro; Hair:pomaded side parting; FacialHair:Umbertine moustache; Headwear:wide black felt hat; Accessory:silk scarf
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Bologna, Kingdom of Italy (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Italian lira (100 centesimi). <Currency=Italian lira (100 centesimi)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Bolognese dialect; Italian. <Language=Bolognese dialect; Italian>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Safety bicycle. <Technology=Safety bicycle>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Rome (Kingdom of Italy). <Geography=Rome (Kingdom of Italy)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Umberto I. <Politics=King Umberto I>
+   [Desk] When were you born?
+   [Traveller] I was born on 4 Dec 1836. <BirthDate=4 Dec 1836>
+   [Desk] How is life back home?
+   [Traveller] The smoke never lifts over the mills.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":7,"visitorName":"Alfredo (Soldier)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Bologna, Kingdom of Italy (Industrial)","claimAllowed":true,"claimSummary":"I request passage home to Bologna, Kingdom of Italy (Industrial).","evidenceCount":0,"unprovenDenial":false}
+   world: money=128 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 8: 'Cecilia Gallerani' claims 'Sforza Milan (Early modern)' role=Diplomat gender=Female liar=False home='Sforza Milan (Early modern)' allowed=True shouldAccept=True premade=gallerani tells=[]
+   papers: Travel Passport: Full Name=Cecilia Gallerani, Date of Birth=3 Mar 1473, Coin of Issue=Milanese silver testone, Native Tongue=Milanese Lombard ; Transit Permit: Declared Device=Milanese plate armour, Bond Currency=Milanese silver testone
+   look: premade gallerani | Outfit:Period dress
+   [Desk] Priority arrival: Cecilia Gallerani.
+   [Traveller] I request passage home to Sforza Milan (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Milanese silver testone. <Currency=Milanese silver testone>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Milanese Lombard. <Language=Milanese Lombard>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Milanese plate armour. <Technology=Milanese plate armour>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Milan (Duchy of Milan). <Geography=Milan (Duchy of Milan)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Duke Ludovico Sforza. <Politics=Duke Ludovico Sforza>
+   [Desk] When were you born?
+   [Traveller] I was born on 3 Mar 1473. <BirthDate=3 Mar 1473>
+   [Desk] How is life back home?
+   [Traveller] The post rides faster than ever.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":8,"visitorName":"Cecilia Gallerani","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":true,"payAwarded":25,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Sforza Milan (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Sforza Milan (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=153 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+25 Mesopotamian dinar token)
+-- d4 slot 9: 'Bartholomew (Scientist)' claims 'Elizabethan England (Early modern)' role=Scientist gender=Male liar=False home='Elizabethan England (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Bartholomew, Date of Birth=4 Mar 1556, Coin of Issue=Silver shilling & sixpence, Native Tongue=Early Modern English ; Transit Permit: Declared Device=Clay tobacco pipe, Bond Currency=Silver shilling & sixpence
+   look: m skin1 face-c blond | Outfit:doublet and ruff; Hair:brushed-up short hair; FacialHair:pick-a-devant beard; Headwear:capotain hat
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Elizabethan England (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver shilling & sixpence. <Currency=Silver shilling & sixpence>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early Modern English. <Language=Early Modern English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Clay tobacco pipe. <Technology=Clay tobacco pipe>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is London (Whitehall Palace). <Geography=London (Whitehall Palace)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Queen Elizabeth I. <Politics=Queen Elizabeth I>
+   [Desk] When were you born?
+   [Traveller] I was born on 4 Mar 1556. <BirthDate=4 Mar 1556>
+   [Desk] How is life back home?
+   [Traveller] The post rides faster than ever.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":9,"visitorName":"Bartholomew (Scientist)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Elizabethan England (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Elizabethan England (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=163 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 10: 'Leofgyth (Soldier)' claims 'Anglo-Saxon England (Medieval)' role=Soldier gender=Female liar=True home='Holy Roman Empire (Rhineland) (Medieval)' allowed=True shouldAccept=False premade=none tells=[Currency/Answer]
+   papers: Travel Passport: Full Name=Leofgyth, Date of Birth=28 Dec 1028, Coin of Issue=Silver penny (pening), Native Tongue=Late Old English ; Transit Permit: Declared Device=Tide-dial sundial, Bond Currency=Silver penny (pening)
+   look: f skin1 face-a red | Outfit:bell-sleeved overgown; Headwear:headrail
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Anglo-Saxon England (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Rhenish gulden & Albus. <Currency=Rhenish gulden & Albus TELL>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Old English. <Language=Late Old English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Tide-dial sundial. <Technology=Tide-dial sundial>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Winchester (royal treasury). <Geography=Winchester (royal treasury)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Edward the Confessor. <Politics=King Edward the Confessor>
+   [Desk] When were you born?
+   [Traveller] I was born on 28 Dec 1028. <BirthDate=28 Dec 1028>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   evidence: Currency ClaimMismatch from Answer value='Rhenish gulden & Albus' expected='Silver penny (pening)' origin='' | CURRENCY INCORRECT — traveller said: "Rhenish gulden & Albus"  /  expected: "Silver penny (pening)"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":10,"visitorName":"Leofgyth (Soldier)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Holy Roman Empire (Rhineland) (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Anglo-Saxon England (Medieval).","evidenceCount":1,"unprovenDenial":false}
+   world: money=173 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 11: 'Lykon (Scientist)' claims 'Periclean Athens (Ancient)' role=Scientist gender=Male liar=True home='Tokugawa Edo (Early modern)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Lykon, Date of Birth=18 Oct 499 BCE, Coin of Issue=Keicho koban & chogin[TELL], Native Tongue=Attic Greek ; Transit Permit: Declared Device=Roman concrete, Bond Currency=Keicho koban & chogin[TELL]
+   look: m skin3 face-d grey | Outfit:chiton and himation; Hair:forward curls; FacialHair:rounded beard; Headwear:petasos hat; Accessory:pera pouch
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Periclean Athens (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver drachma (owl). <Currency=Silver drachma (owl)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Attic Greek. <Language=Attic Greek>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Roman concrete. <Technology=Roman concrete>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Athens (city-state). <Geography=Athens (city-state)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Strategos Pericles. <Politics=Strategos Pericles>
+   [Desk] When were you born?
+   [Traveller] I was born on 18 Oct 499 BCE. <BirthDate=18 Oct 499 BCE>
+   [Desk] How is life back home?
+   [Traveller] Everyone argues in the agora, and nobody agrees.
+   evidence: Currency ClaimMismatch from DocumentField value='Keicho koban & chogin' expected='Silver drachma (owl)' origin='' | CURRENCY INCORRECT — papers: "Keicho koban & chogin"  /  expected: "Silver drachma (owl)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":11,"visitorName":"Lykon (Scientist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Tokugawa Edo (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Periclean Athens (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=183 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d4 slot 12: 'Eadric (Merchant)' claims 'Anglo-Saxon England (Medieval)' role=Merchant gender=Male liar=False home='Anglo-Saxon England (Medieval)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Eadric, Date of Birth=5 Dec 997, Coin of Issue=Silver penny (pening), Native Tongue=Late Old English ; Transit Permit: Declared Device=Tide-dial sundial, Bond Currency=Silver penny (pening)
+   look: m skin1 face-c brown | Outfit:cyrtel and leg bindings; Hair:collar-length hair; FacialHair:long English moustache; Accessory:disc brooch
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Anglo-Saxon England (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver penny (pening). <Currency=Silver penny (pening)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Old English. <Language=Late Old English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Tide-dial sundial. <Technology=Tide-dial sundial>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Winchester (royal treasury). <Geography=Winchester (royal treasury)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Edward the Confessor. <Politics=King Edward the Confessor>
+   [Desk] When were you born?
+   [Traveller] I was born on 5 Dec 997. <BirthDate=5 Dec 997>
+   [Desk] How is life back home?
+   [Traveller] The bells rang all week for the feast.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":12,"visitorName":"Eadric (Merchant)","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Anglo-Saxon England (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Anglo-Saxon England (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=193 stability=70 citationsToday=1 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- day 4 shift report (12 presented)
+   ﺔﺑﻭﺎﻨﻤﻟﺍ ﺮﻳﺮﻘﺗ — 4 ﻡﻮﻴﻟﺍ
+   | Subjects processed: 12
+   | Correct: 11   Wrong: 1
+   | Pay earned: +125
+   | Net: +125 Mesopotamian dinar token   (Balance: 193)
+   | Timeline stability: 70% (-5 today)
+   | Citations today: 1
+   ledger: 12 verdicts, correct 11, wrong 1, pay 125, penalties 0, stability -5, unproven 0
+   save day4_shift: 18375 chars sha1 accb99fe97f1845b169a8c8b866e8ddabd835065
+== HOME night 4
+   expense report: baseAmount=10 memberAmount=10 conditionAmount=1 total=21 memberCount=2
+   | Today's expenses:
+   |   Rent & utilities: -10
+   |   Family upkeep (2): -10
+   |   Medical drain: -1
+   | Total: -21 Mesopotamian dinar token   (Balance: 172)
+   family: Partner=1, Kid=1; money=172
+   sleep | Get some rest. Tomorrow's briefing will reflect tonight's choices.
+   after sleep: day=5 money=172 stability=70 ending='' leader='iraq'
+   save night4_sleep: 18455 chars sha1 bf4574b92bb0d9fa549de7a9107a60aa7c82f7fc
+== DAY 5
+   briefing: ﺔﻴﺣﺎﺒﺼﻟﺍ ﺔﻃﺎﺣﻹﺍ — 5 ﻡﻮﻴﻟﺍ
+   | — ﻲﻨﻣﺰﻟﺍ ﻂﺨﻟﺍ ﺭﺎﺒﺧﺃ —
+   | • Science is now DOMINANT in Elizabethan England.
+   world: day=5 runSeed=12345 daySeed=4870862 money=172 stability=70 leader='iraq' upgrades=[interview_protocols,tr_near_east_written] phase=Office
+   plan: DayPlan_Inv_Day5 visitors=13
+-- d5 slot 1: 'Werner (Soldier)' claims 'Weimar Berlin (Modern)' role=Soldier gender=Male liar=False home='Weimar Berlin (Modern)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Werner, Date of Birth=12 Mar 1895, Coin of Issue=Reichsmark & Rentenmark, Native Tongue=Berlin German (Berlinisch) ; Transit Permit: Declared Device=Leica 35mm camera, Bond Currency=Reichsmark & Rentenmark
+   look: m skin4 face-a brown | Outfit:rumpled suit and coat; Hair:brushed-back hair; FacialHair:walrus moustache; Headwear:broad soft felt hat; Accessory:round spectacles
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Weimar Berlin (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Reichsmark & Rentenmark. <Currency=Reichsmark & Rentenmark>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Berlin German (Berlinisch). <Language=Berlin German (Berlinisch)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Leica 35mm camera. <Technology=Leica 35mm camera>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Berlin (Weimar Republic). <Geography=Berlin (Weimar Republic)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Reichspräsident Hindenburg. <Politics=Reichspräsident Hindenburg>
+   [Desk] When were you born?
+   [Traveller] I was born on 12 Mar 1895. <BirthDate=12 Mar 1895>
+   [Desk] How is life back home?
+   [Traveller] Everything is on the radio now.
+   evidence count 0; plan: deny (a travel rule)
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":1,"visitorName":"Werner (Soldier)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"Weimar Berlin (Modern)","claimAllowed":false,"claimSummary":"I request passage home to Weimar Berlin (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=182 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 2: 'Tobias (Diplomat)' claims 'Elizabethan England (Early modern)' role=Diplomat gender=Male liar=False home='Elizabethan England (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Tobias, Date of Birth=7 Feb 1581, Coin of Issue=Silver shilling & sixpence, Native Tongue=Early Modern English ; Transit Permit: Declared Device=Clay tobacco pipe, Bond Currency=Silver shilling & sixpence
+   look: m skin3 face-a brown | Outfit:doublet and ruff; Hair:brushed-up short hair; FacialHair:pick-a-devant beard; Headwear:capotain hat
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Elizabethan England (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver shilling & sixpence. <Currency=Silver shilling & sixpence>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early Modern English. <Language=Early Modern English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Clay tobacco pipe. <Technology=Clay tobacco pipe>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is London (Whitehall Palace). <Geography=London (Whitehall Palace)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Queen Elizabeth I. <Politics=Queen Elizabeth I>
+   [Desk] When were you born?
+   [Traveller] I was born on 7 Feb 1581. <BirthDate=7 Feb 1581>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":2,"visitorName":"Tobias (Diplomat)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Elizabethan England (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Elizabethan England (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=192 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 3: 'Dimitra (Artist)' claims 'Metapolitefsi Athens (Modern)' role=Artist gender=Female liar=False home='Metapolitefsi Athens (Modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Dimitra, Date of Birth=12 Dec 1935, Coin of Issue=Drachma (1954 new drachma), Native Tongue=Demotic Greek (polytonic) ; Transit Permit: Declared Device=Frappé coffee shaker, Bond Currency=Drachma (1954 new drachma)
+   look: f skin2 face-c brown | Outfit:embroidered blouse; Hair:long loose hair; Accessory:tagari bag
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Metapolitefsi Athens (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Drachma (1954 new drachma). <Currency=Drachma (1954 new drachma)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Demotic Greek (polytonic). <Language=Demotic Greek (polytonic)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Frappé coffee shaker. <Technology=Frappé coffee shaker>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Athens (Hellenic Republic). <Geography=Athens (Hellenic Republic)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by President K. Tsatsos. <Politics=President K. Tsatsos>
+   [Desk] When were you born?
+   [Traveller] I was born on 12 Dec 1935. <BirthDate=12 Dec 1935>
+   [Desk] How is life back home?
+   [Traveller] Everything is on the radio now.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":3,"visitorName":"Dimitra (Artist)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Metapolitefsi Athens (Modern)","claimAllowed":true,"claimSummary":"I request passage home to Metapolitefsi Athens (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=202 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 4: 'Cuilan (Scientist)' claims 'Qing Shanghai (Industrial)' role=Scientist gender=Female liar=True home='Periclean Athens (Ancient)' allowed=True shouldAccept=False premade=none tells=[Language/Papers]
+   papers: Travel Passport: Full Name=Cuilan, Date of Birth=2 Jan 1858, Coin of Issue=Silver tael & Mexican dollar, Native Tongue=Attic Greek[TELL] ; Transit Permit: Declared Device=Rickshaw (dongyangche), Bond Currency=Silver tael & Mexican dollar
+   look: f skin2 face-a black | Outfit:trimmed ao and skirt; Hair:low flat bun; Headwear:meile band; Accessory:white jade bangle
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Qing Shanghai (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver tael & Mexican dollar. <Currency=Silver tael & Mexican dollar>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Shanghainese, Pidgin English. <Language=Shanghainese, Pidgin English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Rickshaw (dongyangche). <Technology=Rickshaw (dongyangche)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Peking (Jingshi). <Geography=Peking (Jingshi)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Guangxu Emperor. <Politics=Guangxu Emperor>
+   [Desk] When were you born?
+   [Traveller] I was born on 2 Jan 1858. <BirthDate=2 Jan 1858>
+   [Desk] How is life back home?
+   [Traveller] Everyone talks about the railway.
+   evidence: Language ClaimMismatch from DocumentField value='Attic Greek' expected='Shanghainese, Pidgin English' origin='' | LANGUAGE INCORRECT — papers: "Attic Greek"  /  expected: "Shanghainese, Pidgin English"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":4,"visitorName":"Cuilan (Scientist)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Periclean Athens (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Qing Shanghai (Industrial).","evidenceCount":1,"unprovenDenial":false}
+   world: money=212 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 5: 'Luigi (Merchant)' claims 'Bologna, Kingdom of Italy (Industrial)' role=Merchant gender=Male liar=True home='Weimar Berlin (Modern)' allowed=True shouldAccept=False premade=none tells=[Technology/Answer]
+   papers: Travel Passport: Full Name=Luigi, Date of Birth=26 Jun 1852, Coin of Issue=Italian lira (100 centesimi), Native Tongue=Bolognese dialect; Italian ; Transit Permit: Declared Device=Safety bicycle, Bond Currency=Italian lira (100 centesimi)
+   look: m skin3 face-c black | Outfit:suit and tabarro; Hair:pomaded side parting; FacialHair:Umbertine moustache; Headwear:wide black felt hat; Accessory:silk scarf
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Bologna, Kingdom of Italy (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Italian lira (100 centesimi). <Currency=Italian lira (100 centesimi)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Bolognese dialect; Italian. <Language=Bolognese dialect; Italian>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Leica 35mm camera. <Technology=Leica 35mm camera TELL>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Rome (Kingdom of Italy). <Geography=Rome (Kingdom of Italy)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Umberto I. <Politics=King Umberto I>
+   [Desk] When were you born?
+   [Traveller] I was born on 26 Jun 1852. <BirthDate=26 Jun 1852>
+   [Desk] How is life back home?
+   [Traveller] The smoke never lifts over the mills.
+   evidence: Technology ClaimMismatch from Answer value='Leica 35mm camera' expected='Safety bicycle' origin='' | DEVICE INCORRECT — traveller said: "Leica 35mm camera"  /  expected: "Safety bicycle"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":5,"visitorName":"Luigi (Merchant)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Weimar Berlin (Modern)","claimAllowed":true,"claimSummary":"I request passage home to Bologna, Kingdom of Italy (Industrial).","evidenceCount":1,"unprovenDenial":false}
+   world: money=222 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 6: 'Herbert (Scientist)' claims 'Weimar Berlin (Modern)' role=Scientist gender=Male liar=False home='Weimar Berlin (Modern)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Herbert, Date of Birth=27 Aug 1884, Coin of Issue=Reichsmark & Rentenmark, Native Tongue=Berlin German (Berlinisch) ; Transit Permit: Declared Device=Leica 35mm camera, Bond Currency=Reichsmark & Rentenmark
+   look: m skin2 face-c black | Outfit:rumpled suit and coat; Hair:brushed-back hair; FacialHair:walrus moustache; Headwear:broad soft felt hat; Accessory:round spectacles
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Weimar Berlin (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Reichsmark & Rentenmark. <Currency=Reichsmark & Rentenmark>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Berlin German (Berlinisch). <Language=Berlin German (Berlinisch)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Leica 35mm camera. <Technology=Leica 35mm camera>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Berlin (Weimar Republic). <Geography=Berlin (Weimar Republic)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Reichspräsident Hindenburg. <Politics=Reichspräsident Hindenburg>
+   [Desk] When were you born?
+   [Traveller] I was born on 27 Aug 1884. <BirthDate=27 Aug 1884>
+   [Desk] How is life back home?
+   [Traveller] The news never stops, day or night.
+   evidence count 0; plan: deny (a travel rule)
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":6,"visitorName":"Herbert (Scientist)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"Weimar Berlin (Modern)","claimAllowed":false,"claimSummary":"I request passage home to Weimar Berlin (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=232 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 7: 'Henuttawy (Artist)' claims 'New Kingdom Egypt (Ancient)' role=Artist gender=Female liar=False home='New Kingdom Egypt (Ancient)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Henuttawy, Date of Birth=17 May 1519 BCE, Coin of Issue=Deben (copper, by weight), Native Tongue=Middle Egyptian, hieroglyphs ; Transit Permit: Declared Device=Papyrus & reed brush, Bond Currency=Deben (copper, by weight)
+   look: f skin2 face-c black | Outfit:linen sheath dress; Hair:tripartite wig; Headwear:lotus fillet; Accessory:wesekh collar
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to New Kingdom Egypt (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Deben (copper, by weight). <Currency=Deben (copper, by weight)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Middle Egyptian, hieroglyphs. <Language=Middle Egyptian, hieroglyphs>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Papyrus & reed brush. <Technology=Papyrus & reed brush>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Thebes (Waset). <Geography=Thebes (Waset)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Pharaoh Hatshepsut. <Politics=Pharaoh Hatshepsut>
+   [Desk] When were you born?
+   [Traveller] I was born on 17 May 1519 BCE. <BirthDate=17 May 1519 BCE>
+   [Desk] How is life back home?
+   [Traveller] The Nile rose right on time; the fields are black and rich.
+   evidence count 0; plan: deny (a travel rule)
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":7,"visitorName":"Henuttawy (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"New Kingdom Egypt (Ancient)","claimAllowed":false,"claimSummary":"I request passage home to New Kingdom Egypt (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=242 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 8: 'Hasan (Merchant)' claims 'Ottoman Egypt (Early modern)' role=Merchant gender=Male liar=True home='Late Ming Suzhou (Early modern)' allowed=True shouldAccept=False premade=none tells=[Currency/Answer]
+   papers: Travel Passport: Full Name=Hasan, Date of Birth=16 Jun 1672, Coin of Issue=Silver medin (para), Native Tongue=Egyptian Arabic; Turkish ; Transit Permit: Declared Device=Yemeni coffee (qahwa), Bond Currency=Silver medin (para)
+   look: m skin4 face-a brown | Outfit:quftan and gibba; FacialHair:short rounded beard; Headwear:red-crown turban; Accessory:shawl sash
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Ottoman Egypt (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver taels, Chongzhen cash. <Currency=Silver taels, Chongzhen cash TELL>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Egyptian Arabic; Turkish. <Language=Egyptian Arabic; Turkish>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Yemeni coffee (qahwa). <Technology=Yemeni coffee (qahwa)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Cairo (Ottoman eyalet). <Geography=Cairo (Ottoman eyalet)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Sultan Mustafa II. <Politics=Sultan Mustafa II>
+   [Desk] When were you born?
+   [Traveller] I was born on 16 Jun 1672. <BirthDate=16 Jun 1672>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence: Currency ClaimMismatch from Answer value='Silver taels, Chongzhen cash' expected='Silver medin (para)' origin='' | CURRENCY INCORRECT — traveller said: "Silver taels, Chongzhen cash"  /  expected: "Silver medin (para)"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":8,"visitorName":"Hasan (Merchant)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Late Ming Suzhou (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Ottoman Egypt (Early modern).","evidenceCount":1,"unprovenDenial":false}
+   world: money=252 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 9: 'Rushi (Artist)' claims 'Late Ming Suzhou (Early modern)' role=Artist gender=Female liar=True home='Anglo-Saxon England (Medieval)' allowed=True shouldAccept=False premade=none tells=[Technology/Answer]
+   papers: Travel Passport: Full Name=Rushi, Date of Birth=23 Dec 1589, Coin of Issue=Silver taels, Chongzhen cash, Native Tongue=Wu Chinese (Suzhou dialect) ; Transit Permit: Declared Device=Suanpan abacus, Bond Currency=Silver taels, Chongzhen cash
+   look: f skin2 face-c black | Outfit:ao and horse-face skirt; Hair:high flat bun; Headwear:baotou
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Late Ming Suzhou (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver taels, Chongzhen cash. <Currency=Silver taels, Chongzhen cash>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Wu Chinese (Suzhou dialect). <Language=Wu Chinese (Suzhou dialect)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Tide-dial sundial. <Technology=Tide-dial sundial TELL>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Beijing (Shuntian Fu). <Geography=Beijing (Shuntian Fu)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Chongzhen Emperor. <Politics=Chongzhen Emperor>
+   [Desk] When were you born?
+   [Traveller] I was born on 23 Dec 1589. <BirthDate=23 Dec 1589>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence: Technology ClaimMismatch from Answer value='Tide-dial sundial' expected='Suanpan abacus' origin='' | DEVICE INCORRECT — traveller said: "Tide-dial sundial"  /  expected: "Suanpan abacus"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":9,"visitorName":"Rushi (Artist)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Anglo-Saxon England (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Late Ming Suzhou (Early modern).","evidenceCount":1,"unprovenDenial":false}
+   world: money=262 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 10: 'Gonbei (Scientist)' claims 'Tokugawa Edo (Early modern)' role=Scientist gender=Male liar=False home='Tokugawa Edo (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Gonbei, Date of Birth=14 May 1574, Coin of Issue=Keicho koban & chogin, Native Tongue=Early Modern Japanese ; Transit Permit: Declared Device=Tanegashima matchlock, Bond Currency=Keicho koban & chogin
+   look: m skin3 face-c black | Outfit:kataginu and hakama; Hair:chasen-mage; FacialHair:thin moustache and beard
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Tokugawa Edo (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Keicho koban & chogin. <Currency=Keicho koban & chogin>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early Modern Japanese. <Language=Early Modern Japanese>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Tanegashima matchlock. <Technology=Tanegashima matchlock>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Edo (shogunate seat). <Geography=Edo (shogunate seat)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Shogun Tokugawa Hidetada. <Politics=Shogun Tokugawa Hidetada>
+   [Desk] When were you born?
+   [Traveller] I was born on 14 May 1574. <BirthDate=14 May 1574>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":10,"visitorName":"Gonbei (Scientist)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Tokugawa Edo (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Tokugawa Edo (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=272 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 11: 'Titus (Artist)' claims 'Republican Rome (Ancient)' role=Artist gender=Male liar=False home='Republican Rome (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Titus, Date of Birth=4 May 74 BCE, Coin of Issue=Silver denarius, Native Tongue=Late Republican Latin ; Transit Permit: Declared Device=Al-jabr reckoning tables, Bond Currency=Silver denarius
+   look: m skin3 face-b brown | Outfit:toga and tunica; Hair:Caesar crop
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Republican Rome (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Silver denarius. <Currency=Silver denarius>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Late Republican Latin. <Language=Late Republican Latin>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Al-jabr reckoning tables. <Technology=Al-jabr reckoning tables>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Rome (Roman Republic). <Geography=Rome (Roman Republic)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Consuls Paullus & Marcellus. <Politics=Consuls Paullus & Marcellus>
+   [Desk] When were you born?
+   [Traveller] I was born on 4 May 74 BCE. <BirthDate=4 May 74 BCE>
+   [Desk] How is life back home?
+   [Traveller] The Senate talks, the legions march.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":11,"visitorName":"Titus (Artist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Republican Rome (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Republican Rome (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=282 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 12: 'Lienhard (Soldier)' claims 'Renaissance Nuremberg (Early modern)' role=Soldier gender=Male liar=True home='Ottoman Baghdad (Early modern)' allowed=True shouldAccept=False premade=none tells=[Technology/Answer]
+   papers: Travel Passport: Full Name=Lienhard, Date of Birth=1 Sep 1492, Coin of Issue=Gulden & Nuremberg Pfennig, Native Tongue=East Franconian German ; Transit Permit: Declared Device=Henlein spring-driven watch, Bond Currency=Gulden & Nuremberg Pfennig
+   look: m skin1 face-a red | Outfit:fur-collared Schaube; Hair:short Kolbe; FacialHair:short rounded beard; Headwear:Barett; Accessory:gold chain
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Renaissance Nuremberg (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Gulden & Nuremberg Pfennig. <Currency=Gulden & Nuremberg Pfennig>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak East Franconian German. <Language=East Franconian German>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Quffa (Tigris coracle). <Technology=Quffa (Tigris coracle) TELL>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Nuremberg (Reichsstadt). <Geography=Nuremberg (Reichsstadt)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Emperor Charles V. <Politics=Emperor Charles V>
+   [Desk] When were you born?
+   [Traveller] I was born on 1 Sep 1492. <BirthDate=1 Sep 1492>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence: Technology ClaimMismatch from Answer value='Quffa (Tigris coracle)' expected='Henlein spring-driven watch' origin='' | DEVICE INCORRECT — traveller said: "Quffa (Tigris coracle)"  /  expected: "Henlein spring-driven watch"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":12,"visitorName":"Lienhard (Soldier)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Ottoman Baghdad (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Renaissance Nuremberg (Early modern).","evidenceCount":1,"unprovenDenial":false}
+   world: money=292 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d5 slot 13: 'Rahel (Merchant)' claims 'Ottoman Iraq (Baghdad Vilayet) (Industrial)' role=Merchant gender=Female liar=False home='Ottoman Iraq (Baghdad Vilayet) (Industrial)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Rahel, Date of Birth=6 Feb 1832, Coin of Issue=Kurus & silver mecidiye, Native Tongue=Baghdadi Arabic; Turkish ; Transit Permit: Declared Device=Horse tram to Kadhimiya, Bond Currency=Kurus & silver mecidiye
+   look: f skin4 face-c black | Outfit:brocade dress and abaya; Headwear:abaya veil; Accessory:filigree bangles
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Ottoman Iraq (Baghdad Vilayet) (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Kurus & silver mecidiye. <Currency=Kurus & silver mecidiye>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Baghdadi Arabic; Turkish. <Language=Baghdadi Arabic; Turkish>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Horse tram to Kadhimiya. <Technology=Horse tram to Kadhimiya>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (vilayet seat). <Geography=Baghdad (vilayet seat)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Sultan Abdulaziz. <Politics=Sultan Abdulaziz>
+   [Desk] When were you born?
+   [Traveller] I was born on 6 Feb 1832. <BirthDate=6 Feb 1832>
+   [Desk] How is life back home?
+   [Traveller] The smoke never lifts over the mills.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":13,"visitorName":"Rahel (Merchant)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Ottoman Iraq (Baghdad Vilayet) (Industrial)","claimAllowed":true,"claimSummary":"I request passage home to Ottoman Iraq (Baghdad Vilayet) (Industrial).","evidenceCount":0,"unprovenDenial":false}
+   world: money=302 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- day 5 shift report (13 presented)
+   ﺔﺑﻭﺎﻨﻤﻟﺍ ﺮﻳﺮﻘﺗ — 5 ﻡﻮﻴﻟﺍ
+   | Subjects processed: 13
+   | Correct: 13   Wrong: 0
+   | Pay earned: +130
+   | Net: +130 Mesopotamian dinar token   (Balance: 302)
+   | Timeline stability: 70% (0 today)
+   ledger: 13 verdicts, correct 13, wrong 0, pay 130, penalties 0, stability 0, unproven 0
+   save day5_shift: 19831 chars sha1 6a9b59bd25dfb4b7fe8c36e76b870665e7b4472d
+== HOME night 5
+   expense report: baseAmount=10 memberAmount=10 conditionAmount=2 total=22 memberCount=2
+   | Today's expenses:
+   |   Rent & utilities: -10
+   |   Family upkeep (2): -10
+   |   Medical drain: -2
+   | Total: -22 Mesopotamian dinar token   (Balance: 280)
+   family: Partner=2, Kid=2; money=280
+   treated Partner: condition 1, money=272
+   treated Kid: condition 1, money=264
+   sleep | Get some rest. Tomorrow's briefing will reflect tonight's choices.
+   after sleep: day=6 money=264 stability=70 ending='' leader='iraq'
+   save night5_sleep: 20258 chars sha1 789c63209ba227c73938413c7ed4e1ab02e37b3e
+== DAY 6
+   briefing: ﺔﻴﺣﺎﺒﺼﻟﺍ ﺔﻃﺎﺣﻹﺍ — 6 ﻡﻮﻴﻟﺍ
+   | — ﻲﻨﻣﺰﻟﺍ ﻂﺨﻟﺍ ﺭﺎﺒﺧﺃ —
+   | • Art is now DOMINANT in Metapolitefsi Athens.
+   | • Democracy is now DOMINANT in Elizabethan England.
+   | • A renaissance of artistic movements ripples through every era.
+   world: day=6 runSeed=12345 daySeed=4878847 money=264 stability=70 leader='iraq' upgrades=[interview_protocols,tr_near_east_written] phase=Office
+   plan: DayPlan_Inv_Day6 visitors=14
+-- d6 slot 1: 'Marcello (Diplomat)' claims 'Dolce Vita Rome (Modern)' role=Diplomat gender=Male liar=False home='Dolce Vita Rome (Modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Marcello, Date of Birth=7 Feb 1912, Coin of Issue=Italian lira (Repubblica), Native Tongue=Italian; Romanesco dialect ; Transit Permit: Declared Device=Vespa scooter, Bond Currency=Italian lira (Repubblica)
+   look: m skin3 face-c brown | Outfit:slim mohair suit; Hair:slicked-back hair; Accessory:dark shades
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Dolce Vita Rome (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Italian lira (Repubblica). <Currency=Italian lira (Repubblica)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Italian; Romanesco dialect. <Language=Italian; Romanesco dialect>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Vespa scooter. <Technology=Vespa scooter>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Rome (Italian Republic). <Geography=Rome (Italian Republic)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by President Giovanni Gronchi. <Politics=President Giovanni Gronchi>
+   [Desk] When were you born?
+   [Traveller] I was born on 7 Feb 1912. <BirthDate=7 Feb 1912>
+   [Desk] How is life back home?
+   [Traveller] Everything is on the radio now.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":1,"visitorName":"Marcello (Diplomat)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Dolce Vita Rome (Modern)","claimAllowed":true,"claimSummary":"I request passage home to Dolce Vita Rome (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=274 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 2: 'Irene (Scientist)' claims 'Post-war Britain (Modern)' role=Scientist gender=Female liar=False home='Post-war Britain (Modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Irene, Date of Birth=5 Oct 1890, Coin of Issue=£1 note & half-crown (£sd), Native Tongue=British English ; Transit Permit: Declared Device=NHS spectacles, Bond Currency=£1 note & half-crown (£sd)
+   look: f skin5 face-d grey | Outfit:twinset and tweed skirt; Hair:pin-curl set; Headwear:headscarf; Accessory:pearl strand
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Post-war Britain (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in £1 note & half-crown (£sd). <Currency=£1 note & half-crown (£sd)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak British English. <Language=British English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use NHS spectacles. <Technology=NHS spectacles>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is London (Westminster). <Geography=London (Westminster)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King George VI. <Politics=King George VI>
+   [Desk] When were you born?
+   [Traveller] I was born on 5 Oct 1890. <BirthDate=5 Oct 1890>
+   [Desk] How is life back home?
+   [Traveller] Everything is on the radio now.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":2,"visitorName":"Irene (Scientist)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Post-war Britain (Modern)","claimAllowed":true,"claimSummary":"I request passage home to Post-war Britain (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=284 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 3: 'Kazuko (Scientist)' claims 'Showa Tokyo (Modern)' role=Scientist gender=Female liar=False home='Showa Tokyo (Modern)' allowed=False shouldAccept=False premade=none tells=[]
+   papers: Travel Passport: Full Name=Kazuko, Date of Birth=7 Apr 1942, Coin of Issue=Yen (Shotoku ¥10,000 note), Native Tongue=Standard Japanese (hyojungo) ; Transit Permit: Declared Device=Portable cassette player, Bond Currency=Yen (Shotoku ¥10,000 note)
+   look: f skin2 face-c black | Outfit:office waistcoat set; Hair:Seiko-chan cut; Accessory:orange headphones
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Showa Tokyo (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Yen (Shotoku ¥10,000 note). <Currency=Yen (Shotoku ¥10,000 note)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Standard Japanese (hyojungo). <Language=Standard Japanese (hyojungo)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Portable cassette player. <Technology=Portable cassette player>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Tokyo Metropolis (Tokyo-to). <Geography=Tokyo Metropolis (Tokyo-to)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Emperor Hirohito (Showa). <Politics=Emperor Hirohito (Showa)>
+   [Desk] When were you born?
+   [Traveller] I was born on 7 Apr 1942. <BirthDate=7 Apr 1942>
+   [Desk] How is life back home?
+   [Traveller] The news never stops, day or night.
+   evidence count 0; plan: deny (a travel rule)
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":3,"visitorName":"Kazuko (Scientist)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":false,"trueHomeLabel":"Showa Tokyo (Modern)","claimAllowed":false,"claimSummary":"I request passage home to Showa Tokyo (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=294 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 4: 'Amelia (Merchant)' claims 'Bologna, Kingdom of Italy (Industrial)' role=Merchant gender=Female liar=True home='Ottoman Ioannina (Early modern)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Amelia, Date of Birth=25 Apr 1874, Coin of Issue=Ottoman kurus (grosi)[TELL], Native Tongue=Bolognese dialect; Italian ; Transit Permit: Declared Device=Safety bicycle, Bond Currency=Ottoman kurus (grosi)[TELL]
+   look: f skin3 face-b brown | Outfit:dress and black scialle; Hair:high curled chignon; Accessory:coral beads
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Bologna, Kingdom of Italy (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Italian lira (100 centesimi). <Currency=Italian lira (100 centesimi)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Bolognese dialect; Italian. <Language=Bolognese dialect; Italian>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Safety bicycle. <Technology=Safety bicycle>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Rome (Kingdom of Italy). <Geography=Rome (Kingdom of Italy)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Umberto I. <Politics=King Umberto I>
+   [Desk] When were you born?
+   [Traveller] I was born on 25 Apr 1874. <BirthDate=25 Apr 1874>
+   [Desk] How is life back home?
+   [Traveller] The smoke never lifts over the mills.
+   evidence: Currency ClaimMismatch from DocumentField value='Ottoman kurus (grosi)' expected='Italian lira (100 centesimi)' origin='' | CURRENCY INCORRECT — papers: "Ottoman kurus (grosi)"  /  expected: "Italian lira (100 centesimi)"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":4,"visitorName":"Amelia (Merchant)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Ottoman Ioannina (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Bologna, Kingdom of Italy (Industrial).","evidenceCount":1,"unprovenDenial":false}
+   world: money=304 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 5: 'Erich (Scientist)' claims 'Weimar Berlin (Modern)' role=Scientist gender=Male liar=False home='Weimar Berlin (Modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Erich, Date of Birth=7 May 1885, Coin of Issue=Reichsmark & Rentenmark, Native Tongue=Berlin German (Berlinisch) ; Transit Permit: Declared Device=Leica 35mm camera, Bond Currency=Reichsmark & Rentenmark
+   look: m skin4 face-c brown | Outfit:rumpled suit and coat; Hair:brushed-back hair; FacialHair:walrus moustache; Headwear:broad soft felt hat; Accessory:round spectacles
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Weimar Berlin (Modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Reichsmark & Rentenmark. <Currency=Reichsmark & Rentenmark>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Berlin German (Berlinisch). <Language=Berlin German (Berlinisch)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Leica 35mm camera. <Technology=Leica 35mm camera>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Berlin (Weimar Republic). <Geography=Berlin (Weimar Republic)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Reichspräsident Hindenburg. <Politics=Reichspräsident Hindenburg>
+   [Desk] When were you born?
+   [Traveller] I was born on 7 May 1885. <BirthDate=7 May 1885>
+   [Desk] How is life back home?
+   [Traveller] Everything is on the radio now.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":5,"visitorName":"Erich (Scientist)","chosenEraId":"modern","trueEraId":"modern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Weimar Berlin (Modern)","claimAllowed":true,"claimSummary":"I request passage home to Weimar Berlin (Modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=314 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 6: 'Mahdi (Diplomat)' claims 'Baghdad Garden City (Future)' role=Diplomat gender=Male liar=True home='Renaissance Nuremberg (Early modern)' allowed=True shouldAccept=False premade=none tells=[Politics/Answer]
+   papers: Travel Passport: Full Name=Mahdi, Date of Birth=7 Apr 2125, Coin of Issue=Mesopotamian dinar token, Native Tongue=Unified Iraqi Arabic ; Transit Permit: Declared Device=Vertical date-palm farm, Bond Currency=Mesopotamian dinar token
+   look: m skin3 face-a black | Outfit:fringed lapis coat; Hair:short textured crop; FacialHair:short trimmed beard
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Baghdad Garden City (Future).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Mesopotamian dinar token. <Currency=Mesopotamian dinar token>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Unified Iraqi Arabic. <Language=Unified Iraqi Arabic>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Vertical date-palm farm. <Technology=Vertical date-palm farm>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (Garden City). <Geography=Baghdad (Garden City)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Emperor Charles V. <Politics=Emperor Charles V TELL>
+   [Desk] When were you born?
+   [Traveller] I was born on 7 Apr 2125. <BirthDate=7 Apr 2125>
+   [Desk] How is life back home?
+   [Traveller] The maglev was late again. Some things never change.
+   evidence: Politics ClaimMismatch from Answer value='Emperor Charles V' expected='President Layla Kareem' origin='' | RULER INCORRECT — traveller said: "Emperor Charles V"  /  expected: "President Layla Kareem"
+   evidence count 1; plan: prove the tells, deny
+   decided on the PC: DENY
+   verdict: {"caseIndex1Based":6,"visitorName":"Mahdi (Diplomat)","chosenEraId":"future","trueEraId":"future","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Renaissance Nuremberg (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Baghdad Garden City (Future).","evidenceCount":1,"unprovenDenial":false}
+   world: money=324 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 7: 'Rabia (Soldier)' claims 'Ottoman Baghdad (Early modern)' role=Soldier gender=Female liar=False home='Ottoman Baghdad (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Rabia, Date of Birth=14 Apr 1664, Coin of Issue=Kurus & Persian abbasi, Native Tongue=Baghdadi Arabic; Turkish ; Transit Permit: Declared Device=Quffa (Tigris coracle), Bond Currency=Kurus & Persian abbasi
+   look: f skin3 face-c black | Outfit:striped dress and aba; Headwear:futa shawl; Accessory:qilada necklace
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Ottoman Baghdad (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Kurus & Persian abbasi. <Currency=Kurus & Persian abbasi>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Baghdadi Arabic; Turkish. <Language=Baghdadi Arabic; Turkish>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Quffa (Tigris coracle). <Technology=Quffa (Tigris coracle)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (Ottoman eyalet). <Geography=Baghdad (Ottoman eyalet)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Sultan Ahmed III. <Politics=Sultan Ahmed III>
+   [Desk] When were you born?
+   [Traveller] I was born on 14 Apr 1664. <BirthDate=14 Apr 1664>
+   [Desk] How is life back home?
+   [Traveller] Every week a new pamphlet, every month a new war.
+   evidence count 0; plan: accept
+   decided at the stamp tray (open): ACCEPT
+   verdict: {"caseIndex1Based":7,"visitorName":"Rabia (Soldier)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Ottoman Baghdad (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Ottoman Baghdad (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=334 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 8: 'Kasahaya (Scientist)' claims 'Kofun Yamato (Ancient)' role=Scientist gender=Male liar=False home='Kofun Yamato (Ancient)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Kasahaya, Date of Birth=19 Dec 431, Coin of Issue=Iron ingots & cloth (barter), Native Tongue=Pre-Old Japanese (Yamato) ; Transit Permit: Declared Device=Sue ware (anagama kiln), Bond Currency=Iron ingots & cloth (barter)
+   look: m skin3 face-b black | Outfit:kinu and tied hakama; Hair:mizura; Accessory:magatama necklace
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Kofun Yamato (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Iron ingots & cloth (barter). <Currency=Iron ingots & cloth (barter)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Pre-Old Japanese (Yamato). <Language=Pre-Old Japanese (Yamato)>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Sue ware (anagama kiln). <Technology=Sue ware (anagama kiln)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Totsu-Asuka Palace, Yamato. <Geography=Totsu-Asuka Palace, Yamato>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Great King Sai (Ingyo). <Politics=Great King Sai (Ingyo)>
+   [Desk] When were you born?
+   [Traveller] I was born on 19 Dec 431. <BirthDate=19 Dec 431>
+   [Desk] How is life back home?
+   [Traveller] The roads are safe, as long as you travel by day.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":8,"visitorName":"Kasahaya (Scientist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Kofun Yamato (Ancient)","claimAllowed":true,"claimSummary":"I request passage home to Kofun Yamato (Ancient).","evidenceCount":0,"unprovenDenial":false}
+   world: money=344 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 9: 'Rifaa (Artist)' claims 'Khedivate of Egypt (Industrial)' role=Artist gender=Male liar=True home='Florentine Republic (Medieval)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Rifaa, Date of Birth=17 Jan 1803, Coin of Issue=Gold florin (fiorino d'oro)[TELL], Native Tongue=Egyptian Arabic; French ; Transit Permit: Declared Device=Suez Canal steamship, Bond Currency=Gold florin (fiorino d'oro)[TELL]
+   look: m skin3 face-d grey | Outfit:black stambouline; Hair:short trimmed hair; FacialHair:groomed moustache; Headwear:tarboush; Accessory:gold watch chain
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Khedivate of Egypt (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Egyptian pound (qirsh/para). <Currency=Egyptian pound (qirsh/para)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Egyptian Arabic; French. <Language=Egyptian Arabic; French>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Suez Canal steamship. <Technology=Suez Canal steamship>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Cairo (Khedivate). <Geography=Cairo (Khedivate)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Khedive Isma'il. <Politics=Khedive Isma'il>
+   [Desk] When were you born?
+   [Traveller] I was born on 17 Jan 1803. <BirthDate=17 Jan 1803>
+   [Desk] How is life back home?
+   [Traveller] The smoke never lifts over the mills.
+   evidence: Currency ClaimMismatch from DocumentField value='Gold florin (fiorino d'oro)' expected='Egyptian pound (qirsh/para)' origin='' | CURRENCY INCORRECT — papers: "Gold florin (fiorino d'oro)"  /  expected: "Egyptian pound (qirsh/para)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":9,"visitorName":"Rifaa (Artist)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Florentine Republic (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Khedivate of Egypt (Industrial).","evidenceCount":1,"unprovenDenial":false}
+   world: money=354 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 10: 'Isotta (Merchant)' claims 'Sforza Milan (Early modern)' role=Merchant gender=Female liar=False home='Sforza Milan (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Isotta, Date of Birth=25 Sep 1462, Coin of Issue=Milanese silver testone, Native Tongue=Milanese Lombard ; Transit Permit: Declared Device=Milanese plate armour, Bond Currency=Milanese silver testone
+   look: f skin3 face-b black | Outfit:laced-sleeve gamurra; Hair:smooth centre parting; Headwear:lenza; Accessory:jet bead necklace
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Sforza Milan (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Milanese silver testone. <Currency=Milanese silver testone>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Milanese Lombard. <Language=Milanese Lombard>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Milanese plate armour. <Technology=Milanese plate armour>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Milan (Duchy of Milan). <Geography=Milan (Duchy of Milan)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Duke Ludovico Sforza. <Politics=Duke Ludovico Sforza>
+   [Desk] When were you born?
+   [Traveller] I was born on 25 Sep 1462. <BirthDate=25 Sep 1462>
+   [Desk] How is life back home?
+   [Traveller] The post rides faster than ever.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":10,"visitorName":"Isotta (Merchant)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Sforza Milan (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Sforza Milan (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=364 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 11: 'Lovernisca (Scientist)' claims 'Iron Age Britain (Ancient)' role=Scientist gender=Female liar=True home='Ottoman Egypt (Early modern)' allowed=True shouldAccept=False premade=none tells=[Currency/Papers]
+   papers: Travel Passport: Full Name=Lovernisca, Date of Birth=1 Jul 41 BCE, Coin of Issue=Silver medin (para)[TELL], Native Tongue=Common Brittonic ; Transit Permit: Declared Device=Essedum (war chariot), Bond Currency=Silver medin (para)[TELL]
+   look: f skin2 face-d grey | Outfit:checked wool dress; Hair:two thick braids; Accessory:torc
+   [Desk] Next! Step forward, madam.
+   [Traveller] I request passage home to Iron Age Britain (Ancient).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What do you trade with at home?
+   [Traveller] We trade with Gold stater (corn-ear). <Currency=Gold stater (corn-ear)>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Common Brittonic. <Language=Common Brittonic>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Essedum (war chariot). <Technology=Essedum (war chariot)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Camulodunum (Colchester). <Geography=Camulodunum (Colchester)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by King Cunobelinus. <Politics=King Cunobelinus>
+   [Desk] When were you born?
+   [Traveller] I was born on 1 Jul 41 BCE. <BirthDate=1 Jul 41 BCE>
+   [Desk] How is life back home?
+   [Traveller] The roads are safe, as long as you travel by day.
+   evidence: Currency ClaimMismatch from DocumentField value='Silver medin (para)' expected='Gold stater (corn-ear)' origin='' | CURRENCY INCORRECT — papers: "Silver medin (para)"  /  expected: "Gold stater (corn-ear)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":11,"visitorName":"Lovernisca (Scientist)","chosenEraId":"ancient","trueEraId":"ancient","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Ottoman Egypt (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Iron Age Britain (Ancient).","evidenceCount":1,"unprovenDenial":false}
+   world: money=374 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 12: 'Christopher (Merchant)' claims 'Elizabethan England (Early modern)' role=Merchant gender=Male liar=False home='Elizabethan England (Early modern)' allowed=True shouldAccept=True premade=none tells=[]
+   papers: Travel Passport: Full Name=Christopher, Date of Birth=16 Jan 1577, Coin of Issue=Silver shilling & sixpence, Native Tongue=Early Modern English ; Transit Permit: Declared Device=Clay tobacco pipe, Bond Currency=Silver shilling & sixpence
+   look: m skin2 face-a blond | Outfit:doublet and ruff; Hair:brushed-up short hair; FacialHair:pick-a-devant beard; Headwear:capotain hat
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Elizabethan England (Early modern).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Silver shilling & sixpence. <Currency=Silver shilling & sixpence>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Early Modern English. <Language=Early Modern English>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Clay tobacco pipe. <Technology=Clay tobacco pipe>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is London (Whitehall Palace). <Geography=London (Whitehall Palace)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Queen Elizabeth I. <Politics=Queen Elizabeth I>
+   [Desk] When were you born?
+   [Traveller] I was born on 16 Jan 1577. <BirthDate=16 Jan 1577>
+   [Desk] How is life back home?
+   [Traveller] The post rides faster than ever.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":12,"visitorName":"Christopher (Merchant)","chosenEraId":"earlymodern","trueEraId":"earlymodern","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Elizabethan England (Early modern)","claimAllowed":true,"claimSummary":"I request passage home to Elizabethan England (Early modern).","evidenceCount":0,"unprovenDenial":false}
+   world: money=384 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 13: 'Ghali (Artist)' claims 'Khedivate of Egypt (Industrial)' role=Artist gender=Male liar=True home='Northern Song Kaifeng (Medieval)' allowed=True shouldAccept=False premade=none tells=[Currency/Answer]
+   papers: Travel Passport: Full Name=Ghali, Date of Birth=23 Jun 1825, Coin of Issue=Egyptian pound (qirsh/para), Native Tongue=Egyptian Arabic; French ; Transit Permit: Declared Device=Suez Canal steamship, Bond Currency=Egyptian pound (qirsh/para)
+   look: m skin4 face-c brown | Outfit:black stambouline; Hair:short trimmed hair; FacialHair:groomed moustache; Headwear:tarboush; Accessory:gold watch chain
+   [Desk] Next! Step forward, sir.
+   [Traveller] I request passage home to Khedivate of Egypt (Industrial).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Copper cash (Xining Yuanbao). <Currency=Copper cash (Xining Yuanbao) TELL>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Egyptian Arabic; French. <Language=Egyptian Arabic; French>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Suez Canal steamship. <Technology=Suez Canal steamship>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Cairo (Khedivate). <Geography=Cairo (Khedivate)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Khedive Isma'il. <Politics=Khedive Isma'il>
+   [Desk] When were you born?
+   [Traveller] I was born on 23 Jun 1825. <BirthDate=23 Jun 1825>
+   [Desk] How is life back home?
+   [Traveller] The smoke never lifts over the mills.
+   evidence: Currency ClaimMismatch from Answer value='Copper cash (Xining Yuanbao)' expected='Egyptian pound (qirsh/para)' origin='' | CURRENCY INCORRECT — traveller said: "Copper cash (Xining Yuanbao)"  /  expected: "Egyptian pound (qirsh/para)"
+   evidence count 1; plan: prove the tells, deny
+   decided at the stamp tray (open): DENY
+   verdict: {"caseIndex1Based":13,"visitorName":"Ghali (Artist)","chosenEraId":"industrial","trueEraId":"industrial","correct":true,"wasLegendary":false,"payAwarded":10,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":false,"shouldAccept":false,"wasLiar":true,"trueHomeLabel":"Northern Song Kaifeng (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Khedivate of Egypt (Industrial).","evidenceCount":1,"unprovenDenial":false}
+   world: money=394 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+10 Mesopotamian dinar token)
+-- d6 slot 14: 'Muhammad al-Khwarizmi' claims 'Abbasid Baghdad (Medieval)' role=Scientist gender=Male liar=False home='Abbasid Baghdad (Medieval)' allowed=True shouldAccept=True premade=khwarizmi tells=[]
+   papers: Travel Passport: Full Name=Muhammad al-Khwarizmi, Date of Birth=3 Apr 780, Coin of Issue=Abbasid silver dirham, Native Tongue=Arabic; Persian; Aramaic ; Transit Permit: Declared Device=Paper (Baghdad mills), Bond Currency=Abbasid silver dirham
+   look: premade khwarizmi | Outfit:Period dress
+   [Desk] Priority arrival: Muhammad al-Khwarizmi.
+   [Traveller] I request passage home to Abbasid Baghdad (Medieval).
+   [Desk] Your Transit Permit, please.
+   [Traveller] Here you are.
+   [Desk] Step closer to the glass, please.
+   [Traveller] Like this?
+   [Desk] Speak up, please. I can barely hear you.
+   [Traveller] Sorry. Is this better?
+   [Desk] What money do you pay with at home?
+   [Traveller] We pay in Abbasid silver dirham. <Currency=Abbasid silver dirham>
+   [Desk] What language do you speak at home?
+   [Traveller] At home we speak Arabic; Persian; Aramaic. <Language=Arabic; Persian; Aramaic>
+   [Desk] What tool do you use every day?
+   [Traveller] Every day I use Paper (Baghdad mills). <Technology=Paper (Baghdad mills)>
+   [Desk] What is the capital of your land?
+   [Traveller] Our capital is Baghdad (Madinat al-Salam). <Geography=Baghdad (Madinat al-Salam)>
+   [Desk] Who rules your land?
+   [Traveller] We are ruled by Caliph al-Ma'mun. <Politics=Caliph al-Ma'mun>
+   [Desk] When were you born?
+   [Traveller] I was born on 3 Apr 780. <BirthDate=3 Apr 780>
+   [Desk] How is life back home?
+   [Traveller] Taxes again. Always taxes.
+   evidence count 0; plan: accept
+   decided on the PC: ACCEPT
+   verdict: {"caseIndex1Based":14,"visitorName":"Muhammad al-Khwarizmi","chosenEraId":"medieval","trueEraId":"medieval","correct":true,"wasLegendary":true,"payAwarded":25,"moneyPenalty":0,"stabilityDelta":0.0,"citationIssued":false,"wasFreeWarning":false,"firedNow":false,"citationText":"","accepted":true,"shouldAccept":true,"wasLiar":false,"trueHomeLabel":"Abbasid Baghdad (Medieval)","claimAllowed":true,"claimSummary":"I request passage home to Abbasid Baghdad (Medieval).","evidenceCount":0,"unprovenDenial":false}
+   world: money=419 stability=70 citationsToday=0 ending=''
+   verdict line: CORRECT  (+25 Mesopotamian dinar token)
+-- day 6 shift report (14 presented)
+   ﺔﺑﻭﺎﻨﻤﻟﺍ ﺮﻳﺮﻘﺗ — 6 ﻡﻮﻴﻟﺍ
+   | Subjects processed: 14
+   | Correct: 14   Wrong: 0
+   | Pay earned: +155
+   | Net: +155 Mesopotamian dinar token   (Balance: 419)
+   | Timeline stability: 70% (0 today)
+   ledger: 14 verdicts, correct 14, wrong 0, pay 155, penalties 0, stability 0, unproven 0
+   save day6_shift: 22615 chars sha1 11f7711fbe1d8cb5efd3354b54bc9585594c41e8
+== HOME night 6
+   expense report: baseAmount=10 memberAmount=10 conditionAmount=2 total=22 memberCount=2
+   | Today's expenses:
+   |   Rent & utilities: -10
+   |   Family upkeep (2): -10
+   |   Medical drain: -2
+   | Total: -22 Mesopotamian dinar token   (Balance: 397)
+   family: Partner=1, Kid=2; money=397
+   treated Kid: condition 1, money=389
+   sleep | Get some rest. Tomorrow's briefing will reflect tonight's choices.
+   after sleep: day=7 money=389 stability=70 ending='' leader='iraq'
+   save night6_sleep: 22463 chars sha1 d9a1d276e466423f75103d0bb07044cc5c893a8c
+== DAY 7 (morning only)
+   briefing: ﺔﻴﺣﺎﺒﺼﻟﺍ ﺔﻃﺎﺣﻹﺍ — 7 ﻡﻮﻴﻟﺍ
+   | — ﻲﻨﻣﺰﻟﺍ ﻂﺨﻟﺍ ﺭﺎﺒﺧﺃ —
+   | • Science is now DOMINANT in Post-war Britain.
+   world: day=7 runSeed=12345 daySeed=4853996 money=389 stability=70 leader='iraq' upgrades=[interview_protocols,tr_near_east_written] phase=Office
+   plan: DayPlan_Inv_Day6 visitors=14
+END
