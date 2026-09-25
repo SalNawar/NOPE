@@ -662,6 +662,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 **`ContentLibraryValidator`** (CRLF):
 - **New** `public static int MaxRequestedDocuments(IEnumerable<CaseBlueprintSO> blueprints)`: the most templates with `DocumentHandOvers.IsRequested(handOver)` in one blueprint. Callers: the menu check (201) and the generator.
 - **`MaxDocuments`** stays, with its doc updated: "the most papers one traveller carries". Caller: the builder's desk-slot check.
+- **Both walk the blueprints through one private helper**, `MaxTemplates(IEnumerable<CaseBlueprintSO> blueprints, Func<DocumentTemplateSO, bool> counts)` (null blueprints and templates skipped; 0 for none): `MaxDocuments` counts every template, `MaxRequestedDocuments` those with `IsRequested`. A later change to how a blueprint's templates count then reaches the slot check and the menu check alike (final review, §10).
 - **`TravellerBlueprints`** (220) becomes `public`, so the builder counts the same blueprints.
 - The `CheckInterview` doc (117) says "the traveller wheel".
 
@@ -1386,3 +1387,4 @@ Five findings from the review after §9, each re-checked against the code at `68
 
 - **Inert papers swallowed the click that leaves focus on screens wider than 16:9** (fixed): a paper at the desk's right end shows at the left of the focused view there, and its collider, above the exit zone, took the click. R38: papers the booth puts away take no raycasts; `BoothRulesTests` pins that the exit zone is never up while the papers take input. §1.2, §1.9, §2.9, §3.4 (:18), §7. The collider switch itself is Assembly-CSharp; a merge re-run can check it with the Game view at 2560 × 1080 (focus, then press on a paper dragged to the desk's right end: the view leaves focus).
 - **§3.4's hover line named the power button as a hand-cursor-only hit zone** (fixed, docs only): the button is a visible sprite with the white outline, and the plan and FEATURES already named the focus exit zone and the glass zone's arrow. §3.4 (:82) now says what FEATURES says, both list the power button among the outlined clickables, and the departure is recorded under "Implementation plan departures".
+- **`MaxRequestedDocuments` copied `MaxDocuments`' blueprint walk** (fixed): the two now share the private `MaxTemplates(blueprints, counts)` and differ only in the template predicate (§2.14). No behaviour changes; the shipped blueprint still gives 1 and 2.

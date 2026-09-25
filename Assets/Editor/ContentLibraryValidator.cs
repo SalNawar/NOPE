@@ -211,10 +211,7 @@ public static class ContentLibraryValidator
     /// desk's paper spawn slots against it.
     /// </summary>
     public static int MaxDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
-        blueprints.Where(b => b != null && b.DocumentTemplates != null)
-                  .Select(b => b.DocumentTemplates.Count(t => t != null))
-                  .DefaultIfEmpty(0)
-                  .Max();
+        MaxTemplates(blueprints, t => true);
 
     /// <summary>
     /// The most documents one traveller hands over on request among these
@@ -223,8 +220,17 @@ public static class ContentLibraryValidator
     /// source's blueprints with the same rule.
     /// </summary>
     public static int MaxRequestedDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
+        MaxTemplates(blueprints, t => DocumentHandOvers.IsRequested(t.handOver));
+
+    /// <summary>
+    /// The one walk behind MaxDocuments and MaxRequestedDocuments: the most
+    /// templates one blueprint holds that <paramref name="counts"/> accepts
+    /// (null blueprints and null templates are skipped, so the predicate never
+    /// sees a null); 0 for no blueprints.
+    /// </summary>
+    private static int MaxTemplates(IEnumerable<CaseBlueprintSO> blueprints, Func<DocumentTemplateSO, bool> counts) =>
         blueprints.Where(b => b != null && b.DocumentTemplates != null)
-                  .Select(b => b.DocumentTemplates.Count(t => t != null && DocumentHandOvers.IsRequested(t.handOver)))
+                  .Select(b => b.DocumentTemplates.Count(t => t != null && counts(t)))
                   .DefaultIfEmpty(0)
                   .Max();
 
