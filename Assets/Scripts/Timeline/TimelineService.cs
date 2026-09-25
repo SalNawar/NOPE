@@ -3,27 +3,25 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// Stable score-key builders so every system reads/writes the same keys.
+/// Score-key builders over the content types, so every system reads and
+/// writes the same keys; the grammar itself lives in Domain ScoreKey.
 /// </summary>
 public static class TimelineKeys
 {
     /// <summary>Score of an attribute inside an authored profile.</summary>
-    public static string ProfileAttr(NationEraProfileSO profile, AttributeSO attr) =>
-        $"attr:{profile.id}:{attr.id}";
+    public static string ProfileAttr(NationEraProfileSO profile, AttributeSO attr) => ScoreKey.ProfileAttr(profile.id, attr.id);
 
     /// <summary>Score of an attribute at an unauthored nation+era destination.</summary>
-    public static string AdHocAttr(NationSO nation, EraSO era, AttributeSO attr) =>
-        $"attr:{nation.id}@{era.id}:{attr.id}";
+    public static string AdHocAttr(NationSO nation, EraSO era, AttributeSO attr) => ScoreKey.AdHocAttr(nation.id, era.id, attr.id);
 
     /// <summary>Global score of an attribute across the whole timeline.</summary>
-    public static string GlobalAttr(AttributeSO attr) => $"attrTotal:{attr.id}";
+    public static string GlobalAttr(AttributeSO attr) => ScoreKey.GlobalAttr(attr.id);
 
     /// <summary>Global score of a nation.</summary>
-    public static string Nation(NationSO nation) => $"nation:{nation.id}";
+    public static string Nation(NationSO nation) => ScoreKey.Nation(nation.id);
 
     /// <summary>Dominance bookkeeping key for a profile attribute.</summary>
-    public static string Dominance(NationEraProfileSO profile, AttributeSO attr) =>
-        $"{profile.id}:{attr.id}";
+    public static string Dominance(NationEraProfileSO profile, AttributeSO attr) => ScoreKey.Dominance(profile.id, attr.id);
 }
 
 /// <summary>
@@ -191,38 +189,30 @@ public static class TimelineService
             if (profile == null || profile.baselines == null || profile.baselines.Count == 0)
                 continue;
 
-            // Rank this profile's attributes by current score.
-            var ranked = new List<(AttributeSO attr, float score)>();
+            // This profile's attributes (baseline + delta) in baseline order, tiered by the Domain ranking.
+            List<AttributeSO> attrs = profile.baselines.Where(b => b != null && b.attribute != null).Select(b => b.attribute).ToList();
+            var scores = attrs.Select(a => new RankedScore(a.id, GetProfileAttributeScore(world, profile, a))).ToList();
+            DominanceTier[] tiers = DominanceTiers.Classify(scores, dominantCount, supportingCount);
 
-            foreach (AttributeBaseline b in profile.baselines)
+            Debug.Log($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", attrs.Select((a, i) => $"{a.displayName}={scores[i].score:0.#} ({tiers[i]})"))}.");
+
+            for (int i = 0; i < attrs.Count; i++)
             {
-                if (b == null || b.attribute == null)
-                    continue;
+                string key = TimelineKeys.Dominance(profile, attrs[i]);
 
-                ranked.Add((b.attribute, GetProfileAttributeScore(world, profile, b.attribute)));
-            }
-
-            ranked.Sort((a, b) => b.score.CompareTo(a.score));
-
-            Debug.Log($"[TimelineService] RecomputeDominance: profile '{profile.displayName}' scores — {string.Join(", ", ranked.Select(r => $"{r.attr.displayName}={r.score:0.#}"))}.");
-
-            for (int i = 0; i < ranked.Count; i++)
-            {
-                string key = TimelineKeys.Dominance(profile, ranked[i].attr);
-
-                if (i < dominantCount)
+                if (tiers[i] == DominanceTier.Dominant)
                 {
                     newDominant.Add(key);
 
                     if (announce && !world.timeline.dominantKeys.Contains(key))
-                        news.Add($"{ranked[i].attr.displayName} is now DOMINANT in {profile.displayName}.");
+                        news.Add($"{attrs[i].displayName} is now DOMINANT in {profile.displayName}.");
                 }
-                else if (i < dominantCount + supportingCount)
+                else if (tiers[i] == DominanceTier.Supporting)
                 {
                     newSupporting.Add(key);
 
                     if (announce && !world.timeline.supportingKeys.Contains(key) && !world.timeline.dominantKeys.Contains(key))
-                        news.Add($"{ranked[i].attr.displayName} is rising in {profile.displayName}.");
+                        news.Add($"{attrs[i].displayName} is rising in {profile.displayName}.");
                 }
             }
         }
