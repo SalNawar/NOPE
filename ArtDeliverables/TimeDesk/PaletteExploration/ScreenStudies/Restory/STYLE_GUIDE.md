@@ -1,5 +1,7 @@
 # ReStory-based screen direction — 2026-09-25
 
+**Superseded on 2026-09-26:** the user rejected this screen for too many blues. The current twenty-colour proposal is in `../../Palette20/README.md`; its exact swatches and assignments override the blue pad/tray/NEXT/key recommendations below. Keep this file only as iteration history.
+
 Latest single palette study, using Saleh's full ReStory desk screenshot and the original game view. It supersedes the abstract charts, monochrome boards, generic beige schemes and overly realistic mockups. This PNG is an AI paint-over, not a runtime capture. The lamp shape drifted toward the reference; treat its finish as guidance, not an approved model replacement. The teleporter's decorative bronze segments in the paint-over are not a requested palette change; retain a coherent neutral-metal ring in implementation.
 
 Art direction:
@@ -16,4 +18,3 @@ Art direction:
 Source references: original local Gameview; Saleh's supplied ReStory image codex-clipboard-7f476fd2-a65b-4f3a-a5f7-7375ce0179dd.png. The official ReStory Steam page was also consulted: https://store.steampowered.com/app/3812600/ReStory_Chill_Electronics_Repairs/
 
 Only the flag conversion has been applied to Unity in this pass. Colour/wood changes remain a screen study. Character generation remains paused until this art-direction task is resolved. The original request for ten options has been overtaken by iterative correction of one screen direction; do not describe ten approved material-correct options as delivered.
-
