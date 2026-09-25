@@ -10,6 +10,7 @@ This page is for ChatGPT. It lists everything you need to draw the art for "Time
 | [CHATGPT_MESSAGE.md](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/superpowers/drafts/art/CHATGPT_MESSAGE.md) | The first message and the first two images (the base man and woman) | The very first chat |
 | [character_guide_v2_1024x1536.png](https://media.githubusercontent.com/media/SalNawar/NOPE/main/docs/superpowers/drafts/art/character_guide_v2_1024x1536.png) | The figure guide: where the figure stands on the 1024 x 1536 canvas | Attached to the base-figure prompts |
 | [UI_ART_RULES.md](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/superpowers/drafts/art/UI_ART_RULES.md) | Wallpapers, wheel icons and the 2D layers drawn over the office | UI art only (a separate Project) |
+| [ART_ASSET_LIST.md](https://raw.githubusercontent.com/SalNawar/NOPE/main/docs/ART_ASSET_LIST.md) | Every piece of art the game needs: each file, its size and status, the order, and what is retired | Choosing what to draw next (not the characters) |
 
 Saleh also attaches `office_style_reference.png`, a screenshot of the game's office. It is a **style reference only**: match its colour range and contrast so the figures sit in that room. Never draw the room.
 
