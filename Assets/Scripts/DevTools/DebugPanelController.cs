@@ -96,10 +96,10 @@ public sealed class DebugPanelController : MonoBehaviour
     {
         GUILayout.Label("Day flow");
 
-        if (GUILayout.Button("Skip Day (nightly resolve + advance)"))
+        if (GUILayout.Button("Skip Day (sleep: endings + nightly resolve + advance)"))
         {
-            Debug.Log("[DebugPanelController] Cheat: Skip Day requested.");
-            run.AdvanceToNextDay();
+            Debug.Log("[DebugPanelController] Cheat: Skip Day requested (through Sleep).");
+            run.Sleep();
         }
 
         if (lib != null)

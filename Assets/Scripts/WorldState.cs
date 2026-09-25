@@ -91,6 +91,9 @@ public sealed class WorldState
     /// <summary>History: the timeline leader, latched fact edits and pending carries (piece 5; an old save loads it empty).</summary>
     public HistoryState history = new();
 
+    /// <summary>Where Continue resumes: the Office until the day's shift ends, Home after the end-of-shift save (a save without it resumes in the Office).</summary>
+    public RunPhase phase = RunPhase.Office;
+
     // -----------------------------
     // Flag helpers
     // -----------------------------
@@ -160,6 +163,16 @@ public sealed class WorldState
         if (!string.IsNullOrEmpty(upgradeId) && !unlockedUpgradeIds.Contains(upgradeId))
             unlockedUpgradeIds.Add(upgradeId);
     }
+}
+
+/// <summary>Where a saved run resumes. Serialized as ints: append only.</summary>
+public enum RunPhase
+{
+    /// <summary>The day's office shift (or the start of a run).</summary>
+    Office,
+
+    /// <summary>After the day's end-of-shift save: the Home phase, then sleep.</summary>
+    Home
 }
 
 /// <summary>Serializable named counter.</summary>

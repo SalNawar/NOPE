@@ -106,6 +106,9 @@ public sealed class GameManager : MonoBehaviour
                 dayPlan = planForToday;
 
             seed = run.GetDaySeed();
+
+            if (_worldState.phase == RunPhase.Home)
+                Debug.LogWarning($"[GameManager] The saved run already finished day {_worldState.day}'s shift; replaying it because the Office scene was opened directly. Continue from the Title resumes at Home.");
         }
         else
         {
@@ -276,7 +279,7 @@ public sealed class GameManager : MonoBehaviour
 
             if (_gameConfig != null)
             {
-                ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig);
+                ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
                 if (ending != null)
                 {
                     Debug.Log($"[GameManager] Ending check after dialog consequences: matched '{ending.id}' ({ending.displayName}).");
@@ -284,6 +287,9 @@ public sealed class GameManager : MonoBehaviour
                 }
             }
         }
+
+        // Continue from this save resumes at Home, never replaying this shift.
+        _worldState.phase = RunPhase.Home;
 
         if (RunManager.HasInstance)
         {
@@ -556,7 +562,7 @@ public sealed class GameManager : MonoBehaviour
         Debug.Log($"[Result] Case {_activeCaseIndex1Based}: chose '{verdict.chosenEraId}', true='{verdict.trueEraId}', correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, citation={verdict.citationIssued} (freeWarning={verdict.wasFreeWarning}), money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
 
         // Check for a game-over ending (e.g., fired from hitting the stability floor).
-        EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig);
+        EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
 
         if (ending != null)
         {
@@ -642,7 +648,7 @@ public sealed class GameManager : MonoBehaviour
 
         Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, liar={verdict.wasLiar}, home='{verdict.trueHomeLabel}', claimAllowed={inst.claimAllowedByRules}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
 
-        EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig);
+        EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
 
         if (ending != null)
         {

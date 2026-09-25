@@ -2,10 +2,11 @@
 using UnityEngine;
 
 /// <summary>
-/// A possible run outcome ("fired", "bankrupt", "timeline collapses into chaos",
-/// "you survived to retirement"). EndingService.Evaluate checks every EndingSO in
-/// the content library each time a game-over check runs and picks the
-/// highest-priority match.
+/// A possible run outcome ("fired", "bankrupt", "you survived to retirement",
+/// an attribute epilogue). EndingService.Evaluate checks every EndingSO in the
+/// content library each time an ending check runs; EndingRules.Select picks:
+/// failures at any check, and at the day boundary the milestone (Retirement),
+/// which an attribute ending whose total is reached replaces as its epilogue.
 /// </summary>
 [CreateAssetMenu(fileName = "Ending_", menuName = "TimeDesk/Endings/Ending", order = 30)]
 public sealed class EndingSO : ScriptableObject

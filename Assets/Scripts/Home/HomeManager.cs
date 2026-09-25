@@ -5,7 +5,8 @@ using UnityEngine;
 /// Drives the Home phase (Phase 4): on scene load, bills today's living
 /// expenses and rolls family condition drift, then walks the player through
 /// Expenses -> Shop -> Slot Machine -> Sleep. Sleep hands off to
-/// RunManager.AdvanceToNextDay() (nightly resolve, day++, back to Office).
+/// RunManager.Sleep() (day-boundary endings, else nightly resolve, day++,
+/// back to Office).
 /// All HomeUIController panels are optional; unwired panels are skipped.
 /// </summary>
 public sealed class HomeManager : MonoBehaviour
@@ -244,14 +245,13 @@ public sealed class HomeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Ends the day. Checks for a game-over ending (bankruptcy, score/day
-    /// thresholds) before the nightly resolve; if one matches, records it
-    /// and hands off to the title scene instead of advancing to tomorrow.
-    /// Otherwise: nightly resolve, day++, save, back to Office.
+    /// Ends the day through RunManager.Sleep: the day-boundary ending check
+    /// (failures, Retirement, the attribute epilogues), else the nightly
+    /// resolve, day++, save, back to Office.
     /// </summary>
     private void HandleSleep()
     {
-        Debug.Log($"[HomeManager] >>> Entering HandleSleep (day {_world?.day}, money={_world?.money}, stability={_world?.timelineStability:0.#}).");
+        Debug.Log($"[HomeManager] HandleSleep (day {_world?.day}): handing off to RunManager.Sleep.");
 
         if (!RunManager.HasInstance)
         {
@@ -259,23 +259,6 @@ public sealed class HomeManager : MonoBehaviour
             return;
         }
 
-        EndingSO ending = EndingService.Evaluate(_world, _lib, _config);
-
-        if (ending != null)
-        {
-            Debug.Log($"[HomeManager] HandleSleep: ending matched '{ending.id}' ({ending.displayName}).");
-
-            _world.endingId = ending.id;
-            RunManager.Instance.SaveNow();
-
-            Debug.Log("[HomeManager] <<< Exiting HandleSleep (loading title scene for ending).");
-
-            RunManager.Instance.LoadTitleScene();
-            return;
-        }
-
-        Debug.Log("[HomeManager] <<< Exiting HandleSleep (no ending, advancing to next day).");
-
-        RunManager.Instance.AdvanceToNextDay();
+        RunManager.Instance.Sleep();
     }
 }

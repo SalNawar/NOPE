@@ -1,19 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Evaluates EndingSO conditions against the current WorldState. Called after
-/// a verdict resolves (GameManager) and before sleep (HomeManager) to detect
-/// game-over conditions (fired, bankrupt, score/day thresholds).
+/// Evaluates EndingSO conditions against the current WorldState: failures
+/// after every verdict and at the end of a shift that applied dialog
+/// consequences (GameManager, EndingMoment.Immediate); failures, the
+/// Retirement milestone and the attribute epilogues at the day boundary
+/// (RunManager.Sleep, EndingMoment.DayBoundary). Which one wins is the Domain
+/// rule EndingRules.Select.
 /// </summary>
 public static class EndingService
 {
     /// <summary>
-    /// Returns the highest-priority EndingSO whose condition currently matches,
-    /// or null if no ending in the library matches (run continues).
+    /// Returns the EndingSO that ends the run at this moment (EndingRules.Select
+    /// over every library ending: its kind, priority and whether its condition
+    /// matches now), or null if none does (run continues).
     /// </summary>
-    public static EndingSO Evaluate(WorldState world, ContentLibrarySO lib, GameConfigSO config)
+    public static EndingSO Evaluate(WorldState world, ContentLibrarySO lib, GameConfigSO config, EndingMoment moment)
     {
-        Debug.Log($"[EndingService] >>> Entering Evaluate (day {world?.day}, money={world?.money}, stability={world?.timelineStability:0.#}).");
+        Debug.Log($"[EndingService] >>> Entering Evaluate ({moment}; day {world?.day}, money={world?.money}, stability={world?.timelineStability:0.#}).");
 
         if (world == null || lib == null)
         {
@@ -21,21 +26,23 @@ public static class EndingService
             return null;
         }
 
-        EndingSO best = null;
-
+        var endings = new List<EndingSO>();
+        var candidates = new List<EndingCandidate>();
         foreach (EndingSO ending in lib.Endings)
         {
             if (ending == null)
                 continue;
 
-            if (!Matches(ending, world, config))
-                continue;
+            bool met = Matches(ending, world, config);
+            if (met)
+                Debug.Log($"[EndingService] Evaluate: ending '{ending.id}' ({ending.displayName}) matches (priority={ending.priority}, {EndingRules.KindOf(ending.conditionType)}).");
 
-            Debug.Log($"[EndingService] Evaluate: ending '{ending.id}' ({ending.displayName}) matches (priority={ending.priority}).");
-
-            if (best == null || ending.priority > best.priority)
-                best = ending;
+            endings.Add(ending);
+            candidates.Add(new EndingCandidate(EndingRules.KindOf(ending.conditionType), ending.priority, met));
         }
+
+        int winner = EndingRules.Select(candidates, moment);
+        EndingSO best = winner >= 0 ? endings[winner] : null;
 
         if (best != null)
             Debug.Log($"[EndingService] <<< Exiting Evaluate (selected '{best.id}' ({best.displayName}), priority={best.priority}).");
