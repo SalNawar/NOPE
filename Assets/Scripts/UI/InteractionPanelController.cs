@@ -13,6 +13,9 @@ public struct InteractionAction
     /// <summary>Shown in the panel's centre slot when it has one (the wheel's "&lt; Back"); otherwise listed like any action.</summary>
     public bool centre;
 
+    /// <summary>Optional: drawn in a square at the button's left, the label starting past it (the traveller wheel's kind icons); null keeps a plain label.</summary>
+    public Sprite icon;
+
     /// <summary>Invoked when the player issues the action.</summary>
     public Action execute;
 }
@@ -34,6 +37,12 @@ public sealed class InteractionPanelController : MonoBehaviour
 
     /// <summary>Optional: where centre actions go (the traveller wheel); none keeps every action in the list.</summary>
     [SerializeField] private Transform centreSlot;
+
+    /// <summary>An action icon's side (reference px; a layout value, like RadialLayoutGroup's sizes).</summary>
+    [SerializeField] private float iconSize = 28f;
+
+    /// <summary>The gap between the button's left edge, an action icon and the label (reference px).</summary>
+    [SerializeField] private float iconPadding = 8f;
 
     private readonly List<GameObject> _spawned = new();
 
@@ -62,8 +71,41 @@ public sealed class InteractionPanelController : MonoBehaviour
             if (label != null)
                 label.text = action.label;
 
+            if (action.icon != null)
+                AddIcon(btn.transform, label, action.icon);
+
             Action execute = action.execute;
             btn.onClick.AddListener(() => execute?.Invoke());
+        }
+    }
+
+    /// <summary>
+    /// Puts <paramref name="icon"/> in a square at the button's left edge,
+    /// vertically centred, and moves the label's left edge past it. Created on
+    /// each spawned button at runtime (the template has no icon), so no builder,
+    /// prefab or scene change is needed; the button and its icon are destroyed
+    /// together.
+    /// </summary>
+    private void AddIcon(Transform button, TMP_Text label, Sprite icon)
+    {
+        var go = new GameObject("Icon", typeof(RectTransform), typeof(Image));
+        var rt = (RectTransform)go.transform;
+        rt.SetParent(button, false);
+        rt.anchorMin = new Vector2(0f, 0.5f);
+        rt.anchorMax = new Vector2(0f, 0.5f);
+        rt.pivot = new Vector2(0f, 0.5f);
+        rt.anchoredPosition = new Vector2(iconPadding, 0f);
+        rt.sizeDelta = new Vector2(iconSize, iconSize);
+
+        Image image = go.GetComponent<Image>();
+        image.sprite = icon;
+        image.preserveAspect = true;
+        image.raycastTarget = false;
+
+        if (label != null)
+        {
+            RectTransform lr = label.rectTransform;
+            lr.offsetMin = new Vector2(Mathf.Max(lr.offsetMin.x, iconPadding * 2f + iconSize), lr.offsetMin.y);
         }
     }
 

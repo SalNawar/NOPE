@@ -165,8 +165,8 @@ public sealed class InterviewQuestion
 }
 
 /// <summary>
-/// The interview's fixed wording, plus the layout limit content is checked
-/// against at run time and by the content validator: the most choices the
+/// The interview's fixed wording and spoken requests, plus the layout limit
+/// content is checked against at run time and by the content validator: the most choices the
 /// traveller wheel shows at once. (The longest line a transcript row holds is a
 /// source-only limit, world_source.json interview.maxLineChars, which only
 /// Generate World checks.)
@@ -219,6 +219,30 @@ public sealed class InterviewLines
     /// <summary>The desk's small-talk question.</summary>
     public LineText smallTalkPrompt = new();
 
+    /// <summary>The spoken requests every traveller is offered on the hub, after the document requests (world_source.json interview.requests).</summary>
+    public List<InterviewRequest> requests = new();
+
     /// <summary>The most choices the traveller wheel shows at once (content never offers more).</summary>
     public int menuCapacity;
+}
+
+/// <summary>
+/// A request the desk makes that only makes the traveller answer ("Step
+/// closer"): a hub entry of kind Request, once per traveller. It carries no
+/// action; a request with a mechanic would add its DialogAction.
+/// </summary>
+[Serializable]
+public sealed class InterviewRequest
+{
+    /// <summary>Stable id; the hub choice is "act:{id}" and the lines are "interview.requests.{id}.prompt" / ".reply".</summary>
+    public string id;
+
+    /// <summary>The hub entry ("Step closer").</summary>
+    public string label;
+
+    /// <summary>What the desk says.</summary>
+    public LineText prompt = new();
+
+    /// <summary>What the traveller answers (never evidence).</summary>
+    public LineText reply = new();
 }

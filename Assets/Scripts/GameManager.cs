@@ -177,7 +177,6 @@ public sealed class GameManager : MonoBehaviour
             investigationUI.SetFacts(_today.Facts);
             investigationUI.SetInterviewDay(interview);
             investigationUI.SetCharacterArt(_characterArt);
-            investigationUI.TravellerExpressionChanged += HandleTravellerExpression;
         }
 
         // Initial HUD state.
@@ -236,8 +235,6 @@ public sealed class GameManager : MonoBehaviour
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
 
-        if (investigationUI != null)
-            investigationUI.TravellerExpressionChanged -= HandleTravellerExpression;
         _characterArt?.Dispose();
 
         if (orchestrator == null)
@@ -526,13 +523,6 @@ public sealed class GameManager : MonoBehaviour
             investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
         else
             officeUI.ShowCase(inst, contentLibrary.Eras, HandlePlayerChoseEra);
-    }
-
-    /// <summary>A premade's line carried an expression: the booth figure shows it.</summary>
-    private void HandleTravellerExpression(string expression)
-    {
-        if (travellerView != null)
-            travellerView.SetExpression(expression);
     }
 
     /// <summary>

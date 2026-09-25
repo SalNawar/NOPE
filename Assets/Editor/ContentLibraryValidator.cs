@@ -127,7 +127,8 @@ public static class ContentLibraryValidator
 
     /// <summary>
     /// Reports interview content the office could not use: blank wording or
-    /// menu capacity; a question whose answers could never be proven, a second
+    /// menu capacity; a spoken request that is empty, has a blank or repeated id,
+    /// or a blank label, prompt or reply; a question whose answers could never be proven, a second
     /// question for one category, an answer template without {value}; a
     /// structurally broken dialog; a dialog effect that is missing or holds an
     /// op that acts while active (and a warning for a permanent one with a
@@ -149,7 +150,7 @@ public static class ContentLibraryValidator
             ("claim", lines.claim?.text), ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
             ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("requestPrompt", lines.requestPrompt?.text),
             ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("backLabel", lines.backLabel),
-            ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text)
+            ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text), ("lookLabel", lines.lookLabel)
         };
         foreach ((string field, string text) in wording)
             if (string.IsNullOrWhiteSpace(text))
@@ -157,6 +158,21 @@ public static class ContentLibraryValidator
 
         if (lines.menuCapacity < 1)
             Error("Interview menu capacity is below 1 (run Tools > TimeDesk > Generate World).", lib);
+
+        var requestIds = new HashSet<string>();
+        foreach (InterviewRequest r in lines.requests ?? new List<InterviewRequest>())
+        {
+            if (r == null)
+            {
+                Error("A spoken request is empty (run Tools > TimeDesk > Generate World).", lib);
+                continue;
+            }
+
+            if (string.IsNullOrWhiteSpace(r.id) || !requestIds.Add(r.id))
+                Error($"Spoken request '{r.id}' has a blank or repeated id (run Tools > TimeDesk > Generate World).", lib);
+            if (string.IsNullOrWhiteSpace(r.label) || string.IsNullOrWhiteSpace(r.prompt?.text) || string.IsNullOrWhiteSpace(r.reply?.text))
+                Error($"Spoken request '{r.id}' has a blank label, prompt or reply (run Tools > TimeDesk > Generate World).", lib);
+        }
 
         HashSet<ClueCategory> books = lib.ReferenceBookCategories();
         var asked = new HashSet<ClueCategory>();
@@ -224,6 +240,7 @@ public static class ContentLibraryValidator
         var premadeDialogs = new HashSet<string>(lib.Legendaries.Where(l => l != null && !string.IsNullOrWhiteSpace(l.dialogId)).Select(l => l.dialogId));
         int bound = lib.Dialogs.Count(d => d != null && d.dialog != null && premadeDialogs.Contains(d.dialog.id));
         foreach (string problem in DialogChecks.MenuProblems(lib.Questions.Count(q => q != null), smallTalk, MaxRequestedDocuments(TravellerBlueprints(lib)),
+                                                             (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
                                                              lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
             Error(problem, lib);
 

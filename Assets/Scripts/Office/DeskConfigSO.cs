@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// Tuning for the physical desk (piece 7): the monitor push-in, screen power,
 /// the scanner, the papers, the sorting bands, the traveller wheel and its
-/// reply bubble, and the day-1 desk notes. Geometry that belongs to the art
+/// speech bubble's pacing (piece 8), and the day-1 desk notes. Geometry that belongs to the art
 /// (the glass rectangle, the desk rectangle, the scanner's drop area, the
 /// anchors) stays in scene components, so another office supplies its own.
 /// Created and assigned by Tools > TimeDesk > Build Office UI
@@ -95,9 +95,15 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The last day the wheel note shows (0 = never).</summary>
     [Min(0)] public int wheelHintUntilDay = 1;
 
-    [Header("Reply bubble")]
-    /// <summary>Seconds the traveller's reply stays up.</summary>
+    [Header("Speech bubble (the traveller's lines, one after another)")]
+    /// <summary>Seconds the traveller's last line stays up once fully shown, when no other line follows.</summary>
     [Min(0.1f)] public float bubbleSeconds = 4f;
+
+    /// <summary>Characters a line types out per second (0 = the whole line at once).</summary>
+    [Min(0f)] public float bubbleCharsPerSecond = 40f;
+
+    /// <summary>The least seconds a line stays up once fully shown before the next line replaces it (never more than bubbleSeconds).</summary>
+    [Min(0f)] public float bubbleMinSeconds = 1.5f;
 
     /// <summary>Where the bubble sits from the traveller's anchor (overlay reference px).</summary>
     public Vector2 bubbleOffset = new Vector2(650f, 100f);

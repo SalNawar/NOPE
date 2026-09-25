@@ -13,17 +13,18 @@ using Object = UnityEngine.Object;
 /// year, facts plus the Culture fact derived from the wardrobe, names, birth
 /// years, small talk, wardrobe and look weights; the eight Future places),
 /// travel rules, premade characters, day plans (tell count and tell channels,
-/// the premade pool, forced slots and chance), the interview (its wording and
-/// menu capacity, questions, narrative dialogs, and a one-shot
-/// unlock-announcement trigger for every gated question), the history (one
-/// leader effect per country, one one-shot trigger and SetFact effect per
-/// history rule, the templated history lines), points the case blueprint at
-/// the listed archetypes, then sets every world array of the content library
-/// and its look rules explicitly. Idempotent: re-running converges to the
-/// source file. It owns the Eras/Nations/Places/Rules/Interview/History/Premades
-/// folders under Assets/Data/World (assets there that the source no longer
-/// lists go to the OS trash), merges its generated triggers and effects after
-/// the hand-authored ones and only drops missing references elsewhere, so
+/// the premade pool, forced slots and chance), the interview (its wording,
+/// spoken requests and menu capacity, questions, narrative dialogs, and a
+/// one-shot unlock-announcement trigger for every gated question), the
+/// history (one leader effect per country, one one-shot trigger and SetFact
+/// effect per history rule, the templated history lines), points the case
+/// blueprint at the listed archetypes, then sets every world array of the
+/// content library and its look rules explicitly. Idempotent: re-running
+/// converges to the source file. It owns the
+/// Eras/Nations/Places/Rules/Interview/History/Premades folders under
+/// Assets/Data/World (assets there that the source no longer lists go to the
+/// OS trash), merges its generated triggers and effects after the
+/// hand-authored ones and only drops missing references elsewhere, so
 /// hand-authored content (effects, triggers) survives a re-run. The authored
 /// assets the source points at (library, blueprint, attributes, archetypes,
 /// books, forced blueprints) must already exist; every reference, id and line
@@ -346,7 +347,7 @@ public static class WorldContentGenerator
 
     /// <summary>
     /// Checks each day's tell channels and the interview sections (wording,
-    /// questions, dialogs, small talk) before anything is written: tokens,
+    /// spoken requests, questions, dialogs, small talk) before anything is written: tokens,
     /// provable categories, gates and announcements, dialog structure and
     /// effects, one set of unique line ids, ASCII text, the worst-case length
     /// of every line the transcript can show, and menu sizes.
@@ -419,6 +420,28 @@ public static class WorldContentGenerator
 
         foreach (string field in new[] { "opener", "openerLegendary", "claim", "requestPrompt", "requestReply", "smallTalkPrompt" })
             Id(InterviewLineId(field), $"interview.{field}");
+
+        // --- Spoken requests: an id each, the three texts, ASCII, one set of line ids ---
+        RequestData[] requests = iv.requests ?? Array.Empty<RequestData>();
+        var requestIds = new HashSet<string>();
+        foreach (RequestData r in requests)
+        {
+            string owner = $"Spoken request '{r.id}'";
+            if (string.IsNullOrWhiteSpace(r.id))
+                errors.Add("A spoken request (interview.requests) has a blank id.");
+            else if (!requestIds.Add(r.id))
+                errors.Add($"Spoken request id '{r.id}' is listed twice.");
+
+            foreach ((string field, string text) in new[] { ("label", r.label), ("prompt", r.prompt), ("reply", r.reply) })
+            {
+                if (string.IsNullOrWhiteSpace(text))
+                    errors.Add($"{owner} has a blank {field}.");
+                Ascii(RequestLineId(r.id, field), text);
+            }
+
+            Id(RequestLineId(r.id, PromptPart), $"spoken request '{r.id}'");
+            Id(RequestLineId(r.id, ReplyPart), $"spoken request '{r.id}'");
+        }
 
         // --- Questions ---
         var bookCategories = new HashSet<ClueCategory>((authored.books ?? Array.Empty<ReferenceBookSO>()).Select(b => b.category));
@@ -575,7 +598,7 @@ public static class WorldContentGenerator
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
         var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
-        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)),
+        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
 
@@ -604,6 +627,11 @@ public static class WorldContentGenerator
         Fits(InterviewLineId("requestPrompt"), iv.requestPrompt, Interview.DocumentToken, longestDocument);
         Fits(InterviewLineId("requestReply"), iv.requestReply, Interview.ValueToken, 0);
         Fits(InterviewLineId("smallTalkPrompt"), iv.smallTalkPrompt, Interview.ValueToken, 0);
+        foreach (RequestData r in requests)
+        {
+            Fits(RequestLineId(r.id, PromptPart), r.prompt, Interview.ValueToken, 0);
+            Fits(RequestLineId(r.id, ReplyPart), r.reply, Interview.ValueToken, 0);
+        }
 
         foreach (QuestionData q in questions)
         {
@@ -1338,6 +1366,12 @@ public static class WorldContentGenerator
     /// <summary>The parts of a question's (or an override's) two line ids: its prompt and its answer.</summary>
     private const string PromptPart = "prompt", AnswerPart = "answer";
 
+    /// <summary>The part of a spoken request's second line id: the traveller's reply (its first is PromptPart).</summary>
+    private const string ReplyPart = "reply";
+
+    /// <summary>The id of a spoken request's line (or, for error messages, a field), "interview.requests.{requestId}.{part}": BuildLines writes it, CheckInterview checks it.</summary>
+    private static string RequestLineId(string requestId, string part) => InterviewLineId($"requests.{requestId}.{part}");
+
     /// <summary>The id of a question's line, "{questionId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
     private static string QuestionLineId(string questionId, string part) => $"{questionId}.{part}";
 
@@ -1347,7 +1381,7 @@ public static class WorldContentGenerator
     /// <summary>A place's id, "{country}_{era}": the profile's id, its asset name and its small-talk lines' owner id.</summary>
     private static string PlaceId(PlaceData p) => $"{p.country}_{p.era}";
 
-    /// <summary>The interview's wording with generated line ids, and its menu capacity (the longest-line limit stays in the source: only CheckInterview reads it).</summary>
+    /// <summary>The interview's wording and spoken requests with generated line ids, and its menu capacity (the longest-line limit stays in the source: only CheckInterview reads it).</summary>
     private static InterviewLines BuildLines(InterviewData i) => new InterviewLines
     {
         deskName = i.deskName,
@@ -1365,6 +1399,13 @@ public static class WorldContentGenerator
         smallTalkLabel = i.smallTalkLabel,
         lookLabel = i.lookLabel,
         smallTalkPrompt = new LineText(InterviewLineId("smallTalkPrompt"), i.smallTalkPrompt),
+        requests = (i.requests ?? Array.Empty<RequestData>()).Select(r => new InterviewRequest
+        {
+            id = r.id,
+            label = r.label,
+            prompt = new LineText(RequestLineId(r.id, PromptPart), r.prompt),
+            reply = new LineText(RequestLineId(r.id, ReplyPart), r.reply)
+        }).ToList(),
         menuCapacity = i.menuCapacity
     };
 
@@ -1752,7 +1793,7 @@ public static class WorldContentGenerator
         public float premadeChance;
     }
 
-    /// <summary>The interview's wording (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>
+    /// <summary>The interview's wording and spoken requests (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>
     [Serializable] private sealed class InterviewData
     {
         public string deskName;
@@ -1770,9 +1811,13 @@ public static class WorldContentGenerator
         public string smallTalkLabel;
         public string smallTalkPrompt;
         public string lookLabel;
+        public RequestData[] requests;
         public int menuCapacity;
         public int maxLineChars;
     }
+
+    /// <summary>A spoken request: the hub entry, the desk's prompt and the traveller's reply (line ids are generated from the id).</summary>
+    [Serializable] private sealed class RequestData { public string id; public string label; public string prompt; public string reply; }
 
     /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated.</summary>
     [Serializable] private sealed class QuestionData
