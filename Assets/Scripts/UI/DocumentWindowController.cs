@@ -11,8 +11,10 @@ using UnityEngine.UI;
 /// the date of birth) show untranslated from translation's first day, or,
 /// with the region's Papers translator, flip into English letter by letter
 /// from the scan (Reveal), rows staggered; a click on a row finishes the
-/// whole document first; reopening never replays. An untranslated value
-/// shows in the compare bar as the placeholder, while its evidence stays the
+/// whole document first; reopening never replays. Such a value takes the
+/// row's width after its label and may wrap and shrink there (a script's
+/// glyphs can be far wider than the English). An untranslated value shows in
+/// the compare bar as the placeholder, while its evidence stays the
 /// canonical value. Rows are cloned from <see cref="fieldRowTemplate"/> (a
 /// disabled row with two TMP texts — label then value — an Image background,
 /// and a Button). A document whose template shows a photo carries the
@@ -127,6 +129,19 @@ public sealed class DocumentWindowController : MonoBehaviour
         _flips.Clear();
     }
 
+    /// <summary>The value takes whatever width the row's layout has left after its label (its glyphs' own width never counts) and may wrap onto a second line there.</summary>
+    private static void FillRest(TMP_Text value)
+    {
+        if (!value.TryGetComponent(out LayoutElement element))
+            element = value.gameObject.AddComponent<LayoutElement>();
+        element.preferredWidth = 0f;
+        element.flexibleWidth = RestWeight;
+        value.textWrappingMode = TextWrappingModes.Normal;
+    }
+
+    /// <summary>The value's share of the row's spare width against the label's (the row's layout expands every child by at least 1).</summary>
+    private const float RestWeight = 1000f;
+
     /// <summary>Switches to a page (clamped) and rebuilds its rows.</summary>
     public void ShowPage(int page)
     {
@@ -205,6 +220,9 @@ public sealed class DocumentWindowController : MonoBehaviour
                 texts[0].text = f.label;
             if (texts.Length > 1 && texts[1] != null)
             {
+                // A value in a foreign tongue takes the row's width after the label, so wide glyphs shrink into it instead of squeezing the label.
+                if (_translation.Foreign && inTongue)
+                    FillRest(texts[1]);
                 if (reveal.Kind == RevealKind.Flipping)
                 {
                     var flip = new TextFlip();

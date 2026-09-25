@@ -72,18 +72,21 @@ public static class UiText
         d == null ? string.Empty : Format(d.ReportKey, Category(d.category), d.documentValue, d.ReportOther);
 
     /// <summary>
-    /// Lets a text built outside the office builder (Home) shrink instead of
-    /// wrapping: no wrapping, auto-size from CultureUiSettings.labelMinScale of
-    /// its size to its size (R21). Without a content library it is left as it is.
+    /// Lets a text built outside the office builder (Home), or a text showing
+    /// wide foreign glyphs (piece 9), shrink instead of spilling: auto-size
+    /// from CultureUiSettings.labelMinScale of its size to its size (R21), with
+    /// no wrapping unless <paramref name="keepWrapping"/>. Without a content
+    /// library it is left as it is.
     /// </summary>
-    public static void FitLabel(TMP_Text text)
+    public static void FitLabel(TMP_Text text, bool keepWrapping = false)
     {
         ContentLibrarySO library = Library();
         if (text == null || library == null)
             return;
 
         float size = text.enableAutoSizing ? text.fontSizeMax : text.fontSize;
-        text.textWrappingMode = TextWrappingModes.NoWrap;
+        if (!keepWrapping)
+            text.textWrappingMode = TextWrappingModes.NoWrap;
         text.enableAutoSizing = true;
         text.fontSizeMax = size;
         text.fontSizeMin = size * library.CultureUi.labelMinScale;

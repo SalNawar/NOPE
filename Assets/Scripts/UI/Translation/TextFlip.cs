@@ -7,7 +7,9 @@ using UnityEngine;
 /// shows, the text uses the script's runtime font (whose fallback is the
 /// runtime LiberationSans, so flipped English letters draw too), and once it
 /// settles its own font and material come back, so the tracked TMP assets
-/// never receive a foreign glyph. A flipping text is rebuilt only when
+/// never receive a foreign glyph. A text that shows foreign cells may shrink
+/// to fit (UiText.FitLabel, keeping its wrapping): a script's glyphs can be
+/// far wider than the English. A flipping text is rebuilt only when
 /// DisplayText.Progress changes, never per frame.
 /// </summary>
 public sealed class TextFlip
@@ -95,8 +97,11 @@ public sealed class TextFlip
             return;
         tr = tr ?? CaseTranslation.None;
         text.text = DisplayText.For(canonical, reveal, tr.Timing, tr.ReducedMotion);
-        if (DisplayText.ShowsForeign(canonical, reveal, tr.Timing, tr.ReducedMotion) && tr.Font != null)
+        if (!DisplayText.ShowsForeign(canonical, reveal, tr.Timing, tr.ReducedMotion))
+            return;
+        if (tr.Font != null)
             text.font = tr.Font;
+        Fit(text);
     }
 
     /// <summary>Writes the reveal's form and picks the font for it.</summary>
@@ -104,7 +109,16 @@ public sealed class TextFlip
     {
         bool foreign = DisplayText.ShowsForeign(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
         SetFont(_text, _ownFont, _ownMaterial, foreign, _tr.Font);
+        if (foreign)
+            Fit(_text);
         _text.text = DisplayText.For(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+    }
+
+    /// <summary>A text that does not size itself shrinks to fit (it keeps its wrapping); one that already auto-sizes keeps its own range. Its English then shows at its size, since that fits.</summary>
+    private static void Fit(TMP_Text text)
+    {
+        if (!text.enableAutoSizing)
+            UiText.FitLabel(text, true);
     }
 
     /// <summary>The script's font while foreign cells show (when there is one), else the text's own font and material.</summary>
