@@ -88,6 +88,9 @@ public sealed class WorldState
     /// <summary>Resolved "tomorrow package" computed at sleep (briefing, news, modifiers).</summary>
     public TomorrowPackage tomorrow = new();
 
+    /// <summary>History: the timeline leader, latched fact edits and pending carries (piece 5; an old save loads it empty).</summary>
+    public HistoryState history = new();
+
     // -----------------------------
     // Flag helpers
     // -----------------------------

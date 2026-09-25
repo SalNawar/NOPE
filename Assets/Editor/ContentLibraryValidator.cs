@@ -328,7 +328,7 @@ public static class ContentLibraryValidator
             if (plan == null)
                 continue;
 
-            List<NationEraProfileSO> today = lib.TodaysProfiles(plan);
+            List<NationEraProfileSO> today = lib.TodaysProfiles(plan, null);
             foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
             {
                 if (w.era == null || w.weight <= 0f || (w.era.smallTalk != null && w.era.smallTalk.Count > 0) || warned.Contains(w.era))
@@ -411,7 +411,7 @@ public static class ContentLibraryValidator
             if (plan == null)
                 continue;
 
-            List<NationEraProfileSO> today = lib.TodaysProfiles(plan);
+            List<NationEraProfileSO> today = lib.TodaysProfiles(plan, null);
             if (today.Count == 0)
             {
                 Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' has no places (its eras x allowed nations match no place).", plan);

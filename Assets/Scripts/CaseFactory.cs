@@ -27,8 +27,8 @@ public sealed class CaseFactory
     /// <summary>Today's visitor names (unique per generated day; see NameRoster).</summary>
     private NameRoster _roster = new NameRoster();
 
-    /// <summary>Today's places (eras x allowed nations), in book order.</summary>
-    private List<NationEraProfileSO> _todays = new List<NationEraProfileSO>();
+    /// <summary>Today's places (eras x allowed nations, at most one Future place), in book order (TodaysWorld).</summary>
+    private readonly List<NationEraProfileSO> _todays;
 
     /// <summary>The current traveller's random stream (reset per case).</summary>
     private IRandomSource _rng = new SeededRandom(0);
@@ -55,13 +55,15 @@ public sealed class CaseFactory
     private Dictionary<int, NationEraProfileSO> _violators = new Dictionary<int, NationEraProfileSO>();
 
     /// <summary>
-    /// Construct a factory over a content library and today's fact snapshot
-    /// (ContentLibrarySO.BuildFactTable for the same day plan).
+    /// Construct a factory over a content library and today's world: its
+    /// places and their facts, history applied (ContentLibrarySO.BuildToday
+    /// for the same day plan).
     /// </summary>
-    public CaseFactory(ContentLibrarySO lib, FactTable facts)
+    public CaseFactory(ContentLibrarySO lib, TodaysWorld today)
     {
         _lib = lib;
-        _facts = facts ?? new FactTable();
+        _facts = today?.Facts ?? new FactTable();
+        _todays = today != null ? new List<NationEraProfileSO>(today.Places) : new List<NationEraProfileSO>();
         _bookCategories = lib != null ? lib.ReferenceBookCategories() : new HashSet<ClueCategory>();
     }
 
@@ -100,7 +102,6 @@ public sealed class CaseFactory
 
         // Fresh roster: names are unique within the day (records use first match).
         _roster = new NameRoster();
-        _todays = _lib.TodaysProfiles(plan);
 
         if (_todays.Count == 0)
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
@@ -519,14 +520,15 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Picks the claimed era by the DayPlan weights. With no weights (or bad
-    /// data), picks uniformly among the eras that have a place today.
+    /// Picks the claimed era by the DayPlan weights; an era with no place
+    /// today (the Future without a leader) is never drawn. With no weights (or
+    /// bad data), picks uniformly among the eras that have a place today.
     /// </summary>
     private EraSO PickEraFromPlan(DayPlanSO plan)
     {
         if (plan.EraWeights != null && plan.EraWeights.Count > 0)
         {
-            EraSO picked = WeightedRandom.Pick(plan.EraWeights, ew => ew.weight, _rng).era;
+            EraSO picked = WeightedRandom.Pick(plan.EraWeights, ew => ew.era != null && _todays.Any(p => p.era == ew.era) ? ew.weight : 0f, _rng).era;
             if (picked != null)
                 return picked;
         }

@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -67,16 +68,22 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Narrative dialogs (generated from world_source.json "dialogs").</summary>
     [SerializeField] private DialogSO[] dialogs;
 
+    [Header("History")]
+    /// <summary>Wording of the templated history news (written by Generate World from world_source.json "history.lines").</summary>
+    [SerializeField] private HistoryLines historyLines = new();
+
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
     /// <summary>
     /// Today's places: profiles whose era the plan includes and whose nation it
-    /// allows, ordered by country (library nation order) then era (chronological).
-    /// Places missing a nation/era (or their ids) are skipped with a warning
-    /// (the validator reports them as errors).
+    /// allows, and at most one Future place: <paramref name="futureNationId"/>'s
+    /// (History.FutureNation, History.InWorld; none for null). Ordered by
+    /// country (library nation order) then era (chronological). Places missing
+    /// a nation/era (or their ids) are skipped with a warning (the validator
+    /// reports them as errors).
     /// </summary>
-    public List<NationEraProfileSO> TodaysProfiles(DayPlanSO plan)
+    public List<NationEraProfileSO> TodaysProfiles(DayPlanSO plan, string futureNationId)
     {
         var result = new List<NationEraProfileSO>();
 
@@ -94,7 +101,7 @@ public sealed class ContentLibrarySO : ScriptableObject
                 continue;
             }
 
-            if (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation))
+            if (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation) || !History.InWorld(p.era.isFuture, p.nation.id, futureNationId))
                 continue;
 
             result.Add(p);
@@ -109,26 +116,50 @@ public sealed class ContentLibrarySO : ScriptableObject
     }
 
     /// <summary>
-    /// The day's fact snapshot: every fact of today's places, in book order.
-    /// The only code that turns place data into facts, so the reference books
-    /// and the papers read the same values (and history-dependent facts have
-    /// one place to plug in).
+    /// Today's world, built once per day: today's places (with the Future
+    /// place of the history's leader, if any) and their facts with history
+    /// applied, in book order, so case generation and the reference books
+    /// share one list and one table.
     /// </summary>
-    public FactTable BuildFactTable(DayPlanSO plan)
+    public TodaysWorld BuildToday(DayPlanSO plan, HistoryState history)
+    {
+        List<NationEraProfileSO> places = TodaysProfiles(plan, History.FutureNation(history));
+        var table = new FactTable();
+        FillFacts(table, places, history);
+        return new TodaysWorld(places, table);
+    }
+
+    /// <summary>
+    /// Every place's facts with history applied (every profile with a nation
+    /// and era id, in library order): what the night steps compare against,
+    /// and the Future currency piece 6 shows in the wallet. A null history
+    /// gives the authored facts.
+    /// </summary>
+    public FactTable BuildWorldFacts(HistoryState history)
     {
         var table = new FactTable();
+        FillFacts(table, Profiles.Where(p => p != null && p.nation != null && p.era != null &&
+                                             !string.IsNullOrWhiteSpace(p.nation.id) && !string.IsNullOrWhiteSpace(p.era.id)), history);
+        return table;
+    }
 
-        foreach (NationEraProfileSO p in TodaysProfiles(plan))
+    /// <summary>
+    /// The only code that turns place facts into table rows: history is
+    /// resolved before Add (History.Resolve), so papers, books, tells and
+    /// answers all follow it. It is also the only code that sees a fact's
+    /// authored and resolved values together (piece 6 marks revised rows here).
+    /// </summary>
+    private static void FillFacts(FactTable table, IEnumerable<NationEraProfileSO> places, HistoryState history)
+    {
+        foreach (NationEraProfileSO p in places)
         {
             if (p.facts == null)
                 continue;
 
             foreach (ProfileFact f in p.facts)
                 if (f != null)
-                    table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, f.value);
+                    table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, History.Resolve(history, p.nation.id, p.era.id, f.category, f.value));
         }
-
-        return table;
     }
 
     /// <summary>Categories that have a reference book (only these can carry a place-fact tell, on papers or in an answer).</summary>
@@ -196,6 +227,12 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to narrative dialogs.</summary>
     public IReadOnlyList<DialogSO> Dialogs => dialogs ?? System.Array.Empty<DialogSO>();
 
+    /// <summary>The templated history news wording (never null).</summary>
+    public HistoryLines HistoryLines => historyLines ?? new HistoryLines();
+
+    /// <summary>The office's own time: the first era marked isFuture, or null when the content has none.</summary>
+    public EraSO FutureEra => eras?.FirstOrDefault(e => e != null && e.isFuture);
+
     /// <summary>
     /// Finds the authored profile for a nation at an era (null if none authored).
     /// </summary>
@@ -223,6 +260,12 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Cached lookup: ending id -> ending asset.</summary>
     private Dictionary<string, EndingSO> _endingById;
 
+    /// <summary>Cached lookup: nation id -> nation asset.</summary>
+    private Dictionary<string, NationSO> _nationById;
+
+    /// <summary>Cached lookup: place (profile) id -> place asset.</summary>
+    private Dictionary<string, NationEraProfileSO> _profileById;
+
     /// <summary>
     /// Clears cached lookups when the asset is loaded/reloaded.
     /// This prevents stale dictionaries after domain reloads or inspector edits.
@@ -233,6 +276,8 @@ public sealed class ContentLibrarySO : ScriptableObject
         _effectByName = null;
         _upgradeById = null;
         _endingById = null;
+        _nationById = null;
+        _profileById = null;
     }
 
     /// <summary>
@@ -246,6 +291,26 @@ public sealed class ContentLibrarySO : ScriptableObject
 
         EnsureLookups();
         return _eraById.TryGetValue(id, out EraSO era) ? era : null;
+    }
+
+    /// <summary>Returns a nation by its id ("china"), or null.</summary>
+    public NationSO GetNationById(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        EnsureLookups();
+        return _nationById.TryGetValue(id, out NationSO nation) ? nation : null;
+    }
+
+    /// <summary>Returns a place by its id ("china_future"), or null.</summary>
+    public NationEraProfileSO GetProfileById(string id)
+    {
+        if (string.IsNullOrWhiteSpace(id))
+            return null;
+
+        EnsureLookups();
+        return _profileById.TryGetValue(id, out NationEraProfileSO profile) ? profile : null;
     }
 
     /// <summary>
@@ -288,21 +353,18 @@ public sealed class ContentLibrarySO : ScriptableObject
     }
 
     /// <summary>
-    /// Finds the DayPlan matching a given dayNumber.
-    /// Keeps day progression data-driven (D1..D7...).
+    /// The DayPlan a day uses (DayPlans.Pick): the plan with that day number,
+    /// else the latest earlier one, else null. Days after the last authored
+    /// plan reuse it (the Future stays open once a leader exists).
     /// </summary>
     public DayPlanSO GetDayPlan(int dayNumber)
     {
         if (dayPlans == null)
             return null;
 
-        foreach (DayPlanSO plan in dayPlans)
-        {
-            if (plan != null && plan.DayNumber == dayNumber)
-                return plan;
-        }
-
-        return null;
+        DayPlanSO[] plans = dayPlans.Where(p => p != null).ToArray();
+        int index = global::DayPlans.Pick(plans.Select(p => p.DayNumber).ToArray(), dayNumber);
+        return index >= 0 ? plans[index] : null;
     }
 
     /// <summary>
@@ -317,6 +379,18 @@ public sealed class ContentLibrarySO : ScriptableObject
         _effectByName = new Dictionary<string, EffectSO>(StringComparer.OrdinalIgnoreCase);
         _upgradeById = new Dictionary<string, UpgradeSO>(StringComparer.OrdinalIgnoreCase);
         _endingById = new Dictionary<string, EndingSO>(StringComparer.OrdinalIgnoreCase);
+        _nationById = new Dictionary<string, NationSO>(StringComparer.OrdinalIgnoreCase);
+        _profileById = new Dictionary<string, NationEraProfileSO>(StringComparer.OrdinalIgnoreCase);
+
+        if (nations != null)
+            foreach (NationSO n in nations)
+                if (n != null && !string.IsNullOrWhiteSpace(n.id))
+                    _nationById.TryAdd(n.id, n);
+
+        if (nationEraProfiles != null)
+            foreach (NationEraProfileSO p in nationEraProfiles)
+                if (p != null && !string.IsNullOrWhiteSpace(p.id))
+                    _profileById.TryAdd(p.id, p);
 
         if (eras != null)
         {

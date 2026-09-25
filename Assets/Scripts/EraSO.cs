@@ -18,6 +18,13 @@ public sealed class EraSO : ScriptableObject
     /// <summary>Chronological position (0 = oldest); orders places in the books.</summary>
     public int order;
 
+    /// <summary>
+    /// The office's own time: at most one era; its places come and go with
+    /// history (one a day: the timeline leader's). Written by Generate World
+    /// from eras[].future.
+    /// </summary>
+    public bool isFuture;
+
     /// <summary>Small-talk lines of travellers claiming this era (used when their place has none).</summary>
     public List<LineText> smallTalk = new();
 }

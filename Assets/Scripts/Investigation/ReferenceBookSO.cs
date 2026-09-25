@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// A player-readable reference book for one fact category (Currency, Language,
 /// Technology, ...). The book is only a cover: its rows are today's facts from
-/// the FactTable (ContentLibrarySO.BuildFactTable), the same values the case
+/// the FactTable (ContentLibrarySO.BuildToday), the same values the case
 /// generator prints on papers, so books and papers can never disagree.
 /// </summary>
 [CreateAssetMenu(fileName = "RefBook_", menuName = "TimeDesk/Reference Book", order = 5)]

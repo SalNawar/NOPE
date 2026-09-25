@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// A place: a nation at a specific time period ("Abbasid Baghdad", Medieval).
 /// It is the unit of the world model (its facts, names and birth years feed
-/// case generation and the reference books through ContentLibrarySO.BuildFactTable)
+/// case generation and the reference books through ContentLibrarySO.BuildToday, history applied)
 /// and of timeline state (baseline attribute scores and tier effects).
 /// </summary>
 [CreateAssetMenu(fileName = "Profile_", menuName = "TimeDesk/Timeline/Nation-Era Profile", order = 22)]

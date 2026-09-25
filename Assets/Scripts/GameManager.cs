@@ -54,6 +54,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Builds case runtime objects from ScriptableObjects.</summary>
     private CaseFactory _caseFactory;
 
+    /// <summary>Today's places and facts, history applied: one snapshot for the factory and the books.</summary>
+    private TodaysWorld _today;
+
     /// <summary>Generated cases for the day (0-based indexing).</summary>
     private List<CaseInstance> _dayCases;
 
@@ -95,8 +98,9 @@ public sealed class GameManager : MonoBehaviour
         {
             _worldState = run.World;
 
-            // Prefer the library's plan for the current day; keep the inspector
-            // value as a fallback so test scenes still work.
+            // Prefer the library's plan for the current day (or its latest
+            // earlier plan); keep the inspector value as a fallback so test
+            // scenes still work.
             DayPlanSO planForToday = run.GetCurrentDayPlan();
             if (planForToday != null)
                 dayPlan = planForToday;
@@ -135,12 +139,11 @@ public sealed class GameManager : MonoBehaviour
         // Fresh ledger for this shift.
         _ledger = new ShiftLedger();
 
-        // Today's facts: one snapshot shared by the case factory and the books,
-        // so papers and reference books can never disagree during the day.
-        FactTable facts = contentLibrary.BuildFactTable(dayPlan);
-
-        // Create the case factory from the content library and today's facts.
-        _caseFactory = new CaseFactory(contentLibrary, facts);
+        // Today's world (places and facts, history applied): one snapshot shared
+        // by the case factory and the books, so papers and reference books can
+        // never disagree during the day.
+        _today = contentLibrary.BuildToday(dayPlan, _worldState.history);
+        _caseFactory = new CaseFactory(contentLibrary, _today);
 
         // Today's interview, fixed at day start: the askable questions, which of
         // them may carry a spoken tell, and the offered dialogs.
@@ -161,7 +164,7 @@ public sealed class GameManager : MonoBehaviour
         {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
             investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
-            investigationUI.SetFacts(facts);
+            investigationUI.SetFacts(_today.Facts);
             investigationUI.SetInterviewDay(interview);
         }
 
@@ -181,7 +184,7 @@ public sealed class GameManager : MonoBehaviour
         if (booth != null)
             booth.BeginDay(_worldState.day);
 
-        Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}.");
+        Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 
         // Morning briefing first (if wired), then the day loop.
         if (dayFlowUI != null)
