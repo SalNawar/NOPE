@@ -752,7 +752,7 @@ public static class ContentLibraryValidator
         foreach (string problem in translation.Problems(lib.Profiles.Where(p => p != null).Select(p => new KeyValuePair<string, string>(p.id, p.tongue))))
             Error(problem);
 
-        foreach (TranslatorPack pack in translation.rules.packs.Where(p => p != null && !string.IsNullOrWhiteSpace(p.id)))
+        foreach (TranslatorPack pack in (translation.rules.packs ?? new List<TranslatorPack>()).Where(p => p != null && !string.IsNullOrWhiteSpace(p.id)))
             foreach (TranslatorKind kind in new[] { TranslatorKind.Written, TranslatorKind.Spoken })
                 if (lib.GetUpgradeById(Translation.UpgradeId(pack.id, kind)) == null)
                     Error($"pack '{pack.id}' has no '{Translation.UpgradeId(pack.id, kind)}' upgrade");

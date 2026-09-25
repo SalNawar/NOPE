@@ -127,7 +127,7 @@ public static partial class WorldContentGenerator
         (ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables) = WriteCulture(culture, written);
 
         // --- Translation: a Papers and a Speech translator per pack, the notice ---
-        UpgradeSO[] translators = src.translation.packs
+        UpgradeSO[] translators = (src.translation.packs ?? Array.Empty<PackData>())
             .SelectMany(p => new[] { MakeTranslator(p, TranslatorKind.Written, src.translation, written), MakeTranslator(p, TranslatorKind.Spoken, src.translation, written) })
             .ToArray();
         TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, written);
@@ -148,7 +148,7 @@ public static partial class WorldContentGenerator
         AssetDatabase.Refresh();
 
         int futurePlaces = src.places.Count(p => src.eras.Any(e => e.future && e.id == p.era));
-        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues.Length} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice; {pruned} unlisted generated asset(s) moved to the trash.");
+        Debug.Log($"[WorldContentGenerator] World generated: {eras.Count} eras, {nations.Count} nations, {places.Length} places ({futurePlaces} Future), {rules.Count} rules, {premades.Length} premades, {days.Length} day plans, {questions.Length} questions, {dialogs.Length} dialogs, {unlocks.Length} unlock triggers, {historyTriggers.Length} history rules, {leaderEffects.Length} leader effects, {themes.Length + 1} themes, {stringTables.Length} UI string tables, {src.translation.tongues?.Length ?? 0} tongues, {translators.Length} translator upgrades, {notices.Length} translation notice; {pruned} unlisted generated asset(s) moved to the trash.");
     }
 
     // -----------------------------
