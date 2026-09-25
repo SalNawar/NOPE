@@ -378,6 +378,8 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 | | `wheelHintUntilDay` `[Min(0)]` | 1 |
 | Reply bubble | `bubbleSeconds` `[Min(0.1)]`, `bubbleOffset` (overlay reference px from the traveller's anchor) | 4, (650, 100) |
 
+**When a knob takes effect.** Every knob is read at runtime except `focusExitOrder`, `glassOrder`, `bezelOrder` and `screenCanvasOrder`, which Build Office UI writes into the scene: a change to them takes effect only when it runs again. The checks on the knobs (`SortingBands.Problems`, the spawn-slot count, `RadialLayout.MaxFit`) also run only in the builder, so it is re-run after changing a sorting order, `paperSpawnSlots` or a wheel size. The class summary, the two headers and the doc comments of `DeskConfigSO` say so, and FEATURES' builder line (final review, §10).
+
 **`DeskReactionSO`** (new, `[CreateAssetMenu(menuName = "TimeDesk/Office/Desk Reaction")]`):
 - fields: `ReactionKind kind`, `[Min(0.05)] float seconds = 0.35`, `float amplitude = 0.12`, `AudioClip clip` (optional; the project has none yet), `[TextArea] string tooltip` ("{value}" is the readout's text; empty = no tooltip), `[Min(0.1)] float tooltipSeconds = 2.5`, `Vector2 tooltipOffset = (0, 60)` (overlay reference px above the object) (R34);
 - ten assets under `Assets/Data/Config/DeskReactions/`: `Reaction_Stamp` (Squash), `Reaction_Mug`, `Reaction_Plant` and `Reaction_Poster` (Wobble), `Reaction_Intercom` (Squash), `Reaction_Scanner` (Pulse), `Reaction_Till` (Nudge, "Credits: {value}"), `Reaction_Calendar` (None, "Day {value}"), `Reaction_Stability` (None, "Timeline stability: {value}"), `Reaction_Clock` (None, "{value}");
@@ -758,15 +760,15 @@ The class becomes `public static partial class`. New booth and desk code goes in
 | Traveller hit zone, calendar zone | −19, −49 | builder |
 | CRT, intercom, scanner, READY, plant, mug, stamp, till | 0 … 6 | builder, unchanged |
 | Wheel note (world text, no collider) | −9 | builder |
-| Focus exit zone | 10 | `focusExitOrder` |
-| Glass zone (R37) | 11 | `glassOrder` |
-| Power button, LED | 12 | `bezelOrder` |
-| Desktop canvas (World Space) | 20 | `screenCanvasOrder` |
-| Papers (a `SortingGroup` each; outline and texts inside) | 30 + stack index | `paperBaseOrder` |
-| Held paper | 60 | `heldPaperOrder` |
+| Focus exit zone | 10 | `focusExitOrder` (written by the builder) |
+| Glass zone (R37) | 11 | `glassOrder` (written by the builder) |
+| Power button, LED | 12 | `bezelOrder` (written by the builder) |
+| Desktop canvas (World Space) | 20 | `screenCanvasOrder` (written by the builder) |
+| Papers (a `SortingGroup` each; outline and texts inside) | 30 + stack index | `paperBaseOrder` (read at runtime) |
+| Held paper | 60 | `heldPaperOrder` (read at runtime) |
 | Overlay canvas (wheel, bubble, tooltip, newsletters) | above every world object | `OfficeOverlayCanvas` order 10, Screen Space Overlay |
 
-A world-space canvas hit carries the canvas's layer and order (ugui `GraphicRaycaster.cs:279-280`). A 2D hit carries its renderer's, or its group's (`Physics2DRaycaster.cs:95-113`). One camera ranks them by layer, then order (`EventSystem.cs:227-238`). That is why the screen beats the glass zone, which beats the exit zone, which beats the props. A collider with no renderer reports order 0 (`Physics2DRaycaster.cs:69-104`), so every hit zone carries a hidden `SpriteRenderer` for its order.
+A world-space canvas hit carries the canvas's layer and order (ugui `GraphicRaycaster.cs:279-280`). A 2D hit carries its renderer's, or its group's (`Physics2DRaycaster.cs:95-113`). One camera ranks them by layer, then order (`EventSystem.cs:227-238`). That is why the screen beats the glass zone, which beats the exit zone, which beats the props. A collider with no renderer reports order 0 (`Physics2DRaycaster.cs:69-104`), so every hit zone carries a hidden `SpriteRenderer` for its order. Papers rank above the exit zone, so a paper the booth puts away leaves the raycast (R38). The builder checks the bands (`SortingBands.Problems`) and writes the four orders marked above into the scene; after a change to any band, re-run it (§2.7).
 
 ### 2.17 Copy
 
@@ -1388,3 +1390,4 @@ Five findings from the review after §9, each re-checked against the code at `68
 - **Inert papers swallowed the click that leaves focus on screens wider than 16:9** (fixed): a paper at the desk's right end shows at the left of the focused view there, and its collider, above the exit zone, took the click. R38: papers the booth puts away take no raycasts; `BoothRulesTests` pins that the exit zone is never up while the papers take input. §1.2, §1.9, §2.9, §3.4 (:18), §7. The collider switch itself is Assembly-CSharp; a merge re-run can check it with the Game view at 2560 × 1080 (focus, then press on a paper dragged to the desk's right end: the view leaves focus).
 - **§3.4's hover line named the power button as a hand-cursor-only hit zone** (fixed, docs only): the button is a visible sprite with the white outline, and the plan and FEATURES already named the focus exit zone and the glass zone's arrow. §3.4 (:82) now says what FEATURES says, both list the power button among the outlined clickables, and the departure is recorded under "Implementation plan departures".
 - **`MaxRequestedDocuments` copied `MaxDocuments`' blueprint walk** (fixed): the two now share the private `MaxTemplates(blueprints, counts)` and differ only in the template predicate (§2.14). No behaviour changes; the shipped blueprint still gives 1 and 2.
+- **Four sorting orders took effect only through the builder, and every band and wheel knob was checked only there, with nothing saying so** (fixed, docs only): `DeskConfigSO`'s summary, headers and doc comments, §2.7, §2.16 and FEATURES' builder line now say which knobs the builder writes into the scene and that its checks need a re-run. A live check (an `OnValidate`, or a check on entering Play mode) was weighed and left out: the band check needs the content's paper count and the builder's highest prop order, and the fit check the content's menu capacity, none of which the config holds, so it would copy the builder's checks or reach into the content from a runtime asset.
