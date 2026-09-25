@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -44,6 +45,22 @@ public class ArabicShaperTests
             Assert.IsFalse(visual.Contains('\0'), $"'{letter}' then hamza: {Codes(visual)}");
             Assert.AreEqual(3, visual.Length, letter.ToString());
         }
+    }
+
+    /// <summary>Audit R2-001: the visual order reports each character's logical source, so a typed line can show its characters in reading order.</summary>
+    [Test]
+    public void ToVisual_ReportsEachVisualCharactersLogicalSource()
+    {
+        var sources = new List<int> { 99 };
+        string visual = ArabicShaper.ToVisual("لا 12 ب", sources);
+        Assert.AreEqual(ArabicShaper.ToVisual("لا 12 ب"), visual);
+        // Logical: lam 0, alef 1, space 2, '1' 3, '2' 4, space 5, beh 6. Visual: beh, space, 1, 2, space, the lam-alef ligature (its lam's index).
+        CollectionAssert.AreEqual(new[] { 6, 5, 3, 4, 2, 0 }, sources);
+
+        ArabicShaper.ToVisual("ACCEPT 1", sources);
+        CollectionAssert.AreEqual(Enumerable.Range(0, 8).ToArray(), sources, "no Arabic: each character is its own source");
+        ArabicShaper.ToVisual(null, sources);
+        Assert.IsEmpty(sources);
     }
 
     [Test]

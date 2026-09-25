@@ -394,7 +394,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             _flip.Tick(_speech.LineSeconds);
         }
 
-        bubble.Reveal(_speech.VisibleCharacters);
+        _flip.Type(_speech.VisibleCharacters);
     }
 
     /// <summary>Centres the ring on the traveller's anchor, kept on the screen and below the case HUD's strips when the anchor is above it (the desk view); with no traveller or anchor it stays centred on the screen.</summary>

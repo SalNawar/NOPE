@@ -6,7 +6,8 @@ using NUnit.Framework;
 /// The one place displayed text may differ from its canonical value (piece 9
 /// T3, T8, R5): plain text shows as it is, untranslated text in its tongue's
 /// glyphs, and a flipping text turns into English letter by letter; reduced
-/// motion shows the English at the reveal; right-to-left text is shaped.
+/// motion shows the English at the reveal; right-to-left text is shaped; a
+/// typed line shows its characters in reading order (audit R2-001).
 /// </summary>
 public class DisplayTextTests
 {
@@ -20,6 +21,9 @@ public class DisplayTextTests
         new ForeignText(Pseudoscript.ParseTable(glyphs, out _), rtl);
 
     private static string For(string text, Reveal reveal, bool reduced = false) => DisplayText.For(text, reveal, Timing, reduced);
+
+    /// <summary>The typed form with "[" and "]" around the characters not typed yet.</summary>
+    private static string Typed(string text, Reveal reveal, int typed) => DisplayText.Typed(text, reveal, Timing, false, typed, "[", "]");
 
     [Test]
     public void Plain_ShowsTheCanonicalText_AndNullShowsNothing()
@@ -128,6 +132,101 @@ public class DisplayTextTests
         string half = For(Shekel, Reveal.Flipping(arabic, 0.665f, 0));
         StringAssert.Contains("Silver", half, "the English run keeps its order");
         Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(arabic, 5f, 0)));
+    }
+
+    /// <summary>
+    /// Audit R2-001: an untranslated right-to-left line is shown in visual
+    /// order (ArabicShaper reverses it), so typing it out by count showed its
+    /// end first. Typed keeps every character in place and hides those whose
+    /// source is not typed yet: the line's first letter is its rightmost.
+    /// </summary>
+    [Test]
+    public void Typed_ARightToLeftLine_TypesFromItsRightEnd_InReadingOrder()
+    {
+        Reveal arabic = Reveal.Untranslated(Foreign(Arabic, true));
+        string shown = For("ab cd", arabic);
+        Assert.AreEqual(5, shown.Length);
+        Assert.IsTrue(DisplayText.ReadsRightToLeft("ab cd", arabic, Timing, false));
+
+        Assert.AreEqual("[" + shown + "]", Typed("ab cd", arabic, 0), "nothing typed, nothing shows");
+        Assert.AreEqual("[" + shown.Substring(0, 4) + "]" + shown.Substring(4), Typed("ab cd", arabic, 1), "the first letter is the rightmost");
+        Assert.AreEqual("[" + shown.Substring(0, 3) + "]" + shown.Substring(3), Typed("ab cd", arabic, 2));
+        Assert.AreEqual("[" + shown.Substring(0, 1) + "]" + shown.Substring(1), Typed("ab cd", arabic, 4));
+        Assert.AreEqual(shown, Typed("ab cd", arabic, 5), "typed out, the line is For's");
+        Assert.AreEqual(shown, Typed("ab cd", arabic, 99));
+    }
+
+    /// <summary>Digits inside a right-to-left line keep their own order, so they type left to right where they stand; the text around them types from the right.</summary>
+    [Test]
+    public void Typed_DigitsInARightToLeftLine_TypeInTheirOwnOrder()
+    {
+        Reveal arabic = Reveal.Untranslated(Foreign(Arabic, true));
+        string shown = For("ab 12", arabic);
+        Assert.AreEqual("12", shown.Substring(0, 2), "the digit run is at the left, in its order");
+
+        Assert.AreEqual("[12]" + shown.Substring(2), Typed("ab 12", arabic, 3), "a, b and the space show; the digits wait");
+        Assert.AreEqual("1[2]" + shown.Substring(2), Typed("ab 12", arabic, 4), "the 1 before the 2");
+    }
+
+    /// <summary>A lam-alef ligature shows once its lam is typed (one glyph for two letters).</summary>
+    [Test]
+    public void Typed_ALamAlefLigature_ShowsWithItsLam()
+    {
+        Reveal arabic = Reveal.Untranslated(Foreign(Arabic, true));
+        string shown = For("ni", arabic);
+        Assert.AreEqual(1, shown.Length, "'n' and 'i' are lam and alef: one ligature");
+        Assert.AreEqual("[" + shown + "]", Typed("ni", arabic, 0));
+        Assert.AreEqual(shown, Typed("ni", arabic, 1));
+    }
+
+    /// <summary>A left-to-right text types its first characters (the bubble uses the text's visible count for it); a settled or plain text reads left to right.</summary>
+    [Test]
+    public void Typed_ALeftToRightText_TypesItsFirstCharacters()
+    {
+        Reveal greek = Reveal.Untranslated(Foreign(Greek));
+        string shown = For("Deben", greek);
+        Assert.AreEqual(shown.Substring(0, 2) + "[" + shown.Substring(2) + "]", Typed("Deben", greek, 2));
+        Assert.AreEqual("Deb[en]", Typed("Deben", Reveal.Plain, 3));
+        Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", greek, Timing, false));
+        Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", Reveal.Plain, Timing, false));
+        Assert.IsFalse(DisplayText.ReadsRightToLeft(Shekel, Reveal.Flipping(Foreign(Arabic, true), 5f, 0), Timing, false), "settled into English");
+        Assert.IsFalse(DisplayText.ReadsRightToLeft("1897", Reveal.Untranslated(Foreign(Arabic, true)), Timing, false), "no letter, nothing reversed");
+        Assert.AreEqual(string.Empty, Typed(null, greek, 0));
+    }
+
+    /// <summary>At every step of a flipping right-to-left line, the typed form keeps For's characters in place and shows one more typed source each step.</summary>
+    [Test]
+    public void Typed_AFlippingRightToLeftLine_KeepsEveryCharacterInPlace_AndGrowsInReadingOrder()
+    {
+        Reveal half = Reveal.Flipping(Foreign(Arabic, true), 0.665f, 0);
+        string shown = For(Shekel, half);
+        Assert.IsTrue(DisplayText.ReadsRightToLeft(Shekel, half, Timing, false));
+        int visible = -1;
+        for (int n = 0; n <= Shekel.Length; n++)
+        {
+            string typed = Typed(Shekel, half, n);
+            Assert.AreEqual(shown, typed.Replace("[", "").Replace("]", ""), $"typed {n}: every character in place");
+            int now = VisibleCount(typed);
+            Assert.GreaterOrEqual(now, visible, $"typed {n}");
+            visible = now;
+        }
+        Assert.AreEqual(shown.Length, visible);
+    }
+
+    private static int VisibleCount(string typed)
+    {
+        int count = 0;
+        bool hidden = false;
+        foreach (char c in typed)
+        {
+            if (c == '[')
+                hidden = true;
+            else if (c == ']')
+                hidden = false;
+            else if (!hidden)
+                count++;
+        }
+        return count;
     }
 
     [Test]

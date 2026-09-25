@@ -4,8 +4,8 @@ using UnityEngine;
 /// <summary>
 /// A timed label on the office overlay canvas that takes no clicks, projected
 /// at a followed transform plus an offset (OverlayProjection): the traveller's
-/// speech bubble (TravellerWheel, which types each line out with Reveal and
-/// times it itself, and flips a translated line through its Label) and the
+/// speech bubble (TravellerWheel, which times each line itself and types it
+/// out and flips a translated one through its Label's TextFlip) and the
 /// desk props' tooltips (DeskReaction). The host stays active; its Panel child
 /// is shown and hidden. It hides when its time is up, when the followed object
 /// is destroyed, or when that object leaves the view (unless it keeps on
@@ -69,13 +69,6 @@ public sealed class OverlayCallout : MonoBehaviour
         panel.gameObject.SetActive(true);
         if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))
             Hide();
-    }
-
-    /// <summary>Shows only the first <paramref name="characters"/> characters of the text (the rest keep their place, so the box does not reflow as a line types out).</summary>
-    public void Reveal(int characters)
-    {
-        if (label != null)
-            label.maxVisibleCharacters = characters < 0 ? 0 : characters;
     }
 
     /// <summary>Hides the box.</summary>
