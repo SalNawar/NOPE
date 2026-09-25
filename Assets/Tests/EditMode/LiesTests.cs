@@ -89,10 +89,10 @@ public class LiesTests
     private static ScriptStep R(int offset) => ScriptStep.Range(offset);
 
     [Test]
-    public void MayLie_OnlyNonLegendaryTravellersWithAnAllowedClaimAndPapers()
+    public void MayLie_NotHonestPremades_WithAnAllowedClaimAndPapers()
     {
-        Assert.IsTrue(Lies.MayLie(false, true, Papers()));
-        Assert.IsFalse(Lies.MayLie(true, true, Papers()), "legendary");
+        Assert.IsTrue(Lies.MayLie(false, true, Papers()), "an ordinary traveller, or a premade authored as a liar");
+        Assert.IsFalse(Lies.MayLie(true, true, Papers()), "an honest premade");
         Assert.IsFalse(Lies.MayLie(false, false, Papers()), "forbidden claim");
         Assert.IsFalse(Lies.MayLie(false, true, null), "no papers");
         Assert.IsFalse(Lies.MayLie(false, true, new List<DocumentField>()), "empty papers");
@@ -565,5 +565,150 @@ public class LiesTests
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, born.TellValue(ClueCategory.BirthDate), true),
             CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover), "egypt", "ancient");
         Assert.AreEqual(DiscrepancyProof.RecordMismatch, record?.provedBy);
+    }
+
+    // -----------------------------
+    // Dress tells (the Appearance channel)
+    // -----------------------------
+
+    /// <summary>Every channel (day 3 on).</summary>
+    private static readonly TellChannel[] All3 = { TellChannel.Papers, TellChannel.Answer, TellChannel.Appearance };
+
+    /// <summary>The books plus the Costume Guide.</summary>
+    private static readonly HashSet<ClueCategory> BooksAndDress = new HashSet<ClueCategory> { ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Culture };
+
+    /// <summary>The fixture's facts plus Culture values: the twin's equals Egypt's, Iraq's and Italy's are their own (or, with <paramref name="shared"/>, Iraq's equals Italy's).</summary>
+    private static FactTable FactsWithDress(bool shared = false)
+    {
+        FactTable t = Facts();
+        t.Add("egypt", "ancient", "New Kingdom Egypt (Ancient)", ClueCategory.Culture, "wesekh collar");
+        t.Add("greece", "ancient", "Periclean Athens (Ancient)", ClueCategory.Culture, " WESEKH COLLAR ");
+        t.Add("iraq", "ancient", "Babylonia (Ancient)", ClueCategory.Culture, shared ? "Caesar crop / nodus roll" : "curled beard / gold fillet");
+        t.Add("italy", "ancient", "Republican Rome (Ancient)", ClueCategory.Culture, "Caesar crop / nodus roll");
+        return t;
+    }
+
+    private static HomeCandidate Leakable(HomeCandidate p) => new HomeCandidate(p.NationId, p.EraId, p.BirthYearMin, p.BirthYearMax, true);
+
+    private static LiePlan PlanDress(IRandomSource rng, IReadOnlyList<HomeCandidate> todays, IReadOnlyList<TellChannel> channels,
+                                     FactTable facts = null, IReadOnlyList<ClueCategory> asked = null, float chance = 0.5f) =>
+        Lies.Plan(chance, 1, "egypt", "ancient", Cover, todays, Papers(), asked ?? None, channels, facts ?? FactsWithDress(), BooksAndDress, rng);
+
+    [Test]
+    public void GoldenOrder_ADressTellIsTheLastOptionOfAHome()
+    {
+        // Iraq's options: Papers BirthDate, Currency, Language, Technology, then Appearance Culture.
+        ScriptedRandom rng = Script(V(0.1f), R(0), R(4));
+        List<DocumentField> papers = Papers();
+        LiePlan plan = Lies.Plan(0.5f, 1, "egypt", "ancient", Cover, new[] { Egypt, Twin, Leakable(Iraq), Italy }, papers, None, All3, FactsWithDress(), BooksAndDress, rng);
+
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        Assert.AreEqual(2, plan.HomeIndex);
+        CollectionAssert.AreEqual(new[] { ClueCategory.Culture }, plan.Tells);
+        Assert.AreEqual(TellChannel.Appearance, plan.ChannelOf(ClueCategory.Culture));
+        Assert.AreEqual("curled beard / gold fillet", plan.TellValue(ClueCategory.Culture));
+
+        List<string> before = papers.Select(f => f.value).ToList();
+        plan.ApplyTo(papers);
+        CollectionAssert.AreEqual(before, papers.Select(f => f.value).ToList(), "a dress tell leaves the papers on the cover");
+        Assert.IsFalse(papers.Any(f => f.isAnachronism));
+        Assert.IsTrue(rng.Done, "roll, home, one tell");
+    }
+
+    [Test]
+    public void AppearanceAllowed_ButNotLeakable_GivesNoDressOption()
+    {
+        for (int seed = 0; seed < 300; seed++)
+        {
+            LiePlan plan = PlanDress(new SeededRandom(seed), Today4, All3, chance: 1f);
+            Assert.IsNull(plan.ChannelOf(ClueCategory.Culture), $"seed {seed}");
+        }
+    }
+
+    [Test]
+    public void AHomeEligibleOnlyThroughDress_IsACandidateWithAppearance_AndNotWithout()
+    {
+        // A second twin of Egypt, born with no birth years, whose dress alone differs.
+        var dressTwin = new HomeCandidate("japan", "ancient", 0, 0, true);
+        FactTable facts = FactsWithDress();
+        facts.Add("japan", "ancient", "Kofun Yamato (Ancient)", ClueCategory.Currency, "Deben");
+        facts.Add("japan", "ancient", "Kofun Yamato (Ancient)", ClueCategory.Language, "Middle Egyptian");
+        facts.Add("japan", "ancient", "Kofun Yamato (Ancient)", ClueCategory.Technology, "Papyrus");
+        facts.Add("japan", "ancient", "Kofun Yamato (Ancient)", ClueCategory.Culture, "mizura / magatama beads");
+        var todays = new[] { Egypt, dressTwin };
+
+        Assert.AreEqual(LieOutcome.NoPossibleLie, PlanDress(Script(V(0f)), todays, Both, facts).Outcome, "without Appearance");
+        LiePlan plan = PlanDress(Script(V(0f), R(0), R(0)), todays, All3, facts);
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        Assert.AreEqual(1, plan.HomeIndex);
+        Assert.AreEqual(TellChannel.Appearance, plan.ChannelOf(ClueCategory.Culture));
+    }
+
+    [Test]
+    public void WithoutTheAppearanceChannel_PlansAreThoseOfPieceThree()
+    {
+        var leakable = new[] { Egypt, Leakable(Twin), Leakable(Iraq), Leakable(Italy) };
+        for (int seed = 0; seed <= 300; seed++)
+        {
+            LiePlan before = Lies.Plan(0.5f, 2, "egypt", "ancient", Cover, Today4, Papers(), new[] { ClueCategory.Currency }, Both, Facts(), Books, new SeededRandom(seed));
+            LiePlan after = Lies.Plan(0.5f, 2, "egypt", "ancient", Cover, leakable, Papers(), new[] { ClueCategory.Currency }, Both, FactsWithDress(), BooksAndDress, new SeededRandom(seed));
+            Assert.AreEqual(before.Outcome, after.Outcome, $"seed {seed}");
+            Assert.AreEqual(before.HomeIndex, after.HomeIndex, $"seed {seed}");
+            CollectionAssert.AreEqual(before.Tells, after.Tells, $"seed {seed}");
+            foreach (ClueCategory c in before.Tells)
+            {
+                Assert.AreEqual(before.ChannelOf(c), after.ChannelOf(c), $"seed {seed} {c}");
+                Assert.AreEqual(before.TellValue(c), after.TellValue(c), $"seed {seed} {c}");
+            }
+        }
+    }
+
+    [Test]
+    public void ASharedCultureValue_RemovesTheDressOption()
+    {
+        for (int seed = 0; seed < 300; seed++)
+        {
+            LiePlan plan = PlanDress(new SeededRandom(seed), new[] { Egypt, Twin, Leakable(Iraq), Italy }, All3, FactsWithDress(shared: true), chance: 1f);
+            Assert.IsNull(plan.ChannelOf(ClueCategory.Culture), $"seed {seed}: Iraq's dress belongs to Rome too, so it cannot prove Iraq");
+        }
+    }
+
+    [Test]
+    public void APremadeLiar_OneCandidateAtChanceOne_KeepsTheAnswerOptions()
+    {
+        // Iraq's options: Papers BirthDate, Currency, Language, Technology, then Answer Currency.
+        ScriptedRandom rng = Script(V(0.99f), R(0), R(4));
+        LiePlan plan = Lies.Plan(1f, 1, "egypt", "ancient", Cover, new[] { Iraq }, Papers(), new[] { ClueCategory.Currency }, Both, Facts(), Books, rng);
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        Assert.AreEqual(0, plan.HomeIndex);
+        Assert.AreEqual(TellChannel.Answer, plan.ChannelOf(ClueCategory.Currency));
+        Assert.IsTrue(rng.Done);
+    }
+
+    [Test]
+    public void ADressTell_ProvesAgainstTheClaimAndTheHome_AndNothingElse()
+    {
+        FactTable facts = FactsWithDress();
+        LiePlan plan = PlanDress(Script(V(0.1f), R(0), R(4)), new[] { Egypt, Twin, Leakable(Iraq), Italy }, All3, facts);
+        CompareEvidence worn = CompareEvidence.ForAppearance(ClueCategory.Culture, plan.TellValue(ClueCategory.Culture), true);
+        foreach (FactRow row in facts.Rows(ClueCategory.Culture))
+        {
+            Discrepancy d = DiscrepancyLog.Prove(worn, row.ToEvidence(), "egypt", "ancient");
+            string where = $"Culture vs {row.OriginLabel}";
+            if (row.NationId == "egypt")
+            {
+                Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d?.provedBy, where);
+                Assert.AreEqual(EvidenceKind.Appearance, d.source, where);
+            }
+            else if (row.NationId == "iraq")
+            {
+                Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d?.provedBy, where);
+                Assert.AreEqual("Babylonia (Ancient)", d.actualOrigin, where);
+            }
+            else
+            {
+                Assert.IsNull(d, where);
+            }
+        }
     }
 }

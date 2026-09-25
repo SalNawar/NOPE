@@ -11,6 +11,8 @@ public enum ClueCategory
     Technology,
     Currency,
     Geography,
+
+    /// <summary>A place's signature dress: the Costume Guide rows and worn garments (derived from the place's wardrobe).</summary>
     Culture,
 
     // Identity fields — validated against the agency's citizen records,

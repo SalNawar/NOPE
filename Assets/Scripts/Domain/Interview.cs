@@ -51,12 +51,17 @@ public static class Interview
     }
 
     /// <summary>
-    /// The desk's opener: the legendary template with the name for a
-    /// legendary (a non-blank <paramref name="legendaryName"/>), otherwise the
-    /// opener with the honorific of <paramref name="gender"/>. "" for null lines.
+    /// The desk's opener: a premade's own opener (a non-blank
+    /// <paramref name="authoredIntro"/>) as it is; else the legendary template
+    /// with the name for a premade (a non-blank <paramref name="legendaryName"/>);
+    /// otherwise the opener with the honorific of <paramref name="gender"/>.
+    /// "" for null lines (and no authored intro).
     /// </summary>
-    public static string Opener(InterviewLines lines, TravellerGender gender, string legendaryName)
+    public static string Opener(InterviewLines lines, TravellerGender gender, string legendaryName, string authoredIntro)
     {
+        if (!string.IsNullOrWhiteSpace(authoredIntro))
+            return authoredIntro;
+
         if (lines == null)
             return string.Empty;
 

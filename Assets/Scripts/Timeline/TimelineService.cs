@@ -358,7 +358,7 @@ public static class TimelineService
             dialogs.Add(new Gated<AuthoredDialog>(d.dialog, ToGates(d.conditions)));
         }
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger);
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, null);
     }
 
     /// <summary>

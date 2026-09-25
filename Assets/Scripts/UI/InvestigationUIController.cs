@@ -411,7 +411,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         DialogGraph graph = InterviewScript.Build(_day.Lines,
             reachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
-            reachable ? _day.OfferedDialogs() : Array.Empty<AuthoredDialog>(),
+            reachable ? _day.OfferedDialogs(null) : Array.Empty<AuthoredDialog>(),
             interviewCase);
         _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
 

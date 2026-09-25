@@ -17,13 +17,16 @@ public enum EvidenceKind
     RecordField,
 
     /// <summary>A traveller's spoken answer in the interview transcript.</summary>
-    Answer
+    Answer,
+
+    /// <summary>A garment the traveller wears (the traveller wheel's look menu).</summary>
+    Appearance
 }
 
 /// <summary>How a discrepancy was proved.</summary>
 public enum DiscrepancyProof
 {
-    /// <summary>The statement (papers or answer) differs from the claimed place's reference entry.</summary>
+    /// <summary>The statement (papers, answer or worn garment) differs from the claimed place's reference entry.</summary>
     ClaimMismatch,
 
     /// <summary>The statement matches a reference entry that belongs to a different origin.</summary>
@@ -50,7 +53,7 @@ public struct CompareEvidence
     /// <summary>The canonical value (never display text: see DisplayText).</summary>
     public string value;
 
-    /// <summary>Statement side (document field or answer): true if the value is a liar's tell.</summary>
+    /// <summary>Statement side (document field, answer or garment): true if the value is a liar's tell.</summary>
     public bool isAnachronism;
 
     /// <summary>Reference side: nation id the entry applies to (null/empty = any).</summary>
@@ -99,6 +102,22 @@ public struct CompareEvidence
         value = value,
         isAnachronism = isTell
     };
+
+    /// <summary>Evidence for a garment the player looked at: its source place's Culture value, a tell when <paramref name="isTell"/>.</summary>
+    public static CompareEvidence ForAppearance(ClueCategory category, string value, bool isTell) => new CompareEvidence
+    {
+        kind = EvidenceKind.Appearance,
+        category = category,
+        value = value,
+        isAnachronism = isTell
+    };
+
+    /// <summary>
+    /// The value a comparison matches on: this side's typed evidence value
+    /// when it carries evidence (a garment shows its item name but matches on
+    /// its place's Culture value), else the text shown. Caller: CompareController.
+    /// </summary>
+    public string MatchValue(string shown) => kind != EvidenceKind.None ? value : shown;
 }
 
 /// <summary>One documented contradiction on the current case.</summary>
@@ -125,7 +144,7 @@ public sealed class Discrepancy
     /// <summary>How this contradiction was proved.</summary>
     public DiscrepancyProof provedBy;
 
-    /// <summary>Where the tell was stated: DocumentField (papers) or Answer (the traveller said it).</summary>
+    /// <summary>Where the tell was stated: DocumentField (papers), Answer (the traveller said it) or Appearance (the traveller wears it).</summary>
     public EvidenceKind source;
 
     /// <summary>Player-facing report line ("CAPITAL INCORRECT — traveller said: ..."), naming where the tell was stated.</summary>
@@ -134,31 +153,33 @@ public sealed class Discrepancy
         get
         {
             string what = ClueLabels.Report(category);
-            bool said = source == EvidenceKind.Answer;
             switch (provedBy)
             {
                 case DiscrepancyProof.ForeignOrigin:
-                    return said
-                        ? $"{what} INCORRECT — traveller said \"{documentValue}\", which belongs to {actualOrigin}"
-                        : $"{what} INCORRECT — papers show \"{documentValue}\", which belongs to {actualOrigin}";
+                    return $"{what} INCORRECT — {Shown()} \"{documentValue}\", which belongs to {actualOrigin}";
                 case DiscrepancyProof.RecordMismatch:
-                    return $"{what} INCORRECT — {Stated(said)}: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
+                    return $"{what} INCORRECT — {Stated()}: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
                 default:
-                    return $"{what} INCORRECT — {Stated(said)}: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
+                    return $"{what} INCORRECT — {Stated()}: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
             }
         }
     }
 
     /// <summary>Who stated the value, as a mismatch line names it.</summary>
-    private static string Stated(bool said) => said ? "traveller said" : "papers";
+    private string Stated() =>
+        source == EvidenceKind.Answer ? "traveller said" : source == EvidenceKind.Appearance ? "traveller wears" : "papers";
+
+    /// <summary>Who showed the value, as an origin line names it.</summary>
+    private string Shown() =>
+        source == EvidenceKind.Answer ? "traveller said" : source == EvidenceKind.Appearance ? "traveller wears" : "papers show";
 }
 
 /// <summary>
 /// Per-case list of documented contradictions (the Deviation Report). Pure C#
 /// so the rules are unit-testable. <see cref="Prove"/> decides whether a
-/// compared pair is a true contradiction: a statement (document field or
-/// answer) against one truth source (a reference entry or the citizen
-/// record), proved either way:
+/// compared pair is a true contradiction: a statement (document field,
+/// answer or worn garment) against one truth source (a reference entry or
+/// the citizen record), proved either way:
 /// - MISMATCH proof: a liar's tell differs from the reference entry that
 ///   applies to the CLAIMED nation+era, or from the agency's record.
 /// - MATCH proof: a liar's tell equals a reference entry that does
@@ -182,7 +203,7 @@ public sealed class DiscrepancyLog
     /// <summary>
     /// Whether a compared pair proves a contradiction of the current claim:
     /// the proof, or null when it proves nothing. The statement side (a
-    /// document field or an answer) must be a liar's tell and face exactly one
+    /// document field, an answer or a garment) must be a liar's tell and face exactly one
     /// truth source (a reference entry or a record field) of the same
     /// category; two statements or two truths prove nothing. Pure: no log changes.
     /// </summary>
@@ -200,7 +221,7 @@ public sealed class DiscrepancyLog
             truth = a;
         }
 
-        // Must be one statement (papers or answer) against one truth source (book or records).
+        // Must be one statement (papers, answer or garment) against one truth source (book or records).
         if (!IsStatement(statement.kind))
             return null;
         if (truth.kind != EvidenceKind.ReferenceEntry && truth.kind != EvidenceKind.RecordField)
@@ -289,11 +310,16 @@ public sealed class DiscrepancyLog
         return true;
     }
 
-    /// <summary>True for a statement row: a document field or a spoken answer.</summary>
+    /// <summary>True for a statement row: a document field, a spoken answer or a worn garment.</summary>
     private static bool IsStatement(EvidenceKind kind) =>
-        kind == EvidenceKind.DocumentField || kind == EvidenceKind.Answer;
+        kind == EvidenceKind.DocumentField || kind == EvidenceKind.Answer || kind == EvidenceKind.Appearance;
 
-    /// <summary>Case-insensitive, trimmed equality (mirrors the compare bar; shared with Forgery.IsProvableTell and TravellerGenders.FromNameLists).</summary>
-    internal static bool ValuesMatch(string x, string y) =>
+    /// <summary>
+    /// Case-insensitive, trimmed equality: the one value comparison (the
+    /// compare bar through CompareEvidence.MatchValue, Forgery.IsProvableTell,
+    /// TravellerGenders.FromNameLists, Looks.CultureValue, Looks.CanLeak and
+    /// Looks.LabelProblems).
+    /// </summary>
+    public static bool ValuesMatch(string x, string y) =>
         string.Equals((x ?? string.Empty).Trim(), (y ?? string.Empty).Trim(), StringComparison.OrdinalIgnoreCase);
 }

@@ -209,7 +209,7 @@ public sealed class CaseFactory
         string role = archetype != null ? archetype.displayName : "Traveler";
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
         string birthDate = GenerateBirthDate(place);
-        string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null);
+        string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null, null);
 
         var inst = new CaseInstance
         {

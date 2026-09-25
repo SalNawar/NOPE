@@ -41,6 +41,9 @@ public sealed class ScriptLine
 
     /// <summary>The wording.</summary>
     public string text;
+
+    /// <summary>Optional: a LookKeys.Expressions token; a premade's picture changes to it when the line is spoken.</summary>
+    public string expression;
 }
 
 /// <summary>One authored reply the player can pick in a narrative dialog.</summary>
@@ -209,6 +212,9 @@ public sealed class InterviewLines
 
     /// <summary>Ask-menu entry for small talk.</summary>
     public string smallTalkLabel;
+
+    /// <summary>Hub entry that opens the look menu (the traveller's visible garments).</summary>
+    public string lookLabel;
 
     /// <summary>The desk's small-talk question.</summary>
     public LineText smallTalkPrompt = new();

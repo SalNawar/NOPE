@@ -199,7 +199,7 @@ public static class ContentLibraryValidator
         bool smallTalk = (lib.Eras ?? Array.Empty<EraSO>()).Any(e => e != null && e.smallTalk != null && e.smallTalk.Count > 0) ||
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
         foreach (string problem in DialogChecks.MenuProblems(lib.Questions.Count(q => q != null), smallTalk, MaxRequestedDocuments(TravellerBlueprints(lib)),
-                                                             lib.Dialogs.Count(d => d != null), lines.menuCapacity))
+                                                             lib.Dialogs.Count(d => d != null), 0, lines.menuCapacity))
             Error(problem, lib);
 
         return issues;

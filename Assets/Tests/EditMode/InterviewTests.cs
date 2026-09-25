@@ -101,20 +101,30 @@ public class InterviewTests
     [TestCase(TravellerGender.Unknown, "Next! Step forward, traveller.")]
     public void Opener_UsesTheHonorificOfTheRecordedGender(TravellerGender gender, string expected)
     {
-        Assert.AreEqual(expected, Interview.Opener(Lines(), gender, null));
+        Assert.AreEqual(expected, Interview.Opener(Lines(), gender, null, null));
     }
 
     [Test]
     public void Opener_ALegendary_UsesTheLegendaryTemplate()
     {
-        Assert.AreEqual("Priority arrival: Nikola Tesla.", Interview.Opener(Lines(), TravellerGender.Unknown, "Nikola Tesla"));
-        Assert.AreEqual("Next! Step forward, sir.", Interview.Opener(Lines(), TravellerGender.Male, "  "), "a blank name is no legendary");
+        Assert.AreEqual("Priority arrival: Nikola Tesla.", Interview.Opener(Lines(), TravellerGender.Unknown, "Nikola Tesla", null));
+        Assert.AreEqual("Next! Step forward, sir.", Interview.Opener(Lines(), TravellerGender.Male, "  ", null), "a blank name is no legendary");
+        Assert.AreEqual("Priority arrival: Nikola Tesla.", Interview.Opener(Lines(), TravellerGender.Male, "Nikola Tesla", "  "), "a blank authored intro is none");
+    }
+
+    [Test]
+    public void Opener_APremadesOwnIntro_IsReturnedAsItIs_WhateverTheNameOrGender()
+    {
+        const string intro = "Priority arrival: Socrates of Athens. He asks more questions than you do.";
+        Assert.AreEqual(intro, Interview.Opener(Lines(), TravellerGender.Male, "Socrates", intro));
+        Assert.AreEqual(intro, Interview.Opener(Lines(), TravellerGender.Female, null, intro));
+        Assert.AreEqual(intro, Interview.Opener(null, TravellerGender.Unknown, null, intro), "even without lines");
     }
 
     [Test]
     public void Opener_NullLines_GiveEmpty()
     {
-        Assert.AreEqual(string.Empty, Interview.Opener(null, TravellerGender.Male, null));
+        Assert.AreEqual(string.Empty, Interview.Opener(null, TravellerGender.Male, null, null));
     }
 
     [Test]

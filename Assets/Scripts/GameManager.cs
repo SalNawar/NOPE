@@ -153,7 +153,7 @@ public sealed class GameManager : MonoBehaviour
         _dayCases = _caseFactory.GenerateDayCases(dayPlan, _worldState, seed,
             spoken ? interview.AskableCategories : System.Array.Empty<ClueCategory>(),
             spoken ? interview.AnswerTellCategories : System.Array.Empty<ClueCategory>());
-        Debug.Log($"[GameManager] Interview: spoken={spoken}, askable=[{string.Join(", ", interview.AskableCategories)}], spoken tells may come from [{string.Join(", ", interview.AnswerTellCategories)}], dialogs offered={interview.OfferedDialogs().Count}.");
+        Debug.Log($"[GameManager] Interview: spoken={spoken}, askable=[{string.Join(", ", interview.AskableCategories)}], spoken tells may come from [{string.Join(", ", interview.AnswerTellCategories)}], dialogs offered={interview.OfferedDialogs(null).Count}.");
 
         // Investigation: surface today's travel directives (rules to deny), the
         // agency's citizen records for today's visitors, today's facts and interview.

@@ -6,8 +6,8 @@ public static class ClueLabels
 {
     /// <summary>
     /// Report label of a category: Geography is CAPITAL, Politics RULER,
-    /// Technology DEVICE, BirthDate BIRTH DATE, and every other category its
-    /// upper-case name.
+    /// Technology DEVICE, BirthDate BIRTH DATE, Culture DRESS, and every other
+    /// category its upper-case name.
     /// </summary>
     public static string Report(ClueCategory category)
     {
@@ -17,6 +17,7 @@ public static class ClueLabels
             case ClueCategory.Politics: return "RULER";
             case ClueCategory.Technology: return "DEVICE";
             case ClueCategory.BirthDate: return "BIRTH DATE";
+            case ClueCategory.Culture: return "DRESS";
             default: return category.ToString().ToUpperInvariant();
         }
     }
