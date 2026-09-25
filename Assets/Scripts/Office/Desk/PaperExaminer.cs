@@ -15,8 +15,9 @@ using UnityEngine;
 /// paper's root stays where it lay, so a put-back lands there. Rises and
 /// returns are eased (ExamineLayout.Ease); it works in LateUpdate only while a
 /// pose moves, and re-poses when the screen's size, the camera's pose or its
-/// field of view changes. DeskController holds and releases; BoothCoordinator
-/// sets the mode; the office binder hands it the camera.
+/// field of view, or the open frame's edge changes. DeskController holds and
+/// releases; BoothCoordinator sets the mode; the office binder hands it the
+/// camera.
 /// </summary>
 public sealed class PaperExaminer : MonoBehaviour
 {
@@ -58,6 +59,7 @@ public sealed class PaperExaminer : MonoBehaviour
     private Vector3 _cameraPosition;
     private Quaternion _cameraRotation;
     private float _cameraFov;
+    private float _frameEdge;
 
     /// <summary>The office camera the papers are posed in front of (the office binder's, from the art office).</summary>
     public void SetCamera(Camera office) => _camera = office;
@@ -358,14 +360,21 @@ public sealed class PaperExaminer : MonoBehaviour
         _holeOpen = any;
     }
 
-    /// <summary>True (and remembered) when the screen's size or the camera's pose or field of view changed since the last call.</summary>
+    /// <summary>
+    /// True (and remembered) when the screen's size, the camera's pose or field
+    /// of view, or (while the frame is open) the frame's right edge changed
+    /// since the last call (the overlay's scaler can follow a new screen size a
+    /// frame late, so the region beside the frame is re-read until it settles).
+    /// </summary>
     private bool ViewChanged()
     {
         Transform cam = _camera.transform;
+        float edge = _frameOpen && frame != null ? frame.RightEdgePixels : 0f;
         if (Screen.width == _screenWidth && Screen.height == _screenHeight && cam.position == _cameraPosition &&
-            cam.rotation == _cameraRotation && Mathf.Approximately(_camera.fieldOfView, _cameraFov))
+            cam.rotation == _cameraRotation && Mathf.Approximately(_camera.fieldOfView, _cameraFov) && Mathf.Approximately(edge, _frameEdge))
             return false;
 
+        _frameEdge = edge;
         _screenWidth = Screen.width;
         _screenHeight = Screen.height;
         _cameraPosition = cam.position;
