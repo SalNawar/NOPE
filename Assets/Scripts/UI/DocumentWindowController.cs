@@ -40,9 +40,6 @@ public sealed class DocumentWindowController : MonoBehaviour
 
     private void Awake()
     {
-        _rowsLayout = fieldRowsRoot != null ? fieldRowsRoot.GetComponent<VerticalLayoutGroup>() : null;
-        if (_rowsLayout != null)
-            _rowsPadding = new RectOffset(_rowsLayout.padding.left, _rowsLayout.padding.right, _rowsLayout.padding.top, _rowsLayout.padding.bottom);
 
         if (prevButton != null)
             prevButton.onClick.AddListener(() => ShowPage(_page - 1));
@@ -97,10 +94,27 @@ public sealed class DocumentWindowController : MonoBehaviour
         bool photoPage = _showsPhoto && _page == 0;
         if (photoBox != null)
             photoBox.SetActive(photoPage);
-        if (_rowsLayout != null && _rowsPadding != null)
-            _rowsLayout.padding = new RectOffset(_rowsPadding.left, _rowsPadding.right + (photoPage ? (int)photoInset : 0), _rowsPadding.top, _rowsPadding.bottom);
+        LeaveRoomForPhoto(photoPage);
 
         Rebuild();
+    }
+
+    /// <summary>
+    /// Pads the rows on the right by <see cref="photoInset"/> on a photo page,
+    /// else restores the authored padding (read once: the window is set up
+    /// while still inactive, before Awake runs).
+    /// </summary>
+    private void LeaveRoomForPhoto(bool photoPage)
+    {
+        if (_rowsLayout == null && fieldRowsRoot != null)
+        {
+            _rowsLayout = fieldRowsRoot.GetComponent<VerticalLayoutGroup>();
+            if (_rowsLayout != null)
+                _rowsPadding = new RectOffset(_rowsLayout.padding.left, _rowsLayout.padding.right, _rowsLayout.padding.top, _rowsLayout.padding.bottom);
+        }
+
+        if (_rowsLayout != null)
+            _rowsLayout.padding = new RectOffset(_rowsPadding.left, _rowsPadding.right + (photoPage ? (int)photoInset : 0), _rowsPadding.top, _rowsPadding.bottom);
     }
 
     private void Rebuild()
