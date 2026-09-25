@@ -106,6 +106,27 @@ public static class InterviewScript
     }
 
     /// <summary>
+    /// The expression a premade shows after transcript line <paramref name="from"/>:
+    /// that of the last Traveller line at or after it that carries one; null
+    /// when none does (or for no transcript). A from below 0 counts as 0.
+    /// </summary>
+    public static string ExpressionSince(IReadOnlyList<DialogLine> transcript, int from)
+    {
+        string expression = null;
+        if (transcript == null)
+            return expression;
+
+        for (int i = from < 0 ? 0 : from; i < transcript.Count; i++)
+        {
+            DialogLine line = transcript[i];
+            if (line != null && line.Speaker == DialogSpeaker.Traveller && !string.IsNullOrEmpty(line.Expression))
+                expression = line.Expression;
+        }
+
+        return expression;
+    }
+
+    /// <summary>
     /// The traveller's graph. Hub: "request:{i}" per document handed over on
     /// request (one-shot, hands document i over), then "ask" when the ask menu has a question or
     /// small talk, then "look" when the traveller has a visible garment, then

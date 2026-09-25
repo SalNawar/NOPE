@@ -558,6 +558,24 @@ public class InterviewScriptTests
     }
 
     [Test]
+    public void ExpressionSince_IsTheLastTravellerLineWithOne_FromTheIndex()
+    {
+        var transcript = new List<DialogLine>
+        {
+            new DialogLine("a", DialogSpeaker.Traveller, "Hello.", "happy"),
+            new DialogLine("b", DialogSpeaker.Desk, "Why?", "angry"),
+            new DialogLine("c", DialogSpeaker.Traveller, "Because.", "worried"),
+            new DialogLine("d", DialogSpeaker.Traveller, "Well.", ""),
+            new DialogLine("e", DialogSpeaker.Traveller, "Hm.")
+        };
+        Assert.AreEqual("worried", InterviewScript.ExpressionSince(transcript, 0), "the last one wins; blank and null lines keep it");
+        Assert.AreEqual("worried", InterviewScript.ExpressionSince(transcript, -3));
+        Assert.IsNull(InterviewScript.ExpressionSince(transcript, 3), "no line since then carries one");
+        Assert.IsNull(InterviewScript.ExpressionSince(transcript.GetRange(1, 1), 0), "the desk never has one");
+        Assert.IsNull(InterviewScript.ExpressionSince(null, 0));
+    }
+
+    [Test]
     public void Expressions_OfNodeLinesAndChoiceLines_ReachTheRuntimeLines_TheDeskAndAnswersHaveNone()
     {
         var dialog = new AuthoredDialog

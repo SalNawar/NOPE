@@ -41,6 +41,8 @@ public sealed class DeskController : MonoBehaviour
 
     private readonly PaperStack _stack = new PaperStack();
     private IReadOnlyList<CaseDocument> _documents = Array.Empty<CaseDocument>();
+    private TravellerLook _look;
+    private CharacterArt _art;
     private DeskPapers _state;
     private bool _live;
     private int _day;
@@ -90,10 +92,12 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Starts a case's papers; the documents handed over on arrival slide onto the desk.</summary>
-    public void BeginCase(IReadOnlyList<CaseDocument> docs)
+    /// <summary>Starts a case's papers (a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the desk.</summary>
+    public void BeginCase(IReadOnlyList<CaseDocument> docs, TravellerLook look, CharacterArt art)
     {
         _documents = docs ?? Array.Empty<CaseDocument>();
+        _look = look;
+        _art = art;
         _state = new DeskPapers(_documents, config.scanSeconds);
         _papers.Clear();
         for (int i = 0; i < _state.Count; i++)
@@ -122,6 +126,7 @@ public sealed class DeskController : MonoBehaviour
         paper.transform.position = handOverPoint.position;
         paper.gameObject.SetActive(true);
         paper.Bind(i, _documents[i]);
+        paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art);
 
         DeskDraggable drag = paper.GetComponent<DeskDraggable>();
         drag.Init(surface);

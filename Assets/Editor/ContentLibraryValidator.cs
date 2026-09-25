@@ -39,6 +39,7 @@ public static class ContentLibraryValidator
 
             Debug.Log($"[ContentLibraryValidator] Validating '{path}'...");
             totalIssues += ValidateLibrary(lib);
+            ReportCharacterArt(lib);
         }
 
         if (totalIssues == 0)
@@ -752,6 +753,27 @@ public static class ContentLibraryValidator
         }
 
         return issues;
+    }
+
+    /// <summary>
+    /// Logs (never counted as an issue) how many character art keys have final
+    /// art at CharacterArt.AssetFolder: the bases, every place's garments and
+    /// every premade's expressions, with the first 20 missing names (the rest
+    /// are drawn as placeholders at runtime).
+    /// </summary>
+    private static void ReportCharacterArt(ContentLibrarySO lib)
+    {
+        var keys = new List<string>(LookKeys.Bases(lib.LookRules));
+        foreach (NationEraProfileSO place in lib.Profiles)
+            if (place != null && place.nation != null && place.era != null)
+                keys.AddRange(LookKeys.Required(place.nation.id, place.era.id, place.wardrobe));
+        foreach (LegendarySO premade in lib.Legendaries)
+            if (premade != null)
+                keys.AddRange(LookKeys.PremadeSet(premade.id));
+
+        List<string> missing = keys.Distinct().Where(k => !System.IO.File.Exists($"{CharacterArt.AssetFolder}/{k}.png")).ToList();
+        int total = keys.Distinct().Count();
+        Debug.Log($"[ContentLibraryValidator] Character art: {total - missing.Count}/{total} key(s) have final art in {CharacterArt.AssetFolder}; placeholders are drawn for the rest{(missing.Count > 0 ? $" (first missing: {string.Join(", ", missing.Take(20))})" : string.Empty)}.");
     }
 
     /// <summary>Reports look rules a traveller's look cannot be composed from: a face band with no face, no grey age, no premade garment label.</summary>

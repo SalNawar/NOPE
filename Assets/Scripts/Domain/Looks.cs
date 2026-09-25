@@ -267,9 +267,6 @@ public static class Looks
         }
     }
 
-    /// <summary>True for every layer that shows a garment: all but Body and Head (the hair back and a premade's whole picture are garments).</summary>
-    public static bool IsGarmentLayer(LookLayer layer) => layer != LookLayer.Body && layer != LookLayer.Head;
-
     /// <summary>
     /// A place's Culture fact: "{men's signature label} / {women's signature
     /// label}", or the one label when both match (the scanner comparison).

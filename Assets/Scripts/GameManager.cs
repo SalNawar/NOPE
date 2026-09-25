@@ -39,7 +39,7 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Scene clock for today's shift (optional: without it the day ends only when the queue is empty).</summary>
     [SerializeField] private ShiftClockDriver shiftClock;
 
-    /// <summary>Optional: the booth figure, from presentation until the decision.</summary>
+    /// <summary>Optional: the booth figure (the traveller's layered look), from presentation until the decision.</summary>
     [SerializeField] private TravellerView travellerView;
 
     /// <summary>Optional: the booth's input and wake rules.</summary>
@@ -71,6 +71,9 @@ public sealed class GameManager : MonoBehaviour
 
     /// <summary>Gameplay tuning, pulled from RunConfig (null-safe).</summary>
     private GameConfigSO _gameConfig;
+
+    /// <summary>Character art for the booth figure and the passport photos (only the current traveller's is kept).</summary>
+    private CharacterArt _characterArt;
 
     /// <summary>Read-only access to the current shift's ledger.</summary>
     public ShiftLedger Ledger => _ledger;
@@ -141,6 +144,7 @@ public sealed class GameManager : MonoBehaviour
 
         // Create the case factory from the content library and today's facts.
         _caseFactory = new CaseFactory(contentLibrary, facts);
+        _characterArt = new CharacterArt(contentLibrary);
 
         // Today's interview, fixed at day start: the askable questions, which of
         // them may carry a spoken tell, and the offered dialogs.
@@ -166,6 +170,8 @@ public sealed class GameManager : MonoBehaviour
             investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
             investigationUI.SetFacts(facts);
             investigationUI.SetInterviewDay(interview);
+            investigationUI.SetCharacterArt(_characterArt);
+            investigationUI.TravellerExpressionChanged += HandleTravellerExpression;
         }
 
         // Initial HUD state.
@@ -224,6 +230,10 @@ public sealed class GameManager : MonoBehaviour
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
 
+        if (investigationUI != null)
+            investigationUI.TravellerExpressionChanged -= HandleTravellerExpression;
+        _characterArt?.Dispose();
+
         if (orchestrator == null)
             return;
 
@@ -246,6 +256,7 @@ public sealed class GameManager : MonoBehaviour
         _travellerAtDesk = false;
         if (shiftClock != null)
             shiftClock.StopShift();
+        _characterArt?.Retain(null);
 
         int correctCount = 0;
         int totalPay = 0;
@@ -469,17 +480,18 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// The one presence transition: whether a traveller is at the desk feeds
-    /// the closing-time rule, the booth figure and the booth's input phase.
+    /// The one presence transition: whether a traveller is at the desk (and
+    /// how they look) feeds the closing-time rule, the booth figure and the
+    /// booth's input phase.
     /// </summary>
-    private void SetTravellerAtDesk(bool at)
+    private void SetTravellerAtDesk(bool at, TravellerLook look = null)
     {
         _travellerAtDesk = at;
 
         if (travellerView != null)
         {
             if (at)
-                travellerView.Show();
+                travellerView.Show(look, _characterArt);
             else
                 travellerView.Clear();
         }
@@ -488,15 +500,30 @@ public sealed class GameManager : MonoBehaviour
             booth.SetPhase(at ? BoothPhase.TravellerAtDesk : BoothPhase.NoTraveller);
     }
 
-    /// <summary>Presents a case via the investigation UI (or legacy era UI).</summary>
+    /// <summary>
+    /// Presents a case via the investigation UI (or legacy era UI): keeps only
+    /// this traveller's art, shows them in the booth, and marks a once-per-run
+    /// premade as met (FlagKeys.PremadeMet: they never come back this run).
+    /// </summary>
     private void ShowActiveCase(CaseInstance inst)
     {
-        SetTravellerAtDesk(true);
+        _characterArt?.Retain(inst.look != null ? inst.look.Keys : null);
+        SetTravellerAtDesk(true, inst.look);
+
+        if (inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
+            _worldState.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
 
         if (investigationUI != null)
             investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
         else
             officeUI.ShowCase(inst, contentLibrary.Eras, HandlePlayerChoseEra);
+    }
+
+    /// <summary>A premade's line carried an expression: the booth figure shows it.</summary>
+    private void HandleTravellerExpression(string expression)
+    {
+        if (travellerView != null)
+            travellerView.SetExpression(expression);
     }
 
     /// <summary>

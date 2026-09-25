@@ -148,7 +148,7 @@ public class LooksTests
         Assert.AreEqual("facialhair_m_britain_industrial_brown", look.PartOn(LookLayer.FacialHair).Value.Key.Name);
 
         var required = new HashSet<string>(LookKeys.Required("britain", "industrial", London()).Concat(LookKeys.Required("japan", "earlymodern", egypt)));
-        foreach (LookPart part in look.Parts.Where(p => Looks.IsGarmentLayer(p.Layer)))
+        foreach (LookPart part in look.Parts.Where(p => p.GarmentIndex >= 0))
             Assert.IsTrue(required.Contains(part.Key.Name), part.Key.Name);
     }
 
@@ -386,13 +386,6 @@ public class LooksTests
         PlaceWardrobe slash = Edo();
         slash.male.outfit = Item("kosode/hakama");
         StringAssert.Contains("holds '/'", Looks.LabelProblems(new[] { ("japan_earlymodern", slash) }).Single());
-    }
-
-    [Test]
-    public void IsGarmentLayer_AllButBodyAndHead()
-    {
-        foreach (LookLayer layer in System.Enum.GetValues(typeof(LookLayer)))
-            Assert.AreEqual(layer != LookLayer.Body && layer != LookLayer.Head, Looks.IsGarmentLayer(layer), layer.ToString());
     }
 
     [Test]

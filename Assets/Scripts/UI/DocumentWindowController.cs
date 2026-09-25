@@ -8,7 +8,9 @@ using UnityEngine.UI;
 /// is a clickable row (label + value) that registers with the CompareController;
 /// the value is shown through DisplayText and compared as its canonical text.
 /// Rows are cloned from <see cref="fieldRowTemplate"/> (a disabled row with two
-/// TMP texts — label then value — an Image background, and a Button).
+/// TMP texts — label then value — an Image background, and a Button). A
+/// document whose template shows a photo carries the traveller's photo on its
+/// first page (the rows there leave room for it).
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
@@ -19,13 +21,29 @@ public sealed class DocumentWindowController : MonoBehaviour
     [SerializeField] private Transform fieldRowsRoot;
     [SerializeField] private GameObject fieldRowTemplate;
 
+    /// <summary>The photo's frame on the first page (hidden on other pages and documents).</summary>
+    [SerializeField] private GameObject photoBox;
+
+    /// <summary>The traveller's photo inside the frame.</summary>
+    [SerializeField] private TravellerPortraitView photo;
+
+    /// <summary>Extra right padding of the rows on a photo page, so no row runs under the photo.</summary>
+    [SerializeField] private float photoInset = 120f;
+
     private DocumentInstance _doc;
     private CompareController _compare;
     private int _page;
+    private bool _showsPhoto;
+    private VerticalLayoutGroup _rowsLayout;
+    private RectOffset _rowsPadding;
     private readonly List<GameObject> _rows = new();
 
     private void Awake()
     {
+        _rowsLayout = fieldRowsRoot != null ? fieldRowsRoot.GetComponent<VerticalLayoutGroup>() : null;
+        if (_rowsLayout != null)
+            _rowsPadding = new RectOffset(_rowsLayout.padding.left, _rowsLayout.padding.right, _rowsLayout.padding.top, _rowsLayout.padding.bottom);
+
         if (prevButton != null)
             prevButton.onClick.AddListener(() => ShowPage(_page - 1));
 
@@ -36,12 +54,21 @@ public sealed class DocumentWindowController : MonoBehaviour
             fieldRowTemplate.SetActive(false);
     }
 
-    /// <summary>Binds a document and renders its first page.</summary>
-    public void SetDocument(DocumentInstance doc, CompareController compare)
+    /// <summary>Binds a document (with the traveller's look for a photo document) and renders its first page.</summary>
+    public void SetDocument(DocumentInstance doc, CompareController compare, TravellerLook look, CharacterArt art)
     {
         _doc = doc;
         _compare = compare;
         _page = 0;
+        _showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto && look != null;
+
+        if (photo != null)
+        {
+            if (_showsPhoto)
+                photo.Show(look, art);
+            else
+                photo.Clear();
+        }
 
         if (titleText != null)
             titleText.text = doc != null && doc.template != null ? doc.template.displayName : "Document";
@@ -66,6 +93,12 @@ public sealed class DocumentWindowController : MonoBehaviour
 
         if (nextButton != null)
             nextButton.interactable = _page < pages - 1;
+
+        bool photoPage = _showsPhoto && _page == 0;
+        if (photoBox != null)
+            photoBox.SetActive(photoPage);
+        if (_rowsLayout != null && _rowsPadding != null)
+            _rowsLayout.padding = new RectOffset(_rowsPadding.left, _rowsPadding.right + (photoPage ? (int)photoInset : 0), _rowsPadding.top, _rowsPadding.bottom);
 
         Rebuild();
     }

@@ -7,8 +7,8 @@ using UnityEngine.Rendering;
 /// A physical paper on the desk: a SortingGroup root carrying its sprite, its
 /// collider, a Clickable and a DeskDraggable (so the hover outline follows the
 /// paper and a raycast reports the group's order). It shows the document's
-/// title, the holder's name and a reserved photo slot; every field is read on
-/// the scanned PC copy. The texts stay in their source script (piece 9
+/// title, the holder's name and, on a photo document, the traveller's photo;
+/// every field is read on the scanned PC copy. The texts stay in their source script (piece 9
 /// translates the scanned copy, not the paper). Slides are linear moves in
 /// Update, only while sliding.
 /// </summary>
@@ -20,8 +20,11 @@ public sealed class DeskDocument : MonoBehaviour
     /// <summary>The holder's name (the traveller's registered given name).</summary>
     [SerializeField] private TextMeshPro holder;
 
-    /// <summary>Reserved for piece 4's passport photo (inactive until then).</summary>
+    /// <summary>The photo's frame, shown only on a photo document.</summary>
     [SerializeField] private GameObject photoSlot;
+
+    /// <summary>The traveller's photo inside the frame (crop sprites).</summary>
+    [SerializeField] private LookSpriteStack photo;
 
     /// <summary>The paper's click (brings it to the front).</summary>
     [SerializeField] private Clickable click;
@@ -70,6 +73,15 @@ public sealed class DeskDocument : MonoBehaviour
             title.text = doc != null ? doc.name : string.Empty;
         if (holder != null)
             holder.text = doc != null ? doc.holder : string.Empty;
+    }
+
+    /// <summary>Shows the traveller's photo in the frame; a null look hides the frame (a document without a photo).</summary>
+    public void ShowPhoto(TravellerLook look, CharacterArt art)
+    {
+        if (photoSlot != null)
+            photoSlot.SetActive(look != null);
+        if (photo != null)
+            photo.Show(look, art);
     }
 
     /// <summary>Sets the paper's sorting order (its place in the stack, or the held order).</summary>
