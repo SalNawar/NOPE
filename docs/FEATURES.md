@@ -37,7 +37,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 ## Fake-OS desktop
 
 - [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability / Clock) and a "< Desk" button: the neutral theme; while a country leads the Future its theme replaces the colours, fonts, wallpaper and flavour labels (see The PC reacts to history)
-- [ ] Start menu: Settings (UI language: Follow history / Always English, remembered per player outside the run save, applied at the next office load; colours, fonts and wallpaper follow history either way), Turn off screen, Quit game; fixed-height entries
+- [ ] Start menu: Settings (UI language: Follow history / Always English, remembered per player outside the run save, applied at the next office load; colours, fonts and wallpaper follow history either way; Motion: Full / Reduced, remembered per player outside the run save, applied from the next traveller: reduced shows translations at once, with no flipping (tested: `DisplayTextTests`)), Turn off screen, Quit game; fixed-height entries
 - [ ] Desktop icon grid top-left; reference book icons + app icons (a document's window gets an icon at the top of the grid the first time it opens)
 - [ ] Upgrade-gated icons (Lexicon needs Archive Access, Material needs Advanced Scanner) dim until the upgrade is owned; the builder reports icon upgrade ids the library does not know
 - [ ] Draggable windows; min/max/close chrome on ALL windows (app, document, reference); windows stay inside the screen while dragged (a window taller than the screen keeps its title bar visible) (clamp tested: `DeskGeometryTests`)

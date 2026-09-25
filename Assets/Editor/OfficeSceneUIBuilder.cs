@@ -1478,19 +1478,33 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The Settings window (piece 6 U12): "UI language" with the two choices
-    /// (SettingsWindowController) and a note that a change applies at the next
-    /// office load and that colours, fonts and the wallpaper follow history.
+    /// The Settings window (piece 6 U12, piece 9 R17), 580 × 520: "UI
+    /// language" with its two choices, "Motion" with Full and Reduced
+    /// (SettingsWindowController), and a note that a language change applies
+    /// at the next office load, that colours, fonts and the wallpaper follow
+    /// history, and that reduced motion shows translations at once. Every
+    /// row's anchors are re-applied on each build.
     /// </summary>
     private static OSWindowChrome BuildSettingsWindow(Transform windowLayer)
     {
-        OSWindowChrome chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null);
+        OSWindowChrome chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(580f, 520f));
         Transform win = chrome.transform;
-        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.7f), new Vector2(0.95f, 0.82f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.5f), new Vector2(0.48f, 0.66f), null, ThemeRoleId.Button, "settings.followHistory");
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.5f), new Vector2(0.95f, 0.66f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.44f), Ink,
+        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.78f), new Vector2(0.95f, 0.87f));
+        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f), null, ThemeRoleId.Button, "settings.followHistory");
+        SetAnchors(follow.transform, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f));
+        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
+        SetAnchors(english.transform, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f));
+        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f), Ink,
+                               ThemeRoleId.WindowBody, "settings.motion");
+        SetAnchors(motion.transform, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f));
+        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f), null, ThemeRoleId.Button, "settings.motionFull");
+        SetAnchors(full.transform, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f));
+        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f), null, ThemeRoleId.Button, "settings.motionReduced");
+        SetAnchors(reduced.transform, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f));
+        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f), Ink,
                              ThemeRoleId.WindowBody, "settings.note");
+        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f));
+        note.text = UiText.Get("settings.note");
         note.textWrappingMode = TextWrappingModes.Normal;
 
         SettingsWindowController controller = win.GetComponent<SettingsWindowController>();
@@ -1499,6 +1513,8 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(controller);
         SetRef(so, "followHistoryButton", follow);
         SetRef(so, "alwaysEnglishButton", english);
+        SetRef(so, "fullMotionButton", full);
+        SetRef(so, "reducedMotionButton", reduced);
         so.ApplyModifiedProperties();
         return chrome;
     }

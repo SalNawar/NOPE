@@ -3,11 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The Settings window's UI language choice (piece 6 U12): "Follow history"
-/// or "Always English" (UiLanguagePreference). The chosen button shows the
-/// theme's accent colours (the SearchButton role), the other the default
-/// button colours. Labels change at the next scene load; colours, fonts and
-/// the wallpaper follow history either way.
+/// The Settings window's per-player choices: the UI language (piece 6 U12),
+/// "Follow history" or "Always English" (UiLanguagePreference; labels change
+/// at the next scene load, colours, fonts and the wallpaper follow history
+/// either way), and motion (piece 9 R17), "Full" or "Reduced"
+/// (MotionPreference; reduced shows translations at once, from the next
+/// traveller). In each pair the chosen button shows the theme's accent
+/// colours (the SearchButton role), the other the default button colours.
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
@@ -17,12 +19,22 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>Chooses "Always English".</summary>
     [SerializeField] private Button alwaysEnglishButton;
 
+    /// <summary>Chooses Full motion (translations flip letter by letter).</summary>
+    [SerializeField] private Button fullMotionButton;
+
+    /// <summary>Chooses Reduced motion (translations show at once).</summary>
+    [SerializeField] private Button reducedMotionButton;
+
     private void Awake()
     {
         if (followHistoryButton != null)
             followHistoryButton.onClick.AddListener(() => Choose(false));
         if (alwaysEnglishButton != null)
             alwaysEnglishButton.onClick.AddListener(() => Choose(true));
+        if (fullMotionButton != null)
+            fullMotionButton.onClick.AddListener(() => ChooseMotion(false));
+        if (reducedMotionButton != null)
+            reducedMotionButton.onClick.AddListener(() => ChooseMotion(true));
     }
 
     private void OnEnable() => ShowSelection();
@@ -34,7 +46,14 @@ public sealed class SettingsWindowController : MonoBehaviour
         ShowSelection();
     }
 
-    /// <summary>Colours the chosen button with the accent, the other as a default button.</summary>
+    /// <summary>Stores the motion choice and shows it.</summary>
+    private void ChooseMotion(bool reduced)
+    {
+        MotionPreference.Reduced = reduced;
+        ShowSelection();
+    }
+
+    /// <summary>Colours each pair's chosen button with the accent, the other as a default button.</summary>
     private void ShowSelection()
     {
         CultureThemeService service = CultureThemeService.Instance;
@@ -42,6 +61,9 @@ public sealed class SettingsWindowController : MonoBehaviour
         bool english = UiLanguagePreference.AlwaysEnglish;
         Paint(followHistoryButton, !english, theme);
         Paint(alwaysEnglishButton, english, theme);
+        bool reduced = MotionPreference.Reduced;
+        Paint(fullMotionButton, !reduced, theme);
+        Paint(reducedMotionButton, reduced, theme);
     }
 
     /// <summary>One button's colours from the theme.</summary>
