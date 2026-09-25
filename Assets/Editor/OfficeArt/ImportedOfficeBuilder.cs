@@ -33,6 +33,65 @@ public static class ImportedOfficeBuilder
     [Serializable] public class Report { public List<Placed> placed = new(); }
     static readonly Dictionary<string, Material> materials = new();
 
+    [MenuItem("Tools/Office Art/Apply Surface Finish")]
+    public static void ApplySurfaceFinish()
+    {
+        if(EditorApplication.isPlaying)throw new InvalidOperationException("Leave Play mode before authoring.");
+        var root=GameObject.Find(Root).transform;
+        var importedCeiling=root.Find("Ceiling");
+        if(importedCeiling)importedCeiling.gameObject.SetActive(false);
+        RestoreOriginalCeiling();
+        foreach(var name in new[]{"MI_Computer","MI_WoodenFurniture","MI_Wood","MI_LampDesk","HD_Stuff_02_Norm"})
+        {
+            var mat=AssetDatabase.LoadAssetAtPath<Material>($"{Folder}/Materials/{name}_Painted.mat");
+            if(!mat)continue;
+            Undo.RecordObject(mat,"Material surface finish");
+            mat.SetFloat("_MipBias",0);mat.SetFloat("_BumpScale",.1f);
+            mat.SetFloat("_Smoothness",name=="MI_Computer"?.3f:name=="MI_LampDesk"?.42f:name.StartsWith("HD")?.32f:.18f);
+            if(name=="MI_LampDesk")
+            {mat.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/Textures/lamp_painted.png"));mat.SetColor("_BaseColor",Color.white);}
+            EditorUtility.SetDirty(mat);
+        }
+        AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+    }
+
+    static void RestoreOriginalCeiling()
+    {
+        var hall=GameObject.Find("HybridOffice/Hall").transform;
+        if(hall.Find("Original ceiling"))return;
+        var ceiling=new GameObject("Original ceiling");ceiling.transform.SetParent(hall,false);
+        Undo.RegisterCreatedObjectUndo(ceiling,"Restore original ceiling");
+        // The original import is merged by material. Extract its existing roof,
+        // beams and fixtures above the window heads without duplicating walls.
+        foreach(var filter in hall.Find("Blender_HallStructure").GetComponentsInChildren<MeshFilter>(true))
+        {
+            using var data=Mesh.AcquireReadOnlyMeshData(filter.sharedMesh);
+            var md=data[0];
+            using var v=new Unity.Collections.NativeArray<Vector3>(md.vertexCount,Unity.Collections.Allocator.Temp);
+            using var n=new Unity.Collections.NativeArray<Vector3>(md.vertexCount,Unity.Collections.Allocator.Temp);
+            using var uv=new Unity.Collections.NativeArray<Vector2>(md.vertexCount,Unity.Collections.Allocator.Temp);
+            md.GetVertices(v);md.GetNormals(n);md.GetUVs(0,uv);
+            var indices=new List<int>();
+            for(int sub=0;sub<md.subMeshCount;sub++)
+            {
+                using var source=new Unity.Collections.NativeArray<int>(md.GetSubMesh(sub).indexCount,Unity.Collections.Allocator.Temp);
+                md.GetIndices(source,sub);
+                for(int i=0;i<source.Length;i+=3)
+                    if(filter.transform.TransformPoint(v[source[i]]).y>13 && filter.transform.TransformPoint(v[source[i+1]]).y>13 && filter.transform.TransformPoint(v[source[i+2]]).y>13)
+                    {indices.Add(source[i]);indices.Add(source[i+1]);indices.Add(source[i+2]);}
+            }
+            if(indices.Count==0)continue;
+            var mesh=new Mesh {name=filter.name+"_Ceiling",indexFormat=UnityEngine.Rendering.IndexFormat.UInt32};
+            mesh.SetVertices(v);mesh.SetNormals(n);mesh.SetUVs(0,uv);mesh.SetTriangles(indices,0);mesh.RecalculateBounds();
+            string path=Folder+"/"+mesh.name+".asset";
+            AssetDatabase.CreateAsset(mesh,path);
+            var go=new GameObject(filter.name);go.transform.SetParent(ceiling.transform,false);
+            go.transform.SetPositionAndRotation(filter.transform.position,filter.transform.rotation);go.transform.localScale=filter.transform.lossyScale;
+            go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterials=filter.GetComponent<Renderer>().sharedMaterials;
+        }
+        ceiling.transform.localPosition=new Vector3(0,-5.5f,0);
+    }
+
     [MenuItem("Tools/Office Art/Check Paint Shader")]
     public static void CheckShader()
     {
@@ -72,6 +131,8 @@ public static class ImportedOfficeBuilder
         {
             foreach(var item in layout.items)
             {
+                // The continuous original floor is the approved floor, including on rebuild.
+                if(item.group=="Hall floor" || item.group=="Ceiling")continue;
                 if(!groups.TryGetValue(item.group,out var group))
                 {
                     group=new GameObject(item.group).transform;group.SetParent(root.transform,false);groups.Add(item.group,group);
@@ -105,10 +166,14 @@ public static class ImportedOfficeBuilder
                 report.placed.Add(new Placed { name=item.name,source=item.prefab,group=item.group,min=b.min,max=b.max,
                     triangles=instance.GetComponentsInChildren<MeshFilter>().Sum(x=>x.sharedMesh?(int)Enumerable.Range(0,x.sharedMesh.subMeshCount).Sum(n=>(long)x.sharedMesh.GetIndexCount(n)/3):0) });
             }
+            var originalFloor=GameObject.Find("HybridOffice/Hall").transform.Find("Blender_HallFloor");
+            Undo.RecordObject(originalFloor.gameObject,"Preserve original hall floor");
+            originalFloor.gameObject.SetActive(true);
             ConnectMonitor(root.transform);
             AddTaskLight(root.transform);
             ConfigureHallLighting(root.transform);
             AddHybridLayers(root.transform);
+            ApplySurfaceFinish();
             AssetDatabase.SaveAssets();
             EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
             File.WriteAllText("ArtDeliverables/TimeDesk/ImportedOffice/placed.json",JsonUtility.ToJson(report,true));

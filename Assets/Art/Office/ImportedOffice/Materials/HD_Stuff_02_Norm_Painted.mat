@@ -39,14 +39,14 @@ Material:
     m_Floats:
     - _AccentRemap: 1
     - _AlphaClip: 0
-    - _BumpScale: 0.15
+    - _BumpScale: 0.1
     - _Contrast: 0.8
     - _Cull: 2
     - _Cutoff: 0.4
     - _Metallic: 0
-    - _MipBias: 1.2
+    - _MipBias: 0
     - _Saturation: 0.6
-    - _Smoothness: 0.22
+    - _Smoothness: 0.32
     - _Surface: 0
     - _ZWrite: 1
     m_Colors:

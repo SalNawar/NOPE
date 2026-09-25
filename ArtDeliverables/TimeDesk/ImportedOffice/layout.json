@@ -3047,7 +3047,6 @@
     }
   ],
   "disablePaths": [
-    "HybridOffice/Hall/Blender_HallFloor",
     "HybridOffice/Hall/Blender_HallStructure",
     "HybridOffice/Hall/Blender_PortalCabinet",
     "HybridOffice/Hall/Blender_Bench_-11.5_9",
