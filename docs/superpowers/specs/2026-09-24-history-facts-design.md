@@ -1093,3 +1093,14 @@ Branch `feat/history-facts` (worktree `E:\unity\NOPE-p5`), from `main` at `1a3e6
 - The carry line reads oddly for Technology values that are themselves phrases with "to" ("travellers brought Horse tram to Kadhimiya to Elizabethan England (Early modern)"); a wording pass on `history.lines.carry` or those values may help.
 - The Future names, facts and year (2150), the "no Future without a leader" default and the history rules' wording are placeholder writing for review (§7).
 - Tell Marwan that PR #3's resubmission should build on `ScoreKey`, `ScoreRanking` and the latched leader (H8, §2.16).
+
+## Applied at the piece 4 merge (2026-09-25)
+
+§8 applied on `feat/p45-reconcile` (from the merge `eb6ad12`), offline (no Unity): `9a5713e`, `807571a`, `3a2e97d`, `55c25f0`, `4703872`. Where piece 4 as implemented differs from this spec's assumptions:
+1. **Future wardrobes:** imported from the reviewed art-brief draft (`docs/superpowers/drafts/art/tools/wardrobe_v2.json` `future`, written from `costumes.json` `futureMotifs`, the same labels as `CHARACTER_ART_BRIEF_v2.md` Appendix D; piece 4's K14 precedent), not written anew: one outfit label per place for both genders (the Culture value is that label: "bead-row yoke linen", "fringed lapis coat", "meander-trim drape", "clavus-stripe wrap", "pankou cross-collar coat", "kasane-collar layers", "tweed-grid frock coat", "Bauhaus colour panels"), the shared hair ("short textured crop" / "sleek low bun") and men's beard ("short trimmed beard") with `"artNation": "neutral"`, no headwear or accessory. Checked with a Python mirror of the generator's character checks over all 48 places.
+2. **`artNation`:** as §2.5. Piece 4 had already added a row after "hidden by the disguise" (the claim's own item labelled the same, its F22), so the same-art row is inserted as row 6 and the rows become: 6 same art, 7 same label, 8 confusable, 9 true. The validator's item check sits in `CheckPlaceLook` (with the other wardrobe checks), not `CheckFuture`; its art report already listed distinct names.
+3. **Culture width:** piece 4 was built with `FactTable.MaxValueLength`; `Looks.MaxCultureLength` never existed in code, so nothing was removed.
+4. **Premades:** the generator's check sits in `CheckCharacters` (where premade places resolve), the validator's in `CheckFuture`. Days 4–6 already carried day 3's pool (nine premades in piece 4's final cast, not seven), `forced: []`, `premadeChance` 0.05 and the Appearance channel (item 5): verified, unchanged.
+5. **Piece 4's whole-outfit warning** now skips Future places (`isFuture`), as its R27 asked.
+
+Left for Unity: Generate World (the Future places' wardrobes and Culture facts are not generated yet), then Validate Content Library, whose art report should list one neutral Future set (`hair_{g}_neutral_future_{colour}`, `facialhair_m_neutral_future_{colour}`) and 16 Future outfits.
