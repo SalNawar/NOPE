@@ -1,11 +1,12 @@
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// The office builder's booth and desk parts (the physical desk, piece 7):
-/// the live monitor on the CRT, the desk tuning asset and the shared hit-zone
-/// helpers. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
+/// the live monitor on the CRT, the traveller wheel and the overlay callouts,
+/// the desk tuning asset and the shared hit-zone helpers. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
 /// its order (geometry before the objects that wire to it).
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -186,5 +187,91 @@ public static partial class OfficeSceneUIBuilder
         if (calls != null)
             calls.ClearArray();
         return calls;
+    }
+
+    /// <summary>
+    /// An overlay callout (a timed label that takes no clicks) under the office
+    /// overlay canvas, rebuilt each run: an always-active full-screen host with
+    /// no graphic, and its Panel child (anchors and pivot (0.5, 0.5), raycast
+    /// targets off, inactive) holding an auto-sized label.
+    /// </summary>
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background)
+    {
+        DestroyChildIfPresent(overlay, name);
+        Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform panel = Panel(host, "Panel", Center, Center, Vector2.zero, size, background);
+        ((RectTransform)panel).pivot = Center;
+        panel.GetComponent<Image>().raycastTarget = false;
+
+        TMP_Text label = Text(panel, "Label", "", 24, TextAlignmentOptions.Center, new Vector2(0.04f, 0.08f), new Vector2(0.96f, 0.92f), Ink);
+        label.enableAutoSizing = true;
+        label.fontSizeMin = 14f;
+        label.fontSizeMax = 24f;
+        label.textWrappingMode = TextWrappingModes.Normal;
+        label.raycastTarget = false;
+
+        OverlayCallout callout = host.gameObject.AddComponent<OverlayCallout>();
+        var so = new SerializedObject(callout);
+        SetRef(so, "panel", panel);
+        SetRef(so, "label", label);
+        so.ApplyModifiedProperties();
+
+        panel.gameObject.SetActive(false);
+        return callout;
+    }
+
+    /// <summary>
+    /// The traveller wheel under the office overlay canvas, rebuilt each run: an
+    /// always-active full-screen host (TravellerWheel, no graphic); its Catcher,
+    /// a full-screen transparent click-to-close area, inactive; the Ring under it
+    /// (anchors and pivot (0.5, 0.5), placed by projection) with the choice
+    /// renderer (InteractionPanelController, its template stretched so a centre
+    /// clone fills the centre slot), the RadialLayoutGroup and the Centre slot
+    /// ("&lt; Back", ignored by the layout). The wheel's traveller is set by
+    /// BuildDeskInteraction, once the traveller view exists.
+    /// </summary>
+    private static TravellerWheel BuildTravellerWheel(Transform overlay, DeskConfigSO config, OverlayCallout bubble)
+    {
+        DestroyChildIfPresent(overlay, "TravellerWheel");
+        Transform host = Panel(overlay, "TravellerWheel", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f));
+
+        Transform ring = Panel(catcher, "Ring", Center, Center, Vector2.zero, Vector2.zero, null);
+        ((RectTransform)ring).pivot = Center;
+        RadialLayoutGroup layout = ring.gameObject.AddComponent<RadialLayoutGroup>();
+        layout.Radii = config.wheelRadii;
+        layout.ItemSize = config.wheelItemSize;
+
+        Transform centre = Panel(ring, "Centre", Center, Center, Vector2.zero, config.wheelCentreSize, null);
+        ((RectTransform)centre).pivot = Center;
+        centre.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
+
+        Button template = MakeButton(ring, "ActionButtonTemplate", "Choice", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 0.95f));
+        TMP_Text choice = template.transform.Find("Label").GetComponent<TMP_Text>();
+        choice.enableAutoSizing = true;
+        choice.fontSizeMin = 12f;
+        choice.fontSizeMax = 20f;
+        choice.textWrappingMode = TextWrappingModes.Normal;
+        template.gameObject.SetActive(false);
+
+        InteractionPanelController panel = ring.gameObject.AddComponent<InteractionPanelController>();
+        var soPanel = new SerializedObject(panel);
+        SetRef(soPanel, "actionsRoot", ring);
+        SetRef(soPanel, "actionButtonTemplate", template);
+        SetRef(soPanel, "centreSlot", centre);
+        soPanel.ApplyModifiedProperties();
+
+        TravellerWheel wheel = host.gameObject.AddComponent<TravellerWheel>();
+        var so = new SerializedObject(wheel);
+        SetRef(so, "catcher", catcher.gameObject);
+        SetRef(so, "ring", ring);
+        SetRef(so, "layout", layout);
+        SetRef(so, "centreSlot", centre);
+        SetRef(so, "bubble", bubble);
+        SetRef(so, "config", config);
+        so.ApplyModifiedProperties();
+
+        catcher.gameObject.SetActive(false);
+        return wheel;
     }
 }

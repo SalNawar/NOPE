@@ -17,9 +17,12 @@ using UnityEngine.UI;
 /// - HUD (day/money/stability), citation slip, verdict line  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: claim banner, directives, draggable/multi-page document
-///   windows, a reference-book shelf with openable book windows, the intercom
-///   and the interview transcript, a visual compare bar, and Accept/Deny
-///   buttons  [InvestigationUIController + CompareController]
+///   windows, a reference-book shelf with openable book windows, the interview
+///   transcript, a visual compare bar, and Accept/Deny buttons, laid out for
+///   the 4:3 desktop  [InvestigationUIController + CompareController]
+/// - The traveller wheel (the interview's choices around the traveller), the
+///   speech bubble and the desk tooltip on the office overlay canvas
+///   [TravellerWheel, OverlayCallout]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
 /// Safe to re-run: finds existing pieces by name and only fills gaps. It builds
@@ -107,8 +110,15 @@ public static partial class OfficeSceneUIBuilder
             }
         }
 
-        // XP desktop wallpaper (behind everything) + taskbar with system-tray HUD.
-        BuildDesktop(root);
+        // Leftovers of the pre-investigation era UI under the OfficeUIController's
+        // object: a live monitor would show them. Its HUD and citation wiring stay
+        // (Test_DayLoop runs the legacy fields from its own scene).
+        foreach (string leftover in new[] { "VisitorText", "Doc1Text", "Doc2Text", "ResultText", "EraButtonsRoot" })
+            DestroyChildIfPresent(officeUI.transform, leftover);
+
+        // XP desktop wallpaper (behind everything), the idle line between
+        // travellers + taskbar with system-tray HUD.
+        GameObject idleScreen = BuildDesktop(root);
         BuildTaskbar(root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text trayClockText);
 
         // Verdict line (result text)
@@ -133,8 +143,16 @@ public static partial class OfficeSceneUIBuilder
         Transform results = BuildNewsletter(officeCanvas.transform, "ResultsPanel", "SHIFT LEDGER — EVENING EDITION",
             "GO HOME", out TMP_Text resultsTitle, out TMP_Text resultsBody, out Button goHome);
 
-        // The desk tuning (created once): the monitor push-in, screen power, sorting bands.
+        // The desk tuning (created once): the monitor push-in, screen power, sorting bands, the wheel.
         DeskConfigSO deskConfig = EnsureDeskConfig();
+
+        // Booth-view overlays, rebuilt each run with always-active hosts: the
+        // traveller's speech bubble, the desk props' tooltip, and the traveller
+        // wheel (the interview's choices; its ring replaces the retired intercom).
+        OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f));
+        OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip);
+        TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
+        InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
 
         DayFlowUIController dayFlow = Object.FindFirstObjectByType<DayFlowUIController>();
         if (dayFlow == null)
@@ -178,40 +196,17 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text directivesText = directivesWindow.transform.Find("Body").GetComponent<TMP_Text>();
         BuildDesktopIcon(bookShelf, "IconDirectives", "Directives", directivesWindow, "");
 
-        // Scanner is the deviation report: its body lists the discrepancies the
-        // player has documented for the current case (drives deny gating).
+        // The Deviation Report: its body lists the discrepancies the player has
+        // documented for the current case (drives deny gating). Its object names
+        // keep "Scanner"; the desk device is the scanner.
         DestroyChildIfPresent(windowLayer, "IconScannerWindow");
-        OSWindowChrome scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "Scanner — Deviation Report",
+        OSWindowChrome scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "Deviation Report",
             "No deviations documented.", new Vector2(560f, 420f));
         TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
-        BuildDesktopIcon(bookShelf, "IconScanner", "Scanner", scannerWindow, "");
+        BuildDesktopIcon(bookShelf, "IconScanner", "Deviation Report", scannerWindow, "");
 
-        // Intercom: the interview's choices (document requests, questions,
-        // dialog replies), provided at runtime by InvestigationUIController.
-        // The layout numbers also give how many choices it shows at once: at
-        // the reference height, the least height the canvas ever has.
-        const float intercomMinY = 0.36f, intercomMaxY = 0.85f;
-        const float actionsMinY = 0.02f, actionsMaxY = 0.86f;
-        const float actionSpacing = 6f, actionHeight = 44f;
-        Transform intercom = Panel(investRoot, "IntercomPanel", new Vector2(0.79f, intercomMinY), new Vector2(0.995f, intercomMaxY), Vector2.zero, Vector2.zero, new Color(0.07f, 0.1f, 0.16f, 0.92f));
-        TMP_Text intercomTitle = Text(intercom, "Title", "INTERCOM", 20, TextAlignmentOptions.Center, new Vector2(0.05f, 0.88f), new Vector2(0.95f, 0.99f), new Color(0.7f, 0.85f, 1f, 1f));
-        intercomTitle.fontStyle = FontStyles.Bold;
-        Transform intercomActions = Panel(intercom, "Actions", new Vector2(0.04f, actionsMinY), new Vector2(0.96f, actionsMaxY), Vector2.zero, Vector2.zero, null);
-        AddVLayout(intercomActions, actionSpacing);
-        if (intercomActions.GetComponent<RectMask2D>() == null)
-            intercomActions.gameObject.AddComponent<RectMask2D>(); // an overflow is clipped, never drawn over the desk
-        Button actionTemplate = MakeButton(intercomActions, "ActionButtonTemplate", "Request", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 1f));
-        SetLayoutHeight(actionTemplate, actionHeight);
-        float actionsHeight = (intercomMaxY - intercomMinY) * ReferenceResolution.y * (actionsMaxY - actionsMinY);
-        int intercomFit = Mathf.FloorToInt((actionsHeight - 2 * VLayoutPadding + actionSpacing) / (actionHeight + actionSpacing));
-        actionTemplate.gameObject.SetActive(false);
-        InteractionPanelController interaction = intercom.GetComponent<InteractionPanelController>();
-        if (interaction == null)
-            interaction = intercom.gameObject.AddComponent<InteractionPanelController>();
-        var soInteract = new SerializedObject(interaction);
-        SetRef(soInteract, "actionsRoot", intercomActions);
-        SetRef(soInteract, "actionButtonTemplate", actionTemplate);
-        soInteract.ApplyModifiedProperties();
+        // The intercom panel is retired: the traveller wheel's ring shows the interview.
+        DestroyChildIfPresent(investRoot, "IntercomPanel");
 
         // Citizen Records app: the agency's master record of every (fake)
         // human. Registry content is injected per day by GameManager.
@@ -254,7 +249,7 @@ public static partial class OfficeSceneUIBuilder
         // choice but a document request; answer rows are compare-clickable.
         DestroyChildIfPresent(windowLayer, "IconClueLogWindow");
         DestroyChildIfPresent(windowLayer, "TranscriptWindow");
-        Transform transcriptWin = Panel(windowLayer, "TranscriptWindow", Center, Center, new Vector2(220f, 70f), new Vector2(620f, 460f), Paper);
+        Transform transcriptWin = Panel(windowLayer, "TranscriptWindow", Center, Center, new Vector2(395f, 60f), new Vector2(620f, 460f), Paper);
         WindowShell transcriptShell = BuildWindowShell(transcriptWin, "Case Notes: Interview");
         TranscriptWindowController transcript = transcriptWin.gameObject.AddComponent<TranscriptWindowController>();
         var soTranscript = new SerializedObject(transcript);
@@ -300,8 +295,13 @@ public static partial class OfficeSceneUIBuilder
         }
         if (dayPlan == null) dayPlan = FindFirstAsset<DayPlanSO>();
         if (library == null) Debug.LogWarning("[TimeDesk] No ContentLibrarySO found — assign GameManager.contentLibrary manually.");
-        if (library != null && library.Interview != null && library.Interview.menuCapacity > intercomFit)
-            Debug.LogError($"[TimeDesk] The intercom fits {intercomFit} choices, but the content library's interview menu capacity is {library.Interview.menuCapacity}; lower interview.menuCapacity in world_source.json or enlarge the intercom.");
+        if (library != null && library.Interview != null)
+        {
+            int wheelFit = RadialLayout.MaxFit(deskConfig.wheelRadii.x, deskConfig.wheelRadii.y, deskConfig.wheelItemSize.x, deskConfig.wheelItemSize.y,
+                                               deskConfig.wheelCentreSize.x, deskConfig.wheelCentreSize.y, deskConfig.wheelItemGap, library.Interview.menuCapacity);
+            if (wheelFit < library.Interview.menuCapacity)
+                Debug.LogError($"[TimeDesk] The traveller wheel fits {wheelFit} choices, but the content library's interview menu capacity is {library.Interview.menuCapacity}; lower interview.menuCapacity in world_source.json or enlarge the wheel (Desk_Default: wheelRadii, wheelItemSize).");
+        }
         if (dayPlan == null) Debug.LogWarning("[TimeDesk] No DayPlanSO found — generate content first (Tools > TimeDesk).");
 
         DayOrchestrator orchestrator = Object.FindFirstObjectByType<DayOrchestrator>();
@@ -377,6 +377,16 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "recordsWindow", records);
         SetRef(soInvest, "transcriptWindow", transcript);
         SetRef(soInvest, "transcriptChrome", transcriptChrome);
+        SetRef(soInvest, "wheel", wheel);
+        SetRef(soInvest, "idleScreen", idleScreen);
+        // The 4:3 desktop: documents cascade on the left, clear of the icon
+        // column; books open in two staggered rows (the fields' defaults are
+        // the 16:9 layout a scene that is not rebuilt keeps).
+        soInvest.FindProperty("documentWindowOrigin").vector2Value = new Vector2(-195f, 150f);
+        soInvest.FindProperty("documentWindowStep").vector2Value = new Vector2(40f, -40f);
+        soInvest.FindProperty("bookWindowOrigin").vector2Value = new Vector2(-180f, -150f);
+        soInvest.FindProperty("bookWindowColumnStep").floatValue = 300f;
+        soInvest.FindProperty("bookWindowRowStep").vector2Value = new Vector2(40f, 40f);
         soInvest.ApplyModifiedProperties();
 
         var soOrch = new SerializedObject(orchestrator);
@@ -397,7 +407,7 @@ public static partial class OfficeSceneUIBuilder
         soGm.ApplyModifiedProperties();
 
         EditorSceneManager.MarkSceneDirty(canvas.gameObject.scene);
-        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, HUD, citation, briefing/results, claim, document + book windows, intercom + interview transcript, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
+        Debug.Log("[TimeDesk] Office investigation desk built and wired (live monitor on the CRT with screen power, HUD, citation, briefing/results, claim, document + book windows, traveller wheel + interview transcript, speech bubble, compare, Accept/Deny, GameManager, DaySystem). Save the scene.");
     }
 
     // -----------------------------
@@ -767,7 +777,13 @@ public static partial class OfficeSceneUIBuilder
 
     // ----------------------------- Windows XP theme -----------------------------
 
-    private static void BuildDesktop(Transform root)
+    /// <summary>
+    /// The wallpaper (behind everything; it envelopes the 4:3 desktop at its own
+    /// aspect, the overflow clipped by the canvas's mask) and, right above it,
+    /// the idle line shown between travellers (inactive; the investigation
+    /// controller shows it). Returns the idle line's object.
+    /// </summary>
+    private static GameObject BuildDesktop(Transform root)
     {
         Transform desk = Panel(root, "Desktop", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.23f, 0.45f, 0.74f, 1f));
         Image img = desk.GetComponent<Image>();
@@ -779,7 +795,20 @@ public static partial class OfficeSceneUIBuilder
             img.preserveAspect = false;
             img.color = Color.white; // don't tint the wallpaper with the fallback color
         }
+        AspectRatioFitter fitter = desk.GetComponent<AspectRatioFitter>();
+        if (fitter == null)
+            fitter = desk.gameObject.AddComponent<AspectRatioFitter>();
+        fitter.aspectMode = AspectRatioFitter.AspectMode.EnvelopeParent;
+        fitter.aspectRatio = wall != null ? wall.rect.width / wall.rect.height : ReferenceResolution.x / ReferenceResolution.y;
         desk.SetAsFirstSibling();
+
+        // Between travellers the live monitor reads this, large enough for the booth view.
+        TMP_Text idle = Text(root, "IdleText", "Waiting for the next traveller", 80, TextAlignmentOptions.Center, new Vector2(0.08f, 0.38f), new Vector2(0.92f, 0.62f), Color.white);
+        idle.fontStyle = FontStyles.Bold;
+        idle.raycastTarget = false;
+        idle.transform.SetSiblingIndex(1);
+        idle.gameObject.SetActive(false);
+        return idle.gameObject;
     }
 
     /// <summary>Pins a layout-group child to a fixed height.</summary>
@@ -896,13 +925,28 @@ public static partial class OfficeSceneUIBuilder
         return chrome;
     }
 
+    /// <summary>
+    /// The wallpaper sprite (a generated placeholder when the art is missing),
+    /// with mipmaps on: the live monitor shows it small in the booth view, where
+    /// a texture without mipmaps shimmers (K18).
+    /// </summary>
     private static Sprite EnsureWallpaper()
     {
         const string assetPath = "Assets/Art/Generated/xp_bliss.png";
-        Sprite existing = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-        if (existing != null)
-            return existing;
+        if (AssetDatabase.LoadAssetAtPath<Sprite>(assetPath) == null)
+            GenerateWallpaper(assetPath);
 
+        if (AssetImporter.GetAtPath(assetPath) is TextureImporter imp && !imp.mipmapEnabled)
+        {
+            imp.mipmapEnabled = true;
+            imp.SaveAndReimport();
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
+    }
+
+    /// <summary>Writes the placeholder wallpaper (an XP "Bliss"-like hill and sky) as a sprite.</summary>
+    private static void GenerateWallpaper(string assetPath)
+    {
         EnsureFolderTree("Assets/Art/Generated");
 
         int W = 960, H = 540;
@@ -939,10 +983,8 @@ public static partial class OfficeSceneUIBuilder
         {
             imp.textureType = TextureImporterType.Sprite;
             imp.spriteImportMode = SpriteImportMode.Single;
-            imp.mipmapEnabled = false;
             imp.SaveAndReimport();
         }
-        return AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
     }
 
     private static float Clouds(float fx, float fy)
@@ -1512,12 +1554,13 @@ public static partial class OfficeSceneUIBuilder
             ("IconInternet", "Internet", "Internet - News",  "Today's news feed. (placeholder)", ""),
             ("IconLexicon",  "Lexicon",  "Lexicon",          "Wikipedia-style era glossary. (placeholder)", "archive_access"),
             ("IconDialect",  "Dialect",  "Dialect",          "Notes on accents and phrasing. (placeholder)", ""),
-            ("IconMaterial", "Material", "Material Scanner", "Flags tech/materials beyond the claimed era. (upgrade)", "adv_scanner"),
+            ("IconMaterial", "Material", "Material Analysis", "Flags tech/materials beyond the claimed era. (upgrade)", "adv_scanner"),
             ("IconNotes",    "Notes",    "Sticky Notes",     "Your notes. (placeholder)", ""),
         };
 
-        // BuildOSWindow keeps an existing window's texts, so the renamed Dialect window is rebuilt.
+        // BuildOSWindow keeps an existing window's texts, so the renamed Dialect and Material windows are rebuilt.
         DestroyChildIfPresent(windowLayer, "IconDialectWindow");
+        DestroyChildIfPresent(windowLayer, "IconMaterialWindow");
 
         foreach (var a in apps)
         {
@@ -1641,6 +1684,10 @@ public static partial class OfficeSceneUIBuilder
     private static void BuildDesktopIcon(Transform grid, string name, string label, OSWindowChrome window, string upgradeId)
     {
         Button btn = MakeButton(grid, name, label, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.45f, 0.85f));
+        Transform labelObject = btn.transform.Find("Label");
+        TMP_Text labelText = labelObject != null ? labelObject.GetComponent<TMP_Text>() : null;
+        if (labelText != null)
+            labelText.text = label; // an existing icon keeps its place in the grid; its label follows the builder
         FitIconLabel(btn);
         LayoutElement le = btn.GetComponent<LayoutElement>();
         if (le == null)
@@ -1675,7 +1722,7 @@ public static partial class OfficeSceneUIBuilder
     /// Lets a desktop icon's label shrink to fit its tile, wrapping only between
     /// words: auto-sizing shrinks a word that does not fit the tile's width
     /// instead of breaking it. Re-applied on every build (MakeButton keeps an
-    /// existing label as it is).
+    /// existing label as it is; the label text is set by BuildDesktopIcon).
     /// </summary>
     private static void FitIconLabel(Button icon)
     {
