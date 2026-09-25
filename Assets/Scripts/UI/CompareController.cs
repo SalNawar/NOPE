@@ -55,11 +55,11 @@ public sealed class CompareController : MonoBehaviour
             compareBar.SetActive(false);
     }
 
-    /// <summary>Registers a clicked value for comparison (no typed evidence).</summary>
+    /// <summary>Registers a clicked value for comparison (no typed evidence); value is the canonical value (it drives MATCH/MISMATCH; never display text).</summary>
     public void Select(string label, string value, Image highlight) =>
         Select(label, value, highlight, default);
 
-    /// <summary>Registers a clicked value for comparison, with typed evidence.</summary>
+    /// <summary>Registers a clicked value for comparison, with typed evidence; value is the canonical value (it drives MATCH/MISMATCH; never display text).</summary>
     public void Select(string label, string value, Image highlight, CompareEvidence evidence)
     {
         // Clicking the same row again clears the comparison.

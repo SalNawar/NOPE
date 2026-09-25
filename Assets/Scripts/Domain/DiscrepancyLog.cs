@@ -47,7 +47,7 @@ public struct CompareEvidence
     /// <summary>Clue category of the field / book.</summary>
     public ClueCategory category;
 
-    /// <summary>The displayed value.</summary>
+    /// <summary>The canonical value (never display text: see DisplayText).</summary>
     public string value;
 
     /// <summary>Statement side (document field or answer): true if the value is a liar's tell.</summary>

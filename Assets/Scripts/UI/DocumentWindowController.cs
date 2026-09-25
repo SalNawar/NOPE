@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Renders one visitor document as a flippable, multi-page window. Each field
-/// is a clickable row (label + value) that registers with the CompareController.
+/// is a clickable row (label + value) that registers with the CompareController;
+/// the value is shown through DisplayText and compared as its canonical text.
 /// Rows are cloned from <see cref="fieldRowTemplate"/> (a disabled row with two
 /// TMP texts — label then value — an Image background, and a Button).
 /// </summary>
@@ -93,7 +94,7 @@ public sealed class DocumentWindowController : MonoBehaviour
             if (texts.Length > 0 && texts[0] != null)
                 texts[0].text = f.label;
             if (texts.Length > 1 && texts[1] != null)
-                texts[1].text = f.value;
+                texts[1].text = DisplayText.For(f.value, TextMedium.Written);
 
             Image bg = row.GetComponent<Image>();
             Button btn = row.GetComponent<Button>();

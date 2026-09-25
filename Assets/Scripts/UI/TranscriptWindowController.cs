@@ -8,8 +8,8 @@ using UnityEngine.UI;
 /// line (speaker, sentence), paged like the reference books and always
 /// showing the newest page. Only answer rows are clickable: a click puts the
 /// answer's canonical fact value into the compare bar as the traveller's
-/// statement. Rows are named Line_{id}. No coroutines: the desktop canvas is
-/// switched off outside monitor focus.
+/// statement. Sentences are shown through DisplayText (the spoken reveal
+/// point); the compared value stays canonical. Rows are named Line_{id}.
 /// </summary>
 public sealed class TranscriptWindowController : PagedRowsWindow
 {
@@ -43,7 +43,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (texts.Length > 0 && texts[0] != null)
             texts[0].text = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
         if (texts.Length > 1 && texts[1] != null)
-            texts[1].text = line.Text;
+            texts[1].text = DisplayText.For(line.Text, TextMedium.Spoken);
 
         if (button == null)
             return;
@@ -53,7 +53,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (!line.IsAnswer || _compare == null)
             return;
 
-        string label = $"Intercom · {ClueLabels.Report(line.Category)}";
+        string label = $"Traveller · {ClueLabels.Report(line.Category)}";
         string value = line.Value;
         CompareEvidence evidence = CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell);
         button.onClick.AddListener(() => _compare.Select(label, value, background, evidence));
