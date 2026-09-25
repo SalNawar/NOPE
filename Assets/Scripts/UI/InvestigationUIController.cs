@@ -7,10 +7,13 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Orchestrates the office investigation: shows the visitor's travel claim and
-/// today's directives, runs the interview on the intercom (document requests,
-/// today's questions and narrative dialogs, with the transcript window), spawns
-/// a draggable window per document, builds a shelf of reference books the
-/// player can open/stow, and offers the binary Accept/Deny.
+/// today's directives, runs the interview on the traveller wheel (document
+/// requests, today's questions and narrative dialogs, with the transcript
+/// window and the traveller's replies in the wheel's bubble), hands each
+/// document over as a physical paper on the desk (whose scan opens its
+/// window) or, where no desk is wired, straight to its draggable window,
+/// builds a shelf of reference books the player can open/stow, and offers the
+/// binary Accept/Deny.
 ///
 /// Two modes:
 /// - RICH: when the desk has been built (document/book/shelf templates wired by
@@ -44,7 +47,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private OSWindowChrome scannerWindow;
 
     [Header("Interaction / records")]
-    /// <summary>The intercom: shows the current interview node's choices (requests, questions, dialog replies).</summary>
+    /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
     [SerializeField] private InteractionPanelController interactionPanel;
 
     /// <summary>Citizen Records app (registry injected per day).</summary>
@@ -56,6 +59,32 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The transcript window's chrome; every interview choice but a document request opens it.</summary>
     [SerializeField] private OSWindowChrome transcriptChrome;
+
+    [Header("Desk")]
+    /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
+    [SerializeField] private DeskController desk;
+
+    /// <summary>The traveller wheel: closed after a hand-over, and it shows the traveller's replies.</summary>
+    [SerializeField] private TravellerWheel wheel;
+
+    /// <summary>Shown on the desktop between travellers.</summary>
+    [SerializeField] private GameObject idleScreen;
+
+    [Header("Window layout")]
+    /// <summary>Where the first document window opens (desktop units from the centre). The builder writes the 4:3 layout; this default is the 16:9 one.</summary>
+    [SerializeField] private Vector2 documentWindowOrigin = new Vector2(-330f, 140f);
+
+    /// <summary>Offset from one document window to the next.</summary>
+    [SerializeField] private Vector2 documentWindowStep = new Vector2(620f, 0f);
+
+    /// <summary>Where the first book window opens.</summary>
+    [SerializeField] private Vector2 bookWindowOrigin = new Vector2(-380f, -150f);
+
+    /// <summary>Horizontal step between the three book windows of a row.</summary>
+    [SerializeField] private float bookWindowColumnStep = 320f;
+
+    /// <summary>Offset from one row of book windows to the next.</summary>
+    [SerializeField] private Vector2 bookWindowRowStep = new Vector2(40f, 40f);
 
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
@@ -98,8 +127,8 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// True when a traveller's answers can be read: always in the text
-    /// fallback; in the rich desk only when the intercom, the transcript window
-    /// and its chrome are wired. When false, GameManager computes no answers
+    /// fallback; in the rich desk only when the wheel's ring, the transcript
+    /// window and its chrome are wired. When false, GameManager computes no answers
     /// and generates no spoken tell that day. (Serialized references are
     /// compared with != null: an unassigned one is Unity's fake null.)
     /// </summary>
@@ -115,6 +144,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     private bool RichMode =>
         documentWindowTemplate != null && windowLayer != null &&
         acceptButton != null && denyButton != null;
+
+    /// <summary>True when documents become physical papers: the rich desk with the desk and all its parts wired (a partly wired desk takes the window path, so papers always reach the PC).</summary>
+    private bool DeskReachable => RichMode && desk != null && desk.IsReachable;
 
     private void Awake()
     {
@@ -132,13 +164,26 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
         if (RichMode && !InterviewReachable)
-            Debug.LogWarning("[InvestigationUIController] Intercom or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
+            Debug.LogWarning("[InvestigationUIController] Traveller wheel or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
+
+        // Without the desk every document still reaches the PC, as its window.
+        if (RichMode && !DeskReachable)
+            Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents open on the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
+
+        if (DeskReachable)
+            desk.ScanFinished += OpenDocumentWindow;
+
+        if (idleScreen != null)
+            idleScreen.SetActive(true);
     }
 
     private void OnDestroy()
     {
         if (compareController != null)
             compareController.PairCompared -= HandlePairCompared;
+
+        if (DeskReachable)
+            desk.ScanFinished -= OpenDocumentWindow;
     }
 
     /// <summary>
@@ -251,11 +296,12 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowFallback(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases).</summary>
+    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line.</summary>
     public void Hide()
     {
         if (root != null) root.SetActive(false);
         if (_fallbackPanel != null) _fallbackPanel.SetActive(false);
+        if (idleScreen != null) idleScreen.SetActive(true);
     }
 
     // -----------------------------
@@ -265,6 +311,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
         if (root != null) root.SetActive(true);
+        if (idleScreen != null) idleScreen.SetActive(false);
 
         if (claimText != null)
             claimText.text = inst != null ? $"{inst.visitorDisplayName}\n\"{inst.claimLine}\"" : string.Empty;
@@ -289,8 +336,9 @@ public sealed class InvestigationUIController : MonoBehaviour
         _caseDocuments.Clear();
 
         // Documents are handed over, never taken: those marked "on arrival" when
-        // the traveller steps up, the others through an interview request. Each
-        // window spawns hidden and opens when its document is handed over.
+        // the traveller steps up, the others through the traveller wheel. With
+        // the desk, each becomes a paper whose scan opens its window; without
+        // it, the window opens at the hand-over. Windows spawn hidden.
         if (inst != null)
         {
             int i = 0;
@@ -299,7 +347,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                 DocumentWindowController clone = Instantiate(documentWindowTemplate, windowLayer);
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
-                    rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
+                    rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
                 clone.SetDocument(doc, compareController);
                 _docWindows.Add(clone.gameObject);
                 _caseDocuments.Add(new CaseDocument
@@ -312,8 +360,15 @@ public sealed class InvestigationUIController : MonoBehaviour
             }
         }
 
-        foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
-            OpenDocumentWindow(i);
+        if (DeskReachable)
+        {
+            desk.BeginCase(_caseDocuments);
+        }
+        else
+        {
+            foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
+                OpenDocumentWindow(i);
+        }
 
         StartInterview(inst, _caseDocuments);
 
@@ -337,7 +392,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _runner = null;
         if (_day == null)
         {
-            Debug.LogError("[InvestigationUIController] No interview day was injected (GameManager.SetInterviewDay), so the intercom is empty.", this);
+            Debug.LogError("[InvestigationUIController] No interview day was injected (GameManager.SetInterviewDay), so the traveller wheel is empty.", this);
             if (interactionPanel != null)
                 interactionPanel.Clear();
             return;
@@ -366,7 +421,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         RefreshChoices();
     }
 
-    /// <summary>Shows the current interview node's choices on the intercom.</summary>
+    /// <summary>Shows the current interview node's choices on the traveller wheel ("&lt; Back" in its centre).</summary>
     private void RefreshChoices()
     {
         if (interactionPanel == null || _runner == null)
@@ -376,7 +431,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         foreach (DialogChoice choice in _runner.Choices)
         {
             string id = choice.Id;
-            actions.Add(new InteractionAction { label = choice.Label, execute = () => Choose(id) });
+            actions.Add(new InteractionAction { label = choice.Label, centre = choice.Kind == DialogChoiceKind.Back, execute = () => Choose(id) });
         }
 
         interactionPanel.SetActions(actions);
@@ -384,13 +439,20 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// Plays one interview choice: the transcript shows its lines; a document
-    /// request hands that document over (its window opens and is raised), any
-    /// other choice opens the transcript; a finished dialog is recorded for the
-    /// end of the shift.
+    /// request hands that document over (a paper onto the desk, or straight to
+    /// its window where no desk is wired) and closes the wheel so the player can
+    /// take it; any other choice opens the transcript; the traveller's reply, when
+    /// the choice adds one, goes to the wheel's bubble (the spoken reveal point;
+    /// a choice without one, such as "Ask about home >" or "&lt; Back", leaves the
+    /// last reply up); a finished dialog is recorded for the end of the shift.
     /// </summary>
     private void Choose(string choiceId)
     {
-        DialogChoice choice = _runner != null ? _runner.Choose(choiceId) : null;
+        if (_runner == null)
+            return;
+
+        int before = _runner.Transcript.Count;
+        DialogChoice choice = _runner.Choose(choiceId);
         if (choice == null)
             return;
 
@@ -398,11 +460,23 @@ public sealed class InvestigationUIController : MonoBehaviour
             transcriptWindow.Refresh();
 
         if (choice.Action == DialogAction.HandOverDocument)
-            OpenDocumentWindow(choice.DocumentIndex);
+        {
+            if (DeskReachable)
+                desk.HandOver(choice.DocumentIndex);
+            else
+                OpenDocumentWindow(choice.DocumentIndex);
+
+            if (wheel != null)
+                wheel.Close();
+        }
         else if (transcriptChrome != null)
         {
             transcriptChrome.Open();
         }
+
+        string reply = InterviewScript.SpokenSince(_runner.Transcript, before);
+        if (wheel != null && reply.Length > 0)
+            wheel.Say(DisplayText.For(reply, TextMedium.Spoken));
 
         if (choice.Action == DialogAction.CompleteDialog)
             _day.Complete(choice.DialogId, choice.EffectName);
@@ -411,9 +485,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Opens a paper's scanned window and raises it. The first time it opens
-    /// this case, the paper also gets a desktop icon at the top of the grid,
-    /// which reopens the window after it is closed.
+    /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
+    /// or a hand-over where no desk is wired: the written reveal point). The
+    /// first time it opens this case, the paper also gets a desktop icon at
+    /// the top of the grid, which reopens the window after it is closed.
     /// </summary>
     private void OpenDocumentWindow(int index)
     {
@@ -464,7 +539,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             ReferenceBookWindowController win = Instantiate(bookWindowTemplate, windowLayer);
             win.SetBook(book, _facts, compareController);
             if (win.transform is RectTransform rt)
-                rt.anchoredPosition = new Vector2(-380f + (i % 3) * 320f + (i / 3) * 40f, -150f + (i / 3) * 40f);
+                rt.anchoredPosition = bookWindowOrigin + new Vector2((i % 3) * bookWindowColumnStep, 0f) + (i / 3) * bookWindowRowStep;
             GameObject winGo = win.gameObject;
             winGo.SetActive(false);
 
@@ -522,6 +597,8 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     private void Decide(bool accepted)
     {
+        if (DeskReachable)
+            desk.EndCase();
         Hide();
 
         // No case is on the desk from here: cleared before the callback, which

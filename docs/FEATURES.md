@@ -19,7 +19,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Diegetic readouts: wall calendar (day), stability monitor (percent + lamp tint), credits till (with ding)
 - [ ] Timeline-reactive poster (sprite swaps driven by timeline cues)
 - [ ] Morning briefing as "THE TEMPORAL TIMES" newsletter over the booth (Start Shift)
-- [ ] End-of-day "SHIFT LEDGER" newsletter over the booth (Go Home), incl. undocumented-denials line
+- [ ] End-of-day "SHIFT LEDGER" newsletter over the booth (Go Home), incl. the undocumented-denials line ("log a deviation before denying")
 - [ ] Per-case READY gate: visitor is presented only after the player taps READY (tested: `ReadyGateTests`)
 - [ ] Analog wall clock (placeholder face + hands) driven by the shift clock
 
@@ -34,7 +34,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Clue Log = Case Notes: Interview, the current traveller's transcript (speaker + line, 8 per page, long lines wrap onto two, jumps to the newest page); answer rows are compare-clickable; every intercom choice except a document request opens it (questions, small talk, dialog replies, "Ask about home >" and "< Back"); it closes with every new case
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)
 - [ ] Every new case closes all open windows (pin system planned to override) (scanned-document icons are cleared too)
-- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it); likewise the rich desk warns once at start when the intercom, the interview transcript or its window chrome is not wired: that day questions are hidden, no answer is computed and no tell is spoken, and the intercom offers only document requests
+- [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it); likewise the rich desk warns once at start when the traveller wheel, the interview transcript or its window chrome is not wired: that day questions are hidden, no answer is computed and no tell is spoken, and the wheel offers only document requests; likewise it warns once when the desk scanner is not wired: documents then open on the PC when handed over
 
 ## World
 
