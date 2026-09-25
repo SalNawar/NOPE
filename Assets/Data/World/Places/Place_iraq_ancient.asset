@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
   year: -1760
+  tongue: akkadian
   birthYearMin: -1830
   birthYearMax: -1778
   facts:

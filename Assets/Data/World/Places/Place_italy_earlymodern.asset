@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
   year: 1495
+  tongue: italian
   birthYearMin: 1425
   birthYearMax: 1477
   facts:

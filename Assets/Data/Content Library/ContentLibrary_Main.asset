@@ -70,6 +70,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4310a94e0a8291a4380d458bff90205e, type: 2}
   - {fileID: 11400000, guid: f163b89b65df0ff4bb129a518b6ee741, type: 2}
   - {fileID: 11400000, guid: 1c15365f5ee847309cf3bf46489df055, type: 2}
+  - {fileID: 11400000, guid: 64dd5072307794d4db6d7042353661ca, type: 2}
+  - {fileID: 11400000, guid: 2d7c9c249f77acc439c7ffd23bdffa5e, type: 2}
+  - {fileID: 11400000, guid: 2b852508ea777bc41a28f9dc645538b0, type: 2}
+  - {fileID: 11400000, guid: 4d8e82e5d30485748834bd8ec3ea126c, type: 2}
+  - {fileID: 11400000, guid: 425102795edca4549a869be97bc38fa4, type: 2}
+  - {fileID: 11400000, guid: 3c2b2e7640f956248bbdcd0a5072ae91, type: 2}
+  - {fileID: 11400000, guid: ec9c846f344b29e438d2c505f6a3048b, type: 2}
+  - {fileID: 11400000, guid: 0a6982e0eb5e73c43884da142bd88222, type: 2}
   attributes:
   - {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
   - {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
@@ -146,6 +154,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c3fb011a0dec4c94bb1a24978e1bcf78, type: 2}
   - {fileID: 11400000, guid: 5b4a14c18c1434d44bc1e220e94d34d2, type: 2}
   - {fileID: 11400000, guid: e654e3aa0bc6bae449fcdca1aaaef69b, type: 2}
+  - {fileID: 11400000, guid: f13d3ee5d615e02498845a500b2e25d5, type: 2}
   - {fileID: 11400000, guid: f3311937c05234244bf44a92a293d6f7, type: 2}
   - {fileID: 11400000, guid: 88aef9a8d18732e45ac561cedb654dfc, type: 2}
   - {fileID: 11400000, guid: e02e4ea69ba6373499a8c5195d9220bf, type: 2}
@@ -811,3 +820,185 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e6d4c206672662643b3275bb5c81d3ee, type: 2}
   - {fileID: 11400000, guid: 5318bdc9b8a286c4cb0663f271791f7d, type: 2}
   - {fileID: 11400000, guid: 7e9502c7ac4b26848bf53f9db563cc89, type: 2}
+  translation:
+    rules:
+      fromDay: 2
+      tongues:
+      - id: english
+        displayName: English
+        script: latin
+        pack: 
+        glyphs: 
+      - id: egyptian
+        displayName: Egyptian
+        script: hieroglyphs
+        pack: near_east
+        glyphs: "\U0001313F\U000130C0\U0001337F\U000130A7\U000131CB\U00013191\U000133BC\U00013254\U000131CC\U00013193\U000133A1\U000130ED\U00013153\U00013216\U0001309D\U000132AA\U0001320E\U0001308B\U000132F4\U000133CF\U00013171\U0001339B\U000133F2\U0001340D\U000133ED\U00013283"
+      - id: akkadian
+        displayName: Akkadian
+        script: cuneiform
+        pack: near_east
+        glyphs: "\U00012000\U00012040\U000121A0\U00012055\U0001208A\U0001227F\U000120B5\U00012129\U0001213F\U00012156\U00012157\U000121B7\U00012220\U0001223E\U00012311\U0001227A\U000122E1\U0001228F\U00012293\U000122EB\U0001230B\U0001224C\U00012292\U000121AA\U00012140\U0001235D"
+      - id: arabic
+        displayName: Arabic
+        script: arabic
+        pack: near_east
+        glyphs: "\u0639\u0643\u0633\u0631\u064A\u0642\u062C\u062D\u0627\u0634\u062A\u0646\u0645\u0644\u0648\u0628\u0637\u062F\u0641\u062E\u0647\u0632\u063A\u0636\u0621\u0630"
+      - id: greek
+        displayName: Greek
+        script: greek
+        pack: mediterranean
+        glyphs: "\u03BF\u03BB\u03BC\u03BD\u03B1\u03BE\u03C0\u03C1\u03B7\u03C3\u03C4\u03C6\u03C7\u03C8\u03C5\u03C2\u03AC\u03AD\u03B2\u03B3\u03B9\u03B4\u03B6\u03B8\u03C9\u03BA"
+      - id: latin
+        displayName: Latin
+        script: latin
+        pack: mediterranean
+        glyphs: ifghojklumnpqrystvwxazbced
+      - id: italian
+        displayName: Italian
+        script: latin
+        pack: mediterranean
+        glyphs: "ohjkulmn\xE8pqrstavwxzbecdfig"
+      - id: chinese
+        displayName: Chinese
+        script: han
+        pack: east_asia
+        glyphs: "\u5B89\u6587\u5C71\u6C34\u8863\u65E5\u6708\u5929\u4E00\u5730\u6728\u706B\u91D1\u77F3\u6B27\u7530\u4E2D\u5927\u5C0F\u4E0A\u4E4C\u4E0B\u53E3\u5FC3\u7531\u738B"
+      - id: japanese
+        displayName: Japanese
+        script: kana
+        pack: east_asia
+        glyphs: "\u3042\u304B\u304D\u304F\u3048\u3051\u3053\u3055\u3044\u3057\u3059\u305B\u305D\u305F\u304A\u3061\u3064\u3066\u3068\u306A\u3046\u306B\u306E\u306F\u3084\u307E"
+      - id: brittonic
+        displayName: Brittonic
+        script: latin
+        pack: north_europe
+        glyphs: wpqrastveyxzbcidfghjoklmun
+      - id: oldenglish
+        displayName: Old English
+        script: latin
+        pack: north_europe
+        glyphs: "umnpyqrs\xE6\xFEv\u01BFxzebc\xF0fgihjkol"
+      - id: germanic
+        displayName: Proto-Germanic
+        script: runic
+        pack: north_europe
+        glyphs: "\u16DF\u16B7\u16B9\u16BA\u16A8\u16BE\u16C3\u16C8\u16D6\u16C9\u16CA\u16CF\u16D2\u16D7\u16A2\u16DA\u16DC\u16DE\u16B4\u16E6\u16C1\u16A0\u16A6\u16B1\u16C7\u16B2"
+      - id: german
+        displayName: German
+        script: latin
+        pack: north_europe
+        glyphs: "eklminpq\xF6r\xDFtvwuxzbcd\xFCfgh\xE4j"
+      packs:
+      - id: near_east
+        displayName: Near East
+      - id: mediterranean
+        displayName: Mediterranean
+      - id: east_asia
+        displayName: East Asia
+      - id: north_europe
+        displayName: Northern Europe
+    scripts:
+    - id: latin
+      rightToLeft: 0
+      fonts: []
+    - id: greek
+      rightToLeft: 0
+      fonts: []
+    - id: arabic
+      rightToLeft: 1
+      fonts:
+      - file: tahoma.ttf
+        face: 0
+        family: Tahoma
+        style: Regular
+      - file: arial.ttf
+        face: 0
+        family: Arial
+        style: Regular
+      - file: 
+        face: 0
+        family: Geeza Pro
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Arabic
+        style: Regular
+    - id: han
+      rightToLeft: 0
+      fonts:
+      - file: msyh.ttc
+        face: 0
+        family: Microsoft YaHei
+        style: Regular
+      - file: simsun.ttc
+        face: 0
+        family: SimSun
+        style: Regular
+      - file: 
+        face: 0
+        family: PingFang SC
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans CJK SC
+        style: Regular
+    - id: kana
+      rightToLeft: 0
+      fonts:
+      - file: YuGothR.ttc
+        face: 0
+        family: Yu Gothic
+        style: Regular
+      - file: msgothic.ttc
+        face: 0
+        family: MS Gothic
+        style: Regular
+      - file: 
+        face: 0
+        family: Hiragino Sans
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans CJK JP
+        style: Regular
+    - id: hieroglyphs
+      rightToLeft: 0
+      fonts:
+      - file: seguihis.ttf
+        face: 0
+        family: Segoe UI Historic
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Egyptian Hieroglyphs
+        style: Regular
+    - id: cuneiform
+      rightToLeft: 0
+      fonts:
+      - file: seguihis.ttf
+        face: 0
+        family: Segoe UI Historic
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Cuneiform
+        style: Regular
+    - id: runic
+      rightToLeft: 0
+      fonts:
+      - file: seguihis.ttf
+        face: 0
+        family: Segoe UI Historic
+        style: Regular
+      - file: 
+        face: 0
+        family: Noto Sans Runic
+        style: Regular
+    flip:
+      startDelay: 0.3
+      letterInterval: 0.04
+      letterSeconds: 0.12
+      scrambleSteps: 2
+      rowStagger: 0.15
+    fallbackGlyphs: olmnupqrystvwxazbcdfeghjik

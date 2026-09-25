@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   year: 1869
+  tongue: arabic
   birthYearMin: 1799
   birthYearMax: 1851
   facts:

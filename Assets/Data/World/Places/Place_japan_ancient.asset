@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
   era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
   year: 450
+  tongue: japanese
   birthYearMin: 380
   birthYearMax: 432
   facts:

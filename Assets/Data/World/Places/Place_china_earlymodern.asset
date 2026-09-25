@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
   year: 1635
+  tongue: chinese
   birthYearMin: 1565
   birthYearMax: 1617
   facts:

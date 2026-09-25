@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   year: 1860
+  tongue: greek
   birthYearMin: 1790
   birthYearMax: 1842
   facts:

@@ -275,9 +275,22 @@ MonoBehaviour:
     text: Always English
     gloss: 0
     tier: 0
+  - key: settings.motion
+    text: Motion
+    gloss: 0
+    tier: 0
+  - key: settings.motionFull
+    text: Full
+    gloss: 0
+    tier: 0
+  - key: settings.motionReduced
+    text: Reduced
+    gloss: 0
+    tier: 0
   - key: settings.note
     text: Colours, fonts and the wallpaper always follow history. A language change
-      applies the next time the office opens.
+      applies the next time the office opens. Reduced motion shows translations at
+      once.
     gloss: 0
     tier: 0
   - key: briefing.empty
@@ -385,6 +398,10 @@ MonoBehaviour:
     tier: 0
   - key: compare.travellerLabel
     text: "Traveller \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: compare.untranslated
+    text: (untranslated {0}; {1} Translator)
     gloss: 0
     tier: 0
   - key: slot.Outfit

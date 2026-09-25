@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
   year: 1075
+  tongue: chinese
   birthYearMin: 1005
   birthYearMax: 1057
   facts:

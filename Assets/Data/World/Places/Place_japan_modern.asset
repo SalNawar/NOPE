@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   year: 1980
+  tongue: japanese
   birthYearMin: 1910
   birthYearMax: 1962
   facts:
