@@ -439,7 +439,7 @@ public static class _TimeDeskAuditPlay
             {
                 CitizenRecord rec = registry.Records.FirstOrDefault(r => r.fullName == c.visitorGivenName);
                 string value = rec == null ? "" : category == ClueCategory.BirthDate ? rec.birthDate : rec.fullName;
-                return EvidencePicks.ForRecord(category, category == ClueCategory.BirthDate ? "Citizen Records · Born" : "Citizen Records · Name", value);
+                return EvidencePicks.ForRecord(category, category == ClueCategory.BirthDate ? "Citizen Records · Born" : "Citizen Records · Name", value, rec?.fullName);
             }
             ReferenceBookSO book = lib.ReferenceBooks.FirstOrDefault(b => b != null && b.category == category);
             FactRow row;

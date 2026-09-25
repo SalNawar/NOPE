@@ -269,7 +269,8 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         Discrepancy proof = DiscrepancyLog.Prove(a, b,
             _currentCase.claimedNation != null ? _currentCase.claimedNation.id : null,
-            _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null);
+            _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null,
+            _currentCase.visitorGivenName);
         if (proof == null)
             return;
 

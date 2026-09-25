@@ -2,13 +2,17 @@ using NUnit.Framework;
 
 /// <summary>
 /// Decision table for DiscrepancyLog.Prove and Add — the core verification rule.
-/// Claim under test: Norvik / Medieval. Truth for Technology: "Longship".
-/// A liar's papers print "Aqueduct" (which really belongs to Latia / Rome).
+/// Claim under test: Norvik / Medieval, by the traveller Bjorn. Truth for
+/// Technology: "Longship". A liar's papers print "Aqueduct" (which really
+/// belongs to Latia / Rome).
 /// </summary>
 public class DiscrepancyLogTests
 {
     private const string ClaimNation = "norvik";
     private const string ClaimEra = "medieval";
+
+    /// <summary>The traveller at the desk, whose Citizen Record may prove a lie.</summary>
+    private const string Traveller = "Bjorn";
 
     private static CompareEvidence TellDocField(string value = "Aqueduct") => new CompareEvidence
     {
@@ -44,7 +48,7 @@ public class DiscrepancyLogTests
     /// <summary>Proves the pair and documents the proof; the proof when the log accepts it, else null.</summary>
     private static Discrepancy Register(DiscrepancyLog log, CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId)
     {
-        Discrepancy proof = DiscrepancyLog.Prove(a, b, claimedNationId, claimedEraId);
+        Discrepancy proof = DiscrepancyLog.Prove(a, b, claimedNationId, claimedEraId, Traveller);
         return log.Add(proof) ? proof : null;
     }
 
@@ -58,7 +62,7 @@ public class DiscrepancyLogTests
         var log = new DiscrepancyLog();
         Discrepancy d = Register(log, 
             TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller),
             ClaimNation, ClaimEra);
 
         Assert.NotNull(d);
@@ -80,7 +84,7 @@ public class DiscrepancyLogTests
             isAnachronism = false
         };
 
-        Assert.IsNull(Register(log, honest, CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"), ClaimNation, ClaimEra));
+        Assert.IsNull(Register(log, honest, CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller), ClaimNation, ClaimEra));
     }
 
     [Test]
@@ -89,7 +93,7 @@ public class DiscrepancyLogTests
         var log = new DiscrepancyLog();
         Assert.IsNull(Register(log, 
             TellDocField(), // Technology
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller),
             ClaimNation, ClaimEra));
     }
 
@@ -98,9 +102,48 @@ public class DiscrepancyLogTests
     {
         var log = new DiscrepancyLog();
         Assert.IsNull(Register(log, 
-            CompareEvidence.ForRecordField(ClueCategory.Name, "Bjorn"),
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            CompareEvidence.ForRecordField(ClueCategory.Name, "Bjorn", Traveller),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller),
             ClaimNation, ClaimEra));
+    }
+
+    /// <summary>
+    /// Phase 0 of the audit: any record row proved a birth-date tell, so
+    /// another traveller's record (whose date always differs) documented a
+    /// "contradiction". Only the traveller's own record proves one.
+    /// </summary>
+    [Test]
+    public void RecordProof_AnotherTravellersRecord_ProvesNothing()
+    {
+        Assert.IsNull(DiscrepancyLog.Prove(
+            TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "14 Sep 2401", "Zara-7"),
+            ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "14 Sep 2401", "Zara-7"),
+            TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            ClaimNation, ClaimEra, Traveller), "either side first");
+    }
+
+    /// <summary>Phase 0 of the audit: an empty record value proved any tell (it differs from every date).</summary>
+    [Test]
+    public void RecordProof_AnEmptyRecordValue_ProvesNothing()
+    {
+        foreach (string empty in new[] { null, "", "   " })
+            Assert.IsNull(DiscrepancyLog.Prove(
+                TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+                CompareEvidence.ForRecordField(ClueCategory.BirthDate, empty, Traveller),
+                ClaimNation, ClaimEra, Traveller), $"'{empty}'");
+    }
+
+    /// <summary>Without a traveller, or a record without an owner, nothing is proved; the owner is matched as every value is (trimmed, any case).</summary>
+    [Test]
+    public void RecordProof_NeedsTheRecordToNameTheTraveller()
+    {
+        CompareEvidence tell = TellIdentityField(ClueCategory.BirthDate, "3 May 1101");
+        Assert.IsNull(DiscrepancyLog.Prove(tell, CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller), ClaimNation, ClaimEra, null));
+        Assert.IsNull(DiscrepancyLog.Prove(tell, CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", null), ClaimNation, ClaimEra, Traveller));
+        Assert.NotNull(DiscrepancyLog.Prove(tell, CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", " bjorn "), ClaimNation, ClaimEra, Traveller));
     }
 
     [Test]
@@ -110,7 +153,7 @@ public class DiscrepancyLogTests
         var log = new DiscrepancyLog();
         Discrepancy d = Register(log, 
             TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller),
             null, null);
 
         Assert.NotNull(d);
@@ -275,7 +318,7 @@ public class DiscrepancyLogTests
     [Test]
     public void AnswerTell_VsTheClaimsRow_ProvesAMismatch_SaidByTheTraveller()
     {
-        Discrepancy d = DiscrepancyLog.Prove(SaidDevice(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        Discrepancy d = DiscrepancyLog.Prove(SaidDevice(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra, Traveller);
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
@@ -288,7 +331,7 @@ public class DiscrepancyLogTests
     [Test]
     public void AnswerTell_VsAForeignRow_ProvesTheOrigin_SaidByTheTraveller()
     {
-        Discrepancy d = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra);
+        Discrepancy d = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra, Traveller);
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
@@ -302,8 +345,8 @@ public class DiscrepancyLogTests
     {
         Discrepancy d = DiscrepancyLog.Prove(
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, "3 Jun 1801 BCE", true),
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 Jun 1510 BCE"),
-            ClaimNation, ClaimEra);
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 Jun 1510 BCE", Traveller),
+            ClaimNation, ClaimEra, Traveller);
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.RecordMismatch, d.provedBy);
@@ -315,12 +358,12 @@ public class DiscrepancyLogTests
     [Test]
     public void HonestAnswer_NeverRegisters_EitherWayOrOrder()
     {
-        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice("Longship", false), Entry("norvik", "medieval", "Waterwheel"), ClaimNation, ClaimEra));
-        Assert.IsNull(DiscrepancyLog.Prove(Entry("latia", "rome", "Longship"), SaidDevice("Longship", false), ClaimNation, ClaimEra));
+        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice("Longship", false), Entry("norvik", "medieval", "Waterwheel"), ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(Entry("latia", "rome", "Longship"), SaidDevice("Longship", false), ClaimNation, ClaimEra, Traveller));
         Assert.IsNull(DiscrepancyLog.Prove(
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131"),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 May 1131", Traveller),
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, "3 May 1101", false),
-            ClaimNation, ClaimEra));
+            ClaimNation, ClaimEra, Traveller));
     }
 
     // -----------------------------
@@ -334,7 +377,7 @@ public class DiscrepancyLogTests
     [Test]
     public void DressTell_VsTheClaimsRow_ProvesAMismatch_WornByTheTraveller()
     {
-        Discrepancy d = DiscrepancyLog.Prove(Wears(), Entry("norvik", "medieval", "chonmage / shimada", ClueCategory.Culture), ClaimNation, ClaimEra);
+        Discrepancy d = DiscrepancyLog.Prove(Wears(), Entry("norvik", "medieval", "chonmage / shimada", ClueCategory.Culture), ClaimNation, ClaimEra, Traveller);
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
@@ -346,7 +389,7 @@ public class DiscrepancyLogTests
     [Test]
     public void DressTell_VsTheTrueHomesRow_ProvesTheOrigin_WornByTheTraveller()
     {
-        Discrepancy d = DiscrepancyLog.Prove(Entry("britain", "industrial", "top hat / poke bonnet", ClueCategory.Culture), Wears(), ClaimNation, ClaimEra);
+        Discrepancy d = DiscrepancyLog.Prove(Entry("britain", "industrial", "top hat / poke bonnet", ClueCategory.Culture), Wears(), ClaimNation, ClaimEra, Traveller);
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
@@ -358,12 +401,12 @@ public class DiscrepancyLogTests
     [Test]
     public void HonestGarment_NeverRegisters_AndGarmentsProveNothingAgainstStatements()
     {
-        Assert.IsNull(DiscrepancyLog.Prove(Wears("chonmage / shimada", false), Entry("norvik", "medieval", "wesekh collar", ClueCategory.Culture), ClaimNation, ClaimEra));
-        Assert.IsNull(DiscrepancyLog.Prove(Entry("latia", "rome", "chonmage / shimada", ClueCategory.Culture), Wears("chonmage / shimada", false), ClaimNation, ClaimEra));
-        Assert.IsNull(DiscrepancyLog.Prove(Wears(), Entry("latia", "rome", "wesekh collar", ClueCategory.Culture), ClaimNation, ClaimEra), "a third place's row");
-        Assert.IsNull(DiscrepancyLog.Prove(Wears(), TellDocField(), ClaimNation, ClaimEra), "garment vs papers");
-        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), Wears(), ClaimNation, ClaimEra), "garment vs answer");
-        Assert.IsNull(DiscrepancyLog.Prove(Wears(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra), "another category's row");
+        Assert.IsNull(DiscrepancyLog.Prove(Wears("chonmage / shimada", false), Entry("norvik", "medieval", "wesekh collar", ClueCategory.Culture), ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(Entry("latia", "rome", "chonmage / shimada", ClueCategory.Culture), Wears("chonmage / shimada", false), ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(Wears(), Entry("latia", "rome", "wesekh collar", ClueCategory.Culture), ClaimNation, ClaimEra, Traveller), "a third place's row");
+        Assert.IsNull(DiscrepancyLog.Prove(Wears(), TellDocField(), ClaimNation, ClaimEra, Traveller), "garment vs papers");
+        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), Wears(), ClaimNation, ClaimEra, Traveller), "garment vs answer");
+        Assert.IsNull(DiscrepancyLog.Prove(Wears(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra, Traveller), "another category's row");
     }
 
     [Test]
@@ -379,21 +422,21 @@ public class DiscrepancyLogTests
     [Test]
     public void AnswerVsPapers_AndAnswerVsAnswer_ProveNothing()
     {
-        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), HonestDocField(), ClaimNation, ClaimEra));
-        Assert.IsNull(DiscrepancyLog.Prove(TellDocField(), SaidDevice("Longship", false), ClaimNation, ClaimEra));
-        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), SaidDevice("Longship"), ClaimNation, ClaimEra));
+        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), HonestDocField(), ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(TellDocField(), SaidDevice("Longship", false), ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(SaidDevice(), SaidDevice("Longship"), ClaimNation, ClaimEra, Traveller));
     }
 
     [Test]
     public void PaperReports_UseThePapersKeys_AndTheCategoryWord()
     {
-        Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual(EvidenceKind.DocumentField, mismatch.source);
         Assert.AreEqual("deviation.claimMismatch.papers", mismatch.ReportKey);
         Assert.AreEqual("Longship", mismatch.ReportOther);
         Assert.AreEqual("category.Technology", ClueLabels.Key(mismatch.category));
 
-        Discrepancy origin = DiscrepancyLog.Prove(TellDocField(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
+        Discrepancy origin = DiscrepancyLog.Prove(TellDocField(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual("deviation.foreignOrigin.papers", origin.ReportKey);
         Assert.AreEqual("latia — rome", origin.ReportOther);
     }
@@ -402,8 +445,8 @@ public class DiscrepancyLogTests
     public void Add_RefusesASecondProofOfADocumentedCategory_FromEitherSource_AndNull()
     {
         var log = new DiscrepancyLog();
-        Assert.IsTrue(log.Add(DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra)));
-        Assert.IsFalse(log.Add(DiscrepancyLog.Prove(SaidDevice(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra)), "same category, spoken");
+        Assert.IsTrue(log.Add(DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra, Traveller)));
+        Assert.IsFalse(log.Add(DiscrepancyLog.Prove(SaidDevice(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra, Traveller)), "same category, spoken");
         Assert.IsFalse(log.Add(null));
         Assert.AreEqual(1, log.Count);
         Assert.AreEqual(EvidenceKind.DocumentField, log.Items[0].source);
@@ -413,11 +456,11 @@ public class DiscrepancyLogTests
     public void Prove_IsPure_ADocumentedCategoryStillProves_TheSameWayTwice()
     {
         var log = new DiscrepancyLog();
-        Assert.IsTrue(log.Add(DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra)));
+        Assert.IsTrue(log.Add(DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra, Traveller)));
 
         // Technology is documented now; Prove never reads the log, so the spoken pair still proves.
-        Discrepancy x = DiscrepancyLog.Prove(SaidDevice(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
-        Discrepancy y = DiscrepancyLog.Prove(SaidDevice(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
+        Discrepancy x = DiscrepancyLog.Prove(SaidDevice(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra, Traveller);
+        Discrepancy y = DiscrepancyLog.Prove(SaidDevice(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra, Traveller);
 
         Assert.NotNull(x, "an already documented category still proves; only Add refuses it");
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, x.provedBy);
@@ -445,18 +488,18 @@ public class DiscrepancyLogTests
     [Test]
     public void ReportKey_AndReportOther_OfRealProofs()
     {
-        Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual("deviation.claimMismatch.papers", mismatch.ReportKey);
         Assert.AreEqual("Longship", mismatch.ReportOther, "the expected value");
 
-        Discrepancy origin = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra);
+        Discrepancy origin = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual("deviation.foreignOrigin.said", origin.ReportKey);
         Assert.AreEqual("latia — rome", origin.ReportOther, "the place the value belongs to");
 
         Discrepancy record = DiscrepancyLog.Prove(
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, "3 Jun 1801 BCE", true),
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 Jun 1510 BCE"),
-            ClaimNation, ClaimEra);
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 Jun 1510 BCE", Traveller),
+            ClaimNation, ClaimEra, Traveller);
         Assert.AreEqual("deviation.recordMismatch.said", record.ReportKey);
         Assert.AreEqual("3 Jun 1510 BCE", record.ReportOther, "the recorded value");
     }

@@ -65,6 +65,9 @@ public struct CompareEvidence
     /// <summary>Reference side: display label for the entry's origin ("Latia — Ancient Rome").</summary>
     public string entryOriginLabel;
 
+    /// <summary>Record side: the full name of the person the citizen record belongs to (Prove takes only the traveller's own).</summary>
+    public string recordOwner;
+
     /// <summary>Evidence for a clicked document-field row.</summary>
     public static CompareEvidence FromDocumentField(DocumentField field) => new CompareEvidence
     {
@@ -85,13 +88,14 @@ public struct CompareEvidence
         entryOriginLabel = originLabel
     };
 
-    /// <summary>Evidence for a clicked citizen-record field.</summary>
-    public static CompareEvidence ForRecordField(ClueCategory category, string value) => new CompareEvidence
+    /// <summary>Evidence for a clicked field of <paramref name="owner"/>'s citizen record.</summary>
+    public static CompareEvidence ForRecordField(ClueCategory category, string value, string owner) => new CompareEvidence
     {
         kind = EvidenceKind.RecordField,
         category = category,
         value = value,
-        entryOriginLabel = "agency records"
+        entryOriginLabel = "agency records",
+        recordOwner = owner
     };
 
     /// <summary>Evidence for a clicked interview answer row: the canonical value the traveller said, a tell when <paramref name="isTell"/>.</summary>
@@ -197,13 +201,15 @@ public sealed class DiscrepancyLog
     public void Clear() => _items.Clear();
 
     /// <summary>
-    /// Whether a compared pair proves a contradiction of the current claim:
-    /// the proof, or null when it proves nothing. The statement side (a
-    /// document field, an answer or a garment) must be a liar's tell and face exactly one
-    /// truth source (a reference entry or a record field) of the same
-    /// category; two statements or two truths prove nothing. Pure: no log changes.
+    /// Whether a compared pair proves a contradiction of the current claim by
+    /// <paramref name="travellerName"/>: the proof, or null when it proves
+    /// nothing. The statement side (a document field, an answer or a garment)
+    /// must be a liar's tell and face exactly one truth source (a reference
+    /// entry, or a field of the traveller's own citizen record that holds a
+    /// value) of the same category; two statements or two truths prove
+    /// nothing. Pure: no log changes.
     /// </summary>
-    public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId)
+    public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId, string travellerName)
     {
         CompareEvidence statement, truth;
         if (IsStatement(a.kind))
@@ -232,24 +238,19 @@ public sealed class DiscrepancyLog
         if (!statement.isAnachronism)
             return null;
 
-        if (truth.kind == EvidenceKind.RecordField)
-        {
-            // Record proof: the statement disagrees with the agency's own
-            // records about who this person is. No era claim involved.
-            if (ValuesMatch(statement.value, truth.value))
-                return null;
+        return truth.kind == EvidenceKind.RecordField
+            ? RecordProof(statement, truth, travellerName)
+            : ReferenceProof(statement, truth, claimedNationId, claimedEraId);
+    }
 
-            return new Discrepancy
-            {
-                category = statement.category,
-                documentValue = statement.value,
-                expectedValue = truth.value,
-                provedBy = DiscrepancyProof.RecordMismatch,
-                source = statement.kind
-            };
-        }
-
-        // Without a claim there is nothing to contradict.
+    /// <summary>
+    /// Reference proof of a tell against a book row, either way: MISMATCH when
+    /// the row applies to the claimed nation and era and differs, MATCH when it
+    /// belongs to another origin and equals the tell. Without a claimed era
+    /// there is nothing to contradict.
+    /// </summary>
+    private static Discrepancy ReferenceProof(CompareEvidence statement, CompareEvidence truth, string claimedNationId, string claimedEraId)
+    {
         if (string.IsNullOrEmpty(claimedEraId))
             return null;
 
@@ -286,6 +287,30 @@ public sealed class DiscrepancyLog
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Record proof: the statement disagrees with the agency's record of who
+    /// this traveller is (no era claim involved). Another person's record, or a
+    /// row with no value, proves nothing (the audit's Phase 0: any record row
+    /// proved, and another traveller's date always differs); the owner is
+    /// matched as every value is (ValuesMatch).
+    /// </summary>
+    private static Discrepancy RecordProof(CompareEvidence statement, CompareEvidence record, string travellerName)
+    {
+        if (string.IsNullOrWhiteSpace(record.value) || string.IsNullOrWhiteSpace(travellerName) || !ValuesMatch(record.recordOwner, travellerName))
+            return null;
+        if (ValuesMatch(statement.value, record.value))
+            return null;
+
+        return new Discrepancy
+        {
+            category = statement.category,
+            documentValue = statement.value,
+            expectedValue = record.value,
+            provedBy = DiscrepancyProof.RecordMismatch,
+            source = statement.kind
+        };
     }
 
     /// <summary>

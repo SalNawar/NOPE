@@ -44,7 +44,7 @@ public static class EvidencePicks
             fact.Value,
             fact.ToEvidence());
 
-    /// <summary>A Citizen Records row (its label from the app), a truth source for the name and the date of birth.</summary>
-    public static ComparePick ForRecord(ClueCategory category, string label, string value) =>
-        new ComparePick(PickKeys.Record(category), label, value, CompareEvidence.ForRecordField(category, value));
+    /// <summary>A row of <paramref name="owner"/>'s Citizen Record (its label from the app), a truth source for the name and the date of birth of that person only.</summary>
+    public static ComparePick ForRecord(ClueCategory category, string label, string value, string owner) =>
+        new ComparePick(PickKeys.Record(category), label, value, CompareEvidence.ForRecordField(category, value, owner));
 }
