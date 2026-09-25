@@ -39,6 +39,12 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Scene clock for today's shift (optional: without it the day ends only when the queue is empty).</summary>
     [SerializeField] private ShiftClockDriver shiftClock;
 
+    /// <summary>Optional: the booth figure, from presentation until the decision.</summary>
+    [SerializeField] private TravellerView travellerView;
+
+    /// <summary>Optional: the booth's input and wake rules.</summary>
+    [SerializeField] private BoothCoordinator booth;
+
     /// <summary>Seed for deterministic day schedule randomness.</summary>
     [SerializeField] private int seed = 12345;
 
@@ -171,6 +177,10 @@ public sealed class GameManager : MonoBehaviour
         if (readySign != null)
             readySign.onClick.AddListener(() => _readyGate.Release());
 
+        // The booth's day (its day-1 notes) and phase: the briefing comes first.
+        if (booth != null)
+            booth.BeginDay(_worldState.day);
+
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}.");
 
         // Morning briefing first (if wired), then the day loop.
@@ -179,6 +189,8 @@ public sealed class GameManager : MonoBehaviour
             DayPlanSO planToRun = dayPlan;
             int seedToUse = seed;
             Debug.Log("[GameManager] <<< Exiting Start (showing morning briefing before day loop).");
+            if (booth != null)
+                booth.SetPhase(BoothPhase.Newsletter);
             dayFlowUI.ShowBriefing(_worldState, () => BeginShift(planToRun, seedToUse));
         }
         else
@@ -288,6 +300,8 @@ public sealed class GameManager : MonoBehaviour
                 officeView.FocusOffice();
 
             Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (showing results panel, then {(ending != null ? "the title scene" : "Home")}).");
+            if (booth != null)
+                booth.SetPhase(BoothPhase.Newsletter);
             dayFlowUI.ShowResults(_worldState, _ledger, next);
         }
         else
@@ -401,6 +415,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Starts the day loop and the shift clock together (after the briefing).</summary>
     private void BeginShift(DayPlanSO plan, int daySeed)
     {
+        if (booth != null)
+            booth.SetPhase(BoothPhase.NoTraveller);
+
         orchestrator.StartDay(_worldState, plan, daySeed);
 
         if (shiftClock != null)
@@ -448,10 +465,30 @@ public sealed class GameManager : MonoBehaviour
         ShowActiveCase(_dayCases[idx]);
     }
 
+    /// <summary>
+    /// The one presence transition: whether a traveller is at the desk feeds
+    /// the closing-time rule, the booth figure and the booth's input phase.
+    /// </summary>
+    private void SetTravellerAtDesk(bool at)
+    {
+        _travellerAtDesk = at;
+
+        if (travellerView != null)
+        {
+            if (at)
+                travellerView.Show();
+            else
+                travellerView.Clear();
+        }
+
+        if (booth != null)
+            booth.SetPhase(at ? BoothPhase.TravellerAtDesk : BoothPhase.NoTraveller);
+    }
+
     /// <summary>Presents a case via the investigation UI (or legacy era UI).</summary>
     private void ShowActiveCase(CaseInstance inst)
     {
-        _travellerAtDesk = true;
+        SetTravellerAtDesk(true);
 
         if (investigationUI != null)
             investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
@@ -478,7 +515,7 @@ public sealed class GameManager : MonoBehaviour
     private void HandlePlayerChoseEra(EraSO chosenEra)
     {
         Debug.Log($"[GameManager] >>> Entering HandlePlayerChoseEra (slot {_activeCaseIndex1Based}, chosenEra='{chosenEra?.id}').");
-        _travellerAtDesk = false;
+        SetTravellerAtDesk(false);
 
         int idx = _activeCaseIndex1Based - 1;
 
@@ -553,7 +590,7 @@ public sealed class GameManager : MonoBehaviour
     private void HandleDecision(bool accepted)
     {
         Debug.Log($"[GameManager] >>> Entering HandleDecision (slot {_activeCaseIndex1Based}, accepted={accepted}).");
-        _travellerAtDesk = false;
+        SetTravellerAtDesk(false);
 
         int idx = _activeCaseIndex1Based - 1;
 
@@ -617,7 +654,8 @@ public sealed class GameManager : MonoBehaviour
 
     /// <summary>
     /// Shows the verdict slip if a UI is wired (pausing the shift clock while a
-    /// citation slip is up), then runs the continuation.
+    /// citation slip is up, and holding the PC screen on so the slip can never
+    /// sit on a dark screen), then runs the continuation.
     /// </summary>
     private void ShowVerdictThen(CaseVerdict verdict, System.Action onContinue)
     {
@@ -627,13 +665,18 @@ public sealed class GameManager : MonoBehaviour
             return;
         }
 
-        // A citation slip holds the day, and the shift clock, until acknowledged.
-        bool holdsClock = shiftClock != null && verdict != null && verdict.citationIssued;
+        // A citation slip holds the day, the shift clock and the screen until acknowledged.
+        bool citation = verdict != null && verdict.citationIssued;
+        bool holdsClock = shiftClock != null && citation;
         if (holdsClock)
             shiftClock.Pause();
+        if (citation && booth != null)
+            booth.SetCitationPending(true);
 
         officeUI.ShowVerdict(verdict, () =>
         {
+            if (citation && booth != null)
+                booth.SetCitationPending(false);
             if (holdsClock)
                 shiftClock.Resume();
             onContinue?.Invoke();
