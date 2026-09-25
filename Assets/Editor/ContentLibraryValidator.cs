@@ -114,7 +114,7 @@ public static class ContentLibraryValidator
     /// question for one category, an answer template without {value}; a
     /// structurally broken dialog; a dialog effect that is missing or holds an
     /// op that acts while active (and a warning for a permanent one with a
-    /// briefing or news line); menus fuller than the intercom shows.
+    /// briefing or news line); menus fuller than the traveller wheel shows.
     /// </summary>
     private static int CheckInterview(ContentLibrarySO lib)
     {
@@ -198,7 +198,7 @@ public static class ContentLibraryValidator
 
         bool smallTalk = (lib.Eras ?? Array.Empty<EraSO>()).Any(e => e != null && e.smallTalk != null && e.smallTalk.Count > 0) ||
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
-        foreach (string problem in DialogChecks.MenuProblems(lib.Questions.Count(q => q != null), smallTalk, MaxDocuments(TravellerBlueprints(lib)),
+        foreach (string problem in DialogChecks.MenuProblems(lib.Questions.Count(q => q != null), smallTalk, MaxRequestedDocuments(TravellerBlueprints(lib)),
                                                              lib.Dialogs.Count(d => d != null), lines.menuCapacity))
             Error(problem, lib);
 
@@ -206,9 +206,9 @@ public static class ContentLibraryValidator
     }
 
     /// <summary>
-    /// The most documents one traveller carries among these blueprints (a
-    /// request each; null blueprints and templates are skipped). Generate
-    /// World counts its source's blueprints with the same rule.
+    /// The most papers one traveller carries among these blueprints (null
+    /// blueprints and templates are skipped). The office builder checks the
+    /// desk's paper spawn slots against it.
     /// </summary>
     public static int MaxDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
         blueprints.Where(b => b != null && b.DocumentTemplates != null)
@@ -216,8 +216,20 @@ public static class ContentLibraryValidator
                   .DefaultIfEmpty(0)
                   .Max();
 
-    /// <summary>Every blueprint a traveller can come from: the day plans' possible and forced ones and the legendaries' overrides (nulls included).</summary>
-    private static IEnumerable<CaseBlueprintSO> TravellerBlueprints(ContentLibrarySO lib)
+    /// <summary>
+    /// The most documents one traveller hands over on request among these
+    /// blueprints (a hub request each; templates handed over on arrival, null
+    /// blueprints and null templates are skipped). Generate World counts its
+    /// source's blueprints with the same rule.
+    /// </summary>
+    public static int MaxRequestedDocuments(IEnumerable<CaseBlueprintSO> blueprints) =>
+        blueprints.Where(b => b != null && b.DocumentTemplates != null)
+                  .Select(b => b.DocumentTemplates.Count(t => t != null && DocumentHandOvers.IsRequested(t.handOver)))
+                  .DefaultIfEmpty(0)
+                  .Max();
+
+    /// <summary>Every blueprint a traveller can come from: the day plans' possible and forced ones and the legendaries' overrides (nulls included). The office builder counts the same blueprints.</summary>
+    public static IEnumerable<CaseBlueprintSO> TravellerBlueprints(ContentLibrarySO lib)
     {
         foreach (DayPlanSO plan in lib.DayPlans)
         {

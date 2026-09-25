@@ -436,10 +436,10 @@ public static class WorldContentGenerator
         foreach (PlaceData p in src.places)
             SmallTalkLines(PlaceId(p), p.smallTalk, $"place '{PlaceId(p)}'");
 
-        // --- Menus: the intercom must show every choice ---
+        // --- Menus: the traveller wheel must show every choice ---
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
-        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxDocuments(Blueprints(authored)), dialogs.Length, iv.menuCapacity))
+        foreach (string problem in DialogChecks.MenuProblems(questions.Length, anySmallTalk, ContentLibraryValidator.MaxRequestedDocuments(Blueprints(authored)), dialogs.Length, iv.menuCapacity))
             errors.Add(problem);
 
         // --- Line length: every line the transcript can show fits two lines of a row ---
