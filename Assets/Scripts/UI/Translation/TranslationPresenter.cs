@@ -49,7 +49,7 @@ public sealed class TranslationPresenter
     /// it, upper-cased where the case rule shows it so, plus a..z and A..Z
     /// (the flipped English letters).
     /// </summary>
-    public static string ScriptSample(TranslationSettings settings, string scriptId)
+    private static string ScriptSample(TranslationSettings settings, string scriptId)
     {
         var sb = new StringBuilder("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
         foreach (Tongue t in settings?.rules?.tongues ?? new List<Tongue>())
