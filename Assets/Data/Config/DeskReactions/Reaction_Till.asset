@@ -16,6 +16,6 @@ MonoBehaviour:
   seconds: 0.35
   amplitude: 0.12
   clip: {fileID: 0}
-  tooltip: 'Credits: {value}'
+  tooltipKey: tooltip.credits
   tooltipSeconds: 2.5
   tooltipOffset: {x: 0, y: 60}

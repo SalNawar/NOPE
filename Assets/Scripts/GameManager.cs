@@ -97,6 +97,9 @@ public sealed class GameManager : MonoBehaviour
         // Acquire the run (creates RunManager + loads save/new run on first scene).
         RunManager run = RunManager.GetOrCreate();
 
+        // The run exists now: theme the office for the present culture before the briefing shows.
+        CultureThemeService.RefreshActive();
+
         if (run != null)
         {
             _worldState = run.World;
@@ -327,7 +330,7 @@ public sealed class GameManager : MonoBehaviour
         else
         {
             if (officeUI != null)
-                officeUI.SetResultText($"Day {_worldState.day} complete.");
+                officeUI.SetResultText(UiText.Format("day.complete", _worldState.day));
 
             Debug.Log($"[GameManager] <<< Exiting HandleDayCompleted (no results panel, going to {(ending != null ? "the title scene" : "Home")} directly).");
             next();
@@ -561,7 +564,7 @@ public sealed class GameManager : MonoBehaviour
         if (_gameConfig == null)
         {
             bool simpleCorrect = inst.trueEra == chosenEra;
-            officeUI.SetResultText(simpleCorrect ? "✅ Correct" : "❌ Wrong");
+            officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
             Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();
             return;
@@ -637,7 +640,7 @@ public sealed class GameManager : MonoBehaviour
         {
             bool simpleCorrect = accepted == inst.ShouldAccept;
             if (officeUI != null)
-                officeUI.SetResultText(simpleCorrect ? "✅ Correct" : "❌ Wrong");
+                officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
             Debug.Log($"[GameManager] <<< Exiting HandleDecision (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();
             return;

@@ -232,7 +232,10 @@ public static class Looks
     public static readonly IReadOnlyList<LookSlot> Slots =
         new[] { LookSlot.Outfit, LookSlot.Hair, LookSlot.FacialHair, LookSlot.Headwear, LookSlot.Accessory };
 
-    /// <summary>The player-facing name of a slot.</summary>
+    /// <summary>The UI string key of a slot's player-facing word ("slot.Headwear"); the words live in world_source.json ui.strings (piece 6).</summary>
+    public static string SlotKey(LookSlot slot) => "slot." + slot;
+
+    /// <summary>A slot's English name in checks and messages for content authors (the player reads SlotKey's word).</summary>
     public static string SlotLabel(LookSlot slot)
     {
         switch (slot)

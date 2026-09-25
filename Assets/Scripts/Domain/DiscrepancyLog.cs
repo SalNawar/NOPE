@@ -147,31 +147,27 @@ public sealed class Discrepancy
     /// <summary>Where the tell was stated: DocumentField (papers), Answer (the traveller said it) or Appearance (the traveller wears it).</summary>
     public EvidenceKind source;
 
-    /// <summary>Player-facing report line ("CAPITAL INCORRECT — traveller said: ..."), naming where the tell was stated.</summary>
-    public string Summary
+    /// <summary>The UI string key of this deviation's report line (ReportKeyFor).</summary>
+    public string ReportKey => ReportKeyFor(provedBy, source);
+
+    /// <summary>The value the statement is held against: the expected or recorded value, or the place the stated value belongs to.</summary>
+    public string ReportOther => provedBy == DiscrepancyProof.ForeignOrigin ? actualOrigin : expectedValue;
+
+    /// <summary>
+    /// The UI string key of a deviation line: "deviation." + claimMismatch /
+    /// foreignOrigin / recordMismatch + "." + said (an answer), worn (a garment
+    /// the traveller wears) or papers (any other statement). The English templates live in world_source.json
+    /// ui.strings ({0} = the category word, {1} = the stated value, {2} = ReportOther).
+    /// </summary>
+    public static string ReportKeyFor(DiscrepancyProof proof, EvidenceKind statement)
     {
-        get
-        {
-            string what = ClueLabels.Report(category);
-            switch (provedBy)
-            {
-                case DiscrepancyProof.ForeignOrigin:
-                    return $"{what} INCORRECT — {Shown()} \"{documentValue}\", which belongs to {actualOrigin}";
-                case DiscrepancyProof.RecordMismatch:
-                    return $"{what} INCORRECT — {Stated()}: \"{documentValue}\"  /  agency records: \"{expectedValue}\"";
-                default:
-                    return $"{what} INCORRECT — {Stated()}: \"{documentValue}\"  /  expected: \"{expectedValue}\"";
-            }
-        }
+        string how = proof == DiscrepancyProof.ForeignOrigin ? "foreignOrigin"
+                   : proof == DiscrepancyProof.RecordMismatch ? "recordMismatch"
+                   : "claimMismatch";
+        string who = statement == EvidenceKind.Answer ? "said" : statement == EvidenceKind.Appearance ? "worn" : "papers";
+        return "deviation." + how + "." + who;
     }
 
-    /// <summary>Who stated the value, as a mismatch line names it.</summary>
-    private string Stated() =>
-        source == EvidenceKind.Answer ? "traveller said" : source == EvidenceKind.Appearance ? "traveller wears" : "papers";
-
-    /// <summary>Who showed the value, as an origin line names it.</summary>
-    private string Shown() =>
-        source == EvidenceKind.Answer ? "traveller said" : source == EvidenceKind.Appearance ? "traveller wears" : "papers show";
 }
 
 /// <summary>

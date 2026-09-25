@@ -1,29 +1,75 @@
 # The PC reacts to history: design (piece 6)
 
-*2026-09-24 · decisions made by Claude under Saleh's instruction "go with all pieces, don't stop" (2026-09-24), open to his review · branch `feat/ui-reacts` (stacked on pieces 2–5: `feat/identity-lies` → `feat/dialog-questions` → `feat/characters` → `feat/history-facts`)*
+*2026-09-24 · decisions made by Claude under Saleh's instruction "go with all pieces, don't stop" (2026-09-24), open to his review · branch `feat/ui-reacts` from `main` at `35fec38` (pieces 0–3, 5 and 7; piece 4 is built in parallel and is not on this branch); re-checked against that code and narrowed by Saleh's scope changes on 2026-09-25 (see the re-check section)*
 
 Saleh: "everything the bg of your pc the font color and style even approve and reject changes color and language everything".
 
 The office PC now belongs to the present that history produced. Piece 5 decides, each night, which country leads the Future. From the next morning the desk takes on that country's culture: the wallpaper, the window and taskbar colours, the fonts, Accept and Deny (colour, not position), the newspaper mastheads and a set of about 30 short labels in that country's language, with a small English gloss on every control that decides a case. The wallet is paid in the Future currency. Evidence never changes: papers, books, records and answers keep their canonical Latin values, so every comparison works exactly as before. Before any country leads, the desk keeps today's neutral XP look, which becomes one theme among nine.
 
-## Amendments from piece 7 (2026-09-25), read first
+## Re-check against the code, amendment A2 and the scope changes (2026-09-25), read first
 
-Piece 7 (the physical desk and the basic traveller wheel, `docs/superpowers/specs/2026-09-25-physical-desk-design.md`) lands before this piece and changes the surfaces this draft themes. Piece 6 re-decides the rows below before its plan; this draft's own lines are otherwise not edited.
+This section binds over every line below it. It records the implemented names this piece builds on (pieces 5 and 7 on `main` at `35fec38`; piece 4 is not on this branch), the decisions left open by piece 7, amendment A2 of `piece6_decisions.md`, and two scope changes Saleh made while the piece was being built. Where a line below disagrees, this section wins; the rest of the document keeps its original wording as the reviewed record.
 
-- **Surfaces** (U11 :27, the surfaces table :94-97): the intercom panel row goes. The traveller wheel (its ring buttons and centre slot), the speech bubble and the desk tooltip (one `OverlayCallout` component, two instances) are new overlay surfaces; themed or neutral is piece 6's decision (piece 7 builds them neutral).
-- **Theme roles 13, 17 and 18** (:297, :301-302): the intercom's `ActionButtonTemplate`, `IntercomPanel` and its title are gone. The wheel's ring buttons replace role 13; roles 17 and 18 have no target.
-- **Keys** (:492-494, :506, :508, :511, :528, :543, :743, :748, :756, :759); every player-visible string piece 7 adds or changes:
-  - `intercom.title` and `intercom.actionSample` go (with the flavour row at :748);
-  - `window.scanner` and `icon.scanner` read "Deviation Report" (the flavour rows :756 and :759 are translated again);
-  - `window.material` reads "Material Analysis";
-  - `compare.intercomLabel` becomes a traveller label, "Traveller · {0}";
-  - `desktop.back` ("< Office", :506) goes with the desktop's Back button; the taskbar's "< Desk" is a new key;
-  - `startmenu.power` ("Power", :511, flavour row :743) reads "Quit game"; "Turn off screen" is a new key;
-  - `results.unproven` (:528) ends "(log a deviation before denying)";
-  - new keys: the idle line "Waiting for the next traveller", the scan note "Drag papers onto the scanner to read them on the PC.", the wheel note "Click the traveller to talk and ask for papers.", and the four tooltip templates "Credits: {0}", "Day {0}", "Timeline stability: {0}", "{0}".
-- **Copy held in ScriptableObjects** (`DeskConfigSO.scanHint` and `wheelHint`, the `DeskReactionSO.tooltip` templates) is UI copy, not content and not diegetic evidence (Z4 covers documents, books and records), so it becomes keys under this draft's R2: piece 6 decides whether the fields then hold a key or move into the table. Its key walk must include these fields, which a walk of the builder and the code would not find.
-- **The apply walk** (:423) **and the completeness check** (:599): the desktop canvas is a World Space canvas, always active, under `OfficeRoot/CRTMonitor/ScreenAnchor`; the overlay canvas gains `TravellerWheel` and two `OverlayCallout`s (`SpeechBubble`, `DeskTooltip`); the world gains the scan and wheel notes (world TMP texts).
-- **Verification** (:1020): "READY, focus the monitor": READY no longer focuses; click the CRT.
+### Scope changes (Saleh, through the coordinator, 2026-09-25)
+
+The builder-built 2D booth in `OfficeScene.unity` is outdated: the game moves into Codex's hybrid 3D office (the `art` branch) in a separate step after this piece. So:
+
+- **S1 Scene-agnostic theming.** The theme applies to whatever UI in any loaded scene carries `ThemeTag` roles (the PC desktop canvas, and on the overlay canvas the newsletters, the traveller wheel, the desk tooltip and the speech bubble). Nothing in the theme system reads the 2D booth.
+- **S2 No booth-prop theming.** U11's booth poster, R12, the `TimelineReactiveSprite` blank-poster fix and the culture posters are deferred to the office move (new follow-up F13). Culture art is the wallpaper only (8 placeholder PNGs, not 16).
+- **S3 Minimal, existing-wins builder changes.** The builder stamps a `ThemeTag` on the UI it creates (and on the existing objects of those names), and creates only the few new objects this piece needs (the verdict and idle strips, the Accept/Deny glyph bars, the Settings window's language choice). R16 (complete builder authority: colours from theme data, the XP constants and colour literals removed, §2.12's drift table enforced by the builder) is deferred to the office move (F14). What the player sees does not depend on it: the runtime applier sets every tagged graphic from the active theme, the neutral one included, so the neutral theme is the one source of the look at runtime; the builder's literals only seed the objects it creates in the editor.
+- **S4 No 2D-scene verification.** `OfficeScene.unity` is not rebuilt or committed by this piece, and there is no play-mode run and no screenshot of it. Unity verification is scene-independent: compile, the EditMode suite, Generate World twice (idempotent) and the validator (with the contrast check), days 1–3 generation unchanged against a baseline dumped before the piece, and an editor-only check that each culture's font chain resolves on this machine, that `HasCharacters` covers its labels, and that the Arabic labels shape. §6 steps 2, 4 and 6–11 move to the real office after the move. Until the office's UI carries tags, the committed 2D scene shows exactly today's look.
+
+### Amendment A2
+
+The live `OfficeScene.unity` on `main` is builder-built; Codex's sprite skins exist only in `OfficeScene_HybridArt.unity`, which this piece never modifies. Amendment A1's "skinned" role and its baked-word replacements do not apply.
+
+### Binding table: the names this piece uses
+
+| # | Piece 5, as implemented | Use |
+|---|---|---|
+| C1 | `WorldState.history.leaderId` ("" = no leader), `history.ranking` | nothing at runtime (the theme follows the cue) |
+| C2 | Domain `CultureCue` (`Prefix`, `Format`, `TryParse`); each nation's generated `NationSO.leaderEffect` (channel UI, source prefix `history:leader`) | `CultureCue.Pick` added here; the service listens on `EffectChannel.UI` |
+| C3 | `HistoryService.RebuildLeaderEffect(WorldState, ContentLibrarySO, int)`, private | made public (the one adaptation), called by `RunManager.ContinueRun` (Z5) |
+| C4 | `HistoryService.ForceLeader(world, lib, nationId)` and the debug panel's History buttons | testing |
+| C6 | `lib.BuildWorldFacts(history).Get(leaderId, lib.FutureEra.id, ClueCategory.Currency)` | the wallet word |
+| C7 | `private static ContentLibrarySO.FillFacts(FactTable, IEnumerable<NationEraProfileSO>, HistoryState)` | the `MarkChanged` call (R14) |
+
+Piece 3, as implemented: `ClueLabels.Report` (replaced by `ClueLabels.Key`), `Discrepancy.source`, `EvidenceKind.Answer`, `CompareController.ShowAlreadyDocumented`, `PagedRowsWindow.FillRow`, `TranscriptWindowController`, `InterviewLines.backLabel` ("< Back" on the wheel is content).
+
+**Piece 4 is not on this branch** (it is built in parallel). So: no `Looks.SlotKey` and no `slot.*` keys; no `EvidenceKind.Appearance`, so six deviation templates (`deviation.{claimMismatch,foreignOrigin,recordMismatch}.{papers,said}`), not nine; no `DiegeticArt`/`DiegeticOverlay` roles; `CompareController` keeps its private equality (piece 4 replaces it with `DiscrepancyLog.ValuesMatch`, which stays `internal`: `History.IsRevised` is in the same assembly); the generator writes the library's culture arrays with its own `SerializedProperty` code (piece 4's `SerializedArrays` is not here); no `PixelShapes` is needed (no poster). When piece 4 merges, the generator's key check asks for the `.wears` templates by itself (it walks every `EvidenceKind` a statement can have), and its portrait layers need diegetic tags.
+
+### Piece 7's surfaces, decided
+
+The desktop is a World Space canvas named `Canvas` under `OfficeRoot/CRTMonitor/ScreenAnchor` (1440 × 1080 units, always active); `OfficeOverlayCanvas` holds the newsletters, `TravellerWheel` (`Catcher`, `Ring`, `ActionButtonTemplate`), and the two `OverlayCallout`s `SpeechBubble` and `DeskTooltip`. The intercom panel, `BackToOfficeButton` and `desktop.back` are gone; the taskbar has `DeskButton` ("< Desk"); the Start menu holds Settings, Turn off screen and Quit game.
+
+- **Wheel choices** are themed (`WheelButton`, the accent colours); their labels are interview content and stay English.
+- **The desk tooltip** is themed (`Tooltip`, note and ink). Its templates become keys (`tooltip.credits` "{1}: {0}", `tooltip.day` "Day {0}", `tooltip.stability` "Timeline stability: {0}", `tooltip.value` "{0}"; `{0}` is the prop's readout, `{1}` the wallet word), so the till names the Future currency.
+- **The speech bubble is diegetic** (`DiegeticBubble`): it shows what the traveller says, which is spoken evidence (Z4), like the transcript rows.
+- **The wheel's click catcher** is `ClickCatcher` (transparent in every theme).
+- **The idle line** ("Waiting for the next traveller", white 80 pt bold on the wallpaper) gets a strip like the verdict line (R18 extended): one role, `ScreenStrip`, for both strips and both texts. Without it a light wallpaper (Japan's `#E9DFC8`) would make it unreadable, and U10 allows no by-eye exemption.
+- **Copy held in ScriptableObjects becomes keys** (R2): `DeskConfigSO.scanHint`/`wheelHint` become `scanHintKey`/`wheelHintKey` (`desk.scanHint`, `desk.wheelHint`) and `DeskReactionSO.tooltip` becomes `tooltipKey`; `Desk_Default.asset` and the four reaction assets with tooltips are migrated in the same commit. The two notes are world texts on the booth: English (Full tier), never tagged (the booth is not themed).
+
+### Roles (replaces the §2.5 table)
+
+`ThemeRoleId`, in order: `Desktop`, `ScreenStrip`, `Taskbar`, `TaskbarGloss`, `StartButton`, `Tray`, `WindowBody`, `TitleBar`, `TitleGloss`, `Button`, `CloseButton`, `AcceptButton`, `DenyButton`, `WheelButton`, `SearchButton`, `DesktopIcon`, `DeskButton`, `Panel` (the runtime text fallback), `ClaimStrip`, `Alert`, `StickyNote`, `CompareBar`, `CompareMatch`, `CompareMismatch`, `CompareNeutral`, `SelectionHighlight`, `StartMenu`, `MenuEntry`, `QuitEntry`, `NewsletterBorder`, `Newsletter`, `NewsletterButton`, `DeskDim`, `InputField`, `InputPlaceholder`, `Tooltip`, `ClickCatcher`; then the diegetic roles `DiegeticPaper`, `DiegeticPhoto` (the photo box and its "PHOTO" label), `DiegeticRow` (document, record and transcript rows, the record's origin), `DiegeticLabel`, `DiegeticNote`, `DiegeticBacking`, `DiegeticBookRow`, `DiegeticBubble`. `ThemeRoles.IsDiegetic` is true from `DiegeticPaper` on. The roles 13, 16, 17 and 18 of §2.5 (intercom action button, `BackToOfficeButton`, intercom panel and title) are replaced by `WheelButton`, `DeskButton`, the fallback `Panel` and nothing. The neutral values are the committed scene's colours read at `35fec38` (hex rounding within 1/510 per channel); `ui.neutral` in `world_source.json` lists them. Every `Palette.Resolve` also runs `Palette.Missing`: a theme without a colour for a chrome role (or, for neutral, a diegetic role) is a generation error.
+
+### Keys (replaces the §2.8 and §2.12 rows where they differ)
+
+- Flavour set, still 34: `intercom.title` goes; `desktop.back` becomes `taskbar.desk` "< Desk" (glossed below); `startmenu.power` becomes `startmenu.quit` "Quit game"; `startmenu.screenOff` "Turn off screen" is new; `window.scanner` and `icon.scanner` read "Deviation Report" (the builder's titles since piece 7). Their translations are in `world_source.json` `ui.languages`.
+- Piece 7's strings: `idle.waiting` "Waiting for the next traveller", `desk.scanHint`, `desk.wheelHint`, the four `tooltip.*`, `wheel.sample` "Choice"; `compare.intercomLabel` is `compare.travellerLabel` "Traveller · {0}".
+- `results.unproven` reads "Undocumented denials: {0} (log a deviation before denying)" (the implemented wording); `citation.unproven` is the implemented "Deviation denied without documented evidence. Log a deviation from the papers or the traveller's answers before denying."; `scanner.idle` is the implemented three-sentence text.
+- The runtime text fallback's strings are keys like every other UI string (`fallback.*`).
+
+### Other corrections
+
+- **Label fit at runtime.** The label policy of §2.10 and R21 (no wrapping, auto-size from `labelMinScale × size` to `size`) moves from the builder to the applier: a `ThemeTag` with `shrinkToFit` (every keyed label, and the tray money, the verdict line and the book rows' label) is fitted when the theme is applied, from the size it had when first themed. So it holds in any scene (S1).
+- **`ThemeSO`** has no `boothPoster` (S2). **Line endings**: many files listed as LF in §2.1 are CRLF on `main` now; each file keeps its own.
+- **The editor font check replaces the play-mode spike** (§6 step 1): if an Arabic chain did not resolve, Egypt and Iraq would take the `ar-Latn` fallback of R6. The check passed with real Arabic (see the verification record), so no transliteration is authored.
+- **Arabic fonts (replaces §2.12's Egypt/Iraq row):** Tahoma, Arial, Geeza Pro (macOS), Noto Sans Arabic (Linux). Segoe UI is dropped for Arabic: the label sheets showed its final reh and zay (U+FEAE, U+FEB0) drawn displaced under TextMeshPro's per-glyph layout, while Tahoma and Arial draw every shaped label correctly. Germany keeps Segoe UI (Latin only).
+- **Implemented shapes that differ from §2.4–§2.11:** `Palette.Missing` and `Palette.DiegeticPairs` (the shared evidence-text pairs of the generator and the validator) are added; `CultureChoice.NeedsOsFont` holds the "labels need an OS font" rule both use; `PaletteEntry` records `hasFill`/`hasInk`; `ThemeTag.Configure` takes a sixth argument, `shrinkToFit`; `RuntimeFonts.Resolve` returns a small `Result` struct (asset, name, covers, missing, tried); the service applies to every loaded scene when `GameManager.Start` refreshes and to the loaded scene on `sceneLoaded`, and does not refresh the scene's other receivers (their only use was the deferred poster, S2); the neutral `Panel` colour is the text fallback's (`#171C29FA`), the intercom's being gone.
+- **§1.7** loses its builder-made items (the button faces, the Acknowledge label size and the book title size stay as committed; only the colours of those faces follow the neutral theme at runtime). The runtime neutral look differs from the committed scene only by §1.7's rings, strips, glyphs and label fit, and by the three `#E6E6EB`/`#F2F2F2` button faces becoming the XP face `#ECE9D8`.
+
+The piece-7 amendment block that stood here (surfaces, roles 13/17/18, keys, SO-held copy, the apply walk, READY) is resolved by the section above.
 
 Line numbers refer to `efe385d` on `feat/identity-lies` (piece 2 implemented). Pieces 3, 4 and 5 land in between and move lines; the piece-6 plan re-reads every file before anchoring an edit, and the implemented code wins over this text. Names from piece 3 are its spec's (`scratchpad/specs/2026-09-24-dialog-questions-design.md`, committed at `fbf4905`). Pieces 4 and 5 were drafted in parallel with this spec: names from them are their draft specs' (`scratchpad/specs/2026-09-24-characters-design.md`, `scratchpad/specs/2026-09-24-history-facts-design.md`), within their decision files (`piece4_decisions.md`, `piece5_decisions.md`). §2.2 states the piece-5 contract exactly as piece 5's §2.16 offers it, and the plan's first task fills in the implemented names (§2.2 binding tables).
 
@@ -1116,3 +1162,27 @@ Every finding was checked before it was applied: against the code and `OfficeSce
 Also corrected while verifying: the header now names pieces 4's and 5's draft specs; `HoverUIOutline.cs` (LF) and `DiscrepancyLogTests.cs` (CRLF) join the line-ending lists; `CaseFactory.cs` and `TimelineService.cs` move to "checked and not changed".
 
 The plan's review should append its findings here.
+
+
+## Implementation and verification record (2026-09-25)
+
+Built on `feat/ui-reacts` from `main` at `35fec38`, under the scope changes S1–S4 above. Commits, in order: the spec promotion (`45f50b9`); Visuals colours, contrast, palettes and roles (`3a2e4dc`); Visuals strings, Arabic shaper, choices and the wallpaper painter (`a1c0173`); Domain culture pick, revised facts and report keys (`64f6975`); the content, generator and validator (`70b19cc`); the runtime theme service, strings and fonts (`1099e7f`); the builder's tags, strips, glyphs and Settings window (`3379996`); the Arabic font fix (`aa6bbc9`); the generated themes, tables and wallpapers (`d447bba`); the review fixes (`3e6862c`); this record.
+
+**Offline**: every commit compiles (`compile_check_p5.py`: 0 errors); the reflection runner passes 654 tests (539 on `main`).
+
+**Unity 6000.4.11f1, scene-independent** (a temporary `_TimeDeskP6Automation`, deleted; its report is `scratchpad/p6_automation_report.txt`), final run at `3e6862c`, 38 checks, all PASS:
+- Generate World twice: the first run creates the 9 themes, 7 string tables and 8 placeholder wallpapers; the second changes no file and paints nothing; `xp_bliss.png` is untouched; the committed generated content equals a fresh generation. Validate Content Library: no issues (the culture check with contrast included).
+- A culture seed that breaks contrast (Egypt's approve set to `#F0F0F0`) aborts Generate World with "Culture 'egypt' theme: Role 'AcceptButton': ink on fill is 1.1:1, needs 4.5:1" and writes nothing; the source is restored byte for byte.
+- The library lists the neutral theme, the 8 culture themes in nation order and the 7 tables; the neutral theme reproduces the committed office colours (Accept `#296B38`, Deny `#752929`, book rows `#FFFFFF0A`, desk dim `#0F121A8C`, taskbar `#2157DB`) and the new rings; China approves in red and mismatches in slate; only the neutral theme holds diegetic colours.
+- Days 1–3 case generation (seeds 12345 and 999, 60 travellers) is byte-identical to a baseline dumped before any piece-6 code.
+- Every UI key the code and the desk config name (132) is in the English table.
+- Per culture, the lookup gives the culture's labels with the English gloss below Accept and in brackets after MATCH (Britain: English, no gloss), numbers filled in the invariant culture.
+- Fonts on the development machine: Egypt and Iraq `tahoma.ttf`, Greece the runtime LiberationSans, Italy `pala.ttf`, China `msyh.ttc`, Japan `YuGothR.ttc`, Britain `georgia.ttf`, Germany `segoeui.ttf`; each draws every label, gloss and number character (`HasCharacters` with its fallback, nothing missing); every Arabic label shapes into presentation forms the font draws. The tracked `LiberationSans SDF - Fallback.asset` gains no character (its feature table churns on load, as before; reverted).
+- Label sheets rendered in an unsaved empty scene, one per theme (`scratchpad/p6_labels_{neutral,egypt,iraq,greece,italy,china,japan,britain,germany}.png`), read by eye: Arabic letters join and read right to left (the numbers inside stay left to right), Greek, Chinese, Japanese, Italian and German render with no missing glyph, and the glosses sit under the decision labels. A native reader should still check the Arabic and the translations (§7).
+- EditMode suite: 782 passed, 2 failed, both in the third-party `com.besty.unity-skills` package: the known `PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly` and `SkillsModeManagerTests.Migration_RepeatLoad_IsIdempotent_NoDuplicateAuditEvent` (EditorPrefs state; it passed in the previous run at the same piece-6 code).
+
+**Not run (S4, Saleh's instruction)**: Build Office UI was not run and `OfficeScene.unity` is unchanged, so the builder's new code (tags, strips, glyphs, the Settings window, the completeness check) compiles but has not executed; no play mode, so the in-game checks of §6 steps 2, 4 and 6–11 (the themed desk per culture, the hover rings, Always English, Continue, direct play, a missing font, the revised marker in a book) wait for the new office.
+
+### Self-review (2026-09-25)
+
+The whole diff (`main..HEAD`) was re-read as a reviewer. Applied: a role name must be exactly one enum name (`Enum.TryParse` also accepted "ScreenStrip, Taskbar", which ORs to another role, and numbers; a test row covers it); the font sample uses the gloss knob instead of a literal 60; `UiText`'s edit-time English lookup is rebuilt when Generate World replaces the table (the builder could have baked stale text within one editor session); `DesktopShell`'s docs; FEATURES now says the committed 2D office is not rebuilt, and states the compare and wallpaper behaviour per theme; `docs/UI_ART_CONTRACT.md` records the text-free rule and the wallpaper paths. Checked and kept: Continue's `RebuildLeaderEffect` is safe for generation (the leader effect holds only its cue op); `UiText` and the theme service are Unity-null-safe; evidence (document, book, record, transcript rows and the bubble) is never recoloured or refonted (only a book row label's shrink-to-fit applies, for "[revised]"). Left open: the builder's code path is unexecuted (above); the legacy era-pick path's "(No document)" and the ledger's "Unknown" name stay literal (F10, O1(c)); the "PHOTO" placeholder label in the document's photo box is 3.1:1 and is left out of the contrast check (diegetic, removed by piece 4); OS-font licensing and the macOS/Linux font names are unverified (§7).

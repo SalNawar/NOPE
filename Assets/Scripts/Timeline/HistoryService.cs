@@ -166,9 +166,11 @@ public static class HistoryService
     /// The idempotent emission step: removes the leader effect entries, then
     /// activates the leader's effect (NationSO.leaderEffect, permanent, from
     /// <paramref name="startDay"/>), so the UI cue culture:{id} always matches
-    /// history.leaderId. A leader without an effect logs a warning.
+    /// history.leaderId. A leader without an effect logs a warning. Also called
+    /// by RunManager.ContinueRun for today, so a save without the day's culture
+    /// cue themes correctly (piece 6 Z5).
     /// </summary>
-    private static void RebuildLeaderEffect(WorldState world, ContentLibrarySO lib, int startDay)
+    public static void RebuildLeaderEffect(WorldState world, ContentLibrarySO lib, int startDay)
     {
         TimelineService.RemoveEffectsFrom(world, LeaderSourcePrefix);
 

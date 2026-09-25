@@ -29,8 +29,8 @@ public sealed class InteractionFeedbackSO : ScriptableObject
     public float worldOutlineWidth = 0.05f;
 
     /// <summary>
-    /// Outline colour for desktop UI. XP-style hover amber by default: it reads
-    /// on both the light windows and the blue wallpaper/taskbar (white would vanish on paper).
+    /// Outline colour for desktop UI that carries no theme tag (the Title and
+    /// Home scenes); themed UI uses its theme's two rings (piece 6 R7).
     /// </summary>
     public Color uiOutlineColor = new Color(0.98f, 0.72f, 0.2f, 1f);
 

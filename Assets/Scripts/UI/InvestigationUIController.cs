@@ -97,7 +97,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Papers whose window already has a desktop icon this case.</summary>
     private readonly HashSet<int> _iconedDocuments = new();
     private bool _booksBuilt;
-    private string _directives = "Directives: all destinations cleared.";
+    private string _directives = string.Empty;
 
     /// <summary>Today's facts (set by GameManager; the books render these rows).</summary>
     private FactTable _facts;
@@ -222,14 +222,14 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (!_discrepancies.Add(proof))
         {
             if (compareController != null)
-                compareController.ShowAlreadyDocumented(ClueLabels.Report(proof.category));
+                compareController.ShowAlreadyDocumented(UiText.Category(proof.category));
             return;
         }
 
         RefreshScannerText();
 
         if (compareController != null)
-            compareController.ShowDeviation(proof.Summary);
+            compareController.ShowDeviation(UiText.Deviation(proof));
 
         if (scannerWindow != null)
             scannerWindow.Open();
@@ -269,19 +269,16 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (_discrepancies.Count == 0)
         {
-            scannerText.text =
-                "No deviations documented.\n\n" +
-                "Compare a document field, a traveller's answer or a garment they wear against the claimed place's reference entry, " +
-                "the entry it really belongs to, or the Citizen Record to log evidence.";
+            scannerText.text = UiText.Get("scanner.idle");
             return;
         }
 
         var sb = new StringBuilder();
         foreach (Discrepancy d in _discrepancies.Items)
-            sb.AppendLine("• " + d.Summary);
+            sb.AppendLine(UiText.Format("list.bullet", UiText.Deviation(d)));
 
         sb.AppendLine();
-        sb.AppendLine($"{_discrepancies.Count} deviation(s) documented. Denial is justified.");
+        sb.AppendLine(UiText.Format("scanner.summary", _discrepancies.Count));
         scannerText.text = sb.ToString();
     }
 
@@ -296,12 +293,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     private static string BuildDirectives(IReadOnlyList<TravelRuleSO> rules)
     {
         if (rules == null || rules.Count == 0)
-            return "Directives: all destinations cleared today.";
+            return UiText.Get("directives.none");
 
-        var sb = new StringBuilder("Directives (deny violators):\n");
+        var sb = new StringBuilder(UiText.Get("directives.header") + "\n");
         foreach (TravelRuleSO r in rules)
             if (r != null)
-                sb.AppendLine("• " + r.Summary());
+                sb.AppendLine(UiText.Format("list.bullet", r.Summary()));
         return sb.ToString();
     }
 
@@ -337,7 +334,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (idleScreen != null) idleScreen.SetActive(false);
 
         if (claimText != null)
-            claimText.text = inst != null ? $"{inst.visitorDisplayName}\n\"{inst.claimLine}\"" : string.Empty;
+            claimText.text = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
 
         if (directivesText != null)
             directivesText.text = _directives;
@@ -375,7 +372,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                 _docWindows.Add(clone.gameObject);
                 _caseDocuments.Add(new CaseDocument
                 {
-                    name = doc != null && doc.template != null ? doc.template.displayName : "Document",
+                    name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
                     holder = inst.visitorGivenName,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
@@ -547,7 +544,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             return;
 
         Garment g = garments[garmentIndex];
-        compareController.Select($"Traveller · {Looks.SlotLabel(g.Slot)}", g.Label, null,
+        compareController.Select(UiText.Format("compare.travellerLabel", UiText.Slot(g.Slot)), g.Label, null,
                                  CompareEvidence.ForAppearance(Looks.EvidenceCategory, g.Value, g.IsTell));
     }
 
@@ -689,7 +686,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (_fallbackClaim != null)
             _fallbackClaim.text = inst != null
-                ? $"{inst.visitorDisplayName}\n\"{inst.claimLine}\"\n\n{_directives}"
+                ? UiText.Format("fallback.claim", inst.visitorDisplayName, inst.claimLine, _directives)
                 : string.Empty;
 
         if (_fallbackBody != null)
@@ -708,40 +705,40 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (inst != null)
         {
-            sb.AppendLine("— DOCUMENTS PRESENTED —");
+            sb.AppendLine(UiText.Get("fallback.documents"));
             foreach (DocumentInstance doc in inst.documents)
             {
-                sb.AppendLine($"[{(doc.template != null ? doc.template.displayName : "Document")}]");
+                sb.AppendLine(UiText.Format("fallback.document", doc.template != null ? doc.template.displayName : UiText.Get("document.untitled")));
                 foreach (DocumentField f in doc.fields)
-                    sb.AppendLine($"    {f.label}: {f.value}");
+                    sb.AppendLine(UiText.Format("fallback.field", f.label, f.value));
             }
             sb.AppendLine();
 
-            sb.AppendLine("— AGENCY RECORD —");
+            sb.AppendLine(UiText.Get("fallback.record"));
             CitizenRecord record = registry != null ? registry.Find(inst.visitorGivenName) : null;
             if (record == null)
             {
-                sb.AppendLine("    No record on file.");
+                sb.AppendLine(UiText.Get("fallback.noRecord"));
             }
             else
             {
-                sb.AppendLine($"    Name: {record.fullName}");
-                sb.AppendLine($"    Born: {record.birthDate}");
-                sb.AppendLine($"    Origin: {record.origin}");
+                sb.AppendLine(UiText.Format("fallback.recordName", record.fullName));
+                sb.AppendLine(UiText.Format("fallback.recordBorn", record.birthDate));
+                sb.AppendLine(UiText.Format("fallback.recordOrigin", record.origin));
             }
             sb.AppendLine();
 
             if (inst.look != null && inst.look.Garments.Count > 0)
             {
-                sb.AppendLine("— TRAVELLER'S DRESS —");
+                sb.AppendLine(UiText.Get("fallback.dress"));
                 foreach (Garment g in inst.look.Garments)
-                    sb.AppendLine($"    {Looks.SlotLabel(g.Slot)}: {g.Label} ({g.Value})");
+                    sb.AppendLine(UiText.Format("fallback.garment", UiText.Slot(g.Slot), g.Label, g.Value));
                 sb.AppendLine();
             }
 
             if (day != null)
             {
-                sb.AppendLine("— INTERVIEW —");
+                sb.AppendLine(UiText.Get("fallback.interview"));
                 string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
                 foreach (InterviewQuestion q in day.Questions)
                 {
@@ -749,7 +746,7 @@ public sealed class InvestigationUIController : MonoBehaviour
                     if (answer == null)
                         continue;
                     sb.AppendLine(InterviewScript.PromptLine(q, eraId).Text);
-                    sb.AppendLine($"    {inst.visitorGivenName}: {InterviewScript.AnswerLine(q, eraId, answer).Text}");
+                    sb.AppendLine(UiText.Format("fallback.answer", inst.visitorGivenName, InterviewScript.AnswerLine(q, eraId, answer).Text));
                 }
                 sb.AppendLine();
             }
@@ -757,12 +754,12 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (lib != null && lib.ReferenceBooks.Count > 0)
         {
-            sb.AppendLine("— REFERENCE (claimed place) —");
+            sb.AppendLine(UiText.Get("fallback.reference"));
             string nationId = inst != null && inst.claimedNation != null ? inst.claimedNation.id : null;
             string eraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null;
             foreach (ReferenceBookSO book in lib.ReferenceBooks)
                 if (book != null)
-                    sb.AppendLine($"{book.displayName}: {(facts != null ? facts.Get(nationId, eraId, book.category) : null) ?? "(no entry)"}");
+                    sb.AppendLine(UiText.Format("fallback.bookEntry", book.displayName, (facts != null ? facts.Get(nationId, eraId, book.category) : null) ?? UiText.Get("fallback.noEntry")));
         }
 
         return sb.ToString();
@@ -785,18 +782,33 @@ public sealed class InvestigationUIController : MonoBehaviour
         Stretch((RectTransform)_fallbackPanel.transform, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.92f));
         Image bg = _fallbackPanel.AddComponent<Image>();
         bg.color = new Color(0.09f, 0.11f, 0.16f, 0.98f);
+        Tag(_fallbackPanel, ThemeRoleId.Panel, ThemeTextKind.Body, null);
 
         _fallbackClaim = NewText(_fallbackPanel.transform, "Claim", 24, TextAlignmentOptions.TopLeft,
             new Vector2(0.04f, 0.78f), new Vector2(0.96f, 0.97f));
+        Tag(_fallbackClaim.gameObject, ThemeRoleId.Panel, ThemeTextKind.Body, null);
         _fallbackBody = NewText(_fallbackPanel.transform, "Body", 20, TextAlignmentOptions.TopLeft,
             new Vector2(0.04f, 0.16f), new Vector2(0.96f, 0.76f));
+        Tag(_fallbackBody.gameObject, ThemeRoleId.Panel, ThemeTextKind.Body, null);
 
-        Button accept = NewButton(_fallbackPanel.transform, "AcceptButton", "ACCEPT (approve travel)",
+        Button accept = NewButton(_fallbackPanel.transform, "AcceptButton", "fallback.accept", ThemeRoleId.AcceptButton,
             new Vector2(0.06f, 0.04f), new Vector2(0.48f, 0.13f), new Color(0.15f, 0.4f, 0.2f, 1f));
-        Button deny = NewButton(_fallbackPanel.transform, "DenyButton", "DENY (refuse travel)",
+        Button deny = NewButton(_fallbackPanel.transform, "DenyButton", "fallback.deny", ThemeRoleId.DenyButton,
             new Vector2(0.52f, 0.04f), new Vector2(0.94f, 0.13f), new Color(0.45f, 0.16f, 0.16f, 1f));
 
         WireDecisionButtons(accept, deny);
+
+        // The panel is built after the scene loaded: theme it now.
+        if (CultureThemeService.Instance != null)
+            CultureThemeService.Instance.ApplyTo(_fallbackPanel);
+    }
+
+    /// <summary>Tags a fallback graphic with its theme role (a label key only for keyed button labels).</summary>
+    private static void Tag(GameObject go, ThemeRoleId role, ThemeTextKind kind, string labelKey)
+    {
+        ThemeTag tag = go.AddComponent<ThemeTag>();
+        bool isText = go.TryGetComponent(out TMP_Text _);
+        tag.Configure(role, isText ? ThemePart.Ink : ThemePart.Fill, labelKey, FontStyles.Normal, kind, !string.IsNullOrEmpty(labelKey));
     }
 
     // -----------------------------
@@ -829,17 +841,19 @@ public sealed class InvestigationUIController : MonoBehaviour
         return t;
     }
 
-    private static Button NewButton(Transform parent, string name, string label, Vector2 min, Vector2 max, Color color)
+    private static Button NewButton(Transform parent, string name, string labelKey, ThemeRoleId role, Vector2 min, Vector2 max, Color color)
     {
         GameObject go = NewUI(name, parent);
         Stretch((RectTransform)go.transform, min, max);
         Image img = go.AddComponent<Image>();
         img.color = color;
+        Tag(go, role, ThemeTextKind.Button, null);
         Button btn = go.AddComponent<Button>();
         btn.targetGraphic = img;
 
         TMP_Text t = NewText(go.transform, "Label", 22, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
-        t.text = label;
+        t.text = UiText.Get(labelKey);
+        Tag(t.gameObject, role, ThemeTextKind.Button, labelKey);
         return btn;
     }
 }

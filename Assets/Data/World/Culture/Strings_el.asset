@@ -1,0 +1,159 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 567a3555c681439ea7087bd38a206262, type: 3}
+  m_Name: Strings_el
+  m_EditorClassIdentifier: Assembly-CSharp::UiStringTableSO
+  language: el
+  rightToLeft: 0
+  entries:
+  - key: accept
+    text: "\u0395\u0393\u039A\u03A1\u0399\u03A3\u0397"
+    gloss: 0
+    tier: 0
+  - key: deny
+    text: "\u0391\u03A0\u039F\u03A1\u03A1\u0399\u03A8\u0397"
+    gloss: 0
+    tier: 0
+  - key: taskbar.start
+    text: "\u03AD\u03BD\u03B1\u03C1\u03BE\u03B7"
+    gloss: 0
+    tier: 0
+  - key: startmenu.settings
+    text: "\u03A1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2"
+    gloss: 0
+    tier: 0
+  - key: startmenu.screenOff
+    text: "\u03A3\u03B2\u03AE\u03C3\u03B9\u03BC\u03BF \u03BF\u03B8\u03CC\u03BD\u03B7\u03C2"
+    gloss: 0
+    tier: 0
+  - key: startmenu.quit
+    text: "\u0388\u03BE\u03BF\u03B4\u03BF\u03C2 \u03B1\u03C0\u03CC \u03C4\u03BF \u03C0\u03B1\u03B9\u03C7\u03BD\u03AF\u03B4\u03B9"
+    gloss: 0
+    tier: 0
+  - key: briefing.masthead
+    text: "\u0397 \u03A7\u03A1\u039F\u039D\u0399\u039A\u0397 \u0395\u03A6\u0397\u039C\u0395\u03A1\u0399\u0394\u0391"
+    gloss: 0
+    tier: 0
+  - key: briefing.start
+    text: "\u0395\u039D\u0391\u03A1\u039E\u0397 \u0392\u0391\u03A1\u0394\u0399\u0391\u03A3"
+    gloss: 0
+    tier: 0
+  - key: results.masthead
+    text: "\u0397\u039C\u0395\u03A1\u039F\u039B\u039F\u0393\u0399\u039F \u0392\u0391\u03A1\u0394\u0399\u0391\u03A3
+      \u2014 \u0391\u03A0\u039F\u0393\u0395\u03A5\u039C\u0391\u03A4\u0399\u039D\u0397
+      \u0395\u039A\u0394\u039F\u03A3\u0397"
+    gloss: 0
+    tier: 0
+  - key: results.goHome
+    text: "\u03A3\u03A0\u0399\u03A4\u0399"
+    gloss: 0
+    tier: 0
+  - key: records.title
+    text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF \u03A0\u03BF\u03BB\u03B9\u03C4\u03CE\u03BD"
+    gloss: 0
+    tier: 0
+  - key: records.search
+    text: "\u0391\u039D\u0391\u0396\u0397\u03A4\u0397\u03A3\u0397"
+    gloss: 0
+    tier: 0
+  - key: compare.match
+    text: "\u03A4\u0391\u0399\u03A1\u0399\u0391\u0396\u0395\u0399"
+    gloss: 0
+    tier: 0
+  - key: compare.mismatch
+    text: "\u0394\u0395\u039D \u03A4\u0391\u0399\u03A1\u0399\u0391\u0396\u0395\u0399"
+    gloss: 0
+    tier: 0
+  - key: citation.title
+    text: "\u0395\u0399\u0394\u039F\u03A0\u039F\u0399\u0397\u03A3\u0397 \u03A7\u03A1\u039F\u039D\u0399\u039A\u0397\u03A3
+      \u0391\u03A0\u039F\u039A\u039B\u0399\u03A3\u0397\u03A3"
+    gloss: 0
+    tier: 0
+  - key: citation.acknowledge
+    text: "\u0395\u03BB\u03AE\u03C6\u03B8\u03B7"
+    gloss: 0
+    tier: 0
+  - key: window.directives
+    text: "\u039F\u03B4\u03B7\u03B3\u03AF\u03B5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: window.scanner
+    text: "\u0391\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B1\u03C0\u03BF\u03BA\u03BB\u03AF\u03C3\u03B5\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: window.settings
+    text: "\u03A1\u03C5\u03B8\u03BC\u03AF\u03C3\u03B5\u03B9\u03C2"
+    gloss: 0
+    tier: 0
+  - key: icon.directives
+    text: "\u039F\u03B4\u03B7\u03B3\u03AF\u03B5\u03C2"
+    gloss: 0
+    tier: 0
+  - key: icon.scanner
+    text: "\u0391\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC \u03B1\u03C0\u03BF\u03BA\u03BB\u03AF\u03C3\u03B5\u03C9\u03BD"
+    gloss: 0
+    tier: 0
+  - key: icon.records
+    text: "\u039C\u03B7\u03C4\u03C1\u03CE\u03BF"
+    gloss: 0
+    tier: 0
+  - key: icon.internet
+    text: "\u0394\u03B9\u03B1\u03B4\u03AF\u03BA\u03C4\u03C5\u03BF"
+    gloss: 0
+    tier: 0
+  - key: icon.lexicon
+    text: "\u039B\u03B5\u03BE\u03B9\u03BA\u03CC"
+    gloss: 0
+    tier: 0
+  - key: icon.dialect
+    text: "\u0394\u03B9\u03AC\u03BB\u03B5\u03BA\u03C4\u03BF\u03C2"
+    gloss: 0
+    tier: 0
+  - key: icon.material
+    text: "\u03A5\u03BB\u03B9\u03BA\u03AC"
+    gloss: 0
+    tier: 0
+  - key: icon.notes
+    text: "\u03A3\u03B7\u03BC\u03B5\u03B9\u03CE\u03C3\u03B5\u03B9\u03C2"
+    gloss: 0
+    tier: 0
+  - key: icon.clueLog
+    text: "\u0395\u03BD\u03B4\u03B5\u03AF\u03BE\u03B5\u03B9\u03C2"
+    gloss: 0
+    tier: 0
+  - key: tray.day
+    text: "\u0397\u03BC\u03AD\u03C1\u03B1 {0}"
+    gloss: 0
+    tier: 0
+  - key: tray.stability
+    text: "\u03A3\u03C4\u03B1\u03B8\u03B5\u03C1\u03CC\u03C4\u03B7\u03C4\u03B1: {0:0}%"
+    gloss: 0
+    tier: 0
+  - key: taskbar.desk
+    text: "< \u0393\u03C1\u03B1\u03C6\u03B5\u03AF\u03BF"
+    gloss: 0
+    tier: 0
+  - key: briefing.title
+    text: "\u0397\u03BC\u03AD\u03C1\u03B1 {0} \u2014 \u03A0\u03C1\u03C9\u03B9\u03BD\u03AE
+      \u03B5\u03BD\u03B7\u03BC\u03AD\u03C1\u03C9\u03C3\u03B7"
+    gloss: 0
+    tier: 0
+  - key: results.title
+    text: "\u0397\u03BC\u03AD\u03C1\u03B1 {0} \u2014 \u0391\u03BD\u03B1\u03C6\u03BF\u03C1\u03AC
+      \u03B2\u03AC\u03C1\u03B4\u03B9\u03B1\u03C2"
+    gloss: 0
+    tier: 0
+  - key: briefing.newsHeader
+    text: "\u2014 \u0395\u0399\u0394\u0397\u03A3\u0395\u0399\u03A3 \u03A7\u03A1\u039F\u039D\u039F\u0393\u03A1\u0391\u039C\u039C\u0397\u03A3
+      \u2014"
+    gloss: 0
+    tier: 0

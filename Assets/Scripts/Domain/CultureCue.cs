@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 /// <summary>
 /// The UI-channel cue that carries the present culture: the timeline leader's
 /// generated effect broadcasts "culture:{nationId}" (piece 5 emits it, piece 6
@@ -24,5 +26,27 @@ public static class CultureCue
 
         nationId = id;
         return true;
+    }
+
+    /// <summary>
+    /// The culture a list of active UI cues selects: the first parsable culture
+    /// cue in list order, or null. <paramref name="matches"/> counts the cues
+    /// that parsed (the caller warns when more than one did).
+    /// </summary>
+    public static string Pick(IReadOnlyList<string> cues, out int matches)
+    {
+        matches = 0;
+        string first = null;
+        if (cues == null)
+            return null;
+
+        foreach (string cue in cues)
+        {
+            if (!TryParse(cue, out string id))
+                continue;
+            matches++;
+            first = first ?? id;
+        }
+        return first;
     }
 }

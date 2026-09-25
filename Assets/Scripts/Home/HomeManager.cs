@@ -179,7 +179,7 @@ public sealed class HomeManager : MonoBehaviour
         if (_world.money < spinCost)
         {
             Debug.Log($"[HomeManager] <<< Exiting HandleSpin — not enough credits ({_world.money} < {spinCost}).");
-            return "Not enough credits to spin.";
+            return $"Not enough {UiText.Currency(UiText.WalletForm.Inline)} to spin.";
         }
 
         IReadOnlyList<SlotOutcomeSO> outcomes = _lib != null ? _lib.SlotOutcomes : System.Array.Empty<SlotOutcomeSO>();
@@ -224,7 +224,7 @@ public sealed class HomeManager : MonoBehaviour
         Debug.Log($"[HomeManager] <<< Exiting HandleSpin (outcome='{outcome.displayName}', spinCost={spinCost}, moneyDelta={outcome.moneyDelta}, money={_world.money}).");
 
         return outcome.moneyDelta != 0
-            ? $"{line} ({outcome.moneyDelta:+0;-0} credits)"
+            ? $"{line} ({outcome.moneyDelta:+0;-0} {UiText.Currency(UiText.WalletForm.Inline)})"
             : line;
     }
 

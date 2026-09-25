@@ -205,7 +205,12 @@ public sealed class HoverHighlighter : MonoBehaviour
                 uiOutline = host.AddComponent<HoverUIOutline>();
             }
 
-            uiOutline.effectColor = settings.uiOutlineColor;
+            // Themed UI takes its theme's two rings; untagged UI (Title, Home) the settings' colour.
+            CultureThemeService theme = CultureThemeService.Instance;
+            bool rings = theme != null && theme.ActiveTheme != null && host.TryGetComponent(out ThemeTag _);
+            uiOutline.twoRings = rings;
+            uiOutline.effectColor = rings ? theme.ActiveTheme.ringDark : settings.uiOutlineColor;
+            uiOutline.outerColor = rings ? theme.ActiveTheme.ringLight : Color.clear;
             uiOutline.effectDistance = settings.uiOutlineDistance;
             uiOutline.useGraphicAlpha = false; // translucent rows would otherwise fade the outline
             uiOutline.enabled = on;

@@ -233,3 +233,33 @@ MonoBehaviour:
     carry:
       id: history.carry
       text: 'HISTORY: travellers brought {value} to {place}.'
+  cultureUi:
+    readingLanguage: en
+    glossPercent: 60
+    labelMinScale: 0.55
+    contrast:
+      text: 4.5
+      largeText: 3
+      glyph: 3
+      hint: 3
+      outline: 3
+      minTextFillAlpha: 0.7
+    latinFallbackFont: {fileID: 12800000, guid: e3265ab4bf004d28a9537516768c1c75, type: 3}
+  neutralTheme: {fileID: 11400000, guid: f032433ed1b73e54587158f6e2a9f58d, type: 2}
+  themes:
+  - {fileID: 11400000, guid: 05c9fef960155b04f9a1031bf36cdf02, type: 2}
+  - {fileID: 11400000, guid: 43b13b2e24c3ebc43bf6a697194ba40f, type: 2}
+  - {fileID: 11400000, guid: a746b164e71be2740a8e21b86e6dacac, type: 2}
+  - {fileID: 11400000, guid: 71efb6d6b9d4ee444b7883e8503ec995, type: 2}
+  - {fileID: 11400000, guid: eda503670e37ea2449655c141856bc10, type: 2}
+  - {fileID: 11400000, guid: ddf9246411686e74890e782d22e98f17, type: 2}
+  - {fileID: 11400000, guid: c1c7d5be86608c24987e864f34f1d7f7, type: 2}
+  - {fileID: 11400000, guid: 7b6dc1f731e2a6746aeeba3b93bceadb, type: 2}
+  stringTables:
+  - {fileID: 11400000, guid: 21f972943dd9bf646bbb5bb5989c17d4, type: 2}
+  - {fileID: 11400000, guid: cf6c72fc05710f34da352b6e457bc35c, type: 2}
+  - {fileID: 11400000, guid: 647426fcd11a64c48bce8be2ca6782f0, type: 2}
+  - {fileID: 11400000, guid: 11cab4f6556a9f4449b52e5cc900dc4c, type: 2}
+  - {fileID: 11400000, guid: e6d4c206672662643b3275bb5c81d3ee, type: 2}
+  - {fileID: 11400000, guid: 5318bdc9b8a286c4cb0663f271791f7d, type: 2}
+  - {fileID: 11400000, guid: 7e9502c7ac4b26848bf53f9db563cc89, type: 2}

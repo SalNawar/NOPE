@@ -62,7 +62,7 @@ public sealed class DeskController : MonoBehaviour
     private void Awake()
     {
         if (scanHint != null && config != null)
-            scanHint.text = config.scanHint;
+            scanHint.text = UiText.Get(config.scanHintKey);
         RefreshHint();
     }
 
@@ -239,6 +239,6 @@ public sealed class DeskController : MonoBehaviour
 
         bool paperOnDesk = _state != null && _state.OnDeskCount > 0;
         scanHint.gameObject.SetActive(config != null &&
-                                      DeskHints.ScanHintVisible(config.scanHint, _day, config.scanHintUntilDay, _scansToday, paperOnDesk));
+                                      DeskHints.ScanHintVisible(config.scanHintKey, _day, config.scanHintUntilDay, _scansToday, paperOnDesk));
     }
 }

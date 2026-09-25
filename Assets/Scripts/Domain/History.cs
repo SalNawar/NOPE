@@ -169,6 +169,14 @@ public static class History
         return baseValue;
     }
 
+    /// <summary>
+    /// True when history gives this place's category a value that differs from
+    /// its authored value (DiscrepancyLog.ValuesMatch decides "differs"); the
+    /// reference books mark such rows "revised" for as long as it lasts (piece 6 R14).
+    /// </summary>
+    public static bool IsRevised(HistoryState history, string nationId, string eraId, ClueCategory category, string baseValue) =>
+        !DiscrepancyLog.ValuesMatch(Resolve(history, nationId, eraId, category, baseValue), baseValue);
+
     /// <summary>Appends an edit and returns true, unless the state or edit is null, its value is blank, or its category is not editable.</summary>
     public static bool Latch(HistoryState history, FactEdit edit)
     {

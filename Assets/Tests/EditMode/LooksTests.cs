@@ -469,4 +469,12 @@ public class LooksTests
         Assert.AreEqual("m skin1 face-a brown; dress tell: Hair 'chasen-mage'", Compose(TravellerGender.Male, Home()).Describe());
         Assert.AreEqual("f skin1 face-a brown", Compose(TravellerGender.Female).Describe());
     }
+
+    [TestCase(LookSlot.Outfit, "slot.Outfit")]
+    [TestCase(LookSlot.FacialHair, "slot.FacialHair")]
+    [TestCase(LookSlot.Accessory, "slot.Accessory")]
+    public void SlotKey_IsTheSlotsUiStringKey(LookSlot slot, string key)
+    {
+        Assert.AreEqual(key, Looks.SlotKey(slot));
+    }
 }

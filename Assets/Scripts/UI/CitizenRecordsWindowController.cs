@@ -39,8 +39,8 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
         if (searchInput != null)
             searchInput.onSubmit.AddListener(_ => Search());
 
-        WireRow(nameRow, () => _current != null ? _current.fullName : null, ClueCategory.Name, "Records · Name");
-        WireRow(bornRow, () => _current != null ? _current.birthDate : null, ClueCategory.BirthDate, "Records · Born");
+        WireRow(nameRow, () => _current != null ? _current.fullName : null, ClueCategory.Name, UiText.Get("records.compare.name"));
+        WireRow(bornRow, () => _current != null ? _current.birthDate : null, ClueCategory.BirthDate, UiText.Get("records.compare.born"));
 
         ShowIdle();
     }
@@ -64,21 +64,21 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
             SetResultVisible(false);
             if (statusText != null)
                 statusText.text = string.IsNullOrWhiteSpace(query)
-                    ? "Type a citizen's name and press SEARCH."
-                    : $"NO RECORD matching \"{query.Trim()}\".";
+                    ? UiText.Get("records.idle")
+                    : UiText.Format("records.noRecord", query.Trim());
             return;
         }
 
         SetResultVisible(true);
 
         if (statusText != null)
-            statusText.text = "RECORD ON FILE:";
+            statusText.text = UiText.Get("records.onFile");
         if (nameValueText != null)
             nameValueText.text = _current.fullName;
         if (bornValueText != null)
             bornValueText.text = _current.birthDate;
         if (originText != null)
-            originText.text = $"Origin:  {_current.origin}";
+            originText.text = UiText.Format("records.origin", _current.origin);
         if (noteText != null)
             noteText.text = _current.note;
     }
@@ -87,7 +87,7 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
     {
         SetResultVisible(false);
         if (statusText != null)
-            statusText.text = "Type a citizen's name and press SEARCH.";
+            statusText.text = UiText.Get("records.idle");
         if (searchInput != null)
             searchInput.text = string.Empty;
     }

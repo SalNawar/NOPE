@@ -43,7 +43,8 @@ public readonly struct FactRow
 /// label) and the reference books read. Built once per day (a snapshot), so
 /// papers and books always agree; Citizen Records carry the claimed place's
 /// label the case took from here. Pure and string-keyed, so it is tested headless;
-/// history changes what goes in (ContentLibrarySO.FillFacts), not how it is read.
+/// history changes what goes in (ContentLibrarySO.FillFacts), not how it is read,
+/// and marks which values history changed (for the books' revised marker).
 /// </summary>
 public sealed class FactTable
 {
@@ -63,6 +64,10 @@ public sealed class FactTable
 
     /// <summary>Shared empty result.</summary>
     private static readonly IReadOnlyList<FactRow> NoRows = Array.Empty<FactRow>();
+
+    /// <summary>Cells whose value history revised (MarkChanged).</summary>
+    private readonly HashSet<(string nation, string era, ClueCategory category)> _changed =
+        new HashSet<(string, string, ClueCategory)>();
 
     /// <summary>
     /// Adds one fact. Blank values and repeats of an existing (place, category)
@@ -90,6 +95,23 @@ public sealed class FactTable
     /// <summary>The fact for a place, or null when it is not in today's table.</summary>
     public string Get(string nationId, string eraId, ClueCategory category) =>
         nationId != null && eraId != null && _values.TryGetValue((nationId, eraId, category), out string v) ? v : null;
+
+    /// <summary>
+    /// Marks a cell as revised by history: true when the cell is in the table
+    /// (and is now marked); false, with nothing marked, for a cell not in the
+    /// table or null ids.
+    /// </summary>
+    public bool MarkChanged(string nationId, string eraId, ClueCategory category)
+    {
+        if (Get(nationId, eraId, category) == null)
+            return false;
+        _changed.Add((nationId, eraId, category));
+        return true;
+    }
+
+    /// <summary>True when history revised the cell (MarkChanged); false for null ids and unmarked cells.</summary>
+    public bool IsChanged(string nationId, string eraId, ClueCategory category) =>
+        nationId != null && eraId != null && _changed.Contains((nationId, eraId, category));
 
     /// <summary>The place's origin label, or null when it is not in today's table.</summary>
     public string OriginLabel(string nationId, string eraId) =>

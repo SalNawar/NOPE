@@ -1066,6 +1066,133 @@
             "weight": 2
           }
         ]
+      },
+      "culture": {
+        "displayName": "Egypt",
+        "language": "ar",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "tahoma.ttf",
+            "face": 0,
+            "family": "Tahoma",
+            "style": "Regular"
+          },
+          {
+            "file": "arial.ttf",
+            "face": 0,
+            "family": "Arial",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Geeza Pro",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans Arabic",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "",
+        "buttonAdd": "",
+        "stripItalic": true,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#C9A45C"
+          },
+          {
+            "name": "chrome",
+            "hex": "#1C4E80"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#123456"
+          },
+          {
+            "name": "accent",
+            "hex": "#C8962E"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#1A1208"
+          },
+          {
+            "name": "paper",
+            "hex": "#F2E6C9"
+          },
+          {
+            "name": "ink",
+            "hex": "#2B1D0E"
+          },
+          {
+            "name": "face",
+            "hex": "#E8D9B5"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#2B1D0E"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF3C4"
+          },
+          {
+            "name": "approve",
+            "hex": "#2E7D32"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#A8322A"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#2B1D0E"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#F2E6C9"
+          },
+          {
+            "name": "match",
+            "hex": "#1B5E20"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#9E1B12"
+          },
+          {
+            "name": "highlight",
+            "hex": "#E9C46A"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#0F2A4D"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#F2D27A"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/egypt/wallpaper.png"
       }
     },
     {
@@ -1103,6 +1230,133 @@
             "weight": 2
           }
         ]
+      },
+      "culture": {
+        "displayName": "Iraq",
+        "language": "ar",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "tahoma.ttf",
+            "face": 0,
+            "family": "Tahoma",
+            "style": "Regular"
+          },
+          {
+            "file": "arial.ttf",
+            "face": 0,
+            "family": "Arial",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Geeza Pro",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans Arabic",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "",
+        "buttonAdd": "",
+        "stripItalic": true,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#2E6F95"
+          },
+          {
+            "name": "chrome",
+            "hex": "#1B4F72"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#0E2F44"
+          },
+          {
+            "name": "accent",
+            "hex": "#D4A017"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#1B1405"
+          },
+          {
+            "name": "paper",
+            "hex": "#EFE6D2"
+          },
+          {
+            "name": "ink",
+            "hex": "#231A10"
+          },
+          {
+            "name": "face",
+            "hex": "#E3D6B8"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#231A10"
+          },
+          {
+            "name": "note",
+            "hex": "#FDF1C7"
+          },
+          {
+            "name": "approve",
+            "hex": "#2F7D4A"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#A63A2A"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#231A10"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#EFE6D2"
+          },
+          {
+            "name": "match",
+            "hex": "#1E6B3A"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#9A2A1C"
+          },
+          {
+            "name": "highlight",
+            "hex": "#F0C75E"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#0D2A3D"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#F0C75E"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/iraq/wallpaper.png"
       }
     },
     {
@@ -1144,6 +1398,108 @@
             "weight": 1
           }
         ]
+      },
+      "culture": {
+        "displayName": "Greece",
+        "language": "el",
+        "runtimeFont": true,
+        "fonts": [],
+        "headingAdd": "",
+        "buttonAdd": "",
+        "stripItalic": false,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#6FA8DC"
+          },
+          {
+            "name": "chrome",
+            "hex": "#0D5EAF"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#0A3D73"
+          },
+          {
+            "name": "accent",
+            "hex": "#1F6F8B"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "paper",
+            "hex": "#FAFAF7"
+          },
+          {
+            "name": "ink",
+            "hex": "#1B2433"
+          },
+          {
+            "name": "face",
+            "hex": "#E6EBF0"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#1B2433"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF6D8"
+          },
+          {
+            "name": "approve",
+            "hex": "#2E7D5B"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#B23A3A"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#1B2433"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#FAFAF7"
+          },
+          {
+            "name": "match",
+            "hex": "#1E6B45"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#A12D2D"
+          },
+          {
+            "name": "highlight",
+            "hex": "#FFE08A"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#093768"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#FFE08A"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/greece/wallpaper.png"
       }
     },
     {
@@ -1185,6 +1541,127 @@
             "weight": 1
           }
         ]
+      },
+      "culture": {
+        "displayName": "Italy",
+        "language": "it",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "pala.ttf",
+            "face": 0,
+            "family": "Palatino Linotype",
+            "style": "Regular"
+          },
+          {
+            "file": "BKANT.TTF",
+            "face": 0,
+            "family": "Book Antiqua",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Palatino",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "SmallCaps",
+        "buttonAdd": "",
+        "stripItalic": false,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#C98B5A"
+          },
+          {
+            "name": "chrome",
+            "hex": "#7A2E1F"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#4A1C13"
+          },
+          {
+            "name": "accent",
+            "hex": "#2E6B3F"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "paper",
+            "hex": "#F5EBDD"
+          },
+          {
+            "name": "ink",
+            "hex": "#2A1A12"
+          },
+          {
+            "name": "face",
+            "hex": "#EADBC6"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#2A1A12"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF1D0"
+          },
+          {
+            "name": "approve",
+            "hex": "#3C7A3A"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#A4262C"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#2A1A12"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#F5EBDD"
+          },
+          {
+            "name": "match",
+            "hex": "#2F6B2D"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#A4262C"
+          },
+          {
+            "name": "highlight",
+            "hex": "#F4D58D"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#4A1C13"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#F4D58D"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/italy/wallpaper.png"
       }
     },
     {
@@ -1218,6 +1695,133 @@
             "weight": 10
           }
         ]
+      },
+      "culture": {
+        "displayName": "China",
+        "language": "zh-Hans",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "msyh.ttc",
+            "face": 0,
+            "family": "Microsoft YaHei",
+            "style": "Regular"
+          },
+          {
+            "file": "simsun.ttc",
+            "face": 0,
+            "family": "SimSun",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "PingFang SC",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans CJK SC",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "",
+        "buttonAdd": "",
+        "stripItalic": true,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#8E1B1B"
+          },
+          {
+            "name": "chrome",
+            "hex": "#A31F1F"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#5E0F0F"
+          },
+          {
+            "name": "accent",
+            "hex": "#D4AF37"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#2A1B00"
+          },
+          {
+            "name": "paper",
+            "hex": "#FBF3E4"
+          },
+          {
+            "name": "ink",
+            "hex": "#1E1410"
+          },
+          {
+            "name": "face",
+            "hex": "#F1E3C8"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#1E1410"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF4CC"
+          },
+          {
+            "name": "approve",
+            "hex": "#B8262A"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#37474F"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#1E1410"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#FBF3E4"
+          },
+          {
+            "name": "match",
+            "hex": "#9B1B1B"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#37474F"
+          },
+          {
+            "name": "highlight",
+            "hex": "#F5D76E"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#5E0F0F"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#F5D76E"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/china/wallpaper.png"
       }
     },
     {
@@ -1251,6 +1855,133 @@
             "weight": 10
           }
         ]
+      },
+      "culture": {
+        "displayName": "Japan",
+        "language": "ja",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "YuGothR.ttc",
+            "face": 0,
+            "family": "Yu Gothic",
+            "style": "Regular"
+          },
+          {
+            "file": "msgothic.ttc",
+            "face": 0,
+            "family": "MS Gothic",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Hiragino Sans",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Noto Sans CJK JP",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "",
+        "buttonAdd": "",
+        "stripItalic": true,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#E9DFC8"
+          },
+          {
+            "name": "chrome",
+            "hex": "#1F2F4A"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#121C2E"
+          },
+          {
+            "name": "accent",
+            "hex": "#B23A1A"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "paper",
+            "hex": "#F7F3EA"
+          },
+          {
+            "name": "ink",
+            "hex": "#1A1A1A"
+          },
+          {
+            "name": "face",
+            "hex": "#ECE4D4"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#1A1A1A"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF7E0"
+          },
+          {
+            "name": "approve",
+            "hex": "#2E6B4F"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#9C2F14"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#1A1A1A"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#F7F3EA"
+          },
+          {
+            "name": "match",
+            "hex": "#2E6B4F"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#9C2F14"
+          },
+          {
+            "name": "highlight",
+            "hex": "#F3D9A0"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#121C2E"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#F3B38A"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/japan/wallpaper.png"
       }
     },
     {
@@ -1296,6 +2027,115 @@
             "weight": 1
           }
         ]
+      },
+      "culture": {
+        "displayName": "Britain",
+        "language": "en",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "georgia.ttf",
+            "face": 0,
+            "family": "Georgia",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "SmallCaps",
+        "buttonAdd": "",
+        "stripItalic": false,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#5B7F95"
+          },
+          {
+            "name": "chrome",
+            "hex": "#1F2A44"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#121A2B"
+          },
+          {
+            "name": "accent",
+            "hex": "#00563F"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "paper",
+            "hex": "#F4EFE3"
+          },
+          {
+            "name": "ink",
+            "hex": "#1C1C1C"
+          },
+          {
+            "name": "face",
+            "hex": "#E7E0D0"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#1C1C1C"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF8DC"
+          },
+          {
+            "name": "approve",
+            "hex": "#1E5631"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#7B1E1E"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#1C1C1C"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#F4EFE3"
+          },
+          {
+            "name": "match",
+            "hex": "#1E5631"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#8B1E1E"
+          },
+          {
+            "name": "highlight",
+            "hex": "#EED9A0"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#121A2B"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#EED9A0"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/britain/wallpaper.png"
       }
     },
     {
@@ -1341,6 +2181,127 @@
             "weight": 1
           }
         ]
+      },
+      "culture": {
+        "displayName": "Germany",
+        "language": "de",
+        "runtimeFont": true,
+        "fonts": [
+          {
+            "file": "segoeui.ttf",
+            "face": 0,
+            "family": "Segoe UI",
+            "style": "Regular"
+          },
+          {
+            "file": "arial.ttf",
+            "face": 0,
+            "family": "Arial",
+            "style": "Regular"
+          },
+          {
+            "file": "",
+            "face": 0,
+            "family": "Helvetica Neue",
+            "style": "Regular"
+          }
+        ],
+        "headingAdd": "",
+        "buttonAdd": "Bold",
+        "stripItalic": false,
+        "seeds": [
+          {
+            "name": "wallpaper",
+            "hex": "#9EA3A8"
+          },
+          {
+            "name": "chrome",
+            "hex": "#2B2B2B"
+          },
+          {
+            "name": "chromeInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "chromeDeep",
+            "hex": "#161616"
+          },
+          {
+            "name": "accent",
+            "hex": "#E0B000"
+          },
+          {
+            "name": "accentInk",
+            "hex": "#111111"
+          },
+          {
+            "name": "paper",
+            "hex": "#F2F2F0"
+          },
+          {
+            "name": "ink",
+            "hex": "#111111"
+          },
+          {
+            "name": "face",
+            "hex": "#E2E2DE"
+          },
+          {
+            "name": "faceInk",
+            "hex": "#111111"
+          },
+          {
+            "name": "note",
+            "hex": "#FFF4B8"
+          },
+          {
+            "name": "approve",
+            "hex": "#2F6F3E"
+          },
+          {
+            "name": "approveInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "reject",
+            "hex": "#C0272D"
+          },
+          {
+            "name": "rejectInk",
+            "hex": "#FFFFFF"
+          },
+          {
+            "name": "dark",
+            "hex": "#111111"
+          },
+          {
+            "name": "darkInk",
+            "hex": "#F2F2F0"
+          },
+          {
+            "name": "match",
+            "hex": "#2F6F3E"
+          },
+          {
+            "name": "mismatch",
+            "hex": "#B0232A"
+          },
+          {
+            "name": "highlight",
+            "hex": "#FFE066"
+          },
+          {
+            "name": "ringDark",
+            "hex": "#161616"
+          },
+          {
+            "name": "ringLight",
+            "hex": "#FFCC00"
+          }
+        ],
+        "overrides": [],
+        "art": [],
+        "wallpaper": "Assets/Art/Culture/germany/wallpaper.png"
       }
     }
   ],
@@ -6232,6 +7193,2343 @@
             "place": "egypt_ancient",
             "category": "Politics",
             "value": "Elected Pharaoh Hatshepsut"
+          }
+        ]
+      }
+    ]
+  },
+  "ui": {
+    "readingLanguage": "en",
+    "glossPercent": 60,
+    "labelMinScale": 0.55,
+    "contrast": {
+      "text": 4.5,
+      "largeText": 3.0,
+      "glyph": 3.0,
+      "hint": 3.0,
+      "outline": 3.0,
+      "minTextFillAlpha": 0.7
+    },
+    "latinFallbackFont": "Assets/TextMesh Pro/Fonts/LiberationSans.ttf",
+    "paletteMap": [
+      {
+        "role": "Desktop",
+        "fill": "wallpaper",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "ScreenStrip",
+        "fill": "chromeDeep",
+        "alpha": 0.8,
+        "ink": "chromeInk",
+        "textClass": "LargeText"
+      },
+      {
+        "role": "Taskbar",
+        "fill": "chrome",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "TaskbarGloss",
+        "fill": "white",
+        "alpha": 0.18,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "StartButton",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "accentInk",
+        "textClass": "LargeText"
+      },
+      {
+        "role": "Tray",
+        "fill": "chromeDeep",
+        "alpha": 1,
+        "ink": "chromeInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "WindowBody",
+        "fill": "paper",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "TitleBar",
+        "fill": "chrome",
+        "alpha": 1,
+        "ink": "chromeInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "TitleGloss",
+        "fill": "white",
+        "alpha": 0.14,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "Button",
+        "fill": "face",
+        "alpha": 1,
+        "ink": "faceInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "CloseButton",
+        "fill": "reject",
+        "alpha": 1,
+        "ink": "rejectInk",
+        "textClass": "Glyph"
+      },
+      {
+        "role": "AcceptButton",
+        "fill": "approve",
+        "alpha": 1,
+        "ink": "approveInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "DenyButton",
+        "fill": "reject",
+        "alpha": 1,
+        "ink": "rejectInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "WheelButton",
+        "fill": "accent",
+        "alpha": 0.95,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "SearchButton",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "DesktopIcon",
+        "fill": "accent",
+        "alpha": 0.85,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "DeskButton",
+        "fill": "accent",
+        "alpha": 0.95,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "Panel",
+        "fill": "chromeDeep",
+        "alpha": 0.92,
+        "ink": "chromeInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "ClaimStrip",
+        "fill": "chromeDeep",
+        "alpha": 0.8,
+        "ink": "chromeInk",
+        "textClass": "LargeText"
+      },
+      {
+        "role": "Alert",
+        "fill": "reject",
+        "alpha": 0.96,
+        "ink": "rejectInk",
+        "textClass": "LargeText"
+      },
+      {
+        "role": "StickyNote",
+        "fill": "note",
+        "alpha": 0.97,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "CompareBar",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "CompareMatch",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "match",
+        "textClass": "Text"
+      },
+      {
+        "role": "CompareMismatch",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "mismatch",
+        "textClass": "Text"
+      },
+      {
+        "role": "CompareNeutral",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "SelectionHighlight",
+        "fill": "highlight",
+        "alpha": 0.7,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "StartMenu",
+        "fill": "chromeDeep",
+        "alpha": 0.97,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "MenuEntry",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "QuitEntry",
+        "fill": "reject",
+        "alpha": 1,
+        "ink": "rejectInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "NewsletterBorder",
+        "fill": "dark",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "Newsletter",
+        "fill": "paper",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "NewsletterButton",
+        "fill": "dark",
+        "alpha": 1,
+        "ink": "darkInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "DeskDim",
+        "fill": "dark",
+        "alpha": 0.55,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "InputField",
+        "fill": "white",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "InputPlaceholder",
+        "fill": "white",
+        "alpha": 1,
+        "ink": "muted",
+        "textClass": "Hint"
+      },
+      {
+        "role": "Tooltip",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "ClickCatcher",
+        "fill": "white",
+        "alpha": 0,
+        "ink": "",
+        "textClass": "None"
+      }
+    ],
+    "neutral": {
+      "id": "neutral",
+      "displayName": "Temporal Customs standard issue",
+      "language": "en",
+      "runtimeFont": false,
+      "fonts": [],
+      "headingAdd": "",
+      "buttonAdd": "",
+      "stripItalic": false,
+      "seeds": [
+        {
+          "name": "wallpaper",
+          "hex": "#3B73BD"
+        },
+        {
+          "name": "chrome",
+          "hex": "#2157DB"
+        },
+        {
+          "name": "chromeInk",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "chromeDeep",
+          "hex": "#1A52C7"
+        },
+        {
+          "name": "accent",
+          "hex": "#3D993B"
+        },
+        {
+          "name": "accentInk",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "paper",
+          "hex": "#ECE9D8"
+        },
+        {
+          "name": "ink",
+          "hex": "#1A1714"
+        },
+        {
+          "name": "face",
+          "hex": "#ECE9D8"
+        },
+        {
+          "name": "faceInk",
+          "hex": "#000000"
+        },
+        {
+          "name": "note",
+          "hex": "#FFFFE0"
+        },
+        {
+          "name": "approve",
+          "hex": "#296B38"
+        },
+        {
+          "name": "approveInk",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "reject",
+          "hex": "#DB402E"
+        },
+        {
+          "name": "rejectInk",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "dark",
+          "hex": "#292621"
+        },
+        {
+          "name": "darkInk",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "match",
+          "hex": "#0D731F"
+        },
+        {
+          "name": "mismatch",
+          "hex": "#B81A14"
+        },
+        {
+          "name": "highlight",
+          "hex": "#FFEB59"
+        },
+        {
+          "name": "muted",
+          "hex": "#737373CC"
+        },
+        {
+          "name": "white",
+          "hex": "#FFFFFF"
+        },
+        {
+          "name": "ringDark",
+          "hex": "#092E70"
+        },
+        {
+          "name": "ringLight",
+          "hex": "#FFD76E"
+        }
+      ],
+      "overrides": [
+        {
+          "role": "Panel",
+          "fill": "#171C29FA",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "StartMenu",
+          "fill": "#1A1F2EF7",
+          "ink": ""
+        },
+        {
+          "role": "ScreenStrip",
+          "fill": "#0F2E6BCC",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "ClaimStrip",
+          "fill": "#0F2E6BCC",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "WheelButton",
+          "fill": "#29476BF2",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "SearchButton",
+          "fill": "#264C80",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "DesktopIcon",
+          "fill": "#334C73D9",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "DeskButton",
+          "fill": "#334C80F2",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "MenuEntry",
+          "fill": "#334059",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "QuitEntry",
+          "fill": "#803333",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "DenyButton",
+          "fill": "#752929",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "Alert",
+          "fill": "#D93326F5",
+          "ink": "#FFFFFF"
+        },
+        {
+          "role": "NewsletterBorder",
+          "fill": "#1A1714",
+          "ink": ""
+        },
+        {
+          "role": "DeskDim",
+          "fill": "#0F121A8C",
+          "ink": ""
+        },
+        {
+          "role": "StickyNote",
+          "fill": "#FFF599F7",
+          "ink": "#1A1714"
+        },
+        {
+          "role": "CompareNeutral",
+          "fill": "",
+          "ink": "#2E260D"
+        },
+        {
+          "role": "ClickCatcher",
+          "fill": "#00000000",
+          "ink": ""
+        },
+        {
+          "role": "DiegeticPaper",
+          "fill": "#F7F5EB",
+          "ink": ""
+        },
+        {
+          "role": "DiegeticPhoto",
+          "fill": "#8C8F94",
+          "ink": "#404247"
+        },
+        {
+          "role": "DiegeticRow",
+          "fill": "#FFFFFFB2",
+          "ink": "#1A1714"
+        },
+        {
+          "role": "DiegeticLabel",
+          "fill": "",
+          "ink": "#595240"
+        },
+        {
+          "role": "DiegeticNote",
+          "fill": "",
+          "ink": "#594C33"
+        },
+        {
+          "role": "DiegeticBacking",
+          "fill": "#21242B",
+          "ink": "#D9DBE0"
+        },
+        {
+          "role": "DiegeticBookRow",
+          "fill": "#FFFFFF0A",
+          "ink": "#1A1714"
+        },
+        {
+          "role": "DiegeticBubble",
+          "fill": "#FAF7EDF7",
+          "ink": "#1A1714"
+        }
+      ],
+      "art": [
+        {
+          "name": "skyTop",
+          "hex": "#336EC2"
+        },
+        {
+          "name": "skyBottom",
+          "hex": "#C7E6FF"
+        },
+        {
+          "name": "groundLow",
+          "hex": "#457326"
+        },
+        {
+          "name": "groundHigh",
+          "hex": "#7DB042"
+        },
+        {
+          "name": "cloud",
+          "hex": "#FFFFFF"
+        }
+      ],
+      "wallpaper": "Assets/Art/Generated/xp_bliss.png"
+    },
+    "strings": [
+      {
+        "key": "accept",
+        "text": "ACCEPT",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "deny",
+        "text": "DENY",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "taskbar.start",
+        "text": "start",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "startmenu.settings",
+        "text": "Settings",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "startmenu.screenOff",
+        "text": "Turn off screen",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "startmenu.quit",
+        "text": "Quit game",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "briefing.masthead",
+        "text": "THE TEMPORAL TIMES",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "briefing.start",
+        "text": "START SHIFT",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "results.masthead",
+        "text": "SHIFT LEDGER — EVENING EDITION",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "results.goHome",
+        "text": "GO HOME",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "records.title",
+        "text": "Citizen Records",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "records.search",
+        "text": "SEARCH",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "compare.match",
+        "text": "MATCH",
+        "gloss": "Inline",
+        "tier": "Flavour"
+      },
+      {
+        "key": "compare.mismatch",
+        "text": "MISMATCH",
+        "gloss": "Inline",
+        "tier": "Flavour"
+      },
+      {
+        "key": "citation.title",
+        "text": "TIMELINE DEVIATION NOTICE",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "citation.acknowledge",
+        "text": "Acknowledge",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "window.directives",
+        "text": "Directives",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "window.scanner",
+        "text": "Deviation Report",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "window.settings",
+        "text": "Settings",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.directives",
+        "text": "Directives",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.scanner",
+        "text": "Deviation Report",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.records",
+        "text": "Records",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.internet",
+        "text": "Internet",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.lexicon",
+        "text": "Lexicon",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.dialect",
+        "text": "Dialect",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.material",
+        "text": "Material",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.notes",
+        "text": "Notes",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.clueLog",
+        "text": "Clue Log",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "tray.day",
+        "text": "Day {0}",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "tray.stability",
+        "text": "Stability: {0:0}%",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "taskbar.desk",
+        "text": "< Desk",
+        "gloss": "Below",
+        "tier": "Flavour"
+      },
+      {
+        "key": "briefing.title",
+        "text": "Day {0} — Morning Briefing",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "results.title",
+        "text": "Day {0} — Shift Report",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "briefing.newsHeader",
+        "text": "— TIMELINE NEWS —",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "wallet.credits",
+        "text": "Credits",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "wallet.creditsInline",
+        "text": "credits",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "wallet.creditsShort",
+        "text": "cr",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "tray.money",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "verdict.correct",
+        "text": "CORRECT  (+{0} {1})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "verdict.wrong",
+        "text": "WRONG  ({0:+0.#;-0.#} stability)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "verdict.wrongPenalty",
+        "text": "WRONG  ({0:+0.#;-0.#} stability, -{1} {2})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "verdict.simpleCorrect",
+        "text": "Correct",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "verdict.simpleWrong",
+        "text": "Wrong",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "day.complete",
+        "text": "Day {0} complete.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "idle.waiting",
+        "text": "Waiting for the next traveller",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.minimize",
+        "text": "_",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.maximize",
+        "text": "[]",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.close",
+        "text": "X",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.prev",
+        "text": "<",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.next",
+        "text": ">",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.page",
+        "text": "Page {0}/{1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.transcript",
+        "text": "Case Notes: Interview",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.internet",
+        "text": "Internet - News",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.lexicon",
+        "text": "Lexicon",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.dialect",
+        "text": "Dialect",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.material",
+        "text": "Material Analysis",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.notes",
+        "text": "Sticky Notes",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "body.internet",
+        "text": "Today's news feed. (placeholder)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "body.lexicon",
+        "text": "Wikipedia-style era glossary. (placeholder)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "body.dialect",
+        "text": "Notes on accents and phrasing. (placeholder)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "body.material",
+        "text": "Flags tech/materials beyond the claimed era. (upgrade)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "body.notes",
+        "text": "Your notes. (placeholder)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.language",
+        "text": "UI language",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.followHistory",
+        "text": "Follow history",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.alwaysEnglish",
+        "text": "Always English",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.note",
+        "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "briefing.empty",
+        "text": "No directives. Process subjects accurately.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "list.bullet",
+        "text": "• {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.processed",
+        "text": "Subjects processed: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.correctWrong",
+        "text": "Correct: {0}   Wrong: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.pay",
+        "text": "Pay earned: +{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.penalties",
+        "text": "Citation penalties: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.net",
+        "text": "Net: {0:+0;-0;0} {1}   (Balance: {2})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.stability",
+        "text": "Timeline stability: {0:0}% ({1:+0.#;-0.#;0} today)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.citations",
+        "text": "Citations today: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.unproven",
+        "text": "Undocumented denials: {0} (log a deviation before denying)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "scanner.idle",
+        "text": "No deviations documented.\n\nCompare a document field, a traveller's answer or a garment they wear against the claimed place's reference entry, the entry it really belongs to, or the Citizen Record to log evidence.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "scanner.summary",
+        "text": "{0} deviation(s) documented. Denial is justified.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "directives.none",
+        "text": "Directives: all destinations cleared today.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "directives.header",
+        "text": "Directives (deny violators):",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "claim.banner",
+        "text": "{0}\n\"{1}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "document.untitled",
+        "text": "Document",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "document.compareLabel",
+        "text": "{0} · {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.untitled",
+        "text": "Reference",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.compareLabel",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.revisedLabel",
+        "text": "{0}  [revised]",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.deviationLogged",
+        "text": "●  DEVIATION LOGGED — {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.alreadyDocumented",
+        "text": "●  ALREADY DOCUMENTED — {0} is in the Deviation Report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.pair",
+        "text": "{0}    {1}:  {2}    vs    {3}:  {4}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.pickAnother",
+        "text": "{0}:  {1}    vs    (pick another value to compare)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.travellerLabel",
+        "text": "Traveller · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "slot.Outfit",
+        "text": "OUTFIT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "slot.Hair",
+        "text": "HAIR",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "slot.FacialHair",
+        "text": "FACIAL HAIR",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "slot.Headwear",
+        "text": "HEADWEAR",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "slot.Accessory",
+        "text": "ACCESSORY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.placeholder",
+        "text": "Type a full name…",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.idle",
+        "text": "Type a citizen's name and press SEARCH.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.noRecord",
+        "text": "NO RECORD matching \"{0}\".",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.onFile",
+        "text": "RECORD ON FILE:",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.origin",
+        "text": "Origin:  {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.compare.name",
+        "text": "Records · Name",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.compare.born",
+        "text": "Records · Born",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.unproven",
+        "text": "Deviation denied without documented evidence. Log a deviation from the papers, the traveller's answers or their dress before denying.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong",
+        "text": "Approved a disguised traveller or a forbidden destination.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.deniedWrong",
+        "text": "Denied a legitimate, permitted traveler.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.misrouted",
+        "text": "Subject misrouted: sent to '{0}', belonged to '{1}'.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.warning",
+        "text": "Warning {0}/{1} — no pay deduction.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.penalty",
+        "text": "Penalty: -{0} {1}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.stability",
+        "text": "Stability {0:+0.#;-0.#}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.layout",
+        "text": "{0}\n{1}\n{2}\n{3}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "rule.unknownPlace",
+        "text": "?",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "rule.eraForbidden",
+        "text": "No travel permitted to {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "rule.nationForbidden",
+        "text": "No travel permitted to {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "rule.nationEraForbidden",
+        "text": "No travel permitted to {0} in {1}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "rule.generic",
+        "text": "Travel restriction in effect.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.scanHint",
+        "text": "Drag papers onto the scanner to read them on the PC.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.wheelHint",
+        "text": "Click the traveller to talk and ask for papers.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "tooltip.credits",
+        "text": "{1}: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "tooltip.day",
+        "text": "Day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "tooltip.stability",
+        "text": "Timeline stability: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "tooltip.value",
+        "text": "{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.claim",
+        "text": "{0}\n\"{1}\"\n\n{2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.documents",
+        "text": "— DOCUMENTS PRESENTED —",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.dress",
+        "text": "— TRAVELLER'S DRESS —",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.garment",
+        "text": "    {0}: {1} ({2})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.document",
+        "text": "[{0}]",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.field",
+        "text": "    {0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.record",
+        "text": "— AGENCY RECORD —",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.noRecord",
+        "text": "    No record on file.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.recordName",
+        "text": "    Name: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.recordBorn",
+        "text": "    Born: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.recordOrigin",
+        "text": "    Origin: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.interview",
+        "text": "— INTERVIEW —",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.answer",
+        "text": "    {0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.reference",
+        "text": "— REFERENCE (claimed place) —",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.bookEntry",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.noEntry",
+        "text": "(no entry)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.accept",
+        "text": "ACCEPT (approve travel)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "fallback.deny",
+        "text": "DENY (refuse travel)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.claimMismatch.papers",
+        "text": "{0} INCORRECT — papers: \"{1}\"  /  expected: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.claimMismatch.said",
+        "text": "{0} INCORRECT — traveller said: \"{1}\"  /  expected: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.claimMismatch.worn",
+        "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  expected: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.foreignOrigin.papers",
+        "text": "{0} INCORRECT — papers show \"{1}\", which belongs to {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.foreignOrigin.said",
+        "text": "{0} INCORRECT — traveller said \"{1}\", which belongs to {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.foreignOrigin.worn",
+        "text": "{0} INCORRECT — traveller wears \"{1}\", which belongs to {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.recordMismatch.papers",
+        "text": "{0} INCORRECT — papers: \"{1}\"  /  agency records: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.recordMismatch.said",
+        "text": "{0} INCORRECT — traveller said: \"{1}\"  /  agency records: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.recordMismatch.worn",
+        "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  agency records: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Language",
+        "text": "LANGUAGE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Material",
+        "text": "MATERIAL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Politics",
+        "text": "RULER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Technology",
+        "text": "DEVICE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Currency",
+        "text": "CURRENCY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Geography",
+        "text": "CAPITAL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Culture",
+        "text": "DRESS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Name",
+        "text": "NAME",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.BirthDate",
+        "text": "BIRTH DATE",
+        "gloss": "None",
+        "tier": "Full"
+      }
+    ],
+    "languages": [
+      {
+        "language": "ar",
+        "rtl": true,
+        "entries": [
+          {
+            "key": "accept",
+            "text": "قبول"
+          },
+          {
+            "key": "deny",
+            "text": "رفض"
+          },
+          {
+            "key": "taskbar.start",
+            "text": "ابدأ"
+          },
+          {
+            "key": "startmenu.settings",
+            "text": "الإعدادات"
+          },
+          {
+            "key": "startmenu.screenOff",
+            "text": "إطفاء الشاشة"
+          },
+          {
+            "key": "startmenu.quit",
+            "text": "إنهاء اللعبة"
+          },
+          {
+            "key": "briefing.masthead",
+            "text": "صحيفة الزمن"
+          },
+          {
+            "key": "briefing.start",
+            "text": "ابدأ المناوبة"
+          },
+          {
+            "key": "results.masthead",
+            "text": "سجل المناوبة — الطبعة المسائية"
+          },
+          {
+            "key": "results.goHome",
+            "text": "إلى البيت"
+          },
+          {
+            "key": "records.title",
+            "text": "سجلات المواطنين"
+          },
+          {
+            "key": "records.search",
+            "text": "بحث"
+          },
+          {
+            "key": "compare.match",
+            "text": "تطابق"
+          },
+          {
+            "key": "compare.mismatch",
+            "text": "عدم تطابق"
+          },
+          {
+            "key": "citation.title",
+            "text": "إشعار انحراف زمني"
+          },
+          {
+            "key": "citation.acknowledge",
+            "text": "تم الاطلاع"
+          },
+          {
+            "key": "window.directives",
+            "text": "التوجيهات"
+          },
+          {
+            "key": "window.scanner",
+            "text": "تقرير الانحرافات"
+          },
+          {
+            "key": "window.settings",
+            "text": "الإعدادات"
+          },
+          {
+            "key": "icon.directives",
+            "text": "التوجيهات"
+          },
+          {
+            "key": "icon.scanner",
+            "text": "تقرير الانحرافات"
+          },
+          {
+            "key": "icon.records",
+            "text": "السجلات"
+          },
+          {
+            "key": "icon.internet",
+            "text": "الإنترنت"
+          },
+          {
+            "key": "icon.lexicon",
+            "text": "المعجم"
+          },
+          {
+            "key": "icon.dialect",
+            "text": "اللهجات"
+          },
+          {
+            "key": "icon.material",
+            "text": "المواد"
+          },
+          {
+            "key": "icon.notes",
+            "text": "ملاحظات"
+          },
+          {
+            "key": "icon.clueLog",
+            "text": "سجل الأدلة"
+          },
+          {
+            "key": "tray.day",
+            "text": "اليوم {0}"
+          },
+          {
+            "key": "tray.stability",
+            "text": "الاستقرار: {0:0}%"
+          },
+          {
+            "key": "taskbar.desk",
+            "text": "العودة إلى المكتب"
+          },
+          {
+            "key": "briefing.title",
+            "text": "اليوم {0} — الإحاطة الصباحية"
+          },
+          {
+            "key": "results.title",
+            "text": "اليوم {0} — تقرير المناوبة"
+          },
+          {
+            "key": "briefing.newsHeader",
+            "text": "— أخبار الخط الزمني —"
+          }
+        ]
+      },
+      {
+        "language": "el",
+        "rtl": false,
+        "entries": [
+          {
+            "key": "accept",
+            "text": "ΕΓΚΡΙΣΗ"
+          },
+          {
+            "key": "deny",
+            "text": "ΑΠΟΡΡΙΨΗ"
+          },
+          {
+            "key": "taskbar.start",
+            "text": "έναρξη"
+          },
+          {
+            "key": "startmenu.settings",
+            "text": "Ρυθμίσεις"
+          },
+          {
+            "key": "startmenu.screenOff",
+            "text": "Σβήσιμο οθόνης"
+          },
+          {
+            "key": "startmenu.quit",
+            "text": "Έξοδος από το παιχνίδι"
+          },
+          {
+            "key": "briefing.masthead",
+            "text": "Η ΧΡΟΝΙΚΗ ΕΦΗΜΕΡΙΔΑ"
+          },
+          {
+            "key": "briefing.start",
+            "text": "ΕΝΑΡΞΗ ΒΑΡΔΙΑΣ"
+          },
+          {
+            "key": "results.masthead",
+            "text": "ΗΜΕΡΟΛΟΓΙΟ ΒΑΡΔΙΑΣ — ΑΠΟΓΕΥΜΑΤΙΝΗ ΕΚΔΟΣΗ"
+          },
+          {
+            "key": "results.goHome",
+            "text": "ΣΠΙΤΙ"
+          },
+          {
+            "key": "records.title",
+            "text": "Μητρώο Πολιτών"
+          },
+          {
+            "key": "records.search",
+            "text": "ΑΝΑΖΗΤΗΣΗ"
+          },
+          {
+            "key": "compare.match",
+            "text": "ΤΑΙΡΙΑΖΕΙ"
+          },
+          {
+            "key": "compare.mismatch",
+            "text": "ΔΕΝ ΤΑΙΡΙΑΖΕΙ"
+          },
+          {
+            "key": "citation.title",
+            "text": "ΕΙΔΟΠΟΙΗΣΗ ΧΡΟΝΙΚΗΣ ΑΠΟΚΛΙΣΗΣ"
+          },
+          {
+            "key": "citation.acknowledge",
+            "text": "Ελήφθη"
+          },
+          {
+            "key": "window.directives",
+            "text": "Οδηγίες"
+          },
+          {
+            "key": "window.scanner",
+            "text": "Αναφορά αποκλίσεων"
+          },
+          {
+            "key": "window.settings",
+            "text": "Ρυθμίσεις"
+          },
+          {
+            "key": "icon.directives",
+            "text": "Οδηγίες"
+          },
+          {
+            "key": "icon.scanner",
+            "text": "Αναφορά αποκλίσεων"
+          },
+          {
+            "key": "icon.records",
+            "text": "Μητρώο"
+          },
+          {
+            "key": "icon.internet",
+            "text": "Διαδίκτυο"
+          },
+          {
+            "key": "icon.lexicon",
+            "text": "Λεξικό"
+          },
+          {
+            "key": "icon.dialect",
+            "text": "Διάλεκτος"
+          },
+          {
+            "key": "icon.material",
+            "text": "Υλικά"
+          },
+          {
+            "key": "icon.notes",
+            "text": "Σημειώσεις"
+          },
+          {
+            "key": "icon.clueLog",
+            "text": "Ενδείξεις"
+          },
+          {
+            "key": "tray.day",
+            "text": "Ημέρα {0}"
+          },
+          {
+            "key": "tray.stability",
+            "text": "Σταθερότητα: {0:0}%"
+          },
+          {
+            "key": "taskbar.desk",
+            "text": "< Γραφείο"
+          },
+          {
+            "key": "briefing.title",
+            "text": "Ημέρα {0} — Πρωινή ενημέρωση"
+          },
+          {
+            "key": "results.title",
+            "text": "Ημέρα {0} — Αναφορά βάρδιας"
+          },
+          {
+            "key": "briefing.newsHeader",
+            "text": "— ΕΙΔΗΣΕΙΣ ΧΡΟΝΟΓΡΑΜΜΗΣ —"
+          }
+        ]
+      },
+      {
+        "language": "it",
+        "rtl": false,
+        "entries": [
+          {
+            "key": "accept",
+            "text": "ACCETTA"
+          },
+          {
+            "key": "deny",
+            "text": "RIFIUTA"
+          },
+          {
+            "key": "taskbar.start",
+            "text": "avvio"
+          },
+          {
+            "key": "startmenu.settings",
+            "text": "Impostazioni"
+          },
+          {
+            "key": "startmenu.screenOff",
+            "text": "Spegni lo schermo"
+          },
+          {
+            "key": "startmenu.quit",
+            "text": "Esci dal gioco"
+          },
+          {
+            "key": "briefing.masthead",
+            "text": "IL CORRIERE DEL TEMPO"
+          },
+          {
+            "key": "briefing.start",
+            "text": "INIZIA IL TURNO"
+          },
+          {
+            "key": "results.masthead",
+            "text": "REGISTRO DEL TURNO — EDIZIONE DELLA SERA"
+          },
+          {
+            "key": "results.goHome",
+            "text": "A CASA"
+          },
+          {
+            "key": "records.title",
+            "text": "Anagrafe"
+          },
+          {
+            "key": "records.search",
+            "text": "CERCA"
+          },
+          {
+            "key": "compare.match",
+            "text": "CORRISPONDE"
+          },
+          {
+            "key": "compare.mismatch",
+            "text": "NON CORRISPONDE"
+          },
+          {
+            "key": "citation.title",
+            "text": "AVVISO DI DEVIAZIONE TEMPORALE"
+          },
+          {
+            "key": "citation.acknowledge",
+            "text": "Preso atto"
+          },
+          {
+            "key": "window.directives",
+            "text": "Direttive"
+          },
+          {
+            "key": "window.scanner",
+            "text": "Rapporto deviazioni"
+          },
+          {
+            "key": "window.settings",
+            "text": "Impostazioni"
+          },
+          {
+            "key": "icon.directives",
+            "text": "Direttive"
+          },
+          {
+            "key": "icon.scanner",
+            "text": "Rapporto deviazioni"
+          },
+          {
+            "key": "icon.records",
+            "text": "Anagrafe"
+          },
+          {
+            "key": "icon.internet",
+            "text": "Internet"
+          },
+          {
+            "key": "icon.lexicon",
+            "text": "Lessico"
+          },
+          {
+            "key": "icon.dialect",
+            "text": "Dialetto"
+          },
+          {
+            "key": "icon.material",
+            "text": "Materiali"
+          },
+          {
+            "key": "icon.notes",
+            "text": "Appunti"
+          },
+          {
+            "key": "icon.clueLog",
+            "text": "Indizi"
+          },
+          {
+            "key": "tray.day",
+            "text": "Giorno {0}"
+          },
+          {
+            "key": "tray.stability",
+            "text": "Stabilità: {0:0}%"
+          },
+          {
+            "key": "taskbar.desk",
+            "text": "< Scrivania"
+          },
+          {
+            "key": "briefing.title",
+            "text": "Giorno {0} — Briefing del mattino"
+          },
+          {
+            "key": "results.title",
+            "text": "Giorno {0} — Rapporto del turno"
+          },
+          {
+            "key": "briefing.newsHeader",
+            "text": "— NOTIZIE DELLA LINEA TEMPORALE —"
+          }
+        ]
+      },
+      {
+        "language": "de",
+        "rtl": false,
+        "entries": [
+          {
+            "key": "accept",
+            "text": "ANNEHMEN"
+          },
+          {
+            "key": "deny",
+            "text": "ABLEHNEN"
+          },
+          {
+            "key": "taskbar.start",
+            "text": "Start"
+          },
+          {
+            "key": "startmenu.settings",
+            "text": "Einstellungen"
+          },
+          {
+            "key": "startmenu.screenOff",
+            "text": "Bildschirm aus"
+          },
+          {
+            "key": "startmenu.quit",
+            "text": "Spiel beenden"
+          },
+          {
+            "key": "briefing.masthead",
+            "text": "DER ZEITBOTE"
+          },
+          {
+            "key": "briefing.start",
+            "text": "SCHICHT BEGINNEN"
+          },
+          {
+            "key": "results.masthead",
+            "text": "SCHICHTBUCH — ABENDAUSGABE"
+          },
+          {
+            "key": "results.goHome",
+            "text": "NACH HAUSE"
+          },
+          {
+            "key": "records.title",
+            "text": "Einwohnerregister"
+          },
+          {
+            "key": "records.search",
+            "text": "SUCHEN"
+          },
+          {
+            "key": "compare.match",
+            "text": "STIMMT"
+          },
+          {
+            "key": "compare.mismatch",
+            "text": "ABWEICHUNG"
+          },
+          {
+            "key": "citation.title",
+            "text": "MELDUNG EINER ZEITABWEICHUNG"
+          },
+          {
+            "key": "citation.acknowledge",
+            "text": "Zur Kenntnis"
+          },
+          {
+            "key": "window.directives",
+            "text": "Anweisungen"
+          },
+          {
+            "key": "window.scanner",
+            "text": "Abweichungsbericht"
+          },
+          {
+            "key": "window.settings",
+            "text": "Einstellungen"
+          },
+          {
+            "key": "icon.directives",
+            "text": "Anweisungen"
+          },
+          {
+            "key": "icon.scanner",
+            "text": "Abweichungsbericht"
+          },
+          {
+            "key": "icon.records",
+            "text": "Register"
+          },
+          {
+            "key": "icon.internet",
+            "text": "Internet"
+          },
+          {
+            "key": "icon.lexicon",
+            "text": "Lexikon"
+          },
+          {
+            "key": "icon.dialect",
+            "text": "Mundart"
+          },
+          {
+            "key": "icon.material",
+            "text": "Material"
+          },
+          {
+            "key": "icon.notes",
+            "text": "Notizen"
+          },
+          {
+            "key": "icon.clueLog",
+            "text": "Hinweise"
+          },
+          {
+            "key": "tray.day",
+            "text": "Tag {0}"
+          },
+          {
+            "key": "tray.stability",
+            "text": "Stabilität: {0:0}%"
+          },
+          {
+            "key": "taskbar.desk",
+            "text": "< Schreibtisch"
+          },
+          {
+            "key": "briefing.title",
+            "text": "Tag {0} — Morgenbesprechung"
+          },
+          {
+            "key": "results.title",
+            "text": "Tag {0} — Schichtbericht"
+          },
+          {
+            "key": "briefing.newsHeader",
+            "text": "— ZEITLINIEN-NACHRICHTEN —"
+          }
+        ]
+      },
+      {
+        "language": "zh-Hans",
+        "rtl": false,
+        "entries": [
+          {
+            "key": "accept",
+            "text": "批准"
+          },
+          {
+            "key": "deny",
+            "text": "拒绝"
+          },
+          {
+            "key": "taskbar.start",
+            "text": "开始"
+          },
+          {
+            "key": "startmenu.settings",
+            "text": "设置"
+          },
+          {
+            "key": "startmenu.screenOff",
+            "text": "关闭屏幕"
+          },
+          {
+            "key": "startmenu.quit",
+            "text": "退出游戏"
+          },
+          {
+            "key": "briefing.masthead",
+            "text": "时间时报"
+          },
+          {
+            "key": "briefing.start",
+            "text": "开始值班"
+          },
+          {
+            "key": "results.masthead",
+            "text": "值班日志 — 晚间版"
+          },
+          {
+            "key": "results.goHome",
+            "text": "回家"
+          },
+          {
+            "key": "records.title",
+            "text": "公民档案"
+          },
+          {
+            "key": "records.search",
+            "text": "搜索"
+          },
+          {
+            "key": "compare.match",
+            "text": "相符"
+          },
+          {
+            "key": "compare.mismatch",
+            "text": "不符"
+          },
+          {
+            "key": "citation.title",
+            "text": "时间线偏差通知"
+          },
+          {
+            "key": "citation.acknowledge",
+            "text": "知悉"
+          },
+          {
+            "key": "window.directives",
+            "text": "指令"
+          },
+          {
+            "key": "window.scanner",
+            "text": "偏差报告"
+          },
+          {
+            "key": "window.settings",
+            "text": "设置"
+          },
+          {
+            "key": "icon.directives",
+            "text": "指令"
+          },
+          {
+            "key": "icon.scanner",
+            "text": "偏差报告"
+          },
+          {
+            "key": "icon.records",
+            "text": "档案"
+          },
+          {
+            "key": "icon.internet",
+            "text": "互联网"
+          },
+          {
+            "key": "icon.lexicon",
+            "text": "词典"
+          },
+          {
+            "key": "icon.dialect",
+            "text": "方言"
+          },
+          {
+            "key": "icon.material",
+            "text": "材料"
+          },
+          {
+            "key": "icon.notes",
+            "text": "便笺"
+          },
+          {
+            "key": "icon.clueLog",
+            "text": "线索"
+          },
+          {
+            "key": "tray.day",
+            "text": "第{0}天"
+          },
+          {
+            "key": "tray.stability",
+            "text": "稳定度：{0:0}%"
+          },
+          {
+            "key": "taskbar.desk",
+            "text": "< 办公桌"
+          },
+          {
+            "key": "briefing.title",
+            "text": "第{0}天 — 晨间简报"
+          },
+          {
+            "key": "results.title",
+            "text": "第{0}天 — 值班报告"
+          },
+          {
+            "key": "briefing.newsHeader",
+            "text": "— 时间线新闻 —"
+          }
+        ]
+      },
+      {
+        "language": "ja",
+        "rtl": false,
+        "entries": [
+          {
+            "key": "accept",
+            "text": "承認"
+          },
+          {
+            "key": "deny",
+            "text": "却下"
+          },
+          {
+            "key": "taskbar.start",
+            "text": "スタート"
+          },
+          {
+            "key": "startmenu.settings",
+            "text": "設定"
+          },
+          {
+            "key": "startmenu.screenOff",
+            "text": "画面オフ"
+          },
+          {
+            "key": "startmenu.quit",
+            "text": "ゲーム終了"
+          },
+          {
+            "key": "briefing.masthead",
+            "text": "時空新報"
+          },
+          {
+            "key": "briefing.start",
+            "text": "勤務開始"
+          },
+          {
+            "key": "results.masthead",
+            "text": "勤務台帳 — 夕刊"
+          },
+          {
+            "key": "results.goHome",
+            "text": "帰宅"
+          },
+          {
+            "key": "records.title",
+            "text": "住民記録"
+          },
+          {
+            "key": "records.search",
+            "text": "検索"
+          },
+          {
+            "key": "compare.match",
+            "text": "一致"
+          },
+          {
+            "key": "compare.mismatch",
+            "text": "不一致"
+          },
+          {
+            "key": "citation.title",
+            "text": "時間線逸脱通知"
+          },
+          {
+            "key": "citation.acknowledge",
+            "text": "了解"
+          },
+          {
+            "key": "window.directives",
+            "text": "指示"
+          },
+          {
+            "key": "window.scanner",
+            "text": "逸脱報告"
+          },
+          {
+            "key": "window.settings",
+            "text": "設定"
+          },
+          {
+            "key": "icon.directives",
+            "text": "指示"
+          },
+          {
+            "key": "icon.scanner",
+            "text": "逸脱報告"
+          },
+          {
+            "key": "icon.records",
+            "text": "記録"
+          },
+          {
+            "key": "icon.internet",
+            "text": "インターネット"
+          },
+          {
+            "key": "icon.lexicon",
+            "text": "用語集"
+          },
+          {
+            "key": "icon.dialect",
+            "text": "方言"
+          },
+          {
+            "key": "icon.material",
+            "text": "素材"
+          },
+          {
+            "key": "icon.notes",
+            "text": "メモ"
+          },
+          {
+            "key": "icon.clueLog",
+            "text": "手がかり"
+          },
+          {
+            "key": "tray.day",
+            "text": "{0}日目"
+          },
+          {
+            "key": "tray.stability",
+            "text": "安定度：{0:0}%"
+          },
+          {
+            "key": "taskbar.desk",
+            "text": "< デスク"
+          },
+          {
+            "key": "briefing.title",
+            "text": "{0}日目 — 朝のブリーフィング"
+          },
+          {
+            "key": "results.title",
+            "text": "{0}日目 — 勤務報告"
+          },
+          {
+            "key": "briefing.newsHeader",
+            "text": "— 時間線ニュース —"
           }
         ]
       }

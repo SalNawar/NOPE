@@ -125,18 +125,18 @@ public static partial class OfficeSceneUIBuilder
         ("free_2", DeskSlotKind.Free, new Vector3(2.5f, -5.6f, 0f)),
     };
 
-    /// <summary>Returns a desk reaction asset, creating it with a kind and a tooltip when missing (a designer's edits are kept).</summary>
-    private static DeskReactionSO EnsureDeskReaction(string name, ReactionKind kind, string tooltip)
+    /// <summary>Returns a desk reaction asset, creating it with a kind and a tooltip key when missing (a designer's edits are kept).</summary>
+    private static DeskReactionSO EnsureDeskReaction(string name, ReactionKind kind, string tooltipKey)
     {
         string path = $"{DeskReactionFolder}/{name}.asset";
         DeskReactionSO reaction = AssetDatabase.LoadAssetAtPath<DeskReactionSO>(path);
         if (reaction != null)
             return reaction;
 
-        EnsureFolderTree(DeskReactionFolder);
+        PlaceholderPng.EnsureFolderTree(DeskReactionFolder);
         reaction = ScriptableObject.CreateInstance<DeskReactionSO>();
         reaction.kind = kind;
-        reaction.tooltip = tooltip;
+        reaction.tooltipKey = tooltipKey;
         AssetDatabase.CreateAsset(reaction, path);
         return reaction;
     }
@@ -148,7 +148,7 @@ public static partial class OfficeSceneUIBuilder
         if (config != null)
             return config;
 
-        EnsureFolderTree("Assets/Data/Config");
+        PlaceholderPng.EnsureFolderTree("Assets/Data/Config");
         config = ScriptableObject.CreateInstance<DeskConfigSO>();
         AssetDatabase.CreateAsset(config, DeskConfigPath);
         AssetDatabase.SaveAssets();
@@ -538,15 +538,15 @@ public static partial class OfficeSceneUIBuilder
         Clickable poster = BuildProp(booth.Find("ReactivePoster"), EnsureDeskReaction("Reaction_Poster", ReactionKind.Wobble, ""), tooltip, null, null);
         Clickable intercom = BuildProp(booth.Find("DeskIntercom"), EnsureDeskReaction("Reaction_Intercom", ReactionKind.Squash, ""), tooltip, null, null);
         Clickable tray = BuildProp(trayTransform, EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null, null);
-        Clickable till = BuildProp(tillTransform, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "Credits: {value}"), tooltip,
+        Clickable till = BuildProp(tillTransform, EnsureDeskReaction("Reaction_Till", ReactionKind.Nudge, "tooltip.credits"), tooltip,
                                    ReadoutText(tillTransform, "CreditsNumber"), tillTransform.GetComponent<AudioSource>());
-        Clickable stability = BuildProp(stabilityTransform, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "Timeline stability: {value}"), tooltip,
+        Clickable stability = BuildProp(stabilityTransform, EnsureDeskReaction("Reaction_Stability", ReactionKind.None, "tooltip.stability"), tooltip,
                                         ReadoutText(stabilityTransform, "StabilityPercent"), null);
-        Clickable clock = BuildProp(booth.Find("WallClock"), EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "{value}"), tooltip, trayClockText, null);
+        Clickable clock = BuildProp(booth.Find("WallClock"), EnsureDeskReaction("Reaction_Clock", ReactionKind.None, "tooltip.value"), tooltip, trayClockText, null);
 
         // The calendar is painted on the left partition: a hit zone over its sheet.
         Clickable calendar = EnsureHitZone(partition, "CalendarZone", CalendarZoneCentre, CalendarZoneSize, CalendarZoneOrder);
-        WireReaction(calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "Day {value}"), tooltip, ReadoutText(partition, "DayNumber"), null);
+        WireReaction(calendar, EnsureDeskReaction("Reaction_Calendar", ReactionKind.None, "tooltip.day"), tooltip, ReadoutText(partition, "DayNumber"), null);
         AssetDatabase.SaveAssets();
 
         // A finished scan pulses the scanner.
@@ -666,15 +666,15 @@ public static partial class OfficeSceneUIBuilder
     /// no graphic, and its Panel child (anchors and pivot (0.5, 0.5), raycast
     /// targets off, inactive) holding an auto-sized label.
     /// </summary>
-    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background)
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role)
     {
         DestroyChildIfPresent(overlay, name);
         Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        Transform panel = Panel(host, "Panel", Center, Center, Vector2.zero, size, background);
+        Transform panel = Panel(host, "Panel", Center, Center, Vector2.zero, size, background, role);
         ((RectTransform)panel).pivot = Center;
         panel.GetComponent<Image>().raycastTarget = false;
 
-        TMP_Text label = Text(panel, "Label", "", 24, TextAlignmentOptions.Center, new Vector2(0.04f, 0.08f), new Vector2(0.96f, 0.92f), Ink);
+        TMP_Text label = Text(panel, "Label", "", 24, TextAlignmentOptions.Center, new Vector2(0.04f, 0.08f), new Vector2(0.96f, 0.92f), Ink, role);
         label.enableAutoSizing = true;
         label.fontSizeMin = 14f;
         label.fontSizeMax = 24f;
@@ -705,7 +705,7 @@ public static partial class OfficeSceneUIBuilder
     {
         DestroyChildIfPresent(overlay, "TravellerWheel");
         Transform host = Panel(overlay, "TravellerWheel", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f));
+        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
 
         Transform ring = Panel(catcher, "Ring", Center, Center, Vector2.zero, Vector2.zero, null);
         ((RectTransform)ring).pivot = Center;
@@ -717,7 +717,7 @@ public static partial class OfficeSceneUIBuilder
         ((RectTransform)centre).pivot = Center;
         centre.gameObject.AddComponent<LayoutElement>().ignoreLayout = true;
 
-        Button template = MakeButton(ring, "ActionButtonTemplate", "Choice", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 0.95f));
+        Button template = MakeButton(ring, "ActionButtonTemplate", "Choice", Vector2.zero, Vector2.one, new Color(0.16f, 0.28f, 0.42f, 0.95f), ThemeRoleId.WheelButton);
         TMP_Text choice = template.transform.Find("Label").GetComponent<TMP_Text>();
         choice.enableAutoSizing = true;
         choice.fontSizeMin = 12f;

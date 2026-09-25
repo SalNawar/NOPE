@@ -118,6 +118,9 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Hides all panels on scene start and wires static buttons.</summary>
     private void Awake()
     {
+        // A long Future currency name shrinks the money line instead of wrapping it (piece 6 R21).
+        UiText.FitLabel(moneyText);
+
         if (expensesPanel != null) expensesPanel.SetActive(false);
         if (shopPanel != null) shopPanel.SetActive(false);
         if (slotPanel != null) slotPanel.SetActive(false);
@@ -143,7 +146,7 @@ public sealed class HomeUIController : MonoBehaviour
             return;
 
         if (moneyText != null)
-            moneyText.text = $"Credits: {world.money}";
+            moneyText.text = $"{UiText.Currency(UiText.WalletForm.Label)}: {world.money}";
 
         if (stabilityText != null)
             stabilityText.text = $"Stability: {world.timelineStability:0}%";
@@ -186,7 +189,7 @@ public sealed class HomeUIController : MonoBehaviour
             if (report.conditionAmount > 0)
                 sb.AppendLine($"  Medical drain: -{report.conditionAmount}");
 
-            sb.AppendLine($"Total: -{report.total} credits   (Balance: {world.money})");
+            sb.AppendLine($"Total: -{report.total} {UiText.Currency(UiText.WalletForm.Inline)}   (Balance: {world.money})");
 
             if (world.money < 0)
                 sb.AppendLine("\nYou are in debt. Find a way to make ends meet.");
@@ -266,7 +269,7 @@ public sealed class HomeUIController : MonoBehaviour
 
         if (shopBodyText != null)
         {
-            shopBodyText.text = $"Balance: {world.money} credits";
+            shopBodyText.text = $"Balance: {world.money} {UiText.Currency(UiText.WalletForm.Inline)}";
         }
 
         BuildShopRows(world, lib, onBuy);
@@ -304,8 +307,8 @@ public sealed class HomeUIController : MonoBehaviour
             string label = owned
                 ? $"{upgrade.displayName} (owned)"
                 : discountPercent > 0f
-                    ? $"{upgrade.displayName} — {cost} cr ({discountPercent:0}% off)"
-                    : $"{upgrade.displayName} — {cost} cr";
+                    ? $"{upgrade.displayName} — {cost} {UiText.Currency(UiText.WalletForm.Short)} ({discountPercent:0}% off)"
+                    : $"{upgrade.displayName} — {cost} {UiText.Currency(UiText.WalletForm.Short)}";
 
             string buttonLabel = owned ? "Owned" : "Buy";
             bool interactable = !owned && world.money >= cost && onBuy != null;
@@ -355,7 +358,7 @@ public sealed class HomeUIController : MonoBehaviour
         int spinCost = config != null ? config.slotSpinCost : 0;
 
         if (slotBodyText != null)
-            slotBodyText.text = $"Spin for {spinCost} credits. Try your luck for tomorrow's shift.";
+            slotBodyText.text = $"Spin for {spinCost} {UiText.Currency(UiText.WalletForm.Inline)}. Try your luck for tomorrow's shift.";
 
         if (slotSpinButton != null)
         {
@@ -482,6 +485,7 @@ public sealed class HomeUIController : MonoBehaviour
         labelText.fontSize = 22;
         labelText.color = Color.white;
         labelText.alignment = TextAlignmentOptions.MidlineLeft;
+        UiText.FitLabel(labelText); // a long currency name shrinks the price instead of wrapping
 
         // Button.
         var buttonGo = new GameObject("Button", typeof(RectTransform));

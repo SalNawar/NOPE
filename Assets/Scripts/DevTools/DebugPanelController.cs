@@ -281,6 +281,24 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.Space(6f);
         foreach (string line in HistorySummary(world))
             GUILayout.Label(line);
+
+        GUILayout.Space(6f);
+        foreach (string line in CultureSummary())
+            GUILayout.Label(line);
+    }
+
+    /// <summary>The present culture as the inspector prints it (piece 6): the cue's culture, the theme, label language, font, wallet word and missing UI strings.</summary>
+    private static IEnumerable<string> CultureSummary()
+    {
+        CultureThemeService s = CultureThemeService.Instance;
+        if (s == null)
+        {
+            yield return "Present culture: no theme service (run Tools > TimeDesk > Generate World)";
+            yield break;
+        }
+        yield return $"Present culture: {s.ActiveCultureId ?? "neutral"} (cue)";
+        yield return $"Theme: {s.ActiveTheme.displayName} · labels: {s.Language} · font: {s.FontName} · wallet: {UiText.Currency(UiText.WalletForm.Label)}";
+        yield return $"Missing UI strings: {s.Strings.MissingKeys.Count}";
     }
 
     /// <summary>The history as the inspector and the state dump print it: leader, ranking, fact edits, pending carries.</summary>

@@ -64,8 +64,8 @@ public class DiscrepancyLogTests
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.RecordMismatch, d.provedBy);
         Assert.AreEqual("3 May 1131", d.expectedValue);
-        StringAssert.Contains("BIRTH DATE", d.Summary);
-        StringAssert.Contains("agency records", d.Summary);
+        Assert.AreEqual("deviation.recordMismatch.papers", d.ReportKey);
+        Assert.AreEqual("3 May 1131", d.ReportOther);
     }
 
     [Test]
@@ -280,8 +280,9 @@ public class DiscrepancyLogTests
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
         Assert.AreEqual(EvidenceKind.Answer, d.source);
-        StringAssert.Contains("traveller said: \"Aqueduct\"", d.Summary);
-        StringAssert.Contains("expected: \"Longship\"", d.Summary);
+        Assert.AreEqual("deviation.claimMismatch.said", d.ReportKey);
+        Assert.AreEqual("Aqueduct", d.documentValue);
+        Assert.AreEqual("Longship", d.ReportOther);
     }
 
     [Test]
@@ -292,7 +293,8 @@ public class DiscrepancyLogTests
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
         Assert.AreEqual("latia — rome", d.actualOrigin);
-        StringAssert.Contains("traveller said \"Aqueduct\", which belongs to latia — rome", d.Summary);
+        Assert.AreEqual("deviation.foreignOrigin.said", d.ReportKey);
+        Assert.AreEqual("latia — rome", d.ReportOther);
     }
 
     [Test]
@@ -305,7 +307,9 @@ public class DiscrepancyLogTests
 
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.RecordMismatch, d.provedBy);
-        Assert.AreEqual("BIRTH DATE INCORRECT — traveller said: \"3 Jun 1801 BCE\"  /  agency records: \"3 Jun 1510 BCE\"", d.Summary);
+        Assert.AreEqual("deviation.recordMismatch.said", d.ReportKey);
+        Assert.AreEqual("3 Jun 1801 BCE", d.documentValue);
+        Assert.AreEqual("3 Jun 1510 BCE", d.ReportOther);
     }
 
     [Test]
@@ -335,7 +339,8 @@ public class DiscrepancyLogTests
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d.provedBy);
         Assert.AreEqual(EvidenceKind.Appearance, d.source);
-        Assert.AreEqual("DRESS INCORRECT — traveller wears: \"top hat / poke bonnet\"  /  expected: \"chonmage / shimada\"", d.Summary);
+        Assert.AreEqual("deviation.claimMismatch.worn", d.ReportKey);
+        Assert.AreEqual("chonmage / shimada", d.ReportOther);
     }
 
     [Test]
@@ -346,7 +351,8 @@ public class DiscrepancyLogTests
         Assert.NotNull(d);
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d.provedBy);
         Assert.AreEqual(EvidenceKind.Appearance, d.source);
-        StringAssert.Contains("DRESS INCORRECT — traveller wears \"top hat / poke bonnet\", which belongs to britain — industrial", d.Summary);
+        Assert.AreEqual("deviation.foreignOrigin.worn", d.ReportKey);
+        Assert.AreEqual("britain — industrial", d.ReportOther);
     }
 
     [Test]
@@ -379,14 +385,17 @@ public class DiscrepancyLogTests
     }
 
     [Test]
-    public void PaperSummaries_StillSayPapers_AndUseTheReportLabel()
+    public void PaperReports_UseThePapersKeys_AndTheCategoryWord()
     {
         Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
         Assert.AreEqual(EvidenceKind.DocumentField, mismatch.source);
-        Assert.AreEqual("DEVICE INCORRECT — papers: \"Aqueduct\"  /  expected: \"Longship\"", mismatch.Summary);
+        Assert.AreEqual("deviation.claimMismatch.papers", mismatch.ReportKey);
+        Assert.AreEqual("Longship", mismatch.ReportOther);
+        Assert.AreEqual("category.Technology", ClueLabels.Key(mismatch.category));
 
         Discrepancy origin = DiscrepancyLog.Prove(TellDocField(), Entry("latia", "rome", "Aqueduct"), ClaimNation, ClaimEra);
-        Assert.AreEqual("DEVICE INCORRECT — papers show \"Aqueduct\", which belongs to latia — rome", origin.Summary);
+        Assert.AreEqual("deviation.foreignOrigin.papers", origin.ReportKey);
+        Assert.AreEqual("latia — rome", origin.ReportOther);
     }
 
     [Test]
@@ -413,24 +422,57 @@ public class DiscrepancyLogTests
         Assert.NotNull(x, "an already documented category still proves; only Add refuses it");
         Assert.AreEqual(DiscrepancyProof.ForeignOrigin, x.provedBy);
         Assert.AreNotSame(x, y);
-        Assert.AreEqual(x.Summary, y.Summary);
+        Assert.AreEqual(x.ReportKey, y.ReportKey);
+        Assert.AreEqual(x.ReportOther, y.ReportOther);
         Assert.AreEqual(x.provedBy, y.provedBy);
         Assert.AreEqual(x.source, y.source);
         Assert.AreEqual(1, log.Count, "proving documents nothing");
         Assert.AreEqual(EvidenceKind.DocumentField, log.Items[0].source);
     }
 
-    [TestCase(ClueCategory.Language, "LANGUAGE")]
-    [TestCase(ClueCategory.Material, "MATERIAL")]
-    [TestCase(ClueCategory.Politics, "RULER")]
-    [TestCase(ClueCategory.Technology, "DEVICE")]
-    [TestCase(ClueCategory.Currency, "CURRENCY")]
-    [TestCase(ClueCategory.Geography, "CAPITAL")]
-    [TestCase(ClueCategory.Culture, "DRESS")]
-    [TestCase(ClueCategory.Name, "NAME")]
-    [TestCase(ClueCategory.BirthDate, "BIRTH DATE")]
-    public void ClueLabels_Report_OneLabelPerCategory(ClueCategory category, string expected)
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.DocumentField, "deviation.claimMismatch.papers")]
+    [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Answer, "deviation.foreignOrigin.said")]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.DocumentField, "deviation.recordMismatch.papers")]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.Answer, "deviation.recordMismatch.said")]
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.None, "deviation.claimMismatch.papers")]
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.Appearance, "deviation.claimMismatch.worn")]
+    [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Appearance, "deviation.foreignOrigin.worn")]
+    public void ReportKeyFor_NamesTheProofAndWhoStatedIt(DiscrepancyProof proof, EvidenceKind statement, string expected)
     {
-        Assert.AreEqual(expected, ClueLabels.Report(category));
+        Assert.AreEqual(expected, Discrepancy.ReportKeyFor(proof, statement));
     }
+
+    [Test]
+    public void ReportKey_AndReportOther_OfRealProofs()
+    {
+        Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        Assert.AreEqual("deviation.claimMismatch.papers", mismatch.ReportKey);
+        Assert.AreEqual("Longship", mismatch.ReportOther, "the expected value");
+
+        Discrepancy origin = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra);
+        Assert.AreEqual("deviation.foreignOrigin.said", origin.ReportKey);
+        Assert.AreEqual("latia — rome", origin.ReportOther, "the place the value belongs to");
+
+        Discrepancy record = DiscrepancyLog.Prove(
+            CompareEvidence.ForAnswer(ClueCategory.BirthDate, "3 Jun 1801 BCE", true),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 Jun 1510 BCE"),
+            ClaimNation, ClaimEra);
+        Assert.AreEqual("deviation.recordMismatch.said", record.ReportKey);
+        Assert.AreEqual("3 Jun 1510 BCE", record.ReportOther, "the recorded value");
+    }
+
+    [TestCase(ClueCategory.Language, "category.Language")]
+    [TestCase(ClueCategory.Material, "category.Material")]
+    [TestCase(ClueCategory.Politics, "category.Politics")]
+    [TestCase(ClueCategory.Technology, "category.Technology")]
+    [TestCase(ClueCategory.Currency, "category.Currency")]
+    [TestCase(ClueCategory.Geography, "category.Geography")]
+    [TestCase(ClueCategory.Culture, "category.Culture")]
+    [TestCase(ClueCategory.Name, "category.Name")]
+    [TestCase(ClueCategory.BirthDate, "category.BirthDate")]
+    public void ClueLabels_Key_OneKeyPerCategory(ClueCategory category, string expected)
+    {
+        Assert.AreEqual(expected, ClueLabels.Key(category));
+    }
+
 }

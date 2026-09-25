@@ -72,7 +72,7 @@ public abstract class PagedRowsWindow : MonoBehaviour
         _page = Mathf.Clamp(page, 0, pages - 1);
 
         if (pageText != null)
-            pageText.text = $"Page {_page + 1}/{pages}";
+            pageText.text = UiText.Format("window.page", _page + 1, pages);
 
         if (prevButton != null)
             prevButton.interactable = _page > 0;
