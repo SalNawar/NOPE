@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// A physical paper on the desk: a root on the desk plane carrying its
@@ -14,10 +15,15 @@ using UnityEngine;
 /// laid out by PaperFace, the values written through DocumentRowView in the
 /// traveller's translation on the document's RevealClock (shared with the
 /// scanned copy). Without one (a scene built before piece 10) it shows the
-/// title and the photo only. Slides are linear moves and flips advance in
+/// title and the photo only. A click raises Clicked with the button and the
+/// row under the pointer (PaperFace.RowAt; DeskController routes it through
+/// PaperClicks). While examined (held in the hand; PaperExaminer owns the
+/// sheet's pose) the paper is evenly lit (its unlit examine material, the
+/// photo in the examine tint) and the row under the pointer tints; a picked
+/// row lights up (RowHighlight). Slides are linear moves and flips advance in
 /// Update, only while either runs.
 /// </summary>
-public sealed class DeskDocument : MonoBehaviour
+public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
     /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider, texts and photo.</summary>
     [SerializeField] private Transform sheet;
@@ -34,7 +40,13 @@ public sealed class DeskDocument : MonoBehaviour
     /// <summary>The inactive row cloned per field (children Label and Value, TextMeshPro, and Highlight, a quad); optional.</summary>
     [SerializeField] private GameObject rowTemplate;
 
-    /// <summary>The paper's click.</summary>
+    /// <summary>The paper quad (its material swaps to the examine material while held).</summary>
+    [SerializeField] private Renderer paperQuad;
+
+    /// <summary>The paper's unlit material while held in the hand (the paper's texture, evenly lit); optional.</summary>
+    [SerializeField] private Material examineMaterial;
+
+    /// <summary>The paper's click (hover outline, hand cursor and whether it takes input).</summary>
     [SerializeField] private Clickable click;
 
     /// <summary>The paper's drag.</summary>
@@ -48,12 +60,41 @@ public sealed class DeskDocument : MonoBehaviour
         public TMP_Text Value;
         public TMP_FontAsset OwnFont;
         public Material OwnMaterial;
+        public Renderer Highlight;
+        public bool Picked;
+        public Color PickColour;
     }
+
+    /// <summary>A row of this paper as a compare highlight: tints the row's quad while picked (over the hover tint); null-safe once the paper is gone.</summary>
+    private sealed class PaperRowHighlight : ICompareHighlight
+    {
+        private readonly DeskDocument _paper;
+        private readonly int _row;
+
+        public PaperRowHighlight(DeskDocument paper, int row)
+        {
+            _paper = paper;
+            _row = row;
+        }
+
+        public void Show(bool picked, Color colour)
+        {
+            if (_paper != null)
+                _paper.SetPicked(_row, picked, colour);
+        }
+    }
+
+    private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
 
     private readonly List<RowView> _rows = new List<RowView>();
     private readonly List<TextFlip> _flips = new List<TextFlip>();
     private CaseTranslation _translation = CaseTranslation.None;
     private RevealClock _clock = new RevealClock();
+    private DeskConfigSO _config;
+    private FaceLayout _face;
+    private Material _ownPaperMaterial;
+    private MaterialPropertyBlock _block;
+    private int _hoveredRow = -1;
 
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
@@ -66,6 +107,18 @@ public sealed class DeskDocument : MonoBehaviour
 
     /// <summary>True while the paper slides (it takes no input then).</summary>
     public bool IsSliding { get; private set; }
+
+    /// <summary>True while the paper is held in the hand (PaperExaminer owns the sheet's pose).</summary>
+    public bool IsExamined { get; private set; }
+
+    /// <summary>The lying sheet (PaperExaminer poses it while the paper is held).</summary>
+    public Transform Sheet => sheet;
+
+    /// <summary>How many field rows the paper shows.</summary>
+    public int RowCount => _rows.Count;
+
+    /// <summary>Raised on a click while the paper takes input: the paper, true for a right click, and the row under the pointer while held (-1: none, or not held).</summary>
+    public event Action<DeskDocument, bool, int> Clicked;
 
     /// <summary>Only while sliding or flipping: moves along the slide (its done callback on landing) and advances the values' flips on the reveal's clock.</summary>
     private void Update()
@@ -104,17 +157,20 @@ public sealed class DeskDocument : MonoBehaviour
         Index = index;
         _translation = translation ?? CaseTranslation.None;
         _clock = clock ?? new RevealClock();
+        _config = config;
         if (title != null)
             title.text = doc != null ? doc.name : string.Empty;
 
         _rows.Clear();
         _flips.Clear();
+        _face = null;
         if (rowTemplate == null || config == null || doc == null)
             return;
 
         float height = config.paperSize.y;
         IReadOnlyList<DocumentRow> ordered = DocumentRows.Ordered(doc.fields);
         FaceLayout face = PaperFace.Layout(ordered.Count, doc.showsPhoto, config.paperSize.x / height, config.face);
+        _face = face;
         if (title != null)
             Place(title.rectTransform, face.Title, height);
         if (photoSlot != null && face.HasPhoto)
@@ -145,11 +201,113 @@ public sealed class DeskDocument : MonoBehaviour
                 FaceRect hit = face.Rows[i].Hit;
                 highlight.localPosition = new Vector3(hit.CentreX * height, hit.CentreY * height, highlight.localPosition.z);
                 highlight.localScale = new Vector3(hit.Width * height, hit.Height * height, 1f);
+                view.Highlight = highlight.GetComponent<Renderer>();
             }
             _rows.Add(view);
+            ApplyRowTint(i);
         }
 
         Refresh();
+    }
+
+    /// <summary>The document row shown as face row <paramref name="row"/> (callers pass a row from Clicked).</summary>
+    public DocumentRow FieldRow(int row) => _rows[row].Row;
+
+    /// <summary>Face row <paramref name="row"/> as a compare highlight.</summary>
+    public ICompareHighlight RowHighlight(int row) => new PaperRowHighlight(this, row);
+
+    /// <summary>
+    /// Takes the paper into the hand or puts it back: while held it is evenly
+    /// lit (the examine material; the photo in the examine tint instead of the
+    /// room's tint), its sheet is the examiner's (SetLift waits), and the row
+    /// under the pointer tints.
+    /// </summary>
+    public void SetExamined(bool examined)
+    {
+        if (IsExamined == examined)
+            return;
+
+        IsExamined = examined;
+        if (paperQuad != null && examineMaterial != null)
+        {
+            if (examined)
+                _ownPaperMaterial = paperQuad.sharedMaterial;
+            paperQuad.sharedMaterial = examined ? examineMaterial : _ownPaperMaterial;
+        }
+        if (photo != null && _config != null)
+            photo.SetTint(examined ? _config.examineTint : _config.travellerTint);
+        if (!examined)
+            SetHovered(-1);
+    }
+
+    /// <summary>A click while the paper takes input: Clicked with the button and, while held, the row under the pointer.</summary>
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (click == null || !click.Interactable || eventData.button == PointerEventData.InputButton.Middle)
+            return;
+
+        int row = IsExamined ? RowUnder(eventData) : -1;
+        Clicked?.Invoke(this, eventData.button == PointerEventData.InputButton.Right, row);
+    }
+
+    /// <summary>While held, the row under the pointer tints.</summary>
+    public void OnPointerMove(PointerEventData eventData) => SetHovered(IsExamined && click != null && click.Interactable ? RowUnder(eventData) : -1);
+
+    /// <summary>The pointer left the paper: no row tints.</summary>
+    public void OnPointerExit(PointerEventData eventData) => SetHovered(-1);
+
+    /// <summary>The face row under the pointer's hit on this paper (-1: none).</summary>
+    private int RowUnder(PointerEventData eventData)
+    {
+        if (_face == null || sheet == null || _config == null)
+            return -1;
+
+        RaycastResult hit = eventData.pointerCurrentRaycast;
+        if (hit.gameObject == null || !hit.gameObject.transform.IsChildOf(transform))
+            hit = eventData.pointerPressRaycast;
+        if (hit.gameObject == null || !hit.gameObject.transform.IsChildOf(transform))
+            return -1;
+
+        Vector3 local = sheet.InverseTransformPoint(hit.worldPosition);
+        float height = _config.paperSize.y;
+        return PaperFace.RowAt(_face, local.x / height, local.y / height);
+    }
+
+    /// <summary>Marks a face row picked (in <paramref name="colour"/>) or not.</summary>
+    private void SetPicked(int row, bool picked, Color colour)
+    {
+        if (row < 0 || row >= _rows.Count)
+            return;
+        _rows[row].Picked = picked;
+        _rows[row].PickColour = colour;
+        ApplyRowTint(row);
+    }
+
+    /// <summary>Tints the hovered row (the old one back).</summary>
+    private void SetHovered(int row)
+    {
+        if (row == _hoveredRow)
+            return;
+        int old = _hoveredRow;
+        _hoveredRow = row;
+        ApplyRowTint(old);
+        ApplyRowTint(row);
+    }
+
+    /// <summary>A row's quad colour: the pick's colour, else the hover tint while hovered, else clear.</summary>
+    private void ApplyRowTint(int row)
+    {
+        if (row < 0 || row >= _rows.Count || _rows[row].Highlight == null)
+            return;
+
+        RowView view = _rows[row];
+        Color colour = view.Picked ? view.PickColour
+            : row == _hoveredRow && _config != null ? _config.rowHoverTint
+            : Color.clear;
+        _block ??= new MaterialPropertyBlock();
+        view.Highlight.GetPropertyBlock(_block);
+        _block.SetColor(BaseColorId, colour);
+        view.Highlight.SetPropertyBlock(_block);
     }
 
     /// <summary>Rewrites the values from the document's reveal clock (a sighting started it, or a row click finished it); flips that still run advance in Update.</summary>
@@ -178,10 +336,10 @@ public sealed class DeskDocument : MonoBehaviour
         }
     }
 
-    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a held paper's lift), in metres.</summary>
+    /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres; ignored while the paper is held in the hand (the examiner owns the sheet).</summary>
     public void SetLift(float height)
     {
-        if (sheet != null)
+        if (sheet != null && !IsExamined)
             sheet.localPosition = new Vector3(0f, height, 0f);
     }
 

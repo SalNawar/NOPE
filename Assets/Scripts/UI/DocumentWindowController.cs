@@ -12,8 +12,10 @@ using UnityEngine.UI;
 /// (every place fact; never the name or the date of birth) show untranslated
 /// from translation's first day, or, with the region's Papers translator,
 /// flip into English letter by letter from the document's reveal (its
-/// RevealClock, which the scan starts: Reveal), rows staggered; a click on a
-/// row finishes the whole document first; reopening never replays. Such a
+/// RevealClock, shared with its desk paper, started by the first sighting of
+/// either: InvestigationUIController, then Refresh), rows staggered; a click
+/// on a row finishes the whole document (both surfaces) first; reopening
+/// never replays. Such a
 /// value takes the row's width after its label and may wrap and shrink there
 /// (a script's glyphs can be far wider than the English). An untranslated
 /// value shows in the compare bar as the placeholder, while its evidence
@@ -96,16 +98,8 @@ public sealed class DocumentWindowController : MonoBehaviour
         ShowPage(0);
     }
 
-    /// <summary>
-    /// The written reveal point (the scan): the first time, a document with a
-    /// value in the tongue starts flipping into English when the Papers
-    /// translator is owned; later calls, and any other document, do nothing.
-    /// </summary>
-    public void Reveal()
-    {
-        if (_doc != null && DocumentReveal.Begin(_clock, _translation, _doc.fields, Time.unscaledTime))
-            Rebuild();
-    }
+    /// <summary>Redraws the current page from the reveal clock (a sighting started it).</summary>
+    public void Refresh() => Rebuild();
 
     /// <summary>Only while values flip: advances them on the reveal's clock (they keep flipping when the page or the window changes).</summary>
     private void Update()

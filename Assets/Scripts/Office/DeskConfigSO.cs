@@ -112,6 +112,15 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>A desk paper's face: its title band, rows (a label over a value) and photo, as fractions of the paper (read at runtime; Build Office UI builds the photo frame from it and checks that every document template's rows fit).</summary>
     public PaperFaceTuning face = new PaperFaceTuning();
 
+    /// <summary>Papers held in the hand: the office slots, the dip under the wheel, the region beside the PC frame, the distance from the camera and the rise's time (screen heights, metres, seconds).</summary>
+    public ExamineTuning examine = new ExamineTuning();
+
+    /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
+    public Color examineTint = Color.white;
+
+    /// <summary>The tint on a held paper's row under the pointer (a picked row shows the compare highlight instead).</summary>
+    public Color rowHoverTint = new Color(0f, 0f, 0f, 0.06f);
+
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";

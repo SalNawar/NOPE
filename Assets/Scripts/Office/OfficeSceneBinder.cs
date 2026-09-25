@@ -13,7 +13,8 @@ using UnityEngine.SceneManagement;
 /// then moves the layer's click boxes onto the art's props and fits them to
 /// their renderers (the art objects get no components of ours), hands the
 /// props' renderers to their outlines and reactions, puts the desktop's clone
-/// on the PC's glass, sizes the desk and the scanner, stands the traveller,
+/// on the PC's glass, sizes the desk, its catcher and the scanner, hands the
+/// paper examiner the camera, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), and
 /// readies the office camera (a PhysicsRaycaster on the Interactable layer,
 /// the desktop's layer culled, its Cinemachine camera on top). Runs before
@@ -54,6 +55,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The overlay callouts (the speech bubble, the tooltip), placed through the office camera.</summary>
     [SerializeField] private OverlayCallout[] callouts;
 
+    /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
+    [SerializeField] private PaperExaminer examiner;
+
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
     [SerializeField] private PcScreenClone screenClone;
@@ -76,6 +80,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     /// <summary>Where papers slide in from and back to.</summary>
     [SerializeField] private Transform handOver;
+
+    /// <summary>The desk catcher's box (piece 10; optional): sized over the desk's clamp area, just under its plane, so papers and props above it win the raycast.</summary>
+    [SerializeField] private BoxCollider deskCatcher;
 
     /// <summary>The day-1 scan note (floats over the scanner, facing the camera).</summary>
     [SerializeField] private Transform scanHint;
@@ -135,6 +142,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>How far above the desk a hint floats (metres).</summary>
     private const float HintHeight = 0.28f;
 
+    /// <summary>The desk catcher's thickness and its top's depth under the desk plane (metres): papers and props above it win the raycast.</summary>
+    private const float DeskCatcherThickness = 0.001f;
+    private const float DeskCatcherDepth = 0.001f;
+
     /// <summary>The raycaster's hit buffer: a point can cross every stacked paper, the scanner, a prop and the traveller.</summary>
     private const int RaycastHits = 16;
 
@@ -179,6 +190,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
             if (callout != null)
                 callout.SetCamera(office);
+        if (examiner != null)
+            examiner.SetCamera(office);
 
         Vector3 viewer = office.transform.position;
         BindPc(viewer);
@@ -329,6 +342,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                               new Vector2(deskRect.CentreX - area.CentreX, deskRect.CentreY - area.CentreY),
                               new Vector2(deskRect.Width, deskRect.Height));
         }
+
+        if (deskCatcher != null)
+            PlaceBox(deskCatcher.transform, new Vector3(area.CentreX, top - DeskCatcherDepth - DeskCatcherThickness / 2f, area.CentreY),
+                     new Vector3(area.Width, DeskCatcherThickness, area.Height));
 
         if (handOver != null)
         {

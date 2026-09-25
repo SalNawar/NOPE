@@ -32,6 +32,9 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>Where the object was when the last drag started.</summary>
     public Vector3 PickUpPosition { get; private set; }
 
+    /// <summary>True while a drag should take the object by its centre (no grab offset): a paper dragged out of the hand drops under the pointer (DeskController sets it while the paper is held).</summary>
+    public bool GrabAtCentre { get; set; }
+
     /// <summary>Sets the desk this object moves on.</summary>
     public void Init(DeskSurface surface) => _surface = surface;
 
@@ -48,13 +51,13 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
             proxy.enabled = raycastable;
     }
 
-    /// <summary>Records the pick-up position and the grab offset, and turns the proxy off.</summary>
+    /// <summary>Records the pick-up position and the grab offset (none while GrabAtCentre), and turns the proxy off.</summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
         _dragging = true;
         PickUpPosition = transform.position;
         _grabOffset = Vector3.zero;
-        if (_surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
+        if (!GrabAtCentre && _surface != null && _surface.TryProject(eventData.pressEventCamera, eventData.position, out Vector3 point))
             _grabOffset = transform.position - point;
         if (proxy != null)
             proxy.enabled = false;

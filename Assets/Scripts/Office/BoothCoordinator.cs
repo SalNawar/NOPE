@@ -5,12 +5,15 @@ using UnityEngine.UI;
 /// <summary>
 /// Applies BoothRules and the wake rules to the office: from the view (the PC
 /// frame open or not), the screen's power, the shift's phase (set by
-/// GameManager), the wheel and a pending citation slip, it decides which of the
-/// desktop, the PC, the power buttons, the desk props, the papers, the
-/// traveller and the wheel take input; it wakes the screen for a presented
-/// traveller and a finished scan, holds it on for a citation slip, and shows
-/// the day-1 wheel note. Every reference is optional: a missing view counts as
-/// the office view; a missing screen counts as on. Event-driven (no per-frame code).
+/// GameManager), the wheel, a pending citation slip and the papers held in the
+/// hand, it decides which of the desktop, the PC, the power buttons, the desk
+/// props, the papers (on the desk and in the hand), the desk catcher, Escape's
+/// put-back, the traveller and the wheel take input, and where held papers sit
+/// (beside the open frame, dipped under the open wheel: PaperExaminer); it
+/// wakes the screen for a presented traveller and a finished scan, holds it on
+/// for a citation slip, and shows the day-1 wheel note. Every reference is
+/// optional: a missing view counts as the office view; a missing screen counts
+/// as on. Event-driven (no per-frame code).
 /// </summary>
 public sealed class BoothCoordinator : MonoBehaviour
 {
@@ -47,6 +50,9 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>The desk tuning (the wheel note's text and last day).</summary>
     [SerializeField] private DeskConfigSO config;
 
+    /// <summary>Poses the papers held in the hand (piece 10; optional): beside the open frame, dipped under the open wheel.</summary>
+    [SerializeField] private PaperExaminer examiner;
+
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
     private bool _citationPending;
@@ -67,7 +73,10 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (wheel != null)
             wheel.OpenChanged += HandleWheel;
         if (desk != null)
+        {
             desk.ScanFinished += HandleScanFinished;
+            desk.HoldsChanged += Apply;
+        }
     }
 
     private void OnDisable()
@@ -79,7 +88,10 @@ public sealed class BoothCoordinator : MonoBehaviour
         if (wheel != null)
             wheel.OpenChanged -= HandleWheel;
         if (desk != null)
+        {
             desk.ScanFinished -= HandleScanFinished;
+            desk.HoldsChanged -= Apply;
+        }
     }
 
     /// <summary>The first application, once every component has woken (Awake runs before any Start).</summary>
@@ -137,7 +149,7 @@ public sealed class BoothCoordinator : MonoBehaviour
         wheel != null && wheel.IsOpen,
         _citationPending,
         false,
-        false);
+        desk != null && desk.HeldCount > 0);
 
     /// <summary>Applies the rules. The wheel first: closing it changes the context the rest reads (its OpenChanged re-applies too, harmlessly).</summary>
     private void Apply()
@@ -159,7 +171,14 @@ public sealed class BoothCoordinator : MonoBehaviour
                 if (prop != null)
                     prop.Interactable = input.PropsLive;
         if (desk != null)
+        {
             desk.SetPapersLive(input.PapersLive);
+            desk.SetHeldLive(input.HeldPapersLive);
+            desk.SetDeskCatcherLive(input.DeskCatcherLive);
+            desk.SetExamineEscapeLive(input.ExamineEscapeLive);
+        }
+        if (examiner != null)
+            examiner.SetMode(view != null && view.Current == OfficeView.MonitorFocus, wheel != null && wheel.IsOpen);
         if (travellerHitZone != null)
             travellerHitZone.Interactable = input.TravellerLive;
         if (wheelHint != null)

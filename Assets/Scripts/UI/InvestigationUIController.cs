@@ -16,8 +16,12 @@ using UnityEngine.UI;
 /// builds a shelf of reference books the player can open/stow, and offers the
 /// binary Accept/Deny. From translation's first day a traveller's papers and
 /// speech are in their claimed place's tongue (piece 9): the day's
-/// TranslationPresenter says how each traveller's text shows, and the scan
-/// is the papers' reveal point.
+/// TranslationPresenter says how each traveller's text shows. A document's
+/// written reveal (one RevealClock for its paper and its scanned copy) starts
+/// at its first sighting (piece 10 X25): its paper lifted into the hand, the
+/// PC frame opening while its scanned window is open, or a scan opening its
+/// window while the frame is open. A held paper's row picked at the desk goes
+/// into the same compare as the PC's rows.
 ///
 /// Two modes:
 /// - RICH: when the desk has been built (document/book/shelf templates wired by
@@ -134,6 +138,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The current traveller's translation (None between cases and when nothing is foreign).</summary>
     private CaseTranslation _caseTranslation = CaseTranslation.None;
 
+    /// <summary>True while the PC frame is open (GameManager, from the office view): a scanned window shown then is seen up close.</summary>
+    private bool _frameOpen;
+
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
 
@@ -209,7 +216,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents open on the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
 
         if (DeskReachable)
+        {
             desk.ScanFinished += OpenDocumentWindow;
+            desk.PaperExamined += Sighted;
+            desk.FieldPicked += HandleFieldPicked;
+        }
 
         if (idleScreen != null)
             idleScreen.SetActive(true);
@@ -221,7 +232,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             compareController.PairCompared -= HandlePairCompared;
 
         if (DeskReachable)
+        {
             desk.ScanFinished -= OpenDocumentWindow;
+            desk.PaperExamined -= Sighted;
+            desk.FieldPicked -= HandleFieldPicked;
+        }
     }
 
     /// <summary>
@@ -583,10 +598,11 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
-    /// or a hand-over where no desk is wired: the written reveal point, where
-    /// a translated paper starts flipping into English the first time). The
-    /// first time it opens this case, the paper also gets a desktop icon at
-    /// the top of the grid, which reopens the window after it is closed.
+    /// or a hand-over where no desk is wired); shown in the open frame, it is a
+    /// sighting (its translation's reveal), else it waits untranslated on the
+    /// office PC's small screen. The first time it opens this case, the paper
+    /// also gets a desktop icon at the top of the grid, which reopens the
+    /// window after it is closed.
     /// </summary>
     private void OpenDocumentWindow(int index)
     {
@@ -596,9 +612,53 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         window.gameObject.SetActive(true);
         window.transform.SetAsLastSibling();
-        window.Reveal();
+        if (_frameOpen)
+            Sighted(index);
         if (_iconedDocuments.Add(index))
             AddDesktopIcon(_caseDocuments[index].name, window.gameObject, true);
+    }
+
+    /// <summary>
+    /// The PC frame opened or closed (GameManager, from the office view):
+    /// opening it is a sighting of every scanned window that is open.
+    /// </summary>
+    public void SetFrameOpen(bool open)
+    {
+        _frameOpen = open;
+        if (!open)
+            return;
+
+        for (int i = 0; i < _docWindows.Count; i++)
+            if (_docWindows[i] != null && _docWindows[i].gameObject.activeSelf)
+                Sighted(i);
+    }
+
+    /// <summary>
+    /// Document <paramref name="index"/> is seen up close (piece 10 X25): its
+    /// written reveal starts the first time (DocumentReveal.Begin), and its
+    /// scanned window and its paper redraw from the shared clock.
+    /// </summary>
+    private void Sighted(int index)
+    {
+        if (index < 0 || index >= _clocks.Count || index >= _caseDocuments.Count)
+            return;
+        if (!DocumentReveal.Begin(_clocks[index], _caseTranslation, _caseDocuments[index].fields, Time.unscaledTime))
+            return;
+
+        if (index < _docWindows.Count && _docWindows[index] != null)
+            _docWindows[index].Refresh();
+        if (DeskReachable)
+            desk.RefreshPaper(index);
+    }
+
+    /// <summary>A held paper's row picked at the desk: the document's flip finishes on both surfaces, then the row goes into the compare (the same pick as its scanned copy's row).</summary>
+    private void HandleFieldPicked(int index, DocumentRow row, ICompareHighlight highlight)
+    {
+        if (index < 0 || index >= _caseDocuments.Count || compareController == null)
+            return;
+
+        _clocks[index].Finish();
+        compareController.Select(EvidencePicks.ForField(index, row, _caseDocuments[index].name, _caseTranslation), highlight);
     }
 
     /// <summary>
