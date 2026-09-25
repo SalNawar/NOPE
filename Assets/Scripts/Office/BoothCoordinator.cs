@@ -5,10 +5,11 @@ using UnityEngine.UI;
 /// <summary>
 /// Applies BoothRules and the wake rules to the office: from the view (the PC
 /// frame open or not), the screen's power, the shift's phase (set by
-/// GameManager), the wheel, a pending citation slip and the papers held in the
-/// hand, it decides which of the desktop, the PC, the power buttons, the desk
-/// props, the papers (on the desk and in the hand), the desk catcher, Escape's
-/// put-back, the traveller and the wheel take input, and where held papers sit
+/// GameManager), the wheel, a pending citation slip, the stamp tray and the
+/// papers held in the hand, it decides which of the desktop, the PC, the power
+/// buttons, the desk props, the papers (on the desk and in the hand), the desk
+/// catcher, Escape's put-back, the traveller, the wheel and the stamp tray take
+/// input, whether the office case HUD shows, and where held papers sit
 /// (beside the open frame, dipped under the open wheel: PaperExaminer); it
 /// wakes the screen for a presented traveller and a finished scan, holds it on
 /// for a citation slip, and shows the day-1 wheel note. Every reference is
@@ -53,6 +54,12 @@ public sealed class BoothCoordinator : MonoBehaviour
     /// <summary>Poses the papers held in the hand (piece 10; optional): beside the open frame, dipped under the open wheel.</summary>
     [SerializeField] private PaperExaminer examiner;
 
+    /// <summary>The stamp tray (piece 10; optional): Accept and Deny at the desk.</summary>
+    [SerializeField] private StampTray stampTray;
+
+    /// <summary>The office case HUD (piece 10; optional): the claim tag and the office compare strip.</summary>
+    [SerializeField] private OfficeCaseHud hud;
+
     private BoothPhase _phase = BoothPhase.NoTraveller;
     private int _day;
     private bool _citationPending;
@@ -72,6 +79,8 @@ public sealed class BoothCoordinator : MonoBehaviour
             screen.PowerChanged += Apply;
         if (wheel != null)
             wheel.OpenChanged += HandleWheel;
+        if (stampTray != null)
+            stampTray.OpenChanged += Apply;
         if (desk != null)
         {
             desk.ScanFinished += HandleScanFinished;
@@ -87,6 +96,8 @@ public sealed class BoothCoordinator : MonoBehaviour
             screen.PowerChanged -= Apply;
         if (wheel != null)
             wheel.OpenChanged -= HandleWheel;
+        if (stampTray != null)
+            stampTray.OpenChanged -= Apply;
         if (desk != null)
         {
             desk.ScanFinished -= HandleScanFinished;
@@ -148,14 +159,16 @@ public sealed class BoothCoordinator : MonoBehaviour
         _phase,
         wheel != null && wheel.IsOpen,
         _citationPending,
-        false,
+        stampTray != null && stampTray.IsOpen,
         desk != null && desk.HeldCount > 0);
 
-    /// <summary>Applies the rules. The wheel first: closing it changes the context the rest reads (its OpenChanged re-applies too, harmlessly).</summary>
+    /// <summary>Applies the rules. The wheel and the stamp tray first: closing either changes the context the rest reads (their OpenChanged re-applies too, harmlessly).</summary>
     private void Apply()
     {
         if (wheel != null)
             wheel.SetCanOpen(BoothRules.Evaluate(Context()).WheelAllowed);
+        if (stampTray != null)
+            stampTray.SetCanOpen(BoothRules.Evaluate(Context()).StampTrayAllowed);
 
         BoothInput input = BoothRules.Evaluate(Context());
         if (screen != null)
@@ -177,6 +190,8 @@ public sealed class BoothCoordinator : MonoBehaviour
             desk.SetDeskCatcherLive(input.DeskCatcherLive);
             desk.SetExamineEscapeLive(input.ExamineEscapeLive);
         }
+        if (hud != null)
+            hud.SetVisible(input.CaseHudVisible);
         if (examiner != null)
             examiner.SetMode(view != null && view.Current == OfficeView.MonitorFocus, wheel != null && wheel.IsOpen);
         if (travellerHitZone != null)

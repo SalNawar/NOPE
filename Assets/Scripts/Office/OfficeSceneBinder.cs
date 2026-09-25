@@ -58,6 +58,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
     [SerializeField] private PaperExaminer examiner;
 
+    /// <summary>The stamp tray (piece 10; optional), placed over the stamp's click box through the office camera.</summary>
+    [SerializeField] private StampTray stampTray;
+
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
     [SerializeField] private PcScreenClone screenClone;
@@ -192,6 +195,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                 callout.SetCamera(office);
         if (examiner != null)
             examiner.SetCamera(office);
+        if (stampTray != null)
+            stampTray.SetCamera(office);
 
         Vector3 viewer = office.transform.position;
         BindPc(viewer);
@@ -410,6 +415,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
 
             PlaceBox(prop.click, anchor, Vector3.zero);
+            if (prop.anchor == OfficeAnchorId.Stamp && stampTray != null)
+                stampTray.SetFollow(prop.click.transform);
             if (prop.click.TryGetComponent(out DeskReaction reaction))
             {
                 reaction.SetTarget(anchor.Transform);

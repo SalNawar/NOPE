@@ -72,6 +72,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
     [SerializeField] private DeskController desk;
 
+    /// <summary>The office case HUD (piece 10; optional): the claim tag shows the claim banner's text in the office.</summary>
+    [SerializeField] private OfficeCaseHud hud;
+
+    /// <summary>The stamp tray (piece 10; optional): its Accept and Deny decide the case like the PC's buttons.</summary>
+    [SerializeField] private StampTray stampTray;
+
     /// <summary>The traveller wheel: closed after a hand-over; it gives the ring its icons and says the traveller's lines (the claim on arrival, then each reply).</summary>
     [SerializeField] private TravellerWheel wheel;
 
@@ -225,6 +231,9 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (wheel != null)
             wheel.LineClicked += HandleLineClicked;
 
+        if (stampTray != null)
+            stampTray.Decided += Decide;
+
         if (idleScreen != null)
             idleScreen.SetActive(true);
     }
@@ -243,6 +252,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (wheel != null)
             wheel.LineClicked -= HandleLineClicked;
+
+        if (stampTray != null)
+            stampTray.Decided -= Decide;
     }
 
     /// <summary>
@@ -364,10 +376,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowFallback(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line.</summary>
+    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line and the office's claim tag empties.</summary>
     public void Hide()
     {
         if (root != null) root.SetActive(false);
+        if (hud != null) hud.SetClaim(string.Empty);
         if (_fallbackPanel != null) _fallbackPanel.SetActive(false);
         if (idleScreen != null) idleScreen.SetActive(true);
     }
@@ -381,8 +394,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (root != null) root.SetActive(true);
         if (idleScreen != null) idleScreen.SetActive(false);
 
+        // The claim banner on the PC and the claim tag in the office: one text.
+        string claim = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
         if (claimText != null)
-            claimText.text = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
+            claimText.text = claim;
+        if (hud != null)
+            hud.SetClaim(claim);
 
         if (directivesText != null)
             directivesText.text = _directives;

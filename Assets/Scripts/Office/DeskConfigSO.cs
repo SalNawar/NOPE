@@ -121,6 +121,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The tint on a held paper's row under the pointer (a picked row shows the compare highlight instead).</summary>
     public Color rowHoverTint = new Color(0f, 0f, 0f, 0.06f);
 
+    /// <summary>Where the stamp tray's centre sits from the stamp (overlay reference px): above it.</summary>
+    public Vector2 stampTrayOffset = new Vector2(0f, 140f);
+
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";
