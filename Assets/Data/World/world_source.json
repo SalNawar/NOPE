@@ -8561,6 +8561,18 @@
         "tier": "Full"
       },
       {
+        "key": "deskView.back",
+        "text": "▲ Back",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deskView.backHint",
+        "text": "Esc / right-click",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "tooltip.credits",
         "text": "{1}: {0}",
         "gloss": "None",

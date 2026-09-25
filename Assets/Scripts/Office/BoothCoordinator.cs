@@ -9,8 +9,9 @@ using UnityEngine.UI;
 /// papers held in the hand and the desk view, it decides which of the desktop,
 /// the PC, the power buttons, the desk props, the papers (on the desk and in
 /// the hand), the desk catcher, Escape's put-back, the traveller, the wheel,
-/// the stamp tray, the mat and the desk view's return take input, whether the
-/// office case HUD shows, and where held papers sit (beside the open frame,
+/// the stamp tray, the mat, the desk view's return, its "▲ Back" control and
+/// the mouse wheel take input, whether the office case HUD shows, and where
+/// held papers sit (beside the open frame,
 /// dipped under the open wheel: PaperExaminer); it returns the desk view when
 /// the next traveller is called or a newsletter shows, wakes the screen for a
 /// presented traveller and a finished scan, holds it on for a citation slip,
@@ -213,6 +214,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         {
             deskView.SetToggleLive(input.DeskViewToggleLive);
             deskView.SetReturnLive(input.DeskViewReturnLive);
+            deskView.SetBackLive(input.DeskViewBackLive);
+            deskView.SetScrollInLive(input.DeskViewScrollInLive);
         }
         if (examiner != null)
             examiner.SetMode(view != null && view.Current == OfficeView.MonitorFocus, wheel != null && wheel.IsOpen);

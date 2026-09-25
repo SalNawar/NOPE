@@ -539,7 +539,7 @@ public static partial class OfficeSceneUIBuilder
                                                 OfficeSceneContractSO contract, TravellerWheel wheel, OverlayCallout[] callouts,
                                                 OverlayCallout tooltip, TMP_Text trayClockText, ShiftClockDriver clock,
                                                 ContentLibrarySO library, FallbackHud hud, PcFrame pcFrame, StampTray stampTray,
-                                                OfficeCaseHud caseHud, out Clickable readySign)
+                                                OfficeCaseHud caseHud, Button deskViewBack, out Clickable readySign)
     {
         Transform office = view.transform;
 
@@ -557,7 +557,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The desk, the scanner and the notes.
         DeskController desk = BuildDesk(office, config, pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint);
-        DeskView deskView = BuildDeskView(office, config, desk.transform.Find("ViewCatcher").GetComponent<ClickCatcher>());
+        DeskView deskView = BuildDeskView(office, config, desk.transform.Find("ViewCatcher").GetComponent<ClickCatcher>(), deskViewBack);
         var soScanner = new SerializedObject(scanner);
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
@@ -1139,8 +1139,14 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 CompareStripSize = new Vector2(1200f, 56f);
     private const float CompareStripTop = 88f;
 
-    /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips and a gap (the desk view clamps both to the top).</summary>
+    /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's strips and a gap.</summary>
     private static readonly float CaseHudClearance = CompareStripTop + CompareStripSize.y + 8f;
+
+    /// <summary>The desk view's "▲ Back" control (reference px), top centre under the case HUD.</summary>
+    private static readonly Vector2 DeskViewBackSize = new Vector2(200f, 44f);
+
+    /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
+    private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
 
     /// <summary>The stamp tray's panel (reference px).</summary>
     private static readonly Vector2 StampTraySize = new Vector2(420f, 96f);
@@ -1185,6 +1191,43 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
         root.gameObject.SetActive(false);
         return hud;
+    }
+
+    /// <summary>
+    /// The desk view's "▲ Back" control (the readability fix: a visible way
+    /// out of the desk view) under the office overlay canvas, rebuilt each run:
+    /// a small button at the top centre, under the case HUD's strips, in the
+    /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
+    /// under it (deskView.backHint: the other ways back) in the tooltip's
+    /// role, shown by HoverHint. Inactive: DeskView shows it while tilted
+    /// (BoothRules.DeskViewBackLive). Returns its button.
+    /// </summary>
+    private static Button BuildDeskViewBack(Transform overlay)
+    {
+        DestroyChildIfPresent(overlay, "DeskViewBack");
+        Button back = MakeButton(overlay, "DeskViewBack", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, "deskView.back");
+        var rt = (RectTransform)back.transform;
+        rt.anchorMin = new Vector2(0.5f, 1f);
+        rt.anchorMax = new Vector2(0.5f, 1f);
+        rt.pivot = new Vector2(0.5f, 1f);
+        rt.anchoredPosition = new Vector2(0f, -CaseHudClearance);
+        rt.sizeDelta = DeskViewBackSize;
+
+        Transform hint = Panel(back.transform, "Hint", new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, -6f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)hint).pivot = new Vector2(0.5f, 1f);
+        hint.GetComponent<Image>().raycastTarget = false;
+        TMP_Text hintText = Text(hint, "Label", null, 18, TextAlignmentOptions.Center, new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.95f), Ink,
+                                 ThemeRoleId.Tooltip, "deskView.backHint", FontStyles.Normal, ThemeTextKind.Body, true);
+        hintText.raycastTarget = false;
+        hint.gameObject.SetActive(false);
+
+        HoverHint hover = back.gameObject.AddComponent<HoverHint>();
+        var so = new SerializedObject(hover);
+        SetRef(so, "hint", hint.gameObject);
+        so.ApplyModifiedProperties();
+
+        back.gameObject.SetActive(false);
+        return back;
     }
 
     /// <summary>
@@ -1253,11 +1296,12 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The desk view (piece 10 section 11), rebuilt each run: Office/DeskView
-    /// (DeskView, wired to the desk tuning and the mat's click) and its inactive
-    /// Camera child, a CinemachineCamera at priority 0 that the office binder
-    /// poses from the art's camera and the mat at load.
+    /// (DeskView, wired to the desk tuning, the mat's click and the overlay's
+    /// "▲ Back" control) and its inactive Camera child, a CinemachineCamera at
+    /// priority 0 that the office binder poses from the art's camera and the
+    /// mat at load.
     /// </summary>
-    private static DeskView BuildDeskView(Transform office, DeskConfigSO config, ClickCatcher mat)
+    private static DeskView BuildDeskView(Transform office, DeskConfigSO config, ClickCatcher mat, Button back)
     {
         DestroyChildIfPresent(office, "DeskView");
         Transform host = EnsureChild(office, "DeskView");
@@ -1271,6 +1315,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "config", config);
         SetRef(so, "deskCamera", deskCamera);
         SetRef(so, "mat", mat);
+        SetRef(so, "backButton", back);
         so.ApplyModifiedProperties();
         return deskView;
     }
@@ -1304,7 +1349,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "panel", panel);
         SetRef(so, "label", label);
         so.FindProperty("keepOnScreen").boolValue = keepOnScreen;
-        so.FindProperty("topInset").floatValue = keepOnScreen ? CaseHudClearance : 0f;
+        so.FindProperty("topInset").floatValue = keepOnScreen ? OverlayTopClearance : 0f;
         so.ApplyModifiedProperties();
 
         panel.gameObject.SetActive(false);
@@ -1360,7 +1405,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "centreSlot", centre);
         SetRef(so, "bubble", bubble);
         SetRef(so, "config", config);
-        so.FindProperty("ringTopInset").floatValue = CaseHudClearance;
+        so.FindProperty("ringTopInset").floatValue = OverlayTopClearance;
         so.ApplyModifiedProperties();
 
         catcher.gameObject.SetActive(false);

@@ -30,9 +30,10 @@ using UnityEngine.UI;
 /// - The traveller wheel (the interview's choices around the traveller), the
 ///   speech bubble (its answer pickable, above the wheel), the desk tooltip,
 ///   the fallback HUD, the office case HUD (the claim tag and the office
-///   compare strip) and the stamp tray (Accept and Deny at the desk) on the
-///   office overlay canvas  [TravellerWheel, OverlayCallout, SpeechBubbleInput,
-///   OfficeCaseHud, StampTray]
+///   compare strip), the desk view's "▲ Back" control and the stamp tray
+///   (Accept and Deny at the desk) on the office overlay canvas
+///   [TravellerWheel, OverlayCallout, SpeechBubbleInput, OfficeCaseHud,
+///   HoverHint, StampTray]
 /// - The Office root: click boxes for the art's props, the physical desk
 ///   (papers, the scanner, the mat's click), the desk view's camera, the
 ///   traveller, the READY sign, the readouts and the office's input rules,
@@ -170,12 +171,14 @@ public static partial class OfficeSceneUIBuilder
 
         // Office overlays, rebuilt each run with always-active hosts, above the
         // newsletters, bottom to top: the fallback HUD, the office case HUD (the
-        // claim tag and the office compare strip), the PC frame, the traveller
+        // claim tag and the office compare strip), the desk view's "▲ Back"
+        // control (under the case HUD, shown while tilted), the PC frame, the traveller
         // wheel (the interview's choices), the traveller's speech bubble (above
         // the wheel, its answer pickable), the desk props' tooltip, the stamp
         // tray, the verdict line and the citation slip.
         FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
         OfficeCaseHud caseHud = BuildOfficeCaseHud(officeCanvas.transform, out GameObject officeCompareStrip, out TMP_Text officeCompareText);
+        Button deskViewBack = BuildDeskViewBack(officeCanvas.transform);
         PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
         OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble, true);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
@@ -382,7 +385,7 @@ public static partial class OfficeSceneUIBuilder
         // the input rules and the binder that puts them on the art office at load.
         BoothCoordinator booth = BuildOffice(officeView, monitorScreen, framePower, deskConfig, contract, wheel,
                                              new[] { speechBubble, deskTooltip }, deskTooltip, trayClockText, shiftClock, library,
-                                             fallbackHud, pcFrame, stampTray, caseHud, out Clickable readySign);
+                                             fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
 
         // The desktop's own layer covers everything under its place (the canvas's windows and templates included).
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer);
