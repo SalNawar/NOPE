@@ -523,6 +523,14 @@ MonoBehaviour:
     text: NEXT
     gloss: 0
     tier: 0
+  - key: deskView.back
+    text: "\u25B2 Back"
+    gloss: 0
+    tier: 0
+  - key: deskView.backHint
+    text: Esc / right-click
+    gloss: 0
+    tier: 0
   - key: tooltip.credits
     text: '{1}: {0}'
     gloss: 0

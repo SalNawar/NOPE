@@ -36,7 +36,7 @@ MonoBehaviour:
     fill: {r: 0.07058824, g: 0.101960786, b: 0.16862746, a: 0.8}
     hasInk: 1
     ink: {r: 1, g: 1, b: 1, a: 1}
-    textClass: 2
+    textClass: 1
   - role: 2
     hasFill: 1
     fill: {r: 0.12156863, g: 0.16470589, b: 0.26666668, a: 1}
@@ -54,7 +54,7 @@ MonoBehaviour:
     fill: {r: 0, g: 0.3372549, b: 0.24705882, a: 1}
     hasInk: 1
     ink: {r: 1, g: 1, b: 1, a: 1}
-    textClass: 2
+    textClass: 1
   - role: 5
     hasFill: 1
     fill: {r: 0.07058824, g: 0.101960786, b: 0.16862746, a: 1}
@@ -138,7 +138,7 @@ MonoBehaviour:
     fill: {r: 0.07058824, g: 0.101960786, b: 0.16862746, a: 0.8}
     hasInk: 1
     ink: {r: 1, g: 1, b: 1, a: 1}
-    textClass: 2
+    textClass: 1
   - role: 19
     hasFill: 1
     fill: {r: 0.48235294, g: 0.11764706, b: 0.11764706, a: 0.96}
