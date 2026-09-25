@@ -182,6 +182,9 @@ public sealed class DeskPapers
     /// <summary>How many papers are held in the hand (0 to 2).</summary>
     public int HeldCount => _holdOrder.Count;
 
+    /// <summary>The paper held longest (the one a third paper sends back), or -1 when none is held.</summary>
+    public int HeldLongest => _holdOrder.Count > 0 ? _holdOrder[0] : -1;
+
     /// <summary>Hands a paper over from the traveller onto the desk; false for any other state or an index out of range.</summary>
     public bool HandOver(int i)
     {

@@ -308,6 +308,24 @@ public class DeskPapersTests
         Assert.AreEqual(ExamineSlot.Right, next.Slot);
     }
 
+    /// <summary>The paper held longest (the one a handed-over paper may send back to make room, PaperLanding): -1 with none held, and it follows holds, put-backs and evictions.</summary>
+    [Test]
+    public void HeldLongest_FollowsTheHoldOrder()
+    {
+        DeskPapers p = AllOnDesk();
+        Assert.AreEqual(-1, p.HeldLongest, "none held");
+        p.Hold(2, true);
+        Assert.AreEqual(2, p.HeldLongest);
+        p.Hold(0, false);
+        Assert.AreEqual(2, p.HeldLongest, "still the first held");
+        p.Hold(1, true);
+        Assert.AreEqual(0, p.HeldLongest, "paper 2 was evicted: 0 is now the one held longest");
+        p.PutBack(0);
+        Assert.AreEqual(1, p.HeldLongest);
+        p.ReturnAll();
+        Assert.AreEqual(-1, p.HeldLongest, "every paper went back");
+    }
+
     [Test]
     public void PutBack_HeldToDesk()
     {
