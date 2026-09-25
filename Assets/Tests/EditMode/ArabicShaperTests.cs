@@ -20,6 +20,8 @@ public class ArabicShaperTests
     [TestCase("سجل الأدلة", "FE94 FEDF FEA9 FEF7 FE8D 00A0 FEDE FEA0 FEB3")]
     [TestCase("(اليوم)", "0028 FEE1 FEEE FEF4 FEDF FE8D 0029", Description = "brackets are mirrored")]
     [TestCase("اليوم 3", "0033 00A0 FEE1 FEEE FEF4 FEDF FE8D")]
+    [TestCase("شيء", "FE80 FEF2 FEB7", Description = "a hamza after a joining letter stays isolated (it has no final form)")]
+    [TestCase("كء", "FE80 FED9", Description = "a letter before a hamza does not join it")]
     public void ToVisual_GoldenCases(string logical, string expected)
     {
         Assert.AreEqual(expected, Codes(ArabicShaper.ToVisual(logical)));
@@ -31,6 +33,17 @@ public class ArabicShaperTests
     public void ToVisual_TextWithoutArabic_IsUnchanged(string text)
     {
         Assert.AreEqual(text, ArabicShaper.ToVisual(text));
+    }
+
+    [Test]
+    public void ToVisual_AHamzaAfterAnyLetter_IsNeverAMissingForm()
+    {
+        foreach (char letter in "ءآأؤإئابةتثجحخدذرزسشصضطظعغفقكلمنهوىي")
+        {
+            string visual = ArabicShaper.ToVisual(letter.ToString() + "ء" + letter);
+            Assert.IsFalse(visual.Contains('\0'), $"'{letter}' then hamza: {Codes(visual)}");
+            Assert.AreEqual(3, visual.Length, letter.ToString());
+        }
     }
 
     [Test]

@@ -134,7 +134,8 @@ public static class ArabicShaper
                 continue;
             }
 
-            bool prevJoins = i > 0 && DualJoining(s[i - 1]);
+            // A letter joins the one before only when both join (a hamza never does: it has no final form).
+            bool prevJoins = i > 0 && DualJoining(s[i - 1]) && Joins(c);
             if (c == Lam && i + 1 < s.Length && LamAlef.TryGetValue(s[i + 1], out var ligature))
             {
                 output.Add(prevJoins ? ligature.fin : ligature.iso);

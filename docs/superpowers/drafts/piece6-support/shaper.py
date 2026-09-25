@@ -24,7 +24,7 @@ def shape(s):
         c=cps[i]
         if c not in F: out.append(c); i+=1; continue
         prev = cps[i-1] if i>0 else None
-        prevJoins = prev is not None and dual(prev)  # previous letter can connect forward
+        prevJoins = prev is not None and dual(prev) and joins(c)  # previous letter can connect forward, and this one joins (never a hamza)
         # lam-alef
         if c==0x0644 and i+1<len(cps) and cps[i+1] in LAMALEF:
             iso,fin = LAMALEF[cps[i+1]]
