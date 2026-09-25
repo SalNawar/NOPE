@@ -43,7 +43,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (texts.Length > 0 && texts[0] != null)
             texts[0].text = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
         if (texts.Length > 1 && texts[1] != null)
-            texts[1].text = DisplayText.For(line.Text, TextMedium.Spoken);
+            texts[1].text = DisplayText.For(line.Text, Reveal.Plain, null, false);
 
         if (button == null)
             return;

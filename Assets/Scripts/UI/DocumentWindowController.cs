@@ -141,7 +141,7 @@ public sealed class DocumentWindowController : MonoBehaviour
             if (texts.Length > 0 && texts[0] != null)
                 texts[0].text = f.label;
             if (texts.Length > 1 && texts[1] != null)
-                texts[1].text = DisplayText.For(f.value, TextMedium.Written);
+                texts[1].text = DisplayText.For(f.value, Reveal.Plain, null, false);
 
             Image bg = row.GetComponent<Image>();
             Button btn = row.GetComponent<Button>();

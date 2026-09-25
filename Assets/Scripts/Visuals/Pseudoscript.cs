@@ -86,10 +86,12 @@ public static class Pseudoscript
     }
 
     /// <summary>The cell a character shows as: its letter's cell (upper-cased for an upper-case letter when the cell is one character), else the character itself.</summary>
-    public static string Cell(char c, IReadOnlyList<string> table)
+    public static string Cell(char c, IReadOnlyList<string> table) => Cell(c, table, LetterIndex(c));
+
+    /// <summary>Cell <paramref name="index"/> shown in place of letter <paramref name="c"/>, in the letter's case (the flip's scramble glyphs); the character itself when it is not a letter or the index or table is out of range.</summary>
+    public static string Cell(char c, IReadOnlyList<string> table, int index)
     {
-        int index = LetterIndex(c);
-        if (index < 0 || table == null || table.Count != TableSize)
+        if (LetterIndex(c) < 0 || table == null || table.Count != TableSize || index < 0 || index >= TableSize)
             return c.ToString();
 
         string cell = table[index];

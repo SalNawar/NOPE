@@ -187,7 +187,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
 
         foreach (DialogLine line in lines)
             if (line != null)
-                _speech.Say(DisplayText.For(line.Text, TextMedium.Spoken), line.Expression);
+                _speech.Say(DisplayText.For(line.Text, Reveal.Plain, null, false), line.Expression);
 
         ShowSpeech();
     }
