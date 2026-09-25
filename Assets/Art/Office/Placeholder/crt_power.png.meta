@@ -1,15 +1,15 @@
 fileFormatVersion: 2
-guid: 3b76634ee0f0e304ba0958315f4369f4
+guid: ed3496969b89ae7438565f8172ab94e9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3809868924067968431
-    second: xp_bliss_0
+      213: -1277308476202750273
+    second: crt_power_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -48,8 +48,8 @@ TextureImporter:
   compressionQuality: 50
   spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
-  alignment: 0
+  spriteMeshType: 1
+  alignment: 9
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: xp_bliss_0
+      name: crt_power_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 960
-        height: 540
+        width: 28
+        height: 28
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 15a012c2660a02bc0800000000000000
-      internalID: -3809868924067968431
+      spriteID: fbee65755b6164ee0800000000000000
+      internalID: -1277308476202750273
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      xp_bliss_0: -3809868924067968431
+      crt_power_0: -1277308476202750273
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
