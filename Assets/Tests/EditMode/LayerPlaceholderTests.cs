@@ -2,9 +2,12 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 
-/// <summary>Placeholder character layers: size, shape inside the safe area, colours, marks, determinism.</summary>
+/// <summary>Placeholder character layers: size, shape inside the art contract's safe area, colours, marks, determinism.</summary>
 public class LayerPlaceholderTests
 {
+    /// <summary>The art contract's safe area (canvas px): x 120..904, y 10..the soles.</summary>
+    private const int SafeXMin = 120, SafeXMax = 904, SafeYMin = 10;
+
     private static readonly (byte, byte, byte) Fill = (200, 30, 40);
     private static readonly (byte, byte, byte) Accent = (10, 220, 90);
 
@@ -42,8 +45,8 @@ public class LayerPlaceholderTests
                     opaque++;
                     int canvasX = x * 4 + 2;
                     int canvasYFromTop = (LayerPlaceholder.Height - 1 - y) * 4 + 2;
-                    Assert.IsTrue(canvasX >= LookCanvas.SafeXMin && canvasX <= LookCanvas.SafeXMax, $"{region}: x {canvasX}");
-                    Assert.IsTrue(canvasYFromTop >= LookCanvas.SafeYMin && canvasYFromTop <= LookCanvas.Feet, $"{region}: y {canvasYFromTop}");
+                    Assert.IsTrue(canvasX >= SafeXMin && canvasX <= SafeXMax, $"{region}: x {canvasX}");
+                    Assert.IsTrue(canvasYFromTop >= SafeYMin && canvasYFromTop <= LookCanvas.Feet, $"{region}: y {canvasYFromTop}");
                 }
             }
 

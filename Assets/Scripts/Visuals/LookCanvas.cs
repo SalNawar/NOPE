@@ -1,7 +1,8 @@
 /// <summary>
 /// The character canvas every layer and premade image shares (the art
 /// contract, make_guide_v2.py and coverage.json): 1024 x 1536 px, landmarks
-/// in pixels from the top. The figure stands with its soles on
+/// in pixels from the top (the safe area, x 120..904, y 10..1490, is the art
+/// contract's). The figure stands with its soles on
 /// <see cref="Feet"/>; sprites pivot there and are one unit tall, so a
 /// traveller's world height is its transform scale. Pure, so the geometry is tested.
 /// </summary>
@@ -36,15 +37,6 @@ public static class LookCanvas
 
     /// <summary>The soles of the feet (the floor).</summary>
     public const int Feet = 1490;
-
-    /// <summary>Left edge of the safe area (nothing may cross it).</summary>
-    public const int SafeXMin = 120;
-
-    /// <summary>Right edge of the safe area.</summary>
-    public const int SafeXMax = 904;
-
-    /// <summary>Top edge of the safe area.</summary>
-    public const int SafeYMin = 10;
 
     /// <summary>How far the arms reach from the centre line (the guide's hands).</summary>
     public const int ArmReach = 232;

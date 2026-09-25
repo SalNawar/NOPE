@@ -41,7 +41,7 @@ public sealed class LookSpriteStack : MonoBehaviour
                 continue;
 
             LookPart? part = look.PartOn((LookLayer)i);
-            layers[i].sprite = part.HasValue ? Sprite(part.Value.Key) : null;
+            layers[i].sprite = part.HasValue ? SpriteOf(part.Value.Key) : null;
             layers[i].enabled = part.HasValue;
         }
     }
@@ -52,7 +52,7 @@ public sealed class LookSpriteStack : MonoBehaviour
         if (_look == null || _look.PremadeId == null || layers == null || layers.Length <= (int)LookLayer.Whole || layers[(int)LookLayer.Whole] == null)
             return;
 
-        layers[(int)LookLayer.Whole].sprite = Sprite(_look.WholeKey(expression));
+        layers[(int)LookLayer.Whole].sprite = SpriteOf(_look.WholeKey(expression));
     }
 
     /// <summary>Empties every layer and forgets the look.</summary>
@@ -73,5 +73,5 @@ public sealed class LookSpriteStack : MonoBehaviour
     }
 
     /// <summary>The key's sprite: its photo crop on a photo, else the full canvas.</summary>
-    private Sprite Sprite(LookKey key) => photo ? _art.GetPhoto(key) : _art.Get(key);
+    private Sprite SpriteOf(LookKey key) => photo ? _art.GetPhoto(key) : _art.Get(key);
 }

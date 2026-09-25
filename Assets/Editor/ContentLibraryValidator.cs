@@ -771,8 +771,9 @@ public static class ContentLibraryValidator
             if (premade != null)
                 keys.AddRange(LookKeys.PremadeSet(premade.id));
 
-        List<string> missing = keys.Distinct().Where(k => !System.IO.File.Exists($"{CharacterArt.AssetFolder}/{k}.png")).ToList();
-        int total = keys.Distinct().Count();
+        List<string> distinct = keys.Distinct().ToList();
+        List<string> missing = distinct.Where(k => !System.IO.File.Exists($"{CharacterArt.AssetFolder}/{k}.png")).ToList();
+        int total = distinct.Count;
         Debug.Log($"[ContentLibraryValidator] Character art: {total - missing.Count}/{total} key(s) have final art in {CharacterArt.AssetFolder}; placeholders are drawn for the rest{(missing.Count > 0 ? $" (first missing: {string.Join(", ", missing.Take(20))})" : string.Empty)}.");
     }
 

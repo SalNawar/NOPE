@@ -35,7 +35,7 @@ public enum LookLayer
     Whole
 }
 
-/// <summary>One layer's art key: its file name and what its placeholder is drawn from. Built only by LookKeys.</summary>
+/// <summary>One layer's art key: its file name and what its placeholder is coloured by. Built only by LookKeys.</summary>
 public readonly struct LookKey
 {
     /// <summary>The file name (no extension).</summary>
@@ -53,30 +53,21 @@ public readonly struct LookKey
     /// <summary>Body and head: the skin tone (1..5); 0 otherwise.</summary>
     public readonly int SkinTone;
 
-    /// <summary>Head: the face token.</summary>
-    public readonly string Face;
-
     /// <summary>Hair, hair back and facial hair: the colour (null for a wig and every other layer).</summary>
     public readonly string HairColour;
-
-    /// <summary>A premade's id (Whole only).</summary>
-    public readonly string PremadeId;
 
     /// <summary>A premade's expression (Whole only).</summary>
     public readonly string Expression;
 
     /// <summary>Creates a key (LookKeys only).</summary>
-    internal LookKey(string name, LookLayer layer, string nationId, string eraId, int skinTone, string face,
-                     string hairColour, string premadeId, string expression)
+    internal LookKey(string name, LookLayer layer, string nationId, string eraId, int skinTone, string hairColour, string expression)
     {
         Name = name;
         Layer = layer;
         NationId = nationId;
         EraId = eraId;
         SkinTone = skinTone;
-        Face = face;
         HairColour = hairColour;
-        PremadeId = premadeId;
         Expression = expression;
     }
 }

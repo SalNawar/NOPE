@@ -9,7 +9,6 @@ public class LookCanvasTests
         Assert.AreEqual((1024, 1536, 512), (LookCanvas.Width, LookCanvas.Height, LookCanvas.CenterX));
         Assert.AreEqual((260, 424, 500, 760, 900, 1170, 1490),
                         (LookCanvas.HeadTop, LookCanvas.Chin, LookCanvas.Shoulders, LookCanvas.Waist, LookCanvas.Hips, LookCanvas.Knees, LookCanvas.Feet));
-        Assert.AreEqual((120, 904), (LookCanvas.SafeXMin, LookCanvas.SafeXMax));
         Assert.AreEqual((362, 215, 662, 590), (LookCanvas.PhotoLeft, LookCanvas.PhotoTop, LookCanvas.PhotoRight, LookCanvas.PhotoBottom));
     }
 

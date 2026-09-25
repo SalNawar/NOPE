@@ -92,7 +92,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] Closing: a traveller at the desk may be finished; one still behind READY is never called (tested: `DaySlotSequencerTests`, `ShiftFlowTests`, `ReadyGateTests`)
 - [ ] Scheduled events, forced cases (blueprints) and forced premades that would have stood in slots never reached before closing are reported as a warning (a premade met on an earlier day is not named)
 - [ ] The clock pauses only while a citation slip is shown, and the slip keeps the PC screen on until acknowledged (the interview, scans and camera moves take real time and cost nothing else)
-- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out; a premade never repeats a name used that day; a forced premade's name is reserved for their slot before the day starts, and no premade's name is in any place's name list) (tested: `NameRosterTests`)
+- [ ] Visitor names are unique within a day ("Marcus II" once a pool runs out; a premade never repeats a name used that day; a forced premade's name is reserved for their slot before the day starts, and no premade's name is in any place's name list) (uniqueness tested: `NameRosterTests`; the reservation is checked in Unity)
 
 ## Interaction feedback
 
