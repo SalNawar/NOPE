@@ -32,6 +32,10 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// <summary>True while the orchestrator is waiting for a case to be resolved.</summary>
     private bool _waitingForCaseResolution;
 
+    /// <summary>Presentation-only progress through the current shift, from opening to closing.</summary>
+    public float ShiftProgress => dayPlan == null ? 0f :
+        Mathf.InverseLerp(1f, Mathf.Max(2, dayPlan.VisitorsCount), _caseIndex1Based);
+
     /// <summary>Handle for the currently running day loop coroutine.</summary>
     private Coroutine _dayLoopRoutine;
 

@@ -1,10 +1,14 @@
-# Current state — custom anime desk shader
+# Current state — anime desk and background crowds
+
+The user accepted the anime desk direction ("Perfect") and requested layered background crowd groups. `OfficeHallCrowds` now adds 19 groups using six anonymous merged illustrations, with morning/evening palettes. The user asked for less personal detail, accepted the merged upper-body direction, then required visible legs; the final atlas restores simple legs and feet. They found the groups too small against the room, so the final placement is 30% larger. See `../HallCrowds/README.md` for assets, reproduction, final captures and checks. The previous empty-hall constraint is superseded by this request.
+
+## Desk shader checkpoint
 
 The user rejected the previous phone and said the objects still lacked anime shading. A new custom shader, `NOPE/Desk Anime`, now replaces the PBR lighting on the desk and CRT. This is the current direction; the completion claims below describe the earlier checkpoint and are superseded by this revision.
 
 The curved pack phone replaces the primitive reconstruction, has clean materials and is separated from the till. The mouse cable reaches the computer; floppy disks are removed. Spare forms are the first two-triangle 2D prop trial, rendered from our Blender assets and lit with the same shader. The original room, floor, desk, lighting, boards and exterior remain preserved.
 
-See `DeskClean/ANIME_SHADER.md`, `DeskClean/anime_validation.json`, and the current Game view `../DeskFinish/Iterations/65_anime_desk.png`. The shader is reusable for other game props; it is currently installed only on the desktop. Do not claim the user has approved this shader or exact ReStory parity.
+See `DeskClean/ANIME_SHADER.md`, `DeskClean/anime_validation.json`, and the desk-only Game view `../DeskFinish/Iterations/65_anime_desk.png`. The shader is reusable for other game props; it is currently installed only on the desktop. The user accepted continuing this direction; do not claim exact ReStory parity.
 
 ## Previous PBR checkpoint (historical)
 

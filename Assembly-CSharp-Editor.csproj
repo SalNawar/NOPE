@@ -55,8 +55,10 @@
     <Compile Include="Assets\Editor\HomeSceneBuilder.cs" />
     <Compile Include="Assets\Editor\OfficeSceneUIBuilder.cs" />
     <Compile Include="Assets\Editor\ContentLibraryValidator.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeDeskAnime.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeSurfaceAudit.cs" />
     <Compile Include="Assets\Editor\OfficeArt\ImportedOfficeBuilder.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeHallCrowds.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeDeskClean.cs" />
     <Compile Include="Assets\Editor\TitleSceneBuilder.cs" />
     <Compile Include="Assets\Editor\InvestigationContentGenerator.cs" />
