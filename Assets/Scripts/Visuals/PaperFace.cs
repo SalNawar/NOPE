@@ -26,10 +26,10 @@ public sealed class PaperFaceTuning
     public float rowPitch = 0.125f;
 
     /// <summary>The label's share of a row's pitch (the label sits over the value).</summary>
-    public float labelShare = 0.36f;
+    public float labelShare = 0.42f;
 
     /// <summary>The value's share of a row's pitch (the rest of the pitch is the gap to the next row).</summary>
-    public float valueShare = 0.52f;
+    public float valueShare = 0.5f;
 
     /// <summary>The margin under the last row, in H.</summary>
     public float bottomMargin = 0.04f;

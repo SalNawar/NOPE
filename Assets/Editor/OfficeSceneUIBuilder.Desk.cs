@@ -71,8 +71,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The desk notes' ink.</summary>
     private static readonly Color NoteInk = new Color(0.96f, 0.95f, 0.88f, 1f);
 
-    /// <summary>A paper row's label ink (quieter than its value).</summary>
-    private static readonly Color PaperLabelInk = new Color(0.36f, 0.33f, 0.28f, 1f);
+    /// <summary>A paper row's label ink (quieter than its value, dark enough to read at 720p).</summary>
+    private static readonly Color PaperLabelInk = new Color(0.25f, 0.23f, 0.2f, 1f);
 
     /// <summary>The smallest auto-size of a paper row's texts (TMP world units: a few millimetres).</summary>
     private const float PaperTextMinSize = 0.03f;
