@@ -99,6 +99,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The current traveller's documents in paper order (name, holder, hand-over).</summary>
     private readonly List<CaseDocument> _caseDocuments = new();
 
+    /// <summary>Each current document's written reveal, in paper order (shared by its scanned window and its desk paper).</summary>
+    private readonly List<RevealClock> _clocks = new();
+
     /// <summary>Papers whose window already has a desktop icon this case.</summary>
     private readonly HashSet<int> _iconedDocuments = new();
     private bool _booksBuilt;
@@ -378,6 +381,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _docIcons.Clear();
         _iconedDocuments.Clear();
         _caseDocuments.Clear();
+        _clocks.Clear();
 
         // The traveller's tongue decides how their papers and speech show today.
         _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
@@ -395,8 +399,10 @@ public sealed class InvestigationUIController : MonoBehaviour
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
-                clone.SetDocument(doc, compareController, inst.look, _art, _caseTranslation);
+                var clock = new RevealClock();
+                clone.SetDocument(doc, i, compareController, inst.look, _art, _caseTranslation, clock);
                 _docWindows.Add(clone);
+                _clocks.Add(clock);
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
@@ -573,9 +579,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController == null || garments == null || garmentIndex < 0 || garmentIndex >= garments.Count)
             return;
 
-        Garment g = garments[garmentIndex];
-        compareController.Select(UiText.Format("compare.travellerLabel", UiText.Slot(g.Slot)), g.Label, null,
-                                 CompareEvidence.ForAppearance(Looks.EvidenceCategory, g.Value, g.IsTell));
+        compareController.Select(EvidencePicks.ForGarment(garmentIndex, garments[garmentIndex]), null);
     }
 
     /// <summary>

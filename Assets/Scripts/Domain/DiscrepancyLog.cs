@@ -115,7 +115,7 @@ public struct CompareEvidence
     /// <summary>
     /// The value a comparison matches on: this side's typed evidence value
     /// when it carries evidence (a garment shows its item name but matches on
-    /// its place's Culture value), else the text shown. Caller: CompareController.
+    /// its place's Culture value), else the text shown. Caller: ComparePair.Matches.
     /// </summary>
     public string MatchValue(string shown) => kind != EvidenceKind.None ? value : shown;
 }

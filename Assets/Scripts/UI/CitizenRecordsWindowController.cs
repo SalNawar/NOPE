@@ -117,7 +117,7 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
             if (string.IsNullOrEmpty(value) || compareController == null)
                 return;
 
-            compareController.Select(label, value, bg, CompareEvidence.ForRecordField(category, value));
+            compareController.Select(EvidencePicks.ForRecord(category, label, value), new ImageHighlight(bg));
         });
     }
 }
