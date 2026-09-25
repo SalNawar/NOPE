@@ -65,6 +65,21 @@ public sealed class PaperExaminer : MonoBehaviour
     /// <summary>True when a world point is right of the screen's centre through the office camera (a paper there prefers the right slot).</summary>
     public bool RightOfCentre(Vector3 world) => _camera != null && _camera.WorldToViewportPoint(world).x > 0.5f;
 
+    /// <summary>True when the office slot on that side (not dipped) would cover a world point on the screen (a paper lying there would be hidden).</summary>
+    public bool SlotCovers(bool right, Vector3 world) =>
+        _camera != null && config != null && Covers(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, false, config.examine), world);
+
+    /// <summary>True when a held paper (not one on its way back) covers a world point on the screen, where it sits now: its office slot or its place beside the open frame.</summary>
+    public bool HeldCovers(Vector3 world)
+    {
+        if (_camera == null || config == null)
+            return false;
+        foreach (Entry entry in _entries)
+            if (!entry.Releasing && Covers(BoxOf(entry), world))
+                return true;
+        return false;
+    }
+
     /// <summary>Takes a paper into the hand at <paramref name="slot"/>: its sheet rises to the slot (a paper on its way back turns round).</summary>
     public void Hold(DeskDocument paper, ExamineSlot slot)
     {
@@ -357,6 +372,17 @@ public sealed class PaperExaminer : MonoBehaviour
         _cameraRotation = cam.rotation;
         _cameraFov = _camera.fieldOfView;
         return true;
+    }
+
+    /// <summary>True when a box covers a world point's projection through the office camera (a point behind the camera is never covered).</summary>
+    private bool Covers(ScreenBox box, Vector3 world)
+    {
+        Vector3 screen = _camera.WorldToScreenPoint(world);
+        if (screen.z <= 0f || Screen.height <= 0)
+            return false;
+        float h = Screen.height, halfWidth = Screen.width / 2f, w = box.Height * PaperAspect;
+        float x = (screen.x - halfWidth) / h, y = screen.y / h;
+        return Mathf.Abs(x - box.CentreX) <= w / 2f && Mathf.Abs(y - box.CentreY) <= box.Height / 2f;
     }
 
     private Entry Find(DeskDocument paper)

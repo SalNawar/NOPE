@@ -393,6 +393,31 @@ public class DeskPapersTests
     public void PaperClicks_DecisionTable(bool held, bool secondary, bool onRow, PaperClickAction expected) =>
         Assert.AreEqual(expected, PaperClicks.Decide(held, secondary, onRow));
 
+    // A held paper never hides the papers still on the desk when it can help it.
+
+    [TestCase(true, 0, 0, true)]
+    [TestCase(false, 0, 0, false)]
+    [TestCase(true, 0, 1, false)]
+    [TestCase(false, 1, 0, true)]
+    [TestCase(true, 1, 1, true)]
+    [TestCase(false, 2, 1, false)]
+    [TestCase(true, 1, 0, true)]
+    [TestCase(false, 0, 2, false)]
+    public void HeldCover_PreferRight_TheSideItLiesOn_UnlessItWouldHideAPaperAndTheOtherWouldNot(bool liesRight, int hiddenLeft, int hiddenRight, bool expected) =>
+        Assert.AreEqual(expected, HeldCover.PreferRight(liesRight, hiddenLeft, hiddenRight));
+
+    [Test]
+    public void HeldCover_LandingSlot_TheNextInTurn_ElseTheFirstUncoveredAfterIt()
+    {
+        Assert.AreEqual(1, HeldCover.LandingSlot(1, new[] { false, false, false, false }), "nothing covered: the next in turn");
+        Assert.AreEqual(2, HeldCover.LandingSlot(1, new[] { false, true, false, false }), "the next is covered: the first uncovered after it");
+        Assert.AreEqual(0, HeldCover.LandingSlot(2, new[] { false, true, true, true }), "wrapping round");
+        Assert.AreEqual(3, HeldCover.LandingSlot(3, new[] { true, true, true, true }), "all covered: the next in turn (it lands under the held papers)");
+        Assert.AreEqual(0, HeldCover.LandingSlot(5, new bool[0]), "no slots");
+        Assert.AreEqual(1, HeldCover.LandingSlot(5, new[] { false, false }), "the turn wraps round the slots");
+        Assert.AreEqual(1, HeldCover.LandingSlot(1, null), "no cover known: the next in turn");
+    }
+
     // -----------------------------
     // DeskHints
     // -----------------------------

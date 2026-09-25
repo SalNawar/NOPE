@@ -13,7 +13,9 @@ using UnityEngine.InputSystem;
 /// dragged paper above them all), returns them at the decision, and shows the
 /// day-1 scan note. A click on a paper routes through PaperClicks (piece 10):
 /// it lifts a paper on the desk into the hand (DeskPapers.Hold, posed by the
-/// PaperExaminer; PaperExamined), picks a held paper's row (FieldPicked) or
+/// PaperExaminer; PaperExamined; on the side that hides no other paper when
+/// it can, and a paper handed over while papers are held lands where none
+/// covers it: HeldCover), picks a held paper's row (FieldPicked) or
 /// puts it back where it lay, on top of the stack; a click on the desk (the
 /// desk catcher) or Escape puts every held paper back, and dragging a held
 /// paper drops it back onto the desk under the pointer and on. A paper on the
@@ -184,8 +186,7 @@ public sealed class DeskController : MonoBehaviour
         _stack.Add(i);
         ApplyStack();
 
-        Vector2[] slots = config.paperSpawnSlots;
-        Vector3 target = slots != null && slots.Length > 0 ? surface.PointAt(slots[_handedOver % slots.Length]) : surface.transform.position;
+        Vector3 target = LandingPoint();
         _handedOver++;
         Slide(paper, target);
         RefreshHint();
@@ -281,13 +282,48 @@ public sealed class DeskController : MonoBehaviour
         }
     }
 
-    /// <summary>Lifts a paper on the desk into the hand, into the slot on its side of the screen (the paper held longest goes back when both are taken).</summary>
+    /// <summary>
+    /// Where the next handed-over paper lands: the next spawn slot in turn
+    /// (slots are reused in order), or, while papers are held, the first slot
+    /// after it that no held paper covers (HeldCover.LandingSlot).
+    /// </summary>
+    private Vector3 LandingPoint()
+    {
+        Vector2[] slots = config.paperSpawnSlots;
+        if (slots == null || slots.Length == 0)
+            return surface.transform.position;
+
+        var covered = new bool[slots.Length];
+        if (examiner != null && _state.HeldCount > 0)
+            for (int k = 0; k < slots.Length; k++)
+                covered[k] = examiner.HeldCovers(surface.PointAt(slots[k]));
+        return surface.PointAt(slots[HeldCover.LandingSlot(_handedOver, covered)]);
+    }
+
+    /// <summary>
+    /// Lifts a paper on the desk into the hand, into the slot on its side of
+    /// the screen unless that slot would hide another paper on the desk and the
+    /// other would not (HeldCover.PreferRight); the paper held longest goes back
+    /// when both are taken.
+    /// </summary>
     private void Examine(DeskDocument paper)
     {
         if (examiner == null || paper.IsSliding)
             return;
 
-        HoldResult hold = _state.Hold(paper.Index, examiner.RightOfCentre(paper.Sheet.position));
+        int hiddenLeft = 0, hiddenRight = 0;
+        foreach (DeskDocument other in _papers)
+        {
+            if (other == null || other == paper || _state.IsHeld(other.Index) || !_state.CanDrag(other.Index))
+                continue;
+            if (examiner.SlotCovers(false, other.Sheet.position))
+                hiddenLeft++;
+            if (examiner.SlotCovers(true, other.Sheet.position))
+                hiddenRight++;
+        }
+
+        bool preferRight = HeldCover.PreferRight(examiner.RightOfCentre(paper.Sheet.position), hiddenLeft, hiddenRight);
+        HoldResult hold = _state.Hold(paper.Index, preferRight);
         if (!hold.Held)
             return;
 
