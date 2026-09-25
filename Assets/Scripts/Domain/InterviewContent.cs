@@ -164,7 +164,7 @@ public sealed class InterviewQuestion
 /// <summary>
 /// The interview's fixed wording, plus the layout limit content is checked
 /// against at run time and by the content validator: the most choices the
-/// intercom shows at once. (The longest line a transcript row holds is a
+/// traveller wheel shows at once. (The longest line a transcript row holds is a
 /// source-only limit, world_source.json interview.maxLineChars, which only
 /// Generate World checks.)
 /// </summary>
@@ -213,6 +213,6 @@ public sealed class InterviewLines
     /// <summary>The desk's small-talk question.</summary>
     public LineText smallTalkPrompt = new();
 
-    /// <summary>The most choices the intercom shows at once (content never offers more).</summary>
+    /// <summary>The most choices the traveller wheel shows at once (content never offers more).</summary>
     public int menuCapacity;
 }

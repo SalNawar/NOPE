@@ -17,11 +17,21 @@ public enum DialogAction
     /// <summary>Nothing else.</summary>
     None,
 
-    /// <summary>The traveller hands over a document: its window opens (DialogChoice.DocumentIndex).</summary>
-    OpenDocument,
+    /// <summary>The traveller hands a document over (DialogChoice.DocumentIndex): onto the desk, or straight to its window where no desk is wired.</summary>
+    HandOverDocument,
 
     /// <summary>A narrative dialog ends: it is recorded for the end of the shift (DialogChoice.DialogId, EffectName).</summary>
     CompleteDialog
+}
+
+/// <summary>What a choice is, for renderers: the wheel puts Back in its centre. Piece 8 appends kinds.</summary>
+public enum DialogChoiceKind
+{
+    /// <summary>An ordinary choice (a ring item).</summary>
+    Normal,
+
+    /// <summary>The way back to the hub (the wheel's centre).</summary>
+    Back
 }
 
 /// <summary>One transcript line. Immutable; an answer line also carries the fact it states.</summary>
@@ -76,8 +86,11 @@ public sealed class DialogChoice
     /// <summary>Id, unique within the graph.</summary>
     public string Id;
 
-    /// <summary>The intercom button label.</summary>
+    /// <summary>The choice's label on the traveller wheel.</summary>
     public string Label;
+
+    /// <summary>What the choice is, for renderers (Normal unless set).</summary>
+    public DialogChoiceKind Kind;
 
     /// <summary>Lines appended to the transcript when chosen.</summary>
     public List<DialogLine> Lines = new List<DialogLine>();
@@ -91,7 +104,7 @@ public sealed class DialogChoice
     /// <summary>What else choosing it does.</summary>
     public DialogAction Action;
 
-    /// <summary>OpenDocument: index of the document in paper order.</summary>
+    /// <summary>HandOverDocument: index of the document in paper order.</summary>
     public int DocumentIndex = -1;
 
     /// <summary>CompleteDialog: the finished dialog's id.</summary>

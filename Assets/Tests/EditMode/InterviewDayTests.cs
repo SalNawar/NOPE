@@ -107,7 +107,7 @@ public class InterviewDayTests
         StringAssert.StartsWith("Dialog 'dlg_broken' is not offered: ", day.ContentProblems[0]);
         StringAssert.Contains("no nodes", day.ContentProblems[0]);
 
-        // A rumour-shaped start node with two choices: too many for an intercom of one, fine with no capacity set.
+        // A rumour-shaped start node with two choices: too many for a traveller wheel of one, fine with no capacity set.
         var twoChoices = new List<Gated<AuthoredDialog>> { new Gated<AuthoredDialog>(new AuthoredDialog
         {
             id = "dlg_two",
@@ -128,10 +128,10 @@ public class InterviewDayTests
         }, null) };
 
         var one = new InterviewDay(new InterviewLines { menuCapacity = 1 }, null, twoChoices, Snap(1), new ShiftLedger());
-        CollectionAssert.IsEmpty(Offered(one), "two choices never fit an intercom of one");
+        CollectionAssert.IsEmpty(Offered(one), "two choices never fit a traveller wheel of one");
         Assert.AreEqual(1, one.ContentProblems.Count, string.Join(" | ", one.ContentProblems));
         StringAssert.StartsWith("Dialog 'dlg_two' is not offered: ", one.ContentProblems[0]);
-        StringAssert.Contains("node 'start' offers 2 choices; the intercom shows at most 1", one.ContentProblems[0]);
+        StringAssert.Contains("node 'start' offers 2 choices; the traveller wheel shows at most 1", one.ContentProblems[0]);
 
         var unlimited = new InterviewDay(new InterviewLines { menuCapacity = 0 }, null, twoChoices, Snap(1), new ShiftLedger());
         CollectionAssert.AreEqual(new[] { "dlg_two" }, Offered(unlimited), "no capacity, no capacity problem");

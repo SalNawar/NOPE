@@ -27,13 +27,13 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 
 - [ ] XP-style wallpaper, taskbar with Start button and system tray (Day / Credits / Stability / Clock)
 - [ ] Start menu: Settings (stub window) + Power (quit); fixed-height entries
-- [ ] Desktop icon grid top-left; reference book icons + app icons (documents come via the intercom, not icons)
+- [ ] Desktop icon grid top-left; reference book icons + app icons (a document's window gets an icon at the top of the grid the first time it opens)
 - [ ] Upgrade-gated icons (Lexicon needs Archive Access, Material needs Advanced Scanner) dim until the upgrade is owned; the builder reports icon upgrade ids the library does not know
 - [ ] Draggable windows; min/max/close chrome on ALL windows (app, document, reference)
 - [ ] Placeholder apps: Internet, Lexicon, Dialect, Material, Notes
 - [ ] Clue Log = Case Notes: Interview, the current traveller's transcript (speaker + line, 8 per page, long lines wrap onto two, jumps to the newest page); answer rows are compare-clickable; every intercom choice except a document request opens it (questions, small talk, dialog replies, "Ask about home >" and "< Back"); it closes with every new case
 - [ ] Directives sticky-note window (closed by default, opened from icon; shows day's travel rules)
-- [ ] Every new case closes all open windows (pin system planned to override)
+- [ ] Every new case closes all open windows (pin system planned to override) (scanned-document icons are cleared too)
 - [ ] Citizen Records app: type a name → agency record (Name/Born rows are compare-clickable; origin + clerk note); a liar's record is their cover identity (claimed origin), so records never reveal a true home; the rich desk warns once at start when the evidence system is active but Citizen Records is not wired (birth-date tells need it); likewise the rich desk warns once at start when the intercom, the interview transcript or its window chrome is not wired: that day questions are hidden, no answer is computed and no tell is spoken, and the intercom offers only document requests
 
 ## World
@@ -48,7 +48,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 ## Investigation loop
 
 - [ ] Claim banner (visitor name + "I request passage home to <place> (<era>)")
-- [ ] Intercom = the interview: every entry is a dialog choice. Hub: "Request <document>" (repeatable; the traveller hands it over and the window opens), "Ask about home >" ("< Back" first, then today's questions, one-shot per traveller, and small talk) and today's narrative dialogs; content never offers more choices than the intercom shows (8), and the way back and the requests come first (hub and menus tested: `InterviewScriptTests`, `DialogRunnerTests`; locked questions hidden and dialogs offered tested: `InterviewDayTests`; capacity rules tested: `InterviewScriptTests`)
+- [ ] Intercom = the interview: every entry is a dialog choice. Hub: "Request <document>" for each document handed over on request (one-shot; the traveller hands it over and its window opens), "Ask about home >" ("< Back" first, then today's questions, one-shot per traveller, and small talk) and today's narrative dialogs; content never offers more choices than the intercom shows (8), and the way back and the requests come first (hub, menus, one-shot requests and which documents get one tested: `InterviewScriptTests`, `DialogRunnerTests`; locked questions hidden and dialogs offered tested: `InterviewDayTests`; capacity rules tested: `InterviewScriptTests`)
 - [ ] Questions: Currency, Language, Device from day 1; Capital from day 2; Ruler from day 3 (each announced in that morning's paper); Date of birth once Interview Protocols is owned (announced the next morning). Unlocks are fixed at the start of the day. Only day-gated questions can carry a spoken tell: the birth-date question is always answered with the registered date, a hint against a passport birth-date tell (gates tested: `GatesTests`; availability and tell eligibility tested: `InterviewDayTests`)
 - [ ] Honest answers equal the claimed place's book entries and the Citizen Record; a liar answers with the cover except for a spoken tell; small talk comes from the claimed place (or its era) and is never evidence (the answer rule, the cover unless the category is an Answer tell, and the small-talk order, place lines before era lines, tested: `InterviewTests`; small talk never evidence tested: `InterviewScriptTests`; which cover values and small-talk lists `CaseFactory` passes in, the claim's and never the true home's, is Assembly-CSharp and checked in Unity (spec §6 steps 3.5 and 3.10), not by the EditMode suite)
 - [ ] Documents render as SCANNED pages (white page + photo placeholder on dark scanner backing), multi-page, structured fields

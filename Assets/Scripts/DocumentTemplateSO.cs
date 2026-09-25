@@ -25,4 +25,8 @@ public sealed class DocumentTemplateSO : ScriptableObject
     /// </summary>
     [Header("Investigation fields")]
     public DocumentFieldSpec[] fieldSpecs;
+
+    /// <summary>When the traveller hands this document over: when they step up (OnArrival) or when asked (OnRequest).</summary>
+    [Header("Desk")]
+    public DocumentHandOver handOver = DocumentHandOver.OnRequest;
 }

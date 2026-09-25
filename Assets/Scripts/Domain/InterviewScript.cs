@@ -12,8 +12,8 @@ public sealed class InterviewCase
     /// <summary>The claimed era's id: picks each question's wording override.</summary>
     public string claimedEraId;
 
-    /// <summary>The traveller's documents' names, in paper order (one request each).</summary>
-    public IReadOnlyList<string> documentNames;
+    /// <summary>The traveller's documents in paper order; only those handed over on request get a hub request.</summary>
+    public IReadOnlyList<CaseDocument> documents;
 
     /// <summary>The traveller's answers to today's askable questions (CaseInstance.answers).</summary>
     public IReadOnlyList<InterviewAnswer> answers;
@@ -77,8 +77,30 @@ public static class InterviewScript
     }
 
     /// <summary>
-    /// The traveller's graph. Hub: "request:{i}" per document (repeatable,
-    /// opens document i), then "ask" when the ask menu has a question or
+    /// What the traveller said since transcript line <paramref name="from"/>:
+    /// the texts of the Traveller lines at or after it, in order, joined with a
+    /// new line; empty when there are none. A null transcript gives ""; a from
+    /// below 0 counts as 0. (The reply the traveller wheel's bubble shows.)
+    /// </summary>
+    public static string SpokenSince(IReadOnlyList<DialogLine> transcript, int from)
+    {
+        if (transcript == null)
+            return string.Empty;
+
+        var said = new List<string>();
+        for (int i = from < 0 ? 0 : from; i < transcript.Count; i++)
+        {
+            DialogLine line = transcript[i];
+            if (line != null && line.Speaker == DialogSpeaker.Traveller)
+                said.Add(line.Text);
+        }
+
+        return string.Join("\n", said);
+    }
+
+    /// <summary>
+    /// The traveller's graph. Hub: "request:{i}" per document handed over on
+    /// request (one-shot, hands document i over), then "ask" when the ask menu has a question or
     /// small talk, then "dlg:{id}" per dialog (one-shot). Ask: "back" first
     /// (so an overlong menu can never hide the way back), then "q:{id}" per
     /// question the traveller has an answer for (one-shot), then "smalltalk".
@@ -94,25 +116,29 @@ public static class InterviewScript
         var hub = new DialogNode { Id = HubNodeId };
         var ask = new DialogNode { Id = AskNodeId };
 
-        IReadOnlyList<string> documents = c != null && c.documentNames != null ? c.documentNames : new string[0];
+        IReadOnlyList<CaseDocument> documents = c != null && c.documents != null ? c.documents : new CaseDocument[0];
         for (int i = 0; i < documents.Count; i++)
         {
-            string name = documents[i];
+            CaseDocument doc = documents[i];
+            if (doc == null || !doc.Requested)
+                continue;
+
             hub.Choices.Add(new DialogChoice
             {
                 Id = $"request:{i}",
-                Label = Interview.Fill(lines.requestLabel, Interview.DocumentToken, name),
+                Label = Interview.Fill(lines.requestLabel, Interview.DocumentToken, doc.name),
                 Lines =
                 {
-                    new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, name)),
+                    new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, doc.name)),
                     new DialogLine(Id(lines.requestReply), DialogSpeaker.Traveller, Text(lines.requestReply))
                 },
-                Action = DialogAction.OpenDocument,
-                DocumentIndex = i
+                Action = DialogAction.HandOverDocument,
+                DocumentIndex = i,
+                OneShot = true
             });
         }
 
-        ask.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId });
+        ask.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
 
         string eraId = c != null ? c.claimedEraId : null;
         if (questions != null)
@@ -293,7 +319,7 @@ public static class DialogChecks
             if (Choices(node).Count == 0)
                 problems.Add($"node '{node.id}' has no choices");
             else if (maxChoices > 0 && Choices(node).Count > maxChoices)
-                problems.Add($"node '{node.id}' offers {Choices(node).Count} choices; the intercom shows at most {maxChoices}");
+                problems.Add($"node '{node.id}' offers {Choices(node).Count} choices; the traveller wheel shows at most {maxChoices}");
         }
 
         foreach (ScriptNode node in nodes.Values)
@@ -357,12 +383,13 @@ public static class DialogChecks
     }
 
     /// <summary>
-    /// Menus larger than the intercom shows: the ask menu (1 back + the
+    /// Menus larger than the traveller wheel shows: the ask menu (1 back + the
     /// questions + 1 when there is small talk) or the hub (the most documents
-    /// of any traveller + 1 ask entry + every dialog, counted as offered at
-    /// once). Skipped when <paramref name="maxChoices"/> is 0 or less.
+    /// one traveller hands over on request + 1 ask entry + every dialog,
+    /// counted as offered at once). Skipped when <paramref name="maxChoices"/>
+    /// is 0 or less.
     /// </summary>
-    public static List<string> MenuProblems(int questions, bool smallTalk, int maxDocuments, int dialogs, int maxChoices)
+    public static List<string> MenuProblems(int questions, bool smallTalk, int maxRequestedDocuments, int dialogs, int maxChoices)
     {
         var problems = new List<string>();
         if (maxChoices <= 0)
@@ -370,11 +397,11 @@ public static class DialogChecks
 
         int ask = 1 + questions + (smallTalk ? 1 : 0);
         if (ask > maxChoices)
-            problems.Add($"The ask menu holds {ask} choices (< Back, {questions} question(s){(smallTalk ? ", small talk" : string.Empty)}); the intercom shows at most {maxChoices}.");
+            problems.Add($"The ask menu holds {ask} choices (< Back, {questions} question(s){(smallTalk ? ", small talk" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 
-        int hub = maxDocuments + 1 + dialogs;
+        int hub = maxRequestedDocuments + 1 + dialogs;
         if (hub > maxChoices)
-            problems.Add($"The hub holds {hub} choices ({maxDocuments} document request(s), the ask entry, {dialogs} dialog(s)); the intercom shows at most {maxChoices}.");
+            problems.Add($"The hub holds {hub} choices ({maxRequestedDocuments} document request(s), the ask entry, {dialogs} dialog(s)); the traveller wheel shows at most {maxChoices}.");
 
         return problems;
     }

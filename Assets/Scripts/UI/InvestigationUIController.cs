@@ -60,6 +60,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     private Action<bool> _onDecision;
     private readonly List<GameObject> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
+
+    /// <summary>The current traveller's documents in paper order (name, holder, hand-over).</summary>
+    private readonly List<CaseDocument> _caseDocuments = new();
+
+    /// <summary>Papers whose window already has a desktop icon this case.</summary>
+    private readonly HashSet<int> _iconedDocuments = new();
     private bool _booksBuilt;
     private string _directives = "Directives: all destinations cleared.";
 
@@ -279,11 +285,12 @@ public sealed class InvestigationUIController : MonoBehaviour
             if (ic != null)
                 Destroy(ic);
         _docIcons.Clear();
+        _iconedDocuments.Clear();
+        _caseDocuments.Clear();
 
-        // Documents are handed over through the interview ("Request Travel
-        // Passport"), not desktop icons: the windows spawn hidden and open on request.
-        var documentNames = new List<string>();
-
+        // Documents are handed over, never taken: those marked "on arrival" when
+        // the traveller steps up, the others through an interview request. Each
+        // window spawns hidden and opens when its document is handed over.
         if (inst != null)
         {
             int i = 0;
@@ -295,12 +302,20 @@ public sealed class InvestigationUIController : MonoBehaviour
                     rt.anchoredPosition = new Vector2(-330f + i * 620f, 140f);
                 clone.SetDocument(doc, compareController);
                 _docWindows.Add(clone.gameObject);
-                documentNames.Add(doc != null && doc.template != null ? doc.template.displayName : "Document");
+                _caseDocuments.Add(new CaseDocument
+                {
+                    name = doc != null && doc.template != null ? doc.template.displayName : "Document",
+                    holder = inst.visitorGivenName,
+                    handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest
+                });
                 i++;
             }
         }
 
-        StartInterview(inst, documentNames);
+        foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
+            OpenDocumentWindow(i);
+
+        StartInterview(inst, _caseDocuments);
 
         BuildBookShelf(lib);
 
@@ -311,13 +326,13 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Starts the traveller's interview: the hub with a request per document,
-    /// and, when the interview is reachable, today's questions, small talk and
+    /// Starts the traveller's interview: the hub with a request per document
+    /// handed over on request, and, when the interview is reachable, today's questions, small talk and
     /// offered dialogs (without a wired transcript nothing spoken could be read,
     /// so only the requests remain). The transcript starts with the opener and
     /// the claim.
     /// </summary>
-    private void StartInterview(CaseInstance inst, IReadOnlyList<string> documentNames)
+    private void StartInterview(CaseInstance inst, IReadOnlyList<CaseDocument> documents)
     {
         _runner = null;
         if (_day == null)
@@ -334,7 +349,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             introLine = inst != null ? inst.introLine : null,
             claimLine = inst != null ? inst.claimLine : null,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
-            documentNames = documentNames,
+            documents = documents,
             answers = inst != null ? inst.answers : null,
             smallTalk = reachable && inst != null ? inst.smallTalk : null
         };
@@ -369,8 +384,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// Plays one interview choice: the transcript shows its lines; a document
-    /// request opens and raises that document's window, any other choice opens
-    /// the transcript; a finished dialog is recorded for the end of the shift.
+    /// request hands that document over (its window opens and is raised), any
+    /// other choice opens the transcript; a finished dialog is recorded for the
+    /// end of the shift.
     /// </summary>
     private void Choose(string choiceId)
     {
@@ -381,15 +397,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (transcriptWindow != null)
             transcriptWindow.Refresh();
 
-        if (choice.Action == DialogAction.OpenDocument)
-        {
-            GameObject window = choice.DocumentIndex >= 0 && choice.DocumentIndex < _docWindows.Count ? _docWindows[choice.DocumentIndex] : null;
-            if (window != null)
-            {
-                window.SetActive(true);
-                window.transform.SetAsLastSibling();
-            }
-        }
+        if (choice.Action == DialogAction.HandOverDocument)
+            OpenDocumentWindow(choice.DocumentIndex);
         else if (transcriptChrome != null)
         {
             transcriptChrome.Open();
@@ -399,6 +408,23 @@ public sealed class InvestigationUIController : MonoBehaviour
             _day.Complete(choice.DialogId, choice.EffectName);
 
         RefreshChoices();
+    }
+
+    /// <summary>
+    /// Opens a paper's scanned window and raises it. The first time it opens
+    /// this case, the paper also gets a desktop icon at the top of the grid,
+    /// which reopens the window after it is closed.
+    /// </summary>
+    private void OpenDocumentWindow(int index)
+    {
+        GameObject window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
+        if (window == null)
+            return;
+
+        window.SetActive(true);
+        window.transform.SetAsLastSibling();
+        if (_iconedDocuments.Add(index))
+            AddDesktopIcon(_caseDocuments[index].name, window, true);
     }
 
     /// <summary>
@@ -497,6 +523,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void Decide(bool accepted)
     {
         Hide();
+
+        // No case is on the desk from here: cleared before the callback, which
+        // may present the next traveller at once (no READY sign wired).
+        _currentCase = null;
         Action<bool> cb = _onDecision;
         _onDecision = null;
         cb?.Invoke(accepted);
