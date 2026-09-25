@@ -48,6 +48,7 @@ public class CarriesTests
         Assert.IsNull(Carries.Make("egypt", "ancient", "greece", "ancient", ClueCategory.Culture, w, 1), "not an editable category");
         Assert.IsNull(Carries.Make("egypt", "ancient", "greece", "ancient", ClueCategory.Technology, null, 1));
         Assert.IsNull(Carries.Make("", "ancient", "greece", "ancient", ClueCategory.Technology, w, 1));
+        Assert.IsNull(Carries.Make("egypt", "ancient", "atlantis", "ancient", ClueCategory.Technology, w, 1), "the claim is not in today's table");
 
         w.Add("japan", "ancient", "Yamato (Ancient)", ClueCategory.Technology, " PAPYRUS ");
         Assert.IsNull(Carries.Make("egypt", "ancient", "japan", "ancient", ClueCategory.Technology, w, 1), "the claim already has the value");

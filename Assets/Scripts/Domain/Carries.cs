@@ -12,8 +12,8 @@ public static class Carries
     /// The carry of an accepted liar: the true home's value for
     /// <paramref name="category"/> in today's table, headed for the claim.
     /// Null when an id is blank, home equals claim, the category is not
-    /// editable, the table is null or has no value for the home, or the claim
-    /// already has that value (DiscrepancyLog.ValuesMatch).
+    /// editable, the table is null, has no value for the home or does not hold
+    /// the claim, or the claim already has that value (DiscrepancyLog.ValuesMatch).
     /// </summary>
     public static CarryRecord Make(string fromNationId, string fromEraId, string toNationId, string toEraId,
                                    ClueCategory category, FactTable today, int day)
@@ -27,7 +27,8 @@ public static class Carries
             return null;
 
         string value = today.Get(fromNationId, fromEraId, category);
-        if (string.IsNullOrWhiteSpace(value) || DiscrepancyLog.ValuesMatch(value, today.Get(toNationId, toEraId, category)))
+        if (string.IsNullOrWhiteSpace(value) || today.OriginLabel(toNationId, toEraId) == null ||
+            DiscrepancyLog.ValuesMatch(value, today.Get(toNationId, toEraId, category)))
             return null;
 
         return new CarryRecord
