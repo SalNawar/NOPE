@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: a32b1de5520de554eb293b269633ed4f
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/Walls/Wall_Divider.prefab
+  uploadId: 880684

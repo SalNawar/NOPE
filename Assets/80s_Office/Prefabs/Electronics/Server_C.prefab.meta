@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 6b225caac059c7d4c8334f140d2a2e9e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/Electronics/Server_C.prefab
+  uploadId: 880684

@@ -1,0 +1,196 @@
+{
+    "placed": [
+        {
+            "name": "Retro CRT",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Computer.prefab",
+            "group": "Desk",
+            "min": {
+                "x": -2.100416898727417,
+                "y": 1.059999942779541,
+                "z": -0.5259056687355042
+            },
+            "max": {
+                "x": -1.1795830726623536,
+                "y": 1.8045480251312256,
+                "z": 0.2659056782722473
+            },
+            "triangles": 4416
+        },
+        {
+            "name": "Retro keyboard",
+            "source": "Assets/80s_Office/Prefabs/Electronics/Keyboard.prefab",
+            "group": "Desk",
+            "min": {
+                "x": -1.75844144821167,
+                "y": 1.059999942779541,
+                "z": -0.8484634160995483
+            },
+            "max": {
+                "x": -1.061558485031128,
+                "y": 1.1458783149719239,
+                "z": -0.3915365934371948
+            },
+            "triangles": 4550
+        },
+        {
+            "name": "Clerk hotline",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+            "group": "Desk",
+            "min": {
+                "x": -0.9008979201316834,
+                "y": 1.059999942779541,
+                "z": -0.0061057209968566898
+            },
+            "max": {
+                "x": -0.4591020941734314,
+                "y": 1.2432067394256592,
+                "z": 0.36610573530197146
+            },
+            "triangles": 5718
+        },
+        {
+            "name": "Banker task lamp",
+            "source": "Assets/80s_Office/Prefabs/Lamps/Lamp_Desk.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 1.287903070449829,
+                "y": 1.059999942779541,
+                "z": 0.059646815061569217
+            },
+            "max": {
+                "x": 2.0520968437194826,
+                "y": 1.6881511211395264,
+                "z": 0.36035317182540896
+            },
+            "triangles": 2776
+        },
+        {
+            "name": "Desk calculator",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 0.7688538432121277,
+                "y": 1.059999942779541,
+                "z": -0.04627801477909088
+            },
+            "max": {
+                "x": 1.0311460494995118,
+                "y": 1.1192631721496583,
+                "z": 0.32627803087234499
+            },
+            "triangles": 458
+        },
+        {
+            "name": "Pen pot",
+            "source": "Assets/80s_Office/Prefabs/TableProps/PenHolder.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 1.1949455738067628,
+                "y": 1.059999942779541,
+                "z": 0.18461067974567414
+            },
+            "max": {
+                "x": 1.325054407119751,
+                "y": 1.2460174560546876,
+                "z": 0.31538933515548708
+            },
+            "triangles": 2598
+        },
+        {
+            "name": "Forms stapler",
+            "source": "Assets/80s_Office/Prefabs/TableProps/Stapler.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 1.3402552604675294,
+                "y": 1.059999942779541,
+                "z": -0.3704434037208557
+            },
+            "max": {
+                "x": 1.4597446918487549,
+                "y": 1.1529242992401124,
+                "z": -0.10955657064914704
+            },
+            "triangles": 1030
+        },
+        {
+            "name": "Document out tray",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Tray.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 1.666680097579956,
+                "y": 1.059999942779541,
+                "z": -0.6595207452774048
+            },
+            "max": {
+                "x": 2.133319854736328,
+                "y": 1.183685541152954,
+                "z": 0.01952075958251953
+            },
+            "triangles": 60
+        },
+        {
+            "name": "Out tray forms",
+            "source": "Assets/80s_Office/Prefabs/TableProps/PaperPile.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 1.7605607509613038,
+                "y": 1.1030000448226929,
+                "z": -0.5037786960601807
+            },
+            "max": {
+                "x": 2.0394392013549806,
+                "y": 1.1477924585342408,
+                "z": -0.11622130870819092
+            },
+            "triangles": 104
+        },
+        {
+            "name": "Spare forms",
+            "source": "Assets/80s_Office/Prefabs/TableProps/PaperPile.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 2.337970733642578,
+                "y": 1.059999942779541,
+                "z": -0.8434020280838013
+            },
+            "max": {
+                "x": 2.662029266357422,
+                "y": 1.106584072113037,
+                "z": -0.41659799218177798
+            },
+            "triangles": 104
+        },
+        {
+            "name": "Cabinet keys",
+            "source": "Assets/80s_Office/Prefabs/TableProps/OfficeKeys.prefab",
+            "group": "Desk",
+            "min": {
+                "x": 0.7421464920043945,
+                "y": 1.070000171661377,
+                "z": -0.1368289738893509
+            },
+            "max": {
+                "x": 0.8178534507751465,
+                "y": 1.096489429473877,
+                "z": -0.06317102909088135
+            },
+            "triangles": 1972
+        },
+        {
+            "name": "Reference binder",
+            "source": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_File_V2.prefab",
+            "group": "Desk",
+            "min": {
+                "x": -2.5348310470581056,
+                "y": 1.059999942779541,
+                "z": 0.10702894628047943
+            },
+            "max": {
+                "x": -2.365169048309326,
+                "y": 1.4185364246368409,
+                "z": 0.3929710388183594
+            },
+            "triangles": 484
+        }
+    ]
+}

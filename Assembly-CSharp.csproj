@@ -78,12 +78,16 @@
     <Compile Include="Assets\Scripts\DocumentTemplateSO.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\DayEventSO.cs" />
+    <Compile Include="Assets\80s_Office\Scripts\LoadScenes.cs" />
     <Compile Include="Assets\Scripts\WeightedRandom.cs" />
     <Compile Include="Assets\Scripts\DevTools\DebugPanelController.cs" />
     <Compile Include="Assets\Scripts\ClueSO.cs" />
     <Compile Include="Assets\Scripts\UI\CompareController.cs" />
+    <Compile Include="Assets\Creepy_Cat\3D Scifi Kit Starter Kit_HD\Scripts\Turn_Move.cs" />
+    <Compile Include="Assets\Scripts\Office\OfficeWindowGlass.cs" />
     <Compile Include="Assets\Scripts\UI\DesktopIcon.cs" />
     <Compile Include="Assets\Scripts\Investigation\ReferenceBookSO.cs" />
+    <Compile Include="Assets\80s_Office\Scripts\ReplaceGameObjects.cs" />
     <Compile Include="Assets\Scripts\Home\HomeManager.cs" />
     <Compile Include="Assets\Scripts\LegendarySO.cs" />
     <Compile Include="Assets\Scripts\Shift\ShiftScoring.cs" />
@@ -104,6 +108,7 @@
     <Compile Include="Assets\Scripts\EraSO.cs" />
     <Compile Include="Assets\Scripts\Core\RunManager.cs" />
     <Compile Include="Assets\Scripts\Office\CinemachineCameraRig.cs" />
+    <Compile Include="Assets\80s_Office\Scripts\LOAD.cs" />
     <Compile Include="Assets\Scripts\Timeline\TimelineService.cs" />
     <Compile Include="Assets\Scripts\UI\ReferenceBookWindowController.cs" />
     <Compile Include="Assets\Scripts\DayPlanSO.cs" />
@@ -117,10 +122,12 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile-2-Pass.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\Art\Office\ImportedOffice\Shaders\OfficePaint.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Art\Office\Hybrid\Materials\OfficePortal.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Creepy_Cat\3D Scifi Kit Starter Kit_HD\Shaders\GlassTypeB.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\SDFFunctions.hlsl" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />

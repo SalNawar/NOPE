@@ -3,37 +3,6 @@ import math
 from artlib import *
 
 
-def build_booth_frame():
-    group('Finish_BoothFrame')
-    # Freestanding clerk station: posts meet the existing desktop. It is not a
-    # new wall across the main hall. The open centre remains available to visitors.
-    for side in [-1, 1]:
-        x = side * 2.22
-        box('Booth upright', (x, 1.445, .96), (.095, 2.89, .105), 'Finish_EnamelDark', .009)
-        box('Post desk collar', (x, 1.069, .96), (.15, .028, .16), 'Finish_Charcoal', .006)
-        box('Upright inside trim', (x-side*.042, 2.0, .897), (.014, 1.61, .018), 'Finish_WoodEdge', .003)
-        # An outer shelf is supported by the upright and partition cap.
-        box('Side shelf', (side*2.54, 2.53, .71), (.67, .055, .39), 'Finish_Wood', .008)
-        box('Shelf worn front lip', (side*2.54, 2.533, .508), (.68, .057, .024), 'Finish_WoodEdge', .004)
-        for dx in [.08, .43]:
-            xx=side*(2.22+dx)
-            tube('Bent shelf support', [(xx,2.53,.87),(xx,2.33,.91),(xx,2.51,.55)], .013, 'Finish_Charcoal')
-        box('Crown angle bracket', (side*2.15,2.785,.955), (.12,.19,.082), 'Finish_Enamel', .005)
-        for y in [2.725,2.84]:
-            cylinder('Frame bolt', (side*2.145,y,.909), .009,.009,'Hardware_BareMetal','z',20)
-    box('Shallow booth crown', (0,2.906,1.00), (4.54,.132,.54), 'Finish_EnamelDark', .014)
-    box('Crown front fascia', (0,2.89,.718), (4.60,.162,.038), 'Finish_Wood', .009)
-    box('Fascia lower trim', (0,2.804,.70), (4.61,.019,.051), 'Finish_WoodEdge', .004)
-    # Flat blank agency plate. Any name/logo belongs to live history-dependent UI.
-    box('Blank agency plate backing',(0,2.898,.69),(1.00,.106,.014),'Finish_Charcoal',.012)
-    box('Blank agency plate face',(0,2.898,.680),(.955,.073,.004),'Finish_Brass',.007)
-    # Fixed wiring runs along the frame, with short clips rather than hanging
-    # across the visitor opening. No paint contains directional illumination.
-    tube('Frame electrical conduit',[(-2.24,1.10,1.024),(-2.24,2.82,1.024),(-2.0,2.837,1.025),(2.16,2.837,1.025)],.009,'Finish_BlackRubber')
-    for x in [-1.8,-.9,.9,1.8]:
-        box('Conduit saddle',(x,2.834,1.031),(.026,.029,.031),'Hardware_BareMetal',.004)
-
-
 def build_desk_stationery():
     group('Finish_FormSorter')
     box('Rubber sorter feet',(0,.009,0),(.40,.018,.22),'Finish_BlackRubber',.007)
@@ -93,38 +62,32 @@ def build_desk_stationery():
 
 
 def build_panel_ephemera(project):
-    material('Canvas_StarryNight','FFFFFF',.99,texture=project/'Assets/Art/Office/Hybrid/Images/starry_night.png')
-    material('Canvas_Mondrian','FFFFFF',.99,texture=project/'Assets/Art/Office/Hybrid/Images/mondrian.png')
-
     def pinned_paper(name,x,y,w,h,angle=0,mat='Finish_Paper'):
-        ob=box(name,(x,y,-.044),(w,h,.0018),mat,.0006)
-        ob.rotation_euler.y=math.radians(angle)
-        cylinder('Push pin metal stem',(x,y+h*.40,-.049),.0015,.012,'Hardware_BareMetal','z',12)
-        cylinder('Push pin round head',(x,y+h*.40,-.058),.007,.006,'Finish_Coral','z',24)
-        return ob
-
-    def postcard(name,x,y,w,h,canvas,uvcorners,angle):
         import artlib as A
         from mathutils import Matrix,Vector
         before=set(A.current.objects)
-        box(name+' white card',(x,y,-.047),(w,h,.002),'Finish_Paper',.001)
-        o=mesh(name+' image',[(x-w*.455,y-h*.425,-.049),(x+w*.455,y-h*.425,-.049),(x+w*.455,y+h*.425,-.049),(x-w*.455,y+h*.425,-.049)],[(0,1,2,3)],canvas)
-        uv=o.data.uv_layers.new(name='PostcardUV')
-        for i,loop in enumerate(o.data.loops):
-            u,vv=uvcorners[i];uv.data[loop.index].uv=(u,1-vv)
-        for px in [-w*.36,w*.36]:
-            box('Old postcard tape',(x+px,y+h*.48,-.051),(w*.20,.021,.001),'Hardware_Paper',.001)
-        centre=Vector(v((x,y,-.047)))
+        ob=box(name,(x,y,-.044),(w,h,.0018),mat,.0006)
+        # Empty form fields, with no letters, logos or history-dependent content.
+        # Low-contrast rules give the paper a designed surface without baking text.
+        box('Blank form header rule',(x-w*.08,y+h*.26,-.0455),(w*.58,h*.024,.0004),'Finish_KeyGrey',0)
+        for i in range(3):
+            yy=y+h*(.09-i*.16)
+            box('Empty form writing rule',(x+w*.055,yy,-.0455),(w*.61,.001,.0004),'Finish_KeyGrey',0)
+            box('Empty form field marker',(x-w*.32,yy+.004,-.0455),(.005,.007,.0004),'Finish_KeyGrey',0)
+        cylinder('Push pin metal stem',(x,y+h*.40,-.049),.0015,.012,'Hardware_BareMetal','z',12)
+        cylinder('Push pin round head',(x,y+h*.40,-.058),.007,.006,'Finish_Coral','z',24)
+        centre=Vector(v((x,y,-.044)))
         rotation=Matrix.Translation(centre)@Matrix.Rotation(math.radians(-angle),4,'Y')@Matrix.Translation(-centre)
-        for ob in set(A.current.objects)-before:ob.matrix_world=rotation@ob.matrix_world
+        for part in set(A.current.objects)-before:part.matrix_world=rotation@part.matrix_world
+        return ob
 
     group('Finish_LeftEphemera')
     pinned_paper('Old folded receipt',-.268,.16,.096,.19,4,'Hardware_Paper')
     pinned_paper('Blank appointment slip',.08,.223,.20,.062,-3)
-    postcard('Starry Night keepsake',-.19,-.405,.255,.166,'Canvas_StarryNight',[(.119,.795),(.88,.795),(.88,.166),(.119,.166)],7)
-    pinned_paper('Small memo tucked under keepsake',-.24,-.443,.111,.114,-10,'Hardware_Paper')
+    pinned_paper('Blank docket card',-.19,-.405,.255,.166,7)
+    pinned_paper('Small memo tucked under docket',-.24,-.443,.111,.114,-10,'Hardware_Paper')
 
     group('Finish_RightEphemera')
     pinned_paper('Clipped administrative slip',-.235,.10,.126,.192,-5)
-    postcard('Mondrian keepsake',-.16,-.274,.219,.218,'Canvas_Mondrian',[(.164,.80),(.82,.80),(.834,.181),(.161,.168)],-7)
+    pinned_paper('Blank inspection card',-.16,-.274,.219,.218,-7)
     pinned_paper('Narrow claim stub',.13,-.487,.22,.063,3,'Hardware_Paper')

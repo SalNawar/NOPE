@@ -1,0 +1,182 @@
+{
+  "items": [
+    {
+      "name": "Retro CRT",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/Electronics/Computer.prefab",
+      "position": {
+        "x": -1.64,
+        "y": 1.06,
+        "z": -0.13
+      },
+      "yaw": -20,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.3
+    },
+    {
+      "name": "Retro keyboard",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/Electronics/Keyboard.prefab",
+      "position": {
+        "x": -1.41,
+        "y": 1.06,
+        "z": -0.62
+      },
+      "yaw": -20,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.1
+    },
+    {
+      "name": "Clerk hotline",
+      "group": "Desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+      "position": {
+        "x": -0.68,
+        "y": 1.06,
+        "z": 0.18
+      },
+      "yaw": 165,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.28
+    },
+    {
+      "name": "Banker task lamp",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/Lamps/Lamp_Desk.prefab",
+      "position": {
+        "x": 1.67,
+        "y": 1.06,
+        "z": 0.21
+      },
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.35
+    },
+    {
+      "name": "Desk calculator",
+      "group": "Desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+      "position": {
+        "x": 0.9,
+        "y": 1.06,
+        "z": 0.14
+      },
+      "yaw": 165,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.4
+    },
+    {
+      "name": "Pen pot",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/PenHolder.prefab",
+      "position": {
+        "x": 1.26,
+        "y": 1.06,
+        "z": 0.25
+      },
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.35
+    },
+    {
+      "name": "Forms stapler",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/Stapler.prefab",
+      "position": {
+        "x": 1.4,
+        "y": 1.06,
+        "z": -0.24
+      },
+      "yaw": -12,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.35
+    },
+    {
+      "name": "Document out tray",
+      "group": "Desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Tray.prefab",
+      "position": {
+        "x": 1.9,
+        "y": 1.06,
+        "z": -0.32
+      },
+      "yaw": 180,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.5
+    },
+    {
+      "name": "Out tray forms",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/PaperPile.prefab",
+      "position": {
+        "x": 1.9,
+        "y": 1.103,
+        "z": -0.31
+      },
+      "yaw": 0,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.25
+    },
+    {
+      "name": "Spare forms",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/PaperPile.prefab",
+      "position": {
+        "x": 2.5,
+        "y": 1.06,
+        "z": -0.63
+      },
+      "yaw": 5,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.3
+    },
+    {
+      "name": "Cabinet keys",
+      "group": "Desk",
+      "prefab": "Assets/80s_Office/Prefabs/TableProps/OfficeKeys.prefab",
+      "position": {
+        "x": 0.78,
+        "y": 1.07,
+        "z": -0.1
+      },
+      "yaw": -15,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1
+    },
+    {
+      "name": "Reference binder",
+      "group": "Desk",
+      "prefab": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_File_V2.prefab",
+      "position": {
+        "x": -2.45,
+        "y": 1.06,
+        "z": 0.25
+      },
+      "yaw": 160,
+      "pitch": 0,
+      "roll": 0,
+      "scale": 1.1
+    }
+  ],
+  "poses": [],
+  "disablePaths": [
+    "HybridOffice/Booth/Finish_PC",
+    "HybridOffice/Booth/Finish_Keyboard",
+    "HybridOffice/Booth/Finish_Lamp",
+    "HybridOffice/Booth/Finish_PencilRack",
+    "HybridOffice/Booth/Finish_Tray",
+    "HybridOffice/Booth/Finish_PaperBundle",
+    "HybridOffice/Booth/Finish_Intercom"
+  ]
+}

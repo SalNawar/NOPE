@@ -1,0 +1,48 @@
+{
+  "scene": "Assets/Scenes/OfficeScene.unity",
+  "glass": [
+    {
+      "transparency": 0,
+      "paneEnabled": "True",
+      "setter": {
+        "success": true,
+        "gameObject": "WindowGlass",
+        "component": "OfficeWindowGlass",
+        "property": "GlassTransparency",
+        "valueSet": "0",
+        "valueType": "Single"
+      }
+    },
+    {
+      "transparency": 100,
+      "paneEnabled": "False",
+      "setter": {
+        "success": true,
+        "gameObject": "WindowGlass",
+        "component": "OfficeWindowGlass",
+        "property": "GlassTransparency",
+        "valueSet": "100",
+        "valueType": "Single"
+      }
+    },
+    {
+      "transparency": 25,
+      "paneEnabled": "True",
+      "setter": {
+        "success": true,
+        "gameObject": "WindowGlass",
+        "component": "OfficeWindowGlass",
+        "property": "GlassTransparency",
+        "valueSet": "25",
+        "valueType": "Single"
+      }
+    }
+  ],
+  "note": "API event-path verification, not a physical pointer test or full gameplay day.",
+  "monitorView": "MonitorFocus",
+  "errors": {
+    "count": 0,
+    "logs": [],
+    "source": "console"
+  }
+}

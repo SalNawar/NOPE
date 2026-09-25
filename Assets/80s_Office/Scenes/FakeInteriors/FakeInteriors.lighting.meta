@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c1eb4257984c3644a848c3a3ec23f1dd
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 4890085278179872738
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Scenes/FakeInteriors/FakeInteriors.lighting
+  uploadId: 880684

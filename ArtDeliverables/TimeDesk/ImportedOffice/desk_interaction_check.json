@@ -1,0 +1,18 @@
+[
+  {
+    "event": "CRT",
+    "view": "MonitorFocus"
+  },
+  {
+    "event": "Back",
+    "view": "OfficeFocus"
+  },
+  {
+    "event": "NEXT",
+    "view": "MonitorFocus"
+  },
+  {
+    "event": "Back",
+    "view": "OfficeFocus"
+  }
+]

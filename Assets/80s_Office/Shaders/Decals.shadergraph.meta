@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f8a9d9648e8203a458f06444e54fc8c3
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Shaders/Decals.shadergraph
+  uploadId: 880684

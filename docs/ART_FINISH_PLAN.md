@@ -1,33 +1,30 @@
-# Office art finish — 24 September 2026
+# Office art finish: 24 September 2026
 
 Reference: `ArtDeliverables/TimeDesk/DeskFinish/ReStory_current_reference.png`.
-The saved Unity scene is the deliverable. No exact parity with ReStory is claimed.
-Small changes must be followed by an actual Play mode capture and visual comparison.
+Saved Unity scene is the deliverable. Small visual changes require actual Play mode captures and comparison. No exact parity is claimed.
 
-## Checkpoint
+## Current checkpoint
 
-Camera and desk layout: PC left, tilted inward; mouse right of keyboard; document
-tools right; central mat clear. Camera stays at vertical FOV 55 and pitch 10 degrees.
-Pass 21 reduces the yellow hardware cast and separates painted metal from plastic.
+`Assets/Scenes/OfficeScene.unity`, reviewed in `Iterations/32_final_art_pass.png`.
+Camera/object positions frozen after pass 26: left tilted PC, mouse right, tools right, clear centre. Hall width/depth and layout changes deferred by user.
 
-## Remaining work, in priority order
+Completed corrective pass:
+- Removed clipping frame/shelves, repeated artwork and obsolete frame assets.
+- Four complete ceiling banners; supported gallery rails for unique paintings.
+- Gentler sculpture simplification, about 24k triangles each, licenses retained.
+- Mesh far city; building window reveals and sills.
+- Lamp head/light target mat centre, with softer coverage.
+- Three window walls with 0-100 Inspector slider saved at 25% transparency.
+- Till fittings, ruled blank forms, continuous desk wood UV/albedo, mitred frames, cloth hems and restrained wear.
+- Real-time foreground fill for shaded PC readability.
+- Original monitor event and glass endpoints verified; fresh console zero errors.
 
-1. Repair clipping shelf/frame composition and make all four suspended banners visible.
-2. Remove repeated artwork/keepsakes. Arrange unique hall exhibits in deliberate groups
-   with a clear portal approach and correctly aligned supports.
-3. Aim the physical lamp head and its spotlight at the centre of the work mat.
-4. Add window glass and a Unity Inspector transparency slider (0–100%, initially
-   25% transparency = 75% opacity), affecting all three window walls.
-5. Inspect sculpture defects and replace over-simplified geometry where necessary.
-6. Correct the low-resolution distant city treatment; do not simply upscale and
-   claim restored detail. Preserve the retro-futuristic megacity identity.
-7. Finish remaining prop materials/contact shadows, verify original interactions,
-   record evidence, remove duplicate imports and commit/push the completed pass.
+## Remaining quality gaps
 
-The earlier 90–120 minute estimate covered a polish pass. The subsequent clipping,
-statue, display-layout and transparency-control feedback adds corrective work.
-No new decorative props should be added during this pass.
+1. More authored character/material variation in hall architecture and megacity facades.
+2. Stronger exhibit integration with the civic interior; revisit with hall composition when user resumes that work.
+3. Whole-scene lighting/material richness still below ReStory. Review same camera/time; no baked directional shadows or unrequested layout changes.
 
-Dynamic lighting, blank history-dependent text/signs, blank CRT, original gameplay
-components, no visible next-case queue, and open government-hall composition remain
-requirements. Dirty/neglected exhibits must still have intentional display placement.
+The 25% glass control is literal transparency (75% opacity); it mutes the city. Slider remains available for art direction.
+
+Constraints: no random filler, characters or visible next-case queue; dynamic lighting; blank changing-language signs/CRT; original gameplay. Use source Blender assets and Unity materials/prefabs. Main is checkpoint b7f8671. Continue and push completed checkpoints on art.

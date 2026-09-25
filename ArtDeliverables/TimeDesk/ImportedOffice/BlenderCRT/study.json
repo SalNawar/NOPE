@@ -1,0 +1,9 @@
+{
+  "source": "Assets/80s_Office/Models/Electronics/SM_Monitor.FBX",
+  "source_vertices": 2495,
+  "source_triangles": 4416,
+  "bevel_meters": 0.0012,
+  "same_camera_lighting": true,
+  "screen_unchanged": true,
+  "export": "Assets/Art/Office/ImportedOffice/Models/CRT_Painted.fbx"
+}

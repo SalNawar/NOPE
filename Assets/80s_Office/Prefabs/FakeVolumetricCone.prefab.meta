@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: fb948aa9abfb3264c858b6ea0cb4407d
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/FakeVolumetricCone.prefab
+  uploadId: 880684

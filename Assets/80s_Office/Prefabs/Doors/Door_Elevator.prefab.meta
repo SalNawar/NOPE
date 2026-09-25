@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: dd12bf804172fc74a9ab26eaa558cde4
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/Doors/Door_Elevator.prefab
+  uploadId: 880684

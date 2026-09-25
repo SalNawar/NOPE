@@ -22,11 +22,11 @@ for name,height,base in [('Thinker',1.86,'Sculpture_Bronze'),('Discobolus',1.75,
     scale=height/(maxs.z-mins.z)
     for vert in o.data.vertices:vert.co=(vert.co-Vector(((mins.x+maxs.x)/2,(mins.y+maxs.y)/2,mins.z)))*scale
     # Smooth scanner noise before reducing geometry. Broad planes, no scan textures.
-    mod=o.modifiers.new('Remove scan surface noise','SMOOTH');mod.factor=.65;mod.iterations=6
+    mod=o.modifiers.new('Remove scan surface noise','SMOOTH');mod.factor=.18;mod.iterations=2
     active(o);bpy.ops.object.modifier_apply(modifier=mod.name)
-    mod=o.modifiers.new('Simplified exhibit silhouette','DECIMATE');mod.ratio=min(1,7000/len(o.data.polygons))
+    mod=o.modifiers.new('Preserve anatomy and silhouette','DECIMATE');mod.ratio=min(1,24000/len(o.data.polygons))
     bpy.ops.object.modifier_apply(modifier=mod.name)
-    mod=o.modifiers.new('Soften simplified surface','SMOOTH');mod.factor=.22;mod.iterations=2
+    mod=o.modifiers.new('Soften simplified surface','SMOOTH');mod.factor=.08;mod.iterations=1
     bpy.ops.object.modifier_apply(modifier=mod.name)
     o.data.materials.append(materials[base])
     second='Sculpture_Patina' if name=='Thinker' else 'Sculpture_Dust'

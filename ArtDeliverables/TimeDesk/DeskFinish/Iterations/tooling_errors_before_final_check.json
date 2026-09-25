@@ -1,0 +1,12 @@
+{
+  "count": 1,
+  "logs": [
+    {
+      "type": "Error",
+      "message": "[UnitySkills] Fallback response failed: primary=Thread was being aborted., fallback=Thread was being aborted.\nUnityEngine.Debug:LogError (object)\nUnitySkills.SkillsLogger:LogError (string) (at ./Library/PackageCache/com.besty.unity-skills@5d468b93cfd4/Editor/Skills/SkillsLogger.cs:59)\nUnitySkills.SkillsHttpServer:WaitAndRespond (UnitySkills.SkillsHttpServer/RequestJob) (at ./Library/PackageCache/com.besty.unity-skills@5d468b93cfd4/Editor/Skills/SkillsHttpServer.cs:1000)\nUnitySkills.SkillsHttpSer...",
+      "file": "./Library/PackageCache/com.besty.unity-skills@5d468b93cfd4/Editor/Skills/SkillsHttpServer.cs",
+      "line": 1000
+    }
+  ],
+  "source": "console"
+}

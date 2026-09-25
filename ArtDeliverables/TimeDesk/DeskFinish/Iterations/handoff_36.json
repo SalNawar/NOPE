@@ -1,0 +1,28 @@
+{
+  "state": {
+    "isPlaying": true,
+    "isPaused": false,
+    "isCompiling": false,
+    "timeSinceStartup": 27766.0200842,
+    "unityVersion": "6000.4.11f1",
+    "platform": "WindowsEditor"
+  },
+  "handoffConsole": {
+    "count": 1,
+    "logs": [
+      {
+        "type": "Error",
+        "message": "[UnitySkills] Fallback response failed: primary=Thread was being aborted., fallback=Thread was being aborted.\nUnityEngine.Debug:LogError (object)\nUnitySkills.SkillsLogger:LogError (string) (at ./Library/PackageCache/com.besty.unity-skills@5d468b93cfd4/Editor/Skills/SkillsLogger.cs:59)\nUnitySkills.SkillsHttpServer:WaitAndRespond (UnitySkills.SkillsHttpServer/RequestJob) (at ./Library/PackageCache/com.besty.unity-skills@5d468b93cfd4/Editor/Skills/SkillsHttpServer.cs:1000)\nUnitySkills.SkillsHttpSer...",
+        "file": "./Library/PackageCache/com.besty.unity-skills@5d468b93cfd4/Editor/Skills/SkillsHttpServer.cs",
+        "line": 1000
+      }
+    ],
+    "source": "console"
+  },
+  "note": "After successful verification_36, re-entering Play for user handoff logged a UnitySkills editor-bridge response-abort during the transition. Game entered Play normally. No art/gameplay exception in this log.",
+  "freshConsole": {
+    "count": 0,
+    "logs": [],
+    "source": "console"
+  }
+}

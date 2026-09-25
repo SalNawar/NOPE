@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 85689e9802f6baa48b910944b7ad7aed
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Prefabs/Electronics/FuseBox.prefab
+  uploadId: 880684

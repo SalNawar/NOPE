@@ -1,0 +1,74 @@
+[
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/City_CivicMegablock.prefab",
+    "name": "FarWest",
+    "parentPath": "HybridOffice/Exterior/DistantMegablocks",
+    "x": -85,
+    "y": -18,
+    "z": 140,
+    "rotY": 12,
+    "scaleX": 1.1,
+    "scaleY": 1.3,
+    "scaleZ": 1.1
+  },
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/City_TwinMegablock.prefab",
+    "name": "FarWestRear",
+    "parentPath": "HybridOffice/Exterior/DistantMegablocks",
+    "x": -45,
+    "y": -18,
+    "z": 165,
+    "rotY": -16,
+    "scaleX": 1.05,
+    "scaleY": 1.35,
+    "scaleZ": 1
+  },
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/City_TerracedMegablock.prefab",
+    "name": "FarCentral",
+    "parentPath": "HybridOffice/Exterior/DistantMegablocks",
+    "x": 5,
+    "y": -18,
+    "z": 155,
+    "rotY": 10,
+    "scaleX": 1.2,
+    "scaleY": 1.55,
+    "scaleZ": 1
+  },
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/City_CivicMegablock.prefab",
+    "name": "FarEast",
+    "parentPath": "HybridOffice/Exterior/DistantMegablocks",
+    "x": 65,
+    "y": -18,
+    "z": 160,
+    "rotY": -8,
+    "scaleX": 1,
+    "scaleY": 1.65,
+    "scaleZ": 1
+  },
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/City_TwinMegablock.prefab",
+    "name": "FarEastRear",
+    "parentPath": "HybridOffice/Exterior/DistantMegablocks",
+    "x": 100,
+    "y": -18,
+    "z": 160,
+    "rotY": 20,
+    "scaleX": 1.1,
+    "scaleY": 1.1,
+    "scaleZ": 1
+  },
+  {
+    "prefabPath": "Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/City_CivicMegablock.prefab",
+    "name": "FarRear",
+    "parentPath": "HybridOffice/Exterior/DistantMegablocks",
+    "x": -7,
+    "y": -18,
+    "z": 220,
+    "rotY": -10,
+    "scaleX": 1.3,
+    "scaleY": 1.5,
+    "scaleZ": 1.3
+  }
+]

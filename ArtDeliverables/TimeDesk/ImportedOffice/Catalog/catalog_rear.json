@@ -1,0 +1,4470 @@
+{
+  "assets": [
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_File_Box 1.prefab",
+      "image": "000_PF_File_Box 1.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.16576123237609863,
+        "z": -0.006566226482391357
+      },
+      "size": {
+        "x": 0.5758662819862366,
+        "y": 0.33152246475219727,
+        "z": 0.36201977729797363
+      },
+      "triangles": 11972,
+      "vertices": 8584,
+      "meshes": 14,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_File_Box.prefab",
+      "image": "001_PF_File_Box.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.16576123237609863,
+        "z": -0.006566226482391357
+      },
+      "size": {
+        "x": 0.5758662819862366,
+        "y": 0.33152246475219727,
+        "z": 0.36201977729797363
+      },
+      "triangles": 11972,
+      "vertices": 8584,
+      "meshes": 14,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_File_Shelf.prefab",
+      "image": "002_PF_File_Shelf.png",
+      "error": "",
+      "center": {
+        "x": -0.007203817367553711,
+        "y": 1.1651376485824585,
+        "z": 0.022243380546569824
+      },
+      "size": {
+        "x": 0.7842649221420288,
+        "y": 2.3233160972595215,
+        "z": 1.7361679077148438
+      },
+      "triangles": 15622,
+      "vertices": 17536,
+      "meshes": 71,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Cabinate_And_File.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_File_Shelf_V2.prefab",
+      "image": "003_PF_File_Shelf_V2.png",
+      "error": "",
+      "center": {
+        "x": -0.09132102131843567,
+        "y": 1.0110985040664673,
+        "z": 0.022243380546569824
+      },
+      "size": {
+        "x": 0.6137229204177856,
+        "y": 2.015237808227539,
+        "z": 1.7361679077148438
+      },
+      "triangles": 18372,
+      "vertices": 19352,
+      "meshes": 72,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Cabinate_And_File.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Office_File.prefab",
+      "image": "004_PF_Office_File.png",
+      "error": "",
+      "center": {
+        "x": 0.0017044693231582642,
+        "y": 0.19888025522232056,
+        "z": -0.001448463648557663
+      },
+      "size": {
+        "x": 0.26451000571250916,
+        "y": 0.39127087593078613,
+        "z": 0.09368737041950226
+      },
+      "triangles": 592,
+      "vertices": 676,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Cabinate_And_File.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Paper_Waste.prefab",
+      "image": "005_PF_Paper_Waste.png",
+      "error": "",
+      "center": {
+        "x": -0.029482826590538025,
+        "y": 0.23106659948825836,
+        "z": -0.0008077323436737061
+      },
+      "size": {
+        "x": 0.37096133828163147,
+        "y": 0.4782472550868988,
+        "z": 0.40297645330429077
+      },
+      "triangles": 1906,
+      "vertices": 1272,
+      "meshes": 16,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2_AlphaClipping.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/Combined/PF_Pen_Holder.prefab",
+      "image": "006_PF_Pen_Holder.png",
+      "error": "",
+      "center": {
+        "x": 0.013092584908008575,
+        "y": 0.10602128505706787,
+        "z": 0.03197941929101944
+      },
+      "size": {
+        "x": 0.20839045941829681,
+        "y": 0.20917659997940063,
+        "z": 0.18000252544879913
+      },
+      "triangles": 1554,
+      "vertices": 1695,
+      "meshes": 6,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Air_Conditioner.prefab",
+      "image": "007_PF_Air_Conditioner.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.07576408237218857,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.9115958213806152,
+        "y": 0.15152816474437714,
+        "z": 0.9401283264160156
+      },
+      "triangles": 1266,
+      "vertices": 1726,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Air_Conditioner.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Ashtry.prefab",
+      "image": "008_PF_Ashtry.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.04027353972196579,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.18111495673656464,
+        "y": 0.08054707944393158,
+        "z": 0.17958998680114746
+      },
+      "triangles": 514,
+      "vertices": 508,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Book.prefab",
+      "image": "009_PF_Book.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.016811668872833252,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.278533935546875,
+        "y": 0.033623337745666504,
+        "z": 0.22079592943191528
+      },
+      "triangles": 72,
+      "vertices": 116,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Book_V1.prefab",
+      "image": "010_PF_Book_V1.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.012498978525400162,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.30069273710250854,
+        "y": 0.024997957050800323,
+        "z": 0.23477284610271454
+      },
+      "triangles": 88,
+      "vertices": 142,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Book_V2.prefab",
+      "image": "011_PF_Book_V2.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.016811668872833252,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.278533935546875,
+        "y": 0.033623337745666504,
+        "z": 0.22079592943191528
+      },
+      "triangles": 72,
+      "vertices": 116,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calculator.prefab",
+      "image": "012_PF_Calculator.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.021165471524000168,
+        "z": 7.450580596923828e-09
+      },
+      "size": {
+        "x": 0.12943387031555176,
+        "y": 0.042330943048000336,
+        "z": 0.240817129611969
+      },
+      "triangles": 458,
+      "vertices": 544,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Calculator.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Calendar.prefab",
+      "image": "013_PF_Calendar.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.24464525282382965,
+        "z": 7.450580596923828e-09
+      },
+      "size": {
+        "x": 0.3626176416873932,
+        "y": 0.4892905056476593,
+        "z": 0.09085676074028015
+      },
+      "triangles": 2723,
+      "vertices": 1741,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Ceiling_Fan.prefab",
+      "image": "014_PF_Ceiling_Fan.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.39385226368904114,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.2731945514678955,
+        "y": 0.7877045273780823,
+        "z": 1.2729583978652954
+      },
+      "triangles": 2024,
+      "vertices": 1948,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Ceiling_Fan.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Ceiling_Fan_V1.prefab",
+      "image": "015_PF_Ceiling_Fan_V1.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.3736916184425354,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.292250394821167,
+        "y": 0.7473832368850708,
+        "z": 1.2922130823135376
+      },
+      "triangles": 1676,
+      "vertices": 1589,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Ceiling_Fan.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Clip_Board.prefab",
+      "image": "016_PF_Clip_Board.png",
+      "error": "",
+      "center": {
+        "x": 4.470348358154297e-08,
+        "y": 0.013104282319545746,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.23631781339645386,
+        "y": 0.02620856463909149,
+        "z": 0.3696526288986206
+      },
+      "triangles": 586,
+      "vertices": 719,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Cutter_Knife.prefab",
+      "image": "017_PF_Cutter_Knife.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.007463942747563124,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.27863097190856934,
+        "y": 0.014927885495126247,
+        "z": 0.04029907286167145
+      },
+      "triangles": 397,
+      "vertices": 503,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Eraser.prefab",
+      "image": "018_PF_Eraser.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.003651699982583523,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.03248763829469681,
+        "y": 0.007303399965167046,
+        "z": 0.04986263066530228
+      },
+      "triangles": 12,
+      "vertices": 24,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_FIle_Carton_Box.prefab",
+      "image": "019_PF_FIle_Carton_Box.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.14075343310832977,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.3484908938407898,
+        "y": 0.28150686621665955,
+        "z": 0.575866162776947
+      },
+      "triangles": 212,
+      "vertices": 208,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_FIle_Carton_Box_Closed.prefab",
+      "image": "020_PF_FIle_Carton_Box_Closed.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.16171325743198395,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.6338952779769897,
+        "y": 0.3234265148639679,
+        "z": 0.36870649456977844
+      },
+      "triangles": 76,
+      "vertices": 90,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_FIle_Carton_Box_Open.prefab",
+      "image": "021_PF_FIle_Carton_Box_Open.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.15461276471614838,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.0220942497253418,
+        "y": 0.30922552943229675,
+        "z": 0.7842646837234497
+      },
+      "triangles": 78,
+      "vertices": 146,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_File_Cabinet_Shelf.prefab",
+      "image": "022_PF_File_Cabinet_Shelf.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 1.00761878490448,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.736167550086975,
+        "y": 2.01523756980896,
+        "z": 0.5778269171714783
+      },
+      "triangles": 168,
+      "vertices": 216,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Cabinate_And_File.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_File_Holder_Rack.prefab",
+      "image": "023_PF_File_Holder_Rack.png",
+      "error": "",
+      "center": {
+        "x": -7.450580596923828e-08,
+        "y": 0.17432986199855804,
+        "z": -2.9802322387695312e-08
+      },
+      "size": {
+        "x": 0.09157516062259674,
+        "y": 0.3486597239971161,
+        "z": 0.26450997591018677
+      },
+      "triangles": 108,
+      "vertices": 144,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_File_Open.prefab",
+      "image": "024_PF_File_Open.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.025358369573950768,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.3908788859844208,
+        "y": 0.050716739147901535,
+        "z": 0.29711490869522095
+      },
+      "triangles": 152,
+      "vertices": 176,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Filing_Cabinet.prefab",
+      "image": "025_PF_Filing_Cabinet.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.7405450344085693,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.6183716654777527,
+        "y": 1.4810900688171387,
+        "z": 0.713391900062561
+      },
+      "triangles": 770,
+      "vertices": 1140,
+      "meshes": 6,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Furniture.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Landline_Phone.prefab",
+      "image": "026_PF_Landline_Phone.png",
+      "error": "",
+      "center": {
+        "x": 0.046556875109672546,
+        "y": 0.06886573135852814,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.2980630099773407,
+        "y": 0.14313030242919922,
+        "z": 0.22118236124515533
+      },
+      "triangles": 5718,
+      "vertices": 3763,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Landline_Phone.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Newspaper.prefab",
+      "image": "027_PF_Newspaper.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.02335773967206478,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.4384986460208893,
+        "y": 0.04671547934412956,
+        "z": 0.34357893466949463
+      },
+      "triangles": 182,
+      "vertices": 270,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Note_Book.prefab",
+      "image": "028_PF_Note_Book.png",
+      "error": "",
+      "center": {
+        "x": 0.0002755001187324524,
+        "y": 0.010022735223174095,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.1945021003484726,
+        "y": 0.02004547044634819,
+        "z": 0.2484598457813263
+      },
+      "triangles": 1008,
+      "vertices": 849,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Notice_Board.prefab",
+      "image": "029_PF_Notice_Board.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.34361469745635986,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.0560173988342285,
+        "y": 0.6872293949127197,
+        "z": 0.03959495574235916
+      },
+      "triangles": 472,
+      "vertices": 318,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_File.prefab",
+      "image": "030_PF_Office_File.png",
+      "error": "",
+      "center": {
+        "x": 7.450580596923828e-08,
+        "y": 0.018132764846086502,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.3188316226005554,
+        "y": 0.036265529692173004,
+        "z": 0.43387824296951294
+      },
+      "triangles": 968,
+      "vertices": 684,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_File_V2.prefab",
+      "image": "031_PF_Office_File_V2.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.16297109425067902,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.07314077019691467,
+        "y": 0.3259422183036804,
+        "z": 0.25000908970832825
+      },
+      "triangles": 484,
+      "vertices": 532,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Cabinate_And_File.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Office_Table.prefab",
+      "image": "032_PF_Office_Table.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.43102481961250305,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.7666206359863281,
+        "y": 0.8620496392250061,
+        "z": 0.8572561740875244
+      },
+      "triangles": 690,
+      "vertices": 996,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Furniture.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Old_Briefcase_Closed.prefab",
+      "image": "033_PF_Old_Briefcase_Closed.png",
+      "error": "",
+      "center": {
+        "x": -1.7881393432617188e-07,
+        "y": 0.06046512722969055,
+        "z": 0.01397627592086792
+      },
+      "size": {
+        "x": 0.5500918626785278,
+        "y": 0.1209302544593811,
+        "z": 0.42180153727531433
+      },
+      "triangles": 1836,
+      "vertices": 2005,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Old_Briefcase_Open.prefab",
+      "image": "034_PF_Old_Briefcase_Open.png",
+      "error": "",
+      "center": {
+        "x": -1.7881393432617188e-07,
+        "y": 0.20296932756900787,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.5500918626785278,
+        "y": 0.40593865513801575,
+        "z": 0.44975408911705017
+      },
+      "triangles": 1836,
+      "vertices": 2005,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Old_Computer.prefab",
+      "image": "035_PF_Old_Computer.png",
+      "error": "",
+      "center": {
+        "x": -1.1920928955078125e-07,
+        "y": 0.27583372592926025,
+        "z": -2.9802322387695312e-08
+      },
+      "size": {
+        "x": 1.168684959411621,
+        "y": 0.5516674518585205,
+        "z": 0.7033381462097168
+      },
+      "triangles": 9993,
+      "vertices": 11982,
+      "meshes": 11,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Classic_Keyboard.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_CRT_Monitor.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Old_CPU.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Retro_Mouse.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Ball.prefab",
+      "image": "036_PF_Paper_Ball.png",
+      "error": "",
+      "center": {
+        "x": -1.862645149230957e-08,
+        "y": 0.044706281274557114,
+        "z": -7.450580596923828e-08
+      },
+      "size": {
+        "x": 0.09800685942173004,
+        "y": 0.08941256254911423,
+        "z": 0.10556197166442871
+      },
+      "triangles": 128,
+      "vertices": 81,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Roll.prefab",
+      "image": "037_PF_Paper_Roll.png",
+      "error": "",
+      "center": {
+        "x": 1.4901161193847656e-08,
+        "y": 0.032660845667123795,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.30364665389060974,
+        "y": 0.06532169133424759,
+        "z": 0.0702914446592331
+      },
+      "triangles": 40,
+      "vertices": 42,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V1.prefab",
+      "image": "038_PF_Paper_Stack_V1.png",
+      "error": "",
+      "center": {
+        "x": 7.450580596923828e-08,
+        "y": 0.03968540206551552,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.35073164105415344,
+        "y": 0.07937080413103104,
+        "z": 0.3105306923389435
+      },
+      "triangles": 154,
+      "vertices": 180,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Stack_V2.prefab",
+      "image": "039_PF_Paper_Stack_V2.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.03903864696621895,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.3359341323375702,
+        "y": 0.0780772939324379,
+        "z": 0.3016839623451233
+      },
+      "triangles": 144,
+      "vertices": 168,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_Tray.prefab",
+      "image": "040_PF_Paper_Tray.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.04122857004404068,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.31109312176704407,
+        "y": 0.08245714008808136,
+        "z": 0.452694296836853
+      },
+      "triangles": 60,
+      "vertices": 88,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_V1.prefab",
+      "image": "041_PF_Paper_V1.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.28272703289985657,
+        "y": 0.0,
+        "z": 0.2002154439687729
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_V2.prefab",
+      "image": "042_PF_Paper_V2.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.004586388356983662,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.2831213176250458,
+        "y": 0.009172776713967323,
+        "z": 0.20077666640281677
+      },
+      "triangles": 32,
+      "vertices": 25,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_V3.prefab",
+      "image": "043_PF_Paper_V3.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.014531268738210201,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.28253477811813354,
+        "y": 0.029062537476420403,
+        "z": 0.19991973042488098
+      },
+      "triangles": 12,
+      "vertices": 14,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Paper_V4.prefab",
+      "image": "044_PF_Paper_V4.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.28272688388824463,
+        "y": 0.0,
+        "z": 0.2002154439687729
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Paper.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Partition_V1.prefab",
+      "image": "045_PF_Partition_V1.png",
+      "error": "",
+      "center": {
+        "x": -0.9000003337860107,
+        "y": 0.7724924087524414,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.7999999523162842,
+        "y": 1.5449848175048828,
+        "z": 0.03747394308447838
+      },
+      "triangles": 60,
+      "vertices": 120,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Partition.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Partition_V2.prefab",
+      "image": "046_PF_Partition_V2.png",
+      "error": "",
+      "center": {
+        "x": -0.5000000596046448,
+        "y": 0.7724924087524414,
+        "z": -1.862645149230957e-08
+      },
+      "size": {
+        "x": 1.0000001192092896,
+        "y": 1.5449848175048828,
+        "z": 0.03747405856847763
+      },
+      "triangles": 60,
+      "vertices": 120,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Partition.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Partition_V3.prefab",
+      "image": "047_PF_Partition_V3.png",
+      "error": "",
+      "center": {
+        "x": -1.799906849861145,
+        "y": 0.7724924087524414,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.59981369972229,
+        "y": 1.5449848175048828,
+        "z": 2.0
+      },
+      "triangles": 180,
+      "vertices": 360,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Partition.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pen.prefab",
+      "image": "048_PF_Pen.png",
+      "error": "",
+      "center": {
+        "x": 1.862645149230957e-09,
+        "y": 0.007217663340270519,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.01812652498483658,
+        "y": 0.014435326680541039,
+        "z": 0.19105300307273865
+      },
+      "triangles": 376,
+      "vertices": 370,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pen_Holder.prefab",
+      "image": "049_PF_Pen_Holder.png",
+      "error": "",
+      "center": {
+        "x": -2.2351741790771484e-08,
+        "y": 0.04970010742545128,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.20839045941829681,
+        "y": 0.09940021485090256,
+        "z": 0.18000252544879913
+      },
+      "triangles": 428,
+      "vertices": 477,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Pencil.prefab",
+      "image": "050_PF_Pencil.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.005861835554242134,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.011429748497903347,
+        "y": 0.011723671108484268,
+        "z": 0.18745069205760956
+      },
+      "triangles": 126,
+      "vertices": 130,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Retro_Chair.prefab",
+      "image": "051_PF_Retro_Chair.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.5719995498657227,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.6626660227775574,
+        "y": 1.1439990997314453,
+        "z": 0.7210289835929871
+      },
+      "triangles": 3452,
+      "vertices": 3700,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Furniture.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Sticky_Note.prefab",
+      "image": "052_PF_Sticky_Note.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0081906383857131,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.08858661353588104,
+        "y": 0.0163812767714262,
+        "z": 0.10186084359884262
+      },
+      "triangles": 122,
+      "vertices": 218,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Sticky_Note_V1.prefab",
+      "image": "053_PF_Sticky_Note_V1.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0020673631224781275,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.08858661353588104,
+        "y": 0.004134726244956255,
+        "z": 0.10147229582071304
+      },
+      "triangles": 10,
+      "vertices": 12,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Table_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Table_Lamp.prefab",
+      "image": "054_PF_Table_Lamp.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.20833078026771545,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.2724148631095886,
+        "y": 0.4166615605354309,
+        "z": 0.15876193344593048
+      },
+      "triangles": 2654,
+      "vertices": 2506,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Terrestrial_Glob.prefab",
+      "image": "055_PF_Terrestrial_Glob.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.2404005527496338,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.3424319326877594,
+        "y": 0.4808011054992676,
+        "z": 0.2989894151687622
+      },
+      "triangles": 1210,
+      "vertices": 903,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Tube_Light.prefab",
+      "image": "056_PF_Tube_Light.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.04456567019224167,
+        "z": 1.862645149230957e-08
+      },
+      "size": {
+        "x": 1.4088808298110962,
+        "y": 0.08913134038448334,
+        "z": 0.10162723064422607
+      },
+      "triangles": 188,
+      "vertices": 238,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Vintage_Cell_Phone.prefab",
+      "image": "057_PF_Vintage_Cell_Phone.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.1658451110124588,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.03999877721071243,
+        "y": 0.3316902220249176,
+        "z": 0.08769222348928452
+      },
+      "triangles": 1542,
+      "vertices": 2185,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Vintage_Cell_Phone.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Wall_Clock.prefab",
+      "image": "058_PF_Wall_Clock.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.15916894376277924,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.3183378577232361,
+        "y": 0.31833788752555847,
+        "z": 0.03514038026332855
+      },
+      "triangles": 664,
+      "vertices": 630,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Glass.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_Waste_Bin.prefab",
+      "image": "059_PF_Waste_Bin.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.1747424155473709,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.34498435258865356,
+        "y": 0.3494848310947418,
+        "z": 0.33633482456207275
+      },
+      "triangles": 378,
+      "vertices": 255,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2.mat",
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories V2_AlphaClipping.mat"
+      ]
+    },
+    {
+      "path": "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Prefabs/URP/PF_White_Board.prefab",
+      "image": "060_PF_White_Board.png",
+      "error": "",
+      "center": {
+        "x": 1.1920928955078125e-07,
+        "y": 0.34361469745635986,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.0560176372528076,
+        "y": 0.6872293949127197,
+        "z": 0.037723150104284286
+      },
+      "triangles": 44,
+      "vertices": 56,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Materials/URP/M_Office_Accessories.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/DoorWay_01_Large.prefab",
+      "image": "061_DoorWay_01_Large.png",
+      "error": "",
+      "center": {
+        "x": -2.5000007152557373,
+        "y": 1.9999995231628418,
+        "z": -0.5005000233650208
+      },
+      "size": {
+        "x": 5.000002384185791,
+        "y": 4.000000476837158,
+        "z": 1.0581670999526978
+      },
+      "triangles": 326,
+      "vertices": 427,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_05_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/DoorWay_01_Ramp.prefab",
+      "image": "062_DoorWay_01_Ramp.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 0.03810190036892891,
+        "z": 0.4999992549419403
+      },
+      "size": {
+        "x": 6.0,
+        "y": 0.0762043222784996,
+        "z": 1.0000005960464478
+      },
+      "triangles": 20,
+      "vertices": 40,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_05_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/DoorWay_01_Up.prefab",
+      "image": "063_DoorWay_01_Up.png",
+      "error": "",
+      "center": {
+        "x": 3.000000476837158,
+        "y": -0.12500019371509552,
+        "z": 0.5000777840614319
+      },
+      "size": {
+        "x": 6.000001907348633,
+        "y": 0.25000134110450745,
+        "z": 1.0000017881393433
+      },
+      "triangles": 25,
+      "vertices": 49,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_05_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/Door_Left_01.prefab",
+      "image": "064_Door_Left_01.png",
+      "error": "",
+      "center": {
+        "x": -2.6250009536743164,
+        "y": 1.9699931144714355,
+        "z": 0.5
+      },
+      "size": {
+        "x": 4.75,
+        "y": 3.9399867057800293,
+        "z": 0.5
+      },
+      "triangles": 626,
+      "vertices": 744,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/Door_Right_01.prefab",
+      "image": "065_Door_Right_01.png",
+      "error": "",
+      "center": {
+        "x": 2.75,
+        "y": 1.969993233680725,
+        "z": 0.5001850128173828
+      },
+      "size": {
+        "x": 5.0,
+        "y": 3.93998646736145,
+        "z": 0.528301477432251
+      },
+      "triangles": 814,
+      "vertices": 932,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/Door_Vert_01.prefab",
+      "image": "066_Door_Vert_01.png",
+      "error": "",
+      "center": {
+        "x": -1.3750019073486328,
+        "y": 1.681822657585144,
+        "z": 3.0026814937591553
+      },
+      "size": {
+        "x": 0.8224987983703613,
+        "y": 3.3636481761932373,
+        "z": 5.126607894897461
+      },
+      "triangles": 220,
+      "vertices": 288,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_04_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_11_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/Horizontal_Doors_Kit.prefab",
+      "image": "067_Horizontal_Doors_Kit.png",
+      "error": "System.Exception: No renderers\r\n  at PackAssetCatalog.Next () [0x00160] in E:\\unity\\NOPE\\Assets\\Editor\\OfficeArt\\PackAssetCatalog.cs:73 ",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "triangles": 0,
+      "vertices": 0,
+      "meshes": 0,
+      "hasUV": false,
+      "materials": []
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Doors/Vertical_Doors_Kit.prefab",
+      "image": "068_Vertical_Doors_Kit.png",
+      "error": "System.Exception: No renderers\r\n  at PackAssetCatalog.Next () [0x00160] in E:\\unity\\NOPE\\Assets\\Editor\\OfficeArt\\PackAssetCatalog.cs:73 ",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "triangles": 0,
+      "vertices": 0,
+      "meshes": 0,
+      "hasUV": false,
+      "materials": []
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Fences/Fence_Angle_02.prefab",
+      "image": "069_Fence_Angle_02.png",
+      "error": "",
+      "center": {
+        "x": 1.436998963356018,
+        "y": 0.6520574688911438,
+        "z": 1.5625003576278687
+      },
+      "size": {
+        "x": 3.1239984035491943,
+        "y": 1.3041143417358398,
+        "z": 3.1250011920928955
+      },
+      "triangles": 292,
+      "vertices": 484,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Fences/Fence_Long_01.prefab",
+      "image": "070_Fence_Long_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.6520577073097229,
+        "z": 3.0000007152557373
+      },
+      "size": {
+        "x": 0.2500004768371582,
+        "y": 1.3041144609451294,
+        "z": 5.000000953674316
+      },
+      "triangles": 104,
+      "vertices": 208,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Fences/Fence_Short_01.prefab",
+      "image": "071_Fence_Short_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.6520574688911438,
+        "z": 1.25
+      },
+      "size": {
+        "x": 0.2500004768371582,
+        "y": 1.3041143417358398,
+        "z": 2.500000476837158
+      },
+      "triangles": 80,
+      "vertices": 160,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Fences/Fence_Turn_90_Large_01.prefab",
+      "image": "072_Fence_Turn_90_Large_01.png",
+      "error": "",
+      "center": {
+        "x": 2.32185697555542,
+        "y": 0.6520569324493408,
+        "z": -2.2437663078308105
+      },
+      "size": {
+        "x": 3.1250014305114746,
+        "y": 1.3041143417358398,
+        "z": 3.1250009536743164
+      },
+      "triangles": 300,
+      "vertices": 382,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Fences/Fence_Turn_90_Short_01.prefab",
+      "image": "073_Fence_Turn_90_Short_01.png",
+      "error": "",
+      "center": {
+        "x": -0.18749988079071045,
+        "y": 0.938586950302124,
+        "z": 0.18749986588954926
+      },
+      "size": {
+        "x": 0.6250002384185791,
+        "y": 0.7310547828674316,
+        "z": 0.6250001192092896
+      },
+      "triangles": 132,
+      "vertices": 164,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Angle_01_6x6.prefab",
+      "image": "074_Floor_Angle_01_6x6.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 3.5762786865234375e-07,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.0,
+        "y": 7.152557373046875e-07,
+        "z": 6.000000953674316
+      },
+      "triangles": 8,
+      "vertices": 9,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Coin_01_Small.prefab",
+      "image": "075_Floor_Coin_01_Small.png",
+      "error": "",
+      "center": {
+        "x": -1.0,
+        "y": 1.1920928955078125e-07,
+        "z": 1.0000001192092896
+      },
+      "size": {
+        "x": 2.0,
+        "y": 2.384185791015625e-07,
+        "z": 2.000000238418579
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Descent_01.prefab",
+      "image": "076_Floor_Descent_01.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": -2.445279598236084,
+        "z": 6.014980316162109
+      },
+      "size": {
+        "x": 6.0,
+        "y": 5.109436988830566,
+        "z": 12.072526931762695
+      },
+      "triangles": 216,
+      "vertices": 422,
+      "meshes": 6,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Hole_01.prefab",
+      "image": "077_Floor_Hole_01.png",
+      "error": "",
+      "center": {
+        "x": -0.029999999329447746,
+        "y": -0.004999993368983269,
+        "z": 0.06000000610947609
+      },
+      "size": {
+        "x": 0.05999999865889549,
+        "y": 0.010000014677643776,
+        "z": 0.12000001221895218
+      },
+      "triangles": 72,
+      "vertices": 136,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Pipes_01.prefab",
+      "image": "078_Floor_Pipes_01.png",
+      "error": "",
+      "center": {
+        "x": -3.038529872894287,
+        "y": -0.36562609672546387,
+        "z": 3.0000016689300537
+      },
+      "size": {
+        "x": 1.4799003601074219,
+        "y": 0.4745955467224121,
+        "z": 5.002001762390137
+      },
+      "triangles": 1136,
+      "vertices": 1650,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Squared_01_6x6.prefab",
+      "image": "079_Floor_Squared_01_6x6.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 3.5762786865234375e-07,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.0,
+        "y": 7.152557373046875e-07,
+        "z": 6.000000953674316
+      },
+      "triangles": 8,
+      "vertices": 9,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Squared_02_6x6.prefab",
+      "image": "080_Floor_Squared_02_6x6.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": -0.3749997615814209,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.0,
+        "y": 0.7500009536743164,
+        "z": 6.000000953674316
+      },
+      "triangles": 1184,
+      "vertices": 1730,
+      "meshes": 4,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Third_01_Strip_2x6.prefab",
+      "image": "081_Floor_Third_01_Strip_2x6.png",
+      "error": "",
+      "center": {
+        "x": -0.9999998807907104,
+        "y": 3.5762786865234375e-07,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 1.999999761581421,
+        "y": 7.152557373046875e-07,
+        "z": 6.000000953674316
+      },
+      "triangles": 4,
+      "vertices": 6,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Third_02_Strip_2x6.prefab",
+      "image": "082_Floor_Third_02_Strip_2x6.png",
+      "error": "",
+      "center": {
+        "x": -0.9999998807907104,
+        "y": 3.5762786865234375e-07,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 1.999999761581421,
+        "y": 7.152557373046875e-07,
+        "z": 6.000000953674316
+      },
+      "triangles": 4,
+      "vertices": 6,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Third_03_Strip_2x6.prefab",
+      "image": "083_Floor_Third_03_Strip_2x6.png",
+      "error": "",
+      "center": {
+        "x": -0.9999998807907104,
+        "y": 3.5762786865234375e-07,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 1.999999761581421,
+        "y": 7.152557373046875e-07,
+        "z": 6.000000953674316
+      },
+      "triangles": 4,
+      "vertices": 6,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Floor_Third_04_Strip_2x6.prefab",
+      "image": "084_Floor_Third_04_Strip_2x6.png",
+      "error": "",
+      "center": {
+        "x": -0.029999999329447746,
+        "y": -0.0037499975878745317,
+        "z": 0.030000003054738045
+      },
+      "size": {
+        "x": 0.05999999865889549,
+        "y": 0.007500009145587683,
+        "z": 0.06000000610947609
+      },
+      "triangles": 26,
+      "vertices": 36,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Meshes/Floors/Floor_Third_04_Strip_2x6.FBX"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Floors/Room_Floor_3x3.prefab",
+      "image": "085_Room_Floor_3x3.png",
+      "error": "",
+      "center": {
+        "x": 8.999999046325684,
+        "y": -0.3749997615814209,
+        "z": 8.999999046325684
+      },
+      "size": {
+        "x": 18.000001907348633,
+        "y": 0.7500009536743164,
+        "z": 18.0
+      },
+      "triangles": 1248,
+      "vertices": 1802,
+      "meshes": 12,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_Corridor_01.prefab",
+      "image": "086_Light_Corridor_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": -0.14055418968200684,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.0,
+        "y": 0.2811086177825928,
+        "z": 3.500000476837158
+      },
+      "triangles": 134,
+      "vertices": 216,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_Corridor_02.prefab",
+      "image": "087_Light_Corridor_02.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": -0.13966555893421173,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.5,
+        "y": 0.2811085879802704,
+        "z": 3.500000476837158
+      },
+      "triangles": 158,
+      "vertices": 261,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_SideLight_01.prefab",
+      "image": "088_Light_SideLight_01.png",
+      "error": "",
+      "center": {
+        "x": 0.04500001668930054,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 0.09000003337860107,
+        "y": 0.19499999284744263,
+        "z": 0.8899999856948853
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_SideLight_02.prefab",
+      "image": "089_Light_SideLight_02.png",
+      "error": "",
+      "center": {
+        "x": 0.04500001668930054,
+        "y": 0.0,
+        "z": 7.450580596923828e-09
+      },
+      "size": {
+        "x": 0.09000003337860107,
+        "y": 0.19499999284744263,
+        "z": 0.163530170917511
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_SideLight_03.prefab",
+      "image": "090_Light_SideLight_03.png",
+      "error": "",
+      "center": {
+        "x": 0.04500001668930054,
+        "y": 0.0,
+        "z": 7.450580596923828e-09
+      },
+      "size": {
+        "x": 0.09000003337860107,
+        "y": 0.19499999284744263,
+        "z": 0.163530170917511
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_SideLight_04.prefab",
+      "image": "091_Light_SideLight_04.png",
+      "error": "",
+      "center": {
+        "x": 0.04500001668930054,
+        "y": 0.0,
+        "z": 7.450580596923828e-09
+      },
+      "size": {
+        "x": 0.09000003337860107,
+        "y": 0.19499999284744263,
+        "z": 0.163530170917511
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Lights/Light_SideLight_05.prefab",
+      "image": "092_Light_SideLight_05.png",
+      "error": "",
+      "center": {
+        "x": -2.1606683731079102e-07,
+        "y": 0.0,
+        "z": -0.04500001668930054
+      },
+      "size": {
+        "x": 0.16353018581867218,
+        "y": 0.19499999284744263,
+        "z": 0.09000003337860107
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Props/Airing_01.prefab",
+      "image": "093_Airing_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": -0.03923988342285156,
+        "z": 0.6100001335144043
+      },
+      "size": {
+        "x": 8.5,
+        "y": 4.418479919433594,
+        "z": 9.720001220703125
+      },
+      "triangles": 469,
+      "vertices": 620,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Smoke.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Props/Crate_01.prefab",
+      "image": "094_Crate_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.3750000596046448,
+        "z": -0.005981564521789551
+      },
+      "size": {
+        "x": 1.0,
+        "y": 0.7500003576278687,
+        "z": 2.011962890625
+      },
+      "triangles": 188,
+      "vertices": 362,
+      "meshes": 4,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Roofs/Roof_Angle_01_6x6.prefab",
+      "image": "095_Roof_Angle_01_6x6.png",
+      "error": "",
+      "center": {
+        "x": -2.999999761581421,
+        "y": 0.25117769837379456,
+        "z": 2.9999990463256836
+      },
+      "size": {
+        "x": 6.000001430511475,
+        "y": 0.5023568868637085,
+        "z": 6.000001907348633
+      },
+      "triangles": 106,
+      "vertices": 118,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Roofs/Roof_Glass_01_6x6.prefab",
+      "image": "096_Roof_Glass_01_6x6.png",
+      "error": "",
+      "center": {
+        "x": -3.000293493270874,
+        "y": 0.9522005319595337,
+        "z": 3.0
+      },
+      "size": {
+        "x": 6.0005879402160645,
+        "y": 1.9044013023376465,
+        "z": 6.000001907348633
+      },
+      "triangles": 192,
+      "vertices": 392,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_12_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Roofs/Roof_Squared_01_6x6.prefab",
+      "image": "097_Roof_Squared_01_6x6.png",
+      "error": "",
+      "center": {
+        "x": -3.0000007152557373,
+        "y": 0.2500002086162567,
+        "z": 3.000000238418579
+      },
+      "size": {
+        "x": 6.000001430511475,
+        "y": 0.5000008940696716,
+        "z": 6.000000953674316
+      },
+      "triangles": 42,
+      "vertices": 60,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Roofs/Roof_Squared_02_6x6.prefab",
+      "image": "098_Roof_Squared_02_6x6.png",
+      "error": "",
+      "center": {
+        "x": -3.0000007152557373,
+        "y": 3.5762786865234375e-07,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.000001430511475,
+        "y": 1.6212306945817545e-06,
+        "z": 6.000000953674316
+      },
+      "triangles": 8,
+      "vertices": 9,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Angle_Right_01.prefab",
+      "image": "099_Stairway_Angle_Right_01.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 0.6601126790046692,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.0,
+        "y": 1.4493502378463745,
+        "z": 6.000000953674316
+      },
+      "triangles": 390,
+      "vertices": 692,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_PillarAngle_01.prefab",
+      "image": "100_Stairway_PillarAngle_01.png",
+      "error": "",
+      "center": {
+        "x": -0.12499994039535522,
+        "y": 0.7500002384185791,
+        "z": 0.12500014901161194
+      },
+      "size": {
+        "x": 0.25000059604644775,
+        "y": 1.5000004768371582,
+        "z": 0.2500002980232239
+      },
+      "triangles": 7,
+      "vertices": 15,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_00.prefab",
+      "image": "101_Stairway_Plateform_00.png",
+      "error": "",
+      "center": {
+        "x": 2.999999761581421,
+        "y": 0.00805462896823883,
+        "z": 3.0000007152557373
+      },
+      "size": {
+        "x": 6.000000476837158,
+        "y": 0.14523570239543915,
+        "z": 6.000001430511475
+      },
+      "triangles": 28,
+      "vertices": 56,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_01.prefab",
+      "image": "102_Stairway_Plateform_01.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 0.6601124405860901,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.0,
+        "y": 1.4493497610092163,
+        "z": 6.000000953674316
+      },
+      "triangles": 276,
+      "vertices": 552,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_02.prefab",
+      "image": "103_Stairway_Plateform_02.png",
+      "error": "",
+      "center": {
+        "x": -3.1875,
+        "y": 0.6601126790046692,
+        "z": 2.875000238418579
+      },
+      "size": {
+        "x": 6.375,
+        "y": 1.4493502378463745,
+        "z": 6.250000953674316
+      },
+      "triangles": 396,
+      "vertices": 700,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_03.prefab",
+      "image": "104_Stairway_Plateform_03.png",
+      "error": "",
+      "center": {
+        "x": -2.999999761581421,
+        "y": 0.6601126790046692,
+        "z": 3.000002145767212
+      },
+      "size": {
+        "x": 6.000003337860107,
+        "y": 1.4493502378463745,
+        "z": 6.000004291534424
+      },
+      "triangles": 620,
+      "vertices": 1066,
+      "meshes": 7,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_04.prefab",
+      "image": "105_Stairway_Plateform_04.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 0.6601124405860901,
+        "z": 3.0000009536743164
+      },
+      "size": {
+        "x": 6.000002861022949,
+        "y": 1.4493497610092163,
+        "z": 6.000001907348633
+      },
+      "triangles": 276,
+      "vertices": 552,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_05.prefab",
+      "image": "106_Stairway_Plateform_05.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": 0.6601124405860901,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.0,
+        "y": 1.4493497610092163,
+        "z": 6.000000953674316
+      },
+      "triangles": 152,
+      "vertices": 304,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_06.prefab",
+      "image": "107_Stairway_Plateform_06.png",
+      "error": "",
+      "center": {
+        "x": -3.000000238418579,
+        "y": 0.6601117253303528,
+        "z": 3.0000011920928955
+      },
+      "size": {
+        "x": 6.000001430511475,
+        "y": 1.4493497610092163,
+        "z": 6.000001430511475
+      },
+      "triangles": 276,
+      "vertices": 552,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_07.prefab",
+      "image": "108_Stairway_Plateform_07.png",
+      "error": "",
+      "center": {
+        "x": -3.000000476837158,
+        "y": 0.6601126790046692,
+        "z": 2.875000238418579
+      },
+      "size": {
+        "x": 6.750000953674316,
+        "y": 1.4493502378463745,
+        "z": 6.250000953674316
+      },
+      "triangles": 523,
+      "vertices": 863,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_08.prefab",
+      "image": "109_Stairway_Plateform_08.png",
+      "error": "",
+      "center": {
+        "x": -3.0000007152557373,
+        "y": 0.6601124405860901,
+        "z": 2.999999523162842
+      },
+      "size": {
+        "x": 6.000002384185791,
+        "y": 1.4493497610092163,
+        "z": 6.000002861022949
+      },
+      "triangles": 276,
+      "vertices": 552,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_09.prefab",
+      "image": "110_Stairway_Plateform_09.png",
+      "error": "",
+      "center": {
+        "x": -3.000001907348633,
+        "y": 0.6601120829582214,
+        "z": 3.0
+      },
+      "size": {
+        "x": 6.750005722045898,
+        "y": 1.4493508338928223,
+        "z": 6.500085830688477
+      },
+      "triangles": 756,
+      "vertices": 1135,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_10.prefab",
+      "image": "111_Stairway_Plateform_10.png",
+      "error": "",
+      "center": {
+        "x": -2.8125,
+        "y": 0.6601119637489319,
+        "z": 2.875000238418579
+      },
+      "size": {
+        "x": 6.375,
+        "y": 1.4493502378463745,
+        "z": 6.250000953674316
+      },
+      "triangles": 396,
+      "vertices": 700,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Plateform_11.prefab",
+      "image": "112_Stairway_Plateform_11.png",
+      "error": "",
+      "center": {
+        "x": -2.999999761581421,
+        "y": 0.6601124405860901,
+        "z": 3.000000476837158
+      },
+      "size": {
+        "x": 6.000000476837158,
+        "y": 1.4493497610092163,
+        "z": 6.000000953674316
+      },
+      "triangles": 276,
+      "vertices": 552,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Slope_45_01.prefab",
+      "image": "113_Stairway_Slope_45_01.png",
+      "error": "",
+      "center": {
+        "x": -3.0,
+        "y": -1.307619571685791,
+        "z": 3.0000007152557373
+      },
+      "size": {
+        "x": 6.0,
+        "y": 5.38481330871582,
+        "z": 6.000001430511475
+      },
+      "triangles": 276,
+      "vertices": 552,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stairways/Stairway_Step_01.prefab",
+      "image": "114_Stairway_Step_01.png",
+      "error": "",
+      "center": {
+        "x": -2.999999761581421,
+        "y": 0.12500007450580597,
+        "z": 0.5000002384185791
+      },
+      "size": {
+        "x": 5.499999523162842,
+        "y": 0.25000038743019104,
+        "z": 0.9999995231628418
+      },
+      "triangles": 16,
+      "vertices": 32,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Air_Grid_01.prefab",
+      "image": "115_Air_Grid_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": -0.03924000263214111,
+        "z": 1.0
+      },
+      "size": {
+        "x": 1.7437865734100342,
+        "y": 2.6684799194335938,
+        "z": 4.300000190734863
+      },
+      "triangles": 70,
+      "vertices": 144,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Smoke.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Beam_01.prefab",
+      "image": "116_Beam_01.png",
+      "error": "",
+      "center": {
+        "x": 5.960464477539062e-07,
+        "y": 2.000000238418579,
+        "z": 7.152557373046875e-07
+      },
+      "size": {
+        "x": 0.2500007152557373,
+        "y": 4.000002861022949,
+        "z": 4.422540664672852
+      },
+      "triangles": 110,
+      "vertices": 220,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Beam_02.prefab",
+      "image": "117_Beam_02.png",
+      "error": "",
+      "center": {
+        "x": -1.005083441734314,
+        "y": 2.0,
+        "z": -1.005082368850708
+      },
+      "size": {
+        "x": 2.4123737812042236,
+        "y": 4.000003814697266,
+        "z": 2.2601661682128906
+      },
+      "triangles": 118,
+      "vertices": 236,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Beam_03.prefab",
+      "image": "118_Beam_03.png",
+      "error": "",
+      "center": {
+        "x": 5.960464477539062e-07,
+        "y": 2.000000238418579,
+        "z": 7.152557373046875e-07
+      },
+      "size": {
+        "x": 0.2500007152557373,
+        "y": 4.000002861022949,
+        "z": 4.422540664672852
+      },
+      "triangles": 130,
+      "vertices": 260,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Beam_04.prefab",
+      "image": "119_Beam_04.png",
+      "error": "",
+      "center": {
+        "x": 1.7881393432617188e-07,
+        "y": 2.000000476837158,
+        "z": 4.3213367462158203e-07
+      },
+      "size": {
+        "x": 0.25000035762786865,
+        "y": 4.000001907348633,
+        "z": 0.40220868587493896
+      },
+      "triangles": 32,
+      "vertices": 64,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Grid_01.prefab",
+      "image": "120_Grid_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 1.625383734703064,
+        "z": -3.5762786865234375e-07
+      },
+      "size": {
+        "x": 0.12795743346214294,
+        "y": 3.250767707824707,
+        "z": 1.999667763710022
+      },
+      "triangles": 36,
+      "vertices": 72,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Intercom_01.prefab",
+      "image": "121_Intercom_01.png",
+      "error": "",
+      "center": {
+        "x": 0.034707412123680115,
+        "y": 0.0,
+        "z": 2.9802322387695312e-08
+      },
+      "size": {
+        "x": 0.0694151222705841,
+        "y": 0.7460669279098511,
+        "z": 0.5000001192092896
+      },
+      "triangles": 34,
+      "vertices": 44,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Intercom_02.prefab",
+      "image": "122_Intercom_02.png",
+      "error": "",
+      "center": {
+        "x": 0.034707456827163696,
+        "y": 0.0,
+        "z": 5.960464477539063e-08
+      },
+      "size": {
+        "x": 0.06941509246826172,
+        "y": 0.39848366379737854,
+        "z": 0.5000000596046448
+      },
+      "triangles": 34,
+      "vertices": 44,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_01.prefab",
+      "image": "123_Pipes_01.png",
+      "error": "",
+      "center": {
+        "x": 0.5550320744514465,
+        "y": -1.1920928955078125e-07,
+        "z": 2.384185791015625e-07
+      },
+      "size": {
+        "x": 1.1100643873214722,
+        "y": 0.9900703430175781,
+        "z": 5.177967548370361
+      },
+      "triangles": 2042,
+      "vertices": 2612,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_02.prefab",
+      "image": "124_Pipes_02.png",
+      "error": "",
+      "center": {
+        "x": 0.11080574989318848,
+        "y": 1.9999632835388184,
+        "z": 0.10103452205657959
+      },
+      "size": {
+        "x": 0.5478343963623047,
+        "y": 4.000075340270996,
+        "z": 1.4553847312927246
+      },
+      "triangles": 1306,
+      "vertices": 1836,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Pipes_03.prefab",
+      "image": "125_Pipes_03.png",
+      "error": "",
+      "center": {
+        "x": 0.012037545442581177,
+        "y": 1.999948263168335,
+        "z": -0.000804603099822998
+      },
+      "size": {
+        "x": 0.7070457339286804,
+        "y": 4.0001044273376465,
+        "z": 1.6687582731246948
+      },
+      "triangles": 1074,
+      "vertices": 1526,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Stuff/Sun.prefab",
+      "image": "126_Sun.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 2.602569341659546,
+        "y": 2.6025707721710205,
+        "z": 4.653756491279637e-07
+      },
+      "triangles": 8,
+      "vertices": 16,
+      "meshes": 4,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glow_Low.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glow_Strong.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Sun.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_0.prefab",
+      "image": "127_Num_0.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_1.prefab",
+      "image": "128_Num_1.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_2.prefab",
+      "image": "129_Num_2.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_3.prefab",
+      "image": "130_Num_3.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_4.prefab",
+      "image": "131_Num_4.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_5.prefab",
+      "image": "132_Num_5.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_6.prefab",
+      "image": "133_Num_6.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_7.prefab",
+      "image": "134_Num_7.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_8.prefab",
+      "image": "135_Num_8.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Num_9.prefab",
+      "image": "136_Num_9.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.995163679122925,
+        "z": 5.387397289276123
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Sign_Caution_01.prefab",
+      "image": "137_Sign_Caution_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 3.995164394378662,
+        "z": 8.562821388244629
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Sign_Caution_02.prefab",
+      "image": "138_Sign_Caution_02.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 4.323488235473633,
+        "z": 8.562822341918945
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Sign_Danger_01.prefab",
+      "image": "139_Sign_Danger_01.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 4.323488235473633,
+        "z": 8.562822341918945
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Sign_Danger_02.prefab",
+      "image": "140_Sign_Danger_02.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 4.323488235473633,
+        "z": 8.562822341918945
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Symb_Arrow.prefab",
+      "image": "141_Symb_Arrow.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 4.762604817187821e-07,
+        "y": 3.9951624870300293,
+        "z": 3.99516224861145
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Area.prefab",
+      "image": "142_Word_Area.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 3.995166063308716,
+        "z": 22.19162940979004
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Deck.prefab",
+      "image": "143_Word_Deck.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 3.995166063308716,
+        "z": 22.20310401916504
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Exit.prefab",
+      "image": "144_Word_Exit.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 3.9951655864715576,
+        "z": 18.255870819091797
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Lab.prefab",
+      "image": "145_Word_Lab.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.244650315537001e-06,
+        "y": 3.9951653480529785,
+        "z": 15.920360565185547
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Level.prefab",
+      "image": "146_Word_Level.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.5546536360488972e-06,
+        "y": 3.9951658248901367,
+        "z": 27.765106201171875
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Tech.prefab",
+      "image": "147_Word_Tech.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 3.9951658248901367,
+        "y": 21.94688606262207,
+        "z": 2.3881109427748015e-06
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Warning.prefab",
+      "image": "148_Word_Warning.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 1.052352331498696e-06,
+        "y": 3.9951674938201904,
+        "z": 37.093894958496094
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Symbols/Word_Zone.prefab",
+      "image": "149_Word_Zone.png",
+      "error": "",
+      "center": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "size": {
+        "x": 4.702756996266544e-06,
+        "y": 3.9951655864715576,
+        "z": 21.946887969970703
+      },
+      "triangles": 2,
+      "vertices": 4,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Column_01_Big.prefab",
+      "image": "150_Column_01_Big.png",
+      "error": "",
+      "center": {
+        "x": 2.499999761581421,
+        "y": 2.0000007152557373,
+        "z": 8.696317672729492e-05
+      },
+      "size": {
+        "x": 3.999999523162842,
+        "y": 4.000001430511475,
+        "z": 0.5001925826072693
+      },
+      "triangles": 292,
+      "vertices": 334,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Porthole_01_Long.prefab",
+      "image": "151_Porthole_01_Long.png",
+      "error": "",
+      "center": {
+        "x": -1.8272005319595337,
+        "y": 2.000000476837158,
+        "z": 3.000000238418579
+      },
+      "size": {
+        "x": 3.6544015407562256,
+        "y": 4.000002861022949,
+        "z": 6.000003337860107
+      },
+      "triangles": 312,
+      "vertices": 522,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_12_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Bed_01.prefab",
+      "image": "152_Wall_Bed_01.png",
+      "error": "",
+      "center": {
+        "x": -0.20684051513671875,
+        "y": 1.0287853479385376,
+        "z": 3.0010263919830322
+      },
+      "size": {
+        "x": 2.4136815071105957,
+        "y": 0.5773720741271973,
+        "z": 5.498030185699463
+      },
+      "triangles": 301,
+      "vertices": 294,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Console_01_Half.prefab",
+      "image": "153_Wall_Console_01_Half.png",
+      "error": "",
+      "center": {
+        "x": -0.7648468017578125,
+        "y": 2.1250007152557373,
+        "z": 1.627298355102539
+      },
+      "size": {
+        "x": 1.470304250717163,
+        "y": 2.7698028087615967,
+        "z": 2.74540376663208
+      },
+      "triangles": 238,
+      "vertices": 428,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HUD_Screen_02.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Console_01_Large.prefab",
+      "image": "154_Wall_Console_01_Large.png",
+      "error": "",
+      "center": {
+        "x": -0.7648468017578125,
+        "y": 2.1250007152557373,
+        "z": 3.0022966861724854
+      },
+      "size": {
+        "x": 1.470304250717163,
+        "y": 2.7698025703430176,
+        "z": 5.495400428771973
+      },
+      "triangles": 478,
+      "vertices": 858,
+      "meshes": 4,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HUD_Screen_01.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HUD_Screen_02.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Coin.prefab",
+      "image": "155_Wall_Cube_01_Coin.png",
+      "error": "",
+      "center": {
+        "x": 0.9999997615814209,
+        "y": -0.4999999403953552,
+        "z": 0.9999993443489075
+      },
+      "size": {
+        "x": 1.9999995231628418,
+        "y": 1.0000008344650269,
+        "z": 2.0000007152557373
+      },
+      "triangles": 37,
+      "vertices": 60,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Flat.prefab",
+      "image": "156_Wall_Cube_01_Flat.png",
+      "error": "",
+      "center": {
+        "x": -1.0000003576278687,
+        "y": 0.5000002980232239,
+        "z": 2.9999992847442627
+      },
+      "size": {
+        "x": 2.000000238418579,
+        "y": 1.0000014305114746,
+        "z": 6.000001907348633
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Invert.prefab",
+      "image": "157_Wall_Cube_01_Invert.png",
+      "error": "",
+      "center": {
+        "x": -1.0,
+        "y": 2.000000238418579,
+        "z": 0.9999996423721313
+      },
+      "size": {
+        "x": 2.0000009536743164,
+        "y": 4.000000953674316,
+        "z": 2.0000007152557373
+      },
+      "triangles": 68,
+      "vertices": 83,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Long.prefab",
+      "image": "158_Wall_Cube_01_Long.png",
+      "error": "",
+      "center": {
+        "x": -1.0000003576278687,
+        "y": 2.000000238418579,
+        "z": 2.999999761581421
+      },
+      "size": {
+        "x": 2.000002145767212,
+        "y": 4.000001430511475,
+        "z": 6.000002861022949
+      },
+      "triangles": 26,
+      "vertices": 44,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Round.prefab",
+      "image": "159_Wall_Cube_01_Round.png",
+      "error": "",
+      "center": {
+        "x": -1.0,
+        "y": 2.000000476837158,
+        "z": 1.0000001192092896
+      },
+      "size": {
+        "x": 2.0000009536743164,
+        "y": 4.000000953674316,
+        "z": 2.0000016689300537
+      },
+      "triangles": 68,
+      "vertices": 83,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_01_Thin.prefab",
+      "image": "160_Wall_Cube_01_Thin.png",
+      "error": "",
+      "center": {
+        "x": -1.0,
+        "y": 2.000000476837158,
+        "z": 0.9999998807907104
+      },
+      "size": {
+        "x": 2.0000009536743164,
+        "y": 4.000000953674316,
+        "z": 2.000002145767212
+      },
+      "triangles": 26,
+      "vertices": 44,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Cube_02_Flat.prefab",
+      "image": "161_Wall_Cube_02_Flat.png",
+      "error": "",
+      "center": {
+        "x": -1.0016216039657593,
+        "y": 0.5000001192092896,
+        "z": 1.9999996423721313
+      },
+      "size": {
+        "x": 2.0032427310943604,
+        "y": 1.0000009536743164,
+        "z": 4.000001430511475
+      },
+      "triangles": 10,
+      "vertices": 20,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Down_01_Long.prefab",
+      "image": "162_Wall_Down_01_Long.png",
+      "error": "",
+      "center": {
+        "x": -0.9999991655349731,
+        "y": 2.0000007152557373,
+        "z": 3.000000238418579
+      },
+      "size": {
+        "x": 2.000005006790161,
+        "y": 4.000001907348633,
+        "z": 6.000003814697266
+      },
+      "triangles": 48,
+      "vertices": 72,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_05_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_07_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Gear_01_Half.prefab",
+      "image": "163_Wall_Gear_01_Half.png",
+      "error": "",
+      "center": {
+        "x": -0.6024070382118225,
+        "y": 2.125000476837158,
+        "z": 1.6255912780761719
+      },
+      "size": {
+        "x": 1.795183777809143,
+        "y": 2.7698020935058594,
+        "z": 2.747159957885742
+      },
+      "triangles": 372,
+      "vertices": 542,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Gear_02_Half.prefab",
+      "image": "164_Wall_Gear_02_Half.png",
+      "error": "",
+      "center": {
+        "x": -0.6139701008796692,
+        "y": 2.125,
+        "z": 1.62559175491333
+      },
+      "size": {
+        "x": 1.7720576524734497,
+        "y": 2.7698020935058594,
+        "z": 2.747159957885742
+      },
+      "triangles": 610,
+      "vertices": 858,
+      "meshes": 5,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Gear_03_Half.prefab",
+      "image": "165_Wall_Gear_03_Half.png",
+      "error": "",
+      "center": {
+        "x": -0.8485768437385559,
+        "y": 2.125000476837158,
+        "z": 1.6255912780761719
+      },
+      "size": {
+        "x": 1.3028441667556763,
+        "y": 2.7698020935058594,
+        "z": 2.747159957885742
+      },
+      "triangles": 96,
+      "vertices": 174,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_Coin.prefab",
+      "image": "166_Wall_Inclined_01_Coin.png",
+      "error": "",
+      "center": {
+        "x": -1.0000003576278687,
+        "y": 1.9999998807907104,
+        "z": -1.0000005960464478
+      },
+      "size": {
+        "x": 2.0000040531158447,
+        "y": 4.000000953674316,
+        "z": 2.0000035762786865
+      },
+      "triangles": 58,
+      "vertices": 80,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_CoinLeft.prefab",
+      "image": "167_Wall_Inclined_01_CoinLeft.png",
+      "error": "",
+      "center": {
+        "x": 2.9999992847442627,
+        "y": 1.9999992847442627,
+        "z": 0.0001800060272216797
+      },
+      "size": {
+        "x": 6.000000476837158,
+        "y": 4.000001430511475,
+        "z": 4.0003662109375
+      },
+      "triangles": 90,
+      "vertices": 126,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_10_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_CoinLeft_Half.prefab",
+      "image": "168_Wall_Inclined_01_CoinLeft_Half.png",
+      "error": "",
+      "center": {
+        "x": 0.00018024444580078125,
+        "y": 2.0,
+        "z": 1.9999994039535522
+      },
+      "size": {
+        "x": 4.000365734100342,
+        "y": 4.000001907348633,
+        "z": 4.000003337860107
+      },
+      "triangles": 90,
+      "vertices": 122,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_09_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_CoinRight.prefab",
+      "image": "169_Wall_Inclined_01_CoinRight.png",
+      "error": "",
+      "center": {
+        "x": 0.0001804828643798828,
+        "y": 2.0000007152557373,
+        "z": 3.0000011920928955
+      },
+      "size": {
+        "x": 4.000365734100342,
+        "y": 4.000001907348633,
+        "z": 6.000002861022949
+      },
+      "triangles": 90,
+      "vertices": 120,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_10_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_CoinRight_Half.prefab",
+      "image": "170_Wall_Inclined_01_CoinRight_Half.png",
+      "error": "",
+      "center": {
+        "x": 0.00018024444580078125,
+        "y": 1.9999979734420776,
+        "z": 2.000002145767212
+      },
+      "size": {
+        "x": 4.000364303588867,
+        "y": 4.000002384185791,
+        "z": 4.000003814697266
+      },
+      "triangles": 90,
+      "vertices": 122,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_09_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_Half.prefab",
+      "image": "171_Wall_Inclined_01_Half.png",
+      "error": "",
+      "center": {
+        "x": 0.0001804828643798828,
+        "y": 2.000000238418579,
+        "z": 1.999999761581421
+      },
+      "size": {
+        "x": 4.000364780426025,
+        "y": 4.000000953674316,
+        "z": 4.000003814697266
+      },
+      "triangles": 90,
+      "vertices": 120,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_09_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_01_Long.prefab",
+      "image": "172_Wall_Inclined_01_Long.png",
+      "error": "",
+      "center": {
+        "x": 0.00018095970153808594,
+        "y": 2.000000238418579,
+        "z": 3.0000007152557373
+      },
+      "size": {
+        "x": 4.000365257263184,
+        "y": 4.000000953674316,
+        "z": 6.000003814697266
+      },
+      "triangles": 90,
+      "vertices": 120,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_02_Coin.prefab",
+      "image": "173_Wall_Inclined_02_Coin.png",
+      "error": "",
+      "center": {
+        "x": 2.0001821517944336,
+        "y": 1.9999998807907104,
+        "z": 2.0001819133758545
+      },
+      "size": {
+        "x": 4.000365257263184,
+        "y": 4.000000953674316,
+        "z": 4.000365734100342
+      },
+      "triangles": 316,
+      "vertices": 305,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_10_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_02_CoinLeft.prefab",
+      "image": "174_Wall_Inclined_02_CoinLeft.png",
+      "error": "",
+      "center": {
+        "x": -2.999999523162842,
+        "y": 2.0000007152557373,
+        "z": 0.00017786026000976562
+      },
+      "size": {
+        "x": 6.000002861022949,
+        "y": 4.000001907348633,
+        "z": 4.000364780426025
+      },
+      "triangles": 330,
+      "vertices": 431,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_10_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_02_CoinRight.prefab",
+      "image": "175_Wall_Inclined_02_CoinRight.png",
+      "error": "",
+      "center": {
+        "x": 2.999999523162842,
+        "y": 2.0000007152557373,
+        "z": -0.00017952919006347656
+      },
+      "size": {
+        "x": 6.000002861022949,
+        "y": 4.000002861022949,
+        "z": 4.000365734100342
+      },
+      "triangles": 330,
+      "vertices": 433,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_10_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Inclined_02_Long.prefab",
+      "image": "176_Wall_Inclined_02_Long.png",
+      "error": "",
+      "center": {
+        "x": 0.00018072128295898438,
+        "y": 2.000000238418579,
+        "z": 3.0000007152557373
+      },
+      "size": {
+        "x": 4.000365257263184,
+        "y": 4.000000953674316,
+        "z": 6.000003814697266
+      },
+      "triangles": 330,
+      "vertices": 432,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_06_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_08_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Pipes_01_Large.prefab",
+      "image": "177_Wall_Pipes_01_Large.png",
+      "error": "",
+      "center": {
+        "x": -0.9640060067176819,
+        "y": 2.1250011920928955,
+        "z": 3.0014383792877197
+      },
+      "size": {
+        "x": 1.0719858407974243,
+        "y": 1.5700006484985352,
+        "z": 5.495666027069092
+      },
+      "triangles": 2430,
+      "vertices": 2935,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Pipes_02_Large.prefab",
+      "image": "178_Wall_Pipes_02_Large.png",
+      "error": "",
+      "center": {
+        "x": -0.9108560681343079,
+        "y": 2.1250011920928955,
+        "z": 3.0014383792877197
+      },
+      "size": {
+        "x": 1.1782854795455933,
+        "y": 1.5700006484985352,
+        "z": 5.495666027069092
+      },
+      "triangles": 2758,
+      "vertices": 3490,
+      "meshes": 3,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_Coin.prefab",
+      "image": "179_Wall_Simple_01_Coin.png",
+      "error": "",
+      "center": {
+        "x": 1.0000007152557373,
+        "y": 1.9999998807907104,
+        "z": 1.0000003576278687
+      },
+      "size": {
+        "x": 2.000001907348633,
+        "y": 4.000001430511475,
+        "z": 2.0000030994415283
+      },
+      "triangles": 294,
+      "vertices": 304,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_Half.prefab",
+      "image": "180_Wall_Simple_01_Half.png",
+      "error": "",
+      "center": {
+        "x": -1.0,
+        "y": 1.9999995231628418,
+        "z": 1.9999992847442627
+      },
+      "size": {
+        "x": 2.0000038146972656,
+        "y": 4.000000476837158,
+        "z": 4.000000953674316
+      },
+      "triangles": 72,
+      "vertices": 101,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_InvertCoin.prefab",
+      "image": "181_Wall_Simple_01_InvertCoin.png",
+      "error": "",
+      "center": {
+        "x": -0.9999998807907104,
+        "y": 1.9999998807907104,
+        "z": 1.0000004768371582
+      },
+      "size": {
+        "x": 2.0000016689300537,
+        "y": 4.000001430511475,
+        "z": 2.000002861022949
+      },
+      "triangles": 296,
+      "vertices": 324,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_Long.prefab",
+      "image": "182_Wall_Simple_01_Long.png",
+      "error": "",
+      "center": {
+        "x": -0.9999998807907104,
+        "y": 1.9999977350234985,
+        "z": 3.0
+      },
+      "size": {
+        "x": 2.0000035762786865,
+        "y": 4.000002861022949,
+        "z": 6.000001907348633
+      },
+      "triangles": 72,
+      "vertices": 100,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_Squared.prefab",
+      "image": "183_Wall_Simple_01_Squared.png",
+      "error": "",
+      "center": {
+        "x": -0.9999994039535522,
+        "y": 2.000000238418579,
+        "z": 0.9999997019767761
+      },
+      "size": {
+        "x": 2.0000030994415283,
+        "y": 4.000000953674316,
+        "z": 2.000002145767212
+      },
+      "triangles": 72,
+      "vertices": 98,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_TurnLarge_90.prefab",
+      "image": "184_Wall_Simple_01_TurnLarge_90.png",
+      "error": "",
+      "center": {
+        "x": -3.999922275543213,
+        "y": 1.999999761581421,
+        "z": 2.0000052452087402
+      },
+      "size": {
+        "x": 8.00013542175293,
+        "y": 4.000000476837158,
+        "z": 8.00001049041748
+      },
+      "triangles": 1554,
+      "vertices": 1409,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_01_TurnShort_90.prefab",
+      "image": "185_Wall_Simple_01_TurnShort_90.png",
+      "error": "",
+      "center": {
+        "x": -2.999995231628418,
+        "y": 1.9999995231628418,
+        "z": 3.00000262260437
+      },
+      "size": {
+        "x": 5.999998092651367,
+        "y": 4.000000953674316,
+        "z": 6.0000081062316895
+      },
+      "triangles": 718,
+      "vertices": 670,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_02_Long.prefab",
+      "image": "186_Wall_Simple_02_Long.png",
+      "error": "",
+      "center": {
+        "x": -0.9999994039535522,
+        "y": 2.000000238418579,
+        "z": 2.999999761581421
+      },
+      "size": {
+        "x": 2.000004529953003,
+        "y": 4.000000953674316,
+        "z": 6.000002861022949
+      },
+      "triangles": 72,
+      "vertices": 102,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_03_Long.prefab",
+      "image": "187_Wall_Simple_03_Long.png",
+      "error": "",
+      "center": {
+        "x": -0.9999994039535522,
+        "y": 2.000000238418579,
+        "z": 2.999999761581421
+      },
+      "size": {
+        "x": 2.000004529953003,
+        "y": 4.000000953674316,
+        "z": 6.000002861022949
+      },
+      "triangles": 72,
+      "vertices": 102,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_04_Long.prefab",
+      "image": "188_Wall_Simple_04_Long.png",
+      "error": "",
+      "center": {
+        "x": -1.0246583223342896,
+        "y": 2.000000238418579,
+        "z": 2.999999761581421
+      },
+      "size": {
+        "x": 2.0493223667144775,
+        "y": 4.000000953674316,
+        "z": 6.000002861022949
+      },
+      "triangles": 344,
+      "vertices": 432,
+      "meshes": 2,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/Others/Glass.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Simple_05_Long.prefab",
+      "image": "189_Wall_Simple_05_Long.png",
+      "error": "",
+      "center": {
+        "x": -1.1919193267822266,
+        "y": 1.999999761581421,
+        "z": 3.000000238418579
+      },
+      "size": {
+        "x": 2.3838443756103516,
+        "y": 4.000001907348633,
+        "z": 6.000003814697266
+      },
+      "triangles": 476,
+      "vertices": 637,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_11_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Table_01.prefab",
+      "image": "190_Wall_Table_01.png",
+      "error": "",
+      "center": {
+        "x": 0.17116236686706543,
+        "y": 0.6761389374732971,
+        "z": 3.0013256072998047
+      },
+      "size": {
+        "x": 2.8719253540039062,
+        "y": 1.3522777557373047,
+        "z": 3.0035972595214844
+      },
+      "triangles": 232,
+      "vertices": 402,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Prefabs/Walls/Wall_Up_01_Long.prefab",
+      "image": "191_Wall_Up_01_Long.png",
+      "error": "",
+      "center": {
+        "x": -1.0000004768371582,
+        "y": 2.000000238418579,
+        "z": 2.999999761581421
+      },
+      "size": {
+        "x": 2.000002384185791,
+        "y": 4.000000953674316,
+        "z": 6.000002861022949
+      },
+      "triangles": 46,
+      "vertices": 64,
+      "meshes": 1,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_05_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_07_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Your_Hown_Prefabs/Corridor_Test_01.prefab",
+      "image": "192_Corridor_Test_01.png",
+      "error": "",
+      "center": {
+        "x": 2.8749091625213623,
+        "y": 2.2499988079071045,
+        "z": 2.999999523162842
+      },
+      "size": {
+        "x": 6.250185966491699,
+        "y": 4.500004768371582,
+        "z": 10.000003814697266
+      },
+      "triangles": 778,
+      "vertices": 937,
+      "meshes": 6,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Your_Hown_Prefabs/Corridor_Test_02.prefab",
+      "image": "193_Corridor_Test_02.png",
+      "error": "",
+      "center": {
+        "x": 2.8749091625213623,
+        "y": 1.875000238418579,
+        "z": 2.999999523162842
+      },
+      "size": {
+        "x": 6.250185966491699,
+        "y": 5.250000953674316,
+        "z": 10.000003814697266
+      },
+      "triangles": 1954,
+      "vertices": 2658,
+      "meshes": 9,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Your_Hown_Prefabs/Simple_Column_01.prefab",
+      "image": "194_Simple_Column_01.png",
+      "error": "",
+      "center": {
+        "x": -4.76837158203125e-07,
+        "y": 1.9999998807907104,
+        "z": 0.0
+      },
+      "size": {
+        "x": 4.000003814697266,
+        "y": 4.000001430511475,
+        "z": 4.000003814697266
+      },
+      "triangles": 1176,
+      "vertices": 1216,
+      "meshes": 4,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Your_Hown_Prefabs/Simple_Room_01.prefab",
+      "image": "195_Simple_Room_01.png",
+      "error": "",
+      "center": {
+        "x": 8.999999046325684,
+        "y": 1.8761780261993408,
+        "z": 9.000000953674316
+      },
+      "size": {
+        "x": 22.767681121826172,
+        "y": 5.25235652923584,
+        "z": 22.767684936523438
+      },
+      "triangles": 5426,
+      "vertices": 7054,
+      "meshes": 41,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_11_Norm.mat"
+      ]
+    },
+    {
+      "path": "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Your_Hown_Prefabs/Simple_Room_02.prefab",
+      "image": "196_Simple_Room_02.png",
+      "error": "",
+      "center": {
+        "x": 8.999998092651367,
+        "y": 1.8761780261993408,
+        "z": 8.999998092651367
+      },
+      "size": {
+        "x": 46.0,
+        "y": 5.25235652923584,
+        "z": 46.0
+      },
+      "triangles": 9314,
+      "vertices": 11878,
+      "meshes": 81,
+      "hasUV": true,
+      "materials": [
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Alpha_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Floor_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Stuff_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_01_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_02_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_03_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_04_Norm.mat",
+        "Assets/Creepy_Cat/3D Scifi Kit Starter Kit_HD/Materials/HD_Wall_11_Norm.mat"
+      ]
+    }
+  ],
+  "complete": true
+}

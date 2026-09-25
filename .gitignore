@@ -17,3 +17,5 @@ _sprite_import/
 *.blend1
 *.blend2
 **/__pycache__/
+ArtDeliverables/TimeDesk/**/*.build.log
+ArtDeliverables/TimeDesk/HybridScene/BlenderPC/unity-editing.log

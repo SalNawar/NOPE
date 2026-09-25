@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 41409141335684d498c34c62fc75f123
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Animations/Anim_Blinds_Vertical_Open.anim
+  uploadId: 880684

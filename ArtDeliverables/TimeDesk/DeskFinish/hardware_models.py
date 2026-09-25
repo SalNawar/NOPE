@@ -6,12 +6,12 @@ from mathutils import Matrix, Vector
 
 
 def build_hardware(texture_dir):
-    material('Hardware_CRTClay','B5BAC0',.64,texture=texture_dir/'ivory_plastic.png')
+    material('Hardware_CRTClay','A8B1BD',.64,texture=texture_dir/'ivory_plastic.png')
     material('Hardware_CRTTrim','888F87',.73)
-    material('Hardware_Cream','D9DFE5',.65,texture=texture_dir/'ivory_plastic.png')
-    material('Hardware_Steel','ADB7BA',.64,.10)
-    material('Hardware_Modifier','72918A',.69)
-    material('Hardware_Keys','CACDC9',.68)
+    material('Hardware_Cream','CDD5DE',.65,texture=texture_dir/'ivory_plastic.png')
+    material('Hardware_Steel','879399',.64,.10)
+    material('Hardware_Modifier','586F73',.69)
+    material('Hardware_Keys','BEC4C4',.68)
     material('Hardware_Seam','363D3C',.90)
     material('Hardware_Glass','243F47',.34)
     material('Hardware_Rubber','303735',.94)
@@ -171,6 +171,10 @@ def build_hardware(texture_dir):
     box('Folded cash drawer cabinet',(0,.113,0),(.646,.198,.406),'Hardware_CashPaint',.009)
     box('Cashbox rolled top lip',(0,.214,-.004),(.654,.019,.412),'Hardware_CashEdge',.005)
     box('Cashbox recessed upper lid',(0,.225,-.006),(.620,.014,.376),'Hardware_CashPaint',.007)
+    for x in [-.20,.20]:
+        cylinder('Rolled cashbox lid hinge',(x,.226,.195),.012,.09,'Hardware_CashEdge','x',24)
+        cylinder('Lid hinge pin',(x,.226,.195),.005,.102,'Hardware_BareMetal','x',20)
+        box('Lid hinge leaf',(x,.238,.172),(.071,.003,.038),'Hardware_CashEdge',.002)
     box('Drawer dark reveal',(0,.098,-.206),(.609,.142,.007),'Hardware_Seam',.005)
     box('Pressed drawer front',(0,.099,-.218),(.591,.118,.018),'Hardware_CashPaint',.009)
     box('Inset pull opening',(-.090,.119,-.23),(.204,.033,.005),'Hardware_Seam',.005)
@@ -178,6 +182,13 @@ def build_hardware(texture_dir):
     cylinder('Cash drawer lock barrel',(.216,.103,-.234),.021,.015,'Hardware_BareMetal','z',36)
     cylinder('Lock inner disc',(.216,.103,-.244),.015,.004,'Hardware_Seam','z',28)
     box('Lock key slot',(.216,.103,-.248),(.003,.021,.003),'Hardware_BareMetal',.0005)
+    # Functional key in the drawer lock, echoing the reference's working cashbox.
+    box('Inserted drawer key',(.216,.103,-.262),(.004,.009,.038),'Hardware_BareMetal',.001)
+    keyring=[]
+    for i in range(33):
+        a=math.tau*i/32;keyring.append((.216+math.cos(a)*.015,.083+math.sin(a)*.020,-.283))
+    tube('Drawer key bow',keyring,.002,'Hardware_BareMetal')
+    patch('Scuffed pull contact',(-.07,.131,-.25),.055,.004,'Hardware_BareMetal')
     # Display on an angled short stand, small enough to belong to the box.
     box('Credit display mounting foot',(.073,.239,.073),(.239,.017,.112),'Hardware_CashEdge',.005)
     box('Credit display stem',(.073,.271,.103),(.121,.071,.035),'Hardware_CashEdge',.006)

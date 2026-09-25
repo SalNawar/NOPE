@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 0d7957b9ef1f66d4fb3b5bcebd0d9863
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 7400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Scenes/Anim_Cam_BoardRoom.anim
+  uploadId: 880684

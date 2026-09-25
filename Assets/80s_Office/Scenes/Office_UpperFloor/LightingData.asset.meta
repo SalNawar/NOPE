@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c64892f681bb1854f810fe2dff9bc836
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 112000000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 289461
+  packageName: Modular 80s Office Building
+  packageVersion: 1.1
+  assetPath: Assets/80s_Office/Scenes/Office_UpperFloor/LightingData.asset
+  uploadId: 880684
