@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 
 /// <summary>The UI-channel cue that carries the present culture (piece 5 emits it, piece 6 reads it).</summary>
@@ -20,5 +21,25 @@ public class CultureCueTests
     {
         Assert.IsFalse(CultureCue.TryParse(cue, out string id));
         Assert.IsNull(id);
+    }
+
+    [Test]
+    public void Pick_NoCues_IsNeutral()
+    {
+        Assert.IsNull(CultureCue.Pick(null, out int none));
+        Assert.AreEqual(0, none);
+        Assert.IsNull(CultureCue.Pick(new List<string>(), out int empty));
+        Assert.AreEqual(0, empty);
+    }
+
+    [Test]
+    public void Pick_TheFirstCultureCueInListOrder_CountingEveryMatch()
+    {
+        Assert.AreEqual("x", CultureCue.Pick(new List<string> { "a", "culture:x" }, out int one));
+        Assert.AreEqual(1, one);
+        Assert.AreEqual("x", CultureCue.Pick(new List<string> { "culture:x", "culture:y" }, out int two));
+        Assert.AreEqual(2, two);
+        Assert.AreEqual("y", CultureCue.Pick(new List<string> { "culture:", "culture:y" }, out int blank), "a blank culture cue is skipped");
+        Assert.AreEqual(1, blank);
     }
 }

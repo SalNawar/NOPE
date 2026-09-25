@@ -369,6 +369,43 @@ public class DiscrepancyLogTests
         Assert.AreEqual(EvidenceKind.DocumentField, log.Items[0].source);
     }
 
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.DocumentField, "deviation.claimMismatch.papers")]
+    [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Answer, "deviation.foreignOrigin.said")]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.DocumentField, "deviation.recordMismatch.papers")]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.Answer, "deviation.recordMismatch.said")]
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.None, "deviation.claimMismatch.papers")]
+    public void ReportKeyFor_NamesTheProofAndWhoStatedIt(DiscrepancyProof proof, EvidenceKind statement, string expected)
+    {
+        Assert.AreEqual(expected, Discrepancy.ReportKeyFor(proof, statement));
+    }
+
+    [Test]
+    public void ReportKey_AndReportOther_OfRealProofs()
+    {
+        Discrepancy mismatch = DiscrepancyLog.Prove(TellDocField(), Entry("norvik", "medieval", "Longship"), ClaimNation, ClaimEra);
+        Assert.AreEqual("deviation.claimMismatch.papers", mismatch.ReportKey);
+        Assert.AreEqual("Longship", mismatch.ReportOther, "the expected value");
+
+        Discrepancy origin = DiscrepancyLog.Prove(Entry("latia", "rome", "Aqueduct"), SaidDevice(), ClaimNation, ClaimEra);
+        Assert.AreEqual("deviation.foreignOrigin.said", origin.ReportKey);
+        Assert.AreEqual("latia — rome", origin.ReportOther, "the place the value belongs to");
+
+        Discrepancy record = DiscrepancyLog.Prove(
+            CompareEvidence.ForAnswer(ClueCategory.BirthDate, "3 Jun 1801 BCE", true),
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, "3 Jun 1510 BCE"),
+            ClaimNation, ClaimEra);
+        Assert.AreEqual("deviation.recordMismatch.said", record.ReportKey);
+        Assert.AreEqual("3 Jun 1510 BCE", record.ReportOther, "the recorded value");
+    }
+
+    [TestCase(ClueCategory.Geography, "category.Geography")]
+    [TestCase(ClueCategory.BirthDate, "category.BirthDate")]
+    [TestCase(ClueCategory.Culture, "category.Culture")]
+    public void ClueLabels_Key_OneKeyPerCategory(ClueCategory category, string expected)
+    {
+        Assert.AreEqual(expected, ClueLabels.Key(category));
+    }
+
     [TestCase(ClueCategory.Language, "LANGUAGE")]
     [TestCase(ClueCategory.Material, "MATERIAL")]
     [TestCase(ClueCategory.Politics, "RULER")]

@@ -50,6 +50,44 @@ public class HistoryTests
     }
 
     [Test]
+    public void IsRevised_WhenHistoryGivesTheCellADifferentValue()
+    {
+        Assert.IsFalse(History.IsRevised(null, "egypt", "ancient", ClueCategory.Currency, "Deben"), "a null state");
+        var h = new HistoryState();
+        Assert.IsFalse(History.IsRevised(h, "egypt", "ancient", ClueCategory.Currency, "Deben"), "no edits");
+
+        h.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, "Sterling"));
+        Assert.IsTrue(History.IsRevised(h, "egypt", "ancient", ClueCategory.Currency, "Deben"));
+        Assert.IsFalse(History.IsRevised(h, "egypt", "ancient", ClueCategory.Technology, "Papyrus"), "another category");
+        Assert.IsFalse(History.IsRevised(h, "greece", "ancient", ClueCategory.Currency, "Obol"), "another place");
+    }
+
+    [TestCase("Deben", false, Description = "an edit equal to the base")]
+    [TestCase("  deben ", false, Description = "case and surrounding spaces do not count (ValuesMatch)")]
+    [TestCase(" ", false, Description = "a blank edit is ignored")]
+    [TestCase("Sterling", true)]
+    public void IsRevised_OneEdit(string value, bool expected)
+    {
+        var h = new HistoryState();
+        h.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, value));
+        Assert.AreEqual(expected, History.IsRevised(h, "egypt", "ancient", ClueCategory.Currency, "Deben"));
+    }
+
+    [Test]
+    public void IsRevised_FollowsTheNewestEdit()
+    {
+        var back = new HistoryState();
+        back.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, "Sterling"));
+        back.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, "Deben", 3));
+        Assert.IsFalse(History.IsRevised(back, "egypt", "ancient", ClueCategory.Currency, "Deben"), "changed back");
+
+        var away = new HistoryState();
+        away.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, "Deben"));
+        away.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, "Sterling", 3));
+        Assert.IsTrue(History.IsRevised(away, "egypt", "ancient", ClueCategory.Currency, "Deben"));
+    }
+
+    [Test]
     public void Resolve_IgnoresABlankEditValue()
     {
         var h = new HistoryState();

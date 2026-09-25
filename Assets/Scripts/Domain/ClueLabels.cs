@@ -4,6 +4,9 @@
 /// </summary>
 public static class ClueLabels
 {
+    /// <summary>The UI string key of a category's report word ("category.Geography"); the words live in world_source.json ui.strings.</summary>
+    public static string Key(ClueCategory category) => "category." + category;
+
     /// <summary>
     /// Report label of a category: Geography is CAPITAL, Politics RULER,
     /// Technology DEVICE, BirthDate BIRTH DATE, and every other category its

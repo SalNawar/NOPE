@@ -128,6 +128,26 @@ public sealed class Discrepancy
     /// <summary>Where the tell was stated: DocumentField (papers) or Answer (the traveller said it).</summary>
     public EvidenceKind source;
 
+    /// <summary>The UI string key of this deviation's report line (ReportKeyFor).</summary>
+    public string ReportKey => ReportKeyFor(provedBy, source);
+
+    /// <summary>The value the statement is held against: the expected or recorded value, or the place the stated value belongs to.</summary>
+    public string ReportOther => provedBy == DiscrepancyProof.ForeignOrigin ? actualOrigin : expectedValue;
+
+    /// <summary>
+    /// The UI string key of a deviation line: "deviation." + claimMismatch /
+    /// foreignOrigin / recordMismatch + "." + said (an answer) or papers (any
+    /// other statement). The English templates live in world_source.json
+    /// ui.strings ({0} = the category word, {1} = the stated value, {2} = ReportOther).
+    /// </summary>
+    public static string ReportKeyFor(DiscrepancyProof proof, EvidenceKind statement)
+    {
+        string how = proof == DiscrepancyProof.ForeignOrigin ? "foreignOrigin"
+                   : proof == DiscrepancyProof.RecordMismatch ? "recordMismatch"
+                   : "claimMismatch";
+        return "deviation." + how + "." + (statement == EvidenceKind.Answer ? "said" : "papers");
+    }
+
     /// <summary>Player-facing report line ("CAPITAL INCORRECT — traveller said: ..."), naming where the tell was stated.</summary>
     public string Summary
     {

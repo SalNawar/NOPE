@@ -101,6 +101,22 @@ public class FactTableTests
     }
 
     [Test]
+    public void MarkChanged_MarksOnlyACellInTheTable()
+    {
+        FactTable t = Today();
+        Assert.IsTrue(t.MarkChanged("egypt", "ancient", ClueCategory.Currency));
+        Assert.IsTrue(t.IsChanged("egypt", "ancient", ClueCategory.Currency));
+        Assert.IsFalse(t.IsChanged("egypt", "ancient", ClueCategory.Language), "another category");
+        Assert.IsFalse(t.IsChanged("iraq", "ancient", ClueCategory.Currency), "another place");
+
+        Assert.IsFalse(t.MarkChanged("egypt", "ancient", ClueCategory.Technology), "not in the table");
+        Assert.IsFalse(t.IsChanged("egypt", "ancient", ClueCategory.Technology));
+        Assert.IsFalse(t.MarkChanged(null, "ancient", ClueCategory.Currency));
+        Assert.IsFalse(t.IsChanged(null, "ancient", ClueCategory.Currency));
+        Assert.IsFalse(t.IsChanged("egypt", null, ClueCategory.Currency));
+    }
+
+    [Test]
     public void MaxValueLength_Is28()
     {
         Assert.AreEqual(28, FactTable.MaxValueLength);
