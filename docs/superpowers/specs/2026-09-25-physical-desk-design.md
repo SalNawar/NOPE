@@ -55,7 +55,7 @@ Claude made these under Saleh's instruction "dont stop until you finish everythi
 | R2 | **Requests are one-shot, and a document's window gets a desktop icon the first time it opens** (after its scan, or on request where no desk is wired). The icon reopens the window; icons are cleared with every new case (the existing `_docIcons` path). | Once a paper is on the desk it never goes back to the traveller mid-case, so the runner's one-shot rule hides the request with no new predicate. It revives the dead `isDocument` branch of `AddDesktopIcon` (`InvestigationUIController.cs:455-480`, only ever called with `false` at :445) and retires piece-3 Q11's "documents can only be reopened through the intercom". |
 | R3 (refines K6) | **Arrival documents in both paths.** With a reachable desk (`DeskReachable`: the desk and all its parts wired), OnArrival papers slide onto the desk at presentation. Without one (no desk, or a partly wired one), OnArrival windows open (and get icons) at presentation. The hub holds a `request:{i}` only for OnRequest documents, `i` staying the paper index. | The same content must play in the hybrid scene and the rich fallback. |
 | R4 (refines K3/K10) | **The wheel's ring reuses `InteractionPanelController`** as its list renderer (serialized name `interactionPanel` kept on `InvestigationUIController`), laid out by a new `RadialLayoutGroup`, with an optional centre slot for "< Back". A new `TravellerWheel` opens, closes and positions it. `DialogChoice` gains `Kind` (`Normal`, `Back`) so the wheel can centre "< Back"; piece 8 appends kinds. | Law 2: the intercom's renderer already turns `InteractionAction {label, execute}` into buttons (`InteractionPanelController.cs:8-15, 40-60`). Keeping the class keeps `InterviewReachable` unchanged (V7) and keeps the hybrid scene's intercom component from becoming a missing script (merge gate G1). |
-| R5 | **The wheel is an elliptical ring** (radii 300 × 200 reference px, items 240 × 44, centre 150 × 44, gap 8). `RadialLayout.MaxFit` gives 8 for these numbers, equal to `interview.menuCapacity`; the builder reports a smaller fit, as it reported the intercom's. | A circle of radius 210 fails at 7 items (the two lowest items sit level, 182 px apart, under the 248 px they need); the ellipse fits every count from 1 to 8 (worked in §2.6). |
+| R5 | **The wheel is an elliptical ring** (radii 300 × 200 reference px, items 240 × 44, centre 150 × 44, gap 8). `RadialLayout.MaxFit` gives 8 for these numbers, equal to `interview.menuCapacity`; the builder reports a smaller fit, as it reported the intercom's. | A circle of radius 210 fits only 4 (at 5 items the two lowest already sit level, 246.9 px apart, under the 248 px they need); the ellipse fits every count from 1 to 8 (worked in §2.6). |
 | R6 | **Overlay catchers exist only while needed.** The wheel's full-screen click-to-close catcher is its `Catcher` child, active only while the wheel is open (the `TravellerWheel` host itself stays active, R33). The focus exit is a world collider (`FocusExitZone`) sorted under the screen canvas, active only while focused. | Overlay raycast hits always outrank world hits (`GraphicRaycaster.sortOrderPriority` is the canvas order for overlay, `GraphicRaycaster.cs:48-58`; `EventSystem.cs:219-220`), so a permanent overlay catcher would block the whole booth and the live desktop. |
 | R7 (refines K5) | **Drops are decided by the projected pointer, not `OnDrop`.** A dragged paper disables its own collider for the drag and re-enables it on release; release inside the scanner's drop rectangle feeds it. | With the collider off, the release is never over the pressed object, so no click follows the drag (`InputSystemUIInputModule.cs:696-745`: the click at 707 needs `pointerClick ==` the handler under the pointer); the projected-point test works for any camera and collider type. |
 | R8 | **A paper is a `SortingGroup` root carrying its `SpriteRenderer`, `BoxCollider2D`, `Clickable` and `DeskDraggable`.** Lifting or restacking changes only the group's order. | `HoverHighlighter` outlines the renderer on the `Clickable`'s own object (`HoverHighlighter.cs:187-197`) and puts the outline one order above it inside the group, so the outline follows the paper with no highlighter change; the raycast reports the group's order (`Physics2DRaycaster.cs:101-113`). |
@@ -76,7 +76,7 @@ Claude made these under Saleh's instruction "dont stop until you finish everythi
 | R23 | **Window spawn positions become serialized layout on `InvestigationUIController`** (documents cascade from (−195, 150) by (40, −40); books from (−180, −150), step 300 per column and (40, 40) per row), set by the builder for the 1440-wide desktop. The fields' initialisers are today's 16:9 constants: documents from (−330, 140) by (620, 0); books from (−380, −150), 320 per column and (40, 40) per row. | The 16:9 constants (`InvestigationUIController.cs:295, 441`) put document 0 over the icon column (x −720..−483 at 1440 wide); the builder owns layout. A scene that is not rebuilt (the hybrid scene, 1920 wide) loads the initialisers and keeps today's layout. |
 | R24 | **The booth raycast buffer goes from 8 to 16.** | At one point the ray can cross up to 8 papers plus the scanner, a prop, the traveller zone and the exit zone; hits are truncated before sorting (`Physics2DRaycaster.cs:55-62`). |
 | R25 | **Copy:** the compare label of an answer row becomes "Traveller · {category}"; the ledger's undocumented-denials hint becomes "(log a deviation before denying)"; every "intercom" in messages and docs becomes "the traveller wheel". | "Intercom" names a retired panel; "scan the evidence" now means the desk device. |
-| R26 | **`InvestigationUIController._currentCase` is reset at the decision.** | Its doc says "null between cases" (`:75-76`) but nothing resets it; `HandlePairCompared` guards on it. |
+| R26 | **`InvestigationUIController._currentCase` is reset at the decision, before the decision callback runs** (the callback may present the next traveller at once where no READY sign is wired, and that case must not be cleared after it). | Its doc says "null between cases" (`:75-76`) but nothing resets it; `HandlePairCompared` guards on it. |
 | R27 | **Papers never outlive their case, by construction.** They exist only between `ShowCase` and the decision; the day ends only after a decision or when closing time finds no traveller at the desk (`GameManager.cs:414-434`, `ShiftFlow.OnClosing`). No day-end cleanup call is added; §6 checks both closing paths. | No defensive dead code. |
 | R28 | **The power button sits on the right bezel beside the glass's lower right corner** (sprite units (0.285, −0.19), world ≈ (6.99, −2.36)), inside the focus framing at 16:9 and 16:10. | The bottom bezel is outside the frame at fill 0.85 (its centre is at world y ≈ −2.96, the frame's bottom edge at −2.55). A 4:3 display cuts the button: §7. |
 | R29 | **The desktop's `CanvasScaler` is removed; its wallpaper gets an `AspectRatioFitter` (EnvelopeParent)**, and the root `Canvas` a `RectMask2D`. | In World Space the scaler only sets `scaleFactor = dynamicPixelsPerUnit` (ugui `CanvasScaler.cs:269, 284-287`), which nothing reads once `DraggableWindow` stops dividing by it; the 1920×1080 wallpaper (`xp_bliss.png`) would otherwise be squeezed 25%; the mask clips the envelope overflow and its raycasts. |
@@ -272,12 +272,14 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 - `public enum DocumentHandOver { OnRequest, OnArrival }`. Doc: "When the traveller hands a document over. Serialized on DocumentTemplateSO: append only." `OnRequest` is 0, so existing assets read as OnRequest.
 - `public sealed class CaseDocument`:
   - fields `string name` (display name), `string holder` (the name the paper shows: the traveller's registered given name), `DocumentHandOver handOver`;
-  - `bool Requested => handOver == DocumentHandOver.OnRequest`.
+  - `bool Requested => DocumentHandOvers.IsRequested(handOver)`.
+- `public static class DocumentHandOvers`: `bool IsRequested(DocumentHandOver handOver)` = `handOver == OnRequest`, the one home of "waits for a request" (callers: `CaseDocument.Requested` and `ContentLibraryValidator.MaxRequestedDocuments`).
+- `public static class CaseDocuments`: `IReadOnlyList<int> ArrivalIndices(IReadOnlyList<CaseDocument> documents)`, the documents handed over on arrival in paper order (null entries skipped, a null list gives none). Callers: the `DeskPapers` constructor and `InvestigationUIController.ShowRich`'s no-desk path.
 - A private nested `enum PaperState { WithTraveller, OnDesk, Scanning, Returned }` inside `DeskPapers` (no public signature uses it).
 - `public enum DropOutcome { Stays, Scanning, Refused }`: "What happens to a paper released on the desk: it stays where it was dropped, it starts scanning, or it goes back to where it was picked up."
 - `public sealed class DeskPapers`: one case's papers.
   - `DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds)`: every paper starts `WithTraveller`. A null list means no papers. `scanSeconds` below 0.01 is raised to 0.01.
-  - `int Count`; `bool ScannerBusy`; `IReadOnlyList<int> ArrivalIndices` (the OnArrival papers in paper order); `int OnDeskCount` (papers `OnDesk` or `Scanning`). A paper's state is private (`StateOf`); callers and tests see it through these members and the methods below.
+  - `int Count`; `bool ScannerBusy`; `IReadOnlyList<int> ArrivalIndices` (the OnArrival papers in paper order, from `CaseDocuments.ArrivalIndices`); `int OnDeskCount` (papers `OnDesk` or `Scanning`). A paper's state is private (`StateOf`); callers and tests see it through these members and the methods below.
   - `bool HandOver(int i)`: `WithTraveller` → `OnDesk`, true. Any other state, or an index out of range, gives false.
   - `bool CanDrag(int i)`: the paper is `OnDesk` (false out of range).
   - `DropOutcome Drop(int i, bool overScanner)`: a paper that is not `OnDesk` (or an index out of range) gives `Refused` and nothing changes; an `OnDesk` paper not over the scanner gives `Stays`; over the scanner it gives `Scanning` while the scanner is idle (the paper → `Scanning`, the timer at 0) and `Refused` while it is busy (nothing changes). A scanned paper may be scanned again. (The scan start is private; `Drop` is its only caller.)
@@ -332,7 +334,8 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
   - n = 7: the lowest pair sits at (±130.1, −180.2), 260.2 ≥ 248 apart;
   - n = 8: the top neighbours are (0, 200) and (212.1, 141.4), with dy 58.6 ≥ 52;
   - n = 9: items 4 and 5 sit level (±102.6, −187.9), 205.2 < 248 apart;
-  - so `MaxFit(limit 16) == 8`. A circle of radius 210 fails at n = 7 (182.2 < 248), so its `MaxFit` is 6.
+  - so `MaxFit(limit 16) == 8`. A circle of radius 210 fits 4: n = 5 already collides (items 2 and 3 sit level at (±123.4, −169.9), 246.9 < 248 apart).
+- `(float width, float height) Extent(float radiusX, float radiusY, float itemW, float itemH)` = (2 · radiusX + itemW, 2 · radiusY + itemH), the box around every item the ring can place ((840, 444) for the defaults). Caller: `TravellerWheel.Awake` sizes the ring's rect from it, so `OverlayProjection` keeps the whole ring on screen, not only its centre.
 
 **`MonitorFraming.cs`:** `float OrthoSize(float width, float height, float aspect, float fill)` = max(height, width / aspect) / (2 · fill). `fill` is clamped to [0.05, 1]; an aspect ≤ 0 counts as 1. Worked example: 2.343 × 1.758 at 16:9 and fill 0.85 gives 1.034.
 
@@ -473,7 +476,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 - **When disabled** (by the owner), the EventSystem sends it nothing (`ExecuteEvents.ShouldSendToComponent` requires `isActiveAndEnabled`, ugui `ExecuteEvents.cs:304-314`).
 
 **`DeskDocument`** (the paper; on a `SortingGroup` root):
-- **Fields:** `SpriteRenderer paper`, `TextMeshPro title`, `TextMeshPro holder`, `GameObject photoSlot` (inactive: "reserved for piece 4's passport photo"), `Clickable click`, `DeskDraggable drag`, `SortingGroup group`.
+- **Fields** (the paper's `SpriteRenderer` sits on the root itself, R8, and no code reads it, so there is no field for it): `TextMeshPro title`, `TextMeshPro holder`, `GameObject photoSlot` (inactive: "reserved for piece 4's passport photo"), `Clickable click`, `DeskDraggable drag`, `SortingGroup group`.
 - **Members:**
   - `int Index` (read by `DeskController` to map a drag or click to its paper);
   - `void Bind(int index, CaseDocument doc)`: the title and the holder are the canonical strings (the paper stays in its source script; the scanned copy is what piece 9 translates, R19);
@@ -501,7 +504,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 - **`event Action<int> ScanFinished`.**
 - **`void BeginDay(int day)`:** keeps the day and resets the day's scan count.
 - **`void BeginCase(IReadOnlyList<CaseDocument> docs)`:** creates `DeskPapers(docs, config.scanSeconds)`, and hands over every `ArrivalIndices` paper.
-- **`bool HandOver(int i)`:** calls `DeskPapers.HandOver(i)`; when true, it clones the template under `paperRoot`, binds it, places it at the hand-over point, adds it to the `PaperStack`, and slides it to `surface.PointAt(config.paperSpawnSlots[k % n])`, where k is the count of papers handed over so far this case.
+- **`void HandOver(int i)`** (its one caller, `InvestigationUIController.Choose`, needs no result; a paper that cannot be handed over is `DeskPapers.HandOver`'s tested "no change"): calls `DeskPapers.HandOver(i)`; when that succeeds, it clones the template under `paperRoot`, binds it, places it at the hand-over point, adds it to the `PaperStack`, and slides it to `surface.PointAt(config.paperSpawnSlots[k % n])`, where k is the count of papers handed over so far this case.
 - **`void EndCase()`:** calls `ReturnAll()`, slides every paper to the hand-over point, destroys it, and clears the stack.
 - **`void SetPapersLive(bool live)`:** remembers the flag (also for new papers) and re-applies each paper's liveness.
 - **Liveness (R36):** a paper is live when `live && DeskPapers.CanDrag(i) && !paper.IsSliding`. Every slide (hand-over, back from the scanner, back from a refused drop, to the bed, and away at `EndCase`) re-applies the paper's liveness when it starts, so a sliding paper is inert, and again in its done callback.
@@ -539,7 +542,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 
 **`TravellerWheel`** (new, `IPointerClickHandler`, on the always-active host `OfficeOverlayCanvas/TravellerWheel`, R33):
 - **The host** is a full-screen `RectTransform` with no graphic; it is never deactivated. Its child **`Catcher`** is a full-screen transparent raycast-target `Image` (the click-to-close catcher, R6), active only while the wheel is open; `Ring` and the centre slot sit under it. A click on the catcher reaches the host's `OnPointerClick` (`GetEventHandler` walks up the parents); ring buttons handle their own clicks. The catcher has no `Selectable`, so the hover shows the arrow.
-- **Fields:** `GameObject catcher`, `RectTransform ring` (the ring's root), `InteractionPanelController panel`, `RadialLayoutGroup layout`, `RectTransform centreSlot`, `TravellerView traveller` (its `Anchor` places the ring and the reply: one source for that point, piece 4 refits it once), `OverlayCallout bubble`, `DeskConfigSO config`.
+- **Fields:** `GameObject catcher`, `RectTransform ring` (the ring's root; its `InteractionPanelController` is driven through `InvestigationUIController.interactionPanel`, R4, so the wheel holds no reference to it), `RadialLayoutGroup layout`, `RectTransform centreSlot`, `TravellerView traveller` (its `Anchor` places the ring and the reply: one source for that point, piece 4 refits it once), `OverlayCallout bubble`, `DeskConfigSO config`.
 - **Members:**
   - `bool IsOpen` = `catcher.activeSelf`;
   - `event Action OpenChanged`;
@@ -548,8 +551,8 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
   - `void SetCanOpen(bool can)`: false closes an open wheel and hides the reply bubble (the view left the booth or the traveller left);
   - `void Say(string text)`: shows the traveller's reply beside them, `bubble.Show(text, traveller.Anchor, config.bubbleOffset, config.bubbleSeconds)` (R34); the caller has already applied `DisplayText`;
   - `OnPointerClick`: `Close()`.
-- **Awake** (the host is active at load, so it runs then): applies the config's radii and item size to the layout and its centre size to the centre slot, caches `Camera.main`, and deactivates the catcher (never its own GameObject). The ring's `InteractionPanelController` wakes at the first open; until then `SetActions` is a plain call that instantiates under the inactive ring, which is safe (its `Awake` only hides the template the builder saves inactive).
-- **`LateUpdate`**, only while open: `OverlayProjection.TryPlace(ring, camera, traveller.Anchor.position, Vector2.zero)`, and Escape → `Close()`.
+- **Awake** (the host is active at load, so it runs then): applies the config's radii and item size to the layout and its centre size to the centre slot, sizes the ring's rect to `RadialLayout.Extent`, caches `Camera.main` and its overlay canvas's rect (`OverlayProjection.CanvasRectOf`), and deactivates the catcher (never its own GameObject). The ring's `InteractionPanelController` wakes at the first open; until then `SetActions` is a plain call that instantiates under the inactive ring, which is safe (its `Awake` only hides the template the builder saves inactive).
+- **`LateUpdate`**, only while open: `OverlayProjection.TryPlace(ring, canvasRect, camera, traveller.Anchor.position, Vector2.zero)`, and Escape → `Close()`.
 - **Null safety:** with no traveller or anchor the ring stays centred on the screen; with no bubble `Say` does nothing.
 
 **`OverlayCallout`** (new, R34), a timed label on the overlay canvas that takes no clicks; the builder makes two instances, `OfficeOverlayCanvas/SpeechBubble` (the traveller's reply) and `OfficeOverlayCanvas/DeskTooltip` (reaction tooltips):
@@ -558,11 +561,11 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 - **Members:**
   - `void Show(string text, Transform follow, Vector2 offset, float seconds)`: sets the text as given (callers apply `DisplayText`), restarts the timer and shows the panel; a blank text or a null `follow` hides it;
   - `void Hide()`.
-- **Awake:** caches `Camera.main` and hides the panel (never its own GameObject).
-- **`LateUpdate`**, only while shown: the timer, and `OverlayProjection.TryPlace(panel, camera, follow.position, offset)`; the callout hides when the timer ends, when `follow` is destroyed, or when the point projects outside the viewport (the bubble while focused).
+- **Awake:** caches `Camera.main` and its overlay canvas's rect (`OverlayProjection.CanvasRectOf`), and hides the panel (never its own GameObject).
+- **`LateUpdate`**, only while shown: the timer, and `OverlayProjection.TryPlace(panel, canvasRect, camera, follow.position, offset)`; the callout hides when the timer ends, when `follow` is destroyed, or when the point projects outside the viewport (the bubble while focused).
 
-**`OverlayProjection`** (new, static): `bool TryPlace(RectTransform target, Camera camera, Vector3 world, Vector2 offset)`:
-- uses the target's root canvas and the given camera (each caller caches `Camera.main` at `Awake`);
+**`OverlayProjection`** (new, static): `RectTransform CanvasRectOf(Component host)` (the rect of the root canvas above the host, or null) and `bool TryPlace(RectTransform target, RectTransform canvasRect, Camera camera, Vector3 world, Vector2 offset)`:
+- uses the given canvas rect and camera, which each caller resolves once at `Awake` (`CanvasRectOf`, `Camera.main`), so the per-frame call looks nothing up (MERGE_CRITERIA: no `GetComponent` in hot paths); false when either is missing;
 - world → screen, false when behind the camera or outside the viewport;
 - `ScreenPointToLocalPointInRectangle(canvasRect, screen, null)`, then `+ offset`, assigned to the target's `anchoredPosition`: the target needs anchors (0.5, 0.5) under a full-screen parent (the builder sets both);
 - clamped inside the canvas with `RectClamp` (not `keepMax`).
@@ -607,7 +610,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
   - hides `idleScreen`;
   - builds a `CaseDocument` per document, with `name` as today (298), `holder = inst.visitorGivenName` (the registered identity, which every Name field prints: `CaseFactory.cs:393-394`; one source) and `handOver = doc.template.handOver` (OnRequest for a null template);
   - places clones at `origin + i * step`;
-  - when `DeskReachable`, `desk.BeginCase(docs)`; otherwise `OpenDocumentWindow(i)` for each arrival index;
+  - when `DeskReachable`, `desk.BeginCase(docs)`; otherwise `OpenDocumentWindow(i)` for each of `CaseDocuments.ArrivalIndices(docs)` (the rule `DeskPapers` uses);
   - `StartInterview(inst, docs)`.
 - **`RefreshChoices`:** `centre = choice.Kind == DialogChoiceKind.Back`.
 - **`Choose`:**
@@ -615,11 +618,11 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
   2. choose, and refresh the transcript;
   3. for `HandOverDocument`: when `DeskReachable` `desk.HandOver(i)`, otherwise `OpenDocumentWindow(i)`; then `wheel.Close()` when a wheel is wired;
   4. any other action opens the transcript chrome, as today;
-  5. when a wheel is wired, `wheel.Say(DisplayText.For(InterviewScript.SpokenSince(_runner.Transcript, before), TextMedium.Spoken))`: the traveller's reply, the spoken reveal point (R19, R34);
+  5. `reply = InterviewScript.SpokenSince(_runner.Transcript, before)`; when a wheel is wired and the reply is not empty, `wheel.Say(DisplayText.For(reply, TextMedium.Spoken))`: the traveller's reply, the spoken reveal point (R19, R34). A choice that adds no traveller line ("Ask about home >", "< Back") leaves the last reply up (§1.7);
   6. `CompleteDialog` and `RefreshChoices` as today.
 - **`OpenDocumentWindow(int i)`** (new, private): activates and raises `_docWindows[i]`; the first time, `AddDesktopIcon(name, window, true)`. It is the scan reveal point (R19).
 - **`BuildBookShelf`:** book position `origin + (i % 3) * column + (i / 3) * rowStep`.
-- **`Decide`:** `desk.EndCase()` when `DeskReachable`, `Hide()`, then the callback, then `_currentCase = null` (R26). The ring cannot be open at a decision (deciding needs focus, and focusing needs the wheel closed, §1.9), and the reply bubble clears when the callback's phase change reaches `wheel.SetCanOpen(false)` (§2.8), so `Decide` does not touch the wheel.
+- **`Decide`:** `desk.EndCase()` when `DeskReachable`, `Hide()`, `_currentCase = null` (R26), then the callback (which may present the next traveller at once). The ring cannot be open at a decision (deciding needs focus, and focusing needs the wheel closed, §1.9), and the reply bubble clears when the callback's phase change reaches `wheel.SetCanOpen(false)` (§2.8), so `Decide` does not touch the wheel.
 - **`Hide`:** shows `idleScreen`.
 - **Text changes:**
   - the class doc (8-21) mentions the traveller wheel and the desk;
@@ -655,7 +658,7 @@ Line endings, as in the working tree (`git ls-files --eol`, `w/` column):
 ### 2.14 Generator and validator
 
 **`ContentLibraryValidator`** (CRLF):
-- **New** `public static int MaxRequestedDocuments(IEnumerable<CaseBlueprintSO> blueprints)`: the most templates with `handOver == OnRequest` in one blueprint. Callers: the menu check (201) and the generator.
+- **New** `public static int MaxRequestedDocuments(IEnumerable<CaseBlueprintSO> blueprints)`: the most templates with `DocumentHandOvers.IsRequested(handOver)` in one blueprint. Callers: the menu check (201) and the generator.
 - **`MaxDocuments`** stays, with its doc updated: "the most papers one traveller carries". Caller: the builder's desk-slot check.
 - **`TravellerBlueprints`** (220) becomes `public`, so the builder counts the same blueprints.
 - The `CheckInterview` doc (117) says "the traveller wheel".
@@ -686,7 +689,7 @@ The class becomes `public static partial class`. New booth and desk code goes in
    - `CRTMonitor/ScreenAnchor/GlassZone` is `EnsureHitZone` sized to the glass (`CrtGlassSize` in the CRT's units, placed in the anchor's space), at order `glassOrder`, with its `Clickable.Interactable` false and no persistent call, inactive (R37).
    - `MonitorScreen` gets `glassSize` = `CrtGlassSize`, `desktopCanvas`, `desktopRaycaster` (the canvas's `GraphicRaycaster`), `glass` (the anchor), `powerLed` and `config`.
 3. **Framing:** `MonitorOrthoSize` (997) goes. The `MonitorVCam` starts at the glass centre with `MonitorFraming.OrthoSize` at the reference aspect 16:9 and the config's fill; the rig reframes at runtime. The rig's `brain` is set to Main Camera's `CinemachineBrain` (R35).
-4. **READY:** `WireClickToFocusMonitor(signClick, view)` (1128) is replaced by `ClearPersistentCalls(signClick, "onClick")`, a new helper that empties `m_PersistentCalls.m_Calls`. The scene's saved call (`OfficeScene.unity:28181`) would otherwise survive.
+4. **READY:** `WireClickToFocusMonitor(signClick, view)` (1128) is replaced by `ClearPersistentCalls(signClick, "onClick")`, a new helper that empties `m_PersistentCalls.m_Calls` (`WirePersistentVoid` empties them through it before adding its call, so the clearing has one home). The scene's saved call (`OfficeScene.unity:28181`) would otherwise survive.
 5. **Taskbar:**
    - `BuildBackToOfficeButton` (1451-1457) goes; `DestroyChildIfPresent(root, "BackToOfficeButton")`;
    - `Taskbar/DeskButton` "< Desk" (anchors (0.125, 0.1)–(0.245, 0.9), with `SetAnchors` re-applied) has a persistent `FocusOffice`; it is built in `BuildDesktopShell` (step c), which runs after the view exists;
@@ -698,7 +701,7 @@ The class becomes `public static partial class`. New booth and desk code goes in
    - `TravellerWheel/Catcher`: full-screen, `Image` alpha 0, raycast target, **inactive**;
    - `Catcher/Ring`: anchors and pivot (0.5, 0.5) (`OverlayProjection` places it by `anchoredPosition`), with `InteractionPanelController` (`actionsRoot` = `Ring`, `actionButtonTemplate`, `centreSlot` = `Centre`), `RadialLayoutGroup` and `ActionButtonTemplate` (`MakeButton`, the `wheelItemSize`, TMP auto-size 12–20, inactive);
    - `Ring/Centre` (the centre slot): anchors and pivot (0.5, 0.5) at the ring's centre, `wheelCentreSize`, and a `LayoutElement` with `ignoreLayout` so the ring never places it;
-   - the wheel's fields: `catcher`, `ring`, `panel`, `layout`, `centreSlot`, `traveller`, `bubble` (the `SpeechBubble` callout) and `config`; `traveller` is set in step d.
+   - the wheel's fields: `catcher`, `ring`, `layout`, `centreSlot`, `traveller`, `bubble` (the `SpeechBubble` callout) and `config`; `traveller` is set in step d.
    - After the library lookup (288), when `RadialLayout.MaxFit(...) < library.Interview.menuCapacity`, the builder logs "[TimeDesk] The traveller wheel fits {fit} choices, but the content library's interview menu capacity is {n}; lower interview.menuCapacity in world_source.json or enlarge the wheel (Desk_Default: wheelRadii, wheelItemSize)."
 8. **Two `OverlayCallout`s** under `OfficeOverlayCanvas`, rebuilt each run (R33, R34): hosts `SpeechBubble` and `DeskTooltip` (full-screen, no graphic, **active**), each with a `Panel` child (anchors and pivot (0.5, 0.5); 420 × 110 and 360 × 60; `Image` and TMP auto-size 14–24, raycast targets off; **inactive**) and the callout's `panel` and `label` set.
 9. **Desktop:**
@@ -712,7 +715,7 @@ The class becomes `public static partial class`. New booth and desk code goes in
    - The transcript window (251) moves to (395, 60), which clears the compare bar (y ≤ −173).
 10. **Booth.** Geometry in `BuildBooth` (1054-1136, step b); interaction in `BuildDeskInteraction` (step d):
     - **Desk surface (b):** `OfficeRoot/DeskSurface` at (−2.25, −4.15, 0), size (10.3, 3.5), which keeps paper centres left of the CRT (x ≤ 2.9) and lets them reach the scanner. On it: `DeskController`, `Papers` (the paper root), `HandOver` at **world** (0, −2.3, 0), which is local (2.25, 1.85, 0) under `DeskSurface` (just past the desk's far edge at y −2.4, below the traveller, so papers slide in from the traveller's side), and the inactive `PaperTemplate`.
-    - **Paper template (b):** `EnsureOfficeSprite("paper", cream, 150, 200)`, 1.5 wide; a `SortingGroup`, `BoxCollider2D` fitted to the art, `Clickable`, `DeskDraggable` (`proxy`), `DeskDocument` (`paper`, `title`, `holder`, `photoSlot`, `click`, `drag`, `group`); `Title` and `Holder` via `WorldText` inside the group (orders 2 and 3); an inactive `PhotoSlot` box.
+    - **Paper template (b):** `EnsureOfficeSprite("paper", cream, 150, 200)`, 1.5 wide; a `SortingGroup`, `BoxCollider2D` fitted to the art, `Clickable`, `DeskDraggable` (`proxy`), `DeskDocument` (`title`, `holder`, `photoSlot`, `click`, `drag`, `group`); `Title` and `Holder` via `WorldText` inside the group (orders 2 and 3); an inactive `PhotoSlot` box.
     - **Scanner (b, d):** `ScannerTray` gets `EnsureClickable`, `DeskScanner` (drop size = the tray sprite's own size; bed centre (0.1, 0.3) local; `reaction`) and `DeskReaction` (`Reaction_Scanner`). `ScanHint` is a `WorldText` on the tray, inactive (the controller sets its text).
     - **Props (d):** `EnsureClickable` + `DeskReaction` (each with `reaction`, `tooltip` = the `DeskTooltip` callout) on DeskStamp, DeskMug, DeskPlant, ReactivePoster, DeskIntercom (plus a persistent `TravellerWheel.Open`), CreditsTill (readout `CreditsNumber`, and its existing `AudioSource`), StabilityMonitor (readout `StabilityPercent`) and WallClock (readout: the tray clock). A calendar hit zone (`EnsureHitZone` on `LeftPartition` over the `DayNumber` area, order −49) gets `DeskReaction` with readout `DayNumber`. The comment "Desk props (decoration only)" (1071) goes.
     - **Traveller (b, d):** `Traveller` keeps its placeholder sprite (`TravellerView.figure` = that renderer), with `Anchor` (world ≈ (0, 1.0, 2); `TravellerView.anchor`) and `TravellerHitZone` (`EnsureHitZone` over the part above the desk's far edge, order −19, persistent `TravellerWheel.Open`). The wheel's `traveller` is set to the `TravellerView`.
@@ -729,7 +732,7 @@ The class becomes `public static partial class`. New booth and desk code goes in
     - `soView` (in `BuildBooth`): `monitorScreen`;
     - `soRig` (in `BuildBooth`): `brain`, `monitorScreen`, `config`;
     - `MonitorScreen`: `desktopCanvas`, `desktopRaycaster`, `glass`, `glassSize`, `powerLed`, `config` (item 2);
-    - `TravellerWheel`: `catcher`, `ring`, `panel`, `layout`, `centreSlot`, `traveller`, `bubble`, `config`; the ring's `InteractionPanelController`: `actionsRoot`, `actionButtonTemplate`, `centreSlot` (item 7);
+    - `TravellerWheel`: `catcher`, `ring`, `layout`, `centreSlot`, `traveller`, `bubble`, `config`; the ring's `InteractionPanelController`: `actionsRoot`, `actionButtonTemplate`, `centreSlot` (item 7);
     - each `OverlayCallout`: `panel`, `label` (item 8);
     - `TravellerView`: `figure`, `anchor`;
     - `DeskController`: `surface`, `scanner`, `paperTemplate`, `paperRoot`, `handOverPoint`, `scanHint`, `config`; `DeskScanner.reaction`; `DeskDocument` and `DeskDraggable` on the template (item 10);
@@ -1083,7 +1086,7 @@ Line numbers are the current file's.
 - **`DeskPapersTests`** (new; the state is private, so each test observes it through `CanDrag`, `ScannerBusy`, `OnDeskCount`, `HandOver`, `Drop` and `Tick`):
   - `HandOver` from each state (only `WithTraveller` succeeds; a second hand-over fails);
   - out-of-range indices give false (`HandOver`, `CanDrag`) and `Refused` (`Drop`);
-  - `ArrivalIndices` keep paper order;
+  - `ArrivalIndices` keep paper order; `CaseDocuments.ArrivalIndices` skips a null entry and gives none for a null list; `DocumentHandOvers.IsRequested` holds only for `OnRequest`;
   - `Drop`, a decision table over the paper's state (`WithTraveller`, `OnDesk`, `Scanning`, `Returned`) × `overScanner` × scanner idle or busy: `Stays` only for an `OnDesk` paper not over the scanner; `Scanning` only for an `OnDesk` paper over an idle scanner (then `ScannerBusy` and `CanDrag` false); `Refused` otherwise, with nothing changed (the busy paper keeps scanning, the refused one stays draggable);
   - a scanned paper can be scanned again;
   - `Tick`: −1 before the duration; the index exactly at it; the index on overshoot; 0 and negative amounts ignored; −1 with no scan; after finishing, the paper is draggable again and `ScannerBusy` is false;
@@ -1104,7 +1107,8 @@ Line numbers are the current file's.
   - `SortingBands.Problems`: the defaults give none; each band equal to the one below (the glass zone included) gives exactly one problem naming both; held inside the paper band.
 - **`RadialLayoutTests`** (new):
   - `Point`: item 0 at the top; clockwise (item 1 has x > 0 for n = 8); n = 4 on the axes; n ≤ 0 gives (0, 0);
-  - `MaxFit` with the worked numbers of §2.6: `MaxFit(limit 16) == 8` for the defaults (so 7 and 8 fit and 9 does not); a circle of radius 210 gives 6; a centre box as large as the ring gives 0 (centre overlap is detected); `limit` is respected (`limit 5` → 5).
+  - `MaxFit` with the worked numbers of §2.6: `MaxFit(limit 16) == 8` for the defaults (so 7 and 8 fit and 9 does not); a circle of radius 210 gives 4 (n = 5 already collides); a centre box as large as the ring gives 0 (centre overlap is detected); `limit` is respected (`limit 5` → 5);
+  - `Extent`: (840, 444) for the defaults.
 - **`MonitorFramingTests`** (new): height-limited at 16:9 (the worked 1.034); width-limited at 4:3 and at 1:1; fill clamped (0 and 2); aspect ≤ 0 counts as 1.
 - **`ReactionCurveTests`** (new): every kind is identity at t = 0 and 1; peaks at 0.5 for Squash, Pulse and Nudge; Wobble at t = 1/6 gives 25·a°; t is clamped; `None` is always identity.
 - **`DisplayTextTests`** (new): returns the canonical string for both media (the identity piece 9 will change); null → "".
@@ -1302,10 +1306,22 @@ Wrong claims in the analysis, corrected here:
 | F27 | The piece-6 amendment missed this piece's new strings, including copy held in ScriptableObjects | applied | §3.2 piece-6 block: every changed or new key (also `desktop.back` :506, `startmenu.power` :511 and flavour :743, `results.unproven` :528); SO-held copy (scan note, wheel note, tooltip templates) is UI copy, not Z4 evidence, so it becomes keys and piece 6's walk must include those fields |
 
 Found while verifying, and fixed here:
-- **V1.** `RadialLayout.Fits` had only `MaxFit` and the tests as callers (the rule F10 and F19 apply). It is private; the worked numbers are pinned through `MaxFit` (a radius-210 circle gives 6), and `MaxFit`'s parameters are spelled out (§2.6, §5).
+- **V1.** `RadialLayout.Fits` had only `MaxFit` and the tests as callers (the rule F10 and F19 apply). It is private; the worked numbers are pinned through `MaxFit` (a radius-210 circle gives 4; the first draft said 6, corrected by the implementation plan's review), and `MaxFit`'s parameters are spelled out (§2.6, §5).
 - **V2.** `DeskPapers.BeginScan` loses its only caller to `Drop`, so it is private (§2.4).
 - **V3.** `Decide`'s `wheel.Close()` was unreachable: deciding needs focus, and focusing needs the wheel closed. The reply bubble now clears through `wheel.SetCanOpen(false)` when the traveller leaves, so `Decide` does not touch the wheel and `InvestigationUIController` has no `bubble` field (§2.11).
 - **V4.** `PcScreen.Toggle` returned "the new state", which a refused toggle while held would report as "on" and a caller could misread. It now returns whether it changed the screen, like `TurnOff` and `Wake` (§2.3).
 - **V5.** The play-through gained steps, so §7's step references are renumbered (5.3–5.13, 6–10).
 - **V6.** With `StateOf` private, `PaperState` appeared in no public signature; it becomes a private nested enum of `DeskPapers` (§2.4).
 - **V7.** `Taskbar/DeskButton` needs the view for its persistent `FocusOffice`, so it is built in `BuildDesktopShell`, after `BuildBooth` (§2.15 item 5); `BuildTaskbar` runs before the view exists.
+
+### Implementation plan departures (2026-09-25)
+
+The implementation plan (`docs/superpowers/plans/2026-09-25-physical-desk.md`) settled these while it was written and reviewed; the sections above now say the same:
+- **The radius-210 worked number:** such a circle fits 4, not 6 (R5, §2.6, §5, V1); the shipped ellipse fits 8, as before.
+- **`RadialLayout.Extent`** (tested) sizes the wheel's ring, so the projection keeps all of it on screen (§2.6, §2.10).
+- **Two fields dropped as dead** (the F10/F19 rule): `TravellerWheel.panel` (§2.10, §2.15 items 7 and 12) and `DeskDocument.paper` (§2.9, §2.15 item 10).
+- **`DeskController.HandOver` returns nothing** (§2.9).
+- **`_currentCase` is cleared before the decision callback** (R26, §2.11).
+- **One home per rule:** `CaseDocuments.ArrivalIndices` (the desk and the no-desk path) and `DocumentHandOvers.IsRequested` (`CaseDocument.Requested` and the validator) (§2.4, §2.11, §2.14, §5); `WirePersistentVoid` clears through `ClearPersistentCalls` (§2.15 item 4).
+- **`OverlayProjection` takes the canvas rect** each caller resolves once at `Awake` (`CanvasRectOf`), so nothing is looked up per frame (§2.10).
+- **The reply bubble** changes only for a choice that adds a traveller line; "Ask about home >" and "< Back" leave the last reply up (§1.7, §2.11).
