@@ -53,8 +53,8 @@ public enum PlaceholderMark
 /// <summary>
 /// Draws a character layer placeholder: a flat shape per layer on the
 /// canvas at quarter size (so it lines up with final art), filled with one
-/// colour and bordered (or, for a whole figure, striped) with another, plus an
-/// optional expression mark. RGBA32, row 0 = bottom (like Texture2D raw
+/// colour and bordered (or, for a whole figure, striped outside the head) with
+/// another, plus an optional expression mark on the head. RGBA32, row 0 = bottom (like Texture2D raw
 /// data), transparent outside the shape. Pure, so it is tested headless;
 /// CharacterArt turns the bytes into a texture when a key has no final art.
 /// </summary>
@@ -140,7 +140,8 @@ public static class LayerPlaceholder
                     continue;
 
                 bool edge = !At(inside, x - Border, y) || !At(inside, x + Border, y) || !At(inside, x, y - Border) || !At(inside, x, y + Border);
-                bool stripe = region == PlaceholderRegion.WholeFigure && (x + y) % StripePeriod < Border;
+                bool stripe = region == PlaceholderRegion.WholeFigure && (x + y) % StripePeriod < Border &&
+                              !PixelShapes.InEllipse(CX, HeadCy, HeadRx, HeadRy, (x + 0.5f) * Scale, (Height - 1 - y + 0.5f) * Scale);
                 Put(rgba, x, y, edge || stripe ? accent : fill);
             }
         }
