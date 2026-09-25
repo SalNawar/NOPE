@@ -24,7 +24,8 @@ public enum EffectChannel
 
 /// <summary>
 /// A generic, channel-tagged bundle of operations. Activated by dominance tiers,
-/// timeline triggers, slot outcomes, or scripted events; multiple effects stack
+/// timeline triggers (including history rules), the timeline leader, slot
+/// outcomes, dialogs or scripted events; multiple effects stack
 /// freely in WorldState.timeline.activeEffects, each with its own duration.
 /// Looked up by asset name (ContentLibrarySO.GetEffectByAssetName).
 /// </summary>
@@ -66,6 +67,9 @@ public sealed class EffectOp
     /// <summary>Target nation (AddNationScore).</summary>
     public NationSO nation;
 
-    /// <summary>Target profile (AddAttributeScore).</summary>
+    /// <summary>Target profile (AddAttributeScore; the SetFact target place).</summary>
     public NationEraProfileSO profile;
+
+    /// <summary>Fact category (SetFact).</summary>
+    public ClueCategory category;
 }

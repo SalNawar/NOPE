@@ -77,6 +77,28 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int supportingPerProfile = 2;
 
+    [Header("History")]
+    /// <summary>Influence a nation needs, strictly above this, to start leading the timeline (and open its Future).</summary>
+    public float leaderFloor = 4f;
+
+    /// <summary>A leader loses the lead when its influence falls to this or below (kept below leaderFloor, so a one-send dip does not flip the Future).</summary>
+    public float leaderKeepFloor = 2f;
+
+    /// <summary>A challenger replaces the leader only when its influence exceeds the leader's by more than this.</summary>
+    [Min(0f)]
+    public float leaderMargin = 2f;
+
+    /// <summary>How often the same (true home, claimed place) pair must be accepted before its carry latches.</summary>
+    [Min(1)]
+    public int carryThreshold = 1;
+
+    /// <summary>The fact an accepted liar carries from their true home into the claimed place (one of the five editable categories).</summary>
+    public ClueCategory carryCategory = ClueCategory.Technology;
+
+    /// <summary>Most templated history news lines a night (the leader's first, then carries).</summary>
+    [Min(1)]
+    public int maxHistoryNewsPerNight = 3;
+
     [Header("Home / Expenses")]
     /// <summary>Base daily living expense (rent/utilities) deducted at Home.</summary>
     [Min(0)]
@@ -106,6 +128,15 @@ public sealed class GameConfigSO : ScriptableObject
     /// <summary>Credits cost to spin the slot machine once.</summary>
     [Min(0)]
     public int slotSpinCost = 10;
+
+    /// <summary>Warns about history knobs that would silently disable a rule.</summary>
+    private void OnValidate()
+    {
+        if (!History.IsEditable(carryCategory))
+            Debug.LogWarning($"[GameConfigSO] '{name}': carryCategory {carryCategory} is not a category history may edit, so carries would silently never record.", this);
+        if (leaderKeepFloor > leaderFloor)
+            Debug.LogWarning($"[GameConfigSO] '{name}': leaderKeepFloor {leaderKeepFloor} is above leaderFloor {leaderFloor} and counts as the floor (no hysteresis at the floor).", this);
+    }
 
     /// <summary>
     /// Returns the money penalty for the Nth penalized citation of the day (1-based).

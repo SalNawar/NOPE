@@ -629,9 +629,13 @@ public sealed class GameManager : MonoBehaviour
         CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accepted, _activeCaseIndex1Based, _worldState, _gameConfig, contentLibrary, evidenceCount);
         _ledger.verdicts.Add(verdict);
 
-        // The traveler is only dispatched (and the timeline moved) when accepted.
+        // The traveler is only dispatched (and the timeline moved) when accepted;
+        // an accepted liar also carries their true home's fact into the claim.
         if (accepted)
+        {
             TimelineService.ApplyVerdictImpacts(inst, inst.claimedEra, verdict.correct, _worldState, contentLibrary);
+            HistoryService.RecordCarry(_worldState, inst, _today.Facts, _gameConfig);
+        }
 
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
