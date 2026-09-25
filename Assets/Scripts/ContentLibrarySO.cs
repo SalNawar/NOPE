@@ -268,9 +268,19 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>
     /// Clears cached lookups when the asset is loaded/reloaded.
-    /// This prevents stale dictionaries after domain reloads or inspector edits.
+    /// This prevents stale dictionaries after domain reloads.
     /// </summary>
-    private void OnEnable()
+    private void OnEnable() => ResetLookups();
+
+    /// <summary>
+    /// Clears cached lookups when the asset changes in the editor (an
+    /// inspector edit, or Generate World rewiring its arrays), so lookups in
+    /// the same editor session never read the old arrays.
+    /// </summary>
+    private void OnValidate() => ResetLookups();
+
+    /// <summary>Drops every cached lookup; the next lookup rebuilds them (EnsureLookups).</summary>
+    private void ResetLookups()
     {
         _eraById = null;
         _effectByName = null;
