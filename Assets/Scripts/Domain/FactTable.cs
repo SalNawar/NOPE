@@ -47,6 +47,13 @@ public readonly struct FactRow
 /// </summary>
 public sealed class FactTable
 {
+    /// <summary>
+    /// The widest fact value a book row shows. The derived Culture value is
+    /// checked against it (Generate World and the content validator); piece 5
+    /// extends the check to every fact value.
+    /// </summary>
+    public const int MaxValueLength = 28;
+
     /// <summary>Fact values per place and category.</summary>
     private readonly Dictionary<(string nation, string era, ClueCategory category), string> _values =
         new Dictionary<(string, string, ClueCategory), string>();

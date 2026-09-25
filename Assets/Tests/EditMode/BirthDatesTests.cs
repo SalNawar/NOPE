@@ -143,6 +143,18 @@ public class BirthDatesTests
         Assert.AreEqual(0, rng.Draws);
     }
 
+    [TestCase("15 Apr 1452", 1495, true, 43)]
+    [TestCase("14 Mar 1505 BCE", -1470, true, 35)]
+    [TestCase("1 Jan 10 BCE", 5, true, 14)]
+    [TestCase("1 Jan 1 BCE", 1, true, 1)]
+    [TestCase("Unknown", 1495, false, 0)]
+    [TestCase("15 Apr 1452", 0, false, 0)]
+    public void TryAgeAt_HasNoYearZero(string date, int atYear, bool ok, int age)
+    {
+        Assert.AreEqual(ok, BirthDates.TryAgeAt(date, atYear, out int actual));
+        Assert.AreEqual(age, actual);
+    }
+
     [TestCase("Unknown", 1630, 1682, false)]
     [TestCase("5 May 1650", 0, 0, false)]
     [TestCase("5 May 1650", 1650, 1650, false)]
