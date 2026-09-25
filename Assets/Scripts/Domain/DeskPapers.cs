@@ -198,9 +198,6 @@ public sealed class DeskPapers
     /// <summary>True while the paper is held in the hand (false out of range).</summary>
     public bool IsHeld(int i) => InRange(i) && StateOf(i) == PaperState.Held;
 
-    /// <summary>The held paper's slot; None for a paper not held or out of range.</summary>
-    public ExamineSlot SlotOf(int i) => IsHeld(i) ? _slots[i] : ExamineSlot.None;
-
     /// <summary>
     /// Takes a paper on the desk into the hand (anything else, or an index out
     /// of range, is not held and nothing changes): the slot on its side

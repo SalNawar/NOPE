@@ -4,8 +4,8 @@ using NUnit.Framework;
 /// <summary>
 /// One case's papers on the desk and the day-1 desk notes. A paper's state is
 /// private, so each test observes it through CanDrag, ScannerBusy,
-/// OnDeskCount, HandOver, Drop, Tick and (piece 10) Hold, IsHeld, SlotOf and
-/// HeldCount; how a click on a paper routes (PaperClicks). Case under test: a
+/// OnDeskCount, HandOver, Drop, Tick and (piece 10) Hold (its HoldResult),
+/// IsHeld and HeldCount; how a click on a paper routes (PaperClicks). Case under test: a
 /// passport handed over on arrival, a permit on request and a letter on
 /// arrival, scans of 1.5 s.
 /// </summary>
@@ -271,13 +271,12 @@ public class DeskPapersTests
         Assert.AreEqual(ExamineSlot.Right, right.Slot);
         Assert.AreEqual(-1, right.Evicted);
         Assert.IsTrue(p.IsHeld(0));
-        Assert.AreEqual(ExamineSlot.Right, p.SlotOf(0));
 
         HoldResult left = p.Hold(1, false);
         Assert.AreEqual(ExamineSlot.Left, left.Slot);
         Assert.AreEqual(2, p.HeldCount);
-        Assert.AreEqual(ExamineSlot.None, p.SlotOf(2), "a paper on the desk has no slot");
-        Assert.AreEqual(ExamineSlot.None, p.SlotOf(-1));
+        Assert.IsFalse(p.IsHeld(2), "a paper on the desk is not held");
+        Assert.IsFalse(p.IsHeld(-1));
     }
 
     [Test]
@@ -302,7 +301,6 @@ public class DeskPapersTests
         Assert.AreEqual(ExamineSlot.Left, r.Slot, "and the new one takes its slot");
         Assert.IsFalse(p.IsHeld(0));
         Assert.IsTrue(p.CanDrag(0), "the evicted paper is on the desk again");
-        Assert.AreEqual(ExamineSlot.None, p.SlotOf(0));
         Assert.AreEqual(2, p.HeldCount);
 
         HoldResult next = p.Hold(0, false);
@@ -370,8 +368,9 @@ public class DeskPapersTests
         Assert.AreEqual(0, p.HeldCount);
         Assert.IsFalse(p.IsHeld(0));
         Assert.IsFalse(p.CanDrag(0));
-        Assert.AreEqual(ExamineSlot.None, p.SlotOf(1));
+        Assert.IsFalse(p.IsHeld(1));
         CollectionAssert.IsEmpty(p.PutBackAll());
+        Assert.IsFalse(p.Hold(0, false).Held, "a returned paper cannot be held");
     }
 
     [Test]
