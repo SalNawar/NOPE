@@ -7,8 +7,8 @@ using System.Collections.Generic;
 /// date of the first day, the day ranges a displaced person's file is
 /// drawn from (phase 3), and the ranges and transponder models 2150
 /// citizens' accounts are drawn from (phase 6). Content, written into the
-/// content library by Generate World; later phases add the clerk's account
-/// and the agency's other lists.
+/// content library by Generate World, with the clerk's own account (phase
+/// 25; phase 13 adds its debt); later phases add the agency's other lists.
 /// </summary>
 [Serializable]
 public sealed class AgencyContent
@@ -24,6 +24,9 @@ public sealed class AgencyContent
 
     /// <summary>The day ranges of a displaced person's file (agency.displaced: found within 30 days, a certificate valid 3 to 365 days; AgencyNumbers.Displaced).</summary>
     public DisplacementRanges displaced = new DisplacementRanges();
+
+    /// <summary>The clerk's own account as authored ("agency.clerk"; the Citizen Account app shows it, redesign phase 25; its checks are ClerkContent.Problems).</summary>
+    public ClerkContent clerk = new();
 
     /// <summary>The ranges a 2150 citizen's account is drawn from (agency.accounts: Valid Until, past trips, each status's debt and trips; AccountMaker.Make).</summary>
     public AccountRanges accounts = new AccountRanges();

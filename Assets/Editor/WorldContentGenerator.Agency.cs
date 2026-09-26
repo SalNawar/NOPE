@@ -6,15 +6,20 @@ using UnityEditor;
 /// <summary>
 /// Generate World's agency block (redesign phase 2; the traveller-types spec's
 /// F6): world_source.json "agency" (the agency's printed name, its programme
-/// line and day 1's date; the displaced's day ranges, phase 3; the accounts'
-/// ranges and the transponder models, phase 6) is checked
-/// (AgencyContent.Problems) and written into the content library, where the
-/// desk calendar, the Records app and case generation read it.
+/// line and day 1's date; the displaced's day ranges, phase 3; the clerk's
+/// own account, "agency.clerk", phase 25: ClerkContent.Problems, which the
+/// Citizen Account app shows; the accounts' ranges and the transponder
+/// models, phase 6) is checked (AgencyContent.Problems) and written into the
+/// content library, where the desk calendar, the Records app, the Citizen
+/// Account app and case generation read it.
 /// </summary>
 public static partial class WorldContentGenerator
 {
-    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced").</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public AccountsData accounts; public TransponderData[] transponders; }
+    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models).</summary>
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; }
+
+    /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
+    [Serializable] private sealed class ClerkData { public string citizenId; public string name; public string born; public string lineage; public string employment; public string note; }
 
     /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name).</summary>
     [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public StatusData[] statuses; }
@@ -33,6 +38,7 @@ public static partial class WorldContentGenerator
             programme = a.programme,
             firstDate = a.firstDate,
             displaced = a.displaced,
+            clerk = BuildClerk(a.clerk),
             accounts = a.accounts == null ? null : new AccountRanges
             {
                 validDaysMin = a.accounts.validDaysMin,
@@ -61,6 +67,12 @@ public static partial class WorldContentGenerator
                 .ToList()
         };
 
+    /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>
+    private static ClerkContent BuildClerk(ClerkData c) =>
+        c == null
+            ? new ClerkContent()
+            : new ClerkContent { citizenId = c.citizenId, name = c.name, born = c.born, lineage = c.lineage, employment = c.employment, note = c.note };
+
     /// <summary>A missing "agency" section, or its problems (AgencyContent.Problems, the validator's rule).</summary>
     private static void CheckAgency(WorldSource src, List<string> errors)
     {
@@ -69,7 +81,9 @@ public static partial class WorldContentGenerator
             errors.Add($"'{SourcePath}' has no \"agency\" section (name, programme, firstDate).");
             return;
         }
-        errors.AddRange(BuildAgency(src.agency).Problems());
+        AgencyContent agency = BuildAgency(src.agency);
+        errors.AddRange(agency.Problems());
+        errors.AddRange(agency.clerk.Problems());
         foreach (StatusData s in src.agency.accounts?.statuses ?? Array.Empty<StatusData>())
             if (!ParseEnum(s.status, out CitizenStatus _))
                 errors.Add($"agency.accounts.statuses: '{s.status}' is not an account status ({string.Join(", ", Enum.GetNames(typeof(CitizenStatus)))}).");

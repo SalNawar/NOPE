@@ -55,10 +55,6 @@ MonoBehaviour:
     text: "\u56DE\u5BB6"
     gloss: 0
     tier: 0
-  - key: records.title
-    text: "\u516C\u6C11\u6863\u6848"
-    gloss: 0
-    tier: 0
   - key: records.search
     text: "\u641C\u7D22"
     gloss: 0
@@ -79,52 +75,32 @@ MonoBehaviour:
     text: "\u77E5\u6089"
     gloss: 0
     tier: 0
-  - key: window.directives
-    text: "\u6307\u4EE4"
-    gloss: 0
-    tier: 0
-  - key: window.scanner
-    text: "\u504F\u5DEE\u62A5\u544A"
-    gloss: 0
-    tier: 0
   - key: window.settings
     text: "\u8BBE\u7F6E"
-    gloss: 0
-    tier: 0
-  - key: icon.directives
-    text: "\u6307\u4EE4"
-    gloss: 0
-    tier: 0
-  - key: icon.scanner
-    text: "\u504F\u5DEE\u62A5\u544A"
-    gloss: 0
-    tier: 0
-  - key: icon.records
-    text: "\u6863\u6848"
     gloss: 0
     tier: 0
   - key: icon.internet
     text: "\u4E92\u8054\u7F51"
     gloss: 0
     tier: 0
-  - key: icon.lexicon
-    text: "\u8BCD\u5178"
-    gloss: 0
-    tier: 0
-  - key: icon.dialect
-    text: "\u65B9\u8A00"
-    gloss: 0
-    tier: 0
-  - key: icon.material
-    text: "\u6750\u6599"
-    gloss: 0
-    tier: 0
   - key: icon.notes
     text: "\u4FBF\u7B3A"
     gloss: 0
     tier: 0
-  - key: icon.clueLog
-    text: "\u7EBF\u7D22"
+  - key: icon.investigation
+    text: "\u8C03\u67E5"
+    gloss: 0
+    tier: 0
+  - key: icon.mail
+    text: "\u90AE\u4EF6"
+    gloss: 0
+    tier: 0
+  - key: icon.account
+    text: "\u516C\u6C11\u8D26\u6237"
+    gloss: 0
+    tier: 0
+  - key: icon.settings
+    text: "\u8BBE\u7F6E"
     gloss: 0
     tier: 0
   - key: tray.day

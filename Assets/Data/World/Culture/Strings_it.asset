@@ -55,10 +55,6 @@ MonoBehaviour:
     text: A CASA
     gloss: 0
     tier: 0
-  - key: records.title
-    text: Anagrafe
-    gloss: 0
-    tier: 0
   - key: records.search
     text: CERCA
     gloss: 0
@@ -79,52 +75,32 @@ MonoBehaviour:
     text: Preso atto
     gloss: 0
     tier: 0
-  - key: window.directives
-    text: Direttive
-    gloss: 0
-    tier: 0
-  - key: window.scanner
-    text: Rapporto deviazioni
-    gloss: 0
-    tier: 0
   - key: window.settings
     text: Impostazioni
-    gloss: 0
-    tier: 0
-  - key: icon.directives
-    text: Direttive
-    gloss: 0
-    tier: 0
-  - key: icon.scanner
-    text: Rapporto deviazioni
-    gloss: 0
-    tier: 0
-  - key: icon.records
-    text: Anagrafe
     gloss: 0
     tier: 0
   - key: icon.internet
     text: Internet
     gloss: 0
     tier: 0
-  - key: icon.lexicon
-    text: Lessico
-    gloss: 0
-    tier: 0
-  - key: icon.dialect
-    text: Dialetto
-    gloss: 0
-    tier: 0
-  - key: icon.material
-    text: Materiali
-    gloss: 0
-    tier: 0
   - key: icon.notes
     text: Appunti
     gloss: 0
     tier: 0
-  - key: icon.clueLog
-    text: Indizi
+  - key: icon.investigation
+    text: Indagine
+    gloss: 0
+    tier: 0
+  - key: icon.mail
+    text: Posta
+    gloss: 0
+    tier: 0
+  - key: icon.account
+    text: Conto del cittadino
+    gloss: 0
+    tier: 0
+  - key: icon.settings
+    text: Impostazioni
     gloss: 0
     tier: 0
   - key: tray.day

@@ -229,12 +229,6 @@ MonoBehaviour:
     hasInk: 1
     ink: {r: 0.9490196, g: 0.9019608, b: 0.7882353, a: 1}
     textClass: 1
-  - role: 32
-    hasFill: 1
-    fill: {r: 0.16862746, g: 0.11372549, b: 0.05490196, a: 0.55}
-    hasInk: 0
-    ink: {r: 0, g: 0, b: 0, a: 0}
-    textClass: 0
   - role: 33
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 1}
@@ -256,6 +250,60 @@ MonoBehaviour:
   - role: 36
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 0}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 46
+    hasFill: 1
+    fill: {r: 0.10980392, g: 0.30588236, b: 0.5019608, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 47
+    hasFill: 1
+    fill: {r: 0.9098039, g: 0.8509804, b: 0.70980394, a: 1}
+    hasInk: 1
+    ink: {r: 0.16862746, g: 0.11372549, b: 0.05490196, a: 1}
+    textClass: 1
+  - role: 48
+    hasFill: 1
+    fill: {r: 0.9490196, g: 0.9019608, b: 0.7882353, a: 1}
+    hasInk: 1
+    ink: {r: 0.16862746, g: 0.11372549, b: 0.05490196, a: 1}
+    textClass: 1
+  - role: 49
+    hasFill: 1
+    fill: {r: 0.9098039, g: 0.8509804, b: 0.70980394, a: 1}
+    hasInk: 1
+    ink: {r: 0.16862746, g: 0.11372549, b: 0.05490196, a: 1}
+    textClass: 1
+  - role: 50
+    hasFill: 1
+    fill: {r: 1, g: 0.9529412, b: 0.76862746, a: 1}
+    hasInk: 1
+    ink: {r: 0.16862746, g: 0.11372549, b: 0.05490196, a: 1}
+    textClass: 1
+  - role: 51
+    hasFill: 1
+    fill: {r: 0.78431374, g: 0.5882353, b: 0.18039216, a: 1}
+    hasInk: 1
+    ink: {r: 0.101960786, g: 0.07058824, b: 0.03137255, a: 1}
+    textClass: 1
+  - role: 52
+    hasFill: 1
+    fill: {r: 0.07058824, g: 0.20392157, b: 0.3372549, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 53
+    hasFill: 1
+    fill: {r: 0.78431374, g: 0.5882353, b: 0.18039216, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 54
+    hasFill: 1
+    fill: {r: 0.78431374, g: 0.5882353, b: 0.18039216, a: 0.45}
     hasInk: 0
     ink: {r: 0, g: 0, b: 0, a: 0}
     textClass: 0

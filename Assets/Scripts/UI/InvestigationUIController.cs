@@ -34,7 +34,11 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private Button denyButton;
     [SerializeField] private CompareController compareController;
 
+    /// <summary>The PC's compare dock (DK9), above the window layer so no window covers it; shown with the case overlay, while a traveller is at the desk.</summary>
+    [SerializeField] private GameObject compareDock;
+
     [Header("Desk windows (built by the office tool)")]
+    /// <summary>The desktop's window layer: outside the case overlay, so a window opened between travellers (Settings) shows too.</summary>
     [SerializeField] private RectTransform windowLayer;
     [SerializeField] private DocumentWindowController documentWindowTemplate;
     [SerializeField] private ReferenceBookWindowController bookWindowTemplate;
@@ -163,6 +167,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (bookWindowTemplate != null) bookWindowTemplate.gameObject.SetActive(false);
         if (bookShelfButtonTemplate != null) bookShelfButtonTemplate.gameObject.SetActive(false);
         if (root != null) root.SetActive(false);
+        if (compareDock != null) compareDock.SetActive(false);
 
         _evidence.Attach();
         WarnAboutWiring(wiring);
@@ -273,13 +278,20 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowRich(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases) and closes its windows (so the taskbar keeps no button for them); the desktop shows its idle line and the office's claim tag empties.</summary>
+    /// <summary>Hides the investigation overlay and the compare dock (between cases) and closes its windows (so the taskbar keeps no button for them); the desktop shows its idle line and the office's claim tag empties.</summary>
     public void Hide()
     {
         CloseAllWindows();
-        if (root != null) root.SetActive(false);
+        ShowCaseLayers(false);
         if (hud != null) hud.SetClaim(string.Empty);
-        if (idleScreen != null) idleScreen.SetActive(true);
+    }
+
+    /// <summary>Shows the case overlay and the compare dock, or hides them and shows the desktop's idle line (the window layer is neither: it shows with or without a case).</summary>
+    private void ShowCaseLayers(bool on)
+    {
+        if (root != null) root.SetActive(on);
+        if (compareDock != null) compareDock.SetActive(on);
+        if (idleScreen != null) idleScreen.SetActive(!on);
     }
 
     /// <summary>
@@ -291,8 +303,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
-        if (root != null) root.SetActive(true);
-        if (idleScreen != null) idleScreen.SetActive(false);
+        ShowCaseLayers(true);
 
         string claim = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
         if (claimText != null)
@@ -304,7 +315,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         CloseAllWindows();
         _documents.Clear();
         _interview.BeginCase(inst);
-        _documents.Present(inst);
+        _documents.Present(inst, lib != null ? lib.Agency : null);
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
         _reference.BuildBookShelf(lib);
 

@@ -1026,6 +1026,14 @@
       "validDaysMin": 3,
       "validDaysMax": 365
     },
+    "clerk": {
+      "citizenId": "773-2840-19",
+      "name": "Theo Marlow",
+      "born": "9 Feb 2121",
+      "lineage": "Victorian Britain",
+      "employment": "Temporal Customs · Desk 3",
+      "note": "No remarks on file."
+    },
     "accounts": {
       "validDaysMin": 3,
       "validDaysMax": 365,
@@ -7871,7 +7879,22 @@
           "other": "lanyer"
         }
       ]
-    }
+    },
+    "mail": [
+      {
+        "id": "welcome",
+        "fromDay": 1,
+        "untilDay": 0,
+        "flag": "",
+        "from": "Customs Directorate",
+        "subject": "Welcome to Desk 3",
+        "body": [
+          "Welcome to Temporal Customs. Every traveller at your desk wants to depart for the past; your desk decides who goes.",
+          "Check each paper against the Citizen Records and the reference books, log every deviation before you deny, and follow the day's directives.",
+          "Your pay is credited when each shift ends. Your Citizen Account holds your statement. Departures are voluntary."
+        ]
+      }
+    ]
   },
   "ui": {
     "readingLanguage": "en",
@@ -8112,13 +8135,6 @@
         "textClass": "Text"
       },
       {
-        "role": "DeskDim",
-        "fill": "dark",
-        "alpha": 0.55,
-        "ink": "",
-        "textClass": "None"
-      },
-      {
         "role": "InputField",
         "fill": "white",
         "alpha": 1,
@@ -8143,6 +8159,69 @@
         "role": "ClickCatcher",
         "fill": "white",
         "alpha": 0,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "TabStrip",
+        "fill": "chrome",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "Tab",
+        "fill": "face",
+        "alpha": 1,
+        "ink": "faceInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "TabActive",
+        "fill": "paper",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "Sidebar",
+        "fill": "face",
+        "alpha": 1,
+        "ink": "faceInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "SearchResults",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "Badge",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "Toast",
+        "fill": "chromeDeep",
+        "alpha": 1,
+        "ink": "chromeInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "FocusRing",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "IconSelection",
+        "fill": "accent",
+        "alpha": 0.45,
         "ink": "",
         "textClass": "None"
       }
@@ -8321,11 +8400,6 @@
           "ink": ""
         },
         {
-          "role": "DeskDim",
-          "fill": "#0F121A8C",
-          "ink": ""
-        },
-        {
           "role": "StickyNote",
           "fill": "#FFF599F7",
           "ink": "#1A1714"
@@ -8384,6 +8458,16 @@
           "role": "DiegeticDevice",
           "fill": "#FFFFFF",
           "ink": "#5E5446"
+        },
+        {
+          "role": "DiegeticForm",
+          "fill": "#F7F5EB",
+          "ink": "#1A1714"
+        },
+        {
+          "role": "SiteContent",
+          "fill": "#FFFFFF",
+          "ink": "#1A1714"
         }
       ],
       "art": [
@@ -8475,7 +8559,7 @@
         "key": "records.title",
         "text": "Citizen Records",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "records.search",
@@ -8511,13 +8595,13 @@
         "key": "window.directives",
         "text": "Directives",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "window.scanner",
         "text": "Deviation Report",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "window.settings",
@@ -8529,41 +8613,23 @@
         "key": "icon.directives",
         "text": "Directives",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "icon.scanner",
         "text": "Deviation Report",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "icon.records",
         "text": "Records",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "icon.internet",
         "text": "Internet",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "icon.lexicon",
-        "text": "Lexicon",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "icon.dialect",
-        "text": "Dialect",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "icon.material",
-        "text": "Material",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -8574,10 +8640,34 @@
         "tier": "Flavour"
       },
       {
+        "key": "icon.investigation",
+        "text": "Investigation",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.mail",
+        "text": "Mail",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.account",
+        "text": "Citizen Account",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.settings",
+        "text": "Settings",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "icon.clueLog",
         "text": "Clue Log",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "tray.day",
@@ -8730,50 +8820,14 @@
         "tier": "Full"
       },
       {
-        "key": "window.lexicon",
-        "text": "Lexicon",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.dialect",
-        "text": "Dialect",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.material",
-        "text": "Material Analysis",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.notes",
-        "text": "Sticky Notes",
+        "text": "Notes",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "body.lexicon",
-        "text": "Wikipedia-style era glossary. (placeholder)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "body.dialect",
-        "text": "Notes on accents and phrasing. (placeholder)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "body.material",
-        "text": "Flags tech/materials beyond the claimed era. (upgrade)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "body.notes",
-        "text": "Your notes. (placeholder)",
+        "key": "window.investigation",
+        "text": "Investigation",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9234,8 +9288,560 @@
         "tier": "Full"
       },
       {
+        "key": "settings.desktop",
+        "text": "Desktop icons open with",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.iconDouble",
+        "text": "Double click",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.iconSingle",
+        "text": "Single click",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resetIcons",
+        "text": "Reset icon positions",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desktop.arrange",
+        "text": "Arrange icons",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.open",
+        "text": "Open",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.note",
         "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens. Reduced motion shows translations at once.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "startmenu.mail",
+        "text": "Mail",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "startmenu.mailUnread",
+        "text": "Mail ({0})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "startmenu.account",
+        "text": "Citizen Account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "startmenu.notes",
+        "text": "Notes",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.mail",
+        "text": "Mail",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.mailUnread",
+        "text": "Mail ({0} unread)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.account",
+        "text": "Citizen Account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "window.shortcuts",
+        "text": "Keyboard shortcuts",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.keyboard",
+        "text": "Keyboard",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.showShortcuts",
+        "text": "Show shortcuts",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.card",
+        "text": "Esc: close a menu, leave a text field, close the Start menu or cancel a drag; with none of those, it leaves the PC.\nDesktop icons: double-click one to open it (Settings can make it one click), drag it anywhere, arrows move the selection and Enter opens it; right-click the desktop to arrange them.\nDouble-click a title bar: maximise or restore the window.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.inbox",
+        "text": "INBOX",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.none",
+        "text": "No mail.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.select",
+        "text": "Select a message to read it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.unreadRow",
+        "text": "• {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.rowMeta",
+        "text": "Day {0} · {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.form.title",
+        "text": "INTERNAL MEMORANDUM",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.form.to",
+        "text": "TO",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.form.from",
+        "text": "FROM",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.form.date",
+        "text": "DATE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.form.ref",
+        "text": "REF",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.form.subject",
+        "text": "SUBJECT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.to",
+        "text": "All desk officers",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.from.directorate",
+        "text": "Customs Directorate",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.from.times",
+        "text": "The Temporal Times",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.from.integrity",
+        "text": "Timeline Integrity Office",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.subject.memo",
+        "text": "Today's directives",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.subject.times",
+        "text": "The Temporal Times, day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.subject.citation",
+        "text": "Citation notice: traveller {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.body.noDirectives",
+        "text": "No travel directives today.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.body.times",
+        "text": "Today's edition is on the News site.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.body.timesArchived",
+        "text": "This edition is kept in the News site's archive.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.body.citation",
+        "text": "A copy of the citation slip you acknowledged:",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.link.rules",
+        "text": "Open the directives >",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.link.news",
+        "text": "Read it on the News site >",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "mail.stamp",
+        "text": "RECEIVED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.form.title",
+        "text": "CITIZEN RECORD EXTRACT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.query",
+        "text": "Account holder: {0} · Citizen ID {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.group.records",
+        "text": "RECORDS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.group.forms",
+        "text": "FORMS ON FILE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.group.travel",
+        "text": "TRAVEL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.name",
+        "text": "Name",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.born",
+        "text": "Born",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.lineage",
+        "text": "Lineage",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.citizenId",
+        "text": "Citizen ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.status",
+        "text": "Status",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.standing",
+        "text": "Standing",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.debt",
+        "text": "Debt",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.balance",
+        "text": "Balance",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.employment",
+        "text": "Employment",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.departure",
+        "text": "Booked departure",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.row.note",
+        "text": "Note",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.status.eligible",
+        "text": "Eligible",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.status.standard",
+        "text": "Standard",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.standing.good",
+        "text": "Good",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.standing.frozen",
+        "text": "Frozen",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.departure.none",
+        "text": "None",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.departure.booked",
+        "text": "Debt Relief departure, booked",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.instalmentRate",
+        "text": "{0}% of pay to Debt Relief",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.unknown",
+        "text": "–",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.statement.title",
+        "text": "STATEMENT OF ACCOUNT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.day",
+        "text": "DAY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.wages",
+        "text": "WAGES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.fines",
+        "text": "FINES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.debtRelief",
+        "text": "DEBT RELIEF",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.household",
+        "text": "HOUSEHOLD",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.purchases",
+        "text": "PURCHASES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.balance",
+        "text": "BALANCE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.col.owed",
+        "text": "OWED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.statement.none",
+        "text": "No entries yet: a day is written when its shift ends.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.statement.unit",
+        "text": "Amounts in {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "account.finePrint",
+        "text": "Departures are voluntary.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.days",
+        "text": "DAYS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.day",
+        "text": "Day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.today",
+        "text": "Day {0} (today)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.pageTitle",
+        "text": "NOTES · DAY {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.clippings",
+        "text": "CLIPPINGS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.notes",
+        "text": "NOTES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.counter",
+        "text": "{0} / {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.hint",
+        "text": "Nothing here yet. Copy a text, then Paste clipping; or type below.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.paste",
+        "text": "Paste clipping",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.pasted",
+        "text": "Pasted",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.remove",
+        "text": "X",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.placeholder",
+        "text": "Type your notes here...",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.loose",
+        "text": "Other clippings",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "notes.full",
+        "text": "This page holds {0} clippings: remove one to paste another.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -10018,10 +10624,6 @@
             "text": "إلى البيت"
           },
           {
-            "key": "records.title",
-            "text": "سجلات المواطنين"
-          },
-          {
             "key": "records.search",
             "text": "بحث"
           },
@@ -10042,52 +10644,32 @@
             "text": "تم الاطلاع"
           },
           {
-            "key": "window.directives",
-            "text": "التوجيهات"
-          },
-          {
-            "key": "window.scanner",
-            "text": "تقرير الانحرافات"
-          },
-          {
             "key": "window.settings",
             "text": "الإعدادات"
-          },
-          {
-            "key": "icon.directives",
-            "text": "التوجيهات"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "تقرير الانحرافات"
-          },
-          {
-            "key": "icon.records",
-            "text": "السجلات"
           },
           {
             "key": "icon.internet",
             "text": "الإنترنت"
           },
           {
-            "key": "icon.lexicon",
-            "text": "المعجم"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "اللهجات"
-          },
-          {
-            "key": "icon.material",
-            "text": "المواد"
-          },
-          {
             "key": "icon.notes",
             "text": "ملاحظات"
           },
           {
-            "key": "icon.clueLog",
-            "text": "سجل الأدلة"
+            "key": "icon.investigation",
+            "text": "التحقيق"
+          },
+          {
+            "key": "icon.mail",
+            "text": "البريد"
+          },
+          {
+            "key": "icon.account",
+            "text": "حساب المواطن"
+          },
+          {
+            "key": "icon.settings",
+            "text": "الإعدادات"
           },
           {
             "key": "tray.day",
@@ -10160,10 +10742,6 @@
             "text": "ΣΠΙΤΙ"
           },
           {
-            "key": "records.title",
-            "text": "Μητρώο Πολιτών"
-          },
-          {
             "key": "records.search",
             "text": "ΑΝΑΖΗΤΗΣΗ"
           },
@@ -10184,52 +10762,32 @@
             "text": "Ελήφθη"
           },
           {
-            "key": "window.directives",
-            "text": "Οδηγίες"
-          },
-          {
-            "key": "window.scanner",
-            "text": "Αναφορά αποκλίσεων"
-          },
-          {
             "key": "window.settings",
             "text": "Ρυθμίσεις"
-          },
-          {
-            "key": "icon.directives",
-            "text": "Οδηγίες"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "Αναφορά αποκλίσεων"
-          },
-          {
-            "key": "icon.records",
-            "text": "Μητρώο"
           },
           {
             "key": "icon.internet",
             "text": "Διαδίκτυο"
           },
           {
-            "key": "icon.lexicon",
-            "text": "Λεξικό"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "Διάλεκτος"
-          },
-          {
-            "key": "icon.material",
-            "text": "Υλικά"
-          },
-          {
             "key": "icon.notes",
             "text": "Σημειώσεις"
           },
           {
-            "key": "icon.clueLog",
-            "text": "Ενδείξεις"
+            "key": "icon.investigation",
+            "text": "Έρευνα"
+          },
+          {
+            "key": "icon.mail",
+            "text": "Αλληλογραφία"
+          },
+          {
+            "key": "icon.account",
+            "text": "Λογαριασμός πολίτη"
+          },
+          {
+            "key": "icon.settings",
+            "text": "Ρυθμίσεις"
           },
           {
             "key": "tray.day",
@@ -10302,10 +10860,6 @@
             "text": "A CASA"
           },
           {
-            "key": "records.title",
-            "text": "Anagrafe"
-          },
-          {
             "key": "records.search",
             "text": "CERCA"
           },
@@ -10326,52 +10880,32 @@
             "text": "Preso atto"
           },
           {
-            "key": "window.directives",
-            "text": "Direttive"
-          },
-          {
-            "key": "window.scanner",
-            "text": "Rapporto deviazioni"
-          },
-          {
             "key": "window.settings",
             "text": "Impostazioni"
-          },
-          {
-            "key": "icon.directives",
-            "text": "Direttive"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "Rapporto deviazioni"
-          },
-          {
-            "key": "icon.records",
-            "text": "Anagrafe"
           },
           {
             "key": "icon.internet",
             "text": "Internet"
           },
           {
-            "key": "icon.lexicon",
-            "text": "Lessico"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "Dialetto"
-          },
-          {
-            "key": "icon.material",
-            "text": "Materiali"
-          },
-          {
             "key": "icon.notes",
             "text": "Appunti"
           },
           {
-            "key": "icon.clueLog",
-            "text": "Indizi"
+            "key": "icon.investigation",
+            "text": "Indagine"
+          },
+          {
+            "key": "icon.mail",
+            "text": "Posta"
+          },
+          {
+            "key": "icon.account",
+            "text": "Conto del cittadino"
+          },
+          {
+            "key": "icon.settings",
+            "text": "Impostazioni"
           },
           {
             "key": "tray.day",
@@ -10444,10 +10978,6 @@
             "text": "NACH HAUSE"
           },
           {
-            "key": "records.title",
-            "text": "Einwohnerregister"
-          },
-          {
             "key": "records.search",
             "text": "SUCHEN"
           },
@@ -10468,52 +10998,32 @@
             "text": "Zur Kenntnis"
           },
           {
-            "key": "window.directives",
-            "text": "Anweisungen"
-          },
-          {
-            "key": "window.scanner",
-            "text": "Abweichungsbericht"
-          },
-          {
             "key": "window.settings",
             "text": "Einstellungen"
-          },
-          {
-            "key": "icon.directives",
-            "text": "Anweisungen"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "Abweichungsbericht"
-          },
-          {
-            "key": "icon.records",
-            "text": "Register"
           },
           {
             "key": "icon.internet",
             "text": "Internet"
           },
           {
-            "key": "icon.lexicon",
-            "text": "Lexikon"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "Mundart"
-          },
-          {
-            "key": "icon.material",
-            "text": "Material"
-          },
-          {
             "key": "icon.notes",
             "text": "Notizen"
           },
           {
-            "key": "icon.clueLog",
-            "text": "Hinweise"
+            "key": "icon.investigation",
+            "text": "Ermittlung"
+          },
+          {
+            "key": "icon.mail",
+            "text": "Post"
+          },
+          {
+            "key": "icon.account",
+            "text": "Bürgerkonto"
+          },
+          {
+            "key": "icon.settings",
+            "text": "Einstellungen"
           },
           {
             "key": "tray.day",
@@ -10586,10 +11096,6 @@
             "text": "回家"
           },
           {
-            "key": "records.title",
-            "text": "公民档案"
-          },
-          {
             "key": "records.search",
             "text": "搜索"
           },
@@ -10610,52 +11116,32 @@
             "text": "知悉"
           },
           {
-            "key": "window.directives",
-            "text": "指令"
-          },
-          {
-            "key": "window.scanner",
-            "text": "偏差报告"
-          },
-          {
             "key": "window.settings",
             "text": "设置"
-          },
-          {
-            "key": "icon.directives",
-            "text": "指令"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "偏差报告"
-          },
-          {
-            "key": "icon.records",
-            "text": "档案"
           },
           {
             "key": "icon.internet",
             "text": "互联网"
           },
           {
-            "key": "icon.lexicon",
-            "text": "词典"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "方言"
-          },
-          {
-            "key": "icon.material",
-            "text": "材料"
-          },
-          {
             "key": "icon.notes",
             "text": "便笺"
           },
           {
-            "key": "icon.clueLog",
-            "text": "线索"
+            "key": "icon.investigation",
+            "text": "调查"
+          },
+          {
+            "key": "icon.mail",
+            "text": "邮件"
+          },
+          {
+            "key": "icon.account",
+            "text": "公民账户"
+          },
+          {
+            "key": "icon.settings",
+            "text": "设置"
           },
           {
             "key": "tray.day",
@@ -10728,10 +11214,6 @@
             "text": "帰宅"
           },
           {
-            "key": "records.title",
-            "text": "住民記録"
-          },
-          {
             "key": "records.search",
             "text": "検索"
           },
@@ -10752,52 +11234,32 @@
             "text": "了解"
           },
           {
-            "key": "window.directives",
-            "text": "指示"
-          },
-          {
-            "key": "window.scanner",
-            "text": "逸脱報告"
-          },
-          {
             "key": "window.settings",
             "text": "設定"
-          },
-          {
-            "key": "icon.directives",
-            "text": "指示"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "逸脱報告"
-          },
-          {
-            "key": "icon.records",
-            "text": "記録"
           },
           {
             "key": "icon.internet",
             "text": "インターネット"
           },
           {
-            "key": "icon.lexicon",
-            "text": "用語集"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "方言"
-          },
-          {
-            "key": "icon.material",
-            "text": "素材"
-          },
-          {
             "key": "icon.notes",
             "text": "メモ"
           },
           {
-            "key": "icon.clueLog",
-            "text": "手がかり"
+            "key": "icon.investigation",
+            "text": "調査"
+          },
+          {
+            "key": "icon.mail",
+            "text": "メール"
+          },
+          {
+            "key": "icon.account",
+            "text": "市民口座"
+          },
+          {
+            "key": "icon.settings",
+            "text": "設定"
           },
           {
             "key": "tray.day",

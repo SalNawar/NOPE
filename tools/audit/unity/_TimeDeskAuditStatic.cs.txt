@@ -195,13 +195,13 @@ public static class _TimeDeskAuditStatic
         return world;
     }
 
-    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place named.</summary>
+    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place named, each paper's serial after its name (redesign phase 4).</summary>
     public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace)
     {
         List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();
         IEnumerable<string> tells = fields.Where(f => f.isAnachronism).Select(f => $"{f.category}/Papers").Distinct()
             .Concat(c.answers.Where(a => a.isTell).Select(a => $"{a.category}/Answer"));
-        string papers = string.Join(";", c.documents.Select(d => $"{(d.template != null ? d.template.displayName : "?")}:" +
+        string papers = string.Join(";", c.documents.Select(d => $"{(d.template != null ? d.template.displayName : "?")}[{d.serial}]:" +
                                                                 string.Join(",", d.fields.Select(f => $"{f.label}={f.value}"))));
         string answers = string.Join(";", c.answers.Select(a => $"{a.category}={a.value}{(a.isTell ? "[TELL]" : "")}"));
         string look = c.look != null ? c.look.Describe() : "none";
