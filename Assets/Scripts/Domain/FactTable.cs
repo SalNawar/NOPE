@@ -73,11 +73,13 @@ public sealed class FactTable
     /// Adds one fact. Blank values and repeats of an existing (place, category)
     /// are ignored (first wins), returning false.
     /// </summary>
-    /// <exception cref="ArgumentException">A place id is blank.</exception>
+    /// <exception cref="ArgumentException">A place id or the origin label is blank (audit R1-017: a place without a label would read as absent to <see cref="HasPlace"/> and <see cref="OriginLabel"/>).</exception>
     public bool Add(string nationId, string eraId, string originLabel, ClueCategory category, string value)
     {
         if (string.IsNullOrWhiteSpace(nationId) || string.IsNullOrWhiteSpace(eraId))
             throw new ArgumentException("A fact needs a nation id and an era id.");
+        if (string.IsNullOrWhiteSpace(originLabel))
+            throw new ArgumentException($"The fact of {nationId}_{eraId} needs an origin label.");
 
         if (string.IsNullOrWhiteSpace(value) || _values.ContainsKey((nationId, eraId, category)))
             return false;
@@ -112,6 +114,10 @@ public sealed class FactTable
     /// <summary>True when history revised the cell (MarkChanged); false for null ids and unmarked cells.</summary>
     public bool IsChanged(string nationId, string eraId, ClueCategory category) =>
         nationId != null && eraId != null && _changed.Contains((nationId, eraId, category));
+
+    /// <summary>True when the place has a fact in today's table (null ids: false).</summary>
+    public bool HasPlace(string nationId, string eraId) =>
+        nationId != null && eraId != null && _labels.ContainsKey((nationId, eraId));
 
     /// <summary>The place's origin label, or null when it is not in today's table.</summary>
     public string OriginLabel(string nationId, string eraId) =>

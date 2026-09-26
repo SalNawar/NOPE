@@ -284,10 +284,10 @@ public class CaseStepsTests
     public void Compared_ANamedCategoryTheCaseCannotState_OrAnUnknownName_IsNoPart()
     {
         CaseProgress p = Progress();
-        StepSpec transponder = Step("transponder", StepWhen.Compared, StatementKind.Field, TruthKind.Record, new[] { "TransponderId", "Name", "Politics" });
+        StepSpec transponder = Step("transponder", StepWhen.Compared, StatementKind.Field, TruthKind.Record, new[] { "Horoscope", "Name", "TransponderId" });
 
         CollectionAssert.AreEqual(new[] { ClueCategory.Name }, CaseSteps.Categories(transponder, p),
-                                  "a category a later phase appends matches nothing yet; none of the papers states a politics field");
+                                  "a name no category has yet matches nothing; no paper of a displaced traveller states a transponder");
     }
 
     [Test]

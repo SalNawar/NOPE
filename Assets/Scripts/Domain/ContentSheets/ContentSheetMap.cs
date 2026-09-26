@@ -42,7 +42,23 @@ public static class ContentSheetMap
                 Num("clerk.garnishShare").Note("the share of each shift's pay that goes to the clerk's debt (0.25 = 25%)"),
                 Text("clerk.reliefEmployer").Note("the clerk's own Debt Relief Labour Contract on the bankrupt ending"),
                 Text("clerk.reliefWorksite"),
-                Int("clerk.reliefWage").Note("the contract's day wage in cr; its term is the debt at this wage")),
+                Int("clerk.reliefWage").Note("the contract's day wage in cr; its term is the debt at this wage"),
+                Single("agencyAccounts", "accounts",
+                    Int("validDaysMin").Note("the fewest days after today a citizen's honest paper is valid"),
+                    Int("validDaysMax").Note("the most days after today a citizen's honest paper is valid"),
+                    Int("tripsWithinDays").Note("a past trip on an account left 1 to this many days ago"),
+                    Rows("agencyStatuses", "statuses",
+                        Text("status").Required().OneOf("Premium", "Standard", "Eligible"),
+                        Int("debtMin"),
+                        Int("debtMax"),
+                        Int("tripsMin"),
+                        Int("tripsMax")).Note("each account status's debt and past trips")).Note("the ranges a 2150 citizen's Citizen Account is drawn from"),
+                Rows("agencyTransponders", "transponders",
+                    Text("id").Required(),
+                    Text("transponderClass").OneOf("Premium", "Economy"),
+                    Text("model"),
+                    Text("prefix").Note("the serial's prefix (HP gives HP-40718)"),
+                    Num("weight")).Note("the transponder models citizens travel on, weighted per class")),
             Rows("eras", "eras", Key("id", "era"),
                 Text("id").Required(),
                 Text("displayName"),
@@ -51,12 +67,7 @@ public static class ContentSheetMap
                 Values("eraSmallTalk", "smallTalk", Text("text")).Note("small talk any traveller of the era may say")),
             Countries(),
             Places(),
-            Wardrobe("presentWardrobe", "present.wardrobe").Note("the present (2150): its clothes, worn whole by a 2150 citizen who forgot their costume"),
-            Rows("presentKit", "present.kit",
-                Text("gender").Required().OneOf("m", "f"),
-                Text("label").Required(),
-                Text("variant").Required().Note("the art key token: accessory_{gender}_neutral_future_{variant}"))
-                .Note("the present's 2150 accessory kit, one item per row: one can slip onto a right costume (a costume error)"),
+            Present(),
             Rows("rules", "rules", Key("asset"),
                 Text("asset").Required().Note("the rule asset's name"),
                 Text("type"),
@@ -94,7 +105,9 @@ public static class ContentSheetMap
     private static SheetSpec Content() =>
         Single("content", "content",
             Text("library"),
-            Text("blueprint"),
+            Rows("contentBlueprints", "blueprints",
+                Text("kind").Required().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced"),
+                Text("asset")).Note("each traveller kind's case blueprint"),
             Text("dayPlanFolder"),
             Rows("contentAttributes", "attributes", Key("id"),
                 Text("id").Required(),
@@ -138,6 +151,22 @@ public static class ContentSheetMap
                 Num("weight")).OmitEmpty().Note("overrides the country's hair weights"))
             .Note("a place is a country in an era; child sheets name it {country}_{era}");
 
+    /// <summary>The neutral present (the present while no nation leads): its name, year and facts; its clothes (its Culture fact is derived from them, and a 2150 citizen who forgot their costume wears them whole) and its 2150 accessory kit (costume errors).</summary>
+    private static SheetSpec Present() =>
+        Single("present", "present",
+            Text("displayName"),
+            Int("year"),
+            Rows("presentFacts", "facts",
+                Text("category"),
+                Text("value")),
+            Wardrobe("presentWardrobe", "wardrobe").Note("the present's clothes, worn whole by a 2150 citizen who forgot their costume"),
+            Rows("presentKit", "kit",
+                Text("gender").Required().OneOf("m", "f"),
+                Text("label").Required(),
+                Text("variant").Required().Note("the art key token: accessory_{gender}_neutral_future_{variant}"))
+                .Note("the present's 2150 accessory kit, one item per row: one can slip onto a right costume (a costume error)"))
+            .Note("the present, 2150, while no nation leads: never a destination; every book lists its row");
+
     /// <summary>A wardrobe at <paramref name="path"/>: per gender its signature slot and one worn item per slot (a place's, or the present's).</summary>
     private static SheetSpec Wardrobe(string name, string path) =>
         Keyed(name + "Sets", path, Text("gender").OneOf("m", "f"),
@@ -157,6 +186,9 @@ public static class ContentSheetMap
             Int("queue"),
             Int("tells"),
             List("channels"),
+            Rows("dayKinds", "kinds",
+                Text("kind").Required().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced"),
+                Num("weight")).Note("the day's traveller mix: each kind's weight"),
             Rows("dayEras", "eras",
                 Text("era").Ref("eras"),
                 Num("weight")),

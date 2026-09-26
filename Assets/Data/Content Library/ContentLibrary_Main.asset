@@ -190,6 +190,10 @@ MonoBehaviour:
       id: interview.openerLegendary
       text: 'Priority arrival: {name}.'
     claims:
+    - kind: 0
+      line:
+        id: interview.claims.RichTourist
+        text: One leisure departure to {place}, please.
     - kind: 3
       line:
         id: interview.claims.Displaced
@@ -465,7 +469,7 @@ MonoBehaviour:
           fromDay: 4
       - type: RichTourist
         inherit: 
-        dataOnly: 1
+        dataOnly: 0
         steps:
         - id: rules
           when: 3
@@ -1615,150 +1619,6 @@ MonoBehaviour:
       placeB: japan_industrial
       slot: 1
       gender: f
-  presentLook:
-    wardrobe:
-      male:
-        signature: 0
-        outfit:
-          label: tech jacket
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-        hair:
-          label: short textured crop
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: neutral
-          artVariant: 
-        facialHair:
-          label: 
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-        headwear:
-          label: 
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-        accessory:
-          label: 
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-      female:
-        signature: 0
-        outfit:
-          label: coat-dress
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-        hair:
-          label: sleek low bun
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: neutral
-          artVariant: 
-        facialHair:
-          label: 
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-        headwear:
-          label: 
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-        accessory:
-          label: 
-          leakable: 0
-          wig: 0
-          back: 0
-          covers: 
-          artNation: 
-          artVariant: 
-    kitMale:
-    - label: smart lenses
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: lenses
-    - label: comm earpiece
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: earpiece
-    - label: transit badge
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: badge
-    - label: shoulder display
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: display
-    kitFemale:
-    - label: smart lenses
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: lenses
-    - label: comm earpiece
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: earpiece
-    - label: transit badge
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: badge
-    - label: shoulder display
-      leakable: 1
-      wig: 0
-      back: 0
-      covers: 
-      artNation: 
-      artVariant: display
   cultureUi:
     readingLanguage: en
     glossPercent: 60
@@ -2003,6 +1863,57 @@ MonoBehaviour:
       reliefEmployer: Tyburn Mills Consortium
       reliefWorksite: Victorian Britain
       reliefWage: 420
+    accounts:
+      validDaysMin: 3
+      validDaysMax: 365
+      tripsWithinDays: 1095
+      statuses:
+      - status: 0
+        debtMin: 0
+        debtMax: 0
+        tripsMin: 0
+        tripsMax: 3
+      - status: 1
+        debtMin: 0
+        debtMax: 18000
+        tripsMin: 0
+        tripsMax: 3
+      - status: 2
+        debtMin: 40000
+        debtMax: 320000
+        tripsMin: 0
+        tripsMax: 2
+    transponders:
+    - id: hopper2
+      transponderClass: 0
+      model: Hopper Mk II
+      prefix: HP
+      weight: 3
+    - id: aurelian9
+      transponderClass: 0
+      model: Aurelian 9
+      prefix: AU
+      weight: 2
+    - id: chronoselite
+      transponderClass: 0
+      model: Chronos Elite
+      prefix: CE
+      weight: 1
+    - id: ticktock
+      transponderClass: 1
+      model: Tick-Tock Basic
+      prefix: TT
+      weight: 3
+    - id: skiplite
+      transponderClass: 1
+      model: Skip Lite
+      prefix: SL
+      weight: 2
+    - id: driftbox3
+      transponderClass: 1
+      model: Driftbox 3
+      prefix: DB
+      weight: 1
   news:
     debt:
     - Debt Relief Departures reach a record high.
@@ -2024,3 +1935,165 @@ MonoBehaviour:
       deviation before you deny, and follow the day's directives.
     - Your pay is credited when each shift ends. Your Citizen Account holds your
       statement. Departures are voluntary.
+  present:
+    displayName: Temporal Customs Zone
+    year: 2150
+    birthYearMin: 2080
+    birthYearMax: 2132
+    facts:
+    - category: 4
+      value: Credits
+    - category: 0
+      value: Agency Standard English
+    - category: 3
+      value: Wrist comm
+    - category: 5
+      value: Directorate Tower
+    - category: 2
+      value: The Customs Directorate
+    - category: 6
+      value: tech jacket / coat-dress
+    look:
+      wardrobe:
+        male:
+          signature: 0
+          outfit:
+            label: tech jacket
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+          hair:
+            label: short textured crop
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: neutral
+            artVariant: 
+          facialHair:
+            label: 
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+          headwear:
+            label: 
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+          accessory:
+            label: 
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+        female:
+          signature: 0
+          outfit:
+            label: coat-dress
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+          hair:
+            label: sleek low bun
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: neutral
+            artVariant: 
+          facialHair:
+            label: 
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+          headwear:
+            label: 
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+          accessory:
+            label: 
+            leakable: 0
+            wig: 0
+            back: 0
+            covers: 
+            artNation: 
+            artVariant: 
+      kitMale:
+      - label: smart lenses
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: lenses
+      - label: comm earpiece
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: earpiece
+      - label: transit badge
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: badge
+      - label: shoulder display
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: display
+      kitFemale:
+      - label: smart lenses
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: lenses
+      - label: comm earpiece
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: earpiece
+      - label: transit badge
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: badge
+      - label: shoulder display
+        leakable: 1
+        wig: 0
+        back: 0
+        covers: 
+        artNation: 
+        artVariant: display

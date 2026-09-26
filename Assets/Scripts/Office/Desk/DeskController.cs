@@ -203,8 +203,8 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>The decision: held papers drop back at once, then every paper goes back (a running scan is cancelled), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
-    public void EndCase()
+    /// <summary>The decision (<paramref name="accepted"/>): held papers drop back at once, then every paper goes back (a running scan is cancelled) wearing the verdict's ink mark (DeskDocument.ShowVerdict), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
+    public void EndCase(bool accepted)
     {
         if (_state == null)
             return;
@@ -223,6 +223,7 @@ public sealed class DeskController : MonoBehaviour
             DeskDocument leaving = paper;
             leaving.SetExamined(false);
             leaving.SetLive(false, false, false);
+            leaving.ShowVerdict(accepted);
             leaving.SlideTo(handOverPoint.position, config.paperSlideSeconds, () => Destroy(leaving.gameObject));
         }
 

@@ -9,14 +9,17 @@ using NUnit.Framework;
 /// 21): world_source.json pc.steps read into the library's shape
 /// (StepSets.Parse: the enum names, the jump), the rules Generate World and
 /// the content validator share (StepSets.Problems), and today's authored
-/// sets against them: the Displaced set in play, the tourists' and the
-/// labourers' data-only until their kinds are.
+/// sets against them: the Displaced and RichTourist sets in play, the poor
+/// tourists' and the labourers' data-only until their kinds are.
 /// </summary>
 public class StepSetsTests
 {
     private const string SourcePath = "Assets/Data/World/world_source.json";
 
     private static readonly string[] Forms = { "TC-610", "TC-620", "TC-630" };
+
+    /// <summary>The forms of the kinds in play today: the displaced's and the rich tourists'.</summary>
+    private static readonly string[] FormsToday = { "TC-610", "TC-620", "TC-630", "TC-101", "TC-230" };
 
     private static StepSource Source(string id, string when, string link = "PrimaryName", string hint = null) => new StepSource
     {
@@ -158,7 +161,7 @@ public class StepSetsTests
         StepSpec unknownForm = Spec("u", StepWhen.PaperRead);
         unknownForm.forms.Add("TC-101");
         StepSpec unknownCategory = Spec("c", StepWhen.Compared);
-        unknownCategory.categories.Add("TransponderClass");
+        unknownCategory.categories.Add("Horoscope");
         StepSpec derivedAgainstRecord = Spec("d", StepWhen.Compared);
         derivedAgainstRecord.truth = TruthKind.Record;
         StepSpec noJump = Spec("j", StepWhen.RulesViewed);
@@ -183,7 +186,7 @@ public class StepSetsTests
         Assert.IsTrue(p.Any(x => x.Contains("'q'") && x.Contains("statement or truth")), all);
         Assert.IsTrue(p.Any(x => x.Contains("'f'") && x.Contains("forms")), all);
         Assert.IsTrue(p.Any(x => x.Contains("'u'") && x.Contains("'TC-101'")), all);
-        Assert.IsTrue(p.Any(x => x.Contains("'c'") && x.Contains("'TransponderClass'")), all);
+        Assert.IsTrue(p.Any(x => x.Contains("'c'") && x.Contains("'Horoscope'")), all);
         Assert.IsTrue(p.Any(x => x.Contains("'d'") && x.Contains("names its categories")), all);
         Assert.IsTrue(p.Any(x => x.Contains("'j'") && x.Contains("no jump")), all);
         Assert.IsTrue(p.Any(x => x.Contains("'b'") && x.Contains("both")), all);
@@ -196,7 +199,7 @@ public class StepSetsTests
     public void Problems_ADataOnlySet_MayNameFormsAndCategoriesLaterPhasesAdd()
     {
         StepSpec transponder = Spec("transponder", StepWhen.Compared);
-        transponder.categories.AddRange(new[] { "TransponderId", "TransponderClass" });
+        transponder.categories.AddRange(new[] { "TransponderId", "Horoscope" });
         transponder.truth = TruthKind.Record;
         StepSpec paperSet = Spec("paperSet", StepWhen.PaperRead);
         paperSet.forms.AddRange(new[] { "TC-101", "TC-230" });
@@ -219,7 +222,7 @@ public class StepSetsTests
     // ---- Today's content ----
 
     [Test]
-    public void TodaysSets_ParseAndPassTheRules_TheDisplacedInPlay_TheOthersDataOnly()
+    public void TodaysSets_ParseAndPassTheRules_TheDisplacedAndRichTouristsInPlay_TheOthersDataOnly()
     {
         ContentNode root = ContentJson.Parse(SourceText());
         var errors = new List<string>();
@@ -227,13 +230,15 @@ public class StepSetsTests
         var keys = new HashSet<string>(root.Get("ui").Get("strings").Items.Select(s => s.Get("key").Text));
 
         CollectionAssert.IsEmpty(errors);
-        CollectionAssert.IsEmpty(StepSets.Problems(data, keys, Forms));
+        CollectionAssert.IsEmpty(StepSets.Problems(data, keys, FormsToday));
         CollectionAssert.AreEqual(new[] { CaseSteps.DefaultType, "Displaced", "RichTourist", "PoorTourist", "Labourer" }, data.sets.Select(s => s.type));
-        CollectionAssert.AreEqual(new[] { false, false, true, true, true }, data.sets.Select(s => s.dataOnly));
+        CollectionAssert.AreEqual(new[] { false, false, false, true, true }, data.sets.Select(s => s.dataOnly));
 
         CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "facts", "questions", "answers", "dress", "returnOrder" },
                                   CaseSteps.Resolve(data, "Displaced", 1).Select(s => s.id));
         Assert.AreEqual("dates", CaseSteps.Resolve(data, "Displaced", 4).Last().id, "the dates directive's step from day 4");
+        CollectionAssert.AreEqual(new[] { "rules", "papers", "read", "identity", "class", "transponder" }, CaseSteps.Resolve(data, "RichTourist", 1).Select(s => s.id),
+                                  "a rich tourist's day-1 steps (the others start with their directives)");
         Assert.AreEqual("RichTourist", data.sets.Single(s => s.type == "PoorTourist").inherit);
         CollectionAssert.IsSubsetOf(CaseSteps.Resolve(data, "RichTourist", 6).Select(s => s.id), CaseSteps.Resolve(data, "PoorTourist", 6).Select(s => s.id),
                                     "the poor tourist's set inherits the rich tourist's");

@@ -76,6 +76,8 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckAgency(src, errors);
+        CheckDayKinds(src, authored, errors);
+        CheckPresent(src, errors);
         CheckNews(src, errors);
         PcContent pc = CheckPc(src, authored, errors);
         if (errors.Count > 0)
@@ -118,10 +120,7 @@ public static partial class WorldContentGenerator
             .ToArray();
         var premadesById = premades.ToDictionary(m => m.id);
 
-        var soBlueprint = new SerializedObject(authored.blueprint);
-        SerializedArrays.Set(soBlueprint, "archetypePool", authored.archetypes);
-        soBlueprint.ApplyModifiedProperties();
-        EditorUtility.SetDirty(authored.blueprint);
+        WireBlueprints(authored);
 
         DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById)).ToArray();
 
@@ -149,9 +148,10 @@ public static partial class WorldContentGenerator
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
                     BuildLines(src.interview), questions, dialogs, unlocks, BuildHistoryLines(src.history?.lines),
-                    historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), ToPresentLook(src.present), culture.ui, neutralTheme, themes, stringTables,
+                    historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
+        WirePresent(authored.library, src);
         WireNews(authored.library, src.news);
         WritePc(authored.library, pc);
 
@@ -172,7 +172,7 @@ public static partial class WorldContentGenerator
     private sealed class Authored
     {
         public ContentLibrarySO library;
-        public CaseBlueprintSO blueprint;
+        public Dictionary<TravellerKind, CaseBlueprintSO> blueprints = new Dictionary<TravellerKind, CaseBlueprintSO>();
         public Dictionary<string, AttributeSO> attributes = new Dictionary<string, AttributeSO>();
         public ArchetypeSO[] archetypes;
         public ReferenceBookSO[] books;
@@ -184,12 +184,12 @@ public static partial class WorldContentGenerator
         var a = new Authored();
         if (content == null)
         {
-            errors.Add($"'{SourcePath}' has no \"content\" section (library, blueprint, dayPlanFolder, attributes, archetypes, books).");
+            errors.Add($"'{SourcePath}' has no \"content\" section (library, blueprints, dayPlanFolder, attributes, archetypes, books).");
             return a;
         }
 
         a.library = Require<ContentLibrarySO>(content.library, "content library", errors);
-        a.blueprint = Require<CaseBlueprintSO>(content.blueprint, "case blueprint", errors);
+        LoadBlueprints(content, a, errors);
         if (!AssetDatabase.IsValidFolder(content.dayPlanFolder ?? string.Empty))
             errors.Add($"Day plan folder '{content.dayPlanFolder}' does not exist.");
 
@@ -798,12 +798,10 @@ public static partial class WorldContentGenerator
         return templates;
     }
 
-    /// <summary>The wired blueprint and every day's forced blueprints (non-null).</summary>
+    /// <summary>Each kind's wired blueprint and every day's forced blueprints (non-null).</summary>
     private static List<CaseBlueprintSO> Blueprints(Authored authored)
     {
-        var blueprints = new List<CaseBlueprintSO>();
-        if (authored.blueprint != null)
-            blueprints.Add(authored.blueprint);
+        var blueprints = new List<CaseBlueprintSO>(authored.blueprints.Values);
         blueprints.AddRange(authored.forcedBlueprints.Values);
         return blueprints;
     }
@@ -1485,7 +1483,7 @@ public static partial class WorldContentGenerator
         tellChannels.arraySize = channels.Length;
         for (int i = 0; i < channels.Length; i++)
             tellChannels.GetArrayElementAtIndex(i).enumValueIndex = (int)(TellChannel)Enum.Parse(typeof(TellChannel), channels[i]);
-        SerializedArrays.Set(so, "possibleBlueprints", new Object[] { authored.blueprint });
+        WriteKinds(so, d, authored);
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
         so.FindProperty("costumeErrorChance").floatValue = d.costumeErrorChance;
@@ -1718,7 +1716,7 @@ public static partial class WorldContentGenerator
                                     ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
                                     InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks,
                                     HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects,
-                                    LegendarySO[] premades, LookRules lookRules, PresentLook presentLook,
+                                    LegendarySO[] premades, LookRules lookRules,
                                     UiData ui, ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables,
                                     UpgradeSO[] translators, TimelineTriggerSO[] notices, TranslationSettings translation)
     {
@@ -1739,7 +1737,6 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
         SerializedArrays.Set(so, "legendaries", premades);
         so.FindProperty("lookRules").boxedValue = lookRules;
-        so.FindProperty("presentLook").boxedValue = presentLook;
         so.FindProperty("cultureUi.readingLanguage").stringValue = ui.readingLanguage;
         so.FindProperty("cultureUi.glossPercent").intValue = ui.glossPercent;
         so.FindProperty("cultureUi.labelMinScale").floatValue = ui.labelMinScale;
@@ -1877,9 +1874,6 @@ public static partial class WorldContentGenerator
     /// <summary>The weight of each costume error variant.</summary>
     [Serializable] private sealed class CostumeErrorsData { public float otherPlace; public float presentClothes; public float presentAccessory; }
 
-    /// <summary>The present's look: its clothes and its 2150 accessory kit.</summary>
-    [Serializable] private sealed class PresentData { public WardrobeData wardrobe; public KitItemData[] kit; }
-
     /// <summary>One kit accessory: its gender ("m" or "f"), its label and its art variant token.</summary>
     [Serializable] private sealed class KitItemData { public string gender; public string label; public string variant; }
 
@@ -1934,7 +1928,8 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class ContentData
     {
         public string library;
-        public string blueprint;
+        /// <summary>Each traveller kind's case blueprint (asset path).</summary>
+        public KindBlueprintData[] blueprints;
         public string dayPlanFolder;
         public AttributeData[] attributes;
         public string[] archetypes;
@@ -1982,6 +1977,8 @@ public static partial class WorldContentGenerator
         public int tells;
         /// <summary>Where this day's tells may show ("Papers", "Answer").</summary>
         public string[] channels;
+        /// <summary>The day's traveller mix: each kind's weight (traveller types K1).</summary>
+        public KindWeightData[] kinds;
         public EraWeightData[] eras;
         public string[] countries;
         public string[] rules;

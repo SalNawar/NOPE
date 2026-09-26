@@ -93,7 +93,8 @@ public sealed class CaseDocumentsPresenter
     /// paper. With the desk, each becomes a paper whose scan brings its copy
     /// to the PC; without it, a paper reaches the PC at the hand-over. Each
     /// paper prints its document's form, headed with <paramref name="agency"/>'s
-    /// name and programme (redesign phase 4).
+    /// name and programme (redesign phase 4), and its copy draws that same
+    /// form (phase 5).
     /// </summary>
     public void Present(CaseInstance inst, AgencyContent agency)
     {
@@ -104,7 +105,7 @@ public sealed class CaseDocumentsPresenter
             {
                 _caseDocuments.Add(new CaseDocument
                 {
-                    name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
+                    name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
                     fields = doc != null ? doc.fields : null,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
@@ -114,7 +115,7 @@ public sealed class CaseDocumentsPresenter
 
         _papers = new CasePapers(_caseDocuments.Count);
         if (_view != null)
-            _view.SetCase(inst != null ? inst.documents : null, _papers, _compare, inst != null ? inst.look : null, _art);
+            _view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art);
 
         if (_desk != null)
             _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
@@ -131,11 +132,11 @@ public sealed class CaseDocumentsPresenter
         Receive(index);
     }
 
-    /// <summary>The decision: the desk's papers leave with the traveller, and the Documents view empties.</summary>
-    public void EndCase()
+    /// <summary>The decision (<paramref name="accepted"/>): the desk's papers leave with the traveller, inked with the verdict, and the Documents view empties.</summary>
+    public void EndCase(bool accepted)
     {
         if (_desk != null)
-            _desk.EndCase();
+            _desk.EndCase(accepted);
         _caseDocuments.Clear();
         _caseForms.Clear();
         _papers = new CasePapers(0);
@@ -158,13 +159,16 @@ public sealed class CaseDocumentsPresenter
         PapersChanged?.Invoke();
     }
 
-    /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper.</summary>
+    /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper; its strip reads the time.</summary>
     private void Scan(int index)
     {
         if (!_papers.Scan(index))
             return;
         if (_view != null)
+        {
+            _view.MarkScanned(index);
             _view.Refresh();
+        }
         PapersChanged?.Invoke();
         Scanned?.Invoke(index);
     }

@@ -46,9 +46,23 @@ public class FieldLengthsTests
     [Test]
     public void TheAgencysNumbersAndDates_AreTheirMakersWidths()
     {
-        Assert.AreEqual(AgencyNumbers.DisplacementNumber(new Top()).Length, FieldLengths.Longest(ClueCategory.CitizenId, 40));
+        Assert.AreEqual(Math.Max(AgencyNumbers.DisplacementNumber(new Top()).Length, AccountMaker.CitizenId(new Top()).Length), FieldLengths.Longest(ClueCategory.CitizenId, 40), "a Displacement No. or a Citizen ID, the wider");
+        Assert.AreEqual("418-0937-52".Length, FieldLengths.Longest(ClueCategory.CitizenId, 40));
         Assert.AreEqual(AgencyNumbers.IncidentNumber(new DateTime(2150, 12, 28), new Top()).Length, FieldLengths.Longest(ClueCategory.Incident, 40));
         Assert.AreEqual(AgencyCalendar.Write(new DateTime(2150, 9, 28)).Length, FieldLengths.Longest(ClueCategory.Expiry, 40));
         Assert.AreEqual(AgencyCalendar.Write(new DateTime(2150, 9, 28)).Length, FieldLengths.Longest(ClueCategory.DepartureDate, 40));
+    }
+
+    /// <summary>Phase 6: an account's status and transponder class are their enum's longest name; a transponder's printed name runs to a book row (AccountRanges.Problems holds every model to it); a debt to the widest amount of credits the accounts may hold.</summary>
+    [Test]
+    public void TheAccountsValues_AreTheirWidths()
+    {
+        Assert.AreEqual("Standard".Length, FieldLengths.Longest(ClueCategory.AccountStatus, 40));
+        foreach (CitizenStatus s in (CitizenStatus[])Enum.GetValues(typeof(CitizenStatus)))
+            Assert.LessOrEqual(s.ToString().Length, FieldLengths.Longest(ClueCategory.AccountStatus, 40));
+        Assert.AreEqual("Premium".Length, FieldLengths.Longest(ClueCategory.TransponderClass, 40));
+        Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(ClueCategory.TransponderId, 40));
+        Assert.AreEqual(AccountMaker.Credits(AccountRanges.MaxDebt).Length, FieldLengths.Longest(ClueCategory.Debt, 40));
+        Assert.AreEqual("9,999,999 cr", AccountMaker.Credits(AccountRanges.MaxDebt));
     }
 }

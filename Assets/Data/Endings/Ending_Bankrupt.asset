@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: A Fresh Start
   bodyText: Your account is frozen and your Debt Relief departure is booked. Attendance
     is required.
+  picture: {fileID: 21300000, guid: e81eb48291124414395b8b5c5c662b4c, type: 3}
   conditionType: 1
   attribute: {fileID: 0}
   threshold: 0

@@ -37,7 +37,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
     /// <summary>Why the labels are in their language (CultureChoice.Language).</summary>
     public LabelLanguage Language { get; private set; }
 
-    /// <summary>The leading culture's Future currency (piece 5's resolved Future place), or null.</summary>
+    /// <summary>The leading culture's Future currency: the present's (ContentLibrarySO.BuildPresent, the leader's Future place), or null.</summary>
     public string FutureCurrency { get; private set; }
 
     /// <summary>The resolved font, for the inspector ("default" for the project font).</summary>
@@ -196,13 +196,19 @@ public sealed class CultureThemeService : TimelineCueReceiver
         return sb.ToString();
     }
 
-    /// <summary>The leading culture's Future currency from the run's resolved world facts (piece 5 C6); null when neutral or before a run exists.</summary>
+    /// <summary>
+    /// The leading culture's Future currency: the present's Currency fact
+    /// (traveller types H1: the leader's Future place, history applied), read
+    /// without building the world's facts (audit R4-018); null when neutral,
+    /// before a run exists, or when the present is not the culture's.
+    /// </summary>
     private string ResolveFutureCurrency(string cultureId)
     {
-        if (cultureId == null || !RunManager.HasInstance || Library.FutureEra == null)
+        if (cultureId == null || !RunManager.HasInstance)
             return null;
 
-        string currency = Library.BuildWorldFacts(RunManager.Instance.World.history).Get(cultureId, Library.FutureEra.id, ClueCategory.Currency);
+        PresentPlace present = Library.BuildPresent(RunManager.Instance.World.history);
+        string currency = present != null && present.NationId == cultureId ? present.Fact(ClueCategory.Currency) : null;
         if (string.IsNullOrWhiteSpace(currency))
             WarnOnce("currency:" + cultureId, $"[CultureThemeService] Culture '{cultureId}' has no Future Currency fact; the wallet keeps its neutral word.");
         return currency;

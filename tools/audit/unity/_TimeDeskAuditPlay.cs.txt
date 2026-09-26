@@ -491,8 +491,11 @@ public static class _TimeDeskAuditPlay
         for (int d = 0; d < c.documents.Count; d++)
         {
             DocumentInstance doc = c.documents[d];
-            foreach (DocumentRow row in DocumentRows.Ordered(doc.fields))
+            for (int f = 0; f < doc.fields.Count; f++)
             {
+                if (doc.fields[f] == null)
+                    continue;
+                var row = new DocumentRow(f, doc.fields[f]); // a paper is one page (the validator): its fields in their order
                 if (!row.Field.isAnachronism || !done.Add(row.Field.category))
                     continue;
                 int index = d;

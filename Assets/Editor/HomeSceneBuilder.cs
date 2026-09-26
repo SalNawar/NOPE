@@ -83,6 +83,7 @@ public static class HomeSceneBuilder
             new Vector2(0.1f, 0.2f), new Vector2(0.45f, 0.34f));
         Button slotContinue = FindOrCreateButton(slot, "ContinueButton", "Continue",
             new Vector2(0.55f, 0.2f), new Vector2(0.9f, 0.34f));
+        BuildSlotMachineArt(slot);
 
         // --- Sleep panel ---
         Transform sleep = FindOrCreatePanel(uiRoot, "SleepPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -144,6 +145,31 @@ public static class HomeSceneBuilder
         UiContrastCheck.Check(canvas, canvas.GetComponent<CanvasScaler>() is CanvasScaler s && s.referenceResolution.y > 0f ? 1080f / s.referenceResolution.y : 1f, null, null);
         EditorSceneManager.MarkSceneDirty(homeUI.gameObject.scene);
         Debug.Log("[TimeDesk] Home UI built and wired. Save the scene.");
+    }
+
+    /// <summary>The slot machine's box (reference px) above the slot panel, at the landscape art's aspect (1000 x 640), clear of the HUD.</summary>
+    private static readonly Vector2 SlotMachineSize = new Vector2(375f, 240f);
+
+    /// <summary>The slot machine's lever (reference px), standing at the machine's right edge.</summary>
+    private static readonly Vector2 SlotLeverSize = new Vector2(80f, 240f);
+
+    /// <summary>The gap (reference px) between the slot panel's top and the machine and lever above it.</summary>
+    private const float SlotArtGap = 8f;
+
+    /// <summary>
+    /// The slot panel's art slots (redesign phase 27): the landscape machine
+    /// standing on the panel's top edge (above it, so the panel's white texts
+    /// stay on the dark panel) and the lever at the machine's right edge; both
+    /// full colour and hidden until their art exists.
+    /// </summary>
+    private static void BuildSlotMachineArt(Transform slot)
+    {
+        Image machine = FindOrCreateImage(slot, "Machine", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0.5f, 0f),
+                                          new Vector2(0f, SlotArtGap), SlotMachineSize);
+        EnsureArtSlot(machine, ArtSlots.SlotMachine, null, true, true);
+        Image lever = FindOrCreateImage(slot, "Lever", new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, 0f),
+                                        new Vector2(SlotMachineSize.x / 2f + SlotArtGap / 2f, SlotArtGap), SlotLeverSize);
+        EnsureArtSlot(lever, ArtSlots.SlotLever, null, true, true);
     }
 
     /// <summary>The HUD's height on its dark strip (reference px), centred on the HUD's texts.</summary>

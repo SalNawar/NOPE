@@ -429,7 +429,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (_currentCase == null)
             return;
 
-        _documents.EndCase();
+        _documents.EndCase(accepted);
         Hide();
         _currentCase = null;
         OneShot.Fire(ref _onDecision, accepted);
