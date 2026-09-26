@@ -1,3 +1,8 @@
+// NOPE/Hall Crowd Contact: the faint ground contact under each crowd group (art side).
+// A soft, slightly broken ellipse over the quad's UVs in _Tint, alpha-blended
+// without depth writes, so the flat groups sit on the floor with no 3D shadow.
+// Unlit, one forward pass. Used by HallCrowds/Materials/Contact_Morning and
+// Contact_Evening (tinted by OfficeHallCrowdPalette like the silhouettes).
 Shader "NOPE/Hall Crowd Contact"
 {
     Properties {[MainColor] _Tint("Ground contact",Color)=(.08,.11,.14,.16)}

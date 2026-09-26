@@ -5,11 +5,23 @@ using UnityEngine;
 /// Scene host for the pure <see cref="ShiftClock"/>: builds today's clock from
 /// GameConfigSO, ticks it with scaled time, and re-raises Closed. GameManager
 /// starts and stops it; readouts (and later, lighting) read <see cref="Clock"/>.
+/// While enabled it is also the read-only shift hook for the art side
+/// (<see cref="Live"/>, <see cref="IShiftProgress"/>).
 /// </summary>
-public sealed class ShiftClockDriver : MonoBehaviour
+public sealed class ShiftClockDriver : MonoBehaviour, IShiftProgress
 {
+    /// <summary>
+    /// The gameplay layer's shift while a driver is enabled; null otherwise (the art
+    /// office on its own, edit mode). Presentation code outside the gameplay layer
+    /// (the art office's crowd palette) reads it; only the driver sets it.
+    /// </summary>
+    public static IShiftProgress Live { get; private set; }
+
     /// <summary>Today's clock (null until Configure).</summary>
     public ShiftClock Clock { get; private set; }
+
+    /// <summary>0 at opening, 1 at closing (<see cref="ShiftClock.Progress01"/>); 0 until Configure.</summary>
+    public float Progress01 => Clock != null ? Clock.Progress01 : 0f;
 
     /// <summary>Raised once, when the clock reaches closing time.</summary>
     public event Action Closed;
@@ -53,6 +65,16 @@ public sealed class ShiftClockDriver : MonoBehaviour
 
     /// <summary>Advances the clock with scaled time.</summary>
     private void Update() => Clock?.Tick(Time.deltaTime);
+
+    /// <summary>Publishes this driver as the live shift hook.</summary>
+    private void OnEnable() => Live = this;
+
+    /// <summary>Withdraws the hook, unless another driver has published since.</summary>
+    private void OnDisable()
+    {
+        if (ReferenceEquals(Live, this))
+            Live = null;
+    }
 
     /// <summary>Unhooks from the clock.</summary>
     private void OnDestroy()

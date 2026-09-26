@@ -1,0 +1,99 @@
+{
+  "scope": "2D design-space checks only; no Unity scene checks or changes",
+  "confirmed_flow": "building -> desk check -> portal departure",
+  "proposal_level": "Level 02, one floor above street admissions; not established canon",
+  "metres_assumption": "Unity units treated as metres for this study",
+  "hall_footprint_metres": [
+    28,
+    30
+  ],
+  "counter_count": 3,
+  "counter_target_metres": [
+    3.2,
+    1.1,
+    1.05
+  ],
+  "arrival_route_obstacle_hits_0_6m_person": [],
+  "departure_route_obstacle_hits_0_6m_person": [],
+  "referral_route_obstacle_hits_0_6m_person": [],
+  "arrival_route_length_metres": 37.47,
+  "departure_route_length_metres": 16.35,
+  "central_aisle_width_metres": 4.8,
+  "left_entry_opening_metres": 4,
+  "right_forward_facing_opening_metres": 4,
+  "right_outer_cross_corridor_metres": 5,
+  "locker_clear_apron_metres": 1.8,
+  "source_camera_horizontal_fov_degrees": 85.57,
+  "portal_base_to_rear_wall_metres": 6.225,
+  "target_center_visibility_checks": {
+    "left_entry_center": {
+      "ndc": [
+        -0.5981,
+        0.311
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": []
+    },
+    "right_corridor_mouth_center": {
+      "ndc": [
+        0.5574,
+        0.3025
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": []
+    },
+    "locker_bank_center": {
+      "ndc": [
+        -0.4788,
+        0.2273
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": []
+    },
+    "one_painting_center": {
+      "ndc": [
+        -0.5292,
+        0.3415
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": []
+    },
+    "portal_center": {
+      "ndc": [
+        0.0,
+        0.4171
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": []
+    }
+  },
+  "rejected_positions_due_to_board_occlusion": {
+    "right_sidewall_at_z16_5": {
+      "ndc": [
+        0.8007,
+        0.3016
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": [
+        "right"
+      ]
+    },
+    "left_wall_lockers_at_z13_3": {
+      "ndc": [
+        -0.8642,
+        0.1962
+      ],
+      "inside_frame": true,
+      "corkboard_overlap": [
+        "left"
+      ]
+    }
+  },
+  "deferred": [
+    "Actual camera perspective/occlusion blockout",
+    "Desk prop and interaction layout if envelope shrinks",
+    "Room heights and building floor designation approval",
+    "Three sprite layers derived from one shared camera",
+    "Department hooks remain gameplay-owned"
+  ]
+}

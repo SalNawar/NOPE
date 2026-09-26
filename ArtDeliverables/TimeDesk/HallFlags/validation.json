@@ -1,0 +1,70 @@
+{
+    "success": true,
+    "note": "Real SpriteRenderers in OfficeScene; supports and original floor are preserved.",
+    "flags": [
+        {
+            "path": "HybridOffice/Hall/Blender_Banner_-8",
+            "clothDisabled": true,
+            "hardwareRetained": true,
+            "spriteAssigned": true,
+            "originalSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.10248522460460663
+            },
+            "spriteSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.20000000298023225
+            }
+        },
+        {
+            "path": "HybridOffice/Hall/Blender_Banner_-4.5",
+            "clothDisabled": true,
+            "hardwareRetained": true,
+            "spriteAssigned": true,
+            "originalSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.10248522460460663
+            },
+            "spriteSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.20000000298023225
+            }
+        },
+        {
+            "path": "HybridOffice/Hall/Blender_Banner_4.5",
+            "clothDisabled": true,
+            "hardwareRetained": true,
+            "spriteAssigned": true,
+            "originalSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.10248522460460663
+            },
+            "spriteSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.20000000298023225
+            }
+        },
+        {
+            "path": "HybridOffice/Hall/Blender_Banner_8",
+            "clothDisabled": true,
+            "hardwareRetained": true,
+            "spriteAssigned": true,
+            "originalSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.10248522460460663
+            },
+            "spriteSize": {
+                "x": 1.664374828338623,
+                "y": 4.498834609985352,
+                "z": 0.20000000298023225
+            }
+        }
+    ]
+}

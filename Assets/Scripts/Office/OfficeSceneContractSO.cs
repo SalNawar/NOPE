@@ -51,7 +51,7 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         }
     }
 
-    /// <summary>Every anchor the gameplay layer resolves (the defaults fit the art office at art 58bda15).</summary>
+    /// <summary>Every anchor the gameplay layer resolves (the defaults fit the art office at art ea62550: the desk layout of 633e2e5).</summary>
     public AnchorSpec[] anchors =
     {
         new AnchorSpec(OfficeAnchorId.PCScreen, new[] { "ImportedOfficeDress/Desk/Retro CRT" }, true, new Vector3(-1.64f, 1.43f, -0.13f), 160f),
@@ -59,8 +59,8 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         new AnchorSpec(OfficeAnchorId.DeskSurface, new[] { "HybridOffice/Booth/Finish_Mat" }, true, new Vector3(0f, 1.07f, -0.52f)),
         new AnchorSpec(OfficeAnchorId.Scanner, null, true, new Vector3(1.02f, 1.06f, -0.46f), 180f),
         new AnchorSpec(OfficeAnchorId.Traveller, null, true, new Vector3(0f, 0f, 1.6f), 180f),
-        new AnchorSpec(OfficeAnchorId.HandOver, null, true, new Vector3(0.45f, 1.07f, 0.95f)),
-        new AnchorSpec(OfficeAnchorId.NextSign, new[] { "HybridOffice/Booth/Blender_Next" }, true, new Vector3(0f, 1.06f, 0.64f), 180f),
+        new AnchorSpec(OfficeAnchorId.HandOver, null, true, new Vector3(0.05f, 1.07f, 0.45f)),
+        new AnchorSpec(OfficeAnchorId.NextSign, new[] { "HybridOffice/Booth/Blender_Next" }, true, new Vector3(0.13f, 1.06f, 0.16f), 180f),
         new AnchorSpec(OfficeAnchorId.Intercom, new[] { "ImportedOfficeDress/Desk/Clerk hotline", "HybridOffice/Booth/Finish_Intercom" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.Stamp, new[] { "HybridOffice/Booth/Blender_Stamp" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.Till, new[] { "HybridOffice/Booth/Finish_Till" }, false, Vector3.zero),

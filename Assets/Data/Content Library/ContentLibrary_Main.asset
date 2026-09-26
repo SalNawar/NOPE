@@ -1295,3 +1295,7 @@ MonoBehaviour:
       letterSeconds: 0.12
       scrambleSteps: 2
     fallbackGlyphs: olmnupqrystvwxazbcdfeghjik
+  agency:
+    name: TEMPORAL CUSTOMS
+    programme: Debt Relief Departures
+    firstDate: 14 Mar 2150

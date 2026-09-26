@@ -1,3 +1,10 @@
+// NOPE/Hall Crowd Silhouette: one painted crowd group as a flat, opaque cut-out
+// (art side). The atlas's alpha gives the shape (its RGB is ignored); _Tint gives the
+// colour, which OfficeHallCrowdPalette overrides per renderer through a property
+// block (morning to evening). Unlit, fogged, depth-writing, double-sided.
+// Passes: forward (UniversalForwardOnly) and DepthOnly. It has no DepthNormalsOnly
+// pass, so SSAO does not see the crowds (triage B15).
+// Used by HallCrowds/Materials/Crowd_Morning_0-2 and Crowd_Evening_0-2.
 Shader "NOPE/Hall Crowd Silhouette"
 {
     Properties

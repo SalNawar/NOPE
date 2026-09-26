@@ -577,10 +577,13 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Builds the agency's citizen master record for a day's visitors. Records
-    /// carry the registered identity: an honest traveller's, or a liar's cover
-    /// (claimed origin). They never reveal a true home. (Future: deliberately
-    /// missing/corrupted records + family history.)
+    /// Builds the agency's citizen master record for a day's visitors: one
+    /// registry entry each (redesign phase 2), a group of rows (Name and Born
+    /// are evidence; Origin and the clerk's Note are not) under UI string
+    /// labels, with no agency number on file yet. Records carry the registered
+    /// identity: an honest traveller's, or a liar's cover (claimed origin).
+    /// They never reveal a true home. (Future: deliberately missing/corrupted
+    /// records + family history.)
     /// </summary>
     public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases)
     {
@@ -594,15 +597,20 @@ public sealed class CaseFactory
             if (inst == null || string.IsNullOrWhiteSpace(inst.visitorGivenName))
                 continue;
 
-            registry.Add(new CitizenRecord
+            string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.nation, inst.trueEra);
+            string note = !inst.isLegendary ? UiText.Get("records.note.none")
+                : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
+                : UiText.Get("records.note.sealed");
+            registry.Add(new CitizenRecord(inst.visitorGivenName, null, new[]
             {
-                fullName = inst.visitorGivenName,
-                birthDate = inst.trueBirthDate,
-                origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.nation, inst.trueEra),
-                note = !inst.isLegendary ? "No remarks on file."
-                    : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
-                    : "Priority subject. Records sealed above your clearance."
-            });
+                new RecordGroup(UiText.Get("records.group.registry"), new[]
+                {
+                    new RecordRow(UiText.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name),
+                    new RecordRow(UiText.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate),
+                    new RecordRow(UiText.Get("records.row.origin"), origin),
+                    new RecordRow(UiText.Get("records.row.note"), note)
+                })
+            }));
         }
 
         return registry;

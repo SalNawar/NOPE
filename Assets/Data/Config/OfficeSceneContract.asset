@@ -44,13 +44,13 @@ MonoBehaviour:
   - id: 5
     fallbacks: []
     hasDefault: 1
-    defaultPosition: {x: 0.45, y: 1.07, z: 0.95}
+    defaultPosition: {x: 0.05, y: 1.07, z: 0.45}
     defaultYaw: 0
   - id: 6
     fallbacks:
     - HybridOffice/Booth/Blender_Next
     hasDefault: 1
-    defaultPosition: {x: 0, y: 1.06, z: 0.64}
+    defaultPosition: {x: 0.13, y: 1.06, z: 0.16}
     defaultYaw: 180
   - id: 7
     fallbacks:

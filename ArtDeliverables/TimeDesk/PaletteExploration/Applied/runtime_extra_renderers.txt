@@ -1,0 +1,4 @@
+Office/Scanner/Placeholder/Base | Placeholder_ScannerBody = Assets/Art/Office/Gameplay/Materials/Placeholder_ScannerBody.mat
+Office/Scanner/Placeholder/Bed | Placeholder_ScannerGlass = Assets/Art/Office/Gameplay/Materials/Placeholder_ScannerGlass.mat
+Office/Scanner/Placeholder/Hinge | Placeholder_ScannerTrim = Assets/Art/Office/Gameplay/Materials/Placeholder_ScannerTrim.mat
+Office/Scanner/Placeholder/Light | Placeholder_ScannerLight = Assets/Art/Office/Gameplay/Materials/Placeholder_ScannerLight.mat
