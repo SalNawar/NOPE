@@ -6,7 +6,14 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-/// <summary>Converts only the four hall cloth renderers into authored 2D sprites.</summary>
+/// <summary>
+/// Art-side editor tool (Tools > Office Art, OfficeScene in edit mode): turns the
+/// four hall banners' cloth meshes into one authored 2D sprite each
+/// (HallFlag_Ochre.png, drawn with the URP Sprite-Unlit shader) sized to the
+/// cloth, and checks the result. It changes only the banner roots under
+/// HybridOffice/Hall: the cloth objects stay, inactive, and the metal supports stay
+/// on. Install is idempotent. Reports go to ArtDeliverables/TimeDesk/HallFlags.
+/// </summary>
 public static class OfficeHallFlags
 {
     const string Folder = "Assets/Art/Office/HallFlags";
@@ -17,18 +24,41 @@ public static class OfficeHallFlags
     const string SpriteName = "Flag Artwork 2D";
     const string ClothName = "Hall_Banner__Banner_Cloth";
 
+    /// <summary>One banner's check in validation.json.</summary>
     [Serializable] public class FlagCheck
     {
+        /// <summary>The banner root, from the hall.</summary>
         public string path;
-        public bool clothDisabled, hardwareRetained, spriteAssigned;
-        public Vector3 originalSize, spriteSize;
+
+        /// <summary>True when the modelled cloth is inactive.</summary>
+        public bool clothDisabled;
+
+        /// <summary>True when the metal hanging support still renders.</summary>
+        public bool hardwareRetained;
+
+        /// <summary>True when the sprite renderer is active and has the flag sprite.</summary>
+        public bool spriteAssigned;
+
+        /// <summary>The cloth's world bounds size (the envelope the sprite must fill).</summary>
+        public Vector3 originalSize;
+
+        /// <summary>The sprite's world bounds size (within 3 cm of the cloth's to pass).</summary>
+        public Vector3 spriteSize;
     }
+    /// <summary>The whole report (HallFlags/validation.json).</summary>
     [Serializable] public class Audit
     {
+        /// <summary>True when all four banners pass.</summary>
         public bool success;
+
+        /// <summary>What the report covers.</summary>
         public string note = "Real SpriteRenderers in OfficeScene; supports and original floor are preserved.";
+
+        /// <summary>One check per banner.</summary>
         public FlagCheck[] flags;
     }
+
+    /// <summary>The four Blender_Banner_* roots under HybridOffice/Hall; refuses outside OfficeScene edit mode.</summary>
     static Transform[] Roots()
     {
         var scene = EditorSceneManager.GetActiveScene();
@@ -41,6 +71,12 @@ public static class OfficeHallFlags
         if (roots.Length != 4) throw new InvalidOperationException("Expected four hall banner roots.");
         return roots;
     }
+    /// <summary>
+    /// Imports the flag PNG as a readable single sprite and returns the flag Sprite
+    /// asset, trimmed to the artwork's opaque pixels. The asset is created once and
+    /// then reused, so after changing the PNG's outline delete HallFlag_Ochre.asset
+    /// before installing again (triage B12).
+    /// </summary>
     static Sprite ImportSprite()
     {
         AssetDatabase.ImportAsset(TexturePath, ImportAssetOptions.ForceSynchronousImport);
@@ -79,6 +115,11 @@ public static class OfficeHallFlags
         return sprite;
     }
 
+    /// <summary>
+    /// Installs or refreshes the 'Flag Artwork 2D' sprite under each banner, fitted to
+    /// the cloth's position, rotation and size, disables the cloth, validates, and
+    /// saves the scene (one undo step).
+    /// </summary>
     [MenuItem("Tools/Office Art/Install Hall Flag Sprites")]
     public static void Install()
     {
@@ -143,6 +184,7 @@ public static class OfficeHallFlags
             throw new IOException("Could not save OfficeScene.");
     }
 
+    /// <summary>Read-only: writes HallFlags/validation.json and throws when a banner fails.</summary>
     [MenuItem("Tools/Office Art/Validate Hall Flag Sprites")]
     public static void Validate()
     {

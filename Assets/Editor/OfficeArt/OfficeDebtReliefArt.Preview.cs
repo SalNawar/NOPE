@@ -6,9 +6,17 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Play-mode capture helpers for the Game-view evidence (runtime.png).
 public static partial class OfficeDebtReliefArt
 {
+    /// <summary>The overlay canvases HideRuntimeOverlays switched off, for RestoreRuntimeOverlays.</summary>
     static readonly List<Canvas> hiddenOverlays=new();
+    /// <summary>
+    /// Play mode only: switches off every active screen-space overlay canvas (the
+    /// gameplay HUD included) so the Game view shows the art alone, and lists the
+    /// enabled renderers outside the art roots in runtime_extra_renderers.txt (what the
+    /// gameplay layer adds). Undo it with Restore Runtime Overlays before leaving play mode.
+    /// </summary>
     [MenuItem("Tools/Office Art/Debt Relief/Hide Runtime Overlays For Capture")]
     public static void HideRuntimeOverlays()
     {
@@ -25,6 +33,7 @@ public static partial class OfficeDebtReliefArt
                 s.AppendLine(PathOf(r.transform)+" | "+string.Join(",",r.sharedMaterials.Where(m=>m).Select(m=>m.name+" = "+AssetDatabase.GetAssetPath(m))));
         File.WriteAllText(ReportFolder+"/runtime_extra_renderers.txt",s.ToString());
     }
+    /// <summary>Switches the canvases HideRuntimeOverlays hid back on.</summary>
     [MenuItem("Tools/Office Art/Debt Relief/Restore Runtime Overlays")]
     public static void RestoreRuntimeOverlays()
     {

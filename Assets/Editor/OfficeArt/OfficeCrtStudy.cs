@@ -6,12 +6,24 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-// One-object art study. Only the monitor focus camera follows the revised screen.
+/// <summary>
+/// Art-side editor tool (Tools > Office Art): installs the Rebuilt CRT (the live PC,
+/// CRT_Rebuilt.fbx from BlenderCRT/rebuild_crt.py) under ImportedOfficeDress/Desk/Retro CRT,
+/// fitted to the pack computer's footprint, with its CRT2_* materials. The PC is
+/// user-protected ('Do not change the PC'): rerun only on request.
+/// </summary>
 public static class OfficeCrtStudy
 {
     const string Folder="Assets/Art/Office/ImportedOffice";
     const string PcRoot="ImportedOfficeDress/Desk/Retro CRT";
 
+    /// <summary>
+    /// Replaces any previous 'Rebuilt CRT' under the PC root, colours its parts, sits it
+    /// on the pack computer's base, and deactivates the earlier studies (kept for
+    /// comparison). It refuses before touching the scene when the model has no glass the
+    /// scene contract accepts or the PC root is missing, and writes
+    /// BlenderCRT/revision2_unity_alignment.txt. The scene is marked dirty, not saved.
+    /// </summary>
     [MenuItem("Tools/Office Art/Apply Rebuilt CRT Study")]
     public static void ApplyRebuilt()
     {
@@ -78,6 +90,7 @@ public static class OfficeCrtStudy
             $"Original bounds: {target}\nRebuilt bounds: {bounds}\nScreen center: {center}\nGameplay PC glass (scene contract PCScreen): {(glass?glass.name:"none")}\n");
     }
 
+    /// <summary>The URP Lit material ImportedOffice/Materials/{name}.mat (created when missing), set to a colour and smoothness.</summary>
     static Material Material(string name,Color color,float smoothness)
     {
         string path=$"{Folder}/Materials/{name}.mat";

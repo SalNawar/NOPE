@@ -6,9 +6,12 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
+// The palette pass: material finishes, textures, readout tints, crowd colours and portal clearance.
 public static partial class OfficeDebtReliefArt
 {
+    /// <summary>The generated walnut texture for the booth's desk wood.</summary>
     const string WoodPath = ArtFolder + "/Textures/QuietWalnut.png";
+    /// <summary>The desk props' colour per DeskClean material key (hex RGB); DeskColour overrides some per prop.</summary>
     static readonly Dictionary<string, string> DeskColours = new() {
         {"ABS","F0EFEB"},{"Case","B4B2B6"},{"Grey","F0EFEB"},
         {"Green","604357"},{"GreenDark","353239"},{"Teal","A18FAE"},
@@ -18,25 +21,34 @@ public static partial class OfficeDebtReliefArt
         {"Ink","211F26"},{"Pad","823F50"},{"PadEdge","592C38"},
         {"PhoneBody","D77662"},{"PhoneDial","FFFFFF"},{"Paper2D","FFFFFF"}
     };
+    /// <summary>A colour from hex RGB(A), with or without '#'.</summary>
     static Color Hex(string v) { ColorUtility.TryParseHtmlString("#" + v.TrimStart('#'), out var c); return c; }
+    /// <summary>Creates an asset folder and its parents when missing.</summary>
     static void EnsureFolder(string path)
     {
         if (AssetDatabase.IsValidFolder(path)) return;
         string parent = System.IO.Path.GetDirectoryName(path).Replace('\\','/');
         EnsureFolder(parent); AssetDatabase.CreateFolder(parent, System.IO.Path.GetFileName(path));
     }
+    /// <summary>The world bounds of a root's enabled art renderers; throws when it has none.</summary>
     static Bounds ArtBounds(Transform root)
     {
         var rs = root.GetComponentsInChildren<Renderer>(false).Where(IsArt).ToArray();
         if (rs.Length == 0) throw new InvalidOperationException("No active renderers: " + PathOf(root));
         var b = rs[0].bounds; foreach (var r in rs.Skip(1)) b.Encapsulate(r.bounds); return b;
     }
+    /// <summary>Puts a material in one slot of a renderer, with undo and as a prefab-instance override.</summary>
     static void Assign(Renderer r, int slot, Material m)
     {
         Undo.RecordObject(r, "Office material finish");
         var list = r.sharedMaterials; list[slot] = m; r.sharedMaterials = list;
         PrefabUtility.RecordPrefabInstancePropertyModifications(r); EditorUtility.SetDirty(r);
     }
+    /// <summary>
+    /// The persistent finish DebtRelief/Materials/{key}.mat: created once as a copy of
+    /// <paramref name="source"/>, then recoloured on every run. Normal maps are dropped;
+    /// with <paramref name="anime"/> it switches to NOPE/Desk Anime with the desk presets.
+    /// </summary>
     static Material Finish(string key, Material source, string colour, bool anime, Texture texture = null)
     {
         string path = ArtFolder + "/Materials/" + key + ".mat";
@@ -63,6 +75,7 @@ public static partial class OfficeDebtReliefArt
         }
         EditorUtility.SetDirty(m); return m;
     }
+    /// <summary>A desk prop's colour for a material key, with the per-prop overrides (till, lamp, NEXT, tray, sorter, ink pad, mouse, pen pot, calculator).</summary>
     static string DeskColour(string path, string key)
     {
         string c = DeskColours.TryGetValue(key, out var v) ? v : "F0EFEB";
@@ -89,7 +102,15 @@ public static partial class OfficeDebtReliefArt
         }
         return c;
     }
+    /// <summary>True for a path at or under a protected root.</summary>
     static bool Excluded(string path) => ProtectedRoots.Any(p => path == p || path.StartsWith(p + "/", StringComparison.Ordinal));
+    /// <summary>
+    /// Assigns the finishes by area: desk props (Clean Art under the booth and the desk),
+    /// other booth parts, the megacity blocks and the hall (portal energy, clear window
+    /// glass, surfaces). Each slot starts from the material it had in the baseline, so a
+    /// rerun rebuilds from the originals rather than from the previous finish. Then
+    /// tints the booth's readout texts and recolours the crowd materials.
+    /// </summary>
     static void ApplyMaterials()
     {
         var originals = JsonUtility.FromJson<AuditReport>(File.ReadAllText(ReportFolder + "/before.json")).renderers.ToDictionary(x=>x.path);
@@ -204,6 +225,7 @@ public static partial class OfficeDebtReliefArt
             Undo.RecordObject(m,"Neutral crowd palette");m.SetColor("_Tint",Hex(pair.Item2));EditorUtility.SetDirty(m);
         }
     }
+    /// <summary>The viewport rectangle a world box covers in a camera (its eight corners projected).</summary>
     static Rect Project(Camera cam, Bounds b)
     {
         Vector2 min = new Vector2(float.MaxValue,float.MaxValue), max = new Vector2(float.MinValue,float.MinValue);
@@ -214,7 +236,13 @@ public static partial class OfficeDebtReliefArt
         }
         return Rect.MinMaxRect(min.x,min.y,max.x,max.y);
     }
+    /// <summary>The portal's viewport rectangle in a camera.</summary>
     static Rect PortalRect(Camera cam) => Project(cam,Require("HybridOffice/Hall/Blender_PortalRing/Hall_Portal__Portal_Paint").GetComponent<Renderer>().bounds);
+    /// <summary>
+    /// Moves each crowd group sideways, away from the centre in 10 cm steps (at most 180),
+    /// until its silhouette clears the portal in the office camera by a small margin and
+    /// stays outside the central aisle (|x| > 3.1 m), turning it to face the camera.
+    /// </summary>
     static void ClearPortalApproach()
     {
         var cam=Camera.main; var portal=PortalRect(cam); var root=Require("OfficeHallCrowds");
@@ -234,6 +262,11 @@ public static partial class OfficeDebtReliefArt
             EditorUtility.SetDirty(group);
         }
     }
+    /// <summary>
+    /// The palette pass: finishes, scanner colours and portal clearance, as one undo step.
+    /// It refuses to save when a protected or gameplay hash changed, then re-applies the
+    /// approved desk notes and wear (once their baseline exists) and validates.
+    /// </summary>
     [MenuItem("Tools/Office Art/Debt Relief/Apply Colours Textures And Clear Portal")]
     public static void ApplyColours()
     {
@@ -252,7 +285,13 @@ public static partial class OfficeDebtReliefArt
         if(File.Exists(LayoutReport+"/before.json"))ApplyDeskNotesAndWear();
         ValidateColours();
     }
-    // This prop is loaded by OfficeGameplay, so persist its dedicated material assets too.
+    /// <summary>
+    /// Recolours the gameplay layer's placeholder scanner materials
+    /// (Assets/Art/Office/Gameplay/Materials/Placeholder_Scanner*.mat, loaded by
+    /// OfficeGameplay). Those assets are gameplay-owned (Build Office UI creates them and
+    /// keeps existing colours), so this crosses the ownership line (triage B9): the art
+    /// side should deliver a scanner model marked Anchor_Scanner instead.
+    /// </summary>
     [MenuItem("Tools/Office Art/Debt Relief/Save Scanner Finishes")]
     public static void ApplyScannerFinishes()
     {
@@ -272,12 +311,35 @@ public static partial class OfficeDebtReliefArt
             AssetDatabase.SaveAssetIfDirty(material);
         }
     }
+    /// <summary>The palette pass's check (Applied/validation.json).</summary>
     [Serializable] public class ColourValidation
     {
-        public bool success, pcAndFloorUnchanged, gameplayUnchanged, deskTransformsUnchanged;
-        public int crowdGroups, portalOverlaps, assignedMaterials;
+        /// <summary>True when there are no errors.</summary>
+        public bool success;
+
+        /// <summary>The protected hash matches the baseline.</summary>
+        public bool pcAndFloorUnchanged;
+
+        /// <summary>The gameplay hash matches the baseline.</summary>
+        public bool gameplayUnchanged;
+
+        /// <summary>No desk renderer moved since the baseline (the four requested layout roots may).</summary>
+        public bool deskTransformsUnchanged;
+
+        /// <summary>Crowd silhouettes found (19 expected).</summary>
+        public int crowdGroups;
+
+        /// <summary>Crowd silhouettes that overlap the portal in the office camera (0 expected).</summary>
+        public int portalOverlaps;
+
+        /// <summary>Material slots using a DebtRelief finish (at least 100 expected).</summary>
+        public int assignedMaterials;
+
+        /// <summary>What failed.</summary>
         public List<string> errors=new();
     }
+
+    /// <summary>Read-only: compares the scene with the palette baseline, writes after.json and validation.json, throws on failure.</summary>
     [MenuItem("Tools/Office Art/Debt Relief/Validate Colours")]
     public static void ValidateColours()
     {

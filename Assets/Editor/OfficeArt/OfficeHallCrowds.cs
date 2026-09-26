@@ -7,9 +7,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 
 /// <summary>
-/// Previews and validates the hall's painted crowd groups (the OfficeHallCrowds
-/// root and its OfficeHallCrowdPalette). The groups are authored scene content:
-/// the Debt Relief pass owns their positions and colours.
+/// Art-side editor tool (Tools > Office Art > Hall Crowds): previews and validates
+/// the hall's painted crowd groups (the OfficeHallCrowds root and its
+/// OfficeHallCrowdPalette). The groups are authored scene content: the Debt Relief
+/// pass owns their positions and colours. Reports go to ArtDeliverables/TimeDesk/HallCrowds.
 /// </summary>
 public static class OfficeHallCrowds
 {
@@ -18,12 +19,16 @@ public static class OfficeHallCrowds
     const int ExpectedGroups = 19;
     const string FloorPath = "HybridOffice/Hall/Blender_HallFloor/Hall_Floor__Hall_Floor";
 
+    /// <summary>Shows the morning palette (in edit mode an undoable scene change: set Follow Shift again before saving).</summary>
     [MenuItem("Tools/Office Art/Hall Crowds/Preview Morning")]
     public static void Morning()=>Preview(OfficeHallCrowdPalette.PreviewMode.Morning);
+    /// <summary>Shows the evening palette.</summary>
     [MenuItem("Tools/Office Art/Hall Crowds/Preview Evening")]
     public static void Evening()=>Preview(OfficeHallCrowdPalette.PreviewMode.Evening);
+    /// <summary>Follows the gameplay shift clock: the mode to leave selected for play.</summary>
     [MenuItem("Tools/Office Art/Hall Crowds/Follow Shift")]
     public static void Automatic()=>Preview(OfficeHallCrowdPalette.PreviewMode.Automatic);
+    /// <summary>Sets the palette's mode; refuses when the open scene has no crowds.</summary>
     static void Preview(OfficeHallCrowdPalette.PreviewMode mode)
     {
         var root=GameObject.Find(Root);
@@ -32,11 +37,49 @@ public static class OfficeHallCrowds
         if(!EditorApplication.isPlaying)Undo.RecordObject(palette,"Crowd palette preview");
         palette.SetPreview(mode);EditorUtility.SetDirty(palette);SceneView.RepaintAll();
     }
+    /// <summary>The report (validation_{mode}.json).</summary>
     [Serializable] sealed class Check
     {
-        public bool success;public int groups,uniqueCompositions,visibleGroups,colliders,renderers;
-        public float floorTop,eveningBlend;public string mode;public bool shiftClockLive;public List<string> errors=new();
+        /// <summary>True when there are no errors.</summary>
+        public bool success;
+
+        /// <summary>Groups under the root (19 expected).</summary>
+        public int groups;
+
+        /// <summary>Distinct silhouette meshes (the six authored compositions).</summary>
+        public int uniqueCompositions;
+
+        /// <summary>Silhouettes inside the office camera's view.</summary>
+        public int visibleGroups;
+
+        /// <summary>Colliders under the root (0 expected: the crowds never take clicks).</summary>
+        public int colliders;
+
+        /// <summary>Renderers under the root (silhouettes and contacts).</summary>
+        public int renderers;
+
+        /// <summary>The hall floor's top; every silhouette's feet must be within 1.5 cm of it.</summary>
+        public float floorTop;
+
+        /// <summary>The palette's current blend (0 morning, 1 evening).</summary>
+        public float eveningBlend;
+
+        /// <summary>The palette's mode (Automatic, Morning or Evening).</summary>
+        public string mode;
+
+        /// <summary>True when the gameplay layer's shift clock is published (play mode with OfficeGameplay loaded).</summary>
+        public bool shiftClockLive;
+
+        /// <summary>What failed.</summary>
+        public List<string> errors=new();
     }
+
+    /// <summary>
+    /// Read-only check of the crowds: count, compositions, no colliders or shadows, feet on
+    /// the floor, behind the desk, every renderer tinted as the current blend says, and in
+    /// play mode a live shift clock for Follow Shift. Writes validation_{mode}.json and logs
+    /// an error on failure.
+    /// </summary>
     [MenuItem("Tools/Office Art/Hall Crowds/Validate")]
     public static void Validate()
     {

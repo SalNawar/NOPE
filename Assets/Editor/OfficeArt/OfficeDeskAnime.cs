@@ -4,9 +4,20 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-// Material-only art tool. Does not change the scene lighting, room, or gameplay.
+/// <summary>
+/// Art-side editor tool (Tools > Office Art): restores the NOPE/Desk Anime shader
+/// and its presets (ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/ANIME_SHADER.md)
+/// on the Rebuilt CRT's CRT2_* materials. Materials only: no scene, lighting or
+/// gameplay change. The desk props' finishes belong to the Debt Relief pass.
+/// </summary>
 public static class OfficeDeskAnime
 {
+    /// <summary>
+    /// Sets NOPE/Desk Anime with the desk presets on every CRT2_* material in
+    /// ImportedOffice/Materials: cool shadows, warm light, three tone bands, and small
+    /// highlights by material kind (almost none on glass and ink; the bezel receives a
+    /// quarter of the cast shadow, so its vents draw no second stripe).
+    /// </summary>
     [MenuItem("Tools/Office Art/Apply Desk Anime Shading")]
     public static void Apply()
     {

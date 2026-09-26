@@ -6,22 +6,28 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
+// The desk-layout pass: the five approved desk notes and the worn surfaces.
 public static partial class OfficeDebtReliefArt
 {
+    // The layout pass's report folder, and the prop roots it moves. The phone, the
+    // calculator and NEXT are scene-contract fallbacks: the gameplay binder follows them at load.
     const string LayoutReport = ReportFolder + "/LayoutWear";
     const string PhoneRoot = "ImportedOfficeDress/Desk/Clerk hotline";
     const string LampRoot = "ImportedOfficeDress/Desk/Banker task lamp";
     const string CalcRoot = "ImportedOfficeDress/Desk/Desk calculator";
     const string NextRoot = "HybridOffice/Booth/Blender_Next";
     const string MouseWire = "HybridOffice/Booth/Finish_Mouse/Clean Art/Clean_Mouse__DeskClean_Rubber";
+    /// <summary>True for a path at or under one of the four prop roots the desk notes move.</summary>
     static bool RequestedDeskChange(string path) => new[] {PhoneRoot,LampRoot,CalcRoot,NextRoot}.Any(p=>path==p || path.StartsWith(p+"/",StringComparison.Ordinal));
 
+    /// <summary>Moves a prop root on the desk plane (its height kept) and sets its heading.</summary>
     static void PlaceDeskRoot(string path, float x, float z, float yaw)
     {
         var t=Require(path); Undo.RecordObject(t,"Apply requested desk layout");
         t.SetPositionAndRotation(new Vector3(x,t.position.y,z),Quaternion.Euler(0,yaw,0));
         PrefabUtility.RecordPrefabInstancePropertyModifications(t);EditorUtility.SetDirty(t);
     }
+    /// <summary>Imports a generated wear texture (DebtRelief/Textures) with the pass's settings.</summary>
     static Texture2D WearTexture(string name)
     {
         string path=ArtFolder+"/Textures/"+name+".png";
@@ -33,7 +39,12 @@ public static partial class OfficeDebtReliefArt
         importer.maxTextureSize=1024;importer.textureCompression=TextureImporterCompression.Uncompressed;
         importer.SaveAndReimport();return AssetDatabase.LoadAssetAtPath<Texture2D>(path);
     }
-    // Map selected broad surfaces explicitly; preserve original FBX meshes and their UVs.
+    /// <summary>
+    /// Gives a broad surface planar UVs so a wear texture spans it once: a copy of its
+    /// mesh (saved under DebtRelief/Meshes, reused on reruns) gets UVs from the world
+    /// position along axes <paramref name="u"/> and <paramref name="v"/> (0 x, 1 y, 2 z)
+    /// normalised to the renderer's bounds. The original FBX mesh and its UVs stay.
+    /// </summary>
     static void SurfaceUV(Renderer r,int u,int v)
     {
         var mf=r.GetComponent<MeshFilter>();if(!mf || !mf.sharedMesh)throw new InvalidOperationException("No mesh on "+PathOf(r.transform));
@@ -51,6 +62,11 @@ public static partial class OfficeDebtReliefArt
         Undo.RecordObject(mf,"Map worn surface");mf.sharedMesh=mesh;
         PrefabUtility.RecordPrefabInstancePropertyModifications(mf);EditorUtility.SetDirty(mf);
     }
+    /// <summary>
+    /// Puts DebtRelief/Materials/Wear_{key}.mat (a copy of the renderer's material, with
+    /// the texture; white base colour when <paramref name="replaceColour"/>) in slot 0,
+    /// and planar UVs when axes are given. Refuses a protected renderer.
+    /// </summary>
     static void ApplyWearMap(Renderer r,Texture2D texture,string key,bool replaceColour,int u=-1,int v=-1)
     {
         if(Excluded(PathOf(r.transform)))throw new InvalidOperationException("Protected target: "+r.name);
@@ -64,6 +80,12 @@ public static partial class OfficeDebtReliefArt
         EditorUtility.SetDirty(m);Assign(r,0,m);
         if(u>=0)SurfaceUV(r,u,v);
     }
+    /// <summary>
+    /// The layout pass: phone to the rear right, NEXT beside the mat, the lamp behind
+    /// NEXT, the calculator turned to the player, the mouse wire hidden, and the worn
+    /// plaster, cork and handled surfaces. Captures its baseline on the first run,
+    /// refuses to save when a protected or gameplay hash changed, then validates.
+    /// </summary>
     [MenuItem("Tools/Office Art/Debt Relief/Apply Desk Notes And Wear")]
     public static void ApplyDeskNotesAndWear()
     {
@@ -102,13 +124,56 @@ public static partial class OfficeDebtReliefArt
         Undo.CollapseUndoOperations(undo);EditorSceneManager.MarkSceneDirty(Scene);EditorSceneManager.SaveScene(Scene);
         ValidateDeskNotesAndWear();
     }
+    /// <summary>The layout pass's check (LayoutWear/validation.json).</summary>
     [Serializable] public class LayoutWearValidation
     {
-        public bool success,pcAndFloorUnchanged,gameplayUnchanged,phoneOnRight,nextNearMat,lampBehindNext,calculatorFacingPlayer,mouseWireHidden;
-        public float nextMatGap,calculatorFacingAngle;
-        public int texturedRenderers,portalOverlaps,crowdGroups;
-        public List<string> intersections=new(),errors=new();
+        /// <summary>True when there are no errors.</summary>
+        public bool success;
+
+        /// <summary>The protected hash matches the layout baseline.</summary>
+        public bool pcAndFloorUnchanged;
+
+        /// <summary>The gameplay hash matches the layout baseline.</summary>
+        public bool gameplayUnchanged;
+
+        /// <summary>The phone sits on the right (its bounds start right of x = 1.5).</summary>
+        public bool phoneOnRight;
+
+        /// <summary>NEXT is behind the mat's back edge by less than 12 cm.</summary>
+        public bool nextNearMat;
+
+        /// <summary>The lamp is behind NEXT and within 60 cm of it sideways.</summary>
+        public bool lampBehindNext;
+
+        /// <summary>The calculator faces the camera within 2 degrees.</summary>
+        public bool calculatorFacingPlayer;
+
+        /// <summary>The mouse wire renderer is off.</summary>
+        public bool mouseWireHidden;
+
+        /// <summary>The gap between the mat's back edge and NEXT, metres.</summary>
+        public float nextMatGap;
+
+        /// <summary>The angle between the calculator's front and the camera, degrees.</summary>
+        public float calculatorFacingAngle;
+
+        /// <summary>Renderers using a Wear_ material (at least 9 expected).</summary>
+        public int texturedRenderers;
+
+        /// <summary>Crowd silhouettes that overlap the portal in the office camera (0 expected).</summary>
+        public int portalOverlaps;
+
+        /// <summary>Crowd silhouettes found (19 expected).</summary>
+        public int crowdGroups;
+
+        /// <summary>Desk props whose bounds overlap (none expected).</summary>
+        public List<string> intersections=new();
+
+        /// <summary>What failed.</summary>
+        public List<string> errors=new();
     }
+
+    /// <summary>Read-only: checks the five notes, the wear and the crowd clearance against the layout baseline, writes after.json and validation.json, throws on failure.</summary>
     [MenuItem("Tools/Office Art/Debt Relief/Validate Desk Notes And Wear")]
     public static void ValidateDeskNotesAndWear()
     {
