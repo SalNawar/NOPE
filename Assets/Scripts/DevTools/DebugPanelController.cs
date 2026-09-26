@@ -87,6 +87,9 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>Queues a change to run after this GUI pass (a pass carries one click).</summary>
     private void AfterPass(Action change) => _afterPass = change;
 
+    /// <summary>The costume error cheat's buttons, None first (one per variant).</summary>
+    private static readonly CostumeError[] CostumeErrorChoices = (CostumeError[])Enum.GetValues(typeof(CostumeError));
+
     /// <summary>Draws the overlay's panel and the selected tab.</summary>
     private void Draw()
     {
@@ -253,6 +256,20 @@ public sealed class DebugPanelController : MonoBehaviour
             Debug.Log($"[DebugPanelController] Cheat: ForceLegendaryNextCase set to {newForced}.");
             DevToolsState.ForceLegendaryNextCase = newForced;
         }
+
+        GUILayout.BeginHorizontal();
+        GUILayout.Label($"Costume error on the next generated case: {DevToolsState.ForcedCostumeError}", GUILayout.Width(330f));
+        foreach (CostumeError error in CostumeErrorChoices)
+        {
+            if (!GUILayout.Button(error.ToString(), GUILayout.Width(120f)) || DevToolsState.ForcedCostumeError == error)
+                continue;
+            AfterPass(() =>
+            {
+                Debug.Log($"[DebugPanelController] Cheat: ForcedCostumeError set to {error} (from the next day's generation).");
+                DevToolsState.ForcedCostumeError = error;
+            });
+        }
+        GUILayout.EndHorizontal();
 
         GUILayout.Space(6f);
         GUILayout.Label("Upgrades");

@@ -23,7 +23,7 @@ public sealed class CaseDocument
     /// <summary>The document's display name ("Travel Passport").</summary>
     public string name;
 
-    /// <summary>The document's fields: the rows its paper shows (DocumentRows).</summary>
+    /// <summary>The document's fields: the boxes its paper's form shows.</summary>
     public IReadOnlyList<DocumentField> fields;
 
     /// <summary>When the traveller hands it over.</summary>

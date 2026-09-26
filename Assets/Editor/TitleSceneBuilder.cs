@@ -55,6 +55,20 @@ public static class TitleSceneBuilder
         Button endingNewRunButton = FindOrCreateButton(ending, "NewRunButton", "New Run",
             new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.2f));
 
+        // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
+        Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(1880f, 520f), withBackground: false);
+        Transform contractCard = FindOrCreatePanel(papers, "ContractCard", new Vector2(0f, 0f), new Vector2(0f, 1f),
+            new Vector2(270f, 0f), new Vector2(540f, 0f), withBackground: true, bgColor: new Color(0.1f, 0.1f, 0.12f, 0.97f));
+        TMP_Text contractText = FindOrCreateText(contractCard, "ContractText", "...", 18,
+            TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.96f));
+        Transform accountCard = FindOrCreatePanel(papers, "AccountCard", new Vector2(1f, 0f), new Vector2(1f, 1f),
+            new Vector2(-270f, 0f), new Vector2(540f, 0f), withBackground: true, bgColor: new Color(0.1f, 0.1f, 0.12f, 0.97f));
+        TMP_Text accountText = FindOrCreateText(accountCard, "AccountText", "...", 16,
+            TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.96f));
+        contractText.textWrappingMode = TextWrappingModes.Normal;
+        accountText.textWrappingMode = TextWrappingModes.Normal;
+
         // --- Wire TitleUIController ---
         var soUi = new SerializedObject(titleUI);
 
@@ -67,6 +81,9 @@ public static class TitleSceneBuilder
         soUi.FindProperty("endingTitleText").objectReferenceValue = endingTitleText;
         soUi.FindProperty("endingBodyText").objectReferenceValue = endingBodyText;
         soUi.FindProperty("endingNewRunButton").objectReferenceValue = endingNewRunButton;
+        soUi.FindProperty("clerkPapers").objectReferenceValue = papers.gameObject;
+        soUi.FindProperty("clerkContractText").objectReferenceValue = contractText;
+        soUi.FindProperty("clerkAccountText").objectReferenceValue = accountText;
         soUi.ApplyModifiedProperties();
 
         BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton);
@@ -81,9 +98,10 @@ public static class TitleSceneBuilder
             soController.ApplyModifiedProperties();
         }
 
-        // Panels start hidden (TitleUIController.Awake also enforces this).
+        // Panels start hidden (TitleUIController.Awake also enforces this; ShowClerkPapers shows the papers).
         title.gameObject.SetActive(false);
         ending.gameObject.SetActive(false);
+        papers.gameObject.SetActive(false);
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");

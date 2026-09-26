@@ -7,8 +7,8 @@ using UnityEngine.UI;
 /// The office builder's desktop window parts (the PC redesign WN1-WN3, DK8,
 /// DK9, CM2): the desktop's knobs (DesktopConfigSO), the compare dock above
 /// the taskbar (outside every window: the window layer, the icon area above
-/// it, draws over the desktop's icons and the case's claim and Accept/Deny
-/// and shows with or without a case; the dock draws over every window), the
+/// it, draws over the desktop's icons and shows with or without a case; the
+/// dock draws over every window), the
 /// taskbar's window buttons, and the window manager on the desktop canvas,
 /// wired to every window's chrome and to the frame's Escape. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; Build() calls these in its order.
@@ -57,19 +57,14 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The compare dock (DK9, CM2): a strip the width of the desktop right
     /// above the taskbar, built hidden and shown with the case (<paramref name="dock"/>,
-    /// the façade's). On the investigation host the case root comes first, then
-    /// the window layer (its windows draw over the case's claim, icons and
-    /// Accept/Deny), then the dock over every window. Empty, it reads the keyed
+    /// the façade's). It is the investigation host's last child, so it draws
+    /// over the window layer and the scan toast. Empty, it reads the keyed
     /// hint; its Pair (the CompareController's bar, shown while a value is
     /// picked) covers the hint with the compare text and a clear button
-    /// (CompareController.Clear). The PC's old floating CompareBar goes.
-    /// Returns the pair; its text is <paramref name="text"/>.
+    /// (CompareController.Clear). Returns the pair; its text is <paramref name="text"/>.
     /// </summary>
-    private static Transform BuildCompareDock(Transform investHost, Transform investRoot, Transform windowLayer, CompareController compare,
-                                              out TMP_Text text, out GameObject dock)
+    private static Transform BuildCompareDock(Transform investHost, CompareController compare, out TMP_Text text, out GameObject dock)
     {
-        DestroyChildIfPresent(investRoot, "CompareBar");
-        MoveChildIfPresent(investRoot, "CompareDock", investHost);
         DesktopConfigSO config = EnsureDesktopConfig();
 
         Transform strip = Panel(investHost, "CompareDock", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, config.taskbarHeight + config.dockHeight / 2f),
@@ -91,25 +86,10 @@ public static partial class OfficeSceneUIBuilder
         WirePersistentVoid(clear, "m_OnClick", compare, nameof(CompareController.Clear));
         pair.gameObject.SetActive(false);
 
-        investRoot.SetAsFirstSibling();
-        windowLayer.SetAsLastSibling();
         strip.SetAsLastSibling();
         strip.gameObject.SetActive(false);
         dock = strip.gameObject;
         return pair;
-    }
-
-    /// <summary>
-    /// Moves <paramref name="parent"/>'s child <paramref name="name"/>, with
-    /// everything on it, to <paramref name="to"/> (its layout re-applied by the
-    /// build after): a scene built while the window layer and the dock sat on
-    /// the case root keeps its windows when rebuilt.
-    /// </summary>
-    private static void MoveChildIfPresent(Transform parent, string name, Transform to)
-    {
-        Transform t = parent.Find(name);
-        if (t != null)
-            t.SetParent(to, false);
     }
 
     /// <summary>

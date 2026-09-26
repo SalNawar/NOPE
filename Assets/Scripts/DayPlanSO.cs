@@ -64,6 +64,13 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private TellChannel[] tellChannels = { TellChannel.Papers };
 
+    /// <summary>
+    /// Chance per 2150 citizen of a costume error (traveller types C2 and P4;
+    /// CostumeErrors.Plan): 0 before the dress rule's first day. Written by
+    /// Tools > TimeDesk > Generate World from world_source.json days[].costumeErrorChance.
+    /// </summary>
+    [SerializeField, Range(0f, 1f)] private float costumeErrorChance;
+
     // -----------------------------
     // Scripted overrides
     // -----------------------------
@@ -109,6 +116,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Where today's liars may leak tells (empty when unset).</summary>
     public IReadOnlyList<TellChannel> TellChannels => tellChannels ?? Array.Empty<TellChannel>();
+
+    /// <summary>Chance per 2150 citizen of a costume error today.</summary>
+    public float CostumeErrorChance => costumeErrorChance;
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();

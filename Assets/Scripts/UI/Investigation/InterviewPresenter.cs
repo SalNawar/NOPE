@@ -7,11 +7,12 @@ using Object = UnityEngine.Object;
 /// The investigation's interview (the PC redesign RF1): the day's interview and
 /// translation (set by GameManager through the façade), the current
 /// traveller's dialog runner on the traveller wheel's ring, the transcript
-/// window, and the wheel's bubble. A document request hands the document over
-/// (through the case's documents) and closes the wheel; a look at a garment
-/// puts it into the compare and closes the wheel; any other choice opens the
-/// transcript; the traveller's new lines go to the bubble; a finished dialog
-/// is recorded for the shift. The bubble's answer, picked at the desk, goes
+/// (the app's Transcript tab), and the wheel's bubble. A document request
+/// hands the document over (through the case's documents) and closes the
+/// wheel; a look at a garment puts it into the compare and closes the wheel;
+/// a choice that adds lines tells the app (the Transcript tab's badge;
+/// nothing opens: WN5); the traveller's new lines go to the bubble; a
+/// finished dialog is recorded for the shift. The bubble's answer, picked at the desk, goes
 /// into the compare as its transcript row would. It subscribes to the wheel
 /// it was given and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
@@ -20,7 +21,7 @@ public sealed class InterviewPresenter
 {
     private readonly InteractionPanelController _ring;
     private readonly TranscriptWindowController _transcript;
-    private readonly DesktopWindow _transcriptChrome;
+    private readonly Action _spoke;
     private readonly TravellerWheel _wheel;
     private readonly CompareController _compare;
     private readonly Action<int> _handOver;
@@ -46,17 +47,17 @@ public sealed class InterviewPresenter
     private TravellerWheel _listening;
 
     /// <summary>
-    /// The wheel's ring, the transcript window and its chrome, the wheel and the
-    /// compare (any may be missing), the hand-over of a document by index
-    /// (CaseDocumentsPresenter.HandOver), the façade's current case, and the
-    /// object the logs name.
+    /// The wheel's ring, the transcript, the wheel and the compare (any may be
+    /// missing), what new transcript lines tell (the app's Transcript tab), the
+    /// hand-over of a document by index (CaseDocumentsPresenter.HandOver), the
+    /// façade's current case, and the object the logs name.
     /// </summary>
-    public InterviewPresenter(InteractionPanelController ring, TranscriptWindowController transcript, DesktopWindow transcriptChrome,
+    public InterviewPresenter(InteractionPanelController ring, TranscriptWindowController transcript, Action spoke,
                               TravellerWheel wheel, CompareController compare, Action<int> handOver, Func<CaseInstance> currentCase, Object context)
     {
         _ring = ring;
         _transcript = transcript;
-        _transcriptChrome = transcriptChrome;
+        _spoke = spoke ?? throw new ArgumentNullException(nameof(spoke));
         _wheel = wheel;
         _compare = compare;
         _handOver = handOver ?? throw new ArgumentNullException(nameof(handOver));
@@ -179,12 +180,12 @@ public sealed class InterviewPresenter
     }
 
     /// <summary>
-    /// Plays one interview choice: the transcript shows its lines; a document
-    /// request hands that document over (a paper onto the desk, or straight to
-    /// its window where no desk is wired) and closes the wheel so the player can
-    /// take it; a look at a garment puts it into the compare bar (the player
-    /// then compares it with a Costume Guide row on the PC) and closes the
-    /// wheel; any other choice opens the transcript; the traveller's lines, when
+    /// Plays one interview choice: the transcript shows its lines (new lines
+    /// tell the app: the Transcript tab's badge); a document request hands that
+    /// document over (a paper onto the desk, or straight to the PC where no
+    /// desk is wired) and closes the wheel so the player can take it; a look at
+    /// a garment puts it into the compare bar (the player then compares it with
+    /// a Costume Guide row on the PC) and closes the wheel; the traveller's lines, when
     /// the choice adds some, go to the wheel's bubble (the spoken reveal point),
     /// queued after what they are saying, each changing a premade's picture as
     /// it starts (a choice without one, such as "Ask about home >" or "&lt;
@@ -203,6 +204,8 @@ public sealed class InterviewPresenter
 
         if (_transcript != null)
             _transcript.Refresh();
+        if (_runner.Transcript.Count > before)
+            _spoke();
 
         if (choice.Action == DialogAction.HandOverDocument)
         {
@@ -215,10 +218,6 @@ public sealed class InterviewPresenter
             LookAt(choice.GarmentIndex);
             if (_wheel != null)
                 _wheel.Close();
-        }
-        else if (_transcriptChrome != null)
-        {
-            _transcriptChrome.Open();
         }
 
         if (_wheel != null)

@@ -12,6 +12,9 @@ ART = TOOLS.parent
 W = json.loads((TOOLS / "wardrobe_v2.json").read_text(encoding="utf-8"))
 P = {p["id"]: p for p in W["places"]}
 FUT = {f["country"]: f for f in W["future"]}
+# v2.3 (2026-09-26): the present's clothes (the neutral Future outfits become game files) and the 2150 accessory kit.
+PRESENT_CLOTHES = W["presentClothes"]
+KIT = W["presentKit"]
 # v2.1 counts for the change section: MUST READ lines rewritten, generated pairs under the two new women's headwear items.
 N_MUST_V21 = sum(1 for e in W["editLog"] if "MUST READ names only" in e["why"])
 N_HID_V21 = sum(1 for x in W["confusableHidden"] if x["gender"] == "f" and x["a"] in ("japan_earlymodern", "china_modern"))
@@ -141,6 +144,8 @@ def future_keys(country, g):
 
 NEUTRAL_FUTURE_KEYS = [f"hair_{g}_neutral_future_{c}" for g in GENDERS for c in COLOURS] + \
                       [f"facialhair_m_neutral_future_{c}" for c in COLOURS]
+PRESENT_OUTFIT_KEYS = [f"outfit_{g}_neutral_future" for g in GENDERS]
+KIT_KEYS = [f"accessory_{g}_neutral_future_{k['variant']}" for g in GENDERS for k in KIT]
 
 # ------------------------------------------------------------------ premades (AMENDMENT A1 cast)
 PREMADES = [
@@ -290,9 +295,9 @@ w = out.append
 
 RULES_A = RULE_BULLETS.format(likeness=", and no likeness of any real person")
 D1080, D720 = DESK[1080], DESK[720]
-w(f"""# Time Sorter: Character Art Brief v2.2 (for ChatGPT)
+w(f"""# Time Sorter: Character Art Brief v2.3 (for ChatGPT)
 
-*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), and again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
+*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"), and on 2026-09-26 for the 2150 clothes and accessory kit (v2.3). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
 
 **The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png`: the game no longer uses that file. It stays on disk only because the art scene's leftover 2D booth (`OfficeRoot`, switched off when the office loads) and the art side's recovery scenes still reference it, and it goes when the art side deletes those leftovers (`docs/SCENE_CONTRACT_GAMEPLAY.md`).
 
@@ -310,6 +315,15 @@ Files that go with this brief (all in this folder, except the office screenshot)
 - `coverage.json`: every file name the game needs, so the delivery can be checked by a script.
 
 Attach whatever each prompt's "Attached:" line names.
+
+## What changed in v2.3 (2026-09-26): 2150 clothes and the accessory kit
+
+Every traveller must be dressed for the time they are going to, or they would cause a panic there (Saleh). A citizen of 2150 travelling into the past can get it wrong: another place's item, their own 2150 clothes, or one 2150 accessory over an otherwise right costume. Two things change for the art:
+
+1. **The neutral Future outfits become game files** (`outfit_m_neutral_future`, `outfit_f_neutral_future`): they are the present's clothes, which the game draws on a 2150 citizen who forgot their costume. They were working references only; draw them exactly as Batch 11 says.
+2. **New: the 2150 accessory kit** (Batch 12, section 24): four small items per gender ({", ".join(k["label"] for k in KIT)}), each readable at a glance above the desk and worn over any period costume. They are filed under the art nation `neutral` with their own name at the end (`accessory_m_neutral_future_{KIT[0]["variant"]}`).
+
+Nothing else changes.
 
 ## What changed in v2.2 (2026-09-25): the ReStory style
 
@@ -507,11 +521,13 @@ For Saleh only, never for ChatGPT (the game's starting weights, to review; they 
 | `accessory_[m/f]_[country]_[era].png` | `accessory_[m/f]_[country]_[era]` |
 | `outfit_[m/f]_[country]_future.png` | `outfit_[m/f]_[country]_future` |
 | `hair_[m/f]_neutral_future.png`, `facialhair_m_neutral_future.png` | `hair_[m/f]_neutral_future_[colour]`, `facialhair_m_neutral_future_[colour]` (shared by every Future place) |
+| `outfit_[m/f]_neutral_future.png` | `outfit_[m/f]_neutral_future` (the present's clothes, since v2.3) |
+| `accessory_[m/f]_neutral_future_[item].png` | `accessory_[m/f]_neutral_future_[item]` (the 2150 accessory kit; items: `{" ".join(k["variant"] for k in KIT)}`) |
 | `premade_[id]_[expression].png` | `premade_[id]_[neutral/happy/angry/worried]` |
 
 - Countries: `egypt iraq greece italy china japan britain germany`. Eras: `ancient medieval earlymodern industrial modern future`. Gender: `m` or `f`. Lower case, no spaces, underscores only.
 - Only what the look has: no file for "none" (no facial hair, no headwear, no accessory).
-- `outfit_[m/f]_neutral_future.png` is a working reference for the Future batch; the game has no key for it. Claude's working files are not game keys either: `mannequin_[m/f].png`, `style_card.png`, `premadebase_[m/f]_skin[N].png`.
+- `outfit_[m/f]_neutral_future.png` is the base of the Future batch and, since v2.3, a game file: the present's clothes. Claude's working files are not game keys: `mannequin_[m/f].png`, `style_card.png`, `premadebase_[m/f]_skin[N].png`.
 - The full list of game keys, with the raw file each comes from, is in `coverage.json`.
 
 ## 9. The prompts
@@ -715,6 +731,7 @@ BATCHES = [
     ("9", "Industrial era", "day 4", ""),
     ("10", "Modern era", "day 5", ""),
     ("11", "The Future", "day 6", "only appears once a country leads history"),
+    ("12", "The 2150 accessory kit", "day 2", "a 2150 citizen's costume error: one kit item over a right costume (the neutral Future outfits of Batch 11 are the other, 2150 clothes)"),
 ]
 w("""## 12. Batch order
 
@@ -833,7 +850,7 @@ places_batch("9", 21, "Industrial era", DAY4, "Day 4 adds the Industrial era (17
 places_batch("10", 22, "Modern era", DAY5, "Day 5 adds the Modern era (1900 to 2000).")
 
 # ---------------------------------------------------------------- Future (Batch 11) + premade setup (section 22)
-fut_raws = [("outfit_m_neutral_future.png", []), ("outfit_f_neutral_future.png", []),
+fut_raws = [("outfit_m_neutral_future.png", ["outfit_m_neutral_future"]), ("outfit_f_neutral_future.png", ["outfit_f_neutral_future"]),
             ("hair_m_neutral_future.png", [f"hair_m_neutral_future_{c}" for c in COLOURS]),
             ("hair_f_neutral_future.png", [f"hair_f_neutral_future_{c}" for c in COLOURS]),
             ("facialhair_m_neutral_future.png", [f"facialhair_m_neutral_future_{c}" for c in COLOURS])] + \
@@ -879,9 +896,31 @@ MUST READ AT A GLANCE: the soft stand collar and clean geometric seams in slate 
 DO NOT DRAW: armour, helmets, visors, glowing parts, robot parts, weapons, logos, letters or readable text.
 ```
 
-Files: `outfit_m_neutral_future.png`, `outfit_f_neutral_future.png` (working references, not used in the game), `hair_m_neutral_future.png`, `hair_f_neutral_future.png`, `facialhair_m_neutral_future.png`
+Files: `outfit_m_neutral_future.png`, `outfit_f_neutral_future.png` (the base of every culture Future and, since v2.3, the present's clothes: import labels "{PRESENT_CLOTHES['m']['outfit']}" / "{PRESENT_CLOTHES['f']['outfit']}"), `hair_m_neutral_future.png`, `hair_f_neutral_future.png`, `facialhair_m_neutral_future.png`
 
 """ + "\n".join(fblocks) + "\n**Send to Claude.**\n")
+
+# ---------------------------------------------------------------- the 2150 accessory kit (Batch 12, v2.3)
+kit_raws = [(f"accessory_{g}_neutral_future_{k['variant']}.png", [f"accessory_{g}_neutral_future_{k['variant']}"]) for g in GENDERS for k in KIT]
+counts.append(("Batch 12: the 2150 accessory kit", len(kit_raws), len(keys_of(kit_raws))))
+w(f"""## 24. Batch 12: the 2150 accessory kit ({len(kit_raws)} images)
+
+The travellers of 2150 must dress for the time they are going to. One who slips wears a single item of their own time over an otherwise right costume, and the player catches it by comparing it with the Costume Guide. These are those items: one small set, drawn for the man and for the woman. Folder: `Raw/batch12-2150-kit/`.
+
+```
+PAIR: neutral_future_kit (the 2150 accessory kit, the player's own time)
+Both: small, clean, practical 2150 gadgets in slate grey, sand and slate teal-blue, like the neutral Future outfits. Each stands on its own, over any period costume, and reads at a glance above the desk.
+""" + "\n".join(f"- {k['label'].upper()}: {k['look']}." for k in KIT) + """
+MUST READ AT A GLANCE: each item's clean geometric shape in slate grey and teal-blue, unlike any period accessory.
+DO NOT DRAW: glowing parts, screens with pictures, letters, numbers or readable text, logos, cables, anything held in the hand.
+```
+
+For each item, send the PAIR block once, then prompt 9.8 (Accessory) with the item's name, once for the man and once for the woman.
+
+Files: """ + ", ".join(f"`{fn}`" for fn, _ in kit_raws) + """. Import labels (world_source.json `present.kit`): """ + "; ".join(f'"{k["label"]}" (`{k["variant"]}`)' for k in KIT) + """.
+
+**Send to Claude.**
+""")
 
 # ---------------------------------------------------------------- checklist + totals
 total_raw = sum(c[1] for c in counts)
@@ -906,7 +945,7 @@ w("""## Checklist before you send a place to Claude
 """ + "\n".join(f"| {k} | {r} | {n} |" for k, r, n in counts) + f"""
 | **Total** | **{total_raw}** | **{total_keys_batches}** |
 
-The game files include the five baked hair colours, the hair-back layers and the four premade expressions. The two neutral Future outfits are working references with no game file. `coverage.json` lists every game file.
+The game files include the five baked hair colours, the hair-back layers and the four premade expressions. `coverage.json` lists every game file.
 """)
 
 # ---------------------------------------------------------------- appendices
@@ -1159,6 +1198,7 @@ for c in future.values():
     for g in GENDERS:
         flat += c[g]
 flat += NEUTRAL_FUTURE_KEYS
+flat += PRESENT_OUTFIT_KEYS + KIT_KEYS
 for v in premades.values():
     flat += v
 assert len(flat) == len(set(flat)), "duplicate key"
@@ -1183,18 +1223,19 @@ add_raw(8, "batch08-premades", premade_raws(POOL3_NEW))
 add_raw(9, "batch09-industrial-era", [r for pid in DAY4 for r in place_raws(pid)])
 add_raw(10, "batch10-modern-era", [r for pid in DAY5 for r in place_raws(pid)])
 add_raw(11, "batch11-future", fut_raws)
+add_raw(12, "batch12-2150-kit", kit_raws)
 produced = [k for r in raw for k in r["produces"]]
 assert sorted(produced) == sorted(flat), (set(flat) - set(produced), set(produced) - set(flat))
 
 cov = {
     "schema": "timesorter.character-art-coverage/1",
-    "generated": "2026-09-25",
+    "generated": "2026-09-26",
     "sources": {
         "grammar": "piece-4 spec section 2.3 (LookKeys) + piece-5 R18 (artNation 'neutral' for Future hair and facial hair)",
         "wardrobe": "costume_research.json + brief_review.json (68 fixes, 22 issues) -> tools/wardrobe_v2.json",
         "premades": "piece4_decisions.md Amendment A1 (cast after the review of brief v2: Cecilia Gallerani replaces Alessandra Strozzi)",
         "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E",
-        "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'",
+        "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'; v2.3 (2026-09-26): the present's clothes (the neutral Future outfits become keys) and the 2150 accessory kit (Batch 12); see the brief's 'What changed in v2.3'",
     },
     "assetFolder": "Assets/Art/Characters/Resources/Characters",
     "extension": ".png",
@@ -1210,19 +1251,23 @@ cov = {
     "grammar": {
         "body": "body_{g}_skin{N}",
         "head": "head_{g}_skin{N}_face{v}",
-        "garment": "{layer}_{g}_{nation}_{era}[_{colour}]  (colour on hair and hairback unless the hair is a wig; always on facialhair)",
+        "garment": "{layer}_{g}_{nation}_{era}[_{variant}][_{colour}]  (variant on the 2150 accessory kit's items; colour on hair and hairback unless the hair is a wig; always on facialhair)",
         "premade": "premade_{id}_{expression}",
         "tokens": {"g": list(GENDERS), "N": SKINS, "v": FACES, "colour": COLOURS,
                    "layer": ["hairback", "outfit", "facialhair", "hair", "headwear", "accessory"],
                    "nation": COUNTRIES + ["neutral"], "era": ["ancient", "medieval", "earlymodern", "industrial", "modern", "future"],
-                   "expression": EXPRESSIONS},
+                   "expression": EXPRESSIONS, "variant": [k["variant"] for k in KIT]},
         "reserved": "an outfit variant suffix _v{N} (not used yet)",
     },
     "counts": {"bases": len(bases), "garments": sum(len(v[g]) for v in garments.values() for g in GENDERS),
                "future": sum(len(v[g]) for v in future.values() for g in GENDERS) + len(NEUTRAL_FUTURE_KEYS),
+               "present": len(PRESENT_OUTFIT_KEYS) + len(KIT_KEYS),
                "premades": sum(len(v) for v in premades.values()), "total": len(flat),
                "rawImages": len(raw)},
-    "required": {"bases": bases, "garments": garments, "future": future, "futureShared": NEUTRAL_FUTURE_KEYS, "premades": premades},
+    "required": {"bases": bases, "garments": garments, "future": future, "futureShared": NEUTRAL_FUTURE_KEYS,
+                 "present": {"clothes": PRESENT_OUTFIT_KEYS, "kit": KIT_KEYS}, "premades": premades},
+    "presentKit": {"labels": {k["variant"]: k["label"] for k in KIT}, "slot": "Accessory", "leakable": True, "artNation": "neutral",
+                   "note": "one item slips onto an otherwise right costume (a costume error); world_source.json present.kit lists them per gender"},
     "requiredFlat": sorted(flat),
     "wardrobeFlags": {**{p["id"]: {g: {"present": p["wardrobe"][g]["present"], "labels": p["wardrobe"][g]["labels"],
                                         "signature": p["wardrobe"][g]["signature"],
@@ -1243,7 +1288,7 @@ cov = {
         "hairback keys exist only for hair items flagged back=true (proposed here; one test: hair that shows beside the neck behind the shoulders in front view); change the flag and the list changes.",
         "wardrobeFlags: 'labels' holds every present item's short label; the signature item is leakable; 'covers' is the headwear's covers list (['Hair'] when it hides all the hair); Future places share hair and facial hair through artNation 'neutral' and never leak (signature Outfit).",
         "Confusable pairs (hand-authored and generated) are in tools/wardrobe_v2.json 'confusable' and 'confusableHidden'.",
-        "outfit_{g}_neutral_future.png raw files are working references with no game key.",
+        "outfit_{g}_neutral_future is the present's clothes (since v2.3): a 2150 citizen who forgot their costume wears them whole, with the neutral Future hair and beard.",
         "UI art (the culture wallpapers; posters are deferred) is listed in officeArt, not in requiredFlat: it follows the office path convention (piece-6 R11). officeArt also names the 2D layers over the office and the art side's scanner, which replace placeholders in place.",
     ],
     "officeArt": {

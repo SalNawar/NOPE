@@ -394,16 +394,20 @@ public static class Looks
     /// colour (one weighted pick; brown and no draw with no weights), grey from
     /// rules.greyFromAge. Age is the claim's year minus the cover birth year
     /// (the youngest band when unreadable). Every slot wears the claim's item,
-    /// except that <paramref name="leakFrom"/> (a dress tell) puts its
-    /// signature item in its signature slot; an item hidden by another's
-    /// covers is not drawn. Each part is filed under its item's art nation
-    /// (LookItem.ArtNation, else its source's nation) and its source's era.
-    /// Hair and hair back take the colour unless the hair is a wig; facial
-    /// hair always does. Garments are listed in slot order, valued with their
-    /// source's Culture fact.
+    /// except that <paramref name="leakFrom"/> (a dress tell or a costume
+    /// error) puts its signature item in its signature slot, or, with
+    /// <paramref name="leakWhole"/> (a 2150 citizen in the present's clothes),
+    /// dresses every slot from its own items instead of the claim's; an item
+    /// hidden by another's covers is not drawn. Every garment from
+    /// <paramref name="leakFrom"/> is a tell. Neither changes a draw. Each
+    /// part is filed under its item's art nation (LookItem.ArtNation, else its
+    /// source's nation), its source's era and its art variant. Hair and hair
+    /// back take the colour unless the hair is a wig; facial hair always does.
+    /// Garments are listed in slot order, valued with their source's Culture
+    /// fact.
     /// </summary>
     public static TravellerLook Compose(LookSource claim, LookSource leakFrom, TravellerGender gender, string coverBirthDate,
-                                        int claimYear, LookWeights weights, LookRules rules, IRandomSource rng)
+                                        int claimYear, LookWeights weights, LookRules rules, IRandomSource rng, bool leakWhole = false)
     {
         rules = rules ?? new LookRules();
 
@@ -433,14 +437,14 @@ public static class Looks
         if (ageKnown && rules.greyFromAge > 0 && age >= rules.greyFromAge)
             colour = LookKeys.Grey;
 
-        // --- Items: the claim's, one slot possibly from the true home ---
+        // --- Items: the claim's, one slot (or, whole, every slot) from the leak ---
         GenderLook own = claim.Wardrobe.For(g);
         GenderLook homeLook = leakFrom?.Wardrobe?.For(g);
         var items = new Dictionary<LookSlot, (LookItem item, LookSource source)>();
         foreach (LookSlot slot in Slots)
         {
-            bool leaked = homeLook != null && slot == homeLook.signature;
-            LookItem item = leaked ? homeLook.Signature : own.Item(slot);
+            bool leaked = homeLook != null && (leakWhole || slot == homeLook.signature);
+            LookItem item = leaked ? homeLook.Item(slot) : own.Item(slot);
             if (item != null && item.IsPresent)
                 items[slot] = (item, leaked ? leakFrom : claim);
         }
@@ -472,7 +476,7 @@ public static class Looks
         bool hairDrawn = items.TryGetValue(LookSlot.Hair, out (LookItem item, LookSource source) hairItem);
         string hairColour = hairDrawn && hairItem.item.wig ? null : colour;
         if (hairDrawn && hairItem.item.back)
-            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hairItem.item.ArtNation(hairItem.source.NationId), hairItem.source.EraId, hairColour), garmentIndex[LookSlot.Hair]));
+            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hairItem.item.ArtNation(hairItem.source.NationId), hairItem.source.EraId, hairColour, hairItem.item.artVariant), garmentIndex[LookSlot.Hair]));
         parts.Add(new LookPart(LookLayer.Body, LookKeys.Body(g, skin), -1));
         AddGarmentPart(parts, items, garmentIndex, LookSlot.Outfit, g, null);
         parts.Add(new LookPart(LookLayer.Head, LookKeys.Head(g, skin, face), -1));
@@ -483,6 +487,26 @@ public static class Looks
 
         return new TravellerLook(parts, garments, null, g, skin, face, colour);
     }
+
+    /// <summary>
+    /// One accessory of the present's kit as a leak source (costume errors,
+    /// traveller types C2): the present's ids and Culture value, with that
+    /// accessory as both genders' signature item, so CanLeak and Compose treat
+    /// it as any signature item and its garment is proven against the
+    /// present's Costume Guide row.
+    /// </summary>
+    public static LookSource KitSource(LookSource present, LookItem accessory) => new LookSource
+    {
+        NationId = present?.NationId,
+        EraId = present?.EraId,
+        PlaceId = present?.PlaceId,
+        Wardrobe = new PlaceWardrobe
+        {
+            male = new GenderLook { signature = LookSlot.Accessory, accessory = accessory ?? new LookItem() },
+            female = new GenderLook { signature = LookSlot.Accessory, accessory = accessory ?? new LookItem() }
+        },
+        CultureValue = present?.CultureValue
+    };
 
     /// <summary>A premade's look: one whole picture (neutral), one garment (the whole-figure label, the claim's Culture value, never a tell). No draws.</summary>
     public static TravellerLook Whole(string premadeId, LookSource claim, LookRules rules)
@@ -503,12 +527,12 @@ public static class Looks
             return;
 
         LookLayer layer = LayerOf(slot);
-        parts.Add(new LookPart(layer, LookKeys.Garment(layer, g, worn.item.ArtNation(worn.source.NationId), worn.source.EraId, colour), garmentIndex[slot]));
+        parts.Add(new LookPart(layer, LookKeys.Garment(layer, g, worn.item.ArtNation(worn.source.NationId), worn.source.EraId, colour, worn.item.artVariant), garmentIndex[slot]));
     }
 
-    /// <summary>An item's uncoloured art name in a slot: its art nation and its place's era (CanLeak's same-art row compares two).</summary>
+    /// <summary>An item's uncoloured art name in a slot: its art nation, its place's era and its variant (CanLeak's same-art row compares two).</summary>
     private static string ArtName(LookSlot slot, TravellerGender gender, LookItem item, LookSource source) =>
-        LookKeys.Garment(LayerOf(slot), gender, item.ArtNation(source.NationId), source.EraId, null).Name;
+        LookKeys.Garment(LayerOf(slot), gender, item.ArtNation(source.NationId), source.EraId, null, item.artVariant).Name;
 
     /// <summary>One weighted pick of a skin tone (1..5); 3 with no draw when every weight is 0 or missing.</summary>
     private static int PickSkin(LookWeights weights, IRandomSource rng)

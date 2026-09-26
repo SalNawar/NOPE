@@ -256,6 +256,10 @@ MonoBehaviour:
     dominant:
       id: history.dominant
       text: '{attribute} is now DOMINANT in {place}.'
+    panic:
+      id: history.panic
+      text: 'PANIC in {place}: a traveller from the agency was seen in "{value}"
+        and the street fled.'
   pc:
     sites:
     - id: news
@@ -532,6 +536,10 @@ MonoBehaviour:
       - d
     greyFromAge: 60
     wholeFigureLabel: Period dress
+    costumeErrors:
+      otherPlace: 2
+      presentClothes: 1
+      presentAccessory: 2
     confusable:
     - placeA: greece_ancient
       placeB: italy_ancient
@@ -1073,6 +1081,150 @@ MonoBehaviour:
       placeB: japan_industrial
       slot: 1
       gender: f
+  presentLook:
+    wardrobe:
+      male:
+        signature: 0
+        outfit:
+          label: tech jacket
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+        hair:
+          label: short textured crop
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: neutral
+          artVariant: 
+        facialHair:
+          label: 
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+        headwear:
+          label: 
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+        accessory:
+          label: 
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+      female:
+        signature: 0
+        outfit:
+          label: coat-dress
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+        hair:
+          label: sleek low bun
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: neutral
+          artVariant: 
+        facialHair:
+          label: 
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+        headwear:
+          label: 
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+        accessory:
+          label: 
+          leakable: 0
+          wig: 0
+          back: 0
+          covers: 
+          artNation: 
+          artVariant: 
+    kitMale:
+    - label: smart lenses
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: lenses
+    - label: comm earpiece
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: earpiece
+    - label: transit badge
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: badge
+    - label: shoulder display
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: display
+    kitFemale:
+    - label: smart lenses
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: lenses
+    - label: comm earpiece
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: earpiece
+    - label: transit badge
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: badge
+    - label: shoulder display
+      leakable: 1
+      wig: 0
+      back: 0
+      covers: 
+      artNation: 
+      artVariant: display
   cultureUi:
     readingLanguage: en
     glossPercent: 60
@@ -1312,6 +1464,18 @@ MonoBehaviour:
       lineage: Victorian Britain
       employment: "Temporal Customs \xB7 Desk 3"
       note: No remarks on file.
+      startDebt: 125430
+      garnishShare: 0.25
+      reliefEmployer: Tyburn Mills Consortium
+      reliefWorksite: Victorian Britain
+      reliefWage: 420
+  news:
+    debt:
+    - Debt Relief Departures reach a record high.
+    - 'CLEAR YOUR DEBT: 180 days in the Victorian mills.'
+    - 12,000 accounts frozen in default.
+    - Premium families book Periclean Athens for the summer.
+    - A stranded tourist's family inherits 212,000 cr.
   mail:
   - id: welcome
     fromDay: 1

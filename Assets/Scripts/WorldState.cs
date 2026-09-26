@@ -35,6 +35,9 @@ public sealed class WorldState
     /// <summary>Citations issued during the current day (resets each morning).</summary>
     public int citationsToday;
 
+    /// <summary>What the Debt Relief instalments have paid off the clerk's own debt so far, in cr (redesign phase 13; ClerkAccountSource.TakeInstalment at each shift's end). Stored as paid, not owed, so an older save loads as "nothing paid yet" (additive).</summary>
+    public int clerkDebtPaid;
+
     // -----------------------------
     // Run outcome (Phase 5)
     // -----------------------------

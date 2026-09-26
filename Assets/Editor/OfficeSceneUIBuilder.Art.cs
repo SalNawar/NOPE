@@ -10,8 +10,10 @@ using UnityEngine.UI;
 /// code-drawn look when it does not. The speech bubble's body (tinted cream,
 /// 9-slice) and its tail (hidden without art); the briefing's and the
 /// ledger's sheets and the citation slip (tinted by their roles, as the flat
-/// panels are); a reference book's cover on its case tile and at the top of
-/// its window (both inactive until the cover is found at runtime); and the
+/// panels are); a reference book's cover at the top of its register page in
+/// the Investigation app's Reference tab (inactive until the cover is found
+/// at runtime; the tab's book chips can show it through SlotArt.CoverFor);
+/// and the
 /// desk paper's art quads, unlit and see-through, drawn over the printed
 /// texts: the photo frame's art over the photo (inactive until found) and the
 /// verdict's ink mark (inactive until the verdict).
@@ -23,8 +25,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The speech bubble tail's size (reference px) under the bubble's bottom centre.</summary>
     private static readonly Vector2 BubbleTailSize = new Vector2(32f, 24f);
 
-    /// <summary>A case tile's cover: its width (reference units) and its inset from the tile's left edge; it spans 80 % of the tile's height.</summary>
-    private const float TileCoverWidth = 28f, TileCoverInset = 5f;
+    /// <summary>The book cover's box on the register page (units): its width, as tall as the title band, its right edge this far left of the title band's end.</summary>
+    private const float BookCoverWidth = 40f, BookCoverGap = 8f;
 
     /// <summary>The paper's art quads' render queue: over the paper's texts and the photo (3000).</summary>
     private const int PaperArtQueue = 3005;
@@ -35,17 +37,16 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// Gives the gameplay layer's Tier-2 images their art slots (rebuilt with
     /// their hosts each run): the bubble, the two newsletters' sheets, the
-    /// citation slip, the book tile and book window covers, and the desk
-    /// paper template's photo frame and ink mark.
+    /// citation slip, the Reference tab's book cover, and the desk paper
+    /// template's photo frame and ink mark.
     /// </summary>
-    private static void BuildArtSlots(Transform overlay, OverlayCallout bubble, Button caseTileTemplate, ReferenceBookWindowController bookTemplate, OfficeViewController officeView)
+    private static void BuildArtSlots(Transform overlay, OverlayCallout bubble, ReferenceView reference, OfficeViewController officeView)
     {
         BuildBubbleArt(bubble);
         SlotOn(overlay.Find("BriefingPanel/Paper"), ArtSlots.BriefingPaper);
         SlotOn(overlay.Find("ResultsPanel/Paper"), ArtSlots.LedgerPaper);
         SlotOn(overlay.Find("CitationPanel"), ArtSlots.CitationSlip);
-        BuildTileCover(caseTileTemplate);
-        BuildBookCover(bookTemplate);
+        BuildBookCover(reference);
         BuildPaperArt(officeView.transform.Find("Desk/PaperTemplate"));
     }
 
@@ -74,38 +75,29 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<ArtSlotImage>(tail.gameObject).Configure(ArtSlots.SpeechBubbleTail, null, false, true);
     }
 
-    /// <summary>The case tile template's cover (a reference book's tile shows it when the cover's art exists: DesktopTiles.Add), inactive, left of the label.</summary>
-    private static void BuildTileCover(Button tileTemplate)
+    /// <summary>
+    /// The Reference tab's book cover: on the register page template (cloned
+    /// per book by ReferenceView), in the title's band, its right edge just
+    /// left of the band's end (clear of the title and of "Claimed place only";
+    /// ReferenceBookWindowController shows it when the book's cover art
+    /// exists), inactive.
+    /// </summary>
+    private static void BuildBookCover(ReferenceView reference)
     {
-        if (tileTemplate == null)
+        var page = reference != null ? (ReferenceBookWindowController)new SerializedObject(reference).FindProperty("pageTemplate").objectReferenceValue : null;
+        Transform title = page != null ? page.transform.Find("TitleText") : null;
+        if (title == null)
             return;
-        Transform cover = Panel(tileTemplate.transform, "Cover", new Vector2(0f, 0.1f), new Vector2(0f, 0.9f), new Vector2(TileCoverInset, 0f), new Vector2(TileCoverWidth, 0f),
-                                Color.white, ThemeRoleId.DiegeticPaper);
-        ((RectTransform)cover).pivot = new Vector2(0f, 0.5f);
-        Image image = cover.GetComponent<Image>();
-        image.raycastTarget = false;
-        image.preserveAspect = true;
-        cover.gameObject.SetActive(false);
-    }
-
-    /// <summary>The book window's cover at its top left, under the title bar and over the rows (ReferenceBookWindowController shows it when the book's cover art exists), inactive.</summary>
-    private static void BuildBookCover(ReferenceBookWindowController bookTemplate)
-    {
-        if (bookTemplate == null)
-            return;
-        var win = (RectTransform)bookTemplate.transform;
-        float top = EnsureDesktopConfig().titleBarHeight;
-        float rowsTop = win.sizeDelta.y * (1f - ((RectTransform)win.Find("Rows")).anchorMax.y);
-        float height = Mathf.Max(8f, rowsTop - top - 4f);
-        Transform cover = Panel(win, "Cover", new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(8f, -(top + 2f)), new Vector2(height * 0.72f, height),
-                                Color.white, ThemeRoleId.DiegeticPaper);
-        ((RectTransform)cover).pivot = new Vector2(0f, 1f);
+        var band = (RectTransform)title;
+        Transform cover = Panel(page.transform, "Cover", new Vector2(band.anchorMax.x, band.anchorMin.y), band.anchorMax, new Vector2(-BookCoverGap, 0f),
+                                new Vector2(BookCoverWidth, 0f), Color.white, ThemeRoleId.DiegeticPaper);
+        ((RectTransform)cover).pivot = new Vector2(1f, 0.5f);
         Image image = cover.GetComponent<Image>();
         image.raycastTarget = false;
         image.preserveAspect = true;
         cover.gameObject.SetActive(false);
 
-        var so = new SerializedObject(bookTemplate);
+        var so = new SerializedObject(page);
         SetRef(so, "cover", image);
         so.ApplyModifiedProperties();
     }

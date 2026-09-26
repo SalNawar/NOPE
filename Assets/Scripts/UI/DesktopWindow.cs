@@ -47,6 +47,12 @@ public sealed class DesktopWindow : MonoBehaviour
     /// <summary>True while maximised.</summary>
     public bool IsMaximised => _maximised;
 
+    /// <summary>True while the window is open, shown or minimised (it has a taskbar button).</summary>
+    public bool IsOpen => manager != null && manager.IsOpen(this);
+
+    /// <summary>True while the window is open and minimised.</summary>
+    public bool IsMinimised => manager != null && manager.IsMinimised(this);
+
     /// <summary>The desktop's window manager (null in a leftover without one).</summary>
     public DesktopWindowManager Manager => manager;
 
@@ -79,6 +85,15 @@ public sealed class DesktopWindow : MonoBehaviour
     {
         if (manager != null)
             manager.Close(this);
+    }
+
+    /// <summary>Retitles the window: its title bar and its taskbar button (a title written straight into the text would leave the button stale).</summary>
+    public void SetTitle(string title)
+    {
+        if (titleText != null)
+            titleText.text = title;
+        if (manager != null)
+            manager.Retitled(this);
     }
 
     /// <summary>Hides the window, keeping its taskbar button (a click on it restores the window).</summary>

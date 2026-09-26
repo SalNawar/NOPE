@@ -6,68 +6,70 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The office investigation's façade (the PC redesign RF1, audit R4-001): the
-/// one component GameManager talks to, with the scene's references. It shows
-/// the visitor's travel claim, presents each case and offers the binary
-/// Accept/Deny (the PC's buttons and the desk's stamp tray, wired once); the
-/// work is its presenters': CaseDocumentsPresenter (the documents' windows,
-/// the hand-over and the scan), InterviewPresenter (the dialog runner on the
-/// traveller wheel, the transcript, the bubble), EvidencePresenter (the
-/// discrepancy log, the Deviation Report, the compare's DEVIATION LOGGED) and
-/// DayReference (the directives, facts, registry and the reference books).
-/// Every document is filled in English (the redesign's F5); from
-/// translation's first day a traveller's speech is in their claimed place's
-/// tongue (piece 9). A held paper's row picked at the desk goes into the same
-/// compare as the PC's rows. What the day can generate follows what is wired
-/// (InvestigationWiring: InterviewReachable, AppearanceReachable,
-/// EvidenceSystemActive). It needs the desk the office builder wires (Tools
-/// &gt; TimeDesk &gt; Build Office UI: the document window template, the
-/// window layer, Accept and Deny); without it, it logs one error and shows no
-/// case (the text-mode fallback no scene could reach was deleted: audit R4-002).
+/// one component GameManager talks to, with the scene's references. It
+/// presents each case in the Investigation app (InvestigationApp: the claim
+/// in its case header, the counters, the six tabs) and offers the binary
+/// Accept/Deny (the app header's buttons and the desk's stamp tray, wired
+/// once); the work is its presenters': CaseDocumentsPresenter (the papers,
+/// the hand-over and the scan: the Documents tab), InterviewPresenter (the
+/// dialog runner on the traveller wheel, the Transcript tab, the bubble),
+/// EvidencePresenter (the discrepancy log, the Report tab, the compare's
+/// DEVIATION LOGGED) and DayReference (the Rules, the Reference books' facts,
+/// the Records tab's registry). Nothing opens or closes a window by itself
+/// but a scan (the app's ScanArrival): new lines and deviations badge their
+/// tabs, and the decision leaves every window as it is (the case's tabs show
+/// the no-case state). Every document is filled in English (the redesign's
+/// F5); from translation's first day a traveller's speech is in their claimed
+/// place's tongue (piece 9). A held paper's row picked at the desk goes into
+/// the same compare as the PC's rows. What the day can generate follows what
+/// is wired (InvestigationWiring: InterviewReachable, AppearanceReachable,
+/// EvidenceSystemActive). It needs the app the office builder wires (Tools
+/// &gt; TimeDesk &gt; Build Office UI: the Documents tab's page, the app,
+/// Accept and Deny); without it, it logs one error and shows no case (the
+/// text-mode fallback no scene could reach was deleted: audit R4-002).
 /// </summary>
 public sealed class InvestigationUIController : MonoBehaviour
 {
-    [Header("Shared")]
-    [SerializeField] private GameObject root;
-    [SerializeField] private TMP_Text claimText;
-    [SerializeField] private TMP_Text directivesText;
+    [Header("The app")]
+    /// <summary>The Investigation app: its window, header, counters, badges, toast and pane.</summary>
+    [SerializeField] private InvestigationApp app;
+
+    /// <summary>The app header's Accept (and the stamp tray's) decide the case.</summary>
     [SerializeField] private Button acceptButton;
+
+    /// <summary>The app header's Deny.</summary>
     [SerializeField] private Button denyButton;
+
+    /// <summary>The one compare: every pickable row on the PC, on a held paper, in the bubble and through the Look menu.</summary>
     [SerializeField] private CompareController compareController;
 
-    /// <summary>The PC's compare dock (DK9), above the window layer so no window covers it; shown with the case overlay, while a traveller is at the desk.</summary>
+    /// <summary>The PC's compare dock (DK9), above the window layer so no window covers it; shown while a traveller is at the desk.</summary>
     [SerializeField] private GameObject compareDock;
 
-    [Header("Desk windows (built by the office tool)")]
-    /// <summary>The desktop's window layer: outside the case overlay, so a window opened between travellers (Settings) shows too.</summary>
-    [SerializeField] private RectTransform windowLayer;
-    [SerializeField] private DocumentWindowController documentWindowTemplate;
-    [SerializeField] private ReferenceBookWindowController bookWindowTemplate;
-    [SerializeField] private Transform bookShelfRoot;
-    [SerializeField] private Button bookShelfButtonTemplate;
+    [Header("The app's tabs")]
+    /// <summary>The Documents tab: a chip per paper, the scanned copies.</summary>
+    [SerializeField] private DocumentsView documentsView;
 
-    [Header("Scanner (deviation report)")]
-    /// <summary>Body text of the Scanner window; lists documented discrepancies.</summary>
-    [SerializeField] private TMP_Text scannerText;
+    /// <summary>The Records tab's lookup (Citizen Records; the registry injected per day).</summary>
+    [SerializeField] private CitizenRecordsWindowController recordsWindow;
 
-    /// <summary>Scanner window chrome; opened when the first discrepancy registers.</summary>
-    [SerializeField] private DesktopWindow scannerWindow;
+    /// <summary>The Reference tab: a chip per book, the registers.</summary>
+    [SerializeField] private ReferenceView referenceView;
 
-    [Header("Interaction / records")]
+    /// <summary>The Transcript tab's transcript (answer rows are compare-clickable).</summary>
+    [SerializeField] private TranscriptWindowController transcriptWindow;
+
+    /// <summary>The Report tab's text: the documented deviations.</summary>
+    [SerializeField] private TMP_Text reportText;
+
+    /// <summary>The Rules tab's text: the day's travel directives.</summary>
+    [SerializeField] private TMP_Text directivesText;
+
+    [Header("Office")]
     /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
     [SerializeField] private InteractionPanelController interactionPanel;
 
-    /// <summary>Citizen Records app (registry injected per day).</summary>
-    [SerializeField] private CitizenRecordsWindowController recordsWindow;
-
-    [Header("Interview")]
-    /// <summary>Case Notes: Interview, the current traveller's transcript (answer rows are compare-clickable).</summary>
-    [SerializeField] private TranscriptWindowController transcriptWindow;
-
-    /// <summary>The transcript window's chrome; every interview choice but a document request opens it.</summary>
-    [SerializeField] private DesktopWindow transcriptChrome;
-
-    [Header("Desk")]
-    /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
+    /// <summary>The physical papers and the scanner (optional: without it documents reach the PC when handed over).</summary>
     [SerializeField] private DeskController desk;
 
     /// <summary>The office case HUD (piece 10; optional): the claim tag shows the claim banner's text in the office.</summary>
@@ -82,22 +84,6 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Shown on the desktop between travellers.</summary>
     [SerializeField] private GameObject idleScreen;
 
-    [Header("Window layout")]
-    /// <summary>Where the first document window opens (desktop units from the centre). The builder writes the 4:3 layout; this default is the 16:9 one.</summary>
-    [SerializeField] private Vector2 documentWindowOrigin = new Vector2(-330f, 140f);
-
-    /// <summary>Offset from one document window to the next.</summary>
-    [SerializeField] private Vector2 documentWindowStep = new Vector2(620f, 0f);
-
-    /// <summary>Where the first book window opens.</summary>
-    [SerializeField] private Vector2 bookWindowOrigin = new Vector2(-380f, -150f);
-
-    /// <summary>Horizontal step between the three book windows of a row.</summary>
-    [SerializeField] private float bookWindowColumnStep = 320f;
-
-    /// <summary>Offset from one row of book windows to the next.</summary>
-    [SerializeField] private Vector2 bookWindowRowStep = new Vector2(40f, 40f);
-
     /// <summary>The decision's callback for the case on the desk (fired once: OneShot).</summary>
     private Action<bool> _onDecision;
 
@@ -107,13 +93,13 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The day's directives, facts, registry and the reference books.</summary>
     private DayReference _reference;
 
-    /// <summary>The current traveller's documents: their windows, the hand-over and the scan.</summary>
+    /// <summary>The current traveller's papers: the Documents tab, the hand-over and the scan.</summary>
     private CaseDocumentsPresenter _documents;
 
-    /// <summary>The current traveller's interview on the wheel and in the transcript.</summary>
+    /// <summary>The current traveller's interview on the wheel and in the Transcript tab.</summary>
     private InterviewPresenter _interview;
 
-    /// <summary>The current case's evidence and the Deviation Report.</summary>
+    /// <summary>The current case's evidence and the Report tab.</summary>
     private EvidencePresenter _evidence;
 
     /// <summary>The stamp tray whose decisions this listens to (null while detached; audit R4-003).</summary>
@@ -123,15 +109,15 @@ public sealed class InvestigationUIController : MonoBehaviour
     public int EvidenceCount => _evidence.Count;
 
     /// <summary>
-    /// True when the evidence loop is playable (the desk and the compare wired),
+    /// True when the evidence loop is playable (the app and the compare wired),
     /// so scoring may gate denials on documented evidence.
     /// </summary>
     public bool EvidenceSystemActive => Wiring.EvidenceSystemActive;
 
     /// <summary>
     /// True when a traveller's answers can be read: the wheel's ring, the
-    /// transcript window and its chrome are wired. When false, GameManager
-    /// computes no answers and generates no spoken tell that day.
+    /// transcript and the app's Transcript tab are wired. When false,
+    /// GameManager computes no answers and generates no spoken tell that day.
     /// </summary>
     public bool InterviewReachable => Wiring.InterviewReachable;
 
@@ -148,8 +134,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// Unity's fake null.
     /// </summary>
     private InvestigationWiring Wiring => new InvestigationWiring(
-        documentWindowTemplate != null, windowLayer != null, acceptButton != null, denyButton != null, compareController != null,
-        interactionPanel != null, transcriptWindow != null, transcriptChrome != null, desk != null && desk.IsReachable, recordsWindow != null);
+        documentsView != null && documentsView.Ready, app != null, acceptButton != null, denyButton != null, compareController != null,
+        interactionPanel != null, transcriptWindow != null, app != null && app.Hosts(AppTab.Transcript), desk != null && desk.IsReachable,
+        recordsWindow != null);
 
     private void Awake()
     {
@@ -163,16 +150,12 @@ public sealed class InvestigationUIController : MonoBehaviour
             return;
         }
 
-        if (documentWindowTemplate != null) documentWindowTemplate.gameObject.SetActive(false);
-        if (bookWindowTemplate != null) bookWindowTemplate.gameObject.SetActive(false);
-        if (bookShelfButtonTemplate != null) bookShelfButtonTemplate.gameObject.SetActive(false);
-        if (root != null) root.SetActive(false);
-        if (compareDock != null) compareDock.SetActive(false);
-
         _evidence.Attach();
         WarnAboutWiring(wiring);
         _documents.Attach();
         _interview.Attach();
+        _documents.Scanned += HandleScanned;
+        _documents.PapersChanged += ShowCounters;
 
         if (stampTray != null)
         {
@@ -187,34 +170,31 @@ public sealed class InvestigationUIController : MonoBehaviour
             denyButton.onClick.AddListener(Deny);
         }
 
-        if (idleScreen != null)
-            idleScreen.SetActive(true);
+        ShowCaseLayers(false);
+        if (app != null)
+            app.EndCase();
     }
 
     /// <summary>The presenters over this component's references (the desk only when it is reachable).</summary>
     private void BuildPresenters(InvestigationWiring wiring)
     {
-        var tiles = new DesktopTiles(bookShelfButtonTemplate, bookShelfRoot);
-        _reference = new DayReference(directivesText, recordsWindow, compareController, tiles, new DayReference.BookShelf
-        {
-            template = bookWindowTemplate, windowLayer = windowLayer,
-            origin = bookWindowOrigin, columnStep = bookWindowColumnStep, rowStep = bookWindowRowStep
-        });
-        _documents = new CaseDocumentsPresenter(new CaseDocumentsPresenter.Windows
-        {
-            template = documentWindowTemplate, windowLayer = windowLayer, origin = documentWindowOrigin, step = documentWindowStep
-        }, wiring.DeskReachable ? desk : null, compareController, tiles);
-        _interview = new InterviewPresenter(interactionPanel, transcriptWindow, transcriptChrome, wheel, compareController,
+        _reference = new DayReference(directivesText, recordsWindow, compareController, referenceView);
+        _documents = new CaseDocumentsPresenter(documentsView, wiring.DeskReachable ? desk : null, compareController);
+        _interview = new InterviewPresenter(interactionPanel, transcriptWindow, () => Arrived(AppTab.Transcript), wheel, compareController,
                                             _documents.HandOver, () => _currentCase, this);
-        _evidence = new EvidencePresenter(compareController, scannerText, scannerWindow, () => _currentCase);
+        _evidence = new EvidencePresenter(compareController, reportText, () =>
+        {
+            Arrived(AppTab.Report);
+            ShowCounters();
+        }, () => _currentCase);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
     private void WarnAboutWiring(InvestigationWiring wiring)
     {
-        // Without the desk windows no case can be shown (there is no text fallback any more).
+        // Without the app no case can be shown (there is no text fallback any more).
         if (!wiring.Wired)
-            Debug.LogError("[InvestigationUIController] The desk windows are not wired (documentWindowTemplate, windowLayer, acceptButton or denyButton): no case can be shown. Run Tools > TimeDesk > Build Office UI.", this);
+            Debug.LogError("[InvestigationUIController] The Investigation app is not wired (the app, its Documents tab's page, acceptButton or denyButton): no case can be shown. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Birth-date tells are proven only against Citizen Records (RecordMismatch).
         if (wiring.RecordsMissing)
@@ -222,15 +202,15 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
         if (wiring.InterviewMissing)
-            Debug.LogWarning("[InvestigationUIController] Traveller wheel or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
+            Debug.LogWarning("[InvestigationUIController] Traveller wheel or the app's Transcript tab not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Without the wheel's look menu or the compare bar no garment could be compared, so the day leaks no dress.
         if (wiring.AppearanceMissing)
             Debug.LogWarning("[InvestigationUIController] Traveller wheel or compare bar not wired (interactionPanel or compareController): garments cannot be looked at and no dress tell is generated today. Run Tools > TimeDesk > Build Office UI.", this);
 
-        // Without the desk every document still reaches the PC, as its window.
+        // Without the desk every document still reaches the PC, at its hand-over.
         if (wiring.DeskMissing)
-            Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents open on the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
+            Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents reach the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
     }
 
     /// <summary>Unsubscribes from the very instances subscribed to (audit R4-003).</summary>
@@ -242,6 +222,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _evidence.Detach();
         _documents.Detach();
         _interview.Detach();
+        _documents.Scanned -= HandleScanned;
+        _documents.PapersChanged -= ShowCounters;
         if (_stampTrayListening != null)
         {
             _stampTrayListening.Decided -= Decide;
@@ -249,10 +231,10 @@ public sealed class InvestigationUIController : MonoBehaviour
         }
     }
 
-    /// <summary>Injects the day's citizen registry into the Records app, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
+    /// <summary>Injects the day's citizen registry into the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day) => _reference.SetCitizenRegistry(registry, agency, day);
 
-    /// <summary>Injects today's facts (the reference books render these rows).</summary>
+    /// <summary>Injects today's facts (the Reference tab's registers render these rows).</summary>
     public void SetFacts(FactTable facts) => _reference.SetFacts(facts);
 
     /// <summary>Injects today's interview (questions, dialogs and wording, fixed at day start).</summary>
@@ -264,10 +246,10 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings (their key-word rule included).</summary>
     public void SetTranslation(TranslationDay day, TranslationSettings settings) => _interview.SetTranslation(day, settings);
 
-    /// <summary>Sets the day's travel directives (shown during every case).</summary>
+    /// <summary>Sets the day's travel directives (the Rules tab).</summary>
     public void SetDirectives(IReadOnlyList<TravelRuleSO> rules) => _reference.SetDirectives(rules);
 
-    /// <summary>Presents a case and waits for the player's Accept/Deny (nothing shows when the desk windows are not wired: Awake logged why).</summary>
+    /// <summary>Presents a case and waits for the player's Accept/Deny (nothing shows when the app is not wired: Awake logged why).</summary>
     public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<bool> onDecision)
     {
         _onDecision = onDecision;
@@ -278,64 +260,72 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowRich(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay and the compare dock (between cases) and closes its windows (so the taskbar keeps no button for them); the desktop shows its idle line and the office's claim tag empties.</summary>
+    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state and the office's claim tag empties. No window closes.</summary>
     public void Hide()
     {
-        CloseAllWindows();
         ShowCaseLayers(false);
-        if (hud != null) hud.SetClaim(string.Empty);
+        if (app != null)
+            app.EndCase();
+        if (hud != null)
+            hud.SetClaim(string.Empty);
     }
 
-    /// <summary>Shows the case overlay and the compare dock, or hides them and shows the desktop's idle line (the window layer is neither: it shows with or without a case).</summary>
+    /// <summary>Shows the compare dock and Accept and Deny (a traveller is at the desk), or hides the dock, turns the buttons off and shows the desktop's idle line.</summary>
     private void ShowCaseLayers(bool on)
     {
-        if (root != null) root.SetActive(on);
         if (compareDock != null) compareDock.SetActive(on);
         if (idleScreen != null) idleScreen.SetActive(!on);
+        if (acceptButton != null) acceptButton.interactable = on;
+        if (denyButton != null) denyButton.interactable = on;
     }
 
     /// <summary>
-    /// A case on the desk: the claim on the PC's banner and the office's tag
-    /// (one text), today's directives, every window closed (a new visitor
-    /// clears the desk; a pin system will later let the player keep chosen
-    /// windows open), the documents presented, the interview started, the book
-    /// shelf built the first time, the compare cleared.
+    /// A case on the desk: the claim in the app's header and the office's tag
+    /// (one text), the app on Documents with its badges cleared, today's
+    /// directives, the papers presented, the interview started, the reference
+    /// books built the first time and turned to the claim, the compare
+    /// cleared. No window opens or closes.
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
         ShowCaseLayers(true);
 
         string claim = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
-        if (claimText != null)
-            claimText.text = claim;
+        app.BeginCase(claim, inst != null ? inst.visitorDisplayName : string.Empty);
         if (hud != null)
             hud.SetClaim(claim);
 
         _reference.ShowDirectives();
-        CloseAllWindows();
-        _documents.Clear();
         _interview.BeginCase(inst);
         _documents.Present(inst, lib != null ? lib.Agency : null);
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
-        _reference.BuildBookShelf(lib);
+        _reference.BuildBooks(lib);
+        _reference.SetClaim(inst);
 
         if (compareController != null)
             compareController.Clear();
     }
 
-    /// <summary>
-    /// Closes every window on the window layer through the desktop's window
-    /// manager, minimised ones too (templates are never opened; per-case
-    /// document clones are destroyed separately).
-    /// </summary>
-    private void CloseAllWindows()
+    /// <summary>Something new for a case tab: the app badges it unless the player sees it.</summary>
+    private void Arrived(AppTab tab)
     {
-        if (windowLayer == null)
-            return;
+        if (app != null && _currentCase != null)
+            app.Arrived(tab);
+    }
 
-        for (int i = 0; i < windowLayer.childCount; i++)
-            if (windowLayer.GetChild(i).TryGetComponent(out DesktopWindow window))
-                window.Close();
+    /// <summary>A paper reached the PC: the app decides what that shows (ScanArrival).</summary>
+    private void HandleScanned(int paper)
+    {
+        IReadOnlyList<CaseDocument> documents = _documents.Documents;
+        if (app != null && paper >= 0 && paper < documents.Count)
+            app.Scanned(paper, documents[paper].name);
+    }
+
+    /// <summary>The app header's counters: papers received and scanned, deviations logged.</summary>
+    private void ShowCounters()
+    {
+        if (app != null && _currentCase != null)
+            app.SetCounters(_documents.Papers, _evidence.Count);
     }
 
     private void Accept() => Decide(true);
@@ -343,13 +333,17 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void Deny() => Decide(false);
 
     /// <summary>
-    /// The decision (the PC's buttons or the stamp tray): the
-    /// desk's papers leave, the overlay hides, and no case is on the desk from
-    /// here: cleared before the callback, which may present the next traveller
-    /// at once (no READY sign wired).
+    /// The decision (the app header's buttons or the stamp tray; nothing
+    /// without a case on the desk): the desk's papers leave, the case tabs show
+    /// the no-case state, and no case is on the desk from here: cleared before
+    /// the callback, which may present the next traveller at once (no READY
+    /// sign wired).
     /// </summary>
     private void Decide(bool accepted)
     {
+        if (_currentCase == null)
+            return;
+
         _documents.EndCase(accepted);
         Hide();
         _currentCase = null;

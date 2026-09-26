@@ -308,10 +308,13 @@ public sealed class GameManager : MonoBehaviour
         int totalCases = _ledger != null ? _ledger.verdicts.Count : 0;
         Debug.Log($"[GameManager] Day {_worldState.day} shift complete: {correctCount}/{totalCases} correct, totalPay={totalPay}, totalPenalty={totalPenalty}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}.");
 
-        // Narrative dialogs' consequences apply now, before the save, so a
-        // Continue replay of this day can never apply them twice.
+        // The clerk's Debt Relief instalment comes out of the shift's pay (redesign
+        // phase 13), and the narrative dialogs' consequences apply, both before the
+        // save, so a Continue replay of this day can never apply them twice. Either
+        // may move the wallet, so the ending check runs after them.
+        bool instalmentTaken = ClerkAccountSource.TakeInstalment(_worldState, _ledger, contentLibrary) > 0;
         EndingSO ending = null;
-        if (ApplyDialogOutcomes())
+        if (ApplyDialogOutcomes() || instalmentTaken)
         {
             if (officeUI != null)
                 officeUI.UpdateHud(_worldState);
@@ -321,13 +324,13 @@ public sealed class GameManager : MonoBehaviour
                 ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
                 if (ending != null)
                 {
-                    Debug.Log($"[GameManager] Ending check after dialog consequences: matched '{ending.id}' ({ending.displayName}).");
+                    Debug.Log($"[GameManager] Ending check after the instalment and dialog consequences: matched '{ending.id}' ({ending.displayName}).");
                     _worldState.endingId = ending.id;
                 }
             }
         }
 
-        // The clerk's statement gets the day's row (the Citizen Account; redesign phase 25).
+        // The clerk's statement gets the day's row, the instalment included (the Citizen Account; redesign phases 25 and 13).
         ClerkAccountSource.RecordShift(_worldState, _ledger, contentLibrary, _gameConfig);
 
         // Continue from this save resumes at Home, never replaying this shift.
@@ -687,11 +690,13 @@ public sealed class GameManager : MonoBehaviour
         _ledger.verdicts.Add(verdict);
 
         // The traveler is only dispatched (and the timeline moved) when accepted;
-        // an accepted liar also carries their true home's fact into the claim.
+        // an accepted liar also carries their true home's fact into the claim,
+        // and an accepted costume error causes a panic there (tomorrow's news).
         if (accepted)
         {
             TimelineService.ApplyVerdictImpacts(inst, inst.claimedEra, verdict.correct, _worldState, contentLibrary);
             HistoryService.RecordCarry(_worldState, inst, _today.Facts, _gameConfig);
+            HistoryService.RecordPanic(_worldState, inst);
         }
 
         if (officeUI != null)

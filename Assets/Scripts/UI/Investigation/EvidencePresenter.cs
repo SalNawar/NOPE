@@ -8,8 +8,9 @@ using TMPro;
 /// after a proof. When the compare pairs two values while a case is on the
 /// desk, a true contradiction (DiscrepancyLog.Prove) is logged once per
 /// category: the report is rewritten, the compare reads DEVIATION LOGGED and
-/// the report window opens; a second proof of a logged category only reads
-/// ALREADY DOCUMENTED. The log clears with each case. It subscribes to the
+/// the app hears of it (the Report tab's badge; nothing opens: CM5); a second
+/// proof of a logged category only reads ALREADY DOCUMENTED. The log clears
+/// with each case. It subscribes to the
 /// compare it was given and unsubscribes from that same instance (audit
 /// R4-003). Plain C#; InvestigationUIController owns it.
 /// </summary>
@@ -17,7 +18,7 @@ public sealed class EvidencePresenter
 {
     private readonly CompareController _compare;
     private readonly TMP_Text _reportText;
-    private readonly DesktopWindow _reportWindow;
+    private readonly Action _logged;
     private readonly Func<CaseInstance> _currentCase;
 
     /// <summary>Documented contradictions for the current case.</summary>
@@ -26,12 +27,12 @@ public sealed class EvidencePresenter
     /// <summary>The compare whose pairs this listens to (null while detached).</summary>
     private CompareController _listening;
 
-    /// <summary>The compare, the Deviation Report's text and window (any may be missing), and the façade's current case (null between cases).</summary>
-    public EvidencePresenter(CompareController compare, TMP_Text reportText, DesktopWindow reportWindow, Func<CaseInstance> currentCase)
+    /// <summary>The compare and the Deviation Report's text (either may be missing), what a new deviation tells (the app's Report tab), and the façade's current case (null between cases).</summary>
+    public EvidencePresenter(CompareController compare, TMP_Text reportText, Action logged, Func<CaseInstance> currentCase)
     {
         _compare = compare;
         _reportText = reportText;
-        _reportWindow = reportWindow;
+        _logged = logged ?? throw new ArgumentNullException(nameof(logged));
         _currentCase = currentCase ?? throw new ArgumentNullException(nameof(currentCase));
     }
 
@@ -93,8 +94,7 @@ public sealed class EvidencePresenter
         if (_compare != null)
             _compare.ShowDeviation(UiText.Deviation(proof));
 
-        if (_reportWindow != null)
-            _reportWindow.Open();
+        _logged();
     }
 
     /// <summary>Rewrites the Deviation Report's body from the discrepancy log.</summary>

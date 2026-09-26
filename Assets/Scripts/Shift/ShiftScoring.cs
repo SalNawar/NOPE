@@ -71,7 +71,7 @@ public static class ShiftScoring
     {
         bool shouldAccept = inst != null && inst.ShouldAccept;
 
-        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, liar={inst?.IsLiar}, claimAllowed={inst?.claimAllowedByRules}, evidence={evidenceCount}).");
+        Debug.Log($"[ShiftScoring] >>> Entering ResolveDecision (case {caseIndex1Based}, accepted={accepted}, shouldAccept={shouldAccept}, liar={inst?.IsLiar}, costume={inst?.costumeFault}, claimAllowed={inst?.claimAllowedByRules}, evidence={evidenceCount}).");
 
         var verdict = new CaseVerdict
         {
@@ -83,6 +83,8 @@ public static class ShiftScoring
             accepted = accepted,
             shouldAccept = shouldAccept,
             wasLiar = inst != null && inst.IsLiar,
+            faultReason = inst != null && inst.costumeFault != CostumeError.None ? CostumeErrors.FaultReason : string.Empty,
+            destinationLabel = inst != null ? inst.originLabel ?? string.Empty : string.Empty,
             trueHomeLabel = inst != null ? inst.HomeLabel : string.Empty,
             claimAllowed = inst == null || inst.claimAllowedByRules,
             claimSummary = inst != null ? inst.claimLine : string.Empty,
@@ -96,11 +98,12 @@ public static class ShiftScoring
             return verdict;
         }
 
-        // Evidence gate: denying a liar must be backed by documented scanner
-        // evidence. Directive violations are exempt (the daily rules are public
-        // knowledge), and evidenceCount < 0 means the evidence system is not
-        // active in this scene (fallback UI) so the gate is skipped.
-        if (inst != null && VerdictRules.IsUnprovenDenial(config.requireEvidenceToDeny, evidenceCount, accepted, inst.IsLiar, inst.claimAllowedByRules))
+        // Evidence gate: denying a deviation fault (a liar, a costume error)
+        // must be backed by documented scanner evidence. Directive violations
+        // are exempt (the daily rules are public knowledge), and evidenceCount
+        // < 0 means the evidence system is not active in this scene (fallback
+        // UI) so the gate is skipped.
+        if (inst != null && VerdictRules.IsUnprovenDenial(config.requireEvidenceToDeny, evidenceCount, accepted, inst.HasDeviationFault, inst.claimAllowedByRules))
         {
             verdict.correct = false;
             verdict.unprovenDenial = true;
@@ -138,7 +141,7 @@ public static class ShiftScoring
         v.stabilityDelta = -stabilityLoss;
         world.timelineStability += v.stabilityDelta;
 
-        string mistake = UiText.Get(v.unprovenDenial ? "citation.unproven" : v.accepted ? "citation.acceptedWrong" : "citation.deniedWrong");
+        string mistake = UiText.Format(v.MistakeKey, v.destinationLabel);
 
         if (world.citationsToday <= config.freeWarningsPerDay)
         {

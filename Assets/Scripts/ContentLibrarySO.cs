@@ -80,6 +80,12 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The look knobs every traveller shares.</summary>
     public LookRules LookRules => lookRules;
 
+    /// <summary>The present's clothes and 2150 accessory kit, for costume errors (written by Generate World from world_source.json "present").</summary>
+    [SerializeField] private PresentLook presentLook = new();
+
+    /// <summary>What the present wears (costume errors: its clothes and its accessory kit).</summary>
+    public PresentLook PresentLook => presentLook ?? new PresentLook();
+
     [Header("Culture (piece 6)")]
     /// <summary>The culture UI knobs (written by Generate World from world_source.json "ui").</summary>
     [SerializeField] private CultureUiSettings cultureUi = new();
@@ -100,6 +106,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     [Header("Agency (redesign phase 2)")]
     /// <summary>The agency's printed name, programme line and day 1's date (written by Generate World from world_source.json "agency").</summary>
     [SerializeField] private AgencyContent agency = new();
+
+    [Header("News (redesign phase 13)")]
+    /// <summary>The morning paper's debt-theme lines (written by Generate World from world_source.json "news").</summary>
+    [SerializeField] private NewsContent news = new();
 
     [Header("Mail (redesign phase 25)")]
     /// <summary>The authored mail (written by Generate World from world_source.json "pc.mail"); the Mail app adds the day's generated messages.</summary>
@@ -286,6 +296,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The agency block: its name, programme line and first date (never null).</summary>
     public AgencyContent Agency => agency ?? new AgencyContent();
+
+    /// <summary>The morning paper's debt-theme lines (never null).</summary>
+    public NewsContent News => news ?? new NewsContent();
 
     /// <summary>The authored mail (never null).</summary>
     public IReadOnlyList<AuthoredMail> Mail => mail ?? System.Array.Empty<AuthoredMail>();

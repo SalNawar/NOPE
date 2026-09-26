@@ -67,10 +67,16 @@ public static class LookKeys
     public static LookKey Head(TravellerGender gender, int skin, string face) =>
         new LookKey($"head_{GenderToken(gender)}_skin{skin}_face{face}", LookLayer.Head, null, null, skin, null, null);
 
-    /// <summary>A garment layer: "{layer}_{g}_{nation}_{era}", plus "_{colour}" when <paramref name="colour"/> is not null.</summary>
-    public static LookKey Garment(LookLayer layer, TravellerGender gender, string nationId, string eraId, string colour)
+    /// <summary>
+    /// A garment layer: "{layer}_{g}_{nation}_{era}", plus "_{variant}" when
+    /// <paramref name="variant"/> is not blank (LookItem.artVariant), then
+    /// "_{colour}" when <paramref name="colour"/> is not null.
+    /// </summary>
+    public static LookKey Garment(LookLayer layer, TravellerGender gender, string nationId, string eraId, string colour, string variant = null)
     {
         string name = $"{LayerToken(layer)}_{GenderToken(gender)}_{nationId}_{eraId}";
+        if (!string.IsNullOrWhiteSpace(variant))
+            name += "_" + variant;
         if (colour != null)
             name += "_" + colour;
         return new LookKey(name, layer, nationId, eraId, 0, colour, null);
@@ -107,11 +113,30 @@ public static class LookKeys
                 foreach (string colour in coloured ? HairColours : new string[] { null })
                 {
                     if (slot == LookSlot.Hair && item.back)
-                        yield return Garment(LookLayer.HairBack, gender, item.ArtNation(nationId), eraId, colour).Name;
-                    yield return Garment(layer, gender, item.ArtNation(nationId), eraId, colour).Name;
+                        yield return Garment(LookLayer.HairBack, gender, item.ArtNation(nationId), eraId, colour, item.artVariant).Name;
+                    yield return Garment(layer, gender, item.ArtNation(nationId), eraId, colour, item.artVariant).Name;
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Every key the present's look can need (costume errors): its clothes'
+    /// keys (the wardrobe's Required), then each kit accessory's key, men's
+    /// then women's, each for its own gender only.
+    /// </summary>
+    public static IEnumerable<string> PresentRequired(string nationId, string eraId, PresentLook present)
+    {
+        if (present == null)
+            yield break;
+
+        foreach (string key in Required(nationId, eraId, present.wardrobe))
+            yield return key;
+
+        foreach (TravellerGender gender in new[] { TravellerGender.Male, TravellerGender.Female })
+            foreach (LookItem item in present.Kit(gender))
+                if (item != null && item.IsPresent)
+                    yield return Garment(LookLayer.Accessory, gender, item.ArtNation(nationId), eraId, null, item.artVariant).Name;
     }
 
     /// <summary>Every body (2 genders x SkinTones) and every head (2 x SkinTones x every face of the bands).</summary>

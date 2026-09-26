@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,9 +8,10 @@ using UnityEngine.UI;
 /// <summary>
 /// UI for the title scene added in Alpha Phase 5: a title panel (Continue /
 /// New Run) and an ending panel (shown instead, when WorldState.endingId is
-/// set, displaying the reached EndingSO and offering New Run). Both panels
-/// are optional; if unwired, TitleSceneController degrades to loading the
-/// office scene directly so the run stays playable.
+/// set, displaying the reached EndingSO and offering New Run; on the Debt
+/// Relief ending, the clerk's own papers beside it, redesign phase 13). Both
+/// panels are optional; if unwired, TitleSceneController degrades to loading
+/// the office scene directly so the run stays playable.
 /// </summary>
 public sealed class TitleUIController : MonoBehaviour
 {
@@ -40,6 +43,16 @@ public sealed class TitleUIController : MonoBehaviour
 
     /// <summary>Clears the ended run and starts a new one.</summary>
     [SerializeField] private Button endingNewRunButton;
+
+    [Header("Ending Panel: the clerk's papers (redesign phase 13)")]
+    /// <summary>The Debt Relief ending's papers, beside the ending panel: the clerk's own Labour Contract and account (hidden for every other ending).</summary>
+    [SerializeField] private GameObject clerkPapers;
+
+    /// <summary>The clerk's Labour Contract (TC-520): its title over its rows.</summary>
+    [SerializeField] private TMP_Text clerkContractText;
+
+    /// <summary>The clerk's Record Extract (TC-901), now Frozen: its title and holder line over its rows.</summary>
+    [SerializeField] private TMP_Text clerkAccountText;
 
     /// <summary>True if the title panel is wired.</summary>
     public bool HasTitlePanel => titlePanel != null;
@@ -123,5 +136,44 @@ public sealed class TitleUIController : MonoBehaviour
             endingNewRunButton.onClick.RemoveAllListeners();
             endingNewRunButton.onClick.AddListener(() => onNewRun?.Invoke());
         }
+    }
+
+    /// <summary>
+    /// Shows the clerk's papers beside the ending panel (the Debt Relief ending,
+    /// redesign phase 13: the Labour Contract on one side, the account, now
+    /// Frozen, on the other), each a title over its rows under their group
+    /// headings. Drawn with today's widgets, the one place the forms engine
+    /// replaces with TC-520 and TC-901. A null contract or account hides them.
+    /// </summary>
+    public void ShowClerkPapers(string contractTitle, IReadOnlyList<AccountRow> contract, string accountTitle, IReadOnlyList<AccountRow> account)
+    {
+        if (clerkPapers == null)
+            return;
+
+        bool show = contract != null && account != null;
+        clerkPapers.SetActive(show);
+        if (!show)
+            return;
+
+        if (clerkContractText != null)
+            clerkContractText.text = Paper(contractTitle, contract);
+        if (clerkAccountText != null)
+            clerkAccountText.text = Paper(accountTitle, account);
+    }
+
+    /// <summary>A paper's text: its title in bold, then each row's label and value (the value indented to its column, so a long one wraps there), a bold heading where the group changes.</summary>
+    private static string Paper(string title, IReadOnlyList<AccountRow> rows)
+    {
+        var sb = new StringBuilder();
+        sb.Append("<b>").Append(title).Append("</b>\n");
+        string group = null;
+        foreach (AccountRow row in rows)
+        {
+            if (row.Group != group && !string.IsNullOrEmpty(row.Group))
+                sb.Append("\n<b>").Append(row.Group).Append("</b>\n");
+            group = row.Group;
+            sb.Append(row.Label).Append("<indent=42%>").Append(row.Value).Append("</indent>\n");
+        }
+        return sb.ToString();
     }
 }

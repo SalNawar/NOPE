@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Ending_Bankrupt
   m_EditorClassIdentifier: Assembly-CSharp::EndingSO
   id: bankrupt
-  displayName: Bankrupt
-  bodyText: The agency's coffers run dry, and with them, your position. The timeline
-    will have to sort itself out.
+  displayName: A Fresh Start
+  bodyText: Your account is frozen and your Debt Relief departure is booked. Attendance
+    is required.
   picture: {fileID: 21300000, guid: e81eb48291124414395b8b5c5c662b4c, type: 3}
   conditionType: 1
   attribute: {fileID: 0}

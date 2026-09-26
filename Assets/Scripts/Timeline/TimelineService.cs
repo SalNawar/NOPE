@@ -132,7 +132,7 @@ public static class TimelineService
     /// Runs the full nightly resolve. Call at sleep, BEFORE world.day increments.
     /// Order: dominance (news only for tomorrow's places) -> tier effects ->
     /// the timeline leader -> triggers (history rules latch here) -> carries ->
-    /// expiry -> tomorrow package.
+    /// today's panics -> the debt line -> expiry -> tomorrow package.
     /// </summary>
     public static void NightlyResolve(WorldState world, ContentLibrarySO lib, GameConfigSO config)
     {
@@ -152,6 +152,8 @@ public static class TimelineService
         int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
         EvaluateTriggers(world, lib, tomorrow, news);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
+        HistoryService.ReportPanics(world, lib, news);
+        AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news);
 
@@ -548,6 +550,14 @@ public static class TimelineService
         });
 
         Debug.Log($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
+    }
+
+    /// <summary>The morning paper's debt line (redesign phase 13; the traveller-types spec's §10): tomorrow's line of the news.debt pool in the run's order (DebtNews.Line); none when the pool is empty.</summary>
+    private static void AddDebtLine(WorldState world, ContentLibrarySO lib, int tomorrow, List<string> news)
+    {
+        string line = DebtNews.Line(lib.News.debt, world.runSeed, tomorrow);
+        if (!string.IsNullOrEmpty(line))
+            news.Add(line);
     }
 
     /// <summary>Removes effects that are no longer active on the given day.</summary>

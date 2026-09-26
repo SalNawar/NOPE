@@ -25,6 +25,11 @@
     ],
     "greyFromAge": 60,
     "wholeFigureLabel": "Period dress",
+    "costumeErrors": {
+      "otherPlace": 2,
+      "presentClothes": 1,
+      "presentAccessory": 2
+    },
     "confusable": [
       {
         "a": "greece_ancient",
@@ -1023,7 +1028,12 @@
       "born": "9 Feb 2121",
       "lineage": "Victorian Britain",
       "employment": "Temporal Customs · Desk 3",
-      "note": "No remarks on file."
+      "note": "No remarks on file.",
+      "startDebt": 125430,
+      "garnishShare": 0.25,
+      "reliefEmployer": "Tyburn Mills Consortium",
+      "reliefWorksite": "Victorian Britain",
+      "reliefWage": 420
     }
   },
   "eras": [
@@ -6375,6 +6385,72 @@
       }
     }
   ],
+  "present": {
+    "wardrobe": {
+      "m": {
+        "signature": "Outfit",
+        "outfit": {
+          "label": "tech jacket"
+        },
+        "hair": {
+          "label": "short textured crop",
+          "artNation": "neutral"
+        }
+      },
+      "f": {
+        "signature": "Outfit",
+        "outfit": {
+          "label": "coat-dress"
+        },
+        "hair": {
+          "label": "sleek low bun",
+          "artNation": "neutral"
+        }
+      }
+    },
+    "kit": [
+      {
+        "gender": "m",
+        "label": "smart lenses",
+        "variant": "lenses"
+      },
+      {
+        "gender": "m",
+        "label": "comm earpiece",
+        "variant": "earpiece"
+      },
+      {
+        "gender": "m",
+        "label": "transit badge",
+        "variant": "badge"
+      },
+      {
+        "gender": "m",
+        "label": "shoulder display",
+        "variant": "display"
+      },
+      {
+        "gender": "f",
+        "label": "smart lenses",
+        "variant": "lenses"
+      },
+      {
+        "gender": "f",
+        "label": "comm earpiece",
+        "variant": "earpiece"
+      },
+      {
+        "gender": "f",
+        "label": "transit badge",
+        "variant": "badge"
+      },
+      {
+        "gender": "f",
+        "label": "shoulder display",
+        "variant": "display"
+      }
+    ]
+  },
   "rules": [
     {
       "asset": "Rule_NoAncientEgypt",
@@ -6417,6 +6493,11 @@
       "country": "japan",
       "era": "modern",
       "description": "Typhoon warning: no travel to Showa Tokyo today."
+    },
+    {
+      "asset": "Rule_DressForDestination",
+      "type": "DressForDestination",
+      "description": "Dress for the destination. An item from another time or place causes a panic: check the Costume Guide."
     }
   ],
   "days": [
@@ -6449,7 +6530,8 @@
           "blueprint": ""
         }
       ],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.0
     },
     {
       "asset": "DayPlan_Inv_Day2",
@@ -6479,7 +6561,8 @@
         "britain"
       ],
       "rules": [
-        "Rule_NoAncientEgypt"
+        "Rule_NoAncientEgypt",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "aspasia",
@@ -6494,7 +6577,8 @@
           "blueprint": ""
         }
       ],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day3",
@@ -6523,7 +6607,8 @@
       "countries": [],
       "rules": [
         "Rule_NoMedievalChina",
-        "Rule_NoEarlyModernJapan"
+        "Rule_NoEarlyModernJapan",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6537,7 +6622,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day4",
@@ -6569,7 +6655,8 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoIndustrialBritain"
+        "Rule_NoIndustrialBritain",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6583,7 +6670,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day5",
@@ -6620,7 +6708,8 @@
       "countries": [],
       "rules": [
         "Rule_NoModernGermany",
-        "Rule_NoAncientEgypt"
+        "Rule_NoAncientEgypt",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6634,7 +6723,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day6",
@@ -6674,7 +6764,8 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoModernJapan"
+        "Rule_NoModernJapan",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6688,7 +6779,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     }
   ],
   "interview": {
@@ -7103,7 +7195,8 @@
       "leaderGained": "HISTORY: {nation} now dominates the timeline. The Future belongs to {place}.",
       "leaderLost": "HISTORY: {nation} no longer dominates the timeline. The Future is unsettled until a new power rises.",
       "carry": "HISTORY: travellers brought {value} to {place}.",
-      "dominant": "{attribute} is now DOMINANT in {place}."
+      "dominant": "{attribute} is now DOMINANT in {place}.",
+      "panic": "PANIC in {place}: a traveller from the agency was seen in \"{value}\" and the street fled."
     },
     "rules": [
       {
@@ -7307,6 +7400,15 @@
           }
         ]
       }
+    ]
+  },
+  "news": {
+    "debt": [
+      "Debt Relief Departures reach a record high.",
+      "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
+      "12,000 accounts frozen in default.",
+      "Premium families book Periclean Athens for the summer.",
+      "A stranded tourist's family inherits 212,000 cr."
     ]
   },
   "pc": {
@@ -8383,12 +8485,6 @@
         "tier": "Flavour"
       },
       {
-        "key": "records.title",
-        "text": "Citizen Records",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "records.search",
         "text": "SEARCH",
         "gloss": "Below",
@@ -8419,40 +8515,10 @@
         "tier": "Flavour"
       },
       {
-        "key": "window.directives",
-        "text": "Directives",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.scanner",
-        "text": "Deviation Report",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.settings",
         "text": "Settings",
         "gloss": "None",
         "tier": "Flavour"
-      },
-      {
-        "key": "icon.directives",
-        "text": "Directives",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "icon.scanner",
-        "text": "Deviation Report",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "icon.records",
-        "text": "Records",
-        "gloss": "None",
-        "tier": "Full"
       },
       {
         "key": "icon.internet",
@@ -8489,12 +8555,6 @@
         "text": "Settings",
         "gloss": "None",
         "tier": "Flavour"
-      },
-      {
-        "key": "icon.clueLog",
-        "text": "Clue Log",
-        "gloss": "None",
-        "tier": "Full"
       },
       {
         "key": "tray.day",
@@ -8599,6 +8659,162 @@
         "tier": "Full"
       },
       {
+        "key": "app.title",
+        "text": "Investigation",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.titleCase",
+        "text": "Investigation · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.counters",
+        "text": "Papers {0} of {1} received · {2} scanned · Deviations {3}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.documents",
+        "text": "Documents",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.records",
+        "text": "Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.reference",
+        "text": "Reference",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.transcript",
+        "text": "Transcript",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.report",
+        "text": "Report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.rules",
+        "text": "Rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.chip.onDesk",
+        "text": "{0}: on the desk",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.chip.notHandedOver",
+        "text": "{0}: not handed over",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.doc.none",
+        "text": "The papers the traveller hands over show here once they are scanned.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.doc.scanHint",
+        "text": "On the desk: scan it to read it here.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.doc.askHint",
+        "text": "Not handed over: ask the traveller for it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.ref.claimedOnly",
+        "text": "Claimed place only",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.search",
+        "text": "Search this case and today's records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toolbar.steps",
+        "text": "Steps",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toolbar.split",
+        "text": "Split",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toolbar.keys",
+        "text": "F1 Keys",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.steps",
+        "text": "STEPS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.pinned",
+        "text": "PINNED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.recent",
+        "text": "RECENT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.empty",
+        "text": "Nothing here yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toast.scanned",
+        "text": "{0} scanned",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toast.open",
+        "text": "Open",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.claimedLabel",
+        "text": "{0} (claimed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "window.minimize",
         "text": "_",
         "gloss": "None",
@@ -8635,12 +8851,6 @@
         "tier": "Full"
       },
       {
-        "key": "window.transcript",
-        "text": "Case Notes: Interview",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.internet",
         "text": "Internet",
         "gloss": "None",
@@ -8649,12 +8859,6 @@
       {
         "key": "window.notes",
         "text": "Notes",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.investigation",
-        "text": "Investigation",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9589,6 +9793,54 @@
         "tier": "Full"
       },
       {
+        "key": "contract.title",
+        "text": "DEBT RELIEF LABOUR CONTRACT · TC-520",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.worker",
+        "text": "Worker",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.citizenId",
+        "text": "Citizen ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.employer",
+        "text": "Employer",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.worksite",
+        "text": "Worksite",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.term",
+        "text": "Term",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.wage",
+        "text": "Day Wage",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.term",
+        "text": "{0:N0} days",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "notes.days",
         "text": "DAYS",
         "gloss": "None",
@@ -9705,6 +9957,12 @@
       {
         "key": "results.penalties",
         "text": "Citation penalties: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.debtRelief",
+        "text": "Debt Relief instalment: -{0}   (still owed: {1:N0} {2})",
         "gloss": "None",
         "tier": "Full"
       },
@@ -10003,6 +10261,12 @@
         "tier": "Full"
       },
       {
+        "key": "citation.acceptedWrong.panic",
+        "text": "Approved a traveller who would cause a panic in {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "citation.deniedWrong",
         "text": "Denied a legitimate, permitted traveler.",
         "gloss": "None",
@@ -10142,7 +10406,7 @@
       },
       {
         "key": "deviation.claimMismatch.worn",
-        "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  expected: \"{2}\"",
+        "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  expected: \"{2}\" — would cause a panic",
         "gloss": "None",
         "tier": "Full"
       },
@@ -10160,7 +10424,7 @@
       },
       {
         "key": "deviation.foreignOrigin.worn",
-        "text": "{0} INCORRECT — traveller wears \"{1}\", which belongs to {2}",
+        "text": "{0} INCORRECT — traveller wears \"{1}\", which belongs to {2}: would cause a panic",
         "gloss": "None",
         "tier": "Full"
       },

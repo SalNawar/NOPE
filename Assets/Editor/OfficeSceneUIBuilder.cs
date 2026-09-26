@@ -23,11 +23,12 @@ using UnityEngine.UI;
 /// - HUD (day/money/stability) on the desktop's taskbar; the citation slip and
 ///   the verdict line on the office overlay (piece 10)  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
-/// - Investigation desk: claim banner, directives, draggable/multi-page document
-///   windows, reference-book windows, the interview transcript (their tiles in
-///   the interim Investigation window), a visual compare bar, and Accept/Deny
-///   buttons, laid out for the 4:3 desktop  [InvestigationUIController +
-///   CompareController]
+/// - Investigation desk: the Investigation app (OfficeSceneUIBuilder.App.cs:
+///   one window with the claim, the counters, Accept/Deny and six tabs: the
+///   scanned documents, Citizen Records, the reference books, the interview
+///   transcript, the Deviation Report and the directives), the compare dock
+///   and the scan toast, laid out for the 4:3 desktop  [InvestigationUIController,
+///   InvestigationApp, AppPane, the views, CompareController]
 /// - The desktop's six icons, their context menu, the Start menu and the one
 ///   OpenApp(id) entry point (OfficeSceneUIBuilder.Desktop.cs)
 ///   [DesktopIcons, DesktopIconView, DesktopContextMenu, DesktopShell, DesktopApps]
@@ -86,9 +87,6 @@ public static partial class OfficeSceneUIBuilder
     /// (The desktop is a World Space canvas of DesktopSize units with no scaler.)
     /// </summary>
     private static readonly Vector2 ReferenceResolution = new Vector2(1920f, 1080f);
-
-    /// <summary>Transcript rows per page: the book row height (34 px) and spacing fit 8 in the window's row area.</summary>
-    private const int TranscriptRowsPerPage = 8;
 
     /// <summary>The one scene this builder writes: the office's gameplay layer.</summary>
     private const string GameplayScenePath = "Assets/Scenes/OfficeGameplay.unity";
@@ -238,88 +236,20 @@ public static partial class OfficeSceneUIBuilder
         }
 
         // --- Investigation desk ---
-        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled case overlay. The
-        // window layer sits on the host above it, never toggled, so a window opened between travellers (an app from
-        // its desktop icon) shows too; the compare dock goes above the layer (BuildCompareDock).
+        // Persistent host (never toggled) holds the controllers; on it the window layer (every window, the icon area
+        // exactly; it shows with or without a case), the scan toast above it and the compare dock above that
+        // (BuildCompareDock). The case overlay retired: its claim and Accept/Deny are in the Investigation app's header.
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
+        DestroyChildIfPresent(investHost, "InvestigationRoot");
+        Transform windowLayer = EnsureWindowLayer(investHost);
 
-        Transform investRoot = EnsureCaseRoot(investHost);
-        Transform windowLayer = EnsureWindowLayer(investHost, investRoot);
+        // The Investigation app (OfficeSceneUIBuilder.App): every case source in one window, one tab each.
+        AppParts app = BuildInvestigationApp(windowLayer, investHost, compare);
 
-        // Claim on a translucent XP-blue strip, clear of the desktop's default icon column.
-        Panel(investRoot, "ClaimStrip", new Vector2(0.12f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ClaimStrip);
-        TMP_Text claimText = Text(investRoot, "ClaimBanner", "Visitor", 26, TextAlignmentOptions.Center, new Vector2(0.13f, 0.88f), new Vector2(0.93f, 0.99f), Color.white, ThemeRoleId.ClaimStrip);
-        SetAnchors(claimText.transform, new Vector2(0.13f, 0.88f), new Vector2(0.93f, 0.99f));
-
-        // The case tiles moved off the desktop (the PC redesign DK7) into the
-        // interim Investigation window the Investigation icon opens, until the
-        // Investigation app (phase 16): the day's windows, then the reference
-        // books and each scanned document the controller adds at runtime.
-        DestroyChildIfPresent(investRoot, "BookShelf");
-        Transform caseTiles = BuildInvestigationWindow(windowLayer, out DesktopWindow investigationWindow, out Button caseTileTemplate);
-
-        // Directives: a window (closed by default) opened from its case tile.
-        DesktopWindow directivesWindow = BuildOSWindow(windowLayer, "DirectivesWindow", "window.directives", null,
-            UiText.Get("directives.none"), new Vector2(430f, 360f));
-        TMP_Text directivesText = directivesWindow.transform.Find("Body").GetComponent<TMP_Text>();
-        BuildCaseTile(caseTiles, "TileDirectives", "icon.directives", directivesWindow);
-
-        // The Deviation Report: its body lists the discrepancies the player has
-        // documented for the current case (drives deny gating). Its object names
-        // keep "Scanner"; the desk device is the scanner.
-        DestroyChildIfPresent(windowLayer, "IconScannerWindow");
-        DesktopWindow scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "window.scanner", null,
-            UiText.Get("scanner.idle"), new Vector2(560f, 420f));
-        TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
-        BuildCaseTile(caseTiles, "TileScanner", "icon.scanner", scannerWindow);
-
-        // Citizen Records app: the agency's master record of every (fake)
-        // human, its rows listed group by group (OfficeSceneUIBuilder.Records).
-        // Registry content is injected per day by GameManager.
-        CitizenRecordsWindowController records = BuildRecordsWindow(windowLayer, caseTiles, compare);
-
-        // Case Notes: Interview — the current traveller's transcript. Rebuilt
-        // fresh each run (like Records), so its row template always has the
-        // transcript layout and the window layer keeps a stable order. Opened by
-        // every interview choice but a document request; answer rows are
-        // compare-clickable.
-        DestroyChildIfPresent(windowLayer, "TranscriptWindow");
-        Transform transcriptWin = Panel(windowLayer, "TranscriptWindow", Center, Center, new Vector2(395f, 60f), new Vector2(620f, 460f), Paper, ThemeRoleId.WindowBody);
-        WindowShell transcriptShell = BuildWindowShell(transcriptWin, "window.transcript", null, ThemeRoleId.WindowBody, ThemeRoleId.DiegeticRow, false);
-        TranscriptWindowController transcript = transcriptWin.gameObject.AddComponent<TranscriptWindowController>();
-        var soTranscript = new SerializedObject(transcript);
-        SetRef(soTranscript, "titleText", transcriptShell.title);
-        SetRef(soTranscript, "pageText", transcriptShell.page);
-        SetRef(soTranscript, "prevButton", transcriptShell.prev);
-        SetRef(soTranscript, "nextButton", transcriptShell.next);
-        SetRef(soTranscript, "entryRowsRoot", transcriptShell.rowsRoot);
-        SetRef(soTranscript, "entryRowTemplate", transcriptShell.rowTemplate);
-        soTranscript.FindProperty("entriesPerPage").intValue = TranscriptRowsPerPage;
-        soTranscript.ApplyModifiedProperties();
-        ApplyTranscriptRowLayout(transcriptShell.rowTemplate);
-        DesktopWindow transcriptChrome = transcriptWin.GetComponent<DesktopWindow>();
-        transcriptWin.gameObject.SetActive(false);
-        BuildCaseTile(caseTiles, "TileClueLog", "icon.clueLog", transcriptChrome);
-
-        // Accept / Deny (above the taskbar), each with a fixed glyph so a culture's colours never carry the meaning alone (piece 6 R8)
-        Button acceptButton = MakeButton(investRoot, "AcceptButton", null, new Vector2(0.3f, 0.06f), new Vector2(0.49f, 0.15f), new Color(0.2f, 0.5f, 0.24f, 1f),
-                                         ThemeRoleId.AcceptButton, "accept");
-        Button denyButton = MakeButton(investRoot, "DenyButton", null, new Vector2(0.51f, 0.06f), new Vector2(0.7f, 0.15f), new Color(0.72f, 0.2f, 0.18f, 1f),
-                                       ThemeRoleId.DenyButton, "deny");
-        BuildDecisionGlyph(acceptButton, ThemeRoleId.AcceptButton, true);
-        BuildDecisionGlyph(denyButton, ThemeRoleId.DenyButton, false);
-
-        // Window templates (disabled, cloned at runtime)
-        DocumentWindowController docTemplate = BuildDocumentWindow(windowLayer);
-        ReferenceBookWindowController bookTemplate = BuildBookWindow(windowLayer);
-
-        // The compare dock above the taskbar (the PC redesign DK9): the window
-        // layer moves over the claim, the icons and Accept/Deny, the dock over it.
-        Transform compareBar = BuildCompareDock(investHost, investRoot, windowLayer, compare, out TMP_Text compareText, out GameObject compareDock);
-
-        investRoot.gameObject.SetActive(false);
+        // The compare dock above the taskbar (the PC redesign DK9): over every window and the toast.
+        Transform compareBar = BuildCompareDock(investHost, compare, out TMP_Text compareText, out GameObject compareDock);
 
         // --- Content + logic objects ---
         DayPlanSO dayPlan = null;
@@ -341,8 +271,10 @@ public static partial class OfficeSceneUIBuilder
 
         // Fake-OS desktop shell: the six apps' windows, their icons, the context
         // menu and the Start menu, and the taskbar's way back to the office.
-        BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, investigationWindow, officeView.transform.Find("Desk").GetComponent<DeskController>(),
-                          gameManager, directivesWindow);
+        DesktopIcons icons = BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, app, gameManager);
+        var soApp = new SerializedObject(app.App);
+        Wire(soApp, "icons", icons);
+        soApp.ApplyModifiedProperties();
 
         // The window stack (every window built above), the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
         BuildWindowManager(canvas, officeView);
@@ -354,6 +286,7 @@ public static partial class OfficeSceneUIBuilder
         ShiftClockDriver shiftClock = gameManager.GetComponent<ShiftClockDriver>();
         if (shiftClock == null)
             shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
+        WireDocumentClock(app.Documents, shiftClock);
 
         // The Office root: every click box, the desk, the traveller, the readouts,
         // the input rules and the binder that puts them on the art office at load.
@@ -362,7 +295,7 @@ public static partial class OfficeSceneUIBuilder
                                              fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
 
         // The Tier-2 images' art slots (OfficeSceneUIBuilder.Art.cs, redesign phase 27), before the desktop's layer is applied to its covers.
-        BuildArtSlots(officeCanvas.transform, speechBubble, caseTileTemplate, bookTemplate, officeView);
+        BuildArtSlots(officeCanvas.transform, speechBubble, app.Reference, officeView);
 
         // The desktop's own layer covers everything under its place (the canvas's windows and templates included).
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer);
@@ -401,36 +334,23 @@ public static partial class OfficeSceneUIBuilder
         soCompare.ApplyModifiedProperties();
 
         var soInvest = new SerializedObject(invest);
-        SetRef(soInvest, "root", investRoot.gameObject);
-        SetRef(soInvest, "claimText", claimText);
-        SetRef(soInvest, "directivesText", directivesText);
-        SetRef(soInvest, "acceptButton", acceptButton);
-        SetRef(soInvest, "denyButton", denyButton);
-        SetRef(soInvest, "compareController", compare);
-        SetRef(soInvest, "compareDock", compareDock);
-        SetRef(soInvest, "windowLayer", windowLayer);
-        SetRef(soInvest, "documentWindowTemplate", docTemplate);
-        SetRef(soInvest, "bookWindowTemplate", bookTemplate);
-        SetRef(soInvest, "bookShelfRoot", caseTiles);
-        SetRef(soInvest, "bookShelfButtonTemplate", caseTileTemplate);
-        SetRef(soInvest, "scannerText", scannerText);
-        SetRef(soInvest, "scannerWindow", scannerWindow);
-        SetRef(soInvest, "interactionPanel", interaction);
-        SetRef(soInvest, "recordsWindow", records);
-        SetRef(soInvest, "transcriptWindow", transcript);
-        SetRef(soInvest, "transcriptChrome", transcriptChrome);
-        SetRef(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
-        SetRef(soInvest, "hud", caseHud);
-        SetRef(soInvest, "stampTray", stampTray);
-        SetRef(soInvest, "wheel", wheel);
-        SetRef(soInvest, "idleScreen", idleScreen);
-        // The 4:3 desktop: documents cascade on the left, clear of the icon
-        // column; books open in two staggered rows.
-        soInvest.FindProperty("documentWindowOrigin").vector2Value = new Vector2(-195f, 150f);
-        soInvest.FindProperty("documentWindowStep").vector2Value = new Vector2(40f, -40f);
-        soInvest.FindProperty("bookWindowOrigin").vector2Value = new Vector2(-180f, -150f);
-        soInvest.FindProperty("bookWindowColumnStep").floatValue = 300f;
-        soInvest.FindProperty("bookWindowRowStep").vector2Value = new Vector2(40f, 40f);
+        Wire(soInvest, "app", app.App);
+        Wire(soInvest, "acceptButton", app.Accept);
+        Wire(soInvest, "denyButton", app.Deny);
+        Wire(soInvest, "compareController", compare);
+        Wire(soInvest, "compareDock", compareDock);
+        Wire(soInvest, "documentsView", app.Documents);
+        Wire(soInvest, "recordsWindow", app.Records);
+        Wire(soInvest, "referenceView", app.Reference);
+        Wire(soInvest, "transcriptWindow", app.Transcript);
+        Wire(soInvest, "reportText", app.ReportText);
+        Wire(soInvest, "directivesText", app.RulesText);
+        Wire(soInvest, "interactionPanel", interaction);
+        Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
+        Wire(soInvest, "hud", caseHud);
+        Wire(soInvest, "stampTray", stampTray);
+        Wire(soInvest, "wheel", wheel);
+        Wire(soInvest, "idleScreen", idleScreen);
         soInvest.ApplyModifiedProperties();
 
         var soOrch = new SerializedObject(orchestrator);
@@ -468,43 +388,6 @@ public static partial class OfficeSceneUIBuilder
     // Window builders
     // -----------------------------
 
-    private static DocumentWindowController BuildDocumentWindow(Transform layer)
-    {
-        // Rebuilt fresh each run: visitor papers read as SCANNED documents —
-        // a white page with a photo corner (the traveller's photo on a photo
-        // document) on a dark scanner backing — so they never look like just
-        // another OS window.
-        DestroyChildIfPresent(layer, "DocumentWindowTemplate");
-        Transform win = Panel(layer, "DocumentWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), new Color(0.13f, 0.14f, 0.17f, 1f), ThemeRoleId.DiegeticBacking);
-        WindowShell s = BuildWindowShell(win, null, UiText.Get("document.untitled"), ThemeRoleId.DiegeticBacking, ThemeRoleId.DiegeticRow, false);
-
-        Transform page = Panel(win, "ScanPage", new Vector2(0.025f, 0.115f), new Vector2(0.975f, 0.85f), Vector2.zero, Vector2.zero, new Color(0.97f, 0.96f, 0.92f, 1f), ThemeRoleId.DiegeticPaper);
-        page.SetSiblingIndex(1); // render after the header, behind the rows
-        Transform photo = Panel(page, "PhotoBox", new Vector2(0.76f, 0.66f), new Vector2(0.96f, 0.96f), Vector2.zero, Vector2.zero, new Color(0.55f, 0.56f, 0.58f, 1f), ThemeRoleId.DiegeticPhoto);
-        TravellerPortraitView portrait = BuildPortrait(photo);
-
-        // Footer page label needs light ink on the dark backing.
-        s.page.color = new Color(0.85f, 0.86f, 0.88f, 1f);
-
-        DocumentWindowController c = GetOrAdd<DocumentWindowController>(win.gameObject);
-        var so = new SerializedObject(c);
-        SetRef(so, "titleText", s.title);
-        SetRef(so, "pageText", s.page);
-        SetRef(so, "prevButton", s.prev);
-        SetRef(so, "nextButton", s.next);
-        SetRef(so, "fieldRowsRoot", s.rowsRoot);
-        SetRef(so, "fieldRowTemplate", s.rowTemplate);
-        SetRef(so, "photoBox", photo.gameObject);
-        SetRef(so, "photo", portrait);
-        so.FindProperty("photoInset").floatValue = PhotoRowInset;
-        so.ApplyModifiedProperties();
-        win.gameObject.SetActive(false);
-        return c;
-    }
-
-    /// <summary>Extra right padding of a photo page's rows (px), so none runs under the photo box.</summary>
-    private const float PhotoRowInset = 120f;
-
     /// <summary>
     /// The scanned page's photo: a 4:5 Portrait fitted inside the box, holding
     /// one full-size, non-raycast Image per LookLayer in stack order, wired to
@@ -536,26 +419,9 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
-    private static ReferenceBookWindowController BuildBookWindow(Transform layer)
+    /// <summary>A paged list's parts (PagedRowsWindow's): the rows' root and template, Prev, Next and the page line.</summary>
+    private struct PagedBody
     {
-        Transform win = Panel(layer, "BookWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), Paper, ThemeRoleId.WindowBody);
-        WindowShell s = BuildWindowShell(win, null, UiText.Get("book.untitled"), ThemeRoleId.WindowBody, ThemeRoleId.DiegeticBookRow, true);
-        ReferenceBookWindowController c = GetOrAdd<ReferenceBookWindowController>(win.gameObject);
-        var so = new SerializedObject(c);
-        SetRef(so, "titleText", s.title);
-        SetRef(so, "pageText", s.page);
-        SetRef(so, "prevButton", s.prev);
-        SetRef(so, "nextButton", s.next);
-        SetRef(so, "entryRowsRoot", s.rowsRoot);
-        SetRef(so, "entryRowTemplate", s.rowTemplate);
-        so.ApplyModifiedProperties();
-        win.gameObject.SetActive(false);
-        return c;
-    }
-
-    private struct WindowShell
-    {
-        public TMP_Text title;
         public TMP_Text page;
         public Button prev;
         public Button next;
@@ -564,39 +430,26 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// A paged window's shell: title bar (keyed title, or a sample the
-    /// controller rewrites), controls, the row list with its template and the
-    /// footer; <paramref name="frameRole"/> colours the footer text, <paramref name="rowRole"/>
-    /// the rows (whose label shrinks to fit when <paramref name="rowLabelFits"/>).
+    /// A paged list in a view (the app's tabs): the row list between
+    /// <paramref name="rowsMin"/> and <paramref name="rowsMax"/> with its
+    /// template and the footer (Prev, "Page n/m", Next); <paramref name="frameRole"/>
+    /// colours the footer text, <paramref name="rowRole"/> the rows (whose label
+    /// shrinks to fit when <paramref name="rowLabelFits"/>).
     /// </summary>
-    private static WindowShell BuildWindowShell(Transform win, string titleKey, string titleSample, ThemeRoleId frameRole, ThemeRoleId rowRole, bool rowLabelFits)
+    private static PagedBody BuildPagedBody(Transform view, Vector2 rowsMin, Vector2 rowsMax, ThemeRoleId frameRole, ThemeRoleId rowRole, bool rowLabelFits)
     {
-        // XP title bar (drag handle) with gloss highlight + window controls.
-        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), TitleBarPos, TitleBarSize, HeaderBar, ThemeRoleId.TitleBar);
-        Panel(header, "Gloss", new Vector2(0f, 0.5f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.14f), ThemeRoleId.TitleGloss);
-        WindowDrag drag = GetOrAdd<WindowDrag>(header.gameObject);
-        var soDrag = new SerializedObject(drag);
-        SetRef(soDrag, "windowRoot", (RectTransform)win);
-        soDrag.ApplyModifiedProperties();
-        TMP_Text title = Text(header, "TitleText", titleSample, TitleFontSize, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.76f, 1f), Color.white,
-                              ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, titleKey != null);
-        BuildWinControls(win, header);
-
-        // Rows container (scroll-free vertical list)
-        Transform rowsRoot = Panel(win, "Rows", new Vector2(0.04f, 0.12f), new Vector2(0.96f, 0.84f), Vector2.zero, Vector2.zero, null);
+        Transform rowsRoot = Panel(view, "Rows", rowsMin, rowsMax, Vector2.zero, Vector2.zero, null);
+        SetAnchors(rowsRoot, rowsMin, rowsMax);
         AddVLayout(rowsRoot, 4f);
-        if (rowsRoot.GetComponent<RectMask2D>() == null)
-            rowsRoot.gameObject.AddComponent<RectMask2D>(); // clip any overflow inside the window
-
-        // Row template
+        GetOrAdd<RectMask2D>(rowsRoot.gameObject); // clip any overflow inside the view
         GameObject rowTemplate = BuildRowTemplate(rowsRoot, rowRole, rowLabelFits);
+        rowTemplate.GetComponent<LayoutElement>().flexibleHeight = 0f; // rows keep their height from the top of a tall view
 
-        // Footer page controls
-        Button prev = MakeButton(win, "PrevButton", null, new Vector2(0.04f, 0.02f), new Vector2(0.18f, 0.1f), null, ThemeRoleId.Button, "window.prev");
-        TMP_Text page = Text(win, "PageText", UiText.Format("window.page", 1, 1), 18, TextAlignmentOptions.Center, new Vector2(0.2f, 0.02f), new Vector2(0.8f, 0.1f), Ink, frameRole);
-        Button next = MakeButton(win, "NextButton", null, new Vector2(0.82f, 0.02f), new Vector2(0.96f, 0.1f), null, ThemeRoleId.Button, "window.next");
+        Button prev = MakeButton(view, "PrevButton", null, new Vector2(0.04f, 0.02f), new Vector2(0.18f, 0.09f), null, ThemeRoleId.Button, "window.prev");
+        TMP_Text page = Text(view, "PageText", UiText.Format("window.page", 1, 1), 18, TextAlignmentOptions.Center, new Vector2(0.2f, 0.02f), new Vector2(0.8f, 0.09f), Ink, frameRole);
+        Button next = MakeButton(view, "NextButton", null, new Vector2(0.82f, 0.02f), new Vector2(0.96f, 0.09f), null, ThemeRoleId.Button, "window.next");
 
-        return new WindowShell { title = title, page = page, prev = prev, next = next, rowsRoot = rowsRoot, rowTemplate = rowTemplate };
+        return new PagedBody { page = page, prev = prev, next = next, rowsRoot = rowsRoot, rowTemplate = rowTemplate };
     }
 
     /// <summary>
@@ -1376,19 +1229,20 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Builds the fake-OS desktop shell: the six apps' windows, registered in
-    /// phase 25's DesktopApps by their DesktopAppIds id (the interim
-    /// Investigation window, the Internet browser, Mail with its feed, the
-    /// Citizen Account, Notes: OfficeSceneUIBuilder.Apps.cs; Settings in
+    /// phase 25's DesktopApps by their DesktopAppIds id (the Investigation
+    /// app, <paramref name="app"/>, built by OfficeSceneUIBuilder.App.cs; the
+    /// Internet browser, Mail with its feed, the Citizen Account, Notes:
+    /// OfficeSceneUIBuilder.Apps.cs; Settings in
     /// sections), their icons and the context menu
     /// (OfficeSceneUIBuilder.Desktop.cs), a Start menu (the six apps, Arrange
     /// icons, Turn off screen and Quit game) wired to a DesktopShell on the
     /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here,
     /// after the view exists). The retired Lexicon, Dialect and Material
-    /// placeholders and their icons go. <paramref name="rulesWindow"/> is what
-    /// Mail's Rules link opens. Idempotent.
+    /// placeholders and their icons go; Mail's Rules link opens the app's Rules
+    /// tab. Idempotent. Returns the icons.
     /// </summary>
-    private static void BuildDesktopShell(Canvas canvas, Transform windowLayer, ContentLibrarySO library, OfficeViewController view, MonitorScreen screen,
-                                          DesktopWindow investigationWindow, DeskController desk, GameManager game, DesktopWindow rulesWindow)
+    private static DesktopIcons BuildDesktopShell(Canvas canvas, Transform windowLayer, ContentLibrarySO library, OfficeViewController view, MonitorScreen screen,
+                                                  AppParts app, GameManager game)
     {
         Transform root = canvas.transform;
         DesktopConfigSO config = EnsureDesktopConfig();
@@ -1406,14 +1260,14 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow internet = BuildInternetWindow(windowLayer, library);
         var windows = new Dictionary<string, DesktopWindow>
         {
-            { DesktopAppIds.Investigation, investigationWindow },
+            { DesktopAppIds.Investigation, app.Window },
             { DesktopAppIds.Internet, internet },
-            { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), rulesWindow, out TMP_Text mailTitle) },
+            { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App, out TMP_Text mailTitle) },
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },
             { DesktopAppIds.Notes, BuildNotesWindow(windowLayer, config) },
             { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
         };
-        DesktopIcons icons = BuildDesktopIcons(canvas, windows, desk, feed, out DesktopContextMenu contextMenu);
+        DesktopIcons icons = BuildDesktopIcons(canvas, windows, feed, out DesktopContextMenu contextMenu);
         WireIconSettings(windows[DesktopAppIds.Settings], icons);
 
         Transform startMenu = BuildStartMenu(root, apps, out TMP_Text mailEntry, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
@@ -1461,6 +1315,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soManager, "contextMenu", contextMenu);
         SerializedArrays.Set(soManager, "emptyDesktop", new Object[] { root.Find("Desktop").GetComponent<Image>(), icons.GetComponent<Image>() });
         soManager.ApplyModifiedProperties();
+        return icons;
     }
 
     /// <summary>
@@ -1516,30 +1371,8 @@ public static partial class OfficeSceneUIBuilder
         return input;
     }
 
-    /// <summary>Largest font size of a case tile's label.</summary>
-    private const float IconLabelMaxSize = 18f;
-
-    /// <summary>Smallest font size a desktop icon's or a case tile's label shrinks to.</summary>
+    /// <summary>Smallest font size a desktop icon's label shrinks to.</summary>
     private const float IconLabelMinSize = 10f;
-
-    /// <summary>
-    /// Lets a case tile's label shrink to fit its tile, wrapping only between
-    /// words: auto-sizing shrinks a word that does not fit the tile's width
-    /// instead of breaking it. Re-applied on every build (MakeButton keeps an
-    /// existing label as it is; the label text is set by BuildCaseTile).
-    /// </summary>
-    private static void FitIconLabel(Button icon)
-    {
-        Transform label = icon.transform.Find("Label");
-        TMP_Text text = label != null ? label.GetComponent<TMP_Text>() : null;
-        if (text == null)
-            return;
-        text.enableAutoSizing = true;
-        text.fontSizeMax = IconLabelMaxSize;
-        text.fontSizeMin = IconLabelMinSize;
-        text.textWrappingMode = TextWrappingModes.Normal;
-        text.margin = new Vector4(3f, 2f, 3f, 2f);
-    }
 
 
 

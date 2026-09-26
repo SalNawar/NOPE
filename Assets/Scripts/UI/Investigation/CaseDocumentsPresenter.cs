@@ -1,72 +1,61 @@
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 /// <summary>
-/// The current traveller's documents (the PC redesign RF1): one scanned-copy
-/// window per document (hidden until it opens, cascading from the origin), the
-/// documents as the desk and the interview read them, the hand-over and the
-/// scan. With the desk, each document becomes a paper (those handed over on
-/// arrival land at once) whose finished scan opens its window; without it, a
-/// document's window opens when it is handed over. The first time a window
-/// opens in a case, the document gets a desktop tile at the top of the grid.
-/// A held paper's row picked at the desk goes into the compare as its scanned
-/// copy's row would. It subscribes to the desk it was given (only a reachable
-/// one) and unsubscribes from that same instance (audit R4-003). Plain C#;
-/// InvestigationUIController owns it.
+/// The current traveller's documents (the PC redesign RF1, AP6): the papers
+/// the Investigation app's Documents tab shows (a chip each; a scanned one's
+/// copy), where each paper is (CasePapers: not handed over, on the desk,
+/// scanned; the app's counters), the documents as the desk and the interview
+/// read them, the hand-over and the scan. With the desk, each document
+/// becomes a paper (those handed over on arrival land at once) whose finished
+/// scan brings its copy to the PC; without it, a document reaches the PC when
+/// it is handed over. A paper reaching the PC raises Scanned (the app decides
+/// what that shows: ScanArrival); nothing here opens a window. A held
+/// paper's row picked at the desk goes into the compare as its scanned
+/// copy's row would. It subscribes to the desk it was given (only a
+/// reachable one) and unsubscribes from that same instance (audit R4-003).
+/// Plain C#; InvestigationUIController owns it.
 /// </summary>
 public sealed class CaseDocumentsPresenter
 {
-    /// <summary>Where the document windows go (the façade's serialized parts and knobs).</summary>
-    public struct Windows
-    {
-        /// <summary>The document window template (inactive).</summary>
-        public DocumentWindowController template;
-
-        /// <summary>The window layer the document windows open on.</summary>
-        public RectTransform windowLayer;
-
-        /// <summary>Where the first document window opens (desktop units from the centre).</summary>
-        public Vector2 origin;
-
-        /// <summary>The offset from one document window to the next.</summary>
-        public Vector2 step;
-    }
-
-    private readonly Windows _windows;
+    private readonly DocumentsView _view;
     private readonly DeskController _desk;
     private readonly CompareController _compare;
-    private readonly DesktopTiles _tiles;
-
-    /// <summary>The current traveller's document windows, in paper order.</summary>
-    private readonly List<DocumentWindowController> _docWindows = new();
-    private readonly List<GameObject> _docIcons = new();
 
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
-    private readonly List<CaseDocument> _caseDocuments = new();
+    private readonly List<CaseDocument> _caseDocuments = new List<CaseDocument>();
 
     /// <summary>The form each of the current traveller's papers prints (redesign phase 4), in paper order.</summary>
-    private readonly List<DocumentForm> _caseForms = new();
+    private readonly List<DocumentForm> _caseForms = new List<DocumentForm>();
 
-    /// <summary>Papers whose window already has a desktop tile this case.</summary>
-    private readonly HashSet<int> _iconedDocuments = new();
+    /// <summary>Where each of the current traveller's papers is.</summary>
+    private CasePapers _papers = new CasePapers(0);
 
-    /// <summary>Character art: the passport photos on the papers and the scanned pages.</summary>
+    /// <summary>Character art: the passport photos on the papers and the scanned copies.</summary>
     private CharacterArt _art;
 
     /// <summary>The desk whose events this listens to (null while detached).</summary>
     private DeskController _listening;
 
-    /// <summary>The document windows' parts, the desk (null when it is not reachable: documents then open at the hand-over), the compare and the desktop's tiles.</summary>
-    public CaseDocumentsPresenter(Windows windows, DeskController reachableDesk, CompareController compare, DesktopTiles tiles)
+    /// <summary>The app's Documents view, the desk (null when it is not reachable: documents then reach the PC at the hand-over) and the compare.</summary>
+    public CaseDocumentsPresenter(DocumentsView view, DeskController reachableDesk, CompareController compare)
     {
-        _windows = windows;
+        _view = view;
         _desk = reachableDesk;
         _compare = compare;
-        _tiles = tiles;
     }
+
+    /// <summary>A paper reached the PC (its index): scanned at the desk, or handed over where no desk is wired.</summary>
+    public event Action<int> Scanned;
+
+    /// <summary>A paper was handed over or scanned (the counters change).</summary>
+    public event Action PapersChanged;
 
     /// <summary>The current traveller's documents, in paper order.</summary>
     public IReadOnlyList<CaseDocument> Documents => _caseDocuments;
+
+    /// <summary>Where each of the current traveller's papers is.</summary>
+    public CasePapers Papers => _papers;
 
     /// <summary>Starts listening to the desk's finished scans and picked rows.</summary>
     public void Attach()
@@ -74,7 +63,7 @@ public sealed class CaseDocumentsPresenter
         if (_desk == null)
             return;
         _listening = _desk;
-        _listening.ScanFinished += OpenDocumentWindow;
+        _listening.ScanFinished += Scan;
         _listening.FieldPicked += HandleFieldPicked;
     }
 
@@ -83,7 +72,7 @@ public sealed class CaseDocumentsPresenter
     {
         if (_listening == null)
             return;
-        _listening.ScanFinished -= OpenDocumentWindow;
+        _listening.ScanFinished -= Scan;
         _listening.FieldPicked -= HandleFieldPicked;
         _listening = null;
     }
@@ -91,102 +80,91 @@ public sealed class CaseDocumentsPresenter
     /// <summary>Sets the character art the passport photos are drawn with.</summary>
     public void SetCharacterArt(CharacterArt art) => _art = art;
 
-    /// <summary>Removes the last traveller's document windows and tiles (their windows are closed first by the façade).</summary>
-    public void Clear()
-    {
-        foreach (DocumentWindowController w in _docWindows)
-            if (w != null)
-                Object.Destroy(w.gameObject);
-        _docWindows.Clear();
-
-        foreach (GameObject ic in _docIcons)
-            if (ic != null)
-                Object.Destroy(ic);
-        _docIcons.Clear();
-        _iconedDocuments.Clear();
-        _caseDocuments.Clear();
-        _caseForms.Clear();
-    }
-
     /// <summary>
     /// Presents the traveller's documents: handed over, never taken: those
     /// marked "on arrival" when the traveller steps up, the others through the
-    /// traveller wheel. With the desk, each becomes a paper whose scan opens
-    /// its window; without it, the window opens at the hand-over. Windows
-    /// spawn hidden. Each paper prints its document's form, headed with
-    /// <paramref name="agency"/>'s name and programme (redesign phase 4).
+    /// traveller wheel. The Documents view gets a chip and a (hidden) copy per
+    /// paper. With the desk, each becomes a paper whose scan brings its copy
+    /// to the PC; without it, a paper reaches the PC at the hand-over. Each
+    /// paper prints its document's form, headed with <paramref name="agency"/>'s
+    /// name and programme (redesign phase 4), and its copy draws that same
+    /// form (phase 5).
     /// </summary>
     public void Present(CaseInstance inst, AgencyContent agency)
     {
+        _caseDocuments.Clear();
+        _caseForms.Clear();
         if (inst != null)
-        {
-            int i = 0;
             foreach (DocumentInstance doc in inst.documents)
             {
-                DocumentWindowController clone = Object.Instantiate(_windows.template, _windows.windowLayer);
-                clone.gameObject.SetActive(false);
-                if (clone.transform is RectTransform rt)
-                    rt.anchoredPosition = _windows.origin + i * _windows.step;
-                clone.SetDocument(doc, i, _compare, inst.look, _art);
-                _docWindows.Add(clone);
                 _caseDocuments.Add(new CaseDocument
                 {
-                    name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
+                    name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
                     fields = doc != null ? doc.fields : null,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
                 _caseForms.Add(DocumentForm.For(doc, agency));
-                i++;
             }
-        }
+
+        _papers = new CasePapers(_caseDocuments.Count);
+        if (_view != null)
+            _view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art);
 
         if (_desk != null)
-        {
             _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
-        }
-        else
-        {
-            foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
-                OpenDocumentWindow(i);
-        }
+        foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
+            Receive(i);
+        PapersChanged?.Invoke();
     }
 
-    /// <summary>A document handed over through the wheel: a paper onto the desk, or straight to its window where no desk is reachable.</summary>
+    /// <summary>A document handed over through the wheel: a paper onto the desk, or straight to the PC where no desk is reachable.</summary>
     public void HandOver(int index)
     {
         if (_desk != null)
             _desk.HandOver(index);
-        else
-            OpenDocumentWindow(index);
+        Receive(index);
     }
 
-    /// <summary>The decision (<paramref name="accepted"/>): the desk's papers leave with the traveller, inked with the verdict.</summary>
+    /// <summary>The decision (<paramref name="accepted"/>): the desk's papers leave with the traveller, inked with the verdict, and the Documents view empties.</summary>
     public void EndCase(bool accepted)
     {
         if (_desk != null)
             _desk.EndCase(accepted);
+        _caseDocuments.Clear();
+        _caseForms.Clear();
+        _papers = new CasePapers(0);
+        if (_view != null)
+            _view.Clear();
     }
 
-    /// <summary>
-    /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
-    /// or a hand-over where no desk is wired). The first time it opens this
-    /// case, the paper also gets a desktop tile at the top of the grid, which
-    /// reopens the window after it is closed.
-    /// </summary>
-    private void OpenDocumentWindow(int index)
+    /// <summary>A paper handed over: onto the desk (its scan comes later), or scanned at once where no desk is reachable.</summary>
+    private void Receive(int index)
     {
-        DocumentWindowController window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
-        if (window == null || !window.TryGetComponent(out DesktopWindow chrome))
-            return;
-
-        chrome.Open();
-        if (_iconedDocuments.Add(index))
+        if (_desk == null)
         {
-            GameObject tile = _tiles.Add(_caseDocuments[index].name, chrome, true);
-            if (tile != null)
-                _docIcons.Add(tile);
+            Scan(index);
+            return;
         }
+        if (!_papers.HandOver(index))
+            return;
+        if (_view != null)
+            _view.Refresh();
+        PapersChanged?.Invoke();
+    }
+
+    /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper; its strip reads the time.</summary>
+    private void Scan(int index)
+    {
+        if (!_papers.Scan(index))
+            return;
+        if (_view != null)
+        {
+            _view.MarkScanned(index);
+            _view.Refresh();
+        }
+        PapersChanged?.Invoke();
+        Scanned?.Invoke(index);
     }
 
     /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>
