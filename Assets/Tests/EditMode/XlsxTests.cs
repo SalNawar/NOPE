@@ -26,8 +26,8 @@ public class XlsxTests
         Assert.AreEqual(2, back.Count);
         Assert.AreEqual("people", back[0].Name);
         Assert.AreEqual("places", back[1].Name);
-        Assert.IsTrue(RowTable.SameCells(people, back[0]), string.Join(" / ", back[0].Rows[1]));
-        Assert.IsTrue(RowTable.SameCells(places, back[1]));
+        Assert.IsTrue(RowTableTests.SameCells(people, back[0]), string.Join(" / ", back[0].Rows[1]));
+        Assert.IsTrue(RowTableTests.SameCells(places, back[1]));
         CollectionAssert.AreEqual(new[] { 2, 3, 4 }, back[0].RowNumbers);
     }
 

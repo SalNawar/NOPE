@@ -31,13 +31,7 @@ public static class ContentSheets
     // The map
     // =====================================================================
 
-    /// <summary>The map's sheet names, in workbook order (the map's tree order).</summary>
-    public static IEnumerable<string> SheetNames(SheetSpec map) => Flatten(map).Select(n => n.Spec.Name);
-
-    /// <summary>The map's sheet of that name; null when there is none.</summary>
-    public static SheetSpec Find(SheetSpec map, string name) => Flatten(map).FirstOrDefault(n => n.Spec.Name == name)?.Spec;
-
-    /// <summary>What is wrong with a map (empty when it is sound): names, headers, keys, shapes, references, defaults, colliding paths.</summary>
+    /// <summary>What is wrong with a map (empty when it is sound): names, headers, keys, shapes, references, colliding paths.</summary>
     public static List<string> MapProblems(SheetSpec map)
     {
         var problems = new List<string>();
@@ -98,12 +92,6 @@ public static class ContentSheets
                         problems.Add($"Sheet '{s.Name}', column '{col.Header}': it refers to sheet '{col.RefSheet}', which is not in the map.");
                     else if (target.Spec.RowKey == null && target.Spec.Shape != SheetShape.Keyed)
                         problems.Add($"Sheet '{s.Name}', column '{col.Header}': it refers to sheet '{col.RefSheet}', whose rows have no key.");
-                }
-                if (col.DefaultText != null)
-                {
-                    ParseCell(col, col.DefaultText, out string error);
-                    if (error != null)
-                        problems.Add($"Sheet '{s.Name}', column '{col.Header}': the default {error}");
                 }
             }
         }
@@ -609,8 +597,8 @@ public static class ContentSheets
     // The README sheet
     // =====================================================================
 
-    /// <summary>The README sheet: a row per sheet (its shape, JSON place and key) and a row per column (type, what a blank means, rules, note).</summary>
-    public static RowTable Readme(SheetSpec map)
+    /// <summary>The README sheet: how the workbook works, then a row per sheet (its shape, JSON place and key) and a row per column (type, what a blank means, rules, note).</summary>
+    private static RowTable Readme(SheetSpec map)
     {
         var t = new RowTable(ReadmeSheet, new[] { "sheet", "column", "type", "blank means", "rules", "note" });
         foreach (string line in Guide)
@@ -690,7 +678,7 @@ public static class ContentSheets
 
     private static string DefaultDisplay(ColumnSpec col)
     {
-        string d = col.DefaultText ?? TypeDefault(col.Type);
+        string d = TypeDefault(col.Type);
         if (d.Length > 0)
             return d;
         return col.Type == CellType.Text ? "empty text" : "no items";
@@ -738,7 +726,7 @@ public static class ContentSheets
         string text = cell ?? string.Empty;
         bool blank = col.Type == CellType.Text ? text.Length == 0 : text.Trim().Length == 0;
         if (blank)
-            text = col.DefaultText ?? TypeDefault(col.Type);
+            text = TypeDefault(col.Type);
         string t = text.Trim();
 
         switch (col.Type)

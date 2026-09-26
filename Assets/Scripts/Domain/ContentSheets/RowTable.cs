@@ -52,10 +52,6 @@ public sealed class RowTable
         RowNumbers.Add(rowNumber > 0 ? rowNumber : (RowNumbers.Count > 0 ? RowNumbers[RowNumbers.Count - 1] : 1) + 1);
     }
 
-    /// <summary>Whether two tables hold the same headers and cells (names and row numbers aside).</summary>
-    public static bool SameCells(RowTable a, RowTable b) =>
-        a.Headers.SequenceEqual(b.Headers) && a.Rows.Count == b.Rows.Count && a.Rows.Zip(b.Rows, (x, y) => x.SequenceEqual(y)).All(same => same);
-
     /// <summary>The spreadsheet column letter of a 0-based column (0 = A, 26 = AA).</summary>
     public static string ColumnLetter(int index)
     {

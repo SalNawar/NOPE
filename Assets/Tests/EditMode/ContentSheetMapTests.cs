@@ -84,7 +84,7 @@ public class ContentSheetMapTests
         var problems = new List<string>();
         List<RowTable> template = ContentSheets.Workbook(ContentSheetMap.World, ContentJson.Parse(Source()), problems, ContentSheets.TemplateExamples);
         CollectionAssert.IsEmpty(problems);
-        CollectionAssert.AreEqual(new[] { ContentSheets.ReadmeSheet }.Concat(ContentSheets.SheetNames(ContentSheetMap.World)), template.Select(t => t.Name));
+        CollectionAssert.AreEqual(new[] { ContentSheets.ReadmeSheet }.Concat(ExportToday().Select(t => t.Name)), template.Select(t => t.Name));
         Assert.AreEqual(ContentSheets.TemplateExamples, template.Single(t => t.Name == "places").Rows.Count);
         Assert.AreEqual(ContentSheets.TemplateExamples, template.Single(t => t.Name == "premades").Rows.Count);
         Assert.IsTrue(template.Single(t => t.Name == "dialogLines").Rows.Count > 0);
@@ -98,8 +98,11 @@ public class ContentSheetMapTests
     [TestCase("historyRules", "rule")]
     public void TheStoryTables_NameTheirRowsForTheirChildSheets(string sheet, string keyHeader)
     {
-        SheetSpec spec = ContentSheets.Find(ContentSheetMap.World, sheet);
+        SheetSpec spec = Find(ContentSheetMap.World, sheet);
         Assert.IsNotNull(spec, sheet);
         Assert.AreEqual(keyHeader, spec.KeyHeader);
     }
+
+    private static SheetSpec Find(SheetSpec at, string name) =>
+        at.Name == name ? at : at.Children.Select(c => Find(c, name)).FirstOrDefault(s => s != null);
 }

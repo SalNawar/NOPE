@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>The row-table layer's CSV: UTF-8, quoting, embedded line breaks, spreadsheet row numbers, blank rows skipped.</summary>
 public class RowTableTests
 {
+    /// <summary>Whether two tables hold the same headers and cells (names and row numbers aside).</summary>
+    internal static bool SameCells(RowTable a, RowTable b) =>
+        a.Headers.SequenceEqual(b.Headers) && a.Rows.Count == b.Rows.Count && a.Rows.Zip(b.Rows, (x, y) => x.SequenceEqual(y)).All(same => same);
+
     [Test]
     public void Read_QuotedCellsAndRowNumbers()
     {
@@ -61,6 +66,6 @@ public class RowTableTests
         var errors = new List<string>();
         RowTable back = Csv.Read("s", csv, errors);
         CollectionAssert.IsEmpty(errors);
-        Assert.IsTrue(RowTable.SameCells(t, back));
+        Assert.IsTrue(SameCells(t, back));
     }
 }

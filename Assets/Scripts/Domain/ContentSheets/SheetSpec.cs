@@ -86,10 +86,10 @@ public sealed class RowKey
 }
 
 /// <summary>
-/// One column: one cell per row, one JSON field. The rules are data: the type, what a
-/// blank cell means, whether the field is left out of the JSON when it holds that
-/// default, whether a value is required, the allowed values, and the sheet whose row
-/// keys the value must name.
+/// One column: one cell per row, one JSON field. The rules are data: the type (a blank
+/// cell means the type's default), whether the field is left out of the JSON when it
+/// holds that default, whether a value is required, the allowed values, and the sheet
+/// whose row keys the value must name.
 /// </summary>
 public sealed class ColumnSpec : SheetField
 {
@@ -105,9 +105,6 @@ public sealed class ColumnSpec : SheetField
 
     /// <summary>What the cells hold.</summary>
     public CellType Type { get; }
-
-    /// <summary>The cell text a blank cell stands for (null: the type's own default).</summary>
-    public string DefaultText { get; private set; }
 
     /// <summary>Leave the field out of the JSON when it holds its default (a blank cell leaves it out).</summary>
     public bool OmitDefault { get; private set; }
@@ -167,13 +164,6 @@ public sealed class ColumnSpec : SheetField
     public ColumnSpec OneOf(params string[] values)
     {
         Allowed = values;
-        return this;
-    }
-
-    /// <summary>What a blank cell stands for, as cell text.</summary>
-    public ColumnSpec Default(string cellText)
-    {
-        DefaultText = cellText;
         return this;
     }
 
