@@ -1,4 +1,12 @@
-"""Small, separately exported booth furnishings in the same material family."""
+"""Small, separately exported booth furnishings in the same material family (art side).
+
+Purpose: build_desk_stationery() models Finish_FormSorter, Finish_PaperBundle and
+Finish_ComputerMedia; build_panel_ephemera(project) the Finish_LeftEphemera and
+Finish_RightEphemera pinned to the booth panels.
+Inputs: artlib (already imported by the caller); build_panel_ephemera's project argument is unused.
+Outputs: Blender collections only; the caller exports them.
+Run: not on its own; author_desk_finish.py imports it.
+"""
 import math
 from artlib import *
 

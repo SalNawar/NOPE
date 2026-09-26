@@ -1,10 +1,20 @@
-"""Targeted phone/mouse revision and a Blender-rendered 2D paper prop.
-Only exports the changed models. Run with Blender --background --python this_file.
+"""Targeted phone/mouse revision and a Blender-rendered 2D paper prop (art side).
+Only exports the changed models.
+
+Purpose: re-exports the phone (refine_phone.py), the mouse with its cable, and the
+two-triangle spare paper (Clean_Paper2D, lit by NOPE/Desk Anime in Unity).
+Inputs: DeskClean.blend and DeskClean_manifest.json here (from author_desk_clean.py);
+../../HybridScene/BlenderOffice/artlib.py; refine_phone.py.
+Outputs: the changed Clean_*.fbx in Assets/Art/Office/DeskClean/Models, the updated
+DeskClean_manifest.json, DeskRevision_manifest.json and DeskClean.blend here, and
+phone_refined.png. Paths resolve from this file (any checkout or worktree).
+Run: blender --background --python ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/revise_desktop.py
+(author_desk_clean.py runs it at the end).
 """
 import bpy,sys,json,math,time,os
 from pathlib import Path
 from mathutils import Vector
-P=Path('E:/unity/NOPE');H=P/'ArtDeliverables/TimeDesk/ImportedOffice/DeskClean'
+H=Path(__file__).resolve().parent;P=H.parents[3]  # the repo root
 sys.path.insert(0,str(P/'ArtDeliverables/TimeDesk/HybridScene/BlenderOffice'))
 sys.path.insert(0,str(H))
 import artlib as A
