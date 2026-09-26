@@ -2,6 +2,8 @@
 
 ## Latest direction: architecture before further art
 
+**Current: Revision C — time-travel terminal.** The user specified a grand train-station structure with multiple teleporter platforms/floors, a straight-facing private inspection booth, and no visible other desks or coworkers. See [Architecture/RevC/README.md](Architecture/RevC/README.md), `C01_terminal_plan.png` and `C02_terminal_section.png`. This supersedes revision B's tilted five-desk line. The tower-crown setting and left window pan remain.
+
 **Latest revision:** the user wants a massive, grand hall at the top of a mega government tower overlooking a fictional city, with the ability to pan left toward the window. See [Architecture/RevB/README.md](Architecture/RevB/README.md) and its top plan / section. This supersedes revision A's low-floor setting. No Unity or gameplay camera changes have been made.
 
 The user corrected the screen mockup: use train-station luggage lockers, only one painting plus artifacts from around the world, and design the room's relationship to the larger building. The next requested deliverable is a top view and side view with a sanity check. See [Architecture/README.md](Architecture/README.md), `Architecture/A01_top_plan.png` and `Architecture/A02_side_section.png`. The confirmed traveller route is building entry → desk check → portal departure.

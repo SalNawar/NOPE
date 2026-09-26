@@ -1,5 +1,7 @@
 # Revision B — government megatower crown
 
+**Superseded layout.** [Revision C](../RevC/README.md) responds to the user's grand-terminal direction: multiple platforms/levels, a straight-facing private booth and no visible other desks or coworkers. The angled five-station line below is rejected; retain only the tower-crown and city-view context.
+
 2026-09-26. This revision supersedes revision A's low-floor setting and its proposal to retain the original hall envelope. It is an architectural study, not an applied scene change.
 
 ## Confirmed by the user
