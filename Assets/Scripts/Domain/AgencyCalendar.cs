@@ -4,9 +4,11 @@ using System.Collections.Generic;
 /// <summary>
 /// The agency block of world_source.json (the traveller-types spec's F6; the
 /// PC spec's §4.8): the agency's printed name and programme line, and the
-/// date of the first day, and the day ranges a displaced person's file is
-/// drawn from (phase 3). Content, written into the content library by
-/// Generate World; later phases add the clerk's account and the agency's lists.
+/// date of the first day, the day ranges a displaced person's file is
+/// drawn from (phase 3), and the ranges and transponder models 2150
+/// citizens' accounts are drawn from (phase 6). Content, written into the
+/// content library by Generate World; later phases add the clerk's account
+/// and the agency's other lists.
 /// </summary>
 [Serializable]
 public sealed class AgencyContent
@@ -23,7 +25,13 @@ public sealed class AgencyContent
     /// <summary>The day ranges of a displaced person's file (agency.displaced: found within 30 days, a certificate valid 3 to 365 days; AgencyNumbers.Displaced).</summary>
     public DisplacementRanges displaced = new DisplacementRanges();
 
-    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most). Empty when sound.</summary>
+    /// <summary>The ranges a 2150 citizen's account is drawn from (agency.accounts: Valid Until, past trips, each status's debt and trips; AccountMaker.Make).</summary>
+    public AccountRanges accounts = new AccountRanges();
+
+    /// <summary>The transponder models citizens travel on (agency.transponders: a weighted list per class).</summary>
+    public List<TransponderModel> transponders = new List<TransponderModel>();
+
+    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), and the accounts' ranges and transponder models (AccountRanges.Problems). Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -43,6 +51,10 @@ public sealed class AgencyContent
             problems.Add($"agency.displaced.foundWithinDays is {displaced.foundWithinDays}: a displaced person is found at least 1 day before today.");
         if (displaced.validDaysMin < 0 || displaced.validDaysMin > displaced.validDaysMax)
             problems.Add($"agency.displaced.validDaysMin {displaced.validDaysMin} and validDaysMax {displaced.validDaysMax}: a certificate is valid from 0 <= validDaysMin <= validDaysMax days after today.");
+        if (accounts == null)
+            problems.Add("agency.accounts is missing: the ranges a 2150 citizen's account is drawn from.");
+        else
+            problems.AddRange(accounts.Problems(transponders));
         return problems;
     }
 }
