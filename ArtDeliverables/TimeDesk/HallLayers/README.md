@@ -1,5 +1,11 @@
 # Hall sprite layers — displayed art and left-side lockers
 
+## Latest direction: architecture before further art
+
+The user corrected the screen mockup: use train-station luggage lockers, only one painting plus artifacts from around the world, and design the room's relationship to the larger building. The next requested deliverable is a top view and side view with a sanity check. See [Architecture/README.md](Architecture/README.md), `Architecture/A01_top_plan.png` and `Architecture/A02_side_section.png`. The confirmed traveller route is building entry → desk check → portal departure.
+
+The architecture drawings are proposals. They do not resize the desk, alter the PC or camera, or change Unity. The screen mockup below is now historical visual exploration and is not an approved layout.
+
 2026-09-26. Current direction: a neglected government departure hall with deliberate institutional decoration, smaller side windows, belongings lockers on the left, and MEDBAY / JAIL / C-SUITES wayfinding. The user requested a mockup based on the actual game screen before Unity changes.
 
 ## Current screen mockup
