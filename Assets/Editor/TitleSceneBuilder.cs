@@ -62,6 +62,8 @@ public static class TitleSceneBuilder
             new Vector2(-270f, 0f), new Vector2(540f, 0f), withBackground: true, bgColor: new Color(0.1f, 0.1f, 0.12f, 0.97f));
         TMP_Text accountText = FindOrCreateText(accountCard, "AccountText", "...", 16,
             TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.04f), new Vector2(0.94f, 0.96f));
+        contractText.textWrappingMode = TextWrappingModes.Normal;
+        accountText.textWrappingMode = TextWrappingModes.Normal;
 
         // --- Wire TitleUIController ---
         var soUi = new SerializedObject(titleUI);

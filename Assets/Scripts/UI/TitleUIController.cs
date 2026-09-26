@@ -150,7 +150,7 @@ public sealed class TitleUIController : MonoBehaviour
             clerkAccountText.text = Paper(accountTitle, account);
     }
 
-    /// <summary>A paper's text: its title in bold, then each row's label and value (the value at a tab stop), a bold heading where the group changes.</summary>
+    /// <summary>A paper's text: its title in bold, then each row's label and value (the value indented to its column, so a long one wraps there), a bold heading where the group changes.</summary>
     private static string Paper(string title, IReadOnlyList<AccountRow> rows)
     {
         var sb = new StringBuilder();
@@ -161,7 +161,7 @@ public sealed class TitleUIController : MonoBehaviour
             if (row.Group != group && !string.IsNullOrEmpty(row.Group))
                 sb.Append("\n<b>").Append(row.Group).Append("</b>\n");
             group = row.Group;
-            sb.Append(row.Label).Append("<pos=42%>").Append(row.Value).Append('\n');
+            sb.Append(row.Label).Append("<indent=42%>").Append(row.Value).Append("</indent>\n");
         }
         return sb.ToString();
     }
