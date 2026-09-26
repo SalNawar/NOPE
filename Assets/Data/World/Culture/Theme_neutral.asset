@@ -299,9 +299,9 @@ MonoBehaviour:
     textClass: 0
   - role: 47
     hasFill: 1
-    fill: {r: 0.9254902, g: 0.9137255, b: 0.84705883, a: 1}
+    fill: {r: 0.12941177, g: 0.34117648, b: 0.85882354, a: 1}
     hasInk: 1
-    ink: {r: 0, g: 0, b: 0, a: 1}
+    ink: {r: 1, g: 1, b: 1, a: 1}
     textClass: 1
   - role: 48
     hasFill: 1
