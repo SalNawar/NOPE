@@ -23,7 +23,7 @@ public enum MailLink
     /// <summary>No link.</summary>
     None,
 
-    /// <summary>The day's directives (today the Directives window; the Investigation app's Rules tab from phase 16).</summary>
+    /// <summary>The day's directives (the Investigation app's Rules tab).</summary>
     Rules,
 
     /// <summary>The News site's issue of the message's day (today the Internet window; phase 24's browser).</summary>

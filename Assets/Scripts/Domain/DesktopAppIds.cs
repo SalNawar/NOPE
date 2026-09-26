@@ -9,7 +9,7 @@ using System.Collections.Generic;
 /// </summary>
 public static class DesktopAppIds
 {
-    /// <summary>The Investigation app (phase 16); until it exists, the interim Investigation window of case tiles.</summary>
+    /// <summary>The Investigation app (phase 16): every case source in one window.</summary>
     public const string Investigation = "investigation";
 
     /// <summary>The Internet browser.</summary>

@@ -87,14 +87,14 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>The paper being dragged, or -1.</summary>
     private int _dragged = -1;
 
-    /// <summary>True when the desk and all its parts are wired; otherwise documents go straight to their windows (InvestigationUIController).</summary>
+    /// <summary>True when the desk and all its parts are wired; otherwise documents reach the PC when handed over (InvestigationUIController).</summary>
     public bool IsReachable =>
         surface != null && scanner != null && paperTemplate != null && paperRoot != null && handOverPoint != null && config != null;
 
     /// <summary>How many papers are held in the hand.</summary>
     public int HeldCount => _state != null ? _state.HeldCount : 0;
 
-    /// <summary>Raised when a scan finishes, with the paper's index (its window opens).</summary>
+    /// <summary>Raised when a scan finishes, with the paper's index (its scanned copy reaches the PC: the Investigation app's Documents tab).</summary>
     public event Action<int> ScanFinished;
 
     /// <summary>Raised when a box of a held paper is picked for comparison: the paper's index, the field's row and where it lights up.</summary>

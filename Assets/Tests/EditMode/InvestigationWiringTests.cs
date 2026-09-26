@@ -8,10 +8,10 @@ using NUnit.Framework;
 public class InvestigationWiringTests
 {
     /// <summary>Everything wired (the built office), with single parts switched off by name.</summary>
-    private static InvestigationWiring Wired(bool documentTemplate = true, bool windowLayer = true, bool accept = true, bool deny = true,
-                                             bool compare = true, bool ring = true, bool transcript = true, bool transcriptChrome = true,
+    private static InvestigationWiring Wired(bool documents = true, bool app = true, bool accept = true, bool deny = true,
+                                             bool compare = true, bool ring = true, bool transcript = true, bool transcriptTab = true,
                                              bool desk = true, bool records = true) =>
-        new InvestigationWiring(documentTemplate, windowLayer, accept, deny, compare, ring, transcript, transcriptChrome, desk, records);
+        new InvestigationWiring(documents, app, accept, deny, compare, ring, transcript, transcriptTab, desk, records);
 
     [Test]
     public void TheBuiltOffice_ReachesEverything_AndWarnsOfNothing()
@@ -32,9 +32,9 @@ public class InvestigationWiringTests
     [TestCase(true, false, true, true)]
     [TestCase(true, true, false, true)]
     [TestCase(true, true, true, false)]
-    public void WithoutAnyDeskWindow_NoCaseShows_NoEvidenceNorDesk_AndOnlyTheErrorIsDue(bool documentTemplate, bool windowLayer, bool accept, bool deny)
+    public void WithoutAnyPartOfTheApp_NoCaseShows_NoEvidenceNorDesk_AndOnlyTheErrorIsDue(bool documents, bool app, bool accept, bool deny)
     {
-        InvestigationWiring w = Wired(documentTemplate, windowLayer, accept, deny);
+        InvestigationWiring w = Wired(documents, app, accept, deny);
         Assert.IsFalse(w.Wired);
         Assert.IsFalse(w.EvidenceSystemActive);
         Assert.IsFalse(w.DeskReachable);
@@ -45,9 +45,9 @@ public class InvestigationWiringTests
     [TestCase(false, true, true)]
     [TestCase(true, false, true)]
     [TestCase(true, true, false)]
-    public void WithoutTheRing_TheTranscriptOrItsChrome_NoTellIsSpoken(bool ring, bool transcript, bool chrome)
+    public void WithoutTheRing_TheTranscriptOrItsTab_NoTellIsSpoken(bool ring, bool transcript, bool tab)
     {
-        InvestigationWiring w = Wired(ring: ring, transcript: transcript, transcriptChrome: chrome);
+        InvestigationWiring w = Wired(ring: ring, transcript: transcript, transcriptTab: tab);
         Assert.IsFalse(w.InterviewReachable);
         Assert.IsTrue(w.InterviewMissing);
     }
@@ -63,7 +63,7 @@ public class InvestigationWiringTests
     }
 
     [Test]
-    public void TheEvidenceSystem_NeedsTheDeskWindowsAndTheCompare()
+    public void TheEvidenceSystem_NeedsTheAppAndTheCompare()
     {
         Assert.IsFalse(Wired(compare: false).EvidenceSystemActive);
         Assert.IsFalse(Wired(deny: false).EvidenceSystemActive);
@@ -79,7 +79,7 @@ public class InvestigationWiringTests
     }
 
     [Test]
-    public void TheDesk_IsReachableOnlyWithTheDeskWindows()
+    public void TheDesk_IsReachableOnlyWithTheApp()
     {
         Assert.IsFalse(Wired(desk: false).DeskReachable);
         Assert.IsTrue(Wired(desk: false).DeskMissing, "documents then open on the PC at the hand-over");

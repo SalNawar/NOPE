@@ -55,10 +55,6 @@ MonoBehaviour:
     text: GO HOME
     gloss: 1
     tier: 1
-  - key: records.title
-    text: Citizen Records
-    gloss: 0
-    tier: 0
   - key: records.search
     text: SEARCH
     gloss: 1
@@ -79,30 +75,10 @@ MonoBehaviour:
     text: Acknowledge
     gloss: 1
     tier: 1
-  - key: window.directives
-    text: Directives
-    gloss: 0
-    tier: 0
-  - key: window.scanner
-    text: Deviation Report
-    gloss: 0
-    tier: 0
   - key: window.settings
     text: Settings
     gloss: 0
     tier: 1
-  - key: icon.directives
-    text: Directives
-    gloss: 0
-    tier: 0
-  - key: icon.scanner
-    text: Deviation Report
-    gloss: 0
-    tier: 0
-  - key: icon.records
-    text: Records
-    gloss: 0
-    tier: 0
   - key: icon.internet
     text: Internet
     gloss: 0
@@ -127,10 +103,6 @@ MonoBehaviour:
     text: Settings
     gloss: 0
     tier: 1
-  - key: icon.clueLog
-    text: Clue Log
-    gloss: 0
-    tier: 0
   - key: tray.day
     text: Day {0}
     gloss: 0
@@ -199,6 +171,110 @@ MonoBehaviour:
     text: Waiting for the next traveller
     gloss: 0
     tier: 0
+  - key: app.title
+    text: Investigation
+    gloss: 0
+    tier: 0
+  - key: app.titleCase
+    text: "Investigation \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: app.counters
+    text: "Papers {0} of {1} received \xB7 {2} scanned \xB7 Deviations {3}"
+    gloss: 0
+    tier: 0
+  - key: app.tab.documents
+    text: Documents
+    gloss: 0
+    tier: 0
+  - key: app.tab.records
+    text: Records
+    gloss: 0
+    tier: 0
+  - key: app.tab.reference
+    text: Reference
+    gloss: 0
+    tier: 0
+  - key: app.tab.transcript
+    text: Transcript
+    gloss: 0
+    tier: 0
+  - key: app.tab.report
+    text: Report
+    gloss: 0
+    tier: 0
+  - key: app.tab.rules
+    text: Rules
+    gloss: 0
+    tier: 0
+  - key: app.chip.onDesk
+    text: '{0}: on the desk'
+    gloss: 0
+    tier: 0
+  - key: app.chip.notHandedOver
+    text: '{0}: not handed over'
+    gloss: 0
+    tier: 0
+  - key: app.doc.none
+    text: The papers the traveller hands over show here once they are scanned.
+    gloss: 0
+    tier: 0
+  - key: app.doc.scanHint
+    text: 'On the desk: scan it to read it here.'
+    gloss: 0
+    tier: 0
+  - key: app.doc.askHint
+    text: 'Not handed over: ask the traveller for it.'
+    gloss: 0
+    tier: 0
+  - key: app.ref.claimedOnly
+    text: Claimed place only
+    gloss: 0
+    tier: 0
+  - key: app.search
+    text: Search this case and today's records
+    gloss: 0
+    tier: 0
+  - key: app.toolbar.steps
+    text: Steps
+    gloss: 0
+    tier: 0
+  - key: app.toolbar.split
+    text: Split
+    gloss: 0
+    tier: 0
+  - key: app.toolbar.keys
+    text: F1 Keys
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.steps
+    text: STEPS
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.pinned
+    text: PINNED
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.recent
+    text: RECENT
+    gloss: 0
+    tier: 0
+  - key: app.sidebar.empty
+    text: Nothing here yet.
+    gloss: 0
+    tier: 0
+  - key: app.toast.scanned
+    text: '{0} scanned'
+    gloss: 0
+    tier: 0
+  - key: app.toast.open
+    text: Open
+    gloss: 0
+    tier: 0
+  - key: book.claimedLabel
+    text: '{0} (claimed)'
+    gloss: 0
+    tier: 0
   - key: window.minimize
     text: _
     gloss: 0
@@ -223,20 +299,12 @@ MonoBehaviour:
     text: Page {0}/{1}
     gloss: 0
     tier: 0
-  - key: window.transcript
-    text: 'Case Notes: Interview'
-    gloss: 0
-    tier: 0
   - key: window.internet
     text: Internet
     gloss: 0
     tier: 0
   - key: window.notes
     text: Notes
-    gloss: 0
-    tier: 0
-  - key: window.investigation
-    text: Investigation
     gloss: 0
     tier: 0
   - key: browser.back
