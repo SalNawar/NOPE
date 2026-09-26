@@ -3,10 +3,11 @@ using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
-/// Translation's game rules (piece 9): the translator upgrade ids, which
-/// document fields and speakers use the claimed place's tongue, which tongues
-/// are foreign or translated today (read from the day-start snapshot), and the
-/// content problems the generator and the validator report.
+/// Translation's game rules (piece 9, speech only since the redesign's phase
+/// 1: papers are always English): the Speech translator's upgrade id, which
+/// speakers use the claimed place's tongue, which tongues are foreign or
+/// translated today (read from the day-start snapshot), and the content
+/// problems the generator and the validator report.
 /// </summary>
 public class TranslationTests
 {
@@ -41,24 +42,9 @@ public class TranslationTests
         new GateSnapshot(day, 100f, flags, upgrades, null, null, null, null);
 
     [Test]
-    public void UpgradeId_IsTrPackKind()
+    public void UpgradeId_IsThePacksSpeechTranslator()
     {
-        Assert.AreEqual("tr_near_east_written", Translation.UpgradeId("near_east", TranslatorKind.Written));
-        Assert.AreEqual("tr_near_east_spoken", Translation.UpgradeId("near_east", TranslatorKind.Spoken));
-    }
-
-    [TestCase(ClueCategory.Language, true)]
-    [TestCase(ClueCategory.Material, true)]
-    [TestCase(ClueCategory.Politics, true)]
-    [TestCase(ClueCategory.Technology, true)]
-    [TestCase(ClueCategory.Currency, true)]
-    [TestCase(ClueCategory.Geography, true)]
-    [TestCase(ClueCategory.Culture, true)]
-    [TestCase(ClueCategory.Name, false)]
-    [TestCase(ClueCategory.BirthDate, false)]
-    public void InTongue_EveryPlaceFact_NeverTheNameOrBirthDate(ClueCategory category, bool expected)
-    {
-        Assert.AreEqual(expected, Translation.InTongue(category));
+        Assert.AreEqual("tr_near_east_spoken", Translation.UpgradeId("near_east"), "the id grammar of piece 9's Speech translators, kept for old saves");
     }
 
     [Test]
@@ -71,9 +57,9 @@ public class TranslationTests
     [Test]
     public void ANativeTongue_IsNeverForeign()
     {
-        var day = new TranslationDay(Rules(), Snap(5));
+        var day = new TranslationDay(Rules(), Snap(5, new[] { "tr_near_east_spoken" }));
         Assert.IsFalse(day.Foreign("english"));
-        Assert.IsFalse(day.Translated("english", TranslatorKind.Written));
+        Assert.IsFalse(day.Translated("english"));
         Assert.IsNull(day.PackOf(day.TongueOf("english")));
     }
 
@@ -88,49 +74,53 @@ public class TranslationTests
     }
 
     [Test]
-    public void BeforeFromDay_NothingIsForeign_EvenOwningBothTranslators()
+    public void BeforeFromDay_NothingIsForeign_EvenOwningTheTranslator()
     {
-        var day = new TranslationDay(Rules(), Snap(1, new[] { "tr_near_east_written", "tr_near_east_spoken" }));
+        var day = new TranslationDay(Rules(), Snap(1, new[] { "tr_near_east_spoken" }));
         Assert.IsFalse(day.Foreign("egyptian"));
-        Assert.IsFalse(day.Translated("egyptian", TranslatorKind.Written));
-        Assert.IsFalse(day.Translated("egyptian", TranslatorKind.Spoken));
+        Assert.IsFalse(day.Translated("egyptian"));
     }
 
     [Test]
-    public void OnFromDay_WithNoTranslator_AForeignTongueIsTranslatedForNeitherKind()
+    public void OnFromDay_WithNoTranslator_AForeignTongueIsNotTranslated()
     {
         var day = new TranslationDay(Rules(), Snap(2));
         Assert.IsTrue(day.Foreign("egyptian"));
-        Assert.IsFalse(day.Translated("egyptian", TranslatorKind.Written));
-        Assert.IsFalse(day.Translated("egyptian", TranslatorKind.Spoken));
+        Assert.IsFalse(day.Translated("egyptian"));
         Assert.AreEqual("near_east", day.PackOf(day.TongueOf("egyptian")).id);
     }
 
     [Test]
-    public void OwningPapersOnly_TranslatesWritten_NotSpoken_AndTheReverse()
+    public void OwningThePacksSpeechTranslator_TranslatesItsTongues()
     {
-        var papers = new TranslationDay(Rules(), Snap(3, new[] { "tr_near_east_written" }));
-        Assert.IsTrue(papers.Translated("arabic", TranslatorKind.Written));
-        Assert.IsFalse(papers.Translated("arabic", TranslatorKind.Spoken));
+        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_near_east_spoken" }));
+        Assert.IsTrue(day.Translated("arabic"));
+        Assert.IsTrue(day.Translated("egyptian"));
+        Assert.IsFalse(day.Translated("greek"));
+    }
 
-        var speech = new TranslationDay(Rules(), Snap(3, new[] { "tr_near_east_spoken" }));
-        Assert.IsFalse(speech.Translated("arabic", TranslatorKind.Written));
-        Assert.IsTrue(speech.Translated("arabic", TranslatorKind.Spoken));
+    /// <summary>A retired Papers translator an old save still owns ("tr_near_east_written") is a harmless id: it translates nothing.</summary>
+    [Test]
+    public void ARetiredPapersTranslator_TranslatesNothing()
+    {
+        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_near_east_written" }));
+        Assert.IsTrue(day.Foreign("egyptian"));
+        Assert.IsFalse(day.Translated("egyptian"));
     }
 
     [Test]
     public void AnotherPacksTranslator_TranslatesNothingHere()
     {
-        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_mediterranean_written", "tr_mediterranean_spoken" }));
-        Assert.IsFalse(day.Translated("egyptian", TranslatorKind.Written));
-        Assert.IsTrue(day.Translated("greek", TranslatorKind.Written));
+        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_mediterranean_spoken" }));
+        Assert.IsFalse(day.Translated("egyptian"));
+        Assert.IsTrue(day.Translated("greek"));
     }
 
     [Test]
     public void TheUpgradeFlag_Alone_TranslatesNothing()
     {
-        var day = new TranslationDay(Rules(), Snap(3, null, new[] { "upgrade:tr_near_east_written" }));
-        Assert.IsFalse(day.Translated("egyptian", TranslatorKind.Written), "it reads owned upgrades, never flags");
+        var day = new TranslationDay(Rules(), Snap(3, null, new[] { "upgrade:tr_near_east_spoken" }));
+        Assert.IsFalse(day.Translated("egyptian"), "it reads owned upgrades, never flags");
     }
 
     [Test]
@@ -148,7 +138,7 @@ public class TranslationTests
     public void EditingTheRulesAfterwards_ChangesNothing()
     {
         TranslationRules rules = Rules();
-        var day = new TranslationDay(rules, Snap(2, new[] { "tr_near_east_written" }));
+        var day = new TranslationDay(rules, Snap(2, new[] { "tr_near_east_spoken" }));
         rules.fromDay = 9;
         rules.tongues[1].pack = "";
         rules.tongues[1].displayName = "Changed";
@@ -156,7 +146,7 @@ public class TranslationTests
         rules.tongues.Clear();
 
         Assert.IsTrue(day.Foreign("egyptian"));
-        Assert.IsTrue(day.Translated("egyptian", TranslatorKind.Written));
+        Assert.IsTrue(day.Translated("egyptian"));
         Assert.AreEqual("Egyptian", day.TongueOf("egyptian").displayName);
         Assert.AreEqual("Near East", day.PackOf(day.TongueOf("egyptian")).displayName);
     }

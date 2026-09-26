@@ -72,7 +72,7 @@ public sealed class TextFlip
         if (!Running || _text == null)
             return false;
 
-        Reveal now = Reveal.Flipping(_reveal.Foreign, elapsed, _reveal.Row);
+        Reveal now = Reveal.Flipping(_reveal.Foreign, elapsed);
         int progress = DisplayText.Progress(_canonical, now, _tr.Timing, _tr.ReducedMotion);
         bool settled = DisplayText.Remaining(_canonical, now, _tr.Timing, _tr.ReducedMotion) <= 0f;
         if (progress != _progress || settled)

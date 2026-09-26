@@ -34,22 +34,21 @@ public enum RevealKind
 /// <summary>How a text shows: plain (canonical), untranslated (the foreign form), or flipping from the foreign form to canonical.</summary>
 public readonly struct Reveal
 {
-    private Reveal(RevealKind kind, ForeignText foreign, float elapsed, int row)
+    private Reveal(RevealKind kind, ForeignText foreign, float elapsed)
     {
         Kind = kind;
         Foreign = foreign;
         Elapsed = elapsed;
-        Row = row;
     }
 
     /// <summary>The canonical text as it is.</summary>
     public static Reveal Plain => default;
 
     /// <summary>The text in a tongue's glyphs.</summary>
-    public static Reveal Untranslated(ForeignText foreign) => new Reveal(RevealKind.Untranslated, foreign, 0f, 0);
+    public static Reveal Untranslated(ForeignText foreign) => new Reveal(RevealKind.Untranslated, foreign, 0f);
 
-    /// <summary>The text <paramref name="elapsed"/> seconds into its flip, as document row <paramref name="row"/> (0 for speech).</summary>
-    public static Reveal Flipping(ForeignText foreign, float elapsed, int row) => new Reveal(RevealKind.Flipping, foreign, elapsed, row);
+    /// <summary>The text <paramref name="elapsed"/> seconds into its flip.</summary>
+    public static Reveal Flipping(ForeignText foreign, float elapsed) => new Reveal(RevealKind.Flipping, foreign, elapsed);
 
     /// <summary>Plain, untranslated or flipping.</summary>
     public RevealKind Kind { get; }
@@ -59,15 +58,13 @@ public readonly struct Reveal
 
     /// <summary>Seconds since the reveal (flipping only).</summary>
     public float Elapsed { get; }
-
-    /// <summary>The document row, which delays its flip (flipping only).</summary>
-    public int Row { get; }
 }
 
 /// <summary>
 /// The one place displayed text may differ from its canonical value (piece 9
-/// T3, T8): the scanned document window's values, the transcript's sentences
-/// and the traveller's line in the speech bubble go through it. Plain text
+/// T3, T8; speech only since the redesign's phase 1, papers being always
+/// English): the transcript's sentences and the traveller's line in the
+/// speech bubble go through it. Plain text
 /// shows as it is; untranslated text shows each letter as its tongue's cell
 /// (Pseudoscript); a flipping text turns into English letter by letter
 /// (FlipSequence), each letter passing through scramble glyphs of its tongue;
@@ -187,7 +184,7 @@ public static class DisplayText
             else
             {
                 int step = 0;
-                CellState state = flipping ? FlipSequence.StateAt(rank, reveal.Row, timing ?? DefaultTiming, reveal.Elapsed, out step) : CellState.Foreign;
+                CellState state = flipping ? FlipSequence.StateAt(rank, timing ?? DefaultTiming, reveal.Elapsed, out step) : CellState.Foreign;
                 AppendLetter(sb, c, letter, table, state, step);
                 rank++;
             }
@@ -218,7 +215,7 @@ public static class DisplayText
         if (reveal.Kind == RevealKind.Untranslated)
             return float.PositiveInfinity;
 
-        float end = reducedMotion ? 0f : FlipSequence.Duration(letters, reveal.Row, timing ?? DefaultTiming);
+        float end = reducedMotion ? 0f : FlipSequence.Duration(letters, timing ?? DefaultTiming);
         if (float.IsNaN(reveal.Elapsed))
             return end;
         return reveal.Elapsed >= end ? 0f : end - reveal.Elapsed;
@@ -231,7 +228,7 @@ public static class DisplayText
             return 0;
         if (reducedMotion)
             return reveal.Elapsed >= 0f ? 1 : 0;
-        return FlipSequence.Progress(Letters(canonical), reveal.Row, timing ?? DefaultTiming, reveal.Elapsed);
+        return FlipSequence.Progress(Letters(canonical), timing ?? DefaultTiming, reveal.Elapsed);
     }
 
     /// <summary>True while any foreign or scramble cell shows (the text then needs its script's font).</summary>

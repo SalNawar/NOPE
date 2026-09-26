@@ -4,8 +4,9 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Today's translation for the office's windows and wheel (piece 9), one per
-/// office day: for each traveller, whether their claimed place's tongue is
+/// Today's speech translation for the transcript and the wheel (piece 9;
+/// papers are always English), one per office day: for each traveller,
+/// whether their claimed place's tongue is
 /// foreign (TranslationDay, read from the day-start snapshot) and how it
 /// shows. Each tongue's look is built once: its parsed table and direction,
 /// and its script's OS font through the session's RuntimeFonts (piece 6),
@@ -39,9 +40,7 @@ public sealed class TranslationPresenter
         TranslatorPack pack = _day.PackOf(tongue);
         (ForeignText text, TMP_FontAsset font) = Look(tongue);
         string placeholder = UiText.Format("compare.untranslated", tongue.displayName, pack != null ? pack.displayName : tongue.pack);
-        return new CaseTranslation(text, font,
-            _day.Translated(id, TranslatorKind.Written), _day.Translated(id, TranslatorKind.Spoken),
-            _settings.flip, MotionPreference.Reduced, placeholder);
+        return new CaseTranslation(text, font, _day.Translated(id), _settings.flip, MotionPreference.Reduced, placeholder);
     }
 
     /// <summary>

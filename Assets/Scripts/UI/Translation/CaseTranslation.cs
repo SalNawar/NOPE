@@ -1,12 +1,14 @@
 using TMPro;
 
 /// <summary>
-/// One traveller's translation (piece 9), paired up for the windows and the
-/// wheel: whether the claimed place's tongue is foreign today, its look and
-/// script font, which translators are owned, the flip's knobs and the motion
-/// choice, and the compare bar's placeholder. Each member is one call into
-/// tested rules: Translation.InTongue (Domain) decides what uses the tongue,
-/// DisplayText (Visuals) how it shows.
+/// One traveller's speech translation (piece 9; speech only since the
+/// redesign's phase 1: papers are always English), paired up for the
+/// transcript and the wheel: whether the claimed place's tongue is foreign
+/// today, its look and script font, whether the region's Speech translator is
+/// owned, the flip's knobs and the motion choice, and the compare bar's
+/// placeholder. Each member is one call into tested rules:
+/// Translation.InTongue (Domain) decides who speaks the tongue, DisplayText
+/// (Visuals) how it shows.
 /// </summary>
 public sealed class CaseTranslation
 {
@@ -20,13 +22,12 @@ public sealed class CaseTranslation
     }
 
     /// <summary>A traveller whose tongue is foreign today.</summary>
-    public CaseTranslation(ForeignText text, TMP_FontAsset font, bool papersTranslated, bool speechTranslated,
+    public CaseTranslation(ForeignText text, TMP_FontAsset font, bool speechTranslated,
                            FlipTiming timing, bool reducedMotion, string placeholder)
     {
         Foreign = true;
         Text = text;
         Font = font;
-        PapersTranslated = papersTranslated;
         SpeechTranslated = speechTranslated;
         Timing = timing ?? new FlipTiming();
         ReducedMotion = reducedMotion;
@@ -42,9 +43,6 @@ public sealed class CaseTranslation
     /// <summary>The script's runtime font for foreign cells; null = the text's own font (the fallback cipher).</summary>
     public TMP_FontAsset Font { get; }
 
-    /// <summary>True when the region's Papers translator was owned at the start of the day.</summary>
-    public bool PapersTranslated { get; }
-
     /// <summary>True when the region's Speech translator was owned at the start of the day.</summary>
     public bool SpeechTranslated { get; }
 
@@ -57,19 +55,6 @@ public sealed class CaseTranslation
     /// <summary>The compare bar's text for an untranslated side: "(untranslated Egyptian; Near East Translator)".</summary>
     public string Placeholder { get; }
 
-    /// <summary>
-    /// A document field <paramref name="revealElapsed"/> seconds after its
-    /// scan (NaN before) as document row <paramref name="row"/>: plain when
-    /// not foreign or not in the tongue (the name and the date of birth);
-    /// untranslated without the Papers translator or before the scan; else flipping.
-    /// </summary>
-    public Reveal Field(ClueCategory category, float revealElapsed, int row)
-    {
-        if (!Foreign || !Translation.InTongue(category))
-            return Reveal.Plain;
-        return PapersTranslated && !float.IsNaN(revealElapsed) ? Reveal.Flipping(Text, revealElapsed, row) : Reveal.Untranslated(Text);
-    }
-
     /// <summary>A transcript line, settled: plain when not foreign, the desk's, or with the Speech translator; else untranslated.</summary>
     public Reveal Line(DialogSpeaker speaker) =>
         !Foreign || !Translation.InTongue(speaker) || SpeechTranslated ? Reveal.Plain : Reveal.Untranslated(Text);
@@ -79,7 +64,7 @@ public sealed class CaseTranslation
     {
         if (!Foreign)
             return Reveal.Plain;
-        return SpeechTranslated ? Reveal.Flipping(Text, lineSeconds, 0) : Reveal.Untranslated(Text);
+        return SpeechTranslated ? Reveal.Flipping(Text, lineSeconds) : Reveal.Untranslated(Text);
     }
 
     /// <summary>The compare bar's text for a statement: the canonical value when it reads (not foreign, not in the tongue, or translated), else the placeholder. The evidence stays canonical either way.</summary>

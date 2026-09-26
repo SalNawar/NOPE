@@ -4,25 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Renders one visitor document as a flippable, multi-page window. Each field
-/// is a clickable row (label + value, DocumentRows.OnPage written through
+/// Renders one visitor document as a multi-page window. Each field is a
+/// clickable row (label + value, DocumentRows.OnPage written through
 /// DocumentRowView) that registers with the CompareController
-/// (EvidencePicks.ForField); the value is shown through DisplayText and
-/// compared as its canonical text. Values in the claimed place's tongue
-/// (every place fact; never the name or the date of birth) show untranslated
-/// from translation's first day, or, with the region's Papers translator,
-/// flip into English letter by letter from the document's reveal (its
-/// RevealClock, shared with its desk paper, started by the first sighting of
-/// either: InvestigationUIController, then Refresh), rows staggered; a click
-/// on a row finishes the whole document (both surfaces) first; reopening
-/// never replays. Such a
-/// value takes the row's width after its label and may wrap and shrink there
-/// (a script's glyphs can be far wider than the English). An untranslated
-/// value shows in the compare bar as the placeholder, while its evidence
-/// stays the canonical value. Rows are cloned from <see cref="fieldRowTemplate"/> (a
-/// disabled row with two TMP texts — label then value — an Image background,
-/// and a Button). A document whose template shows a photo carries the
-/// traveller's photo on its first page (the rows there leave room for it).
+/// (EvidencePicks.ForField). Every value shows in English, as filled (the
+/// redesign's F5: documents are never in a tongue). Rows are cloned from
+/// <see cref="fieldRowTemplate"/> (a disabled row with two TMP texts — label
+/// then value — an Image background, and a Button). A document whose template
+/// shows a photo carries the traveller's photo on its first page (the rows
+/// there leave room for it).
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
@@ -47,13 +37,6 @@ public sealed class DocumentWindowController : MonoBehaviour
     /// <summary>The document's index in the case (its fields' pick keys).</summary>
     private int _index;
     private CompareController _compare;
-    private CaseTranslation _translation = CaseTranslation.None;
-
-    /// <summary>The document's written reveal (shared with its desk paper; never null).</summary>
-    private RevealClock _clock = new RevealClock();
-
-    /// <summary>The current page's value texts still flipping.</summary>
-    private readonly List<TextFlip> _flips = new();
     private int _page;
     private bool _showsPhoto;
     private VerticalLayoutGroup _rowsLayout;
@@ -73,14 +56,12 @@ public sealed class DocumentWindowController : MonoBehaviour
             fieldRowTemplate.SetActive(false);
     }
 
-    /// <summary>Binds document <paramref name="index"/> of the case (with the traveller's look for a photo document, their translation and the document's reveal clock) and renders its first page.</summary>
-    public void SetDocument(DocumentInstance doc, int index, CompareController compare, TravellerLook look, CharacterArt art, CaseTranslation translation, RevealClock clock)
+    /// <summary>Binds document <paramref name="index"/> of the case (with the traveller's look for a photo document) and renders its first page.</summary>
+    public void SetDocument(DocumentInstance doc, int index, CompareController compare, TravellerLook look, CharacterArt art)
     {
         _doc = doc;
         _index = index;
         _compare = compare;
-        _translation = translation ?? CaseTranslation.None;
-        _clock = clock ?? new RevealClock();
         _page = 0;
         _showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto && look != null;
 
@@ -96,30 +77,6 @@ public sealed class DocumentWindowController : MonoBehaviour
             titleText.text = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled");
 
         ShowPage(0);
-    }
-
-    /// <summary>Redraws the current page from the reveal clock (a sighting started it).</summary>
-    public void Refresh() => Rebuild();
-
-    /// <summary>Only while values flip: advances them on the reveal's clock (they keep flipping when the page or the window changes).</summary>
-    private void Update()
-    {
-        if (_flips.Count == 0)
-            return;
-
-        float elapsed = _clock.Elapsed(Time.unscaledTime);
-        for (int i = _flips.Count - 1; i >= 0; i--)
-            if (!_flips[i].Tick(elapsed))
-                _flips.RemoveAt(i);
-    }
-
-    /// <summary>The skip: once revealed, every value of the document (on every page) shows its English at once.</summary>
-    private void FinishFlips()
-    {
-        _clock.Finish();
-        foreach (TextFlip flip in _flips)
-            flip.Complete();
-        _flips.Clear();
     }
 
     /// <summary>Switches to a page (clamped) and rebuilds its rows.</summary>
@@ -173,13 +130,10 @@ public sealed class DocumentWindowController : MonoBehaviour
                 Destroy(r);
 
         _rows.Clear();
-        _flips.Clear();
 
         if (_doc == null || fieldRowsRoot == null || fieldRowTemplate == null)
             return;
 
-        // A row's flip is delayed by the rows in the tongue above it on this page (rows that never flip take no time).
-        float now = Time.unscaledTime;
         string docName = _doc.template != null ? _doc.template.displayName : UiText.Get("document.untitled");
         foreach (DocumentRow docRow in DocumentRows.OnPage(_doc.fields, _page))
         {
@@ -188,18 +142,14 @@ public sealed class DocumentWindowController : MonoBehaviour
             _rows.Add(row);
 
             TMP_Text[] texts = row.GetComponentsInChildren<TMP_Text>(true);
-            DocumentRowView.Write(texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, docRow, _translation, _clock, now, _flips);
+            DocumentRowView.Write(texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, docRow);
 
             Image bg = row.GetComponent<Image>();
             Button btn = row.GetComponent<Button>();
-            ComparePick pick = EvidencePicks.ForField(_index, docRow, docName, _translation);
+            ComparePick pick = EvidencePicks.ForField(_index, docRow, docName);
 
             if (btn != null && _compare != null)
-                btn.onClick.AddListener(() =>
-                {
-                    FinishFlips();
-                    _compare.Select(pick, new ImageHighlight(bg));
-                });
+                btn.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(bg)));
         }
     }
 }

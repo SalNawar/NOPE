@@ -89,7 +89,7 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
   - Day 4: the first rule violator is accepted.
 - **Home each night:**
   1. Treat every family member at condition 2 or worse, if affordable.
-  2. Buy Interview Protocols, then the Near East Papers translator, each once there is money to spare.
+  2. Buy Interview Protocols, then the Near East Speech translator, each once there is money to spare (the Near East Papers translator until the redesign's phase 1 retired it).
   3. Never spin the slot machine (its draw is unseeded, see below).
   4. Sleep.
 

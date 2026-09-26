@@ -39,9 +39,9 @@ public class DisplayTextTests
     public void ANullForeignText_BehavesAsPlain()
     {
         Assert.AreEqual(Shekel, For(Shekel, Reveal.Untranslated(null)));
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(null, 0f, 0)));
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(null, 0f)));
         Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Untranslated(null), Timing, false));
-        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(null, 0f, 0), Timing, false));
+        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(null, 0f), Timing, false));
     }
 
     [Test]
@@ -59,21 +59,21 @@ public class DisplayTextTests
     {
         ForeignText greek = Foreign(Greek);
         string foreign = For(Shekel, Reveal.Untranslated(greek));
-        Assert.AreEqual(foreign, For(Shekel, Reveal.Flipping(greek, 0f, 0)));
+        Assert.AreEqual(foreign, For(Shekel, Reveal.Flipping(greek, 0f)));
 
-        float duration = FlipSequence.Duration(20, 0, Timing);
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, duration, 0)));
-        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, duration, 0), Timing, false));
-        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, duration, 0), Timing, false));
+        float duration = FlipSequence.Duration(20, Timing);
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, duration)));
+        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, duration), Timing, false));
+        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, duration), Timing, false));
 
         // At 0.665 s letters 0-6 ("Silver s") have landed (the seventh at 0.66 s),
         // letters 7-9 are flipping and letter 10 (the 'e' at index 11) has not started.
-        string mid = For(Shekel, Reveal.Flipping(greek, 0.665f, 0));
+        string mid = For(Shekel, Reveal.Flipping(greek, 0.665f));
         StringAssert.StartsWith("Silver s", mid);
         Assert.AreNotEqual('h', mid[8], "the eighth letter is on its way");
         Assert.AreEqual(foreign.Substring(11), mid.Substring(11), "the letters that have not started are still foreign");
-        Assert.AreEqual(duration - 0.665f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0.665f, 0), Timing, false), 1e-5f);
-        Assert.IsTrue(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0.665f, 0), Timing, false));
+        Assert.AreEqual(duration - 0.665f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0.665f), Timing, false), 1e-5f);
+        Assert.IsTrue(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0.665f), Timing, false));
     }
 
     [Test]
@@ -81,26 +81,18 @@ public class DisplayTextTests
     {
         ForeignText greek = Foreign(Greek);
         // 'S' (letter 18) at 0.301 s: step 0, cell (18 + 7) % 26 = 25 ('κ'), upper-cased like its letter.
-        Assert.AreEqual("Κ", For("S", Reveal.Flipping(greek, 0.301f, 0)));
+        Assert.AreEqual("Κ", For("S", Reveal.Flipping(greek, 0.301f)));
         // At 0.361 s: step 1, cell (18 + 14) % 26 = 6 ('π').
-        Assert.AreEqual("π", For("s", Reveal.Flipping(greek, 0.361f, 0)));
-    }
-
-    [Test]
-    public void ARowStartsLater()
-    {
-        ForeignText greek = Foreign(Greek);
-        Assert.AreEqual(For("Deben", Reveal.Untranslated(greek)), For("Deben", Reveal.Flipping(greek, 0.44f, 1)));
-        Assert.AreEqual(FlipSequence.Duration(5, 1, Timing), DisplayText.Remaining("Deben", Reveal.Flipping(greek, 0f, 1), Timing, false), 1e-5f);
+        Assert.AreEqual("π", For("s", Reveal.Flipping(greek, 0.361f)));
     }
 
     [Test]
     public void ReducedMotion_ShowsTheCanonicalTextAtTheReveal()
     {
         ForeignText greek = Foreign(Greek);
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, 0f, 0), true));
-        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0f, 0), Timing, true));
-        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0f, 0), Timing, true));
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, 0f), true));
+        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0f), Timing, true));
+        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0f), Timing, true));
         Assert.AreEqual(For(Shekel, Reveal.Untranslated(greek)), For(Shekel, Reveal.Untranslated(greek), true), "reduced motion translates nothing by itself");
     }
 
@@ -108,12 +100,12 @@ public class DisplayTextTests
     public void Progress_ChangesExactlyWhenTheShownTextDoes()
     {
         ForeignText greek = Foreign(Greek);
-        int previousProgress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, 0f, 0), Timing, false);
-        string previousText = For(Shekel, Reveal.Flipping(greek, 0f, 0));
+        int previousProgress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, 0f), Timing, false);
+        string previousText = For(Shekel, Reveal.Flipping(greek, 0f));
         for (float e = 0.0005f; e < 1.3f; e += 0.001f)
         {
-            int progress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, e, 0), Timing, false);
-            string text = For(Shekel, Reveal.Flipping(greek, e, 0));
+            int progress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, e), Timing, false);
+            string text = For(Shekel, Reveal.Flipping(greek, e));
             Assert.AreEqual(progress != previousProgress, text != previousText, $"at {e}");
             previousProgress = progress;
             previousText = text;
@@ -129,9 +121,9 @@ public class DisplayTextTests
         Assert.AreEqual(ArabicShaper.ToVisual(logical), For(Shekel, Reveal.Untranslated(arabic)));
         Assert.IsFalse(For(Shekel, Reveal.Untranslated(arabic)).Contains('\0'));
 
-        string half = For(Shekel, Reveal.Flipping(arabic, 0.665f, 0));
+        string half = For(Shekel, Reveal.Flipping(arabic, 0.665f));
         StringAssert.Contains("Silver", half, "the English run keeps its order");
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(arabic, 5f, 0)));
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(arabic, 5f)));
     }
 
     /// <summary>
@@ -189,7 +181,7 @@ public class DisplayTextTests
         Assert.AreEqual("Deb[en]", Typed("Deben", Reveal.Plain, 3));
         Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", greek, Timing, false));
         Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", Reveal.Plain, Timing, false));
-        Assert.IsFalse(DisplayText.ReadsRightToLeft(Shekel, Reveal.Flipping(Foreign(Arabic, true), 5f, 0), Timing, false), "settled into English");
+        Assert.IsFalse(DisplayText.ReadsRightToLeft(Shekel, Reveal.Flipping(Foreign(Arabic, true), 5f), Timing, false), "settled into English");
         Assert.IsFalse(DisplayText.ReadsRightToLeft("1897", Reveal.Untranslated(Foreign(Arabic, true)), Timing, false), "no letter, nothing reversed");
         Assert.AreEqual(string.Empty, Typed(null, greek, 0));
     }
@@ -198,7 +190,7 @@ public class DisplayTextTests
     [Test]
     public void Typed_AFlippingRightToLeftLine_KeepsEveryCharacterInPlace_AndGrowsInReadingOrder()
     {
-        Reveal half = Reveal.Flipping(Foreign(Arabic, true), 0.665f, 0);
+        Reveal half = Reveal.Flipping(Foreign(Arabic, true), 0.665f);
         string shown = For(Shekel, half);
         Assert.IsTrue(DisplayText.ReadsRightToLeft(Shekel, half, Timing, false));
         int visible = -1;

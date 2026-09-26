@@ -15,9 +15,6 @@ public sealed class FlipTiming
 
     /// <summary>Glyphs of its tongue a letter passes through on the way (0 = none: the foreign letter stays until it lands).</summary>
     public int scrambleSteps = 2;
-
-    /// <summary>Extra delay per document row (each row of a document starts this much after the one above).</summary>
-    public float rowStagger = 0.15f;
 }
 
 /// <summary>Where a letter is in its flip.</summary>
@@ -34,26 +31,27 @@ public enum CellState
 }
 
 /// <summary>
-/// The letter flip's timing (piece 9 T8), one pure rule for papers and speech:
-/// letter k of row r starts at startDelay + r × rowStagger + k × letterInterval,
-/// passes through its scramble steps and lands letterSeconds later. Only
-/// letters count (their rank skips everything else). Negative knobs count as
-/// 0; an elapsed time that is NaN (not revealed yet) is before every start.
+/// The letter flip's timing (piece 9 T8; speech only since the redesign's
+/// phase 1, papers being always English): letter k starts at startDelay +
+/// k × letterInterval, passes through its scramble steps and lands
+/// letterSeconds later. Only letters count (their rank skips everything
+/// else). Negative knobs count as 0; an elapsed time that is NaN (not
+/// revealed yet) is before every start.
 /// </summary>
 public static class FlipSequence
 {
     /// <summary>The stride between scramble glyphs: any number coprime with 26, so consecutive steps differ from each other and from the letter.</summary>
     private const int ScrambleStride = 7;
 
-    /// <summary>When the letter of this rank in this row starts.</summary>
-    public static float StartOf(int letterRank, int row, FlipTiming t) =>
-        NonNegative(t.startDelay) + Math.Max(0, row) * NonNegative(t.rowStagger) + Math.Max(0, letterRank) * NonNegative(t.letterInterval);
+    /// <summary>When the letter of this rank starts.</summary>
+    public static float StartOf(int letterRank, FlipTiming t) =>
+        NonNegative(t.startDelay) + Math.Max(0, letterRank) * NonNegative(t.letterInterval);
 
     /// <summary>A letter's state <paramref name="elapsed"/> seconds after the reveal; <paramref name="step"/> is its scramble step while Flipping (0 .. scrambleSteps-1), else 0.</summary>
-    public static CellState StateAt(int letterRank, int row, FlipTiming t, float elapsed, out int step)
+    public static CellState StateAt(int letterRank, FlipTiming t, float elapsed, out int step)
     {
         step = 0;
-        float start = StartOf(letterRank, row, t);
+        float start = StartOf(letterRank, t);
         float seconds = NonNegative(t.letterSeconds);
         if (!(elapsed >= start))
             return CellState.Foreign;
@@ -72,22 +70,22 @@ public static class FlipSequence
     public static int ScrambleIndex(int letter, int step) =>
         ((letter + ScrambleStride * (step + 1)) % Pseudoscript.TableSize + Pseudoscript.TableSize) % Pseudoscript.TableSize;
 
-    /// <summary>When the last of <paramref name="letterCount"/> letters in a row lands (0 for no letters).</summary>
-    public static float Duration(int letterCount, int row, FlipTiming t) =>
-        letterCount <= 0 ? 0f : StartOf(letterCount - 1, row, t) + NonNegative(t.letterSeconds);
+    /// <summary>When the last of <paramref name="letterCount"/> letters lands (0 for no letters).</summary>
+    public static float Duration(int letterCount, FlipTiming t) =>
+        letterCount <= 0 ? 0f : StartOf(letterCount - 1, t) + NonNegative(t.letterSeconds);
 
     /// <summary>
     /// How many change points (a letter starting, each scramble step, a
-    /// letter landing) have passed for a row of <paramref name="letterCount"/>
+    /// letter landing) have passed for a text of <paramref name="letterCount"/>
     /// letters: the shown text changes exactly when this does.
     /// </summary>
-    public static int Progress(int letterCount, int row, FlipTiming t, float elapsed)
+    public static int Progress(int letterCount, FlipTiming t, float elapsed)
     {
         int progress = 0;
         int landed = Math.Max(0, t.scrambleSteps) + 1;
         for (int rank = 0; rank < letterCount; rank++)
         {
-            CellState state = StateAt(rank, row, t, elapsed, out int step);
+            CellState state = StateAt(rank, t, elapsed, out int step);
             if (state == CellState.Foreign)
                 break; // later letters start later still
             progress += state == CellState.English ? landed : step + 1;

@@ -84,7 +84,7 @@ public sealed class TranslationSettings
             problems.Add($"translation.fallbackGlyphs must be 26 distinct lower-case ASCII letters ({fallbackProblem ?? "it holds other characters"}).");
 
         FlipTiming f = flip ?? new FlipTiming();
-        if (f.startDelay < 0f || f.letterInterval < 0f || f.letterSeconds < 0f || f.scrambleSteps < 0 || f.rowStagger < 0f)
+        if (f.startDelay < 0f || f.letterInterval < 0f || f.letterSeconds < 0f || f.scrambleSteps < 0)
             problems.Add("translation.flip: every knob must be at least 0.");
         return problems;
     }

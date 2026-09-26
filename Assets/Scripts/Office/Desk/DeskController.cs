@@ -14,8 +14,8 @@ using UnityEngine.UI;
 /// dragged paper above them all), returns them at the decision, and shows the
 /// day-1 scan note. A click on a paper routes through PaperClicks (piece 10):
 /// it lifts a paper on the desk into the hand (DeskPapers.Hold, posed by the
-/// PaperExaminer; PaperExamined; on the side that hides no other paper when
-/// it can: HeldCover), picks a held paper's row (FieldPicked) or
+/// PaperExaminer; on the side that hides no other paper when it can:
+/// HeldCover), picks a held paper's row (FieldPicked) or
 /// puts it back where it lay, on top of the stack; a click on the desk (the
 /// desk catcher) or Escape puts every held paper back, and dragging a held
 /// paper drops it back onto the desk under the pointer and on. A paper handed
@@ -68,8 +68,6 @@ public sealed class DeskController : MonoBehaviour
 
     private readonly PaperStack _stack = new PaperStack();
     private IReadOnlyList<CaseDocument> _documents = Array.Empty<CaseDocument>();
-    private CaseTranslation _translation = CaseTranslation.None;
-    private IReadOnlyList<RevealClock> _clocks = Array.Empty<RevealClock>();
     private TravellerLook _look;
     private CharacterArt _art;
     private DeskPapers _state;
@@ -97,9 +95,6 @@ public sealed class DeskController : MonoBehaviour
 
     /// <summary>Raised when a scan finishes, with the paper's index (its window opens).</summary>
     public event Action<int> ScanFinished;
-
-    /// <summary>Raised when a paper is lifted into the hand, with its index (the first time is its sighting: its translation's reveal).</summary>
-    public event Action<int> PaperExamined;
 
     /// <summary>Raised when a held paper's row is picked for comparison: the paper's index, the row and where it lights up.</summary>
     public event Action<int, DocumentRow, ICompareHighlight> FieldPicked;
@@ -149,12 +144,10 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Starts a case's papers (a photo document shows <paramref name="look"/>; each paper's values show in the traveller's translation on its document's reveal clock, shared with the scanned copy); the documents handed over on arrival slide onto the desk.</summary>
-    public void BeginCase(IReadOnlyList<CaseDocument> docs, TravellerLook look, CharacterArt art, CaseTranslation translation, IReadOnlyList<RevealClock> clocks)
+    /// <summary>Starts a case's papers (a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the desk.</summary>
+    public void BeginCase(IReadOnlyList<CaseDocument> docs, TravellerLook look, CharacterArt art)
     {
         _documents = docs ?? Array.Empty<CaseDocument>();
-        _translation = translation ?? CaseTranslation.None;
-        _clocks = clocks ?? Array.Empty<RevealClock>();
         _look = look;
         _art = art;
         _state = new DeskPapers(_documents, config.scanSeconds);
@@ -185,7 +178,7 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = Instantiate(paperTemplate, paperRoot);
         paper.transform.position = handOverPoint.position;
         paper.gameObject.SetActive(true);
-        paper.Bind(i, _documents[i], _translation, i < _clocks.Count ? _clocks[i] : null, config);
+        paper.Bind(i, _documents[i], config);
         paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art, config.travellerTint);
 
         DeskDraggable drag = paper.GetComponent<DeskDraggable>();
@@ -203,13 +196,6 @@ public sealed class DeskController : MonoBehaviour
         _handedOver++;
         Slide(paper, target);
         RefreshHint();
-    }
-
-    /// <summary>Rewrites a paper's values from its document's reveal clock (a sighting on the PC started it); nothing for a paper not handed over.</summary>
-    public void RefreshPaper(int i)
-    {
-        if (i >= 0 && i < _papers.Count && _papers[i] != null)
-            _papers[i].Refresh();
     }
 
     /// <summary>The decision: held papers drop back at once, then every paper goes back (a running scan is cancelled), slides inert and out of the raycast to the traveller's side and is destroyed.</summary>
@@ -423,7 +409,6 @@ public sealed class DeskController : MonoBehaviour
         ApplyLive(paper);
         _readsToday++;
         RefreshHint();
-        PaperExamined?.Invoke(paper.Index);
         HoldsChanged?.Invoke();
     }
 
