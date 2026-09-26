@@ -46,7 +46,7 @@ Camera and object composition are frozen after pass 26 at the user's request. Ha
 
 ## Window transparency control
 
-Select `HybridOffice/Hall/WindowGlass`. Its **Office Window Glass > Glass Transparency** Inspector slider controls all three window walls. Saved value: **25% transparency (75% opacity)**. Zero is opaque; 100 disables the panes. Prefab: `Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/Hall_WindowGlass.prefab`.
+Select `HybridOffice/Hall/WindowGlass`. Since 2026-09-26 the glass material (`Hall_ClearGlass`, from the palette pass) owns the panes' alpha. To override it, tick **Office Window Glass > Override Material Alpha**: the **Glass Transparency** slider then controls all three window walls (zero is opaque, 100 disables the panes; the saved value is 25). Untick it to hand the alpha back to the material. Prefab: `Assets/Art/Office/Hybrid/BlenderOffice/Prefabs/Hall_WindowGlass.prefab`.
 
 `Assets/Scripts/Office/OfficeWindowGlass.cs` is the only new runtime component in this corrective pass, explicitly requested for the slider. It updates material property blocks only when needed, without material clones or gameplay changes. This supersedes the earlier no-new-C# note for this visual control only.
 

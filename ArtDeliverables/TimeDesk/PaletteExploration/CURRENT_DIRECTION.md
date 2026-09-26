@@ -1,6 +1,6 @@
 # Current art direction — 2026-09-26
 
-This file supersedes the earlier palette studies. The latest correction requires the five desk-layout notes and visible worn surfaces to be applied to the scene as well as the colours and clear teleporter. The PC is explicitly protected.
+Rules for the art side (2026-09-26): see ../ImportedOffice/CURRENT_STATE.md. This file supersedes the earlier palette studies. The latest correction requires the five desk-layout notes and visible worn surfaces to be applied to the scene as well as the colours and clear teleporter. The PC is explicitly protected.
 
 ## Applied state
 

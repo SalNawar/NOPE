@@ -82,9 +82,9 @@ in the art scene do nothing. The art side should **delete** them:
 - the `Physics2DRaycaster` on `Main Camera` (the game disables it and adds a
   `PhysicsRaycaster` at runtime)
 
-The Codex tools that write into `OfficeRoot/CRTMonitor` and `MonitorVCam`
-(`ConnectMonitor`, `ApplyRebuiltCrt`) still work on those leftovers; once they
-are deleted, point those tools at the PC under `ImportedOfficeDress/Desk`.
+No art tool writes these leftovers any more (2026-09-26: `ConnectMonitor` went
+with ImportedOfficeBuilder, and Apply Rebuilt CRT Study checks the PC's glass
+instead of aligning the old click proxy and push-in camera), so they can go.
 
 Other art-side fixes found by the move:
 
