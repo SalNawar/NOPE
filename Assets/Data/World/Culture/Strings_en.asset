@@ -536,7 +536,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tooltip.day
-    text: Day {0}
+    text: 'Today: {0}'
     gloss: 0
     tier: 0
   - key: tooltip.stability
@@ -545,6 +545,10 @@ MonoBehaviour:
     tier: 0
   - key: tooltip.value
     text: '{0}'
+    gloss: 0
+    tier: 0
+  - key: desk.calendar
+    text: "{0} \xB7 DAY {1}"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers

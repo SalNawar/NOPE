@@ -1008,6 +1008,11 @@
       "Assets/Data/Investigation/RefBook_Culture.asset"
     ]
   },
+  "agency": {
+    "name": "TEMPORAL CUSTOMS",
+    "programme": "Debt Relief Departures",
+    "firstDate": "14 Mar 2150"
+  },
   "eras": [
     {
       "id": "ancient",
@@ -8580,7 +8585,7 @@
       },
       {
         "key": "tooltip.day",
-        "text": "Day {0}",
+        "text": "Today: {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8593,6 +8598,12 @@
       {
         "key": "tooltip.value",
         "text": "{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desk.calendar",
+        "text": "{0} · DAY {1}",
         "gloss": "None",
         "tier": "Full"
       },

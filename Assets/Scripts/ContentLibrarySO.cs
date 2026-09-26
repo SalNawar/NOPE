@@ -96,6 +96,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The tongues, packs, scripts, flip knobs and fallback cipher (written by Generate World from world_source.json "translation").</summary>
     [SerializeField] private TranslationSettings translation = new();
 
+    [Header("Agency (redesign phase 2)")]
+    /// <summary>The agency's printed name, programme line and day 1's date (written by Generate World from world_source.json "agency").</summary>
+    [SerializeField] private AgencyContent agency = new();
+
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
@@ -274,6 +278,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>What translation reads at runtime (piece 9): the rules, the scripts, the flip's knobs and the fallback cipher (empty until Generate World ran).</summary>
     public TranslationSettings Translation => translation ?? new TranslationSettings();
+
+    /// <summary>The agency block: its name, programme line and first date (never null).</summary>
+    public AgencyContent Agency => agency ?? new AgencyContent();
 
     /// <summary>The office's own time: the first era marked isFuture, or null when the content has none.</summary>
     public EraSO FutureEra => eras?.FirstOrDefault(e => e != null && e.isFuture);
