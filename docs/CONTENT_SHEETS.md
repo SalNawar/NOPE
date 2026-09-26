@@ -59,9 +59,9 @@ Everything is driven by one declarative map, `Assets/Scripts/Domain/ContentSheet
 
 ## The sheets (today)
 
-The README sheet of any export is the live list, with every column's type, default and rules. Today there are 60 sheets. The story tables:
+The README sheet of any export is the live list, with every column's type, default and rules. Today there are 61 sheets. The story tables:
 
 - **Characters and stories:** `premades` (+ `premadeImpacts`); `places` (+ `placeFacts`, `placeSmallTalk`, `wardrobeSets`, `wardrobe`, `placeHair`); `countries`; `eras` (+ `eraSmallTalk`).
-- **Dialogue and interactions:** `dialogs`, `dialogConditions`, `dialogNodes`, `dialogLines`, `dialogChoices`, `choiceLines`; `questions`, `questionConditions`, `questionOverrides`; `interview`, `interviewRequests`.
+- **Dialogue and interactions:** `dialogs`, `dialogConditions`, `dialogNodes`, `dialogLines`, `dialogChoices`, `choiceLines`; `questions`, `questionConditions`, `questionOverrides`; `interview`, `claims` (the claim per traveller kind), `interviewRequests`.
 - **The days and history:** `days`, `dayEras`, `dayForced`, `rules`; `history`, `historyRules`, `historyConditions`, `historyEdits`.
 - **Presentation (rarely edited):** `world`, `agency`, `looks`, `faceBands`, `confusable`, `content` and its asset lists; the country `culture` blocks (`countryFonts`, `countrySeeds`, `countryOverrides`, `countryArt`); `ui`, `uiPalette`, `uiNeutral` (+ its four sheets), `uiStrings`, `uiLanguages`, `uiLanguageEntries`; `translation` (with the key words that stay English), `scripts`, `scriptFonts`, `packs`, `tongues`.
