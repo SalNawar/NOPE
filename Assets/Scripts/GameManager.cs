@@ -84,6 +84,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Read-only access to the current shift's ledger.</summary>
     public ShiftLedger Ledger => _ledger;
 
+    /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then; redesign phase 25).</summary>
+    public event System.Action<CaseVerdict> CitationAcknowledged;
+
     /// <summary>
     /// Initializes systems, generates cases once, and starts the day loop.
     /// </summary>
@@ -323,6 +326,9 @@ public sealed class GameManager : MonoBehaviour
                 }
             }
         }
+
+        // The clerk's statement gets the day's row (the Citizen Account; redesign phase 25).
+        ClerkAccountSource.RecordShift(_worldState, _ledger, contentLibrary, _gameConfig);
 
         // Continue from this save resumes at Home, never replaying this shift.
         _worldState.phase = RunPhase.Home;
@@ -737,6 +743,8 @@ public sealed class GameManager : MonoBehaviour
                 booth.SetCitationPending(false);
             if (holdsClock)
                 shiftClock.Resume();
+            if (citation)
+                CitationAcknowledged?.Invoke(verdict);
             onContinue?.Invoke();
         });
     }

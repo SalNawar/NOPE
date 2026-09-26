@@ -343,6 +343,9 @@ public static partial class OfficeSceneUIBuilder
         // and the taskbar's way back to the office.
         BuildDesktopShell(canvas, bookShelf, windowLayer, library, officeView, monitorScreen);
 
+        // Mail, the Citizen Account, Notes, Settings' sections and the Start menu's apps (OfficeSceneUIBuilder.Apps).
+        BuildApps(canvas, windowLayer, bookShelf, gameManager, directivesWindow);
+
         // The window stack, the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
         BuildWindowManager(canvas, investRoot, officeView);
 
@@ -1401,7 +1404,6 @@ public static partial class OfficeSceneUIBuilder
             ("IconLexicon",  "icon.lexicon",  "window.lexicon",  "body.lexicon", "archive_access"),
             ("IconDialect",  "icon.dialect",  "window.dialect",  "body.dialect", ""),
             ("IconMaterial", "icon.material", "window.material", "body.material", "adv_scanner"),
-            ("IconNotes",    "icon.notes",    "window.notes",    "body.notes", ""),
         };
 
         // The Internet app (the browser: OfficeSceneUIBuilder.Internet.cs), first in the icon column.
@@ -1499,48 +1501,6 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow chrome = BuildWinControls(win, header);
 
         win.gameObject.SetActive(false); // opened by its icon
-        return chrome;
-    }
-
-    /// <summary>
-    /// The Settings window (piece 6 U12, piece 9 R17), 580 × 520: "UI
-    /// language" with its two choices, "Motion" with Full and Reduced
-    /// (SettingsWindowController), and a note that a language change applies
-    /// at the next office load, that colours, fonts and the wallpaper follow
-    /// history, and that reduced motion shows translations at once. Every
-    /// row's anchors are re-applied on each build.
-    /// </summary>
-    private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
-    {
-        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(580f, 520f));
-        Transform win = chrome.transform;
-        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.78f), new Vector2(0.95f, 0.87f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f), null, ThemeRoleId.Button, "settings.followHistory");
-        SetAnchors(follow.transform, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f));
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        SetAnchors(english.transform, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f));
-        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f), Ink,
-                               ThemeRoleId.WindowBody, "settings.motion");
-        SetAnchors(motion.transform, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f));
-        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f), null, ThemeRoleId.Button, "settings.motionFull");
-        SetAnchors(full.transform, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f));
-        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f), null, ThemeRoleId.Button, "settings.motionReduced");
-        SetAnchors(reduced.transform, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f));
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f), Ink,
-                             ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f));
-        note.text = UiText.Get("settings.note");
-        note.textWrappingMode = TextWrappingModes.Normal;
-
-        SettingsWindowController controller = win.GetComponent<SettingsWindowController>();
-        if (controller == null)
-            controller = win.gameObject.AddComponent<SettingsWindowController>();
-        var so = new SerializedObject(controller);
-        SetRef(so, "followHistoryButton", follow);
-        SetRef(so, "alwaysEnglishButton", english);
-        SetRef(so, "fullMotionButton", full);
-        SetRef(so, "reducedMotionButton", reduced);
-        so.ApplyModifiedProperties();
         return chrome;
     }
 

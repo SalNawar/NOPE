@@ -1305,3 +1305,24 @@ MonoBehaviour:
       foundWithinDays: 30
       validDaysMin: 3
       validDaysMax: 365
+    clerk:
+      citizenId: 773-2840-19
+      name: Theo Marlow
+      born: 9 Feb 2121
+      lineage: Victorian Britain
+      employment: "Temporal Customs \xB7 Desk 3"
+      note: No remarks on file.
+  mail:
+  - id: welcome
+    fromDay: 1
+    untilDay: 0
+    flag: 
+    from: Customs Directorate
+    subject: Welcome to Desk 3
+    body:
+    - Welcome to Temporal Customs. Every traveller at your desk wants to depart for
+      the past; your desk decides who goes.
+    - Check each paper against the Citizen Records and the reference books, log every
+      deviation before you deny, and follow the day's directives.
+    - Your pay is credited when each shift ends. Your Citizen Account holds your
+      statement. Departures are voluntary.
