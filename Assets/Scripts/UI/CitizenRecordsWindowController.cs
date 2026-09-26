@@ -14,7 +14,10 @@ using UnityEngine.UI;
 /// the traveller's own record can disprove their birth-date tell
 /// (RecordMismatch; another person's record proves nothing). The registry,
 /// the agency block and the date are injected per day by GameManager via
-/// InvestigationUIController.
+/// InvestigationUIController. Each evidence row is marked with its key for
+/// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
+/// tells the Records tab (Looked), and a jump shows a record and its row
+/// (Show).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -65,6 +68,12 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     /// <summary>The shown record's lines, in order (empty when none is shown).</summary>
     private readonly List<Line> _lines = new();
 
+    /// <summary>The record shown, or null.</summary>
+    public CitizenRecord Current => _current;
+
+    /// <summary>Raised after a lookup (a record shown, or none on file).</summary>
+    public event System.Action Looked;
+
     /// <inheritdoc />
     protected override void Awake()
     {
@@ -111,6 +120,23 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
                 : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
 
         ShowPage(0);
+        Looked?.Invoke();
+    }
+
+    /// <summary>A jump: looks up <paramref name="recordId"/> (its number, else its name) and shows the page of its row keyed <paramref name="rowKey"/> (null: the first page).</summary>
+    public void Show(string recordId, string rowKey)
+    {
+        if (searchInput != null)
+            searchInput.text = recordId ?? string.Empty;
+        Search();
+        if (rowKey == null || _current == null)
+            return;
+        for (int i = 0; i < _lines.Count; i++)
+            if (_lines[i].Heading == null && _lines[i].Row.IsEvidence && PickKeys.Record(_lines[i].Row.Category, _current.Id) == rowKey)
+            {
+                ShowRowAt(i);
+                return;
+            }
     }
 
     private void ShowIdle()
@@ -145,6 +171,9 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
             background.enabled = !heading;
 
         bool pickable = !heading && line.Row.IsEvidence && !string.IsNullOrEmpty(line.Row.Value) && compareController != null;
+        if (!heading && line.Row.IsEvidence && _current != null)
+            AppRow.Mark(row, AppTab.Records, PickKeys.Record(line.Row.Category, _current.Id), UiText.Format("app.row.record", _current.FullName, line.Row.Label),
+                        texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, pickable ? button : null);
         if (button == null)
             return;
         button.enabled = pickable;

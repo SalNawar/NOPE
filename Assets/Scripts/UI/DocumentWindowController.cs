@@ -12,9 +12,11 @@ using UnityEngine.UI;
 /// <see cref="fieldRowTemplate"/> (a disabled row with two TMP texts — label
 /// then value — an Image background, and a Button). A document whose template
 /// shows a photo carries the traveller's photo on its first page (the rows
-/// there leave room for it).
+/// there leave room for it). Each row is marked with its key for the keys,
+/// the copy and the pins (AppRow); the keys turn the pages (IPagedRows) and a
+/// jump to a field shows its page (ShowField).
 /// </summary>
-public sealed class DocumentWindowController : MonoBehaviour
+public sealed class DocumentWindowController : MonoBehaviour, IPagedRows
 {
     [SerializeField] private TMP_Text titleText;
     [SerializeField] private TMP_Text pageText;
@@ -79,6 +81,22 @@ public sealed class DocumentWindowController : MonoBehaviour
         ShowPage(0);
     }
 
+    /// <inheritdoc />
+    public bool TurnPage(int direction)
+    {
+        if (_doc == null || _page + direction < 0 || _page + direction >= _doc.PageCount)
+            return false;
+        ShowPage(_page + direction);
+        return true;
+    }
+
+    /// <summary>Shows the page field <paramref name="field"/> (its index in the document's list) is on.</summary>
+    public void ShowField(int field)
+    {
+        if (_doc != null && _doc.fields != null && field >= 0 && field < _doc.fields.Count && _doc.fields[field] != null)
+            ShowPage(_doc.fields[field].page);
+    }
+
     /// <summary>Switches to a page (clamped) and rebuilds its rows.</summary>
     public void ShowPage(int page)
     {
@@ -125,9 +143,13 @@ public sealed class DocumentWindowController : MonoBehaviour
 
     private void Rebuild()
     {
+        // Hidden at once (Destroy waits for the frame's end), so the keys never find a row that is going.
         foreach (GameObject r in _rows)
             if (r != null)
+            {
+                r.SetActive(false);
                 Destroy(r);
+            }
 
         _rows.Clear();
 
@@ -147,6 +169,7 @@ public sealed class DocumentWindowController : MonoBehaviour
             Image bg = row.GetComponent<Image>();
             Button btn = row.GetComponent<Button>();
             ComparePick pick = EvidencePicks.ForField(_index, docRow, docName);
+            AppRow.Mark(row, AppTab.Documents, pick.Key, pick.Label, texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, btn);
 
             if (btn != null && _compare != null)
                 btn.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(bg)));

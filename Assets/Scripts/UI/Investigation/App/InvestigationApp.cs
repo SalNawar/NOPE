@@ -8,9 +8,12 @@ using UnityEngine.UI;
 /// the desk), that fills the desktop the first time it opens. Its case header
 /// holds the claim, the counters ("Papers 2 of 3 received · 1 scanned ·
 /// Deviations 1") and the PC's Accept and Deny (the façade wires them); its
-/// toolbar holds Back, Forward, the search field, Steps, Split and Keys, shown
-/// but not live until their phases (18-21); the sidebar's Steps, Pinned and
-/// Recent are placeholders until then; one pane holds the six tabs.
+/// toolbar holds Back, Forward, the search field, Steps, Split and Keys (the
+/// search field and Keys are live since phase 20; the others are shown but
+/// not live until their phases, 18 and 21); the sidebar holds Steps (a
+/// placeholder until phase 21), Pinned and Recent; one pane holds the six
+/// tabs. The keys, the focus ring, copy and paste, pins, recent items and
+/// zoom are in InvestigationApp.Keys (redesign phase 20).
 /// Nothing steals the view: something new for a tab badges it unless the
 /// player sees it (AppBadges), and dots the desktop's Investigation icon
 /// while the app is closed or minimised; a scan (ScanArrival) opens the app
@@ -21,7 +24,7 @@ using UnityEngine.UI;
 /// directive memo (the Rules tab) and the toast. InvestigationUIController
 /// drives it.
 /// </summary>
-public sealed class InvestigationApp : MonoBehaviour
+public sealed partial class InvestigationApp : MonoBehaviour
 {
     /// <summary>The app's window (maximised on the first open).</summary>
     [SerializeField] private DesktopWindow window;
@@ -37,7 +40,7 @@ public sealed class InvestigationApp : MonoBehaviour
     [SerializeField] private TMP_Text countersText;
 
     [Header("Toolbar")]
-    /// <summary>Back, Forward, the search field, Steps, Split and Keys: shown, not live until their phases (18-21).</summary>
+    /// <summary>Back, Forward, Steps and Split: shown, not live until their phases (18, 21).</summary>
     [SerializeField] private Selectable[] notYetLive = new Selectable[0];
 
     [Header("Desktop")]
@@ -55,6 +58,9 @@ public sealed class InvestigationApp : MonoBehaviour
 
     /// <summary>True while the app shows (open and not minimised).</summary>
     public bool IsShowing => window != null && window.gameObject.activeSelf;
+
+    /// <summary>The app's window (the keyboard poller's "app focused").</summary>
+    public DesktopWindow Window => window;
 
     /// <summary>True when the pane hosts a view for the tab.</summary>
     public bool Hosts(AppTab tab) => pane != null && pane.Hosts(tab);
@@ -94,6 +100,7 @@ public sealed class InvestigationApp : MonoBehaviour
         pane.Show(AppTab.Documents);
         if (toast != null)
             toast.Hide();
+        KeysBeginCase(travellerName);
     }
 
     /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller.</summary>
@@ -109,6 +116,7 @@ public sealed class InvestigationApp : MonoBehaviour
         pane.SetCase(false);
         if (toast != null)
             toast.Hide();
+        KeysEndCase();
     }
 
     /// <summary>Writes the counters from the case's papers and the logged deviations.</summary>
@@ -165,6 +173,7 @@ public sealed class InvestigationApp : MonoBehaviour
         foreach (Selectable control in notYetLive)
             if (control != null)
                 control.interactable = false;
+        InitKeys();
     }
 
     /// <summary>The player sees the tab: its badge goes.</summary>

@@ -11,8 +11,11 @@ using UnityEngine.UI;
 /// at most DesktopConfigSO.notesMaxChars characters with its counter. An
 /// empty page shows a hint. Pages live in WorldState.notes (Notes.Page, at
 /// most notesDaysKept days) and are saved with the run. "Paste clipping"
-/// pastes the system clipboard's text as a clip; phase 20's clipboard calls
-/// <see cref="Clip"/> with the clip's source (and Ctrl+V with no field focused).
+/// and Ctrl+V with the window focused and no field focused (the keyboard
+/// poller) paste the system clipboard: when it holds the desktop clipboard's
+/// clip (AppClipboard.IsCurrent) the card keeps the clip's source and
+/// traveller, else it is plain pasted text; inside the notes field Ctrl+V
+/// pastes text as usual.
 /// </summary>
 public sealed class NotesWindow : MonoBehaviour
 {
@@ -48,6 +51,9 @@ public sealed class NotesWindow : MonoBehaviour
 
     /// <summary>The characters used of the limit ("312 / 2000").</summary>
     [SerializeField] private TMP_Text counterText;
+
+    /// <summary>The Investigation app (the desktop's clipboard).</summary>
+    [SerializeField] private InvestigationApp app;
 
     private readonly List<Button> _days = new List<Button>();
     private readonly List<int> _dayNumbers = new List<int>();
@@ -94,12 +100,8 @@ public sealed class NotesWindow : MonoBehaviour
         DrawPage();
     }
 
-    /// <summary>
-    /// Adds a clipping to the shown day's page (the entry point phase 20's
-    /// clipboard calls with the clip's source); false when the page is full
-    /// or the clip is blank.
-    /// </summary>
-    public bool Clip(Clipping clipping)
+    /// <summary>Adds a clipping to the shown day's page; false when the page is full or the clip is blank.</summary>
+    private bool Clip(Clipping clipping)
     {
         NotePage page = CurrentPage();
         bool added = Notes.Clip(page, clipping, MaxClippings);
@@ -109,9 +111,15 @@ public sealed class NotesWindow : MonoBehaviour
         return added;
     }
 
-    /// <summary>"Paste clipping": the system clipboard's text as a clip from no case.</summary>
-    private void PasteClipboard() =>
-        Clip(new Clipping { text = GUIUtility.systemCopyBuffer ?? string.Empty, label = UiText.Get("notes.pasted") });
+    /// <summary>"Paste clipping" and Ctrl+V: the desktop clipboard's clip with its source when the system clipboard holds it, else the system clipboard's text as a clip from no case.</summary>
+    public void PasteClipboard()
+    {
+        string text = GUIUtility.systemCopyBuffer ?? string.Empty;
+        AppClipboard clipboard = app != null ? app.Clipboard : null;
+        Clip(clipboard != null && clipboard.IsCurrent(text)
+            ? clipboard.Current.ToClipping()
+            : new Clipping { text = text, label = UiText.Get("notes.pasted") });
+    }
 
     /// <summary>The shown day's page (null outside a run).</summary>
     private NotePage CurrentPage()

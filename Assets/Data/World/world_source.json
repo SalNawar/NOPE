@@ -9333,12 +9333,6 @@
         "tier": "Full"
       },
       {
-        "key": "keys.card",
-        "text": "Esc: close a menu, leave a text field, close the Start menu or cancel a drag; with none of those, it leaves the PC.\nDesktop icons: double-click one to open it (Settings can make it one click), drag it anywhere, arrows move the selection and Enter opens it; right-click the desktop to arrange them.\nDouble-click a title bar: maximise or restore the window.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "keys.focusSearch",
         "text": "Open the Investigation app and put the cursor in its search field",
         "gloss": "None",
@@ -10036,7 +10030,7 @@
       },
       {
         "key": "notes.hint",
-        "text": "Nothing here yet. Copy a text, then Paste clipping; or type below.",
+        "text": "Nothing here yet. Copy a value (Ctrl+C, or right-click a row: Copy value), then Ctrl+V or Paste clipping; or type below.",
         "gloss": "None",
         "tier": "Full"
       },

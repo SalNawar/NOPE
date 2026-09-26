@@ -10,8 +10,9 @@ using UnityEngine.UI;
 /// layer ("Investigation"; the restored size from DesktopConfigSO, maximised
 /// on its first open) with its case header (the claim, the counters, the PC's
 /// Accept and Deny with their fixed glyphs), its toolbar (Back, Forward, the
-/// search field, Steps, Split, Keys: built, not live until phases 18-21), its
-/// sidebar (Steps, Pinned, Recent: placeholders until phases 20-21) and one
+/// search field, Steps, Split, Keys: Back, Forward, Steps and Split built, not
+/// live until phases 18 and 21), its sidebar (Steps, Pinned, Recent: the
+/// keys' partial, OfficeSceneUIBuilder.Keys, fills Pinned and Recent) and one
 /// pane (AppPane): the six tabs in TabOrder.Default with their active looks
 /// and badges, the chip row, the content with a view per tab and the no-case
 /// state over it. The views host today's page components (the scanned page,
@@ -163,18 +164,18 @@ public static partial class OfficeSceneUIBuilder
         BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward, the search field, Steps, Split and Keys, all built and none live until phases 18-21. Returns them.</summary>
+    /// <summary>The toolbar (AP2): Back, Forward, the search field, Steps, Split and Keys. Returns the ones not live yet (Back, Forward, Steps, Split: phases 18 and 21); the search field and Keys are the keys' (BuildAppKeys).</summary>
     private static Selectable[] BuildAppToolbar(Transform win, float top)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
                               new Vector2(0f, AppToolbarHeight), XpFace, ThemeRoleId.WindowBody);
         Button back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f);
         Button forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f);
-        TMP_InputField search = BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
+        BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
         Button steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
         Button split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
-        Button keys = ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
-        return new Selectable[] { back, forward, search, steps, split, keys };
+        ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
+        return new Selectable[] { back, forward, steps, split };
     }
 
     /// <summary>A toolbar button between two horizontal anchors (its label keyed).</summary>
