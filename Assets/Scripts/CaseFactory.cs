@@ -28,6 +28,10 @@ using UnityEngine;
 /// speech, the destination's dress over their family country's looks, and a
 /// Citizen Account (AccountMaker) on their account stream, which their forms
 /// and their record print. Until phase 7 a citizen never lies.
+/// A 2150
+/// citizen with no other fault may wear a costume error (CostumeErrors, on
+/// their fault stream, Seeds.ForFaults): another place's item, the present's
+/// clothes or a 2150 accessory, dressed by Looks.Compose like a dress tell.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -69,6 +73,12 @@ public sealed class CaseFactory
 
     /// <summary>The current traveller's account stream (Seeds.ForAccount): their agency numbers and dates, apart from every other stream.</summary>
     private IRandomSource _accountRng = new SeededRandom(0);
+
+    /// <summary>The current traveller's fault stream (Seeds.ForFaults): the costume roll, its variant and its source.</summary>
+    private IRandomSource _faultRng = new SeededRandom(0);
+
+    /// <summary>Whether a garment can be looked at and compared today (a costume error, like a dress tell, needs it).</summary>
+    private bool _appearanceReachable;
 
     /// <summary>Today's date on the agency calendar (AgencyCalendar.TryToday for the world's day); null when the agency block's first date is unreadable.</summary>
     private System.DateTime? _today;
@@ -150,6 +160,7 @@ public sealed class CaseFactory
                 Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so their banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
 
         _channels = appearanceReachable ? plan.TellChannels : plan.TellChannels.Where(c => c != TellChannel.Appearance).ToList();
+        _appearanceReachable = appearanceReachable;
 
         // Fresh roster: names are unique within the day (records use first
         // match). The forced premades who will stand today are reserved first,
@@ -183,6 +194,7 @@ public sealed class CaseFactory
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
+            _faultRng = new SeededRandom(Seeds.ForFaults(caseSeed));
             _formsSeed = Seeds.ForForms(caseSeed);
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
@@ -193,11 +205,14 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Places one violator of each active rule in the first half of the queue
-    /// (DayPlanSO.GuaranteeRuleViolators), never in a forced premade's slot,
-    /// drawn from the day's own violator stream so the travellers' streams are
-    /// untouched. A rule that forbids none of today's places cannot be tested
-    /// and is skipped with a warning.
+    /// Places one violator of each active closure in the first half of the
+    /// queue (DayPlanSO.GuaranteeRuleViolators), never in a forced premade's
+    /// slot, drawn from the day's own violator stream so the travellers'
+    /// streams are untouched. A closure that forbids none of today's places
+    /// cannot be tested and is skipped with a warning. A standing procedure
+    /// (dress for the destination) plans no violator here: its costume errors
+    /// come from the costume roll (the plan's phase 9 brings its first-day
+    /// guarantee with the directives' makers).
     /// </summary>
     private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed)
     {
@@ -208,7 +223,7 @@ public sealed class CaseFactory
         var breakersPerRule = new List<List<NationEraProfileSO>>();
         foreach (TravelRuleSO rule in plan.ActiveTravelRules)
         {
-            if (rule == null)
+            if (rule == null || !rule.IsClosure)
                 continue;
 
             List<NationEraProfileSO> breakers = _todays.Where(p => !rule.Allows(p.nation, p.era)).ToList();
@@ -332,19 +347,23 @@ public sealed class CaseFactory
         inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
         inst.claimAllowedByRules = plan.ClaimAllowed(nation, claimedEra);
         List<DocumentField> fields = PopulateDocumentFields(inst);
-        LiePlan lie = Disguise(inst, fields, plan, blueprint, state, caseIndex1Based, place, legendary);
+
+        // A costume error forced from the debug panel is a planned fault: it stands in for the lie roll (K5).
+        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && inst.claimAllowedByRules && place != null;
+        LiePlan lie = forcedCostume ? null : Disguise(inst, fields, plan, blueprint, state, caseIndex1Based, place, legendary);
         AddAnswers(inst, lie);
 
         // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
         EraSO talkEra = place != null ? place.era : claimedEra;
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
-        inst.look = ComposeLook(inst, place, lie, legendary, family, caseIndex1Based);
+        (LookSource source, bool whole) costume = PlanCostume(inst, place, legendary, forcedCostume, plan, caseIndex1Based);
+        inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
 
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -471,16 +490,118 @@ public sealed class CaseFactory
     }
 
     /// <summary>
+    /// The costume roll (traveller types C2, K5), for a 2150 citizen with no
+    /// other fault (not a premade, a liar or a closure's violator) whose
+    /// garments can be looked at today; no draw otherwise. Its candidates:
+    /// today's other places whose signature item can leak onto the claim
+    /// (Looks.CanLeak) and whose Costume Guide row differs from the claim's
+    /// (per place, C5), the present's clothes, and the kit accessories that
+    /// can leak (Looks.KitSource). It draws on the fault stream
+    /// (CostumeErrors.Plan) at the day's costume error chance. A costume error
+    /// forced from the debug panel skips the roll and the kind check (a dev
+    /// cheat for testing before 2150 citizens reach a day) and is consumed
+    /// here. Sets inst.costumeFault; returns the leak source and whether it is
+    /// worn whole (the present's clothes), or no source.
+    /// </summary>
+    private (LookSource source, bool whole) PlanCostume(CaseInstance inst, NationEraProfileSO place, LegendarySO legendary, bool forced,
+                                                        DayPlanSO plan, int caseIndex1Based)
+    {
+        if (legendary != null || place == null || inst.IsLiar || !inst.claimAllowedByRules || !_appearanceReachable ||
+            inst.gender == TravellerGender.Unknown || (!forced && !CostumeErrors.MayErr(inst.kind)))
+            return (null, false);
+
+        LookSource claim = SourceOf(place);
+        List<LookSource> others = _todays
+            .Where(p => p != place)
+            .Select(SourceOf)
+            .Where(p => Looks.CanLeak(claim, p, inst.gender, _lib.LookRules) && !DiscrepancyLog.ValuesMatch(p.CultureValue, claim.CultureValue))
+            .ToList();
+        LookSource present = PresentSource();
+        GenderLook presentLook = present?.Wardrobe?.For(inst.gender);
+        bool clothes = presentLook != null && presentLook.Signature.IsPresent && !DiscrepancyLog.ValuesMatch(present.CultureValue, claim.CultureValue);
+        LookSource kitOwner = KitOwner(present);
+        List<LookSource> kit = kitOwner == null ? new List<LookSource>()
+            : _lib.PresentLook.Kit(inst.gender).Select(item => Looks.KitSource(kitOwner, item))
+                  .Where(k => Looks.CanLeak(claim, k, inst.gender, _lib.LookRules)).ToList();
+
+        CostumeError pinned = forced ? DevToolsState.ForcedCostumeError : CostumeError.None;
+        CostumePlan costume = CostumeErrors.Plan(plan.CostumeErrorChance, forced, pinned, _lib.LookRules.costumeErrors, others.Count, clothes, kit.Count, _faultRng);
+        if (forced)
+        {
+            Debug.Log($"[CaseFactory] ForcedCostumeError '{pinned}' consumed by case {caseIndex1Based} ({inst.kind}): {costume.Error}.");
+            DevToolsState.ForcedCostumeError = CostumeError.None;
+        }
+
+        if (costume.Error == CostumeError.None)
+        {
+            if (costume.Rolled)
+                Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a costume error, but nothing wrong can show on '{inst.originLabel}' for a {inst.gender} traveller (no leakable item of another place today, no present's clothes or kit that differ), so they are dressed right. Check the wardrobes, the present and looks.costumeErrors.");
+            return (null, false);
+        }
+
+        inst.costumeFault = costume.Error;
+        switch (costume.Error)
+        {
+            case CostumeError.OtherPlace:
+                return (others[costume.SourceIndex], false);
+            case CostumeError.PresentClothes:
+                return (present, true);
+            default:
+                return (kit[costume.SourceIndex], false);
+        }
+    }
+
+    /// <summary>
+    /// The present as the look rules see it (traveller types H1): today's
+    /// present (TodaysWorld.Present: the leader's Future place and its outfit,
+    /// or the neutral present and its clothes), under its own nation and era,
+    /// valued with its Culture fact (its row in the Costume Guide, so a 2150
+    /// garment's origin proof names 2150). Null without a present or clothes.
+    /// </summary>
+    private LookSource PresentSource()
+    {
+        if (_present == null || _present.Wardrobe == null)
+            return null;
+
+        return new LookSource
+        {
+            NationId = _present.NationId,
+            EraId = _present.EraId,
+            PlaceId = _present.NationId + "_" + _present.EraId,
+            Wardrobe = _present.Wardrobe,
+            CultureValue = _present.Fact(Looks.EvidenceCategory)
+        };
+    }
+
+    /// <summary>
+    /// Whose accessories the 2150 kit is (traveller types §7.3): the neutral
+    /// present's, filed under its token and the present's era whoever leads,
+    /// and valued with the present's Culture fact, so a kit accessory proves
+    /// against today's present row. Null without a present.
+    /// </summary>
+    private static LookSource KitOwner(LookSource present) =>
+        present == null ? null : new LookSource
+        {
+            NationId = Present.NeutralNationId,
+            EraId = present.EraId,
+            PlaceId = Present.NeutralNationId + "_" + present.EraId,
+            CultureValue = present.CultureValue
+        };
+
+    /// <summary>
     /// How the traveller looks: a premade's whole picture; otherwise the
     /// claimed place's layers (Looks.Compose on the look stream), with one
-    /// garment of the true home for a dress tell. A 2150 citizen wears the
-    /// destination's dress (traveller types C1) with their family country's
-    /// skin and hair weights (<paramref name="family"/>: the Future place
-    /// whose list gave the name), their age counted from the present's year.
-    /// A missing place draws the minimal look and an unknown gender is drawn
-    /// on the look stream, each with a warning.
+    /// garment of the true home for a dress tell, or the costume error's
+    /// source: its signature item, or its whole look for the present's
+    /// clothes. A 2150 citizen wears the destination's dress (traveller types
+    /// C1) with their family country's skin and hair weights
+    /// (<paramref name="family"/>: the Future place whose list gave the name),
+    /// their age counted from the present's year. A missing place draws the
+    /// minimal look and an unknown gender is drawn on the look stream, each
+    /// with a warning.
     /// </summary>
-    private TravellerLook ComposeLook(CaseInstance inst, NationEraProfileSO place, LiePlan lie, LegendarySO legendary, NationEraProfileSO family, int caseIndex1Based)
+    private TravellerLook ComposeLook(CaseInstance inst, NationEraProfileSO place, LiePlan lie, LegendarySO legendary, NationEraProfileSO family,
+                                      (LookSource source, bool whole) costume, int caseIndex1Based)
     {
         if (legendary != null)
             return Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules);
@@ -494,12 +615,12 @@ public sealed class CaseFactory
         if (inst.gender == TravellerGender.Unknown)
             Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: '{inst.visitorGivenName}' has no known gender (not on the place's name lists); the look draws one. Check the place's names.");
 
-        LookSource leak = lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance && inst.trueHome != null
+        LookSource leak = costume.source ?? (lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance && inst.trueHome != null
             ? SourceOf(inst.trueHome)
-            : null;
+            : null);
         int year = family != null && _present != null ? _present.Year : place.year;
         LookWeights weights = family != null ? family.looks : place.looks;
-        return Looks.Compose(SourceOf(place), leak, inst.gender, inst.trueBirthDate, year, weights, _lib.LookRules, _looksRng);
+        return Looks.Compose(SourceOf(place), leak, inst.gender, inst.trueBirthDate, year, weights, _lib.LookRules, _looksRng, costume.whole);
     }
 
     /// <summary>A place as the look rules see it: its ids, wardrobe and today's Culture fact.</summary>

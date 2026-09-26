@@ -32,6 +32,18 @@ public class ShiftLedgerTests
         Assert.AreEqual(1, ledger.UnprovenDenialCount);
     }
 
+    /// <summary>The citation's mistake key (the plan's phase 7 generalises the fault reasons; phase 10 brings the first, the costume error's panic).</summary>
+    [TestCase(true, false, "", "citation.acceptedWrong")]
+    [TestCase(true, false, null, "citation.acceptedWrong")]
+    [TestCase(true, false, "panic", "citation.acceptedWrong.panic")]
+    [TestCase(false, false, "panic", "citation.deniedWrong")]
+    [TestCase(false, true, "panic", "citation.unproven")]
+    [TestCase(false, true, "", "citation.unproven")]
+    public void MistakeKey_ByTheDecisionAndTheFaultReason(bool accepted, bool unproven, string reason, string expected)
+    {
+        Assert.AreEqual(expected, new CaseVerdict { accepted = accepted, unprovenDenial = unproven, faultReason = reason }.MistakeKey);
+    }
+
     [Test]
     public void EmptyLedger_IsAllZeroes()
     {
@@ -42,5 +54,19 @@ public class ShiftLedgerTests
         Assert.AreEqual(0, ledger.CorrectCount);
         Assert.AreEqual(0, ledger.WrongCount);
         Assert.AreEqual(0, ledger.UnprovenDenialCount);
+        Assert.AreEqual(0, ledger.debtInstalment);
+        Assert.AreEqual(Account.Unknown, ledger.debtOwed, "no debt known before the shift's end");
+    }
+
+    [Test]
+    public void NetMoney_IsPayLessPenaltiesLessTheDebtInstalment()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(Verdict(true, pay: 220));
+        ledger.verdicts.Add(Verdict(false, penalty: 15));
+        ledger.debtInstalment = 55;
+
+        Assert.AreEqual(220, ledger.TotalPay, "the pay stays the whole pay (the statement's WAGES)");
+        Assert.AreEqual(150, ledger.NetMoney, "the wallet's change: 220 - 15 - 55");
     }
 }

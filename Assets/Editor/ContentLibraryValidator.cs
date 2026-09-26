@@ -129,6 +129,9 @@ public static partial class ContentLibraryValidator
         // --- The agency block (redesign phase 2) ---
         issues += CheckAgency(lib);
 
+        // --- The morning paper's debt lines (redesign phase 13; ContentLibraryValidator.News.cs) ---
+        issues += CheckNews(lib);
+
         // --- The PC block: the Internet's sites, pages and people (ContentLibraryValidator.Pc.cs) ---
         issues += CheckPc(lib);
 
@@ -973,7 +976,7 @@ public static partial class ContentLibraryValidator
 
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
             {
-                if (rule != null && today.All(p => rule.Allows(p.nation, p.era)))
+                if (rule != null && rule.IsClosure && today.All(p => rule.Allows(p.nation, p.era)))
                 {
                     Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' uses rule '{rule.name}', which forbids none of the day's places (no traveller can break it).", plan);
                     issues++;
@@ -1007,7 +1010,7 @@ public static partial class ContentLibraryValidator
                     issues++;
                 }
 
-                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Count > 0 && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
+                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && r.IsClosure) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
                 {
                     Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.", plan);
                     issues++;
@@ -1238,10 +1241,11 @@ public static partial class ContentLibraryValidator
 
     /// <summary>
     /// Logs (never counted as an issue) how many character art keys have final
-    /// art at CharacterArt.AssetFolder: the bases, every place's garments and
-    /// every premade's expressions, each distinct name once (a drawing places
-    /// share through an item's artNation counts once), with the first 20
-    /// missing names (the rest are drawn as placeholders at runtime).
+    /// art at CharacterArt.AssetFolder: the bases, every place's garments, the
+    /// present's clothes and 2150 accessory kit, and every premade's
+    /// expressions, each distinct name once (a drawing places share through an
+    /// item's artNation counts once), with the first 20 missing names (the rest
+    /// are drawn as placeholders at runtime).
     /// </summary>
     private static void ReportCharacterArt(ContentLibrarySO lib)
     {
@@ -1249,6 +1253,8 @@ public static partial class ContentLibraryValidator
         foreach (NationEraProfileSO place in lib.Profiles)
             if (place != null && place.nation != null && place.era != null)
                 keys.AddRange(LookKeys.Required(place.nation.id, place.era.id, place.wardrobe));
+        if (lib.FutureEra != null)
+            keys.AddRange(LookKeys.PresentRequired(Present.NeutralNationId, lib.FutureEra.id, lib.PresentLook));
         foreach (LegendarySO premade in lib.Legendaries)
             if (premade != null)
                 keys.AddRange(LookKeys.PremadeSet(premade.id));
@@ -1278,6 +1284,14 @@ public static partial class ContentLibraryValidator
             Error("Look rules have no grey age (greyFromAge must be above 0)");
         if (string.IsNullOrWhiteSpace(rules.wholeFigureLabel))
             Error("Look rules have no whole-figure label (a premade's garment)");
+        CostumeErrorWeights w = rules.costumeErrors ?? new CostumeErrorWeights();
+        if (w.otherPlace + w.presentClothes + w.presentAccessory <= 0f)
+            Error("Look rules have no costume error weights (looks.costumeErrors), so a rolled costume error can never show");
+        PresentLook present = lib.PresentLook;
+        if (present.wardrobe == null || !present.wardrobe.male.Signature.IsPresent || !present.wardrobe.female.Signature.IsPresent)
+            Error("The present has no clothes (present.wardrobe), so no 2150 citizen can wear them by mistake");
+        if (present.Kit(TravellerGender.Male).Count == 0 || present.Kit(TravellerGender.Female).Count == 0)
+            Error("The present's 2150 accessory kit (present.kit) is missing a gender");
         return issues;
     }
 

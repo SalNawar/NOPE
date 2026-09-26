@@ -10,10 +10,11 @@ using System.Linq;
 /// </summary>
 public sealed class PresentPlace
 {
-    /// <summary>A present of <paramref name="nationId"/> in <paramref name="eraId"/> with <paramref name="facts"/> (copied, in order; blank values skipped).</summary>
+    /// <summary>A present of <paramref name="nationId"/> in <paramref name="eraId"/> with <paramref name="facts"/> (copied, in order; blank values skipped) and its clothes (<paramref name="wardrobe"/>; null for none).</summary>
     public PresentPlace(string nationId, string eraId, string label, int year, int birthYearMin, int birthYearMax,
-                        IEnumerable<KeyValuePair<ClueCategory, string>> facts)
+                        IEnumerable<KeyValuePair<ClueCategory, string>> facts, PlaceWardrobe wardrobe = null)
     {
+        Wardrobe = wardrobe;
         NationId = nationId;
         EraId = eraId;
         Label = label;
@@ -45,6 +46,9 @@ public sealed class PresentPlace
 
     /// <summary>Its facts, one per category, in authored order.</summary>
     public IReadOnlyList<KeyValuePair<ClueCategory, string>> Facts { get; }
+
+    /// <summary>What its people wear (a leader's Future outfit, or the neutral present's clothes): the 2150 clothes of a costume error; null when none is authored.</summary>
+    public PlaceWardrobe Wardrobe { get; }
 
     /// <summary>True when no nation leads, so this is the authored neutral present.</summary>
     public bool IsNeutral => NationId == Present.NeutralNationId;

@@ -117,4 +117,26 @@ public static class Seeds
     /// who travels or who lies.
     /// </summary>
     public static int ForAccount(int caseSeed) => Mix(caseSeed, AccountSalt);
+
+    /// <summary>Salt for the run's debt-news order ("DEBT").</summary>
+    public const int DebtNewsSalt = 0x44454254;
+
+    /// <summary>
+    /// Seed for the order in which the morning paper runs through the debt
+    /// lines (redesign phase 13; DebtNews.Line): one stream for the whole run,
+    /// apart from every day's and traveller's, so the paper never shifts who
+    /// travels.
+    /// </summary>
+    public static int ForDebtNews(int runSeed) => Mix(runSeed, DebtNewsSalt);
+    /// <summary>Salt for a traveller's fault stream ("FALT").</summary>
+    public const int FaultSalt = 0x46414C54;
+
+    /// <summary>
+    /// Seed for one traveller's fault draws (traveller types L5 and §6.4): the
+    /// costume roll, its variant and its source (CostumeErrors.Plan); the
+    /// directive violation roll joins it before the costume roll (plan phase
+    /// 9). Apart from the case, lie and look streams, so a fault never changes
+    /// who travels, who lies or how they look.
+    /// </summary>
+    public static int ForFaults(int caseSeed) => Mix(caseSeed, FaultSalt);
 }

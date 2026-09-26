@@ -463,6 +463,101 @@ public class LooksTests
         }
     }
 
+    // -----------------------------
+    // Costume errors (traveller types C2): the present's whole look, a kit accessory
+    // -----------------------------
+
+    /// <summary>The present's clothes (2150): a panelled coat-dress (the signature), a short crop and a trimmed beard for men; the coat-dress and a low bun for women.</summary>
+    private static PlaceWardrobe PresentClothes() => new PlaceWardrobe
+    {
+        male = Look(LookSlot.Outfit, Item("panelled coat-dress"), Item("short textured crop"), Item("short trimmed beard")),
+        female = Look(LookSlot.Outfit, Item("panelled coat-dress"), Item("sleek low bun"))
+    };
+
+    private static LookSource Present() => Source("neutral", "future", PresentClothes());
+
+    /// <summary>A kit accessory: the wrist comm, drawn under its own variant.</summary>
+    private static LookItem Comm(bool leakable = true) => new LookItem { label = "wrist comm", leakable = leakable, artVariant = "comm" };
+
+    private static TravellerLook Whole(TravellerGender g, IRandomSource rng = null) =>
+        Looks.Compose(Claim(), Present(), g, Born25, Year, Weights(), Rules(), rng ?? Draws(), leakWhole: true);
+
+    [Test]
+    public void TheWholeLook_WearsOnlyTheLeaksItems_AndFlagsEveryGarment()
+    {
+        TravellerLook look = Whole(TravellerGender.Male);
+        CollectionAssert.AreEqual(new[] { "body_m_skin1", "outfit_m_neutral_future", "head_m_skin1_facea", "facialhair_m_neutral_future_brown", "hair_m_neutral_future_brown" },
+                                  Names(look), "no top hat or watch chain: the present wears none");
+        CollectionAssert.AreEqual(new[] { "panelled coat-dress", "short textured crop", "short trimmed beard" }, look.Garments.Select(g => g.Label).ToArray());
+        Assert.IsTrue(look.Garments.All(g => g.IsTell && g.Value == "panelled coat-dress"), "every garment is a tell, valued with the present's Costume Guide row");
+        Assert.AreEqual("m skin1 face-a brown; dress tell: Outfit 'panelled coat-dress'; dress tell: Hair 'short textured crop'; dress tell: FacialHair 'short trimmed beard'", look.Describe());
+    }
+
+    [Test]
+    public void AKitAccessory_LeaksLikeASignatureItem_OverAnOtherwiseRightCostume()
+    {
+        LookSource kit = Looks.KitSource(Present(), Comm());
+        Assert.IsTrue(Looks.CanLeak(Claim(), kit, TravellerGender.Male, Rules()));
+        Assert.IsTrue(Looks.CanLeak(Claim(), kit, TravellerGender.Female, Rules()), "the source serves the gender the kit item was taken for");
+
+        TravellerLook look = Compose(TravellerGender.Male, kit);
+        Garment tell = look.Garments.Single(g => g.IsTell);
+        Assert.AreEqual(LookSlot.Accessory, tell.Slot);
+        Assert.AreEqual("wrist comm", tell.Label);
+        Assert.AreEqual("panelled coat-dress", tell.Value, "valued with the present's row, so the origin proof names 2150");
+        Assert.AreEqual("accessory_m_neutral_future_comm", look.PartOn(LookLayer.Accessory).Value.Key.Name);
+        Assert.AreEqual("headwear_m_britain_industrial", look.PartOn(LookLayer.Headwear).Value.Key.Name, "the rest is the claim's");
+        Assert.AreEqual(4, look.Garments.Count(g => !g.IsTell));
+    }
+
+    [Test]
+    public void AKitAccessory_KeepsTheLeakRules()
+    {
+        PlaceWardrobe cloak = London();
+        cloak.male.outfit = Item("great cloak", false, false, false, LookSlot.Accessory);
+        Assert.IsFalse(Looks.CanLeak(Claim(cloak), Looks.KitSource(Present(), Comm()), TravellerGender.Male, Rules()), "covered by the claim's cloak");
+        Assert.IsFalse(Looks.CanLeak(Claim(), Looks.KitSource(Present(), Comm(false)), TravellerGender.Male, Rules()), "not leakable");
+        Assert.IsFalse(Looks.CanLeak(Claim(), Looks.KitSource(Present(), Comm()), TravellerGender.Unknown, Rules()), "an unknown gender");
+
+        PlaceWardrobe comm = London();
+        comm.male.accessory = Item("Wrist Comm");
+        Assert.IsFalse(Looks.CanLeak(Claim(comm), Looks.KitSource(Present(), Comm()), TravellerGender.Male, Rules()), "labelled like the claim's own accessory");
+    }
+
+    [Test]
+    public void ACostumeError_CostsNoLookDraw()
+    {
+        foreach (TravellerLook look in new[] { Compose(TravellerGender.Male, Home(), rng: Draws()), Whole(TravellerGender.Male), Compose(TravellerGender.Male, Looks.KitSource(Present(), Comm())) })
+        {
+            Assert.AreEqual(1, look.SkinTone);
+            Assert.AreEqual("a", look.Face);
+            Assert.AreEqual("brown", look.HairColour);
+        }
+
+        var rng = Draws();
+        Whole(TravellerGender.Female, rng);
+        Assert.IsTrue(rng.Done, "the whole look draws the same three: skin, face, hair");
+        for (int seed = 0; seed < 50; seed++)
+        {
+            TravellerLook honest = Compose(TravellerGender.Unknown, rng: new SeededRandom(seed));
+            TravellerLook whole = Whole(TravellerGender.Unknown, new SeededRandom(seed));
+            Assert.AreEqual((honest.Gender, honest.SkinTone, honest.Face, honest.HairColour), (whole.Gender, whole.SkinTone, whole.Face, whole.HairColour), $"seed {seed}");
+        }
+    }
+
+    [Test]
+    public void KitSource_IsThePresent_WithTheAccessoryAsItsSignature()
+    {
+        LookSource kit = Looks.KitSource(Present(), Comm());
+        Assert.AreEqual(("neutral", "future", "neutral_future", "panelled coat-dress"), (kit.NationId, kit.EraId, kit.PlaceId, kit.CultureValue));
+        foreach (GenderLook look in new[] { kit.Wardrobe.male, kit.Wardrobe.female })
+        {
+            Assert.AreEqual(LookSlot.Accessory, look.signature);
+            Assert.AreEqual("wrist comm", look.Signature.label);
+            Assert.IsFalse(look.outfit.IsPresent);
+        }
+    }
+
     [Test]
     public void Describe_NamesTheDrawsAndTheTell()
     {

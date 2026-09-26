@@ -64,6 +64,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: Han topknot
         leakable: 0
@@ -71,6 +72,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: moustache and goatee
         leakable: 0
@@ -78,6 +80,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: jieze cap
         leakable: 1
@@ -85,6 +88,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: 
         leakable: 0
@@ -92,6 +96,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
     female:
       signature: 4
       outfit:
@@ -101,6 +106,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: low looped bun
         leakable: 0
@@ -108,6 +114,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -115,6 +122,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: 
         leakable: 0
@@ -122,6 +130,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: bi-disc pendant
         leakable: 1
@@ -129,6 +138,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
   looks:
     skin:
     - 1

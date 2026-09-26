@@ -422,6 +422,25 @@ public class DiscrepancyLogTests
         Assert.AreEqual("britain — industrial", d.ReportOther);
     }
 
+    /// <summary>
+    /// A costume error (traveller types C2, C3): a 2150 garment is valued with
+    /// the present's Costume Guide row, so against the claimed row it is DRESS
+    /// INCORRECT and against the present's row it names 2150.
+    /// </summary>
+    [Test]
+    public void A2150Garment_VsThePresentsRow_Names2150_AndVsTheClaimsRow_IsAMismatch()
+    {
+        CompareEvidence present = CompareEvidence.ForReferenceEntry(ClueCategory.Culture, "panelled coat-dress", "neutral", "future", "Temporal Customs Zone (2150)");
+        Discrepancy origin = DiscrepancyLog.Prove(Wears("panelled coat-dress"), present, ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual(DiscrepancyProof.ForeignOrigin, origin.provedBy);
+        Assert.AreEqual("Temporal Customs Zone (2150)", origin.ReportOther);
+        Assert.AreEqual("deviation.foreignOrigin.worn", origin.ReportKey);
+
+        Discrepancy mismatch = DiscrepancyLog.Prove(Wears("panelled coat-dress"), Entry("norvik", "medieval", "chonmage / shimada", ClueCategory.Culture), ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual(DiscrepancyProof.ClaimMismatch, mismatch.provedBy);
+        Assert.AreEqual("deviation.claimMismatch.worn", mismatch.ReportKey);
+    }
+
     [Test]
     public void HonestGarment_NeverRegisters_AndGarmentsProveNothingAgainstStatements()
     {

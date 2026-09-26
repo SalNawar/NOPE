@@ -59,9 +59,9 @@ Everything is driven by one declarative map, `Assets/Scripts/Domain/ContentSheet
 
 ## The sheets (today)
 
-The README sheet of any export is the live list, with every column's type, default and rules. Today there are 78 sheets. The story tables:
+The README sheet of any export is the live list, with every column's type, default and rules. Today there are 80 sheets. The story tables:
 
-- **Characters and stories:** `premades` (+ `premadeImpacts`); `places` (+ `placeFacts`, `placeSmallTalk`, `wardrobeSets`, `wardrobe`, `placeHair`); `present` (the neutral present, 2150: + `presentFacts`, `presentWardrobeSets`, `presentWardrobe`); `countries`; `eras` (+ `eraSmallTalk`).
+- **Characters and stories:** `premades` (+ `premadeImpacts`); `places` (+ `placeFacts`, `placeSmallTalk`, `wardrobeSets`, `wardrobe`, `placeHair`); `present` (the neutral present, 2150: + `presentFacts`; its clothes, `presentWardrobeSets`, `presentWardrobe`, and its 2150 accessory kit, `presentKit`, for costume errors); `countries`; `eras` (+ `eraSmallTalk`).
 - **Dialogue and interactions:** `dialogs`, `dialogConditions`, `dialogNodes`, `dialogLines`, `dialogChoices`, `choiceLines`; `questions`, `questionConditions`, `questionOverrides`; `interview`, `claims` (the claim per traveller kind), `interviewRequests`.
 - **The days and history:** `days`, `dayKinds` (each day's traveller mix), `dayEras`, `dayForced`, `rules`; `history`, `historyRules`, `historyConditions`, `historyEdits`.
 - **The PC's Internet:** `pc` (whether the premades get Lineage Archive cards), `pcSites`, `pcPages` (+ `pcPageBlocks`: a Static site's authored pages), `pcPeople` and `pcRelations` (the Lineage Archive's people of the past), and Mail's authored messages, `pcMail` (+ `pcMailBody`: each message's paragraphs).

@@ -42,9 +42,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
   tellCount: 1
   tellChannels: 000000000100000002000000
+  costumeErrorChance: 0.1
   activeTravelRules:
   - {fileID: 11400000, guid: 5bb4a0a94cee20740a3b154dcbe5f43d, type: 2}
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []

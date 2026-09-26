@@ -25,4 +25,7 @@ public sealed class PresentContent
 
     /// <summary>Its facts, one per category (Currency, Language, Technology, Geography, Politics, and the derived Culture).</summary>
     public List<ProfileFact> facts = new();
+
+    /// <summary>What it wears: its clothes (the source of its Culture fact) and its 2150 accessory kit, for costume errors (traveller types C2).</summary>
+    public PresentLook look = new();
 }

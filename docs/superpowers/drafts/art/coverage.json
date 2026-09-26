@@ -1,12 +1,12 @@
 {
  "schema": "timesorter.character-art-coverage/1",
- "generated": "2026-09-25",
+ "generated": "2026-09-26",
  "sources": {
   "grammar": "piece-4 spec section 2.3 (LookKeys) + piece-5 R18 (artNation 'neutral' for Future hair and facial hair)",
   "wardrobe": "costume_research.json + brief_review.json (68 fixes, 22 issues) -> tools/wardrobe_v2.json",
   "premades": "piece4_decisions.md Amendment A1 (cast after the review of brief v2: Cecilia Gallerani replaces Alessandra Strozzi)",
   "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E",
-  "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'"
+  "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'; v2.3 (2026-09-26): the present's clothes (the neutral Future outfits become keys) and the 2150 accessory kit (Batch 12); see the brief's 'What changed in v2.3'"
  },
  "assetFolder": "Assets/Art/Characters/Resources/Characters",
  "extension": ".png",
@@ -77,7 +77,7 @@
  "grammar": {
   "body": "body_{g}_skin{N}",
   "head": "head_{g}_skin{N}_face{v}",
-  "garment": "{layer}_{g}_{nation}_{era}[_{colour}]  (colour on hair and hairback unless the hair is a wig; always on facialhair)",
+  "garment": "{layer}_{g}_{nation}_{era}[_{variant}][_{colour}]  (variant on the 2150 accessory kit's items; colour on hair and hairback unless the hair is a wig; always on facialhair)",
   "premade": "premade_{id}_{expression}",
   "tokens": {
    "g": [
@@ -136,6 +136,12 @@
     "happy",
     "angry",
     "worried"
+   ],
+   "variant": [
+    "lenses",
+    "earpiece",
+    "badge",
+    "display"
    ]
   },
   "reserved": "an outfit variant suffix _v{N} (not used yet)"
@@ -144,9 +150,10 @@
   "bases": 50,
   "garments": 759,
   "future": 31,
+  "present": 10,
   "premades": 40,
-  "total": 880,
-  "rawImages": 406
+  "total": 890,
+  "rawImages": 414
  },
  "required": {
   "bases": [
@@ -1285,6 +1292,22 @@
    "facialhair_m_neutral_future_red",
    "facialhair_m_neutral_future_grey"
   ],
+  "present": {
+   "clothes": [
+    "outfit_m_neutral_future",
+    "outfit_f_neutral_future"
+   ],
+   "kit": [
+    "accessory_m_neutral_future_lenses",
+    "accessory_m_neutral_future_earpiece",
+    "accessory_m_neutral_future_badge",
+    "accessory_m_neutral_future_display",
+    "accessory_f_neutral_future_lenses",
+    "accessory_f_neutral_future_earpiece",
+    "accessory_f_neutral_future_badge",
+    "accessory_f_neutral_future_display"
+   ]
+  },
   "premades": {
    "senenmut": [
     "premade_senenmut_neutral",
@@ -1348,6 +1371,18 @@
    ]
   }
  },
+ "presentKit": {
+  "labels": {
+   "lenses": "smart lenses",
+   "earpiece": "comm earpiece",
+   "badge": "transit badge",
+   "display": "shoulder display"
+  },
+  "slot": "Accessory",
+  "leakable": true,
+  "artNation": "neutral",
+  "note": "one item slips onto an otherwise right costume (a costume error); world_source.json present.kit lists them per gender"
+ },
  "requiredFlat": [
   "accessory_f_britain_ancient",
   "accessory_f_britain_earlymodern",
@@ -1380,6 +1415,10 @@
   "accessory_f_italy_modern",
   "accessory_f_japan_ancient",
   "accessory_f_japan_modern",
+  "accessory_f_neutral_future_badge",
+  "accessory_f_neutral_future_display",
+  "accessory_f_neutral_future_earpiece",
+  "accessory_f_neutral_future_lenses",
   "accessory_m_britain_ancient",
   "accessory_m_britain_industrial",
   "accessory_m_britain_medieval",
@@ -1407,6 +1446,10 @@
   "accessory_m_italy_modern",
   "accessory_m_japan_ancient",
   "accessory_m_japan_modern",
+  "accessory_m_neutral_future_badge",
+  "accessory_m_neutral_future_display",
+  "accessory_m_neutral_future_earpiece",
+  "accessory_m_neutral_future_lenses",
   "body_f_skin1",
   "body_f_skin2",
   "body_f_skin3",
@@ -2141,6 +2184,7 @@
   "outfit_f_japan_industrial",
   "outfit_f_japan_medieval",
   "outfit_f_japan_modern",
+  "outfit_f_neutral_future",
   "outfit_m_britain_ancient",
   "outfit_m_britain_earlymodern",
   "outfit_m_britain_future",
@@ -2189,6 +2233,7 @@
   "outfit_m_japan_industrial",
   "outfit_m_japan_medieval",
   "outfit_m_japan_modern",
+  "outfit_m_neutral_future",
   "premade_arib_angry",
   "premade_arib_happy",
   "premade_arib_neutral",
@@ -7942,12 +7987,16 @@
   {
    "batch": 11,
    "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_m_neutral_future.png",
-   "produces": []
+   "produces": [
+    "outfit_m_neutral_future"
+   ]
   },
   {
    "batch": 11,
    "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch11-future/outfit_f_neutral_future.png",
-   "produces": []
+   "produces": [
+    "outfit_f_neutral_future"
+   ]
   },
   {
    "batch": 11,
@@ -8093,6 +8142,62 @@
    "produces": [
     "outfit_f_germany_future"
    ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_m_neutral_future_lenses.png",
+   "produces": [
+    "accessory_m_neutral_future_lenses"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_m_neutral_future_earpiece.png",
+   "produces": [
+    "accessory_m_neutral_future_earpiece"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_m_neutral_future_badge.png",
+   "produces": [
+    "accessory_m_neutral_future_badge"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_m_neutral_future_display.png",
+   "produces": [
+    "accessory_m_neutral_future_display"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_f_neutral_future_lenses.png",
+   "produces": [
+    "accessory_f_neutral_future_lenses"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_f_neutral_future_earpiece.png",
+   "produces": [
+    "accessory_f_neutral_future_earpiece"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_f_neutral_future_badge.png",
+   "produces": [
+    "accessory_f_neutral_future_badge"
+   ]
+  },
+  {
+   "batch": 12,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch12-2150-kit/accessory_f_neutral_future_display.png",
+   "produces": [
+    "accessory_f_neutral_future_display"
+   ]
   }
  ],
  "notes": [
@@ -8100,7 +8205,7 @@
   "hairback keys exist only for hair items flagged back=true (proposed here; one test: hair that shows beside the neck behind the shoulders in front view); change the flag and the list changes.",
   "wardrobeFlags: 'labels' holds every present item's short label; the signature item is leakable; 'covers' is the headwear's covers list (['Hair'] when it hides all the hair); Future places share hair and facial hair through artNation 'neutral' and never leak (signature Outfit).",
   "Confusable pairs (hand-authored and generated) are in tools/wardrobe_v2.json 'confusable' and 'confusableHidden'.",
-  "outfit_{g}_neutral_future.png raw files are working references with no game key.",
+  "outfit_{g}_neutral_future is the present's clothes (since v2.3): a 2150 citizen who forgot their costume wears them whole, with the neutral Future hair and beard.",
   "UI art (the culture wallpapers; posters are deferred) is listed in officeArt, not in requiredFlat: it follows the office path convention (piece-6 R11). officeArt also names the 2D layers over the office and the art side's scanner, which replace placeholders in place."
  ],
  "officeArt": {
