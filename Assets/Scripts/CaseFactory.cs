@@ -156,6 +156,9 @@ public sealed class CaseFactory
         // which also keeps them out of the day's random roll.
         _roster = new NameRoster();
         _agencyNumbers = new HashSet<string>();
+        string clerkId = _lib.Agency.clerk != null ? _lib.Agency.clerk.citizenId : null;
+        if (!string.IsNullOrWhiteSpace(clerkId))
+            _agencyNumbers.Add(clerkId.Trim()); // no traveller is ever given the clerk's own Citizen ID
         _today = AgencyCalendar.TryToday(_lib.Agency.firstDate, state.day, out System.DateTime today) ? today : (System.DateTime?)null;
         if (_today == null)
             Debug.LogError($"[CaseFactory] Day {state.day}: the agency calendar cannot count from agency.firstDate '{_lib.Agency.firstDate}', so the displaced's numbers and dates print placeholders. Run Tools > TimeDesk > Generate World.");

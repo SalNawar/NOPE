@@ -17,25 +17,118 @@ MonoBehaviour:
   fieldSpecs:
   - category: 9
     label: Citizen ID
-    page: 0
   - category: 15
     label: Transponder
-    page: 0
   - category: 16
     label: Transponder Class
-    page: 0
   - category: 4
     label: Currency Carried
-    page: 0
   - category: 3
     label: Declared Effects
-    page: 0
   - category: 12
     label: Departure
-    page: 0
   handOver: 0
   showsPhoto: 0
   askableBy:
   - 0
   - 1
   - 2
+  form:
+    formNumber: 
+    title: 
+    fixedPage: 1
+    blocks:
+    - kind: 0
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 1
+      text: 1  CITIZEN
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 2
+      text: 
+      cells:
+      - field: 0
+        slot: 
+        caption: 
+        span: 6
+        rows: 1
+      - field: 5
+        slot: 
+        caption: 
+        span: 6
+        rows: 1
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 1
+      text: 2  TRANSPONDER
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 2
+      text: 
+      cells:
+      - field: 1
+        slot: 
+        caption: 
+        span: 8
+        rows: 1
+      - field: 2
+        slot: 
+        caption: 
+        span: 4
+        rows: 1
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 1
+      text: 3  DECLARED EFFECTS
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 2
+      text: 
+      cells:
+      - field: 3
+        slot: 
+        caption: 
+        span: 6
+        rows: 1
+      - field: 4
+        slot: 
+        caption: 
+        span: 6
+        rows: 1
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 12
+      text: Temporal Customs Act of 2139. Any alteration voids this document.
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 

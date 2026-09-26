@@ -83,6 +83,9 @@ public sealed class StatusRanges
 [Serializable]
 public sealed class AccountRanges
 {
+    /// <summary>The most debt an account may hold, so the widest debt fits its box on a form (FieldLengths.Longest; "9,999,999 cr").</summary>
+    public const int MaxDebt = 9_999_999;
+
     /// <summary>The fewest days after today an honest paper is valid (3).</summary>
     public int validDaysMin;
 
@@ -101,10 +104,11 @@ public sealed class AccountRanges
     /// <summary>
     /// What Generate World and the validator refuse: Valid Until and trip
     /// windows AgencyNumbers cannot draw from; a status with no ranges, or
-    /// with a debt or trip range out of order; and, over
-    /// <paramref name="transponders"/>, a model id used twice, a blank model
-    /// or prefix, a weight of 0 or less, and a class some status travels on
-    /// with no model. Empty when sound.
+    /// with a debt or trip range out of order or a debt above
+    /// <see cref="MaxDebt"/>; and, over <paramref name="transponders"/>, a
+    /// model id used twice, a blank model or prefix, a printed name wider than
+    /// a book row (FactTable.MaxValueLength, a form's box), a weight of 0 or
+    /// less, and a class some status travels on with no model. Empty when sound.
     /// </summary>
     public List<string> Problems(IReadOnlyList<TransponderModel> transponders)
     {
@@ -124,6 +128,8 @@ public sealed class AccountRanges
             }
             if (r.debtMin < 0 || r.debtMin > r.debtMax)
                 problems.Add($"agency.accounts.statuses {status}: the debt range {r.debtMin}-{r.debtMax} must run from 0 or more upwards.");
+            if (r.debtMax > MaxDebt)
+                problems.Add($"agency.accounts.statuses {status}: the debt {r.debtMax} is above {AccountMaker.Credits(MaxDebt)}, the widest a form prints.");
             if (r.tripsMin < 0 || r.tripsMin > r.tripsMax)
                 problems.Add($"agency.accounts.statuses {status}: the trips range {r.tripsMin}-{r.tripsMax} must run from 0 or more upwards.");
         }
@@ -139,6 +145,9 @@ public sealed class AccountRanges
                 problems.Add($"agency.transponders '{t.id}': the model name is blank.");
             if (string.IsNullOrWhiteSpace(t.prefix))
                 problems.Add($"agency.transponders '{t.id}': the serial prefix is blank.");
+            string widest = AccountMaker.TransponderName(t.model, AccountMaker.Serial(t.prefix, new TopDraws()));
+            if (widest.Length > FactTable.MaxValueLength)
+                problems.Add($"agency.transponders '{t.id}': '{widest}' is {widest.Length} characters; a form's box and a book row hold {FactTable.MaxValueLength}.");
             if (t.weight <= 0f)
                 problems.Add($"agency.transponders '{t.id}': the weight {t.weight} must be positive.");
         }
@@ -149,6 +158,16 @@ public sealed class AccountRanges
 
         return problems;
     }
+}
+
+/// <summary>A source that draws the top of every range: a maker's widest value.</summary>
+internal sealed class TopDraws : IRandomSource
+{
+    /// <inheritdoc />
+    public int Range(int minInclusive, int maxExclusive) => maxExclusive - 1;
+
+    /// <inheritdoc />
+    public float Value() => 0.999f;
 }
 
 /// <summary>One past trip on an account's Travel history ("12 Aug 2149, Periclean Athens (Ancient), returned").</summary>
@@ -345,6 +364,7 @@ public static class AccountMaker
 /// compare pick); the rest (standing, lineage, the forms not on file, the
 /// departure date, past trips, the note) is shown only. Labels and fixed
 /// words come through <c>text</c> (UI string keys), values from the account.
+/// The clerk's own account is a record too, with no evidence row.
 /// </summary>
 public static class AccountRecords
 {
@@ -395,5 +415,38 @@ public static class AccountRecords
             new RecordGroup(text("records.group.travel"), travel),
             new RecordGroup(string.Empty, new[] { new RecordRow(text("records.row.note"), text("records.note.none")) })
         });
+    }
+
+    /// <summary>
+    /// The clerk's own account as a record (traveller types R1, D1, §4.4):
+    /// the rows the Citizen Account app shows (Account.ExtractRows over the
+    /// clerk's IClerkAccountSource, one source), grouped as there, found by
+    /// the clerk's Citizen ID (773-2840-19) or name. No row carries a
+    /// category: the clerk is nobody's case, so nothing on it is a compare
+    /// pick. Null when no name is authored.
+    /// </summary>
+    public static CitizenRecord Clerk(ClerkContent profile, IEnumerable<AccountRow> rows)
+    {
+        if (profile == null || string.IsNullOrWhiteSpace(profile.name))
+            return null;
+
+        var groups = new List<RecordGroup>();
+        string title = null;
+        var current = new List<RecordRow>();
+        foreach (AccountRow row in rows ?? Enumerable.Empty<AccountRow>())
+        {
+            string group = row.Group ?? string.Empty;
+            if (title != null && group != title)
+            {
+                groups.Add(new RecordGroup(title, current));
+                current = new List<RecordRow>();
+            }
+            title = group;
+            current.Add(new RecordRow(row.Label, row.Value));
+        }
+        if (title != null)
+            groups.Add(new RecordGroup(title, current));
+
+        return new CitizenRecord(profile.name, profile.citizenId, groups);
     }
 }

@@ -272,6 +272,18 @@ public class AccountMakerTests
     }
 
     [Test]
+    public void Problems_ADebtOrATransponderNameTooWideToPrint()
+    {
+        AccountRanges r = Ranges();
+        r.statuses[2].debtMax = AccountRanges.MaxDebt + 10;
+        var models = Transponders();
+        models.Add(new TransponderModel { id = "long", transponderClass = TransponderClass.Economy, model = "Extraordinarily Long Unit", prefix = "XL", weight = 1f });
+        List<string> problems = r.Problems(models);
+        Assert.IsTrue(problems.Any(p => p.Contains("Eligible") && p.Contains("9,999,999")), string.Join(" | ", problems));
+        Assert.IsTrue(problems.Any(p => p.Contains("'long'") && p.Contains("28")), string.Join(" | ", problems));
+    }
+
+    [Test]
     public void Problems_AClassWithNoModel()
     {
         var premiumOnly = Transponders().Where(t => t.transponderClass == TransponderClass.Premium).ToList();
@@ -340,6 +352,40 @@ public class AccountMakerTests
         Assert.AreEqual("<records.row.trips>", trips.Label);
         Assert.AreEqual("<records.none>", trips.Value);
         Assert.IsFalse(trips.IsEvidence);
+    }
+
+    [Test]
+    public void Clerk_IsFoundByCitizenIdAndName_AndNothingOnItIsEvidence()
+    {
+        var rows = new[]
+        {
+            new AccountRow("RECORDS", "Name", "Theo Marlow"),
+            new AccountRow("RECORDS", "Citizen ID", "773-2840-19"),
+            new AccountRow("RECORDS", "Debt", "–"),
+            new AccountRow("FORMS ON FILE", "Employment", "Temporal Customs · Desk 3"),
+            new AccountRow("TRAVEL", "Booked departure", "None"),
+            new AccountRow(string.Empty, "Note", "No remarks on file.")
+        };
+        CitizenRecord clerk = AccountRecords.Clerk(new ClerkContent { name = "Theo Marlow", citizenId = "773-2840-19" }, rows);
+
+        Assert.AreEqual("Theo Marlow", clerk.FullName);
+        Assert.AreEqual("773-2840-19", clerk.Number);
+        CollectionAssert.AreEqual(new[] { "RECORDS", "FORMS ON FILE", "TRAVEL", string.Empty }, clerk.Groups.Select(g => g.Title).ToArray(), "the Citizen Account app's groups, in order");
+        CollectionAssert.AreEqual(rows.Select(r => r.Label + "=" + r.Value).ToArray(), clerk.Groups.SelectMany(g => g.Rows).Select(r => r.Label + "=" + r.Value).ToArray(), "the app's rows, one source");
+        Assert.IsTrue(clerk.Groups.SelectMany(g => g.Rows).All(r => !r.IsEvidence), "the clerk is nobody's case: no row is a compare pick (§4.4)");
+
+        var registry = new CitizenRegistry();
+        registry.Add(Record(Account()));
+        registry.Add(clerk);
+        Assert.AreSame(clerk, registry.Find("773-2840-19"));
+        Assert.AreSame(clerk, registry.Find("theo marlow"));
+    }
+
+    [Test]
+    public void Clerk_WithNoAuthoredAccount_IsNoRecord()
+    {
+        Assert.IsNull(AccountRecords.Clerk(new ClerkContent(), new AccountRow[0]), "a blank name is no record (CitizenRegistry.Add ignores it anyway)");
+        Assert.IsNull(AccountRecords.Clerk(null, null));
     }
 
     [Test]
