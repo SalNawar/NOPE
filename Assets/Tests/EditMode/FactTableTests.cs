@@ -120,6 +120,25 @@ public class FactTableTests
     }
 
     [Test]
+    public void Add_RejectsABlankOriginLabel_LikeABlankId()
+    {
+        var t = new FactTable();
+        Assert.Throws<System.ArgumentException>(() => t.Add("egypt", "ancient", null, ClueCategory.Currency, "Deben"), "audit R1-017: a place without a label would count as absent");
+        Assert.Throws<System.ArgumentException>(() => t.Add("egypt", "ancient", " ", ClueCategory.Currency, "Deben"));
+        Assert.IsNull(t.Get("egypt", "ancient", ClueCategory.Currency), "nothing was stored");
+    }
+
+    [Test]
+    public void HasPlace_IsTrueOnlyForAPlaceInTheTable()
+    {
+        FactTable t = Today();
+        Assert.IsTrue(t.HasPlace("egypt", "ancient"));
+        Assert.IsFalse(t.HasPlace("egypt", "medieval"));
+        Assert.IsFalse(t.HasPlace(null, "ancient"));
+        Assert.IsFalse(t.HasPlace("egypt", null));
+    }
+
+    [Test]
     public void MaxValueLength_Is28()
     {
         Assert.AreEqual(28, FactTable.MaxValueLength);

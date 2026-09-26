@@ -141,6 +141,26 @@ Canvas/SlotPanel/ContinueButton/Label active=True layer=0 tag=Untagged component
 Canvas/SlotPanel/ContinueButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/SlotPanel/ContinueButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/SlotPanel/ContinueButton/Label text='Continue' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/SlotPanel/Machine active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ArtSlotImage]
+Canvas/SlotPanel/Machine transform pos=(0.000,188.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/SlotPanel/Machine rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.5,0.0) pos=(0.0,8.0) size=(375.0,240.0)
+Canvas/SlotPanel/Machine image sprite=null color=#FFFFFFFF type=Simple raycast=False material=null
+Canvas/SlotPanel/Machine ArtSlotImage enabled=True
+Canvas/SlotPanel/Machine ArtSlotImage.slot='Home/slot_machine'
+Canvas/SlotPanel/Machine ArtSlotImage.hoverSlot=''
+Canvas/SlotPanel/Machine ArtSlotImage.fullColour=True
+Canvas/SlotPanel/Machine ArtSlotImage.hideWithoutArt=True
+Canvas/SlotPanel/Machine ArtSlotImage.showWithArt.Array.size=0
+Canvas/SlotPanel/Lever active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image,ArtSlotImage]
+Canvas/SlotPanel/Lever transform pos=(191.500,188.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/SlotPanel/Lever rect min=(0.5,1.0) max=(0.5,1.0) pivot=(0.0,0.0) pos=(191.5,8.0) size=(80.0,240.0)
+Canvas/SlotPanel/Lever image sprite=null color=#FFFFFFFF type=Simple raycast=False material=null
+Canvas/SlotPanel/Lever ArtSlotImage enabled=True
+Canvas/SlotPanel/Lever ArtSlotImage.slot='Home/slot_lever'
+Canvas/SlotPanel/Lever ArtSlotImage.hoverSlot=''
+Canvas/SlotPanel/Lever ArtSlotImage.fullColour=True
+Canvas/SlotPanel/Lever ArtSlotImage.hideWithoutArt=True
+Canvas/SlotPanel/Lever ArtSlotImage.showWithArt.Array.size=0
 Canvas/SleepPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/SleepPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/SleepPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(560.0,320.0)

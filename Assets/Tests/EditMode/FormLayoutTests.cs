@@ -552,4 +552,160 @@ public class FormLayoutTests
         var measure = new FakeMeasure();
         Assert.AreEqual(measure.Height("Hg", FormTextRole.Label, M.labelSize, 1e6f) + M.labelSize * M.capsLead, wrapped.Rect.Height, Eps, "a long label wraps: a measured line, then a line of capitals");
     }
+
+    // ---------------- Phase 5: the PC width and the page kinds ----------------
+
+    /// <summary>The PC's page width (PC spec §6.3): 542 u, the 580 u pane less its padding and scrollbar.</summary>
+    private const float PcWidth = 542f;
+
+    /// <summary>A page kind laid out at the PC width.</summary>
+    private static PlacedForm Pc(FormSpec spec, FormData data) => FormLayout.Layout(spec, data, PcWidth, M, new FakeMeasure());
+
+    [Test]
+    public void AtThePcWidth_ADocumentPageIs708u_AndPrintsAtTheSpecSizes()
+    {
+        PlacedForm f = Pc(Tc610(), Tc610Data());
+        Assert.AreEqual(708.5f, f.PageHeight, 0.1f, "H = 542 / 0.765");
+        Assert.AreEqual(f.PageHeight, f.Height, Eps, "a document is one fixed page");
+        float Size(FormTextRole role) => f.Items.Where(i => i.Kind == FormItemKind.Text && i.Role == role).Min(i => i.Size);
+        Assert.AreEqual(34.7f, f.Items.Where(i => i.Role == FormTextRole.Value).Max(i => i.Size), 0.1f, "a value at 0.049 H");
+        Assert.GreaterOrEqual(Size(FormTextRole.Value), 0.042f * f.PageHeight - Eps, "no value under the floor");
+        Assert.AreEqual(26.9f, Size(FormTextRole.Label), 0.1f, "a label at 0.038 H");
+        Assert.AreEqual(25.5f, Size(FormTextRole.Section), 0.1f, "a section head at 0.036 H");
+        Assert.AreEqual(14.2f, Size(FormTextRole.FinePrint), 0.1f, "fine print at 0.020 H");
+        Assert.IsTrue(f.Items.All(i => Inside(i.Rect, new FaceRect(0f, 0f, PcWidth, f.PageHeight))), "every item on the page");
+        PlacedForm desk = Desk(Tc610(), Tc610Data());
+        Assert.AreEqual(desk.Items.Count, f.Items.Count, "the same form as the desk paper");
+        for (int i = 0; i < f.Items.Count; i++)
+        {
+            Assert.AreEqual(desk.Items[i].Text, f.Items[i].Text);
+            Assert.AreEqual(desk.Items[i].Rect.YMin * f.PageHeight, f.Items[i].Rect.YMin, 0.01f, "the same place in page heights");
+        }
+    }
+
+    /// <summary>Today's record extract (PC spec §6.2, TC-901): the query line, the record's groups, the note, the stamp area and fine print.</summary>
+    private static FormSpec RecordExtract() => new FormSpec
+    {
+        formNumber = "TC-901",
+        title = "Record Extract",
+        fixedPage = false,
+        blocks = new[]
+        {
+            Block(FormBlockKind.Header),
+            new FormBlock { kind = FormBlockKind.Paragraph, slot = "query" },
+            new FormBlock { kind = FormBlockKind.RecordGroups, slot = "groups" },
+            new FormBlock { kind = FormBlockKind.Paragraph, slot = "note" },
+            Block(FormBlockKind.StampArea),
+            Block(FormBlockKind.FinePrint, "Extract of the agency's records, valid on the day of issue.")
+        }
+    };
+
+    [Test]
+    public void RecordGroups_EachGroupANumberedSection_RowsTwoToARow_ALongValueAcross_EachRowASlot()
+    {
+        var data = FormData.Page(RecordExtract(), "Temporal Customs", "Debt Relief Departures");
+        data.Text = new Dictionary<string, string> { { "query", "Query \"552-1804-33\" · 1 record on file" }, { "note", "No remarks on file." } };
+        data.Groups = new[]
+        {
+            new FormGroup("Records", new[] { ("Name", "Oren Hale"), ("Citizen ID", "552-1804-33"), ("Born", "2 Feb 2117") }),
+            new FormGroup("Travel", new[] { ("Booked departure", "Debt Relief departure to the Industrial era, gate 4, on the first free day"), ("History", "None") })
+        };
+        PlacedForm f = Pc(RecordExtract(), data);
+
+        CollectionAssert.AreEqual(new[] { "1  RECORDS", "2  TRAVEL" }, f.Items.Where(i => i.Role == FormTextRole.Section).Select(i => i.Text).ToArray());
+        Assert.AreEqual(5, f.Slots.Count, "a slot per row");
+        CollectionAssert.AreEqual(new[] { 0, 1, 2, 3, 4 }, f.Slots.Select(s => s.Row).ToArray(), "rows counted across the groups");
+        Assert.IsTrue(f.Slots.All(s => s.Source == "groups" && s.Field == -1));
+        float content = PcWidth - 2f * M.marginX * f.PageHeight;
+        Assert.AreEqual(f.Slots[0].Hit.YMin, f.Slots[1].Hit.YMin, Eps, "Name and Citizen ID share a row");
+        Assert.Less(f.Slots[0].Hit.Width, content / 2f, "a half-row box");
+        Assert.Greater(f.Slots[2].Hit.YMin, f.Slots[0].Hit.YMax - Eps, "Born starts the next row");
+        Assert.AreEqual(content, f.Slots[3].Hit.Width, 0.5f, "the long departure goes across the row");
+        Assert.Greater(f.Slots[4].Hit.YMin, f.Slots[3].Hit.YMax - Eps, "the row after the long one");
+        FormItem section2 = f.Items.First(i => i.Text == "2  TRAVEL");
+        Assert.Greater(section2.Rect.YMin, f.Slots[2].Hit.YMax - Eps, "a group's section follows the last row of the one before");
+        Assert.IsTrue(f.Items.Any(i => i.Role == FormTextRole.Value && i.Text == "552-1804-33") && f.Items.Any(i => i.Role == FormTextRole.Label && i.Text == "Citizen ID"));
+        FormItem note = f.Items.Last(i => i.Kind == FormItemKind.Text && i.Role == FormTextRole.Paragraph);
+        Assert.AreEqual("No remarks on file.", note.Text);
+        Assert.Greater(note.Rect.YMin, f.Slots[4].Hit.YMax - Eps, "the note under the groups");
+
+        data.Groups = Array.Empty<FormGroup>();
+        PlacedForm none = Pc(RecordExtract(), data);
+        Assert.AreEqual(0, none.Slots.Count, "no record: no groups");
+        Assert.Less(none.Height, f.Height, "a flow page is as tall as its content");
+    }
+
+    [Test]
+    public void ATable_OneCellRowIsAHeadingAcross_NotASlot_AndTheRowsKeepTheirIndex()
+    {
+        var spec = new FormSpec
+        {
+            formNumber = "TC-916",
+            title = "Register",
+            fixedPage = false,
+            blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "PLACE", "ERA", "VALUE", "NOTE" }, shares = new[] { 0.34f, 0.16f, 0.36f, 0.14f }, slot = "rows" } }
+        };
+        var data = FormData.Page(spec, "Temporal Customs", "Debt Relief Departures");
+        data.Rows = new Dictionary<string, IReadOnlyList<string[]>>
+        {
+            { "rows", new List<string[]> { new[] { "Medieval" }, new[] { "Florence", "Medieval", "Guild robe", "" }, new[] { "Modern" }, new[] { "Berlin", "Modern", "Suit", "" } } }
+        };
+        PlacedForm f = Pc(spec, data);
+        CollectionAssert.AreEqual(new[] { 1, 3 }, f.Slots.Select(s => s.Row).ToArray(), "the headings are no slots; each row keeps its index");
+        CollectionAssert.AreEqual(new[] { "MEDIEVAL", "MODERN" }, f.Items.Where(i => i.Role == FormTextRole.Section).Select(i => i.Text).ToArray());
+        FormItem medieval = f.Items.First(i => i.Text == "MEDIEVAL");
+        Assert.Less(medieval.Rect.YMax, f.Slots[0].Hit.YMin + Eps, "the heading comes before its rows");
+        Assert.AreEqual(2, f.Items.Count(i => i.Kind == FormItemKind.RowBand && i.Rect.Width > PcWidth * 0.8f && i.Rect.YMin > f.Items.First(h => h.Text == "PLACE").Rect.YMax), "a band across the table under each heading");
+    }
+
+    [Test]
+    public void OnAPageKind_TheSignatureIsItsSlotsText()
+    {
+        var spec = new FormSpec { fixedPage = false, blocks = new[] { new FormBlock { kind = FormBlockKind.Signature, text = "For the Customs Directorate", slot = "signature" } } };
+        var data = new FormData { Text = new Dictionary<string, string> { { "signature", "Customs Directorate" } } };
+        PlacedForm f = Pc(spec, data);
+        Assert.AreEqual("Customs Directorate", TextOf(f, FormTextRole.Value).Text);
+        Assert.AreEqual("For the Customs Directorate", TextOf(f, FormTextRole.Caption).Text);
+        Assert.AreEqual(FormLayout.Unsigned, TextOf(Pc(spec, new FormData()), FormTextRole.Value).Text, "no text: the line is unsigned");
+    }
+
+    [Test]
+    public void APageKindsHeading_IsTheAgencyOverItsOwnNumberAndTitle()
+    {
+        FormData data = FormData.Page(RecordExtract(), "Temporal Customs", "Debt Relief Departures");
+        Assert.AreEqual(("Temporal Customs", "Debt Relief Departures", "TC-901", "Record Extract"), (data.Agency, data.Programme, data.FormNumber, data.Title));
+        PlacedForm f = Pc(RecordExtract(), data);
+        Assert.AreEqual("RECORD EXTRACT", TextOf(f, FormTextRole.Title).Text);
+        Assert.AreEqual("TC-901", TextOf(f, FormTextRole.FormNumber).Text);
+        Assert.AreEqual(string.Empty, FormData.Page(null, null, null).FormNumber);
+    }
+
+    [Test]
+    public void ALandscapePage_TakesHAsItsWidthTimesTheAspect_SoAWideTableKeepsPortraitSizes()
+    {
+        var spec = new FormSpec
+        {
+            fixedPage = false,
+            landscape = true,
+            blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "DAY", "WAGES", "FINES", "DEBT RELIEF", "HOUSEHOLD", "PURCHASES", "BALANCE", "OWED" }, slot = "rows" } }
+        };
+        var data = new FormData { Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", new List<string[]> { new[] { "1", "1,250", "0", "312", "180", "120", "3,450", "124,806" } } } } };
+        const float width = 980f;
+        PlacedForm f = FormLayout.Layout(spec, data, width, M, new FakeMeasure());
+        Assert.AreEqual(width * M.aspect, f.PageHeight, 0.01f, "the long side across");
+        Assert.AreEqual(M.cellSize * width * M.aspect, f.Items.First(i => i.Role == FormTextRole.Cell).Size, 0.01f);
+        spec.landscape = false;
+        Assert.AreEqual(width / M.aspect, FormLayout.Layout(spec, data, width, M, new FakeMeasure()).PageHeight, 0.01f, "portrait: width over the aspect");
+    }
+
+    [Test]
+    public void APageKindAtAPaneWidth_PrintsLarger_TheWidthIsTheCallers()
+    {
+        var spec = new FormSpec { fixedPage = false, blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "PLACE", "VALUE" }, slot = "rows" } } };
+        var data = new FormData { Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", new List<string[]> { new[] { "Florence (Medieval)", "Wool tunic" } } } } };
+        float Cell(float width) => FormLayout.Layout(spec, data, width, M, new FakeMeasure()).Items.First(i => i.Role == FormTextRole.Cell).Size;
+        Assert.AreEqual(M.cellSize * PcWidth / M.aspect, Cell(PcWidth), 0.01f, "at 542 u a cell is 0.034 H of 708 u");
+        const float pane = 860f;
+        Assert.AreEqual(Cell(PcWidth) * pane / PcWidth, Cell(pane), 0.01f, "at a pane's width it grows with the width");
+    }
 }
