@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
   year: 2150
+  moment: The Rhine-Ruhr grown into one hydrogen metropole, 2150
   tongue: german
   birthYearMin: 2080
   birthYearMax: 2132

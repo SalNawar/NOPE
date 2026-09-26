@@ -9,7 +9,7 @@ public static partial class ContentLibraryValidator
         int issues = 0;
         foreach (string problem in Mailbox.AuthoredProblems(lib.Mail))
         {
-            Debug.LogError($"[ContentLibraryValidator] Mail: {problem.TrimEnd('.')} in '{lib.name}' (Tools > TimeDesk > Generate World writes world_source.json \"mail\").", lib);
+            Debug.LogError($"[ContentLibraryValidator] Mail: {problem.TrimEnd('.')} in '{lib.name}' (Tools > TimeDesk > Generate World writes world_source.json \"pc.mail\").", lib);
             issues++;
         }
         return issues;

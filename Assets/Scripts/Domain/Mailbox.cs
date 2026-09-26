@@ -13,7 +13,7 @@ public enum MailKind
     /// <summary>The copy of a citation slip, delivered once the slip is acknowledged.</summary>
     CitationNotice,
 
-    /// <summary>A message written in world_source.json "mail".</summary>
+    /// <summary>A message written in world_source.json "pc.mail".</summary>
     Authored
 }
 
@@ -31,7 +31,7 @@ public enum MailLink
 }
 
 /// <summary>
-/// One authored message (world_source.json "mail", written into the content
+/// One authored message (world_source.json "pc.mail", written into the content
 /// library by Generate World): it arrives on <see cref="fromDay"/>, stays in
 /// the inbox until <see cref="untilDay"/> (0 = for the run), and only while
 /// <see cref="flag"/> is set when it names one.

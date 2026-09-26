@@ -56,7 +56,9 @@ public static partial class OfficeSceneUIBuilder
         DesktopApps apps = GetOrAdd<DesktopApps>(root.gameObject);
         MailFeed feed = GetOrAdd<MailFeed>(root.gameObject);
 
-        DesktopWindow mail = BuildMailWindow(windowLayer, config, feed, apps, rulesWindow, out TMP_Text mailTitle);
+        Transform browserWin = windowLayer.Find("InternetWindow");
+        BrowserWindow browser = browserWin != null ? browserWin.GetComponent<BrowserWindow>() : null;
+        DesktopWindow mail = BuildMailWindow(windowLayer, config, feed, apps, browser, rulesWindow, out TMP_Text mailTitle);
         DesktopWindow account = BuildAccountWindow(windowLayer, config);
         DesktopWindow notes = BuildNotesWindow(windowLayer, config);
 
@@ -65,7 +67,7 @@ public static partial class OfficeSceneUIBuilder
         BuildDesktopIcon(iconGrid, "IconNotes", "icon.notes", notes, "");
 
         Transform settingsWin = windowLayer.Find("SettingsWindow");
-        Transform internetWin = windowLayer.Find("IconInternetWindow");
+        Transform internetWin = windowLayer.Find("InternetWindow");
         var soApps = new SerializedObject(apps);
         SetRef(soApps, "shell", root.GetComponent<DesktopShell>());
         SetApps(soApps, ("mail", mail), ("citizen_account", account), ("notes", notes),
@@ -159,7 +161,8 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left, the memo form on the right. Rebuilt fresh.</summary>
-    private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, DesktopWindow rulesWindow, out TMP_Text title)
+    private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
+                                                 DesktopWindow rulesWindow, out TMP_Text title)
     {
         DestroyChildIfPresent(windowLayer, "MailWindow");
         DesktopWindow chrome = BuildOSWindow(windowLayer, "MailWindow", null, null, null, config.mailWindowSize);
@@ -207,6 +210,7 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(component);
         SetRef(so, "feed", feed);
         SetRef(so, "apps", apps);
+        SetRef(so, "browser", browser);
         SetRef(so, "rulesWindow", rulesWindow);
         SetRef(so, "listRoot", list);
         SetRef(so, "rowTemplate", row);

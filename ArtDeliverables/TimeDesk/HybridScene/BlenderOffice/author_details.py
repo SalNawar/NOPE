@@ -1,4 +1,16 @@
-"""Historic machinery, meaningful desk keepsakes and animated-vehicle meshes."""
+"""Historic machinery, meaningful desk keepsakes and animated-vehicle meshes (art side).
+
+Purpose: the three flying cars (City_AirTaxi, City_AirSedan, City_AirVan: the live traffic
+moved by OfficeTrafficVehicle), the board bracket and pin, and the removed exhibits
+(printing press, Wright Flyer, rocket, Voyager cover), whose FBX the scene no longer
+uses (triage B17).
+Inputs: artlib.py (this folder); the exhibit OBJs in Assets/Art/Office/Hybrid/Models
+(exhibit_printing_press, exhibit_wright_flyer, exhibit_rocket; keep them while this
+script builds the exhibits); Assets/Art/Office/Hybrid/Images/voyager_record.png.
+Outputs: Assets/Art/Office/Hybrid/BlenderOffice/Models/{City_Air*,Office_*,Art_*}.fbx
+(+ Exports/ copies), Details_Collection_manifest.json and Details_Collection.blend here.
+Run: blender --background --python ArtDeliverables/TimeDesk/HybridScene/BlenderOffice/author_details.py
+"""
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))

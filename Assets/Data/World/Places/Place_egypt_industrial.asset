@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   year: 1869
+  moment: Cairo in 1869, the year Khedive Isma'il opened the Suez Canal, during the
+    building of the new irrigation canal network
   tongue: arabic
   birthYearMin: 1799
   birthYearMax: 1851

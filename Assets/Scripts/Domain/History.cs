@@ -116,6 +116,9 @@ public sealed class HistoryLines
 
     /// <summary>A carry latched; tokens {value} and {place}.</summary>
     public LineText carry = new();
+
+    /// <summary>An attribute becomes dominant in a place (the dominance news, audit R3-007); tokens {attribute} and {place}.</summary>
+    public LineText dominant = new();
 }
 
 /// <summary>
@@ -131,6 +134,9 @@ public static class History
 
     /// <summary>The nation's display name in a history line ("{nation}"; {place} and {value} are Interview.PlaceToken and ValueToken).</summary>
     public const string NationToken = "nation";
+
+    /// <summary>The attribute's display name in the dominance line ("{attribute}").</summary>
+    public const string AttributeToken = "attribute";
 
     /// <summary>True for the categories history may change.</summary>
     public static bool IsEditable(ClueCategory category) => Array.IndexOf(EditableCategories, category) >= 0;
@@ -153,20 +159,28 @@ public static class History
     /// (also for a null state). Every edit applies from the day after it
     /// latched, and facts are only built for that day or later, so no day filter.
     /// </summary>
-    public static string Resolve(HistoryState history, string nationId, string eraId, ClueCategory category, string baseValue)
+    public static string Resolve(HistoryState history, string nationId, string eraId, ClueCategory category, string baseValue) =>
+        LatestEdit(history, nationId, eraId, category)?.value ?? baseValue;
+
+    /// <summary>
+    /// The edit <see cref="Resolve"/> reads: the newest latched edit of that
+    /// place and category with a non-blank value, or null (none, or a null
+    /// state). Chronopedia shows its day beside a revised value.
+    /// </summary>
+    public static FactEdit LatestEdit(HistoryState history, string nationId, string eraId, ClueCategory category)
     {
         if (history == null || history.factEdits == null)
-            return baseValue;
+            return null;
 
         for (int i = history.factEdits.Count - 1; i >= 0; i--)
         {
             FactEdit e = history.factEdits[i];
             if (e != null && e.category == category && !string.IsNullOrWhiteSpace(e.value) &&
                 string.Equals(e.nationId, nationId, StringComparison.Ordinal) && string.Equals(e.eraId, eraId, StringComparison.Ordinal))
-                return e.value;
+                return e;
         }
 
-        return baseValue;
+        return null;
     }
 
     /// <summary>

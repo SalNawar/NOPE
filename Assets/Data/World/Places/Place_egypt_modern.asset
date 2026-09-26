@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   year: 1962
+  moment: Egypt under Gamal Abdel Nasser, Cairo and Aswan, c. 1962 (Aswan High Dam
+    under construction 1960-70; Suez Canal nationalised 1956)
   tongue: arabic
   birthYearMin: 1892
   birthYearMax: 1944

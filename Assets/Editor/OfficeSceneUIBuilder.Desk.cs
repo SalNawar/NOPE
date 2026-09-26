@@ -125,18 +125,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>Returns Desk_Default, creating it with the defaults when missing (a designer's edits are kept).</summary>
-    private static DeskConfigSO EnsureDeskConfig()
-    {
-        DeskConfigSO config = AssetDatabase.LoadAssetAtPath<DeskConfigSO>(DeskConfigPath);
-        if (config != null)
-            return config;
-
-        PlaceholderPng.EnsureFolderTree("Assets/Data/Config");
-        config = ScriptableObject.CreateInstance<DeskConfigSO>();
-        AssetDatabase.CreateAsset(config, DeskConfigPath);
-        AssetDatabase.SaveAssets();
-        return config;
-    }
+    private static DeskConfigSO EnsureDeskConfig() => EnsureConfigAsset<DeskConfigSO>(DeskConfigPath);
 
     /// <summary>Returns the office scene contract, creating it with the defaults when missing, and puts it on RunConfig (the load hook reads it there).</summary>
     private static OfficeSceneContractSO EnsureOfficeContract()

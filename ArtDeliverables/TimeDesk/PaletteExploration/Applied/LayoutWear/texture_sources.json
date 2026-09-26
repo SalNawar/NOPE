@@ -1,0 +1,17 @@
+[
+  {
+    "name": "WornPlaster",
+    "prompt": "Use case: stylized-concept. Asset: production game BASE COLOUR TEXTURE, square1024x1024, flat orthographic surface covering entire image with no border. Clean hand-painted cel/anime plaster for an ill-maintained but still operating government office. Main colour warm pale plaster #D4C6B9. Broad sparse irregular chalky cream repainted patches and a few warmgrey exposed undercoat chips, a couple simple fine angular cracks. Wear clusters in two or three small areas, about 15 percent surface coverage; most plaster remains calm, solid and clean. Attractive stylized illustrated material, limited flat colour shapes, restrained low frequency mottling. NO photographic grain, noise, stipple, gritty realism, mould, drips, heavy scratches, bricks, objects, icons, text, lighting, cast shadows, perspective or vignette. No green or blue. Make wear visible at game-camera distance but not dirty or high contrast. This is an actual flat texture map, not a scene preview.",
+    "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a0d7ac-fe8e-70f2-9ab4-eda8806beab8\\exec-84fbba92-6ed7-48be-a287-45c23dc127d3.png"
+  },
+  {
+    "name": "WornCork",
+    "prompt": "Use case: stylized-concept. Asset: square1024x1024 flat diffuse BASE COLOUR TEXTURE for a stylized office noticeboard. Even warm honey cork #BB955F, with broad simplified irregular interlocking cork chips outlined only with subtle darker honey brown shapes, sparse faded rectangles where old notices were removed, a few small old pinholes. Clean matte anime/cel-painted game texture, gentle low contrast, quiet predominantly solid warm cork centre. All over surface, no surrounding frame, paper notes, objects, text, perspective, bevel, lighting, grain, photo detail, noise, grunge, green or blue. Readable irregular cork and faint age, not a realistic macro photograph. Opaque full canvas.",
+    "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a0d7ac-fe8e-70f2-9ab4-eda8806beab8\\exec-eddd0b51-b969-4a3c-855c-50768adf1068.png"
+  },
+  {
+    "name": "HandledSurface",
+    "prompt": "Use case: stylized-concept. Asset: square1024x1024 grayscale MULTIPLICATIVE WEAR TEXTURE for existing coloured cel-shaded game props. PURE WHITE #FFFFFF base over at least 85percent canvas. A few small sparse pale-grey irregular flattened scuffs and short broken rubbing marks, lightgrey #D8D8D8 to #ECECEC. Slight broad lightgrey worn patches near two edges. Keep central 60percent nearly purewhite. All shapes clean and simplified, handpainted anime texture with soft outer edges but no grain/noise. Very subtle, low contrast, no black, no colour, no objects, no borders, no full rectangular outline, no labels, no text, no lighting or shadows, no deep scratches, no photograph. Flat opaque texture image, not transparent, not a scene or object render.",
+    "source": "C:\\Users\\Saleh\\.codex\\generated_images\\01a0d7ac-fe8e-70f2-9ab4-eda8806beab8\\exec-61c455b5-a47a-47f9-b43c-948f46cffed7.png"
+  }
+]

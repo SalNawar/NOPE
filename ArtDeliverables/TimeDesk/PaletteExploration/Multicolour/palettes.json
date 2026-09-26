@@ -1,0 +1,143 @@
+{
+  "roles": [
+    "hall walls and floor",
+    "structural columns and boards",
+    "desk surface",
+    "CRT casing and keyboard",
+    "phone and lamp",
+    "metal trim",
+    "UI and portal accent"
+  ],
+  "options": [
+    {
+      "number": 1,
+      "name": "Civic Pop",
+      "colors": [
+        "#86AAA5",
+        "#C76550",
+        "#304863",
+        "#E6CB8F",
+        "#9085A5",
+        "#BD9858",
+        "#466DBC"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Retrofuture Riviera",
+      "colors": [
+        "#DAA18B",
+        "#326F7B",
+        "#7E4C40",
+        "#E6D9BC",
+        "#8D995D",
+        "#C6A257",
+        "#748BBB"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Terminal 98",
+      "colors": [
+        "#A2B0B4",
+        "#4463A0",
+        "#6E4651",
+        "#DDD2B9",
+        "#67AAA5",
+        "#C7A44D",
+        "#D07A61"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Postal Deco",
+      "colors": [
+        "#D9C58C",
+        "#56788C",
+        "#A35345",
+        "#C7CEC8",
+        "#74A596",
+        "#A58850",
+        "#9C90B5"
+      ]
+    },
+    {
+      "number": 5,
+      "name": "Dusty Memphis",
+      "colors": [
+        "#B6A0BD",
+        "#3D7468",
+        "#455B73",
+        "#EDD8A0",
+        "#C97662",
+        "#B57D51",
+        "#719CD1"
+      ]
+    },
+    {
+      "number": 6,
+      "name": "Factory Pastel",
+      "colors": [
+        "#CDCFC1",
+        "#AA6955",
+        "#456A83",
+        "#D8BD8F",
+        "#76987B",
+        "#B9A078",
+        "#8D6A95"
+      ]
+    },
+    {
+      "number": 7,
+      "name": "Nightshift Candy",
+      "colors": [
+        "#688293",
+        "#77586C",
+        "#31595C",
+        "#D6B092",
+        "#D1B65E",
+        "#A9BABB",
+        "#DD846F"
+      ]
+    },
+    {
+      "number": 8,
+      "name": "Executive Circuit",
+      "colors": [
+        "#DCD3B9",
+        "#7C4450",
+        "#737954",
+        "#9AB5BE",
+        "#E1C685",
+        "#B88A55",
+        "#67B8B1"
+      ]
+    },
+    {
+      "number": 9,
+      "name": "Metro Chromatic",
+      "colors": [
+        "#AAC5B4",
+        "#45689F",
+        "#9C5D4E",
+        "#E1D0B3",
+        "#86576E",
+        "#BD8A4B",
+        "#E3B760"
+      ]
+    },
+    {
+      "number": 10,
+      "name": "Time Travel Agency",
+      "colors": [
+        "#9FBBC4",
+        "#BB9655",
+        "#78525F",
+        "#BDCCB1",
+        "#CF8B74",
+        "#A08159",
+        "#438D85"
+      ]
+    }
+  ]
+}

@@ -1,4 +1,15 @@
-"""Blender hall, display furniture and painting frames. Fixed composition."""
+"""Blender hall, display furniture and painting frames. Fixed composition (art side).
+
+Purpose: the hall: floor (the original floor the user restored), structure, banners,
+bench, departures board, portal, service cabinet and paperwork (Hall_* groups, all
+live). The gallery rail, plinth, display stand and Art_* painting groups still export
+FBX the scene no longer uses since the exhibits were removed (triage B17).
+Inputs: artlib.py (this folder); Assets/Art/Office/Hybrid/BlenderOffice/Textures/civic_stone.png
+and the painting images in Assets/Art/Office/Hybrid/Images.
+Outputs: Assets/Art/Office/Hybrid/BlenderOffice/Models/Hall_*.fbx and Art_*.fbx (+ Exports/
+copies), Hall_Collection_manifest.json and Hall_Collection.blend here.
+Run: blender --background --python ArtDeliverables/TimeDesk/HybridScene/BlenderOffice/author_hall.py
+"""
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))

@@ -1,3 +1,10 @@
+// TimeSorter/OfficePortal: the hall portal's moving liquid surface (art side).
+// Unlit and opaque: two layers of drifting folds blend _DeepColor into _FlowColor,
+// with thin crests and an edge glow in _RimColor, animated by _Speed. The Debt Relief
+// pass sets the colours on DebtRelief/Materials/Portal_Energy.mat (the live portal
+// opening); PortalFlow.mat is used only by a _Recovery scene. One forward pass: no
+// fog, no DepthOnly/DepthNormals pass (the portal is missing from the depth prepass
+// and SSAO) and no instancing or stereo macros (triage B14).
 Shader "TimeSorter/OfficePortal"
 {
     Properties

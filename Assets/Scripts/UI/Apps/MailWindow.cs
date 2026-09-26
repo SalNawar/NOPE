@@ -21,6 +21,9 @@ public sealed class MailWindow : MonoBehaviour
     /// <summary>The desktop's apps (the News link opens "internet").</summary>
     [SerializeField] private DesktopApps apps;
 
+    /// <summary>The Internet app's browser (the News link goes to the message's issue on the News site).</summary>
+    [SerializeField] private BrowserWindow browser;
+
     /// <summary>The window the Rules link opens (the Directives window; the Investigation app's Rules tab from phase 16).</summary>
     [SerializeField] private DesktopWindow rulesWindow;
 
@@ -177,7 +180,7 @@ public sealed class MailWindow : MonoBehaviour
         }
     }
 
-    /// <summary>Follows the open message's link: the Rules (the Directives window) or the News site (the Internet app).</summary>
+    /// <summary>Follows the open message's link: the Rules (the Directives window), or the News site's issue of the message's day (the Internet app).</summary>
     private void FollowLink()
     {
         MailItem open = null;
@@ -191,7 +194,23 @@ public sealed class MailWindow : MonoBehaviour
         if (open.Link == MailLink.Rules && rulesWindow != null)
             rulesWindow.Open();
         else if (open.Link == MailLink.News && apps != null)
+        {
             apps.OpenApp("internet");
+            SiteSpec news = NewsSite();
+            if (browser != null && news != null)
+                browser.Go(NewsPages.IssueAddress(news, open.Day));
+        }
+    }
+
+    /// <summary>The News site (the first site of the News kind), or null.</summary>
+    private static SiteSpec NewsSite()
+    {
+        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+        if (library != null)
+            foreach (SiteSpec site in library.Pc.sites)
+                if (site != null && site.kind == SiteKind.News)
+                    return site;
+        return null;
     }
 
     private static void Set(TMP_Text text, string value)
@@ -249,7 +268,7 @@ public static class MailText
             _ => "M-" + m.Id.Substring(Mailbox.AuthoredPrefix.Length)
         };
 
-    /// <summary>The body: the directives as a list, the headlines and where the edition is, the slip's copy, or the authored paragraphs.</summary>
+    /// <summary>The body: the directives as a list, the paper's lines and where the edition is (today's on the News site, an earlier one in its archive), the slip's copy, or the authored paragraphs.</summary>
     public static string Body(MailItem m)
     {
         var sb = new StringBuilder();
@@ -266,7 +285,8 @@ public static class MailText
                     sb.AppendLine(UiText.Format("list.bullet", line));
                 if (m.Body.Count > 0)
                     sb.AppendLine();
-                sb.Append(UiText.Get(m.IssueOnHand ? "mail.body.times" : "mail.body.timesArchived"));
+                bool today = m.IssueOnHand && RunManager.HasInstance && RunManager.Instance.World.day == m.Day;
+                sb.Append(UiText.Get(today ? "mail.body.times" : "mail.body.timesArchived"));
                 break;
             case MailKind.CitationNotice:
                 sb.AppendLine(UiText.Get("mail.body.citation"));

@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
   year: 2150
+  moment: Rome as the seat of a Mediterranean Union, 2150
   tongue: italian
   birthYearMin: 2080
   birthYearMax: 2132

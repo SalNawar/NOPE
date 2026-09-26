@@ -1,9 +1,17 @@
-"""Keep the licensed pack's manufactured phone silhouette, refine its surfaces.
+"""Keep the licensed pack's manufactured phone silhouette, refine its surfaces (art side).
 Called by author_desk_clean.py and the targeted desktop revision script.
+
+Purpose: build(A) imports the 3DreaMax SM_Landline_Phone.fbx into the Clean_Phone group,
+with clean DeskClean_PhoneBody/PhoneDial materials and the original curved receiver.
+Inputs: Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1 (the phone mesh and its
+dial texture: keep that pack while the phone is built from it).
+Outputs: Blender objects only; the caller exports them.
+Run: not on its own; author_desk_clean.py and revise_desktop.py import it.
+Paths resolve from this file (any checkout or worktree).
 """
 import bpy,math
 from pathlib import Path
-P=Path('E:/unity/NOPE')
+P=Path(__file__).resolve().parents[4]  # the repo root
 SOURCE=P/'Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Meshes/SM_Landline_Phone.fbx'
 DIAL=P/'Assets/3DreaMax Studio/036_Retro Office Props Pack Vol-1/Art/Textures/2K/T_Landline_Phone_Basecolor.png'
 

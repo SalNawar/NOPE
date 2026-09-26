@@ -1,4 +1,12 @@
-"""Three distinct megablock silhouettes, keeping the established exterior scale."""
+"""Three distinct megablock silhouettes, keeping the established exterior scale (art side).
+
+Purpose: the megacity outside the hall windows (the City_* block groups used by the
+Blender_Megacity blocks and DistantMegablocks in OfficeScene).
+Inputs: artlib.py (this folder).
+Outputs: Assets/Art/Office/Hybrid/BlenderOffice/Models/City_*.fbx (+ Exports/ copies),
+City_Collection_manifest.json and City_Collection.blend here.
+Run: blender --background --python ArtDeliverables/TimeDesk/HybridScene/BlenderOffice/author_city.py
+"""
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))

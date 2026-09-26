@@ -128,6 +128,9 @@ public static partial class ContentLibraryValidator
         // --- The agency block (redesign phase 2) ---
         issues += CheckAgency(lib);
 
+        // --- The PC block: the Internet's sites, pages and people (ContentLibraryValidator.Pc.cs) ---
+        issues += CheckPc(lib);
+
         return issues;
     }
 
