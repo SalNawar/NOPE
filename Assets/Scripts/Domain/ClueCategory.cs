@@ -26,7 +26,7 @@ public enum ClueCategory
     // types, F4). Invariant: an honest traveller has one value per compared
     // category, the same on every form, answer and record row.
 
-    /// <summary>The agency's number for the person: a Displacement No. ("DP-4471-02") for the displaced; a Citizen ID later.</summary>
+    /// <summary>The agency's number for the person: a Displacement No. ("DP-4471-02") for the displaced, a Citizen ID ("418-0937-52") for a 2150 citizen.</summary>
     CitizenId,
 
     /// <summary>Where the traveller is sent: the claimed place's label (a displaced person's origin).</summary>
@@ -39,5 +39,20 @@ public enum ClueCategory
     DepartureDate,
 
     /// <summary>The date a paper stops being valid. Directive-only: read against the desk calendar, never compared, never a proof.</summary>
-    Expiry
+    Expiry,
+
+    // A 2150 citizen's account (traveller types F4, phase 6): compared with
+    // the Citizen Account and with each other's papers.
+
+    /// <summary>A citizen's account status as a visa or proof of means prints it ("Premium", "Standard", "Eligible").</summary>
+    AccountStatus,
+
+    /// <summary>The transponder a citizen travels on: its model and serial ("Hopper Mk II · HP-40718").</summary>
+    TransponderId,
+
+    /// <summary>The transponder's class ("Premium" or "Economy").</summary>
+    TransponderClass,
+
+    /// <summary>What a citizen owes, in credits ("0 cr", "212,000 cr").</summary>
+    Debt
 }

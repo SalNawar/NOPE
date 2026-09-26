@@ -124,15 +124,13 @@ public sealed class PlaceWardrobe
 /// What the present (2150, traveller types H1) wears, for costume errors (C2):
 /// its clothes, worn whole by a 2150 citizen who forgot their costume, and its
 /// accessory kit, one item of which can slip onto an otherwise right costume.
-/// Its art is filed under the present's nation token (<see cref="NationToken"/>)
-/// and the Future era, so the clothes reuse the neutral Future drawings.
+/// Part of the neutral present (PresentContent.look); its art is filed under
+/// the present's nation token (Present.NeutralNationId) and the Future era, so
+/// the clothes reuse the neutral Future drawings.
 /// </summary>
 [Serializable]
 public sealed class PresentLook
 {
-    /// <summary>The present's nation token in art keys and placeholder colours ("neutral": no country).</summary>
-    public const string NationToken = "neutral";
-
     /// <summary>The present's clothes (no accessory: the kit is its accessories).</summary>
     public PlaceWardrobe wardrobe = new();
 
