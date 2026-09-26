@@ -429,31 +429,55 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: records.placeholder
-    text: "Type a full name\u2026"
+    text: "Name or number\u2026"
     gloss: 0
     tier: 0
   - key: records.idle
-    text: Type a citizen's name and press SEARCH.
+    text: Type a name or a record number and press SEARCH.
     gloss: 0
     tier: 0
   - key: records.noRecord
-    text: NO RECORD matching "{0}".
+    text: "NO RECORD ON FILE for \"{0}\" \xB7 {1}"
     gloss: 0
     tier: 0
   - key: records.onFile
-    text: 'RECORD ON FILE:'
+    text: "Query \"{0}\" \xB7 1 record on file \xB7 {1}"
     gloss: 0
     tier: 0
-  - key: records.origin
-    text: 'Origin:  {0}'
+  - key: records.agency
+    text: "{0} \xB7 {1}"
     gloss: 0
     tier: 0
-  - key: records.compare.name
-    text: "Records \xB7 Name"
+  - key: records.group.registry
+    text: REGISTRY ENTRY
     gloss: 0
     tier: 0
-  - key: records.compare.born
-    text: "Records \xB7 Born"
+  - key: records.row.name
+    text: Name
+    gloss: 0
+    tier: 0
+  - key: records.row.born
+    text: Born
+    gloss: 0
+    tier: 0
+  - key: records.row.origin
+    text: Origin
+    gloss: 0
+    tier: 0
+  - key: records.row.note
+    text: Note
+    gloss: 0
+    tier: 0
+  - key: records.note.none
+    text: No remarks on file.
+    gloss: 0
+    tier: 0
+  - key: records.note.sealed
+    text: Priority subject. Records sealed above your clearance.
+    gloss: 0
+    tier: 0
+  - key: records.compareLabel
+    text: "Records \xB7 {0}"
     gloss: 0
     tier: 0
   - key: citation.unproven
@@ -540,7 +564,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: tooltip.day
-    text: Day {0}
+    text: 'Today: {0}'
     gloss: 0
     tier: 0
   - key: tooltip.stability
@@ -551,81 +575,8 @@ MonoBehaviour:
     text: '{0}'
     gloss: 0
     tier: 0
-  - key: fallback.claim
-    text: '{0}
-
-      "{1}"
-
-
-      {2}'
-    gloss: 0
-    tier: 0
-  - key: fallback.documents
-    text: "\u2014 DOCUMENTS PRESENTED \u2014"
-    gloss: 0
-    tier: 0
-  - key: fallback.dress
-    text: "\u2014 TRAVELLER'S DRESS \u2014"
-    gloss: 0
-    tier: 0
-  - key: fallback.garment
-    text: '    {0}: {1} ({2})'
-    gloss: 0
-    tier: 0
-  - key: fallback.document
-    text: '[{0}]'
-    gloss: 0
-    tier: 0
-  - key: fallback.field
-    text: '    {0}: {1}'
-    gloss: 0
-    tier: 0
-  - key: fallback.record
-    text: "\u2014 AGENCY RECORD \u2014"
-    gloss: 0
-    tier: 0
-  - key: fallback.noRecord
-    text: '    No record on file.'
-    gloss: 0
-    tier: 0
-  - key: fallback.recordName
-    text: '    Name: {0}'
-    gloss: 0
-    tier: 0
-  - key: fallback.recordBorn
-    text: '    Born: {0}'
-    gloss: 0
-    tier: 0
-  - key: fallback.recordOrigin
-    text: '    Origin: {0}'
-    gloss: 0
-    tier: 0
-  - key: fallback.interview
-    text: "\u2014 INTERVIEW \u2014"
-    gloss: 0
-    tier: 0
-  - key: fallback.answer
-    text: '    {0}: {1}'
-    gloss: 0
-    tier: 0
-  - key: fallback.reference
-    text: "\u2014 REFERENCE (claimed place) \u2014"
-    gloss: 0
-    tier: 0
-  - key: fallback.bookEntry
-    text: '{0}: {1}'
-    gloss: 0
-    tier: 0
-  - key: fallback.noEntry
-    text: (no entry)
-    gloss: 0
-    tier: 0
-  - key: fallback.accept
-    text: ACCEPT (approve travel)
-    gloss: 0
-    tier: 0
-  - key: fallback.deny
-    text: DENY (refuse travel)
+  - key: desk.calendar
+    text: "{0} \xB7 DAY {1}"
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.papers

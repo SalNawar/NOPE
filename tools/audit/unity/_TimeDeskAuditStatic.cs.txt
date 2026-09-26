@@ -175,8 +175,8 @@ public static class _TimeDeskAuditStatic
                 for (int i = 0; i < cases.Count; i++)
                 {
                     CaseInstance c = cases[i];
-                    CitizenRecord record = registry.Records.FirstOrDefault(r => r.fullName == c.visitorGivenName);
-                    string rec = record != null ? $"{record.fullName}|{record.birthDate}|{record.origin}|{record.note}" : "none";
+                    CitizenRecord record = registry.Find(c.visitorGivenName);
+                    string rec = record != null ? string.Join("|", record.Groups.SelectMany(g => g.Rows).Select(r => r.Value)) : "none";
                     lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null) + $" | record={rec}");
                 }
             }

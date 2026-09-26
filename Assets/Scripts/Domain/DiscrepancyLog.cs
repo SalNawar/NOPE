@@ -94,7 +94,6 @@ public struct CompareEvidence
         kind = EvidenceKind.RecordField,
         category = category,
         value = value,
-        entryOriginLabel = "agency records",
         recordOwner = owner
     };
 
