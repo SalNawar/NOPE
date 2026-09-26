@@ -95,4 +95,16 @@ public static class Seeds
     /// from the day's raw stream the family conditions draw from.
     /// </summary>
     public static int ForSlot(int daySeed) => Mix(daySeed, SlotSalt);
+
+    /// <summary>Salt for a traveller's account stream ("ACCT").</summary>
+    public const int AccountSalt = 0x41434354;
+
+    /// <summary>
+    /// Seed for one traveller's agency numbers and dates (traveller types,
+    /// R2 and §4.3; AgencyNumbers): for the displaced, their Displacement
+    /// No., incident, found date and the certificate's Valid Until. Apart from
+    /// the case and lie streams, so tuning an amount or a range never changes
+    /// who travels or who lies.
+    /// </summary>
+    public static int ForAccount(int caseSeed) => Mix(caseSeed, AccountSalt);
 }

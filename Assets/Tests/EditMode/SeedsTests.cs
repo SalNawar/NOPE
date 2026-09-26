@@ -51,12 +51,14 @@ public class SeedsTests
         { "dialog", Seeds.ForDialog },
         { "look", Seeds.ForLooks },
         { "legendary", Seeds.ForLegendary },
+        { "account", Seeds.ForAccount },
     };
 
     [TestCase("lie")]
     [TestCase("dialog")]
     [TestCase("look")]
     [TestCase("legendary")]
+    [TestCase("account")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -87,8 +89,30 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt };
         CollectionAssert.AllItemsAreUnique(salts);
+    }
+
+    /// <summary>
+    /// Audit R1-002 (in part): the seeds themselves are pinned, so a changed
+    /// salt or Mix formula, which would reshuffle every run's travellers,
+    /// fails here. Values of run 12345, day 3, slot 1.
+    /// </summary>
+    [Test]
+    public void Streams_KeepTheirSeeds()
+    {
+        int daySeed = Seeds.Day(12345, 3);
+        int caseSeed = Seeds.ForCase(daySeed, 1);
+        Assert.AreEqual(1611744290, Seeds.Mix(12345, Seeds.CaseSalt));
+        Assert.AreEqual(-263357159, caseSeed);
+        Assert.AreEqual(1520228237, Seeds.ForViolators(daySeed));
+        Assert.AreEqual(954518297, Seeds.ForSlot(daySeed));
+        Assert.AreEqual(-816652609, Seeds.ForLies(caseSeed));
+        Assert.AreEqual(1857474870, Seeds.ForDialog(caseSeed));
+        Assert.AreEqual(542320186, Seeds.ForLooks(caseSeed));
+        Assert.AreEqual(1809927997, Seeds.ForLegendary(caseSeed));
+        Assert.AreEqual(-917021711, Seeds.ForAccount(caseSeed));
+        Assert.AreEqual(0x41434354, Seeds.AccountSalt, "\"ACCT\"");
     }
 
     [Test]
