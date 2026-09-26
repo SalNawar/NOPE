@@ -16,6 +16,7 @@ MonoBehaviour:
     formNumber: 'TC-950'
     title: 'Internal Memorandum'
     fixedPage: 0
+    landscape: 0
     blocks:
     - kind: 0
       text: 

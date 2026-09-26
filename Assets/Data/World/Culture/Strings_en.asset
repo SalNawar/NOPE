@@ -864,52 +864,12 @@ MonoBehaviour:
     text: "\u2013"
     gloss: 0
     tier: 0
-  - key: account.statement.title
-    text: STATEMENT OF ACCOUNT
-    gloss: 0
-    tier: 0
-  - key: account.col.day
-    text: DAY
-    gloss: 0
-    tier: 0
-  - key: account.col.wages
-    text: WAGES
-    gloss: 0
-    tier: 0
-  - key: account.col.fines
-    text: FINES
-    gloss: 0
-    tier: 0
-  - key: account.col.debtRelief
-    text: DEBT RELIEF
-    gloss: 0
-    tier: 0
-  - key: account.col.household
-    text: HOUSEHOLD
-    gloss: 0
-    tier: 0
-  - key: account.col.purchases
-    text: PURCHASES
-    gloss: 0
-    tier: 0
-  - key: account.col.balance
-    text: BALANCE
-    gloss: 0
-    tier: 0
-  - key: account.col.owed
-    text: OWED
-    gloss: 0
-    tier: 0
   - key: account.statement.none
     text: 'No entries yet: a day is written when its shift ends.'
     gloss: 0
     tier: 0
   - key: account.statement.unit
     text: Amounts in {0}.
-    gloss: 0
-    tier: 0
-  - key: account.finePrint
-    text: Departures are voluntary.
     gloss: 0
     tier: 0
   - key: contract.title

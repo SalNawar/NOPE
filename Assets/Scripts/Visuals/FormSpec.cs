@@ -22,7 +22,7 @@ public enum FormBlockKind
     /// <summary>Options with a box each; the one equal to the block's field's value is ticked.</summary>
     Checkboxes = 4,
 
-    /// <summary>A header row (columns, shares) and the rows of the block's slot, each row a slot; a row of one cell in a table of several columns is a heading across it (a band, no slot).</summary>
+    /// <summary>A header row (columns, shares; the heads in the label style at the cells' size) and the rows of the block's slot, each row a slot; a row of one cell in a table of several columns is a heading across it (a band, no slot).</summary>
     Table = 5,
 
     /// <summary>A paragraph: the block's text, else its slot's content.</summary>
@@ -127,6 +127,9 @@ public sealed class FormSpec
 
     /// <summary>True for a document: pages of the paper's aspect. False for a PC page kind, which flows.</summary>
     public bool fixedPage = true;
+
+    /// <summary>A page kind printed across (landscape): its width is the page's long side, so its page height H is the width times the aspect, not the width over it, and a wide table keeps a portrait page's type sizes (the statement's eight columns). Documents are portrait.</summary>
+    public bool landscape;
 
     /// <summary>The blocks, top to bottom.</summary>
     public FormBlock[] blocks = new FormBlock[0];

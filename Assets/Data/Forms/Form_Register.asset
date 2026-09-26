@@ -16,6 +16,7 @@ MonoBehaviour:
     formNumber: 'TC-911'
     title: 'Register'
     fixedPage: 0
+    landscape: 0
     blocks:
     - kind: 0
       text: 
@@ -42,10 +43,10 @@ MonoBehaviour:
       - 'Value'
       - 'Note'
       shares:
-      - 0.34
-      - 0.16
-      - 0.36
-      - 0.14
+      - 0.26
+      - 0.23
+      - 0.31
+      - 0.2
       options: []
       field: -1
       slot: 'rows'

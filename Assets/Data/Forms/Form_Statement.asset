@@ -16,6 +16,7 @@ MonoBehaviour:
     formNumber: 'TC-960'
     title: 'Statement'
     fixedPage: 0
+    landscape: 1
     blocks:
     - kind: 0
       text: 
@@ -38,17 +39,25 @@ MonoBehaviour:
       - 'Balance'
       - 'Owed'
       shares:
-      - 0.07
-      - 0.12
+      - 0.065
       - 0.11
-      - 0.13
-      - 0.15
-      - 0.15
+      - 0.09
+      - 0.1
+      - 0.175
+      - 0.175
       - 0.14
-      - 0.13
+      - 0.145
       options: []
       field: -1
       slot: 'rows'
+    - kind: 6
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 'none'
     - kind: 6
       text: 
       cells: []

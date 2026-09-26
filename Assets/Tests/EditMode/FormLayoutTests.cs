@@ -679,4 +679,33 @@ public class FormLayoutTests
         Assert.AreEqual("TC-901", TextOf(f, FormTextRole.FormNumber).Text);
         Assert.AreEqual(string.Empty, FormData.Page(null, null, null).FormNumber);
     }
+
+    [Test]
+    public void ALandscapePage_TakesHAsItsWidthTimesTheAspect_SoAWideTableKeepsPortraitSizes()
+    {
+        var spec = new FormSpec
+        {
+            fixedPage = false,
+            landscape = true,
+            blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "DAY", "WAGES", "FINES", "DEBT RELIEF", "HOUSEHOLD", "PURCHASES", "BALANCE", "OWED" }, slot = "rows" } }
+        };
+        var data = new FormData { Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", new List<string[]> { new[] { "1", "1,250", "0", "312", "180", "120", "3,450", "124,806" } } } } };
+        const float width = 980f;
+        PlacedForm f = FormLayout.Layout(spec, data, width, M, new FakeMeasure());
+        Assert.AreEqual(width * M.aspect, f.PageHeight, 0.01f, "the long side across");
+        Assert.AreEqual(M.cellSize * width * M.aspect, f.Items.First(i => i.Role == FormTextRole.Cell).Size, 0.01f);
+        spec.landscape = false;
+        Assert.AreEqual(width / M.aspect, FormLayout.Layout(spec, data, width, M, new FakeMeasure()).PageHeight, 0.01f, "portrait: width over the aspect");
+    }
+
+    [Test]
+    public void APageKindAtAPaneWidth_PrintsLarger_TheWidthIsTheCallers()
+    {
+        var spec = new FormSpec { fixedPage = false, blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "PLACE", "VALUE" }, slot = "rows" } } };
+        var data = new FormData { Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", new List<string[]> { new[] { "Florence (Medieval)", "Wool tunic" } } } } };
+        float Cell(float width) => FormLayout.Layout(spec, data, width, M, new FakeMeasure()).Items.First(i => i.Role == FormTextRole.Cell).Size;
+        Assert.AreEqual(M.cellSize * PcWidth / M.aspect, Cell(PcWidth), 0.01f, "at 542 u a cell is 0.034 H of 708 u");
+        const float pane = 860f;
+        Assert.AreEqual(Cell(PcWidth) * pane / PcWidth, Cell(pane), 0.01f, "at a pane's width it grows with the width");
+    }
 }

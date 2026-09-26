@@ -371,7 +371,7 @@ public sealed class PlacedForm
     /// <summary>Its height: its pages on a fixed page, its content on a flow page.</summary>
     public float Height { get; }
 
-    /// <summary>H: one page's height (width / aspect), the unit of every size.</summary>
+    /// <summary>H: one page's height (width / aspect; width × aspect on a landscape page), the unit of every size.</summary>
     public float PageHeight { get; }
 
     /// <summary>The items in drawing order.</summary>
@@ -413,7 +413,14 @@ public static class FormLayout
     /// <summary>The words a probe value is cut from: real word lengths, so it wraps like a value.</summary>
     private const string ProbeWords = "Middle Egyptian, hieroglyphs and a reed brush ";
 
-    /// <summary>Lays out <paramref name="spec"/> showing <paramref name="data"/> at <paramref name="width"/> (the caller's units).</summary>
+    /// <summary>
+    /// Lays out <paramref name="spec"/> showing <paramref name="data"/> at
+    /// <paramref name="width"/> (the caller's units). Every size is in page
+    /// heights, H = width / aspect (width × aspect on a landscape page): the
+    /// wider the page, the larger its print. A document copy on the PC takes
+    /// 542 u (H = 708 u); a page kind in a pane takes the pane's width, so its
+    /// table cells reach 13 px at 720p from about 564 u.
+    /// </summary>
     public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure) =>
         new Placer(spec, data, width, m, measure, null).Run();
 
@@ -545,7 +552,7 @@ public static class FormLayout
             _measure = measure;
             _problems = problems;
             _width = width;
-            _h = width / _m.aspect;
+            _h = _spec.landscape ? width * _m.aspect : width / _m.aspect;
             _left = _m.marginX * _h;
             _content = width - 2f * _left;
             _column = (_content - (Columns - 1) * G(_m.gutter)) / Columns;
@@ -896,15 +903,15 @@ public static class FormLayout
             for (int i = 0; i < n; i++)
                 widths[i] = total > 0f && b.shares != null && i < b.shares.Length && b.shares[i] > 0f ? _content * b.shares[i] / total : _content / n;
 
-            float headHeight = 0f;
+            float headHeight = 0f, headSize = G(_m.cellSize);
             for (int i = 0; i < n; i++)
-                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, G(_m.labelSize), widths[i] - 2f * pad));
+                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, headSize, widths[i] - 2f * pad));
             var band = FaceRect.FromTop(_left, _y, _content, headHeight + 2f * pad);
             Add(FormItemKind.RowBand, band);
             float x = _left;
             for (int i = 0; i < n; i++)
             {
-                Text(FormTextRole.Label, heads[i], x + pad, _y + pad, widths[i] - 2f * pad, G(_m.labelSize));
+                Text(FormTextRole.Label, heads[i], x + pad, _y + pad, widths[i] - 2f * pad, headSize);
                 x += widths[i];
             }
             _y = band.YMax;

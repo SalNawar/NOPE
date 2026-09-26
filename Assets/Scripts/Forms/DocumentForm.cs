@@ -66,6 +66,8 @@ public sealed class DocumentForm
             problems.Add("its form sets a form number or title; a document prints its template's formNumber and displayName");
         if (!spec.fixedPage)
             problems.Add("its form flows; a document's form is a fixed page");
+        if (spec.landscape)
+            problems.Add("its form is landscape; a paper is portrait");
         if (spec.PageCount > 1)
             problems.Add($"its form has {spec.PageCount} pages; a paper is one page");
 

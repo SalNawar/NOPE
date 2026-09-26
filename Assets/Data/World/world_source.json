@@ -9679,60 +9679,6 @@
         "tier": "Full"
       },
       {
-        "key": "account.statement.title",
-        "text": "STATEMENT OF ACCOUNT",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.day",
-        "text": "DAY",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.wages",
-        "text": "WAGES",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.fines",
-        "text": "FINES",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.debtRelief",
-        "text": "DEBT RELIEF",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.household",
-        "text": "HOUSEHOLD",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.purchases",
-        "text": "PURCHASES",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.balance",
-        "text": "BALANCE",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.owed",
-        "text": "OWED",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "account.statement.none",
         "text": "No entries yet: a day is written when its shift ends.",
         "gloss": "None",
@@ -9741,12 +9687,6 @@
       {
         "key": "account.statement.unit",
         "text": "Amounts in {0}.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.finePrint",
-        "text": "Departures are voluntary.",
         "gloss": "None",
         "tier": "Full"
       },
