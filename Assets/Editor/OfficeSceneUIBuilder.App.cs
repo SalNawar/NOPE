@@ -14,7 +14,7 @@ using UnityEngine.UI;
 /// live until phases 18 and 21), its sidebar (Steps, Pinned, Recent: the
 /// keys' partial, OfficeSceneUIBuilder.Keys, fills Pinned and Recent) and one
 /// pane (AppPane): the six tabs in TabOrder.Default (BuildTab: each a plate
-/// on the chrome, its active look a paper plate with an accent bar, its badge
+/// on the chrome, its active look a paper plate with an ink bar, its badge
 /// an accent dot after the label), the chip row (BuildChipTemplate: a chip as
 /// wide as its label, the chosen one on an accent plate), the content with a
 /// view per tab and the no-case state over it. The views host today's page components (the scanned page,
@@ -49,8 +49,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The gap between a tab's label and its badge slot.</summary>
     private const float AppTabGap = 6f;
 
-    /// <summary>The accent bar along the active tab's top edge.</summary>
-    private const float AppTabAccentHeight = 4f;
+    /// <summary>The bar along the active tab's top edge (in the body's ink: an accent would read under 3:1 on the paper plate in four cultures' themes).</summary>
+    private const float AppTabBarHeight = 4f;
 
     /// <summary>A tab's badge dot, after its label (its slot is always reserved, so a badge never moves the label).</summary>
     private const float AppTabBadgeSize = 12f;
@@ -300,8 +300,8 @@ public static partial class OfficeSceneUIBuilder
     /// to fit); its badge, an accent dot in a slot reserved after the label, so
     /// a badge never moves it; and its active look over both, shown by AppPane
     /// while the tab is active: a paper plate in the TabActive role joined to
-    /// the row below, an accent bar along its top and the label in the body's
-    /// ink, placed exactly over the inactive label. Returns the button;
+    /// the row below, a bar in the body's ink along its top and the label in
+    /// that ink, placed exactly over the inactive label. Returns the button;
     /// <paramref name="active"/> and <paramref name="badge"/> are what the pane
     /// toggles.
     /// </summary>
@@ -332,9 +332,10 @@ public static partial class OfficeSceneUIBuilder
         Transform look = Panel(button.transform, "Active", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.TabActive);
         look.GetComponent<Image>().raycastTarget = false;
         GetOrAdd<LayoutElement>(look.gameObject).ignoreLayout = true;
-        Transform bar = Panel(look, "AccentBar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -AppTabAccentHeight / 2f), new Vector2(0f, AppTabAccentHeight),
-                              XpGreen, ThemeRoleId.Badge);
-        bar.GetComponent<Image>().raycastTarget = false;
+        Transform bar = Panel(look, "TopBar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -AppTabBarHeight / 2f), new Vector2(0f, AppTabBarHeight), Ink);
+        Image barImage = bar.GetComponent<Image>();
+        Tag(barImage, ThemeRoleId.TabActive, ThemePart.Ink);
+        barImage.raycastTarget = false;
         TMP_Text activeLabel = Text(look, "Label", null, Mathf.RoundToInt(config.tabLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink,
                                     ThemeRoleId.TabActive, AppTabKeys[tab], FontStyles.Normal, ThemeTextKind.Button, true);
         var activeRect = (RectTransform)activeLabel.transform;

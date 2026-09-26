@@ -7,7 +7,7 @@ using UnityEngine.UI;
 /// <summary>
 /// One pane of the Investigation app (the PC redesign AP2, AP3, AP5, AP8):
 /// its tab strip (one tab per source, in TabOrder.Default, each with a badge;
-/// the active tab wears its active look, the paper plate with the accent bar
+/// the active tab wears its active look, the paper plate with the ink bar
 /// the builder made), its header (the active view's chips: a click shows that
 /// item; the chosen chip wears its "Chosen" accent look, one not readable yet
 /// is dimmed) and its content (the active tab's view; between travellers a case source shows the
