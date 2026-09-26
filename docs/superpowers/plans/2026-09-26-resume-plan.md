@@ -100,3 +100,17 @@ WIP commits may carry generated-asset churn (a rebuilt OfficeGameplay, Assets/Da
   - skins 2–5 show a faceless placeholder head until Batch 2;
   - the day-1 scan hint overlaps the calculator;
   - the calendar box on the art is small for "14 MAR 2150 · DAY 1".
+
+## 6. Continued on 2026-09-26 (a cloud session, branch `claude/trusting-fermi-uhtkuk`)
+
+Saleh's request in that session: make the Investigation app readable (the tabs were "super messy") and make Ctrl+C / Ctrl+V work. Done there, without Unity (the container has no editor; a .NET 8 SDK compiled Domain, Visuals and the EditMode tests: `passed 1774, failed 0`):
+
+- **Phase 20 landed on the branch** (merge `3e6654a` of `redesign/p20-keys-clipboard`, whose tip already held `main`'s code): copy and paste, the keys, the F1 card, pins, recents and zoom. Its last WIP commit (the merge with main's phase 6) is still unverified in Unity.
+- **The app's chrome restyled** (`OfficeSceneUIBuilder.App`, `AppPane`, `DesktopConfigSO`, the `Tab` palette rule): the tab strip and the chip row as `docs/FEATURES.md` now describes them. The old strip drew the active and the inactive tabs in the same colour and its chips at 11-17 units; the new sizes are knobs.
+- **Phase 18 was not merged:** a trial merge of 18 and 20 together conflicts in 20 files (the app, the pane, the views, the builder, the scene). When 18 lands, its `OfficeSceneUIBuilder.Panes` takes `BuildTab` and `BuildChipTemplate` from `OfficeSceneUIBuilder.App` and its `AppPane` keeps `DrawChips`' chosen look; its glyph collapse (AP3) replaces the labels' shrinking on a narrow strip.
+
+**Unity steps before this merges to `main`** (in the art office, `E:\unity\NOPE-art`):
+1. Tools > TimeDesk > Generate World (the `Tab` rule changed: chrome and its ink), then Build Office UI (the strip, the chips, the keys' partial on the fresh app); commit `OfficeGameplay` and the theme assets.
+2. The EditMode suite; the smoke test; the phase 20 feature probes (Ctrl+C on a row, Ctrl+V into Notes and the search field, F1, Ctrl+P, Ctrl+=).
+3. Screenshots of the app at 1920 × 1080 and 1280 × 720: the tab strip active and inactive, a badge, the Documents chips (one chosen, one on the desk), the Reference chips; the readability audit over them.
+4. The golden masters: `data_hashes.txt` (world_source.json, the themes), the scene dump and the profile change on purpose; re-pack once verified.

@@ -6,9 +6,11 @@ using UnityEngine.UI;
 
 /// <summary>
 /// One pane of the Investigation app (the PC redesign AP2, AP3, AP5, AP8):
-/// its tab strip (one tab per source, in TabOrder.Default, each with a badge),
-/// its header (the active view's chips: a click shows that item) and its
-/// content (the active tab's view; between travellers a case source shows the
+/// its tab strip (one tab per source, in TabOrder.Default, each with a badge;
+/// the active tab wears its active look, the paper plate with the accent bar
+/// the builder made), its header (the active view's chips: a click shows that
+/// item; the chosen chip wears its "Chosen" accent look, one not readable yet
+/// is dimmed) and its content (the active tab's view; between travellers a case source shows the
 /// no-case state, "Waiting for the next traveller", instead). A tab is shown
 /// only by the player's click or the app's own rules (a new case shows
 /// Documents, AP8); a view never switches the tab. The views are IAppView
@@ -38,9 +40,6 @@ public sealed partial class AppPane : MonoBehaviour
 
     /// <summary>The no-case state over the content (a case source's tab between travellers).</summary>
     [SerializeField] private GameObject noCase;
-
-    /// <summary>The chosen chip's tint (pressed).</summary>
-    [SerializeField] private Color chosenTint = new Color(0.72f, 0.72f, 0.72f, 1f);
 
     /// <summary>An unavailable item's chip tint (dimmed; it still shows why when clicked).</summary>
     [SerializeField] private Color unavailableTint = new Color(1f, 1f, 1f, 0.55f);
@@ -145,7 +144,7 @@ public sealed partial class AppPane : MonoBehaviour
         DrawChips();
     }
 
-    /// <summary>The active view's chips (none while the no-case state shows), the chosen one pressed, an unavailable one dimmed.</summary>
+    /// <summary>The active view's chips (none while the no-case state shows): the chosen one wears its accent look, an unavailable one is dimmed.</summary>
     private void DrawChips()
     {
         foreach (Button chip in _chips)
@@ -162,11 +161,13 @@ public sealed partial class AppPane : MonoBehaviour
             Button chip = Instantiate(chipTemplate, chipStrip);
             chip.gameObject.name = "Chip_" + i;
             chip.gameObject.SetActive(true);
-            TMP_Text label = chip.GetComponentInChildren<TMP_Text>(true);
-            if (label != null)
+            foreach (TMP_Text label in chip.GetComponentsInChildren<TMP_Text>(true))
                 label.text = items[i].Label;
+            Transform chosen = chip.transform.Find("Chosen");
+            if (chosen != null && chosen.gameObject.activeSelf != (i == view.Selected))
+                chosen.gameObject.SetActive(i == view.Selected);
             ColorBlock colours = chip.colors;
-            colours.normalColor = i == view.Selected ? chosenTint : items[i].Available ? Color.white : unavailableTint;
+            colours.normalColor = items[i].Available ? Color.white : unavailableTint;
             colours.selectedColor = colours.normalColor;
             chip.colors = colours;
             int index = i;

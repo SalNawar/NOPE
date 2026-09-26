@@ -8249,9 +8249,9 @@
       },
       {
         "role": "Tab",
-        "fill": "face",
+        "fill": "chrome",
         "alpha": 1,
-        "ink": "faceInk",
+        "ink": "chromeInk",
         "textClass": "Text"
       },
       {

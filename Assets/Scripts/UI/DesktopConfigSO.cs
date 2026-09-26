@@ -7,7 +7,7 @@ using UnityEngine;
 /// buttons, the desktop's icons (their cell, the arrange grid, the default
 /// order, the drop's overlap share), the double-click, the Internet's caps
 /// (the news back issues, the browser's history), the app windows' sizes,
-/// the Investigation app's scan toast and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
+/// the Investigation app's scan toast and its chrome's sizes, and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
 /// UI (Assets/Data/Config/Desktop_Default.asset). The builder reads the sizes
 /// (re-run it after changing one); DesktopWindowManager and DesktopIcons read
 /// the double-click, DesktopIcons the icon knobs and InvestigationApp the
@@ -101,6 +101,19 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>How long a scan's toast shows, in seconds (WN5).</summary>
     [Min(0.5f)] public float toastSeconds = 4f;
+
+    [Header("The Investigation app's chrome (readability; desktop units)")]
+    /// <summary>A pane's tab strip height (the tabs stand on the strip's bottom edge, joined to the row under it).</summary>
+    [Min(1f)] public float tabStripHeight = 48f;
+
+    /// <summary>A tab's label size (26 units read 20 px at 1080p and 13.5 px at 720p; a label shrinks to fit a narrow strip and never wraps).</summary>
+    [Min(1f)] public float tabLabelSize = 26f;
+
+    /// <summary>The pane header's (the chip row's) height.</summary>
+    [Min(1f)] public float chipRowHeight = 48f;
+
+    /// <summary>A chip's label size; a chip squeezed by its row shrinks the label to three quarters of it, then cuts the text with "…".</summary>
+    [Min(1f)] public float chipLabelSize = 22f;
 
     [Header("Notes (redesign phase 25)")]
     /// <summary>The most day pages Notes keeps (WorldState.notes); the oldest go first.</summary>
