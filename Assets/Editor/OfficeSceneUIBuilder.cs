@@ -1256,7 +1256,7 @@ public static partial class OfficeSceneUIBuilder
         {
             { DesktopAppIds.Investigation, app.Window },
             { DesktopAppIds.Internet, internet },
-            { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App, out TMP_Text mailTitle) },
+            { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App) },
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },
             { DesktopAppIds.Notes, BuildNotesWindow(windowLayer, config) },
             { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
@@ -1268,7 +1268,7 @@ public static partial class OfficeSceneUIBuilder
         var soFeed = new SerializedObject(feed);
         SetRef(soFeed, "game", game);
         SetRef(soFeed, "startEntryLabel", mailEntry);
-        SetRef(soFeed, "windowTitle", mailTitle);
+        SetRef(soFeed, "mailWindow", windows[DesktopAppIds.Mail]);
         soFeed.ApplyModifiedProperties();
 
         // The taskbar's way back to the office (closes the PC frame), next to Start.
