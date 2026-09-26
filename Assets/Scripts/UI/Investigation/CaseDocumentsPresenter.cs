@@ -114,7 +114,8 @@ public sealed class CaseDocumentsPresenter
     /// traveller wheel. With the desk, each becomes a paper whose scan opens
     /// its window; without it, the window opens at the hand-over. Windows
     /// spawn hidden. Each paper prints its document's form, headed with
-    /// <paramref name="agency"/>'s name and programme (redesign phase 4).
+    /// <paramref name="agency"/>'s name and programme (redesign phase 4), and
+    /// its window draws that same form (phase 5).
     /// </summary>
     public void Present(CaseInstance inst, AgencyContent agency)
     {
@@ -127,16 +128,17 @@ public sealed class CaseDocumentsPresenter
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = _windows.origin + i * _windows.step;
-                clone.SetDocument(doc, i, _compare, inst.look, _art);
+                DocumentForm form = DocumentForm.For(doc, agency);
+                clone.SetDocument(doc, i, form, _compare, inst.look, _art);
                 _docWindows.Add(clone);
                 _caseDocuments.Add(new CaseDocument
                 {
-                    name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
+                    name = doc != null ? doc.DisplayName : UiText.Get("document.untitled"),
                     fields = doc != null ? doc.fields : null,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
-                _caseForms.Add(DocumentForm.For(doc, agency));
+                _caseForms.Add(form);
                 i++;
             }
         }
@@ -170,9 +172,10 @@ public sealed class CaseDocumentsPresenter
 
     /// <summary>
     /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
-    /// or a hand-over where no desk is wired). The first time it opens this
-    /// case, the paper also gets a desktop tile at the top of the grid, which
-    /// reopens the window after it is closed.
+    /// or a hand-over where no desk is wired); its strip reads the time the
+    /// copy arrived. The first time it opens this case, the paper also gets a
+    /// desktop tile at the top of the grid, which reopens the window after it
+    /// is closed.
     /// </summary>
     private void OpenDocumentWindow(int index)
     {
@@ -180,6 +183,7 @@ public sealed class CaseDocumentsPresenter
         if (window == null || !window.TryGetComponent(out DesktopWindow chrome))
             return;
 
+        window.MarkScanned();
         chrome.Open();
         if (_iconedDocuments.Add(index))
         {

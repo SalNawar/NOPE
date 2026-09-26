@@ -351,6 +351,7 @@ public static partial class OfficeSceneUIBuilder
         ShiftClockDriver shiftClock = gameManager.GetComponent<ShiftClockDriver>();
         if (shiftClock == null)
             shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
+        WireDocumentClock(docTemplate, shiftClock);
 
         // The Office root: every click box, the desk, the traveller, the readouts,
         // the input rules and the binder that puts them on the art office at load.
@@ -419,8 +420,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "wheel", wheel);
         SetRef(soInvest, "idleScreen", idleScreen);
         // The 4:3 desktop: documents cascade on the left, clear of the icon
-        // column; books open in two staggered rows.
-        soInvest.FindProperty("documentWindowOrigin").vector2Value = new Vector2(-195f, 150f);
+        // column, the first a whole page tall under the window layer's top
+        // (phase 5's scanned copy); books open in two staggered rows.
+        soInvest.FindProperty("documentWindowOrigin").vector2Value = new Vector2(-195f, 96f);
         soInvest.FindProperty("documentWindowStep").vector2Value = new Vector2(40f, -40f);
         soInvest.FindProperty("bookWindowOrigin").vector2Value = new Vector2(-180f, -150f);
         soInvest.FindProperty("bookWindowColumnStep").floatValue = 300f;
@@ -461,43 +463,6 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
     // Window builders
     // -----------------------------
-
-    private static DocumentWindowController BuildDocumentWindow(Transform layer)
-    {
-        // Rebuilt fresh each run: visitor papers read as SCANNED documents —
-        // a white page with a photo corner (the traveller's photo on a photo
-        // document) on a dark scanner backing — so they never look like just
-        // another OS window.
-        DestroyChildIfPresent(layer, "DocumentWindowTemplate");
-        Transform win = Panel(layer, "DocumentWindowTemplate", Center, Center, Vector2.zero, new Vector2(540f, 440f), new Color(0.13f, 0.14f, 0.17f, 1f), ThemeRoleId.DiegeticBacking);
-        WindowShell s = BuildWindowShell(win, null, UiText.Get("document.untitled"), ThemeRoleId.DiegeticBacking, ThemeRoleId.DiegeticRow, false);
-
-        Transform page = Panel(win, "ScanPage", new Vector2(0.025f, 0.115f), new Vector2(0.975f, 0.85f), Vector2.zero, Vector2.zero, new Color(0.97f, 0.96f, 0.92f, 1f), ThemeRoleId.DiegeticPaper);
-        page.SetSiblingIndex(1); // render after the header, behind the rows
-        Transform photo = Panel(page, "PhotoBox", new Vector2(0.76f, 0.66f), new Vector2(0.96f, 0.96f), Vector2.zero, Vector2.zero, new Color(0.55f, 0.56f, 0.58f, 1f), ThemeRoleId.DiegeticPhoto);
-        TravellerPortraitView portrait = BuildPortrait(photo);
-
-        // Footer page label needs light ink on the dark backing.
-        s.page.color = new Color(0.85f, 0.86f, 0.88f, 1f);
-
-        DocumentWindowController c = GetOrAdd<DocumentWindowController>(win.gameObject);
-        var so = new SerializedObject(c);
-        SetRef(so, "titleText", s.title);
-        SetRef(so, "pageText", s.page);
-        SetRef(so, "prevButton", s.prev);
-        SetRef(so, "nextButton", s.next);
-        SetRef(so, "fieldRowsRoot", s.rowsRoot);
-        SetRef(so, "fieldRowTemplate", s.rowTemplate);
-        SetRef(so, "photoBox", photo.gameObject);
-        SetRef(so, "photo", portrait);
-        so.FindProperty("photoInset").floatValue = PhotoRowInset;
-        so.ApplyModifiedProperties();
-        win.gameObject.SetActive(false);
-        return c;
-    }
-
-    /// <summary>Extra right padding of a photo page's rows (px), so none runs under the photo box.</summary>
-    private const float PhotoRowInset = 120f;
 
     /// <summary>
     /// The scanned page's photo: a 4:5 Portrait fitted inside the box, holding
@@ -565,16 +530,7 @@ public static partial class OfficeSceneUIBuilder
     /// </summary>
     private static WindowShell BuildWindowShell(Transform win, string titleKey, string titleSample, ThemeRoleId frameRole, ThemeRoleId rowRole, bool rowLabelFits)
     {
-        // XP title bar (drag handle) with gloss highlight + window controls.
-        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), TitleBarPos, TitleBarSize, HeaderBar, ThemeRoleId.TitleBar);
-        Panel(header, "Gloss", new Vector2(0f, 0.5f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.14f), ThemeRoleId.TitleGloss);
-        WindowDrag drag = GetOrAdd<WindowDrag>(header.gameObject);
-        var soDrag = new SerializedObject(drag);
-        SetRef(soDrag, "windowRoot", (RectTransform)win);
-        soDrag.ApplyModifiedProperties();
-        TMP_Text title = Text(header, "TitleText", titleSample, TitleFontSize, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.76f, 1f), Color.white,
-                              ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, titleKey != null);
-        BuildWinControls(win, header);
+        TMP_Text title = BuildWindowHeader(win, titleKey, titleSample);
 
         // Rows container (scroll-free vertical list)
         Transform rowsRoot = Panel(win, "Rows", new Vector2(0.04f, 0.12f), new Vector2(0.96f, 0.84f), Vector2.zero, Vector2.zero, null);
@@ -591,6 +547,26 @@ public static partial class OfficeSceneUIBuilder
         Button next = MakeButton(win, "NextButton", null, new Vector2(0.82f, 0.02f), new Vector2(0.96f, 0.1f), null, ThemeRoleId.Button, "window.next");
 
         return new WindowShell { title = title, page = page, prev = prev, next = next, rowsRoot = rowsRoot, rowTemplate = rowTemplate };
+    }
+
+    /// <summary>
+    /// A window's XP title bar: the drag handle with its gloss, the title (a
+    /// keyed title, or a sample the controller rewrites) and the window
+    /// controls with the DesktopWindow they drive. Returns the title.
+    /// </summary>
+    private static TMP_Text BuildWindowHeader(Transform win, string titleKey, string titleSample)
+    {
+        // XP title bar (drag handle) with gloss highlight + window controls.
+        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), TitleBarPos, TitleBarSize, HeaderBar, ThemeRoleId.TitleBar);
+        Panel(header, "Gloss", new Vector2(0f, 0.5f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.14f), ThemeRoleId.TitleGloss);
+        WindowDrag drag = GetOrAdd<WindowDrag>(header.gameObject);
+        var soDrag = new SerializedObject(drag);
+        SetRef(soDrag, "windowRoot", (RectTransform)win);
+        soDrag.ApplyModifiedProperties();
+        TMP_Text title = Text(header, "TitleText", titleSample, TitleFontSize, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.76f, 1f), Color.white,
+                              ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, titleKey != null);
+        BuildWinControls(win, header);
+        return title;
     }
 
     /// <summary>
