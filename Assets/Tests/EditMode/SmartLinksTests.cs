@@ -24,7 +24,8 @@ public class SmartLinksTests
 
     private static readonly ClueCategory[] RecordRows =
     {
-        ClueCategory.Name, ClueCategory.BirthDate, ClueCategory.CitizenId, ClueCategory.Destination, ClueCategory.Incident
+        ClueCategory.Name, ClueCategory.BirthDate, ClueCategory.CitizenId, ClueCategory.Destination, ClueCategory.Incident,
+        ClueCategory.AccountStatus, ClueCategory.TransponderId, ClueCategory.TransponderClass, ClueCategory.Debt
     };
 
     private static readonly ClueCategory[] DirectiveOnly = { ClueCategory.DepartureDate, ClueCategory.Expiry };
@@ -63,6 +64,10 @@ public class SmartLinksTests
     [TestCase(ClueCategory.CitizenId)]
     [TestCase(ClueCategory.Destination)]
     [TestCase(ClueCategory.Incident)]
+    [TestCase(ClueCategory.AccountStatus)]
+    [TestCase(ClueCategory.TransponderId)]
+    [TestCase(ClueCategory.TransponderClass)]
+    [TestCase(ClueCategory.Debt)]
     public void RecordField_GoesToTheRecordOfThePapersCitizenId_AtItsRow(ClueCategory c)
     {
         DocumentField field = F(c, "value");

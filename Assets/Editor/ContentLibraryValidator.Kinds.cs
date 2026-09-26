@@ -4,9 +4,10 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 
 /// <summary>
-/// Validate Content Library's traveller-kinds part (the redesign's phase 3):
-/// the agency forms each blueprint lists and the claim line of every kind a
-/// blueprint makes.
+/// Validate Content Library's traveller-kinds part (the redesign's phases 3
+/// and 6): the agency forms each blueprint lists, the claim line of every
+/// kind a blueprint makes, each day's traveller mix, the present and the
+/// 2150 citizens' names.
 /// </summary>
 public static partial class ContentLibraryValidator
 {
@@ -54,6 +55,31 @@ public static partial class ContentLibraryValidator
 
         foreach (string problem in Interview.ClaimProblems((lib.Interview ?? new InterviewLines()).claims, blueprints.Select(b => b.Kind).Distinct()))
             Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
+
+        foreach (DayPlanSO plan in lib.DayPlans.Where(p => p != null))
+        {
+            if (!plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f))
+                Error($"Day plan '{plan.name}' has no traveller kind with a blueprint and a positive weight (days[].kinds).", plan);
+            foreach (KindWeight k in plan.Kinds.Where(k => k != null && k.blueprint == null))
+                Error($"Day plan '{plan.name}' lists a kind with no blueprint (run Tools > TimeDesk > Generate World).", plan);
+
+            bool premades = plan.AvailableLegendaries != null && plan.AvailableLegendaries.Any(l => l != null) ||
+                            plan.ForcedCases.Any(f => f != null && f.legendary != null);
+            if (premades && !plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && k.blueprint.Kind == TravellerKind.Displaced))
+                Error($"Day plan '{plan.name}' has premades but no Displaced kind with a positive weight; a premade stands only as a displaced traveller.", plan);
+        }
+
+        // The present (traveller types H1): every book lists its row, so it needs a fact per book category.
+        PresentPlace present = lib.BuildPresent(null);
+        if (present == null)
+            Error("The library has no present (world_source.json \"present\"; run Tools > TimeDesk > Generate World).", lib);
+        else
+            foreach (ClueCategory category in lib.ReferenceBookCategories().Where(c => present.Fact(c) == null))
+                Error($"The present '{present.Label}' has no {category} fact, so its row is missing from that book (run Tools > TimeDesk > Generate World).", lib);
+
+        // The 2150 citizens' names (K4): the Future places' lists together.
+        foreach (string problem in lib.CitizenNames().Problems())
+            Error(problem, lib);
 
         return issues;
     }

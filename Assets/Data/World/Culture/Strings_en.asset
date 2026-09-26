@@ -1307,6 +1307,82 @@ MonoBehaviour:
     text: Awaiting return
     gloss: 0
     tier: 0
+  - key: records.group.account
+    text: RECORDS
+    gloss: 0
+    tier: 0
+  - key: records.group.forms
+    text: FORMS ON FILE
+    gloss: 0
+    tier: 0
+  - key: records.group.travel
+    text: TRAVEL
+    gloss: 0
+    tier: 0
+  - key: records.row.citizenId
+    text: Citizen ID
+    gloss: 0
+    tier: 0
+  - key: records.row.standing
+    text: Standing
+    gloss: 0
+    tier: 0
+  - key: records.row.debt
+    text: Debt
+    gloss: 0
+    tier: 0
+  - key: records.row.lineage
+    text: Lineage
+    gloss: 0
+    tier: 0
+  - key: records.row.transponder
+    text: Transponder
+    gloss: 0
+    tier: 0
+  - key: records.row.transponderClass
+    text: Transponder Class
+    gloss: 0
+    tier: 0
+  - key: records.row.waiver
+    text: Stranding Waiver
+    gloss: 0
+    tier: 0
+  - key: records.row.proof
+    text: Proof of means
+    gloss: 0
+    tier: 0
+  - key: records.row.contract
+    text: Labour Contract
+    gloss: 0
+    tier: 0
+  - key: records.row.departure
+    text: Booked departure
+    gloss: 0
+    tier: 0
+  - key: records.row.departureDate
+    text: Departure date
+    gloss: 0
+    tier: 0
+  - key: records.row.trips
+    text: Past trips
+    gloss: 0
+    tier: 0
+  - key: records.row.trip
+    text: Past trip
+    gloss: 0
+    tier: 0
+  - key: records.standing.good
+    text: Good
+    gloss: 0
+    tier: 0
+  - key: records.none
+    text: None on file
+    gloss: 0
+    tier: 0
+  - key: records.trip.returned
+    text: returned
+    gloss: 0
+    tier: 0
   - key: case.roleUnknown
     text: Traveler
     gloss: 0
@@ -1518,5 +1594,21 @@ MonoBehaviour:
     tier: 0
   - key: category.Expiry
     text: VALID UNTIL
+    gloss: 0
+    tier: 0
+  - key: category.AccountStatus
+    text: VISA CLASS
+    gloss: 0
+    tier: 0
+  - key: category.TransponderId
+    text: TRANSPONDER
+    gloss: 0
+    tier: 0
+  - key: category.TransponderClass
+    text: TRANSPONDER CLASS
+    gloss: 0
+    tier: 0
+  - key: category.Debt
+    text: DEBT
     gloss: 0
     tier: 0

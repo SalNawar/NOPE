@@ -80,11 +80,8 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The look knobs every traveller shares.</summary>
     public LookRules LookRules => lookRules;
 
-    /// <summary>The present's clothes and 2150 accessory kit, for costume errors (written by Generate World from world_source.json "present").</summary>
-    [SerializeField] private PresentLook presentLook = new();
-
-    /// <summary>What the present wears (costume errors: its clothes and its accessory kit).</summary>
-    public PresentLook PresentLook => presentLook ?? new PresentLook();
+    /// <summary>What the neutral present wears (costume errors: its clothes and its accessory kit; PresentContent.look, never null).</summary>
+    public PresentLook PresentLook => (present ?? new PresentContent()).look ?? new PresentLook();
 
     [Header("Culture (piece 6)")]
     /// <summary>The culture UI knobs (written by Generate World from world_source.json "ui").</summary>
@@ -114,6 +111,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     [Header("Mail (redesign phase 25)")]
     /// <summary>The authored mail (written by Generate World from world_source.json "pc.mail"); the Mail app adds the day's generated messages.</summary>
     [SerializeField] private AuthoredMail[] mail;
+
+    [Header("The present (redesign phase 6)")]
+    /// <summary>The neutral present, the present while no nation leads (written by Generate World from world_source.json "present").</summary>
+    [SerializeField] private PresentContent present = new();
 
     /// <summary>Public read-only access to reference books.</summary>
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
@@ -161,22 +162,64 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>
     /// Today's world, built once per day: today's places (with the Future
     /// place of the history's leader, if any) and their facts with history
-    /// applied, in book order, so case generation and the reference books
-    /// share one list and one table.
+    /// applied, in book order, then the present's row (Present.AddRow, so
+    /// every book lists it from day 1), so case generation and the reference
+    /// books share one list and one table; and the present itself.
     /// </summary>
     public TodaysWorld BuildToday(DayPlanSO plan, HistoryState history)
     {
         List<NationEraProfileSO> places = TodaysProfiles(plan, History.FutureNation(history));
         var table = new FactTable();
         FillFacts(table, places, history);
-        return new TodaysWorld(places, table);
+        PresentPlace now = BuildPresent(history);
+        global::Present.AddRow(table, now);
+        return new TodaysWorld(places, table, now);
     }
 
     /// <summary>
+    /// The present on <paramref name="history"/> (Present.Choose, traveller
+    /// types H1): the leader's Future place, or the neutral present
+    /// ("present"), its facts with history applied. Builds only that one
+    /// place (audit R4-018: the wallet reads it without building the world's
+    /// facts). Null, with a warning, when no leader stands and Generate World
+    /// has not written the neutral present.
+    /// </summary>
+    public PresentPlace BuildPresent(HistoryState history)
+    {
+        string leader = History.FutureNation(history);
+        EraSO future = FutureEra;
+        var leaderPlaces = new List<PresentPlace>();
+        if (leader != null && future != null)
+            foreach (NationEraProfileSO p in Profiles)
+                if (p != null && p.era == future && p.nation != null && p.nation.id == leader)
+                    leaderPlaces.Add(new PresentPlace(p.nation.id, future.id, p.OriginLabel, p.year, p.birthYearMin, p.birthYearMax, ResolvedFacts(p.nation.id, future.id, p.facts, history), p.wardrobe));
+
+        PresentPlace neutral = null;
+        if (present != null && !string.IsNullOrWhiteSpace(present.displayName) && future != null)
+            neutral = new PresentPlace(global::Present.NeutralNationId, future.id, OriginLabels.Format(present.displayName, future.displayName), present.year,
+                                       present.birthYearMin, present.birthYearMax, ResolvedFacts(global::Present.NeutralNationId, future.id, present.facts, history), PresentLook.wardrobe);
+
+        PresentPlace chosen = global::Present.Choose(leader, leaderPlaces, neutral);
+        if (chosen == null)
+            Debug.LogWarning($"[ContentLibrarySO] '{name}' has no present (no leader, and no neutral present or Future era): 2150 citizens have no home row. Run Tools > TimeDesk > Generate World.", this);
+        return chosen;
+    }
+
+    /// <summary>A place's facts with history applied (History.Resolve), in authored order.</summary>
+    private static IEnumerable<KeyValuePair<ClueCategory, string>> ResolvedFacts(string nationId, string eraId, IEnumerable<ProfileFact> facts, HistoryState history) =>
+        (facts ?? Enumerable.Empty<ProfileFact>())
+            .Where(f => f != null)
+            .Select(f => new KeyValuePair<ClueCategory, string>(f.category, History.Resolve(history, nationId, eraId, f.category, f.value)));
+
+    /// <summary>The names 2150 citizens are drawn from (traveller types K4): every Future place's lists, in library order, whoever leads.</summary>
+    public CitizenNames CitizenNames() =>
+        new CitizenNames(Profiles.Where(p => p != null && p.era != null && p.era.isFuture)
+                                 .Select(p => new NameList(p.id, p.maleNames, p.femaleNames)));
+
+    /// <summary>
     /// Every place's facts with history applied (every profile with a nation
-    /// and era id, in library order): what the night steps compare against,
-    /// and the Future currency piece 6 shows in the wallet. A null history
-    /// gives the authored facts.
+    /// and era id, in library order): what the night steps and the history
+    /// checks compare against. A null history gives the authored facts.
     /// </summary>
     public FactTable BuildWorldFacts(HistoryState history)
     {

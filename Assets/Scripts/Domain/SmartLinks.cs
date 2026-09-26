@@ -107,7 +107,8 @@ public readonly struct LinkTarget : IEquatable<LinkTarget>
 /// answer (Currency, Language, Technology, Geography, Politics, Material, and
 /// Culture: the Costume Guide) goes to its book's claimed-place row. Name,
 /// Date of Birth and the record categories (Citizen ID, Destination: the
-/// record's registered origin or booked departure, Incident) go to the
+/// record's registered origin or booked departure, Incident, and a Citizen
+/// Account's status, transponder, transponder class and debt) go to the
 /// traveller's own record in Records, looked up by the paper's Citizen ID,
 /// else its Name, at that category's row. The directive-only dates (a
 /// departure date, a Valid Until) go to Rules. A category with no target (a
@@ -183,6 +184,10 @@ public static class SmartLinks
             case ClueCategory.CitizenId:
             case ClueCategory.Destination:
             case ClueCategory.Incident:
+            case ClueCategory.AccountStatus:
+            case ClueCategory.TransponderId:
+            case ClueCategory.TransponderClass:
+            case ClueCategory.Debt:
                 return string.IsNullOrWhiteSpace(recordLookup) ? LinkTarget.None : LinkTarget.ToRecords(recordLookup, category);
             case ClueCategory.DepartureDate:
             case ClueCategory.Expiry:
