@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// A generated, playable case for the current shift.
@@ -90,6 +91,21 @@ public sealed class CaseInstance
     /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
     public string HomeLabel => IsLiar ? trueHomeLabel : originLabel;
 
+    /// <summary>
+    /// A 2150 citizen's costume error (traveller types C2): the wrong item
+    /// they wear to the destination, where it would cause a panic (None for
+    /// everyone else). A deviation fault, never beside another fault (K5),
+    /// proven by comparing a garment with the Costume Guide.
+    /// </summary>
+    public CostumeError costumeFault;
+
+    /// <summary>The label of the first wrong garment a costume error shows (the panic news names it); empty without one.</summary>
+    public string CostumeItem =>
+        costumeFault == CostumeError.None ? string.Empty : look?.Garments.FirstOrDefault(g => g.IsTell)?.Label ?? string.Empty;
+
+    /// <summary>True when the traveller has a deviation fault (traveller types P1): a lie about their home, or a costume error. Denying one needs a logged deviation.</summary>
+    public bool HasDeviationFault => IsLiar || costumeFault != CostumeError.None;
+
     /// <summary>True if the claimed destination is permitted by today's rules.</summary>
     public bool claimAllowedByRules = true;
 
@@ -110,10 +126,12 @@ public sealed class CaseInstance
     public TravellerLook look;
 
     /// <summary>
-    /// The correct decision: accept only an honest traveller whose destination
-    /// is permitted today; deny a liar or a rule-breaking destination.
+    /// The correct decision: accept only a traveller with no deviation fault
+    /// whose destination is permitted today; deny a liar, a costume error or
+    /// a rule-breaking destination (VerdictRules' liar input is the deviation
+    /// fault until the plan's phase 7 names it).
     /// </summary>
-    public bool ShouldAccept => VerdictRules.ShouldAccept(IsLiar, claimAllowedByRules);
+    public bool ShouldAccept => VerdictRules.ShouldAccept(HasDeviationFault, claimAllowedByRules);
 
     /// <summary>Runtime documents built from templates.</summary>
     public readonly List<DocumentInstance> documents = new();

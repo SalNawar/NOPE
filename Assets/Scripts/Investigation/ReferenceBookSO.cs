@@ -14,4 +14,11 @@ public sealed class ReferenceBookSO : ScriptableObject
 
     /// <summary>Category this book covers; matches DocumentField.category and the fact category.</summary>
     public ClueCategory category;
+
+    /// <summary>
+    /// Lists the claimed place's row first, then the places under era
+    /// headings, the claimed era first (BookLines.Arrange; the Costume Guide,
+    /// traveller types C3); off: today's rows as they are.
+    /// </summary>
+    public bool groupByEra;
 }

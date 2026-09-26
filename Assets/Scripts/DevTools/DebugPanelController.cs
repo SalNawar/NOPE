@@ -199,6 +199,17 @@ public sealed class DebugPanelController : MonoBehaviour
             DevToolsState.ForceLegendaryNextCase = newForced;
         }
 
+        GUILayout.BeginHorizontal();
+        GUILayout.Label($"Costume error on the next generated case: {DevToolsState.ForcedCostumeError}", GUILayout.Width(330f));
+        foreach (CostumeError error in (CostumeError[])System.Enum.GetValues(typeof(CostumeError)))
+        {
+            if (!GUILayout.Button(error.ToString(), GUILayout.Width(120f)) || DevToolsState.ForcedCostumeError == error)
+                continue;
+            Debug.Log($"[DebugPanelController] Cheat: ForcedCostumeError set to {error} (from the next day's generation).");
+            DevToolsState.ForcedCostumeError = error;
+        }
+        GUILayout.EndHorizontal();
+
         GUILayout.Space(6f);
         GUILayout.Label("Upgrades");
 

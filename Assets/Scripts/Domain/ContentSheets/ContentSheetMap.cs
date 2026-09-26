@@ -46,12 +46,18 @@ public static class ContentSheetMap
                 Values("eraSmallTalk", "smallTalk", Text("text")).Note("small talk any traveller of the era may say")),
             Countries(),
             Places(),
+            Wardrobe("presentWardrobe", "present.wardrobe").Note("the present (2150): its clothes, worn whole by a 2150 citizen who forgot their costume"),
+            Rows("presentKit", "present.kit",
+                Text("gender").Required().OneOf("m", "f"),
+                Text("label").Required(),
+                Text("variant").Required().Note("the art key token: accessory_{gender}_neutral_future_{variant}"))
+                .Note("the present's 2150 accessory kit, one item per row: one can slip onto a right costume (a costume error)"),
             Rows("rules", "rules", Key("asset"),
                 Text("asset").Required().Note("the rule asset's name"),
                 Text("type"),
-                Text("country").Ref("countries"),
-                Text("era").Ref("eras"),
-                Text("description")).Note("travel rules a day can switch on"),
+                Text("country").Omit().Ref("countries").Note("a closure's country (blank: none)"),
+                Text("era").Omit().Ref("eras").Note("a closure's era (blank: none)"),
+                Text("description")).Note("travel rules a day can switch on: closures and standing procedures"),
             Days(),
             Interview(),
             Questions(),
@@ -69,6 +75,9 @@ public static class ContentSheetMap
                 List("faces")),
             Int("greyFromAge"),
             Text("wholeFigureLabel"),
+            Num("costumeErrors.otherPlace").Note("weight of a costume error that is another of today's places' item"),
+            Num("costumeErrors.presentClothes").Note("weight of a costume error that is the present's whole look (2150 clothes)"),
+            Num("costumeErrors.presentAccessory").Note("weight of a costume error that is one 2150 accessory"),
             Rows("confusable", "confusable",
                 Text("a").Ref("places"),
                 Text("b").Ref("places"),
@@ -116,20 +125,24 @@ public static class ContentSheetMap
             List("maleNames"),
             List("femaleNames"),
             Values("placeSmallTalk", "smallTalk", Text("text")).OmitEmpty(),
-            Keyed("wardrobeSets", "wardrobe", Text("gender").OneOf("m", "f"),
-                Text("signature").Note("the slot whose item is the dress signature"),
-                Keyed("wardrobe", "", Text("slot").OneOf("outfit", "hair", "facialHair", "headwear", "accessory"),
-                    Text("label").Required(),
-                    Bool("wig").Omit(),
-                    Bool("back").Omit(),
-                    Bool("leakable").Omit(),
-                    List("covers").Omit().Note("slots this item hides"),
-                    Text("artNation").Omit().Note("files the art under another nation (blank: the place's own)")).Note("one worn item per row")),
+            Wardrobe("wardrobe", "wardrobe"),
             Nums("looks.skin").Omit().Note("overrides the country's skin weights"),
             Rows("placeHair", "looks.hair",
                 Text("colour"),
                 Num("weight")).OmitEmpty().Note("overrides the country's hair weights"))
             .Note("a place is a country in an era; child sheets name it {country}_{era}");
+
+    /// <summary>A wardrobe at <paramref name="path"/>: per gender its signature slot and one worn item per slot (a place's, or the present's).</summary>
+    private static SheetSpec Wardrobe(string name, string path) =>
+        Keyed(name + "Sets", path, Text("gender").OneOf("m", "f"),
+            Text("signature").Note("the slot whose item is the dress signature"),
+            Keyed(name, "", Text("slot").OneOf("outfit", "hair", "facialHair", "headwear", "accessory"),
+                Text("label").Required(),
+                Bool("wig").Omit(),
+                Bool("back").Omit(),
+                Bool("leakable").Omit(),
+                List("covers").Omit().Note("slots this item hides"),
+                Text("artNation").Omit().Note("files the art under another nation (blank: the place's own)")).Note("one worn item per row"));
 
     private static SheetSpec Days() =>
         Rows("days", "days", Key("day", "day"),
@@ -148,7 +161,8 @@ public static class ContentSheetMap
                 Int("slot"),
                 Text("premade").Ref("premades"),
                 Text("blueprint")),
-            Float("premadeChance"));
+            Float("premadeChance"),
+            Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"));
 
     private static SheetSpec Interview() =>
         Single("interview", "interview",
@@ -234,6 +248,7 @@ public static class ContentSheetMap
             Text("lines.leaderLost"),
             Text("lines.carry"),
             Text("lines.dominant").Note("an attribute becomes dominant in a place: {attribute} and {place}"),
+            Text("lines.panic").Note("an accepted costume error caused a panic: {place} and {value} (the wrong item)"),
             Rows("historyRules", "rules", Key("id", "rule"),
                 Text("id").Required(),
                 Text("name"),

@@ -43,6 +43,9 @@ public sealed class DayReference
     private FactTable _facts;
     private bool _booksBuilt;
 
+    /// <summary>The book windows built on the first case (each re-lists its rows for the traveller's claim).</summary>
+    private readonly List<ReferenceBookWindowController> _books = new List<ReferenceBookWindowController>();
+
     /// <summary>The Directives window's text, the Citizen Records app, the compare (the book rows pick into it), the desktop's tiles and the book shelf's parts; any may be missing.</summary>
     public DayReference(TMP_Text directivesText, CitizenRecordsWindowController records, CompareController compare, DesktopTiles tiles, BookShelf shelf)
     {
@@ -77,6 +80,14 @@ public sealed class DayReference
             _records.SetRegistry(registry, agency, agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null);
     }
 
+    /// <summary>Tells every book window the traveller's claimed place (the Costume Guide lists its row first and its era's places next).</summary>
+    public void SetClaim(string nationId, string eraId)
+    {
+        foreach (ReferenceBookWindowController book in _books)
+            if (book != null)
+                book.SetClaim(nationId, eraId);
+    }
+
     /// <summary>The first time only: one window per reference book of the library (hidden), each with a desktop tile.</summary>
     public void BuildBookShelf(ContentLibrarySO lib)
     {
@@ -95,7 +106,8 @@ public sealed class DayReference
                 continue;
 
             ReferenceBookWindowController win = Object.Instantiate(_shelf.template, _shelf.windowLayer);
-            win.SetBook(book, _facts, _compare);
+            win.SetBook(book, _facts, _compare, lib.Eras);
+            _books.Add(win);
             if (win.transform is RectTransform rt)
                 rt.anchoredPosition = _shelf.origin + new Vector2((i % 3) * _shelf.columnStep, 0f) + (i / 3) * _shelf.rowStep;
             win.gameObject.SetActive(false);

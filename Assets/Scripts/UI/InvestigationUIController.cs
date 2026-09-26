@@ -287,7 +287,8 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// (one text), today's directives, every window closed (a new visitor
     /// clears the desk; a pin system will later let the player keep chosen
     /// windows open), the documents presented, the interview started, the book
-    /// shelf built the first time, the compare cleared.
+    /// shelf built the first time and told the claim (the Costume Guide
+    /// lists the claimed row first), the compare cleared.
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
@@ -307,6 +308,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _documents.Present(inst);
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
         _reference.BuildBookShelf(lib);
+        _reference.SetClaim(inst != null && inst.claimedNation != null ? inst.claimedNation.id : null,
+                            inst != null && inst.claimedEra != null ? inst.claimedEra.id : null);
 
         if (compareController != null)
             compareController.Clear();

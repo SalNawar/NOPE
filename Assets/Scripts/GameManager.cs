@@ -687,11 +687,13 @@ public sealed class GameManager : MonoBehaviour
         _ledger.verdicts.Add(verdict);
 
         // The traveler is only dispatched (and the timeline moved) when accepted;
-        // an accepted liar also carries their true home's fact into the claim.
+        // an accepted liar also carries their true home's fact into the claim,
+        // and an accepted costume error causes a panic there (tomorrow's news).
         if (accepted)
         {
             TimelineService.ApplyVerdictImpacts(inst, inst.claimedEra, verdict.correct, _worldState, contentLibrary);
             HistoryService.RecordCarry(_worldState, inst, _today.Facts, _gameConfig);
+            HistoryService.RecordPanic(_worldState, inst);
         }
 
         if (officeUI != null)
