@@ -429,7 +429,7 @@ public static class _TimeDeskAuditPlay
         var compare = (CompareController)Field(o.Ui, "compareController");
         var tr = (CaseTranslation)Field(o.Ui, "_caseTranslation");
         var facts = (FactTable)Field(o.Ui, "_facts");
-        var registry = (CitizenRegistry)Field(o.Ui, "_registry");
+        var registry = (CitizenRegistry)Field(Field(o.Ui, "recordsWindow"), "_registry");
         var runner = (DialogRunner)Field(o.Ui, "_runner");
         ContentLibrarySO lib = RunManager.Instance.Library;
 
