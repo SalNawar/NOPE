@@ -231,13 +231,16 @@ public static partial class OfficeSceneUIBuilder
         }
 
         // --- Investigation desk ---
-        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled overlay.
+        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled case overlay. The
+        // window layer sits on the host above it, never toggled, so a window opened between travellers (Settings, from
+        // the Start menu) shows too; the compare dock goes above the layer (BuildCompareDock).
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
 
         Transform investRoot = Panel(investHost, "InvestigationRoot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, DeskDimColor, ThemeRoleId.DeskDim);
-        Transform windowLayer = Panel(investRoot, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        MoveChildIfPresent(investRoot, "WindowLayer", investHost);
+        Transform windowLayer = Panel(investHost, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
         // Claim on a translucent XP-blue strip.
         Panel(investRoot, "ClaimStrip", new Vector2(0.06f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ClaimStrip);
@@ -313,7 +316,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The compare dock above the taskbar (the PC redesign DK9): the window
         // layer moves over the claim, the icons and Accept/Deny, the dock over it.
-        Transform compareBar = BuildCompareDock(investRoot, windowLayer, compare, out TMP_Text compareText);
+        Transform compareBar = BuildCompareDock(investHost, investRoot, windowLayer, compare, out TMP_Text compareText, out GameObject compareDock);
 
         investRoot.gameObject.SetActive(false);
 
@@ -407,6 +410,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "acceptButton", acceptButton);
         SetRef(soInvest, "denyButton", denyButton);
         SetRef(soInvest, "compareController", compare);
+        SetRef(soInvest, "compareDock", compareDock);
         SetRef(soInvest, "windowLayer", windowLayer);
         SetRef(soInvest, "documentWindowTemplate", docTemplate);
         SetRef(soInvest, "bookWindowTemplate", bookTemplate);
