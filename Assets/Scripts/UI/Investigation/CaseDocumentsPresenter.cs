@@ -161,11 +161,11 @@ public sealed class CaseDocumentsPresenter
             OpenDocumentWindow(index);
     }
 
-    /// <summary>The decision: the desk's papers leave with the traveller.</summary>
-    public void EndCase()
+    /// <summary>The decision (<paramref name="accepted"/>): the desk's papers leave with the traveller, inked with the verdict.</summary>
+    public void EndCase(bool accepted)
     {
         if (_desk != null)
-            _desk.EndCase();
+            _desk.EndCase(accepted);
     }
 
     /// <summary>

@@ -9,10 +9,15 @@ using UnityEngine.UI;
 /// row the player can compare against a traveller's statement; a row whose
 /// value history changed shows "[revised]" after its place (FactTable.IsChanged;
 /// the value and the evidence stay canonical). Paging and row cloning are
-/// PagedRowsWindow's.
+/// PagedRowsWindow's. The book's cover shows at the window's top when its art
+/// exists (SlotArt.CoverFor, redesign phase 27); without it the header stays
+/// as it was.
 /// </summary>
 public sealed class ReferenceBookWindowController : PagedRowsWindow
 {
+    /// <summary>The cover at the window's top (inactive until the book's cover art is found).</summary>
+    [SerializeField] private Image cover;
+
     private ReferenceBookSO _book;
     private FactTable _facts;
     private CompareController _compare;
@@ -25,6 +30,12 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
         _compare = compare;
 
         SetTitle(book != null ? book.displayName : UiText.Get("book.untitled"));
+        if (cover != null)
+        {
+            Sprite art = SlotArt.CoverFor(book);
+            cover.sprite = art;
+            cover.gameObject.SetActive(art != null);
+        }
         ShowPage(0);
     }
 

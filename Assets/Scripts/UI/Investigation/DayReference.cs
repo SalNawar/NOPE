@@ -101,7 +101,7 @@ public sealed class DayReference
             win.gameObject.SetActive(false);
 
             if (win.TryGetComponent(out DesktopWindow chrome))
-                _tiles.Add(book.displayName, chrome, false);
+                _tiles.Add(book.displayName, chrome, false, SlotArt.CoverFor(book));
             i++;
         }
     }

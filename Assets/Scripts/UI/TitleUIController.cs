@@ -32,6 +32,9 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>Reached ending's display name.</summary>
     [SerializeField] private TMP_Text endingTitleText;
 
+    /// <summary>The reached ending's picture, full screen behind the ending panel (EndingSO.picture; hidden when it has none).</summary>
+    [SerializeField] private Image endingPicture;
+
     /// <summary>Reached ending's flavor text.</summary>
     [SerializeField] private TMP_Text endingBodyText;
 
@@ -54,6 +57,7 @@ public sealed class TitleUIController : MonoBehaviour
     {
         if (titlePanel != null) titlePanel.SetActive(false);
         if (endingPanel != null) endingPanel.SetActive(false);
+        if (endingPicture != null) endingPicture.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -106,6 +110,13 @@ public sealed class TitleUIController : MonoBehaviour
 
         if (endingBodyText != null)
             endingBodyText.text = ending != null ? ending.bodyText : string.Empty;
+
+        if (endingPicture != null)
+        {
+            Sprite picture = ending != null ? ending.picture : null;
+            endingPicture.sprite = picture;
+            endingPicture.gameObject.SetActive(picture != null);
+        }
 
         if (endingNewRunButton != null)
         {

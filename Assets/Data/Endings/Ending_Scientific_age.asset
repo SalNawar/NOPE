@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Age of Science
   bodyText: Your decisions accelerated discovery after discovery. The timeline hums
     with new machines, new power, new possibilities.
+  picture: {fileID: 21300000, guid: 44aa605992be2ab44a456beec266d40b, type: 3}
   conditionType: 2
   attribute: {fileID: 11400000, guid: 3729349da64c16941b3371cc2cbf6487, type: 2}
   threshold: 26

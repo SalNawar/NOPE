@@ -13,7 +13,9 @@ using UnityEngine.UI;
 /// Dynamic rows (family members, shop items) are spawned at runtime in their
 /// panel's own ink (its body text's colour, as the scene draws the panel), so
 /// they read on whatever the panel is; the shop shows its upgrades a page at a
-/// time (Paging), with a pager row when they do not fit one page.
+/// time (Paging), with a pager row when they do not fit one page. A row shows
+/// its art when the file exists (redesign phase 27): a family member's
+/// portrait for their condition, an upgrade's icon.
 /// </summary>
 public sealed class HomeUIController : MonoBehaviour
 {
@@ -211,7 +213,7 @@ public sealed class HomeUIController : MonoBehaviour
         expensesPanel.SetActive(true);
     }
 
-    /// <summary>Rebuilds the family member rows (name, condition, Treat button).</summary>
+    /// <summary>Rebuilds the family member rows (the member's portrait for their condition when its art exists, ArtSlots.FamilyPortrait; name, condition, Treat button).</summary>
     private void BuildFamilyRows(WorldState world, GameConfigSO config, Action<int> onTreat)
     {
         if (familyRowsRoot == null)
@@ -233,8 +235,9 @@ public sealed class HomeUIController : MonoBehaviour
             string buttonLabel = $"Treat (-{careCost})";
             bool interactable = member.condition > 0 && world.money >= careCost && onTreat != null;
 
+            Sprite portrait = SlotArt.Sprite(ArtSlots.FamilyPortrait(member.name, member.condition, config != null ? config.maxFamilyCondition : 0));
             GameObject row = CreateRow(familyRowsRoot, label, buttonLabel, interactable,
-                () => onTreat?.Invoke(capturedIndex), PanelInk(expensesBodyText));
+                () => onTreat?.Invoke(capturedIndex), PanelInk(expensesBodyText), portrait);
 
             _familyRows.Add(row);
         }
@@ -291,7 +294,7 @@ public sealed class HomeUIController : MonoBehaviour
         shopPanel.SetActive(true);
     }
 
-    /// <summary>Rebuilds the shop page's item rows (name + cost, Buy/Owned button), then a pager row ("Page n/m", "Next >", wrapping round) when there is more than one page.</summary>
+    /// <summary>Rebuilds the shop page's item rows (the upgrade's icon when its art exists, ArtSlots.UpgradeIcon; name + cost, Buy/Owned button), then a pager row ("Page n/m", "Next >", wrapping round) when there is more than one page.</summary>
     private void BuildShopRows(WorldState world, ContentLibrarySO lib, Action<UpgradeSO> onBuy)
     {
         if (shopRowsRoot == null)
@@ -333,7 +336,7 @@ public sealed class HomeUIController : MonoBehaviour
 
             UpgradeSO capturedUpgrade = upgrade;
             GameObject row = CreateRow(shopRowsRoot, label, buttonLabel, interactable,
-                () => onBuy?.Invoke(capturedUpgrade), PanelInk(shopBodyText));
+                () => onBuy?.Invoke(capturedUpgrade), PanelInk(shopBodyText), SlotArt.Sprite(ArtSlots.UpgradeIcon(upgrade.id)));
 
             _shopRows.Add(row);
         }
@@ -491,8 +494,8 @@ public sealed class HomeUIController : MonoBehaviour
         return row;
     }
 
-    /// <summary>Creates a row with a label in <paramref name="ink"/> on the left and a button on the right.</summary>
-    private static GameObject CreateRow(Transform parent, string label, string buttonLabel, bool buttonInteractable, Action onClick, Color ink)
+    /// <summary>Creates a row with <paramref name="icon"/> (when given, a square the row's height) and a label in <paramref name="ink"/> on the left and a button on the right.</summary>
+    private static GameObject CreateRow(Transform parent, string label, string buttonLabel, bool buttonInteractable, Action onClick, Color ink, Sprite icon = null)
     {
         var row = new GameObject("Row", typeof(RectTransform));
         row.transform.SetParent(parent, false);
@@ -509,6 +512,20 @@ public sealed class HomeUIController : MonoBehaviour
         hLayout.childForceExpandHeight = true;
         hLayout.spacing = 12f;
         hLayout.childAlignment = TextAnchor.MiddleLeft;
+
+        // Icon (the row's art slot; none without art).
+        if (icon != null)
+        {
+            var iconGo = new GameObject("Icon", typeof(RectTransform));
+            iconGo.transform.SetParent(row.transform, false);
+            var iconLayout = iconGo.AddComponent<LayoutElement>();
+            iconLayout.preferredWidth = rowLayout.preferredHeight;
+            iconLayout.flexibleWidth = 0f;
+            Image iconImage = iconGo.AddComponent<Image>();
+            iconImage.sprite = icon;
+            iconImage.preserveAspect = true;
+            iconImage.raycastTarget = false;
+        }
 
         // Label.
         var labelGo = new GameObject("Label", typeof(RectTransform));

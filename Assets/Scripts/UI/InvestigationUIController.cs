@@ -350,7 +350,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// </summary>
     private void Decide(bool accepted)
     {
-        _documents.EndCase();
+        _documents.EndCase(accepted);
         Hide();
         _currentCase = null;
         OneShot.Fire(ref _onDecision, accepted);
