@@ -1,7 +1,7 @@
-Assets/Data files: 446
+Assets/Data files: 448
 first Generate World changed vs the committed tree: []
 second Generate World changed vs the first: []
 --- first Generate World log (warnings, errors, generator summary lines) ---
-[Log] [WorldContentGenerator] World generated: 6 eras, 8 nations, 48 places (8 Future), 6 rules, 10 premades, 6 day plans, 6 questions, 3 dialogs, 3 unlock triggers, 11 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 4 translator upgrades, 1 translation notice; 0 unlisted generated asset(s) moved to the trash.
+[Log] [WorldContentGenerator] World generated: 6 eras, 8 nations, 48 places (8 Future), 7 rules, 10 premades, 6 day plans, 6 questions, 3 dialogs, 3 unlock triggers, 11 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 4 translator upgrades, 1 translation notice; 0 unlisted generated asset(s) moved to the trash.
 --- second Generate World log ---
-[Log] [WorldContentGenerator] World generated: 6 eras, 8 nations, 48 places (8 Future), 6 rules, 10 premades, 6 day plans, 6 questions, 3 dialogs, 3 unlock triggers, 11 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 4 translator upgrades, 1 translation notice; 0 unlisted generated asset(s) moved to the trash.
+[Log] [WorldContentGenerator] World generated: 6 eras, 8 nations, 48 places (8 Future), 7 rules, 10 premades, 6 day plans, 6 questions, 3 dialogs, 3 unlock triggers, 11 history rules, 8 leader effects, 9 themes, 7 UI string tables, 13 tongues, 4 translator upgrades, 1 translation notice; 0 unlisted generated asset(s) moved to the trash.

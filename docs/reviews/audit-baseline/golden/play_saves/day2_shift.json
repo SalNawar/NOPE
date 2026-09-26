@@ -3,17 +3,16 @@
     "world": {
         "day": 2,
         "runSeed": 12345,
-        "money": 125,
+        "money": 162,
         "timelineStability": 80.0,
         "totalCitations": 2,
         "citationsToday": 1,
+        "clerkDebtPaid": 43,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
-        "unlockedUpgradeIds": [
-            "tr_near_east_spoken"
-        ],
+        "unlockedUpgradeIds": [],
         "flags": [
             "premade:senenmut:met",
             "trig:unlock_q_capital:fired",
@@ -349,7 +348,8 @@
                 "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
                 "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
                 "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
-                "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
+                "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
+                "Premium families book Periclean Athens for the summer."
             ]
         },
         "history": {
@@ -410,7 +410,8 @@
                     "value": "Al-jabr reckoning tables",
                     "day": 2
                 }
-            ]
+            ],
+            "pendingPanics": []
         },
         "newsArchive": [
             {
@@ -427,7 +428,8 @@
                     "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
                     "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
                     "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
-                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
+                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
+                    "Premium families book Periclean Athens for the summer."
                 ]
             }
         ],
@@ -438,21 +440,21 @@
                 "day": 1,
                 "wages": 85,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 21,
                 "household": 20,
-                "purchases": 80,
-                "balance": 35,
-                "owed": -1
+                "purchases": 0,
+                "balance": 94,
+                "owed": 125409
             },
             {
                 "day": 2,
                 "wages": 90,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 22,
                 "household": 0,
                 "purchases": 0,
-                "balance": 125,
-                "owed": -1
+                "balance": 162,
+                "owed": 125387
             }
         ],
         "notes": []

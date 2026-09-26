@@ -3,17 +3,18 @@
     "world": {
         "day": 6,
         "runSeed": 12345,
-        "money": 284,
+        "money": 147,
         "timelineStability": 70.0,
         "totalCitations": 4,
         "citationsToday": 0,
+        "clerkDebtPaid": 137,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
         "unlockedUpgradeIds": [
-            "tr_near_east_spoken",
-            "interview_protocols"
+            "interview_protocols",
+            "tr_near_east_spoken"
         ],
         "flags": [
             "premade:senenmut:met",
@@ -24,9 +25,9 @@
             "dlg:dlg_rumour:done",
             "rumour_calculators",
             "trig:unlock_q_ruler:fired",
+            "trig:unlock_q_born:fired",
             "premade:arib:met",
             "dlg:dlg_rumour_followup:done",
-            "trig:unlock_q_born:fired",
             "premade:gallerani:met",
             "trig:art_renaissance:fired"
         ],
@@ -607,7 +608,8 @@
             "newsLines": [
                 "Art is now DOMINANT in Metapolitefsi Athens.",
                 "Democracy is now DOMINANT in Elizabethan England.",
-                "A renaissance of artistic movements ripples through every era."
+                "A renaissance of artistic movements ripples through every era.",
+                "12,000 accounts frozen in default."
             ]
         },
         "history": {
@@ -667,7 +669,8 @@
                     "source": "Republican Rome (Ancient)"
                 }
             ],
-            "pendingCarries": []
+            "pendingCarries": [],
+            "pendingPanics": []
         },
         "newsArchive": [
             {
@@ -684,7 +687,8 @@
                     "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
                     "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
                     "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
-                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
+                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
+                    "Premium families book Periclean Athens for the summer."
                 ]
             },
             {
@@ -695,21 +699,24 @@
                 "news": [
                     "Art is now DOMINANT in Abbasid Baghdad.",
                     "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
-                    "HISTORY: travellers brought Al-jabr reckoning tables to Periclean Athens (Ancient)."
+                    "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
+                    "HISTORY: travellers brought Al-jabr reckoning tables to Periclean Athens (Ancient).",
+                    "Debt Relief Departures reach a record high."
                 ]
             },
             {
                 "day": 4,
                 "briefing": [],
                 "news": [
-                    "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records."
+                    "A stranded tourist's family inherits 212,000 cr."
                 ]
             },
             {
                 "day": 5,
                 "briefing": [],
                 "news": [
-                    "Science is now DOMINANT in Elizabethan England."
+                    "Science is now DOMINANT in Elizabethan England.",
+                    "CLEAR YOUR DEBT: 180 days in the Victorian mills."
                 ]
             }
         ],
@@ -720,51 +727,51 @@
                 "day": 1,
                 "wages": 85,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 21,
                 "household": 20,
-                "purchases": 80,
-                "balance": 35,
-                "owed": -1
+                "purchases": 0,
+                "balance": 94,
+                "owed": 125409
             },
             {
                 "day": 2,
                 "wages": 90,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 22,
                 "household": 21,
-                "purchases": 0,
-                "balance": 104,
-                "owed": -1
+                "purchases": 120,
+                "balance": 21,
+                "owed": 125387
             },
             {
                 "day": 3,
                 "wages": 125,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 31,
                 "household": 21,
-                "purchases": 120,
-                "balance": 88,
-                "owed": -1
+                "purchases": 0,
+                "balance": 94,
+                "owed": 125356
             },
             {
                 "day": 4,
                 "wages": 125,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 31,
                 "household": 21,
-                "purchases": 0,
-                "balance": 192,
-                "owed": -1
+                "purchases": 80,
+                "balance": 87,
+                "owed": 125325
             },
             {
                 "day": 5,
                 "wages": 130,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 32,
                 "household": 38,
                 "purchases": 0,
-                "balance": 284,
-                "owed": -1
+                "balance": 147,
+                "owed": 125293
             }
         ],
         "notes": []

@@ -3,10 +3,11 @@
     "world": {
         "day": 1,
         "runSeed": 12345,
-        "money": 135,
+        "money": 114,
         "timelineStability": 95.0,
         "totalCitations": 1,
         "citationsToday": 1,
+        "clerkDebtPaid": 21,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
@@ -279,7 +280,8 @@
             "leaderSinceDay": 0,
             "ranking": [],
             "factEdits": [],
-            "pendingCarries": []
+            "pendingCarries": [],
+            "pendingPanics": []
         },
         "newsArchive": [
             {
@@ -295,11 +297,11 @@
                 "day": 1,
                 "wages": 85,
                 "fines": 0,
-                "debtRelief": -1,
+                "debtRelief": 21,
                 "household": 0,
                 "purchases": 0,
-                "balance": 135,
-                "owed": -1
+                "balance": 114,
+                "owed": 125409
             }
         ],
         "notes": []

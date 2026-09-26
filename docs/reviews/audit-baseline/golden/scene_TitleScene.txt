@@ -5,7 +5,7 @@ Canvas active=True layer=5 tag=Untagged components=[RectTransform,Canvas,CanvasS
 Canvas transform pos=(960.000,540.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas rect min=(0.0,0.0) max=(0.0,0.0) pivot=(0.5,0.5) pos=(960.0,540.0) size=(1920.0,1080.0)
 Canvas canvas mode=ScreenSpaceOverlay order=0 camera=null override=False
-Canvas scaler mode=ConstantPixelSize ref=(800.0,600.0) match=0 screenMatch=MatchWidthOrHeight
+Canvas scaler mode=ScaleWithScreenSize ref=(1920.0,1080.0) match=0 screenMatch=MatchWidthOrHeight
 Canvas TitleUIController enabled=True
 Canvas TitleUIController.titlePanel=Canvas/TitlePanel
 Canvas TitleUIController.titleText=Canvas/TitlePanel/TitleText:TextMeshProUGUI
@@ -15,6 +15,9 @@ Canvas TitleUIController.endingPanel=Canvas/EndingPanel
 Canvas TitleUIController.endingTitleText=Canvas/EndingPanel/EndingTitleText:TextMeshProUGUI
 Canvas TitleUIController.endingBodyText=Canvas/EndingPanel/EndingBodyText:TextMeshProUGUI
 Canvas TitleUIController.endingNewRunButton=Canvas/EndingPanel/NewRunButton:Button
+Canvas TitleUIController.clerkPapers=Canvas/EndingPanel/ClerkPapers
+Canvas TitleUIController.clerkContractText=Canvas/EndingPanel/ClerkPapers/ContractCard/ContractText:TextMeshProUGUI
+Canvas TitleUIController.clerkAccountText=Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText:TextMeshProUGUI
 Canvas/ArtBackground active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/ArtBackground transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/ArtBackground rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
@@ -73,6 +76,25 @@ Canvas/EndingPanel/NewRunButton/Label active=True layer=0 tag=Untagged component
 Canvas/EndingPanel/NewRunButton/Label transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/EndingPanel/NewRunButton/Label rect min=(0.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/EndingPanel/NewRunButton/Label text='New Run' size=26 auto=False min=18 max=72 color=#000000FF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
+Canvas/EndingPanel/ClerkPapers active=False layer=0 tag=Untagged components=[RectTransform]
+Canvas/EndingPanel/ClerkPapers transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/ClerkPapers rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(1880.0,520.0)
+Canvas/EndingPanel/ClerkPapers/ContractCard active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/EndingPanel/ClerkPapers/ContractCard transform pos=(-670.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/ClerkPapers/ContractCard rect min=(0.0,0.0) max=(0.0,1.0) pivot=(0.5,0.5) pos=(270.0,0.0) size=(540.0,0.0)
+Canvas/EndingPanel/ClerkPapers/ContractCard image sprite=null color=#1A1A1FF7 type=Simple raycast=True material=null
+Canvas/EndingPanel/ClerkPapers/ContractCard/ContractText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/EndingPanel/ClerkPapers/ContractCard/ContractText transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/ClerkPapers/ContractCard/ContractText rect min=(0.1,0.0) max=(0.9,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/EndingPanel/ClerkPapers/ContractCard/ContractText text='...' size=18 auto=False min=0 max=0 color=#FFFFFFFF font=null align=TopLeft wrap=Normal raycast=True
+Canvas/EndingPanel/ClerkPapers/AccountCard active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
+Canvas/EndingPanel/ClerkPapers/AccountCard transform pos=(670.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/ClerkPapers/AccountCard rect min=(1.0,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(-270.0,0.0) size=(540.0,0.0)
+Canvas/EndingPanel/ClerkPapers/AccountCard image sprite=null color=#1A1A1FF7 type=Simple raycast=True material=null
+Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
+Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText rect min=(0.1,0.0) max=(0.9,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
+Canvas/EndingPanel/ClerkPapers/AccountCard/AccountText text='...' size=16 auto=False min=0 max=0 color=#FFFFFFFF font=null align=TopLeft wrap=Normal raycast=True
 EventSystem active=True layer=0 tag=Untagged components=[Transform,EventSystem,InputSystemUIInputModule]
 EventSystem transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 TitleSceneController active=True layer=0 tag=Untagged components=[Transform,TitleSceneController]
