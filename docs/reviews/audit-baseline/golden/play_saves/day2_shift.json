@@ -18,6 +18,7 @@
             "premade:senenmut:met",
             "trig:unlock_q_capital:fired",
             "trig:translation_notice:fired",
+            "trig:history_roman_aljabr:fired",
             "premade:socrates:met",
             "dlg:dlg_rumour:done",
             "rumour_calculators"
@@ -25,7 +26,7 @@
         "counters": [
             {
                 "key": "sent:era:ancient",
-                "value": 8
+                "value": 9
             },
             {
                 "key": "sent:tag:merchant",
@@ -74,6 +75,30 @@
             {
                 "key": "sent:tag:culture:ancient",
                 "value": 5
+            },
+            {
+                "key": "sent:tag:diplomat",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:diplomat:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy:ancient",
+                "value": 1
             },
             {
                 "key": "sent:era:medieval",
@@ -139,12 +164,20 @@
                     "value": 2.0
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
-                    "value": 8.0
+                    "key": "attr:iraq_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:democracy",
+                    "value": 2.0
                 },
                 {
                     "key": "nation:iraq",
-                    "value": 10.0
+                    "value": 12.0
+                },
+                {
+                    "key": "attr:iraq_ancient:art",
+                    "value": 8.0
                 },
                 {
                     "key": "attr:iraq_medieval:art",
@@ -152,6 +185,18 @@
                 }
             ],
             "activeEffects": [
+                {
+                    "effectId": "Effect_Leader_iraq",
+                    "sourceLabel": "history:leader Iraq",
+                    "startDay": 2,
+                    "durationDays": -1
+                },
+                {
+                    "effectId": "Effect_History_roman_aljabr",
+                    "sourceLabel": "Trigger: Al-jabr reaches Rome",
+                    "startDay": 2,
+                    "durationDays": 1
+                },
                 {
                     "effectId": "Effect_Dialog_RumourHeard",
                     "sourceLabel": "Dialog: dlg_rumour",
@@ -301,17 +346,19 @@
             "newsLines": [
                 "Art is now DOMINANT in Babylonia.",
                 "Art is now DOMINANT in Periclean Athens.",
+                "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
                 "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
-                "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English."
+                "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
+                "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
             ]
         },
         "history": {
-            "leaderId": "",
-            "leaderSinceDay": 0,
+            "leaderId": "iraq",
+            "leaderSinceDay": 2,
             "ranking": [
                 {
                     "id": "iraq",
-                    "score": 4.0
+                    "score": 6.0
                 },
                 {
                     "id": "egypt",
@@ -342,7 +389,17 @@
                     "score": 0.0
                 }
             ],
-            "factEdits": [],
+            "factEdits": [
+                {
+                    "nationId": "italy",
+                    "eraId": "ancient",
+                    "category": 3,
+                    "value": "Al-jabr reckoning tables",
+                    "sinceDay": 2,
+                    "cause": 0,
+                    "source": "Trigger: Al-jabr reaches Rome"
+                }
+            ],
             "pendingCarries": [
                 {
                     "fromNationId": "italy",
@@ -350,11 +407,54 @@
                     "toNationId": "greece",
                     "toEraId": "ancient",
                     "category": 3,
-                    "value": "Roman concrete",
+                    "value": "Al-jabr reckoning tables",
                     "day": 2
                 }
             ]
         },
-        "phase": 1
+        "newsArchive": [
+            {
+                "day": 1,
+                "briefing": [],
+                "news": []
+            },
+            {
+                "day": 2,
+                "briefing": [],
+                "news": [
+                    "Art is now DOMINANT in Babylonia.",
+                    "Art is now DOMINANT in Periclean Athens.",
+                    "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
+                    "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
+                    "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
+                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
+                ]
+            }
+        ],
+        "phase": 1,
+        "mailRead": [],
+        "accountDays": [
+            {
+                "day": 1,
+                "wages": 85,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 20,
+                "purchases": 80,
+                "balance": 35,
+                "owed": -1
+            },
+            {
+                "day": 2,
+                "wages": 90,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 0,
+                "purchases": 0,
+                "balance": 125,
+                "owed": -1
+            }
+        ],
+        "notes": []
     }
 }

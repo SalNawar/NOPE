@@ -17,12 +17,13 @@
         "flags": [
             "premade:senenmut:met",
             "trig:unlock_q_capital:fired",
-            "trig:translation_notice:fired"
+            "trig:translation_notice:fired",
+            "trig:history_roman_aljabr:fired"
         ],
         "counters": [
             {
                 "key": "sent:era:ancient",
-                "value": 5
+                "value": 6
             },
             {
                 "key": "sent:tag:merchant",
@@ -71,6 +72,30 @@
             {
                 "key": "sent:tag:culture:ancient",
                 "value": 3
+            },
+            {
+                "key": "sent:tag:diplomat",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:diplomat:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy:ancient",
+                "value": 1
             }
         ],
         "timeline": {
@@ -96,15 +121,36 @@
                     "value": 2.0
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
-                    "value": 4.0
+                    "key": "attr:iraq_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:democracy",
+                    "value": 2.0
                 },
                 {
                     "key": "nation:iraq",
+                    "value": 6.0
+                },
+                {
+                    "key": "attr:iraq_ancient:art",
                     "value": 4.0
                 }
             ],
-            "activeEffects": [],
+            "activeEffects": [
+                {
+                    "effectId": "Effect_Leader_iraq",
+                    "sourceLabel": "history:leader Iraq",
+                    "startDay": 2,
+                    "durationDays": -1
+                },
+                {
+                    "effectId": "Effect_History_roman_aljabr",
+                    "sourceLabel": "Trigger: Al-jabr reaches Rome",
+                    "startDay": 2,
+                    "durationDays": 1
+                }
+            ],
             "dominantKeys": [
                 "egypt_ancient:art",
                 "egypt_medieval:art",
@@ -247,17 +293,19 @@
             "newsLines": [
                 "Art is now DOMINANT in Babylonia.",
                 "Art is now DOMINANT in Periclean Athens.",
+                "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
                 "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
-                "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English."
+                "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
+                "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
             ]
         },
         "history": {
-            "leaderId": "",
-            "leaderSinceDay": 0,
+            "leaderId": "iraq",
+            "leaderSinceDay": 2,
             "ranking": [
                 {
                     "id": "iraq",
-                    "score": 4.0
+                    "score": 6.0
                 },
                 {
                     "id": "egypt",
@@ -288,9 +336,40 @@
                     "score": 0.0
                 }
             ],
-            "factEdits": [],
+            "factEdits": [
+                {
+                    "nationId": "italy",
+                    "eraId": "ancient",
+                    "category": 3,
+                    "value": "Al-jabr reckoning tables",
+                    "sinceDay": 2,
+                    "cause": 0,
+                    "source": "Trigger: Al-jabr reaches Rome"
+                }
+            ],
             "pendingCarries": []
         },
-        "phase": 0
+        "newsArchive": [
+            {
+                "day": 1,
+                "briefing": [],
+                "news": []
+            }
+        ],
+        "phase": 0,
+        "mailRead": [],
+        "accountDays": [
+            {
+                "day": 1,
+                "wages": 85,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 20,
+                "purchases": 80,
+                "balance": 35,
+                "owed": -1
+            }
+        ],
+        "notes": []
     }
 }

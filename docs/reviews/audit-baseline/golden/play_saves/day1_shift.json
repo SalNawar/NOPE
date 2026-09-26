@@ -18,7 +18,7 @@
         "counters": [
             {
                 "key": "sent:era:ancient",
-                "value": 5
+                "value": 6
             },
             {
                 "key": "sent:tag:merchant",
@@ -67,6 +67,30 @@
             {
                 "key": "sent:tag:culture:ancient",
                 "value": 3
+            },
+            {
+                "key": "sent:tag:diplomat",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:diplomat:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy:ancient",
+                "value": 1
             }
         ],
         "timeline": {
@@ -92,11 +116,19 @@
                     "value": 2.0
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
-                    "value": 4.0
+                    "key": "attr:iraq_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:democracy",
+                    "value": 2.0
                 },
                 {
                     "key": "nation:iraq",
+                    "value": 6.0
+                },
+                {
+                    "key": "attr:iraq_ancient:art",
                     "value": 4.0
                 }
             ],
@@ -249,6 +281,27 @@
             "factEdits": [],
             "pendingCarries": []
         },
-        "phase": 1
+        "newsArchive": [
+            {
+                "day": 1,
+                "briefing": [],
+                "news": []
+            }
+        ],
+        "phase": 1,
+        "mailRead": [],
+        "accountDays": [
+            {
+                "day": 1,
+                "wages": 85,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 0,
+                "purchases": 0,
+                "balance": 135,
+                "owed": -1
+            }
+        ],
+        "notes": []
     }
 }

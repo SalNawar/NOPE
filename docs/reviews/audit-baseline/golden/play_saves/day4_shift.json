@@ -19,11 +19,11 @@
             "premade:senenmut:met",
             "trig:unlock_q_capital:fired",
             "trig:translation_notice:fired",
+            "trig:history_roman_aljabr:fired",
             "premade:socrates:met",
             "dlg:dlg_rumour:done",
             "rumour_calculators",
             "trig:unlock_q_ruler:fired",
-            "trig:history_roman_aljabr:fired",
             "premade:arib:met",
             "dlg:dlg_rumour_followup:done",
             "trig:unlock_q_born:fired",
@@ -32,7 +32,7 @@
         "counters": [
             {
                 "key": "sent:era:ancient",
-                "value": 8
+                "value": 9
             },
             {
                 "key": "sent:tag:merchant",
@@ -81,6 +81,30 @@
             {
                 "key": "sent:tag:culture:ancient",
                 "value": 5
+            },
+            {
+                "key": "sent:tag:diplomat",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:diplomat:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:politics:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:democracy:ancient",
+                "value": 1
             },
             {
                 "key": "sent:era:medieval",
@@ -135,24 +159,12 @@
                 "value": 2
             },
             {
-                "key": "sent:tag:diplomat",
-                "value": 2
-            },
-            {
                 "key": "sent:tag:diplomat:medieval",
                 "value": 1
             },
             {
-                "key": "sent:tag:politics",
-                "value": 2
-            },
-            {
                 "key": "sent:tag:politics:medieval",
                 "value": 1
-            },
-            {
-                "key": "sent:tag:democracy",
-                "value": 2
             },
             {
                 "key": "sent:tag:democracy:medieval",
@@ -298,12 +310,20 @@
                     "value": 2.5
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
-                    "value": 8.0
+                    "key": "attr:iraq_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:democracy",
+                    "value": -3.0
                 },
                 {
                     "key": "nation:iraq",
-                    "value": 12.0
+                    "value": 14.0
+                },
+                {
+                    "key": "attr:iraq_ancient:art",
+                    "value": 8.0
                 },
                 {
                     "key": "attr:iraq_medieval:art",
@@ -320,10 +340,6 @@
                 {
                     "key": "attr:egypt_medieval:democracy",
                     "value": 2.0
-                },
-                {
-                    "key": "attrTotal:democracy",
-                    "value": -5.0
                 },
                 {
                     "key": "attr:china_earlymodern:democracy",
@@ -539,11 +555,11 @@
         },
         "history": {
             "leaderId": "iraq",
-            "leaderSinceDay": 3,
+            "leaderSinceDay": 2,
             "ranking": [
                 {
                     "id": "iraq",
-                    "score": 12.0
+                    "score": 14.0
                 },
                 {
                     "id": "egypt",
@@ -580,7 +596,7 @@
                     "eraId": "ancient",
                     "category": 3,
                     "value": "Al-jabr reckoning tables",
-                    "sinceDay": 3,
+                    "sinceDay": 2,
                     "cause": 0,
                     "source": "Trigger: Al-jabr reaches Rome"
                 },
@@ -588,7 +604,7 @@
                     "nationId": "greece",
                     "eraId": "ancient",
                     "category": 3,
-                    "value": "Roman concrete",
+                    "value": "Al-jabr reckoning tables",
                     "sinceDay": 3,
                     "cause": 1,
                     "source": "Republican Rome (Ancient)"
@@ -596,6 +612,87 @@
             ],
             "pendingCarries": []
         },
-        "phase": 1
+        "newsArchive": [
+            {
+                "day": 1,
+                "briefing": [],
+                "news": []
+            },
+            {
+                "day": 2,
+                "briefing": [],
+                "news": [
+                    "Art is now DOMINANT in Babylonia.",
+                    "Art is now DOMINANT in Periclean Athens.",
+                    "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
+                    "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
+                    "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
+                    "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad."
+                ]
+            },
+            {
+                "day": 3,
+                "briefing": [
+                    "A traveller's tip: someone is smuggling pocket calculators into the past. Keep your eyes open."
+                ],
+                "news": [
+                    "Art is now DOMINANT in Abbasid Baghdad.",
+                    "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
+                    "HISTORY: travellers brought Al-jabr reckoning tables to Periclean Athens (Ancient)."
+                ]
+            },
+            {
+                "day": 4,
+                "briefing": [],
+                "news": [
+                    "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records."
+                ]
+            }
+        ],
+        "phase": 1,
+        "mailRead": [],
+        "accountDays": [
+            {
+                "day": 1,
+                "wages": 85,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 20,
+                "purchases": 80,
+                "balance": 35,
+                "owed": -1
+            },
+            {
+                "day": 2,
+                "wages": 90,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 21,
+                "purchases": 0,
+                "balance": 104,
+                "owed": -1
+            },
+            {
+                "day": 3,
+                "wages": 125,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 21,
+                "purchases": 120,
+                "balance": 88,
+                "owed": -1
+            },
+            {
+                "day": 4,
+                "wages": 125,
+                "fines": 0,
+                "debtRelief": -1,
+                "household": 0,
+                "purchases": 0,
+                "balance": 213,
+                "owed": -1
+            }
+        ],
+        "notes": []
     }
 }
