@@ -129,9 +129,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>How many pickable boxes the paper prints.</summary>
     public int SlotCount => _slots.Count;
 
-    /// <summary>The paper's placed form (null before Bind), in form space: metres from the paper's top-left, y down.</summary>
-    public PlacedForm Form => _form;
-
     /// <summary>Raised on a click while the paper takes input: the paper, true for a right click, and the box under the pointer while held (-1: none, or not held).</summary>
     public event Action<DeskDocument, bool, int> Clicked;
 

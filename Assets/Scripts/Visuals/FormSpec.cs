@@ -152,24 +152,25 @@ public sealed class FormSpec
                 continue;
             if (b.kind == FormBlockKind.PageBreak)
                 page++;
-            else if (Places(b, field))
+            else if (field >= 0 && Array.IndexOf(FieldsOf(b), field) >= 0)
                 return page;
         }
         return -1;
     }
 
-    /// <summary>True when the block shows template field <paramref name="field"/> (a FieldRow cell, or a Checkboxes or Signature block's field).</summary>
-    public static bool Places(FormBlock block, int field)
+    /// <summary>The template fields a block shows: a FieldRow's cells' fields, a Checkboxes or Signature block's field (none for a null block).</summary>
+    public static int[] FieldsOf(FormBlock block)
     {
-        if (block == null || field < 0)
-            return false;
+        if (block == null)
+            return new int[0];
         if (block.kind == FormBlockKind.FieldRow)
         {
+            var fields = new System.Collections.Generic.List<int>();
             foreach (FormCell c in block.cells ?? new FormCell[0])
-                if (c != null && c.field == field)
-                    return true;
-            return false;
+                if (c != null && c.field >= 0)
+                    fields.Add(c.field);
+            return fields.ToArray();
         }
-        return (block.kind == FormBlockKind.Checkboxes || block.kind == FormBlockKind.Signature) && block.field == field;
+        return (block.kind == FormBlockKind.Checkboxes || block.kind == FormBlockKind.Signature) && block.field >= 0 ? new[] { block.field } : new int[0];
     }
 }

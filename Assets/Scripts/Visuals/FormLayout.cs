@@ -428,14 +428,14 @@ public static class FormLayout
         var problems = new List<string>();
         int count = probe.FieldLabels.Count;
         foreach (FormBlock b in spec.blocks ?? new FormBlock[0])
-            foreach (int f in FieldsOf(b))
+            foreach (int f in FormSpec.FieldsOf(b))
                 if (f >= count)
                     problems.Add($"a {b.kind} names field {f}, but the template has {count} fields");
         for (int f = 0; f < count; f++)
         {
             int placed = 0;
             foreach (FormBlock b in spec.blocks ?? new FormBlock[0])
-                foreach (int g in FieldsOf(b))
+                foreach (int g in FormSpec.FieldsOf(b))
                     if (g == f)
                         placed++;
             if (placed == 0)
@@ -456,23 +456,6 @@ public static class FormLayout
 
         new Placer(spec, probe, m.aspect, m, measure, problems).Run();
         return problems;
-    }
-
-    /// <summary>The template fields a block shows (a FieldRow's cells, a Checkboxes' or Signature's field).</summary>
-    private static IEnumerable<int> FieldsOf(FormBlock b)
-    {
-        if (b == null)
-            yield break;
-        if (b.kind == FormBlockKind.FieldRow)
-        {
-            foreach (FormCell c in b.cells ?? new FormCell[0])
-                if (c != null && c.field >= 0)
-                    yield return c.field;
-        }
-        else if ((b.kind == FormBlockKind.Checkboxes || b.kind == FormBlockKind.Signature) && b.field >= 0)
-        {
-            yield return b.field;
-        }
     }
 
     /// <summary>A probe value <paramref name="length"/> characters long, cut from real words.</summary>
