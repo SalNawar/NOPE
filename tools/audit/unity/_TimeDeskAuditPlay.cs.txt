@@ -387,7 +387,7 @@ public static class _TimeDeskAuditPlay
                 DialogChoice up = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
                 if (up == null)
                     break;
-                Call(o.Ui, "Choose", up.Id);
+                Call(Field(o.Ui, "_interview"), "Choose", up.Id);
                 continue;
             }
             Choose(request);
