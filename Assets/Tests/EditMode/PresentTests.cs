@@ -49,6 +49,21 @@ public class PresentTests
     }
 
     [Test]
+    public void Choose_KeepsThePresentsClothes_TheLeadersOutfitOrTheNeutralOnes()
+    {
+        var outfit = new PlaceWardrobe();
+        outfit.male.outfit.label = "kimono-cut jacket";
+        var clothes = new PlaceWardrobe();
+        clothes.male.outfit.label = "tech jacket";
+        var leader = new PresentPlace("japan", "future", "Neo-Tokyo Bay (Future)", 2150, 2080, 2132, null, outfit);
+        var neutral = new PresentPlace(Present.NeutralNationId, "future", "Temporal Customs Zone (Future)", 2150, 2080, 2132, null, clothes);
+
+        Assert.AreSame(outfit, Present.Choose("japan", new[] { leader }, neutral).Wardrobe, "2150 clothes are the leader's Future outfit while it leads");
+        Assert.AreSame(clothes, Present.Choose(null, new[] { leader }, neutral).Wardrobe);
+        Assert.IsNull(Neutral().Wardrobe, "none authored");
+    }
+
+    [Test]
     public void Fact_IsNullForACategoryThePresentHasNot()
     {
         Assert.IsNull(Neutral().Fact(ClueCategory.Politics));
