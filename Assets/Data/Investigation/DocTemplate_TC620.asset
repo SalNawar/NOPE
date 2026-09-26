@@ -10,15 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
-  m_Name: DocTemplate_Permit
+  m_Name: DocTemplate_TC620
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Transit Permit
-  preferredCategories: 
-  maxClues: 3
+  displayName: Intake Declaration
+  formNumber: TC-620
   fieldSpecs:
-  - category: 3
-    label: Declared Device
+  - category: 7
+    label: Declarant
+    page: 0
+  - category: 9
+    label: Displacement No.
     page: 0
   - category: 4
-    label: Bond Currency
-    page: 1
+    label: Coin of Home
+    page: 0
+  - category: 0
+    label: Native Tongue
+    page: 0
+  - category: 3
+    label: Effects Carried
+    page: 0
+  handOver: 0
+  showsPhoto: 0
+  askableBy:
+  - 3

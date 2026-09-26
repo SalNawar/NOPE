@@ -100,6 +100,17 @@ public sealed class AuthoredDialog
     public List<ScriptNode> nodes = new();
 }
 
+/// <summary>A line of one traveller kind (world_source.json interview.claims: one row per kind).</summary>
+[Serializable]
+public sealed class KindLine
+{
+    /// <summary>The kind that says it.</summary>
+    public TravellerKind kind;
+
+    /// <summary>The line ("interview.claims.{Kind}").</summary>
+    public LineText line = new();
+}
+
 /// <summary>Per-era wording of a question: chosen by the traveller's claimed era.</summary>
 [Serializable]
 public sealed class WordingOverride
@@ -183,8 +194,8 @@ public sealed class InterviewLines
     /// <summary>The desk's opener for a legendary ({name}).</summary>
     public LineText openerLegendary = new();
 
-    /// <summary>The traveller's claim ({place}); also the banner and the shift summary.</summary>
-    public LineText claim = new();
+    /// <summary>The traveller's claim per kind ({place}; traveller types §8: the displaced "Please. Send me home to {place}."); also the banner and the shift summary.</summary>
+    public List<KindLine> claims = new();
 
     /// <summary>Honorific for a traveller recorded as male ("sir").</summary>
     public string honorificMale;
@@ -195,8 +206,11 @@ public sealed class InterviewLines
     /// <summary>Honorific when the gender is unknown ("traveller").</summary>
     public string honorificUnknown;
 
-    /// <summary>Hub entry per document ({document}).</summary>
+    /// <summary>Hub entry for a traveller's one document on request ({document}).</summary>
     public string requestLabel;
+
+    /// <summary>Hub entry that opens the papers menu when a traveller can be asked for two or more documents ("Request papers >"; traveller types I2).</summary>
+    public string papersLabel;
 
     /// <summary>The desk's request ({document}).</summary>
     public LineText requestPrompt = new();

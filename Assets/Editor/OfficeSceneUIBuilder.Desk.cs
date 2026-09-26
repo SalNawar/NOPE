@@ -27,7 +27,7 @@ using UnityEngine.UI;
 public static partial class OfficeSceneUIBuilder
 {
     /// <summary>The desk tuning asset, created by the builder when missing (a designer's edits are kept).</summary>
-    private const string DeskConfigPath = "Assets/Data/Config/Desk_Default.asset";
+    internal const string DeskConfigPath = "Assets/Data/Config/Desk_Default.asset";
 
     /// <summary>The office scene contract, created by the builder when missing (the art side's anchors and a designer's edits are kept).</summary>
     private const string OfficeContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
@@ -690,25 +690,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "hudClock", hud.clock);
         soBinder.ApplyModifiedProperties();
 
-        // Checks: every paper a traveller carries has a spawn slot, and every document's rows fit its paper's face.
-        int maxPapers = library != null ? ContentLibraryValidator.MaxDocuments(ContentLibraryValidator.TravellerBlueprints(library)) : 0;
-        int slots = config.paperSpawnSlots != null ? config.paperSpawnSlots.Length : 0;
-        if (slots < maxPapers)
-            Debug.LogError($"[TimeDesk] The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");
-        if (library != null)
-        {
-            var checkedTemplates = new HashSet<DocumentTemplateSO>();
-            foreach (CaseBlueprintSO blueprint in ContentLibraryValidator.TravellerBlueprints(library))
-                foreach (DocumentTemplateSO template in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : new DocumentTemplateSO[0])
-                {
-                    if (template == null || !checkedTemplates.Add(template))
-                        continue;
-                    int fields = template.fieldSpecs != null ? template.fieldSpecs.Length : 0;
-                    int capacity = PaperFace.Capacity(template.showsPhoto, config.face);
-                    if (fields > capacity)
-                        Debug.LogError($"[TimeDesk] {template.displayName} has {fields} fields but a paper face holds {capacity}; raise Desk_Default.face or shorten the template.");
-                }
-        }
+        // Checks (the validator runs the same, audit R6-021): every paper a traveller carries has a spawn slot, every document's rows fit its paper's face, the wheel shows the menu capacity.
+        foreach (string problem in ContentLibraryValidator.DeskFitProblems(library, config))
+            Debug.LogError($"[TimeDesk] {problem}");
 
         return coordinator;
     }

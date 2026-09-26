@@ -12,15 +12,15 @@ using UnityEditor;
 /// </summary>
 public static partial class WorldContentGenerator
 {
-    /// <summary>The agency block as authored ("agency").</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public ClerkData clerk; }
+    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk").</summary>
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData { public string citizenId; public string name; public string born; public string lineage; public string employment; public string note; }
 
     /// <summary>The agency block's content (its fields verbatim).</summary>
     private static AgencyContent BuildAgency(AgencyData a) =>
-        new AgencyContent { name = a.name, programme = a.programme, firstDate = a.firstDate, clerk = BuildClerk(a.clerk) };
+        new AgencyContent { name = a.name, programme = a.programme, firstDate = a.firstDate, displaced = a.displaced, clerk = BuildClerk(a.clerk) };
 
     /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>
     private static ClerkContent BuildClerk(ClerkData c) =>
