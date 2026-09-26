@@ -16,7 +16,7 @@ using UnityEngine;
 /// notice).
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
-public static class ContentLibraryValidator
+public static partial class ContentLibraryValidator
 {
     /// <summary>Runs validation across all ContentLibrarySO assets in the project.</summary>
     [MenuItem("Tools/TimeDesk/Validate Content Library")]
@@ -121,6 +121,9 @@ public static class ContentLibraryValidator
 
         // --- Translation (piece 9) ---
         issues += CheckTranslation(lib);
+
+        // --- The PC block: the Internet's sites, pages and people (ContentLibraryValidator.Pc.cs) ---
+        issues += CheckPc(lib);
 
         return issues;
     }

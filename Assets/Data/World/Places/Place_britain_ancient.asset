@@ -17,6 +17,9 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
   year: 20
+  moment: 'Camulodunum (Colchester), the trading capital of the Catuvellauni under
+    Cunobelinus, c. 20 CE: shortly before the Roman conquest, while wine and luxury
+    goods were arriving from Roman Gaul'
   tongue: brittonic
   birthYearMin: -50
   birthYearMax: 2

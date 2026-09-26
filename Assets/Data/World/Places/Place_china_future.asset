@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
   year: 2150
+  moment: Shanghai as a megacity capital linked by maglev, 2150
   tongue: chinese
   birthYearMin: 2080
   birthYearMax: 2132

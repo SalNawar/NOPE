@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
   year: 98
+  moment: Free Germania east of the Rhine and north of the Danube, c. 98 CE, as described
+    in Tacitus' Germania
   tongue: germanic
   birthYearMin: 28
   birthYearMax: 80

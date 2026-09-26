@@ -17,6 +17,9 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   year: 1950
+  moment: Manchester, c. 1950, where Alan Turing was working on the university's
+    pioneering stored-program computer (the Manchester Mark 1, built commercially
+    by Ferranti)
   tongue: english
   birthYearMin: 1880
   birthYearMax: 1932

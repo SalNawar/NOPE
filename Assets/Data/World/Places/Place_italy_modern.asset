@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   year: 1960
+  moment: Rome during the economic miracle, the year of 'La Dolce Vita', 1960
   tongue: italian
   birthYearMin: 1890
   birthYearMax: 1942

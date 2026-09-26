@@ -116,6 +116,9 @@ public sealed class HistoryLines
 
     /// <summary>A carry latched; tokens {value} and {place}.</summary>
     public LineText carry = new();
+
+    /// <summary>An attribute becomes dominant in a place (the dominance news, audit R3-007); tokens {attribute} and {place}.</summary>
+    public LineText dominant = new();
 }
 
 /// <summary>
@@ -131,6 +134,9 @@ public static class History
 
     /// <summary>The nation's display name in a history line ("{nation}"; {place} and {value} are Interview.PlaceToken and ValueToken).</summary>
     public const string NationToken = "nation";
+
+    /// <summary>The attribute's display name in the dominance line ("{attribute}").</summary>
+    public const string AttributeToken = "attribute";
 
     /// <summary>True for the categories history may change.</summary>
     public static bool IsEditable(ClueCategory category) => Array.IndexOf(EditableCategories, category) >= 0;

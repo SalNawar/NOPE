@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   year: 1975
+  moment: Athens after the fall of the junta and the restoration of democracy, c.
+    1975
   tongue: greek
   birthYearMin: 1905
   birthYearMax: 1957

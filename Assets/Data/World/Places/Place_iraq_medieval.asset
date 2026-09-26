@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
   year: 830
+  moment: Baghdad under the Abbasids, c. 830 CE (al-Khwarizmi at the House of Wisdom;
+    translation and algebra)
   tongue: arabic
   birthYearMin: 760
   birthYearMax: 812
