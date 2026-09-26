@@ -659,6 +659,10 @@ MonoBehaviour:
     text: (untranslated {0}; {1} Translator)
     gloss: 0
     tier: 0
+  - key: compare.dockHint
+    text: COMPARE    Click two values to compare them.
+    gloss: 0
+    tier: 0
   - key: slot.Outfit
     text: OUTFIT
     gloss: 0

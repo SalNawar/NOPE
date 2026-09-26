@@ -49,7 +49,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private TMP_Text scannerText;
 
     /// <summary>Scanner window chrome; opened when the first discrepancy registers.</summary>
-    [SerializeField] private OSWindowChrome scannerWindow;
+    [SerializeField] private DesktopWindow scannerWindow;
 
     [Header("Interaction / records")]
     /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
@@ -63,7 +63,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private TranscriptWindowController transcriptWindow;
 
     /// <summary>The transcript window's chrome; every interview choice but a document request opens it.</summary>
-    [SerializeField] private OSWindowChrome transcriptChrome;
+    [SerializeField] private DesktopWindow transcriptChrome;
 
     [Header("Desk")]
     /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
@@ -370,9 +370,10 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowFallback(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line and the office's claim tag empties.</summary>
+    /// <summary>Hides the investigation overlay (between cases) and closes its windows (so the taskbar keeps no button for them); the desktop shows its idle line and the office's claim tag empties.</summary>
     public void Hide()
     {
+        CloseAllWindows();
         if (root != null) root.SetActive(false);
         if (hud != null) hud.SetClaim(string.Empty);
         if (_fallbackPanel != null) _fallbackPanel.SetActive(false);
@@ -620,13 +621,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void OpenDocumentWindow(int index)
     {
         DocumentWindowController window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
-        if (window == null)
+        if (window == null || !window.TryGetComponent(out DesktopWindow chrome))
             return;
 
-        window.gameObject.SetActive(true);
-        window.transform.SetAsLastSibling();
+        chrome.Open();
         if (_iconedDocuments.Add(index))
-            AddDesktopIcon(_caseDocuments[index].name, window.gameObject, true);
+            AddDesktopIcon(_caseDocuments[index].name, chrome, true);
     }
 
     /// <summary>The bubble's answer picked at the desk: it goes into the compare as the transcript's row would (the same pick), lighting the bubble while it shows.</summary>
@@ -654,8 +654,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Closes every window on the window layer (templates are already
-    /// inactive; per-case document clones are destroyed separately).
+    /// Closes every window on the window layer through the desktop's window
+    /// manager, minimised ones too (templates are never opened; per-case
+    /// document clones are destroyed separately).
     /// </summary>
     private void CloseAllWindows()
     {
@@ -663,11 +664,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             return;
 
         for (int i = 0; i < windowLayer.childCount; i++)
-        {
-            GameObject child = windowLayer.GetChild(i).gameObject;
-            if (child.activeSelf)
-                child.SetActive(false);
-        }
+            if (windowLayer.GetChild(i).TryGetComponent(out DesktopWindow window))
+                window.Close();
     }
 
     private void BuildBookShelf(ContentLibrarySO lib)
@@ -691,20 +689,21 @@ public sealed class InvestigationUIController : MonoBehaviour
             win.SetBook(book, _facts, compareController);
             if (win.transform is RectTransform rt)
                 rt.anchoredPosition = bookWindowOrigin + new Vector2((i % 3) * bookWindowColumnStep, 0f) + (i / 3) * bookWindowRowStep;
-            GameObject winGo = win.gameObject;
-            winGo.SetActive(false);
+            win.gameObject.SetActive(false);
 
-            AddDesktopIcon(book.displayName, winGo, false);
+            if (win.TryGetComponent(out DesktopWindow chrome))
+                AddDesktopIcon(book.displayName, chrome, false);
             i++;
         }
     }
 
     /// <summary>
-    /// Adds a desktop icon tile (in the icon grid) that toggles a window's
-    /// visibility. Document icons are tracked so they can be cleared per case and
-    /// sit at the top of the grid.
+    /// Adds a desktop icon tile (in the icon grid) that opens a window (a
+    /// minimised one restores), raised and focused, like every icon. Document
+    /// icons are tracked so they can be cleared per case and sit at the top of
+    /// the grid.
     /// </summary>
-    private void AddDesktopIcon(string label, GameObject window, bool isDocument)
+    private void AddDesktopIcon(string label, DesktopWindow window, bool isDocument)
     {
         if (bookShelfButtonTemplate == null || bookShelfRoot == null || window == null)
             return;
@@ -718,14 +717,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (text != null)
             text.text = label;
 
-        GameObject captured = window;
-        btn.onClick.AddListener(() =>
-        {
-            bool now = !captured.activeSelf;
-            captured.SetActive(now);
-            if (now)
-                captured.transform.SetAsLastSibling();
-        });
+        btn.onClick.AddListener(window.Open);
 
         if (isDocument)
             _docIcons.Add(btn.gameObject);

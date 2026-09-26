@@ -9171,6 +9171,12 @@
         "tier": "Full"
       },
       {
+        "key": "compare.dockHint",
+        "text": "COMPARE    Click two values to compare them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "slot.Outfit",
         "text": "OUTFIT",
         "gloss": "None",
