@@ -43,6 +43,10 @@ public sealed class FormStyleSO : ScriptableObject
     /// <summary>The seal behind the header (its alpha is its tint: 10 %).</summary>
     public Color seal = new Color(0.1f, 0.09f, 0.08f, 0.1f);
 
+    /// <summary>How much heavier the printed words are than the font (TextMeshPro's face dilate on the paper's text material): a held paper's small print needs the weight to read at 720p as drawn. Build Office UI writes it into the material.</summary>
+    [Header("Print")]
+    [Range(0f, 0.5f)] public float inkWeight = 0.2f;
+
     /// <summary>The colour a text of <paramref name="role"/> is printed in.</summary>
     public Color Ink(FormTextRole role)
     {

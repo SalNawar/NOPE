@@ -7,7 +7,8 @@ using UnityEngine.Rendering;
 /// <summary>
 /// The office builder's forms parts (redesign phase 4, PC spec FO1, FO7, FO8,
 /// FO10): the form style (FormStyleSO, created when missing), the desk paper's
-/// printing parts (the text template every printed word clones, the fills and
+/// printing parts (the text template every printed word clones, in the paper's
+/// text material weighted by the style's ink weight, the fills and
 /// lines meshes, the seal's quad, the quad each pickable box clones) and the
 /// form style's checks: the paper's aspect and the contrast pairs with the
 /// hover tint and each theme's pick highlight over a box (FormContrast). Each
@@ -61,6 +62,9 @@ public static partial class OfficeSceneUIBuilder
         var print = new PaperPrint();
         print.Text = PaperText(sheet, "Text", string.Empty, Vector2.zero, new Vector2(0.1f, 0.02f), false);
         print.Text.GetComponent<MeshRenderer>().enabled = false;
+        Material ink = PaperTextMaterial(print.Text.font, EnsureFormStyle().inkWeight);
+        if (ink != null)
+            print.Text.fontSharedMaterial = ink;
 
         print.Fills = PrintMesh(sheet, "Fills", FormMaterial("Form_Fill", FillQueue));
         print.Lines = PrintMesh(sheet, "Lines", FormMaterial("Form_Lines", LineQueue));
@@ -93,6 +97,27 @@ public static partial class OfficeSceneUIBuilder
         ((MeshRenderer)print.Slot).shadowCastingMode = ShadowCastingMode.Off;
         print.Slot.gameObject.SetActive(false);
         return print;
+    }
+
+    /// <summary>The paper's text material: the font's own, its face dilated by the form style's ink weight (written on every build, so the knob takes effect).</summary>
+    private static Material PaperTextMaterial(TMP_FontAsset font, float weight)
+    {
+        string path = $"{GameplayArtFolder}/Materials/Paper_Text.mat";
+        Material material = AssetDatabase.LoadAssetAtPath<Material>(path);
+        if (material == null)
+        {
+            if (font == null)
+                return null;
+            PlaceholderPng.EnsureFolderTree($"{GameplayArtFolder}/Materials");
+            material = new Material(font.material) { name = "Paper_Text" };
+            AssetDatabase.CreateAsset(material, path);
+        }
+        if (!Mathf.Approximately(material.GetFloat(ShaderUtilities.ID_FaceDilate), weight))
+        {
+            material.SetFloat(ShaderUtilities.ID_FaceDilate, weight);
+            EditorUtility.SetDirty(material);
+        }
+        return material;
     }
 
     /// <summary>An empty mesh child of the sheet in <paramref name="material"/> (the paper fills it when it binds).</summary>
