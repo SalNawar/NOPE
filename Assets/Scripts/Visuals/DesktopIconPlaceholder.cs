@@ -2,7 +2,7 @@ using System;
 
 /// <summary>
 /// Draws the desktop's placeholder icon glyphs (the PC redesign DK2, until
-/// the asset list's Assets/Art/UI/Desktop/icon_&lt;id&gt;.png art lands): a
+/// the asset list's Assets/Art/UI/Resources/Desktop/icon_&lt;id&gt;.png art lands): a
 /// white glyph on transparent per app id, shapes only, never letters: a
 /// magnifying glass (investigation), a globe (internet), an envelope (mail),
 /// an ID card (citizen_account), a ruled sheet with a folded corner (notes)

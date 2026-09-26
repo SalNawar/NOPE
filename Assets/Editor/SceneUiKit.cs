@@ -11,6 +11,8 @@ using UnityEngine.UI;
 /// logic and UI objects, and panels, texts and buttons found by name under a
 /// parent or created with the given layout. An object that already exists is
 /// returned as it is, never re-laid out (the two builders' create-only policy).
+/// The art slots (redesign phase 27, ArtSlotImage) are the one exception: a
+/// slot's configuration is re-applied on every build.
 /// </summary>
 internal static class SceneUiKit
 {
@@ -161,6 +163,55 @@ internal static class SceneUiKit
 
         Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
         return btn;
+    }
+
+    /// <summary>
+    /// Finds a child image by name or creates a white one (no raycasts) at the
+    /// given anchors, pivot, position and size, keeping its aspect: the host
+    /// of an art slot that has no image of its own today.
+    /// </summary>
+    public static Image FindOrCreateImage(Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax, Vector2 pivot,
+                                          Vector2 anchoredPos, Vector2 size)
+    {
+        Transform existing = parent.Find(name);
+
+        if (existing != null)
+            return existing.GetComponent<Image>();
+
+        var go = new GameObject(name, typeof(RectTransform));
+        go.transform.SetParent(parent, false);
+
+        var rt = (RectTransform)go.transform;
+        rt.anchorMin = anchorMin;
+        rt.anchorMax = anchorMax;
+        rt.pivot = pivot;
+        rt.anchoredPosition = anchoredPos;
+        rt.sizeDelta = size;
+
+        Image img = go.AddComponent<Image>();
+        img.raycastTarget = false;
+        img.preserveAspect = true;
+
+        Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
+        return img;
+    }
+
+    /// <summary>
+    /// Gives an image its art slot (ArtSlotImage.Configure, re-applied on every
+    /// build): the slot's file shows when it exists, else the image keeps its
+    /// look (or hides, <paramref name="hideWithoutArt"/>); a full-colour
+    /// <paramref name="picture"/> shows untinted; <paramref name="companions"/>
+    /// come on with the art.
+    /// </summary>
+    public static void EnsureArtSlot(Image image, string slot, string hoverSlot, bool picture, bool hideWithoutArt, params Behaviour[] companions)
+    {
+        if (image == null)
+            return;
+        ArtSlotImage art = image.GetComponent<ArtSlotImage>();
+        if (art == null)
+            art = Undo.AddComponent<ArtSlotImage>(image.gameObject);
+        art.Configure(slot, hoverSlot, picture, hideWithoutArt, companions);
+        EditorUtility.SetDirty(art);
     }
 
     /// <summary>Anchors a rect to the given relative corners with no offsets, so it fills them.</summary>

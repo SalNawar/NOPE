@@ -11,7 +11,11 @@ using static SceneUiKit;
 /// reached EndingSO, New Run). Like HomeSceneBuilder, this creates the
 /// Canvas, EventSystem, TitleSceneController and TitleUIController objects
 /// from scratch if they don't already exist. Safe to re-run: finds and skips
-/// pieces that already exist (by name), through the shared SceneUiKit.
+/// pieces that already exist (by name), through the shared SceneUiKit. The
+/// art slots (redesign phase 27): the three buttons take the text-free Title
+/// face with their labels on when it exists (else their hand-wired sprites,
+/// labels off), and the ending's picture shows full screen behind the ending
+/// panel (EndingSO.picture).
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -82,6 +86,8 @@ public static class TitleSceneBuilder
         soUi.FindProperty("clerkAccountText").objectReferenceValue = accountText;
         soUi.ApplyModifiedProperties();
 
+        BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton);
+
         // --- Wire TitleSceneController ---
         var soController = new SerializedObject(titleController);
         SerializedProperty titleUiProp = soController.FindProperty("titleUI");
@@ -99,5 +105,33 @@ public static class TitleSceneBuilder
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");
+    }
+
+    /// <summary>
+    /// The Title's art slots: each button's text-free face (ArtSlots.TitleButton,
+    /// its hover face swapped in, its label turned on) and the ending's
+    /// picture, a full-screen image just under the ending panel, hidden until
+    /// an ending with a picture shows (TitleUIController.endingPicture).
+    /// </summary>
+    private static void BuildArtSlots(TitleUIController titleUI, Transform ending, params Button[] buttons)
+    {
+        foreach (Button button in buttons)
+        {
+            if (button == null)
+                continue;
+            Transform label = button.transform.Find("Label");
+            EnsureArtSlot(button.GetComponent<Image>(), ArtSlots.TitleButton, ArtSlots.TitleButtonHover, true, false,
+                          label != null ? label.GetComponent<TMP_Text>() : null);
+        }
+
+        Image picture = FindOrCreateImage(ending.parent, "EndingPicture", Vector2.zero, Vector2.one, new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero);
+        picture.preserveAspect = false;
+        if (picture.transform.GetSiblingIndex() > ending.GetSiblingIndex())
+            picture.transform.SetSiblingIndex(ending.GetSiblingIndex());
+        picture.gameObject.SetActive(false);
+
+        var so = new SerializedObject(titleUI);
+        so.FindProperty("endingPicture").objectReferenceValue = picture;
+        so.ApplyModifiedProperties();
     }
 }

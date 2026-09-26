@@ -14,8 +14,10 @@ using UnityEngine.UI;
 /// area, and on release DesktopIcons drops it (DesktopLayout.Drop) and saves
 /// the layout; Escape cancels the drag (IDesktopDrag), the icon back where it
 /// started. The pointer is read in the icon area's space through the press
-/// camera, so a drag is right through the PC frame. With no glyph art the
-/// icon draws DesktopIconPlaceholder's (kept in memory, destroyed with it).
+/// camera, so a drag is right through the PC frame. The glyph is the app's
+/// art when delivered (Assets/Art/UI/Resources/Desktop/icon_&lt;id&gt;.png,
+/// ArtSlots.DesktopIcon); without it the icon draws DesktopIconPlaceholder's
+/// (kept in memory, destroyed with it).
 /// No upgrade gate and no reach into the run (audit R4-020): every icon is
 /// always there and always live. Its RectTransform is anchored and pivoted
 /// at the icon area's top-left.
@@ -55,10 +57,18 @@ public sealed class DesktopIconView : MonoBehaviour, IPointerDownHandler, IPoint
 
     private RectTransform Rect => (RectTransform)transform;
 
+    /// <summary>The glyph: the app's art when delivered (ArtSlots.DesktopIcon, redesign phase 27), else the placeholder drawn for its id.</summary>
     private void Awake()
     {
         if (glyph == null || glyph.sprite != null)
             return;
+
+        Sprite art = SlotArt.Sprite(ArtSlots.DesktopIcon(appId));
+        if (art != null)
+        {
+            glyph.sprite = art;
+            return;
+        }
 
         byte[] rgba = DesktopIconPlaceholder.Render(appId);
         if (rgba == null)
