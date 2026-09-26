@@ -5,7 +5,7 @@ Phase 4) that takes confirmed backlog items (`SCRATCH/audit/backlog.json`, verdi
 `verify_A/B.json`) which the redesign plan (`docs/superpowers/plans/2026-09-26-redesign-plan.md` §3)
 leaves to the overhaul or maps to phases that did not fix them. It edits only files that
 no phase in flight tonight is changing. Branch `overhaul/slice-untouched`, from main `e71def0`,
-with main `fc96484` merged in at the end. One commit per item, each compiling with its tests green.
+with main merged in at the end (`fc96484`, then `e271878`, phase 17's desktop icons). One commit per item, each compiling with its tests green.
 
 **Files kept out of the slice:** GameManager, InvestigationUIController, CaseFactory,
 Lies*, VerdictRules, DiscrepancyLog, `world_source.json`, DesktopShell, the desk and papers,
@@ -46,7 +46,7 @@ and the validator). HomeManager was left alone on the orchestrator's instruction
 - **R2-008 (the drift roll on a Seeds stream).** It would change every night's drift, a golden-master change to take with a re-pack. `HomeRulesTests` pins today's rolls, so the change will show.
 - **R6-018's optional part (the seven unused built-in modules).** Kept: low value, and the verdicts covered only the packages. `com.unity.ai.assistant` is kept as an editor workflow tool (Saleh's call), and `com.unity.timeline` for UnitySkills.
 
-## Gates (after merging main `fc96484`)
+## Gates (after merging main `fc96484`; re-run after `e271878`)
 
 - **Compile:** 0 errors.
   - Compiler warnings in our code: 7, all OfficeSceneUIBuilder's CS0618 (out of scope, see above). The baseline had 16; this slice removed HomeSceneBuilder's 4 and TitleSceneBuilder's 4.
@@ -54,15 +54,16 @@ and the validator). HomeManager was left alone on the orchestrator's instruction
 - **Offline EditMode tests:**
   - At the start: 1286 passed.
   - With this slice: 1343 passed (57 new).
-  - After the merge: 1427 passed, 0 failed.
-- **EditMode suite in the editor:** 1556 passed, 1 failed, the known third-party `UnitySkills...PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly`. Before the merge, with the packages removed: 1472 passed and the same single failure.
-- **Builders:** OfficeGameplay 6272 lines, Home 165 and Title 81 each rebuild equal to the committed scene, and a second rebuild changes nothing. 0 errors, 0 warnings. The art office is byte-unchanged.
+  - After merging `fc96484`: 1427 passed, 0 failed.
+  - After merging `e271878`: 1457 passed, 0 failed.
+- **EditMode suite in the editor:** 1586 passed, 1 failed after `e271878` (1556 and the same failure after `fc96484`). The failure is the known third-party `UnitySkills...PerceptionSkillsTests.SceneSummarize_CountsObjectsCorrectly`. Before the merge, with the packages removed: 1472 passed and the same single failure.
+- **Builders:** OfficeGameplay (6272 lines after `fc96484`, 6689 after `e271878`), Home 165 and Title 81 each rebuild equal to the committed scene, and a second rebuild changes nothing. 0 errors, 0 warnings. The art office is byte-unchanged.
 - **Generate World:** 0 files changed on either run. The validator reports 0 errors and 0 warnings.
-- **Smoke:** the scripted play-through ran days 1-6 in the art office with Home between them: `fails=0`, and every traveller was decided.
+- **Smoke:** the scripted play-through ran days 1-6 in the art office with Home between them, after each merge: `fails=0` (82 checks), and every traveller was decided. Its warnings are the baseline's 7 anchor warnings.
 
 ## Golden masters
 
-`golden.py diff` against the committed baseline found no difference that comes from this slice.
+`golden.py diff` against the committed baseline found no difference that comes from this slice. It ran after `fc96484`; after `e271878` the transcript was checked again with the same result.
 
 - **Identical:** `cases.txt`, `world_generate.txt`, `validator.txt`, the Home and Title scene dumps, `contract.txt` and `play_warnings.txt`.
 - **`play_transcript.txt`: every gameplay line is identical, Home's included** (expenses, family conditions, care, purchases and money each night, endings). Only the 12 `save ... sha1` lines differ.
