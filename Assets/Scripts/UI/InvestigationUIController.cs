@@ -104,6 +104,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new();
 
+    /// <summary>The form each of the current traveller's papers prints (redesign phase 4), in paper order.</summary>
+    private readonly List<DocumentForm> _caseForms = new();
+
     /// <summary>Papers whose window already has a desktop icon this case.</summary>
     private readonly HashSet<int> _iconedDocuments = new();
     private bool _booksBuilt;
@@ -402,6 +405,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _docIcons.Clear();
         _iconedDocuments.Clear();
         _caseDocuments.Clear();
+        _caseForms.Clear();
 
         // The traveller's tongue decides how their speech shows today (their papers are always English).
         _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
@@ -428,13 +432,14 @@ public sealed class InvestigationUIController : MonoBehaviour
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
+                _caseForms.Add(DocumentForm.For(doc, lib != null ? lib.Agency : null));
                 i++;
             }
         }
 
         if (DeskReachable)
         {
-            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
+            desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
         }
         else
         {

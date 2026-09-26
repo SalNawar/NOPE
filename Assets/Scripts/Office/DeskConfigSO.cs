@@ -5,14 +5,14 @@ using UnityEngine;
 /// screen power, the desktop's clone on the PC, the scanner, the papers on the
 /// desk, the traveller, the traveller wheel and its speech bubble's pacing
 /// (piece 8), the day-1 desk notes, papers read in the hand (piece 10: the
-/// paper's face, the examine pose) and the desk view. Geometry that belongs to the art
+/// examine pose; a paper's printed form is FormStyleSO's) and the desk view. Geometry that belongs to the art
 /// (where the desk, the PC, the scanner and the traveller are) comes from the
 /// art scene's anchors (OfficeSceneContractSO), so another office supplies its
 /// own. Created and assigned by Tools > TimeDesk > Build Office UI
 /// (Assets/Data/Config/Desk_Default.asset). Every knob is read at runtime; the
-/// checks on them (paper spawn slots, the wheel's fit, the paper face's
-/// capacity) run only in the builder: re-run it after changing the spawn
-/// slots, a wheel size or the face.
+/// checks on them (paper spawn slots, the wheel's fit, the paper's size
+/// against the form style's aspect) run only in the builder: re-run it after
+/// changing the spawn slots, a wheel size or the paper.
 /// </summary>
 [CreateAssetMenu(fileName = "Desk_Default", menuName = "TimeDesk/Office/Desk Config")]
 public sealed class DeskConfigSO : ScriptableObject
@@ -112,16 +112,13 @@ public sealed class DeskConfigSO : ScriptableObject
     public Vector2 bubbleOffset = new Vector2(0f, 290f);
 
     [Header("Examine (piece 10)")]
-    /// <summary>A desk paper's face: its title band, rows (a label over a value) and photo, as fractions of the paper (read at runtime; Build Office UI builds the photo frame from it and checks that every document template's rows fit).</summary>
-    public PaperFaceTuning face = new PaperFaceTuning();
-
     /// <summary>Papers held in the hand: the office slots, the dip under the wheel, the region beside the PC frame, the distance from the camera and the rise's time (screen heights, metres, seconds).</summary>
     public ExamineTuning examine = new ExamineTuning();
 
     /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
     public Color examineTint = Color.white;
 
-    /// <summary>The tint on a held paper's row under the pointer (a picked row shows the compare highlight instead).</summary>
+    /// <summary>The tint on a held paper's box under the pointer (a picked box shows the compare highlight instead).</summary>
     public Color rowHoverTint = new Color(0f, 0f, 0f, 0.06f);
 
     /// <summary>Where the stamp tray's centre sits from the stamp (overlay reference px): above it.</summary>

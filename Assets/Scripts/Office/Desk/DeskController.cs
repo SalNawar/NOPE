@@ -15,7 +15,7 @@ using UnityEngine.UI;
 /// day-1 scan note. A click on a paper routes through PaperClicks (piece 10):
 /// it lifts a paper on the desk into the hand (DeskPapers.Hold, posed by the
 /// PaperExaminer; on the side that hides no other paper when it can:
-/// HeldCover), picks a held paper's row (FieldPicked) or
+/// HeldCover), picks a box of a held paper's form (FieldPicked) or
 /// puts it back where it lay, on top of the stack; a click on the desk (the
 /// desk catcher) or Escape puts every held paper back, and dragging a held
 /// paper drops it back onto the desk under the pointer and on. A paper handed
@@ -68,6 +68,7 @@ public sealed class DeskController : MonoBehaviour
 
     private readonly PaperStack _stack = new PaperStack();
     private IReadOnlyList<CaseDocument> _documents = Array.Empty<CaseDocument>();
+    private IReadOnlyList<DocumentForm> _forms = Array.Empty<DocumentForm>();
     private TravellerLook _look;
     private CharacterArt _art;
     private DeskPapers _state;
@@ -96,7 +97,7 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Raised when a scan finishes, with the paper's index (its window opens).</summary>
     public event Action<int> ScanFinished;
 
-    /// <summary>Raised when a held paper's row is picked for comparison: the paper's index, the row and where it lights up.</summary>
+    /// <summary>Raised when a box of a held paper is picked for comparison: the paper's index, the field's row and where it lights up.</summary>
     public event Action<int, DocumentRow, ICompareHighlight> FieldPicked;
 
     /// <summary>Raised when the papers held in the hand change (the booth's input rules read HeldCount).</summary>
@@ -144,10 +145,11 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Starts a case's papers (a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the desk.</summary>
-    public void BeginCase(IReadOnlyList<CaseDocument> docs, TravellerLook look, CharacterArt art)
+    /// <summary>Starts a case's papers, each printing its form (<paramref name="forms"/>, by paper; a photo document shows <paramref name="look"/>); the documents handed over on arrival slide onto the desk.</summary>
+    public void BeginCase(IReadOnlyList<CaseDocument> docs, IReadOnlyList<DocumentForm> forms, TravellerLook look, CharacterArt art)
     {
         _documents = docs ?? Array.Empty<CaseDocument>();
+        _forms = forms ?? Array.Empty<DocumentForm>();
         _look = look;
         _art = art;
         _state = new DeskPapers(_documents, config.scanSeconds);
@@ -178,7 +180,7 @@ public sealed class DeskController : MonoBehaviour
         DeskDocument paper = Instantiate(paperTemplate, paperRoot);
         paper.transform.position = handOverPoint.position;
         paper.gameObject.SetActive(true);
-        paper.Bind(i, _documents[i], config);
+        paper.Bind(i, _documents[i], i < _forms.Count ? _forms[i] : null, config);
         paper.ShowPhoto(_documents[i] != null && _documents[i].showsPhoto ? _look : null, _art, config.travellerTint);
 
         DeskDraggable drag = paper.GetComponent<DeskDraggable>();
@@ -258,19 +260,19 @@ public sealed class DeskController : MonoBehaviour
         _escapeLive = live;
     }
 
-    /// <summary>A click on a paper (PaperClicks): examine a paper on the desk, pick a held paper's row, or put a held paper back.</summary>
-    private void HandlePaperClicked(DeskDocument paper, bool secondary, int row)
+    /// <summary>A click on a paper (PaperClicks): examine a paper on the desk, pick a box of a held paper, or put a held paper back.</summary>
+    private void HandlePaperClicked(DeskDocument paper, bool secondary, int slot)
     {
         if (_state == null)
             return;
 
-        switch (PaperClicks.Decide(_state.IsHeld(paper.Index), secondary, row >= 0 && row < paper.RowCount))
+        switch (PaperClicks.Decide(_state.IsHeld(paper.Index), secondary, slot >= 0 && slot < paper.SlotCount))
         {
             case PaperClickAction.Examine:
                 Examine(paper);
                 break;
             case PaperClickAction.Pick:
-                FieldPicked?.Invoke(paper.Index, paper.FieldRow(row), paper.RowHighlight(row));
+                FieldPicked?.Invoke(paper.Index, paper.FieldAt(slot), paper.SlotHighlight(slot));
                 break;
             case PaperClickAction.PutBack:
                 if (_state.PutBack(paper.Index))

@@ -125,6 +125,9 @@ public static partial class ContentLibraryValidator
         // --- The agency block (redesign phase 2) ---
         issues += CheckAgency(lib);
 
+        // --- The document templates' forms (redesign phase 4) ---
+        issues += CheckForms(lib);
+
         return issues;
     }
 

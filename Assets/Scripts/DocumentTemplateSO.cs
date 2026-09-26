@@ -32,4 +32,17 @@ public sealed class DocumentTemplateSO : ScriptableObject
 
     /// <summary>The first page carries the traveller's photo (a 4:5 crop of how they look), on the scanned page and on the paper. Only the Travel Passport does.</summary>
     public bool showsPhoto;
+
+    /// <summary>The form number printed at the form's top right and before its serial ("TC-610").</summary>
+    [Header("Form")]
+    public string formNumber = string.Empty;
+
+    /// <summary>
+    /// The paper's form (PC spec FO3): its blocks and where each field is
+    /// printed, on the desk paper and its scanned copy alike. A field's page is
+    /// the page the form places it on (FO4). Build Office UI and the content
+    /// validator check that it places every field once and fits the paper
+    /// (FormLayout.Check).
+    /// </summary>
+    public FormSpec form = new FormSpec();
 }
