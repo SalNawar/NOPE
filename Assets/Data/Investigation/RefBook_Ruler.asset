@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReferenceBookSO
   displayName: Rulers & Regents
   category: 2
+  groupByEra: 0

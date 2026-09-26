@@ -87,6 +87,15 @@ public sealed class DesktopWindow : MonoBehaviour
             manager.Close(this);
     }
 
+    /// <summary>Retitles the window: its title bar and its taskbar button (a title written straight into the text would leave the button stale).</summary>
+    public void SetTitle(string title)
+    {
+        if (titleText != null)
+            titleText.text = title;
+        if (manager != null)
+            manager.Retitled(this);
+    }
+
     /// <summary>Hides the window, keeping its taskbar button (a click on it restores the window).</summary>
     public void Minimise()
     {

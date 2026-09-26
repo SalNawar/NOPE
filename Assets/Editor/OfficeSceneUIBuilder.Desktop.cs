@@ -12,10 +12,8 @@ using UnityEngine.UI;
 /// runtime), the desktop's context menu, the Start menu (the six apps,
 /// Arrange icons, Turn off screen, Quit game), and phase 25's DesktopApps,
 /// the one OpenApp(id) entry point, with each app's window registered under
-/// its DesktopAppIds id. Until the Investigation app exists (phase 16), the
-/// Investigation icon opens an interim window holding today's case tiles
-/// (Directives, the Deviation Report, Records, the Clue Log, the reference
-/// books and the case's scanned documents). Also the canvas's layer order
+/// its DesktopAppIds id (the Investigation icon opens phase 16's app,
+/// OfficeSceneUIBuilder.App). Also the canvas's layer order
 /// and the check that every keyed label is in the reading table (audit
 /// R6-023). Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these
 /// in its order.
@@ -42,23 +40,14 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The context menu's width and entry height.</summary>
     private static readonly Vector2 ContextMenuEntry = new Vector2(240f, 40f);
 
-    /// <summary>The interim Investigation window's size and its tiles' cell (three columns).</summary>
-    private static readonly Vector2 InvestigationWindowSize = new Vector2(480f, 520f);
-
-    /// <summary>A case tile's cell in the interim Investigation window.</summary>
-    private static readonly Vector2 CaseTileCell = new Vector2(146f, 58f);
-
     /// <summary>
     /// The window layer: every desktop window's parent, on the investigation
-    /// host after the case root (never toggled: an app opens between
-    /// travellers too), the icon area exactly (the desktop above the compare
-    /// dock and the taskbar, so no window covers them and a maximised one
-    /// fills it), masked to it. A layer an older build put under the case root
-    /// is moved out with its windows.
+    /// host (never toggled: an app opens between travellers too), the icon
+    /// area exactly (the desktop above the compare dock and the taskbar, so no
+    /// window covers them and a maximised one fills it), masked to it.
     /// </summary>
-    private static Transform EnsureWindowLayer(Transform investHost, Transform caseRoot)
+    private static Transform EnsureWindowLayer(Transform investHost)
     {
-        MoveChildIfPresent(caseRoot, "WindowLayer", investHost);
         Transform layer = Panel(investHost, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceIconArea(layer);
         GetOrAdd<RectMask2D>(layer.gameObject);
@@ -74,65 +63,6 @@ public static partial class OfficeSceneUIBuilder
         rt.pivot = Center;
         rt.offsetMin = new Vector2(0f, EnsureDesktopConfig().MaximisedBottom);
         rt.offsetMax = Vector2.zero;
-    }
-
-    /// <summary>
-    /// The case root (shown while a traveller is at the desk): the claim, Accept
-    /// and Deny and the compare dock. Its old dim (the retired DeskDim role, TH2)
-    /// goes, so the icons and the wallpaper show around the case chrome.
-    /// </summary>
-    private static Transform EnsureCaseRoot(Transform investHost)
-    {
-        Transform caseRoot = Panel(investHost, "InvestigationRoot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        ThemeTag dimTag = caseRoot.GetComponent<ThemeTag>();
-        if (dimTag != null)
-            Object.DestroyImmediate(dimTag);
-        Image dim = caseRoot.GetComponent<Image>();
-        if (dim != null)
-            Object.DestroyImmediate(dim);
-        return caseRoot;
-    }
-
-    /// <summary>
-    /// The interim Investigation window (until phase 16's app): a desktop
-    /// window titled "Investigation" whose body is a grid of case tiles (three
-    /// columns). The builder puts the day's windows there (Directives, the
-    /// Deviation Report, Records, the Clue Log: BuildCaseTile); the
-    /// investigation controller adds the reference books and each scanned
-    /// document at runtime by cloning <paramref name="tileTemplate"/>. Returns the grid.
-    /// </summary>
-    private static Transform BuildInvestigationWindow(Transform windowLayer, out DesktopWindow window, out Button tileTemplate)
-    {
-        DestroyChildIfPresent(windowLayer, "InvestigationWindow");
-        window = BuildOSWindow(windowLayer, "InvestigationWindow", "window.investigation", null, string.Empty, InvestigationWindowSize);
-        Transform win = window.transform;
-        float top = EnsureDesktopConfig().titleBarHeight;
-
-        Transform grid = Panel(win, "CaseTiles", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(grid, Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -(top + 8f)));
-        AddGridLayout(grid, CaseTileCell, new Vector2(6f, 6f));
-        grid.GetComponent<GridLayoutGroup>().constraintCount = 3;
-
-        tileTemplate = MakeButton(grid, "CaseTileTemplate", "Book", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
-        FitIconLabel(tileTemplate);
-        tileTemplate.gameObject.SetActive(false);
-        return grid;
-    }
-
-    /// <summary>A case tile in the interim Investigation window: its keyed label (Full tier) opens its window (a persistent call to DesktopWindow.Open).</summary>
-    private static void BuildCaseTile(Transform grid, string name, string labelKey, DesktopWindow window)
-    {
-        Button tile = MakeButton(grid, name, null, Vector2.zero, Vector2.one, null, ThemeRoleId.Button, labelKey);
-        Transform label = tile.transform.Find("Label");
-        if (label != null)
-        {
-            TMP_Text text = label.GetComponent<TMP_Text>();
-            text.text = UiText.Get(labelKey);
-            // Tile labels wrap between words and shrink (FitIconLabel), not the one-line fit.
-            Tag(text, ThemeRoleId.Button, ThemePart.Ink, labelKey, FontStyles.Normal, ThemeTextKind.Button, false);
-        }
-        FitIconLabel(tile);
-        WirePersistentVoid(tile, "m_OnClick", window, nameof(DesktopWindow.Open));
     }
 
     /// <summary>Gives the Settings window the desktop's icons (Reset icon positions arranges them).</summary>
@@ -151,7 +81,7 @@ public static partial class OfficeSceneUIBuilder
     /// count) with one icon per id in the default arrangement, and the
     /// context menu. Every icon is rebuilt each run. Returns the icons.
     /// </summary>
-    private static DesktopIcons BuildDesktopIcons(Canvas canvas, IReadOnlyDictionary<string, DesktopWindow> windows, DeskController desk, MailFeed mail,
+    private static DesktopIcons BuildDesktopIcons(Canvas canvas, IReadOnlyDictionary<string, DesktopWindow> windows, MailFeed mail,
                                                   out DesktopContextMenu contextMenu)
     {
         Transform root = canvas.transform;
@@ -193,9 +123,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "manager", GetOrAdd<DesktopWindowManager>(root.gameObject));
         SetRef(so, "contextMenu", contextMenu);
         SetRef(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
-        SetRef(so, "desk", desk);
         SetRef(so, "mail", mail);
-        SetRef(so, "investigationWindow", windows.TryGetValue(DesktopAppIds.Investigation, out DesktopWindow investigation) ? investigation : null);
         SerializedArrays.Set(so, "icons", views.ToArray());
         so.ApplyModifiedProperties();
         return board;

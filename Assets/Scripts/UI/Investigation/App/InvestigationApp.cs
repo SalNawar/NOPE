@@ -26,9 +26,6 @@ public sealed class InvestigationApp : MonoBehaviour
     /// <summary>The app's window (maximised on the first open).</summary>
     [SerializeField] private DesktopWindow window;
 
-    /// <summary>The window's title text ("Investigation · Aster Vale").</summary>
-    [SerializeField] private TMP_Text titleText;
-
     /// <summary>The pane with the six tabs.</summary>
     [SerializeField] private AppPane pane;
 
@@ -84,8 +81,8 @@ public sealed class InvestigationApp : MonoBehaviour
     public void BeginCase(string claim, string travellerName)
     {
         Init();
-        if (titleText != null)
-            titleText.text = UiText.Format("app.titleCase", travellerName);
+        if (window != null)
+            window.SetTitle(UiText.Format("app.titleCase", travellerName));
         if (claimText != null)
             claimText.text = claim;
         _badges.Clear();
@@ -103,8 +100,8 @@ public sealed class InvestigationApp : MonoBehaviour
     public void EndCase()
     {
         Init();
-        if (titleText != null)
-            titleText.text = UiText.Get("app.title");
+        if (window != null)
+            window.SetTitle(UiText.Get("app.title"));
         if (claimText != null)
             claimText.text = UiText.Get("idle.waiting");
         if (countersText != null)

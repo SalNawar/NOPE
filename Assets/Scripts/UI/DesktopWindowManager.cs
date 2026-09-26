@@ -130,6 +130,13 @@ public sealed class DesktopWindowManager : MonoBehaviour
             _stack.Close(Register(window));
     }
 
+    /// <summary>A window's title changed: its taskbar button reads the new one.</summary>
+    public void Retitled(DesktopWindow window)
+    {
+        if (window != null && _ids.TryGetValue(window, out string id) && _buttons.TryGetValue(id, out TaskbarButton button) && button.Label != null)
+            button.Label.text = window.Title;
+    }
+
     /// <summary>True while the window is open, shown or minimised (a window never opened is not).</summary>
     public bool IsOpen(DesktopWindow window) => window != null && _ids.TryGetValue(window, out string id) && _stack.IsOpen(id);
 
