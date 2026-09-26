@@ -13,7 +13,9 @@ using UnityEngine.UI;
 /// the register works between travellers too (a day source). Today each
 /// register is drawn by the book page component (ReferenceBookWindowController,
 /// one clone of the page template per book); phase 5's FormView takes its place.
-/// DayReference fills it.
+/// A link, Back or a dock side reveals a book row (Reveal: its book chosen,
+/// "Claimed place only" lifted when it hides the row, the page turned, the row
+/// marked). Each pane has one; DayReference fills them all.
 /// </summary>
 public sealed class ReferenceView : AppView
 {
@@ -106,6 +108,23 @@ public sealed class ReferenceView : AppView
             if (_pages[i] != null && _pages[i].gameObject.activeSelf != (i == _selected))
                 _pages[i].gameObject.SetActive(i == _selected);
         RaiseChipsChanged();
+    }
+
+    /// <summary>Chooses the book of the target's row (else its item), lifts "Claimed place only" when it hides the row, and marks the row found; no row: the mark clears.</summary>
+    public override void Reveal(LinkTarget target)
+    {
+        int book = target.Item;
+        if (PickKeys.TryBookRow(target.Key, out ClueCategory category, out _, out _))
+            book = _books.FindIndex(b => b.category == category);
+        if (book >= 0)
+            Select(book);
+        if (_selected < 0 || _selected >= _pages.Count)
+            return;
+
+        ReferenceBookWindowController page = _pages[_selected];
+        if (target.Key != null && !page.Shows(target.Key) && claimedOnly != null && claimedOnly.isOn)
+            claimedOnly.isOn = false;
+        page.RevealRow(target.Key);
     }
 
     /// <summary>Every book's register from today's rows, the claim and the toggle.</summary>

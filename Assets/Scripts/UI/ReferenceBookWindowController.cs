@@ -10,9 +10,10 @@ using UnityEngine.UI;
 /// book's category. A row is a clickable "place : value" row the player can
 /// compare against a traveller's statement (the claimed place's reads
 /// "(claimed)"; a row whose value history changed shows "[revised]" after its
-/// place: FactTable.IsChanged; the value and the evidence stay canonical); an
-/// era heading line (the Costume Guide) shows the era's name, with no
-/// background and no click.
+/// place: FactTable.IsChanged; the value and the evidence stay canonical) that
+/// lights while its key is picked (AppRow); an era heading line (the Costume
+/// Guide) shows the era's name, with no background and no click. RevealRow
+/// turns to a row's page and marks it found.
 /// </summary>
 public sealed class ReferenceBookWindowController : PagedRowsWindow
 {
@@ -21,6 +22,9 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
     private CompareController _compare;
     private IReadOnlyList<ReferenceLine> _lines = System.Array.Empty<ReferenceLine>();
     private IReadOnlyDictionary<string, string> _eraNames;
+
+    /// <summary>The row a link went to (its pick key; null: none), marked found.</summary>
+    private string _foundKey;
 
     /// <summary>Binds a book to today's facts and the compare its rows pick into, and titles the page.</summary>
     public void SetBook(ReferenceBookSO book, FactTable facts, CompareController compare)
@@ -36,7 +40,33 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
     {
         _lines = lines ?? System.Array.Empty<ReferenceLine>();
         _eraNames = eraNames;
+        _foundKey = null;
         ShowPage(0);
+    }
+
+    /// <summary>True when the register shows the row <paramref name="rowKey"/> names (a BookRow pick key).</summary>
+    public bool Shows(string rowKey) => IndexOf(rowKey) >= 0;
+
+    /// <summary>Turns to the page of the row <paramref name="rowKey"/> names and marks it found; a key it does not show (or null) only clears the mark, on the page shown.</summary>
+    public void RevealRow(string rowKey)
+    {
+        int index = IndexOf(rowKey);
+        _foundKey = index >= 0 ? rowKey : null;
+        if (index >= 0)
+            ShowPageOf(index);
+        else
+            ShowPage(Page);
+    }
+
+    /// <summary>The line of the row <paramref name="rowKey"/> names, or -1.</summary>
+    private int IndexOf(string rowKey)
+    {
+        if (string.IsNullOrEmpty(rowKey))
+            return -1;
+        for (int i = 0; i < _lines.Count; i++)
+            if (!_lines[i].IsHeading && PickKeys.BookRow(_lines[i].Row.Category, _lines[i].Row.NationId, _lines[i].Row.EraId) == rowKey)
+                return i;
+        return -1;
     }
 
     /// <inheritdoc />
@@ -76,7 +106,13 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
             texts[1].text = fact.Value;
 
         ComparePick pick = EvidencePicks.ForBookRow(_book, fact);
+        AppRow mark = row.GetComponent<AppRow>();
+        if (mark != null)
+        {
+            mark.Bind(_compare, pick.Key);
+            mark.SetFound(pick.Key == _foundKey);
+        }
         if (button != null && _compare != null)
-            button.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(background)));
+            button.onClick.AddListener(() => _compare.Select(pick, null));
     }
 }

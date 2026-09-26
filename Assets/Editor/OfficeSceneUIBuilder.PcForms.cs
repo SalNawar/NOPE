@@ -6,9 +6,11 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's PC forms (redesign phase 5, PC spec FO1, §2.4, §6.5):
 /// a FormView (the uGUI form: its paper, seal, fill and line strokes, the slot
-/// button every pickable box clones, the photo cell and the text template in
-/// the paper's text material, every part tagged DiegeticForm so no theme
-/// touches it) and the scanned-copy page of the Investigation app's
+/// button every pickable box clones, the ↗ every linked box clones and the
+/// found outline (phase 18, OfficeSceneUIBuilder.Panes), the photo cell and
+/// the text template in the paper's text material, every part tagged
+/// DiegeticForm so no theme touches it; the hints and the outline are chrome)
+/// and the scanned-copy page of the Investigation app's
 /// Documents tab built on it: the scanner's dark backing, the document's
 /// name, the scan strip and the form in a scroll, a document page at the PC
 /// width (542 u, so H = 708 u). Part of <see cref="OfficeSceneUIBuilder"/>.
@@ -55,6 +57,8 @@ public static partial class OfficeSceneUIBuilder
         slot.transition = Selectable.Transition.None;
         slot.targetGraphic = slotImage;
         slotImage.gameObject.SetActive(false);
+        Button link = BuildLinkButton(slots, "LinkTemplate", ThemeRoleId.DiegeticForm, out _);
+        link.gameObject.SetActive(false);
 
         FormStrokes lines = Strokes(view, "Lines");
 
@@ -72,6 +76,9 @@ public static partial class OfficeSceneUIBuilder
             text.fontSharedMaterial = ink;
         text.gameObject.SetActive(false);
 
+        Transform found = BuildFrame(view, "Found", FoundFrameWidth, AccentInk, ThemeRoleId.FocusRing);
+        found.gameObject.SetActive(false);
+
         FormView form = view.gameObject.AddComponent<FormView>();
         var so = new SerializedObject(form);
         Wire(so, "style", style);
@@ -80,6 +87,8 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "fills", fills);
         Wire(so, "slotsRoot", slots);
         Wire(so, "slotTemplate", slot);
+        Wire(so, "linkTemplate", link);
+        Wire(so, "found", found);
         Wire(so, "lines", lines);
         Wire(so, "photoFrame", photoFrame);
         Wire(so, "photo", portrait);

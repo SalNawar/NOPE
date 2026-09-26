@@ -8809,6 +8809,90 @@
         "tier": "Full"
       },
       {
+        "key": "app.tabGlyph.documents",
+        "text": "DOC",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabGlyph.records",
+        "text": "REC",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabGlyph.reference",
+        "text": "REF",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabGlyph.transcript",
+        "text": "TRN",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabGlyph.report",
+        "text": "RPT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabGlyph.rules",
+        "text": "RUL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabMenu.left",
+        "text": "Move left",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabMenu.right",
+        "text": "Move right",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tabMenu.reset",
+        "text": "Reset tab order",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.split.hint",
+        "text": "Two panes side by side, or one",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.split.tooNarrow",
+        "text": "Maximise the window for two panes",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.link.reference",
+        "text": "Open the Reference: {0}, the claimed place",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.link.records",
+        "text": "Open Records: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.link.rules",
+        "text": "Open the Rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "book.claimedLabel",
         "text": "{0} (claimed)",
         "gloss": "None",
@@ -10089,6 +10173,30 @@
       {
         "key": "compare.dockHint",
         "text": "COMPARE    Click two values to compare them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockSide",
+        "text": "{0}:  {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockPending",
+        "text": "pick another value",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockDeviation",
+        "text": "●  DEVIATION LOGGED · Report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockAlready",
+        "text": "ALREADY DOCUMENTED · Report",
         "gloss": "None",
         "tier": "Full"
       },

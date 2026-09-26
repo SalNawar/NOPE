@@ -245,8 +245,8 @@ public static partial class OfficeSceneUIBuilder
         // The Investigation app (OfficeSceneUIBuilder.App): every case source in one window, one tab each.
         AppParts app = BuildInvestigationApp(windowLayer, investHost, compare);
 
-        // The compare dock above the taskbar (the PC redesign DK9): over every window and the toast.
-        Transform compareBar = BuildCompareDock(investHost, compare, out TMP_Text compareText, out GameObject compareDock);
+        // The compare dock above the taskbar (the PC redesign DK9): over every window and the toast; its sides link into the app.
+        CompareDock dockColumns = BuildCompareDock(investHost, compare, app.App, out GameObject compareDock);
 
         // --- Content + logic objects ---
         DayPlanSO dayPlan = null;
@@ -271,6 +271,8 @@ public static partial class OfficeSceneUIBuilder
         DesktopIcons icons = BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, app, gameManager);
         var soApp = new SerializedObject(app.App);
         Wire(soApp, "icons", icons);
+        Transform contextMenu = root.Find("ContextMenu");
+        Wire(soApp, "contextMenu", contextMenu != null ? contextMenu.GetComponent<DesktopContextMenu>() : null);
         soApp.ApplyModifiedProperties();
 
         // The window stack (every window built above), the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
@@ -283,7 +285,8 @@ public static partial class OfficeSceneUIBuilder
         ShiftClockDriver shiftClock = gameManager.GetComponent<ShiftClockDriver>();
         if (shiftClock == null)
             shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
-        WireDocumentClock(app.Documents, shiftClock);
+        foreach (DocumentsView documents in app.Documents)
+            WireDocumentClock(documents, shiftClock);
 
         // The Office root: every click box, the desk, the traveller, the readouts,
         // the input rules and the binder that puts them on the art office at load.
@@ -318,8 +321,7 @@ public static partial class OfficeSceneUIBuilder
         soFlow.ApplyModifiedProperties();
 
         var soCompare = new SerializedObject(compare);
-        SetRef(soCompare, "compareBar", compareBar.gameObject);
-        SetRef(soCompare, "compareText", compareText);
+        Wire(soCompare, "dock", dockColumns);
         SetRef(soCompare, "officeBar", officeCompareStrip);
         SetRef(soCompare, "officeText", officeCompareText);
         SetColor(soCompare, "matchColor", new Color(0.05f, 0.45f, 0.12f, 1f));
@@ -333,12 +335,12 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "denyButton", app.Deny);
         Wire(soInvest, "compareController", compare);
         Wire(soInvest, "compareDock", compareDock);
-        Wire(soInvest, "documentsView", app.Documents);
-        Wire(soInvest, "recordsWindow", app.Records);
-        Wire(soInvest, "referenceView", app.Reference);
-        Wire(soInvest, "transcriptWindow", app.Transcript);
-        Wire(soInvest, "reportText", app.ReportText);
-        Wire(soInvest, "directivesText", app.RulesText);
+        SerializedArrays.Set(soInvest, "documentsViews", app.Documents);
+        SerializedArrays.Set(soInvest, "recordsWindows", app.Records);
+        SerializedArrays.Set(soInvest, "referenceViews", app.Reference);
+        SerializedArrays.Set(soInvest, "transcriptWindows", app.Transcript);
+        SerializedArrays.Set(soInvest, "reportTexts", app.ReportText);
+        SerializedArrays.Set(soInvest, "directivesTexts", app.RulesText);
         Wire(soInvest, "interactionPanel", interaction);
         Wire(soInvest, "desk", officeView.transform.Find("Desk").GetComponent<DeskController>());
         Wire(soInvest, "hud", caseHud);

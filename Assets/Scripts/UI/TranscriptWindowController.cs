@@ -5,11 +5,13 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Case Notes: Interview — the current traveller's transcript: one row per
-/// line (speaker, sentence), paged like the reference books and always
-/// showing the newest page. Only answer rows are clickable: a click puts the
+/// line (speaker, sentence), paged like the reference books and showing the
+/// newest page as lines come. Only answer rows are clickable: a click puts the
 /// answer's canonical fact value into the compare bar as the traveller's
 /// statement (EvidencePicks.ForAnswer, keyed by the line's index, the same
-/// pick as the bubble's answer). Sentences are shown through DisplayText: from translation's
+/// pick as the bubble's answer), and the row lights while that key is picked
+/// (AppRow); an answer with a smart link (SmartLinks.ForAnswer) shows the ↗.
+/// Reveal turns to a line's page and marks it found. Sentences are shown through DisplayText: from translation's
 /// first day the traveller's lines are in their claimed place's tongue and
 /// show in English only with the region's Speech translator (settled, never
 /// animated); an untranslated answer shows in the bar as the placeholder,
@@ -25,20 +27,42 @@ public sealed class TranscriptWindowController : PagedRowsWindow
     private CompareController _compare;
     private CaseTranslation _translation = CaseTranslation.None;
 
+    /// <summary>The case's claim and record lookup (the answers' links).</summary>
+    private CaseClaim _claim;
+    private string _caseLookup;
+
+    /// <summary>The line a link went to (its pick key; null: none), marked found.</summary>
+    private string _foundKey;
+
     /// <summary>The sentence text's own font and material (the row template's), read once.</summary>
     private TMP_FontAsset _ownFont;
     private Material _ownMaterial;
     private bool _ownRead;
 
-    /// <summary>Shows a traveller's transcript (the runner's live, append-only list) on its newest page, in their translation.</summary>
-    public void Bind(IReadOnlyList<DialogLine> transcript, string deskName, string travellerName, CompareController compare, CaseTranslation translation)
+    /// <summary>Shows a traveller's transcript (the runner's live, append-only list) on its newest page, in their translation; the answers link by the case's <paramref name="claim"/> and record lookup (SmartLinks.CaseLookup).</summary>
+    public void Bind(IReadOnlyList<DialogLine> transcript, string deskName, string travellerName, CompareController compare, CaseTranslation translation,
+                     CaseClaim claim, string caseLookup)
     {
         _lines = transcript ?? System.Array.Empty<DialogLine>();
         _deskName = deskName ?? string.Empty;
         _travellerName = travellerName ?? string.Empty;
         _compare = compare;
         _translation = translation ?? CaseTranslation.None;
+        _claim = claim;
+        _caseLookup = caseLookup;
+        _foundKey = null;
         ShowLastPage();
+    }
+
+    /// <summary>Turns to the page of the line <paramref name="lineKey"/> names (a Line pick key) and marks it found; any other key (or null) only clears the mark, on the page shown.</summary>
+    public void Reveal(string lineKey)
+    {
+        bool mine = PickKeys.TryLine(lineKey, out int index) && index < _lines.Count;
+        _foundKey = mine ? lineKey : null;
+        if (mine)
+            ShowPageOf(index);
+        else
+            ShowPage(Page);
     }
 
     /// <summary>Shows the newest page (call after lines were appended).</summary>
@@ -61,6 +85,16 @@ public sealed class TranscriptWindowController : PagedRowsWindow
             TextFlip.Write(texts[1], _ownFont, _ownMaterial, line.Text, _translation.Line(line), _translation);
         }
 
+        AppRow mark = row.GetComponent<AppRow>();
+        if (mark != null)
+        {
+            string key = line.IsAnswer ? PickKeys.Line(index) : null;
+            mark.Bind(_compare, key);
+            LinkTarget link = line.IsAnswer ? SmartLinks.ForAnswer(line.Category, _claim, _caseLookup) : LinkTarget.None;
+            mark.SetLink(link, AppLinks.Hint(link, line.Category));
+            mark.SetFound(key != null && key == _foundKey);
+        }
+
         if (button == null)
             return;
 
@@ -70,7 +104,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
             return;
 
         ComparePick pick = EvidencePicks.ForAnswer(index, line, _translation);
-        button.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(background)));
+        button.onClick.AddListener(() => _compare.Select(pick, null));
     }
 
     /// <summary>Reads the sentence text's own font and material from the row template, once (a row's own font, whatever a foreign line set before).</summary>

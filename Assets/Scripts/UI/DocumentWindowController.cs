@@ -11,8 +11,13 @@ using UnityEngine.UI;
 /// same DocumentForm the desk paper prints, so the copy is the paper: its
 /// pages stacked in a scroll. A
 /// click on a box picks the field for the compare (EvidencePicks.ForField,
-/// the same pick as the held paper's box) and the box under the pointer tints.
-/// Every value shows in English, as filled (TR1).
+/// the same pick as the held paper's box), the box under the pointer tints,
+/// and a box lights while its field's key is picked, in every pane (phase
+/// 18, CM3). A field with a smart link (SmartLinks.ForField: its book's
+/// claimed row, the traveller's record, the Rules) has a ↗ that follows it
+/// through the pane the copy is in (LK2); RevealField scrolls a field's box
+/// to the middle and outlines it. Every value shows in English, as filled
+/// (TR1).
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
@@ -37,35 +42,46 @@ public sealed class DocumentWindowController : MonoBehaviour
     private int _index;
     private CompareController _compare;
 
+    /// <summary>The case's claim (the place facts' links).</summary>
+    private CaseClaim _claim;
+
     private void Awake()
     {
-        if (form != null)
-            form.SlotClicked += Pick;
+        if (form == null)
+            return;
+        form.SlotClicked += Pick;
+        form.LinkClicked += Follow;
     }
 
     private void OnDestroy()
     {
-        if (form != null)
-            form.SlotClicked -= Pick;
+        if (form == null)
+            return;
+        form.SlotClicked -= Pick;
+        form.LinkClicked -= Follow;
     }
 
     /// <summary>
     /// Binds document <paramref name="index"/> of the case: draws
     /// <paramref name="paper"/> (the form its desk paper prints) with the
-    /// traveller's photo when it has one, scrolled to its top.
+    /// traveller's photo when it has one, scrolled to its top; its boxes light
+    /// by their keys in <paramref name="compare"/> and its fields link by the
+    /// case's <paramref name="claim"/>.
     /// </summary>
-    public void SetDocument(DocumentInstance doc, int index, DocumentForm paper, CompareController compare, TravellerLook look, CharacterArt art)
+    public void SetDocument(DocumentInstance doc, int index, DocumentForm paper, CompareController compare, TravellerLook look, CharacterArt art, CaseClaim claim)
     {
         _doc = doc;
         _index = index;
         _compare = compare;
+        _claim = claim;
 
         if (titleText != null)
             titleText.text = doc != null ? doc.DisplayName : UiText.Get("document.untitled");
 
         if (form != null && paper != null)
         {
-            form.Show(paper.Spec, paper.Data, slot => slot.Field >= 0 && doc != null && slot.Field < doc.fields.Count && doc.fields[slot.Field] != null);
+            form.Bind(compare, slot => Field(slot) != null ? PickKeys.Field(_index, slot.Field) : null);
+            form.Show(paper.Spec, paper.Data, slot => Field(slot) != null, LinkHint);
             form.ShowPhoto(paper.Data.HasPhoto ? look : null, art);
         }
         if (scroll != null)
@@ -81,11 +97,61 @@ public sealed class DocumentWindowController : MonoBehaviour
         scanStrip.text = string.Format(form.Style.scanStrip, time);
     }
 
-    /// <summary>A box was clicked: its field goes into the compare, lit on this copy.</summary>
-    private void Pick(FormSlot slot, ICompareHighlight highlight)
+    /// <summary>
+    /// Scrolls the box of the field <paramref name="fieldKey"/> names (a Field
+    /// pick key of this document) to the middle and outlines it; any other key
+    /// (or null) only clears the outline.
+    /// </summary>
+    public void RevealField(string fieldKey)
     {
-        if (_compare == null || _doc == null || slot.Field < 0 || slot.Field >= _doc.fields.Count || _doc.fields[slot.Field] == null)
+        int slot = -1;
+        PlacedForm placed = form != null ? form.Placed : null;
+        if (placed != null && PickKeys.TryField(fieldKey, out int document, out int field) && document == _index)
+            for (int s = 0; s < placed.Slots.Count && slot < 0; s++)
+                if (placed.Slots[s].Field == field)
+                    slot = s;
+        if (form != null)
+            form.MarkFound(slot);
+        if (slot < 0 || scroll == null || scroll.viewport == null)
             return;
-        _compare.Select(EvidencePicks.ForField(_index, new DocumentRow(slot.Field, _doc.fields[slot.Field]), _doc.DisplayName), highlight);
+
+        FaceRect box = placed.Slots[slot].Hit;
+        scroll.verticalNormalizedPosition = AppPanes.ScrollToMiddle(placed.Height, scroll.viewport.rect.height, box.YMin, box.Height);
+    }
+
+    /// <summary>The field a slot shows (null for a table row or a slot past the document's fields).</summary>
+    private DocumentField Field(FormSlot slot) =>
+        _doc != null && slot.Field >= 0 && slot.Field < _doc.fields.Count ? _doc.fields[slot.Field] : null;
+
+    /// <summary>A field's link (SmartLinks.ForField; None for a slot without a field).</summary>
+    private LinkTarget Link(FormSlot slot)
+    {
+        DocumentField field = Field(slot);
+        return field != null ? SmartLinks.ForField(field, _doc.fields, _claim) : LinkTarget.None;
+    }
+
+    /// <summary>The ↗'s hover hint of a slot with a link, or null (no ↗).</summary>
+    private string LinkHint(FormSlot slot)
+    {
+        LinkTarget link = Link(slot);
+        return link.IsNone ? null : AppLinks.Hint(link, Field(slot).category);
+    }
+
+    /// <summary>A box was clicked: its field goes into the compare (the box lights by its key).</summary>
+    private void Pick(FormSlot slot)
+    {
+        DocumentField field = Field(slot);
+        if (_compare == null || field == null)
+            return;
+        _compare.Select(EvidencePicks.ForField(_index, new DocumentRow(slot.Field, field), _doc.DisplayName), null);
+    }
+
+    /// <summary>A ↗ was clicked: its field's link, through the pane this copy is in (LK2).</summary>
+    private void Follow(FormSlot slot)
+    {
+        LinkTarget link = Link(slot);
+        AppPane pane = GetComponentInParent<AppPane>();
+        if (!link.IsNone && pane != null)
+            pane.FollowLink(link);
     }
 }

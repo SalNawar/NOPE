@@ -18,12 +18,16 @@ using UnityEngine.UI;
 /// measures with a hidden text of the template's font that the view makes
 /// for itself (TextMeshPro measures only once awake, and a window is filled
 /// while still inactive). Each pickable slot gets a button over its
-/// box: a click raises SlotClicked with the slot and the box as a compare
-/// highlight, and the box under the pointer tints (FormLayout.SlotAt, as on
-/// the desk). The view sets its own height to the form's, so a scroll rect
-/// can hold it. Its parts are the builder's, tagged DiegeticForm (forms are
-/// never themed), and pooled: a new Show reuses them and drops the old picks.
-/// Always English (TR1): values are written as they are.
+/// box: a click raises SlotClicked, and the box under the pointer tints
+/// (FormLayout.SlotAt, as on the desk). A box's pick tint follows its key
+/// (the PC redesign CM3: Bind; CompareController.IsPicked and PicksChanged),
+/// so a value shown in both panes lights in both and a redrawn form is lit
+/// again. A slot with a smart link gets a ↗ at its box's top right (LK2: a
+/// click raises LinkClicked; the link never picks), and MarkFound outlines
+/// the box a link went to. The view sets its own height to the form's, so a
+/// scroll rect can hold it. Its parts are the builder's, tagged DiegeticForm
+/// (forms are never themed), and pooled: a new Show reuses them. Always
+/// English (TR1): values are written as they are.
 /// </summary>
 public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitHandler
 {
@@ -54,56 +58,53 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The traveller's photo inside the cell.</summary>
     [SerializeField] private TravellerPortraitView photo;
 
+    /// <summary>The inactive ↗ cloned per linked slot (a small button with the drawn glyph and its hover hint).</summary>
+    [SerializeField] private Button linkTemplate;
+
+    /// <summary>The found mark: an outline placed over the box a link went to (inactive otherwise).</summary>
+    [SerializeField] private RectTransform found;
+
+    /// <summary>The ↗'s side: its hit box, at the box's top right corner.</summary>
+    [SerializeField, Min(1f)] private float linkSize = 28f;
+
     /// <summary>Where the texts are cloned (spans the form).</summary>
     [SerializeField] private RectTransform textsRoot;
 
     /// <summary>The inactive text every printed word clones (its font and material are also the measure's).</summary>
     [SerializeField] private TextMeshProUGUI textTemplate;
 
-    /// <summary>One pooled slot button: which slot it shows, and its pick.</summary>
+    /// <summary>One pooled slot button: which slot it shows, and whether its key is picked.</summary>
     private sealed class SlotPart
     {
         public Button Button;
         public Image Tint;
         public int Slot;
         public bool Picked;
-        public Color PickColour;
     }
 
-    /// <summary>A box of the view as a compare highlight: tints it while picked; nothing once the view is gone or shows another form.</summary>
-    private sealed class SlotHighlight : ICompareHighlight
+    /// <summary>One pooled ↗: which slot it follows, and its hover hint's text.</summary>
+    private sealed class LinkPart
     {
-        private readonly FormView _view;
-        private readonly SlotPart _part;
-        private readonly int _generation;
-
-        public SlotHighlight(FormView view, SlotPart part)
-        {
-            _view = view;
-            _part = part;
-            _generation = view._generation;
-        }
-
-        public void Show(bool picked, Color colour)
-        {
-            if (_view == null || _view._generation != _generation)
-                return;
-            _part.Picked = picked;
-            _part.PickColour = colour;
-            _view.ApplyTint(_part);
-        }
+        public Button Button;
+        public TMP_Text Hint;
+        public int Slot;
     }
 
     private readonly List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
     private readonly List<SlotPart> _parts = new List<SlotPart>();
+    private readonly List<LinkPart> _links = new List<LinkPart>();
     private TmpFormText _measure;
     private TextMeshProUGUI _measureText;
     private PlacedForm _form;
-    private int _generation;
     private SlotPart _hovered;
+    private CompareController _compare;
+    private Func<FormSlot, string> _keyOf;
 
-    /// <summary>Raised when a pickable slot is clicked: the slot (its field, or its table row) and its box as a compare highlight.</summary>
-    public event Action<FormSlot, ICompareHighlight> SlotClicked;
+    /// <summary>Raised when a pickable slot is clicked (its field, or its table row).</summary>
+    public event Action<FormSlot> SlotClicked;
+
+    /// <summary>Raised when a slot's ↗ is clicked.</summary>
+    public event Action<FormSlot> LinkClicked;
 
     /// <summary>The form as last placed (null before the first Show).</summary>
     public PlacedForm Placed => _form;
@@ -112,15 +113,35 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     public FormStyleSO Style => style;
 
     /// <summary>
+    /// Tints each box while the key <paramref name="keyOf"/> gives it is
+    /// picked in <paramref name="compare"/> (null key: never), now and on
+    /// every change of the picks (CM3).
+    /// </summary>
+    public void Bind(CompareController compare, Func<FormSlot, string> keyOf)
+    {
+        if (_compare != compare)
+        {
+            if (_compare != null)
+                _compare.PicksChanged -= Relight;
+            _compare = compare;
+            if (_compare != null)
+                _compare.PicksChanged += Relight;
+        }
+        _keyOf = keyOf;
+        Relight();
+    }
+
+    /// <summary>
     /// Draws <paramref name="spec"/> showing <paramref name="data"/> at the
     /// view's width and sets the view's height to the form's. The slots
     /// <paramref name="pickable"/> accepts (every slot when null) get a button
-    /// and tint under the pointer. Picks of an earlier form are dropped.
-    /// Returns the placed form (null without a style or text template).
+    /// and tint under the pointer, lit while their key is picked (Bind); the
+    /// slots <paramref name="linkHint"/> gives a hint get a ↗ with that hint.
+    /// The found mark clears. Returns the placed form (null without a style or
+    /// text template).
     /// </summary>
-    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null)
+    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, Func<FormSlot, string> linkHint = null)
     {
-        _generation++;
         _hovered = null;
         _form = null;
         if (style == null || textTemplate == null)
@@ -164,13 +185,37 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (lines != null)
             lines.Set(quads, FormPaintLayer.Line);
 
-        int parts = 0;
+        int parts = 0, links = 0;
         for (int s = 0; s < _form.Slots.Count; s++)
+        {
             if (pickable == null || pickable(_form.Slots[s]))
                 Arm(parts++, s);
+            string hint = linkHint != null ? linkHint(_form.Slots[s]) : null;
+            if (hint != null)
+                ArmLink(links++, s, hint);
+        }
         for (int i = parts; i < _parts.Count; i++)
             _parts[i].Button.gameObject.SetActive(false);
+        for (int i = links; i < _links.Count; i++)
+            _links[i].Button.gameObject.SetActive(false);
+        MarkFound(-1);
+        Relight();
         return _form;
+    }
+
+    /// <summary>Outlines slot <paramref name="slot"/>'s box (the one a link went to); -1 hides the mark.</summary>
+    public void MarkFound(int slot)
+    {
+        if (found == null)
+            return;
+        bool on = _form != null && slot >= 0 && slot < _form.Slots.Count;
+        if (on)
+        {
+            Place(found, _form.Slots[slot].Hit);
+            found.SetAsLastSibling();
+        }
+        if (found.gameObject.activeSelf != on)
+            found.gameObject.SetActive(on);
     }
 
     /// <summary>Shows the traveller's photo in the photo cell (a null look empties it).</summary>
@@ -184,11 +229,30 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             photo.Clear();
     }
 
-    /// <summary>The hidden measuring text goes with the view.</summary>
+    /// <summary>The hidden measuring text goes with the view, and the picks stop being heard.</summary>
     private void OnDestroy()
     {
         if (_measureText != null)
             Destroy(_measureText.gameObject);
+        if (_compare != null)
+            _compare.PicksChanged -= Relight;
+    }
+
+    /// <summary>Each armed box's pick from its key (Bind), and its tint. A view destroyed before it ever woke (a copy never shown) gets no OnDestroy: it stops listening here.</summary>
+    private void Relight()
+    {
+        if (this == null)
+        {
+            _compare.PicksChanged -= Relight;
+            return;
+        }
+        foreach (SlotPart part in _parts)
+        {
+            if (!part.Button.gameObject.activeSelf)
+                continue;
+            part.Picked = _compare != null && _keyOf != null && _form != null && part.Slot < _form.Slots.Count && _compare.IsPicked(_keyOf(_form.Slots[part.Slot]));
+            ApplyTint(part);
+        }
     }
 
     /// <summary>The box under the pointer tints (a pickable slot's).</summary>
@@ -251,11 +315,42 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         ApplyTint(p);
     }
 
-    /// <summary>A slot's button was clicked: SlotClicked with the slot and its highlight.</summary>
+    /// <summary>A slot's button was clicked: SlotClicked with the slot.</summary>
     private void Click(SlotPart part)
     {
         if (_form != null && part.Slot >= 0 && part.Slot < _form.Slots.Count)
-            SlotClicked?.Invoke(_form.Slots[part.Slot], new SlotHighlight(this, part));
+            SlotClicked?.Invoke(_form.Slots[part.Slot]);
+    }
+
+    /// <summary>Arms pooled ↗ <paramref name="index"/> at slot <paramref name="slot"/>'s box's top right, with its hover hint.</summary>
+    private void ArmLink(int index, int slot, string hint)
+    {
+        if (linkTemplate == null)
+            return;
+        if (index >= _links.Count)
+        {
+            Button button = Instantiate(linkTemplate, slotsRoot != null ? slotsRoot : linkTemplate.transform.parent);
+            var part = new LinkPart { Button = button, Hint = button.GetComponentInChildren<TMP_Text>(true) };
+            button.onClick.AddListener(() => FollowLink(part));
+            _links.Add(part);
+        }
+        LinkPart p = _links[index];
+        p.Slot = slot;
+        p.Button.name = $"Link_{slot}";
+        if (p.Hint != null)
+            p.Hint.text = hint;
+        FaceRect box = _form.Slots[slot].Hit;
+        float side = Mathf.Min(linkSize, box.Width, box.Height);
+        Place((RectTransform)p.Button.transform, new FaceRect(box.XMax - side, box.YMin, box.XMax, box.YMin + side));
+        p.Button.transform.SetAsLastSibling();
+        p.Button.gameObject.SetActive(true);
+    }
+
+    /// <summary>A ↗ was clicked: LinkClicked with its slot.</summary>
+    private void FollowLink(LinkPart part)
+    {
+        if (_form != null && part.Slot >= 0 && part.Slot < _form.Slots.Count)
+            LinkClicked?.Invoke(_form.Slots[part.Slot]);
     }
 
     /// <summary>The armed part whose slot holds the pointer (FormLayout.SlotAt on the form), or null.</summary>
@@ -285,11 +380,11 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             ApplyTint(part);
     }
 
-    /// <summary>A box's tint: the pick's colour, else the hover tint while hovered, else clear.</summary>
+    /// <summary>A box's tint: the compare's highlight while its key is picked, else the hover tint while hovered, else clear.</summary>
     private void ApplyTint(SlotPart part)
     {
         if (part.Tint != null)
-            part.Tint.color = part.Picked ? part.PickColour : part == _hovered ? style.hoverTint : Color.clear;
+            part.Tint.color = part.Picked && _compare != null ? _compare.HighlightColor : part == _hovered ? style.hoverTint : Color.clear;
     }
 
     /// <summary>Puts <paramref name="rt"/> over a form-space rectangle (from the form's top-left, y down).</summary>

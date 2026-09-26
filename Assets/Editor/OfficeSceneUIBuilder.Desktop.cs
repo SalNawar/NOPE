@@ -196,7 +196,7 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
-    /// <summary>The desktop's context menu (DK5, TH4): a Start-menu-styled panel whose entries (Arrange icons; Open) show per target; hidden.</summary>
+    /// <summary>The desktop's context menu (DK5, TH4, AP4): a Start-menu-styled panel whose entries (Arrange icons; Open; a tab's Move left, Move right and Reset tab order) show per target; hidden.</summary>
     private static DesktopContextMenu BuildContextMenu(Transform root, DesktopIcons icons)
     {
         DestroyChildIfPresent(root, "ContextMenu");
@@ -210,11 +210,20 @@ public static partial class OfficeSceneUIBuilder
         SetLayoutHeight(arrange, ContextMenuEntry.y);
         Button open = MakeButton(menu, "OpenEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "menu.open");
         SetLayoutHeight(open, ContextMenuEntry.y);
+        Button moveLeft = MakeButton(menu, "MoveLeftEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "app.tabMenu.left");
+        SetLayoutHeight(moveLeft, ContextMenuEntry.y);
+        Button moveRight = MakeButton(menu, "MoveRightEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "app.tabMenu.right");
+        SetLayoutHeight(moveRight, ContextMenuEntry.y);
+        Button resetTabs = MakeButton(menu, "ResetTabsEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "app.tabMenu.reset");
+        SetLayoutHeight(resetTabs, ContextMenuEntry.y);
 
         DesktopContextMenu contextMenu = menu.gameObject.AddComponent<DesktopContextMenu>();
         var so = new SerializedObject(contextMenu);
         SetRef(so, "arrangeEntry", arrange);
         SetRef(so, "openEntry", open);
+        Wire(so, "moveLeftEntry", moveLeft);
+        Wire(so, "moveRightEntry", moveRight);
+        Wire(so, "resetTabsEntry", resetTabs);
         SetRef(so, "icons", icons);
         so.ApplyModifiedProperties();
         menu.gameObject.SetActive(false);

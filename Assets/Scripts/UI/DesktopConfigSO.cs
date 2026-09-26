@@ -7,11 +7,12 @@ using UnityEngine;
 /// buttons, the desktop's icons (their cell, the arrange grid, the default
 /// order, the drop's overlap share), the double-click, the Internet's caps
 /// (the news back issues, the browser's history), the app windows' sizes,
-/// the Investigation app's scan toast and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
+/// the Investigation app's scan toast and panes, and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
 /// UI (Assets/Data/Config/Desktop_Default.asset). The builder reads the sizes
 /// (re-run it after changing one); DesktopWindowManager and DesktopIcons read
-/// the double-click, DesktopIcons the icon knobs and InvestigationApp the
-/// toast's time, at runtime.
+/// the double-click, DesktopIcons the icon knobs, InvestigationApp the
+/// toast's time and the panes' widths and AppPane the tabs' widths and the
+/// history's length, at runtime.
 /// </summary>
 [CreateAssetMenu(fileName = "Desktop_Default", menuName = "TimeDesk/Office/Desktop Config")]
 public sealed class DesktopConfigSO : ScriptableObject
@@ -101,6 +102,22 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>How long a scan's toast shows, in seconds (WN5).</summary>
     [Min(0.5f)] public float toastSeconds = 4f;
+
+    [Header("The Investigation app's panes (redesign phase 18)")]
+    /// <summary>A pane's narrowest readable width: two panes show only while the body holds the sidebar and two of these (AP3).</summary>
+    [Min(1f)] public float paneMinWidth = 520f;
+
+    /// <summary>The divider between the two panes.</summary>
+    [Min(0f)] public float paneGap = 6f;
+
+    /// <summary>The places a pane's Back can return through (AP9).</summary>
+    [Min(1)] public int paneHistory = 30;
+
+    /// <summary>The width a tab needs for its name: a strip narrower than the tabs' share shows the inactive tabs' glyphs (AP3).</summary>
+    [Min(1f)] public float tabLabelWidth = 110f;
+
+    /// <summary>An inactive tab's width while it shows its glyph.</summary>
+    [Min(1f)] public float tabGlyphWidth = 48f;
 
     [Header("Notes (redesign phase 25)")]
     /// <summary>The most day pages Notes keeps (WorldState.notes); the oldest go first.</summary>
