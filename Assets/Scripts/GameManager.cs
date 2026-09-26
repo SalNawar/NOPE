@@ -184,7 +184,7 @@ public sealed class GameManager : MonoBehaviour
         if (investigationUI != null)
         {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
-            investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
+            investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases), contentLibrary.Agency, _worldState.day);
             investigationUI.SetFacts(_today.Facts);
             investigationUI.SetInterviewDay(interview);
             investigationUI.SetCharacterArt(_characterArt);

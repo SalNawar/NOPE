@@ -5,8 +5,9 @@ using UnityEngine.UI;
 /// <summary>
 /// Fake-OS desktop shell: the Start button toggles a small menu offering
 /// Settings (opens the Settings window: the UI language choice, piece 6), Turn off screen (darkens the live
-/// monitor; only where one is wired) and Quit game. Wire from the editor
-/// builder. All fields are optional / null-safe.
+/// monitor; only where one is wired) and Quit game. The desktop's window
+/// manager closes the menu on a press outside it and on Escape. Wire from the
+/// editor builder. All fields are optional / null-safe.
 /// </summary>
 public sealed class DesktopShell : MonoBehaviour
 {
@@ -30,7 +31,10 @@ public sealed class DesktopShell : MonoBehaviour
     [SerializeField] private MonitorScreen monitorScreen;
 
     /// <summary>Settings window opened by the Settings entry (the UI language choice, SettingsWindowController).</summary>
-    [SerializeField] private OSWindowChrome settingsWindow;
+    [SerializeField] private DesktopWindow settingsWindow;
+
+    /// <summary>True while the Start menu is open.</summary>
+    public bool StartMenuOpen => startMenu != null && startMenu.activeSelf;
 
     private void Start()
     {
@@ -54,13 +58,24 @@ public sealed class DesktopShell : MonoBehaviour
             startMenu.SetActive(!startMenu.activeSelf);
     }
 
+    /// <summary>Closes the Start menu.</summary>
+    public void CloseStartMenu()
+    {
+        if (startMenu != null)
+            startMenu.SetActive(false);
+    }
+
+    /// <summary>True for the Start menu, the Start button and their parts (a press there leaves the menu to them).</summary>
+    public bool IsStartMenuPart(GameObject go) =>
+        go != null && ((startMenu != null && go.transform.IsChildOf(startMenu.transform)) ||
+                       (startButton != null && go.transform.IsChildOf(startButton.transform)));
+
     /// <summary>Opens the Settings window and closes the Start menu.</summary>
     public void OpenSettings()
     {
         if (settingsWindow != null)
             settingsWindow.Open();
-        if (startMenu != null)
-            startMenu.SetActive(false);
+        CloseStartMenu();
     }
 
     /// <summary>Turns the monitor's screen off (a screen held on by a pending citation slip stays on) and closes the Start menu.</summary>
@@ -68,8 +83,7 @@ public sealed class DesktopShell : MonoBehaviour
     {
         if (monitorScreen != null)
             monitorScreen.TurnOff();
-        if (startMenu != null)
-            startMenu.SetActive(false);
+        CloseStartMenu();
     }
 
     /// <summary>Quits the game (exits play mode in the editor).</summary>

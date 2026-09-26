@@ -2,9 +2,12 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// The office's diegetic readouts: the day calendar (Day), the timeline
-/// stability monitor (Stability, its text tinted by band) and the cash till
-/// (Credits, with a "ding" when the value rises). The stability text keeps
+/// The office's diegetic readouts: the day calendar (today's date in the
+/// agency's calendar and the day number, "14 MAR 2150 · DAY 1": the
+/// traveller-types spec's F6; its text wraps and shrinks to fit the art's box,
+/// which was drawn for a day number), the timeline stability monitor
+/// (Stability, its text tinted by band) and the cash till (Credits, with a
+/// "ding" when the value rises). The stability text keeps
 /// its own colour while stability is healthy. The texts are the art
 /// office's own (the office binder hands them over through Bind), or the
 /// gameplay layer's fallback HUD where the art has none. Polls WorldState each
@@ -27,6 +30,10 @@ public sealed class OfficeReadouts : MonoBehaviour
 
     /// <summary>The text's colour when stability is critical.</summary>
     [SerializeField] private Color redColor = new Color(0.9f, 0.35f, 0.3f);
+
+    [Header("Calendar")]
+    /// <summary>The smallest size the calendar's date shrinks to, as a share of the text's authored size.</summary>
+    [SerializeField, Range(0.1f, 1f)] private float dateMinScale = 0.25f;
 
     [Header("Credits")]
     /// <summary>Plays a "ding" when credits increase (clip is a placeholder to assign).</summary>
@@ -56,6 +63,8 @@ public sealed class OfficeReadouts : MonoBehaviour
     public void Bind(TMP_Text day, TMP_Text stability, TMP_Text credits)
     {
         _dayText = day;
+        if (day != null)
+            FitDate(day);
         _stabilityText = stability;
         _creditsText = credits;
         if (stability != null)
@@ -70,18 +79,35 @@ public sealed class OfficeReadouts : MonoBehaviour
         if (!RunManager.HasInstance)
             return;
 
-        Apply(RunManager.Instance.World);
+        Apply(RunManager.Instance.World, RunManager.Instance.Library);
+    }
+
+    /// <summary>Lets the calendar's date wrap and shrink inside its box, down to <see cref="dateMinScale"/> of its authored size.</summary>
+    private void FitDate(TMP_Text text)
+    {
+        float size = text.enableAutoSizing ? text.fontSizeMax : text.fontSize;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.enableAutoSizing = true;
+        text.fontSizeMax = size;
+        text.fontSizeMin = size * dateMinScale;
+    }
+
+    /// <summary>The calendar's line for <paramref name="day"/>: today's date in capitals and the day number (UI string desk.calendar), or the plain day (tray.day) when the library has no readable first date.</summary>
+    private static string CalendarLine(ContentLibrarySO library, int day)
+    {
+        string today = library != null ? AgencyCalendar.Today(library.Agency.firstDate, day) : null;
+        return today != null ? UiText.Format("desk.calendar", today.ToUpperInvariant(), day) : UiText.Format("tray.day", day);
     }
 
     /// <summary>Refreshes every readout from world state (null-safe): a text is re-formatted only when its value changed since it was last written; the stability tint is kept every frame.</summary>
-    private void Apply(WorldState world)
+    private void Apply(WorldState world, ContentLibrarySO library)
     {
         if (world == null)
             return;
 
         if (_dayText != null && world.day != _shownDay)
         {
-            _dayText.text = world.day.ToString("00");
+            _dayText.text = CalendarLine(library, world.day);
             _shownDay = world.day;
         }
 
