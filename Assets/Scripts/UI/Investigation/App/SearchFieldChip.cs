@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// ("Nikias · line 7 · untranslated Greek", ✕ removes it), so search can
 /// match it glyph to glyph without ever showing its English; a plain clip
 /// stays plain text. Escape's ClearSearch clears the text and the chip.
-/// Search reads the chip (redesign phase 19).
+/// Search reads the chip (redesign phase 19: InvestigationApp.SetChip).
 /// </summary>
 public sealed class SearchFieldChip : MonoBehaviour
 {
@@ -84,6 +84,8 @@ public sealed class SearchFieldChip : MonoBehaviour
             chip.SetActive(clip != null);
         if (chipLabel != null)
             chipLabel.text = clip != null ? UiText.Format("search.chip", clip.SourceLabel, clip.TongueName) : string.Empty;
+        if (app != null)
+            app.SetChip(clip != null ? new SearchChip(clip.TongueId, clip.Canonical) : (SearchChip?)null);
         if (_viewport != null && chip != null)
             _viewport.offsetMax = new Vector2(_viewportRight - (clip != null ? ((RectTransform)chip.transform).rect.width : 0f), _viewport.offsetMax.y);
     }

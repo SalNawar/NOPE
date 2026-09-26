@@ -186,18 +186,19 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.EndCase();
     }
 
-    /// <summary>The presenters over this component's references (the desk only when it is reachable).</summary>
+    /// <summary>The presenters over this component's references (the desk only when it is reachable), each filling the app's search index.</summary>
     private void BuildPresenters(InvestigationWiring wiring)
     {
-        _reference = new DayReference(directivesTexts, recordsWindows, compareController, referenceViews);
-        _documents = new CaseDocumentsPresenter(documentsViews, wiring.DeskReachable ? desk : null, compareController);
+        CaseIndex index = app != null ? app.Index : null;
+        _reference = new DayReference(directivesTexts, recordsWindows, compareController, referenceViews, index);
+        _documents = new CaseDocumentsPresenter(documentsViews, wiring.DeskReachable ? desk : null, compareController, index);
         _interview = new InterviewPresenter(interactionPanel, transcriptWindows, () => Arrived(AppTab.Transcript), wheel, compareController,
-                                            _documents.HandOver, () => _currentCase, this);
+                                            _documents.HandOver, () => _currentCase, this, index);
         _evidence = new EvidencePresenter(compareController, reportTexts, () =>
         {
             Arrived(AppTab.Report);
             ShowCounters();
-        }, () => _currentCase);
+        }, () => _currentCase, index);
     }
 
     /// <summary>The start-up error and warnings for what is not wired (each changes what the day can show or generate).</summary>
@@ -313,6 +314,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         _reference.ShowDirectives();
         _interview.BeginCase(inst);
+        app.SetSpeechScript(_interview.Translation.Font);
         _documents.Present(inst, lib != null ? lib.Agency : null);
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
         _reference.BuildBooks(lib);

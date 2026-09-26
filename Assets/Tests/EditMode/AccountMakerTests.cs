@@ -377,8 +377,8 @@ public class AccountMakerTests
         var registry = new CitizenRegistry();
         registry.Add(Record(Account()));
         registry.Add(clerk);
-        Assert.AreSame(clerk, registry.Find("773-2840-19"));
-        Assert.AreSame(clerk, registry.Find("theo marlow"));
+        Assert.AreSame(clerk, Find(registry, "773-2840-19"));
+        Assert.AreSame(clerk, Find(registry, "theo marlow"));
     }
 
     [Test]
@@ -388,13 +388,22 @@ public class AccountMakerTests
         Assert.IsNull(AccountRecords.Clerk(null, null));
     }
 
+    /// <summary>The Records lookup as the Records tab runs it (redesign phase 19: the search index scoped to Records, its best hit).</summary>
+    private static CitizenRecord Find(CitizenRegistry registry, string query)
+    {
+        var index = new CaseIndex();
+        index.SetDay(IndexEntries.Records(registry, "{0} · {1}"));
+        IndexEntry hit = index.Search(SearchQuery.Parse(query), new[] { AppTab.Records }, 1, AppTab.Records).FirstOrDefault()?.Hits[0].Entry;
+        return hit != null ? registry.Records[hit.Item] : null;
+    }
+
     [Test]
     public void Record_IsFoundByNumberAndByName_InTheRegistry()
     {
         var registry = new CitizenRegistry();
         registry.Add(Record(Account()));
-        Assert.AreEqual("Omar", registry.Find("418-0937-52")?.FullName);
-        Assert.AreEqual("Omar", registry.Find(" omar ")?.FullName);
-        Assert.IsNull(registry.Find("418-0937-5"), "a number is found whole only");
+        Assert.AreEqual("Omar", Find(registry, "418-0937-52")?.FullName);
+        Assert.AreEqual("Omar", Find(registry, " omar ")?.FullName);
+        Assert.AreEqual("Omar", Find(registry, "418-0937-5")?.FullName, "a number's parts are found by their starts: one matcher with search (the PC spec's SE3, SE6)");
     }
 }

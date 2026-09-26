@@ -10,9 +10,10 @@ using System.Collections.Generic;
 /// becomes a paper (those handed over on arrival land at once) whose finished
 /// scan brings its copy to the PC; without it, a document reaches the PC when
 /// it is handed over. A paper reaching the PC raises Scanned (the app decides
-/// what that shows: ScanArrival); nothing here opens a window. A held
-/// paper's row picked at the desk goes into the compare as its scanned
-/// copy's row would. It subscribes to the desk it was given (only a
+/// what that shows: ScanArrival) and puts the paper and its fields into
+/// search's case layer (redesign phase 19: a document joins when it reaches
+/// the PC); nothing here opens a window. A held paper's row picked at the
+/// desk goes into the compare as its scanned copy's row would. It subscribes to the desk it was given (only a
 /// reachable one) and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
 /// </summary>
@@ -21,6 +22,7 @@ public sealed class CaseDocumentsPresenter
     private readonly IReadOnlyList<DocumentsView> _views;
     private readonly DeskController _desk;
     private readonly CompareController _compare;
+    private readonly CaseIndex _index;
 
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new List<CaseDocument>();
@@ -37,12 +39,13 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The desk whose events this listens to (null while detached).</summary>
     private DeskController _listening;
 
-    /// <summary>The app's Documents views (one per pane; null entries are skipped), the desk (null when it is not reachable: documents then reach the PC at the hand-over) and the compare.</summary>
-    public CaseDocumentsPresenter(IReadOnlyList<DocumentsView> views, DeskController reachableDesk, CompareController compare)
+    /// <summary>The app's Documents views (one per pane; null entries are skipped), the desk (null when it is not reachable: documents then reach the PC at the hand-over), the compare and search's index (null: nothing indexed).</summary>
+    public CaseDocumentsPresenter(IReadOnlyList<DocumentsView> views, DeskController reachableDesk, CompareController compare, CaseIndex index)
     {
         _views = views ?? Array.Empty<DocumentsView>();
         _desk = reachableDesk;
         _compare = compare;
+        _index = index;
     }
 
     /// <summary>A paper reached the PC (its index): scanned at the desk, or handed over where no desk is wired.</summary>
@@ -157,11 +160,12 @@ public sealed class CaseDocumentsPresenter
         PapersChanged?.Invoke();
     }
 
-    /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper; its strip reads the time.</summary>
+    /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper; its strip reads the time, and it joins search.</summary>
     private void Scan(int index)
     {
         if (!_papers.Scan(index))
             return;
+        IndexPaper(index);
         foreach (DocumentsView view in _views)
             if (view != null)
             {
@@ -170,6 +174,19 @@ public sealed class CaseDocumentsPresenter
             }
         PapersChanged?.Invoke();
         Scanned?.Invoke(index);
+    }
+
+    /// <summary>Paper <paramref name="index"/> and its fields into search's case layer ("paper · label", every value as filled: always English).</summary>
+    private void IndexPaper(int index)
+    {
+        if (_index == null || index < 0 || index >= _caseDocuments.Count)
+            return;
+        CaseDocument doc = _caseDocuments[index];
+        var fields = new List<(string label, string value)>();
+        foreach (DocumentField field in doc.fields ?? new List<DocumentField>())
+            fields.Add(field != null ? (field.label, field.value) : (null, null));
+        foreach (IndexEntry entry in IndexEntries.Paper(index, doc.name, fields, UiText.Get("search.title.row")))
+            _index.Add(entry);
     }
 
     /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>

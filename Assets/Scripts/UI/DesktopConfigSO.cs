@@ -7,12 +7,12 @@ using UnityEngine;
 /// buttons, the desktop's icons (their cell, the arrange grid, the default
 /// order, the drop's overlap share), the double-click, the Internet's caps
 /// (the news back issues, the browser's history), the app windows' sizes,
-/// the Investigation app's scan toast and panes, and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
+/// the Investigation app's scan toast, panes and search, and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
 /// UI (Assets/Data/Config/Desktop_Default.asset). The builder reads the sizes
 /// (re-run it after changing one); DesktopWindowManager and DesktopIcons read
 /// the double-click, DesktopIcons the icon knobs, InvestigationApp the
-/// toast's time and the panes' widths and AppPane the tabs' widths and the
-/// history's length, at runtime.
+/// toast's time and the panes' widths, AppPane the tabs' widths and the
+/// history's length and SearchBox the search knobs, at runtime.
 /// </summary>
 [CreateAssetMenu(fileName = "Desktop_Default", menuName = "TimeDesk/Office/Desktop Config")]
 public sealed class DesktopConfigSO : ScriptableObject
@@ -144,6 +144,12 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The shortcut card's size (F1).</summary>
     public Vector2 shortcutCardSize = new Vector2(760f, 800f);
+    [Header("Search (redesign phase 19; the PC spec's SE1, SE4)")]
+    /// <summary>How long typing pauses before the results update, in seconds.</summary>
+    [Min(0f)] public float searchDebounceSeconds = 0.15f;
+
+    /// <summary>The hits a source's group shows before "Show all n".</summary>
+    [Min(1)] public int searchPerGroup = 5;
 
     /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar and the dock (the icon area starts there).</summary>
     public float MaximisedBottom => taskbarHeight + dockHeight;

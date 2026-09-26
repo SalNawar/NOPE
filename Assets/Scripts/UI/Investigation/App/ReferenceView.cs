@@ -125,6 +125,9 @@ public sealed class ReferenceView : AppView, IAppItems
         Select(_pages.Count > 0 ? 0 : -1);
     }
 
+    /// <summary>The books, in their chips' order (a book's place is its item in the search index).</summary>
+    public IReadOnlyList<ReferenceBookSO> Books => _books;
+
     /// <summary>A new case's claim (null ids for none): its row comes first, and "Claimed place only" turns on (AP8).</summary>
     public void SetClaim(string nationId, string eraId)
     {

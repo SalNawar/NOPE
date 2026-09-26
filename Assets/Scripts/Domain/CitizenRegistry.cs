@@ -63,7 +63,8 @@ public sealed class RecordGroup
 
 /// <summary>
 /// One entry in the agency's master record of every (fake) human: rows in
-/// groups (R1), found by the agency number or the name (R3). Records carry the
+/// groups (R1), found by the agency number or the name (R3, through the search
+/// index). Records carry the
 /// registered identity (a liar's is their cover); the note row is the hook for
 /// flavour and future easter eggs.
 /// </summary>
@@ -91,46 +92,24 @@ public sealed class CitizenRecord
 }
 
 /// <summary>
-/// The agency's citizen master record: the Citizen Records app's lookup by
-/// agency number or name. Pure C# so lookup rules are unit-testable.
-/// Future (noted, not built): deliberately missing/corrupted records that force
-/// indirect verification via family history (father/sister records).
+/// The agency's citizen master record: today's records, in order. The Records
+/// tab's lookup by name or number is search's (the index scoped to Records,
+/// redesign phase 19: IndexEntries.Records), so search and the lookup find the
+/// same records. Future (noted, not built): deliberately missing/corrupted
+/// records that force indirect verification via family history (father/sister
+/// records).
 /// </summary>
 public sealed class CitizenRegistry
 {
     private readonly List<CitizenRecord> _records = new();
+
+    /// <summary>The records on file, in the order added.</summary>
+    public IReadOnlyList<CitizenRecord> Records => _records;
 
     /// <summary>Adds a record (ignored when null or unnamed).</summary>
     public void Add(CitizenRecord record)
     {
         if (record != null && !string.IsNullOrWhiteSpace(record.FullName))
             _records.Add(record);
-    }
-
-    /// <summary>
-    /// Finds a record (trimmed, case-insensitive): a whole agency number first
-    /// (R3), then an exact name, then the first name containing the query.
-    /// Null when nothing matches.
-    /// </summary>
-    public CitizenRecord Find(string query)
-    {
-        if (string.IsNullOrWhiteSpace(query))
-            return null;
-
-        string q = query.Trim();
-
-        foreach (CitizenRecord r in _records)
-            if (!string.IsNullOrWhiteSpace(r.Number) && string.Equals(r.Number.Trim(), q, StringComparison.OrdinalIgnoreCase))
-                return r;
-
-        foreach (CitizenRecord r in _records)
-            if (string.Equals(r.FullName.Trim(), q, StringComparison.OrdinalIgnoreCase))
-                return r;
-
-        foreach (CitizenRecord r in _records)
-            if (r.FullName.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0)
-                return r;
-
-        return null;
     }
 }

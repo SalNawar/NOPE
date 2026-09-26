@@ -10,7 +10,8 @@ using UnityEngine.UI;
 /// window layer ("Investigation"; the restored size from DesktopConfigSO,
 /// maximised on its first open) with its case header (the claim, the
 /// counters, the PC's Accept and Deny with their fixed glyphs), its toolbar
-/// (Back, Forward and Split live; the search field and Keys live since phase
+/// (Back, Forward and Split live; the search field live since phase 19,
+/// OfficeSceneUIBuilder.Search, with phase 20's keys; Keys live since phase
 /// 20; Steps built, not live until phase 21), its sidebar (Steps, Pinned,
 /// Recent: the keys' partial, OfficeSceneUIBuilder.Keys, fills Pinned and
 /// Recent) and two panes side by side (AppPane, built by
@@ -155,6 +156,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
+        BuildAppSearch(parts.App, win, toolbar.Search, top + AppHeaderHeight + AppToolbarHeight, config);
         return parts;
     }
 
@@ -182,10 +184,11 @@ public static partial class OfficeSceneUIBuilder
         public Button Forward;
         public Button Split;
         public TMP_Text SplitHint;
+        public TMP_InputField Search;
         public Selectable[] NotYetLive;
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field and Keys are the keys' (BuildAppKeys); Steps built, not live until phase 21.</summary>
+    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field is search's (BuildAppSearch) and the keys' (BuildAppKeys), Keys the keys'; Steps built, not live until phase 21.</summary>
     private static AppToolbar BuildAppToolbar(Transform win, float top)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
@@ -195,7 +198,7 @@ public static partial class OfficeSceneUIBuilder
             Back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f),
             Forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f),
         };
-        BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
+        toolbar.Search = BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
         Button steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
         toolbar.Split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
         toolbar.SplitHint = BuildHoverHint(toolbar.Split, null, UiText.Get("app.split.hint"), AppSplitHintSize, new Vector2(1f, 1f), new Vector2(1f, 0f));

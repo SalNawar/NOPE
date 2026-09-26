@@ -8958,6 +8958,114 @@
         "tier": "Full"
       },
       {
+        "key": "search.all",
+        "text": "All",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.sourceChip",
+        "text": "{0} ({1})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.more",
+        "text": "Show all {0} in {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.none",
+        "text": "Nothing in this case or today's records matches '{0}'.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.noneChip",
+        "text": "No untranslated line of this case is the same as the pasted clip.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.hint",
+        "text": "Enter opens the first result · click a result to go there",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.close",
+        "text": "Close",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.glyph.documents",
+        "text": "DOC",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.glyph.records",
+        "text": "REC",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.glyph.reference",
+        "text": "BOOK",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.glyph.transcript",
+        "text": "TRN",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.glyph.report",
+        "text": "DEV",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.glyph.rules",
+        "text": "RULE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.title.row",
+        "text": "{0} · {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.title.rule",
+        "text": "Rule {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.title.line",
+        "text": "{0} · line {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.title.deviation",
+        "text": "Deviation · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.revised",
+        "text": "revised",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "app.tabGlyph.documents",
         "text": "DOC",
         "gloss": "None",

@@ -4,8 +4,9 @@ using NUnit.Framework;
 
 /// <summary>
 /// The Lineage Archive: cards for the premades who are who they claim and
-/// for authored people (never for an impostor), the name search with country
-/// and era filters, a card's fields and links, and the content rules.
+/// for authored people (never for an impostor), the name search (search's
+/// TextMatch: word starts, any case and accent) with country and era filters,
+/// a card's fields and links, and the content rules.
 /// </summary>
 public class AncestryPagesTests
 {
@@ -37,6 +38,8 @@ public class AncestryPagesTests
     {
         SiteWorld w = SiteFixture.World();
         CollectionAssert.AreEqual(new[] { "Senenmut" }, AncestryPages.Search(w.People, " senen ", null, null, w.PlaceById).Select(c => c.Name));
+        CollectionAssert.AreEqual(new[] { "Hatnefer" }, AncestryPages.Search(w.People, "ḤAT", null, null, w.PlaceById).Select(c => c.Name), "accents and case ignored");
+        CollectionAssert.AreEqual(new[] { "Neferure" }, AncestryPages.Search(w.People, "nefer", null, null, w.PlaceById).Select(c => c.Name), "a word's start, never its middle");
         CollectionAssert.AreEqual(new[] { "Aspasia", "Hatnefer", "Neferure", "Senenmut" }, AncestryPages.Search(w.People, "", null, null, w.PlaceById).Select(c => c.Name));
         CollectionAssert.IsEmpty(AncestryPages.Search(w.People, "Socrates", null, null, w.PlaceById));
     }
@@ -47,7 +50,8 @@ public class AncestryPagesTests
         SiteWorld w = SiteFixture.World();
         CollectionAssert.AreEqual(new[] { "Aspasia" }, AncestryPages.Search(w.People, null, "greece", null, w.PlaceById).Select(c => c.Name));
         CollectionAssert.AreEqual(new[] { "Aspasia", "Hatnefer", "Neferure", "Senenmut" }, AncestryPages.Search(w.People, null, null, "ancient", w.PlaceById).Select(c => c.Name));
-        CollectionAssert.AreEqual(new[] { "Hatnefer", "Neferure" }, AncestryPages.Search(w.People, "e", "egypt", "ancient", w.PlaceById).Where(c => c.Name != "Senenmut").Select(c => c.Name));
+        CollectionAssert.AreEqual(new[] { "Hatnefer", "Neferure" }, AncestryPages.Search(w.People, "", "egypt", "ancient", w.PlaceById).Where(c => c.Name != "Senenmut").Select(c => c.Name));
+        CollectionAssert.AreEqual(new[] { "Hatnefer" }, AncestryPages.Search(w.People, "hat", "egypt", "ancient", w.PlaceById).Select(c => c.Name));
         CollectionAssert.IsEmpty(AncestryPages.Search(w.People, null, "egypt", "medieval", w.PlaceById));
 
         var lost = new List<PersonCard> { new PersonCard { Id = "x", Name = "Nobody", PlaceId = "atlantis" } };

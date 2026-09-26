@@ -9,7 +9,8 @@ using TMPro;
 /// after a proof. When the compare pairs two values while a case is on the
 /// desk, a true contradiction (DiscrepancyLog.Prove) is logged once per
 /// category: the report is rewritten, the compare reads DEVIATION LOGGED and
-/// the app hears of it (the Report tab's badge; nothing opens: CM5); a second
+/// the app hears of it (the Report tab's badge; nothing opens: CM5) and it
+/// joins search's case layer (redesign phase 19); a second
 /// proof of a logged category only reads ALREADY DOCUMENTED. The report is
 /// written into each pane's Report tab. The log clears
 /// with each case. It subscribes to the
@@ -22,6 +23,7 @@ public sealed class EvidencePresenter
     private readonly IReadOnlyList<TMP_Text> _reportTexts;
     private readonly Action _logged;
     private readonly Func<CaseInstance> _currentCase;
+    private readonly CaseIndex _index;
 
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new DiscrepancyLog();
@@ -29,9 +31,10 @@ public sealed class EvidencePresenter
     /// <summary>The compare whose pairs this listens to (null while detached).</summary>
     private CompareController _listening;
 
-    /// <summary>The compare and the Deviation Report's texts (one per pane; either may be missing), what a new deviation tells (the app's Report tab), and the façade's current case (null between cases).</summary>
-    public EvidencePresenter(CompareController compare, IReadOnlyList<TMP_Text> reportTexts, Action logged, Func<CaseInstance> currentCase)
+    /// <summary>The compare and the Deviation Report's texts (one per pane; either may be missing), what a new deviation tells (the app's Report tab), the façade's current case (null between cases) and search's index (null: nothing indexed).</summary>
+    public EvidencePresenter(CompareController compare, IReadOnlyList<TMP_Text> reportTexts, Action logged, Func<CaseInstance> currentCase, CaseIndex index)
     {
+        _index = index;
         _compare = compare;
         _reportTexts = reportTexts ?? Array.Empty<TMP_Text>();
         _logged = logged ?? throw new ArgumentNullException(nameof(logged));
@@ -92,6 +95,12 @@ public sealed class EvidencePresenter
         }
 
         RefreshReport();
+        if (_index != null)
+        {
+            string category = UiText.Category(proof.category);
+            _index.Add(IndexEntries.Deviation(_discrepancies.Count - 1, proof.category, UiText.Format("search.title.deviation", category), category,
+                                              UiText.Deviation(proof)));
+        }
 
         if (_compare != null)
             _compare.ShowDeviation(UiText.Deviation(proof));

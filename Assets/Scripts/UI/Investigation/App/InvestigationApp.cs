@@ -14,8 +14,8 @@ using UnityEngine.UI;
 /// field, Steps, Split (two panes side by side, saved per player, possible
 /// only while each pane gets a readable width: AppPanes.CanSplit, so a
 /// restored window has one pane and the button says why) and Keys (the search
-/// field and Keys are live since phase 20; Steps is shown but not live until
-/// phase 21); the sidebar holds Steps (a placeholder until phase 21), Pinned
+/// field is live since phase 19, InvestigationApp.Search, and Keys since phase
+/// 20; Steps is shown but not live until phase 21); the sidebar holds Steps (a placeholder until phase 21), Pinned
 /// and Recent. The keys, the focus ring, copy and paste, pins, recent items
 /// and zoom are in InvestigationApp.Keys (redesign phase 20). Two
 /// panes share one tab order (TabOrder: dragged or moved from a tab's menu,
@@ -142,10 +142,11 @@ public sealed partial class InvestigationApp : MonoBehaviour
             Layout();
     }
 
-    /// <summary>A traveller is presented: the title, the claim, the left pane on Documents, the histories without the last traveller, the badges and the icon's dot cleared, the toast gone.</summary>
+    /// <summary>A traveller is presented: the title, the claim, the left pane on Documents, the histories without the last traveller, the badges and the icon's dot cleared, the toast gone, search's case layer empty.</summary>
     public void BeginCase(string claim, string travellerName)
     {
         Init();
+        ResetSearchCase();
         if (window != null)
             window.SetTitle(UiText.Format("app.titleCase", travellerName));
         if (claimText != null)
@@ -166,11 +167,12 @@ public sealed partial class InvestigationApp : MonoBehaviour
         KeysBeginCase(travellerName);
     }
 
-    /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller.</summary>
+    /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller; search forgets the case.</summary>
     public void EndCase()
     {
         Init();
         _papers = null;
+        ResetSearchCase();
         if (window != null)
             window.SetTitle(UiText.Get("app.title"));
         if (claimText != null)
@@ -304,6 +306,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         if (_manager != null)
             _manager.Pressed += Pressed;
         InitKeys();
+        InitSearch();
         Layout();
         RefreshHistoryButtons();
     }
