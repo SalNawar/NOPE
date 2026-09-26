@@ -36,8 +36,14 @@ public sealed class ShiftLedger
         }
     }
 
-    /// <summary>Net money change for the shift.</summary>
-    public int NetMoney => TotalPay - TotalPenalties;
+    /// <summary>The clerk's Debt Relief instalment taken from this shift's pay at its end (ClerkDebt.Instalment; 0 until then).</summary>
+    public int debtInstalment;
+
+    /// <summary>The clerk's debt still owed after this shift's instalment (Account.Unknown until the shift's end, or when no source gives the debt).</summary>
+    public int debtOwed = Account.Unknown;
+
+    /// <summary>Net money change for the shift: the pay less the citation penalties and the Debt Relief instalment.</summary>
+    public int NetMoney => TotalPay - TotalPenalties - debtInstalment;
 
     /// <summary>Number of correct sends.</summary>
     public int CorrectCount
