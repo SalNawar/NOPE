@@ -41,7 +41,7 @@ public class PaletteTests
     public void TheRulesAlpha_MultipliesTheFill()
     {
         var problems = new List<string>();
-        ResolvedRole r = Resolve(new[] { Rule("DeskDim", "shade", "", 0.5f, ContrastClass.None) }, null, false, problems).Single();
+        ResolvedRole r = Resolve(new[] { Rule("IconSelection", "shade", "", 0.5f, ContrastClass.None) }, null, false, problems).Single();
         Assert.AreEqual(0.25f, r.Fill.Value.A, Tolerance);
         Assert.IsNull(r.Ink);
     }
@@ -121,6 +121,26 @@ public class PaletteTests
         Assert.IsTrue(culture.Contains(ThemeRoleId.Taskbar));
         Assert.IsFalse(culture.Any(ThemeRoles.IsDiegetic));
         Assert.IsTrue(Palette.Missing(roles, true).Contains(ThemeRoleId.DiegeticBubble));
+    }
+
+    [Test]
+    public void Missing_NeverListsARetiredRole()
+    {
+        List<ThemeRoleId> missing = Palette.Missing(new List<ResolvedRole>(), true);
+        Assert.IsFalse(missing.Contains(ThemeRoleId.DeskDim));
+        Assert.IsTrue(missing.Contains(ThemeRoleId.StickyNote), "a live role needs its colour");
+        Assert.IsTrue(missing.Contains(ThemeRoleId.IconSelection));
+        Assert.IsTrue(missing.Contains(ThemeRoleId.DiegeticForm));
+    }
+
+    [Test]
+    public void ARuleOrOverride_ForARetiredRole_IsAProblem()
+    {
+        var problems = new List<string>();
+        List<ResolvedRole> roles = Resolve(new[] { Rule("DeskDim", "bar", "text") }, new[] { new PaletteOverride { role = "DeskDim", fill = "#FFFFFF" } }, false, problems);
+        Assert.IsEmpty(roles);
+        Assert.AreEqual(2, problems.Count, string.Join("\n", problems));
+        Assert.IsTrue(problems.All(p => p.Contains("retired")));
     }
 
     private static ResolvedRole Role(ThemeRoleId role, string fill, string ink)

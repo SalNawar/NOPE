@@ -8,18 +8,15 @@ using UnityEngine.UI;
 /// AC1, NT1, SG1, §2.12-2.15): the Mail window (the inbox and the memo form)
 /// with its feed on the desktop canvas, the Citizen Account window (the
 /// clerk's Record Extract and Statement), the Notes window (days, clippings,
-/// the typed notes; the Notes desktop tile now opens it and the placeholder
-/// window goes), the Settings window in sections (Language, Motion,
-/// Keyboard) with the shortcut card, the desktop's app registry
-/// (DesktopApps: its OpenApp is what phase 17's icons call), and the Start
-/// menu's app entries (Mail, Citizen Account, Notes above Settings). The
-/// forms are drawn with today's widgets on diegetic paper (fixed colours,
-/// never themed), each in its own window component, so phase 5's forms
-/// engine replaces one drawing method per form. The three app windows are
-/// rebuilt fresh on each run (like Records); Settings keeps its objects.
-/// Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls BuildApps after
-/// the desktop shell and before the window manager (which wires every
-/// window's chrome).
+/// the typed notes), and the Settings window in sections (Language, Motion,
+/// Desktop, Keyboard) with the shortcut card. The forms are drawn with
+/// today's widgets on diegetic paper (fixed colours, never themed), each in
+/// its own window component, so phase 5's forms engine replaces one drawing
+/// method per form. The three app windows are rebuilt fresh on each run
+/// (like Records); Settings keeps its objects. Part of
+/// <see cref="OfficeSceneUIBuilder"/>; the desktop shell builds each app and
+/// registers it in DesktopApps (phase 17: BuildDesktopShell), before the
+/// window manager (which wires every window's chrome).
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
@@ -37,104 +34,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>A list row's height (the inbox, the day list).</summary>
     private const float AppRowHeight = 52f;
-
-    /// <summary>A Start menu entry's height (as BuildDesktopShell's).</summary>
-    private const float StartEntryHeight = 46f;
-
-    /// <summary>The gap between Start menu entries (as BuildDesktopShell's).</summary>
-    private const float StartEntryGap = 4f;
-
-    /// <summary>
-    /// Builds the three apps, wires Settings' Keyboard section, lists every
-    /// app in DesktopApps and puts the apps at the top of the Start menu.
-    /// <paramref name="rulesWindow"/> is what Mail's Rules link opens.
-    /// </summary>
-    private static void BuildApps(Canvas canvas, Transform windowLayer, Transform iconGrid, GameManager game, DesktopWindow rulesWindow)
-    {
-        Transform root = canvas.transform;
-        DesktopConfigSO config = EnsureDesktopConfig();
-        DesktopApps apps = GetOrAdd<DesktopApps>(root.gameObject);
-        MailFeed feed = GetOrAdd<MailFeed>(root.gameObject);
-
-        Transform browserWin = windowLayer.Find("InternetWindow");
-        BrowserWindow browser = browserWin != null ? browserWin.GetComponent<BrowserWindow>() : null;
-        DesktopWindow mail = BuildMailWindow(windowLayer, config, feed, apps, browser, rulesWindow, out TMP_Text mailTitle);
-        DesktopWindow account = BuildAccountWindow(windowLayer, config);
-        DesktopWindow notes = BuildNotesWindow(windowLayer, config);
-
-        // The Notes tile opens the real app; its placeholder window goes (its body.notes string retired with it).
-        DestroyChildIfPresent(windowLayer, "IconNotesWindow");
-        BuildDesktopIcon(iconGrid, "IconNotes", "icon.notes", notes, "");
-
-        Transform settingsWin = windowLayer.Find("SettingsWindow");
-        Transform internetWin = windowLayer.Find("InternetWindow");
-        var soApps = new SerializedObject(apps);
-        SetRef(soApps, "shell", root.GetComponent<DesktopShell>());
-        SetApps(soApps, ("mail", mail), ("citizen_account", account), ("notes", notes),
-                ("settings", settingsWin != null ? settingsWin.GetComponent<DesktopWindow>() : null),
-                ("internet", internetWin != null ? internetWin.GetComponent<DesktopWindow>() : null));
-        soApps.ApplyModifiedProperties();
-
-        TMP_Text mailEntry = BuildStartMenuApps(root, apps);
-
-        var soFeed = new SerializedObject(feed);
-        SetRef(soFeed, "game", game);
-        SetRef(soFeed, "startEntryLabel", mailEntry);
-        SetRef(soFeed, "windowTitle", mailTitle);
-        soFeed.ApplyModifiedProperties();
-    }
-
-    /// <summary>Lists the apps that have a window (an id whose window is missing is left out).</summary>
-    private static void SetApps(SerializedObject so, params (string id, DesktopWindow window)[] apps)
-    {
-        SerializedProperty list = so.FindProperty("apps");
-        list.arraySize = 0;
-        foreach ((string id, DesktopWindow window) in apps)
-        {
-            if (window == null)
-                continue;
-            list.arraySize++;
-            SerializedProperty app = list.GetArrayElementAtIndex(list.arraySize - 1);
-            app.FindPropertyRelative("id").stringValue = id;
-            app.FindPropertyRelative("window").objectReferenceValue = window;
-        }
-    }
-
-    /// <summary>
-    /// Mail, Citizen Account and Notes at the top of the Start menu (DK8:
-    /// the apps, then Settings, Turn off screen and Quit game), each opening
-    /// its app through DesktopApps.OpenApp; the menu grows to hold them.
-    /// Returns the Mail entry's label (the feed writes the unread count into it).
-    /// </summary>
-    private static TMP_Text BuildStartMenuApps(Transform root, DesktopApps apps)
-    {
-        Transform menu = root.Find("StartMenu");
-        var entries = new (string name, string id, string key)[]
-        {
-            ("MailEntry", "mail", null), ("AccountEntry", "citizen_account", "startmenu.account"), ("NotesEntry", "notes", "startmenu.notes")
-        };
-        TMP_Text mailLabel = null;
-        for (int i = 0; i < entries.Length; i++)
-        {
-            Button entry = MakeButton(menu, entries[i].name, entries[i].key == null ? UiText.Get("startmenu.mail") : null, Vector2.zero, Vector2.one,
-                                      new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, entries[i].key);
-            SetLayoutHeight(entry, StartEntryHeight);
-            entry.transform.SetSiblingIndex(i);
-            WirePersistentString(entry, "m_OnClick", apps, nameof(DesktopApps.OpenApp), entries[i].id);
-            if (entries[i].key == null)
-                mailLabel = entry.transform.Find("Label").GetComponent<TMP_Text>();
-        }
-
-        int count = 0;
-        foreach (Transform child in menu)
-            if (child.GetComponent<Button>() != null)
-                count++;
-        float height = count * StartEntryHeight + (count - 1) * StartEntryGap + 2 * VLayoutPadding;
-        var rt = (RectTransform)menu;
-        rt.sizeDelta = new Vector2(rt.sizeDelta.x, height);
-        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, StartMenuCentre(height));
-        return mailLabel;
-    }
 
     /// <summary>Wires a single persistent call with a string argument on a UnityEvent (as WirePersistentVoid, String mode).</summary>
     private static void WirePersistentString(Object host, string eventProp, Object target, string method, string argument)
@@ -373,38 +272,50 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The Settings window (piece 6 U12, piece 9 R17, redesign phase 25 SG1),
     /// 640 × 720, in titled sections: Language (Follow history / Always
-    /// English), Motion (Full / Reduced), Keyboard (Show shortcuts, which
-    /// opens the shortcut card), then the note. The Desktop and Investigation
-    /// sections come with the features they set (phases 17, 18, 20 and 21).
-    /// Existing objects are kept; every row's anchors are re-applied on each build.
+    /// English), Motion (Full / Reduced), Desktop (open icons with Double
+    /// click / Single click, Reset icon positions: phase 17; its icons wired
+    /// by WireIconSettings), Keyboard (Show shortcuts, which opens the
+    /// shortcut card), then the note. The Investigation section comes with
+    /// the features it sets (phases 18, 20 and 21). Existing objects are kept;
+    /// every row's anchors are re-applied on each build.
     /// </summary>
     private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
     {
         DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, EnsureDesktopConfig().settingsWindowSize);
         Transform win = chrome.transform;
-        Heading(win.Find("Body").GetComponent<TMP_Text>(), "settings.language", new Vector2(0.05f, 0.855f), new Vector2(0.95f, 0.915f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.76f), new Vector2(0.48f, 0.845f), null, ThemeRoleId.Button, "settings.followHistory");
-        SetAnchors(follow.transform, new Vector2(0.05f, 0.76f), new Vector2(0.48f, 0.845f));
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.76f), new Vector2(0.95f, 0.845f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        SetAnchors(english.transform, new Vector2(0.52f, 0.76f), new Vector2(0.95f, 0.845f));
+        Heading(win.Find("Body").GetComponent<TMP_Text>(), "settings.language", new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.93f));
+        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.795f), new Vector2(0.48f, 0.865f), null, ThemeRoleId.Button, "settings.followHistory");
+        SetAnchors(follow.transform, new Vector2(0.05f, 0.795f), new Vector2(0.48f, 0.865f));
+        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.795f), new Vector2(0.95f, 0.865f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
+        SetAnchors(english.transform, new Vector2(0.52f, 0.795f), new Vector2(0.95f, 0.865f));
 
-        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.665f), new Vector2(0.95f, 0.725f), Ink,
+        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.725f), new Vector2(0.95f, 0.78f), Ink,
                                ThemeRoleId.WindowBody, "settings.motion");
-        Heading(motion, "settings.motion", new Vector2(0.05f, 0.665f), new Vector2(0.95f, 0.725f));
-        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.57f), new Vector2(0.48f, 0.655f), null, ThemeRoleId.Button, "settings.motionFull");
-        SetAnchors(full.transform, new Vector2(0.05f, 0.57f), new Vector2(0.48f, 0.655f));
-        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.57f), new Vector2(0.95f, 0.655f), null, ThemeRoleId.Button, "settings.motionReduced");
-        SetAnchors(reduced.transform, new Vector2(0.52f, 0.57f), new Vector2(0.95f, 0.655f));
+        Heading(motion, "settings.motion", new Vector2(0.05f, 0.725f), new Vector2(0.95f, 0.78f));
+        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.645f), new Vector2(0.48f, 0.715f), null, ThemeRoleId.Button, "settings.motionFull");
+        SetAnchors(full.transform, new Vector2(0.05f, 0.645f), new Vector2(0.48f, 0.715f));
+        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.645f), new Vector2(0.95f, 0.715f), null, ThemeRoleId.Button, "settings.motionReduced");
+        SetAnchors(reduced.transform, new Vector2(0.52f, 0.645f), new Vector2(0.95f, 0.715f));
 
-        TMP_Text keyboard = Text(win, "KeyboardLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.475f), new Vector2(0.95f, 0.535f), Ink,
+        TMP_Text desktop = Text(win, "DesktopLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.575f), new Vector2(0.95f, 0.63f), Ink,
+                                ThemeRoleId.WindowBody, "settings.desktop");
+        Heading(desktop, "settings.desktop", new Vector2(0.05f, 0.575f), new Vector2(0.95f, 0.63f));
+        Button iconDouble = MakeButton(win, "IconDoubleClickButton", null, new Vector2(0.05f, 0.495f), new Vector2(0.48f, 0.565f), null, ThemeRoleId.Button, "settings.iconDouble");
+        SetAnchors(iconDouble.transform, new Vector2(0.05f, 0.495f), new Vector2(0.48f, 0.565f));
+        Button iconSingle = MakeButton(win, "IconSingleClickButton", null, new Vector2(0.52f, 0.495f), new Vector2(0.95f, 0.565f), null, ThemeRoleId.Button, "settings.iconSingle");
+        SetAnchors(iconSingle.transform, new Vector2(0.52f, 0.495f), new Vector2(0.95f, 0.565f));
+        Button resetIcons = MakeButton(win, "ResetIconsButton", null, new Vector2(0.05f, 0.415f), new Vector2(0.48f, 0.485f), null, ThemeRoleId.Button, "settings.resetIcons");
+        SetAnchors(resetIcons.transform, new Vector2(0.05f, 0.415f), new Vector2(0.48f, 0.485f));
+
+        TMP_Text keyboard = Text(win, "KeyboardLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f), Ink,
                                  ThemeRoleId.WindowBody, "settings.keyboard");
-        Heading(keyboard, "settings.keyboard", new Vector2(0.05f, 0.475f), new Vector2(0.95f, 0.535f));
-        Button shortcuts = MakeButton(win, "ShowShortcutsButton", null, new Vector2(0.05f, 0.38f), new Vector2(0.48f, 0.465f), null, ThemeRoleId.Button, "settings.showShortcuts");
-        SetAnchors(shortcuts.transform, new Vector2(0.05f, 0.38f), new Vector2(0.48f, 0.465f));
+        Heading(keyboard, "settings.keyboard", new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f));
+        Button shortcuts = MakeButton(win, "ShowShortcutsButton", null, new Vector2(0.05f, 0.265f), new Vector2(0.48f, 0.335f), null, ThemeRoleId.Button, "settings.showShortcuts");
+        SetAnchors(shortcuts.transform, new Vector2(0.05f, 0.265f), new Vector2(0.48f, 0.335f));
 
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.34f), Ink,
+        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.03f), new Vector2(0.95f, 0.245f), Ink,
                              ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.34f));
+        SetAnchors(note.transform, new Vector2(0.05f, 0.03f), new Vector2(0.95f, 0.245f));
         note.text = UiText.Get("settings.note");
         note.textWrappingMode = TextWrappingModes.Normal;
 
@@ -419,6 +330,9 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "alwaysEnglishButton", english);
         SetRef(so, "fullMotionButton", full);
         SetRef(so, "reducedMotionButton", reduced);
+        SetRef(so, "iconDoubleClickButton", iconDouble);
+        SetRef(so, "iconSingleClickButton", iconSingle);
+        SetRef(so, "resetIconsButton", resetIcons);
         SetRef(so, "showShortcutsButton", shortcuts);
         SetRef(so, "shortcutsWindow", card);
         so.ApplyModifiedProperties();

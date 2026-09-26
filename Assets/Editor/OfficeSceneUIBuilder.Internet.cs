@@ -40,7 +40,7 @@ public static partial class OfficeSceneUIBuilder
     /// boxes at the library's body-text minimum; an error per failing pair).
     /// Returns the window.
     /// </summary>
-    private static DesktopWindow BuildInternetWindow(Transform windowLayer, Transform iconGrid, ContentLibrarySO library)
+    private static DesktopWindow BuildInternetWindow(Transform windowLayer, ContentLibrarySO library)
     {
         ContrastRules rules = library != null && library.CultureUi.contrast != null ? library.CultureUi.contrast : new ContrastRules();
         foreach ((string styleName, SiteStyle siteStyle) in SiteStyles.All)
@@ -174,8 +174,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "statusText", status);
         SetRef(so, "page", renderer);
         so.ApplyModifiedProperties();
-
-        BuildDesktopIcon(iconGrid, "IconInternet", "icon.internet", chrome, "");
         return chrome;
     }
 
