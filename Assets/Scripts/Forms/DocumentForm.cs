@@ -46,11 +46,12 @@ public sealed class DocumentForm
     /// <summary>
     /// Every problem of <paramref name="template"/>'s form (FormLayout.Check):
     /// its fields' labels, each value at its category's longest
-    /// (FieldLengths), a full serial; plus a form that sets its own number or
+    /// (FieldLengths, an origin at <paramref name="longestOrigin"/>
+    /// characters), a full serial; plus a form that sets its own number or
     /// title (a document prints its template's) or breaks onto a second page
     /// (a paper is one page, traveller-types F1). Empty when it fits.
     /// </summary>
-    public static List<string> Problems(DocumentTemplateSO template, AgencyContent agency, FormMetrics metrics, ITextMeasure measure)
+    public static List<string> Problems(DocumentTemplateSO template, AgencyContent agency, int longestOrigin, FormMetrics metrics, ITextMeasure measure)
     {
         var problems = new List<string>();
         if (template == null)
@@ -68,7 +69,7 @@ public sealed class DocumentForm
         if (spec.PageCount > 1)
             problems.Add($"its form has {spec.PageCount} pages; a paper is one page");
 
-        FieldSpecsOf(template, out List<string> labels, out List<int> longest);
+        FieldSpecsOf(template, longestOrigin, out List<string> labels, out List<int> longest);
         FormData probe = Heading(template, agency);
         probe.Serial = FormSerials.Make(template.formNumber, 0, 0);
         probe.FieldLabels = labels;
@@ -89,14 +90,14 @@ public sealed class DocumentForm
     };
 
     /// <summary>A template's field labels and each field's longest value length, by field index.</summary>
-    private static void FieldSpecsOf(DocumentTemplateSO template, out List<string> labels, out List<int> longest)
+    private static void FieldSpecsOf(DocumentTemplateSO template, int longestOrigin, out List<string> labels, out List<int> longest)
     {
         labels = new List<string>();
         longest = new List<int>();
         foreach (DocumentFieldSpec spec in template.fieldSpecs ?? new DocumentFieldSpec[0])
         {
             labels.Add(spec != null ? spec.label : string.Empty);
-            longest.Add(spec != null ? FieldLengths.Longest(spec.category) : 0);
+            longest.Add(spec != null ? FieldLengths.Longest(spec.category, longestOrigin) : 0);
         }
     }
 }

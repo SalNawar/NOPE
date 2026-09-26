@@ -93,7 +93,10 @@ public sealed class FormMetrics
     public float titleSize = 0.052f;
 
     /// <summary>The smallest size a long title shrinks to, to stay on one line.</summary>
-    public float titleFloor = 0.034f;
+    public float titleFloor = 0.032f;
+
+    /// <summary>A line of capitals (the agency line, the title, section heads, labels), in ems: capitals have no descenders, so they take less room than a measured line.</summary>
+    public float capsLead = 1.05f;
 
     /// <summary>The serial's size.</summary>
     public float serialSize = 0.026f;
@@ -243,6 +246,10 @@ public static class FormTextStyles
 
     /// <summary>True for the labels, drawn in small capitals.</summary>
     public static bool IsSmallCaps(FormTextRole role) => role == FormTextRole.Label;
+
+    /// <summary>True for the roles printed in capitals (the agency line, the title and section heads in capitals, the labels in small capitals): a line of them is FormMetrics.capsLead ems.</summary>
+    public static bool IsCapitals(FormTextRole role) =>
+        role == FormTextRole.Agency || role == FormTextRole.Title || role == FormTextRole.Section || role == FormTextRole.Label;
 }
 
 /// <summary>One placed part of a form, in form space (top-left origin, y down, the caller's units).</summary>
@@ -355,8 +362,8 @@ public sealed class PlacedForm
 /// in page heights (FO6). The desk paper (DeskDocument) and the PC (FormView)
 /// draw the same placed form, so a paper and its scanned copy are one form.
 /// FieldRows sit on a 12-column grid; a cell may span rows (the 4:5 photo
-/// beside two boxes). A value keeps its size on one line, shrinks to the floor
-/// to stay on one line, then wraps to two lines, and its box grows to fit.
+/// beside two boxes). A value keeps its size on one line, else shrinks to the
+/// floor, where it may wrap to two lines, and its box grows to fit.
 /// SlotAt is the hit test; Check is Build Office UI's and the validator's face
 /// check (FO10). Pure and engine-free.
 /// </summary>
@@ -601,6 +608,13 @@ public static class FormLayout
         private float Measure(string text, FormTextRole role, float size, float width) =>
             string.IsNullOrEmpty(text) ? Line(role, size) : Math.Max(Line(role, size), _measure.Height(text, role, size, width));
 
+        /// <summary>The room a text takes: its measured height, or for capitals (no descenders under the last line) the measured lines but the last at FormMetrics.capsLead ems.</summary>
+        private float Height(string text, FormTextRole role, float size, float width)
+        {
+            float h = Measure(text, role, size, width);
+            return FormTextStyles.IsCapitals(role) ? (Lines(h, role, size) - 1) * Line(role, size) + size * _m.capsLead : h;
+        }
+
         /// <summary>How many lines a measured height is.</summary>
         private int Lines(float height, FormTextRole role, float size) => Math.Max(1, (int)Math.Round(height / Line(role, size)));
 
@@ -631,7 +645,7 @@ public static class FormLayout
         {
             if (string.IsNullOrEmpty(text))
                 return 0f;
-            float h = Measure(text, role, size, width);
+            float h = Height(text, role, size, width);
             Add(FormItemKind.Text, FaceRect.FromTop(x, y, width, h), slot, text, role, size, align);
             return h;
         }
@@ -664,7 +678,7 @@ public static class FormLayout
             float agency = Text(FormTextRole.Agency, (_data.Agency ?? string.Empty).ToUpperInvariant(), _left, top, agencyWidth, G(_m.agencySize));
             float programme = Text(FormTextRole.Programme, _data.Programme, _left + agencyWidth, top, _content - agencyWidth, G(_m.programmeSize), -1, FormTextAlign.Right);
             float titleTop = top + Math.Max(agency, programme) + G(_m.rowGap);
-            float titleWidth = _content * 0.8f;
+            float titleWidth = _content * 0.84f;
             string title = (_data.Title ?? string.Empty).ToUpperInvariant();
             float size = OneLine(title, FormTextRole.Title, _m.titleSize, _m.titleFloor, titleWidth);
             float titleHeight = Text(FormTextRole.Title, title, _left, titleTop, titleWidth, size);
@@ -677,7 +691,7 @@ public static class FormLayout
         {
             float pad = G(_m.boxPadding);
             float size = G(_m.sectionSize);
-            float line = Measure(b.text.ToUpperInvariant(), FormTextRole.Section, size, _content - 2f * pad);
+            float line = Height(b.text.ToUpperInvariant(), FormTextRole.Section, size, _content - 2f * pad);
             var band = FaceRect.FromTop(_left, _y, _content, line + pad);
             Add(FormItemKind.RowBand, band);
             Text(FormTextRole.Section, (b.text ?? string.Empty).ToUpperInvariant(), _left + pad, _y + pad / 2f, _content - 2f * pad, size);
@@ -691,28 +705,22 @@ public static class FormLayout
             float inner = width - 2f * pad;
             string label = !string.IsNullOrEmpty(c.caption) ? c.caption : FieldLabel(c.field);
             string value = c.field >= 0 ? FieldValue(c.field) : SlotText(c.slot);
-            float labelHeight = string.IsNullOrEmpty(label) ? 0f : Measure(label, FormTextRole.Label, G(_m.labelSize), inner);
+            float labelHeight = string.IsNullOrEmpty(label) ? 0f : Height(label, FormTextRole.Label, G(_m.labelSize), inner);
             (float size, float height, int lines) = FitValue(value, inner);
             if (lines > _m.maxValueLines)
                 _problems?.Add($"field {c.field} ({label})'s longest value needs {lines} lines at the floor; a box holds {_m.maxValueLines}");
             return (label, value, size, height, labelHeight, pad + labelHeight + height + pad);
         }
 
-        /// <summary>A value's size and height: full size on one line, else the floor on one line, else two lines at full size, else at the floor.</summary>
+        /// <summary>A value's size and height: full size on one line, else the floor, on one line or wrapped (a box reserves the lines its value needs at the floor, FO6).</summary>
         private (float size, float height, int lines) FitValue(string value, float width)
         {
             float full = G(_m.valueSize), floor = G(_m.valueFloor);
             float hFull = Measure(value, FormTextRole.Value, full, width);
-            int linesFull = Lines(hFull, FormTextRole.Value, full);
-            if (linesFull <= 1)
+            if (Lines(hFull, FormTextRole.Value, full) <= 1)
                 return (full, hFull, 1);
             float hFloor = Measure(value, FormTextRole.Value, floor, width);
-            int linesFloor = Lines(hFloor, FormTextRole.Value, floor);
-            if (linesFloor <= 1)
-                return (floor, hFloor, 1);
-            if (linesFull <= _m.maxValueLines)
-                return (full, hFull, linesFull);
-            return (floor, hFloor, linesFloor);
+            return (floor, hFloor, Lines(hFloor, FormTextRole.Value, floor));
         }
 
         private void DrawBox(FormCell c, FaceRect rect, int slot, (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) box)
@@ -727,7 +735,7 @@ public static class FormLayout
         {
             float top = _y;
             float pad = G(_m.boxPadding);
-            float rowHeight = pad + Line(FormTextRole.Label, G(_m.labelSize)) + Line(FormTextRole.Value, G(_m.valueSize)) + pad;
+            float rowHeight = pad + G(_m.labelSize) * _m.capsLead + Line(FormTextRole.Value, G(_m.valueSize)) + pad;
             var placed = new List<(FormCell cell, FaceRect rect, int slot, (string, string, float, float, float, float) box)>();
             int col = 0;
             foreach (FormCell c in b.cells ?? new FormCell[0])
@@ -871,7 +879,7 @@ public static class FormLayout
 
             float headHeight = 0f;
             for (int i = 0; i < n; i++)
-                headHeight = Math.Max(headHeight, Measure(heads[i], FormTextRole.Label, G(_m.labelSize), widths[i] - 2f * pad));
+                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, G(_m.labelSize), widths[i] - 2f * pad));
             var band = FaceRect.FromTop(_left, _y, _content, headHeight + 2f * pad);
             Add(FormItemKind.RowBand, band);
             float x = _left;

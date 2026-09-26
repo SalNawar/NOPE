@@ -183,8 +183,7 @@ public class FormLayoutTests
         PlacedForm f = Desk(Passport(), data);
         FormItem title = TextOf(f, FormTextRole.Title);
         Assert.Less(title.Size, M.titleSize);
-        var measure = new FakeMeasure();
-        Assert.AreEqual(measure.Height("Hg", FormTextRole.Title, title.Size, 1e6f), title.Rect.Height, Eps, "one line");
+        Assert.AreEqual(title.Size * M.capsLead, title.Rect.Height, Eps, "one line of capitals");
     }
 
     [Test]
@@ -246,7 +245,7 @@ public class FormLayoutTests
     }
 
     [Test]
-    public void AValueTooLongForOneLineAtFullSize_ShrinksToTheFloor_ThenWrapsToTwoLines()
+    public void AValueTooLongForOneLineAtFullSize_ShrinksToTheFloor_WhereItWrapsToTwoLines()
     {
         FormData data = PassportData();
         var measure = new FakeMeasure();
@@ -263,8 +262,8 @@ public class FormLayoutTests
         data.FieldValues = new[] { new string('x', floorChars + 2), "b", "c", "d" };
         PlacedForm two = Desk(Passport(), data);
         FormItem wrapped = two.Items.First(i => i.Role == FormTextRole.Value);
-        Assert.AreEqual(M.valueSize, wrapped.Size, Eps, "two lines at the full size");
-        Assert.AreEqual(2f * measure.Height("Hg", FormTextRole.Value, M.valueSize, 1e6f), wrapped.Rect.Height, Eps);
+        Assert.AreEqual(M.valueFloor, wrapped.Size, Eps, "two lines at the floor (a box reserves the lines its value needs at the floor)");
+        Assert.AreEqual(2f * measure.Height("Hg", FormTextRole.Value, M.valueFloor, 1e6f), wrapped.Rect.Height, Eps);
         Assert.Greater(two.Slots[0].Hit.Height, plain.Slots[0].Hit.Height, "the box grows by the line");
         Assert.AreEqual(two.Slots[0].Hit.Height, two.Items.Single(i => i.Kind == FormItemKind.Box && i.Slot < 0).Rect.Height - two.Slots[1].Hit.Height - M.rowGap, Eps, "the photo follows its rows");
     }
@@ -531,9 +530,26 @@ public class FormLayoutTests
     {
         foreach (FormTextRole role in Enum.GetValues(typeof(FormTextRole)))
         {
-            bool bold = role == FormTextRole.Agency || role == FormTextRole.Title || role == FormTextRole.Section || role == FormTextRole.Label;
-            Assert.AreEqual(bold, FormTextStyles.IsBold(role), role.ToString());
+            bool caps = role == FormTextRole.Agency || role == FormTextRole.Title || role == FormTextRole.Section || role == FormTextRole.Label;
+            Assert.AreEqual(caps, FormTextStyles.IsBold(role), role.ToString());
+            Assert.AreEqual(caps, FormTextStyles.IsCapitals(role), role.ToString());
             Assert.AreEqual(role == FormTextRole.Label, FormTextStyles.IsSmallCaps(role), role.ToString());
         }
+    }
+
+    [Test]
+    public void ALineOfCapitals_TakesTheCapsLead_AndAWrappedLabelAMeasuredLineMore()
+    {
+        FormData data = PassportData();
+        PlacedForm f = Desk(Passport(), data);
+        FormItem label = TextOf(f, FormTextRole.Label);
+        Assert.AreEqual(M.labelSize * M.capsLead, label.Rect.Height, Eps, "capitals have no descenders");
+        FormItem section = f.Items.First(i => i.Role == FormTextRole.Section);
+        Assert.AreEqual(M.sectionSize * M.capsLead, section.Rect.Height, Eps);
+
+        data.FieldLabels = new[] { "Full Name of the Bearer at Birth", "Date of Birth", "Coin of Issue", "Native Tongue" };
+        FormItem wrapped = TextOf(Desk(Passport(), data), FormTextRole.Label);
+        var measure = new FakeMeasure();
+        Assert.AreEqual(measure.Height("Hg", FormTextRole.Label, M.labelSize, 1e6f) + M.labelSize * M.capsLead, wrapped.Rect.Height, Eps, "a long label wraps: a measured line, then a line of capitals");
     }
 }
