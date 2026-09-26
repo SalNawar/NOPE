@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
+using Unity.Cinemachine;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -12,9 +14,12 @@ using UnityEngine.UI;
 /// its layer, the frame and clone cameras, the screen), the PC frame on the
 /// overlay canvas, the traveller wheel and the overlay callouts, and the
 /// Office root: the click boxes the office binder puts on the art's props at
-/// load, the desk (its plane, the paper template, the scanner and its stand-in
-/// machine, the day-1 notes), the traveller, the READY sign, the readouts,
-/// the decoration slots, the booth coordinator and the binder. Nothing here
+/// load, the desk (its plane, the paper template with its face, the desk
+/// catcher, the mat's click and the paper examiner, the scanner and its
+/// stand-in machine, the day-1 notes), the desk view's camera, the traveller,
+/// the READY sign, the readouts, the decoration slots, the booth coordinator
+/// and the binder; on the overlay the office case HUD and the stamp tray
+/// (piece 10). Nothing here
 /// knows where the art puts things: the binder reads the scene contract at
 /// load. Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls these in
 /// its order.
@@ -68,6 +73,27 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The desk notes' ink.</summary>
     private static readonly Color NoteInk = new Color(0.96f, 0.95f, 0.88f, 1f);
+
+    /// <summary>A paper row's label ink: a shade lighter than its value's (Ink), dark enough to reach 4.5:1 on the held paper as drawn under the art's tonemapping, the picked row's highlight included (the readability fix).</summary>
+    private static readonly Color PaperLabelInk = new Color(0.115f, 0.105f, 0.09f, 1f);
+
+    /// <summary>The day-1 scan note's box (metres): two lines of the note at the size one line of the old, shorter note had.</summary>
+    private static readonly Vector2 ScanHintBox = new Vector2(0.78f, 0.13f);
+
+    /// <summary>The day-1 wheel note's box (metres): two lines, twice the size of the old one-line note (it floats above the traveller, far from the camera).</summary>
+    private static readonly Vector2 WheelHintBox = new Vector2(1.2f, 0.23f);
+
+    /// <summary>The wheel note's largest size (TMP world units): room for its two lines at twice the old note's size.</summary>
+    private const float WheelHintMaxSize = 1f;
+
+    /// <summary>The day-1 notes' backing (the readability fix): a dark, mostly opaque plate behind the light text, so it reads over the pale morning crowds and the evening palette.</summary>
+    private static readonly Color NoteBackingColour = new Color(0.07f, 0.08f, 0.1f, 0.85f);
+
+    /// <summary>The margin of a note's backing around its text (metres).</summary>
+    private static readonly Vector2 NoteBackingMargin = new Vector2(0.04f, 0.02f);
+
+    /// <summary>The smallest auto-size of a paper row's texts (TMP world units: a few millimetres).</summary>
+    private const float PaperTextMinSize = 0.03f;
 
     /// <summary>The desk's named spots (decoration hooks, item 7), in the desk plane's local XZ (metres): empty for now.</summary>
     private static readonly (string id, DeskSlotKind kind, Vector3 position)[] DeskSlots =
@@ -195,19 +221,19 @@ public static partial class OfficeSceneUIBuilder
         Debug.LogError($"[TimeDesk] No free layer for '{name}'.");
     }
 
-    /// <summary>Puts the gameplay layer in the build list right after the art office (whose load brings it).</summary>
+    /// <summary>
+    /// Keeps the build list in boot order (BuildScenes.Order, audit R3-001): the
+    /// title first (a player build boots it), then the art office, the gameplay
+    /// layer (whose load the art office brings) and Home, each enabled; every
+    /// other listed scene stays after them, disabled (the legacy Test_DayLoop).
+    /// Written only when it changes.
+    /// </summary>
     private static void EnsureBuildSettings()
     {
-        var scenes = new List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
-        scenes.RemoveAll(s => s.path == GameplayScenePath);
-        int art = scenes.FindIndex(s => s.path == ArtScenePath);
-        var gameplay = new EditorBuildSettingsScene(GameplayScenePath, true);
-        if (art >= 0)
-            scenes.Insert(art + 1, gameplay);
-        else
-            scenes.Add(gameplay);
-
-        EditorBuildSettingsScene[] list = scenes.ToArray();
+        EditorBuildSettingsScene[] list = BuildScenes
+            .Order(EditorBuildSettings.scenes.Select(s => new BuildScene(s.path, s.enabled)), TitleScenePath, ArtScenePath, GameplayScenePath, HomeScenePath)
+            .Select(s => new EditorBuildSettingsScene(s.Path, s.Enabled))
+            .ToArray();
         bool same = list.Length == EditorBuildSettings.scenes.Length;
         for (int i = 0; same && i < list.Length; i++)
             same = list[i].path == EditorBuildSettings.scenes[i].path && list[i].enabled == EditorBuildSettings.scenes[i].enabled;
@@ -354,12 +380,20 @@ public static partial class OfficeSceneUIBuilder
             soFilter.ApplyModifiedProperties();
         }
 
+        // Piece 10: held papers beside the open frame take clicks through a second hole in the catcher (PaperExaminer sizes it).
+        Transform examineHole = Panel(root, "ExamineHole", Vector2.zero, Vector2.zero, Vector2.zero, Vector2.zero, null);
+        ((RectTransform)examineHole).pivot = Vector2.zero;
+        var soHole = new SerializedObject(catcher.gameObject.AddComponent<RectHoleRaycastFilter>());
+        SetRef(soHole, "hole", examineHole);
+        soHole.ApplyModifiedProperties();
+
         Button close = MakeButton(frame, "CloseButton", "", new Vector2(1f, 1f), new Vector2(1f, 1f), Color.white, ThemeRoleId.DiegeticDevice);
         var closeRect = (RectTransform)close.transform;
         closeRect.pivot = new Vector2(1f, 1f);
         closeRect.sizeDelta = new Vector2(64f, 64f);
         closeRect.anchoredPosition = new Vector2(-14f, -14f);
         close.GetComponent<Image>().sprite = EnsureOfficeShape("pc_close", 48, 48, Center, CloseButtonPixel);
+        Object.DestroyImmediate(close.transform.Find("Label").gameObject); // its cross is drawn in the sprite: no text
         WirePersistentVoid(close, "m_OnClick", view, nameof(OfficeViewController.FocusOffice));
 
         powerButton = MakeButton(frame, "PowerButton", "", new Vector2(1f, 0f), new Vector2(1f, 0f), Color.white, ThemeRoleId.DiegeticDevice);
@@ -368,6 +402,7 @@ public static partial class OfficeSceneUIBuilder
         powerRect.sizeDelta = new Vector2(64f, 64f);
         powerRect.anchoredPosition = new Vector2(-70f, 46f);
         powerButton.GetComponent<Image>().sprite = EnsureOfficeShape("crt_power", 28, 28, Center, PowerButtonPixel);
+        Object.DestroyImmediate(powerButton.transform.Find("Label").gameObject); // its symbol is drawn in the sprite: no text
 
         powerLed = Panel(frame, "PowerLed", new Vector2(1f, 0f), new Vector2(1f, 0f), Vector2.zero, new Vector2(18f, 18f), Color.white, ThemeRoleId.DiegeticDevice).GetComponent<Image>();
         ((RectTransform)powerLed.transform).anchoredPosition = new Vector2(-170f, 78f);
@@ -386,6 +421,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "root", root.gameObject);
         SetRef(so, "glass", glassRect);
         SetRef(so, "frameCamera", frameCamera);
+        SetRef(so, "examineHole", examineHole);
         so.ApplyModifiedProperties();
 
         root.gameObject.SetActive(false);
@@ -517,7 +553,8 @@ public static partial class OfficeSceneUIBuilder
     private static BoothCoordinator BuildOffice(OfficeViewController view, MonitorScreen screen, Button framePower, DeskConfigSO config,
                                                 OfficeSceneContractSO contract, TravellerWheel wheel, OverlayCallout[] callouts,
                                                 OverlayCallout tooltip, TMP_Text trayClockText, ShiftClockDriver clock,
-                                                ContentLibrarySO library, FallbackHud hud, out Clickable readySign)
+                                                ContentLibrarySO library, FallbackHud hud, PcFrame pcFrame, StampTray stampTray,
+                                                OfficeCaseHud caseHud, Button deskViewBack, out Clickable readySign)
     {
         Transform office = view.transform;
 
@@ -534,10 +571,20 @@ public static partial class OfficeSceneUIBuilder
         GameObject readyPlaceholder = BuildReadyPlaceholder(readySign.transform);
 
         // The desk, the scanner and the notes.
-        DeskController desk = BuildDesk(office, config, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint);
+        DeskController desk = BuildDesk(office, config, pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint);
+        DeskView deskView = BuildDeskView(office, config, desk.transform.Find("ViewCatcher").GetComponent<ClickCatcher>(), deskViewBack);
         var soScanner = new SerializedObject(scanner);
         SetRef(soScanner, "reaction", WireReaction(scanner.GetComponent<Clickable>(), EnsureDeskReaction("Reaction_Scanner", ReactionKind.Pulse, ""), tooltip, null));
         soScanner.ApplyModifiedProperties();
+
+        // What a handed-over paper must not land under: the case HUD's strips, the speech bubble, the wheel's ring.
+        var soDesk = new SerializedObject(desk);
+        SerializedArrays.Set(soDesk, "landingCovers", new Object[]
+        {
+            caseHud.transform.Find("Root/ClaimStrip"), caseHud.transform.Find("Root/CompareStrip"),
+            callouts[0].transform.Find("Panel"), wheel.transform.Find("Catcher/Ring")
+        });
+        soDesk.ApplyModifiedProperties();
 
         // The traveller and the wheel's openers (the traveller and the desk intercom).
         TravellerView traveller = BuildTraveller(office, out Clickable travellerZone);
@@ -545,7 +592,10 @@ public static partial class OfficeSceneUIBuilder
         var soWheel = new SerializedObject(wheel);
         SetRef(soWheel, "traveller", traveller);
         soWheel.ApplyModifiedProperties();
-        TextMeshPro wheelHint = FloatingNote(office, "WheelHint");
+        TextMeshPro wheelHint = FloatingNote(office, "WheelHint", true);
+        ((RectTransform)wheelHint.transform).sizeDelta = WheelHintBox;
+        wheelHint.textWrappingMode = TextWrappingModes.Normal;
+        wheelHint.fontSizeMax = WheelHintMaxSize;
 
         // The props: a click box and a reaction each (the binder hands them the art prop and its readout).
         Transform propsRoot = EnsureChild(office, "Props");
@@ -571,6 +621,7 @@ public static partial class OfficeSceneUIBuilder
         Prop("PenPot", OfficeAnchorId.PenPot, EnsureDeskReaction("Reaction_PenPot", ReactionKind.Wobble, ""), null, "pen_pot");
         Prop("Stapler", OfficeAnchorId.Stapler, EnsureDeskReaction("Reaction_Stapler", ReactionKind.Squash, ""), null, "stapler");
         WirePersistentVoid(propsRoot.Find("Intercom").GetComponent<Clickable>(), "onClick", wheel, nameof(TravellerWheel.Open));
+        WirePersistentVoid(propsRoot.Find("Stamp").GetComponent<Clickable>(), "onClick", stampTray, nameof(StampTray.Open));
         AssetDatabase.SaveAssets();
 
         // The readouts (the binder hands them the art's texts or the fallback HUD's).
@@ -601,6 +652,10 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(so, "props", clicks);
         SetRef(so, "wheelHint", wheelHint);
         SetRef(so, "config", config);
+        SetRef(so, "examiner", desk.transform.Find("Examiner").GetComponent<PaperExaminer>());
+        SetRef(so, "stampTray", stampTray);
+        SetRef(so, "hud", caseHud);
+        SetRef(so, "deskView", deskView);
         so.ApplyModifiedProperties();
 
         // The binder puts all of it on the art office at load.
@@ -610,6 +665,11 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "config", config);
         SetRef(soBinder, "wheel", wheel);
         SerializedArrays.Set(soBinder, "callouts", callouts);
+        SetRef(soBinder, "examiner", desk.transform.Find("Examiner").GetComponent<PaperExaminer>());
+        SetRef(soBinder, "stampTray", stampTray);
+        SetRef(soBinder, "deskCatcher", desk.transform.Find("Catcher").GetComponent<BoxCollider>());
+        SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());
+        SetRef(soBinder, "deskView", deskView);
         SetRef(soBinder, "screenClone", screen.GetComponent<PcScreenClone>());
         SetRef(soBinder, "pc", pc);
         SetRef(soBinder, "pcPower", pcPower);
@@ -641,11 +701,25 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "hudClock", hud.clock);
         soBinder.ApplyModifiedProperties();
 
-        // Checks: every paper a traveller carries has a spawn slot.
+        // Checks: every paper a traveller carries has a spawn slot, and every document's rows fit its paper's face.
         int maxPapers = library != null ? ContentLibraryValidator.MaxDocuments(ContentLibraryValidator.TravellerBlueprints(library)) : 0;
         int slots = config.paperSpawnSlots != null ? config.paperSpawnSlots.Length : 0;
         if (slots < maxPapers)
             Debug.LogError($"[TimeDesk] The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");
+        if (library != null)
+        {
+            var checkedTemplates = new HashSet<DocumentTemplateSO>();
+            foreach (CaseBlueprintSO blueprint in ContentLibraryValidator.TravellerBlueprints(library))
+                foreach (DocumentTemplateSO template in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : new DocumentTemplateSO[0])
+                {
+                    if (template == null || !checkedTemplates.Add(template))
+                        continue;
+                    int fields = template.fieldSpecs != null ? template.fieldSpecs.Length : 0;
+                    int capacity = PaperFace.Capacity(template.showsPhoto, config.face);
+                    if (fields > capacity)
+                        Debug.LogError($"[TimeDesk] {template.displayName} has {fields} fields but a paper face holds {capacity}; raise Desk_Default.face or shorten the template.");
+                }
+        }
 
         return coordinator;
     }
@@ -680,12 +754,18 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The desk: Office/Desk (the DeskSurface plane and the DeskController)
-    /// with its Papers root, the HandOver point, the inactive paper template
-    /// and the decoration slots; Office/Scanner (the DeskScanner, its click box,
-    /// Clickable and reaction, and a stand-in flatbed machine the binder shows
-    /// where the art has no scanner); the day-1 scan note. Idempotent.
+    /// with its Papers root, the HandOver point, the inactive paper template,
+    /// the decoration slots, the Catcher (a click on the desk puts held papers
+    /// back; a box on the Interactable layer the binder sizes under the desk
+    /// plane, inactive until papers are held), the ViewCatcher (the mat's
+    /// click, the desk view's toggle: the same box, inactive until DeskView
+    /// makes it live) and the Examiner (poses held
+    /// papers; the PC frame bounds their region); Office/Scanner (the
+    /// DeskScanner, its click box, Clickable and reaction, and a stand-in
+    /// flatbed machine the binder shows where the art has no scanner); the
+    /// day-1 scan note. Idempotent.
     /// </summary>
-    private static DeskController BuildDesk(Transform office, DeskConfigSO config, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint)
+    private static DeskController BuildDesk(Transform office, DeskConfigSO config, PcFrame pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint)
     {
         Clickable scannerClick = EnsureClickBox(office, "Scanner");
         scanner = GetOrAdd<DeskScanner>(scannerClick.gameObject);
@@ -701,7 +781,10 @@ public static partial class OfficeSceneUIBuilder
         soScanner.FindProperty("bedCentre").vector3Value = new Vector3(0f, 0.056f, 0.01f);
         soScanner.ApplyModifiedProperties();
 
-        scanHint = FloatingNote(office, "ScanHint");
+        scanHint = FloatingNote(office, "ScanHint", true);
+        // Piece 10's longer note ("Click a paper to read it; drag it onto the scanner to open it on the PC.") wraps onto two lines, so it keeps its size.
+        ((RectTransform)scanHint.transform).sizeDelta = ScanHintBox;
+        scanHint.textWrappingMode = TextWrappingModes.Normal;
 
         Transform deskTransform = EnsureChild(office, "Desk");
         DeskSurface surface = GetOrAdd<DeskSurface>(deskTransform.gameObject);
@@ -712,6 +795,28 @@ public static partial class OfficeSceneUIBuilder
         DeskDocument template = BuildPaperTemplate(deskTransform, config);
         BuildDeskSlots(deskTransform);
 
+        DestroyChildIfPresent(deskTransform, "Catcher");
+        Transform catcher = EnsureChild(deskTransform, "Catcher");
+        catcher.gameObject.layer = OfficeLayers.InteractableLayer;
+        catcher.gameObject.AddComponent<BoxCollider>();
+        ClickCatcher deskCatcher = catcher.gameObject.AddComponent<ClickCatcher>();
+        catcher.gameObject.SetActive(false);
+
+        DestroyChildIfPresent(deskTransform, "ViewCatcher");
+        Transform viewCatcher = EnsureChild(deskTransform, "ViewCatcher");
+        viewCatcher.gameObject.layer = OfficeLayers.InteractableLayer;
+        viewCatcher.gameObject.AddComponent<BoxCollider>();
+        viewCatcher.gameObject.AddComponent<ClickCatcher>();
+        viewCatcher.gameObject.SetActive(false);
+
+        DestroyChildIfPresent(deskTransform, "Examiner");
+        PaperExaminer examiner = EnsureChild(deskTransform, "Examiner").gameObject.AddComponent<PaperExaminer>();
+        var soExaminer = new SerializedObject(examiner);
+        SetRef(soExaminer, "config", config);
+        SetRef(soExaminer, "surface", surface);
+        SetRef(soExaminer, "frame", pcFrame);
+        soExaminer.ApplyModifiedProperties();
+
         DeskController desk = GetOrAdd<DeskController>(deskTransform.gameObject);
         var so = new SerializedObject(desk);
         SetRef(so, "surface", surface);
@@ -721,6 +826,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "handOverPoint", handOver);
         SetRef(so, "scanHint", scanHint);
         SetRef(so, "config", config);
+        SetRef(so, "examiner", examiner);
+        SetRef(so, "deskCatcher", deskCatcher);
         so.ApplyModifiedProperties();
         return desk;
     }
@@ -729,8 +836,11 @@ public static partial class OfficeSceneUIBuilder
     /// The inactive paper every handed-over document clones: a root (the
     /// DeskDocument, its DeskDraggable and Clickable) and its lying Sheet (the
     /// click box on the Interactable layer, the lit paper quad the hover
-    /// outlines, the title and holder texts, the hidden photo frame with the
-    /// traveller's photo). Rebuilt each run.
+    /// outlines, the title, the hidden photo frame with the traveller's photo,
+    /// and the Rows root with its inactive RowTemplate: a Label and a Value
+    /// text and a Highlight quad), laid out by PaperFace from Desk_Default's
+    /// face (the runtime re-lays each paper from the same knobs); the unlit
+    /// examine material the paper wears while held. Rebuilt each run.
     /// </summary>
     private static DeskDocument BuildPaperTemplate(Transform desk, DeskConfigSO config)
     {
@@ -754,14 +864,21 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(sheet, "Paper", PrimitiveType.Quad, Vector3.zero, new Vector3(size.x, size.y, 1f), paperMaterial);
         MeshRenderer paper = sheet.Find("Paper").GetComponent<MeshRenderer>();
         paper.shadowCastingMode = ShadowCastingMode.Off;
+        Material examineMaterial = EnsureMaterial("Paper_Examine", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetTexture("_BaseMap", paperSprite.texture);
+            m.SetColor("_BaseColor", Color.white);
+        });
 
-        TextMeshPro title = PaperText(sheet, "Title", "Document", new Vector2(0f, size.y * 0.36f), new Vector2(size.x * 0.86f, size.y * 0.13f), true);
-        TextMeshPro holder = PaperText(sheet, "Holder", "Name", new Vector2(0f, size.y * 0.21f), new Vector2(size.x * 0.86f, size.y * 0.1f), false);
+        // The face (piece 10): where the title, the photo and the rows go (the runtime re-lays each paper from the same knobs).
+        float h = size.y;
+        FaceLayout face = PaperFace.Layout(1, true, size.x / h, config.face);
+        TextMeshPro title = PaperText(sheet, "Title", "Document", new Vector2(face.Title.CentreX * h, face.Title.CentreY * h), new Vector2(face.Title.Width * h, face.Title.Height * h), true);
 
-        float photoHeight = size.y * 0.38f;
+        float photoHeight = face.Photo.Height * h;
         var photoSize = new Vector2(photoHeight * LookCanvas.PhotoAspect, photoHeight);
         Transform frame = EnsureChild(sheet, "PhotoSlot");
-        frame.localPosition = new Vector3(0f, -size.y * 0.13f, -0.0005f);
+        frame.localPosition = new Vector3(face.Photo.CentreX * h, face.Photo.CentreY * h, -0.0005f);
         PrimitivePart(frame, "Frame", PrimitiveType.Quad, Vector3.zero, new Vector3(photoSize.x, photoSize.y, 1f), LitMaterial("Paper_PhotoFrame", PhotoGrey, 0.1f));
         frame.Find("Frame").GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
 
@@ -774,6 +891,33 @@ public static partial class OfficeSceneUIBuilder
         WireLayers(stack, portrait, 1, true);
         frame.gameObject.SetActive(false);
 
+        // The rows: one inactive template (a label over a value, and a highlight quad behind both) the paper clones per field.
+        Transform rows = EnsureChild(sheet, "Rows");
+        rows.localPosition = Vector3.zero;
+        rows.localRotation = Quaternion.identity;
+        Transform rowTemplate = EnsureChild(rows, "RowTemplate");
+        FaceRow first = face.Rows[0];
+        TextMeshPro label = PaperText(rowTemplate, "Label", "Label", new Vector2(first.Label.CentreX * h, first.Label.CentreY * h), new Vector2(first.Label.Width * h, first.Label.Height * h), false);
+        label.alignment = TextAlignmentOptions.BottomLeft;
+        label.color = PaperLabelInk;
+        label.fontSizeMin = PaperTextMinSize;
+        TextMeshPro value = PaperText(rowTemplate, "Value", "Value", new Vector2(first.Value.CentreX * h, first.Value.CentreY * h), new Vector2(first.Value.Width * h, first.Value.Height * h), false);
+        value.alignment = TextAlignmentOptions.TopLeft;
+        value.textWrappingMode = TextWrappingModes.Normal;
+        value.fontSizeMin = PaperTextMinSize;
+        Material highlightMaterial = EnsureMaterial("PaperRow_Highlight", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetColor("_BaseColor", new Color(0f, 0f, 0f, 0f));
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            m.SetFloat("_QueueOffset", -10f);
+            BaseShaderGUI.SetMaterialKeywords(m);
+        });
+        PrimitivePart(rowTemplate, "Highlight", PrimitiveType.Quad, new Vector3(first.Hit.CentreX * h, first.Hit.CentreY * h, -0.0003f),
+                      new Vector3(first.Hit.Width * h, first.Hit.Height * h, 1f), highlightMaterial);
+        rowTemplate.Find("Highlight").GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
+        rowTemplate.gameObject.SetActive(false);
+
         Clickable click = root.gameObject.AddComponent<Clickable>();
         click.SetOutline(new Renderer[] { paper });
         DeskDraggable drag = root.gameObject.AddComponent<DeskDraggable>();
@@ -785,9 +929,11 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(doc);
         SetRef(so, "sheet", sheet);
         SetRef(so, "title", title);
-        SetRef(so, "holder", holder);
         SetRef(so, "photoSlot", frame.gameObject);
         SetRef(so, "photo", stack);
+        SetRef(so, "rowTemplate", rowTemplate.gameObject);
+        SetRef(so, "paperQuad", paper);
+        SetRef(so, "examineMaterial", examineMaterial);
         SetRef(so, "click", click);
         SetRef(so, "drag", drag);
         so.ApplyModifiedProperties();
@@ -820,8 +966,14 @@ public static partial class OfficeSceneUIBuilder
         return tmp;
     }
 
-    /// <summary>A note floating in the office (the binder places it and turns it to the camera): light text on a dark backing, auto-sized, inactive until shown. Idempotent.</summary>
-    private static TextMeshPro FloatingNote(Transform parent, string name)
+    /// <summary>
+    /// A note floating in the office (the binder places it and turns it to the
+    /// camera): light text with a dark outline, auto-sized, inactive until
+    /// shown; with <paramref name="backing"/> (the day-1 hints) a dark plate
+    /// behind it (a Backing quad in FloatingNote_Backing, fitted to the text by
+    /// NoteBacking). Idempotent.
+    /// </summary>
+    private static TextMeshPro FloatingNote(Transform parent, string name, bool backing = false)
     {
         DestroyChildIfPresent(parent, name);
         var go = new GameObject(name, typeof(RectTransform), typeof(TextMeshPro));
@@ -837,9 +989,33 @@ public static partial class OfficeSceneUIBuilder
         tmp.color = NoteInk;
         tmp.fontStyle = FontStyles.Bold;
         tmp.fontSharedMaterial = NoteMaterial(tmp.font);
+        if (backing)
+        {
+            PrimitivePart(go.transform, "Backing", PrimitiveType.Quad, new Vector3(0f, 0f, 0.002f), Vector3.one, NoteBackingMaterial());
+            MeshRenderer plate = go.transform.Find("Backing").GetComponent<MeshRenderer>();
+            plate.shadowCastingMode = ShadowCastingMode.Off;
+            plate.receiveShadows = false;
+            NoteBacking fit = go.AddComponent<NoteBacking>();
+            var so = new SerializedObject(fit);
+            SetRef(so, "text", tmp);
+            SetRef(so, "backing", plate.transform);
+            so.FindProperty("margin").vector2Value = NoteBackingMargin;
+            so.ApplyModifiedProperties();
+        }
         go.SetActive(false);
         return tmp;
     }
+
+    /// <summary>The day-1 notes' backing material: unlit, transparent, dark, drawn before the notes' text. Created once; a designer's edits are kept.</summary>
+    private static Material NoteBackingMaterial() =>
+        EnsureMaterial("FloatingNote_Backing", "Universal Render Pipeline/Unlit", m =>
+        {
+            m.SetColor("_BaseColor", NoteBackingColour);
+            m.SetFloat("_Surface", 1f);
+            m.SetFloat("_Blend", 0f);
+            m.SetFloat("_QueueOffset", -10f);
+            BaseShaderGUI.SetMaterialKeywords(m);
+        });
 
     /// <summary>
     /// The floating notes' shared font material: the font's own with a dark
@@ -1014,13 +1190,205 @@ public static partial class OfficeSceneUIBuilder
         return hud;
     }
 
+    /// <summary>The office case HUD's strips (reference px from the top centre): the claim tag, the office compare strip under it.</summary>
+    private static readonly Vector2 ClaimStripSize = new Vector2(1100f, 64f);
+    private const float ClaimStripTop = 16f;
+    private static readonly Vector2 CompareStripSize = new Vector2(1200f, 56f);
+    private const float CompareStripTop = 88f;
+
+    /// <summary>Where the desk view's "▲ Back" control starts (reference px from the top): under the office case HUD's strips and a gap.</summary>
+    private static readonly float CaseHudClearance = CompareStripTop + CompareStripSize.y + 8f;
+
+    /// <summary>The desk view's "▲ Back" control (reference px), top centre under the case HUD.</summary>
+    private static readonly Vector2 DeskViewBackSize = new Vector2(200f, 44f);
+
+    /// <summary>The band at the overlay's top the speech bubble and the wheel's ring keep clear (reference px): the office case HUD's strips, the desk view's Back control and gaps (the desk view clamps both to the top).</summary>
+    private static readonly float OverlayTopClearance = CaseHudClearance + DeskViewBackSize.y + 8f;
+
+    /// <summary>The stamp tray's panel (reference px).</summary>
+    private static readonly Vector2 StampTraySize = new Vector2(420f, 96f);
+
+    /// <summary>A strip at the top centre of the overlay, <paramref name="top"/> px down, with its text (auto-sized, no raycasts).</summary>
+    private static TMP_Text TopStrip(Transform parent, string name, Vector2 size, float top, Color background, ThemeRoleId role, int fontSize, Color ink, out Transform strip)
+    {
+        strip = Panel(parent, name, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -top - size.y / 2f), size, background, role);
+        ((RectTransform)strip).pivot = Center;
+        strip.GetComponent<Image>().raycastTarget = false;
+        TMP_Text text = Text(strip, name + "Text", "", fontSize, TextAlignmentOptions.Center, new Vector2(0.02f, 0.04f), new Vector2(0.98f, 0.96f), ink, role);
+        text.enableAutoSizing = true;
+        text.fontSizeMin = 11f;
+        text.fontSizeMax = fontSize;
+        text.raycastTarget = false;
+        return text;
+    }
+
+    /// <summary>
+    /// The office case HUD (piece 10) under the office overlay canvas, rebuilt
+    /// each run: an always-active full-screen host (OfficeCaseHud, no graphic)
+    /// and its Root, top centre: the claim tag (ClaimStrip, the claim banner's
+    /// text) and under it the office compare strip (CompareBar, inactive; the
+    /// CompareController draws it). No part takes raycasts. Returns the HUD and
+    /// the strip's object and text through out parameters.
+    /// </summary>
+    private static OfficeCaseHud BuildOfficeCaseHud(Transform overlay, out GameObject compareStrip, out TMP_Text compareText)
+    {
+        DestroyChildIfPresent(overlay, "OfficeCaseHud");
+        Transform host = Panel(overlay, "OfficeCaseHud", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform root = Panel(host, "Root", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        TMP_Text claimText = TopStrip(root, "ClaimStrip", ClaimStripSize, ClaimStripTop, ScreenStripColor, ThemeRoleId.ClaimStrip, 26, Color.white, out Transform claim);
+        compareText = TopStrip(root, "CompareStrip", CompareStripSize, CompareStripTop, Tooltip, ThemeRoleId.CompareBar, 22, Ink, out Transform compare);
+        compareStrip = compare.gameObject;
+        compareStrip.SetActive(false);
+
+        OfficeCaseHud hud = host.gameObject.AddComponent<OfficeCaseHud>();
+        var so = new SerializedObject(hud);
+        SetRef(so, "root", root.gameObject);
+        SetRef(so, "claimRoot", claim.gameObject);
+        SetRef(so, "claimText", claimText);
+        so.ApplyModifiedProperties();
+        root.gameObject.SetActive(false);
+        return hud;
+    }
+
+    /// <summary>
+    /// The desk view's "▲ Back" control (the readability fix: a visible way
+    /// out of the desk view) under the office overlay canvas, rebuilt each run:
+    /// a small button at the top centre, under the case HUD's strips, in the
+    /// "&lt; Desk" button's role, its label keyed (deskView.back); a hover hint
+    /// beside it, on its right (deskView.backHint: the other ways back), in the
+    /// tooltip's role, shown by HoverHint (beside, not under: the speech bubble
+    /// waits right under the Back control in the desk view). Inactive:
+    /// DeskView shows it while tilted (BoothRules.DeskViewBackLive). Returns
+    /// its button.
+    /// </summary>
+    private static Button BuildDeskViewBack(Transform overlay)
+    {
+        DestroyChildIfPresent(overlay, "DeskViewBack");
+        Button back = MakeButton(overlay, "DeskViewBack", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.5f, 0.95f), ThemeRoleId.DeskButton, "deskView.back");
+        var rt = (RectTransform)back.transform;
+        rt.anchorMin = new Vector2(0.5f, 1f);
+        rt.anchorMax = new Vector2(0.5f, 1f);
+        rt.pivot = new Vector2(0.5f, 1f);
+        rt.anchoredPosition = new Vector2(0f, -CaseHudClearance);
+        rt.sizeDelta = DeskViewBackSize;
+
+        Transform hint = Panel(back.transform, "Hint", new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(8f, 0f), new Vector2(DeskViewBackSize.x, 34f), Tooltip, ThemeRoleId.Tooltip);
+        ((RectTransform)hint).pivot = new Vector2(0f, 0.5f);
+        hint.GetComponent<Image>().raycastTarget = false;
+        TMP_Text hintText = Text(hint, "Label", null, 18, TextAlignmentOptions.Center, new Vector2(0.04f, 0.05f), new Vector2(0.96f, 0.95f), Ink,
+                                 ThemeRoleId.Tooltip, "deskView.backHint", FontStyles.Normal, ThemeTextKind.Body, true);
+        hintText.raycastTarget = false;
+        hint.gameObject.SetActive(false);
+
+        HoverHint hover = back.gameObject.AddComponent<HoverHint>();
+        var so = new SerializedObject(hover);
+        SetRef(so, "hint", hint.gameObject);
+        so.ApplyModifiedProperties();
+
+        back.gameObject.SetActive(false);
+        return back;
+    }
+
+    /// <summary>
+    /// The stamp tray (piece 10) under the office overlay canvas, rebuilt each
+    /// run, the wheel's host pattern: an always-active full-screen host
+    /// (StampTray, no graphic); its Catcher, a full-screen transparent
+    /// click-to-close area, inactive; the Panel under it (anchors and pivot
+    /// (0.5, 0.5), placed over the stamp by projection) with Accept (left,
+    /// tick) and Deny (right, cross) in piece 6's decision roles and labels.
+    /// </summary>
+    private static StampTray BuildStampTray(Transform overlay, DeskConfigSO config)
+    {
+        DestroyChildIfPresent(overlay, "StampTray");
+        Transform host = Panel(overlay, "StampTray", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform catcher = Panel(host, "Catcher", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(0f, 0f, 0f, 0f), ThemeRoleId.ClickCatcher);
+        Transform panel = Panel(catcher, "Panel", Center, Center, Vector2.zero, StampTraySize, PanelNavy, ThemeRoleId.Panel);
+        ((RectTransform)panel).pivot = Center;
+
+        Button accept = MakeButton(panel, "AcceptButton", null, new Vector2(0.03f, 0.12f), new Vector2(0.485f, 0.88f), new Color(0.2f, 0.5f, 0.24f, 1f),
+                                   ThemeRoleId.AcceptButton, "accept");
+        Button deny = MakeButton(panel, "DenyButton", null, new Vector2(0.515f, 0.12f), new Vector2(0.97f, 0.88f), new Color(0.72f, 0.2f, 0.18f, 1f),
+                                 ThemeRoleId.DenyButton, "deny");
+        BuildDecisionGlyph(accept, ThemeRoleId.AcceptButton, true);
+        BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
+
+        StampTray tray = host.gameObject.AddComponent<StampTray>();
+        var so = new SerializedObject(tray);
+        SetRef(so, "catcher", catcher.gameObject);
+        SetRef(so, "panel", panel);
+        SetRef(so, "acceptButton", accept);
+        SetRef(so, "denyButton", deny);
+        SetRef(so, "config", config);
+        so.ApplyModifiedProperties();
+
+        catcher.gameObject.SetActive(false);
+        return tray;
+    }
+
+    /// <summary>
+    /// The speech bubble takes input (piece 10): its panel image catches
+    /// raycasts (hovering holds the line), carries a transition-free Button
+    /// (interactable only while an answer shows, set by the wheel) and a
+    /// SpeechBubbleInput, and the bubble moves above the wheel (after it on
+    /// the overlay) so an answer can be picked while the wheel is open.
+    /// </summary>
+    private static void BuildBubbleInput(OverlayCallout bubble, TravellerWheel wheel)
+    {
+        Transform panel = bubble.transform.Find("Panel");
+        Image image = panel.GetComponent<Image>();
+        image.raycastTarget = true;
+        Button button = panel.gameObject.AddComponent<Button>();
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = image;
+        button.interactable = false;
+        SpeechBubbleInput input = panel.gameObject.AddComponent<SpeechBubbleInput>();
+        var so = new SerializedObject(input);
+        SetRef(so, "wheel", wheel);
+        SetRef(so, "button", button);
+        so.ApplyModifiedProperties();
+
+        var soWheel = new SerializedObject(wheel);
+        SetRef(soWheel, "bubbleButton", button);
+        soWheel.ApplyModifiedProperties();
+        bubble.transform.SetSiblingIndex(wheel.transform.GetSiblingIndex() + 1);
+    }
+
+    /// <summary>
+    /// The desk view (piece 10 section 11), rebuilt each run: Office/DeskView
+    /// (DeskView, wired to the desk tuning, the mat's click and the overlay's
+    /// "▲ Back" control) and its inactive Camera child, a CinemachineCamera at
+    /// priority 0 that the office binder poses from the art's camera and the
+    /// mat at load.
+    /// </summary>
+    private static DeskView BuildDeskView(Transform office, DeskConfigSO config, ClickCatcher mat, Button back)
+    {
+        DestroyChildIfPresent(office, "DeskView");
+        Transform host = EnsureChild(office, "DeskView");
+        Transform cameraHost = EnsureChild(host, "Camera");
+        CinemachineCamera deskCamera = cameraHost.gameObject.AddComponent<CinemachineCamera>();
+        deskCamera.Priority = 0;
+        cameraHost.gameObject.SetActive(false);
+
+        DeskView deskView = host.gameObject.AddComponent<DeskView>();
+        var so = new SerializedObject(deskView);
+        SetRef(so, "config", config);
+        SetRef(so, "deskCamera", deskCamera);
+        SetRef(so, "mat", mat);
+        SetRef(so, "backButton", back);
+        so.ApplyModifiedProperties();
+        return deskView;
+    }
+
     /// <summary>
     /// An overlay callout (a timed label that takes no clicks) under the office
     /// overlay canvas, rebuilt each run: an always-active full-screen host with
     /// no graphic, and its Panel child (anchors and pivot (0.5, 0.5), raycast
-    /// targets off, inactive) holding an auto-sized label.
+    /// targets off, inactive) holding an auto-sized label; with
+    /// <paramref name="keepOnScreen"/> it waits at the screen's edge while its
+    /// object is out of view, below the case HUD's strips (the speech bubble),
+    /// else it hides (the tooltip).
     /// </summary>
-    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role)
+    private static OverlayCallout BuildOverlayCallout(Transform overlay, string name, Vector2 size, Color background, ThemeRoleId role, bool keepOnScreen)
     {
         DestroyChildIfPresent(overlay, name);
         Transform host = Panel(overlay, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -1039,6 +1407,8 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(callout);
         SetRef(so, "panel", panel);
         SetRef(so, "label", label);
+        so.FindProperty("keepOnScreen").boolValue = keepOnScreen;
+        so.FindProperty("topInset").floatValue = keepOnScreen ? OverlayTopClearance : 0f;
         so.ApplyModifiedProperties();
 
         panel.gameObject.SetActive(false);
@@ -1094,6 +1464,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "centreSlot", centre);
         SetRef(so, "bubble", bubble);
         SetRef(so, "config", config);
+        so.FindProperty("ringTopInset").floatValue = OverlayTopClearance;
         so.ApplyModifiedProperties();
 
         catcher.gameObject.SetActive(false);

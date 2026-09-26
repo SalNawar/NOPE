@@ -1,5 +1,8 @@
 """Builds art/CHARACTER_ART_BRIEF_v2.md and art/coverage.json from art/tools/wardrobe_v2.json.
-Run data_v2.py first. Key grammar = piece-4 spec LookKeys (section 2.3) + piece-5 R18 (artNation)."""
+Run data_v2.py first. Key grammar = piece-4 spec LookKeys (section 2.3) + piece-5 R18 (artNation).
+v2.1 (2026-09-25): revised for the 3D office (the desk-view sizes below are measured in the art office at main d5844d0).
+v2.2 (2026-09-25): the ReStory style (cute 2D anime-style faces, flat cel colours) for both kinds of character, the
+layered travellers and the premades; the head size and body proportions stay the guide's (LookCanvas)."""
 import json, sys
 from pathlib import Path
 
@@ -9,6 +12,9 @@ ART = TOOLS.parent
 W = json.loads((TOOLS / "wardrobe_v2.json").read_text(encoding="utf-8"))
 P = {p["id"]: p for p in W["places"]}
 FUT = {f["country"]: f for f in W["future"]}
+# v2.1 counts for the change section: MUST READ lines rewritten, generated pairs under the two new women's headwear items.
+N_MUST_V21 = sum(1 for e in W["editLog"] if "MUST READ names only" in e["why"])
+N_HID_V21 = sum(1 for x in W["confusableHidden"] if x["gender"] == "f" and x["a"] in ("japan_earlymodern", "china_modern"))
 
 COUNTRIES = ["egypt", "iraq", "greece", "italy", "china", "japan", "britain", "germany"]
 CNAME = dict(egypt="Egypt", iraq="Iraq / Mesopotamia", greece="Greece", italy="Italy", china="China",
@@ -19,6 +25,18 @@ COLOURS = ["black", "brown", "blond", "red", "grey"]
 SKINS = [1, 2, 3, 4, 5]
 FACES = ["a", "b", "c", "d"]
 EXPRESSIONS = ["neutral", "happy", "angry", "worried"]
+# v2.2: how faces a-d differ in the anime style, which tends to give everyone one face. They keep face a's head
+# outline and feature positions (the beards, caps and glasses are fitted to them: Batch 2), so they differ inside it.
+FACE_AGE = {"a": "a young adult in their 20s", "b": "a different young adult in their 20s",
+            "c": "middle-aged, 40s to 50s", "d": "elderly, 60s and up"}
+FACE_LOOK = {"a": "soft, round cheeks and chin; large, round eyes; gently curved brows; a small, short nose",
+             "b": "slimmer cheeks and a more defined chin; narrower, longer eyes; straight, thicker brows; a longer, "
+                  "straighter nose",
+             "c": "fuller cheeks and a firmer, squarer chin; steady eyes with a small line at each outer corner; heavier, "
+                  "lower brows; a broader nose; a few lines on the forehead and beside the mouth",
+             "d": "softer, slightly hollow cheeks and a softer jawline; smaller eyes under heavier lids, with wrinkles at "
+                  "the corners; thin, lighter eyebrows; a longer nose; wrinkles on the forehead and cheeks"}
+def face_drawn(v): return f"{FACE_AGE[v]}: {FACE_LOOK[v]}"
 SLOTWORD = {"Outfit": "outfit", "Hair": "hair", "FacialHair": "facial hair", "Headwear": "headwear", "Accessory": "accessory"}
 # Skin swatches (review 2 finding 41): ChatGPT gets them in prompt 9.2, Claude recolours bodies 2-5 to them.
 SKIN_WORD = {1: "very light", 2: "light", 3: "medium olive", 4: "brown", 5: "deep brown"}
@@ -26,13 +44,36 @@ SKIN_HEX = {1: "#F1D3C0", 2: "#E0B394", 3: "#C39A6B", 4: "#94653F", 5: "#5C3A24"
 OUTLINE_HEX = "#3B2A20"
 SIZE_LINE = "Portrait, 1024 x 1536, the same framing as the attached image."
 STYLE_ATTACH = "style_card.png (STYLE REFERENCE ONLY: match its line weight and shading; do not copy any clothing)"
+OFFICE_REF = "office_style_reference.png"
+OFFICE_ATTACH = (f"{OFFICE_REF} (STYLE REFERENCE ONLY: the game's office; match its colour range and contrast, never draw "
+                 "the room)")
 
-# Shared by Block A (layers) and Block P (premades), so the two never drift apart.
-STYLE_BULLETS = f"""- Clean, friendly 2D character art like the customers in a cozy shop-counter game: soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature.
-- Simple textures: flat colour areas, each with ONE soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
+# The desk view (v2.1), measured in the art office (main d5844d0): the office camera at (0, 2.16, -2.62), pitched 10 degrees
+# down, vertical field of view 55 degrees; the traveller's feet at the default Anchor_Traveller (0, 0, 1.6), 1.8 m from
+# the soles to the top of the head (LookCanvas y 1490 to 260). Projected landmarks match p9_day2_bubble_hieroglyphs.png
+# within a pixel (hat top y 407, chin 505, sleeve ends 613). The vertical field of view is fixed, so sizes scale with the
+# screen height only.
+DESK = {
+    1080: dict(head=58, face=44, head_to_shoulders=85, shoulders=121, px=0.36, photo_desk="48 x 25", photo_pc="60 x 75",
+               photo_held="95 x 119", photo_beside="134 x 167"),
+    720: dict(head=39, face=30, head_to_shoulders=57, shoulders=80, px=0.24, photo_desk="32 x 17", photo_pc="40 x 50",
+              photo_held="63 x 79", photo_beside="89 x 111"),
+}
+DESK_VISIBLE_TO = 760   # canvas y where the NEXT sign's top cuts the figure (the waist)
+READ_ZONE_TO = 630      # canvas y of mid-chest: held papers (piece 10) cover the figure's sides below about here
+
+# Shared by Block A (layers) and Block P (premades), so the two never drift apart. v2.2 (2026-09-25): the ReStory style,
+# the same for both kinds of character; the head size and body proportions stay the guide's (LookCanvas).
+STYLE_BULLETS = f"""- Cute, soft 2D anime-style characters, like the customers of a cozy shop-counter game: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair drawn in clean stylised shapes and locks. Every character is an adult who looks their age: never chibi, never childlike.
+- The head size and body proportions are fixed by the attached guide, mannequin or base figure (adult proportions, about seven and a half heads tall; see CANVAS). The style changes only the face and the rendering: never enlarge the head, and never shorten or lengthen the body.
+- Faces stay individual: give each face the face shape, eye shape, brows and nose its prompt describes, never one anime face for everyone. Paint every skin tone exactly as given, never lighter. Every culture is drawn in this same style: never a caricature, never an exoticised version of a people.
+- One cast: the game's layered travellers and its named historical characters are drawn in two separate Projects but must look like one cast, with the same eyes, line, shading and colour treatment, so neither kind ever stands out from the other at the desk.
+- Everything reads small: in the game the head is only about {DESK[1080]['head']} px tall on screen, so keep the eyes, brows, mouth, hair shapes and headwear simple, bold and clear.
+- Flat cel colours: each colour area has ONE hard-edged shade tone (the same hue, about 20% darker, with a crisp edge and no soft blending) and at most one small highlight. No fabric grain, brush or paper texture, noise, gradient or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
 - A clean, even dark-brown outline ({OUTLINE_HEX}, 2-3 px) around every piece and its main folds.
 - Neutral, even lighting: plain white light from the front. Shade only to show form (under the chin, inside folds, under a brim), the same on both sides. No light direction, no rim light, no glow, no cast shadow, no ground shadow, no warm or cool tint.
 - Gently muted, natural period colours. Nothing neon.
+- No manga symbols: no sweat drops, anger marks, blush lines, sparkles, tears or speed lines. A face shows feeling only through its eyes, brows and mouth.
 - Front view: standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
 - When I attach a STYLE REFERENCE image, match its line weight, shading and pattern scale, and never copy its clothing."""
 CANVAS_BULLETS = """- Portrait, 1024 x 1536 px. The figure stays exactly where the attached guide, mannequin or base figure puts it: same top of head, chin, shoulders, waist, hips, knees and feet, same centre line. Never move, resize, turn or re-pose it.
@@ -41,6 +82,10 @@ CANVAS_BULLETS = """- Portrait, 1024 x 1536 px. The figure stays exactly where t
 - Never use bright green, lime, magenta, pink, purple or violet anywhere in the clothing, hair or items, not even muted. Where a look asks for purple, paint deep wine red. Where it asks for pink or rose, paint dusty coral or salmon. Where it asks for green, paint dark olive, moss or bottle green. Paint jade as a dark, dull grey-green stone with a strong dark outline. Natural skin and lip colours on faces and bodies are fine.
 - Paint every fabric fully opaque, even veils, gauze, muslin and stockings, and never cut holes through it. Magenta, green or skin must never show through anything. Where I say "light" or "fine" fabric, paint a thin, light, solid fabric.
 - No text, letters, numbers, logos, watermarks or signatures anywhere. Bands called "tiraz" or "script" are abstract embroidered patterns, never real or fake letters. Coins are plain discs with no face, letters or marks."""
+# Shared by Block A and Block P (v2.1): the figures stand in the 3D office.
+GAME_BULLETS = f"""- The characters are flat 2D figures that stand behind the clerk's desk in the 3D office, facing the player; the game places them in the room and tones them to its light, so draw them flat and evenly lit.
+- The desk hides every figure below the waist, and the head shows small on screen. So everything that tells where a character comes from (headwear, hair, face, beard, collar, necklace, shoulders and upper chest) must be bold and clear. Still draw the whole figure, down to the feet.
+- When I attach {OFFICE_REF}, it is a STYLE REFERENCE ONLY: a screenshot of the game's office. Match its colour range and contrast so the character sits in that room. Never draw the room, the desk, any furniture or the room's lighting: the background stays flat green."""
 RULE_BULLETS = """- Respectful and historically grounded. No caricature or stereotype of any people or culture{likeness}.
 - Civilian clothing only. No military uniforms or armour, weapons, flags, insignia, badges, royal regalia, political, regime or hate symbols, and no religious vestments or holy symbols."""
 
@@ -117,7 +162,8 @@ PREMADES = [
     dict(id="banzhao", name="Ban Zhao", g="f", place="china_ancient", born="3 Feb 45", age=60, face="d", skin=2,
          role="scientist", sched="pooled days 2-3", batch="6", true_place="",
          note="Historian of the Han court. Completed the Book of Han.",
-         look="Ban Zhao, historian and teacher at the Eastern Han court, about 60: a dignified elderly scholar with a kind, firm face and grey hair drawn smoothly back into a low looped bun at the nape, held with one plain silver hairpin. A floor-length quju wrap robe closed with the wearer's left panel over the right (a 'y' at the throat), layered collars with the innermost white, in sober deep brown or dark red silk with broad black cloud-scroll borders; huge sleeves that bag below the arm and narrow at the wrist; a dark cloth sash. A jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging at mid-chest on its own long red silk cord round the neck.",
+         look="Ban Zhao, historian and teacher at the Eastern Han court, about 60: a dignified elderly scholar with a kind, firm face and grey hair drawn smoothly back into a low looped bun at the nape, held with one plain silver hairpin. A floor-length quju wrap robe closed with the wearer's left panel over the right (a 'y' at the throat), layered collars with the innermost white, in sober deep brown or dark red silk with broad black cloud-scroll borders; huge sleeves that bag below the arm and narrow at the wrist; a dark cloth sash. A jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck.",
+         # v2.1: raised from mid-chest with the china_ancient women's leak item (data_v2.py section 2c).
          avoid="court rank insignia, phoenix crowns, books or brushes in the hands"),
     dict(id="arib", name="Arib al-Ma'muniyya", g="f", place="iraq_medieval", born="20 May 797", age=33, face="b", skin=3,
          role="artist", sched="pooled days 2-3", batch="6", true_place="",
@@ -160,7 +206,7 @@ STRESS = [("egypt_ancient", "hair_f_egypt_ancient.png"),
           ("egypt_medieval", "hair_f_egypt_medieval.png"),
           ("egypt_medieval", "headwear_f_egypt_medieval.png"),
           ("japan_ancient", "accessory_m_japan_ancient.png")]
-STRESS_FILES = {f for _, f in STRESS}
+STRESS_FILES = tuple(f for _, f in STRESS)  # ordered: the brief lists skipped files in this order on every run
 DAY1 = ["egypt_ancient", "iraq_ancient", "italy_ancient"]
 DAY2 = ["china_ancient", "britain_ancient", "egypt_medieval", "iraq_medieval", "greece_medieval",
         "italy_medieval", "china_medieval", "britain_medieval"]
@@ -243,29 +289,68 @@ out = []
 w = out.append
 
 RULES_A = RULE_BULLETS.format(likeness=", and no likeness of any real person")
-w(f"""# Time Sorter: Character Art Brief v2 (for ChatGPT)
+D1080, D720 = DESK[1080], DESK[720]
+w(f"""# Time Sorter: Character Art Brief v2.2 (for ChatGPT)
 
-*2026-09-24, revised the same day after the review of v2 (Appendix E). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits) and Saleh's style direction: simpler, like ReStory with simpler textures, neutral even lighting.*
+*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), and again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
 
-**The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png` (that file stays only until the booth rework, because two scenes still reference it).
+**The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png`: the game no longer uses that file. It stays on disk only because the art scene's leftover 2D booth (`OfficeRoot`, switched off when the office loads) and the art side's recovery scenes still reference it, and it goes when the art side deletes those leftovers (`docs/SCENE_CONTRACT_GAMEPLAY.md`).
 
-Everything ChatGPT needs to draw every character in the game. Work through it batch by batch, and **send each place's files to Claude as soon as that place is done**: Claude cuts the images out, lines them up, bakes the hair colours, names them for the game and tests them in Unity. A mistake that repeats (square images, a drifting mannequin, a colour the cut-out eats) then costs a few images instead of a whole batch. The game already runs on coloured placeholder shapes, and every finished file replaces its placeholder the moment it lands, so each place makes the game look better straight away.
+Everything ChatGPT needs to draw every character in the game. "Time Sorter" is set in a 3D office; the travellers are flat 2D figures, built from layers, standing behind its desk. Work through the brief batch by batch, and **send each place's files to Claude as soon as that place is done**: Claude cuts the images out, lines them up, bakes the hair colours, names them for the game and tests them in Unity, in the game's office. A mistake that repeats (square images, a drifting mannequin, a colour the cut-out eats) then costs a few images instead of a whole batch. The game already runs on coloured placeholder shapes, and every finished file replaces its placeholder the moment it lands, so each place makes the game look better straight away.
 
-Files that go with this brief (all in this folder):
+Files that go with this brief (all in this folder, except the office screenshot):
 
+- `{OFFICE_REF}`: a screenshot of the game's office that Saleh takes once (Unity's Game view at 1920 x 1080, the office with no traveller at the desk, saved as a PNG). It is a **style reference only**: ChatGPT matches its colour range and contrast so the figures sit in that room, and never draws the room. Attach it where a prompt's "Attached:" line names it.
 - `character_guide_v2_1024x1536.png`: the figure guide. Attach it in Batch 1.
 - `mannequin_m.png` and `mannequin_f.png`: Claude makes these from your approved Batch 1 figures.
-- `style_card.png`: Claude makes it from the approved pilot (Batch 1, Step 4). Every garment prompt attaches it from then on as a style reference.
+- `style_card.png`: Claude makes it from the approved pilot (Batch 1, Step 4). Every garment prompt and the premade prompt (9.10) attach it from then on as a style reference.
 - `premadebase_m_skin[N].png` and `premadebase_f_skin[N].png`: Claude makes these after Batch 2 (the approved body and head of each skin tone, lined up). The premade prompts attach them.
 - `CHATGPT_MESSAGE.md`: the short message that starts the work.
-- `UI_ART_RULES.md`: the rules for desktop wallpapers, posters and other UI art (a separate track).
+- `UI_ART_RULES.md`: the rules for the desktop wallpapers, the 2D layers over the office (the PC frame, the speech bubble, the paper faces) and other UI art (a separate track).
 - `coverage.json`: every file name the game needs, so the delivery can be checked by a script.
 
 Attach whatever each prompt's "Attached:" line names.
 
+## What changed in v2.2 (2026-09-25): the ReStory style
+
+v2.1 named the 2D customers of *ReStory: Chill Electronics Repairs* as its reference, then steered away from them: realistic proportions, a ban on large heads and eyes, and a ban on anime styling in Showa Tokyo's DO NOT DRAW. ReStory's customers are cute 2D anime-style characters with a soft, rounded, illustrative look, standing in a detailed 3D shop. That is this game's own set-up (flat 2D travellers in a 3D office), and the art side now cel-shades the office's desk props (`NOPE/Desk Anime`). Saleh asked for that style for both kinds of character: the generated travellers and the premades. Every change:
+
+1. **The style (section 2, Block A, Block P).** The shared STYLE text of both blocks is rewritten: cute, soft 2D anime-style characters (expressive anime eyes, larger than realistic, with one simple highlight; a small, simple nose and mouth; clean rounded face shapes; hair in clean stylised shapes and locks), flat cel colours with one hard-edged shade tone, the same dark-brown outline and the same neutral, even front lighting. Adults who look their age, never chibi. No manga symbols (sweat drops, anger marks, blush lines); section 10 says so too.
+2. **One cast.** The style applies the same way to both kinds of character, and section 2 and both blocks say so: the same eyes, line, shading and colour treatment, so a premade never stands out from a generated traveller at the desk. The premade prompt (9.10) now attaches the style card too, and Claude compares each premade with the pilot's Athens travellers (section 11).
+3. **The proportions do not change.** The head size and body proportions stay the figure guide's and `LookCanvas`'s (the mannequins, every layer and the passport crop depend on them): the style changes the face and the rendering only. Batch 1, Step 1 now rejects a base figure whose head is too big for its body.
+4. **Faces stay distinct.** Section 7 and prompts 9.1 and 9.3 say how faces a to d differ (cheeks and chin, eye shape, brows, nose, the lines of age) inside face a's head outline, which Batch 2 still requires. The skin tones stay exactly their swatches (the style never lightens a darker skin), and every culture gets the same style.
+5. **Premade expressions** (prompt 9.11, Block P): anime-expressive but dignified, because they are real people; each premade keeps the features its description gives (Socrates' snub nose and full lips, for example).
+6. **Showa Tokyo.** Its DO NOT DRAW bans "cosplay, idol-costume or anime-costume cliches" in place of the old anime ban, which would now ban the style itself, and adds "a school-uniform look": in this style its office outfit (a blouse with a bow at the collar and a pleated skirt) could drift into one. Every other DO NOT DRAW and review line was checked against the new style; none contradicts it.
+7. **`CHATGPT_MESSAGE.md` and `README.md`** carry the new style rules; the first image is still the bald base man, now in this style.
+
+Nothing else changes: the layers, canvas and landmarks, the green background and colour rules, the leak items and MUST READ lines, section 1's desk view and sizes, the file names, the batch order and files, and every key in `coverage.json`.
+
+## What changed in v2.1 (2026-09-25): revised for the 3D office
+
+The v2 brief was written for the old flat 2D booth. The game now runs in the art side's Blender-made 3D office, with the travellers as flat 2D layered figures standing behind its desk. Every change, decided by Claude under Saleh's "go with all pieces, don't stop" (open to his review):
+
+1. **The framing (D1).** Block A, Block P, `CHATGPT_MESSAGE.md` and the `UI_ART_RULES.md` set-up say it: "Time Sorter" is set in a 3D office and the travellers are flat 2D figures standing at the desk. A screenshot of the office, `{OFFICE_REF}`, is attached as a **style reference only** (its colour range and contrast, so the figures sit in the room; the room is never drawn). The flat style, the outlines, the neutral even lighting and the green background are unchanged. "Unity adds time-of-day light" is replaced by what the game does: it stands the flat, unlit figure in the lit room and tones it to the room's light.
+2. **Where the player sees a traveller (D2).** Section 1's "shown three ways" and the Visitor window (270 x 406 px) are replaced by a table of the three places a traveller appears: the office view (head to waist, measured sizes), the passport photo, and the Look menu (names only). Nothing shows the whole figure. The layers stay whole figures on the same 1024 x 1536 canvas (the contract is unchanged; a walk-in or a moved anchor may show more later), but nothing that identifies a look relies on the lower body, and every identifying item must read at the measured head size. Section 3's canvas table, section 6's accessory row, prompts 9.4 and 9.8 and the checklist say so.
+3. **Leak items the desk can see (D3).** Every leak item now sits on the head, face, neck, shoulders or upper chest. Five sat below the desk; each was replaced or moved (details and sources in Appendix F):
+   - Ottoman Ioannina, woman: the **pafti buckle** (waist) becomes **silver chest chains** (the pafti stays drawn, closing the outfit's belt);
+   - Tokugawa Edo, woman: the **Nagoya-obi** (hips) becomes the **kazuki veil**, a kosode worn over the head (the Nagoya-obi stays drawn, in the outfit);
+   - Beijing 1972, woman: the **khaki satchel** (hip) becomes the **navy cap**, the same cap as the men's (the satchel stays drawn, not leakable);
+   - Metapolitefsi Athens, man and woman: the **tagari bag** stays the leak item but is drawn high against the side of the chest on a short strap;
+   - Eastern Han Luoyang, woman: the **bi-disc pendant** (mid-chest, borderline) moves up to the upper chest.
+   Every MUST READ line now names only what shows above the desk ({N_MUST_V21} rewritten; the lower body stays in the outfit lines, because it is still drawn), and `tools/data_v2.py` fails on a leak accessory or a MUST READ line that names a lower-body feature.
+4. **The game matches (D4).** The same leak-item change is in `Assets/Data/World/world_source.json` (the piece-4 wardrobe that `worldSourceWardrobe` mirrors): the three changed signatures, their labels and `leakable` flags, the Costume Guide rows (Culture values) they give, one new hand-authored confusable pair and {N_HID_V21} generated ones (Appendix D).
+5. **UI art (D5).** `UI_ART_RULES.md`: the 3D-office framing; wallpapers become 4:3 (1440 x 1080, from ChatGPT's 1536 x 1024); posters leave the ChatGPT prompts and the delivery list (the office has no poster); a new section on the 2D layers over the office (the PC frame, rendered from the Blender CRT by preference, the speech bubble, the paper faces); the 3D props the Blender side makes (the scanner).
+6. **The 2D booth is gone from the text (D6).** Pixels-per-unit and world-unit instructions, "the booth rework", the `traveller.png` sentence, "Claude checks the booth", the Visitor window and Appendix E's poster question are removed or replaced. `coverage.json` `officeArt` lists the 4:3 wallpapers and marks the posters deferred; its canvas gains the measured desk view.
+
+**Open questions for Saleh (v2.1)**
+
+1. **The desk hides less than thought.** Measured at the default traveller anchor, the NEXT sign's top edge cuts the figure at the **waist** (canvas y {DESK_VISIBLE_TO}), not mid-chest: the whole chest shows. The brief still keeps identity above mid-chest (y {READ_ZONE_TO}), because papers held up to read (piece 10) cover the figure's sides from there down and the Look menu's "< Back" button sits over the neck while it is open. Keep that margin?
+2. **The tagari.** Worn high on the chest it is less typical than at the hip, where the research and v2 put it. Accept, or pick another Greek 1975 item (none passed the checks: Appendix F)?
+3. **The kazuki and the women's navy cap** add headwear to two looks that had none (both historically attested: Appendix F). Accept?
+
 ## What changed since v1
 
-- **Style.** Clean, simple 2D characters with flat colours and very little texture, and **neutral, even lighting** (Unity adds time-of-day light). v1 asked for painterly shading lit from the top-left.
+- **Style.** Cute, soft 2D anime-style characters (since v2.2) with flat cel colours and very little texture, the same for travellers and premades, and **neutral, even lighting** (the game stands the flat figure in its 3D office and tones it to the room's light). v1 asked for painterly shading lit from the top-left.
 - **File names follow the game's key grammar** (section 8). Hair and facial hair come out in five baked colours (Claude makes them from your medium-brown drawing). The Future uses the same pattern as every other era (`outfit_m_china_future`), and all Future travellers share one neutral hairstyle.
 - **A hair-back layer.** Hair that shows beside the neck behind the shoulders is split off by Claude and drawn behind the body, so it never covers a collar or shawl.
 - **All 68 data fixes and all 22 practicality fixes from the v1 review are in** (Appendices A to C say how, and the few that were adapted and why).
@@ -276,25 +361,42 @@ Attach whatever each prompt's "Attached:" line names.
 
 ## 1. How characters work in the game
 
-- **Two kinds of character.** *Generated* travellers are built from layers, so the game can make thousands of different people. *Premade* characters (named historical people) are drawn whole, with four expressions.
+- **Two kinds of character.** *Generated* travellers are built from layers, so the game can make thousands of different people. *Premade* characters (named historical people) are drawn whole, with four expressions. Both kinds share one style (section 2), so they look like one cast.
 - **The layers, bottom first:** hair back, body, outfit, head, facial hair, hair, headwear, accessory. You draw seven kinds of image; Claude makes the hair-back layer from your hair drawing.
-- **Every layer is a full 1024 x 1536 image with the figure in exactly the same spot**, so the game stacks them with no adjusting. The same stack is shown three ways: standing at the booth, in a **Visitor window** on the desk computer (the figure is about 270 x 406 px there, so every item must read at that size), and as the **passport photo**, a head-and-shoulders crop of the same stack.
-- **Every country and era has its own look.** Honest travellers wear only their claimed place's look. A liar's disguise leaks exactly **one** item from their real home, like a Victorian top hat on someone claiming to be from Edo Japan. The player clicks that garment and compares it with a new reference book, the **Costume Guide**, which lists one "leak item" per gender for each place. That is why every look has LEAK ITEMS: they must be instantly recognisable, different from every other place's, and make sense on their own over any other place's clothes.
+- **Every layer is a full 1024 x 1536 image with the figure in exactly the same spot**, so the game stacks them with no adjusting.
+- **Every country and era has its own look.** Honest travellers wear only their claimed place's look. A liar's disguise leaks exactly **one** item from their real home, like a Victorian top hat on someone claiming to be from Edo Japan. The player picks that garment by name in the traveller wheel's Look menu and compares it with a reference book on the office PC, the **Costume Guide**, which lists one "leak item" per gender for each place. That is why every look has LEAK ITEMS: they must be recognisable at the desk's size (below), different from every other place's, and make sense on their own over any other place's clothes.
 - **A worn item can hide another.** A turban, hood or veil that hides all the hair (its PAIR line says so) means the game draws no hair under it, so its edge must come down to the hairline.
 - **Skin and hair colour never give anyone away.** The game picks them from the place the traveller *claims* to be from (and turns hair grey from age 60). Only culture (clothes, hairstyle, headwear, accessories) can be a clue.
 - **The traveller's job never changes the look.** Soldiers, scientists and merchants all wear civilian dress.
 
+### Where the player sees a traveller
+
+The game is set in the art side's 3D office. A traveller is the stack of flat 2D layers, standing behind the desk as a billboard 1.8 m tall (soles to the top of the head), turned to face the camera and toned to the room's light. Sizes are measured at the default traveller anchor, at 1920 x 1080 (and 1280 x 720; they scale with the screen height only).
+
+| Where | What the player sees | Size at 1920 x 1080 (1280 x 720) |
+|---|---|---|
+| **The office view**, from the moment the traveller is called until the decision | The figure from the headroom (tall hats) down to the **waist**: the NEXT sign and the desk hide everything below (canvas y {DESK_VISIBLE_TO}). Papers held up to read (from piece 10) cover the figure's sides from about mid-chest (canvas y {READ_ZONE_TO}) down, and while the wheel's Look menu (or another sub-menu) is open, its "< Back" button sits over the neck and collar. | The head (top of the head to the chin) about **{D1080['head']} px** tall and {D1080['face']} px wide ({D720['head']} x {D720['face']}); top of the head to the shoulders {D1080['head_to_shoulders']} px ({D720['head_to_shoulders']}); the shoulders {D1080['shoulders']} px wide ({D720['shoulders']}). One canvas pixel is about {D1080['px']} screen pixels ({D720['px']}): the 2-3 px outline shows as about 1 px, and a detail thinner than a finger (about 12 canvas px) is lost. |
+| **The passport photo**: on the passport paper on the desk, on its scanned copy on the PC, and (from piece 10) on the paper held up close to read | The head-and-shoulders crop (362, 215) to (662, 590) of the same stack: head, neck, shoulders and upper chest. | On the desk paper about {D1080['photo_desk']} px, lying flat (not for reading); on the scanned copy in the open PC frame about {D1080['photo_pc']} px ({D720['photo_pc']}); on a held paper about {D1080['photo_held']} px ({D720['photo_held']}), and up to {D1080['photo_beside']} px beside the PC frame. |
+| **The Look menu** on the traveller wheel | No picture: every worn garment is listed by its label ("sakkos snood", "petasos hat"); choosing one puts it into the PC's compare bar, to compare with the Costume Guide. | – |
+
+**Nothing shows the whole figure.** The Visitor window of the first design was dropped (the piece-4 amendments, K1). Still draw every layer as a whole figure, down to the feet, on the same 1024 x 1536 canvas: the art contract is unchanged, and a walk-in or a moved traveller anchor may show more later. But **nothing that identifies a look may rely on the lower body**: every LEAK ITEM and everything a MUST READ line names sits on the head, face, neck, shoulders or upper chest, in bold shapes that read when the head is only {D1080['head']} px tall (a leak item is at least a palm across).
+
 ## 2. The look
 
-The reference is the 2D customers who walk up to the counter in *ReStory: Chill Electronics Repairs*: clean, soft, friendly 2D characters. We go **simpler** than that: flat colours, one soft shade tone, almost no texture. Never name any game in a prompt; Block A describes the look in words, and a named game pulls ChatGPT towards that game's look.
+The reference is the 2D customers who walk up to the counter in *ReStory: Chill Electronics Repairs*: cute, soft 2D anime-style characters with a rounded, illustrative look, standing in a detailed 3D shop. That is this game's set-up too (flat 2D travellers in a 3D office), and the art side already shades the office's desk props with an anime cel shader (`NOPE/Desk Anime`: `ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/ANIME_SHADER.md`). So the characters follow ReStory's customers: anime faces, flat cel colours, almost no texture. Never name any game in a prompt; Block A describes the look in words, and a named game pulls ChatGPT towards that game's look.
 
-- **Shapes and faces:** soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature of any people.
-- **Textures:** flat colour areas, each with one soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photo detail. Patterns (stripes, checks, borders, embroidery) are clean, bold, flat shapes that still read when the figure is 270 px tall.
+- **One cast, two kinds.** The style is the same for both kinds of character: the generated travellers, built from layers (Block A), and the premades, drawn whole (Block P, section 11). Both blocks carry the same STYLE text, written once by `tools/build_v2.py`, and both say the two kinds must look like one cast: the same eyes, line, shading and colour treatment, so a premade never stands out from a generated traveller at the desk.
+- **Faces and hair:** cute, soft and anime-style: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair in clean stylised shapes and locks. Adults who look their age, never chibi or childlike.
+- **Proportions: the guide's, exactly.** The head size and body proportions are fixed by the figure guide and the game's `LookCanvas` (section 3; the figure is about seven and a half heads tall): the mannequins, every layer, the premades and the passport crop depend on them. The style changes the face and the rendering, never the head size or the body.
+- **Reads small:** every look stays recognisable when the head is {D1080['head']} px tall (section 1). The anime face helps: big, clear eyes and simple, bold shapes survive at that size, where fine realistic features blur.
+- **Respect:** never a caricature of any people. The five skin tones stay exactly their swatches (the style never lightens a darker skin tone), and the four faces a to d stay clearly different in cheeks and chin, eye shape, brows and nose (section 7), because anime styling tends to give everyone the same face. Every culture gets this same style: no exoticised styling, and no cosplay or anime-costume cliches.
+- **Textures:** flat cel colours: each colour area has one hard-edged shade tone (the same hue, about 20% darker, with a crisp edge, never blended) and at most one small highlight. No fabric grain, brush or paper texture, noise or photo detail. Patterns (stripes, checks, borders, embroidery) are clean, bold, flat shapes that still read when the head is {D1080['head']} px tall (section 1).
 - **Outline:** a clean, even dark-brown line ({OUTLINE_HEX}, 2 to 3 px) around every piece and its main folds.
-- **Lighting: neutral and even.** Plain white light from the front. Shading only shows form (under the chin, inside folds, under a brim), the same on both sides. No light direction, rim light, glow, cast or ground shadow, and no warm or cool tint. Unity adds the time of day (morning sun, evening lamps) on top, so anything baked in would fight it.
+- **Lighting: neutral and even.** Plain white light from the front. Shading only shows form (under the chin, inside folds, under a brim), the same on both sides. No light direction, rim light, glow, cast or ground shadow, and no warm or cool tint. The game stands the flat, unlit figure in its lit 3D office and tones it to the room's light (a warm grey tint today), so any light baked into the drawing would fight the room's.
+- **The room:** `{OFFICE_REF}` shows the office the figures stand in. ChatGPT matches its colour range and contrast (so a figure never looks pasted in), never its lighting, and never draws the room.
 - **Colour:** gently muted, natural period dyes. Nothing neon.
-- **Pose:** front view, standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
-- **One style across about 40 chats.** After the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, plus a small swatch of folds, a pattern band and the outline weight. Every garment prompt attaches it as a style reference only, so line weight, shading depth and pattern scale stay the same in every chat.
+- **Pose and expression:** front view, standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer. The premades' other three expressions (prompt 9.11) are anime-expressive but dignified, because they are real historical people. No manga symbols on any face (sweat drops, anger marks, blush lines, sparkles, tears, speed lines).
+- **One style across about 40 chats.** After the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, plus a small swatch of folds showing their one hard-edged shade tone, a pattern band and the outline weight. Every garment prompt attaches it as a style reference only, and so does the premade prompt (9.10), so line weight, shading depth and pattern scale stay the same in every chat and in both Projects.
 
 ## 3. Canvas, pivot and the figure guide
 
@@ -308,7 +410,8 @@ Every layer (and every premade image) uses the same canvas and the same figure p
 | Safe area | x 120 to 904; nothing may cross it. Tall hats and hair may rise into the headroom above y = 260 |
 | Pivot | the feet: x = 512, y = 1490 (the game's pivot is 3% up from the bottom edge) |
 | Passport photo | crop (362, 215) to (662, 590), 4:5, head and shoulders; a tall hat is cut by the frame, which is fine |
-| Visitor window | the whole figure at about 270 x 406 px |
+| Office view (section 1) | the figure from the headroom to the waist (y {DESK_VISIBLE_TO}); the head about {D1080['head']} px tall at 1920 x 1080 ({D720['head']} px at 1280 x 720), one canvas pixel about {D1080['px']} screen pixels |
+| Read zone | everything that identifies a look sits above mid-chest (y {READ_ZONE_TO}): the head, face, neck, shoulders and upper chest |
 | Delivered file | RGBA PNG, 1024 x 1536, **untrimmed** (Claude never crops layers; the stack depends on it) |
 
 ChatGPT can't measure pixels, so the prompts refer to the guide's lines instead. Claude re-centres and rescales every image onto these landmarks before cutting it out, so a figure that comes out slightly big or off-centre is not a reason to reject it.
@@ -321,18 +424,22 @@ ChatGPT can't line up separate transparent images reliably. So every piece is dr
 
 1. Create a ChatGPT **Project** called "Time Sorter Characters".
 2. Paste **Block A** (below) into the Project's instructions.
-3. Keep the figure guide, and later the two mannequins and the style card, in a folder on your PC. In every message, use the paperclip to attach exactly the file(s) named on the prompt's "Attached:" line, even if they are also in the Project files. ChatGPT's drawing tool only reliably uses images attached to the message. Don't add finished pieces to the Project files, because ChatGPT copies details from them into other looks.
-4. Every prompt below ends with a size line ("{SIZE_LINE}"). Keep it: without it ChatGPT often answers with a square image, which the importer rejects and which costs a regeneration.
-5. Start a new chat for each PAIR block (each country and era). Long chats drift in style and mix up looks.
-6. Never ask ChatGPT to fix or tweak an image it made. If something is wrong, press Regenerate, or send the same prompt again with the original mannequin attached. Every edit redraws the whole picture, and the figure drifts further each time.
-7. Save every image with ChatGPT's own download button on a computer, so the file is a 1024 x 1536 PNG. Never screenshot, and never save from the phone app: JPG files blur the green and magenta edges Claude removes.
-8. **Send each place to Claude as soon as it is done** (its 5 to 9 files), even in the middle of a batch, and wait for Claude's go-ahead on the first place of every batch. The batches are only the planning unit.
-9. Premade characters are real people, so they are made in a **second Project**, "Time Sorter Premades", with its own instructions, Block P (section 11).
+3. Take `{OFFICE_REF}` once: in Unity, open the game's office, set the Game view to 1920 x 1080, and save a screenshot of the office with no traveller at the desk. It is a style reference only (section 2).
+4. Keep it, the figure guide, and later the two mannequins and the style card, in a folder on your PC. In every message, use the paperclip to attach exactly the file(s) named on the prompt's "Attached:" line, even if they are also in the Project files. ChatGPT's drawing tool only reliably uses images attached to the message. Don't add finished pieces to the Project files, because ChatGPT copies details from them into other looks.
+5. Every prompt below ends with a size line ("{SIZE_LINE}"). Keep it: without it ChatGPT often answers with a square image, which the importer rejects and which costs a regeneration.
+6. Start a new chat for each PAIR block (each country and era). Long chats drift in style and mix up looks.
+7. Never ask ChatGPT to fix or tweak an image it made. If something is wrong, press Regenerate, or send the same prompt again with the original mannequin attached. Every edit redraws the whole picture, and the figure drifts further each time.
+8. Save every image with ChatGPT's own download button on a computer, so the file is a 1024 x 1536 PNG. Never screenshot, and never save from the phone app: JPG files blur the green and magenta edges Claude removes.
+9. **Send each place to Claude as soon as it is done** (its 5 to 9 files), even in the middle of a batch, and wait for Claude's go-ahead on the first place of every batch. The batches are only the planning unit.
+10. Premade characters are real people, so they are made in a **second Project**, "Time Sorter Premades", with its own instructions, Block P (section 11).
 
 ### Block A: paste into the Project instructions
 
 ```
-You are drawing characters for "Time Sorter", a 2D game in which the player is a clerk at a time-travel border desk, checking the papers of travellers from many countries and eras. Every character is built from separate layers (body, head, outfit, facial hair, hair, headwear, accessory) that the game stacks on top of each other, so every layer must line up with the same figure.
+You are drawing characters for "Time Sorter", a game set in a 3D office in which the player is a clerk at a time-travel border desk, checking the papers of travellers from many countries and eras. The travellers are flat 2D figures standing at the desk. Every character is built from separate layers (body, head, outfit, facial hair, hair, headwear, accessory) that the game stacks on top of each other, so every layer must line up with the same figure.
+
+IN THE GAME
+{GAME_BULLETS}
 
 STYLE
 {STYLE_BULLETS}
@@ -363,22 +470,22 @@ When I send a PAIR block, reply only READY and draw nothing. After that, one ima
 | Hair | The hairstyle only, as seen from the front with any hat or veil taken off, fitted to the bald head (shaved parts stay magenta) | Face, headwear; a plait, braid or tail that hangs down the back (the body hides it) | 1 per gender per place |
 | Hair back | Made by Claude: the part of the hair that shows beside the neck behind the shoulders, moved behind the body | (you never draw it separately) | Only for loose long hair, a wide wig or a spread curtain of plaits |
 | Headwear | Hat, cap, veil, hood or headdress, sized to sit over a full head of hair; eyes, nose and mouth stay visible. One that hides all the hair (its PAIR line says so) comes down to the hairline, because the game draws no hair under it | Hair, face | When the look has one |
-| Accessory | One worn item that stands on its own on any outfit and hairstyle and reads at thumbnail size: a necklace, collar or pendant on its own chain or cord, a belt, sash or girdle and what hangs from it, a strap bag, a shawl or scarf, glasses, headphones, large earrings | Anything held in the hands; anything that hangs from, is tucked into, pins, closes or sits under another layer's item (a sash, belt, cloak, collar, pocket, hairstyle); rings, single or small earrings, small pins or badges | When the look has one |
+| Accessory | One worn item that stands on its own on any outfit and hairstyle and reads at the desk's head size (section 1): a necklace, collar or pendant on its own chain or cord, a belt, sash or girdle and what hangs from it, a strap bag, a shawl or scarf, glasses, headphones, large earrings | Anything held in the hands; anything that hangs from, is tucked into, pins, closes or sits under another layer's item (a sash, belt, cloak, collar, pocket, hairstyle); rings, single or small earrings, small pins or badges | When the look has one |
 
-A liar's leaked item is drawn over the claimed look, so every item must make sense on its own, on anyone. An item is never an absence ("clean-shaven", "bareheaded"): only real items can leak. For a leak item this is a hard rule: a brooch that pins "the cloak" or a pendant hanging from "the sash" would float in the air over another place's clothes.
+A liar's leaked item is drawn over the claimed look, so every item must make sense on its own, on anyone. An item is never an absence ("clean-shaven", "bareheaded"): only real items can leak. For a leak item this is a hard rule: a brooch that pins "the cloak" or a pendant hanging from "the sash" would float in the air over another place's clothes. A leak item also sits where the desk never hides it, on the head, face, neck, shoulders or upper chest (section 1): a belt, a sash round the waist or a bag at the hip can be an ordinary accessory, never a leak item.
 
 ## 7. Bodies, heads, skin tones, faces and hair colours
 
 **Skin tones** (5): """ + ", ".join(f"{n} {SKIN_WORD[n]} `{SKIN_HEX[n]}`" for n in SKINS) + f""". Every culture uses several tones; the game picks them by weights per place, so a skin tone never points to a country. ChatGPT gets the swatches in prompt 9.2, and Claude recolours bodies 2 to 5 from the approved tone-1 body to the same swatches, so heads and bodies agree.
 
-**Faces** (4), chosen by the traveller's age:
+**Faces** (4), chosen by the traveller's age. In the anime style (section 2) faces easily come out alike, so each face has its own cheeks and chin, eye shape, brows and nose. All four keep face a's head outline and feature positions (within a few pixels: Batch 2), because the beards, caps and glasses are fitted to them, so they differ inside that outline:
 
 | Face | Age | Drawn as |
 |---|---|---|
-| a | 18 to 34 | a young adult in their 20s |
-| b | 18 to 34 | a different young adult in their 20s |
-| c | 35 to 59 | middle-aged, 40s to 50s, a few lines |
-| d | 60 and over | elderly, 60s and up, wrinkles, lighter eyebrows (the game also turns the hair grey) |
+| a | 18 to 34 | {face_drawn('a')} |
+| b | 18 to 34 | {face_drawn('b')} |
+| c | 35 to 59 | {face_drawn('c')} |
+| d | 60 and over | {face_drawn('d')} (the game also turns the hair grey) |
 
 **Hair colours** (5, baked by Claude, never drawn by ChatGPT): black, brown, blond, red, grey. You draw every natural hairstyle and beard once, in medium brown; Claude masks any ornaments and bakes the five colours into five files. Wigs are costume and keep the colour you draw (one file, no variants).
 
@@ -414,15 +521,19 @@ Replace the parts in [square brackets]. For each place, start a new chat, send i
 ### 9.0 Starting a place
 
 ```
+Attached: {OFFICE_ATTACH}.
 [paste the PAIR block]
 Read this and reply only READY. Do not draw anything yet.
 ```
 
+Attach the office screenshot here once per chat; ChatGPT keeps it in mind for the rest of that place's images.
+
 ### 9.1 Base figure (Batch 1)
 
 ```
-Attached: character_guide_v2_1024x1536.png (the Time Sorter figure guide).
+Attached: character_guide_v2_1024x1536.png (the Time Sorter figure guide) and {OFFICE_ATTACH}.
 Draw a BASE FIGURE: a [man / woman] in their 20s, skin tone [1 very light], bald (no hair at all, smooth scalp), ears visible, no makeup, neutral expression, looking at the viewer.
+Face: {FACE_LOOK['a']}.
 Follow the guide's pose, proportions and landmark lines: the top of the head on the TOP OF HEAD line, the chin on the CHIN line, the soles of the feet on the bottom line, centred on the dashed centre line.
 Clothing: only [plain light-grey fitted shorts ending mid-thigh / a plain light-grey strapless bandeau covering only the bust, and plain light-grey fitted shorts ending mid-thigh]. Bare feet.
 Remove all guide lines, labels and the grey silhouette. Flat pure green #00FF00 background.
@@ -443,7 +554,7 @@ Claude keeps only the head from these; the bodies for tones 2 to 5 are recoloure
 
 ```
 Attached: my approved base figure base_[m / f]_skin[N]_facea.png.
-Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [b: a different young adult in their 20s / c: middle-aged, 40s to 50s, a few lines / d: elderly, 60s and up, wrinkles, lighter eyebrows]. Still bald, ears visible, no makeup, neutral expression, looking at the viewer. Do not move, turn or resize the head.
+Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [""" + " / ".join(f"{v}: {face_drawn(v)}" for v in FACES[1:]) + f"""]. Still bald, ears visible, no makeup, neutral expression, looking at the viewer. Do not move, turn or resize the head, and keep its outline: only the cheeks and chin may be a little rounder or more defined, as described.
 {SIZE_LINE}
 ```
 
@@ -455,6 +566,7 @@ Each image shows the whole figure; Claude cuts the head out, lines it up on the 
 Attached: mannequin_[m / f].png (draw on this) and {STYLE_ATTACH}.
 From the PAIR block, draw ONLY the [man's / woman's] OUTFIT (all clothing and footwear) on the magenta mannequin, fitted to its body.
 Do not draw the face, hair, facial hair, headwear, accessory or any jewellery. The head stays magenta and uncovered: keep every collar and garment below the chin line, because anything drawn over the head is hidden by the head layer. Any part of the body the outfit does not cover stays magenta.
+Draw the whole outfit down to the shoes. Make the collar, shoulders and chest especially clear: in the game the desk hides the figure below the waist.
 {SIZE_LINE}
 ```
 
@@ -488,7 +600,7 @@ From the PAIR block, draw ONLY the [man's / woman's] HEADWEAR on the mannequin's
 
 ```
 Attached: mannequin_[m / f].png (draw on this) and {STYLE_ATTACH}.
-From the PAIR block, draw ONLY the [man's / woman's] ACCESSORY in its natural worn position on the body. It is worn, never held, and it stands on its own: do not draw a belt, sash, cloak or collar for it to hang from unless the accessory line names one as part of it. Make it big and bold enough to recognise when the whole figure is shown 270 px tall. Draw only what is seen in front of the body, and leave out anything that would hang down the back. Draw nothing else.
+From the PAIR block, draw ONLY the [man's / woman's] ACCESSORY in its natural worn position on the body. It is worn, never held, and it stands on its own: do not draw a belt, sash, cloak or collar for it to hang from unless the accessory line names one as part of it. Make it big and bold enough to recognise when the head is shown only about 40 to 60 px tall: a clear shape at least a palm across, with no detail that matters thinner than a finger. Draw only what is seen in front of the body, and leave out anything that would hang down the back. Draw nothing else.
 {SIZE_LINE}
 ```
 
@@ -503,7 +615,7 @@ Keep the magenta mannequin, the green background and the outfit's cut, fit and o
 ### 9.10 Premade character (Batches 3, 6 and 8)
 
 ```
-Attached: premadebase_[m / f]_skin[N].png (the lined-up base figure).
+Attached: premadebase_[m / f]_skin[N].png (the lined-up base figure), {STYLE_ATTACH} and {OFFICE_ATTACH}.
 Dress this exact figure as a complete PREMADE CHARACTER, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories: [the character's description from its batch section]. Hands stay open and empty. Neutral expression, looking at the viewer. Flat pure green #00FF00 background.
 Do not draw: [the character's "do not draw" line].
 {SIZE_LINE}
@@ -513,7 +625,7 @@ Do not draw: [the character's "do not draw" line].
 
 ```
 Attached: my approved premade_[id]_neutral.png.
-Keep everything exactly the same (pose, clothing, position, background) and change ONLY the facial expression to [happy: a warm, open smile / angry: lowered, frowning brows and pressed lips / worried: raised inner brows and a tight, uncertain mouth].
+Keep everything exactly the same (pose, clothing, position, background) and change ONLY the facial expression to [happy: a warm, open smile with softly curved, smiling eyes / angry: lowered, frowning brows, narrowed eyes and pressed lips / worried: raised inner brows, wide, uncertain eyes and a small, tight mouth]. Make it clear and expressive in the anime style, but dignified: no comic distortion of the face and no manga symbols (sweat drops, anger marks, blush lines, tears).
 {SIZE_LINE}
 ```
 
@@ -530,8 +642,10 @@ These hold for every image, on top of each PAIR block's own DO NOT DRAW list.
 - **No skin-colour tells:** never tie a skin tone or hair colour to a culture, never tint or shade skin inside an outfit, hair or headwear layer, never draw skin anywhere except on the base figures and heads, and never draw makeup on the heads.
 - **No held props:** hands stay open and empty.
 - **No caricature:** no stereotyped features, no "Hollywood" versions of a culture, no ragged or comic poverty.
+- **No manga symbols:** no sweat drops, anger marks, blush lines, sparkles, tears or speed lines on any face.
 - **No colour the cut-out eats:** no bright green, lime, magenta, pink, purple or violet; nothing see-through; no holes cut through fabric (lattice, perforation and laser-cut motifs are printed or stitched on solid cloth); no checkerboard.
 - **No lighting effects:** no glow, rim light, cast or ground shadow, or coloured mood light, and no shade painted onto the magenta mannequin.
+- **No room:** nothing from the office screenshot (no walls, desk, furniture, floor, window or its lighting); the background is always flat green.
 - **Nothing hanging behind the body** on hair, headwear and accessory layers (it can't be seen from the front and it lands in front of the outfit).
 """)
 
@@ -542,7 +656,7 @@ def wears(x):
     return f"{s['label']} ({SLOTWORD[s['slot']]})"
 w(f"""## 11. Premade characters (set-up and cast)
 
-Premade characters are drawn **whole**: one finished image per expression (neutral, happy, angry, worried), on the lined-up base figure `premadebase_[m/f]_skin[N].png` that Claude makes after Batch 2 (the approved recoloured body with the approved head, aligned to the landmarks). Claude registers every premade image to the same landmarks as the layers before delivering it, so the booth position and the passport crop match the generated travellers. The game swaps the four images as they talk.
+Premade characters are drawn **whole**: one finished image per expression (neutral, happy, angry, worried), on the lined-up base figure `premadebase_[m/f]_skin[N].png` that Claude makes after Batch 2 (the approved recoloured body with the approved head, aligned to the landmarks). Claude registers every premade image to the same landmarks as the layers before delivering it, so its place behind the desk and the passport crop match the generated travellers. The game swaps the four images as they talk.
 
 **A second Project.** Block A forbids any likeness of a real person, draws every hair in medium brown and works on a magenta mannequin; premades are real people, drawn whole, in their real hair colour. So they get their own Project:
 
@@ -555,7 +669,10 @@ All ten lived and died centuries ago, none was a ruler, and no photograph of any
 ### Block P: paste into the premades Project's instructions
 
 ```
-You are drawing the named historical characters of "Time Sorter", a 2D game in which the player is a clerk at a time-travel border desk. Each character is ONE whole image: a respectful portrait based on period descriptions, not a photo likeness. Every one of them lived and died centuries ago, and none was a ruler.
+You are drawing the named historical characters of "Time Sorter", a game set in a 3D office in which the player is a clerk at a time-travel border desk. The travellers are flat 2D figures standing at the desk. Each character is ONE whole image: a respectful portrait based on period descriptions, not a photo likeness. Every one of them lived and died centuries ago, and none was a ruler.
+
+IN THE GAME
+{GAME_BULLETS}
 
 STYLE
 {STYLE_BULLETS}
@@ -568,9 +685,11 @@ CHARACTERS
 - Draw each character on the attached base figure, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories.
 - Draw hair, beards and wigs in the colour the description gives (grey for an elderly character).
 - Dress each character exactly as described: the civilian dress of their own place and time.
+- Draw every face in the shared style, but keep the features its description gives (such as a snub nose, full lips, a firm jaw or the lines of age): they make each person recognisable.
+- Each character's first image has a neutral expression. When I ask for happy, angry or worried, change only the expression: anime-expressive but dignified, because these are real people. Show feeling through the eyes, brows and mouth only; no comic distortion and no manga symbols.
 ```
 
-**Rules for every premade:** the same style, canvas, neutral lighting, green background and "do not draw" rules as everyone else; period-accurate civilian dress of their claimed place and moment, **including that place's Costume Guide item for their gender** (in the Visitor window a premade's "Period dress" carries the claim's Costume Guide value, and from day 3 the player compares dress with the Guide, so an honest premade must look like its row); the age shown below; hands open and empty. Every description was checked against its place's ChatGPT DO NOT DRAW line and contradicts nothing in it; paste the premade's own "Do not draw" line with prompt 9.10.
+**Rules for every premade:** the same style as the generated travellers (section 2: one cast, with the same eyes, line, shading and colour treatment; Claude compares each premade with the pilot's Athens travellers at the desk, and one that stands out is redrawn), and the same canvas, neutral lighting, green background and "do not draw" rules as everyone else; period-accurate civilian dress of their claimed place and moment, **including that place's Costume Guide item for their gender** (the Look menu lists a premade's whole picture as one garment, "Period dress", valued with the claim's Costume Guide entry, and from day 3 the player compares dress with the Guide, so an honest premade must look like its row, and the item must show above the desk); anime-expressive but dignified expressions (prompt 9.11); the age shown below; hands open and empty. Every description was checked against its place's ChatGPT DO NOT DRAW line and contradicts nothing in it; paste the premade's own "Do not draw" line with prompt 9.10.
 
 **The cast** (Amendment A1: about half women, at most ten). The drawing descriptions are in Batches 3, 6 and 8 (sections 15, 18 and 20).
 
@@ -629,16 +748,16 @@ This small batch proves the pieces stack, the cut-out works and the style is rig
 - `base_m_skin1_facea.png`
 - `base_f_skin1_facea.png`
 
-**Send to Claude.** Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre. Claude splits each figure into a body and a head, recolours the approved body to the four other skin swatches (section 7), and sends back `mannequin_m.png` and `mannequin_f.png`. Keep them in your art folder.
+**Send to Claude.** Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre. Do reject one whose head is too big for its body (easy in this style: with the top of the head and the soles on their lines, the chin sits clearly below the CHIN line), because the head size is fixed. Claude splits each figure into a body and a head, recolours the approved body to the four other skin swatches (section 7), and sends back `mannequin_m.png` and `mannequin_f.png`. Keep them in your art folder.
 
 **Step 2.** In a new chat, send this PAIR block with prompt 9.0, then use prompts 9.4 to 9.8 for each file below it. The style card does not exist yet, so for this pilot only, attach the mannequin alone and leave the style card out of each prompt's "Attached:" line.
 
 {place_section(PILOT_PLACE, heading_level="####", send_line=False)}
 **Step 3 (stress test).** These try the risky cases (a hood over the head that hides all the hair, hair under a veil, a large dark-green area, a wig hanging behind the shoulders). In a new chat for each PAIR block (they are in Batches 4, 5 and 7): paste the Egypt medieval PAIR block and make `outfit_f_egypt_medieval.png` (add to the prompt: "Make the qamis deep bottle green.", so the green case is really tested), `hair_f_egypt_medieval.png`, `headwear_f_egypt_medieval.png`; paste the Japan ancient PAIR block and make `accessory_m_japan_ancient.png`; paste the Egypt ancient PAIR block and make `hair_f_egypt_ancient.png`. They count toward their own batches, which skip them.
 
-**Send to Claude.** Claude stacks everything in Unity (booth, Visitor window, passport photo). If the pieces line up and the style is right, go on. If not, we fix the prompts before making more.
+**Send to Claude.** Claude stacks everything in Unity: the figure behind the desk in the game's office, the passport photo, and the whole canvas. If the pieces line up and the style is right, go on. If not, we fix the prompts before making more.
 
-**Step 4 (style card).** Once the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, with a small swatch of folds, a pattern band and the outline weight, all on the green background. From now on every garment prompt (9.4 to 9.8) attaches it next to the mannequin, as a style reference only.
+**Step 4 (style card).** Once the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, with a small swatch of folds showing their one hard-edged shade tone, a pattern band and the outline weight, all on the green background. From now on every garment prompt (9.4 to 9.8) attaches it next to the mannequin, and every premade prompt (9.10) next to the base figure, as a style reference only.
 """)
 
 # ---------------------------------------------------------------- Batch 2
@@ -778,7 +897,7 @@ w("""## Checklist before you send a place to Claude
 - Each accessory stands on its own (no belt, sash or cloak drawn for it to hang from).
 - Lighting is flat and even: no bright side, no glow, no shadow on the ground.
 - No text, logos, flags, badges or insignia anywhere; coins are plain discs.
-- The LEAK ITEMS are clearly visible and match the description.
+- The LEAK ITEMS are clearly visible, match the description and sit on the head, face, neck, shoulders or upper chest; the collar, shoulders and chest read clearly (the desk hides the rest in the game).
 
 ## Totals
 
@@ -887,7 +1006,7 @@ The piece-4 plan authors each place's `wardrobe` block in `world_source.json` by
 
 Checked by `tools/data_v2.py`: every item label is at most 24 characters, ASCII and without "/"; every Culture value is at most 28 characters and unique; the full `Looks.LabelProblems` rule per gender (no two places share a signature label, and no item of any place, in any slot, carries another place's signature label); every accessory stands on its own (no "tucked", "hanging from the sash/belt", "pinning", "closing", "small").
 
-**Every item, per place and gender** (bold = the signature item, which is `leakable`; every signature passes spec C7: an item, readable at thumbnail size, standing on its own; flags in brackets):
+**Every item, per place and gender** (bold = the signature item, which is `leakable`; every signature passes spec C7: an item, readable at the desk's head size (section 1), standing on its own; since v2.1 every leak item sits on the head, face, neck, shoulders or upper chest; flags in brackets):
 
 | Place | g | Signature slot | Outfit | Hair | Facial hair | Headwear | Accessory | Culture value |
 |---|---|---|---|---|---|---|---|---|
@@ -936,13 +1055,14 @@ Day pools this implies: day 1 forced `senenmut` (slot 3); day 2 forced `socrates
 # ---------------------------------------------------------------- appendix E: the v2 review
 N_COVERS = sum(1 for p in W["places"] for g in GENDERS if p["wardrobe"][g]["covers"])
 N_BACK = sum(1 for p in W["places"] for g in GENDERS if p["wardrobe"][g]["back"])
-N_HAND_NEW = len(W["confusable"]) - 9  # v2 had 9 pairs
+N_HAND_NEW = len(W["confusable"]) - W["confusableAddedV21"] - 9  # v2 had 9 pairs; v2.1 pairs are not the review's
 N_HID = len(W["confusableHidden"])
+N_HID_V2 = N_HID - N_HID_V21  # the review's generated pairs (v2.1 added pairs under two new headwear items)
 REVIEW2 = [
-    (1, "high", "Poster delivered at 1024 x 1408 with the placeholder's PPU 100 renders about 13 times too big", "Applied", "UI_ART_RULES Posters and Delivery, coverage.json officeArt: the poster is scaled to 320 x 440 and its .meta set to 400 pixels per unit (0.8 x 1.1 world units, like `Assets/Art/Office/Placeholder/Posters/*`); the wallpaper's target is 1920 x 1080 (a stretched UI Image)."),
+    (1, "high", "Poster delivered at 1024 x 1408 with the placeholder's PPU 100 renders about 13 times too big", "Applied, then superseded (v2.1)", "UI_ART_RULES Posters and Delivery, coverage.json officeArt: the poster was scaled to 320 x 440 with its .meta at 400 pixels per unit (0.8 x 1.1 world units, the old booth's posters); the wallpaper's target was 1920 x 1080. v2.1: the 3D office has no poster (deferred) and the desktop wallpaper is 4:3, 1440 x 1080 (UI_ART_RULES)."),
     (2, "medium", "No `leakable` or `covers`; non-signature items have no labels", "Applied, adapted", f"Every item has a label and every signature is `leakable` (Appendix D); `data_v2.py` runs the full per-gender LabelProblems rule. `covers: [Hair]` on the {N_COVERS} headwear items that hide all the hair. Adapted: post-war Britain's headscarf and Abbasid Baghdad's veil show the front hair and side-curls, so they get no `covers` (the honest hair would vanish); instead, hair signatures read on the top of the head get generated confusable pairs under every such headwear."),
     (3, "medium", "Five signature items hang off another layer or are tiny", "Applied", "Bi-disc on its own cord round the neck, palm-wide; the Anglo-Saxon brooch face-wide at the shoulder with the cloak fastening itself; headphones round the neck with no cord or player; the Jugendstil brooch became a face-wide pendant on its own chain (label `Jugendstil pendant`); the lenza a finger-wide band with an eye-sized stone. The non-signature lines: finding 15."),
-    (4, "medium", "Confusable list incomplete", "Applied", f"Every signature checked against every same-gender item in its slot (`tools/confusable_candidates.txt`); {N_HAND_NEW} hand pairs added, including all seven the finding lists (the Caesar-crop ones through `covers` and the generated 'hidden under a hat' set, because every one of those claims wears a turban or a hat), plus {N_HID} generated pairs. Pair #19 is unreachable and not authored (reason in Appendix D). Two items were made clearer instead of paired: the petasos is undyed tan felt (apart from the black wide-brimmed hats of Bologna and Weimar) and the Ottoman Baghdad turban has bold checks."),
+    (4, "medium", "Confusable list incomplete", "Applied", f"Every signature checked against every same-gender item in its slot (`tools/confusable_candidates.txt`); {N_HAND_NEW} hand pairs added, including all seven the finding lists (the Caesar-crop ones through `covers` and the generated 'hidden under a hat' set, because every one of those claims wears a turban or a hat), plus {N_HID_V2} generated pairs. Pair #19 is unreachable and not authored (reason in Appendix D). Two items were made clearer instead of paired: the petasos is undyed tan felt (apart from the black wide-brimmed hats of Bologna and Weimar) and the Ottoman Baghdad turban has bold checks."),
     (5, "medium", "Premade descriptions break their place's DO NOT DRAW", "Applied", "Leonardo clean-shaven (the Milanese fashion of the 1490s; his look at 43 is unknown), Gutenberg clean-shaven in the Gugel (no likeness survives), Senenmut's pleated over-kilt removed; Strozzi replaced (finding 6). Section 11 keeps 'the place's list applies' and says every description was checked against it."),
     (6, "medium", "Honest premades don't wear their place's Costume Guide item", "Applied", "Leonardo red berretta, Gutenberg Gugel, Lanyer hat over coif, Ban Zhao bi-disc, Socrates petasos worn on the head (slung would hang behind him, unseen). Strozzi is swapped for Cecilia Gallerani (Sforza Milan, born 1473, an A1 candidate), whose portrait shows exactly the lenza; Strozzi is listed as an alternate. The cast table names each premade's item."),
     (7, "low", "The premade chat inherits Block A's hair colour and mannequin rules", "Applied", "Block P (section 11) has no mannequin, medium-brown or READY rule, and says to draw hair in the colour described."),
@@ -965,7 +1085,7 @@ REVIEW2 = [
     (24, "medium", "Errors surface only after a whole batch", "Applied", "Send each place (and each premade) as soon as it is done; wait for the go-ahead on the first place of every batch."),
     (25, "medium", "Walrus and curled-beard look-alikes", "Applied", "Eight walrus pairs and two curled-beard pairs (Byzantine beard; the Gugel hides most of a chest-length beard), and the walrus text made extreme."),
     (26, "medium", "Culture palettes invite flags", "Applied", "UI_ART_RULES avoid lists: Italy no green, white and red side by side; Germany no black-red-gold (and still no black-white-red); Japan no red sun or red disc."),
-    (27, "medium", "Poster PPU (same as finding 1)", "Applied", "Finding 1."),
+    (27, "medium", "Poster PPU (same as finding 1)", "Applied, then superseded (v2.1)", "Finding 1."),
     (28, "medium", "'Travel poster' primes lettering", "Applied", "'an illustrated wall print in a flat vintage-poster style, with no title area, no banner and no lettering of any kind'; 'no title band' in the checklist."),
     (29, "medium", "Future motifs cut holes through fabric", "Applied", "Printed or embroidered lattice and punch-card patterns, 'laser-cut-look stitched' line work on solid fabric; section 10 and prompt 9.9 ban holes."),
     (30, "medium", "Premades attach drifting skin 2 to 5 figures", "Applied", "Claude makes `premadebase_[m/f]_skin[N].png` after Batch 2; prompt 9.10 attaches it; Claude registers every premade image to the landmarks."),
@@ -999,7 +1119,28 @@ Also changed while applying them (same reasons): the Florentine women's brooch b
 2. **Hair under hats.** """ + str(N_HID) + """ generated confusable pairs keep the hair signatures (Caesar crop, Suebian knot, chasen-mage, nodus roll, sokuhatsu) from leaking invisibly under a claim's hat. Keep them as data, or add one `CanLeak` row and a `hidesTop` headwear flag to the piece-4 spec instead?
 3. **Headphones round the neck.** Showa Tokyo's men wore them on the head with a Walkman on the belt; the leak item now rests round the neck for both genders so it stands alone. Acceptable?
 4. **Leonardo and Gutenberg without beards.** Chosen to fit their places' rules and the historical record; their famous later images have beards, so they are harder to recognise. Acceptable, given that the name appears on their papers?
-5. **Poster size.** 320 x 440 at 400 pixels per unit matches the existing booth posters; the ChatGPT master is kept in `Raw/` if the booth rework wants more pixels. Or keep 1024 x 1408 at 1280 pixels per unit?
+5. **Poster size.** Closed in v2.1: the 3D office has no poster. When the art side adds a poster frame to the office, the poster becomes a texture in it, sized by that frame (UI_ART_RULES, "Posters: later").
+""")
+
+# ---------------------------------------------------------------- appendix F: v2.1, the 3D office
+def cv(pid): return P[pid]["cultureValue"]
+w(f"""## Appendix F. v2.1: the desk view and the leak items it can see
+
+**How the desk view was measured.** In the art office on `main` (d5844d0: the art scene of art 23aa6e1 with the gameplay layer), the office camera sits at (0, 2.16, -2.62), pitched 10 degrees down, with a vertical field of view of 55 degrees; the traveller stands at the default `Anchor_Traveller` (0, 0, 1.6), 1.8 m from the soles to the top of the head (`DeskConfigSO.travellerHeight`, `TravellerView.Stand`), a yaw-only billboard tinted (0.9, 0.88, 0.84). Projecting the `LookCanvas` landmarks through that camera gives the placeholder's hat top at y 407, the chin at 505 and the sleeve ends at 613 on a 1920 x 1080 screen; the layered placeholder in `p9_day2_bubble_hieroglyphs.png` (a screenshot of piece 9's play-through) shows them at 406.5, 505 and 609 to 613, so the projection holds. The head (the top of the head, y 260, to the chin, y 424) is {D1080['head']} px tall; the "about 85 px" read off that screenshot earlier was the top of the head to the shoulders ({D1080['head_to_shoulders']} px). The NEXT sign's top edge meets the figure at y 622 to 628 on screen, the waist line (canvas y {DESK_VISIBLE_TO} projects to 622), and the sign is as wide as the figure's hands. The field of view is vertical, so every size scales with the screen height ({D720['head']} px at 720 lines).
+
+**The rule.** A leak item sits on the head, face, neck, shoulders or upper chest (above y {READ_ZONE_TO}), is leakable over any other place's look, differs from every other place's signature (the candidate grid in `tools/confusable_candidates.txt`; `Looks.LabelProblems` in `tools/data_v2.py`), is respectful, and breaks no line of its place's DO NOT DRAW list. An item the look already has (its headwear or hair) was preferred when it passed those checks.
+
+| Place | Gender | v2 leak item (where) | v2.1 leak item | Why | Source |
+|---|---|---|---|---|---|
+| greece_earlymodern (Ottoman Ioannina) | woman | pafti buckle (Accessory, the waist: behind the NEXT sign) | **silver chest chains** (Accessory) | The look's headwear (cap and tsemberi) is already confusable with three other women's headwear (the sakkos, the mandil, the fesi), and its two front braids look like Iron Age Britain's; Epirote silverwork keeps Ioannina's identity where the desk shows it. The pafti stays drawn, as the buckle that closes the outfit's belt. A confusable pair with Renaissance Nuremberg's layered gold chains (the one similar item) keeps a hard-to-see leak out. | Greek women's chest ornaments of silver chains (for example the Benaki Museum's chest ornament of chains; the kioustekia of Greek costume) and Ioannina's filigree workshops ("Wearing Silver", The Athenian, 1990); back-projected to c. 1700 like the pafti itself, as the research's own note says. Drawn without crosses, saints' plaques or double-headed eagles (the place's DO NOT DRAW list bans crosses; Block A bans eagles). |
+| japan_earlymodern (Tokugawa Edo) | woman | Nagoya-obi (Accessory, the hips) | **kazuki veil** (Headwear, hides the top) | The look had no headwear, and its tamamusubi hair reads like Muromachi Kyoto's long tied-back hair from the front (its loop sits at the nape, out of view). Japanese women of 1610 wore no necklaces or earrings, and hairpins belong to later Edo (the DO NOT DRAW list). The kazuki, a patterned kosode draped over the head, is a big, dark, densely patterned shape unlike every other veil (all plain white, black or one colour). The Nagoya-obi stays drawn, in the outfit. | Women going out in the Momoyama and early Edo periods wore a kosode over the head as a veil (kazuki), as the genre screens the research already cites show; the Edo kazuki was worn with its collar pulled forward over the forehead (for example the Kyoto Prefectural Library and Archives, "The Costume of Edo-Period Japanese Women"). |
+| china_modern (Beijing 1972) | woman | khaki satchel (Accessory, the hip) | **navy cap** (Headwear, hides the top) | The women's look had no headwear, and its clipped bob reads like Weimar Berlin's Bubikopf; the plain cloth peaked cap of the men's look was worn by men and women alike with the Zhongshan suit. Among the women's headwear it has no look-alike (the Weimar cloche is a low bell hat without a peak). The satchel stays drawn as the women's accessory (not leakable). The Culture value becomes one item for both genders: "{cv('china_modern')}". | The research's own sources (1970s documentary photographs of Beijing; the suit "worn by men and women alike") and "Dress in Communist China" (Fashion, Costume, and Culture: men and women wore the same garments, with cloth peaked caps). Plain, with no star or badge (DO NOT DRAW). |
+| greece_modern (Metapolitefsi Athens) | man and woman | tagari bag (Accessory, the front of the hip) | **tagari bag**, drawn high: a short, broad striped strap across the chest and the bag against the left side of the chest, its top level with the armpit | No head or neck item of Athens 1975 passes the checks: the thick moustache and the shaggy cut look like other places' moustaches and cuts, the fisherman's cap is Beijing's and London's cap (the research dropped it for that), and worry beads are held. The tagari is the research's single Greek item for both genders, so it stays and moves up. | The research: the tagari was so emblematic of 1970s Athenian students that it named them. Worn higher than it usually was (open question 2 of v2.1). |
+| china_ancient (Eastern Han Luoyang) | woman | bi-disc pendant (Accessory, mid-chest: borderline) | **bi-disc pendant**, raised to the upper chest (its centre about a hand below the collarbones) | It shows above the desk at mid-chest, but papers held up to read (piece 10) reach mid-chest, so it moves up to clear them. The label and the Culture value are unchanged ("{cv('china_ancient')}"), so the game data does not change; Ban Zhao's description moves it up too. | Unchanged (it hangs on its own cord round the neck since the v2 review, finding 3). |
+
+**The Culture values (Costume Guide rows) that change:** Ottoman Ioannina "{cv('greece_earlymodern')}"; Tokugawa Edo "{cv('japan_earlymodern')}"; Beijing, People's Republic "{cv('china_modern')}". Metapolitefsi Athens and Eastern Han Luoyang keep theirs.
+
+**MUST READ lines.** {N_MUST_V21} lines named or led with a feature below the desk (such as calcei boots, knee-tied trousers, hakama, the fustanella, Schnabelschuhe, leg bindings, knee- and ankle-length garments, skirts, the pafti and the Nagoya-obi, or a long garment's silhouette), or did not name the leak item that replaced one; each now names only what shows above the desk. The lower-body description stays in the outfit lines, because every layer is still drawn whole.
 """)
 
 brief = "\n".join(out)
@@ -1047,18 +1188,23 @@ assert sorted(produced) == sorted(flat), (set(flat) - set(produced), set(produce
 
 cov = {
     "schema": "timesorter.character-art-coverage/1",
-    "generated": "2026-09-24",
+    "generated": "2026-09-25",
     "sources": {
         "grammar": "piece-4 spec section 2.3 (LookKeys) + piece-5 R18 (artNation 'neutral' for Future hair and facial hair)",
         "wardrobe": "costume_research.json + brief_review.json (68 fixes, 22 issues) -> tools/wardrobe_v2.json",
         "premades": "piece4_decisions.md Amendment A1 (cast after the review of brief v2: Cecilia Gallerani replaces Alessandra Strozzi)",
         "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E",
+        "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'",
     },
     "assetFolder": "Assets/Art/Characters/Resources/Characters",
     "extension": ".png",
     "canvas": {"width": 1024, "height": 1536, "format": "RGBA PNG, untrimmed", "pivot": {"x": 512, "yFromTop": 1490},
                "landmarksFromTop": {"headTop": 260, "chin": 424, "shoulders": 500, "waist": 760, "hips": 900, "knees": 1170, "feet": 1490},
-               "safeX": [120, 904], "photoCrop": [362, 215, 662, 590]},
+               "safeX": [120, 904], "photoCrop": [362, 215, 662, 590],
+               "officeView": {"visibleFromTopTo": DESK_VISIBLE_TO, "readZoneTo": READ_ZONE_TO,
+                              "headPx": {"1080": DESK[1080]["head"], "720": DESK[720]["head"]},
+                              "screenPxPerCanvasPx": {"1080": DESK[1080]["px"], "720": DESK[720]["px"]},
+                              "note": "the figure behind the desk at the default Anchor_Traveller: the NEXT sign cuts it at the waist; every leak item sits above readZoneTo (the brief's section 1)"}},
     "skinSwatches": {str(n): {"name": SKIN_WORD[n], "hex": SKIN_HEX[n]} for n in SKINS},
     "outlineHex": OUTLINE_HEX,
     "grammar": {
@@ -1098,19 +1244,28 @@ cov = {
         "wardrobeFlags: 'labels' holds every present item's short label; the signature item is leakable; 'covers' is the headwear's covers list (['Hair'] when it hides all the hair); Future places share hair and facial hair through artNation 'neutral' and never leak (signature Outfit).",
         "Confusable pairs (hand-authored and generated) are in tools/wardrobe_v2.json 'confusable' and 'confusableHidden'.",
         "outfit_{g}_neutral_future.png raw files are working references with no game key.",
-        "UI art (culture wallpapers and posters) is listed in officeArt, not in requiredFlat: it follows the office path convention (piece-6 R11).",
+        "UI art (the culture wallpapers; posters are deferred) is listed in officeArt, not in requiredFlat: it follows the office path convention (piece-6 R11). officeArt also names the 2D layers over the office and the art side's scanner, which replace placeholders in place.",
     ],
     "officeArt": {
         "convention": "fixed path, replaced in place (piece-6 R11); raw ChatGPT masters go to ArtDeliverables/TimeDesk/Culture/Raw/",
-        "files": [f"Assets/Art/Culture/{c}/wallpaper.png" for c in COUNTRIES] + [f"Assets/Art/Culture/{c}/poster.png" for c in COUNTRIES],
-        "wallpaper": {"raw": "1536 x 1024 from ChatGPT; crop the middle 1536 x 864 (16:9)", "final": [1920, 1080],
-                      "import": "keep the placeholder's .meta (Sprite, no mipmaps); it is a stretched uGUI Image, so its pixels per unit do not matter",
-                      "placeholder": [960, 540]},
-        "poster": {"raw": "1024 x 1536 from ChatGPT; trim to the middle 1024 x 1408 (8:11)", "final": [320, 440],
-                   "spritePixelsToUnits": 400, "worldSize": [0.8, 1.1],
-                   "import": "the generated placeholder is 80 x 110 at 100 pixels per unit (0.8 x 1.1 world units); when the 320 x 440 art replaces it, set spritePixelsToUnits to 400 in the same .meta so the world size stays 0.8 x 1.1, as for Assets/Art/Office/Placeholder/Posters/* (320 x 440 at 400)",
-                   "placeholder": [80, 110], "placeholderPixelsPerUnit": 100},
-        "optional": [{"path": "Assets/Art/Generated/xp_bliss.png", "size": [1920, 1080], "note": "neutral wallpaper, exists"},
+        "files": [f"Assets/Art/Culture/{c}/wallpaper.png" for c in COUNTRIES],
+        "wallpaper": {"raw": "1536 x 1024 from ChatGPT; crop the middle 1365 x 1024 (4:3; about 85 px off each side)", "final": [1440, 1080],
+                      "aspect": "4:3, the desktop canvas (OfficeSceneUIBuilder DesktopSize 1440 x 1080); the wallpaper Image envelopes it (AspectRatioFitter EnvelopeParent, overflow clipped), so a 16:9 image loses its sides",
+                      "quietShares": {"left": 0.2, "top": 0.13, "bottom": 0.04},
+                      "quietWhy": "the desktop icons in two columns at the left (0.5% to 17% of the width), the claim banner over the top 13% while a traveller is at the desk, the taskbar along the bottom (36 of 1080 units); the desktop is also cloned small on the office CRT (1024 x 768, letterboxed)",
+                      "import": "keep the placeholder's .meta (Sprite, max size 2048, mipmaps on); the fitter takes the sprite's own aspect (CultureThemeService), so any aspect and pixels per unit work",
+                      "placeholder": [960, 540],
+                      "placeholderNote": "the 16:9 text-free placeholders Generate World wrote; it never writes over an existing file, so they are not regenerated; until the art lands they lose an eighth of their width on each side"},
+        "posters": {"status": "deferred",
+                    "note": "the 3D office has no poster frame: piece 6 deferred the culture posters to the office move (its S2 and F13), and the move added none; no poster.png exists. When the art side adds a poster frame (an anchor), the poster becomes a texture in it, sized by that frame"},
+        "overlay2d": [{"path": "Assets/Art/Office/Placeholder/pc_frame.png", "referenceSize": [1240, 1060], "suggested": [1860, 1590],
+                       "glassFromTopLeft": [60, 60, 1180, 900], "placeholder": [620, 530],
+                       "note": "the PC close-up bezel on the office overlay (PcFrame); a transparent 4:3 glass hole; render it from the Blender CRT by preference (UI_ART_RULES)"},
+                      {"path": "Assets/Art/Office/Placeholder/pc_close.png", "referenceSize": [64, 64], "placeholder": [48, 48], "note": "the frame's close X"},
+                      {"path": "Assets/Art/Office/Placeholder/crt_power.png", "referenceSize": [64, 64], "placeholder": [28, 28], "note": "the frame's power button (the LED stays a code-tinted white disc)"}],
+        "props3d": [{"anchor": "Anchor_Scanner", "owner": "art side (Blender)",
+                     "note": "the scanner model; until it exists the gameplay layer shows a stand-in flatbed (0.40 x 0.32 m) at the default pose (UI_ART_RULES)"}],
+        "optional": [{"path": "Assets/Art/Generated/xp_bliss.png", "size": [1920, 1080], "note": "neutral wallpaper, exists; 16:9, so the 4:3 desktop shows its middle 1440 x 1080"},
                      {"path": "Assets/Art/UI/Investigation/refbook_cover_culture.png", "size": [400, 560],
                       "note": "Costume Guide cover, text-free, like refbook_cover_currency.png; new file (+ .meta like the other covers)"}],
     },

@@ -13,7 +13,9 @@ using UnityEngine.SceneManagement;
 /// then moves the layer's click boxes onto the art's props and fits them to
 /// their renderers (the art objects get no components of ours), hands the
 /// props' renderers to their outlines and reactions, puts the desktop's clone
-/// on the PC's glass, sizes the desk and the scanner, stands the traveller,
+/// on the PC's glass, sizes the desk, its catcher and the scanner, hands the
+/// paper examiner the camera, poses the desk view from the art's Cinemachine
+/// camera and the mat, stands the traveller,
 /// binds the readouts to the art's texts (or shows the fallback HUD), and
 /// readies the office camera (a PhysicsRaycaster on the Interactable layer,
 /// the desktop's layer culled, its Cinemachine camera on top). Runs before
@@ -54,6 +56,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The overlay callouts (the speech bubble, the tooltip), placed through the office camera.</summary>
     [SerializeField] private OverlayCallout[] callouts;
 
+    /// <summary>Poses the papers held in the hand in front of the office camera (piece 10; optional).</summary>
+    [SerializeField] private PaperExaminer examiner;
+
+    /// <summary>The stamp tray (piece 10; optional), placed over the stamp's click box through the office camera.</summary>
+    [SerializeField] private StampTray stampTray;
+
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
     [SerializeField] private PcScreenClone screenClone;
@@ -76,6 +84,15 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
     /// <summary>Where papers slide in from and back to.</summary>
     [SerializeField] private Transform handOver;
+
+    /// <summary>The desk catcher's box (piece 10; optional): sized over the desk's clamp area, just under its plane, so papers and props above it win the raycast.</summary>
+    [SerializeField] private BoxCollider deskCatcher;
+
+    /// <summary>The mat's click box (the desk view's toggle; piece 10; optional): laid exactly like the desk catcher's.</summary>
+    [SerializeField] private BoxCollider matCatcher;
+
+    /// <summary>The desk view (piece 10; optional): posed from the art's Cinemachine camera and the mat.</summary>
+    [SerializeField] private DeskView deskView;
 
     /// <summary>The day-1 scan note (floats over the scanner, facing the camera).</summary>
     [SerializeField] private Transform scanHint;
@@ -135,10 +152,17 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>How far above the desk a hint floats (metres).</summary>
     private const float HintHeight = 0.28f;
 
+    /// <summary>The desk catcher's thickness and its top's depth under the desk plane (metres): papers and props above it win the raycast.</summary>
+    private const float DeskCatcherThickness = 0.001f;
+    private const float DeskCatcherDepth = 0.001f;
+
     /// <summary>The raycaster's hit buffer: a point can cross every stacked paper, the scanner, a prop and the traveller.</summary>
     private const int RaycastHits = 16;
 
     private Dictionary<OfficeAnchorId, ResolvedAnchor> _anchors;
+
+    /// <summary>The art's office Cinemachine camera when the office camera has a brain to blend it (the desk view needs both), else null.</summary>
+    private CinemachineCamera _officeVcam;
 
     private void Awake()
     {
@@ -179,6 +203,10 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         foreach (OverlayCallout callout in callouts ?? Array.Empty<OverlayCallout>())
             if (callout != null)
                 callout.SetCamera(office);
+        if (examiner != null)
+            examiner.SetCamera(office);
+        if (stampTray != null)
+            stampTray.SetCamera(office);
 
         Vector3 viewer = office.transform.position;
         BindPc(viewer);
@@ -217,7 +245,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
         Transform vcam = At(OfficeAnchorId.OfficeVCam).Transform;
         if (vcam != null && vcam.TryGetComponent(out CinemachineCamera office))
+        {
             office.Priority = 100;
+            if (cam.TryGetComponent(out CinemachineBrain _))
+                _officeVcam = office;
+        }
     }
 
     // -----------------------------
@@ -330,6 +362,21 @@ public sealed class OfficeSceneBinder : MonoBehaviour
                               new Vector2(deskRect.Width, deskRect.Height));
         }
 
+        var catcherCentre = new Vector3(area.CentreX, top - DeskCatcherDepth - DeskCatcherThickness / 2f, area.CentreY);
+        var catcherSize = new Vector3(area.Width, DeskCatcherThickness, area.Height);
+        if (deskCatcher != null)
+            PlaceBox(deskCatcher.transform, catcherCentre, catcherSize);
+        if (matCatcher != null)
+            PlaceBox(matCatcher.transform, catcherCentre, catcherSize);
+
+        if (deskView != null)
+        {
+            if (_officeVcam != null)
+                deskView.Bind(_officeVcam, deskCentre);
+            else
+                Debug.LogWarning("[OfficeSceneBinder] The art office has no Cinemachine camera with a brain on the office camera (Anchor_OfficeVCam): the desk view stays off. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
+        }
+
         if (handOver != null)
         {
             Vector3 from = At(OfficeAnchorId.HandOver).Position;
@@ -393,6 +440,8 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             }
 
             PlaceBox(prop.click, anchor, Vector3.zero);
+            if (prop.anchor == OfficeAnchorId.Stamp && stampTray != null)
+                stampTray.SetFollow(prop.click.transform);
             if (prop.click.TryGetComponent(out DeskReaction reaction))
             {
                 reaction.SetTarget(anchor.Transform);

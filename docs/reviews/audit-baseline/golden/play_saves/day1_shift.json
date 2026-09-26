@@ -1,0 +1,254 @@
+{
+    "version": 2,
+    "world": {
+        "day": 1,
+        "runSeed": 12345,
+        "money": 135,
+        "timelineStability": 95.0,
+        "totalCitations": 1,
+        "citationsToday": 1,
+        "endingId": "",
+        "legendaryChanceBonus": 0.0,
+        "forgeryChanceModifier": 0.0,
+        "payRateMultiplier": 1.0,
+        "unlockedUpgradeIds": [],
+        "flags": [
+            "premade:senenmut:met"
+        ],
+        "counters": [
+            {
+                "key": "sent:era:ancient",
+                "value": 5
+            },
+            {
+                "key": "sent:tag:merchant",
+                "value": 2
+            },
+            {
+                "key": "sent:tag:merchant:ancient",
+                "value": 2
+            },
+            {
+                "key": "sent:tag:trade",
+                "value": 2
+            },
+            {
+                "key": "sent:tag:trade:ancient",
+                "value": 2
+            },
+            {
+                "key": "sent:tag:economy",
+                "value": 2
+            },
+            {
+                "key": "sent:tag:economy:ancient",
+                "value": 2
+            },
+            {
+                "key": "sent:tag:artist",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:artist:ancient",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:art",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:art:ancient",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:culture",
+                "value": 3
+            },
+            {
+                "key": "sent:tag:culture:ancient",
+                "value": 3
+            }
+        ],
+        "timeline": {
+            "scores": [
+                {
+                    "key": "attr:greece_ancient:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:art",
+                    "value": 8.0
+                },
+                {
+                    "key": "nation:greece",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:egypt_ancient:art",
+                    "value": 2.0
+                },
+                {
+                    "key": "nation:egypt",
+                    "value": 2.0
+                },
+                {
+                    "key": "attr:iraq_ancient:art",
+                    "value": 4.0
+                },
+                {
+                    "key": "nation:iraq",
+                    "value": 4.0
+                }
+            ],
+            "activeEffects": [],
+            "dominantKeys": [
+                "egypt_ancient:art",
+                "egypt_medieval:art",
+                "egypt_earlymodern:art",
+                "egypt_industrial:art",
+                "egypt_modern:art",
+                "iraq_ancient:science",
+                "iraq_medieval:science",
+                "iraq_earlymodern:science",
+                "iraq_industrial:science",
+                "iraq_modern:science",
+                "greece_ancient:democracy",
+                "greece_medieval:democracy",
+                "greece_earlymodern:democracy",
+                "greece_industrial:democracy",
+                "greece_modern:democracy",
+                "italy_ancient:art",
+                "italy_medieval:art",
+                "italy_earlymodern:art",
+                "italy_industrial:art",
+                "italy_modern:art",
+                "china_ancient:science",
+                "china_medieval:science",
+                "china_earlymodern:science",
+                "china_industrial:science",
+                "china_modern:science",
+                "japan_ancient:science",
+                "japan_medieval:science",
+                "japan_earlymodern:science",
+                "japan_industrial:science",
+                "japan_modern:science",
+                "britain_ancient:democracy",
+                "britain_medieval:democracy",
+                "britain_earlymodern:democracy",
+                "britain_industrial:democracy",
+                "britain_modern:democracy",
+                "germany_ancient:science",
+                "germany_medieval:science",
+                "germany_earlymodern:science",
+                "germany_industrial:science",
+                "germany_modern:science"
+            ],
+            "supportingKeys": [
+                "egypt_ancient:democracy",
+                "egypt_ancient:science",
+                "egypt_medieval:democracy",
+                "egypt_medieval:science",
+                "egypt_earlymodern:democracy",
+                "egypt_earlymodern:science",
+                "egypt_industrial:democracy",
+                "egypt_industrial:science",
+                "egypt_modern:democracy",
+                "egypt_modern:science",
+                "iraq_ancient:democracy",
+                "iraq_ancient:art",
+                "iraq_medieval:democracy",
+                "iraq_medieval:art",
+                "iraq_earlymodern:democracy",
+                "iraq_earlymodern:art",
+                "iraq_industrial:democracy",
+                "iraq_industrial:art",
+                "iraq_modern:democracy",
+                "iraq_modern:art",
+                "greece_ancient:science",
+                "greece_ancient:art",
+                "greece_medieval:science",
+                "greece_medieval:art",
+                "greece_earlymodern:science",
+                "greece_earlymodern:art",
+                "greece_industrial:science",
+                "greece_industrial:art",
+                "greece_modern:science",
+                "greece_modern:art",
+                "italy_ancient:democracy",
+                "italy_ancient:science",
+                "italy_medieval:democracy",
+                "italy_medieval:science",
+                "italy_earlymodern:democracy",
+                "italy_earlymodern:science",
+                "italy_industrial:democracy",
+                "italy_industrial:science",
+                "italy_modern:democracy",
+                "italy_modern:science",
+                "china_ancient:democracy",
+                "china_ancient:art",
+                "china_medieval:democracy",
+                "china_medieval:art",
+                "china_earlymodern:democracy",
+                "china_earlymodern:art",
+                "china_industrial:democracy",
+                "china_industrial:art",
+                "china_modern:democracy",
+                "china_modern:art",
+                "japan_ancient:democracy",
+                "japan_ancient:art",
+                "japan_medieval:democracy",
+                "japan_medieval:art",
+                "japan_earlymodern:democracy",
+                "japan_earlymodern:art",
+                "japan_industrial:democracy",
+                "japan_industrial:art",
+                "japan_modern:democracy",
+                "japan_modern:art",
+                "britain_ancient:science",
+                "britain_ancient:art",
+                "britain_medieval:science",
+                "britain_medieval:art",
+                "britain_earlymodern:science",
+                "britain_earlymodern:art",
+                "britain_industrial:science",
+                "britain_industrial:art",
+                "britain_modern:science",
+                "britain_modern:art",
+                "germany_ancient:democracy",
+                "germany_ancient:art",
+                "germany_medieval:democracy",
+                "germany_medieval:art",
+                "germany_earlymodern:democracy",
+                "germany_earlymodern:art",
+                "germany_industrial:democracy",
+                "germany_industrial:art",
+                "germany_modern:democracy",
+                "germany_modern:art"
+            ]
+        },
+        "family": {
+            "members": [
+                {
+                    "name": "Partner",
+                    "condition": 0
+                },
+                {
+                    "name": "Kid",
+                    "condition": 0
+                }
+            ]
+        },
+        "tomorrow": {
+            "briefingLines": [],
+            "newsLines": []
+        },
+        "history": {
+            "leaderId": "",
+            "leaderSinceDay": 0,
+            "ranking": [],
+            "factEdits": [],
+            "pendingCarries": []
+        },
+        "phase": 1
+    }
+}

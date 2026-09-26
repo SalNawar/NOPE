@@ -52,31 +52,82 @@ public static class ArabicShaper
     /// no-break), runs in reverse order; digits and Latin keep their order.
     /// Text with no Arabic letter comes back unchanged; null gives "".
     /// </summary>
-    public static string ToVisual(string logical)
+    public static string ToVisual(string logical) => ToVisual(logical, null);
+
+    /// <summary>
+    /// ToVisual, also saying where each visual character came from (audit
+    /// R2-001: a typed line shows its characters in reading order):
+    /// <paramref name="sources"/> (cleared first; null skips it) receives, per
+    /// character of the result, the index in <paramref name="logical"/> of the
+    /// character it shows (a lam-alef ligature: its lam's).
+    /// </summary>
+    public static string ToVisual(string logical, List<int> sources)
     {
+        sources?.Clear();
         if (string.IsNullOrEmpty(logical))
             return string.Empty;
         if (!logical.Any(Forms.ContainsKey))
+        {
+            for (int i = 0; sources != null && i < logical.Length; i++)
+                sources.Add(i);
             return logical;
+        }
 
-        List<char> shaped = Shape(logical);
+        var from = new List<int>(logical.Length);
+        List<char> shaped = Shape(logical, from);
+        return Reorder(shaped, from, Directions(shaped), sources);
+    }
+
+    /// <summary>
+    /// The shaped characters in visual order: right-to-left runs reversed
+    /// (brackets mirrored, spaces made no-break), runs in reverse order;
+    /// <paramref name="sources"/> (null skips it) receives each visual
+    /// character's logical source (<paramref name="from"/>).
+    /// </summary>
+    private static string Reorder(List<char> shaped, List<int> from, char[] resolved, List<int> sources)
+    {
+        // Each run holds the shaped characters' positions, so every visual character keeps its source.
+        var runs = new List<(char dir, List<int> at)>();
+        for (int i = 0; i < shaped.Count; i++)
+        {
+            if (runs.Count > 0 && runs[runs.Count - 1].dir == resolved[i])
+                runs[runs.Count - 1].at.Add(i);
+            else
+                runs.Add((resolved[i], new List<int> { i }));
+        }
+
+        var sb = new StringBuilder(shaped.Count);
+        for (int r = runs.Count - 1; r >= 0; r--)
+        {
+            List<int> at = runs[r].at;
+            bool rtl = runs[r].dir == 'R';
+            for (int k = 0; k < at.Count; k++)
+            {
+                int i = rtl ? at[at.Count - 1 - k] : at[k];
+                char c = shaped[i];
+                sb.Append(!rtl ? c : c == ' ' ? ' ' : Mirror.TryGetValue(c, out char m) ? m : c);
+                sources?.Add(from[i]);
+            }
+        }
+        return sb.ToString();
+    }
+
+    /// <summary>
+    /// Each shaped character's direction for the reorder: R for Arabic, L for
+    /// Latin and digits (and a % after a digit, a + or - before one, a . , or :
+    /// between two, which join the digit run); a neutral between two
+    /// left-to-right runs is L, any other R (a right-to-left paragraph).
+    /// </summary>
+    private static char[] Directions(List<char> shaped)
+    {
         var dir = new char[shaped.Count];
         for (int i = 0; i < shaped.Count; i++)
             dir[i] = Class(shaped[i]);
 
-        // % after a digit, + - before a digit, and . , : between two digits join the digit run.
         for (int i = 0; i < shaped.Count; i++)
-        {
-            if (dir[i] != 'N')
-                continue;
-            char c = shaped[i];
-            bool left = i > 0 && dir[i - 1] == 'L' && char.IsDigit(shaped[i - 1]);
-            bool right = i + 1 < shaped.Count && dir[i + 1] == 'L' && char.IsDigit(shaped[i + 1]);
-            if ((".,:".IndexOf(c) >= 0 && left && right) || (c == '%' && left) || ("+-".IndexOf(c) >= 0 && right))
+            if (dir[i] == 'N' && JoinsDigitRun(shaped, dir, i))
                 dir[i] = 'L';
-        }
 
-        // A neutral between two left-to-right runs is L, otherwise R (a right-to-left paragraph).
         var resolved = (char[])dir.Clone();
         for (int i = 0; i < dir.Length; i++)
         {
@@ -85,32 +136,16 @@ public static class ArabicShaper
             char l = Neighbour(dir, i, -1), r = Neighbour(dir, i, +1);
             resolved[i] = l == 'L' && r == 'L' ? 'L' : 'R';
         }
+        return resolved;
+    }
 
-        var runs = new List<(char dir, List<char> chars)>();
-        for (int i = 0; i < shaped.Count; i++)
-        {
-            if (runs.Count > 0 && runs[runs.Count - 1].dir == resolved[i])
-                runs[runs.Count - 1].chars.Add(shaped[i]);
-            else
-                runs.Add((resolved[i], new List<char> { shaped[i] }));
-        }
-
-        var sb = new StringBuilder(shaped.Count);
-        for (int r = runs.Count - 1; r >= 0; r--)
-        {
-            List<char> chars = runs[r].chars;
-            if (runs[r].dir == 'R')
-            {
-                for (int i = chars.Count - 1; i >= 0; i--)
-                    sb.Append(chars[i] == ' ' ? ' ' : Mirror.TryGetValue(chars[i], out char m) ? m : chars[i]);
-            }
-            else
-            {
-                foreach (char c in chars)
-                    sb.Append(c);
-            }
-        }
-        return sb.ToString();
+    /// <summary>A neutral that joins a digit run: % after a digit, + or - before one, and . , or : between two.</summary>
+    private static bool JoinsDigitRun(List<char> shaped, char[] dir, int i)
+    {
+        char c = shaped[i];
+        bool left = i > 0 && dir[i - 1] == 'L' && char.IsDigit(shaped[i - 1]);
+        bool right = i + 1 < shaped.Count && dir[i + 1] == 'L' && char.IsDigit(shaped[i + 1]);
+        return (".,:".IndexOf(c) >= 0 && left && right) || (c == '%' && left) || ("+-".IndexOf(c) >= 0 && right);
     }
 
     /// <summary>False when the text holds a character of the Arabic block (U+0600–U+06FF) the tables do not cover; <paramref name="unsupported"/> lists them.</summary>
@@ -121,13 +156,14 @@ public static class ArabicShaper
         return bad.Length == 0;
     }
 
-    /// <summary>Contextual shaping in logical order (lam-alef ligatures included).</summary>
-    private static List<char> Shape(string s)
+    /// <summary>Contextual shaping in logical order (lam-alef ligatures included); <paramref name="from"/> receives each shaped character's index in <paramref name="s"/> (a ligature's: its lam's).</summary>
+    private static List<char> Shape(string s, List<int> from)
     {
         var output = new List<char>(s.Length);
         for (int i = 0; i < s.Length; i++)
         {
             char c = s[i];
+            from.Add(i);
             if (!Forms.TryGetValue(c, out var f))
             {
                 output.Add(c);

@@ -99,6 +99,58 @@ public static class Contrast
         return (Math.Max(la, lb) + 0.05) / (Math.Min(la, lb) + 0.05);
     }
 
+    /// <summary>WCAG's large text: 18 pt, as pixels drawn on a 1920x1080 screen (1 pt = 4/3 px).</summary>
+    public const float LargePixels = 24f;
+
+    /// <summary>WCAG's large bold text: 14 pt bold, as pixels drawn on a 1920x1080 screen.</summary>
+    public const float LargeBoldPixels = 18.66f;
+
+    /// <summary>
+    /// The class a text needs by its size (the readability fix): large text
+    /// (3:1) from <see cref="LargePixels"/>, or <see cref="LargeBoldPixels"/>
+    /// when bold, where <paramref name="pixels"/> is its font size as drawn on
+    /// a 1920x1080 screen (the office overlay's reference size; the PC's
+    /// desktop is drawn smaller than its own units); body text (4.5:1) below.
+    /// </summary>
+    public static ContrastClass ClassFor(float pixels, bool bold) =>
+        pixels >= LargePixels || (bold && pixels >= LargeBoldPixels) ? ContrastClass.LargeText : ContrastClass.Text;
+
+    /// <summary>
+    /// The lowest contrast <paramref name="ink"/> can have on the layers drawn
+    /// behind it (<paramref name="layersNearestFirst"/>, each composited by its
+    /// alpha under the ones before it): once they are opaque, on what they
+    /// make; while light still comes through them (a translucent strip, or no
+    /// layer at all), what shows behind is unknown, so the worse of the stack
+    /// over black and over white. A translucent ink is composited first.
+    /// </summary>
+    public static double WorstRatio(Rgba ink, IReadOnlyList<Rgba> layersNearestFirst)
+    {
+        float r = 0f, g = 0f, b = 0f, a = 0f;
+        foreach (Rgba layer in layersNearestFirst ?? Array.Empty<Rgba>())
+        {
+            float k = (1f - a) * layer.A;
+            r += layer.R * k;
+            g += layer.G * k;
+            b += layer.B * k;
+            a += k;
+            if (a >= OpaqueEnough)
+                break;
+        }
+
+        double worst = double.MaxValue;
+        foreach (float under in a >= OpaqueEnough ? new[] { -1f } : new[] { 0f, 1f })
+        {
+            Rgba backdrop = under < 0f
+                ? new Rgba(r / a, g / a, b / a)
+                : new Rgba(r + (1f - a) * under, g + (1f - a) * under, b + (1f - a) * under);
+            worst = Math.Min(worst, Ratio(Over(ink, backdrop), backdrop));
+        }
+        return worst;
+    }
+
+    /// <summary>How opaque the layers behind a text must add up to for what shows behind them not to matter.</summary>
+    private const float OpaqueEnough = 0.995f;
+
     /// <summary><paramref name="fg"/> composited over <paramref name="bg"/> by fg's alpha; the result is opaque.</summary>
     public static Rgba Over(Rgba fg, Rgba bg)
     {

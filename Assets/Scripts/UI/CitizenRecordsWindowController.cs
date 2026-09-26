@@ -4,8 +4,9 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The Citizen Records desktop app: type a name, get the agency's record for
-/// that person. The Name and Born rows are compare-clickable, so a record can
-/// disprove a liar's birth-date tell (RecordMismatch evidence).
+/// that person. The Name and Born rows are compare-clickable, so the
+/// traveller's own record can disprove their birth-date tell (RecordMismatch
+/// evidence; another person's record proves nothing).
 /// Registry is injected per day by GameManager via InvestigationUIController.
 /// </summary>
 public sealed class CitizenRecordsWindowController : MonoBehaviour
@@ -117,7 +118,7 @@ public sealed class CitizenRecordsWindowController : MonoBehaviour
             if (string.IsNullOrEmpty(value) || compareController == null)
                 return;
 
-            compareController.Select(label, value, bg, CompareEvidence.ForRecordField(category, value));
+            compareController.Select(EvidencePicks.ForRecord(category, label, value, _current.fullName), new ImageHighlight(bg));
         });
     }
 }

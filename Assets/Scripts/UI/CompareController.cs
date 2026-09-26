@@ -1,26 +1,34 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
-/// Visual-only click-to-compare (Papers, Please style). Click one value, then
-/// another, and both are highlighted and shown side by side in a compare bar so
-/// the player can spot a mismatch themselves — no automatic verdict. A third
-/// click starts a new comparison. Document field rows, reference-book entry
-/// rows, Citizen Records rows, interview transcript answer rows and the
-/// traveller wheel's look menu (a garment) call <see cref="Select"/>. MATCH is
-/// decided on each side's CompareEvidence.MatchValue (a garment shows its item
-/// but matches on its place's Culture value).
+/// Visual-only click-to-compare (Papers, Please style). Pick one value, then
+/// another, and both light up and show side by side in a compare bar so the
+/// player can spot a mismatch themselves: no automatic verdict. A third pick
+/// starts a new comparison; a value picked again clears it. One comparison
+/// serves every surface (piece 10): the PC's rows (document fields, reference
+/// books, Citizen Records, transcript answers) and the desk's (a held paper's
+/// rows, the bubble's answer, a garment from the wheel's look menu) call
+/// <see cref="Select"/> with a pick from EvidencePicks. The pair rule and MATCH
+/// are ComparePair's (each side's CompareEvidence.MatchValue: a garment shows
+/// its item but matches on its place's Culture value). The same text and
+/// colours are drawn in two bars: the PC's and the office strip (optional).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
-    /// <summary>Bar shown while a comparison is active.</summary>
+    /// <summary>The PC's bar, shown while a value is picked.</summary>
     [SerializeField] private GameObject compareBar;
 
-    /// <summary>Text that shows the two compared values.</summary>
+    /// <summary>The PC bar's text: the compared values and the verdict.</summary>
     [SerializeField] private TMP_Text compareText;
 
-    /// <summary>Tint applied to a selected row's background.</summary>
+    /// <summary>The office compare strip (piece 10; optional), shown while a value is picked; its parent, the office case HUD, shows only while the frame is closed.</summary>
+    [SerializeField] private GameObject officeBar;
+
+    /// <summary>The office strip's text (the PC bar's text and colour).</summary>
+    [SerializeField] private TMP_Text officeText;
+
+    /// <summary>Tint applied to a picked value (a row's background, a paper's row, the bubble).</summary>
     [SerializeField] private Color highlightColor = new Color(1f, 0.92f, 0.35f, 0.7f);
 
     /// <summary>Compare-bar text color when the two values match.</summary>
@@ -32,21 +40,15 @@ public sealed class CompareController : MonoBehaviour
     /// <summary>Compare-bar text color while only one value is picked.</summary>
     [SerializeField] private Color neutralColor = new Color(0.18f, 0.15f, 0.05f, 1f);
 
-    private struct Slot
-    {
-        public string label;
-        public string value;
-        public Image graphic;
-        public Color original;
-        public bool set;
-        public CompareEvidence evidence;
-    }
+    /// <summary>The two sides (the one pair rule).</summary>
+    private readonly ComparePair _pair = new ComparePair();
 
-    private Slot _a;
-    private Slot _b;
+    /// <summary>Where each side lit up (null: nowhere, e.g. a garment).</summary>
+    private ICompareHighlight _highlightA;
+    private ICompareHighlight _highlightB;
 
     /// <summary>
-    /// Raised when the second slot fills, with both sides' typed evidence.
+    /// Raised when the second side is picked, with both sides' typed evidence.
     /// The discrepancy system listens to auto-register true contradictions.
     /// </summary>
     public event System.Action<CompareEvidence, CompareEvidence> PairCompared;
@@ -55,37 +57,43 @@ public sealed class CompareController : MonoBehaviour
     {
         if (compareBar != null)
             compareBar.SetActive(false);
+        if (officeBar != null)
+            officeBar.SetActive(false);
     }
 
     /// <summary>
-    /// Registers a clicked value for comparison, with typed evidence.
-    /// <paramref name="value"/> is the text the bar shows for this side: the
-    /// canonical value, or an untranslated statement's placeholder (piece 9);
-    /// with typed evidence, MATCH is decided on CompareEvidence.MatchValue, the
-    /// canonical value; never DisplayText output.
+    /// Picks a value for comparison (EvidencePicks builds it; its shown text
+    /// is the canonical value or an untranslated statement's placeholder, its
+    /// evidence always canonical) and lights <paramref name="highlight"/>
+    /// (optional) while it is picked: the same key again clears the
+    /// comparison, a first pick waits, a second pairs (PairCompared), a pick
+    /// after a pair starts anew.
     /// </summary>
-    public void Select(string label, string value, Image highlight, CompareEvidence evidence)
+    public void Select(ComparePick pick, ICompareHighlight highlight)
     {
-        // Clicking the same row again clears the comparison.
-        if ((_a.set && highlight != null && highlight == _a.graphic) ||
-            (_b.set && highlight != null && highlight == _b.graphic))
+        CompareStep step = _pair.Select(pick);
+        if (step == CompareStep.Cleared)
         {
-            Clear();
+            ClearHighlights();
+            Draw();
             return;
         }
 
-        if (_a.set && _b.set)
-            Clear();
-
-        if (!_a.set)
-            _a = Fill(label, value, highlight, evidence);
+        if (step == CompareStep.Pending)
+        {
+            ClearHighlights();
+            _highlightA = highlight;
+        }
         else
-            _b = Fill(label, value, highlight, evidence);
+        {
+            _highlightB = highlight;
+        }
 
-        Refresh();
+        highlight?.Show(true, highlightColor);
+        Draw();
 
-        if (_a.set && _b.set)
-            PairCompared?.Invoke(_a.evidence, _b.evidence);
+        if (step == CompareStep.Paired)
+            PairCompared?.Invoke(_pair.A.Evidence, _pair.B.Evidence);
     }
 
     /// <summary>The present culture's compare colours (CultureThemeService at scene load; piece 6).</summary>
@@ -98,87 +106,70 @@ public sealed class CompareController : MonoBehaviour
     }
 
     /// <summary>
-    /// Replaces the compare bar verdict after a discrepancy registers, so an
+    /// Replaces the bars' verdict after a discrepancy registers, so an
     /// origin-proof never reads as a friendly green MATCH.
     /// </summary>
-    public void ShowDeviation(string summary)
-    {
-        if (compareText == null)
-            return;
-
-        compareText.color = mismatchColor;
-        compareText.text = UiText.Format("compare.deviationLogged", summary);
-    }
+    public void ShowDeviation(string summary) =>
+        WriteBars(UiText.Format("compare.deviationLogged", summary), mismatchColor);
 
     /// <summary>
-    /// Replaces the compare bar verdict when a pair proves a category that is
+    /// Replaces the bars' verdict when a pair proves a category that is
     /// already in the Deviation Report, so a second proof visibly adds nothing.
     /// </summary>
-    public void ShowAlreadyDocumented(string categoryLabel)
-    {
-        if (compareText == null)
-            return;
+    public void ShowAlreadyDocumented(string categoryLabel) =>
+        WriteBars(UiText.Format("compare.alreadyDocumented", categoryLabel), neutralColor);
 
-        compareText.color = neutralColor;
-        compareText.text = UiText.Format("compare.alreadyDocumented", categoryLabel);
+    /// <summary>Clears the picks, their highlights and the bars.</summary>
+    public void Clear()
+    {
+        _pair.Clear();
+        ClearHighlights();
+        Draw();
     }
 
-    private Slot Fill(string label, string value, Image g, CompareEvidence evidence)
+    /// <summary>Restores both sides' highlights.</summary>
+    private void ClearHighlights()
     {
-        var s = new Slot { label = label, value = value, graphic = g, set = true, evidence = evidence };
-
-        if (g != null)
-        {
-            s.original = g.color;
-            g.color = highlightColor;
-        }
-
-        return s;
+        _highlightA?.Show(false, highlightColor);
+        _highlightB?.Show(false, highlightColor);
+        _highlightA = null;
+        _highlightB = null;
     }
 
-    private void Refresh()
+    /// <summary>Shows the bars while a value is picked, with the pair's text: MATCH or MISMATCH, the first pick waiting, or nothing.</summary>
+    private void Draw()
     {
+        bool active = _pair.HasA;
         if (compareBar != null)
-            compareBar.SetActive(_a.set);
+            compareBar.SetActive(active);
+        if (officeBar != null)
+            officeBar.SetActive(active);
 
-        if (compareText == null)
-            return;
-
-        if (_a.set && _b.set)
+        if (_pair.IsPaired)
         {
-            bool match = DiscrepancyLog.ValuesMatch(_a.evidence.MatchValue(_a.value), _b.evidence.MatchValue(_b.value));
-            compareText.color = match ? matchColor : mismatchColor;
+            bool match = _pair.Matches;
             string verdict = UiText.Get(match ? "compare.match" : "compare.mismatch");
-            compareText.text = UiText.Format("compare.pair", verdict, _a.label, _a.value, _b.label, _b.value);
+            WriteBars(UiText.Format("compare.pair", verdict, _pair.A.Label, _pair.A.Shown, _pair.B.Label, _pair.B.Shown), match ? matchColor : mismatchColor);
         }
-        else if (_a.set)
+        else if (active)
         {
-            compareText.color = neutralColor;
-            compareText.text = UiText.Format("compare.pickAnother", _a.label, _a.value);
+            WriteBars(UiText.Format("compare.pickAnother", _pair.A.Label, _pair.A.Shown), neutralColor);
         }
         else
         {
-            compareText.color = neutralColor;
-            compareText.text = string.Empty;
+            WriteBars(string.Empty, neutralColor);
         }
     }
 
-    /// <summary>Clears highlights and the compare bar.</summary>
-    public void Clear()
+    /// <summary>Writes the same text and colour into both bars' texts.</summary>
+    private void WriteBars(string text, Color colour)
     {
-        if (_a.set && _a.graphic != null)
-            _a.graphic.color = _a.original;
-
-        if (_b.set && _b.graphic != null)
-            _b.graphic.color = _b.original;
-
-        _a = default;
-        _b = default;
-
-        if (compareBar != null)
-            compareBar.SetActive(false);
-
-        if (compareText != null)
-            compareText.text = string.Empty;
+        foreach (TMP_Text t in new[] { compareText, officeText })
+        {
+            if (t == null)
+                continue;
+            t.color = colour;
+            t.text = text;
+        }
     }
 }

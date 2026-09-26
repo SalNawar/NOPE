@@ -1,0 +1,489 @@
+// Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 golden masters that
+// need Unity but no play mode. Runs in the persistent editor through the job
+// runner (Library/ClaudeJobs), never exits it. Outputs go to
+// <out root>/<tag>/ (see Root): the case generation dump (days 1-6 x 20 seeds,
+// day 6 also under each possible leader), Generate World twice (the Data
+// folder's hashes), the validator's output, semantic dumps of the committed
+// OfficeGameplay / HomeScene / TitleScene and of their builders' rebuilds, the
+// scene contract report.
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using TMPro;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+using Object = UnityEngine.Object;
+
+public static class _TimeDeskAuditStatic
+{
+    /// <summary>
+    /// Where the outputs go: the folder named in Library/AuditBaseline/out_root.txt
+    /// when that file exists, else Library/AuditBaseline (inside the project, ignored by git).
+    /// </summary>
+    private static string Root
+    {
+        get
+        {
+            string lib = Path.Combine(Directory.GetCurrentDirectory(), "Library", "AuditBaseline");
+            string file = Path.Combine(lib, "out_root.txt");
+            return File.Exists(file) ? File.ReadAllText(file).Trim() : lib;
+        }
+    }
+    private const string LibraryPath = "Assets/Data/Content Library/ContentLibrary_Main.asset";
+    private const string ArtScene = "Assets/Scenes/OfficeScene.unity";
+    private const string GameplayScene = "Assets/Scenes/OfficeGameplay.unity";
+    private const string HomeScene = "Assets/Scenes/HomeScene.unity";
+    private const string TitleScene = "Assets/Scenes/TitleScene.unity";
+    private const string BuildOffice = "Tools/TimeDesk/Build Office UI (HUD + Panels)";
+    private const string BuildHome = "Tools/TimeDesk/Build Home UI (Panels + Wiring)";
+    private const string BuildTitle = "Tools/TimeDesk/Build Title UI (Panels + Wiring)";
+
+    /// <summary>The 20 run seeds of the generation dump (negative ones too: RunManager draws from the whole int range).</summary>
+    public static readonly int[] RunSeeds =
+    {
+        12345, 999, 1, 2, 3, 5, 7, 42, 100, 1000, 2024, 31337, 65535, 123456, 987654,
+        int.MaxValue, -1, -12345, -987654321, int.MinValue
+    };
+
+    private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+    private static string _out;
+    private static string _report;
+
+    public static void RunA() => Run("runA", true);
+    public static void RunB() => Run("runB", true);
+    public static void CasesA() => Run("casesA", false);
+
+    private static void Report(string line) => File.AppendAllText(_report, line + "\n");
+
+    private static void Run(string tag, bool full)
+    {
+        _out = Path.Combine(Root, tag);
+        Directory.CreateDirectory(_out);
+        _report = Path.Combine(_out, "static_report.txt");
+        File.WriteAllText(_report, "start " + DateTime.Now.ToString("s") + "\n");
+        string sceneBefore = UnityEngine.SceneManagement.SceneManager.GetActiveScene().path;
+        try
+        {
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            var lib = AssetDatabase.LoadAssetAtPath<ContentLibrarySO>(LibraryPath);
+            WriteCases(lib, "cases.txt", "cases_log.txt");
+            if (full)
+            {
+                World();
+                lib = AssetDatabase.LoadAssetAtPath<ContentLibrarySO>(LibraryPath);
+                WriteCases(lib, "cases_after_generate.txt", "cases_after_generate_log.txt");
+                Scenes();
+            }
+        }
+        catch (Exception e)
+        {
+            Report("FAILED " + e);
+        }
+        finally
+        {
+            try
+            {
+                // End on an untitled scene: the rebuilt scene files are restored from git
+                // afterwards, and restoring a scene that is open in the editor stops it with a
+                // modal "modified externally" dialog.
+                Report("scene open before the job: " + sceneBefore);
+                EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single);
+            }
+            catch (Exception e)
+            {
+                Report("restore scene failed " + e.Message);
+            }
+            Report("done " + DateTime.Now.ToString("s"));
+        }
+    }
+
+    // =====================================================================
+    // Case generation
+    // =====================================================================
+
+    private static void WriteCases(ContentLibrarySO lib, string file, string logFile)
+    {
+        var log = new List<string>();
+        Application.LogCallback capture = (message, stack, type) =>
+        {
+            if (type != LogType.Log)
+                log.Add($"[{type}] {message}");
+        };
+        Application.logMessageReceived += capture;
+        List<string> lines;
+        try
+        {
+            lines = CaseLines(lib);
+        }
+        finally
+        {
+            Application.logMessageReceived -= capture;
+        }
+        File.WriteAllLines(Path.Combine(_out, file), lines);
+        File.WriteAllLines(Path.Combine(_out, logFile), log);
+        Report($"{file}: {lines.Count} lines, {log.Count} warnings/errors logged during generation, sha1 {Sha(string.Join("\n", lines))}");
+    }
+
+    private static List<string> CaseLines(ContentLibrarySO lib)
+    {
+        var lines = new List<string>();
+        var variants = new List<(int day, string leader)>();
+        for (int d = 1; d <= 6; d++)
+            variants.Add((d, "-"));
+        foreach (NationSO n in lib.Nations)
+            if (n != null)
+                variants.Add((6, n.id));
+
+        // The world of each variant (seed independent): the plan, today's places, rules, interview and facts.
+        foreach ((int day, string leader) in variants)
+        {
+            DayPlanSO plan = lib.GetDayPlan(day);
+            WorldState world = World(day, leader);
+            InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
+            TodaysWorld today = lib.BuildToday(plan, world.history);
+            string head = $"WORLD day={day} leader={leader}";
+            lines.Add($"{head} plan='{plan.name}' visitors={plan.VisitorsCount} tellCount={plan.TellCount} channels=[{string.Join(",", plan.TellChannels)}] violators={plan.GuaranteeRuleViolators} legendaryChance={plan.LegendaryBaseChance.ToString("0.###", Inv)}");
+            lines.Add($"{head} places=[{string.Join(", ", today.Places.Select(p => p != null ? p.id : "null"))}]");
+            lines.Add($"{head} rules=[{string.Join(" | ", plan.ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}]");
+            lines.Add($"{head} askable=[{string.Join(",", interview.AskableCategories)}] answerTells=[{string.Join(",", interview.AnswerTellCategories)}] dialogs=[{string.Join(",", interview.OfferedDialogs(null).Select(d => d.id))}] problems={interview.ContentProblems.Count}");
+            lines.Add($"{head} forced=[{string.Join(",", plan.ForcedCases.Where(f => f != null).Select(f => $"{f.caseIndex1Based}:{(f.legendary != null ? f.legendary.id : "-")}/{(f.caseBlueprint != null ? f.caseBlueprint.name : "-")}"))}] pool=[{string.Join(",", plan.AvailableLegendaries.Where(l => l != null).Select(l => l.id))}]");
+            foreach (ClueCategory category in Enum.GetValues(typeof(ClueCategory)).Cast<ClueCategory>())
+                foreach (FactRow row in today.Facts.Rows(category))
+                    lines.Add($"{head} fact {category} {row.NationId}/{row.EraId} '{row.OriginLabel}' = '{row.Value}'{(today.Facts.IsChanged(row.NationId, row.EraId, category) ? " [revised]" : "")}");
+        }
+
+        FieldInfo violatorsField = typeof(CaseFactory).GetField("_violators", BindingFlags.NonPublic | BindingFlags.Instance);
+        foreach (int seed in RunSeeds)
+        {
+            foreach ((int day, string leader) in variants)
+            {
+                DayPlanSO plan = lib.GetDayPlan(day);
+                WorldState world = World(day, leader);
+                InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
+                var factory = new CaseFactory(lib, lib.BuildToday(plan, world.history));
+                List<CaseInstance> cases = factory.GenerateDayCases(plan, world, Seeds.Day(seed, day), interview.AskableCategories, interview.AnswerTellCategories, true);
+                var violators = (Dictionary<int, NationEraProfileSO>)violatorsField.GetValue(factory);
+                CitizenRegistry registry = CaseFactory.BuildRegistry(cases);
+                for (int i = 0; i < cases.Count; i++)
+                {
+                    CaseInstance c = cases[i];
+                    CitizenRecord record = registry.Records.FirstOrDefault(r => r.fullName == c.visitorGivenName);
+                    string rec = record != null ? $"{record.fullName}|{record.birthDate}|{record.origin}|{record.note}" : "none";
+                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null) + $" | record={rec}");
+                }
+            }
+        }
+        return lines;
+    }
+
+    private static WorldState World(int day, string leader)
+    {
+        var world = new WorldState { day = day };
+        if (leader != "-")
+        {
+            world.history.leaderId = leader;
+            world.history.leaderSinceDay = day;
+        }
+        return world;
+    }
+
+    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place named.</summary>
+    public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace)
+    {
+        List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();
+        IEnumerable<string> tells = fields.Where(f => f.isAnachronism).Select(f => $"{f.category}/Papers").Distinct()
+            .Concat(c.answers.Where(a => a.isTell).Select(a => $"{a.category}/Answer"));
+        string papers = string.Join(";", c.documents.Select(d => $"{(d.template != null ? d.template.displayName : "?")}:" +
+                                                                string.Join(",", d.fields.Select(f => $"{f.label}={f.value}"))));
+        string answers = string.Join(";", c.answers.Select(a => $"{a.category}={a.value}{(a.isTell ? "[TELL]" : "")}"));
+        string look = c.look != null ? c.look.Describe() : "none";
+        string garments = c.look != null ? string.Join(";", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}")) : "";
+        return $"seed={seed} day={day} leader={leader} slot={slot} claim='{c.originLabel}' name='{c.visitorGivenName}' born='{c.trueBirthDate}' role='{(c.archetype != null ? c.archetype.displayName : "")}' allowed={c.claimAllowedByRules} violator={(violatorPlace ?? "no")}" +
+               $" | liar={c.IsLiar} home='{c.HomeLabel}' tells=[{string.Join(",", tells)}] | papers={papers} | answers={answers}" +
+               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} intro='{c.introLine}' claimLine='{c.claimLine}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
+    }
+
+    // =====================================================================
+    // Generate World (twice) and the validator
+    // =====================================================================
+
+    private static void World()
+    {
+        Dictionary<string, string> before = HashFolder("Assets/Data");
+        List<string> gen1 = RunMenu("Tools/TimeDesk/Generate World");
+        Dictionary<string, string> first = HashFolder("Assets/Data");
+        List<string> gen2 = RunMenu("Tools/TimeDesk/Generate World");
+        Dictionary<string, string> second = HashFolder("Assets/Data");
+        List<string> validator = RunMenu("Tools/TimeDesk/Validate Content Library");
+
+        var lines = new List<string>
+        {
+            $"Assets/Data files: {before.Count}",
+            $"first Generate World changed vs the committed tree: [{string.Join(", ", Changed(before, first))}]",
+            $"second Generate World changed vs the first: [{string.Join(", ", Changed(first, second))}]",
+            "--- first Generate World log (warnings, errors, generator summary lines) ---"
+        };
+        lines.AddRange(Filter(gen1));
+        lines.Add("--- second Generate World log ---");
+        lines.AddRange(Filter(gen2));
+        File.WriteAllLines(Path.Combine(_out, "world_generate.txt"), lines);
+        File.WriteAllLines(Path.Combine(_out, "validator.txt"), validator);
+        File.WriteAllLines(Path.Combine(_out, "data_hashes.txt"), second.OrderBy(k => k.Key, StringComparer.Ordinal).Select(k => $"{k.Value} {k.Key}"));
+        Report($"Generate World: {Changed(before, first).Count} files changed by the first run, {Changed(first, second).Count} by the second; validator {validator.Count} lines, errors {validator.Count(l => l.StartsWith("[Error]") || l.StartsWith("[Exception]"))}, warnings {validator.Count(l => l.StartsWith("[Warning]"))}");
+    }
+
+    private static IEnumerable<string> Filter(List<string> log) =>
+        log.Where(l => !l.StartsWith("[Log]") || l.Contains("[WorldContentGenerator]"));
+
+    // =====================================================================
+    // Scenes
+    // =====================================================================
+
+    private static void Scenes()
+    {
+        string artHash = FileHash(ArtScene);
+        var hashes = new List<string>();
+        foreach (string path in new[] { GameplayScene, HomeScene, TitleScene, ArtScene })
+            hashes.Add($"{FileHash(path)} {path}");
+
+        // The committed scenes as they are.
+        var committed = new Dictionary<string, List<string>>();
+        foreach (string path in new[] { GameplayScene, HomeScene, TitleScene })
+        {
+            EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+            committed[path] = DumpScene();
+            File.WriteAllLines(Path.Combine(_out, $"scene_{Path.GetFileNameWithoutExtension(path)}_committed.txt"), committed[path]);
+        }
+
+        // The builders' rebuilds (the files are restored from git afterwards, outside Unity).
+        EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+        List<string> b1 = RunMenu(BuildOffice);
+        List<string> office1 = DumpScene();
+        List<string> b2 = RunMenu(BuildOffice);
+        List<string> office2 = DumpScene();
+        File.WriteAllLines(Path.Combine(_out, "scene_OfficeGameplay_rebuilt.txt"), office1);
+        File.WriteAllLines(Path.Combine(_out, "scene_OfficeGameplay_rebuilt2.txt"), office2);
+        File.WriteAllLines(Path.Combine(_out, "build_office_log.txt"), b1.Concat(new[] { "--- second build ---" }).Concat(b2).Where(l => !l.StartsWith("[Log]")));
+
+        List<string> home1 = RebuildOpen(HomeScene, BuildHome, out List<string> hb1);
+        List<string> home2 = RebuildOpen(HomeScene, BuildHome, out List<string> hb2);
+        File.WriteAllLines(Path.Combine(_out, "scene_HomeScene_rebuilt.txt"), home1);
+        File.WriteAllLines(Path.Combine(_out, "scene_HomeScene_rebuilt2.txt"), home2);
+        List<string> title1 = RebuildOpen(TitleScene, BuildTitle, out List<string> tb1);
+        List<string> title2 = RebuildOpen(TitleScene, BuildTitle, out List<string> tb2);
+        File.WriteAllLines(Path.Combine(_out, "scene_TitleScene_rebuilt.txt"), title1);
+        File.WriteAllLines(Path.Combine(_out, "scene_TitleScene_rebuilt2.txt"), title2);
+        File.WriteAllLines(Path.Combine(_out, "build_home_title_log.txt"),
+            hb1.Concat(hb2).Concat(new[] { "--- title ---" }).Concat(tb1).Concat(tb2).Where(l => !l.StartsWith("[Log]")));
+
+        var summary = new List<string>();
+        void Compare(string name, List<string> a, List<string> b, string what)
+        {
+            List<string> sa = a.OrderBy(l => l, StringComparer.Ordinal).ToList();
+            List<string> sb = b.OrderBy(l => l, StringComparer.Ordinal).ToList();
+            List<string> onlyA = sa.Except(sb).ToList(), onlyB = sb.Except(sa).ToList();
+            summary.Add($"{name}: {what}: {a.Count} vs {b.Count} lines; same set={onlyA.Count == 0 && onlyB.Count == 0}; same order={a.SequenceEqual(b)}; only-left {onlyA.Count}, only-right {onlyB.Count}");
+            foreach (string l in onlyA.Take(40))
+                summary.Add("   - " + l);
+            foreach (string l in onlyB.Take(40))
+                summary.Add("   + " + l);
+        }
+        Compare("OfficeGameplay", committed[GameplayScene], office1, "committed vs rebuilt");
+        Compare("OfficeGameplay", office1, office2, "rebuilt vs rebuilt again");
+        Compare("HomeScene", committed[HomeScene], home1, "committed vs rebuilt");
+        Compare("HomeScene", home1, home2, "rebuilt vs rebuilt again");
+        Compare("TitleScene", committed[TitleScene], title1, "committed vs rebuilt");
+        Compare("TitleScene", title1, title2, "rebuilt vs rebuilt again");
+        summary.Add($"build errors: office {b1.Concat(b2).Count(IsError)}, home {hb1.Concat(hb2).Count(IsError)}, title {tb1.Concat(tb2).Count(IsError)}");
+        summary.Add($"build warnings: office {b1.Concat(b2).Count(l => l.StartsWith("[Warning]"))}, home {hb1.Concat(hb2).Count(l => l.StartsWith("[Warning]"))}, title {tb1.Concat(tb2).Count(l => l.StartsWith("[Warning]"))}");
+        summary.Add($"art office byte-unchanged by the builders: {FileHash(ArtScene) == artHash}");
+        summary.Add("committed scene file hashes: " + string.Join("; ", hashes));
+        summary.Add("build settings: " + string.Join(", ", EditorBuildSettings.scenes.Select(s => s.path + (s.enabled ? "" : "(off)"))));
+
+        // The scene contract (read-only).
+        var art = EditorSceneManager.OpenScene(ArtScene, OpenSceneMode.Single);
+        string contract = OfficeSceneContractTools.Report(art);
+        File.WriteAllText(Path.Combine(_out, "contract.txt"), contract);
+        summary.Add($"contract report written; art dirty after it: {art.isDirty}; art still byte-unchanged: {FileHash(ArtScene) == artHash}");
+        EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+
+        File.WriteAllLines(Path.Combine(_out, "scenes_summary.txt"), summary);
+        foreach (string l in summary.Where(l => !l.StartsWith("   ")))
+            Report(l);
+    }
+
+    private static bool IsError(string l) => l.StartsWith("[Error]") || l.StartsWith("[Exception]") || l.StartsWith("[Assert]");
+
+    private static List<string> RebuildOpen(string path, string menu, out List<string> log)
+    {
+        var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
+        log = RunMenu(menu);
+        EditorSceneManager.SaveScene(scene);
+        return DumpScene();
+    }
+
+    // --- The semantic dump of the open scene (piece 10's, extended to every assembly of ours and key Unity components) ---
+
+    private static readonly HashSet<string> OurAssemblies = new HashSet<string> { "Assembly-CSharp", "TimeDesk.Visuals", "TimeDesk.Domain" };
+
+    public static List<string> DumpScene()
+    {
+        var lines = new List<string>();
+        foreach (GameObject go in EditorSceneManager.GetActiveScene().GetRootGameObjects())
+            Dump(go.transform, lines);
+        return lines;
+    }
+
+    private static void Dump(Transform t, List<string> lines)
+    {
+        string path = PathOf(t);
+        lines.Add($"{path} active={t.gameObject.activeSelf} layer={t.gameObject.layer} tag={t.gameObject.tag} components=[{string.Join(",", t.GetComponents<Component>().Where(c => c == null || (c.hideFlags & HideFlags.DontSave) == 0).Select(c => c != null ? c.GetType().Name : "Missing"))}]");
+        lines.Add($"{path} transform pos={V3(t.localPosition)} rot={V3(t.localEulerAngles)} scale={V3(t.localScale)}");
+        if (t is RectTransform rt)
+            lines.Add($"{path} rect min={V(rt.anchorMin)} max={V(rt.anchorMax)} pivot={V(rt.pivot)} pos={V(rt.anchoredPosition)} size={V(rt.sizeDelta)}");
+        foreach (TMP_Text text in Saved<TMP_Text>(t))
+            lines.Add($"{path} text='{text.text}' size={F(text.fontSize)} auto={text.enableAutoSizing} min={F(text.fontSizeMin)} max={F(text.fontSizeMax)} color={C(text.color)} font={Target(text.font)} align={text.alignment} wrap={text.textWrappingMode} raycast={text.raycastTarget}");
+        foreach (Image image in Saved<Image>(t))
+            lines.Add($"{path} image sprite={Target(image.sprite)} color={C(image.color)} type={image.type} raycast={image.raycastTarget} material={Target(image.material != image.defaultMaterial ? image.material : null)}");
+        foreach (RawImage raw in Saved<RawImage>(t))
+            lines.Add($"{path} rawimage texture={Target(raw.texture)} color={C(raw.color)} raycast={raw.raycastTarget}");
+        foreach (Selectable s in Saved<Selectable>(t))
+            lines.Add($"{path} {s.GetType().Name} interactable={s.interactable} transition={s.transition} target={Target(s.targetGraphic)}");
+        foreach (Button button in Saved<Button>(t))
+            lines.Add($"{path} button calls={Calls(button.onClick)}");
+        foreach (Canvas canvas in Saved<Canvas>(t))
+            lines.Add($"{path} canvas mode={canvas.renderMode} order={canvas.sortingOrder} camera={Target(canvas.worldCamera)} override={canvas.overrideSorting}");
+        foreach (CanvasScaler scaler in Saved<CanvasScaler>(t))
+            lines.Add($"{path} scaler mode={scaler.uiScaleMode} ref={V(scaler.referenceResolution)} match={F(scaler.matchWidthOrHeight)} screenMatch={scaler.screenMatchMode}");
+        foreach (Camera cam in Saved<Camera>(t))
+            lines.Add($"{path} camera depth={F(cam.depth)} mask={cam.cullingMask} ortho={cam.orthographic} fov={F(cam.fieldOfView)} clear={cam.clearFlags} target={Target(cam.targetTexture)} enabled={cam.enabled}");
+        foreach (Collider c in Saved<Collider>(t))
+            lines.Add($"{path} collider {c.GetType().Name} enabled={c.enabled} trigger={c.isTrigger}" + (c is BoxCollider box ? $" center={V3(box.center)} size={V3(box.size)}" : ""));
+        foreach (Renderer r in Saved<Renderer>(t))
+            lines.Add($"{path} renderer {r.GetType().Name} enabled={r.enabled} materials=[{string.Join(",", r.sharedMaterials.Select(Target))}]");
+        foreach (MeshFilter mf in Saved<MeshFilter>(t))
+            lines.Add($"{path} mesh={Target(mf.sharedMesh)}");
+        foreach (MonoBehaviour mb in t.GetComponents<MonoBehaviour>())
+        {
+            if (mb == null || !OurAssemblies.Contains(mb.GetType().Assembly.GetName().Name))
+                continue;
+            lines.Add($"{path} {mb.GetType().Name} enabled={mb.enabled}");
+            SerializedProperty p = new SerializedObject(mb).GetIterator();
+            bool enter = true;
+            while (p.NextVisible(enter))
+            {
+                enter = p.propertyType == SerializedPropertyType.Generic;
+                if (p.name == "m_Script")
+                    continue;
+                string value = p.propertyType switch
+                {
+                    SerializedPropertyType.ObjectReference => Target(p.objectReferenceValue),
+                    SerializedPropertyType.String => $"'{p.stringValue}'",
+                    SerializedPropertyType.Integer => p.intValue.ToString(Inv),
+                    SerializedPropertyType.Boolean => p.boolValue.ToString(),
+                    SerializedPropertyType.Float => F(p.floatValue),
+                    SerializedPropertyType.Enum => p.enumValueIndex.ToString(Inv),
+                    SerializedPropertyType.Color => C(p.colorValue),
+                    SerializedPropertyType.Vector2 => V(p.vector2Value),
+                    SerializedPropertyType.Vector3 => V3(p.vector3Value),
+                    SerializedPropertyType.Vector2Int => p.vector2IntValue.ToString(),
+                    SerializedPropertyType.Rect => p.rectValue.ToString(),
+                    SerializedPropertyType.LayerMask => p.intValue.ToString(Inv),
+                    SerializedPropertyType.ArraySize => p.intValue.ToString(Inv),
+                    _ => null
+                };
+                if (value != null)
+                    lines.Add($"{path} {mb.GetType().Name}.{p.propertyPath}={value}");
+            }
+            // Persistent UnityEvent calls on our components (e.g. Clickable.onClick).
+            foreach (FieldInfo f in mb.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+                if (typeof(UnityEventBase).IsAssignableFrom(f.FieldType) && f.GetValue(mb) is UnityEventBase ev)
+                    lines.Add($"{path} {mb.GetType().Name}.{f.Name} calls={Calls(ev)}");
+        }
+        for (int i = 0; i < t.childCount; i++)
+            Dump(t.GetChild(i), lines);
+    }
+
+    private static IEnumerable<T> Saved<T>(Transform t) where T : Component =>
+        t.GetComponents<T>().Where(c => c != null && (c.hideFlags & HideFlags.DontSave) == 0);
+
+    private static string Calls(UnityEventBase e)
+    {
+        var calls = new List<string>();
+        for (int i = 0; i < e.GetPersistentEventCount(); i++)
+            calls.Add($"{Target(e.GetPersistentTarget(i))}.{e.GetPersistentMethodName(i)}");
+        return "[" + string.Join(", ", calls) + "]";
+    }
+
+    private static string PathOf(Transform t) => t.parent == null ? t.name : PathOf(t.parent) + "/" + t.name;
+    private static string F(float f) => f.ToString("0.###", Inv);
+    private static string V(Vector2 v) => $"({v.x.ToString("0.0", Inv)},{v.y.ToString("0.0", Inv)})";
+    private static string V3(Vector3 v) => $"({v.x.ToString("0.000", Inv)},{v.y.ToString("0.000", Inv)},{v.z.ToString("0.000", Inv)})";
+    private static string C(Color c) => "#" + ColorUtility.ToHtmlStringRGBA(c);
+
+    private static string Target(Object o)
+    {
+        if (o == null)
+            return "null";
+        if (o is Component c)
+            return PathOf(c.transform) + ":" + c.GetType().Name;
+        if (o is GameObject g)
+            return g.scene.IsValid() ? PathOf(g.transform) : AssetDatabase.GetAssetPath(g) + ":" + g.name;
+        string asset = AssetDatabase.GetAssetPath(o);
+        return (string.IsNullOrEmpty(asset) ? "(runtime)" : asset) + ":" + o.name;
+    }
+
+    // =====================================================================
+    // Plumbing
+    // =====================================================================
+
+    private static List<string> RunMenu(string menu)
+    {
+        var lines = new List<string>();
+        Application.LogCallback capture = (message, stack, type) => lines.Add($"[{type}] {message}");
+        Application.logMessageReceived += capture;
+        bool ran;
+        try
+        {
+            ran = EditorApplication.ExecuteMenuItem(menu);
+        }
+        finally
+        {
+            Application.logMessageReceived -= capture;
+        }
+        Report($"menu '{menu}' ran={ran} ({lines.Count} log lines)");
+        return lines;
+    }
+
+    private static List<string> Changed(Dictionary<string, string> a, Dictionary<string, string> b) =>
+        a.Keys.Union(b.Keys).Where(k => !a.TryGetValue(k, out string x) || !b.TryGetValue(k, out string y) || x != y).OrderBy(k => k, StringComparer.Ordinal).ToList();
+
+    private static Dictionary<string, string> HashFolder(string folder) =>
+        Directory.GetFiles(folder, "*", SearchOption.AllDirectories).ToDictionary(p => p.Replace('\\', '/'), FileHash);
+
+    /// <summary>A file's hash with CRLF read as LF (git's autocrlf checks text out as CRLF and Unity writes LF: only content counts).</summary>
+    private static string FileHash(string path)
+    {
+        byte[] bytes = File.ReadAllBytes(path);
+        var kept = new List<byte>(bytes.Length);
+        for (int i = 0; i < bytes.Length; i++)
+            if (!(bytes[i] == 13 && i + 1 < bytes.Length && bytes[i + 1] == 10))
+                kept.Add(bytes[i]);
+        using var sha = SHA1.Create();
+        return BitConverter.ToString(sha.ComputeHash(kept.ToArray())).Replace("-", "").ToLowerInvariant();
+    }
+
+    private static string Sha(string text)
+    {
+        using var sha = SHA1.Create();
+        return BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(text))).Replace("-", "").ToLowerInvariant();
+    }
+}

@@ -284,4 +284,134 @@ public class SpeechQueueTests
         Assert.AreEqual(2, q.VisibleCharacters);
         Assert.AreEqual("Hello", q.Text);
     }
+
+    // -----------------------------
+    // Piece 10: a tag per line (the wheel's DialogLine) and the hover hold
+    // -----------------------------
+
+    [Test]
+    public void Tag_FollowsShownLine()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hi", null, 0f, 3);
+        q.Say("Bye", null, 0f, 7);
+        Assert.AreEqual(3, q.Tag);
+        q.Tick(1.21f);
+        Assert.AreEqual("Bye", q.Text);
+        Assert.AreEqual(7, q.Tag);
+        q.Say("Untagged", null);
+        q.Tick(1.31f);
+        Assert.AreEqual("Untagged", q.Text);
+        Assert.AreEqual(-1, q.Tag, "a line said without a tag");
+    }
+
+    [Test]
+    public void Tag_NoneWhenEmpty()
+    {
+        SpeechQueue q = Queue();
+        Assert.AreEqual(-1, q.Tag);
+        q.Say("Hi", null, 0f, 2);
+        q.Tick(4.21f);
+        Assert.IsFalse(q.Showing);
+        Assert.AreEqual(-1, q.Tag, "the line ended");
+    }
+
+    [Test]
+    public void Clear_ResetsTag()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hi", null, 0f, 4);
+        q.Say("Bye", null, 0f, 5);
+        q.Clear();
+        Assert.AreEqual(-1, q.Tag);
+        q.Say("Again", null);
+        Assert.AreEqual(-1, q.Tag, "the dropped lines' tags are gone");
+    }
+
+    [Test]
+    public void Hold_FullyShownLineNeverEnds()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hi", null, 0f, 1);
+        q.Hold(true);
+        q.Tick(100f);
+        Assert.IsTrue(q.Showing, "held while hovered");
+        Assert.AreEqual(2, q.VisibleCharacters);
+        Assert.AreEqual(1, q.Tag);
+        q.Tick(1000f);
+        Assert.AreEqual("Hi", q.Text);
+    }
+
+    [Test]
+    public void Hold_TypingContinues()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hello there", null);
+        q.Hold(true);
+        q.Tick(0.5f);
+        Assert.AreEqual(5, q.VisibleCharacters, "typing runs while held");
+        q.Tick(10f);
+        Assert.AreEqual(11, q.VisibleCharacters);
+        Assert.IsTrue(q.Showing);
+
+        SpeechQueue flip = Queue();
+        flip.Say("Hi", null, 2f);
+        flip.Hold(true);
+        flip.Tick(1.5f);
+        Assert.AreEqual(1.5f, flip.LineSeconds, 1e-5f, "the reveal's clock runs while held");
+        flip.Tick(5f);
+        Assert.AreEqual(2f, flip.LineSeconds, 1e-5f, "and stops once the line is fully shown");
+    }
+
+    [Test]
+    public void Release_EndsAfterHold()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hi", null);
+        q.Tick(3f);
+        q.Hold(true);
+        q.Tick(10f);
+        q.Hold(false);
+        q.Tick(3.99f);
+        Assert.IsTrue(q.Showing, "the whole 4 s hold runs from the release");
+        q.Tick(0.02f);
+        Assert.IsFalse(q.Showing);
+    }
+
+    [Test]
+    public void Release_EndsAfterMinWhenLineWaits()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hi", null);
+        q.Hold(true);
+        q.Say("Bye", null);
+        q.Tick(10f);
+        Assert.AreEqual("Hi", q.Text);
+        q.Hold(false);
+        q.Tick(0.99f);
+        Assert.AreEqual("Hi", q.Text, "the 1 s minimum runs from the release");
+        q.Tick(0.02f);
+        Assert.AreEqual("Bye", q.Text);
+    }
+
+    [Test]
+    public void Hold_QueuedLinesWait()
+    {
+        SpeechQueue q = Queue();
+        q.Say("Hi", null);
+        q.Say("Bye", null);
+        q.Hold(true);
+        q.Tick(5f);
+        Assert.AreEqual("Hi", q.Text);
+        Assert.AreEqual(1, q.LineNumber);
+        q.Say("Later", null);
+        Assert.AreEqual("Hi", q.Text, "a new line waits too");
+
+        var instant = new SpeechQueue(0f, 0f, 0f);
+        instant.Say("Hi", null);
+        instant.Hold(true);
+        instant.Say("Bye", null);
+        instant.Tick(1f);
+        Assert.AreEqual("Hi", instant.Text, "even with no minimum and no hold");
+    }
 }

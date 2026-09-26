@@ -1,0 +1,488 @@
+// Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 profiled
+// play-through. Title -> New Run (seed 12345) -> day 1 in the art office ->
+// Home -> day 2's office. Measures, with the editor's profiler recording play
+// mode only: the frame time and the GC allocated per frame inside PlayerLoop
+// (the game's own work; the editor's loop is reported apart) in steady windows
+// (title, the office with the briefing, the office view with a traveller at the
+// desk, the PC frame's desktop, the wheel open, the office between travellers,
+// Home), the top allocation sites (the sample path above each GC.Alloc), and
+// the scene loads (title -> office, office -> home, home -> office) by the wall
+// clock. Driven from EditorApplication.update in the persistent editor (job
+// runner); never exits the editor. Output: <out root>/<tag>/profile_* (see Root).
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Unity.Profiling;
+using UnityEditor;
+using UnityEditor.Profiling;
+using UnityEditor.SceneManagement;
+using UnityEditorInternal;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
+
+[InitializeOnLoad]
+public static class _TimeDeskAuditProfile
+{
+    /// <summary>
+    /// Where the outputs go: the folder named in Library/AuditBaseline/out_root.txt
+    /// when that file exists, else Library/AuditBaseline (inside the project, ignored by git).
+    /// </summary>
+    private static string Root
+    {
+        get
+        {
+            string lib = Path.Combine(Directory.GetCurrentDirectory(), "Library", "AuditBaseline");
+            string file = Path.Combine(lib, "out_root.txt");
+            return File.Exists(file) ? File.ReadAllText(file).Trim() : lib;
+        }
+    }
+    private const int Seed = 12345;
+    private const int WindowFrames = 240;
+    private const string ViewName = "TimeDeskAuditProfile";
+
+    private const string StepKey = "AuditProfile.Step";
+    private const string TagKey = "AuditProfile.Tag";
+    private const string HadSaveKey = "AuditProfile.HadSave";
+    private const string SceneKey = "AuditProfile.Scene";
+    private const string SeedKey = "AuditProfile.SeedBefore";
+    private const string ViewWidthKey = "AuditProfile.ViewWidth";
+    private const string ViewHeightKey = "AuditProfile.ViewHeight";
+    private const string ProfilerKey = "AuditProfile.ProfilerWasOn";
+
+    private const int Playing = 1;
+    private const int Finishing = 2;
+
+    private static readonly Stack<IEnumerator> Script = new Stack<IEnumerator>();
+    private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+
+    private static string Dir => Path.Combine(Root, SessionState.GetString(TagKey, "profX"));
+    private static string ReportPath => Path.Combine(Dir, "profile_report.txt");
+    private static string SummaryPath => Path.Combine(Dir, "profile_summary.txt");
+    private static string SaveBackup => Path.Combine(Root, "nope_save_backup_auditprofile.json");
+
+    static _TimeDeskAuditProfile()
+    {
+        if (SessionState.GetInt(StepKey, 0) == 0)
+            return;
+        EditorApplication.update += Tick;
+    }
+
+    public static void RunA() => Begin("profA");
+    public static void RunB() => Begin("profB");
+
+    private static void Begin(string tag)
+    {
+        SessionState.SetString(TagKey, tag);
+        Directory.CreateDirectory(Dir);
+        foreach (string f in Directory.GetFiles(Dir))
+            File.Delete(f);
+        File.WriteAllText(ReportPath, $"start {DateTime.Now:s}\n");
+        File.WriteAllText(SummaryPath, string.Empty);
+
+        // The player's save slot (the save, its temp file and its backup) is set aside and restored at the end.
+        int hadSave = 0;
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
+        {
+            if (!File.Exists(SaveSystem.Files[i]))
+                continue;
+            hadSave |= 1 << i;
+            File.Copy(SaveSystem.Files[i], SaveBackup + i, true);
+            File.Delete(SaveSystem.Files[i]);
+        }
+        SessionState.SetInt(HadSaveKey, hadSave);
+        SessionState.SetInt(SeedKey, Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath).fixedRunSeed);
+        SessionState.SetInt(ProfilerKey, ProfilerDriver.enabled ? 1 : 0);
+
+        PlayModeWindow.GetRenderingResolution(out uint width, out uint height);
+        SessionState.SetInt(ViewWidthKey, (int)width);
+        SessionState.SetInt(ViewHeightKey, (int)height);
+        PlayModeWindow.SetCustomRenderingResolution(1920, 1080, ViewName);
+
+        SessionState.SetInt(StepKey, Playing);
+        SessionState.SetString(SceneKey, SceneManager.GetActiveScene().path);
+        EditorSceneManager.OpenScene("Assets/Scenes/TitleScene.unity", OpenSceneMode.Single);
+        EditorApplication.update += Tick;
+        EditorApplication.EnterPlaymode();
+    }
+
+    private static void Tick()
+    {
+        int step = SessionState.GetInt(StepKey, 0);
+        if (step == Finishing)
+        {
+            if (!EditorApplication.isPlaying)
+                Finish();
+            return;
+        }
+        if (step != Playing || !EditorApplication.isPlaying)
+            return;
+
+        try
+        {
+            if (Script.Count == 0)
+                Script.Push(Play());
+            while (Script.Count > 0)
+            {
+                IEnumerator top = Script.Peek();
+                if (!top.MoveNext())
+                {
+                    Script.Pop();
+                    continue;
+                }
+                if (top.Current is IEnumerator nested)
+                {
+                    Script.Push(nested);
+                    continue;
+                }
+                return;
+            }
+            EndPlay();
+        }
+        catch (Exception e)
+        {
+            Report($"FAIL exception: {e}");
+            Script.Clear();
+            EndPlay();
+        }
+    }
+
+    private static void EndPlay()
+    {
+        ProfilerDriver.enabled = SessionState.GetInt(ProfilerKey, 0) == 1;
+        SessionState.SetInt(StepKey, Finishing);
+        EditorApplication.ExitPlaymode();
+    }
+
+    // =====================================================================
+    // The profiled play-through
+    // =====================================================================
+
+    private static IEnumerator Play()
+    {
+        yield return Until(() => Object.FindFirstObjectByType<TitleSceneController>() != null && RunManager.HasInstance, 60f, "the title scene");
+        RunManager.Instance.Config.fixedRunSeed = Seed;
+        ProfilerDriver.profileEditor = false;
+        yield return Seconds(2f);
+        yield return Window("title (idle)");
+
+        var load = Stopwatch.StartNew();
+        int startFrame = Time.frameCount;
+        ((Button)Field(Object.FindFirstObjectByType<TitleUIController>(), "newRunButton")).onClick.Invoke();
+        yield return Until(() => Office.Loaded() && Office.Briefing() != null && Office.Briefing().activeInHierarchy, 90f, "the office and its briefing");
+        Summary($"LOAD title -> office (art + gameplay, briefing up): {load.ElapsedMilliseconds} ms, {Time.frameCount - startFrame} frames");
+        var o = new Office();
+        yield return Seconds(2f);
+        yield return Window("office + morning briefing (idle)");
+
+        o.StartShift.onClick.Invoke();
+        yield return Until(() => o.ReadyArmed, 20f, "READY");
+        yield return Seconds(1.5f);
+        yield return Window("office view, before READY (no traveller)");
+
+        ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+        yield return Until(() => Field(o.Ui, "_currentCase") != null, 10f, "the traveller");
+        yield return Seconds(6f);
+        yield return Window("office view, traveller at the desk (idle, bubble done)");
+
+        o.View.FocusMonitor();
+        yield return Seconds(2f);
+        yield return Window("desktop in the PC frame, traveller at the desk (idle)");
+        o.View.FocusOffice();
+        yield return Seconds(1.5f);
+
+        Clickable zone = (Clickable)Field(o.Coordinator, "travellerHitZone");
+        ExecuteEvents.Execute(zone.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+        yield return Seconds(1.5f);
+        Report($"wheel open: {o.Wheel.IsOpen}");
+        yield return Window("office view, traveller wheel open (idle)");
+        o.Wheel.Close();
+        yield return Seconds(1f);
+
+        // The rest of day 1: accept everyone, then the shift report.
+        int guard = 0;
+        while (!o.Results.activeInHierarchy && guard++ < 30)
+        {
+            if (Field(o.Ui, "_currentCase") != null)
+            {
+                ((Button)Field(o.Ui, "acceptButton")).onClick.Invoke();
+                yield return Frames(2);
+                if (o.CitationPanel.activeInHierarchy)
+                    ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
+            }
+            yield return Until(() => o.ReadyArmed || o.Results.activeInHierarchy, 20f, "READY or the report");
+            if (o.Results.activeInHierarchy)
+                break;
+            ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+            yield return Until(() => Field(o.Ui, "_currentCase") != null, 10f, "the traveller");
+            yield return Frames(3);
+        }
+        yield return Seconds(1f);
+        yield return Window("office + shift report (idle)");
+
+        load = Stopwatch.StartNew();
+        startFrame = Time.frameCount;
+        o.GoHome.onClick.Invoke();
+        yield return Until(() => Object.FindFirstObjectByType<HomeUIController>() != null && SceneManager.GetActiveScene().name == RunManager.Instance.Config.homeSceneName
+                                 && ((GameObject)Field(Object.FindFirstObjectByType<HomeUIController>(), "expensesPanel")).activeInHierarchy, 60f, "Home");
+        Summary($"LOAD office -> home (expenses up): {load.ElapsedMilliseconds} ms, {Time.frameCount - startFrame} frames");
+        yield return Seconds(2f);
+        yield return Window("home, expenses panel (idle)");
+
+        load = Stopwatch.StartNew();
+        startFrame = Time.frameCount;
+        RunManager.Instance.Sleep();
+        yield return Until(() => Office.Loaded() && RunManager.Instance.World.day == 2 && Office.Briefing() != null && Office.Briefing().activeInHierarchy, 90f, "day 2's office");
+        Summary($"LOAD home -> office (sleep, nightly resolve, day 2 briefing up): {load.ElapsedMilliseconds} ms, {Time.frameCount - startFrame} frames");
+        yield return Seconds(2f);
+        yield return Window("day 2 office + morning briefing (idle)");
+    }
+
+    // =====================================================================
+    // Measuring a window
+    // =====================================================================
+
+    private static IEnumerator Window(string name)
+    {
+        var mainThread = ProfilerRecorder.StartNew(ProfilerCategory.Internal, "Main Thread", WindowFrames + 16);
+        var gcFrame = ProfilerRecorder.StartNew(ProfilerCategory.Memory, "GC Allocated In Frame", WindowFrames + 16);
+        ProfilerDriver.ClearAllFrames();
+        ProfilerDriver.enabled = true;
+        int first = Time.frameCount;
+        yield return Frames(WindowFrames);
+        ProfilerDriver.enabled = false;
+        yield return Frames(2);
+
+        var loopGc = new List<double>();
+        var loopMs = new List<double>();
+        var editorGc = new List<double>();
+        var frameMs = new List<double>();
+        var sites = new Dictionary<string, (double bytes, int frames, double calls)>();
+        int firstIndex = ProfilerDriver.firstFrameIndex, lastIndex = ProfilerDriver.lastFrameIndex;
+        for (int i = Math.Max(firstIndex, 0); i <= lastIndex; i++)
+        {
+            using (HierarchyFrameDataView view = ProfilerDriver.GetHierarchyFrameDataView(i, 0, HierarchyFrameDataView.ViewModes.MergeSamplesWithTheSameName, HierarchyFrameDataView.columnGcMemory, false))
+            {
+                if (view == null || !view.valid)
+                    continue;
+                var children = new List<int>();
+                view.GetItemChildren(view.GetRootItemID(), children);
+                bool sawLoop = false;
+                foreach (int id in children)
+                {
+                    string itemName = view.GetItemName(id);
+                    if (itemName == "PlayerLoop")
+                    {
+                        sawLoop = true;
+                        loopGc.Add(view.GetItemColumnDataAsFloat(id, HierarchyFrameDataView.columnGcMemory));
+                        loopMs.Add(view.GetItemColumnDataAsFloat(id, HierarchyFrameDataView.columnTotalTime));
+                        var frameSites = new Dictionary<string, (double bytes, double calls)>();
+                        Walk(view, id, "PlayerLoop", frameSites, 0);
+                        foreach (KeyValuePair<string, (double bytes, double calls)> kv in frameSites)
+                        {
+                            sites.TryGetValue(kv.Key, out (double bytes, int frames, double calls) s);
+                            sites[kv.Key] = (s.bytes + kv.Value.bytes, s.frames + 1, s.calls + kv.Value.calls);
+                        }
+                    }
+                    else if (itemName == "EditorLoop")
+                    {
+                        editorGc.Add(view.GetItemColumnDataAsFloat(id, HierarchyFrameDataView.columnGcMemory));
+                    }
+                }
+                if (sawLoop)
+                    frameMs.Add(view.frameTimeMs);
+            }
+        }
+
+        var main = new List<double>();
+        for (int i = 0; i < mainThread.Count; i++)
+            main.Add(mainThread.GetSample(i).Value / 1e6);
+        var gcAll = new List<double>();
+        for (int i = 0; i < gcFrame.Count; i++)
+            gcAll.Add(gcFrame.GetSample(i).Value);
+        mainThread.Dispose();
+        gcFrame.Dispose();
+
+        int n = loopGc.Count;
+        Summary($"WINDOW {name}: {n} profiled frames (of {Time.frameCount - first})");
+        Summary($"   PlayerLoop GC alloc per frame: median {Stat(loopGc, 0.5)} B, mean {Mean(loopGc)} B, p95 {Stat(loopGc, 0.95)} B, max {Stat(loopGc, 1)} B; frames allocating {loopGc.Count(x => x > 0)}/{n}");
+        Summary($"   PlayerLoop time per frame: median {Ms(loopMs, 0.5)} ms, p95 {Ms(loopMs, 0.95)} ms; frame time median {Ms(frameMs, 0.5)} ms, p95 {Ms(frameMs, 0.95)} ms");
+        Summary($"   EditorLoop GC alloc per frame (editor, not the game): median {Stat(editorGc, 0.5)} B, mean {Mean(editorGc)} B");
+        Summary($"   recorder: main thread median {Ms(main, 0.5)} ms p95 {Ms(main, 0.95)} ms; GC Allocated In Frame (whole main thread, editor included) median {Stat(gcAll, 0.5)} B mean {Mean(gcAll)} B ({gcAll.Count} samples)");
+        foreach (KeyValuePair<string, (double bytes, int frames, double calls)> kv in sites.OrderByDescending(k => k.Value.bytes).ThenBy(k => k.Key, StringComparer.Ordinal).Take(25))
+            Summary($"   site {(n > 0 ? kv.Value.bytes / n : 0).ToString("0", Inv)} B/frame avg, in {kv.Value.frames}/{n} frames, {(kv.Value.frames > 0 ? kv.Value.calls / kv.Value.frames : 0).ToString("0.#", Inv)} allocs/frame when present: {kv.Key}");
+    }
+
+    /// <summary>Collects, under <paramref name="id"/>, the bytes of every GC.Alloc sample by the path of samples above it.</summary>
+    private static void Walk(HierarchyFrameDataView view, int id, string path, Dictionary<string, (double bytes, double calls)> sites, int depth)
+    {
+        var kids = new List<int>();
+        view.GetItemChildren(id, kids);
+        foreach (int k in kids)
+        {
+            string name = view.GetItemName(k);
+            float gc = view.GetItemColumnDataAsFloat(k, HierarchyFrameDataView.columnGcMemory);
+            if (gc <= 0f)
+                continue;
+            if (name == "GC.Alloc")
+            {
+                sites.TryGetValue(path, out (double bytes, double calls) s);
+                sites[path] = (s.bytes + gc, s.calls + view.GetItemColumnDataAsFloat(k, HierarchyFrameDataView.columnCalls));
+            }
+            else if (depth < 40)
+            {
+                Walk(view, k, path + " > " + name, sites, depth + 1);
+            }
+        }
+    }
+
+    private static string Stat(List<double> xs, double q)
+    {
+        if (xs.Count == 0)
+            return "n/a";
+        List<double> s = xs.OrderBy(x => x).ToList();
+        return s[(int)Math.Min(s.Count - 1, Math.Floor(q * (s.Count - 1) + 0.5))].ToString("0", Inv);
+    }
+
+    private static string Ms(List<double> xs, double q)
+    {
+        if (xs.Count == 0)
+            return "n/a";
+        List<double> s = xs.OrderBy(x => x).ToList();
+        return s[(int)Math.Min(s.Count - 1, Math.Floor(q * (s.Count - 1) + 0.5))].ToString("0.00", Inv);
+    }
+
+    private static string Mean(List<double> xs) => xs.Count == 0 ? "n/a" : xs.Average().ToString("0", Inv);
+
+    // =====================================================================
+    // The office
+    // =====================================================================
+
+    private sealed class Office
+    {
+        public static bool Loaded()
+        {
+            Scene g = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
+            return g.IsValid() && g.isLoaded && OfficeScenes.ArtScene.IsValid() && One<GameManager>() != null;
+        }
+
+        public static T One<T>() where T : Component
+        {
+            Scene g = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
+            if (!g.IsValid() || !g.isLoaded)
+                return null;
+            foreach (GameObject root in g.GetRootGameObjects())
+            {
+                T found = root.GetComponentInChildren<T>(true);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+
+        public static GameObject Briefing()
+        {
+            DayFlowUIController flow = One<DayFlowUIController>();
+            return flow != null ? (GameObject)Field(flow, "briefingPanel") : null;
+        }
+
+        public readonly GameManager Game = One<GameManager>();
+        public readonly InvestigationUIController Ui = One<InvestigationUIController>();
+        public readonly OfficeUIController OfficeUi = One<OfficeUIController>();
+        public readonly OfficeViewController View = One<OfficeViewController>();
+        public readonly BoothCoordinator Coordinator = One<BoothCoordinator>();
+        public readonly TravellerWheel Wheel = One<TravellerWheel>();
+
+        public DayFlowUIController DayFlow() => One<DayFlowUIController>();
+        public Clickable Ready => (Clickable)Field(Game, "readySign");
+        public bool ReadyArmed => Ready.Interactable && ((ReadyGate)Field(Game, "_readyGate")).IsArmed;
+        public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
+        public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
+        public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
+        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
+    }
+
+    // =====================================================================
+    // Waiting and plumbing
+    // =====================================================================
+
+    private static IEnumerator Frames(int n)
+    {
+        int target = Time.frameCount + n;
+        while (Time.frameCount < target)
+            yield return null;
+    }
+
+    private static IEnumerator Seconds(float seconds)
+    {
+        float end = Time.realtimeSinceStartup + seconds;
+        while (Time.realtimeSinceStartup < end)
+            yield return null;
+    }
+
+    private static IEnumerator Until(Func<bool> condition, float timeout, string what)
+    {
+        float end = Time.realtimeSinceStartup + timeout;
+        while (!condition())
+        {
+            if (Time.realtimeSinceStartup > end)
+                throw new TimeoutException($"waited {timeout} s for {what}");
+            yield return null;
+        }
+    }
+
+    private static void Finish()
+    {
+        PlayModeWindow.SetCustomRenderingResolution((uint)SessionState.GetInt(ViewWidthKey, 1920), (uint)SessionState.GetInt(ViewHeightKey, 1080), ViewName);
+        int hadSave = SessionState.GetInt(HadSaveKey, 0);
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
+        {
+            bool had = (hadSave & (1 << i)) != 0;
+            if (had && File.Exists(SaveBackup + i))
+            {
+                File.Copy(SaveBackup + i, SaveSystem.Files[i], true);
+                File.Delete(SaveBackup + i);
+            }
+            else if (!had && File.Exists(SaveSystem.Files[i]))
+            {
+                File.Delete(SaveSystem.Files[i]);
+            }
+        }
+        Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath).fixedRunSeed = SessionState.GetInt(SeedKey, 0);
+        ProfilerDriver.enabled = SessionState.GetInt(ProfilerKey, 0) == 1;
+        ProfilerDriver.ClearAllFrames();
+        SessionState.SetInt(StepKey, 0);
+        EditorApplication.update -= Tick;
+        string scene = SessionState.GetString(SceneKey, string.Empty);
+        if (!string.IsNullOrEmpty(scene) && File.Exists(scene))
+            EditorSceneManager.OpenScene(scene, OpenSceneMode.Single);
+        Report($"done {DateTime.Now:s}");
+    }
+
+    private static object Field(object target, string name)
+    {
+        for (Type t = target.GetType(); t != null; t = t.BaseType)
+        {
+            FieldInfo f = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (f != null)
+                return f.GetValue(target);
+        }
+        throw new MissingFieldException(target.GetType().Name, name);
+    }
+
+    private static void Report(string line) => File.AppendAllText(ReportPath, line + "\n");
+
+    private static void Summary(string line)
+    {
+        File.AppendAllText(SummaryPath, line + "\n");
+        Report(line);
+    }
+}

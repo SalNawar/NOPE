@@ -414,6 +414,10 @@ MonoBehaviour:
       placeB: iraq_earlymodern
       slot: 4
       gender: f
+    - placeA: greece_earlymodern
+      placeB: germany_earlymodern
+      slot: 4
+      gender: f
     - placeA: greece_ancient
       placeB: germany_ancient
       slot: 1
@@ -530,6 +534,10 @@ MonoBehaviour:
       placeB: italy_ancient
       slot: 1
       gender: f
+    - placeA: japan_earlymodern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
     - placeA: germany_earlymodern
       placeB: italy_ancient
       slot: 1
@@ -547,6 +555,10 @@ MonoBehaviour:
       slot: 1
       gender: f
     - placeA: iraq_modern
+      placeB: italy_ancient
+      slot: 1
+      gender: f
+    - placeA: china_modern
       placeB: italy_ancient
       slot: 1
       gender: f
@@ -762,6 +774,10 @@ MonoBehaviour:
       placeB: japan_industrial
       slot: 1
       gender: f
+    - placeA: japan_earlymodern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
     - placeA: germany_earlymodern
       placeB: japan_industrial
       slot: 1
@@ -779,6 +795,10 @@ MonoBehaviour:
       slot: 1
       gender: f
     - placeA: iraq_modern
+      placeB: japan_industrial
+      slot: 1
+      gender: f
+    - placeA: china_modern
       placeB: japan_industrial
       slot: 1
       gender: f

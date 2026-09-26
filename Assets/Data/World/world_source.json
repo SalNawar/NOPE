@@ -279,6 +279,13 @@
         "why": "plain gold discs at the neck (coin pendant vs qilada)"
       },
       {
+        "a": "greece_earlymodern",
+        "b": "germany_earlymodern",
+        "slot": "Accessory",
+        "gender": "f",
+        "why": "festoons of chains on the chest (silver vs layered gold)"
+      },
+      {
         "a": "greece_ancient",
         "b": "germany_ancient",
         "slot": "Hair",
@@ -482,6 +489,13 @@
         "why": "nodus roll hidden under the cap and tsemberi"
       },
       {
+        "a": "japan_earlymodern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the kazuki veil"
+      },
+      {
         "a": "germany_earlymodern",
         "b": "italy_ancient",
         "slot": "Hair",
@@ -515,6 +529,13 @@
         "slot": "Hair",
         "gender": "f",
         "why": "nodus roll hidden under the abaya over the head"
+      },
+      {
+        "a": "china_modern",
+        "b": "italy_ancient",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "nodus roll hidden under the navy cap"
       },
       {
         "a": "britain_modern",
@@ -888,6 +909,13 @@
         "why": "sokuhatsu hidden under the cap and tsemberi"
       },
       {
+        "a": "japan_earlymodern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the kazuki veil"
+      },
+      {
         "a": "germany_earlymodern",
         "b": "japan_industrial",
         "slot": "Hair",
@@ -921,6 +949,13 @@
         "slot": "Hair",
         "gender": "f",
         "why": "sokuhatsu hidden under the abaya over the head"
+      },
+      {
+        "a": "china_modern",
+        "b": "japan_industrial",
+        "slot": "Hair",
+        "gender": "f",
+        "why": "sokuhatsu hidden under the navy cap"
       },
       {
         "a": "britain_modern",
@@ -3449,7 +3484,7 @@
             "label": "cap and tsemberi"
           },
           "accessory": {
-            "label": "pafti buckle",
+            "label": "silver chest chains",
             "leakable": true
           }
         }
@@ -4423,16 +4458,19 @@
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Headwear",
           "outfit": {
             "label": "Zhongshan jacket"
           },
           "hair": {
             "label": "clipped bob"
           },
-          "accessory": {
-            "label": "khaki satchel",
+          "headwear": {
+            "label": "navy cap",
             "leakable": true
+          },
+          "accessory": {
+            "label": "khaki satchel"
           }
         }
       }
@@ -4660,15 +4698,15 @@
           }
         },
         "f": {
-          "signature": "Accessory",
+          "signature": "Headwear",
           "outfit": {
             "label": "Keicho kosode"
           },
           "hair": {
             "label": "tamamusubi loop"
           },
-          "accessory": {
-            "label": "Nagoya-obi",
+          "headwear": {
+            "label": "kazuki veil",
             "leakable": true
           }
         }
@@ -7272,7 +7310,7 @@
         "fill": "chromeDeep",
         "alpha": 0.8,
         "ink": "chromeInk",
-        "textClass": "LargeText"
+        "textClass": "Text"
       },
       {
         "role": "Taskbar",
@@ -7293,7 +7331,7 @@
         "fill": "accent",
         "alpha": 1,
         "ink": "accentInk",
-        "textClass": "LargeText"
+        "textClass": "Text"
       },
       {
         "role": "Tray",
@@ -7391,7 +7429,7 @@
         "fill": "chromeDeep",
         "alpha": 0.8,
         "ink": "chromeInk",
-        "textClass": "LargeText"
+        "textClass": "Text"
       },
       {
         "role": "Alert",
@@ -7548,7 +7586,7 @@
         },
         {
           "name": "accent",
-          "hex": "#3D993B"
+          "hex": "#2E7D32"
         },
         {
           "name": "accentInk",
@@ -7584,7 +7622,7 @@
         },
         {
           "name": "reject",
-          "hex": "#DB402E"
+          "hex": "#C43C2C"
         },
         {
           "name": "rejectInk",
@@ -8506,7 +8544,7 @@
       },
       {
         "key": "desk.scanHint",
-        "text": "Drag papers onto the scanner to read them on the PC.",
+        "text": "Click a paper to read it; drag it onto the scanner to open it on the PC.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8519,6 +8557,18 @@
       {
         "key": "desk.readyCaption",
         "text": "NEXT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deskView.back",
+        "text": "▲ Back",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deskView.backHint",
+        "text": "Esc / right-click",
         "gloss": "None",
         "tier": "Full"
       },

@@ -32,7 +32,7 @@ MonoBehaviour:
   - category: 2
     value: Acting Chairman Dong Biwu
   - category: 6
-    value: navy cap / khaki satchel
+    value: navy cap
   maleNames:
   - Jianguo
   - Weidong
@@ -91,7 +91,7 @@ MonoBehaviour:
         covers: 
         artNation: 
     female:
-      signature: 4
+      signature: 3
       outfit:
         label: Zhongshan jacket
         leakable: 0
@@ -114,15 +114,15 @@ MonoBehaviour:
         covers: 
         artNation: 
       headwear:
-        label: 
-        leakable: 0
+        label: navy cap
+        leakable: 1
         wig: 0
         back: 0
         covers: 
         artNation: 
       accessory:
         label: khaki satchel
-        leakable: 1
+        leakable: 0
         wig: 0
         back: 0
         covers: 

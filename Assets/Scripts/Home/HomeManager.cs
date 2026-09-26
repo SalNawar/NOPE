@@ -26,6 +26,9 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Today's expense breakdown, kept for re-showing the panel after a Treat.</summary>
     private HomeEconomy.ExpenseReport _expenseReport;
 
+    /// <summary>Tonight's slot spins, drawn in turn from the run's own stream for the day (Seeds.ForSlot): a run replays, and Continue (Home again from the save made before it) cannot reroll a spin.</summary>
+    private IRandomSource _slotRandom;
+
     /// <summary>Acquires the run, bills expenses, and starts the panel flow.</summary>
     private void Start()
     {
@@ -49,6 +52,7 @@ public sealed class HomeManager : MonoBehaviour
         // deterministically seeded by the day so it's stable on reload.
         _expenseReport = HomeEconomy.ApplyDailyExpenses(_world, _config);
         HomeEconomy.AdvanceFamilyConditions(_world, _config, run.GetDaySeed());
+        _slotRandom = new SeededRandom(Seeds.ForSlot(run.GetDaySeed()));
 
         homeUI?.UpdateHud(_world);
 
@@ -166,9 +170,9 @@ public sealed class HomeManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Spends the spin cost (if affordable), picks a weighted SlotOutcomeSO,
-    /// and applies its money/modifier/effect results. Returns the line shown
-    /// to the player.
+    /// Spends the spin cost (if affordable), picks a weighted SlotOutcomeSO
+    /// from tonight's seeded stream, and applies its money/modifier/effect
+    /// results. Returns the line shown to the player.
     /// </summary>
     private string HandleSpin()
     {
@@ -192,7 +196,7 @@ public sealed class HomeManager : MonoBehaviour
 
         _world.money -= spinCost;
 
-        SlotOutcomeSO outcome = WeightedRandom.Pick(outcomes, o => o != null ? o.weight : 0f, new UnityRandomSource());
+        SlotOutcomeSO outcome = WeightedRandom.Pick(outcomes, o => o != null ? o.weight : 0f, _slotRandom);
 
         if (outcome == null)
         {

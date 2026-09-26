@@ -14,6 +14,17 @@ public static class BirthDates
     /// <summary>Suffix for years before 1 CE.</summary>
     private const string Bce = "BCE";
 
+    /// <summary>
+    /// The travellers' age range (world_source.json's travellerAgeMin and
+    /// travellerAgeMax, from which every place's birth years are written):
+    /// null when 1 &lt;= min &lt;= max, else the problem (audit R6-001: an
+    /// inverted range silently inverted every place's birth years).
+    /// </summary>
+    public static string AgeRangeProblem(int minAge, int maxAge) =>
+        minAge >= 1 && minAge <= maxAge
+            ? null
+            : $"travellerAgeMin {minAge} and travellerAgeMax {maxAge}: travellers' ages need 1 <= travellerAgeMin <= travellerAgeMax.";
+
     /// <summary>Writes a date; negative years get a BCE suffix.</summary>
     public static string Format(int day, int monthIndex0, int year) =>
         year < 0 ? $"{day} {Months[monthIndex0]} {-year} {Bce}" : $"{day} {Months[monthIndex0]} {year}";

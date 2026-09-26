@@ -33,12 +33,12 @@ report of the current art scene: `Tools > TimeDesk > Check Office Scene Contract
 
 ## The anchors
 
-| Id | Used for | Found today (art 23aa6e1) | The art side may add |
+| Id | Used for | Found today (art 58bda15) | The art side may add |
 |---|---|---|---|
 | `PCScreen` | the PC: its click box opens the PC frame; the desktop is cloned onto its glass | fallback `ImportedOfficeDress/Desk/Retro CRT` | nothing needed. The glass is the renderer, or the submesh whose material, is named `Glass` or `Screen` (case-insensitive); keep that naming on any new PC. |
-| `PCPower` | the PC's power knob (click box) | **default**: derived from the glass (bottom right of the bezel) | `Anchor_PCPower` on the real knob |
+| `PCPower` | the PC's power knob (click box) | fallback `ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange` (the rebuilt CRT's orange power buttons, the monitor's and the system unit's, one mesh: one box over both, outlined on hover); without it, **default**: derived from the glass (bottom right of the bezel, measured on the older CRT study) | `Anchor_PCPower` on the monitor's knob |
 | `DeskSurface` | the desk plane the papers lie and slide on (height = the art's top) | fallback `HybridOffice/Booth/Finish_Mat` | `Anchor_DeskSurface` (or keep the mat) |
-| `Scanner` | the scanner (drop bed, scan pulse) | **default** pose (1.08, 1.06, −0.33); the gameplay layer shows a placeholder flatbed there | a scanner model with `Anchor_Scanner` (the placeholder hides when an art scanner is found) |
+| `Scanner` | the scanner (drop bed, scan pulse) | **default** pose (1.02, 1.06, −0.46): right of the mat (its left edge on the mat's border), between the calculator and the ink pad, where it touches no prop and its click box covers no other prop's box as the office camera sees it; the gameplay layer shows a placeholder flatbed there | a scanner model with `Anchor_Scanner` (the placeholder hides when an art scanner is found) |
 | `Traveller` | where the traveller's feet stand (the figure turns to the camera) | **default** (0, 0, 1.6) | `Anchor_Traveller` behind the desk |
 | `HandOver` | where handed-over papers slide in from and back to | **default** (0.45, 1.07, 0.95) | `Anchor_HandOver` at the traveller's edge of the desk |
 | `NextSign` | READY / NEXT: the click box | fallback `HybridOffice/Booth/Blender_Next` | — |
@@ -52,8 +52,8 @@ report of the current art scene: `Tools > TimeDesk > Check Office Scene Contract
 
 **For the art side:** `Tools > TimeDesk > Add Gameplay Anchors (art office)`,
 run with `OfficeScene.unity` open, adds an empty `GameplayAnchors/Anchor_{id}` at
-the current default pose for every place still on a default (today: `PCPower`,
-`Scanner`, `Traveller`, `HandOver`). Move them where the art wants them and save.
+the current default pose for every place still on a default (today: `Scanner`,
+`Traveller`, `HandOver`). Move them where the art wants them and save.
 The gameplay side does not run this tool on the art scene.
 
 ## Hooks the gameplay layer offers the art side

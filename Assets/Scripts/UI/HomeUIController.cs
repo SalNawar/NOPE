@@ -10,9 +10,10 @@ using UnityEngine.UI;
 /// upgrade shop, slot machine, and the sleep prompt that hands off to the
 /// next day. All references are optional; unwired panels are skipped so the
 /// flow degrades gracefully (HomeManager just calls straight through).
-/// Dynamic rows (family members, shop items) are spawned at runtime; the shop
-/// shows its upgrades a page at a time (Paging), with a pager row when they
-/// do not fit one page.
+/// Dynamic rows (family members, shop items) are spawned at runtime in their
+/// panel's own ink (its body text's colour, as the scene draws the panel), so
+/// they read on whatever the panel is; the shop shows its upgrades a page at a
+/// time (Paging), with a pager row when they do not fit one page.
 /// </summary>
 public sealed class HomeUIController : MonoBehaviour
 {
@@ -233,13 +234,13 @@ public sealed class HomeUIController : MonoBehaviour
             bool interactable = member.condition > 0 && world.money >= careCost && onTreat != null;
 
             GameObject row = CreateRow(familyRowsRoot, label, buttonLabel, interactable,
-                () => onTreat?.Invoke(capturedIndex));
+                () => onTreat?.Invoke(capturedIndex), PanelInk(expensesBodyText));
 
             _familyRows.Add(row);
         }
 
         if (world.family.members.Count == 0)
-            _familyRows.Add(CreateLabelRow(familyRowsRoot, "No family members on record."));
+            _familyRows.Add(CreateLabelRow(familyRowsRoot, "No family members on record.", PanelInk(expensesBodyText)));
     }
 
     /// <summary>Expenses continue clicked: close and move to the shop.</summary>
@@ -304,7 +305,7 @@ public sealed class HomeUIController : MonoBehaviour
 
         if (upgrades.Count == 0)
         {
-            _shopRows.Add(CreateLabelRow(shopRowsRoot, "No upgrades stocked yet."));
+            _shopRows.Add(CreateLabelRow(shopRowsRoot, "No upgrades stocked yet.", PanelInk(shopBodyText)));
             return;
         }
 
@@ -331,7 +332,7 @@ public sealed class HomeUIController : MonoBehaviour
 
             UpgradeSO capturedUpgrade = upgrade;
             GameObject row = CreateRow(shopRowsRoot, label, buttonLabel, interactable,
-                () => onBuy?.Invoke(capturedUpgrade));
+                () => onBuy?.Invoke(capturedUpgrade), PanelInk(shopBodyText));
 
             _shopRows.Add(row);
         }
@@ -343,7 +344,7 @@ public sealed class HomeUIController : MonoBehaviour
             {
                 _shopPage = (_shopPage + 1) % pages;
                 BuildShopRows(world, lib, onBuy);
-            }));
+            }, PanelInk(shopBodyText)));
         }
     }
 
@@ -464,8 +465,11 @@ public sealed class HomeUIController : MonoBehaviour
         rows.Clear();
     }
 
-    /// <summary>Creates a label-only row (no button) — used for empty-state messages.</summary>
-    private static GameObject CreateLabelRow(Transform parent, string label)
+    /// <summary>A panel's own ink: its body text's colour (the scene's choice for that panel), white without a body text.</summary>
+    private static Color PanelInk(TMP_Text body) => body != null ? body.color : Color.white;
+
+    /// <summary>Creates a label-only row (no button) in <paramref name="ink"/> — used for empty-state messages.</summary>
+    private static GameObject CreateLabelRow(Transform parent, string label, Color ink)
     {
         var row = new GameObject("Row_Label", typeof(RectTransform));
         row.transform.SetParent(parent, false);
@@ -480,14 +484,14 @@ public sealed class HomeUIController : MonoBehaviour
         var text = row.AddComponent<TextMeshProUGUI>();
         text.text = label;
         text.fontSize = 22;
-        text.color = Color.white;
+        text.color = ink;
         text.alignment = TextAlignmentOptions.MidlineLeft;
 
         return row;
     }
 
-    /// <summary>Creates a row with a label on the left and a button on the right.</summary>
-    private static GameObject CreateRow(Transform parent, string label, string buttonLabel, bool buttonInteractable, Action onClick)
+    /// <summary>Creates a row with a label in <paramref name="ink"/> on the left and a button on the right.</summary>
+    private static GameObject CreateRow(Transform parent, string label, string buttonLabel, bool buttonInteractable, Action onClick, Color ink)
     {
         var row = new GameObject("Row", typeof(RectTransform));
         row.transform.SetParent(parent, false);
@@ -515,7 +519,7 @@ public sealed class HomeUIController : MonoBehaviour
         var labelText = labelGo.AddComponent<TextMeshProUGUI>();
         labelText.text = label;
         labelText.fontSize = 22;
-        labelText.color = Color.white;
+        labelText.color = ink;
         labelText.alignment = TextAlignmentOptions.MidlineLeft;
         UiText.FitLabel(labelText); // a long currency name shrinks the price instead of wrapping
 

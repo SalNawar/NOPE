@@ -1,26 +1,64 @@
-# Time Sorter: Character Art Brief v2 (for ChatGPT)
+# Time Sorter: Character Art Brief v2.2 (for ChatGPT)
 
-*2026-09-24, revised the same day after the review of v2 (Appendix E). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits) and Saleh's style direction: simpler, like ReStory with simpler textures, neutral even lighting.*
+*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), and again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
 
-**The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png` (that file stays only until the booth rework, because two scenes still reference it).
+**The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png`: the game no longer uses that file. It stays on disk only because the art scene's leftover 2D booth (`OfficeRoot`, switched off when the office loads) and the art side's recovery scenes still reference it, and it goes when the art side deletes those leftovers (`docs/SCENE_CONTRACT_GAMEPLAY.md`).
 
-Everything ChatGPT needs to draw every character in the game. Work through it batch by batch, and **send each place's files to Claude as soon as that place is done**: Claude cuts the images out, lines them up, bakes the hair colours, names them for the game and tests them in Unity. A mistake that repeats (square images, a drifting mannequin, a colour the cut-out eats) then costs a few images instead of a whole batch. The game already runs on coloured placeholder shapes, and every finished file replaces its placeholder the moment it lands, so each place makes the game look better straight away.
+Everything ChatGPT needs to draw every character in the game. "Time Sorter" is set in a 3D office; the travellers are flat 2D figures, built from layers, standing behind its desk. Work through the brief batch by batch, and **send each place's files to Claude as soon as that place is done**: Claude cuts the images out, lines them up, bakes the hair colours, names them for the game and tests them in Unity, in the game's office. A mistake that repeats (square images, a drifting mannequin, a colour the cut-out eats) then costs a few images instead of a whole batch. The game already runs on coloured placeholder shapes, and every finished file replaces its placeholder the moment it lands, so each place makes the game look better straight away.
 
-Files that go with this brief (all in this folder):
+Files that go with this brief (all in this folder, except the office screenshot):
 
+- `office_style_reference.png`: a screenshot of the game's office that Saleh takes once (Unity's Game view at 1920 x 1080, the office with no traveller at the desk, saved as a PNG). It is a **style reference only**: ChatGPT matches its colour range and contrast so the figures sit in that room, and never draws the room. Attach it where a prompt's "Attached:" line names it.
 - `character_guide_v2_1024x1536.png`: the figure guide. Attach it in Batch 1.
 - `mannequin_m.png` and `mannequin_f.png`: Claude makes these from your approved Batch 1 figures.
-- `style_card.png`: Claude makes it from the approved pilot (Batch 1, Step 4). Every garment prompt attaches it from then on as a style reference.
+- `style_card.png`: Claude makes it from the approved pilot (Batch 1, Step 4). Every garment prompt and the premade prompt (9.10) attach it from then on as a style reference.
 - `premadebase_m_skin[N].png` and `premadebase_f_skin[N].png`: Claude makes these after Batch 2 (the approved body and head of each skin tone, lined up). The premade prompts attach them.
 - `CHATGPT_MESSAGE.md`: the short message that starts the work.
-- `UI_ART_RULES.md`: the rules for desktop wallpapers, posters and other UI art (a separate track).
+- `UI_ART_RULES.md`: the rules for the desktop wallpapers, the 2D layers over the office (the PC frame, the speech bubble, the paper faces) and other UI art (a separate track).
 - `coverage.json`: every file name the game needs, so the delivery can be checked by a script.
 
 Attach whatever each prompt's "Attached:" line names.
 
+## What changed in v2.2 (2026-09-25): the ReStory style
+
+v2.1 named the 2D customers of *ReStory: Chill Electronics Repairs* as its reference, then steered away from them: realistic proportions, a ban on large heads and eyes, and a ban on anime styling in Showa Tokyo's DO NOT DRAW. ReStory's customers are cute 2D anime-style characters with a soft, rounded, illustrative look, standing in a detailed 3D shop. That is this game's own set-up (flat 2D travellers in a 3D office), and the art side now cel-shades the office's desk props (`NOPE/Desk Anime`). Saleh asked for that style for both kinds of character: the generated travellers and the premades. Every change:
+
+1. **The style (section 2, Block A, Block P).** The shared STYLE text of both blocks is rewritten: cute, soft 2D anime-style characters (expressive anime eyes, larger than realistic, with one simple highlight; a small, simple nose and mouth; clean rounded face shapes; hair in clean stylised shapes and locks), flat cel colours with one hard-edged shade tone, the same dark-brown outline and the same neutral, even front lighting. Adults who look their age, never chibi. No manga symbols (sweat drops, anger marks, blush lines); section 10 says so too.
+2. **One cast.** The style applies the same way to both kinds of character, and section 2 and both blocks say so: the same eyes, line, shading and colour treatment, so a premade never stands out from a generated traveller at the desk. The premade prompt (9.10) now attaches the style card too, and Claude compares each premade with the pilot's Athens travellers (section 11).
+3. **The proportions do not change.** The head size and body proportions stay the figure guide's and `LookCanvas`'s (the mannequins, every layer and the passport crop depend on them): the style changes the face and the rendering only. Batch 1, Step 1 now rejects a base figure whose head is too big for its body.
+4. **Faces stay distinct.** Section 7 and prompts 9.1 and 9.3 say how faces a to d differ (cheeks and chin, eye shape, brows, nose, the lines of age) inside face a's head outline, which Batch 2 still requires. The skin tones stay exactly their swatches (the style never lightens a darker skin), and every culture gets the same style.
+5. **Premade expressions** (prompt 9.11, Block P): anime-expressive but dignified, because they are real people; each premade keeps the features its description gives (Socrates' snub nose and full lips, for example).
+6. **Showa Tokyo.** Its DO NOT DRAW bans "cosplay, idol-costume or anime-costume cliches" in place of the old anime ban, which would now ban the style itself, and adds "a school-uniform look": in this style its office outfit (a blouse with a bow at the collar and a pleated skirt) could drift into one. Every other DO NOT DRAW and review line was checked against the new style; none contradicts it.
+7. **`CHATGPT_MESSAGE.md` and `README.md`** carry the new style rules; the first image is still the bald base man, now in this style.
+
+Nothing else changes: the layers, canvas and landmarks, the green background and colour rules, the leak items and MUST READ lines, section 1's desk view and sizes, the file names, the batch order and files, and every key in `coverage.json`.
+
+## What changed in v2.1 (2026-09-25): revised for the 3D office
+
+The v2 brief was written for the old flat 2D booth. The game now runs in the art side's Blender-made 3D office, with the travellers as flat 2D layered figures standing behind its desk. Every change, decided by Claude under Saleh's "go with all pieces, don't stop" (open to his review):
+
+1. **The framing (D1).** Block A, Block P, `CHATGPT_MESSAGE.md` and the `UI_ART_RULES.md` set-up say it: "Time Sorter" is set in a 3D office and the travellers are flat 2D figures standing at the desk. A screenshot of the office, `office_style_reference.png`, is attached as a **style reference only** (its colour range and contrast, so the figures sit in the room; the room is never drawn). The flat style, the outlines, the neutral even lighting and the green background are unchanged. "Unity adds time-of-day light" is replaced by what the game does: it stands the flat, unlit figure in the lit room and tones it to the room's light.
+2. **Where the player sees a traveller (D2).** Section 1's "shown three ways" and the Visitor window (270 x 406 px) are replaced by a table of the three places a traveller appears: the office view (head to waist, measured sizes), the passport photo, and the Look menu (names only). Nothing shows the whole figure. The layers stay whole figures on the same 1024 x 1536 canvas (the contract is unchanged; a walk-in or a moved anchor may show more later), but nothing that identifies a look relies on the lower body, and every identifying item must read at the measured head size. Section 3's canvas table, section 6's accessory row, prompts 9.4 and 9.8 and the checklist say so.
+3. **Leak items the desk can see (D3).** Every leak item now sits on the head, face, neck, shoulders or upper chest. Five sat below the desk; each was replaced or moved (details and sources in Appendix F):
+   - Ottoman Ioannina, woman: the **pafti buckle** (waist) becomes **silver chest chains** (the pafti stays drawn, closing the outfit's belt);
+   - Tokugawa Edo, woman: the **Nagoya-obi** (hips) becomes the **kazuki veil**, a kosode worn over the head (the Nagoya-obi stays drawn, in the outfit);
+   - Beijing 1972, woman: the **khaki satchel** (hip) becomes the **navy cap**, the same cap as the men's (the satchel stays drawn, not leakable);
+   - Metapolitefsi Athens, man and woman: the **tagari bag** stays the leak item but is drawn high against the side of the chest on a short strap;
+   - Eastern Han Luoyang, woman: the **bi-disc pendant** (mid-chest, borderline) moves up to the upper chest.
+   Every MUST READ line now names only what shows above the desk (21 rewritten; the lower body stays in the outfit lines, because it is still drawn), and `tools/data_v2.py` fails on a leak accessory or a MUST READ line that names a lower-body feature.
+4. **The game matches (D4).** The same leak-item change is in `Assets/Data/World/world_source.json` (the piece-4 wardrobe that `worldSourceWardrobe` mirrors): the three changed signatures, their labels and `leakable` flags, the Costume Guide rows (Culture values) they give, one new hand-authored confusable pair and 4 generated ones (Appendix D).
+5. **UI art (D5).** `UI_ART_RULES.md`: the 3D-office framing; wallpapers become 4:3 (1440 x 1080, from ChatGPT's 1536 x 1024); posters leave the ChatGPT prompts and the delivery list (the office has no poster); a new section on the 2D layers over the office (the PC frame, rendered from the Blender CRT by preference, the speech bubble, the paper faces); the 3D props the Blender side makes (the scanner).
+6. **The 2D booth is gone from the text (D6).** Pixels-per-unit and world-unit instructions, "the booth rework", the `traveller.png` sentence, "Claude checks the booth", the Visitor window and Appendix E's poster question are removed or replaced. `coverage.json` `officeArt` lists the 4:3 wallpapers and marks the posters deferred; its canvas gains the measured desk view.
+
+**Open questions for Saleh (v2.1)**
+
+1. **The desk hides less than thought.** Measured at the default traveller anchor, the NEXT sign's top edge cuts the figure at the **waist** (canvas y 760), not mid-chest: the whole chest shows. The brief still keeps identity above mid-chest (y 630), because papers held up to read (piece 10) cover the figure's sides from there down and the Look menu's "< Back" button sits over the neck while it is open. Keep that margin?
+2. **The tagari.** Worn high on the chest it is less typical than at the hip, where the research and v2 put it. Accept, or pick another Greek 1975 item (none passed the checks: Appendix F)?
+3. **The kazuki and the women's navy cap** add headwear to two looks that had none (both historically attested: Appendix F). Accept?
+
 ## What changed since v1
 
-- **Style.** Clean, simple 2D characters with flat colours and very little texture, and **neutral, even lighting** (Unity adds time-of-day light). v1 asked for painterly shading lit from the top-left.
+- **Style.** Cute, soft 2D anime-style characters (since v2.2) with flat cel colours and very little texture, the same for travellers and premades, and **neutral, even lighting** (the game stands the flat figure in its 3D office and tones it to the room's light). v1 asked for painterly shading lit from the top-left.
 - **File names follow the game's key grammar** (section 8). Hair and facial hair come out in five baked colours (Claude makes them from your medium-brown drawing). The Future uses the same pattern as every other era (`outfit_m_china_future`), and all Future travellers share one neutral hairstyle.
 - **A hair-back layer.** Hair that shows beside the neck behind the shoulders is split off by Claude and drawn behind the body, so it never covers a collar or shawl.
 - **All 68 data fixes and all 22 practicality fixes from the v1 review are in** (Appendices A to C say how, and the few that were adapted and why).
@@ -31,25 +69,42 @@ Attach whatever each prompt's "Attached:" line names.
 
 ## 1. How characters work in the game
 
-- **Two kinds of character.** *Generated* travellers are built from layers, so the game can make thousands of different people. *Premade* characters (named historical people) are drawn whole, with four expressions.
+- **Two kinds of character.** *Generated* travellers are built from layers, so the game can make thousands of different people. *Premade* characters (named historical people) are drawn whole, with four expressions. Both kinds share one style (section 2), so they look like one cast.
 - **The layers, bottom first:** hair back, body, outfit, head, facial hair, hair, headwear, accessory. You draw seven kinds of image; Claude makes the hair-back layer from your hair drawing.
-- **Every layer is a full 1024 x 1536 image with the figure in exactly the same spot**, so the game stacks them with no adjusting. The same stack is shown three ways: standing at the booth, in a **Visitor window** on the desk computer (the figure is about 270 x 406 px there, so every item must read at that size), and as the **passport photo**, a head-and-shoulders crop of the same stack.
-- **Every country and era has its own look.** Honest travellers wear only their claimed place's look. A liar's disguise leaks exactly **one** item from their real home, like a Victorian top hat on someone claiming to be from Edo Japan. The player clicks that garment and compares it with a new reference book, the **Costume Guide**, which lists one "leak item" per gender for each place. That is why every look has LEAK ITEMS: they must be instantly recognisable, different from every other place's, and make sense on their own over any other place's clothes.
+- **Every layer is a full 1024 x 1536 image with the figure in exactly the same spot**, so the game stacks them with no adjusting.
+- **Every country and era has its own look.** Honest travellers wear only their claimed place's look. A liar's disguise leaks exactly **one** item from their real home, like a Victorian top hat on someone claiming to be from Edo Japan. The player picks that garment by name in the traveller wheel's Look menu and compares it with a reference book on the office PC, the **Costume Guide**, which lists one "leak item" per gender for each place. That is why every look has LEAK ITEMS: they must be recognisable at the desk's size (below), different from every other place's, and make sense on their own over any other place's clothes.
 - **A worn item can hide another.** A turban, hood or veil that hides all the hair (its PAIR line says so) means the game draws no hair under it, so its edge must come down to the hairline.
 - **Skin and hair colour never give anyone away.** The game picks them from the place the traveller *claims* to be from (and turns hair grey from age 60). Only culture (clothes, hairstyle, headwear, accessories) can be a clue.
 - **The traveller's job never changes the look.** Soldiers, scientists and merchants all wear civilian dress.
 
+### Where the player sees a traveller
+
+The game is set in the art side's 3D office. A traveller is the stack of flat 2D layers, standing behind the desk as a billboard 1.8 m tall (soles to the top of the head), turned to face the camera and toned to the room's light. Sizes are measured at the default traveller anchor, at 1920 x 1080 (and 1280 x 720; they scale with the screen height only).
+
+| Where | What the player sees | Size at 1920 x 1080 (1280 x 720) |
+|---|---|---|
+| **The office view**, from the moment the traveller is called until the decision | The figure from the headroom (tall hats) down to the **waist**: the NEXT sign and the desk hide everything below (canvas y 760). Papers held up to read (from piece 10) cover the figure's sides from about mid-chest (canvas y 630) down, and while the wheel's Look menu (or another sub-menu) is open, its "< Back" button sits over the neck and collar. | The head (top of the head to the chin) about **58 px** tall and 44 px wide (39 x 30); top of the head to the shoulders 85 px (57); the shoulders 121 px wide (80). One canvas pixel is about 0.36 screen pixels (0.24): the 2-3 px outline shows as about 1 px, and a detail thinner than a finger (about 12 canvas px) is lost. |
+| **The passport photo**: on the passport paper on the desk, on its scanned copy on the PC, and (from piece 10) on the paper held up close to read | The head-and-shoulders crop (362, 215) to (662, 590) of the same stack: head, neck, shoulders and upper chest. | On the desk paper about 48 x 25 px, lying flat (not for reading); on the scanned copy in the open PC frame about 60 x 75 px (40 x 50); on a held paper about 95 x 119 px (63 x 79), and up to 134 x 167 px beside the PC frame. |
+| **The Look menu** on the traveller wheel | No picture: every worn garment is listed by its label ("sakkos snood", "petasos hat"); choosing one puts it into the PC's compare bar, to compare with the Costume Guide. | – |
+
+**Nothing shows the whole figure.** The Visitor window of the first design was dropped (the piece-4 amendments, K1). Still draw every layer as a whole figure, down to the feet, on the same 1024 x 1536 canvas: the art contract is unchanged, and a walk-in or a moved traveller anchor may show more later. But **nothing that identifies a look may rely on the lower body**: every LEAK ITEM and everything a MUST READ line names sits on the head, face, neck, shoulders or upper chest, in bold shapes that read when the head is only 58 px tall (a leak item is at least a palm across).
+
 ## 2. The look
 
-The reference is the 2D customers who walk up to the counter in *ReStory: Chill Electronics Repairs*: clean, soft, friendly 2D characters. We go **simpler** than that: flat colours, one soft shade tone, almost no texture. Never name any game in a prompt; Block A describes the look in words, and a named game pulls ChatGPT towards that game's look.
+The reference is the 2D customers who walk up to the counter in *ReStory: Chill Electronics Repairs*: cute, soft 2D anime-style characters with a rounded, illustrative look, standing in a detailed 3D shop. That is this game's set-up too (flat 2D travellers in a 3D office), and the art side already shades the office's desk props with an anime cel shader (`NOPE/Desk Anime`: `ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/ANIME_SHADER.md`). So the characters follow ReStory's customers: anime faces, flat cel colours, almost no texture. Never name any game in a prompt; Block A describes the look in words, and a named game pulls ChatGPT towards that game's look.
 
-- **Shapes and faces:** soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature of any people.
-- **Textures:** flat colour areas, each with one soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photo detail. Patterns (stripes, checks, borders, embroidery) are clean, bold, flat shapes that still read when the figure is 270 px tall.
+- **One cast, two kinds.** The style is the same for both kinds of character: the generated travellers, built from layers (Block A), and the premades, drawn whole (Block P, section 11). Both blocks carry the same STYLE text, written once by `tools/build_v2.py`, and both say the two kinds must look like one cast: the same eyes, line, shading and colour treatment, so a premade never stands out from a generated traveller at the desk.
+- **Faces and hair:** cute, soft and anime-style: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair in clean stylised shapes and locks. Adults who look their age, never chibi or childlike.
+- **Proportions: the guide's, exactly.** The head size and body proportions are fixed by the figure guide and the game's `LookCanvas` (section 3; the figure is about seven and a half heads tall): the mannequins, every layer, the premades and the passport crop depend on them. The style changes the face and the rendering, never the head size or the body.
+- **Reads small:** every look stays recognisable when the head is 58 px tall (section 1). The anime face helps: big, clear eyes and simple, bold shapes survive at that size, where fine realistic features blur.
+- **Respect:** never a caricature of any people. The five skin tones stay exactly their swatches (the style never lightens a darker skin tone), and the four faces a to d stay clearly different in cheeks and chin, eye shape, brows and nose (section 7), because anime styling tends to give everyone the same face. Every culture gets this same style: no exoticised styling, and no cosplay or anime-costume cliches.
+- **Textures:** flat cel colours: each colour area has one hard-edged shade tone (the same hue, about 20% darker, with a crisp edge, never blended) and at most one small highlight. No fabric grain, brush or paper texture, noise or photo detail. Patterns (stripes, checks, borders, embroidery) are clean, bold, flat shapes that still read when the head is 58 px tall (section 1).
 - **Outline:** a clean, even dark-brown line (#3B2A20, 2 to 3 px) around every piece and its main folds.
-- **Lighting: neutral and even.** Plain white light from the front. Shading only shows form (under the chin, inside folds, under a brim), the same on both sides. No light direction, rim light, glow, cast or ground shadow, and no warm or cool tint. Unity adds the time of day (morning sun, evening lamps) on top, so anything baked in would fight it.
+- **Lighting: neutral and even.** Plain white light from the front. Shading only shows form (under the chin, inside folds, under a brim), the same on both sides. No light direction, rim light, glow, cast or ground shadow, and no warm or cool tint. The game stands the flat, unlit figure in its lit 3D office and tones it to the room's light (a warm grey tint today), so any light baked into the drawing would fight the room's.
+- **The room:** `office_style_reference.png` shows the office the figures stand in. ChatGPT matches its colour range and contrast (so a figure never looks pasted in), never its lighting, and never draws the room.
 - **Colour:** gently muted, natural period dyes. Nothing neon.
-- **Pose:** front view, standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
-- **One style across about 40 chats.** After the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, plus a small swatch of folds, a pattern band and the outline weight. Every garment prompt attaches it as a style reference only, so line weight, shading depth and pattern scale stay the same in every chat.
+- **Pose and expression:** front view, standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer. The premades' other three expressions (prompt 9.11) are anime-expressive but dignified, because they are real historical people. No manga symbols on any face (sweat drops, anger marks, blush lines, sparkles, tears, speed lines).
+- **One style across about 40 chats.** After the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, plus a small swatch of folds showing their one hard-edged shade tone, a pattern band and the outline weight. Every garment prompt attaches it as a style reference only, and so does the premade prompt (9.10), so line weight, shading depth and pattern scale stay the same in every chat and in both Projects.
 
 ## 3. Canvas, pivot and the figure guide
 
@@ -63,7 +118,8 @@ Every layer (and every premade image) uses the same canvas and the same figure p
 | Safe area | x 120 to 904; nothing may cross it. Tall hats and hair may rise into the headroom above y = 260 |
 | Pivot | the feet: x = 512, y = 1490 (the game's pivot is 3% up from the bottom edge) |
 | Passport photo | crop (362, 215) to (662, 590), 4:5, head and shoulders; a tall hat is cut by the frame, which is fine |
-| Visitor window | the whole figure at about 270 x 406 px |
+| Office view (section 1) | the figure from the headroom to the waist (y 760); the head about 58 px tall at 1920 x 1080 (39 px at 1280 x 720), one canvas pixel about 0.36 screen pixels |
+| Read zone | everything that identifies a look sits above mid-chest (y 630): the head, face, neck, shoulders and upper chest |
 | Delivered file | RGBA PNG, 1024 x 1536, **untrimmed** (Claude never crops layers; the stack depends on it) |
 
 ChatGPT can't measure pixels, so the prompts refer to the guide's lines instead. Claude re-centres and rescales every image onto these landmarks before cutting it out, so a figure that comes out slightly big or off-centre is not a reason to reject it.
@@ -76,25 +132,36 @@ ChatGPT can't line up separate transparent images reliably. So every piece is dr
 
 1. Create a ChatGPT **Project** called "Time Sorter Characters".
 2. Paste **Block A** (below) into the Project's instructions.
-3. Keep the figure guide, and later the two mannequins and the style card, in a folder on your PC. In every message, use the paperclip to attach exactly the file(s) named on the prompt's "Attached:" line, even if they are also in the Project files. ChatGPT's drawing tool only reliably uses images attached to the message. Don't add finished pieces to the Project files, because ChatGPT copies details from them into other looks.
-4. Every prompt below ends with a size line ("Portrait, 1024 x 1536, the same framing as the attached image."). Keep it: without it ChatGPT often answers with a square image, which the importer rejects and which costs a regeneration.
-5. Start a new chat for each PAIR block (each country and era). Long chats drift in style and mix up looks.
-6. Never ask ChatGPT to fix or tweak an image it made. If something is wrong, press Regenerate, or send the same prompt again with the original mannequin attached. Every edit redraws the whole picture, and the figure drifts further each time.
-7. Save every image with ChatGPT's own download button on a computer, so the file is a 1024 x 1536 PNG. Never screenshot, and never save from the phone app: JPG files blur the green and magenta edges Claude removes.
-8. **Send each place to Claude as soon as it is done** (its 5 to 9 files), even in the middle of a batch, and wait for Claude's go-ahead on the first place of every batch. The batches are only the planning unit.
-9. Premade characters are real people, so they are made in a **second Project**, "Time Sorter Premades", with its own instructions, Block P (section 11).
+3. Take `office_style_reference.png` once: in Unity, open the game's office, set the Game view to 1920 x 1080, and save a screenshot of the office with no traveller at the desk. It is a style reference only (section 2).
+4. Keep it, the figure guide, and later the two mannequins and the style card, in a folder on your PC. In every message, use the paperclip to attach exactly the file(s) named on the prompt's "Attached:" line, even if they are also in the Project files. ChatGPT's drawing tool only reliably uses images attached to the message. Don't add finished pieces to the Project files, because ChatGPT copies details from them into other looks.
+5. Every prompt below ends with a size line ("Portrait, 1024 x 1536, the same framing as the attached image."). Keep it: without it ChatGPT often answers with a square image, which the importer rejects and which costs a regeneration.
+6. Start a new chat for each PAIR block (each country and era). Long chats drift in style and mix up looks.
+7. Never ask ChatGPT to fix or tweak an image it made. If something is wrong, press Regenerate, or send the same prompt again with the original mannequin attached. Every edit redraws the whole picture, and the figure drifts further each time.
+8. Save every image with ChatGPT's own download button on a computer, so the file is a 1024 x 1536 PNG. Never screenshot, and never save from the phone app: JPG files blur the green and magenta edges Claude removes.
+9. **Send each place to Claude as soon as it is done** (its 5 to 9 files), even in the middle of a batch, and wait for Claude's go-ahead on the first place of every batch. The batches are only the planning unit.
+10. Premade characters are real people, so they are made in a **second Project**, "Time Sorter Premades", with its own instructions, Block P (section 11).
 
 ### Block A: paste into the Project instructions
 
 ```
-You are drawing characters for "Time Sorter", a 2D game in which the player is a clerk at a time-travel border desk, checking the papers of travellers from many countries and eras. Every character is built from separate layers (body, head, outfit, facial hair, hair, headwear, accessory) that the game stacks on top of each other, so every layer must line up with the same figure.
+You are drawing characters for "Time Sorter", a game set in a 3D office in which the player is a clerk at a time-travel border desk, checking the papers of travellers from many countries and eras. The travellers are flat 2D figures standing at the desk. Every character is built from separate layers (body, head, outfit, facial hair, hair, headwear, accessory) that the game stacks on top of each other, so every layer must line up with the same figure.
+
+IN THE GAME
+- The characters are flat 2D figures that stand behind the clerk's desk in the 3D office, facing the player; the game places them in the room and tones them to its light, so draw them flat and evenly lit.
+- The desk hides every figure below the waist, and the head shows small on screen. So everything that tells where a character comes from (headwear, hair, face, beard, collar, necklace, shoulders and upper chest) must be bold and clear. Still draw the whole figure, down to the feet.
+- When I attach office_style_reference.png, it is a STYLE REFERENCE ONLY: a screenshot of the game's office. Match its colour range and contrast so the character sits in that room. Never draw the room, the desk, any furniture or the room's lighting: the background stays flat green.
 
 STYLE
-- Clean, friendly 2D character art like the customers in a cozy shop-counter game: soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature.
-- Simple textures: flat colour areas, each with ONE soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
+- Cute, soft 2D anime-style characters, like the customers of a cozy shop-counter game: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair drawn in clean stylised shapes and locks. Every character is an adult who looks their age: never chibi, never childlike.
+- The head size and body proportions are fixed by the attached guide, mannequin or base figure (adult proportions, about seven and a half heads tall; see CANVAS). The style changes only the face and the rendering: never enlarge the head, and never shorten or lengthen the body.
+- Faces stay individual: give each face the face shape, eye shape, brows and nose its prompt describes, never one anime face for everyone. Paint every skin tone exactly as given, never lighter. Every culture is drawn in this same style: never a caricature, never an exoticised version of a people.
+- One cast: the game's layered travellers and its named historical characters are drawn in two separate Projects but must look like one cast, with the same eyes, line, shading and colour treatment, so neither kind ever stands out from the other at the desk.
+- Everything reads small: in the game the head is only about 58 px tall on screen, so keep the eyes, brows, mouth, hair shapes and headwear simple, bold and clear.
+- Flat cel colours: each colour area has ONE hard-edged shade tone (the same hue, about 20% darker, with a crisp edge and no soft blending) and at most one small highlight. No fabric grain, brush or paper texture, noise, gradient or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
 - A clean, even dark-brown outline (#3B2A20, 2-3 px) around every piece and its main folds.
 - Neutral, even lighting: plain white light from the front. Shade only to show form (under the chin, inside folds, under a brim), the same on both sides. No light direction, no rim light, no glow, no cast shadow, no ground shadow, no warm or cool tint.
 - Gently muted, natural period colours. Nothing neon.
+- No manga symbols: no sweat drops, anger marks, blush lines, sparkles, tears or speed lines. A face shows feeling only through its eyes, brows and mouth.
 - Front view: standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
 - When I attach a STYLE REFERENCE image, match its line weight, shading and pattern scale, and never copy its clothing.
 - Respectful and historically grounded. No caricature or stereotype of any people or culture, and no likeness of any real person.
@@ -130,22 +197,22 @@ When I send a PAIR block, reply only READY and draw nothing. After that, one ima
 | Hair | The hairstyle only, as seen from the front with any hat or veil taken off, fitted to the bald head (shaved parts stay magenta) | Face, headwear; a plait, braid or tail that hangs down the back (the body hides it) | 1 per gender per place |
 | Hair back | Made by Claude: the part of the hair that shows beside the neck behind the shoulders, moved behind the body | (you never draw it separately) | Only for loose long hair, a wide wig or a spread curtain of plaits |
 | Headwear | Hat, cap, veil, hood or headdress, sized to sit over a full head of hair; eyes, nose and mouth stay visible. One that hides all the hair (its PAIR line says so) comes down to the hairline, because the game draws no hair under it | Hair, face | When the look has one |
-| Accessory | One worn item that stands on its own on any outfit and hairstyle and reads at thumbnail size: a necklace, collar or pendant on its own chain or cord, a belt, sash or girdle and what hangs from it, a strap bag, a shawl or scarf, glasses, headphones, large earrings | Anything held in the hands; anything that hangs from, is tucked into, pins, closes or sits under another layer's item (a sash, belt, cloak, collar, pocket, hairstyle); rings, single or small earrings, small pins or badges | When the look has one |
+| Accessory | One worn item that stands on its own on any outfit and hairstyle and reads at the desk's head size (section 1): a necklace, collar or pendant on its own chain or cord, a belt, sash or girdle and what hangs from it, a strap bag, a shawl or scarf, glasses, headphones, large earrings | Anything held in the hands; anything that hangs from, is tucked into, pins, closes or sits under another layer's item (a sash, belt, cloak, collar, pocket, hairstyle); rings, single or small earrings, small pins or badges | When the look has one |
 
-A liar's leaked item is drawn over the claimed look, so every item must make sense on its own, on anyone. An item is never an absence ("clean-shaven", "bareheaded"): only real items can leak. For a leak item this is a hard rule: a brooch that pins "the cloak" or a pendant hanging from "the sash" would float in the air over another place's clothes.
+A liar's leaked item is drawn over the claimed look, so every item must make sense on its own, on anyone. An item is never an absence ("clean-shaven", "bareheaded"): only real items can leak. For a leak item this is a hard rule: a brooch that pins "the cloak" or a pendant hanging from "the sash" would float in the air over another place's clothes. A leak item also sits where the desk never hides it, on the head, face, neck, shoulders or upper chest (section 1): a belt, a sash round the waist or a bag at the hip can be an ordinary accessory, never a leak item.
 
 ## 7. Bodies, heads, skin tones, faces and hair colours
 
 **Skin tones** (5): 1 very light `#F1D3C0`, 2 light `#E0B394`, 3 medium olive `#C39A6B`, 4 brown `#94653F`, 5 deep brown `#5C3A24`. Every culture uses several tones; the game picks them by weights per place, so a skin tone never points to a country. ChatGPT gets the swatches in prompt 9.2, and Claude recolours bodies 2 to 5 from the approved tone-1 body to the same swatches, so heads and bodies agree.
 
-**Faces** (4), chosen by the traveller's age:
+**Faces** (4), chosen by the traveller's age. In the anime style (section 2) faces easily come out alike, so each face has its own cheeks and chin, eye shape, brows and nose. All four keep face a's head outline and feature positions (within a few pixels: Batch 2), because the beards, caps and glasses are fitted to them, so they differ inside that outline:
 
 | Face | Age | Drawn as |
 |---|---|---|
-| a | 18 to 34 | a young adult in their 20s |
-| b | 18 to 34 | a different young adult in their 20s |
-| c | 35 to 59 | middle-aged, 40s to 50s, a few lines |
-| d | 60 and over | elderly, 60s and up, wrinkles, lighter eyebrows (the game also turns the hair grey) |
+| a | 18 to 34 | a young adult in their 20s: soft, round cheeks and chin; large, round eyes; gently curved brows; a small, short nose |
+| b | 18 to 34 | a different young adult in their 20s: slimmer cheeks and a more defined chin; narrower, longer eyes; straight, thicker brows; a longer, straighter nose |
+| c | 35 to 59 | middle-aged, 40s to 50s: fuller cheeks and a firmer, squarer chin; steady eyes with a small line at each outer corner; heavier, lower brows; a broader nose; a few lines on the forehead and beside the mouth |
+| d | 60 and over | elderly, 60s and up: softer, slightly hollow cheeks and a softer jawline; smaller eyes under heavier lids, with wrinkles at the corners; thin, lighter eyebrows; a longer nose; wrinkles on the forehead and cheeks (the game also turns the hair grey) |
 
 **Hair colours** (5, baked by Claude, never drawn by ChatGPT): black, brown, blond, red, grey. You draw every natural hairstyle and beard once, in medium brown; Claude masks any ornaments and bakes the five colours into five files. Wigs are costume and keep the colour you draw (one file, no variants).
 
@@ -181,15 +248,19 @@ Replace the parts in [square brackets]. For each place, start a new chat, send i
 ### 9.0 Starting a place
 
 ```
+Attached: office_style_reference.png (STYLE REFERENCE ONLY: the game's office; match its colour range and contrast, never draw the room).
 [paste the PAIR block]
 Read this and reply only READY. Do not draw anything yet.
 ```
 
+Attach the office screenshot here once per chat; ChatGPT keeps it in mind for the rest of that place's images.
+
 ### 9.1 Base figure (Batch 1)
 
 ```
-Attached: character_guide_v2_1024x1536.png (the Time Sorter figure guide).
+Attached: character_guide_v2_1024x1536.png (the Time Sorter figure guide) and office_style_reference.png (STYLE REFERENCE ONLY: the game's office; match its colour range and contrast, never draw the room).
 Draw a BASE FIGURE: a [man / woman] in their 20s, skin tone [1 very light], bald (no hair at all, smooth scalp), ears visible, no makeup, neutral expression, looking at the viewer.
+Face: soft, round cheeks and chin; large, round eyes; gently curved brows; a small, short nose.
 Follow the guide's pose, proportions and landmark lines: the top of the head on the TOP OF HEAD line, the chin on the CHIN line, the soles of the feet on the bottom line, centred on the dashed centre line.
 Clothing: only [plain light-grey fitted shorts ending mid-thigh / a plain light-grey strapless bandeau covering only the bust, and plain light-grey fitted shorts ending mid-thigh]. Bare feet.
 Remove all guide lines, labels and the grey silhouette. Flat pure green #00FF00 background.
@@ -210,7 +281,7 @@ Claude keeps only the head from these; the bodies for tones 2 to 5 are recoloure
 
 ```
 Attached: my approved base figure base_[m / f]_skin[N]_facea.png.
-Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [b: a different young adult in their 20s / c: middle-aged, 40s to 50s, a few lines / d: elderly, 60s and up, wrinkles, lighter eyebrows]. Still bald, ears visible, no makeup, neutral expression, looking at the viewer. Do not move, turn or resize the head.
+Keep everything exactly the same (pose, body, skin tone, grey clothing, position, size, background) and change ONLY the face to: [b: a different young adult in their 20s: slimmer cheeks and a more defined chin; narrower, longer eyes; straight, thicker brows; a longer, straighter nose / c: middle-aged, 40s to 50s: fuller cheeks and a firmer, squarer chin; steady eyes with a small line at each outer corner; heavier, lower brows; a broader nose; a few lines on the forehead and beside the mouth / d: elderly, 60s and up: softer, slightly hollow cheeks and a softer jawline; smaller eyes under heavier lids, with wrinkles at the corners; thin, lighter eyebrows; a longer nose; wrinkles on the forehead and cheeks]. Still bald, ears visible, no makeup, neutral expression, looking at the viewer. Do not move, turn or resize the head, and keep its outline: only the cheeks and chin may be a little rounder or more defined, as described.
 Portrait, 1024 x 1536, the same framing as the attached image.
 ```
 
@@ -222,6 +293,7 @@ Each image shows the whole figure; Claude cuts the head out, lines it up on the 
 Attached: mannequin_[m / f].png (draw on this) and style_card.png (STYLE REFERENCE ONLY: match its line weight and shading; do not copy any clothing).
 From the PAIR block, draw ONLY the [man's / woman's] OUTFIT (all clothing and footwear) on the magenta mannequin, fitted to its body.
 Do not draw the face, hair, facial hair, headwear, accessory or any jewellery. The head stays magenta and uncovered: keep every collar and garment below the chin line, because anything drawn over the head is hidden by the head layer. Any part of the body the outfit does not cover stays magenta.
+Draw the whole outfit down to the shoes. Make the collar, shoulders and chest especially clear: in the game the desk hides the figure below the waist.
 Portrait, 1024 x 1536, the same framing as the attached image.
 ```
 
@@ -255,7 +327,7 @@ Portrait, 1024 x 1536, the same framing as the attached image.
 
 ```
 Attached: mannequin_[m / f].png (draw on this) and style_card.png (STYLE REFERENCE ONLY: match its line weight and shading; do not copy any clothing).
-From the PAIR block, draw ONLY the [man's / woman's] ACCESSORY in its natural worn position on the body. It is worn, never held, and it stands on its own: do not draw a belt, sash, cloak or collar for it to hang from unless the accessory line names one as part of it. Make it big and bold enough to recognise when the whole figure is shown 270 px tall. Draw only what is seen in front of the body, and leave out anything that would hang down the back. Draw nothing else.
+From the PAIR block, draw ONLY the [man's / woman's] ACCESSORY in its natural worn position on the body. It is worn, never held, and it stands on its own: do not draw a belt, sash, cloak or collar for it to hang from unless the accessory line names one as part of it. Make it big and bold enough to recognise when the head is shown only about 40 to 60 px tall: a clear shape at least a palm across, with no detail that matters thinner than a finger. Draw only what is seen in front of the body, and leave out anything that would hang down the back. Draw nothing else.
 Portrait, 1024 x 1536, the same framing as the attached image.
 ```
 
@@ -270,7 +342,7 @@ Portrait, 1024 x 1536, the same framing as the attached image.
 ### 9.10 Premade character (Batches 3, 6 and 8)
 
 ```
-Attached: premadebase_[m / f]_skin[N].png (the lined-up base figure).
+Attached: premadebase_[m / f]_skin[N].png (the lined-up base figure), style_card.png (STYLE REFERENCE ONLY: match its line weight and shading; do not copy any clothing) and office_style_reference.png (STYLE REFERENCE ONLY: the game's office; match its colour range and contrast, never draw the room).
 Dress this exact figure as a complete PREMADE CHARACTER, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories: [the character's description from its batch section]. Hands stay open and empty. Neutral expression, looking at the viewer. Flat pure green #00FF00 background.
 Do not draw: [the character's "do not draw" line].
 Portrait, 1024 x 1536, the same framing as the attached image.
@@ -280,7 +352,7 @@ Portrait, 1024 x 1536, the same framing as the attached image.
 
 ```
 Attached: my approved premade_[id]_neutral.png.
-Keep everything exactly the same (pose, clothing, position, background) and change ONLY the facial expression to [happy: a warm, open smile / angry: lowered, frowning brows and pressed lips / worried: raised inner brows and a tight, uncertain mouth].
+Keep everything exactly the same (pose, clothing, position, background) and change ONLY the facial expression to [happy: a warm, open smile with softly curved, smiling eyes / angry: lowered, frowning brows, narrowed eyes and pressed lips / worried: raised inner brows, wide, uncertain eyes and a small, tight mouth]. Make it clear and expressive in the anime style, but dignified: no comic distortion of the face and no manga symbols (sweat drops, anger marks, blush lines, tears).
 Portrait, 1024 x 1536, the same framing as the attached image.
 ```
 
@@ -297,13 +369,15 @@ These hold for every image, on top of each PAIR block's own DO NOT DRAW list.
 - **No skin-colour tells:** never tie a skin tone or hair colour to a culture, never tint or shade skin inside an outfit, hair or headwear layer, never draw skin anywhere except on the base figures and heads, and never draw makeup on the heads.
 - **No held props:** hands stay open and empty.
 - **No caricature:** no stereotyped features, no "Hollywood" versions of a culture, no ragged or comic poverty.
+- **No manga symbols:** no sweat drops, anger marks, blush lines, sparkles, tears or speed lines on any face.
 - **No colour the cut-out eats:** no bright green, lime, magenta, pink, purple or violet; nothing see-through; no holes cut through fabric (lattice, perforation and laser-cut motifs are printed or stitched on solid cloth); no checkerboard.
 - **No lighting effects:** no glow, rim light, cast or ground shadow, or coloured mood light, and no shade painted onto the magenta mannequin.
+- **No room:** nothing from the office screenshot (no walls, desk, furniture, floor, window or its lighting); the background is always flat green.
 - **Nothing hanging behind the body** on hair, headwear and accessory layers (it can't be seen from the front and it lands in front of the outfit).
 
 ## 11. Premade characters (set-up and cast)
 
-Premade characters are drawn **whole**: one finished image per expression (neutral, happy, angry, worried), on the lined-up base figure `premadebase_[m/f]_skin[N].png` that Claude makes after Batch 2 (the approved recoloured body with the approved head, aligned to the landmarks). Claude registers every premade image to the same landmarks as the layers before delivering it, so the booth position and the passport crop match the generated travellers. The game swaps the four images as they talk.
+Premade characters are drawn **whole**: one finished image per expression (neutral, happy, angry, worried), on the lined-up base figure `premadebase_[m/f]_skin[N].png` that Claude makes after Batch 2 (the approved recoloured body with the approved head, aligned to the landmarks). Claude registers every premade image to the same landmarks as the layers before delivering it, so its place behind the desk and the passport crop match the generated travellers. The game swaps the four images as they talk.
 
 **A second Project.** Block A forbids any likeness of a real person, draws every hair in medium brown and works on a magenta mannequin; premades are real people, drawn whole, in their real hair colour. So they get their own Project:
 
@@ -316,14 +390,24 @@ All ten lived and died centuries ago, none was a ruler, and no photograph of any
 ### Block P: paste into the premades Project's instructions
 
 ```
-You are drawing the named historical characters of "Time Sorter", a 2D game in which the player is a clerk at a time-travel border desk. Each character is ONE whole image: a respectful portrait based on period descriptions, not a photo likeness. Every one of them lived and died centuries ago, and none was a ruler.
+You are drawing the named historical characters of "Time Sorter", a game set in a 3D office in which the player is a clerk at a time-travel border desk. The travellers are flat 2D figures standing at the desk. Each character is ONE whole image: a respectful portrait based on period descriptions, not a photo likeness. Every one of them lived and died centuries ago, and none was a ruler.
+
+IN THE GAME
+- The characters are flat 2D figures that stand behind the clerk's desk in the 3D office, facing the player; the game places them in the room and tones them to its light, so draw them flat and evenly lit.
+- The desk hides every figure below the waist, and the head shows small on screen. So everything that tells where a character comes from (headwear, hair, face, beard, collar, necklace, shoulders and upper chest) must be bold and clear. Still draw the whole figure, down to the feet.
+- When I attach office_style_reference.png, it is a STYLE REFERENCE ONLY: a screenshot of the game's office. Match its colour range and contrast so the character sits in that room. Never draw the room, the desk, any furniture or the room's lighting: the background stays flat green.
 
 STYLE
-- Clean, friendly 2D character art like the customers in a cozy shop-counter game: soft, slightly stylised faces with clear eyes and simple features, on realistic adult proportions (about 7 heads tall). Not chibi, no oversized heads or eyes, never a caricature.
-- Simple textures: flat colour areas, each with ONE soft shade tone (the same hue, about 20% darker) and at most one small highlight. No fabric grain, brush or paper texture, noise or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
+- Cute, soft 2D anime-style characters, like the customers of a cozy shop-counter game: expressive anime eyes (larger than realistic, with one simple highlight), a small, simple nose and mouth, clean rounded face shapes, and hair drawn in clean stylised shapes and locks. Every character is an adult who looks their age: never chibi, never childlike.
+- The head size and body proportions are fixed by the attached guide, mannequin or base figure (adult proportions, about seven and a half heads tall; see CANVAS). The style changes only the face and the rendering: never enlarge the head, and never shorten or lengthen the body.
+- Faces stay individual: give each face the face shape, eye shape, brows and nose its prompt describes, never one anime face for everyone. Paint every skin tone exactly as given, never lighter. Every culture is drawn in this same style: never a caricature, never an exoticised version of a people.
+- One cast: the game's layered travellers and its named historical characters are drawn in two separate Projects but must look like one cast, with the same eyes, line, shading and colour treatment, so neither kind ever stands out from the other at the desk.
+- Everything reads small: in the game the head is only about 58 px tall on screen, so keep the eyes, brows, mouth, hair shapes and headwear simple, bold and clear.
+- Flat cel colours: each colour area has ONE hard-edged shade tone (the same hue, about 20% darker, with a crisp edge and no soft blending) and at most one small highlight. No fabric grain, brush or paper texture, noise, gradient or photographic detail. Draw patterns (stripes, checks, borders, embroidery) as clean, bold, flat shapes.
 - A clean, even dark-brown outline (#3B2A20, 2-3 px) around every piece and its main folds.
 - Neutral, even lighting: plain white light from the front. Shade only to show form (under the chin, inside folds, under a brim), the same on both sides. No light direction, no rim light, no glow, no cast shadow, no ground shadow, no warm or cool tint.
 - Gently muted, natural period colours. Nothing neon.
+- No manga symbols: no sweat drops, anger marks, blush lines, sparkles, tears or speed lines. A face shows feeling only through its eyes, brows and mouth.
 - Front view: standing straight, facing the viewer, arms relaxed slightly away from the body, hands open and empty, neutral expression, eyes looking at the viewer.
 - When I attach a STYLE REFERENCE image, match its line weight, shading and pattern scale, and never copy its clothing.
 - Respectful and historically grounded. No caricature or stereotype of any people or culture.
@@ -341,9 +425,11 @@ CHARACTERS
 - Draw each character on the attached base figure, keeping its pose, size and position, with a new face, hair, clothing, headwear and accessories.
 - Draw hair, beards and wigs in the colour the description gives (grey for an elderly character).
 - Dress each character exactly as described: the civilian dress of their own place and time.
+- Draw every face in the shared style, but keep the features its description gives (such as a snub nose, full lips, a firm jaw or the lines of age): they make each person recognisable.
+- Each character's first image has a neutral expression. When I ask for happy, angry or worried, change only the expression: anime-expressive but dignified, because these are real people. Show feeling through the eyes, brows and mouth only; no comic distortion and no manga symbols.
 ```
 
-**Rules for every premade:** the same style, canvas, neutral lighting, green background and "do not draw" rules as everyone else; period-accurate civilian dress of their claimed place and moment, **including that place's Costume Guide item for their gender** (in the Visitor window a premade's "Period dress" carries the claim's Costume Guide value, and from day 3 the player compares dress with the Guide, so an honest premade must look like its row); the age shown below; hands open and empty. Every description was checked against its place's ChatGPT DO NOT DRAW line and contradicts nothing in it; paste the premade's own "Do not draw" line with prompt 9.10.
+**Rules for every premade:** the same style as the generated travellers (section 2: one cast, with the same eyes, line, shading and colour treatment; Claude compares each premade with the pilot's Athens travellers at the desk, and one that stands out is redrawn), and the same canvas, neutral lighting, green background and "do not draw" rules as everyone else; period-accurate civilian dress of their claimed place and moment, **including that place's Costume Guide item for their gender** (the Look menu lists a premade's whole picture as one garment, "Period dress", valued with the claim's Costume Guide entry, and from day 3 the player compares dress with the Guide, so an honest premade must look like its row, and the item must show above the desk); anime-expressive but dignified expressions (prompt 9.11); the age shown below; hands open and empty. Every description was checked against its place's ChatGPT DO NOT DRAW line and contradicts nothing in it; paste the premade's own "Do not draw" line with prompt 9.10.
 
 **The cast** (Amendment A1: about half women, at most ten). The drawing descriptions are in Batches 3, 6 and 8 (sections 15, 18 and 20).
 
@@ -391,7 +477,7 @@ This small batch proves the pieces stack, the cut-out works and the style is rig
 - `base_m_skin1_facea.png`
 - `base_f_skin1_facea.png`
 
-**Send to Claude.** Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre. Claude splits each figure into a body and a head, recolours the approved body to the four other skin swatches (section 7), and sends back `mannequin_m.png` and `mannequin_f.png`. Keep them in your art folder.
+**Send to Claude.** Claude resizes and re-centres both figures onto the guide's landmarks (top of head y=260, chin y=424, soles y=1490) before making the mannequins, so don't reject a figure just because it is a little big or off-centre. Do reject one whose head is too big for its body (easy in this style: with the top of the head and the soles on their lines, the chin sits clearly below the CHIN line), because the head size is fixed. Claude splits each figure into a body and a head, recolours the approved body to the four other skin swatches (section 7), and sends back `mannequin_m.png` and `mannequin_f.png`. Keep them in your art folder.
 
 **Step 2.** In a new chat, send this PAIR block with prompt 9.0, then use prompts 9.4 to 9.8 for each file below it. The style card does not exist yet, so for this pilot only, attach the mannequin alone and leave the style card out of each prompt's "Attached:" line.
 
@@ -425,9 +511,9 @@ Files (8): `outfit_m_greece_ancient.png`, `hair_m_greece_ancient.png`, `facialha
 
 **Step 3 (stress test).** These try the risky cases (a hood over the head that hides all the hair, hair under a veil, a large dark-green area, a wig hanging behind the shoulders). In a new chat for each PAIR block (they are in Batches 4, 5 and 7): paste the Egypt medieval PAIR block and make `outfit_f_egypt_medieval.png` (add to the prompt: "Make the qamis deep bottle green.", so the green case is really tested), `hair_f_egypt_medieval.png`, `headwear_f_egypt_medieval.png`; paste the Japan ancient PAIR block and make `accessory_m_japan_ancient.png`; paste the Egypt ancient PAIR block and make `hair_f_egypt_ancient.png`. They count toward their own batches, which skip them.
 
-**Send to Claude.** Claude stacks everything in Unity (booth, Visitor window, passport photo). If the pieces line up and the style is right, go on. If not, we fix the prompts before making more.
+**Send to Claude.** Claude stacks everything in Unity: the figure behind the desk in the game's office, the passport photo, and the whole canvas. If the pieces line up and the style is right, go on. If not, we fix the prompts before making more.
 
-**Step 4 (style card).** Once the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, with a small swatch of folds, a pattern band and the outline weight, all on the green background. From now on every garment prompt (9.4 to 9.8) attaches it next to the mannequin, as a style reference only.
+**Step 4 (style card).** Once the pilot is approved, Claude makes `style_card.png`: the approved Athens outfits in greyscale on the mannequin, with a small swatch of folds showing their one hard-edged shade tone, a pattern band and the outline weight, all on the green background. From now on every garment prompt (9.4 to 9.8) attaches it next to the mannequin, and every premade prompt (9.10) next to the base figure, as a style reference only.
 
 ## 14. Batch 2: skin tones and faces (38 images)
 
@@ -568,7 +654,7 @@ WOMAN
 - Headwear: none
 - Accessory: Monile: a short necklace of large pearls on gold links, worn high on the chest
 
-MUST READ AT A GLANCE: Men: a plain white toga with a curved, rounded edge over a tunic with a narrow deep wine-red clavus stripe, with calcei boots. Women: the nodus roll of hair above the forehead, with the strapped stola.
+MUST READ AT A GLANCE: Men: a plain white toga with a curved, rounded edge draped over the left shoulder, over a tunic with a narrow deep wine-red clavus stripe running down from the shoulder. Women: the nodus roll of hair above the forehead, with the stola's straps on the shoulders.
 LEAK ITEMS (draw these extra clear and true to the text): man's hair (Caesar crop); woman's hair (nodus roll)
 DO NOT DRAW: deep knee-length sinus fold and chest pouch (umbo): these are Augustan (umbo from c. 10 BCE), a generation too late; laurel wreath (triumphal or imperial); toga praetexta or all-purple toga (magistrate or emperor); broad senatorial stripe (latus clavus); legionary armour, red military cloak, gladiator gear; beards on men (reads as Greek or later imperial); Greek-key or other patterned borders (keep those for Greece); sandals worn with the toga; Vestal or priestly veiling, toga drawn over the head (sacred); arm held in a toga sling (a statue pose that fights the layered body rig)
 ```
@@ -602,9 +688,9 @@ WOMAN
 - Outfit: Floor-length quju shenyi: a wrap robe whose long curved front panel spirals round the body, making layered diagonal bands on the skirt. Wide drooping sleeves narrow at the wrist, and two or three cross-collars layer at the neck, the wearer's left over right. Deep red, black or ochre silk with checked or cloud-scroll borders, cinched with a sash. The silhouette is narrow and trails at the hem.
 - Hair: Chuishao ji: centre-parted hair drawn smoothly back into a low looped bun at the nape, with a short tail of hair hanging below it
 - Headwear: none
-- Accessory: Jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging at mid-chest on its own long red silk cord round the neck, with a short red tassel below it
+- Accessory: Jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck, with a short red tassel below it
 
-MUST READ AT A GLANCE: A long cross-collar wrap robe with huge bag-shaped 'ox-dewlap' sleeves and broad contrasting borders; men add the roof-ridged black jieze cap
+MUST READ AT A GLANCE: The layered cross-collars (a 'y' at the throat) of a long wrap robe with broad dark borders and huge bag-shaped 'ox-dewlap' sleeves; men add the roof-ridged black jieze cap, women the palm-wide dark jade bi-disc pendant high on the chest
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (jieze cap); woman's accessory (bi-disc pendant)
 DO NOT DRAW: Emperor's mianguan crown with bead curtains, dragon robes or imperial yellow; jinxian guan ridged official hat or coloured seal-ribbons (shou), which mark rank; armour, swords, crossbows; Qing items (queue braid, skullcap, horse-hoof cuffs) or Tang/Ming items; Japanese elements: mizura side loops, magatama beads, short jacket with trousers tied at the knee; conical straw hat (douli); robe closed with the right panel over the left (reversed); chin ties on the jieze (ties belong to the formal guan hat worn on top of it)
 ```
@@ -675,7 +761,7 @@ LEAK ITEMS (draw these extra clear and true to the text): man's headwear (imama 
 DO NOT DRAW: Mamluk military dress: kallawta cap, heraldic blazons or roundels, metal-plaque belts, swords, bows; Abbasid tall black qalansuwa cap, black robes, tiraz script armbands, or taylasan/tarha shawl over the shoulders (read as Iraq-medieval); Blue, yellow or red izars, or any colour-coded turban: these colours were imposed on Christian, Jewish and Samaritan subjects; face-covering veils (burqu'); Ottoman tall kavuk turbans; the tall tartur/taqiyya women's caps (15th century and later, and banned in 1426/7); belly-dance costume; Crusader imagery
 ```
 
-Files (6): `outfit_m_egypt_medieval.png`, `hair_m_egypt_medieval.png`, `facialhair_m_egypt_medieval.png`, `headwear_m_egypt_medieval.png`, `accessory_m_egypt_medieval.png`, `accessory_f_egypt_medieval.png` (already made in Batch 1: `outfit_f_egypt_medieval.png`, `headwear_f_egypt_medieval.png`, `hair_f_egypt_medieval.png`)
+Files (6): `outfit_m_egypt_medieval.png`, `hair_m_egypt_medieval.png`, `facialhair_m_egypt_medieval.png`, `headwear_m_egypt_medieval.png`, `accessory_m_egypt_medieval.png`, `accessory_f_egypt_medieval.png` (already made in Batch 1: `outfit_f_egypt_medieval.png`, `hair_f_egypt_medieval.png`, `headwear_f_egypt_medieval.png`)
 
 Notes for Claude's processing: the man's headwear covers the hair (check on the bald head that no scalp shows under it); the woman's headwear covers the hair (check on the bald head that no scalp shows under it).
 
@@ -768,7 +854,7 @@ WOMAN
 - Headwear: Ghirlanda: a thick padded roll, like a fat wreath, covered in crimson silk and studded with pearls, set around the crown of the head. No veil, so the drawn-back hair and the high bare forehead show.
 - Accessory: A large gold pendant jewel (fermaglio) with a pearl cluster, as wide as the palm, hanging at the base of the throat on its own short gold chain
 
-MUST READ AT A GLANCE: Men: the cappuccio a mazzocchio (a padded ring-hat with a draped side and a long hanging becchetto) with an ankle-length red lucco. Women: the pearl-studded padded ghirlanda roll over bare, drawn-back hair and a plucked high forehead.
+MUST READ AT A GLANCE: Men: the cappuccio a mazzocchio (a padded ring-hat with a draped side and a long hanging becchetto) over a red lucco gown. Women: the pearl-studded padded ghirlanda roll over bare, drawn-back hair and a plucked high forehead.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (mazzocchio hat); woman's headwear (ghirlanda)
 DO NOT DRAW: beards on men (reads Byzantine Greek); tall brimmed Byzantine hat; women's veils, wimples or wound headcloths (read Byzantine, Egypt, Britain or Germany); floor-trailing hanging sleeves (reads Egypt-medieval); a hood enclosing the head and neck with a scalloped shoulder cape (reads Germany's Gugel); cardinal's red galero hat, clerical or papal robes (sacred); laurel wreath and red-cap 'Dante' costume cliches; the later balzo headdress (1450s-80s, Ferrara and Milan); condottiere armour or weapons; slashed Renaissance sleeves (too late; reserve for early modern); Medici family crest or balls emblem
 ```
@@ -830,7 +916,7 @@ WOMAN
 - Headwear: Headrail: a long rectangular veil of COLOURED wool or linen (blue, brown-red or ochre, contrasting with the gown) laid over the head, wrapped once around the throat and draped down over the shoulders and back. It frames the face but never covers it. (This headwear hides all the hair, so no hair is drawn under it: bring its front edge right down to the hairline so no bald scalp shows.)
 - Accessory: none
 
-MUST READ AT A GLANCE: Men: the only knee-length tunic of the era, with leg bindings, a big round silver disc brooch high on the right shoulder, and the long English moustache. Women: a coloured headrail veil wrapped over the head and round the throat, above a bell-sleeved overgown.
+MUST READ AT A GLANCE: Men: a big round silver disc brooch high on the right shoulder and the long English moustache, with a cloak over a tunic. Women: a coloured headrail veil wrapped over the head and round the throat, above a bell-sleeved overgown.
 LEAK ITEMS (draw these extra clear and true to the text): man's accessory (disc brooch); woman's headwear (headrail)
 DO NOT DRAW: horned or winged helmets, a Viking-raider look; chainmail, Norman kite shields, any armour or weapons; crowns or royal regalia; monks' habits, nuns' wimples or any liturgical vestment; white headrail (reads Egypt's white izar and Germany's Kruseler at thumbnail size); a compact wound turban-headdress (reads Greece); hood with a long tail (Gugel) or long pointed shoes (Germany-medieval); frilled Kruseler veil (Germany-medieval); tall conical hennin or later Gothic headdresses; Robin Hood-style feathered cap and Lincoln green
 ```
@@ -868,7 +954,7 @@ Files: `premade_aspasia_neutral.png`, `premade_aspasia_happy.png`, `premade_aspa
 - In the game: pooled days 2-3.
 
 ```
-Ban Zhao, historian and teacher at the Eastern Han court, about 60: a dignified elderly scholar with a kind, firm face and grey hair drawn smoothly back into a low looped bun at the nape, held with one plain silver hairpin. A floor-length quju wrap robe closed with the wearer's left panel over the right (a 'y' at the throat), layered collars with the innermost white, in sober deep brown or dark red silk with broad black cloud-scroll borders; huge sleeves that bag below the arm and narrow at the wrist; a dark cloth sash. A jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging at mid-chest on its own long red silk cord round the neck.
+Ban Zhao, historian and teacher at the Eastern Han court, about 60: a dignified elderly scholar with a kind, firm face and grey hair drawn smoothly back into a low looped bun at the nape, held with one plain silver hairpin. A floor-length quju wrap robe closed with the wearer's left panel over the right (a 'y' at the throat), layered collars with the innermost white, in sober deep brown or dark red silk with broad black cloud-scroll borders; huge sleeves that bag below the arm and narrow at the wrist; a dark cloth sash. A jade bi-disc pendant: a flat round disc of dark, dull grey-green jade with a hole in the centre, as wide as the palm, hanging high on the chest (its centre about a hand's width below the collarbones) on its own red silk cord round the neck.
 ```
 
 Do not draw: court rank insignia, phoenix crowns, books or brushes in the hands.
@@ -932,7 +1018,7 @@ WOMAN
 - Headwear: none
 - Accessory: Multi-strand necklace of dark grey-green magatama and round blue glass beads
 
-MUST READ AT A GLANCE: A short belted jacket over knee-tied trousers or a long skirt, with a necklace of dark grey-green comma-shaped magatama beads; men also wear mizura hair loops beside the ears (the clearest silhouette cue), and women the flat board chignon
+MUST READ AT A GLANCE: Men: mizura hair loops beside the ears (the clearest silhouette cue) and a necklace of dark grey-green comma-shaped magatama beads over a short belted jacket. Women: the flat board chignon and a necklace of magatama beads over the jacket.
 LEAK ITEMS (draw these extra clear and true to the text): man's hair (mizura); woman's accessory (magatama beads)
 DO NOT DRAW: keiko armour, swords, helmets (the famous haniwa warrior); shrine-maiden ritual sash (osuhi), bronze mirrors, anything liturgical; a single oversized jewel styled as the imperial regalia; red face paint (seen on haniwa figures); later kimono with a wide obi, or Heian court robes; Chinese long robes with huge sleeves, or topknot caps
 ```
@@ -998,7 +1084,7 @@ WOMAN
 - Headwear: Ichime-gasa: a wide-brimmed lacquered sedge hat with a tall knob crown, worn WITHOUT its veil so the face is fully visible
 - Accessory: none
 
-MUST READ AT A GLANCE: Men: a tall, soft, crumpled black eboshi cap with a wide-sleeved hitatare and hakama. Women: the wide, knob-crowned ichime-gasa travel hat.
+MUST READ AT A GLANCE: Men: a tall, soft, crumpled black eboshi cap with a wide-sleeved hitatare. Women: the wide, knob-crowned ichime-gasa travel hat.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (eboshi cap); woman's headwear (ichime-gasa)
 DO NOT DRAW: armour, katana, samurai helmets, ninja imagery; Heian junihitoe or court robes (aristocratic and the wrong period); Buddhist monk kesa or yamabushi robes (liturgical); amulet pendants (kake-mamori), which are religious; family crests (kamon) on the hitatare, which can read as a warrior retainer; wide Edo obi or geisha look (anachronistic); Chinese futou with horizontal wings; a stiff, smooth, upright cap with a turban at its base (reads Iraq's qalansuwa); collar closed right-over-left (the burial style); the hanging veil (mushi-no-tareginu) that hides the face
 ```
@@ -1028,7 +1114,7 @@ WOMAN
 - Headwear: Kruseler: a white linen veil edged with several rows of tightly ruffled frills that frame the forehead and cheeks like a halo, with no chin band (This headwear hides all the hair, so no hair is drawn under it: bring its front edge right down to the hairline so no bald scalp shows.)
 - Accessory: none
 
-MUST READ AT A GLANCE: Men: the Gugel hood with its scalloped shoulder cape, plus pointed Schnabelschuhe. Women: the Kruseler veil with its many-layered frilled edge.
+MUST READ AT A GLANCE: Men: the Gugel hood with its scalloped shoulder cape, the face fully clear. Women: the Kruseler veil with its many-layered frilled edge.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (Gugel hood); woman's headwear (Kruseler veil)
 DO NOT DRAW: armour, crowns or noble regalia; clerical or monastic robes; a pointed or funnel-shaped hat, or any marker or badge on the clothing; Anglo-Saxon disc-brooch cloak, long moustache or headrail veil (Britain-medieval); tall conical hennin (Burgundian); Italian padded ring-hat (mazzocchio) or the women's ghirlanda roll (Italy-medieval); an ankle-length red citizen's gown (reads as the Florentine lucco); Crusader tabards or crosses
 ```
@@ -1109,7 +1195,7 @@ Notes for Claude's processing: the man's headwear covers the hair (check on the 
 
 ### Greece: Ottoman Ioannina
 
-Costume Guide entry (the Culture value): **kalpak / pafti buckle**
+Costume Guide entry (the Culture value): **kalpak / silver chest chains**
 
 ```
 PAIR: greece_earlymodern (Ottoman Ioannina, 1700)
@@ -1123,13 +1209,13 @@ MAN
 - Accessory: Wide striped silk-cotton sash (zonari) wound several times around the waist
 
 WOMAN
-- Outfit: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord.
+- Outfit: Long open-fronted anteri of striped silk (alatzas) over a white chemise with wide sleeves and a full skirt. Over it a short, sleeveless, dark velvet waistcoat (zipouni) embroidered with gold cord. A belt at the waist is closed with a pafti: a large, ornate double-plate silver-filigree buckle (Ioannina silverwork).
 - Hair: Long hair plaited into two braids that fall forward over the shoulders onto the chest
 - Headwear: Small red cap wrapped with a patterned silk headscarf (tsemberi) tied at the back. The braids and face stay visible.
-- Accessory: Pafti: a large, ornate double-plate silver-filigree buckle on a belt at the waist (Ioannina silverwork)
+- Accessory: Silver chest chains: four or five rows of fine silver chains hanging in festoons across the upper chest from two round silver-filigree rosettes on the collarbones, the rosettes joined by a silver chain round the back of the neck; the chains are strung with round silver filigree beads (Ioannina silverwork)
 
-MUST READ AT A GLANCE: Tall, rounded, black lambskin kalpak worn with a long, dark, fur-edged coat (women: the large silver pafti buckle)
-LEAK ITEMS (draw these extra clear and true to the text): man's headwear (kalpak); woman's accessory (pafti buckle)
+MUST READ AT A GLANCE: Men: the tall, rounded, black lambskin kalpak with a full beard, over a long dark coat edged with fur at the collar and down the front. Women: rows of fine silver chains festooned across the upper chest over a dark gold-corded velvet waistcoat, with a red cap wrapped in a patterned headscarf.
+LEAK ITEMS (draw these extra clear and true to the text): man's headwear (kalpak); woman's accessory (silver chest chains)
 DO NOT DRAW: white turban or green garments (reserved for Muslims under Ottoman sumptuary law; also reads as Ottoman Egypt or Iraq); red kalpak (forbidden to Christians by a 1662 regulation) and sable fur (restricted for non-Muslims); mitre-shaped or two-pointed kalpaks (a mitre shape reads as clergy); a square, stiff-gauze tall cap or a pale wide-sleeved robe (reads as Ming China); fustanella kilt or tasselled fez (19th century; reserve for industrial); Janissary or Ottoman military uniforms, yataghan or pistols in the sash; Orthodox clergy robes, priest's hat, crosses (sacred); Venetian or Italian Renaissance dress (would read as Venetian Crete or Italy); sultan or court dress (royalty)
 ```
 
@@ -1158,7 +1244,7 @@ WOMAN
 - Headwear: Lenza: a finger-wide dark velvet band worn straight across the forehead, with a large dark-red stone set in gold, as big as the whole eye, at the centre of the brow
 - Accessory: Long necklace of dark jet beads looped twice around the neck
 
-MUST READ AT A GLANCE: Lenza: a finger-wide dark brow band with a large dark-red jewel at the centre, worn straight across the forehead over smooth, hatless hair (men: a small soft red berretta over a shoulder-length bob, with a knee-length dusty-coral pitocco)
+MUST READ AT A GLANCE: Lenza: a finger-wide dark brow band with a large dark-red jewel at the centre, worn straight across the forehead over smooth, hatless hair (men: a small soft red berretta over a shoulder-length bob, with a dusty-coral pitocco tunic)
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (red berretta); woman's headwear (lenza)
 DO NOT DRAW: Leonardo's old long white 'wizard' beard (a later image; also blurs the Greek beard tell); any beard on the man, a wide flat tilted Barett, a fur-collared Schaube or gold chains (read as Germany-earlymodern); any hat on the woman (the German woman wears the Barett); Galileo-era black Spanish dress with ruff or falling collar (reads northern Europe); Tudor-style flat cap with brim and feather (reads Britain); a cloak slung over one shoulder on the man (duplicates Britain); Landsknecht slashing and puffing, armour, weapons; Venetian carnival masks; clerical or cardinal robes (sacred); Sforza or ducal regalia (royalty)
 ```
@@ -1188,7 +1274,7 @@ WOMAN
 - Headwear: Baotou (tougu): a broad black satin band worn low across the brow, with a small jade or pearl ornament at the centre
 - Accessory: none
 
-MUST READ AT A GLANCE: Tall, square, black gauze scholar's cap (women: a knee-length jacket with a standing collar and gold buttons over a pleated horse-face skirt)
+MUST READ AT A GLANCE: Tall, square, black gauze scholar's cap (women: the broad black satin baotou band worn low across the brow, over a jacket with a standing collar and gold buttons)
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (square gauze cap); woman's headwear (baotou)
 DO NOT DRAW: Qing queue, skullcap or horse-hoof cuffs (wrong dynasty); Mandarin rank squares (buzi), python or dragon robes, the official winged wusha cap; Daoist priest vestments. Despite its name the daopao here is a lay robe, so no bagua, taiji or cranes.; long drooping moustaches; white robes for the man (read as mourning); rounded fur-textured caps or dark fur-edged coats (read as Greece-earlymodern); jinbu waist pendants hanging to the knee (too close to Japan's tasselled cord belt); Japanese chonmage topknot or kamishimo; conical straw hat (douli); Collar closed right-over-left; Qipao (a 20th-century garment)
 ```
@@ -1203,7 +1289,7 @@ Review only (Saleh and Claude check the images for these; never paste them into 
 
 ### Japan: Tokugawa Edo
 
-Costume Guide entry (the Culture value): **chasen-mage / Nagoya-obi**
+Costume Guide entry (the Culture value): **chasen-mage / kazuki veil**
 
 ```
 PAIR: japan_earlymodern (Tokugawa Edo, 1610)
@@ -1217,17 +1303,17 @@ MAN
 - Accessory: none
 
 WOMAN
-- Outfit: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi.
+- Outfit: Keicho-style kosode: an ankle-length straight robe with small wrist openings and rounded sleeve bottoms. Dense small motifs in divided zones (tie-dye, embroidery, gold leaf) sit on a dark ground of black, deep red or brown. Collar left over right; slim silhouette with no wide obi. Round the hips, a Nagoya-obi: a braided silk cord belt wound several times and tied in front, with long tassels hanging to the knee.
 - Hair: Long centre-parted hair drawn to the nape and looped once into a soft tamamusubi fold, tied with white paper cord, with the ends hanging down the back (hidden from the front)
-- Headwear: none
-- Accessory: Nagoya-obi: a braided silk cord belt wound several times around the hips and tied in front, with long tassels hanging to the knee
+- Headwear: Kazuki: a second kosode worn over the head as a veil. Its collar edge lies across the top of the forehead, it frames the fully visible face and the hair at the sides, and the robe falls over both shoulders to the upper arms. Dark ground (black, deep red or brown) with dense small motifs in divided zones, in colours different from the kosode worn on the body. The face is fully uncovered.
+- Accessory: none
 
-MUST READ AT A GLANCE: Sleeveless kataginu vest over a kosode and pleated hakama, with the shaved-pate tea-whisk topknot (women: the tasselled Nagoya-obi cord belt on a dark, densely patterned kosode)
-LEAK ITEMS (draw these extra clear and true to the text): man's hair (chasen-mage); woman's accessory (Nagoya-obi)
+MUST READ AT A GLANCE: Men: the bare, shaved-pate tea-whisk topknot (chasen-mage) with a sleeveless kataginu vest with flat, squared shoulders over a kosode. Women: the kazuki, a densely patterned kosode worn over the head and shoulders as a veil, framing the face.
+LEAK ITEMS (draw these extra clear and true to the text): man's hair (chasen-mage); woman's headwear (kazuki veil)
 DO NOT DRAW: stiff, whalebone-stiffened winged kataginu shoulders (a mid-Edo, Genroku-era development); Katana, wakizashi or any sword (samurai wore two; omit them); Armour or kabuto helmets; Tokugawa hollyhock (aoi) crest or any clan crest; Wide obi with a large back bow, or geisha/oiran white makeup and hairpins (later Edo); Chinese square cap or cross-collar daopao with huge sleeves; Collar closed right-over-left; Late-Edo folded-forward chonmage (use the upright chasen-mage)
 ```
 
-Files (6): `outfit_m_japan_earlymodern.png`, `hair_m_japan_earlymodern.png`, `facialhair_m_japan_earlymodern.png`, `outfit_f_japan_earlymodern.png`, `hair_f_japan_earlymodern.png`, `accessory_f_japan_earlymodern.png`
+Files (6): `outfit_m_japan_earlymodern.png`, `hair_m_japan_earlymodern.png`, `facialhair_m_japan_earlymodern.png`, `outfit_f_japan_earlymodern.png`, `hair_f_japan_earlymodern.png`, `headwear_f_japan_earlymodern.png`
 
 Notes for Claude's processing: mask the man's hair ornament before recolouring: white cord; mask the woman's hair ornament before recolouring: white paper cord.
 
@@ -1422,7 +1508,7 @@ WOMAN
 - Headwear: The top of the black silk 'abaya drawn over a black head-kerchief (futa), from the crown down both sides of the head and neck to the shoulders. The face is uncovered. (This headwear hides all the hair, so no hair is drawn under it: bring its front edge right down to the hairline so no bald scalp shows.)
 - Accessory: Heavy gold filigree bangles stacked on both wrists
 
-MUST READ AT A GLANCE: Men: the white chfiyya headcloth held by a black 'igal cord, worn with a gold-trimmed camel 'aba. Women: the black silk 'abaya worn from the crown of the head to the ankles, open over a brocade dress.
+MUST READ AT A GLANCE: Men: the white chfiyya headcloth held by a black 'igal cord, worn with a gold-trimmed camel 'aba. Women: the black silk 'abaya drawn over the head and falling open over a brocade dress.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (chfiyya); woman's headwear (abaya veil)
 DO NOT DRAW: a stiff crimson fez or tarboush with a stambouline frock coat (reads as Egypt-industrial, even though Ottoman officials in Baghdad also wore it); a white veil trailing down the back (reads as Egypt women); black-and-white or other chequered keffiyeh patterns tied to modern political movements, and any slogans; Ottoman military uniforms; the black horsehair face veil (pushi) or anything else that hides the face; daggers, rifles or other weapons; Gulf-style all-white thobe and ghutra (a modern look)
 ```
@@ -1454,7 +1540,7 @@ WOMAN
 - Headwear: Small red fesi pinned tilted on the crown, with a long tassel of braided gold thread falling to the shoulder. The face and hairline are fully visible.
 - Accessory: Necklace of plain gold discs with raised rims on a chain (the dowry flouria, drawn with no face, letters or marks)
 
-MUST READ AT A GLANCE: Men: the white, many-pleated fustanella kilt. Women: the gold-embroidered velvet kontogouni bolero with a small tilted red fesi and a gold tassel.
+MUST READ AT A GLANCE: Men: the small red fesi with a long tassel, over a full-sleeved white shirt and a dark-crimson gold-braided jacket. Women: the gold-embroidered velvet kontogouni bolero with a small tilted red fesi and a gold tassel.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (fesi); woman's headwear (fesi)
 DO NOT DRAW: Evzone guard look: pom-pom tsarouchia shoes, guard ranks, ceremonial drill pose (military); silahlik weapon belt, pistols, yataghan, rifles, cartridge belts; stiff, tall, upright Egyptian or Ottoman tarboosh (reads as Egypt); a long white veil trailing down the back (reads as Egypt women); Queen Amalia's crown or court jewels (royalty); a bright-blue-and-white colour scheme (the Greek flag); Orthodox clergy dress (sacred); Italian tabarro cloak or broad-brimmed felt hat (reads as Italy)
 ```
@@ -1550,7 +1636,7 @@ WOMAN
 - Headwear: none
 - Accessory: none
 
-MUST READ AT A GLANCE: Men: a black bowler hat worn with a black haori, white himo cord and striped hakama, a Western hat over Japanese dress. Women: the maroon hakama tied high over a yagasuri kimono, with sokuhatsu hair and a ribbon bow.
+MUST READ AT A GLANCE: Men: a black bowler hat worn with a black haori closed by a white himo cord, a Western hat over Japanese dress. Women: the sokuhatsu hairstyle with a large white ribbon bow, over a yagasuri kimono.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (bowler hat); woman's hair (sokuhatsu)
 DO NOT DRAW: Imperial Army or Navy uniforms, the Rising Sun flag, the sixteen-petal imperial chrysanthemum; Swords (banned in 1876); Samurai topknot (anachronistic by now); Geisha makeup or kimono; Chinese queue, skullcap or changshan; Collar closed right-over-left (the dressing used for the dead); a bowler worn with a Western frock coat or suit (loses the Japanese tell; reads as Germany or Britain)
 ```
@@ -1614,7 +1700,7 @@ WOMAN
 - Headwear: none
 - Accessory: Jugendstil pendant: a large silver plaque with dark-blue enamel and a curving 'whiplash' leaf motif in the Pforzheim style, about as wide as the face, hanging at the base of the throat on its own short silver chain
 
-MUST READ AT A GLANCE: Men: a Homburg hat with pince-nez and an upturned moustache. Women: a loose, uncorseted Reformkleid with Jugendstil embroidery on the yoke.
+MUST READ AT A GLANCE: Men: a Homburg hat with pince-nez and an upturned moustache. Women: a large Jugendstil pendant at the throat, over the embroidered yoke of a loose Reformkleid.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (Homburg); woman's accessory (Jugendstil pendant)
 DO NOT DRAW: Pickelhaube or any military or police uniform; Iron Cross, eagle emblems, black-white-red imperial colours; student-fraternity caps, sashes or duelling scars; a monocle; a moustache waxed into long needle points reaching the cheekbones; lederhosen, dirndl or Tyrolean hats; top hat with mutton-chop whiskers, or a poke bonnet with Paisley shawl (Britain-industrial); broad-brimmed soft felt hat with a full circular cloak (Italy-industrial); a round-domed bowler (the Japan-industrial hat); tight wasp-waist corset with a bustle
 ```
@@ -1627,7 +1713,7 @@ Review only (Saleh and Claude check the images for these; never paste them into 
 
 When the last place is in, Claude runs the batch check in Unity.
 
-## 22. Batch 10: Modern era (60 images)
+## 22. Batch 10: Modern era (61 images)
 
 Day 5 adds the Modern era (1900 to 2000). Folder: `Raw/batch10-modern-era/`. Start a new chat for each place, send its PAIR block with prompt 9.0, then make each file in its list. **Send each place's files to Claude as soon as that place is done**, and wait for the go-ahead on the first place of the batch.
 
@@ -1652,7 +1738,7 @@ WOMAN
 - Headwear: Mandil abu oya: a coloured triangular cotton headscarf tied at the back of the head (knot at the nape, point covering the back of the head), its front edge trimmed with a fringe of tiny crocheted flowers or beads that frames the forehead. Face, chin and neck fully visible.
 - Accessory: Ghawayesh: a stack of thick gold bangles on each wrist
 
-MUST READ AT A GLANCE: The galabiya. Men wear a tailored Western jacket over it. Women wear a bright printed galabiya with a flower-edged mandil tied at the nape.
+MUST READ AT A GLANCE: Men: a long, dark, fringed shal round the neck, its ends down the chest, over a tailored Western jacket worn on a galabiya. Women: a flower-edged mandil tied at the nape, with a bright printed galabiya.
 LEAK ITEMS (draw these extra clear and true to the text): man's accessory (fringed shal); woman's headwear (mandil)
 DO NOT DRAW: tarboush or fez (reads as Egypt-industrial); military uniforms or Free Officers' khaki; revolutionary or United Arab Republic emblems, the eagle, flags; keffiyeh with agal, or the sidara cap (read as Iraq); black melaya laff wrap over the head (reads as Iraq's 'abaya); face veils or the burqu'; belly-dance costume or coin hip-scarves; bouffant hair, sheath dress and big sunglasses (read as 1960 Rome); striped scarf (reads as Britain's college scarf); pharaonic costume
 ```
@@ -1708,15 +1794,15 @@ MAN
 - Hair: Collar-length, slightly shaggy 1970s cut
 - Facial hair: Thick full moustache
 - Headwear: none
-- Accessory: Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body with the bag resting at the front of the hip
+- Accessory: Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit
 
 WOMAN
 - Outfit: White cotton folk-revival blouse with red and black cross-stitch embroidery at the neckline and cuffs, under a loose chunky knit cardigan. Below are a long midi skirt or flared jeans and flat handmade leather strap sandals.
 - Hair: Long, straight, centre-parted and loose
 - Headwear: none
-- Accessory: Tagari: hand-woven wool shoulder bag in bold horizontal stripes, with a fringed bottom, worn diagonally across the body with the bag resting at the front of the hip
+- Accessory: Tagari: a hand-woven wool shoulder bag in bold horizontal stripes with a fringed bottom, about as tall as the head, fringe included. It is worn crossbody on a short, broad strap woven in the same stripes: the strap runs from the right shoulder across the chest, and the bag rides high against the left side of the chest, its top level with the armpit
 
-MUST READ AT A GLANCE: Tagari: a hand-woven striped wool shoulder bag with a fringed bottom, worn crossbody
+MUST READ AT A GLANCE: The tagari: a hand-woven wool bag in bold stripes with a fringed bottom, worn high on the left side of the chest on a broad striped strap that crosses the chest (men with a thick moustache and a shaggy 1970s cut; women with a cross-stitched folk blouse and long loose hair)
 LEAK ITEMS (draw these extra clear and true to the text): man's accessory (tagari bag); woman's accessory (tagari bag)
 DO NOT DRAW: any uniform, insignia or phoenix emblem; any military or police uniform; Greek flag as clothing; ancient chiton or Evzone costume on a modern traveller; Orthodox clergy dress (sacred); komboloi worry beads (held prop, not worn); fisherman's or other soft peaked cap (collides with Beijing 1972's cap); plain khaki canvas satchel (reads as Beijing 1972); slim dark suit and dark sunglasses (reads 1960 Italy)
 ```
@@ -1763,7 +1849,7 @@ Review only (Saleh and Claude check the images for these; never paste them into 
 
 ### China: Beijing, People's Republic
 
-Costume Guide entry (the Culture value): **navy cap / khaki satchel**
+Costume Guide entry (the Culture value): **navy cap**
 
 ```
 PAIR: china_modern (Beijing, People's Republic, 1972)
@@ -1779,15 +1865,15 @@ MAN
 WOMAN
 - Outfit: Women's version of the same Zhongshan jacket in pale blue or grey cotton, with turn-down collar and four patch pockets and a white shirt collar folded out over it. Straight dark trousers and black cloth strap shoes; practical and unornamented.
 - Hair: Short, straight, chin-length bob with a side part, held back on one side by a plain black hair clip
-- Headwear: none
+- Headwear: The same soft navy cotton cap as the men's: a tall, rounded, slightly stiffened crown, a cloth band and a short stiff peak, sitting high on the head over the bob, unlike a low flat cap. Plain, with no badge or star.
 - Accessory: Plain faded-khaki canvas satchel on a cross-body strap, with no star, slogan, print or stripes
 
-MUST READ AT A GLANCE: Blue-grey Zhongshan (Mao) suit with four patch pockets, worn by men and women alike
-LEAK ITEMS (draw these extra clear and true to the text): man's headwear (navy cap); woman's accessory (khaki satchel)
+MUST READ AT A GLANCE: The soft navy cap with a tall, rounded crown and a short peak, over a blue-grey Zhongshan (Mao) jacket with a turn-down collar and buttoned patch pockets, worn by men and women alike
+LEAK ITEMS (draw these extra clear and true to the text): man's headwear (navy cap); woman's headwear (navy cap)
 DO NOT DRAW: any badge or pin on the jacket; a star or badge on the cap, a green army-style uniform, armbands; a book in the hands, slogans or any text; 1930s qipao or Shanghai glamour (wrong decade); White lab coat as the main garment (not culturally distinctive); conical straw hat (douli); Japanese salaryman suit and tie; low flat tweed cap (Britain modern); striped or fringed woven bag (Greece modern)
 ```
 
-Files (7): `outfit_m_china_modern.png`, `hair_m_china_modern.png`, `headwear_m_china_modern.png`, `accessory_m_china_modern.png`, `outfit_f_china_modern.png`, `hair_f_china_modern.png`, `accessory_f_china_modern.png`
+Files (8): `outfit_m_china_modern.png`, `hair_m_china_modern.png`, `headwear_m_china_modern.png`, `accessory_m_china_modern.png`, `outfit_f_china_modern.png`, `hair_f_china_modern.png`, `headwear_f_china_modern.png`, `accessory_f_china_modern.png`
 
 Notes for Claude's processing: mask the woman's hair ornament before recolouring: black hair clip.
 
@@ -1816,9 +1902,9 @@ WOMAN
 - Headwear: none
 - Accessory: The same silver-and-black headband headphones with round bright-orange foam ear pads, resting around the neck; no cord, no player, no brand logo
 
-MUST READ AT A GLANCE: Orange-foam headphones resting around the neck (men with a dark salaryman suit, women with a fitted office waistcoat and pleated skirt)
+MUST READ AT A GLANCE: Orange-foam headphones resting around the neck (men with a dark salaryman suit, women with a fitted office waistcoat over a blouse with a bow at the collar)
 LEAK ITEMS (draw these extra clear and true to the text): man's accessory (orange headphones); woman's accessory (orange headphones)
-DO NOT DRAW: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; anime or manga styling; samurai or geisha looks; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)
+DO NOT DRAW: Rising Sun flag or rays, or a hachimaki headband with the hinomaru; WWII military uniforms or imagery; Sony or any real brand logo; cosplay, idol-costume or anime-costume cliches; a school-uniform look; samurai or geisha looks; Kimono (not everyday wear at this moment); Chinese Zhongshan suit; dark sunglasses (reads as 1960 Rome, whose slim suit is close to the salaryman's)
 ```
 
 Files (6): `outfit_m_japan_modern.png`, `hair_m_japan_modern.png`, `accessory_m_japan_modern.png`, `outfit_f_japan_modern.png`, `hair_f_japan_modern.png`, `accessory_f_japan_modern.png`
@@ -1846,7 +1932,7 @@ WOMAN
 - Headwear: Printed silk square headscarf folded into a triangle and knotted under the chin, covering the ears, its front edge set back from the forehead; face fully visible
 - Accessory: A single strand of pearls (the 'twinset and pearls')
 
-MUST READ AT A GLANCE: Tweed and knitwear. Men wear a herringbone tweed jacket over a Fair Isle pullover with a flat cap. Women wear a twinset and pearls with a tweed skirt and an under-the-chin headscarf.
+MUST READ AT A GLANCE: Men: a flat cap, with a herringbone tweed jacket over a Fair Isle pullover. Women: an under-the-chin headscarf, with a twinset and pearls.
 LEAK ITEMS (draw these extra clear and true to the text): man's headwear (flat cap); woman's headwear (headscarf)
 DO NOT DRAW: military, Home Guard, ARP or any uniform; Union Jack, royal regalia, guards' bearskins, police helmets; 1960s Mod or 1970s punk looks (the wrong moment); cloche hat, Bubikopf bob or Bauhaus colour-block prints (Germany modern); broad-brimmed soft felt hat with round wire spectacles and a walrus moustache (Germany modern); tall-crowned navy peaked cap (China modern); kerchief knotted at the back of the head with a flower-trimmed edge (Egypt modern); Sherlock-style deerstalker cliche
 ```
@@ -1878,7 +1964,7 @@ WOMAN
 - Headwear: Close-fitting felt cloche hat pulled down to just above the eyebrows, with a small brim so the eyes and face stay clear
 - Accessory: Geometric chrome-and-brass necklace of circles and bars in the Bauhaus metal-workshop style
 
-MUST READ AT A GLANCE: For women, Bauhaus colour-block geometry with a Bubikopf bob and cloche. For men, a broad-brimmed soft felt hat, walrus moustache and round wire spectacles.
+MUST READ AT A GLANCE: For women, the close felt cloche over a Bubikopf bob, with Bauhaus colour-block geometry on the dress. For men, a broad-brimmed soft felt hat, a walrus moustache and round wire spectacles.
 LEAK ITEMS (draw these extra clear and true to the text): man's facial hair (walrus moustache); woman's headwear (cloche)
 DO NOT DRAW: any uniform, armband or insignia; brown or black shirts, jackboots, leather trench coats; Iron Cross, eagles, black-white-red imperial colours; toothbrush moustache; monocle or Pickelhaube; lederhosen or dirndl; fishnets or lingerie; wild white hair or a famous-portrait pose; tweed flat cap, Fair Isle knitwear or twinset and pearls (Britain modern)
 ```
@@ -2034,7 +2120,7 @@ Files: `outfit_m_germany_future.png`, `outfit_f_germany_future.png` (prompt 9.9)
 - Each accessory stands on its own (no belt, sash or cloak drawn for it to hang from).
 - Lighting is flat and even: no bright side, no glow, no shadow on the ground.
 - No text, logos, flags, badges or insignia anywhere; coins are plain discs.
-- The LEAK ITEMS are clearly visible and match the description.
+- The LEAK ITEMS are clearly visible, match the description and sit on the head, face, neck, shoulders or upper chest; the collar, shoulders and chest read clearly (the desk hides the rest in the game).
 
 ## Totals
 
@@ -2049,15 +2135,15 @@ Files: `outfit_m_germany_future.png`, `outfit_f_germany_future.png` (prompt 9.9)
 | Batch 7: Day 3 places | 88 | 225 |
 | Batch 8: premades (Johannes Gutenberg, Leonardo da Vinci, Aemilia Lanyer, Cecilia Gallerani) | 16 | 16 |
 | Batch 9: Industrial era | 64 | 161 |
-| Batch 10: Modern era | 60 | 145 |
+| Batch 10: Modern era | 61 | 146 |
 | Batch 11: the Future | 21 | 31 |
-| **Total** | **405** | **879** |
+| **Total** | **406** | **880** |
 
 The game files include the five baked hair colours, the hair-back layers and the four premade expressions. The two neutral Future outfits are working references with no game file. `coverage.json` lists every game file.
 
 ## Appendix A. The 68 data fixes (brief_review.json `fixes`)
 
-All 68 are in the PAIR blocks above. "Applied" means the reviewer's text is still used exactly as written (`tools/data_v2.py` compares every field with the reviewer's text). "Applied, then amended" means the fix went in and a later rule changed its text; the note names that rule: a v1 practicality issue (the piece-4 spec's rule R23: where a data fix and a later practicality issue conflict, the issue wins) or a finding of the v2 review (Appendix E). The other statuses say where an issue replaced or merged the fix. Totals: 35 applied, 26 applied, then amended, 5 superseded, 1 applied, then reworded, 1 merged.
+All 68 are in the PAIR blocks above. "Applied" means the reviewer's text is still used exactly as written (`tools/data_v2.py` compares every field with the reviewer's text). "Applied, then amended" means the fix went in and a later rule changed its text; the note names that rule: a v1 practicality issue (the piece-4 spec's rule R23: where a data fix and a later practicality issue conflict, the issue wins) or a finding of the v2 review (Appendix E). The other statuses say where an issue replaced or merged the fix. Totals: 33 applied, then amended, 28 applied, 5 superseded, 1 applied, then reworded, 1 merged.
 
 | # | Place | Field | Status | Note |
 |---|---|---|---|---|
@@ -2067,9 +2153,9 @@ All 68 are in the PAIR blocks above. "Applied" means the reviewer's text is stil
 | 4 | greece_ancient | female.outfit | applied |  |
 | 5 | greece_ancient | female.accessory | applied |  |
 | 6 | greece_ancient | female.headwear | applied |  |
-| 7 | italy_ancient | signature | applied, then amended | issue 4 |
-| 8 | china_ancient | signature | applied |  |
-| 9 | japan_ancient | signature | applied, then amended | issue 4 (on fix 9's wording) |
+| 7 | italy_ancient | signature | applied, then amended | issue 4; v2.1 (3D office): MUST READ names only what shows above the desk |
+| 8 | china_ancient | signature | applied, then amended | v2.1 (3D office): MUST READ names only what shows above the desk |
+| 9 | japan_ancient | signature | applied, then amended | issue 4 (on fix 9's wording); v2.1 (3D office): MUST READ names only what shows above the desk |
 | 10 | britain_ancient | female.outfit | applied, then amended | issue 21 (on fix 10); issue 4 |
 | 11 | germany_ancient | female.outfit | applied, then amended | issue 4 |
 | 12 | germany_ancient | signature | applied, then amended | issue 4 |
@@ -2082,18 +2168,18 @@ All 68 are in the PAIR blocks above. "Applied" means the reviewer's text is stil
 | 19 | greece_medieval | male.headwear | applied |  |
 | 20 | china_medieval | female.hair | applied |  |
 | 21 | japan_medieval | avoid | applied |  |
-| 22 | britain_medieval | signature | applied, then amended | review 2 finding 3 (the brooch no longer pins the cloak) |
+| 22 | britain_medieval | signature | applied, then amended | review 2 finding 3 (the brooch no longer pins the cloak); v2.1 (3D office): MUST READ names only what shows above the desk |
 | 23 | britain_medieval | female.accessory | applied, then amended | review 2 finding 15 (clasp moved into the outfit) |
 | 24 | germany_medieval | male.outfit | applied, then amended | issue 4 rule, extended; review 2 finding 15 |
 | 25 | germany_medieval | male.accessory | applied, then amended | review 2 finding 15 (purse moved into the outfit) |
 | 26 | germany_medieval | female.outfit | applied, then amended | issue 4 rule, extended; review 2 finding 15: the Fuerspan clasp closes the neckline |
-| 27 | germany_medieval | signature | applied |  |
+| 27 | germany_medieval | signature | applied, then amended | v2.1 (3D office): MUST READ names only what shows above the desk |
 | 28 | egypt_earlymodern | male.headwear | applied |  |
 | 29 | iraq_earlymodern | signature | applied |  |
-| 30 | greece_earlymodern | female.accessory | applied |  |
+| 30 | greece_earlymodern | female.accessory | applied, then amended | v2.1 (3D office): the pafti buckle at the waist is hidden by the desk; chest silverwork is the visible Ioannina item |
 | 31 | italy_earlymodern | female.hair | applied, then amended | issue 5 deletes the sheer trinzale net that fix 31 kept |
 | 32 | italy_earlymodern | signature | applied, then amended | issue 11 (large brow jewel) and issue 4 (pink -> dusty coral) |
-| 33 | japan_earlymodern | signature | applied |  |
+| 33 | japan_earlymodern | signature | applied, then amended | v2.1 (3D office): MUST READ names only what shows above the desk |
 | 34 | japan_earlymodern | male.accessory | applied, then amended | review 2 finding 15 (inro moved into the outfit) |
 | 35 | britain_earlymodern | female.hair | applied |  |
 | 36 | britain_earlymodern | female.headwear | applied |  |
@@ -2120,12 +2206,12 @@ All 68 are in the PAIR blocks above. "Applied" means the reviewer's text is stil
 | 57 | iraq_modern | female.outfit | applied, then amended | review 2 finding 33 |
 | 58 | iraq_modern | female.headwear | applied |  |
 | 59 | iraq_modern | female.hair | applied |  |
-| 60 | greece_modern | male.accessory | applied |  |
-| 61 | greece_modern | female.accessory | applied |  |
+| 60 | greece_modern | male.accessory | applied, then amended | v2.1 (3D office): the bag rode at the hip, behind the desk; drawn high on the chest |
+| 61 | greece_modern | female.accessory | applied, then amended | v2.1 (3D office): the bag rode at the hip, behind the desk; drawn high on the chest |
 | 62 | china_modern | female.outfit | applied |  |
 | 63 | japan_modern | female.accessory | applied, then amended | review 2 finding 3 (same item as the man's) |
-| 64 | japan_modern | signature | applied, then amended | review 2 finding 3 |
-| 65 | britain_modern | signature | applied |  |
+| 64 | japan_modern | signature | applied, then amended | review 2 finding 3; v2.1 (3D office): MUST READ names only what shows above the desk |
+| 65 | britain_modern | signature | applied, then amended | v2.1 (3D office): MUST READ names only what shows above the desk |
 | 66 | britain_modern | female.headwear | applied |  |
 | 67 | germany_modern | male.outfit | applied |  |
 | 68 | germany_modern | female.headwear | applied |  |
@@ -2185,7 +2271,7 @@ The piece-4 plan authors each place's `wardrobe` block in `world_source.json` by
 
 Checked by `tools/data_v2.py`: every item label is at most 24 characters, ASCII and without "/"; every Culture value is at most 28 characters and unique; the full `Looks.LabelProblems` rule per gender (no two places share a signature label, and no item of any place, in any slot, carries another place's signature label); every accessory stands on its own (no "tucked", "hanging from the sash/belt", "pinning", "closing", "small").
 
-**Every item, per place and gender** (bold = the signature item, which is `leakable`; every signature passes spec C7: an item, readable at thumbnail size, standing on its own; flags in brackets):
+**Every item, per place and gender** (bold = the signature item, which is `leakable`; every signature passes spec C7: an item, readable at the desk's head size (section 1), standing on its own; since v2.1 every leak item sits on the head, face, neck, shoulders or upper chest; flags in brackets):
 
 | Place | g | Signature slot | Outfit | Hair | Facial hair | Headwear | Accessory | Culture value |
 |---|---|---|---|---|---|---|---|---|
@@ -2225,14 +2311,14 @@ Checked by `tools/data_v2.py`: every item label is at most 24 characters, ASCII 
 | egypt_earlymodern | f | Headwear | brocade entari | curtain of thin plaits [back] |  | **tartur** (leakable) [hides top] | disc-drop earrings |  |
 | iraq_earlymodern | m | Headwear | zaboun and striped aba | short crop | full beard | **checked turban** (leakable) [covers Hair] |  | checked turban / futa shawl |
 | iraq_earlymodern | f | Headwear | striped dress and aba | pinned braids |  | **futa shawl** (leakable) [covers Hair] | qilada necklace |  |
-| greece_earlymodern | m | Headwear | anteri and fur coat | short crop | full beard | **kalpak** (leakable) [hides top] | striped sash | kalpak / pafti buckle |
-| greece_earlymodern | f | Accessory | anteri and zipouni | two front braids |  | cap and tsemberi [hides top] | **pafti buckle** (leakable) |  |
+| greece_earlymodern | m | Headwear | anteri and fur coat | short crop | full beard | **kalpak** (leakable) [hides top] | striped sash | kalpak / silver chest chains |
+| greece_earlymodern | f | Accessory | anteri and zipouni | two front braids |  | cap and tsemberi [hides top] | **silver chest chains** (leakable) |  |
 | italy_earlymodern | m | Headwear | coral pitocco | zazzera bob |  | **red berretta** (leakable) [hides top] |  | red berretta / lenza |
 | italy_earlymodern | f | Headwear | laced-sleeve gamurra | smooth centre parting |  | **lenza** (leakable) | jet bead necklace |  |
 | china_earlymodern | m | Headwear | pale daopao robe | topknot with wangjin | neat moustache and beard | **square gauze cap** (leakable) [hides top] | tasselled sitao sash | square gauze cap / baotou |
 | china_earlymodern | f | Headwear | ao and horse-face skirt | high flat bun |  | **baotou** (leakable) |  |  |
-| japan_earlymodern | m | Hair | kataginu and hakama | **chasen-mage** (leakable) | thin moustache and beard |  |  | chasen-mage / Nagoya-obi |
-| japan_earlymodern | f | Accessory | Keicho kosode | tamamusubi loop |  |  | **Nagoya-obi** (leakable) |  |
+| japan_earlymodern | m | Hair | kataginu and hakama | **chasen-mage** (leakable) | thin moustache and beard |  |  | chasen-mage / kazuki veil |
+| japan_earlymodern | f | Headwear | Keicho kosode | tamamusubi loop |  | **kazuki veil** (leakable) [hides top] |  |  |
 | britain_earlymodern | m | Headwear | doublet and ruff | brushed-up short hair | pick-a-devant beard | **capotain hat** (leakable) [hides top] |  | capotain hat / hat over coif |
 | britain_earlymodern | f | Headwear | gown and lace ruff | pinned-up hair |  | **hat over coif** (leakable) [covers Hair] | pomander girdle |  |
 | germany_earlymodern | m | Headwear | fur-collared Schaube | short Kolbe | short rounded beard | **Barett** (leakable) [hides top] | gold chain | Barett |
@@ -2261,8 +2347,8 @@ Checked by `tools/data_v2.py`: every item label is at most 24 characters, ASCII 
 | greece_modern | f | Accessory | embroidered blouse | long loose hair [back] |  |  | **tagari bag** (leakable) |  |
 | italy_modern | m | Accessory | slim mohair suit | slicked-back hair |  |  | **dark shades** (leakable) | dark shades / cat-eye shades |
 | italy_modern | f | Accessory | print sheath dress | bouffant |  |  | **cat-eye shades** (leakable) |  |
-| china_modern | m | Headwear | Zhongshan suit | side-parted crop |  | **navy cap** (leakable) [hides top] | khaki satchel | navy cap / khaki satchel |
-| china_modern | f | Accessory | Zhongshan jacket | clipped bob |  |  | **khaki satchel** (leakable) |  |
+| china_modern | m | Headwear | Zhongshan suit | side-parted crop |  | **navy cap** (leakable) [hides top] | khaki satchel | navy cap |
+| china_modern | f | Headwear | Zhongshan jacket | clipped bob |  | **navy cap** (leakable) [hides top] | khaki satchel |  |
 | japan_modern | m | Accessory | salaryman suit | combed side parting |  |  | **orange headphones** (leakable) | orange headphones |
 | japan_modern | f | Accessory | office waistcoat set | Seiko-chan cut |  |  | **orange headphones** (leakable) |  |
 | britain_modern | m | Headwear | tweed and Fair Isle | short back and sides |  | **flat cap** (leakable) [hides top] | college scarf | flat cap / headscarf |
@@ -2312,16 +2398,17 @@ Checked by `tools/data_v2.py`: every item label is at most 24 characters, ASCII 
 | germany_ancient | italy_industrial | Accessory | f | chunky orange amber vs red coral beads |
 | iraq_modern | greece_industrial | Accessory | f | plain gold discs at the neck (coin pendant vs disc necklace) |
 | iraq_modern | iraq_earlymodern | Accessory | f | plain gold discs at the neck (coin pendant vs qilada) |
+| greece_earlymodern | germany_earlymodern | Accessory | f | festoons of chains on the chest (silver vs layered gold) |
 
-**Generated pairs: a hair signature hidden under a hat** (94 entries in `wardrobe_v2.json` `confusableHidden`, slot `Hair`). The telling part of these hairstyles sits on the top or upper side of the head, so under a claim's hat or cap ("hides top") the leak would be invisible although the proof would land. Mizura (loops at ear level) stays visible under a hat and needs none.
+**Generated pairs: a hair signature hidden under a hat** (98 entries in `wardrobe_v2.json` `confusableHidden`, slot `Hair`). The telling part of these hairstyles sits on the top or upper side of the head, so under a claim's hat or cap ("hides top") the leak would be invisible although the proof would land. Mizura (loops at ear level) stays visible under a hat and needs none.
 
 - Suebian knot (germany_ancient, man) is refused under the headwear of: britain_earlymodern, britain_industrial, britain_modern, china_ancient, china_earlymodern, china_industrial, china_medieval, china_modern, egypt_industrial, germany_earlymodern, germany_industrial, germany_modern, greece_ancient, greece_earlymodern, greece_industrial, greece_medieval, iraq_medieval, iraq_modern, italy_earlymodern, italy_industrial, italy_medieval, japan_industrial, japan_medieval.
-- nodus roll (italy_ancient, woman) is refused under the headwear of: britain_industrial, britain_modern, egypt_earlymodern, egypt_industrial, egypt_modern, germany_earlymodern, germany_modern, greece_ancient, greece_earlymodern, iraq_medieval, iraq_modern, italy_medieval, japan_medieval.
+- nodus roll (italy_ancient, woman) is refused under the headwear of: britain_industrial, britain_modern, china_modern, egypt_earlymodern, egypt_industrial, egypt_modern, germany_earlymodern, germany_modern, greece_ancient, greece_earlymodern, iraq_medieval, iraq_modern, italy_medieval, japan_earlymodern, japan_medieval.
 - Caesar crop (italy_ancient, man) is refused under the headwear of: britain_earlymodern, britain_industrial, britain_modern, china_ancient, china_earlymodern, china_industrial, china_medieval, china_modern, egypt_industrial, germany_earlymodern, germany_industrial, germany_modern, greece_earlymodern, greece_industrial, greece_medieval, iraq_medieval, iraq_modern, italy_earlymodern, italy_industrial, italy_medieval, japan_industrial, japan_medieval.
 - chasen-mage (japan_earlymodern, man) is refused under the headwear of: britain_earlymodern, britain_industrial, britain_modern, china_ancient, china_earlymodern, china_industrial, china_medieval, china_modern, egypt_industrial, germany_earlymodern, germany_industrial, germany_modern, greece_ancient, greece_earlymodern, greece_industrial, greece_medieval, iraq_medieval, iraq_modern, italy_earlymodern, italy_industrial, italy_medieval, japan_industrial, japan_medieval.
-- sokuhatsu (japan_industrial, woman) is refused under the headwear of: britain_industrial, britain_modern, egypt_earlymodern, egypt_industrial, egypt_modern, germany_earlymodern, germany_modern, greece_ancient, greece_earlymodern, iraq_medieval, iraq_modern, italy_medieval, japan_medieval.
+- sokuhatsu (japan_industrial, woman) is refused under the headwear of: britain_industrial, britain_modern, china_modern, egypt_earlymodern, egypt_industrial, egypt_modern, germany_earlymodern, germany_modern, greece_ancient, greece_earlymodern, iraq_medieval, iraq_modern, italy_medieval, japan_earlymodern, japan_medieval.
 
-These generated pairs work with the spec as written. A simpler alternative for Saleh (open question 2 in Appendix E): one extra `CanLeak` row, "a Hair signature is refused when the claim wears headwear that hides the top of the head", with a `hidesTop` flag on those headwear items instead of 94 pairs.
+These generated pairs work with the spec as written. A simpler alternative for Saleh (open question 2 in Appendix E): one extra `CanLeak` row, "a Hair signature is refused when the claim wears headwear that hides the top of the head", with a `hidesTop` flag on those headwear items instead of 98 pairs.
 
 Not authored, with the reason: the spec's section 2.14 asks for "greece/italy/germany Industrial men's facial hair (#19) at least". No Industrial man's signature is facial hair (theirs are the fesi, the silk scarf and the Homburg), so a facial-hair leak can never happen between those three places; the pairs would be unreachable. The Modern walrus moustache, which can leak onto them, has its own pairs above.
 
@@ -2370,7 +2457,7 @@ The v2 brief was reviewed on 2026-09-24 (43 findings). Nothing was rejected. Two
 
 | # | Severity | Finding | Status | What changed |
 |---|---|---|---|---|
-| 1 | high | Poster delivered at 1024 x 1408 with the placeholder's PPU 100 renders about 13 times too big | Applied | UI_ART_RULES Posters and Delivery, coverage.json officeArt: the poster is scaled to 320 x 440 and its .meta set to 400 pixels per unit (0.8 x 1.1 world units, like `Assets/Art/Office/Placeholder/Posters/*`); the wallpaper's target is 1920 x 1080 (a stretched UI Image). |
+| 1 | high | Poster delivered at 1024 x 1408 with the placeholder's PPU 100 renders about 13 times too big | Applied, then superseded (v2.1) | UI_ART_RULES Posters and Delivery, coverage.json officeArt: the poster was scaled to 320 x 440 with its .meta at 400 pixels per unit (0.8 x 1.1 world units, the old booth's posters); the wallpaper's target was 1920 x 1080. v2.1: the 3D office has no poster (deferred) and the desktop wallpaper is 4:3, 1440 x 1080 (UI_ART_RULES). |
 | 2 | medium | No `leakable` or `covers`; non-signature items have no labels | Applied, adapted | Every item has a label and every signature is `leakable` (Appendix D); `data_v2.py` runs the full per-gender LabelProblems rule. `covers: [Hair]` on the 12 headwear items that hide all the hair. Adapted: post-war Britain's headscarf and Abbasid Baghdad's veil show the front hair and side-curls, so they get no `covers` (the honest hair would vanish); instead, hair signatures read on the top of the head get generated confusable pairs under every such headwear. |
 | 3 | medium | Five signature items hang off another layer or are tiny | Applied | Bi-disc on its own cord round the neck, palm-wide; the Anglo-Saxon brooch face-wide at the shoulder with the cloak fastening itself; headphones round the neck with no cord or player; the Jugendstil brooch became a face-wide pendant on its own chain (label `Jugendstil pendant`); the lenza a finger-wide band with an eye-sized stone. The non-signature lines: finding 15. |
 | 4 | medium | Confusable list incomplete | Applied | Every signature checked against every same-gender item in its slot (`tools/confusable_candidates.txt`); 27 hand pairs added, including all seven the finding lists (the Caesar-crop ones through `covers` and the generated 'hidden under a hat' set, because every one of those claims wears a turban or a hat), plus 94 generated pairs. Pair #19 is unreachable and not authored (reason in Appendix D). Two items were made clearer instead of paired: the petasos is undyed tan felt (apart from the black wide-brimmed hats of Bologna and Weimar) and the Ottoman Baghdad turban has bold checks. |
@@ -2396,7 +2483,7 @@ The v2 brief was reviewed on 2026-09-24 (43 findings). Nothing was rejected. Two
 | 24 | medium | Errors surface only after a whole batch | Applied | Send each place (and each premade) as soon as it is done; wait for the go-ahead on the first place of every batch. |
 | 25 | medium | Walrus and curled-beard look-alikes | Applied | Eight walrus pairs and two curled-beard pairs (Byzantine beard; the Gugel hides most of a chest-length beard), and the walrus text made extreme. |
 | 26 | medium | Culture palettes invite flags | Applied | UI_ART_RULES avoid lists: Italy no green, white and red side by side; Germany no black-red-gold (and still no black-white-red); Japan no red sun or red disc. |
-| 27 | medium | Poster PPU (same as finding 1) | Applied | Finding 1. |
+| 27 | medium | Poster PPU (same as finding 1) | Applied, then superseded (v2.1) | Finding 1. |
 | 28 | medium | 'Travel poster' primes lettering | Applied | 'an illustrated wall print in a flat vintage-poster style, with no title area, no banner and no lettering of any kind'; 'no title band' in the checklist. |
 | 29 | medium | Future motifs cut holes through fabric | Applied | Printed or embroidered lattice and punch-card patterns, 'laser-cut-look stitched' line work on solid fabric; section 10 and prompt 9.9 ban holes. |
 | 30 | medium | Premades attach drifting skin 2 to 5 figures | Applied | Claude makes `premadebase_[m/f]_skin[N].png` after Batch 2; prompt 9.10 attaches it; Claude registers every premade image to the landmarks. |
@@ -2419,7 +2506,25 @@ Also changed while applying them (same reasons): the Florentine women's brooch b
 **Open questions for Saleh**
 
 1. **Cast swap.** Strozzi out, Cecilia Gallerani in (finding 6). Keep, or bring Strozzi back and accept that her widow's veil looks unlike Florence's Costume Guide row?
-2. **Hair under hats.** 94 generated confusable pairs keep the hair signatures (Caesar crop, Suebian knot, chasen-mage, nodus roll, sokuhatsu) from leaking invisibly under a claim's hat. Keep them as data, or add one `CanLeak` row and a `hidesTop` headwear flag to the piece-4 spec instead?
+2. **Hair under hats.** 98 generated confusable pairs keep the hair signatures (Caesar crop, Suebian knot, chasen-mage, nodus roll, sokuhatsu) from leaking invisibly under a claim's hat. Keep them as data, or add one `CanLeak` row and a `hidesTop` headwear flag to the piece-4 spec instead?
 3. **Headphones round the neck.** Showa Tokyo's men wore them on the head with a Walkman on the belt; the leak item now rests round the neck for both genders so it stands alone. Acceptable?
 4. **Leonardo and Gutenberg without beards.** Chosen to fit their places' rules and the historical record; their famous later images have beards, so they are harder to recognise. Acceptable, given that the name appears on their papers?
-5. **Poster size.** 320 x 440 at 400 pixels per unit matches the existing booth posters; the ChatGPT master is kept in `Raw/` if the booth rework wants more pixels. Or keep 1024 x 1408 at 1280 pixels per unit?
+5. **Poster size.** Closed in v2.1: the 3D office has no poster. When the art side adds a poster frame to the office, the poster becomes a texture in it, sized by that frame (UI_ART_RULES, "Posters: later").
+
+## Appendix F. v2.1: the desk view and the leak items it can see
+
+**How the desk view was measured.** In the art office on `main` (d5844d0: the art scene of art 23aa6e1 with the gameplay layer), the office camera sits at (0, 2.16, -2.62), pitched 10 degrees down, with a vertical field of view of 55 degrees; the traveller stands at the default `Anchor_Traveller` (0, 0, 1.6), 1.8 m from the soles to the top of the head (`DeskConfigSO.travellerHeight`, `TravellerView.Stand`), a yaw-only billboard tinted (0.9, 0.88, 0.84). Projecting the `LookCanvas` landmarks through that camera gives the placeholder's hat top at y 407, the chin at 505 and the sleeve ends at 613 on a 1920 x 1080 screen; the layered placeholder in `p9_day2_bubble_hieroglyphs.png` (a screenshot of piece 9's play-through) shows them at 406.5, 505 and 609 to 613, so the projection holds. The head (the top of the head, y 260, to the chin, y 424) is 58 px tall; the "about 85 px" read off that screenshot earlier was the top of the head to the shoulders (85 px). The NEXT sign's top edge meets the figure at y 622 to 628 on screen, the waist line (canvas y 760 projects to 622), and the sign is as wide as the figure's hands. The field of view is vertical, so every size scales with the screen height (39 px at 720 lines).
+
+**The rule.** A leak item sits on the head, face, neck, shoulders or upper chest (above y 630), is leakable over any other place's look, differs from every other place's signature (the candidate grid in `tools/confusable_candidates.txt`; `Looks.LabelProblems` in `tools/data_v2.py`), is respectful, and breaks no line of its place's DO NOT DRAW list. An item the look already has (its headwear or hair) was preferred when it passed those checks.
+
+| Place | Gender | v2 leak item (where) | v2.1 leak item | Why | Source |
+|---|---|---|---|---|---|
+| greece_earlymodern (Ottoman Ioannina) | woman | pafti buckle (Accessory, the waist: behind the NEXT sign) | **silver chest chains** (Accessory) | The look's headwear (cap and tsemberi) is already confusable with three other women's headwear (the sakkos, the mandil, the fesi), and its two front braids look like Iron Age Britain's; Epirote silverwork keeps Ioannina's identity where the desk shows it. The pafti stays drawn, as the buckle that closes the outfit's belt. A confusable pair with Renaissance Nuremberg's layered gold chains (the one similar item) keeps a hard-to-see leak out. | Greek women's chest ornaments of silver chains (for example the Benaki Museum's chest ornament of chains; the kioustekia of Greek costume) and Ioannina's filigree workshops ("Wearing Silver", The Athenian, 1990); back-projected to c. 1700 like the pafti itself, as the research's own note says. Drawn without crosses, saints' plaques or double-headed eagles (the place's DO NOT DRAW list bans crosses; Block A bans eagles). |
+| japan_earlymodern (Tokugawa Edo) | woman | Nagoya-obi (Accessory, the hips) | **kazuki veil** (Headwear, hides the top) | The look had no headwear, and its tamamusubi hair reads like Muromachi Kyoto's long tied-back hair from the front (its loop sits at the nape, out of view). Japanese women of 1610 wore no necklaces or earrings, and hairpins belong to later Edo (the DO NOT DRAW list). The kazuki, a patterned kosode draped over the head, is a big, dark, densely patterned shape unlike every other veil (all plain white, black or one colour). The Nagoya-obi stays drawn, in the outfit. | Women going out in the Momoyama and early Edo periods wore a kosode over the head as a veil (kazuki), as the genre screens the research already cites show; the Edo kazuki was worn with its collar pulled forward over the forehead (for example the Kyoto Prefectural Library and Archives, "The Costume of Edo-Period Japanese Women"). |
+| china_modern (Beijing 1972) | woman | khaki satchel (Accessory, the hip) | **navy cap** (Headwear, hides the top) | The women's look had no headwear, and its clipped bob reads like Weimar Berlin's Bubikopf; the plain cloth peaked cap of the men's look was worn by men and women alike with the Zhongshan suit. Among the women's headwear it has no look-alike (the Weimar cloche is a low bell hat without a peak). The satchel stays drawn as the women's accessory (not leakable). The Culture value becomes one item for both genders: "navy cap". | The research's own sources (1970s documentary photographs of Beijing; the suit "worn by men and women alike") and "Dress in Communist China" (Fashion, Costume, and Culture: men and women wore the same garments, with cloth peaked caps). Plain, with no star or badge (DO NOT DRAW). |
+| greece_modern (Metapolitefsi Athens) | man and woman | tagari bag (Accessory, the front of the hip) | **tagari bag**, drawn high: a short, broad striped strap across the chest and the bag against the left side of the chest, its top level with the armpit | No head or neck item of Athens 1975 passes the checks: the thick moustache and the shaggy cut look like other places' moustaches and cuts, the fisherman's cap is Beijing's and London's cap (the research dropped it for that), and worry beads are held. The tagari is the research's single Greek item for both genders, so it stays and moves up. | The research: the tagari was so emblematic of 1970s Athenian students that it named them. Worn higher than it usually was (open question 2 of v2.1). |
+| china_ancient (Eastern Han Luoyang) | woman | bi-disc pendant (Accessory, mid-chest: borderline) | **bi-disc pendant**, raised to the upper chest (its centre about a hand below the collarbones) | It shows above the desk at mid-chest, but papers held up to read (piece 10) reach mid-chest, so it moves up to clear them. The label and the Culture value are unchanged ("jieze cap / bi-disc pendant"), so the game data does not change; Ban Zhao's description moves it up too. | Unchanged (it hangs on its own cord round the neck since the v2 review, finding 3). |
+
+**The Culture values (Costume Guide rows) that change:** Ottoman Ioannina "kalpak / silver chest chains"; Tokugawa Edo "chasen-mage / kazuki veil"; Beijing, People's Republic "navy cap". Metapolitefsi Athens and Eastern Han Luoyang keep theirs.
+
+**MUST READ lines.** 21 lines named or led with a feature below the desk (such as calcei boots, knee-tied trousers, hakama, the fustanella, Schnabelschuhe, leg bindings, knee- and ankle-length garments, skirts, the pafti and the Nagoya-obi, or a long garment's silhouette), or did not name the leak item that replaced one; each now names only what shows above the desk. The lower-body description stays in the outfit lines, because every layer is still drawn whole.

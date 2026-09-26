@@ -1,0 +1,825 @@
+// Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 scripted
+// play-through golden master. Title -> New Run (fixed seed 12345) -> days 1-6
+// in the art office with the gameplay layer, Home between them, up to day 7's
+// morning paper. Every traveller: the READY sign, the interview (every request,
+// every question; slot 1 also runs its first dialog to the end), the evidence
+// for each tell through the real compare path, then a scripted verdict (the
+// right one, except four planned mistakes: an honest traveller denied on day 1,
+// a liar accepted on day 2, a liar denied without evidence on day 3, a rule
+// violator accepted on day 4). Home: treat any family member at condition 2+,
+// buy Interview Protocols, then the Near East Papers translator, when there is
+// money for it (never the slot machine: its draw is unseeded). Driven by direct
+// calls from EditorApplication.update in the persistent editor (job runner);
+// never exits the editor. The transcript holds only deterministic content:
+// <out root>/<tag>/play_transcript.txt (+ saves/ and a report; see Root).
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
+using TMPro;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
+
+[InitializeOnLoad]
+public static class _TimeDeskAuditPlay
+{
+    /// <summary>
+    /// Where the outputs go: the folder named in Library/AuditBaseline/out_root.txt
+    /// when that file exists, else Library/AuditBaseline (inside the project, ignored by git).
+    /// </summary>
+    private static string Root
+    {
+        get
+        {
+            string lib = Path.Combine(Directory.GetCurrentDirectory(), "Library", "AuditBaseline");
+            string file = Path.Combine(lib, "out_root.txt");
+            return File.Exists(file) ? File.ReadAllText(file).Trim() : lib;
+        }
+    }
+    private const int Seed = 12345;
+    private const int LastDay = 6;
+    private const string ViewName = "TimeDeskAuditPlay";
+
+    private const string StepKey = "AuditPlay.Step";
+    private const string TagKey = "AuditPlay.Tag";
+    private const string FailsKey = "AuditPlay.Fails";
+    private const string HadSaveKey = "AuditPlay.HadSave";
+    private const string SceneKey = "AuditPlay.Scene";
+    private const string SeedKey = "AuditPlay.SeedBefore";
+    private const string PrefKey = "AuditPlay.UiLanguage";
+    private const string MotionKey = "AuditPlay.Motion";
+    private const string ViewWidthKey = "AuditPlay.ViewWidth";
+    private const string ViewHeightKey = "AuditPlay.ViewHeight";
+    private const string UiLanguagePref = "TimeDesk.UiLanguage";
+    private const string MotionPref = "TimeDesk.ReducedMotion";
+
+    private const int Playing = 1;
+    private const int Finishing = 2;
+
+    private static readonly Stack<IEnumerator> Script = new Stack<IEnumerator>();
+    private static readonly HashSet<string> MistakesMade = new HashSet<string>();
+    private static bool _ended;
+
+    private static string Dir => Path.Combine(Root, SessionState.GetString(TagKey, "playX"));
+    private static string TranscriptPath => Path.Combine(Dir, "play_transcript.txt");
+    private static string ReportPath => Path.Combine(Dir, "play_report.txt");
+    private static string WarningsPath => Path.Combine(Dir, "play_warnings.txt");
+    private static string SaveBackup => Path.Combine(Root, "nope_save_backup_auditplay.json");
+
+    static _TimeDeskAuditPlay()
+    {
+        if (SessionState.GetInt(StepKey, 0) == 0)
+            return;
+        EditorApplication.update += Tick;
+        Application.logMessageReceived += OnLog;
+    }
+
+    public static void RunA() => Begin("playA");
+    public static void RunB() => Begin("playB");
+
+    private static void Begin(string tag)
+    {
+        SessionState.SetString(TagKey, tag);
+        Directory.CreateDirectory(Path.Combine(Dir, "saves"));
+        foreach (string f in Directory.GetFiles(Dir, "*", SearchOption.AllDirectories))
+            File.Delete(f);
+        File.WriteAllText(ReportPath, $"start {DateTime.Now:s}\n");
+        File.WriteAllText(TranscriptPath, string.Empty);
+        File.WriteAllText(WarningsPath, string.Empty);
+
+        // The player's save slot (the save, its temp file and its backup) is set aside and restored at the end.
+        int hadSave = 0;
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
+        {
+            if (!File.Exists(SaveSystem.Files[i]))
+                continue;
+            hadSave |= 1 << i;
+            File.Copy(SaveSystem.Files[i], SaveBackup + i, true);
+            File.Delete(SaveSystem.Files[i]);
+        }
+        SessionState.SetInt(HadSaveKey, hadSave);
+        SessionState.SetString(PrefKey, PlayerPrefs.HasKey(UiLanguagePref) ? PlayerPrefs.GetString(UiLanguagePref) : "<absent>");
+        SessionState.SetString(MotionKey, PlayerPrefs.HasKey(MotionPref) ? PlayerPrefs.GetString(MotionPref) : "<absent>");
+        PlayerPrefs.DeleteKey(UiLanguagePref);
+        PlayerPrefs.DeleteKey(MotionPref);
+
+        // The fixed seed is set on the run's config in play mode (in memory only, never saved; restored at the end).
+        SessionState.SetInt(SeedKey, Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath).fixedRunSeed);
+
+        PlayModeWindow.GetRenderingResolution(out uint width, out uint height);
+        SessionState.SetInt(ViewWidthKey, (int)width);
+        SessionState.SetInt(ViewHeightKey, (int)height);
+        PlayModeWindow.SetCustomRenderingResolution(1920, 1080, ViewName);
+
+        SessionState.SetInt(FailsKey, 0);
+        SessionState.SetInt(StepKey, Playing);
+        SessionState.SetString(SceneKey, SceneManager.GetActiveScene().path);
+        EditorSceneManager.OpenScene("Assets/Scenes/TitleScene.unity", OpenSceneMode.Single);
+        EditorApplication.update += Tick;
+        Application.logMessageReceived += OnLog;
+        EditorApplication.EnterPlaymode();
+    }
+
+    private static void Tick()
+    {
+        int step = SessionState.GetInt(StepKey, 0);
+        if (step == Finishing)
+        {
+            if (!EditorApplication.isPlaying)
+                Finish();
+            return;
+        }
+        if (step != Playing || !EditorApplication.isPlaying)
+            return;
+
+        try
+        {
+            if (Script.Count == 0)
+                Script.Push(Play());
+            while (Script.Count > 0)
+            {
+                IEnumerator top = Script.Peek();
+                if (!top.MoveNext())
+                {
+                    Script.Pop();
+                    continue;
+                }
+                if (top.Current is IEnumerator nested)
+                {
+                    Script.Push(nested);
+                    continue;
+                }
+                return;
+            }
+            EndPlay();
+        }
+        catch (Exception e)
+        {
+            Check(false, $"exception: {e}");
+            Script.Clear();
+            EndPlay();
+        }
+    }
+
+    private static void EndPlay()
+    {
+        SessionState.SetInt(StepKey, Finishing);
+        EditorApplication.ExitPlaymode();
+    }
+
+    // =====================================================================
+    // The play-through
+    // =====================================================================
+
+    private static IEnumerator Play()
+    {
+        MistakesMade.Clear();
+        _ended = false;
+        yield return Until(() => Object.FindFirstObjectByType<TitleSceneController>() != null && RunManager.HasInstance, 60f, "the title scene");
+        RunManager.Instance.Config.fixedRunSeed = Seed;
+        yield return Frames(5);
+        Line($"RUN fixed seed {Seed}; title scene {SceneManager.GetActiveScene().name}");
+        var title = Object.FindFirstObjectByType<TitleUIController>();
+        ((Button)Field(title, "newRunButton")).onClick.Invoke();
+
+        for (int day = 1; day <= LastDay && !_ended; day++)
+        {
+            yield return OfficeDay(day);
+            if (_ended)
+                break;
+            yield return HomeNight(day);
+        }
+
+        if (!_ended)
+        {
+            yield return OfficeLoads(LastDay + 1);
+            Line($"== DAY {LastDay + 1} (morning only)");
+            RecordBriefing();
+            RecordWorld();
+        }
+        Line("END");
+    }
+
+    private static IEnumerator OfficeLoads(int day)
+    {
+        yield return Until(() => Office.Loaded() && RunManager.Instance.World.day == day && Office.Briefing() != null && Office.Briefing().activeInHierarchy, 90f, $"day {day}'s office and briefing");
+        yield return Frames(3);
+        Scene art = OfficeScenes.ArtScene, gameplay = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
+        Check(art.IsValid() && gameplay.IsValid() && gameplay.isLoaded && SceneManager.GetActiveScene() == art,
+              $"day {day}: the art office ({art.path}) is active with the gameplay layer ({gameplay.path})");
+    }
+
+    private static IEnumerator OfficeDay(int day)
+    {
+        yield return OfficeLoads(day);
+        var o = new Office();
+        Line($"== DAY {day}");
+        RecordBriefing();
+        RecordWorld();
+        o.StartShift.onClick.Invoke();
+
+        int presented = 0;
+        while (true)
+        {
+            yield return Until(() => o.ReadyArmed || o.Results.activeInHierarchy || _ended, 30f, $"day {day}: READY or the shift report");
+            if (o.Results.activeInHierarchy || _ended)
+                break;
+            ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+            yield return Until(() => Field(o.Ui, "_currentCase") != null && (bool)Field(o.Game, "_travellerAtDesk"), 10f, "the traveller at the desk");
+            presented++;
+            yield return Seconds(0.4f);
+            yield return Traveller(o, day);
+            if (_ended)
+                break;
+        }
+
+        if (_ended)
+            yield break;
+        yield return Frames(3);
+        Line($"-- day {day} shift report ({presented} presented)");
+        Line("   " + ((TMP_Text)Field(o.DayFlow(), "resultsTitleText")).text);
+        foreach (string l in Lines(((TMP_Text)Field(o.DayFlow(), "resultsBodyText")).text))
+            Line("   | " + l);
+        ShiftLedger ledger = o.Game.Ledger;
+        Line($"   ledger: {ledger.verdicts.Count} verdicts, correct {ledger.CorrectCount}, wrong {ledger.WrongCount}, pay {ledger.TotalPay}, penalties {ledger.TotalPenalties}, stability {ledger.TotalStabilityDelta.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)}, unproven {ledger.UnprovenDenialCount}");
+        foreach (DialogOutcome d in ledger.dialogOutcomes)
+            Line($"   dialog outcome: {JsonUtility.ToJson(d)}");
+        Check(ledger.verdicts.Count == RunManager.Instance.GetCurrentDayPlan().VisitorsCount,
+              $"day {day}: every traveller in the queue was decided before closing ({ledger.verdicts.Count}/{RunManager.Instance.GetCurrentDayPlan().VisitorsCount})");
+        RecordSave($"day{day}_shift");
+        o.GoHome.onClick.Invoke();
+    }
+
+    private static IEnumerator Traveller(Office o, int day)
+    {
+        var c = (CaseInstance)Field(o.Ui, "_currentCase");
+        int slot = (int)Field(o.Game, "_activeCaseIndex1Based");
+        List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();
+        string tells = string.Join(",", fields.Where(f => f.isAnachronism).Select(f => $"{f.category}/Papers").Distinct()
+            .Concat(c.answers.Where(a => a.isTell).Select(a => $"{a.category}/Answer"))
+            .Concat(c.look != null ? c.look.Garments.Where(g => g.IsTell).Select(g => $"{g.Slot}/Dress") : Enumerable.Empty<string>()));
+        Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} home='{c.HomeLabel}' allowed={c.claimAllowedByRules} shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}]");
+        Line($"   papers: {string.Join(" ; ", c.documents.Select(d => (d.template != null ? d.template.displayName : "?") + ": " + string.Join(", ", d.fields.Select(f => $"{f.label}={f.value}{(f.isAnachronism ? "[TELL]" : "")}"))))}");
+        if (c.look != null)
+            Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
+
+        // The decision (planned mistakes first).
+        string plan;
+        bool accept;
+        bool gatherEvidence;
+        if (day == 1 && slot >= 2 && c.ShouldAccept && !c.IsLiar && Once("d1-deny-honest"))
+        {
+            plan = "MISTAKE deny an honest traveller";
+            accept = false;
+            gatherEvidence = false;
+        }
+        else if (day == 2 && c.IsLiar && Once("d2-accept-liar"))
+        {
+            plan = "MISTAKE accept a liar";
+            accept = true;
+            gatherEvidence = false;
+        }
+        else if (day == 3 && c.IsLiar && Once("d3-unproven-denial"))
+        {
+            plan = "MISTAKE deny a liar without evidence";
+            accept = false;
+            gatherEvidence = false;
+        }
+        else if (day == 4 && !c.claimAllowedByRules && !c.IsLiar && Once("d4-accept-violator"))
+        {
+            plan = "MISTAKE accept a rule violator";
+            accept = true;
+            gatherEvidence = false;
+        }
+        else if (c.IsLiar)
+        {
+            plan = "prove the tells, deny";
+            accept = false;
+            gatherEvidence = true;
+        }
+        else
+        {
+            plan = c.ShouldAccept ? "accept" : "deny (a travel rule)";
+            accept = c.ShouldAccept;
+            gatherEvidence = false;
+        }
+
+        // The interview: every request, every question (slot 1 also runs its first dialog).
+        yield return Interview(o, c, slot == 1);
+
+        if (gatherEvidence)
+            yield return Evidence(o, c);
+
+        var runner = (DialogRunner)Field(o.Ui, "_runner");
+        foreach (DialogLine l in runner.Transcript)
+            Line($"   [{l.Speaker}] {l.Text}{(l.IsAnswer ? $" <{l.Category}={l.Value}{(l.IsTell ? " TELL" : "")}>" : "")}");
+        var log = (DiscrepancyLog)Field(o.Ui, "_discrepancies");
+        foreach (Discrepancy d in log.Items)
+            Line($"   evidence: {d.category} {d.provedBy} from {d.source} value='{d.documentValue}' expected='{d.expectedValue}' origin='{d.actualOrigin}' | {UiText.Deviation(d)}");
+        Line($"   evidence count {o.Ui.EvidenceCount}; plan: {plan}");
+
+        // Odd slots decide at the stamp tray, even ones on the PC.
+        int before = o.Game.Ledger.verdicts.Count;
+        if (slot % 2 == 1 && o.Tray != null)
+        {
+            o.Tray.Open();
+            yield return Frames(2);
+            string opened = o.Tray.IsOpen ? "open" : "NOT OPEN";
+            ((Button)Field(o.Tray, accept ? "acceptButton" : "denyButton")).onClick.Invoke();
+            Line($"   decided at the stamp tray ({opened}): {(accept ? "ACCEPT" : "DENY")}");
+        }
+        else
+        {
+            ((Button)Field(o.Ui, accept ? "acceptButton" : "denyButton")).onClick.Invoke();
+            Line($"   decided on the PC: {(accept ? "ACCEPT" : "DENY")}");
+        }
+        Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
+        CaseVerdict v = o.Game.Ledger.verdicts.Last();
+        Line($"   verdict: {JsonUtility.ToJson(v)}");
+        WorldState w = RunManager.Instance.World;
+        Line($"   world: money={w.money} stability={F(w.timelineStability)} citationsToday={w.citationsToday} ending='{w.endingId}'");
+        yield return Frames(2);
+        if (!string.IsNullOrEmpty(w.endingId))
+        {
+            Line($"   ENDING {w.endingId}");
+            _ended = true;
+            yield break;
+        }
+        if (o.CitationPanel.activeInHierarchy)
+        {
+            Line($"   citation slip: {((TMP_Text)Field(o.OfficeUi, "citationText")).text.Replace("\n", " / ")}");
+            ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
+            yield return Frames(2);
+        }
+        Line($"   verdict line: {((TMP_Text)Field(o.OfficeUi, "resultText")).text.Replace("\n", " / ")}");
+    }
+
+    private static bool Once(string key) => MistakesMade.Add(key);
+
+    /// <summary>Every request at the hub, then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
+    private static IEnumerator Interview(Office o, CaseInstance c, bool dialog)
+    {
+        var runner = (DialogRunner)Field(o.Ui, "_runner");
+        var chosen = new HashSet<string>();
+        void Choose(DialogChoice choice)
+        {
+            chosen.Add(choice.Id);
+            Call(o.Ui, "Choose", choice.Id);
+        }
+
+        for (int guard = 0; guard < 12; guard++)
+        {
+            DialogChoice request = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Request && !chosen.Contains(x.Id));
+            if (request == null)
+                break;
+            Choose(request);
+        }
+        yield return Seconds(0.4f);
+
+        DialogChoice ask = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Question && !string.IsNullOrEmpty(x.Next));
+        if (ask != null)
+        {
+            Choose(ask);
+            for (int guard = 0; guard < 16; guard++)
+            {
+                DialogChoice q = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Question && string.IsNullOrEmpty(x.Next) && !chosen.Contains(x.Id));
+                if (q == null)
+                    break;
+                Choose(q);
+            }
+            DialogChoice back = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
+            if (back != null)
+                Choose(back);
+        }
+
+        if (dialog)
+        {
+            DialogChoice start = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Dialog);
+            if (start != null)
+            {
+                Choose(start);
+                for (int guard = 0; guard < 16; guard++)
+                {
+                    DialogChoice next = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Normal);
+                    if (next == null)
+                        break;
+                    Choose(next);
+                    if (next.Action == DialogAction.CompleteDialog)
+                        break;
+                }
+            }
+        }
+        yield return Frames(2);
+    }
+
+    /// <summary>Proves each of a liar's tells through the real compare path: the tell picked, then the claimed place's book row (or the citizen record for a birth date); a dress tell is picked through the wheel's Look menu.</summary>
+    private static IEnumerator Evidence(Office o, CaseInstance c)
+    {
+        var compare = (CompareController)Field(o.Ui, "compareController");
+        var tr = (CaseTranslation)Field(o.Ui, "_caseTranslation");
+        var facts = (FactTable)Field(o.Ui, "_facts");
+        var registry = (CitizenRegistry)Field(o.Ui, "_registry");
+        var runner = (DialogRunner)Field(o.Ui, "_runner");
+        ContentLibrarySO lib = RunManager.Instance.Library;
+
+        ComparePick? Proof(ClueCategory category, string tellValue, bool home)
+        {
+            if (category == ClueCategory.BirthDate || category == ClueCategory.Name)
+            {
+                CitizenRecord rec = registry.Records.FirstOrDefault(r => r.fullName == c.visitorGivenName);
+                string value = rec == null ? "" : category == ClueCategory.BirthDate ? rec.birthDate : rec.fullName;
+                return EvidencePicks.ForRecord(category, category == ClueCategory.BirthDate ? "Citizen Records · Born" : "Citizen Records · Name", value, rec?.fullName);
+            }
+            ReferenceBookSO book = lib.ReferenceBooks.FirstOrDefault(b => b != null && b.category == category);
+            FactRow row;
+            if (home)
+            {
+                if (!facts.TryFindOtherPlaceWith(category, c.claimedNation.id, c.claimedEra.id, tellValue, out row))
+                    return null;
+            }
+            else
+            {
+                row = facts.Rows(category).FirstOrDefault(r => r.NationId == c.claimedNation.id && r.EraId == c.claimedEra.id);
+                if (row.Value == null)
+                    return null;
+            }
+            return EvidencePicks.ForBookRow(book, row);
+        }
+
+        IEnumerator Pair(string what, Func<ComparePick?> tell, ClueCategory category, string tellValue)
+        {
+            int before = o.Ui.EvidenceCount;
+            foreach (bool home in new[] { false, true })
+            {
+                ComparePick? proof = Proof(category, tellValue, home);
+                if (proof == null)
+                    continue;
+                compare.Clear();
+                ComparePick? first = tell();
+                if (first != null)
+                    compare.Select(first.Value, null);
+                compare.Select(proof.Value, null);
+                yield return Frames(1);
+                if (o.Ui.EvidenceCount > before)
+                    yield break;
+            }
+            Line($"   evidence FAILED for {what}");
+        }
+
+        // Papers: the first tell field of each category.
+        var done = new HashSet<ClueCategory>();
+        for (int d = 0; d < c.documents.Count; d++)
+        {
+            DocumentInstance doc = c.documents[d];
+            foreach (DocumentRow row in DocumentRows.Ordered(doc.fields))
+            {
+                if (!row.Field.isAnachronism || !done.Add(row.Field.category))
+                    continue;
+                int index = d;
+                DocumentRow r = row;
+                string docName = doc.template != null ? doc.template.displayName : "?";
+                yield return Pair($"papers {row.Field.category}", () => EvidencePicks.ForField(index, r, docName, tr), row.Field.category, row.Field.value);
+            }
+        }
+
+        // Answers: the tell line in the transcript (every question was asked).
+        foreach (InterviewAnswer a in c.answers.Where(x => x.isTell))
+        {
+            int i = -1;
+            for (int k = 0; k < runner.Transcript.Count; k++)
+                if (runner.Transcript[k].IsAnswer && runner.Transcript[k].IsTell && runner.Transcript[k].Category == a.category)
+                    i = k;
+            if (i < 0)
+            {
+                Line($"   evidence FAILED: no {a.category} tell line in the transcript");
+                continue;
+            }
+            DialogLine line = runner.Transcript[i];
+            int index = i;
+            yield return Pair($"answer {a.category}", () => EvidencePicks.ForAnswer(index, line, tr), a.category, a.value);
+        }
+
+        // Dress: Look > the tell garment (the controller puts it into the compare), then the Costume Guide row.
+        if (c.look != null)
+        {
+            for (int g = 0; g < c.look.Garments.Count; g++)
+            {
+                Garment garment = c.look.Garments[g];
+                if (!garment.IsTell)
+                    continue;
+                int gi = g;
+                ComparePick? LookAt()
+                {
+                    compare.Clear();
+                    DialogChoice look = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Look && !string.IsNullOrEmpty(x.Next));
+                    if (look != null)
+                        Call(o.Ui, "Choose", look.Id);
+                    DialogChoice item = runner.Choices.FirstOrDefault(x => x.Action == DialogAction.InspectGarment && x.GarmentIndex == gi);
+                    if (item != null)
+                        Call(o.Ui, "Choose", item.Id);
+                    else
+                        Line($"   no Look choice for garment {gi}");
+                    DialogChoice back = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
+                    if (back != null && item == null)
+                        Call(o.Ui, "Choose", back.Id);
+                    return null;
+                }
+                yield return PairDress(o, compare, LookAt, () => Proof(Looks.EvidenceCategory, garment.Value, false), () => Proof(Looks.EvidenceCategory, garment.Value, true), $"dress {garment.Slot}");
+            }
+        }
+        compare.Clear();
+    }
+
+    private static IEnumerator PairDress(Office o, CompareController compare, Func<ComparePick?> look, Func<ComparePick?> claimed, Func<ComparePick?> home, string what)
+    {
+        int before = o.Ui.EvidenceCount;
+        foreach (Func<ComparePick?> proof in new[] { claimed, home })
+        {
+            ComparePick? p = proof();
+            if (p == null)
+                continue;
+            look();
+            compare.Select(p.Value, null);
+            yield return Frames(1);
+            if (o.Ui.EvidenceCount > before)
+                yield break;
+        }
+        Line($"   evidence FAILED for {what}");
+    }
+
+    // =====================================================================
+    // Home
+    // =====================================================================
+
+    private static IEnumerator HomeNight(int day)
+    {
+        yield return Until(() => Object.FindFirstObjectByType<HomeUIController>() != null && RunManager.HasInstance && SceneManager.GetActiveScene().name == RunManager.Instance.Config.homeSceneName, 60f, "Home");
+        var ui = Object.FindFirstObjectByType<HomeUIController>();
+        var manager = Object.FindFirstObjectByType<HomeManager>();
+        yield return Until(() => ((GameObject)Field(ui, "expensesPanel")).activeInHierarchy, 15f, "the expenses panel");
+        yield return Frames(3);
+        WorldState w = RunManager.Instance.World;
+        GameConfigSO config = RunManager.Instance.Config.gameConfig;
+        Line($"== HOME night {day}");
+        Line($"   expense report: {Fields(Field(manager, "_expenseReport"))}");
+        foreach (string l in Lines(((TMP_Text)Field(ui, "expensesBodyText")).text))
+            Line("   | " + l);
+        Line($"   family: {string.Join(", ", w.family.members.Select(m => $"{m.name}={m.condition}"))}; money={w.money}");
+
+        for (int i = 0; i < w.family.members.Count; i++)
+        {
+            if (w.family.members[i].condition < 2 || w.money < HomeEconomy.GetCareCost(config))
+                continue;
+            Call(manager, "HandleTreatFamilyMember", i);
+            Line($"   treated {w.family.members[i].name}: condition {w.family.members[i].condition}, money={w.money}");
+        }
+
+        ((Button)Field(ui, "expensesContinueButton")).onClick.Invoke();
+        yield return Frames(3);
+        ContentLibrarySO lib = RunManager.Instance.Library;
+        foreach (string id in new[] { "interview_protocols", "tr_near_east_written" })
+        {
+            UpgradeSO upgrade = lib.GetUpgradeById(id);
+            if (upgrade == null || w.HasUpgrade(id) || w.money < upgrade.cost + 20)
+                continue;
+            Call(manager, "HandleBuyUpgrade", upgrade);
+            Line($"   bought {id}: owned={w.HasUpgrade(id)} money={w.money}");
+            break;
+        }
+        ((Button)Field(ui, "shopContinueButton")).onClick.Invoke();
+        yield return Frames(3);
+        ((Button)Field(ui, "slotContinueButton")).onClick.Invoke();
+        yield return Frames(3);
+        foreach (string l in Lines(((TMP_Text)Field(ui, "sleepBodyText")).text))
+            Line("   sleep | " + l);
+        ((Button)Field(ui, "sleepButton")).onClick.Invoke();
+        yield return Frames(1);
+        w = RunManager.Instance.World;
+        Line($"   after sleep: day={w.day} money={w.money} stability={F(w.timelineStability)} ending='{w.endingId}' leader='{w.history.leaderId}'");
+        RecordSave($"night{day}_sleep");
+        if (!string.IsNullOrEmpty(w.endingId))
+        {
+            Line($"   ENDING {w.endingId}");
+            _ended = true;
+        }
+    }
+
+    // =====================================================================
+    // Records
+    // =====================================================================
+
+    private static void RecordBriefing()
+    {
+        DayFlowUIController flow = Office.One<DayFlowUIController>();
+        Line("   briefing: " + ((TMP_Text)Field(flow, "briefingTitleText")).text);
+        foreach (string l in Lines(((TMP_Text)Field(flow, "briefingBodyText")).text))
+            Line("   | " + l);
+    }
+
+    private static void RecordWorld()
+    {
+        WorldState w = RunManager.Instance.World;
+        Line($"   world: day={w.day} runSeed={w.runSeed} daySeed={RunManager.Instance.GetDaySeed()} money={w.money} stability={F(w.timelineStability)} leader='{w.history.leaderId}' upgrades=[{string.Join(",", w.unlockedUpgradeIds)}] phase={w.phase}");
+        Line($"   plan: {RunManager.Instance.GetCurrentDayPlan().name} visitors={RunManager.Instance.GetCurrentDayPlan().VisitorsCount}");
+    }
+
+    private static void RecordSave(string name)
+    {
+        if (!File.Exists(SaveSystem.SavePath))
+        {
+            Line($"   save {name}: NO SAVE FILE");
+            return;
+        }
+        string json = File.ReadAllText(SaveSystem.SavePath);
+        File.WriteAllText(Path.Combine(Dir, "saves", name + ".json"), json);
+        using var sha = SHA1.Create();
+        Line($"   save {name}: {json.Length} chars sha1 {BitConverter.ToString(sha.ComputeHash(Encoding.UTF8.GetBytes(json))).Replace("-", "").ToLowerInvariant()}");
+    }
+
+    private static IEnumerable<string> Lines(string text) =>
+        (text ?? string.Empty).Replace("\r", "").Split('\n').Where(l => l.Length > 0);
+
+    private static string F(float f) => f.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture);
+
+    private static string Fields(object o)
+    {
+        if (o == null)
+            return "null";
+        return string.Join(" ", o.GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+            .Select(f => $"{f.Name}={Value(f.GetValue(o))}"));
+    }
+
+    private static string Value(object v) => v switch
+    {
+        null => "null",
+        float f => F(f),
+        string s => $"'{s}'",
+        System.Collections.IEnumerable e => "[" + string.Join(",", e.Cast<object>().Select(x => x is float xf ? F(xf) : x?.ToString())) + "]",
+        _ => v.ToString()
+    };
+
+    // =====================================================================
+    // The office
+    // =====================================================================
+
+    private sealed class Office
+    {
+        public static bool Loaded()
+        {
+            Scene g = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
+            return g.IsValid() && g.isLoaded && OfficeScenes.ArtScene.IsValid() && One<GameManager>() != null;
+        }
+
+        public static T One<T>() where T : Component
+        {
+            Scene g = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
+            if (!g.IsValid() || !g.isLoaded)
+                return null;
+            foreach (GameObject root in g.GetRootGameObjects())
+            {
+                T found = root.GetComponentInChildren<T>(true);
+                if (found != null)
+                    return found;
+            }
+            return null;
+        }
+
+        public static GameObject Briefing()
+        {
+            DayFlowUIController flow = One<DayFlowUIController>();
+            return flow != null ? (GameObject)Field(flow, "briefingPanel") : null;
+        }
+
+        public readonly GameManager Game = One<GameManager>();
+        public readonly InvestigationUIController Ui = One<InvestigationUIController>();
+        public readonly OfficeUIController OfficeUi = One<OfficeUIController>();
+        public readonly BoothCoordinator Coordinator = One<BoothCoordinator>();
+
+        public DayFlowUIController DayFlow() => One<DayFlowUIController>();
+        public Clickable Ready => (Clickable)Field(Game, "readySign");
+        public bool ReadyArmed => Ready.Interactable && ((ReadyGate)Field(Game, "_readyGate")).IsArmed;
+        public StampTray Tray => (StampTray)Field(Coordinator, "stampTray");
+        public GameObject Results => (GameObject)Field(DayFlow(), "resultsPanel");
+        public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
+        public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
+        public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
+    }
+
+    // =====================================================================
+    // Waiting and plumbing
+    // =====================================================================
+
+    private static IEnumerator Frames(int n)
+    {
+        int target = Time.frameCount + n;
+        while (Time.frameCount < target)
+            yield return null;
+    }
+
+    private static IEnumerator Seconds(float seconds)
+    {
+        float end = Time.realtimeSinceStartup + seconds;
+        while (Time.realtimeSinceStartup < end)
+            yield return null;
+    }
+
+    private static IEnumerator Until(Func<bool> condition, float timeout, string what)
+    {
+        float end = Time.realtimeSinceStartup + timeout;
+        while (!condition())
+        {
+            if (Time.realtimeSinceStartup > end)
+                throw new TimeoutException($"waited {timeout} s for {what}");
+            yield return null;
+        }
+    }
+
+    private static void Finish()
+    {
+        PlayModeWindow.SetCustomRenderingResolution((uint)SessionState.GetInt(ViewWidthKey, 1920), (uint)SessionState.GetInt(ViewHeightKey, 1080), ViewName);
+        int hadSave = SessionState.GetInt(HadSaveKey, 0);
+        for (int i = 0; i < SaveSystem.Files.Count; i++)
+        {
+            bool had = (hadSave & (1 << i)) != 0;
+            if (had && File.Exists(SaveBackup + i))
+            {
+                File.Copy(SaveBackup + i, SaveSystem.Files[i], true);
+                File.Delete(SaveBackup + i);
+            }
+            else if (!had && File.Exists(SaveSystem.Files[i]))
+            {
+                File.Delete(SaveSystem.Files[i]);
+            }
+        }
+        foreach ((string key, string pref) in new[] { (PrefKey, UiLanguagePref), (MotionKey, MotionPref) })
+        {
+            string value = SessionState.GetString(key, "<absent>");
+            if (value == "<absent>")
+                PlayerPrefs.DeleteKey(pref);
+            else
+                PlayerPrefs.SetString(pref, value);
+        }
+        PlayerPrefs.Save();
+        Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath).fixedRunSeed = SessionState.GetInt(SeedKey, 0);
+
+        Report($"fails={SessionState.GetInt(FailsKey, 0)}");
+        SessionState.SetInt(StepKey, 0);
+        EditorApplication.update -= Tick;
+        Application.logMessageReceived -= OnLog;
+        string scene = SessionState.GetString(SceneKey, string.Empty);
+        if (!string.IsNullOrEmpty(scene) && File.Exists(scene))
+            EditorSceneManager.OpenScene(scene, OpenSceneMode.Single);
+        Report($"done {DateTime.Now:s}");
+    }
+
+    private static void OnLog(string message, string stack, LogType type)
+    {
+        if (type == LogType.Log)
+            return;
+        if (stack != null && stack.Contains("UnityEditor.Search"))
+            return;
+        if (message.StartsWith("Account API did not become accessible"))
+            return;
+        try { File.AppendAllText(WarningsPath, $"[{type}] {message}\n"); } catch (IOException) { }
+    }
+
+    private static object Field(object target, string name)
+    {
+        for (Type t = target.GetType(); t != null; t = t.BaseType)
+        {
+            FieldInfo f = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (f != null)
+                return f.GetValue(target);
+        }
+        throw new MissingFieldException(target.GetType().Name, name);
+    }
+
+    private static object Call(object target, string name, params object[] args)
+    {
+        MethodInfo m = target.GetType().GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            .First(x => x.Name == name && x.GetParameters().Length == args.Length);
+        return m.Invoke(target, args);
+    }
+
+    private static void Line(string line) => File.AppendAllText(TranscriptPath, line + "\n");
+
+    private static void Report(string line) => File.AppendAllText(ReportPath, line + "\n");
+
+    private static void Check(bool ok, string what)
+    {
+        Report((ok ? "PASS " : "FAIL ") + what);
+        if (!ok)
+            SessionState.SetInt(FailsKey, SessionState.GetInt(FailsKey, 0) + 1);
+    }
+}

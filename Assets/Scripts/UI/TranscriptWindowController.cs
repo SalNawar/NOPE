@@ -8,7 +8,8 @@ using UnityEngine.UI;
 /// line (speaker, sentence), paged like the reference books and always
 /// showing the newest page. Only answer rows are clickable: a click puts the
 /// answer's canonical fact value into the compare bar as the traveller's
-/// statement. Sentences are shown through DisplayText: from translation's
+/// statement (EvidencePicks.ForAnswer, keyed by the line's index, the same
+/// pick as the bubble's answer). Sentences are shown through DisplayText: from translation's
 /// first day the traveller's lines are in their claimed place's tongue and
 /// show in English only with the region's Speech translator (settled, never
 /// animated); an untranslated answer shows in the bar as the placeholder,
@@ -58,9 +59,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (!line.IsAnswer || _compare == null)
             return;
 
-        string label = UiText.Format("compare.travellerLabel", UiText.Category(line.Category));
-        string shown = _translation.Shown(Translation.InTongue(line.Speaker), _translation.SpeechTranslated, line.Value);
-        CompareEvidence evidence = CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell);
-        button.onClick.AddListener(() => _compare.Select(label, shown, background, evidence));
+        ComparePick pick = EvidencePicks.ForAnswer(index, line, _translation);
+        button.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(background)));
     }
 }

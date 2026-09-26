@@ -16,8 +16,12 @@ using UnityEngine.UI;
 /// builds a shelf of reference books the player can open/stow, and offers the
 /// binary Accept/Deny. From translation's first day a traveller's papers and
 /// speech are in their claimed place's tongue (piece 9): the day's
-/// TranslationPresenter says how each traveller's text shows, and the scan
-/// is the papers' reveal point.
+/// TranslationPresenter says how each traveller's text shows. A document's
+/// written reveal (one RevealClock for its paper and its scanned copy) starts
+/// at its first sighting (piece 10 X25): its paper lifted into the hand, the
+/// PC frame opening while its scanned window is open, or a scan opening its
+/// window while the frame is open. A held paper's row picked at the desk goes
+/// into the same compare as the PC's rows.
 ///
 /// Two modes:
 /// - RICH: when the desk has been built (document/book/shelf templates wired by
@@ -68,6 +72,12 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
     [SerializeField] private DeskController desk;
 
+    /// <summary>The office case HUD (piece 10; optional): the claim tag shows the claim banner's text in the office.</summary>
+    [SerializeField] private OfficeCaseHud hud;
+
+    /// <summary>The stamp tray (piece 10; optional): its Accept and Deny decide the case like the PC's buttons.</summary>
+    [SerializeField] private StampTray stampTray;
+
     /// <summary>The traveller wheel: closed after a hand-over; it gives the ring its icons and says the traveller's lines (the claim on arrival, then each reply).</summary>
     [SerializeField] private TravellerWheel wheel;
 
@@ -96,8 +106,11 @@ public sealed class InvestigationUIController : MonoBehaviour
     private readonly List<DocumentWindowController> _docWindows = new();
     private readonly List<GameObject> _docIcons = new();
 
-    /// <summary>The current traveller's documents in paper order (name, holder, hand-over).</summary>
+    /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new();
+
+    /// <summary>Each current document's written reveal, in paper order (shared by its scanned window and its desk paper).</summary>
+    private readonly List<RevealClock> _clocks = new();
 
     /// <summary>Papers whose window already has a desktop icon this case.</summary>
     private readonly HashSet<int> _iconedDocuments = new();
@@ -130,6 +143,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The current traveller's translation (None between cases and when nothing is foreign).</summary>
     private CaseTranslation _caseTranslation = CaseTranslation.None;
+
+    /// <summary>True while the PC frame is open (GameManager, from the office view): a scanned window shown then is seen up close.</summary>
+    private bool _frameOpen;
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
@@ -206,7 +222,17 @@ public sealed class InvestigationUIController : MonoBehaviour
             Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents open on the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
 
         if (DeskReachable)
+        {
             desk.ScanFinished += OpenDocumentWindow;
+            desk.PaperExamined += Sighted;
+            desk.FieldPicked += HandleFieldPicked;
+        }
+
+        if (wheel != null)
+            wheel.LineClicked += HandleLineClicked;
+
+        if (stampTray != null)
+            stampTray.Decided += Decide;
 
         if (idleScreen != null)
             idleScreen.SetActive(true);
@@ -218,7 +244,17 @@ public sealed class InvestigationUIController : MonoBehaviour
             compareController.PairCompared -= HandlePairCompared;
 
         if (DeskReachable)
+        {
             desk.ScanFinished -= OpenDocumentWindow;
+            desk.PaperExamined -= Sighted;
+            desk.FieldPicked -= HandleFieldPicked;
+        }
+
+        if (wheel != null)
+            wheel.LineClicked -= HandleLineClicked;
+
+        if (stampTray != null)
+            stampTray.Decided -= Decide;
     }
 
     /// <summary>
@@ -233,7 +269,8 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         Discrepancy proof = DiscrepancyLog.Prove(a, b,
             _currentCase.claimedNation != null ? _currentCase.claimedNation.id : null,
-            _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null);
+            _currentCase.claimedEra != null ? _currentCase.claimedEra.id : null,
+            _currentCase.visitorGivenName);
         if (proof == null)
             return;
 
@@ -340,10 +377,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowFallback(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line.</summary>
+    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line and the office's claim tag empties.</summary>
     public void Hide()
     {
         if (root != null) root.SetActive(false);
+        if (hud != null) hud.SetClaim(string.Empty);
         if (_fallbackPanel != null) _fallbackPanel.SetActive(false);
         if (idleScreen != null) idleScreen.SetActive(true);
     }
@@ -357,8 +395,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (root != null) root.SetActive(true);
         if (idleScreen != null) idleScreen.SetActive(false);
 
+        // The claim banner on the PC and the claim tag in the office: one text.
+        string claim = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
         if (claimText != null)
-            claimText.text = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
+            claimText.text = claim;
+        if (hud != null)
+            hud.SetClaim(claim);
 
         if (directivesText != null)
             directivesText.text = _directives;
@@ -378,6 +420,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _docIcons.Clear();
         _iconedDocuments.Clear();
         _caseDocuments.Clear();
+        _clocks.Clear();
 
         // The traveller's tongue decides how their papers and speech show today.
         _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
@@ -395,12 +438,14 @@ public sealed class InvestigationUIController : MonoBehaviour
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
-                clone.SetDocument(doc, compareController, inst.look, _art, _caseTranslation);
+                var clock = new RevealClock();
+                clone.SetDocument(doc, i, compareController, inst.look, _art, _caseTranslation, clock);
                 _docWindows.Add(clone);
+                _clocks.Add(clock);
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
-                    holder = inst.visitorGivenName,
+                    fields = doc != null ? doc.fields : null,
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
@@ -410,7 +455,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (DeskReachable)
         {
-            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
+            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art, _caseTranslation, _clocks);
         }
         else
         {
@@ -572,17 +617,16 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController == null || garments == null || garmentIndex < 0 || garmentIndex >= garments.Count)
             return;
 
-        Garment g = garments[garmentIndex];
-        compareController.Select(UiText.Format("compare.travellerLabel", UiText.Slot(g.Slot)), g.Label, null,
-                                 CompareEvidence.ForAppearance(Looks.EvidenceCategory, g.Value, g.IsTell));
+        compareController.Select(EvidencePicks.ForGarment(garmentIndex, garments[garmentIndex]), null);
     }
 
     /// <summary>
     /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
-    /// or a hand-over where no desk is wired: the written reveal point, where
-    /// a translated paper starts flipping into English the first time). The
-    /// first time it opens this case, the paper also gets a desktop icon at
-    /// the top of the grid, which reopens the window after it is closed.
+    /// or a hand-over where no desk is wired); shown in the open frame, it is a
+    /// sighting (its translation's reveal), else it waits untranslated on the
+    /// office PC's small screen. The first time it opens this case, the paper
+    /// also gets a desktop icon at the top of the grid, which reopens the
+    /// window after it is closed.
     /// </summary>
     private void OpenDocumentWindow(int index)
     {
@@ -592,9 +636,68 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         window.gameObject.SetActive(true);
         window.transform.SetAsLastSibling();
-        window.Reveal();
+        if (_frameOpen)
+            Sighted(index);
         if (_iconedDocuments.Add(index))
             AddDesktopIcon(_caseDocuments[index].name, window.gameObject, true);
+    }
+
+    /// <summary>
+    /// The PC frame opened or closed (GameManager, from the office view):
+    /// opening it is a sighting of every scanned window that is open.
+    /// </summary>
+    public void SetFrameOpen(bool open)
+    {
+        _frameOpen = open;
+        if (!open)
+            return;
+
+        for (int i = 0; i < _docWindows.Count; i++)
+            if (_docWindows[i] != null && _docWindows[i].gameObject.activeSelf)
+                Sighted(i);
+    }
+
+    /// <summary>
+    /// Document <paramref name="index"/> is seen up close (piece 10 X25): its
+    /// written reveal starts the first time (DocumentReveal.Begin), and its
+    /// scanned window and its paper redraw from the shared clock.
+    /// </summary>
+    private void Sighted(int index)
+    {
+        if (index < 0 || index >= _clocks.Count || index >= _caseDocuments.Count)
+            return;
+        if (!DocumentReveal.Begin(_clocks[index], _caseTranslation, _caseDocuments[index].fields, Time.unscaledTime))
+            return;
+
+        if (index < _docWindows.Count && _docWindows[index] != null)
+            _docWindows[index].Refresh();
+        if (DeskReachable)
+            desk.RefreshPaper(index);
+    }
+
+    /// <summary>The bubble's answer picked at the desk: it goes into the compare as the transcript's row would (the same pick), lighting the bubble while it shows.</summary>
+    private void HandleLineClicked(DialogLine line)
+    {
+        if (_runner == null || compareController == null || line == null || !line.IsAnswer)
+            return;
+
+        IReadOnlyList<DialogLine> transcript = _runner.Transcript;
+        for (int i = 0; i < transcript.Count; i++)
+            if (transcript[i] == line)
+            {
+                compareController.Select(EvidencePicks.ForAnswer(i, line, _caseTranslation), wheel.BubbleHighlightNow);
+                return;
+            }
+    }
+
+    /// <summary>A held paper's row picked at the desk: the document's flip finishes on both surfaces, then the row goes into the compare (the same pick as its scanned copy's row).</summary>
+    private void HandleFieldPicked(int index, DocumentRow row, ICompareHighlight highlight)
+    {
+        if (index < 0 || index >= _caseDocuments.Count || compareController == null)
+            return;
+
+        _clocks[index].Finish();
+        compareController.Select(EvidencePicks.ForField(index, row, _caseDocuments[index].name, _caseTranslation), highlight);
     }
 
     /// <summary>

@@ -47,11 +47,8 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
         if (texts.Length > 1 && texts[1] != null)
             texts[1].text = fact.Value;
 
-        string label = UiText.Format("book.compareLabel", _book != null ? _book.displayName : UiText.Get("book.untitled"), fact.OriginLabel);
-        string value = fact.Value;
-        CompareEvidence evidence = fact.ToEvidence();
-
+        ComparePick pick = EvidencePicks.ForBookRow(_book, fact);
         if (button != null && _compare != null)
-            button.onClick.AddListener(() => _compare.Select(label, value, background, evidence));
+            button.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(background)));
     }
 }

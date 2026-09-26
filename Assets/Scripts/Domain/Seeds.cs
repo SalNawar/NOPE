@@ -86,4 +86,15 @@ public static class Seeds
     /// authoring a premade never reshuffles a day's travellers.
     /// </summary>
     public static int ForLegendary(int caseSeed) => Mix(caseSeed, LegendarySalt);
+
+    /// <summary>Salt for the night's slot-machine spins at Home ("SLOT").</summary>
+    public const int SlotSalt = 0x534C4F54;
+
+    /// <summary>
+    /// Seed for the night's slot-machine spins at Home, drawn in turn (audit
+    /// R2-004: the spins were unseeded), so a run replays and Continue, which
+    /// reloads Home from the save made before it, cannot reroll a spin; apart
+    /// from the day's raw stream the family conditions draw from.
+    /// </summary>
+    public static int ForSlot(int daySeed) => Mix(daySeed, SlotSalt);
 }

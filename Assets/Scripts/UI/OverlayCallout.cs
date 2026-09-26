@@ -4,11 +4,13 @@ using UnityEngine;
 /// <summary>
 /// A timed label on the office overlay canvas that takes no clicks, projected
 /// at a followed transform plus an offset (OverlayProjection): the traveller's
-/// speech bubble (TravellerWheel, which types each line out with Reveal and
-/// times it itself, and flips a translated line through its Label) and the
+/// speech bubble (TravellerWheel, which times each line itself and types it
+/// out and flips a translated one through its Label's TextFlip) and the
 /// desk props' tooltips (DeskReaction). The host stays active; its Panel child
 /// is shown and hidden. It hides when its time is up, when the followed object
-/// is destroyed, or when that object leaves the view. Callers apply DisplayText.
+/// is destroyed, or when that object leaves the view (unless it keeps on
+/// screen, as the speech bubble does: it then waits at the screen's edge,
+/// below the office case HUD's strips). Callers apply DisplayText.
 /// </summary>
 public sealed class OverlayCallout : MonoBehaviour
 {
@@ -17,6 +19,12 @@ public sealed class OverlayCallout : MonoBehaviour
 
     /// <summary>The box's text.</summary>
     [SerializeField] private TMP_Text label;
+
+    /// <summary>True when the box stays at the screen's edge while its object is out of view (the speech bubble: the desk view tilts the traveller's head above the top); false hides it (the tooltips).</summary>
+    [SerializeField] private bool keepOnScreen;
+
+    /// <summary>The band at the overlay's top the box never covers (canvas reference px): the office case HUD's strips for the speech bubble; 0 for the tooltips.</summary>
+    [SerializeField] private float topInset;
 
     private Camera _camera;
     private RectTransform _canvasRect;
@@ -59,15 +67,8 @@ public sealed class OverlayCallout : MonoBehaviour
         _offset = offset;
         _remaining = seconds;
         panel.gameObject.SetActive(true);
-        if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset))
+        if (!OverlayProjection.TryPlace(panel, _canvasRect, _camera, follow.position, offset, keepOnScreen, topInset))
             Hide();
-    }
-
-    /// <summary>Shows only the first <paramref name="characters"/> characters of the text (the rest keep their place, so the box does not reflow as a line types out).</summary>
-    public void Reveal(int characters)
-    {
-        if (label != null)
-            label.maxVisibleCharacters = characters < 0 ? 0 : characters;
     }
 
     /// <summary>Hides the box.</summary>
@@ -85,7 +86,7 @@ public sealed class OverlayCallout : MonoBehaviour
             return;
 
         _remaining -= Time.deltaTime;
-        if (_remaining <= 0f || _follow == null || !OverlayProjection.TryPlace(panel, _canvasRect, _camera, _follow.position, _offset))
+        if (_remaining <= 0f || _follow == null || !OverlayProjection.TryPlace(panel, _canvasRect, _camera, _follow.position, _offset, keepOnScreen, topInset))
             Hide();
     }
 }

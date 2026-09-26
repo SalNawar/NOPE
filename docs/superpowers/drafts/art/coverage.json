@@ -1,11 +1,12 @@
 {
  "schema": "timesorter.character-art-coverage/1",
- "generated": "2026-09-24",
+ "generated": "2026-09-25",
  "sources": {
   "grammar": "piece-4 spec section 2.3 (LookKeys) + piece-5 R18 (artNation 'neutral' for Future hair and facial hair)",
   "wardrobe": "costume_research.json + brief_review.json (68 fixes, 22 issues) -> tools/wardrobe_v2.json",
   "premades": "piece4_decisions.md Amendment A1 (cast after the review of brief v2: Cecilia Gallerani replaces Alessandra Strozzi)",
-  "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E"
+  "review": "brief v2 review (43 findings), applied in data_v2.py and build_v2.py; see the brief's Appendix E",
+  "revision": "v2.1 (2026-09-25): revised for the 3D office (leak items the desk can see, the desk view, 4:3 wallpapers, posters deferred); see the brief's 'What changed in v2.1' and Appendix F; v2.2 (2026-09-25): the ReStory style for both kinds of character (style text only: no key, file, canvas or size change); see the brief's 'What changed in v2.2'"
  },
  "assetFolder": "Assets/Art/Characters/Resources/Characters",
  "extension": ".png",
@@ -35,7 +36,20 @@
    215,
    662,
    590
-  ]
+  ],
+  "officeView": {
+   "visibleFromTopTo": 760,
+   "readZoneTo": 630,
+   "headPx": {
+    "1080": 58,
+    "720": 39
+   },
+   "screenPxPerCanvasPx": {
+    "1080": 0.36,
+    "720": 0.24
+   },
+   "note": "the figure behind the desk at the default Anchor_Traveller: the NEXT sign cuts it at the waist; every leak item sits above readZoneTo (the brief's section 1)"
+  }
  },
  "skinSwatches": {
   "1": {
@@ -128,11 +142,11 @@
  },
  "counts": {
   "bases": 50,
-  "garments": 758,
+  "garments": 759,
   "future": 31,
   "premades": 40,
-  "total": 879,
-  "rawImages": 405
+  "total": 880,
+  "rawImages": 406
  },
  "required": {
   "bases": [
@@ -728,7 +742,7 @@
      "hair_f_japan_earlymodern_blond",
      "hair_f_japan_earlymodern_red",
      "hair_f_japan_earlymodern_grey",
-     "accessory_f_japan_earlymodern"
+     "headwear_f_japan_earlymodern"
     ]
    },
    "britain_earlymodern": {
@@ -1114,6 +1128,7 @@
      "hair_f_china_modern_blond",
      "hair_f_china_modern_red",
      "hair_f_china_modern_grey",
+     "headwear_f_china_modern",
      "accessory_f_china_modern"
     ]
    },
@@ -1364,7 +1379,6 @@
   "accessory_f_italy_medieval",
   "accessory_f_italy_modern",
   "accessory_f_japan_ancient",
-  "accessory_f_japan_earlymodern",
   "accessory_f_japan_modern",
   "accessory_m_britain_ancient",
   "accessory_m_britain_industrial",
@@ -2028,6 +2042,7 @@
   "headwear_f_china_earlymodern",
   "headwear_f_china_industrial",
   "headwear_f_china_medieval",
+  "headwear_f_china_modern",
   "headwear_f_egypt_ancient",
   "headwear_f_egypt_earlymodern",
   "headwear_f_egypt_industrial",
@@ -2047,6 +2062,7 @@
   "headwear_f_iraq_modern",
   "headwear_f_italy_earlymodern",
   "headwear_f_italy_medieval",
+  "headwear_f_japan_earlymodern",
   "headwear_f_japan_medieval",
   "headwear_m_britain_earlymodern",
   "headwear_m_britain_industrial",
@@ -3197,11 +3213,11 @@
      "outfit": "anteri and zipouni",
      "hair": "two front braids",
      "headwear": "cap and tsemberi",
-     "accessory": "pafti buckle"
+     "accessory": "silver chest chains"
     },
     "signature": {
      "slot": "Accessory",
-     "label": "pafti buckle",
+     "label": "silver chest chains",
      "leakable": true
     },
     "wig": false,
@@ -3344,23 +3360,23 @@
      "outfit": true,
      "hair": true,
      "facialHair": false,
-     "headwear": false,
-     "accessory": true
+     "headwear": true,
+     "accessory": false
     },
     "labels": {
      "outfit": "Keicho kosode",
      "hair": "tamamusubi loop",
-     "accessory": "Nagoya-obi"
+     "headwear": "kazuki veil"
     },
     "signature": {
-     "slot": "Accessory",
-     "label": "Nagoya-obi",
+     "slot": "Headwear",
+     "label": "kazuki veil",
      "leakable": true
     },
     "wig": false,
     "back": false,
     "covers": [],
-    "headwearHides": "",
+    "headwearHides": "top",
     "ornamentsToMask": "white paper cord"
    }
   },
@@ -4128,23 +4144,24 @@
      "outfit": true,
      "hair": true,
      "facialHair": false,
-     "headwear": false,
+     "headwear": true,
      "accessory": true
     },
     "labels": {
      "outfit": "Zhongshan jacket",
      "hair": "clipped bob",
+     "headwear": "navy cap",
      "accessory": "khaki satchel"
     },
     "signature": {
-     "slot": "Accessory",
-     "label": "khaki satchel",
+     "slot": "Headwear",
+     "label": "navy cap",
      "leakable": true
     },
     "wig": false,
     "back": false,
     "covers": [],
-    "headwearHides": "",
+    "headwearHides": "top",
     "ornamentsToMask": "black hair clip"
    }
   },
@@ -6605,9 +6622,9 @@
   },
   {
    "batch": 7,
-   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/accessory_f_japan_earlymodern.png",
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch07-day-3-places/headwear_f_japan_earlymodern.png",
    "produces": [
-    "accessory_f_japan_earlymodern"
+    "headwear_f_japan_earlymodern"
    ]
   },
   {
@@ -7721,6 +7738,13 @@
   },
   {
    "batch": 10,
+   "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/headwear_f_china_modern.png",
+   "produces": [
+    "headwear_f_china_modern"
+   ]
+  },
+  {
+   "batch": 10,
    "raw": "ArtDeliverables/TimeDesk/Characters/Raw/batch10-modern-era/accessory_f_china_modern.png",
    "produces": [
     "accessory_f_china_modern"
@@ -8077,7 +8101,7 @@
   "wardrobeFlags: 'labels' holds every present item's short label; the signature item is leakable; 'covers' is the headwear's covers list (['Hair'] when it hides all the hair); Future places share hair and facial hair through artNation 'neutral' and never leak (signature Outfit).",
   "Confusable pairs (hand-authored and generated) are in tools/wardrobe_v2.json 'confusable' and 'confusableHidden'.",
   "outfit_{g}_neutral_future.png raw files are working references with no game key.",
-  "UI art (culture wallpapers and posters) is listed in officeArt, not in requiredFlat: it follows the office path convention (piece-6 R11)."
+  "UI art (the culture wallpapers; posters are deferred) is listed in officeArt, not in requiredFlat: it follows the office path convention (piece-6 R11). officeArt also names the 2D layers over the office and the art side's scanner, which replace placeholders in place."
  ],
  "officeArt": {
   "convention": "fixed path, replaced in place (piece-6 R11); raw ChatGPT masters go to ArtDeliverables/TimeDesk/Culture/Raw/",
@@ -8089,46 +8113,87 @@
    "Assets/Art/Culture/china/wallpaper.png",
    "Assets/Art/Culture/japan/wallpaper.png",
    "Assets/Art/Culture/britain/wallpaper.png",
-   "Assets/Art/Culture/germany/wallpaper.png",
-   "Assets/Art/Culture/egypt/poster.png",
-   "Assets/Art/Culture/iraq/poster.png",
-   "Assets/Art/Culture/greece/poster.png",
-   "Assets/Art/Culture/italy/poster.png",
-   "Assets/Art/Culture/china/poster.png",
-   "Assets/Art/Culture/japan/poster.png",
-   "Assets/Art/Culture/britain/poster.png",
-   "Assets/Art/Culture/germany/poster.png"
+   "Assets/Art/Culture/germany/wallpaper.png"
   ],
   "wallpaper": {
-   "raw": "1536 x 1024 from ChatGPT; crop the middle 1536 x 864 (16:9)",
+   "raw": "1536 x 1024 from ChatGPT; crop the middle 1365 x 1024 (4:3; about 85 px off each side)",
    "final": [
-    1920,
+    1440,
     1080
    ],
-   "import": "keep the placeholder's .meta (Sprite, no mipmaps); it is a stretched uGUI Image, so its pixels per unit do not matter",
+   "aspect": "4:3, the desktop canvas (OfficeSceneUIBuilder DesktopSize 1440 x 1080); the wallpaper Image envelopes it (AspectRatioFitter EnvelopeParent, overflow clipped), so a 16:9 image loses its sides",
+   "quietShares": {
+    "left": 0.2,
+    "top": 0.13,
+    "bottom": 0.04
+   },
+   "quietWhy": "the desktop icons in two columns at the left (0.5% to 17% of the width), the claim banner over the top 13% while a traveller is at the desk, the taskbar along the bottom (36 of 1080 units); the desktop is also cloned small on the office CRT (1024 x 768, letterboxed)",
+   "import": "keep the placeholder's .meta (Sprite, max size 2048, mipmaps on); the fitter takes the sprite's own aspect (CultureThemeService), so any aspect and pixels per unit work",
    "placeholder": [
     960,
     540
-   ]
+   ],
+   "placeholderNote": "the 16:9 text-free placeholders Generate World wrote; it never writes over an existing file, so they are not regenerated; until the art lands they lose an eighth of their width on each side"
   },
-  "poster": {
-   "raw": "1024 x 1536 from ChatGPT; trim to the middle 1024 x 1408 (8:11)",
-   "final": [
-    320,
-    440
-   ],
-   "spritePixelsToUnits": 400,
-   "worldSize": [
-    0.8,
-    1.1
-   ],
-   "import": "the generated placeholder is 80 x 110 at 100 pixels per unit (0.8 x 1.1 world units); when the 320 x 440 art replaces it, set spritePixelsToUnits to 400 in the same .meta so the world size stays 0.8 x 1.1, as for Assets/Art/Office/Placeholder/Posters/* (320 x 440 at 400)",
-   "placeholder": [
-    80,
-    110
-   ],
-   "placeholderPixelsPerUnit": 100
+  "posters": {
+   "status": "deferred",
+   "note": "the 3D office has no poster frame: piece 6 deferred the culture posters to the office move (its S2 and F13), and the move added none; no poster.png exists. When the art side adds a poster frame (an anchor), the poster becomes a texture in it, sized by that frame"
   },
+  "overlay2d": [
+   {
+    "path": "Assets/Art/Office/Placeholder/pc_frame.png",
+    "referenceSize": [
+     1240,
+     1060
+    ],
+    "suggested": [
+     1860,
+     1590
+    ],
+    "glassFromTopLeft": [
+     60,
+     60,
+     1180,
+     900
+    ],
+    "placeholder": [
+     620,
+     530
+    ],
+    "note": "the PC close-up bezel on the office overlay (PcFrame); a transparent 4:3 glass hole; render it from the Blender CRT by preference (UI_ART_RULES)"
+   },
+   {
+    "path": "Assets/Art/Office/Placeholder/pc_close.png",
+    "referenceSize": [
+     64,
+     64
+    ],
+    "placeholder": [
+     48,
+     48
+    ],
+    "note": "the frame's close X"
+   },
+   {
+    "path": "Assets/Art/Office/Placeholder/crt_power.png",
+    "referenceSize": [
+     64,
+     64
+    ],
+    "placeholder": [
+     28,
+     28
+    ],
+    "note": "the frame's power button (the LED stays a code-tinted white disc)"
+   }
+  ],
+  "props3d": [
+   {
+    "anchor": "Anchor_Scanner",
+    "owner": "art side (Blender)",
+    "note": "the scanner model; until it exists the gameplay layer shows a stand-in flatbed (0.40 x 0.32 m) at the default pose (UI_ART_RULES)"
+   }
+  ],
   "optional": [
    {
     "path": "Assets/Art/Generated/xp_bliss.png",
@@ -8136,7 +8201,7 @@
      1920,
      1080
     ],
-    "note": "neutral wallpaper, exists"
+    "note": "neutral wallpaper, exists; 16:9, so the 4:3 desktop shows its middle 1440 x 1080"
    },
    {
     "path": "Assets/Art/UI/Investigation/refbook_cover_culture.png",

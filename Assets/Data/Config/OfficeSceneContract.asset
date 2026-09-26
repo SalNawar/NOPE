@@ -20,7 +20,8 @@ MonoBehaviour:
     defaultPosition: {x: -1.64, y: 1.43, z: -0.13}
     defaultYaw: 160
   - id: 1
-    fallbacks: []
+    fallbacks:
+    - ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange
     hasDefault: 1
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
@@ -33,7 +34,7 @@ MonoBehaviour:
   - id: 3
     fallbacks: []
     hasDefault: 1
-    defaultPosition: {x: 1.08, y: 1.06, z: -0.33}
+    defaultPosition: {x: 1.02, y: 1.06, z: -0.46}
     defaultYaw: 180
   - id: 4
     fallbacks: []

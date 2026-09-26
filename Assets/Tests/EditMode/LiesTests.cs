@@ -17,6 +17,9 @@ using NUnit.Framework;
 /// </summary>
 public class LiesTests
 {
+    /// <summary>The traveller at the desk, whose Citizen Record proves a birth-date tell.</summary>
+    private const string Traveller = "Ahmose";
+
     private const string Cover = "3 Jun 1450 BCE";
     private const int CoverYear = -1450;
 
@@ -334,14 +337,14 @@ public class LiesTests
             CompareEvidence doc = CompareEvidence.FromDocumentField(f);
             if (f.category == ClueCategory.BirthDate)
             {
-                Discrepancy record = DiscrepancyLog.Prove(doc, CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover), "egypt", "ancient");
+                Discrepancy record = DiscrepancyLog.Prove(doc, CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover, Traveller), "egypt", "ancient", Traveller);
                 Assert.AreEqual(DiscrepancyProof.RecordMismatch, record?.provedBy, f.label);
                 continue;
             }
 
             foreach (FactRow row in facts.Rows(f.category))
             {
-                Discrepancy d = DiscrepancyLog.Prove(doc, row.ToEvidence(), "egypt", "ancient");
+                Discrepancy d = DiscrepancyLog.Prove(doc, row.ToEvidence(), "egypt", "ancient", Traveller);
                 string where = $"{f.label} vs {row.OriginLabel}";
                 if (row.NationId == "egypt")
                 {
@@ -541,7 +544,7 @@ public class LiesTests
             CompareEvidence said = CompareEvidence.ForAnswer(category, plan.TellValue(category), true);
             foreach (FactRow row in facts.Rows(category))
             {
-                Discrepancy d = DiscrepancyLog.Prove(said, row.ToEvidence(), "egypt", "ancient");
+                Discrepancy d = DiscrepancyLog.Prove(said, row.ToEvidence(), "egypt", "ancient", Traveller);
                 string where = $"{category} vs {row.OriginLabel}";
                 if (row.NationId == "egypt")
                 {
@@ -563,7 +566,7 @@ public class LiesTests
         LiePlan born = PlanSpoken(Script(V(0f), R(0), R(0), R(2)), new[] { ClueCategory.BirthDate }, AnswerOnly);
         Discrepancy record = DiscrepancyLog.Prove(
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, born.TellValue(ClueCategory.BirthDate), true),
-            CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover), "egypt", "ancient");
+            CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover, Traveller), "egypt", "ancient", Traveller);
         Assert.AreEqual(DiscrepancyProof.RecordMismatch, record?.provedBy);
     }
 
@@ -693,7 +696,7 @@ public class LiesTests
         CompareEvidence worn = CompareEvidence.ForAppearance(ClueCategory.Culture, plan.TellValue(ClueCategory.Culture), true);
         foreach (FactRow row in facts.Rows(ClueCategory.Culture))
         {
-            Discrepancy d = DiscrepancyLog.Prove(worn, row.ToEvidence(), "egypt", "ancient");
+            Discrepancy d = DiscrepancyLog.Prove(worn, row.ToEvidence(), "egypt", "ancient", Traveller);
             string where = $"Culture vs {row.OriginLabel}";
             if (row.NationId == "egypt")
             {
