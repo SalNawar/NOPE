@@ -10,7 +10,8 @@ using UnityEngine.UI;
 /// layer ("Investigation"; the restored size from DesktopConfigSO, maximised
 /// on its first open) with its case header (the claim, the counters, the PC's
 /// Accept and Deny with their fixed glyphs), its toolbar (Back, Forward, the
-/// search field, Steps, Split, Keys: built, not live until phases 18-21), its
+/// search field (live since phase 19: OfficeSceneUIBuilder.Search), Steps,
+/// Split, Keys: built, not live until phases 18, 20, 21), its
 /// sidebar (Steps, Pinned, Recent: placeholders until phases 20-21) and one
 /// pane (AppPane): the six tabs in TabOrder.Default with their active looks
 /// and badges, the chip row, the content with a view per tab and the no-case
@@ -115,7 +116,7 @@ public static partial class OfficeSceneUIBuilder
 
         var parts = new AppParts { Window = window };
         BuildAppHeader(win, top, out TMP_Text claim, out TMP_Text counters, out parts.Accept, out parts.Deny);
-        Selectable[] notYetLive = BuildAppToolbar(win, top + AppHeaderHeight);
+        Selectable[] notYetLive = BuildAppToolbar(win, top + AppHeaderHeight, out TMP_InputField searchField);
 
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(top + AppHeaderHeight + AppToolbarHeight)));
@@ -134,6 +135,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
+        BuildAppSearch(parts.App, win, searchField, top + AppHeaderHeight + AppToolbarHeight, config);
         return parts;
     }
 
@@ -154,18 +156,18 @@ public static partial class OfficeSceneUIBuilder
         BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward, the search field, Steps, Split and Keys, all built and none live until phases 18-21. Returns them.</summary>
-    private static Selectable[] BuildAppToolbar(Transform win, float top)
+    /// <summary>The toolbar (AP2): Back, Forward, the search field (<paramref name="search"/>, live), Steps, Split and Keys; returns those not live until phases 18, 20 and 21.</summary>
+    private static Selectable[] BuildAppToolbar(Transform win, float top, out TMP_InputField search)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
                               new Vector2(0f, AppToolbarHeight), XpFace, ThemeRoleId.WindowBody);
         Button back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f);
         Button forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f);
-        TMP_InputField search = BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
+        search = BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
         Button steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
         Button split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
         Button keys = ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
-        return new Selectable[] { back, forward, search, steps, split, keys };
+        return new Selectable[] { back, forward, steps, split, keys };
     }
 
     /// <summary>A toolbar button between two horizontal anchors (its label keyed).</summary>

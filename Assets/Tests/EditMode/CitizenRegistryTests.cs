@@ -5,8 +5,8 @@ using NUnit.Framework;
 /// <summary>
 /// The agency's citizen records (redesign phase 2; the traveller-types spec's
 /// R1 and R3): a record is rows (label, value and, for evidence, a category)
-/// in titled groups; the lookup takes an exact agency number first, then an
-/// exact name, then the first name containing the query.
+/// in titled groups; the registry keeps its records in order (the lookup by
+/// name or number is the search index's, scoped to Records: CaseIndexTests).
 /// </summary>
 public class CitizenRegistryTests
 {
@@ -30,9 +30,6 @@ public class CitizenRegistryTests
             r.Add(record);
         return r;
     }
-
-    private static CitizenRegistry Registry() =>
-        Registry(Entry("Bjorn", "3 May 1131"), Entry("Zara-7", "14 Sep 2401"));
 
     [Test]
     public void Record_KeepsItsGroupsAndRowsInOrder()
@@ -89,74 +86,19 @@ public class CitizenRegistryTests
     }
 
     [Test]
-    public void Find_ExactName_ReturnsRecord()
-    {
-        Assert.AreEqual("Bjorn", Registry().Find("Bjorn").FullName);
-    }
-
-    [Test]
-    public void Find_IsCaseAndWhitespaceInsensitive()
-    {
-        Assert.AreEqual("Bjorn", Registry().Find("  bJORN ").FullName);
-    }
-
-    [Test]
-    public void Find_PartialName_FallsBackToContains()
-    {
-        Assert.AreEqual("Zara-7", Registry().Find("zara").FullName);
-    }
-
-    [Test]
-    public void Find_ExactNameBeatsAnEarlierSubstring()
-    {
-        // Audit R1-022: NameRoster hands out "Marcus" after "Marcus II".
-        Assert.AreEqual("Marcus", Registry(Entry("Marcus II", "1 Jan 100"), Entry("Marcus", "2 Feb 200")).Find("Marcus").FullName);
-        Assert.AreEqual("Anna", Registry(Entry("Anna Maria", "1 Jan 100"), Entry("Anna", "2 Feb 200")).Find("anna").FullName);
-    }
-
-    [Test]
-    public void Find_ByNumber()
-    {
-        CitizenRegistry r = Registry(Entry("Bjorn", "3 May 1131", "DP-0412-07"), Entry("Oren Hale", "2 Feb 2117", "552-1804-33"));
-        Assert.AreEqual("Oren Hale", r.Find("552-1804-33").FullName);
-        Assert.AreEqual("Bjorn", r.Find(" dp-0412-07 ").FullName, "trimmed, any case");
-    }
-
-    [Test]
-    public void Find_NumberFirst_BeforeAnyName()
-    {
-        // A query equal to one record's number finds it, though an earlier record's name is that text.
-        CitizenRegistry r = Registry(Entry("DP-0412-07", "1 Jan 100"), Entry("Bjorn", "3 May 1131", "DP-0412-07"));
-        Assert.AreEqual("Bjorn", r.Find("DP-0412-07").FullName);
-    }
-
-    [Test]
-    public void Find_NumbersMatchWhole_NeverPartly()
-    {
-        CitizenRegistry r = Registry(Entry("Oren Hale", "2 Feb 2117", "552-1804-33"));
-        Assert.IsNull(r.Find("552-1804"));
-        Assert.IsNull(r.Find("1804"));
-    }
-
-    [Test]
-    public void Find_UnknownName_ReturnsNull()
-    {
-        Assert.IsNull(Registry().Find("Cassia"));
-    }
-
-    [Test]
-    public void Find_NullOrEmpty_ReturnsNull()
-    {
-        Assert.IsNull(Registry().Find(null));
-        Assert.IsNull(Registry().Find("   "));
-    }
-
-    [Test]
     public void Add_IgnoresNullAndUnnamed()
     {
         var r = new CitizenRegistry();
         r.Add(null);
         r.Add(Entry("  ", "1 Jan 100", "X-1"));
-        Assert.IsNull(r.Find("X-1"), "an unnamed record is not on file, even by its number");
+        r.Add(Entry("Bjorn", "3 May 1131"));
+        CollectionAssert.AreEqual(new[] { "Bjorn" }, r.Records.Select(x => x.FullName), "an unnamed record is not on file, even by its number");
+    }
+
+    [Test]
+    public void Records_KeepTheOrderAdded()
+    {
+        CitizenRegistry r = Registry(Entry("Zara-7", "14 Sep 2401"), Entry("Bjorn", "3 May 1131"));
+        CollectionAssert.AreEqual(new[] { "Zara-7", "Bjorn" }, r.Records.Select(x => x.FullName));
     }
 }

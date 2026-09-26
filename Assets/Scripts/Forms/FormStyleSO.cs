@@ -48,6 +48,9 @@ public sealed class FormStyleSO : ScriptableObject
     /// <summary>The tint on a pickable box under the pointer, on the held paper and on the PC (a picked box shows the compare highlight instead).</summary>
     public Color hoverTint = new Color(0f, 0f, 0f, 0.06f);
 
+    /// <summary>The found colour: the flash and outline on what a search result opened (the PC spec's SE4; never the compare's highlight, which is yellow). At least 3:1 on the paper, as an outline.</summary>
+    public Color found = new Color(0.1f, 0.42f, 0.9f, 1f);
+
     /// <summary>The scanner's dark backing a scanned copy lies on (the PC's document window).</summary>
     [Header("Scanner backing")]
     public Color backing = new Color(0.129f, 0.137f, 0.161f, 1f);
@@ -92,7 +95,8 @@ public sealed class FormStyleSO : ScriptableObject
         Band = Rgb(band),
         StampDash = Rgb(stampDash),
         Backing = Rgb(backing),
-        BackingInk = Rgb(backingInk)
+        BackingInk = Rgb(backingInk),
+        Found = Rgb(found)
     };
 
     /// <summary>A Unity colour as an Rgba.</summary>

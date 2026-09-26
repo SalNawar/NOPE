@@ -12,7 +12,10 @@ using Object = UnityEngine.Object;
 /// wheel; a look at a garment puts it into the compare and closes the wheel;
 /// a choice that adds lines tells the app (the Transcript tab's badge;
 /// nothing opens: WN5); the traveller's new lines go to the bubble; a
-/// finished dialog is recorded for the shift. The bubble's answer, picked at the desk, goes
+/// finished dialog is recorded for the shift. Each line joins search's case
+/// layer as it is spoken (redesign phase 19, SE5): as shown, so a line the
+/// player hears untranslated is found only by its key words and its speaker,
+/// and shows its glyphs. The bubble's answer, picked at the desk, goes
 /// into the compare as its transcript row would. It subscribes to the wheel
 /// it was given and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
@@ -27,6 +30,7 @@ public sealed class InterviewPresenter
     private readonly Action<int> _handOver;
     private readonly Func<CaseInstance> _currentCase;
     private readonly Object _context;
+    private readonly CaseIndex _index;
 
     /// <summary>Today's interview: askable questions, offered dialogs, wording and the shift's dialog outcomes.</summary>
     private InterviewDay _day;
@@ -46,15 +50,22 @@ public sealed class InterviewPresenter
     /// <summary>The wheel whose bubble this listens to (null while detached).</summary>
     private TravellerWheel _listening;
 
+    /// <summary>The current traveller's name (the transcript's speaker) and tongue (search's clip match).</summary>
+    private string _travellerName = string.Empty;
+    private string _tongueId;
+
     /// <summary>
     /// The wheel's ring, the transcript, the wheel and the compare (any may be
     /// missing), what new transcript lines tell (the app's Transcript tab), the
     /// hand-over of a document by index (CaseDocumentsPresenter.HandOver), the
-    /// façade's current case, and the object the logs name.
+    /// façade's current case, the object the logs name and search's index
+    /// (null: nothing indexed).
     /// </summary>
     public InterviewPresenter(InteractionPanelController ring, TranscriptWindowController transcript, Action spoke,
-                              TravellerWheel wheel, CompareController compare, Action<int> handOver, Func<CaseInstance> currentCase, Object context)
+                              TravellerWheel wheel, CompareController compare, Action<int> handOver, Func<CaseInstance> currentCase, Object context,
+                              CaseIndex index)
     {
+        _index = index;
         _ring = ring;
         _transcript = transcript;
         _spoke = spoke ?? throw new ArgumentNullException(nameof(spoke));
@@ -93,9 +104,16 @@ public sealed class InterviewPresenter
         _keyWords = settings != null && settings.rules != null ? settings.rules.keyWords : null;
     }
 
+    /// <summary>The current traveller's translation (their script's font draws their untranslated lines in search's results too).</summary>
+    public CaseTranslation Translation => _caseTranslation;
+
     /// <summary>A new traveller: their tongue decides how their speech shows today (their papers are always English).</summary>
-    public void BeginCase(CaseInstance inst) =>
+    public void BeginCase(CaseInstance inst)
+    {
         _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
+        _travellerName = inst != null ? inst.visitorGivenName : string.Empty;
+        _tongueId = inst != null ? inst.tongueId : null;
+    }
 
     /// <summary>
     /// Starts the traveller's interview: the wheel takes the case's translation;
@@ -131,11 +149,37 @@ public sealed class InterviewPresenter
 
         if (_transcript != null)
             _transcript.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, _compare, _caseTranslation);
+        IndexLines(0);
 
         RefreshChoices();
 
         if (_wheel != null)
             _wheel.Say(InterviewScript.SaidSince(_runner.Transcript, 0));
+    }
+
+    /// <summary>
+    /// The transcript's lines from <paramref name="from"/> into search's case
+    /// layer, as the transcript shows them: "speaker · line n"; a line shown
+    /// untranslated (settled: the Speech translator is owned at the day's
+    /// start or not) by its key words, its glyphs as its snippet and its
+    /// tongue for a pasted clip.
+    /// </summary>
+    private void IndexLines(int from)
+    {
+        if (_index == null || _runner == null || _day == null)
+            return;
+        IReadOnlyList<DialogLine> lines = _runner.Transcript;
+        SpeechTranslation speech = _caseTranslation.Speech;
+        for (int i = from; i < lines.Count; i++)
+        {
+            DialogLine line = lines[i];
+            string speaker = line.Speaker == DialogSpeaker.Desk ? _day.Lines.deskName : _travellerName;
+            Reveal shown = _caseTranslation.Line(line);
+            ForeignLine? foreign = DisplayText.ShowsForeign(line.Text, shown, speech.Timing, speech.ReducedMotion)
+                ? new ForeignLine(_tongueId, DisplayText.For(line.Text, shown, speech.Timing, speech.ReducedMotion))
+                : (ForeignLine?)null;
+            _index.Add(IndexEntries.Line(i, UiText.Format("search.title.line", speaker, i + 1), speaker, line.Text, line.English, foreign));
+        }
     }
 
     /// <summary>The traveller as the interview script reads them: small talk only when the interview is reachable, the garments only when the look is.</summary>
@@ -204,6 +248,7 @@ public sealed class InterviewPresenter
 
         if (_transcript != null)
             _transcript.Refresh();
+        IndexLines(before);
         if (_runner.Transcript.Count > before)
             _spoke();
 

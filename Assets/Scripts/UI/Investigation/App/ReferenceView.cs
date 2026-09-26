@@ -13,7 +13,8 @@ using UnityEngine.UI;
 /// the register works between travellers too (a day source). Today each
 /// register is drawn by the book page component (ReferenceBookWindowController,
 /// one clone of the page template per book); phase 5's FormView takes its place.
-/// DayReference fills it.
+/// DayReference fills it. A search result shows its row (Reveal: "Claimed
+/// place only" turned off when it hides the row).
 /// </summary>
 public sealed class ReferenceView : AppView
 {
@@ -86,6 +87,29 @@ public sealed class ReferenceView : AppView
             claimedOnly.onValueChanged.AddListener(_ => Redraw());
         Redraw();
         Select(_pages.Count > 0 ? 0 : -1);
+    }
+
+    /// <summary>The books, in their chips' order (a book's place is its item in the search index).</summary>
+    public IReadOnlyList<ReferenceBookSO> Books => _books;
+
+    /// <summary>
+    /// A search result (redesign phase 19, SE4): book <paramref name="book"/>
+    /// chosen and the page of its row <paramref name="key"/> (its pick)
+    /// shown, "Claimed place only" turned off when it hides the row; the row
+    /// is returned as found.
+    /// </summary>
+    public FoundTarget Reveal(int book, string key)
+    {
+        if (book < 0 || book >= _pages.Count)
+            return default;
+        Select(book);
+        FoundTarget found = _pages[book].RevealRow(key);
+        if (found.Rect == null && claimedOnly != null && claimedOnly.isOn)
+        {
+            claimedOnly.isOn = false;
+            found = _pages[book].RevealRow(key);
+        }
+        return found;
     }
 
     /// <summary>A new case's claim (null ids for none): its row comes first, and "Claimed place only" turns on (AP8).</summary>

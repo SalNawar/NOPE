@@ -50,6 +50,15 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
         ShowPage(0);
     }
 
+    /// <summary>A search result (redesign phase 19, SE4): the page of the row whose pick is <paramref name="key"/>, returned as found; nothing when the register does not list it (a filter hides it).</summary>
+    public FoundTarget RevealRow(string key)
+    {
+        for (int i = 0; _book != null && i < _lines.Count; i++)
+            if (!_lines[i].IsHeading && PickKeys.BookRow(_book.category, _lines[i].Row.NationId, _lines[i].Row.EraId) == key)
+                return ShowRowOf(i);
+        return default;
+    }
+
     /// <inheritdoc />
     protected override int RowCount => _lines.Count;
 

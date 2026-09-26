@@ -8,8 +8,9 @@ using UnityEngine.UI;
 /// the desk), that fills the desktop the first time it opens. Its case header
 /// holds the claim, the counters ("Papers 2 of 3 received · 1 scanned ·
 /// Deviations 1") and the PC's Accept and Deny (the façade wires them); its
-/// toolbar holds Back, Forward, the search field, Steps, Split and Keys, shown
-/// but not live until their phases (18-21); the sidebar's Steps, Pinned and
+/// toolbar holds Back, Forward, the search field (live since phase 19:
+/// InvestigationApp.Search), Steps, Split and Keys, the others shown but not
+/// live until their phases (18, 20, 21); the sidebar's Steps, Pinned and
 /// Recent are placeholders until then; one pane holds the six tabs.
 /// Nothing steals the view: something new for a tab badges it unless the
 /// player sees it (AppBadges), and dots the desktop's Investigation icon
@@ -21,7 +22,7 @@ using UnityEngine.UI;
 /// directive memo (the Rules tab) and the toast. InvestigationUIController
 /// drives it.
 /// </summary>
-public sealed class InvestigationApp : MonoBehaviour
+public sealed partial class InvestigationApp : MonoBehaviour
 {
     /// <summary>The app's window (maximised on the first open).</summary>
     [SerializeField] private DesktopWindow window;
@@ -37,7 +38,7 @@ public sealed class InvestigationApp : MonoBehaviour
     [SerializeField] private TMP_Text countersText;
 
     [Header("Toolbar")]
-    /// <summary>Back, Forward, the search field, Steps, Split and Keys: shown, not live until their phases (18-21).</summary>
+    /// <summary>Back, Forward, Steps, Split and Keys: shown, not live until their phases (18, 20, 21).</summary>
     [SerializeField] private Selectable[] notYetLive = new Selectable[0];
 
     [Header("Desktop")]
@@ -77,10 +78,11 @@ public sealed class InvestigationApp : MonoBehaviour
             icons.SetBadge(DesktopAppIds.Investigation, 0);
     }
 
-    /// <summary>A traveller is presented: the title, the claim, the pane on Documents, the badges and the icon's dot cleared, the toast gone.</summary>
+    /// <summary>A traveller is presented: the title, the claim, the pane on Documents, the badges and the icon's dot cleared, the toast gone, search's case layer empty.</summary>
     public void BeginCase(string claim, string travellerName)
     {
         Init();
+        ResetSearchCase();
         if (window != null)
             window.SetTitle(UiText.Format("app.titleCase", travellerName));
         if (claimText != null)
@@ -96,10 +98,11 @@ public sealed class InvestigationApp : MonoBehaviour
             toast.Hide();
     }
 
-    /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller.</summary>
+    /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller; search forgets the case.</summary>
     public void EndCase()
     {
         Init();
+        ResetSearchCase();
         if (window != null)
             window.SetTitle(UiText.Get("app.title"));
         if (claimText != null)
@@ -165,6 +168,7 @@ public sealed class InvestigationApp : MonoBehaviour
         foreach (Selectable control in notYetLive)
             if (control != null)
                 control.interactable = false;
+        InitSearch();
     }
 
     /// <summary>The player sees the tab: its badge goes.</summary>

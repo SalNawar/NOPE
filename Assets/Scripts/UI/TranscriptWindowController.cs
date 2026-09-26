@@ -44,6 +44,9 @@ public sealed class TranscriptWindowController : PagedRowsWindow
     /// <summary>Shows the newest page (call after lines were appended).</summary>
     public void Refresh() => ShowLastPage();
 
+    /// <summary>A search result (redesign phase 19, SE4): shows line <paramref name="index"/>'s page and returns its row as found.</summary>
+    public FoundTarget RevealLine(int index) => ShowRowOf(index);
+
     /// <inheritdoc />
     protected override int RowCount => _lines.Count;
 

@@ -173,6 +173,26 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         return _form;
     }
 
+    /// <summary>
+    /// The box of field <paramref name="field"/> (its first slot) as found by a
+    /// search result (redesign phase 19): its button (which takes the focus),
+    /// and in <paramref name="centreY"/> the box's middle below the form's top;
+    /// nothing when the form has no armed box for the field.
+    /// </summary>
+    public FoundTarget FieldBox(int field, out float centreY)
+    {
+        centreY = 0f;
+        if (_form == null)
+            return default;
+        foreach (SlotPart part in _parts)
+            if (part.Button.gameObject.activeSelf && part.Slot >= 0 && part.Slot < _form.Slots.Count && _form.Slots[part.Slot].Field == field)
+            {
+                centreY = _form.Slots[part.Slot].Hit.CentreY;
+                return new FoundTarget((RectTransform)part.Button.transform, part.Button);
+            }
+        return default;
+    }
+
     /// <summary>Shows the traveller's photo in the photo cell (a null look empties it).</summary>
     public void ShowPhoto(TravellerLook look, CharacterArt art)
     {

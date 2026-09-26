@@ -8,7 +8,8 @@ using NUnit.Framework;
 /// on a box, the section heads on their band, the fine print on the paper,
 /// the rules and the stamp area's dash as outlines (3:1), and the ink on each
 /// fill laid over a box (the hover tint, every theme's pick highlight), and
-/// the scan strip's text on the scanner backing (phase 5).
+/// the scan strip's text on the scanner backing (phase 5), and search's found
+/// outline on the paper and on a box (phase 19).
 /// </summary>
 public class FormContrastTests
 {
@@ -30,7 +31,8 @@ public class FormContrastTests
         Band = Hex("#E2DACA"),
         StampDash = Hex("#6B6358"),
         Backing = Hex("#212329"),
-        BackingInk = Hex("#D9DBE0")
+        BackingInk = Hex("#D9DBE0"),
+        Found = Hex("#1A6BE6")
     };
 
     [Test]
@@ -65,6 +67,15 @@ public class FormContrastTests
         p.BackingInk = Hex("#4A4D55");
         List<string> problems = FormContrast.Problems(p, new List<(string, Rgba)>(), new ContrastRules());
         Assert.IsTrue(problems.Single().Contains("scanner backing"), string.Join("\n", problems));
+    }
+
+    [Test]
+    public void AFaintFoundOutline_IsReported_OnThePaperAndOnABox()
+    {
+        FormPalette p = Spec();
+        p.Found = Hex("#A8C8F0");
+        List<string> problems = FormContrast.Problems(p, new List<(string, Rgba)>(), new ContrastRules());
+        Assert.AreEqual(2, problems.Count(m => m.Contains("found outline")), string.Join(" | ", problems));
     }
 
     [Test]

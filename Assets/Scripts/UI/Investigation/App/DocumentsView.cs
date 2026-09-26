@@ -12,7 +12,8 @@ using UnityEngine;
 /// form (phase 5): a clone of the scanned-page template per paper
 /// (DocumentWindowController over a FormView), drawn from the same
 /// DocumentForm the desk paper prints.
-/// CaseDocumentsPresenter fills it; nothing here opens or switches by itself.
+/// CaseDocumentsPresenter fills it; nothing here opens or switches by itself
+/// (a search result shows its paper and field: Reveal).
 /// </summary>
 public sealed class DocumentsView : AppView
 {
@@ -68,6 +69,15 @@ public sealed class DocumentsView : AppView
     {
         if (index >= 0 && index < _pages.Count && _pages[index] != null)
             _pages[index].MarkScanned();
+    }
+
+    /// <summary>A search result (redesign phase 19, SE4): paper <paramref name="paper"/> chosen and its field <paramref name="field"/> (-1: the paper itself) returned as found, scrolled to the middle; nothing for a paper not scanned.</summary>
+    public FoundTarget Reveal(int paper, int field)
+    {
+        if (paper < 0 || paper >= _pages.Count || _pages[paper] == null || _papers.State(paper) != PaperState.Scanned)
+            return default;
+        Select(paper);
+        return _pages[paper].RevealField(field);
     }
 
     /// <summary>The papers moved (handed over, scanned): the chips and the shown paper follow.</summary>

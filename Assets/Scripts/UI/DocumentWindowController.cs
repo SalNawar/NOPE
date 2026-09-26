@@ -72,6 +72,28 @@ public sealed class DocumentWindowController : MonoBehaviour
             scroll.verticalNormalizedPosition = 1f;
     }
 
+    /// <summary>
+    /// A search result (redesign phase 19, SE4): field <paramref name="field"/>'s
+    /// box scrolled to the middle of the copy and returned as found; the copy
+    /// itself, from its top, for -1 (the paper as a result).
+    /// </summary>
+    public FoundTarget RevealField(int field)
+    {
+        if (form == null)
+            return default;
+        float centre = 0f;
+        FoundTarget found = field >= 0 ? form.FieldBox(field, out centre) : default;
+        if (found.Rect == null)
+        {
+            if (scroll != null)
+                scroll.verticalNormalizedPosition = 1f;
+            return new FoundTarget((RectTransform)form.transform, null);
+        }
+        if (scroll != null && scroll.content != null && scroll.viewport != null)
+            scroll.verticalNormalizedPosition = FoundFlash.CentredScroll(scroll.content.rect.height, scroll.viewport.rect.height, centre);
+        return found;
+    }
+
     /// <summary>The copy arrived on the PC (its scan finished): the strip reads the shift clock's time now.</summary>
     public void MarkScanned()
     {

@@ -6,8 +6,11 @@ using UnityEngine.UI;
 /// <summary>
 /// The Citizen Records desktop app (redesign phase 2): under the agency's
 /// printed name and programme, type a name or an agency number to get the
-/// agency's record (CitizenRegistry.Find: a whole number first); the status
-/// line reads the query, whether a record is on file and today's date. The
+/// agency's record: the search index scoped to Records opens its best hit
+/// (redesign phase 19, the PC spec's SE6: one matcher, so search and the
+/// lookup find the same records; a whole number or name ranks first); the
+/// status line reads the query, whether a record is on file and today's
+/// date. A search result jumps to a record's row (Reveal). The
 /// record's rows are listed generically, group by group (a group's title is a
 /// heading line), a page at a time (PagedRowsWindow). A row that is evidence
 /// is compare-clickable, keyed by its record (EvidencePicks.ForRecord), so
@@ -56,7 +59,11 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         public RecordRow Row { get; }
     }
 
+    /// <summary>The one source the lookup searches.</summary>
+    private static readonly AppTab[] RecordsOnly = { AppTab.Records };
+
     private CitizenRegistry _registry;
+    private CaseIndex _index;
     private CitizenRecord _current;
 
     /// <summary>Today's date in the agency's calendar (null when the agency block has no readable first date).</summary>
@@ -79,22 +86,54 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         ShowIdle();
     }
 
-    /// <summary>Sets the day's registry, the agency block the window prints and today's date, and resets the view.</summary>
-    public void SetRegistry(CitizenRegistry registry, AgencyContent agency, string today)
+    /// <summary>Sets the day's registry, the search index holding its rows (the lookup's matcher), the agency block the window prints and today's date, and resets the view.</summary>
+    public void SetRegistry(CitizenRegistry registry, CaseIndex index, AgencyContent agency, string today)
     {
         _registry = registry;
+        _index = index;
         _today = today;
         if (agencyText != null)
             agencyText.text = agency != null ? UiText.Format("records.agency", agency.name, agency.programme) : string.Empty;
         ShowIdle();
     }
 
-    /// <summary>Looks up the typed name or number and lists the record's rows (or says none is on file).</summary>
+    /// <summary>Looks up the typed name or number (the index scoped to Records, its best hit) and lists the record's rows (or says none is on file).</summary>
     public void Search()
     {
         string query = searchInput != null ? searchInput.text : null;
-        _current = _registry != null ? _registry.Find(query) : null;
+        IReadOnlyList<ResultGroup> found = _index != null ? _index.Search(SearchQuery.Parse(query), RecordsOnly, 1, AppTab.Records) : null;
+        Show(found != null && found.Count > 0 ? RecordAt(found[0].Hits[0].Entry.Item) : null, query);
+    }
 
+    /// <summary>
+    /// A search result (redesign phase 19, SE4): record <paramref name="record"/>
+    /// of the registry shown as its lookup by id would show it (the query its
+    /// number, else its name), on the page of its row <paramref name="row"/>
+    /// (in order across its groups; -1: its first row), which is returned as found.
+    /// </summary>
+    public FoundTarget Reveal(int record, int row)
+    {
+        CitizenRecord found = RecordAt(record);
+        if (found == null)
+            return default;
+        if (searchInput != null)
+            searchInput.SetTextWithoutNotify(found.Id);
+        Show(found, found.Id);
+        int rows = -1;
+        for (int i = 0; i < _lines.Count; i++)
+            if (_lines[i].Heading == null && ++rows == System.Math.Max(0, row))
+                return ShowRowOf(i);
+        return default;
+    }
+
+    /// <summary>The registry's record at <paramref name="index"/>, or null.</summary>
+    private CitizenRecord RecordAt(int index) =>
+        _registry != null && index >= 0 && index < _registry.Records.Count ? _registry.Records[index] : null;
+
+    /// <summary>Lists <paramref name="record"/>'s rows (null: none on file) under the status line for <paramref name="query"/>, from the first page.</summary>
+    private void Show(CitizenRecord record, string query)
+    {
+        _current = record;
         _lines.Clear();
         if (_current != null)
             foreach (RecordGroup group in _current.Groups)
