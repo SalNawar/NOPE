@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,10 +7,13 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Phase 6 developer overlay: cheat panel + live timeline inspector.
-/// Toggle with the backtick/tilde key (KeyCode.BackQuote). Only draws in the
-/// editor or development builds, so it's automatically absent from release
-/// builds. RunManager.GetOrCreate() attaches this to its persistent
-/// GameObject, so it's available from any scene with no scene wiring.
+/// Toggle with the backtick/tilde key. RunManager.GetOrCreate() attaches this
+/// to its persistent GameObject in the editor and development builds only, so
+/// it's available from any scene with no scene wiring and absent from release
+/// builds. The component is enabled only while the overlay is open: a closed
+/// overlay runs no OnGUI, so IMGUI costs nothing per frame (audit R2-012,
+/// R3-030); the key is an input action, heard while the component is off. A
+/// cheat clicked in a GUI pass runs after the pass (audit R2-003).
 /// </summary>
 public sealed class DebugPanelController : MonoBehaviour
 {
@@ -20,9 +24,6 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>Tab labels for the toolbar.</summary>
     private static readonly string[] TabLabels = { "Cheats", "Timeline Inspector" };
 
-    /// <summary>True while the overlay is visible.</summary>
-    private bool _visible;
-
     /// <summary>Currently selected tab (0 = Cheats, 1 = Timeline Inspector).</summary>
     private int _tab;
 
@@ -32,32 +33,65 @@ public sealed class DebugPanelController : MonoBehaviour
     /// <summary>Text field contents for the flag set/clear cheat.</summary>
     private string _flagInput = string.Empty;
 
-    /// <summary>Logs that the overlay has been attached and how to open it.</summary>
+    /// <summary>The toggle key (backtick/tilde), heard while the component is disabled.</summary>
+    private InputAction _toggle;
+
+    /// <summary>
+    /// What a click in this GUI pass changes (a cheat, the tab), run once the
+    /// pass has drawn everything: changing what is drawn mid-pass (a new flag
+    /// row, the other tab) would draw more controls than IMGUI's layout pass
+    /// counted, and GUILayout throws.
+    /// </summary>
+    private Action _afterPass;
+
+    /// <summary>Listens for the toggle key and starts closed (disabled: no OnGUI).</summary>
     private void Awake()
     {
+        _toggle = new InputAction("DevOverlay", InputActionType.Button, "<Keyboard>/backquote");
+        _toggle.performed += OnToggle;
+        _toggle.Enable();
+        enabled = false;
         Debug.Log("[DebugPanelController] Attached to persistent RunManager object (press ~ to toggle the dev overlay).");
     }
 
-    /// <summary>Watches for the toggle key.</summary>
-    private void Update()
+    /// <summary>Stops listening for the toggle key.</summary>
+    private void OnDestroy()
     {
-        if (Keyboard.current != null && Keyboard.current.backquoteKey.wasPressedThisFrame)
-        {
-            _visible = !_visible;
-            _scroll = Vector2.zero;
-            Debug.Log($"[DebugPanelController] Overlay {(_visible ? "opened" : "closed")} (~ pressed).");
-        }
+        if (_toggle == null)
+            return;
+        _toggle.performed -= OnToggle;
+        _toggle.Dispose();
+        _toggle = null;
     }
 
-    /// <summary>Draws the overlay (editor / development builds only).</summary>
-    private void OnGUI()
+    /// <summary>Opens or closes the overlay (editor / development builds only).</summary>
+    private void OnToggle(InputAction.CallbackContext _)
     {
         if (!Application.isEditor && !Debug.isDebugBuild)
             return;
 
-        if (!_visible)
-            return;
+        enabled = !enabled;
+        _scroll = Vector2.zero;
+        _afterPass = null;
+        Debug.Log($"[DebugPanelController] Overlay {(enabled ? "opened" : "closed")} (~ pressed).");
+    }
 
+    /// <summary>Draws the open overlay, then applies what a click in this pass changed.</summary>
+    private void OnGUI()
+    {
+        Draw();
+
+        Action change = _afterPass;
+        _afterPass = null;
+        change?.Invoke();
+    }
+
+    /// <summary>Queues a change to run after this GUI pass (a pass carries one click).</summary>
+    private void AfterPass(Action change) => _afterPass = change;
+
+    /// <summary>Draws the overlay's panel and the selected tab.</summary>
+    private void Draw()
+    {
         RunManager run = RunManager.HasInstance ? RunManager.Instance : null;
         WorldState world = run != null ? run.World : null;
         ContentLibrarySO lib = run != null ? run.Library : null;
@@ -76,7 +110,9 @@ public sealed class DebugPanelController : MonoBehaviour
 
         GUILayout.Label($"Day {world.day}   Money {world.money}   Stability {world.timelineStability:0.#}   Ending '{world.endingId}'");
 
-        _tab = GUILayout.Toolbar(_tab, TabLabels);
+        int tab = GUILayout.Toolbar(_tab, TabLabels);
+        if (tab != _tab)
+            AfterPass(() => _tab = tab);
         GUILayout.Space(4f);
 
         _scroll = GUILayout.BeginScrollView(_scroll, GUILayout.Height(PanelHeight - 90f));
@@ -98,8 +134,11 @@ public sealed class DebugPanelController : MonoBehaviour
 
         if (GUILayout.Button("Skip Day (sleep: endings + nightly resolve + advance)"))
         {
-            Debug.Log("[DebugPanelController] Cheat: Skip Day requested (through Sleep).");
-            run.Sleep();
+            AfterPass(() =>
+            {
+                Debug.Log("[DebugPanelController] Cheat: Skip Day requested (through Sleep).");
+                run.Sleep();
+            });
         }
 
         if (lib != null)
@@ -109,8 +148,11 @@ public sealed class DebugPanelController : MonoBehaviour
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("No leader"))
             {
-                Debug.Log("[DebugPanelController] Cheat: No leader.");
-                HistoryService.ForceLeader(world, lib, null);
+                AfterPass(() =>
+                {
+                    Debug.Log("[DebugPanelController] Cheat: No leader.");
+                    HistoryService.ForceLeader(world, lib, null);
+                });
             }
 
             int shown = 1;
@@ -125,8 +167,12 @@ public sealed class DebugPanelController : MonoBehaviour
                 }
                 if (GUILayout.Button(nation.displayName))
                 {
-                    Debug.Log($"[DebugPanelController] Cheat: Force leader '{nation.id}'.");
-                    HistoryService.ForceLeader(world, lib, nation.id);
+                    string nationId = nation.id;
+                    AfterPass(() =>
+                    {
+                        Debug.Log($"[DebugPanelController] Cheat: Force leader '{nationId}'.");
+                        HistoryService.ForceLeader(world, lib, nationId);
+                    });
                 }
             }
             GUILayout.EndHorizontal();
@@ -136,19 +182,19 @@ public sealed class DebugPanelController : MonoBehaviour
         GUILayout.Space(6f);
         GUILayout.Label("Money");
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("+10")) AddMoney(world, 10);
-        if (GUILayout.Button("+50")) AddMoney(world, 50);
-        if (GUILayout.Button("+100")) AddMoney(world, 100);
-        if (GUILayout.Button("-50")) AddMoney(world, -50);
+        if (GUILayout.Button("+10")) AfterPass(() => AddMoney(world, 10));
+        if (GUILayout.Button("+50")) AfterPass(() => AddMoney(world, 50));
+        if (GUILayout.Button("+100")) AfterPass(() => AddMoney(world, 100));
+        if (GUILayout.Button("-50")) AfterPass(() => AddMoney(world, -50));
         GUILayout.EndHorizontal();
 
         GUILayout.Space(6f);
         GUILayout.Label("Timeline stability");
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("+10")) AddStability(world, 10f);
-        if (GUILayout.Button("-10")) AddStability(world, -10f);
-        if (GUILayout.Button("Set 0 (fire test)")) SetStability(world, 0f);
-        if (GUILayout.Button("Set 100")) SetStability(world, 100f);
+        if (GUILayout.Button("+10")) AfterPass(() => AddStability(world, 10f));
+        if (GUILayout.Button("-10")) AfterPass(() => AddStability(world, -10f));
+        if (GUILayout.Button("Set 0 (fire test)")) AfterPass(() => SetStability(world, 0f));
+        if (GUILayout.Button("Set 100")) AfterPass(() => SetStability(world, 100f));
         GUILayout.EndHorizontal();
 
         GUILayout.Space(6f);
@@ -158,14 +204,22 @@ public sealed class DebugPanelController : MonoBehaviour
 
         if (GUILayout.Button("Set", GUILayout.Width(50f)) && !string.IsNullOrWhiteSpace(_flagInput))
         {
-            Debug.Log($"[DebugPanelController] Cheat: SetFlag('{_flagInput.Trim()}').");
-            world.SetFlag(_flagInput.Trim());
+            string flag = _flagInput.Trim();
+            AfterPass(() =>
+            {
+                Debug.Log($"[DebugPanelController] Cheat: SetFlag('{flag}').");
+                world.SetFlag(flag);
+            });
         }
 
         if (GUILayout.Button("Clear", GUILayout.Width(50f)) && !string.IsNullOrWhiteSpace(_flagInput))
         {
-            Debug.Log($"[DebugPanelController] Cheat: ClearFlag('{_flagInput.Trim()}').");
-            world.ClearFlag(_flagInput.Trim());
+            string flag = _flagInput.Trim();
+            AfterPass(() =>
+            {
+                Debug.Log($"[DebugPanelController] Cheat: ClearFlag('{flag}').");
+                world.ClearFlag(flag);
+            });
         }
 
         GUILayout.EndHorizontal();
@@ -181,8 +235,11 @@ public sealed class DebugPanelController : MonoBehaviour
 
             if (GUILayout.Button("Clear", GUILayout.Width(50f)))
             {
-                Debug.Log($"[DebugPanelController] Cheat: ClearFlag('{flag}') (from active list).");
-                world.ClearFlag(flag);
+                AfterPass(() =>
+                {
+                    Debug.Log($"[DebugPanelController] Cheat: ClearFlag('{flag}') (from active list).");
+                    world.ClearFlag(flag);
+                });
             }
 
             GUILayout.EndHorizontal();
@@ -222,16 +279,24 @@ public sealed class DebugPanelController : MonoBehaviour
             {
                 if (GUILayout.Button("Lock", GUILayout.Width(60f)))
                 {
-                    Debug.Log($"[DebugPanelController] Cheat: removing upgrade '{upgrade.id}'.");
-                    world.unlockedUpgradeIds.Remove(upgrade.id);
+                    string id = upgrade.id;
+                    AfterPass(() =>
+                    {
+                        Debug.Log($"[DebugPanelController] Cheat: removing upgrade '{id}'.");
+                        world.unlockedUpgradeIds.Remove(id);
+                    });
                 }
             }
             else
             {
                 if (GUILayout.Button("Unlock", GUILayout.Width(60f)))
                 {
-                    Debug.Log($"[DebugPanelController] Cheat: unlocking upgrade '{upgrade.id}'.");
-                    world.UnlockUpgrade(upgrade.id);
+                    string id = upgrade.id;
+                    AfterPass(() =>
+                    {
+                        Debug.Log($"[DebugPanelController] Cheat: unlocking upgrade '{id}'.");
+                        world.UnlockUpgrade(id);
+                    });
                 }
             }
 

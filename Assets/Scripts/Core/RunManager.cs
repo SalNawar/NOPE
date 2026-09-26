@@ -52,9 +52,12 @@ public sealed class RunManager : MonoBehaviour
         mgr.Config = config;
         Instance = mgr;
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
         // Phase 6: dev overlay (cheats + timeline inspector), toggled with '~'.
-        // Editor/dev-build only — DebugPanelController.OnGUI() no-ops otherwise.
+        // Editor and development builds only (audit R2-012, R3-030): a release
+        // build never carries it.
         go.AddComponent<DebugPanelController>();
+#endif
 
         // Default boot behavior: continue an existing run, otherwise start fresh.
         if (!mgr.ContinueRun())
