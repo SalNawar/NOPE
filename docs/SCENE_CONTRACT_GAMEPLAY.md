@@ -33,16 +33,16 @@ report of the current art scene: `Tools > TimeDesk > Check Office Scene Contract
 
 ## The anchors
 
-| Id | Used for | Found today (art 58bda15) | The art side may add |
+| Id | Used for | Found today (art ea62550, the desk layout of 633e2e5) | The art side may add |
 |---|---|---|---|
 | `PCScreen` | the PC: its click box opens the PC frame; the desktop is cloned onto its glass | fallback `ImportedOfficeDress/Desk/Retro CRT` | nothing needed. The glass is the renderer, or the submesh whose material, is named `Glass` or `Screen` (case-insensitive); keep that naming on any new PC. |
 | `PCPower` | the PC's power knob (click box) | fallback `ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange` (the rebuilt CRT's orange power buttons, the monitor's and the system unit's, one mesh: one box over both, outlined on hover); without it, **default**: derived from the glass (bottom right of the bezel, measured on the older CRT study) | `Anchor_PCPower` on the monitor's knob |
 | `DeskSurface` | the desk plane the papers lie and slide on (height = the art's top) | fallback `HybridOffice/Booth/Finish_Mat` | `Anchor_DeskSurface` (or keep the mat) |
 | `Scanner` | the scanner (drop bed, scan pulse) | **default** pose (1.02, 1.06, −0.46): right of the mat (its left edge on the mat's border), between the calculator and the ink pad, where it touches no prop and its click box covers no other prop's box as the office camera sees it; the gameplay layer shows a placeholder flatbed there | a scanner model with `Anchor_Scanner` (the placeholder hides when an art scanner is found) |
 | `Traveller` | where the traveller's feet stand (the figure turns to the camera) | **default** (0, 0, 1.6) | `Anchor_Traveller` behind the desk |
-| `HandOver` | where handed-over papers slide in from and back to | **default** (0.45, 1.07, 0.95) | `Anchor_HandOver` at the traveller's edge of the desk |
-| `NextSign` | READY / NEXT: the click box | fallback `HybridOffice/Booth/Blender_Next` | — |
-| `Intercom` | opens the wheel | fallback `ImportedOfficeDress/Desk/Clerk hotline` (then `HybridOffice/Booth/Finish_Intercom`) | — |
+| `HandOver` | where handed-over papers slide in from and back to | **default** (0.05, 1.07, 0.45): right behind the NEXT sign, which hides a paper there from the office camera, so papers slide out from under the sign and back under it. Since the 633e2e5 layout the sign stands against the mat's back edge and the lamp behind it: every path from the far side of the desk to the mat crosses the sign's base, and the old default (0.45, 1.07, 0.95) lay on the lamp's cord, so papers came out of the lamp. This spot touches no prop, and no path from it to the mat or the scanner crosses the lamp | `Anchor_HandOver` at the traveller's edge of the desk, with a clear run to the mat |
+| `NextSign` | READY / NEXT: the click box | fallback `HybridOffice/Booth/Blender_Next` (beside the mat's back edge since 633e2e5); without it, **default** (0.13, 1.06, 0.16), where the art's sign stands, with the gameplay's READY placeholder | — |
+| `Intercom` | opens the wheel | fallback `ImportedOfficeDress/Desk/Clerk hotline`, the phone at the desk's right rear since 633e2e5 (then `HybridOffice/Booth/Finish_Intercom`) | — |
 | `Stamp`, `Till`, `StabilityMonitor`, `Calendar`, `Clock` | reacting props with tooltips | fallbacks under `HybridOffice/Booth/` | — |
 | `Calculator`, `PenPot`, `Stapler` | flavour props (react on click) | fallbacks under `ImportedOfficeDress/Desk/` | — |
 | `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock` | the art's TMP texts the game writes (day, stability %, credits, digital shift clock) | bare names `DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay` | keep these names on the texts (or add anchors on them). Without them the game shows a small fallback HUD. |
