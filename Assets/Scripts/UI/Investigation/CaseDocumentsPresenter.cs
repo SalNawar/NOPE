@@ -25,6 +25,9 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new List<CaseDocument>();
 
+    /// <summary>The form each of the current traveller's papers prints (redesign phase 4), in paper order.</summary>
+    private readonly List<DocumentForm> _caseForms = new List<DocumentForm>();
+
     /// <summary>Where each of the current traveller's papers is.</summary>
     private CasePapers _papers = new CasePapers(0);
 
@@ -82,13 +85,17 @@ public sealed class CaseDocumentsPresenter
     /// marked "on arrival" when the traveller steps up, the others through the
     /// traveller wheel. The Documents view gets a chip and a (hidden) copy per
     /// paper. With the desk, each becomes a paper whose scan brings its copy
-    /// to the PC; without it, a paper reaches the PC at the hand-over.
+    /// to the PC; without it, a paper reaches the PC at the hand-over. Each
+    /// paper prints its document's form, headed with <paramref name="agency"/>'s
+    /// name and programme (redesign phase 4).
     /// </summary>
-    public void Present(CaseInstance inst)
+    public void Present(CaseInstance inst, AgencyContent agency)
     {
         _caseDocuments.Clear();
+        _caseForms.Clear();
         if (inst != null)
             foreach (DocumentInstance doc in inst.documents)
+            {
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
@@ -96,13 +103,15 @@ public sealed class CaseDocumentsPresenter
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
+                _caseForms.Add(DocumentForm.For(doc, agency));
+            }
 
         _papers = new CasePapers(_caseDocuments.Count);
         if (_view != null)
             _view.SetCase(inst != null ? inst.documents : null, _papers, _compare, inst != null ? inst.look : null, _art);
 
         if (_desk != null)
-            _desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
+            _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
         foreach (int i in CaseDocuments.ArrivalIndices(_caseDocuments))
             Receive(i);
         PapersChanged?.Invoke();
@@ -122,6 +131,7 @@ public sealed class CaseDocumentsPresenter
         if (_desk != null)
             _desk.EndCase();
         _caseDocuments.Clear();
+        _caseForms.Clear();
         _papers = new CasePapers(0);
         if (_view != null)
             _view.Clear();

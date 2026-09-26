@@ -61,6 +61,9 @@ public sealed class CaseFactory
     /// <summary>The agency numbers handed out today (a number belongs to one traveller a day, AgencyNumbers.TakeUnique).</summary>
     private HashSet<string> _agencyNumbers = new HashSet<string>();
 
+    /// <summary>The current traveller's forms seed (Seeds.ForForms): a value their papers' serials come from, never a stream.</summary>
+    private int _formsSeed;
+
     /// <summary>Today's tell channels: the plan's, minus Appearance where no garment can be looked at.</summary>
     private IReadOnlyList<TellChannel> _channels = System.Array.Empty<TellChannel>();
 
@@ -157,6 +160,7 @@ public sealed class CaseFactory
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
+            _formsSeed = Seeds.ForForms(caseSeed);
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
 
@@ -331,6 +335,7 @@ public sealed class CaseFactory
             if (doc == null || doc.template == null || doc.template.fieldSpecs == null)
                 continue;
 
+            doc.serial = FormSerials.Make(doc.template.formNumber, _formsSeed, inst.documents.IndexOf(doc));
             foreach (DocumentFieldSpec spec in doc.template.fieldSpecs)
             {
                 if (spec == null)
@@ -341,7 +346,7 @@ public sealed class CaseFactory
                     category = spec.category,
                     label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
                     value = ResolveFieldValue(spec.category, inst),
-                    page = Mathf.Max(0, spec.page)
+                    page = doc.template.form != null ? Mathf.Max(0, doc.template.form.PageOf(doc.fields.Count)) : 0
                 };
 
                 doc.fields.Add(field);
