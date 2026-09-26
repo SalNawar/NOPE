@@ -8,8 +8,8 @@ using UnityEngine.UI;
 /// </summary>
 public sealed class DesktopIcon : MonoBehaviour
 {
-    /// <summary>Window this icon opens / focuses.</summary>
-    [SerializeField] private OSWindowChrome targetWindow;
+    /// <summary>Window this icon opens (a minimised one restores), raised and focused.</summary>
+    [SerializeField] private DesktopWindow targetWindow;
 
     /// <summary>Button on the icon (defaults to this object's Button).</summary>
     [SerializeField] private Button button;
