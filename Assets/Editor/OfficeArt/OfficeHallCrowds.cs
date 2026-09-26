@@ -35,7 +35,7 @@ public static class OfficeHallCrowds
     [Serializable] sealed class Check
     {
         public bool success;public int groups,uniqueCompositions,visibleGroups,colliders,renderers;
-        public float floorTop,eveningBlend;public string mode;public List<string> errors=new();
+        public float floorTop,eveningBlend;public string mode;public bool shiftClockLive;public List<string> errors=new();
     }
     [MenuItem("Tools/Office Art/Hall Crowds/Validate")]
     public static void Validate()
@@ -59,6 +59,10 @@ public static class OfficeHallCrowds
         report.colliders=root.GetComponentsInChildren<Collider>(true).Length;
         report.floorTop=floorRenderer.bounds.max.y;
         report.eveningBlend=palette.EveningBlend;report.mode=palette.Preview.ToString();
+        // Follow Shift reads the gameplay layer's shift hook; in play mode it must be there, or the crowds stay in the morning all day.
+        report.shiftClockLive=ShiftClockDriver.Live!=null;
+        if(EditorApplication.isPlaying && palette.Preview==OfficeHallCrowdPalette.PreviewMode.Automatic && !report.shiftClockLive)
+            report.errors.Add("No gameplay shift clock (ShiftClockDriver.Live): Follow Shift stays in the morning palette.");
         if(report.groups!=ExpectedGroups || report.uniqueCompositions!=6)report.errors.Add("Expected all placements and six authored compositions.");
         if(report.colliders!=0)report.errors.Add("Background crowds must not intercept gameplay input.");
         foreach(var r in cards)

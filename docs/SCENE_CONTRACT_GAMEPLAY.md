@@ -56,6 +56,16 @@ the current default pose for every place still on a default (today: `PCPower`,
 `Scanner`, `Traveller`, `HandOver`). Move them where the art wants them and save.
 The gameplay side does not run this tool on the art scene.
 
+## Hooks the gameplay layer offers the art side
+
+Art-side runtime code never reads gameplay objects directly (and never edits
+gameplay code or assets); it reads a read-only hook the gameplay side owns. Ask
+the gameplay side for a new hook when the art needs one.
+
+| Hook | What it gives | Used by |
+|---|---|---|
+| `ShiftClockDriver.Live` (`IShiftProgress`) | today's shift progress, `Progress01`: 0 at opening, 1 at closing (`ShiftClock.Progress01`); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours) |
+
 ## What the art scene must not do (and what the game does about leftovers)
 
 The art scene still carries **leftover gameplay objects** from before the move.

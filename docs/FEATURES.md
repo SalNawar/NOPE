@@ -24,6 +24,7 @@ by the EditMode suite in `Assets/Tests/EditMode`.
 - [ ] End-of-day "SHIFT LEDGER" newsletter over the office (Go Home), incl. the undocumented-denials line ("log a deviation before denying") (the office ignores clicks while a newsletter is up; tested: `BoothRulesTests`)
 - [ ] Per-case READY gate: visitor is presented only after the player taps the NEXT sign (tested: `ReadyGateTests`)
 - [ ] The art's digital clock display shows the shift clock (the analog placeholder clock is retired)
+- [ ] The art's background crowds (`OfficeHallCrowds`) turn from their morning to their evening colours with the shift clock, whatever the queue: morning until half the shift (13:00), fully evening from 90% (16:12), eased between; the art office without the gameplay layer keeps them in the morning. The art reads the gameplay's read-only hook (`IShiftProgress`, `ShiftClockDriver.Live`) (the curve and its clock times tested: `CrowdPaletteBlendTests`; the crowds on screen are checked in Unity)
 
 ## Desk
 
