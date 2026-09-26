@@ -282,11 +282,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             scannerWindow.Open();
     }
 
-    /// <summary>Injects the day's citizen registry into the Records app.</summary>
-    public void SetCitizenRegistry(CitizenRegistry registry)
+    /// <summary>Injects the day's citizen registry into the Records app, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
+    public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
         if (recordsWindow != null)
-            recordsWindow.SetRegistry(registry);
+            recordsWindow.SetRegistry(registry, agency, agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null);
     }
 
     /// <summary>Injects today's facts (the reference books render these rows).</summary>

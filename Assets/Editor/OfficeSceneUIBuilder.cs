@@ -272,39 +272,9 @@ public static partial class OfficeSceneUIBuilder
         BuildDesktopIcon(bookShelf, "IconScanner", "icon.scanner", scannerWindow, "");
 
         // Citizen Records app: the agency's master record of every (fake)
-        // human. Registry content is injected per day by GameManager.
-        DestroyChildIfPresent(windowLayer, "RecordsWindow");
-        OSWindowChrome recordsChrome = BuildOSWindow(windowLayer, "RecordsWindow", "records.title", null,
-            UiText.Get("records.idle"), new Vector2(520f, 430f));
-        Transform recWin = recordsChrome.transform;
-        TMP_Text recStatus = recWin.Find("Body").GetComponent<TMP_Text>();
-        var recStatusRt = (RectTransform)recStatus.transform;
-        recStatusRt.anchorMin = new Vector2(0.05f, 0.6f);
-        recStatusRt.anchorMax = new Vector2(0.95f, 0.7f);
-        TMP_InputField recSearchInput = BuildInputField(recWin, "SearchInput", "records.placeholder", new Vector2(0.05f, 0.74f), new Vector2(0.68f, 0.86f));
-        Button recSearchButton = MakeButton(recWin, "SearchButton", null, new Vector2(0.71f, 0.74f), new Vector2(0.95f, 0.86f), new Color(0.15f, 0.3f, 0.5f, 1f),
-                                            ThemeRoleId.SearchButton, "records.search");
-        (GameObject recNameRow, TMP_Text recNameValue) = BuildRecordRow(recWin, "NameRow", "Name", new Vector2(0.05f, 0.46f), new Vector2(0.95f, 0.56f));
-        (GameObject recBornRow, TMP_Text recBornValue) = BuildRecordRow(recWin, "BornRow", "Born", new Vector2(0.05f, 0.34f), new Vector2(0.95f, 0.44f));
-        TMP_Text recOrigin = Text(recWin, "OriginText", "", 17, TextAlignmentOptions.Left, new Vector2(0.06f, 0.24f), new Vector2(0.95f, 0.32f), Ink, ThemeRoleId.DiegeticRow);
-        TMP_Text recNote = Text(recWin, "NoteText", "", 15, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.05f), new Vector2(0.95f, 0.22f), new Color(0.35f, 0.3f, 0.2f, 1f),
-                                ThemeRoleId.DiegeticNote, style: FontStyles.Italic);
-        CitizenRecordsWindowController records = recWin.GetComponent<CitizenRecordsWindowController>();
-        if (records == null)
-            records = recWin.gameObject.AddComponent<CitizenRecordsWindowController>();
-        var soRecords = new SerializedObject(records);
-        SetRef(soRecords, "searchInput", recSearchInput);
-        SetRef(soRecords, "searchButton", recSearchButton);
-        SetRef(soRecords, "statusText", recStatus);
-        SetRef(soRecords, "nameRow", recNameRow);
-        SetRef(soRecords, "nameValueText", recNameValue);
-        SetRef(soRecords, "bornRow", recBornRow);
-        SetRef(soRecords, "bornValueText", recBornValue);
-        SetRef(soRecords, "originText", recOrigin);
-        SetRef(soRecords, "noteText", recNote);
-        SetRef(soRecords, "compareController", compare);
-        soRecords.ApplyModifiedProperties();
-        BuildDesktopIcon(bookShelf, "IconRecords", "icon.records", recordsChrome, "");
+        // human, its rows listed group by group (OfficeSceneUIBuilder.Records).
+        // Registry content is injected per day by GameManager.
+        CitizenRecordsWindowController records = BuildRecordsWindow(windowLayer, bookShelf, compare);
 
         // Case Notes: Interview — the current traveller's transcript. Rebuilt
         // fresh each run (like Records), so its row template always has the
@@ -1593,19 +1563,6 @@ public static partial class OfficeSceneUIBuilder
         input.placeholder = ph;
         input.targetGraphic = box.GetComponent<Image>();
         return input;
-    }
-
-    /// <summary>Builds a compare-clickable label/value record row; returns row + value text.</summary>
-    private static (GameObject row, TMP_Text value) BuildRecordRow(Transform parent, string name, string label, Vector2 aMin, Vector2 aMax)
-    {
-        DestroyChildIfPresent(parent, name);
-        Transform row = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.7f), ThemeRoleId.DiegeticRow);
-        Button btn = row.gameObject.AddComponent<Button>();
-        btn.targetGraphic = row.GetComponent<Image>();
-
-        Text(row, "Label", label, 17, TextAlignmentOptions.Left, new Vector2(0.03f, 0f), new Vector2(0.3f, 1f), new Color(0.35f, 0.32f, 0.25f, 1f), ThemeRoleId.DiegeticLabel);
-        TMP_Text value = Text(row, "Value", "", 17, TextAlignmentOptions.Left, new Vector2(0.33f, 0f), new Vector2(0.97f, 1f), Ink, ThemeRoleId.DiegeticRow);
-        return (row.gameObject, value);
     }
 
     /// <summary>Builds a desktop icon button bound to a window (its label keyed), with optional unlock-gating.</summary>

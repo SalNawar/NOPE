@@ -8429,43 +8429,79 @@
       },
       {
         "key": "records.placeholder",
-        "text": "Type a full name…",
+        "text": "Name or number…",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "records.idle",
-        "text": "Type a citizen's name and press SEARCH.",
+        "text": "Type a name or a record number and press SEARCH.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "records.noRecord",
-        "text": "NO RECORD matching \"{0}\".",
+        "text": "NO RECORD ON FILE for \"{0}\" · {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "records.onFile",
-        "text": "RECORD ON FILE:",
+        "text": "Query \"{0}\" · 1 record on file · {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "records.origin",
-        "text": "Origin:  {0}",
+        "key": "records.agency",
+        "text": "{0} · {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "records.compare.name",
-        "text": "Records · Name",
+        "key": "records.group.registry",
+        "text": "REGISTRY ENTRY",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "records.compare.born",
-        "text": "Records · Born",
+        "key": "records.row.name",
+        "text": "Name",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.born",
+        "text": "Born",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.origin",
+        "text": "Origin",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.note",
+        "text": "Note",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.note.none",
+        "text": "No remarks on file.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.note.sealed",
+        "text": "Priority subject. Records sealed above your clearance.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.compareLabel",
+        "text": "Records · {0}",
         "gloss": "None",
         "tier": "Full"
       },

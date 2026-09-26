@@ -437,9 +437,9 @@ public static class _TimeDeskAuditPlay
         {
             if (category == ClueCategory.BirthDate || category == ClueCategory.Name)
             {
-                CitizenRecord rec = registry.Records.FirstOrDefault(r => r.fullName == c.visitorGivenName);
-                string value = rec == null ? "" : category == ClueCategory.BirthDate ? rec.birthDate : rec.fullName;
-                return EvidencePicks.ForRecord(category, category == ClueCategory.BirthDate ? "Citizen Records · Born" : "Citizen Records · Name", value, rec?.fullName);
+                CitizenRecord rec = registry.Find(c.visitorGivenName);
+                RecordRow? recordRow = rec?.Groups.SelectMany(g => g.Rows).Where(r => r.IsEvidence && r.Category == category).Cast<RecordRow?>().FirstOrDefault();
+                return rec != null && recordRow.HasValue ? EvidencePicks.ForRecord(rec, recordRow.Value) : (ComparePick?)null;
             }
             ReferenceBookSO book = lib.ReferenceBooks.FirstOrDefault(b => b != null && b.category == category);
             FactRow row;

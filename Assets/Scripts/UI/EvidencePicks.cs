@@ -44,7 +44,8 @@ public static class EvidencePicks
             fact.Value,
             fact.ToEvidence());
 
-    /// <summary>A row of <paramref name="owner"/>'s Citizen Record (its label from the app), a truth source for the name and the date of birth of that person only.</summary>
-    public static ComparePick ForRecord(ClueCategory category, string label, string value, string owner) =>
-        new ComparePick(PickKeys.Record(category), label, value, CompareEvidence.ForRecordField(category, value, owner));
+    /// <summary>An evidence row of a Citizen Record: "Records · Born", keyed by the record (PickKeys.Record), a truth source for that person only (DiscrepancyLog.Prove).</summary>
+    public static ComparePick ForRecord(CitizenRecord record, RecordRow row) =>
+        new ComparePick(PickKeys.Record(row.Category, record.Id), UiText.Format("records.compareLabel", row.Label), row.Value,
+                        CompareEvidence.ForRecordField(row.Category, row.Value, record.FullName));
 }

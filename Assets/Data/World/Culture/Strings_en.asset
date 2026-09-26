@@ -425,31 +425,55 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: records.placeholder
-    text: "Type a full name\u2026"
+    text: "Name or number\u2026"
     gloss: 0
     tier: 0
   - key: records.idle
-    text: Type a citizen's name and press SEARCH.
+    text: Type a name or a record number and press SEARCH.
     gloss: 0
     tier: 0
   - key: records.noRecord
-    text: NO RECORD matching "{0}".
+    text: "NO RECORD ON FILE for \"{0}\" \xB7 {1}"
     gloss: 0
     tier: 0
   - key: records.onFile
-    text: 'RECORD ON FILE:'
+    text: "Query \"{0}\" \xB7 1 record on file \xB7 {1}"
     gloss: 0
     tier: 0
-  - key: records.origin
-    text: 'Origin:  {0}'
+  - key: records.agency
+    text: "{0} \xB7 {1}"
     gloss: 0
     tier: 0
-  - key: records.compare.name
-    text: "Records \xB7 Name"
+  - key: records.group.registry
+    text: REGISTRY ENTRY
     gloss: 0
     tier: 0
-  - key: records.compare.born
-    text: "Records \xB7 Born"
+  - key: records.row.name
+    text: Name
+    gloss: 0
+    tier: 0
+  - key: records.row.born
+    text: Born
+    gloss: 0
+    tier: 0
+  - key: records.row.origin
+    text: Origin
+    gloss: 0
+    tier: 0
+  - key: records.row.note
+    text: Note
+    gloss: 0
+    tier: 0
+  - key: records.note.none
+    text: No remarks on file.
+    gloss: 0
+    tier: 0
+  - key: records.note.sealed
+    text: Priority subject. Records sealed above your clearance.
+    gloss: 0
+    tier: 0
+  - key: records.compareLabel
+    text: "Records \xB7 {0}"
     gloss: 0
     tier: 0
   - key: citation.unproven
