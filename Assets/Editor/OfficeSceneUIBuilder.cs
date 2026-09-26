@@ -24,9 +24,13 @@ using UnityEngine.UI;
 ///   the verdict line on the office overlay (piece 10)  [OfficeUIController]
 /// - Morning briefing + shift report panels  [DayFlowUIController]
 /// - Investigation desk: claim banner, directives, draggable/multi-page document
-///   windows, a reference-book shelf with openable book windows, the interview
-///   transcript, a visual compare bar, and Accept/Deny buttons, laid out for
-///   the 4:3 desktop  [InvestigationUIController + CompareController]
+///   windows, reference-book windows, the interview transcript (their tiles in
+///   the interim Investigation window), a visual compare bar, and Accept/Deny
+///   buttons, laid out for the 4:3 desktop  [InvestigationUIController +
+///   CompareController]
+/// - The desktop's six icons, their context menu, the Start menu and the one
+///   OpenApp(id) entry point (OfficeSceneUIBuilder.Desktop.cs)
+///   [DesktopIcons, DesktopIconView, DesktopContextMenu, DesktopShell, DesktopApps]
 /// - The traveller wheel (the interview's choices around the traveller), the
 ///   speech bubble (its answer pickable, above the wheel), the desk tooltip,
 ///   the fallback HUD, the office case HUD (the claim tag and the office
@@ -236,31 +240,26 @@ public static partial class OfficeSceneUIBuilder
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
 
-        Transform investRoot = Panel(investHost, "InvestigationRoot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, DeskDimColor, ThemeRoleId.DeskDim);
-        Transform windowLayer = Panel(investRoot, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        Transform investRoot = EnsureCaseRoot(investHost);
+        Transform windowLayer = EnsureWindowLayer(root, investRoot);
 
-        // Claim on a translucent XP-blue strip.
-        Panel(investRoot, "ClaimStrip", new Vector2(0.06f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ClaimStrip);
-        TMP_Text claimText = Text(investRoot, "ClaimBanner", "Visitor", 26, TextAlignmentOptions.Center, new Vector2(0.1f, 0.88f), new Vector2(0.9f, 0.99f), Color.white, ThemeRoleId.ClaimStrip);
+        // Claim on a translucent XP-blue strip, clear of the desktop's default icon column.
+        Panel(investRoot, "ClaimStrip", new Vector2(0.12f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ClaimStrip);
+        TMP_Text claimText = Text(investRoot, "ClaimBanner", "Visitor", 26, TextAlignmentOptions.Center, new Vector2(0.13f, 0.88f), new Vector2(0.93f, 0.99f), Color.white, ThemeRoleId.ClaimStrip);
+        SetAnchors(claimText.transform, new Vector2(0.13f, 0.88f), new Vector2(0.93f, 0.99f));
 
-        // Desktop icon grid pinned to the top-left of the screen (like a real
-        // OS). Investigation documents + reference books + the desktop apps all
-        // register their launch tiles here, filling top-left downward.
-        Transform bookShelf = Panel(investRoot, "BookShelf", new Vector2(0.005f, 0.06f), new Vector2(0.17f, 0.855f), Vector2.zero, Vector2.zero, null);
-        AddGridLayout(bookShelf, new Vector2(82f, 60f), new Vector2(6f, 6f));
-        Button shelfButtonTemplate = MakeButton(bookShelf, "BookShelfButtonTemplate", "Book", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
-        FitIconLabel(shelfButtonTemplate);
-        shelfButtonTemplate.gameObject.SetActive(false);
+        // The case tiles moved off the desktop (the PC redesign DK7) into the
+        // interim Investigation window the Investigation icon opens, until the
+        // Investigation app (phase 16): the day's windows, then the reference
+        // books and each scanned document the controller adds at runtime.
+        DestroyChildIfPresent(investRoot, "BookShelf");
+        Transform caseTiles = BuildInvestigationWindow(windowLayer, out DesktopWindow investigationWindow, out Button caseTileTemplate);
 
-        // Directives live in a sticky-note window (closed by default) opened
-        // from a desktop icon, instead of a note that is always open.
+        // Directives: a window (closed by default) opened from its case tile.
         DesktopWindow directivesWindow = BuildOSWindow(windowLayer, "DirectivesWindow", "window.directives", null,
-            UiText.Get("directives.none"), new Vector2(430f, 360f), ThemeRoleId.StickyNote);
-        Image directivesImg = directivesWindow.GetComponent<Image>();
-        if (directivesImg != null)
-            directivesImg.color = new Color(1f, 0.96f, 0.6f, 0.97f);
+            UiText.Get("directives.none"), new Vector2(430f, 360f));
         TMP_Text directivesText = directivesWindow.transform.Find("Body").GetComponent<TMP_Text>();
-        BuildDesktopIcon(bookShelf, "IconDirectives", "icon.directives", directivesWindow, "");
+        BuildCaseTile(caseTiles, "TileDirectives", "icon.directives", directivesWindow);
 
         // The Deviation Report: its body lists the discrepancies the player has
         // documented for the current case (drives deny gating). Its object names
@@ -269,12 +268,12 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "window.scanner", null,
             UiText.Get("scanner.idle"), new Vector2(560f, 420f));
         TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
-        BuildDesktopIcon(bookShelf, "IconScanner", "icon.scanner", scannerWindow, "");
+        BuildCaseTile(caseTiles, "TileScanner", "icon.scanner", scannerWindow);
 
         // Citizen Records app: the agency's master record of every (fake)
         // human, its rows listed group by group (OfficeSceneUIBuilder.Records).
         // Registry content is injected per day by GameManager.
-        CitizenRecordsWindowController records = BuildRecordsWindow(windowLayer, bookShelf, compare);
+        CitizenRecordsWindowController records = BuildRecordsWindow(windowLayer, caseTiles, compare);
 
         // Case Notes: Interview — the current traveller's transcript. Rebuilt
         // fresh each run (like Records), so its row template always has the
@@ -297,7 +296,7 @@ public static partial class OfficeSceneUIBuilder
         ApplyTranscriptRowLayout(transcriptShell.rowTemplate);
         DesktopWindow transcriptChrome = transcriptWin.GetComponent<DesktopWindow>();
         transcriptWin.gameObject.SetActive(false);
-        BuildDesktopIcon(bookShelf, "IconClueLog", "icon.clueLog", transcriptChrome, "");
+        BuildCaseTile(caseTiles, "TileClueLog", "icon.clueLog", transcriptChrome);
 
         // Accept / Deny (above the taskbar), each with a fixed glyph so a culture's colours never carry the meaning alone (piece 6 R8)
         Button acceptButton = MakeButton(investRoot, "AcceptButton", null, new Vector2(0.3f, 0.06f), new Vector2(0.49f, 0.15f), new Color(0.2f, 0.5f, 0.24f, 1f),
@@ -313,7 +312,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The compare dock above the taskbar (the PC redesign DK9): the window
         // layer moves over the claim, the icons and Accept/Deny, the dock over it.
-        Transform compareBar = BuildCompareDock(investRoot, windowLayer, compare, out TMP_Text compareText);
+        Transform compareBar = BuildCompareDock(investRoot, compare, out TMP_Text compareText);
 
         investRoot.gameObject.SetActive(false);
 
@@ -342,13 +341,12 @@ public static partial class OfficeSceneUIBuilder
         GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
         if (gameManager == null) gameManager = new GameObject("GameManager").AddComponent<GameManager>();
 
-        // Fake-OS desktop shell: NEW apps only (existing document/reference/compare
-        // windows are launched by the investigation icon grid), plus a Start menu
-        // and the taskbar's way back to the office.
-        BuildDesktopShell(canvas, bookShelf, windowLayer, library, officeView, monitorScreen);
+        // Fake-OS desktop shell: the six apps' windows, their icons, the context
+        // menu and the Start menu, and the taskbar's way back to the office.
+        BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, investigationWindow, officeView.transform.Find("Desk").GetComponent<DeskController>());
 
-        // The window stack, the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
-        BuildWindowManager(canvas, investRoot, officeView);
+        // The window stack (every window built above), the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
+        BuildWindowManager(canvas, officeView);
 
         // Cursor + hover outline settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
@@ -410,8 +408,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "windowLayer", windowLayer);
         SetRef(soInvest, "documentWindowTemplate", docTemplate);
         SetRef(soInvest, "bookWindowTemplate", bookTemplate);
-        SetRef(soInvest, "bookShelfRoot", bookShelf);
-        SetRef(soInvest, "bookShelfButtonTemplate", shelfButtonTemplate);
+        SetRef(soInvest, "bookShelfRoot", caseTiles);
+        SetRef(soInvest, "bookShelfButtonTemplate", caseTileTemplate);
         SetRef(soInvest, "scannerText", scannerText);
         SetRef(soInvest, "scannerWindow", scannerWindow);
         SetRef(soInvest, "interactionPanel", interaction);
@@ -452,13 +450,15 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soGm, "desktopConfig", EnsureDesktopConfig());
         soGm.ApplyModifiedProperties();
 
+        OrderDesktopLayers(root);
         CheckThemeTags(canvas, officeCanvas);
+        CheckLabelKeysAndRoles(library, canvas, officeCanvas);
         CheckContrast(library, canvas, officeCanvas);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
         AssetDatabase.SaveAssets();
-        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
+        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, the six desktop icons, their context menu and the Start menu, Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
     }
 
     // -----------------------------
@@ -885,9 +885,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The translucent strip behind texts on the wallpaper (verdict and idle lines) and the claim strip.</summary>
     private static readonly Color ScreenStripColor = new Color(0.06f, 0.18f, 0.42f, 0.8f);
-
-    /// <summary>The dim behind the investigation desk.</summary>
-    private static readonly Color DeskDimColor = new Color(0.06f, 0.07f, 0.1f, 0.55f);
 
     /// <summary>
     /// A text, created once (existing-wins); with a role it gets that theme
@@ -1375,69 +1372,41 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the fake-OS desktop shell: a left column of icons (the Internet
-    /// app's first; some unlock-gated by a library upgrade id, reported when the
-    /// library does not know it) that open the browser and placeholder windows
-    /// with min/max/close chrome, a Start menu
-    /// (Settings, Turn off screen and Quit game) wired to a DesktopShell on the
-    /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here, after
-    /// the view exists). Idempotent.
+    /// Builds the fake-OS desktop shell: the six apps' windows, registered by
+    /// their DesktopAppIds id (the interim Investigation window, the Internet
+    /// browser, Mail and Citizen Account placeholders until phase 25, the Notes
+    /// placeholder, Settings), their icons and the context menu
+    /// (OfficeSceneUIBuilder.Desktop.cs), a Start menu (the six apps, Arrange
+    /// icons, Turn off screen and Quit game) wired to a DesktopShell on the
+    /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here,
+    /// after the view exists). The retired Lexicon, Dialect and Material
+    /// placeholders and their icons go. Idempotent.
     /// </summary>
-    private static void BuildDesktopShell(Canvas canvas, Transform iconGrid, Transform windowLayer, ContentLibrarySO library,
-                                          OfficeViewController view, MonitorScreen screen)
+    private static void BuildDesktopShell(Canvas canvas, Transform windowLayer, ContentLibrarySO library, OfficeViewController view, MonitorScreen screen,
+                                          DesktopWindow investigationWindow, DeskController desk)
     {
         Transform root = canvas.transform;
 
-        // Remove the earlier redundant placeholder shell (parallel desktop) from
-        // prior builds so it no longer overlaps the real investigation desk.
-        DestroyChildIfPresent(root, "DesktopIcons");
+        // The earlier parallel desktop and the retired placeholder apps (the PC redesign DK7) go.
         DestroyChildIfPresent(root, "DesktopWindowLayer");
-
-        // Only genuinely-new apps get placeholder windows; existing
-        // Passport/Permit documents, reference books, and Compare are launched by
-        // the investigation icon grid (real windows with real data). Scanner,
-        // Directives, Records and the interview transcript (Clue Log) are built
-        // separately in Build() and wired to controllers. Upgrade ids are
-        // UpgradeSO.id values.
-        var apps = new (string name, string labelKey, string titleKey, string bodyKey, string upgrade)[]
-        {
-            ("IconLexicon",  "icon.lexicon",  "window.lexicon",  "body.lexicon", "archive_access"),
-            ("IconDialect",  "icon.dialect",  "window.dialect",  "body.dialect", ""),
-            ("IconMaterial", "icon.material", "window.material", "body.material", "adv_scanner"),
-            ("IconNotes",    "icon.notes",    "window.notes",    "body.notes", ""),
-        };
-
-        // The Internet app (the browser: OfficeSceneUIBuilder.Internet.cs), first in the icon column.
-        BuildInternetWindow(windowLayer, iconGrid, library);
-
-        // BuildOSWindow keeps an existing window's texts, so the renamed Dialect and Material windows are rebuilt.
+        DestroyChildIfPresent(windowLayer, "IconLexiconWindow");
         DestroyChildIfPresent(windowLayer, "IconDialectWindow");
         DestroyChildIfPresent(windowLayer, "IconMaterialWindow");
 
-        foreach (var a in apps)
+        // Each app's window by its id (DesktopApps.OpenApp): an app's builder returns its window and it is registered here.
+        var windows = new Dictionary<string, DesktopWindow>
         {
-            if (library != null && !string.IsNullOrEmpty(a.upgrade) && library.GetUpgradeById(a.upgrade) == null)
-                Debug.LogError($"[TimeDesk] Desktop icon '{a.name}' requires unknown upgrade '{a.upgrade}' (not in the content library's upgrades); it could never unlock.");
+            { DesktopAppIds.Investigation, investigationWindow },
+            { DesktopAppIds.Internet, BuildInternetWindow(windowLayer, library) },
+            { DesktopAppIds.Mail, BuildPlaceholderApp(windowLayer, "MailWindow", "window.mail", "body.mail") },
+            { DesktopAppIds.CitizenAccount, BuildPlaceholderApp(windowLayer, "AccountWindow", "window.account", "body.account") },
+            { DesktopAppIds.Notes, BuildOSWindow(windowLayer, "IconNotesWindow", "window.notes", "body.notes", null) },
+            { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
+        };
+        DesktopIcons icons = BuildDesktopIcons(canvas, windows, desk, out DesktopApps apps, out DesktopContextMenu contextMenu);
+        WireIconSettings(windows[DesktopAppIds.Settings], icons);
 
-            DesktopWindow w = BuildOSWindow(windowLayer, a.name + "Window", a.titleKey, a.bodyKey, null);
-            BuildDesktopIcon(iconGrid, a.name, a.labelKey, w, a.upgrade);
-        }
-
-        DesktopWindow settings = BuildSettingsWindow(windowLayer);
-
-        // Rebuilt from scratch each run: the entries need fixed LayoutElement
-        // heights or the vertical layout collapses them on top of each other
-        // (three 46-px entries, 4 px apart, 6 px padding: 158 px).
-        DestroyChildIfPresent(root, "StartMenu");
-        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.2f, 0f), new Vector2(0f, StartMenuCentre(158f)), new Vector2(0f, 158f), new Color(0.1f, 0.12f, 0.18f, 0.97f), ThemeRoleId.StartMenu);
-        AddVLayout(startMenu, 4f);
-        Button settingsEntry = MakeButton(startMenu, "SettingsEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "startmenu.settings");
-        SetLayoutHeight(settingsEntry, 46f);
-        Button screenOffEntry = MakeButton(startMenu, "ScreenOffEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "startmenu.screenOff");
-        SetLayoutHeight(screenOffEntry, 46f);
-        Button quitEntry = MakeButton(startMenu, "QuitEntry", null, Vector2.zero, Vector2.one, new Color(0.5f, 0.2f, 0.2f, 1f), ThemeRoleId.QuitEntry, "startmenu.quit");
-        SetLayoutHeight(quitEntry, 46f);
-        startMenu.gameObject.SetActive(false);
+        Transform startMenu = BuildStartMenu(root, out List<(string id, Button button)> appEntries, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
 
         // The taskbar's way back to the office (closes the PC frame), next to Start.
         Transform taskbar = root.Find("Taskbar");
@@ -1464,12 +1433,27 @@ public static partial class OfficeSceneUIBuilder
         var soShell = new SerializedObject(shell);
         SetRef(soShell, "startButton", startBtn);
         SetRef(soShell, "startMenu", startMenu.gameObject);
-        SetRef(soShell, "settingsButton", settingsEntry);
+        SerializedProperty entries = soShell.FindProperty("appEntries");
+        entries.arraySize = appEntries.Count;
+        for (int i = 0; i < appEntries.Count; i++)
+        {
+            entries.GetArrayElementAtIndex(i).FindPropertyRelative("id").stringValue = appEntries[i].id;
+            entries.GetArrayElementAtIndex(i).FindPropertyRelative("button").objectReferenceValue = appEntries[i].button;
+        }
+        SetRef(soShell, "apps", apps);
+        SetRef(soShell, "arrangeButton", arrangeEntry);
+        SetRef(soShell, "icons", icons);
         SetRef(soShell, "quitButton", quitEntry);
         SetRef(soShell, "screenOffButton", screenOffEntry);
         SetRef(soShell, "monitorScreen", screen);
-        SetRef(soShell, "settingsWindow", settings);
         soShell.ApplyModifiedProperties();
+
+        // The window manager closes the context menu on a press outside it and on Escape; a press on an icon or the icon layer leaves no window focused.
+        var soManager = new SerializedObject(GetOrAdd<DesktopWindowManager>(root.gameObject));
+        SetRef(soManager, "shell", shell);
+        SetRef(soManager, "contextMenu", contextMenu);
+        SerializedArrays.Set(soManager, "emptyDesktop", new Object[] { root.Find("Desktop").GetComponent<Image>(), icons.GetComponent<Image>() });
+        soManager.ApplyModifiedProperties();
     }
 
     /// <summary>
@@ -1506,32 +1490,44 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The Settings window (piece 6 U12, piece 9 R17), 580 × 520: "UI
-    /// language" with its two choices, "Motion" with Full and Reduced
-    /// (SettingsWindowController), and a note that a language change applies
-    /// at the next office load, that colours, fonts and the wallpaper follow
-    /// history, and that reduced motion shows translations at once. Every
-    /// row's anchors are re-applied on each build.
+    /// The Settings window (piece 6 U12, piece 9 R17; the PC redesign SG1's
+    /// Desktop section), 640 × 720: "UI language" with its two choices,
+    /// "Motion" with Full and Reduced, "Desktop icons open with" Double click
+    /// and Single click and "Reset icon positions"
+    /// (SettingsWindowController; the icon rows wired by WireIconSettings), and
+    /// a note that a language change applies at the next office load, that
+    /// colours, fonts and the wallpaper follow history, and that reduced
+    /// motion shows translations at once. Every row's anchors are re-applied
+    /// on each build.
     /// </summary>
     private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
     {
-        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(580f, 520f));
+        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(640f, 720f));
         Transform win = chrome.transform;
-        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.78f), new Vector2(0.95f, 0.87f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f), null, ThemeRoleId.Button, "settings.followHistory");
-        SetAnchors(follow.transform, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f));
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        SetAnchors(english.transform, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f));
-        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f), Ink,
+        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.885f), new Vector2(0.95f, 0.94f));
+        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.8f), new Vector2(0.48f, 0.875f), null, ThemeRoleId.Button, "settings.followHistory");
+        SetAnchors(follow.transform, new Vector2(0.05f, 0.8f), new Vector2(0.48f, 0.875f));
+        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.8f), new Vector2(0.95f, 0.875f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
+        SetAnchors(english.transform, new Vector2(0.52f, 0.8f), new Vector2(0.95f, 0.875f));
+        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.72f), new Vector2(0.95f, 0.775f), Ink,
                                ThemeRoleId.WindowBody, "settings.motion");
-        SetAnchors(motion.transform, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f));
-        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f), null, ThemeRoleId.Button, "settings.motionFull");
-        SetAnchors(full.transform, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f));
-        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f), null, ThemeRoleId.Button, "settings.motionReduced");
-        SetAnchors(reduced.transform, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f));
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f), Ink,
+        SetAnchors(motion.transform, new Vector2(0.05f, 0.72f), new Vector2(0.95f, 0.775f));
+        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.635f), new Vector2(0.48f, 0.71f), null, ThemeRoleId.Button, "settings.motionFull");
+        SetAnchors(full.transform, new Vector2(0.05f, 0.635f), new Vector2(0.48f, 0.71f));
+        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.635f), new Vector2(0.95f, 0.71f), null, ThemeRoleId.Button, "settings.motionReduced");
+        SetAnchors(reduced.transform, new Vector2(0.52f, 0.635f), new Vector2(0.95f, 0.71f));
+        TMP_Text desktop = Text(win, "DesktopLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.555f), new Vector2(0.95f, 0.61f), Ink,
+                                ThemeRoleId.WindowBody, "settings.desktop");
+        SetAnchors(desktop.transform, new Vector2(0.05f, 0.555f), new Vector2(0.95f, 0.61f));
+        Button iconDouble = MakeButton(win, "IconDoubleClickButton", null, new Vector2(0.05f, 0.47f), new Vector2(0.48f, 0.545f), null, ThemeRoleId.Button, "settings.iconDouble");
+        SetAnchors(iconDouble.transform, new Vector2(0.05f, 0.47f), new Vector2(0.48f, 0.545f));
+        Button iconSingle = MakeButton(win, "IconSingleClickButton", null, new Vector2(0.52f, 0.47f), new Vector2(0.95f, 0.545f), null, ThemeRoleId.Button, "settings.iconSingle");
+        SetAnchors(iconSingle.transform, new Vector2(0.52f, 0.47f), new Vector2(0.95f, 0.545f));
+        Button resetIcons = MakeButton(win, "ResetIconsButton", null, new Vector2(0.05f, 0.385f), new Vector2(0.95f, 0.46f), null, ThemeRoleId.Button, "settings.resetIcons");
+        SetAnchors(resetIcons.transform, new Vector2(0.05f, 0.385f), new Vector2(0.95f, 0.46f));
+        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.36f), Ink,
                              ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f));
+        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.36f));
         note.text = UiText.Get("settings.note");
         note.textWrappingMode = TextWrappingModes.Normal;
 
@@ -1543,8 +1539,19 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "alwaysEnglishButton", english);
         SetRef(so, "fullMotionButton", full);
         SetRef(so, "reducedMotionButton", reduced);
+        SetRef(so, "iconDoubleClickButton", iconDouble);
+        SetRef(so, "iconSingleClickButton", iconSingle);
+        SetRef(so, "resetIconsButton", resetIcons);
         so.ApplyModifiedProperties();
         return chrome;
+    }
+
+    /// <summary>Gives the Settings window the desktop's icons (Reset icon positions arranges them).</summary>
+    private static void WireIconSettings(DesktopWindow settings, DesktopIcons icons)
+    {
+        var so = new SerializedObject(settings.GetComponent<SettingsWindowController>());
+        SetRef(so, "icons", icons);
+        so.ApplyModifiedProperties();
     }
 
     /// <summary>Builds a TMP input field (box + masked viewport + keyed placeholder + text).</summary>
@@ -1567,53 +1574,17 @@ public static partial class OfficeSceneUIBuilder
         return input;
     }
 
-    /// <summary>Builds a desktop icon button bound to a window (its label keyed), with optional unlock-gating.</summary>
-    private static void BuildDesktopIcon(Transform grid, string name, string labelKey, DesktopWindow window, string upgradeId)
-    {
-        Button btn = MakeButton(grid, name, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.45f, 0.85f), ThemeRoleId.DesktopIcon, labelKey);
-        Transform labelObject = btn.transform.Find("Label");
-        TMP_Text labelText = labelObject != null ? labelObject.GetComponent<TMP_Text>() : null;
-        if (labelText != null)
-        {
-            labelText.text = UiText.Get(labelKey); // an existing icon keeps its place in the grid; its label follows the builder
-            // Icon labels wrap between words and shrink (FitIconLabel), not the one-line fit.
-            Tag(labelText, ThemeRoleId.DesktopIcon, ThemePart.Ink, labelKey, FontStyles.Normal, ThemeTextKind.Button, false);
-        }
-        FitIconLabel(btn);
-        LayoutElement le = btn.GetComponent<LayoutElement>();
-        if (le == null)
-            le = btn.gameObject.AddComponent<LayoutElement>();
-        le.minHeight = 40f;
-        le.preferredHeight = 40f;
-
-        CanvasGroup cg = btn.GetComponent<CanvasGroup>();
-        if (cg == null)
-            cg = btn.gameObject.AddComponent<CanvasGroup>();
-
-        DesktopIcon icon = btn.GetComponent<DesktopIcon>();
-        if (icon == null)
-            icon = btn.gameObject.AddComponent<DesktopIcon>();
-        var so = new SerializedObject(icon);
-        SetRef(so, "targetWindow", window);
-        SetRef(so, "button", btn);
-        SetRef(so, "canvasGroup", cg);
-        SerializedProperty up = so.FindProperty("requiredUpgradeId");
-        if (up != null)
-            up.stringValue = upgradeId ?? string.Empty;
-        so.ApplyModifiedProperties();
-    }
-
-    /// <summary>Largest font size of a desktop icon label.</summary>
+    /// <summary>Largest font size of a case tile's label.</summary>
     private const float IconLabelMaxSize = 18f;
 
-    /// <summary>Smallest font size an icon label shrinks to.</summary>
+    /// <summary>Smallest font size a desktop icon's or a case tile's label shrinks to.</summary>
     private const float IconLabelMinSize = 10f;
 
     /// <summary>
-    /// Lets a desktop icon's label shrink to fit its tile, wrapping only between
+    /// Lets a case tile's label shrink to fit its tile, wrapping only between
     /// words: auto-sizing shrinks a word that does not fit the tile's width
     /// instead of breaking it. Re-applied on every build (MakeButton keeps an
-    /// existing label as it is; the label text is set by BuildDesktopIcon).
+    /// existing label as it is; the label text is set by BuildCaseTile).
     /// </summary>
     private static void FitIconLabel(Button icon)
     {

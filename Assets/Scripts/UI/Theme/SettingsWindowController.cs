@@ -8,8 +8,11 @@ using UnityEngine.UI;
 /// at the next scene load, colours, fonts and the wallpaper follow history
 /// either way), and motion (piece 9 R17), "Full" or "Reduced"
 /// (MotionPreference; reduced shows translations at once, from the next
-/// traveller). In each pair the chosen button shows the theme's accent
-/// colours (the SearchButton role), the other the default button colours.
+/// traveller); and the desktop's icons (the PC redesign DK5, DK6): open
+/// with a "Double click" (the default) or a "Single click"
+/// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange).
+/// In each pair the chosen button shows the theme's accent colours (the
+/// SearchButton role), the other the default button colours.
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
@@ -25,6 +28,18 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>Chooses Reduced motion (translations show at once).</summary>
     [SerializeField] private Button reducedMotionButton;
 
+    /// <summary>Desktop icons open with a double click.</summary>
+    [SerializeField] private Button iconDoubleClickButton;
+
+    /// <summary>Desktop icons open with a single click.</summary>
+    [SerializeField] private Button iconSingleClickButton;
+
+    /// <summary>Lays the desktop's icons out in the default arrangement again.</summary>
+    [SerializeField] private Button resetIconsButton;
+
+    /// <summary>The desktop's icons (Reset icon positions).</summary>
+    [SerializeField] private DesktopIcons icons;
+
     private void Awake()
     {
         if (followHistoryButton != null)
@@ -35,6 +50,12 @@ public sealed class SettingsWindowController : MonoBehaviour
             fullMotionButton.onClick.AddListener(() => ChooseMotion(false));
         if (reducedMotionButton != null)
             reducedMotionButton.onClick.AddListener(() => ChooseMotion(true));
+        if (iconDoubleClickButton != null)
+            iconDoubleClickButton.onClick.AddListener(() => ChooseIconOpen(false));
+        if (iconSingleClickButton != null)
+            iconSingleClickButton.onClick.AddListener(() => ChooseIconOpen(true));
+        if (resetIconsButton != null)
+            resetIconsButton.onClick.AddListener(ResetIcons);
     }
 
     private void OnEnable() => ShowSelection();
@@ -53,6 +74,20 @@ public sealed class SettingsWindowController : MonoBehaviour
         ShowSelection();
     }
 
+    /// <summary>Stores how desktop icons open and shows it.</summary>
+    private void ChooseIconOpen(bool singleClick)
+    {
+        DesktopPreferences.OpenIconsWithSingleClick = singleClick;
+        ShowSelection();
+    }
+
+    /// <summary>Lays the desktop's icons out in the default arrangement (and saves it).</summary>
+    private void ResetIcons()
+    {
+        if (icons != null)
+            icons.Arrange();
+    }
+
     /// <summary>Colours each pair's chosen button with the accent, the other as a default button.</summary>
     private void ShowSelection()
     {
@@ -64,6 +99,9 @@ public sealed class SettingsWindowController : MonoBehaviour
         bool reduced = MotionPreference.Reduced;
         Paint(fullMotionButton, !reduced, theme);
         Paint(reducedMotionButton, reduced, theme);
+        bool single = DesktopPreferences.OpenIconsWithSingleClick;
+        Paint(iconDoubleClickButton, !single, theme);
+        Paint(iconSingleClickButton, single, theme);
     }
 
     /// <summary>One button's colours from the theme.</summary>

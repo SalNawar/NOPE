@@ -24,8 +24,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A record row's label ink (DiegeticLabel's built colour).</summary>
     private static readonly Color RecordLabelInk = new Color(0.35f, 0.32f, 0.25f, 1f);
 
-    /// <summary>Builds the Records window and its desktop icon in <paramref name="iconGrid"/>; its evidence rows pick into <paramref name="compare"/>.</summary>
-    private static CitizenRecordsWindowController BuildRecordsWindow(Transform windowLayer, Transform iconGrid, CompareController compare)
+    /// <summary>Builds the Records window and its case tile in <paramref name="caseTiles"/>; its evidence rows pick into <paramref name="compare"/>.</summary>
+    private static CitizenRecordsWindowController BuildRecordsWindow(Transform windowLayer, Transform caseTiles, CompareController compare)
     {
         DestroyChildIfPresent(windowLayer, "RecordsWindow");
         Transform win = Panel(windowLayer, "RecordsWindow", Center, Center, Vector2.zero, RecordsWindowSize, Paper, ThemeRoleId.WindowBody);
@@ -64,7 +64,7 @@ public static partial class OfficeSceneUIBuilder
 
         DesktopWindow chrome = win.GetComponent<DesktopWindow>();
         win.gameObject.SetActive(false); // opened by its icon
-        BuildDesktopIcon(iconGrid, "IconRecords", "icon.records", chrome, "");
+        BuildCaseTile(caseTiles, "TileRecords", "icon.records", chrome);
         return records;
     }
 }
