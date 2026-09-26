@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Fired
   bodyText: "Your superiors have seen enough. Badge, keys, and timeline clearance
     \u2014 all revoked, effective immediately."
+  picture: {fileID: 21300000, guid: f46b26ff2f694de45b7ad4d0eedf33eb, type: 3}
   conditionType: 0
   attribute: {fileID: 0}
   threshold: 0

@@ -47,6 +47,9 @@ using UnityEngine.UI;
 ///   TravellerView, BoothCoordinator]
 /// - GameManager + DaySystem (DayOrchestrator + DayEventDirector), auto-wired to
 ///   ContentLibrary_Main and a Day Plan
+/// - The Tier-2 images' art slots: each shows its file from
+///   Assets/Art/UI/Resources/ when delivered, else today's look
+///   (OfficeSceneUIBuilder.Art.cs)  [ArtSlotImage]
 /// Safe to re-run: finds existing pieces by name and only fills gaps (some
 /// overlay and window parts are rebuilt each run). Every UI graphic it makes
 /// gets a ThemeTag (piece 6: role, label key, style, fit), which
@@ -293,6 +296,9 @@ public static partial class OfficeSceneUIBuilder
         BoothCoordinator booth = BuildOffice(officeView, monitorScreen, framePower, deskConfig, contract, wheel,
                                              new[] { speechBubble, deskTooltip }, deskTooltip, trayClockText, shiftClock, library,
                                              fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
+
+        // The Tier-2 images' art slots (OfficeSceneUIBuilder.Art.cs, redesign phase 27), before the desktop's layer is applied to its covers.
+        BuildArtSlots(officeCanvas.transform, speechBubble, app.Reference, officeView);
 
         // The desktop's own layer covers everything under its place (the canvas's windows and templates included).
         SetLayer(monitorScreen.transform, OfficeLayers.PcDesktopLayer);

@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Democracy Triumphant
   bodyText: Era after era, you tipped the balance toward open assemblies and free
     voices. Democratic ideals now ripple across the whole timeline.
+  picture: {fileID: 21300000, guid: 06fc62db9909a9e478903ed29f060a45, type: 3}
   conditionType: 2
   attribute: {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
   threshold: 9

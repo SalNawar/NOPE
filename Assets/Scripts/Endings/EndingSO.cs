@@ -21,6 +21,9 @@ public sealed class EndingSO : ScriptableObject
     [TextArea]
     public string bodyText;
 
+    /// <summary>The ending's illustration, full screen behind the ending panel (Assets/Art/Title/ending_&lt;id&gt;.png, replaced in place); none leaves the title's background.</summary>
+    public Sprite picture;
+
     /// <summary>Which condition this ending checks for.</summary>
     public EndingConditionType conditionType;
 
