@@ -96,6 +96,26 @@ public class DisplayTextTests
         Assert.AreEqual(For(Shekel, Reveal.Untranslated(greek)), For(Shekel, Reveal.Untranslated(greek), true), "reduced motion translates nothing by itself");
     }
 
+    /// <summary>
+    /// Audit R4-024 and R4-023 (the TextFlip font contract, the PC spec's TR3):
+    /// a text is written in the script's font exactly while it shows a foreign
+    /// or scramble cell (when the script has a font), else in its own; the
+    /// choice depends only on what it shows now, so a pooled row that held a
+    /// foreign line gets its own font back.
+    /// </summary>
+    [Test]
+    public void FontFor_TheScriptsWhileForeignCellsShow_ElseTheTextsOwn()
+    {
+        ForeignText greek = Foreign(Greek);
+        Assert.AreEqual("script", DisplayText.FontFor(Shekel, Reveal.Untranslated(greek), Timing, false, "script", "own"));
+        Assert.AreEqual("script", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 0.665f), Timing, false, "script", "own"), "mid-flip");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 5f), Timing, false, "script", "own"), "settled");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 0f), Timing, true, "script", "own"), "reduced motion");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Plain, Timing, false, "script", "own"), "a plain line after a foreign one: its own font again");
+        Assert.AreEqual("own", DisplayText.FontFor("1897", Reveal.Untranslated(greek), Timing, false, "script", "own"), "no letter, nothing foreign");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Untranslated(greek), Timing, false, null, "own"), "the fallback cipher draws in the text's own font");
+    }
+
     [Test]
     public void Progress_ChangesExactlyWhenTheShownTextDoes()
     {

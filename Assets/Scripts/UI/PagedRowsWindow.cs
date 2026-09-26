@@ -55,6 +55,9 @@ public abstract class PagedRowsWindow : MonoBehaviour
     /// <summary>How many rows the window lists in all.</summary>
     protected abstract int RowCount { get; }
 
+    /// <summary>The disabled row every shown row is cloned from (a subclass reads its texts' own fonts there).</summary>
+    protected GameObject RowTemplate => entryRowTemplate;
+
     /// <summary>Fills one cloned row (texts in child order: [0] heading/speaker, [1] value/sentence).</summary>
     protected abstract void FillRow(int index, GameObject row, TMP_Text[] texts, Image background, Button button);
 

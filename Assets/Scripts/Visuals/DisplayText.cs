@@ -235,6 +235,16 @@ public static class DisplayText
     public static bool ShowsForeign(string canonical, Reveal reveal, FlipTiming timing, bool reducedMotion) =>
         !IsPlain(reveal) && Letters(canonical) > 0 && !IsSettled(canonical, reveal, timing, reducedMotion);
 
+    /// <summary>
+    /// The font a text is written in: <paramref name="script"/> (the script's
+    /// font, when it has one) while the text shows a foreign or scramble cell,
+    /// else <paramref name="own"/>. It depends only on what the text shows now,
+    /// never on the font it had, so a pooled text that held a foreign line gets
+    /// its own font back (audit R4-024; TextFlip writes every text through it).
+    /// </summary>
+    public static TFont FontFor<TFont>(string canonical, Reveal reveal, FlipTiming timing, bool reducedMotion, TFont script, TFont own) where TFont : class =>
+        script != null && ShowsForeign(canonical, reveal, timing, reducedMotion) ? script : own;
+
     /// <summary>Plain, or no tongue to show.</summary>
     private static bool IsPlain(Reveal reveal) => reveal.Kind == RevealKind.Plain || reveal.Foreign?.Table == null;
 

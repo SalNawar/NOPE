@@ -13,7 +13,9 @@ using UnityEngine.UI;
 /// first day the traveller's lines are in their claimed place's tongue and
 /// show in English only with the region's Speech translator (settled, never
 /// animated); an untranslated answer shows in the bar as the placeholder,
-/// while its evidence stays the canonical value. Rows are named Line_{id}.
+/// while its evidence stays the canonical value. Every sentence is written in
+/// the font TextFlip picks from the row template's own (the script's only
+/// while foreign cells show). Rows are named Line_{id}.
 /// </summary>
 public sealed class TranscriptWindowController : PagedRowsWindow
 {
@@ -22,6 +24,11 @@ public sealed class TranscriptWindowController : PagedRowsWindow
     private string _travellerName = string.Empty;
     private CompareController _compare;
     private CaseTranslation _translation = CaseTranslation.None;
+
+    /// <summary>The sentence text's own font and material (the row template's), read once.</summary>
+    private TMP_FontAsset _ownFont;
+    private Material _ownMaterial;
+    private bool _ownRead;
 
     /// <summary>Shows a traveller's transcript (the runner's live, append-only list) on its newest page, in their translation.</summary>
     public void Bind(IReadOnlyList<DialogLine> transcript, string deskName, string travellerName, CompareController compare, CaseTranslation translation)
@@ -49,7 +56,10 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (texts.Length > 0 && texts[0] != null)
             texts[0].text = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
         if (texts.Length > 1)
-            TextFlip.Write(texts[1], line.Text, _translation.Line(line), _translation);
+        {
+            ReadOwnFont();
+            TextFlip.Write(texts[1], _ownFont, _ownMaterial, line.Text, _translation.Line(line), _translation);
+        }
 
         if (button == null)
             return;
@@ -61,5 +71,19 @@ public sealed class TranscriptWindowController : PagedRowsWindow
 
         ComparePick pick = EvidencePicks.ForAnswer(index, line, _translation);
         button.onClick.AddListener(() => _compare.Select(pick, new ImageHighlight(background)));
+    }
+
+    /// <summary>Reads the sentence text's own font and material from the row template, once (a row's own font, whatever a foreign line set before).</summary>
+    private void ReadOwnFont()
+    {
+        if (_ownRead || RowTemplate == null)
+            return;
+        TMP_Text[] template = RowTemplate.GetComponentsInChildren<TMP_Text>(true);
+        if (template.Length > 1)
+        {
+            _ownFont = template[1].font;
+            _ownMaterial = template[1].fontSharedMaterial;
+        }
+        _ownRead = true;
     }
 }
