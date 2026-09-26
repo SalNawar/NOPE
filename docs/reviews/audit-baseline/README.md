@@ -103,12 +103,14 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
   - `profile_A.txt`, `profile_B.txt`: re-measured. The office views allocate 736 B per frame (phase 0's fix 7); no new allocation site; every load within 25% of the old baseline.
   - Unchanged: `cases.txt`, `validator.txt`, the three scene dumps (each rebuild equal), `contract.txt`, `play_warnings.txt`. Runs A and B were identical.
 
-- **The art clean-up and the character pilot** (`verify/art-cleanup`, with main at `0cecc4a` and art at `f7d9d49` merged in):
+- **The art clean-up and the character pilot** (`verify/art-cleanup`, with main at `8487338` and art at `f7d9d49` merged in). The pack also takes in redesign phases 14 and 2, which reached main without re-packing:
   - `contract.txt`: the office scene contract on the new desk layout. HandOver's default moves to (0.050, 1.070, 0.450), behind the NEXT sign; NextSign, Intercom, ReadoutNext and Calculator report the art's moved props. Still 0 anchors, 20 fallbacks, 3 defaults, 0 missing.
-  - `data_hashes.txt`: `OfficeSceneContract.asset` (the HandOver and NextSign defaults).
+  - `data_hashes.txt`: `OfficeSceneContract.asset` (the HandOver and NextSign defaults); phase 14's new `Desktop_Default.asset` and its meta; phase 2's agency block (`world_source.json`, `ContentLibrary_Main.asset`, `Strings_en.asset`).
+  - `world_generate.txt`: `Assets/Data` 433 → 435 files (phase 14's `Desktop_Default.asset` and its meta).
+  - `scene_OfficeGameplay.txt`: phase 14's window manager (DesktopWindowManager, the taskbar buttons, DesktopWindow in place of OSWindowChrome, the compare dock) and phase 2's record rows and the calendar's date readout. Each rebuild equals the committed scene.
   - `scenes_summary.txt`: the art scene's file hash (the art clean-up); the art office stays byte-unchanged by the builders.
   - `validator.txt`: 42 of 880 character keys have final art (the pilot's batch 1).
-  - Unchanged: `cases.txt`, `world_generate.txt`, the three scene dumps (each rebuild equal), the play transcript, the 12 saves and `play_warnings.txt`. The profiles were not re-measured (no runtime code changed).
+  - Unchanged: `cases.txt`, the Home and Title dumps, the play transcript, the 12 saves and `play_warnings.txt`. The profiles were not re-measured here.
 
 ## Baseline results (ff3a6e0)
 
