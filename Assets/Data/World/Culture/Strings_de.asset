@@ -55,10 +55,6 @@ MonoBehaviour:
     text: NACH HAUSE
     gloss: 0
     tier: 0
-  - key: records.title
-    text: Einwohnerregister
-    gloss: 0
-    tier: 0
   - key: records.search
     text: SUCHEN
     gloss: 0
@@ -79,52 +75,32 @@ MonoBehaviour:
     text: Zur Kenntnis
     gloss: 0
     tier: 0
-  - key: window.directives
-    text: Anweisungen
-    gloss: 0
-    tier: 0
-  - key: window.scanner
-    text: Abweichungsbericht
-    gloss: 0
-    tier: 0
   - key: window.settings
     text: Einstellungen
-    gloss: 0
-    tier: 0
-  - key: icon.directives
-    text: Anweisungen
-    gloss: 0
-    tier: 0
-  - key: icon.scanner
-    text: Abweichungsbericht
-    gloss: 0
-    tier: 0
-  - key: icon.records
-    text: Register
     gloss: 0
     tier: 0
   - key: icon.internet
     text: Internet
     gloss: 0
     tier: 0
-  - key: icon.lexicon
-    text: Lexikon
-    gloss: 0
-    tier: 0
-  - key: icon.dialect
-    text: Mundart
-    gloss: 0
-    tier: 0
-  - key: icon.material
-    text: Material
-    gloss: 0
-    tier: 0
   - key: icon.notes
     text: Notizen
     gloss: 0
     tier: 0
-  - key: icon.clueLog
-    text: Hinweise
+  - key: icon.investigation
+    text: Ermittlung
+    gloss: 0
+    tier: 0
+  - key: icon.mail
+    text: Post
+    gloss: 0
+    tier: 0
+  - key: icon.account
+    text: "B\xFCrgerkonto"
+    gloss: 0
+    tier: 0
+  - key: icon.settings
+    text: Einstellungen
     gloss: 0
     tier: 0
   - key: tray.day

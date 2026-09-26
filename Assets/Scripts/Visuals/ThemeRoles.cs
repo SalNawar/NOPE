@@ -1,8 +1,9 @@
 /// <summary>
 /// The role of a themed UI graphic (piece 6): which theme colours it takes.
-/// Serialized by ThemeTag as an int: append only once shipped. Roles from
-/// DiegeticPaper on are diegetic (evidence and what the traveller says): the
-/// theme never touches them (ThemeRoles.IsDiegetic).
+/// Serialized by ThemeTag as an int: append only once shipped. The diegetic
+/// roles (evidence, forms and what the traveller says) are an explicit list
+/// (ThemeRoles.IsDiegetic): the theme never touches them. Retired roles keep
+/// their place and number but no graphic takes them (ThemeRoles.IsRetired).
 /// </summary>
 public enum ThemeRoleId
 {
@@ -66,7 +67,7 @@ public enum ThemeRoleId
     /// <summary>The citation slip and its text.</summary>
     Alert,
 
-    /// <summary>The Directives sticky note and its text.</summary>
+    /// <summary>Retired (the PC redesign TH2): was the Directives sticky note; no graphic takes it and the palette map has no rule for it.</summary>
     StickyNote,
 
     /// <summary>The compare bar and its text.</summary>
@@ -102,7 +103,7 @@ public enum ThemeRoleId
     /// <summary>A newsletter's button (START SHIFT, GO HOME).</summary>
     NewsletterButton,
 
-    /// <summary>The translucent dim behind the investigation desk.</summary>
+    /// <summary>Retired (the PC redesign TH2): was the translucent dim behind the investigation desk; no graphic takes it and the palette map has no rule for it.</summary>
     DeskDim,
 
     /// <summary>An input field's box and text.</summary>
@@ -142,12 +143,71 @@ public enum ThemeRoleId
     DiegeticBubble,
 
     /// <summary>Diegetic: a physical device drawn as UI (the PC frame's bezel, its LED and brand plate): it looks like the office's hardware whatever the culture.</summary>
-    DiegeticDevice
+    DiegeticDevice,
+
+    /// <summary>A pane's tab strip (the Investigation app).</summary>
+    TabStrip,
+
+    /// <summary>An inactive tab, its fill and ink.</summary>
+    Tab,
+
+    /// <summary>The active tab.</summary>
+    TabActive,
+
+    /// <summary>The app's sidebar and its rows.</summary>
+    Sidebar,
+
+    /// <summary>The search results panel and its hits.</summary>
+    SearchResults,
+
+    /// <summary>A badge: a desktop icon's or a tab's count or dot.</summary>
+    Badge,
+
+    /// <summary>A toast.</summary>
+    Toast,
+
+    /// <summary>The keyboard focus outline.</summary>
+    FocusRing,
+
+    /// <summary>The selected desktop icon's plate.</summary>
+    IconSelection,
+
+    /// <summary>Diegetic: every part of a form (texts, boxes, seal, barcode, stamp area, links).</summary>
+    DiegeticForm,
+
+    /// <summary>Diegetic: an Internet page's content.</summary>
+    SiteContent
 }
 
-/// <summary>The rule that keeps theming off evidence (piece 6 Z4).</summary>
+/// <summary>The rule that keeps theming off evidence (piece 6 Z4), and the retired roles (the PC redesign TH2).</summary>
 public static class ThemeRoles
 {
-    /// <summary>True for the diegetic roles (DiegeticPaper and after): the theme never recolours or refonts them, and cultures may not override them.</summary>
-    public static bool IsDiegetic(ThemeRoleId role) => role >= ThemeRoleId.DiegeticPaper;
+    /// <summary>
+    /// True for the diegetic roles, an explicit list (an appended chrome role
+    /// must never become diegetic by its number): the theme never recolours or
+    /// refonts them, and cultures may not override them.
+    /// </summary>
+    public static bool IsDiegetic(ThemeRoleId role)
+    {
+        switch (role)
+        {
+            case ThemeRoleId.DiegeticPaper:
+            case ThemeRoleId.DiegeticPhoto:
+            case ThemeRoleId.DiegeticRow:
+            case ThemeRoleId.DiegeticLabel:
+            case ThemeRoleId.DiegeticNote:
+            case ThemeRoleId.DiegeticBacking:
+            case ThemeRoleId.DiegeticBookRow:
+            case ThemeRoleId.DiegeticBubble:
+            case ThemeRoleId.DiegeticDevice:
+            case ThemeRoleId.DiegeticForm:
+            case ThemeRoleId.SiteContent:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>True for the retired roles (DeskDim, StickyNote): kept in the enum, taken by no graphic, with no palette rule and no colour a theme must have.</summary>
+    public static bool IsRetired(ThemeRoleId role) => role == ThemeRoleId.DeskDim || role == ThemeRoleId.StickyNote;
 }

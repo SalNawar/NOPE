@@ -145,12 +145,6 @@ MonoBehaviour:
     hasInk: 1
     ink: {r: 1, g: 1, b: 1, a: 1}
     textClass: 2
-  - role: 20
-    hasFill: 1
-    fill: {r: 1, g: 0.972549, b: 0.8627451, a: 0.97}
-    hasInk: 1
-    ink: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
-    textClass: 1
   - role: 21
     hasFill: 1
     fill: {r: 1, g: 0.972549, b: 0.8627451, a: 1}
@@ -217,12 +211,6 @@ MonoBehaviour:
     hasInk: 1
     ink: {r: 0.95686275, g: 0.9372549, b: 0.8901961, a: 1}
     textClass: 1
-  - role: 32
-    hasFill: 1
-    fill: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 0.55}
-    hasInk: 0
-    ink: {r: 0, g: 0, b: 0, a: 0}
-    textClass: 0
   - role: 33
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 1}
@@ -244,6 +232,60 @@ MonoBehaviour:
   - role: 36
     hasFill: 1
     fill: {r: 1, g: 1, b: 1, a: 0}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 46
+    hasFill: 1
+    fill: {r: 0.12156863, g: 0.16470589, b: 0.26666668, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 47
+    hasFill: 1
+    fill: {r: 0.90588236, g: 0.8784314, b: 0.8156863, a: 1}
+    hasInk: 1
+    ink: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
+    textClass: 1
+  - role: 48
+    hasFill: 1
+    fill: {r: 0.95686275, g: 0.9372549, b: 0.8901961, a: 1}
+    hasInk: 1
+    ink: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
+    textClass: 1
+  - role: 49
+    hasFill: 1
+    fill: {r: 0.90588236, g: 0.8784314, b: 0.8156863, a: 1}
+    hasInk: 1
+    ink: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
+    textClass: 1
+  - role: 50
+    hasFill: 1
+    fill: {r: 1, g: 0.972549, b: 0.8627451, a: 1}
+    hasInk: 1
+    ink: {r: 0.10980392, g: 0.10980392, b: 0.10980392, a: 1}
+    textClass: 1
+  - role: 51
+    hasFill: 1
+    fill: {r: 0, g: 0.3372549, b: 0.24705882, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 52
+    hasFill: 1
+    fill: {r: 0.07058824, g: 0.101960786, b: 0.16862746, a: 1}
+    hasInk: 1
+    ink: {r: 1, g: 1, b: 1, a: 1}
+    textClass: 1
+  - role: 53
+    hasFill: 1
+    fill: {r: 0, g: 0.3372549, b: 0.24705882, a: 1}
+    hasInk: 0
+    ink: {r: 0, g: 0, b: 0, a: 0}
+    textClass: 0
+  - role: 54
+    hasFill: 1
+    fill: {r: 0, g: 0.3372549, b: 0.24705882, a: 0.45}
     hasInk: 0
     ink: {r: 0, g: 0, b: 0, a: 0}
     textClass: 0

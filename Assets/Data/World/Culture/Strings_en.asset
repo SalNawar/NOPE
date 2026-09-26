@@ -58,7 +58,7 @@ MonoBehaviour:
   - key: records.title
     text: Citizen Records
     gloss: 0
-    tier: 1
+    tier: 0
   - key: records.search
     text: SEARCH
     gloss: 1
@@ -82,11 +82,11 @@ MonoBehaviour:
   - key: window.directives
     text: Directives
     gloss: 0
-    tier: 1
+    tier: 0
   - key: window.scanner
     text: Deviation Report
     gloss: 0
-    tier: 1
+    tier: 0
   - key: window.settings
     text: Settings
     gloss: 0
@@ -94,39 +94,43 @@ MonoBehaviour:
   - key: icon.directives
     text: Directives
     gloss: 0
-    tier: 1
+    tier: 0
   - key: icon.scanner
     text: Deviation Report
     gloss: 0
-    tier: 1
+    tier: 0
   - key: icon.records
     text: Records
     gloss: 0
-    tier: 1
+    tier: 0
   - key: icon.internet
     text: Internet
-    gloss: 0
-    tier: 1
-  - key: icon.lexicon
-    text: Lexicon
-    gloss: 0
-    tier: 1
-  - key: icon.dialect
-    text: Dialect
-    gloss: 0
-    tier: 1
-  - key: icon.material
-    text: Material
     gloss: 0
     tier: 1
   - key: icon.notes
     text: Notes
     gloss: 0
     tier: 1
+  - key: icon.investigation
+    text: Investigation
+    gloss: 0
+    tier: 1
+  - key: icon.mail
+    text: Mail
+    gloss: 0
+    tier: 1
+  - key: icon.account
+    text: Citizen Account
+    gloss: 0
+    tier: 1
+  - key: icon.settings
+    text: Settings
+    gloss: 0
+    tier: 1
   - key: icon.clueLog
     text: Clue Log
     gloss: 0
-    tier: 1
+    tier: 0
   - key: tray.day
     text: Day {0}
     gloss: 0
@@ -227,36 +231,32 @@ MonoBehaviour:
     text: Internet
     gloss: 0
     tier: 0
-  - key: window.lexicon
-    text: Lexicon
-    gloss: 0
-    tier: 0
-  - key: window.dialect
-    text: Dialect
-    gloss: 0
-    tier: 0
-  - key: window.material
-    text: Material Analysis
-    gloss: 0
-    tier: 0
   - key: window.notes
     text: Sticky Notes
     gloss: 0
     tier: 0
-  - key: body.lexicon
-    text: Wikipedia-style era glossary. (placeholder)
+  - key: window.investigation
+    text: Investigation
     gloss: 0
     tier: 0
-  - key: body.dialect
-    text: Notes on accents and phrasing. (placeholder)
+  - key: window.mail
+    text: Mail
     gloss: 0
     tier: 0
-  - key: body.material
-    text: Flags tech/materials beyond the claimed era. (upgrade)
+  - key: window.account
+    text: Citizen Account
     gloss: 0
     tier: 0
   - key: body.notes
     text: Your notes. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: body.mail
+    text: Your messages. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: body.account
+    text: Your account statement. (placeholder)
     gloss: 0
     tier: 0
   - key: browser.back
@@ -564,6 +564,30 @@ MonoBehaviour:
     tier: 0
   - key: settings.motionReduced
     text: Reduced
+    gloss: 0
+    tier: 0
+  - key: settings.desktop
+    text: Desktop icons open with
+    gloss: 0
+    tier: 0
+  - key: settings.iconDouble
+    text: Double click
+    gloss: 0
+    tier: 0
+  - key: settings.iconSingle
+    text: Single click
+    gloss: 0
+    tier: 0
+  - key: settings.resetIcons
+    text: Reset icon positions
+    gloss: 0
+    tier: 0
+  - key: desktop.arrange
+    text: Arrange icons
+    gloss: 0
+    tier: 0
+  - key: menu.open
+    text: Open
     gloss: 0
     tier: 0
   - key: settings.note

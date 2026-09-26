@@ -1,36 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
-/// <summary>The rule that keeps theming off evidence: exactly the diegetic roles are skipped.</summary>
+/// <summary>
+/// The rule that keeps theming off evidence (piece 6 Z4; the PC redesign
+/// TH2): the diegetic roles are an explicit list, checked for every enum
+/// value, so an appended chrome role never becomes diegetic by its number;
+/// and the two retired roles.
+/// </summary>
 public class ThemeRolesTests
 {
-    [TestCase(ThemeRoleId.Desktop)]
-    [TestCase(ThemeRoleId.AcceptButton)]
-    [TestCase(ThemeRoleId.WindowBody)]
-    [TestCase(ThemeRoleId.Tooltip)]
-    [TestCase(ThemeRoleId.ClickCatcher, Description = "the last chrome role")]
-    public void ChromeRoles_AreNotDiegetic(ThemeRoleId role)
+    /// <summary>The diegetic roles, and only these.</summary>
+    private static readonly ThemeRoleId[] Diegetic =
     {
+        ThemeRoleId.DiegeticPaper, ThemeRoleId.DiegeticPhoto, ThemeRoleId.DiegeticRow, ThemeRoleId.DiegeticLabel,
+        ThemeRoleId.DiegeticNote, ThemeRoleId.DiegeticBacking, ThemeRoleId.DiegeticBookRow, ThemeRoleId.DiegeticBubble,
+        ThemeRoleId.DiegeticDevice, ThemeRoleId.DiegeticForm, ThemeRoleId.SiteContent
+    };
+
+    private static IEnumerable<ThemeRoleId> All => ((ThemeRoleId[])Enum.GetValues(typeof(ThemeRoleId))).AsEnumerable();
+
+    [Test]
+    public void EveryRole_IsDiegetic_ExactlyWhenListed()
+    {
+        foreach (ThemeRoleId role in All)
+            Assert.AreEqual(Diegetic.Contains(role), ThemeRoles.IsDiegetic(role), role.ToString());
+    }
+
+    [TestCase(ThemeRoleId.TabStrip)]
+    [TestCase(ThemeRoleId.Tab)]
+    [TestCase(ThemeRoleId.TabActive)]
+    [TestCase(ThemeRoleId.Sidebar)]
+    [TestCase(ThemeRoleId.SearchResults)]
+    [TestCase(ThemeRoleId.Badge)]
+    [TestCase(ThemeRoleId.Toast)]
+    [TestCase(ThemeRoleId.FocusRing)]
+    [TestCase(ThemeRoleId.IconSelection, Description = "appended after the diegetic roles, still chrome")]
+    public void TheAppendedChromeRoles_AreNotDiegetic(ThemeRoleId role)
+    {
+        Assert.Greater((int)role, (int)ThemeRoleId.DiegeticDevice);
         Assert.IsFalse(ThemeRoles.IsDiegetic(role));
     }
 
-    [TestCase(ThemeRoleId.DiegeticPaper, Description = "the first diegetic role")]
-    [TestCase(ThemeRoleId.DiegeticPhoto)]
-    [TestCase(ThemeRoleId.DiegeticRow)]
-    [TestCase(ThemeRoleId.DiegeticLabel)]
-    [TestCase(ThemeRoleId.DiegeticNote)]
-    [TestCase(ThemeRoleId.DiegeticBacking)]
-    [TestCase(ThemeRoleId.DiegeticBookRow)]
-    [TestCase(ThemeRoleId.DiegeticBubble)]
-    [TestCase(ThemeRoleId.DiegeticDevice)]
-    public void EvidenceRoles_AreDiegetic(ThemeRoleId role)
+    [Test]
+    public void TheRolesKeepTheirNumbers()
     {
-        Assert.IsTrue(ThemeRoles.IsDiegetic(role));
+        // Serialized by ThemeTag as an int: the first diegetic role and the appended ones never move.
+        Assert.AreEqual(37, (int)ThemeRoleId.DiegeticPaper);
+        Assert.AreEqual(45, (int)ThemeRoleId.DiegeticDevice);
+        Assert.AreEqual(46, (int)ThemeRoleId.TabStrip);
+        Assert.AreEqual(54, (int)ThemeRoleId.IconSelection);
+        Assert.AreEqual(56, (int)ThemeRoleId.SiteContent);
     }
 
     [Test]
-    public void EveryRoleBeforeTheFirstDiegeticOne_IsChrome()
+    public void OnlyDeskDimAndStickyNote_AreRetired()
     {
-        for (int i = 0; i < (int)ThemeRoleId.DiegeticPaper; i++)
-            Assert.IsFalse(ThemeRoles.IsDiegetic((ThemeRoleId)i), ((ThemeRoleId)i).ToString());
+        CollectionAssert.AreEquivalent(new[] { ThemeRoleId.StickyNote, ThemeRoleId.DeskDim }, All.Where(ThemeRoles.IsRetired).ToArray());
     }
 }
