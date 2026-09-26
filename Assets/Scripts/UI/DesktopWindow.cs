@@ -6,8 +6,9 @@ using UnityEngine.UI;
 /// A desktop window's chrome (was OSWindowChrome; the PC redesign WN1, WN3).
 /// Open, Minimise and Close go through the desktop's window manager (one
 /// window stack: the only way a window shows or hides, audit R4-017), so a
-/// minimised window keeps its taskbar button. Maximise fills the icon area
-/// exactly, above the compare dock and the taskbar, with no insets (R4-015);
+/// minimised window keeps its taskbar button. Maximise fills the window
+/// layer exactly, which is the icon area above the compare dock and the
+/// taskbar, with no insets (R4-015);
 /// a double-click on the title bar (WindowDrag) toggles it, and a maximised
 /// window does not drag. The restored rect and the maximised state are
 /// remembered while the window lives (the office session; never saved).
@@ -87,7 +88,7 @@ public sealed class DesktopWindow : MonoBehaviour
             manager.Minimise(this);
     }
 
-    /// <summary>Toggles between the restored rect and the icon area (the desktop above the dock and the taskbar), and focuses the window.</summary>
+    /// <summary>Toggles between the restored rect and the whole window layer (the icon area: the desktop above the dock and the taskbar), and focuses the window.</summary>
     public void ToggleMaximise()
     {
         if (window == null || manager == null)
@@ -102,7 +103,7 @@ public sealed class DesktopWindow : MonoBehaviour
 
             window.anchorMin = Vector2.zero;
             window.anchorMax = Vector2.one;
-            window.offsetMin = new Vector2(0f, manager.MaximisedBottom);
+            window.offsetMin = Vector2.zero;
             window.offsetMax = Vector2.zero;
             _maximised = true;
         }

@@ -6,11 +6,11 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's desktop window parts (the PC redesign WN1-WN3, DK8,
 /// DK9, CM2): the desktop's knobs (DesktopConfigSO), the compare dock above
-/// the taskbar (outside every window: the window layer draws over the case's
-/// claim, icons and Accept/Deny and shows with or without a case, the dock
-/// over every window), the taskbar's
-/// window buttons, and the window manager on the desktop canvas, wired to
-/// every window's chrome and to the frame's Escape. Part of
+/// the taskbar (outside every window: the window layer, the icon area above
+/// it, draws over the desktop's icons and the case's claim and Accept/Deny
+/// and shows with or without a case; the dock draws over every window), the
+/// taskbar's window buttons, and the window manager on the desktop canvas,
+/// wired to every window's chrome and to the frame's Escape. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; Build() calls these in its order.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -116,12 +116,12 @@ public static partial class OfficeSceneUIBuilder
     /// The window manager on the desktop canvas (WN1-WN3, DK8): the taskbar's
     /// strip of window buttons between "&lt; Desk" and the tray (a template
     /// shrinking from the widest to the narrowest button knob as windows
-    /// open), the desktop's raycaster, the Start menu's shell and the empty
-    /// desktop's graphics (the wallpaper and the case dim); every window's
-    /// chrome gets the manager, its title text and the title size, and the
-    /// office view defers its Escape to the manager's stamp. Idempotent.
+    /// open) and the desktop's raycaster (the shell, the context menu and the
+    /// empty desktop are wired with the icons: BuildDesktopShell); every
+    /// window's chrome gets the manager, its title text and the title size,
+    /// and the office view defers its Escape to the manager's stamp. Idempotent.
     /// </summary>
-    private static DesktopWindowManager BuildWindowManager(Canvas canvas, Transform investRoot, OfficeViewController view)
+    private static DesktopWindowManager BuildWindowManager(Canvas canvas, OfficeViewController view)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         Transform root = canvas.transform;
@@ -157,8 +157,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
         SetRef(so, "taskbarButtons", strip);
         SetRef(so, "taskbarButtonTemplate", template);
-        SetRef(so, "shell", root.GetComponent<DesktopShell>());
-        SerializedArrays.Set(so, "emptyDesktop", new Object[] { root.Find("Desktop").GetComponent<Image>(), investRoot.GetComponent<Image>() });
         so.ApplyModifiedProperties();
 
         foreach (DesktopWindow window in root.GetComponentsInChildren<DesktopWindow>(true))
