@@ -288,7 +288,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private void Escape()
     {
         TMP_InputField field = FocusedField();
-        var state = new DesktopEscapeState(field != null || _fieldFocusedAtFrameEnd, shell != null && shell.StartMenuOpen, _drag != null);
+        var state = new DesktopEscapeState(false, field != null || _fieldFocusedAtFrameEnd, shell != null && shell.StartMenuOpen, _drag != null);
         switch (DesktopEscapeRule.Resolve(state))
         {
             case DesktopEscape.LeaveField:
