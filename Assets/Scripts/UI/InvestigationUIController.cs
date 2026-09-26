@@ -231,8 +231,13 @@ public sealed class InvestigationUIController : MonoBehaviour
         }
     }
 
-    /// <summary>Injects the day's citizen registry into the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
-    public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day) => _reference.SetCitizenRegistry(registry, agency, day);
+    /// <summary>Injects the day's citizen registry into the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints; a new day's registry drops the app's pins and recent items (PR2).</summary>
+    public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
+    {
+        _reference.SetCitizenRegistry(registry, agency, day);
+        if (app != null)
+            app.BeginDay();
+    }
 
     /// <summary>Injects today's facts (the Reference tab's registers render these rows).</summary>
     public void SetFacts(FactTable facts) => _reference.SetFacts(facts);

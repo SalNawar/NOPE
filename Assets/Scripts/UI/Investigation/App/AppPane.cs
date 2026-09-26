@@ -13,9 +13,10 @@ using UnityEngine.UI;
 /// only by the player's click or the app's own rules (a new case shows
 /// Documents, AP8); a view never switches the tab. The views are IAppView
 /// components, so a view drawn by the forms engine drops in for today's.
-/// Phase 18 adds the second pane and the reordering.
+/// Phase 18 adds the second pane and the reordering; the keys' focus ring
+/// walks its tabs and chips (AppPane.Keys, phase 20).
 /// </summary>
-public sealed class AppPane : MonoBehaviour
+public sealed partial class AppPane : MonoBehaviour
 {
     /// <summary>The tabs' buttons, in TabOrder.Default.</summary>
     [SerializeField] private Button[] tabButtons = new Button[0];
