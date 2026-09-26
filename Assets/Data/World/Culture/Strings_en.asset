@@ -755,6 +755,38 @@ MonoBehaviour:
     text: Priority subject. Records sealed above your clearance.
     gloss: 0
     tier: 0
+  - key: records.row.number
+    text: Displacement No.
+    gloss: 0
+    tier: 0
+  - key: records.row.incident
+    text: Incident
+    gloss: 0
+    tier: 0
+  - key: records.row.found
+    text: Found
+    gloss: 0
+    tier: 0
+  - key: records.row.status
+    text: Status
+    gloss: 0
+    tier: 0
+  - key: records.status.awaiting
+    text: Awaiting return
+    gloss: 0
+    tier: 0
+  - key: case.roleUnknown
+    text: Traveler
+    gloss: 0
+    tier: 0
+  - key: case.unlistedLand
+    text: an unlisted land
+    gloss: 0
+    tier: 0
+  - key: case.subject
+    text: Subject #{0}
+    gloss: 0
+    tier: 0
   - key: records.compareLabel
     text: "Records \xB7 {0}"
     gloss: 0
@@ -928,5 +960,25 @@ MonoBehaviour:
     tier: 0
   - key: category.BirthDate
     text: BIRTH DATE
+    gloss: 0
+    tier: 0
+  - key: category.CitizenId
+    text: CITIZEN ID
+    gloss: 0
+    tier: 0
+  - key: category.Destination
+    text: DESTINATION
+    gloss: 0
+    tier: 0
+  - key: category.Incident
+    text: INCIDENT
+    gloss: 0
+    tier: 0
+  - key: category.DepartureDate
+    text: DEPARTURE
+    gloss: 0
+    tier: 0
+  - key: category.Expiry
+    text: VALID UNTIL
     gloss: 0
     tier: 0

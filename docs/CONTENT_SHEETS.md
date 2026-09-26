@@ -59,10 +59,10 @@ Everything is driven by one declarative map, `Assets/Scripts/Domain/ContentSheet
 
 ## The sheets (today)
 
-The README sheet of any export is the live list, with every column's type, default and rules. Today there are 66 sheets. The story tables:
+The README sheet of any export is the live list, with every column's type, default and rules. Today there are 67 sheets. The story tables:
 
 - **Characters and stories:** `premades` (+ `premadeImpacts`); `places` (+ `placeFacts`, `placeSmallTalk`, `wardrobeSets`, `wardrobe`, `placeHair`); `countries`; `eras` (+ `eraSmallTalk`).
-- **Dialogue and interactions:** `dialogs`, `dialogConditions`, `dialogNodes`, `dialogLines`, `dialogChoices`, `choiceLines`; `questions`, `questionConditions`, `questionOverrides`; `interview`, `interviewRequests`.
+- **Dialogue and interactions:** `dialogs`, `dialogConditions`, `dialogNodes`, `dialogLines`, `dialogChoices`, `choiceLines`; `questions`, `questionConditions`, `questionOverrides`; `interview`, `claims` (the claim per traveller kind), `interviewRequests`.
 - **The days and history:** `days`, `dayEras`, `dayForced`, `rules`; `history`, `historyRules`, `historyConditions`, `historyEdits`.
 - **The PC's Internet:** `pc` (whether the premades get Lineage Archive cards), `pcSites`, `pcPages` (+ `pcPageBlocks`: a Static site's authored pages), `pcPeople` and `pcRelations` (the Lineage Archive's people of the past).
 - **Presentation (rarely edited):** `world`, `agency`, `looks`, `faceBands`, `confusable`, `content` and its asset lists; the country `culture` blocks (`countryFonts`, `countrySeeds`, `countryOverrides`, `countryArt`); `ui`, `uiPalette`, `uiNeutral` (+ its four sheets), `uiStrings`, `uiLanguages`, `uiLanguageEntries`; `translation` (with the key words that stay English), `scripts`, `scriptFonts`, `packs`, `tongues`.

@@ -975,7 +975,7 @@
   },
   "content": {
     "library": "Assets/Data/Content Library/ContentLibrary_Main.asset",
-    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Investigation.asset",
+    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset",
     "dayPlanFolder": "Assets/Data/Investigation",
     "attributes": [
       {
@@ -1011,7 +1011,12 @@
   "agency": {
     "name": "TEMPORAL CUSTOMS",
     "programme": "Debt Relief Departures",
-    "firstDate": "14 Mar 2150"
+    "firstDate": "14 Mar 2150",
+    "displaced": {
+      "foundWithinDays": 30,
+      "validDaysMin": 3,
+      "validDaysMax": 365
+    }
   },
   "eras": [
     {
@@ -6682,11 +6687,17 @@
     "deskName": "DESK",
     "opener": "Next! Step forward, {honorific}.",
     "openerLegendary": "Priority arrival: {name}.",
-    "claim": "I request passage home to {place}.",
+    "claims": [
+      {
+        "kind": "Displaced",
+        "text": "Please. Send me home to {place}."
+      }
+    ],
     "honorificMale": "sir",
     "honorificFemale": "madam",
     "honorificUnknown": "traveller",
     "requestLabel": "Request {document}",
+    "papersLabel": "Request papers >",
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about home >",
@@ -9320,6 +9331,54 @@
         "tier": "Full"
       },
       {
+        "key": "records.row.number",
+        "text": "Displacement No.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.incident",
+        "text": "Incident",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.found",
+        "text": "Found",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.status",
+        "text": "Status",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.status.awaiting",
+        "text": "Awaiting return",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "case.roleUnknown",
+        "text": "Traveler",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "case.unlistedLand",
+        "text": "an unlisted land",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "case.subject",
+        "text": "Subject #{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "records.compareLabel",
         "text": "Records · {0}",
         "gloss": "None",
@@ -9568,6 +9627,36 @@
       {
         "key": "category.BirthDate",
         "text": "BIRTH DATE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.CitizenId",
+        "text": "CITIZEN ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Destination",
+        "text": "DESTINATION",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Incident",
+        "text": "INCIDENT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.DepartureDate",
+        "text": "DEPARTURE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Expiry",
+        "text": "VALID UNTIL",
         "gloss": "None",
         "tier": "Full"
       }

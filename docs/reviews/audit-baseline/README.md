@@ -17,7 +17,7 @@ changes that a slice documents as intended. A slice with such a change re-packs
 | `golden/cases.txt.gz` | Case generation, days 1-6 x 20 run seeds, plus day 6 under each of the 8 possible leaders: every traveller's claim, name, papers, tells, answers, look and garments, premade, violator, citizen record; each variant's world (plan, places, rules, interview, every fact) | yes |
 | `golden/world_generate.txt`, `validator.txt`, `data_hashes.txt` | Generate World run twice (files it changed; content hashes of `Assets/Data`), the validator's output | yes |
 | `golden/scene_*.txt`, `scenes_summary.txt`, `contract.txt` | Semantic dumps of the committed OfficeGameplay, HomeScene and TitleScene; each builder's rebuild compared with them; the office scene contract report | yes |
-| `golden/play_transcript.txt`, `play_warnings.txt`, `play_saves/*.json` | Scripted play-through, seed 12345, days 1-6 in the art office and Home between them, to day 7's morning paper: briefings, every traveller, the interview, the evidence, the verdict, the ledger, Home and the save after each shift and each night | yes |
+| `golden/play_transcript.txt.gz`, `play_warnings.txt`, `play_saves/*.json` | Scripted play-through, seed 12345, days 1-6 in the art office and Home between them, to day 7's morning paper: briefings, every traveller, the interview, the evidence, the verdict, the ledger, Home and the save after each shift and each night | yes |
 | `golden/profile_A.txt`, `profile_B.txt` | Profiled play-through (two runs): PlayerLoop GC alloc and frame time per window, the allocation sites, scene load times | GC per frame yes; times are measurements |
 | `golden/MANIFEST.sha256` | sha256 of every deterministic golden file (uncompressed, LF line endings; `golden.py` compares with line endings normalised) | |
 
@@ -82,7 +82,7 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
 
 - **Each traveller:**
   1. READY.
-  2. Every request (documents and spoken requests), then every question in the ask menu. Slot 1 also runs the first offered dialog, taking the first choice at each step.
+  2. Every request (documents, through the papers menu when there are two or more, and spoken requests), then every question in the ask menu. Slot 1 also runs the first offered dialog, taking the first choice at each step.
   3. For a liar, each tell is proven through the real compare path: the tell (paper row, answer line, or a garment through Look) against the claimed place's book row. A birth date goes against the citizen record, and the true home's row is the fallback.
   4. The verdict: odd slots at the stamp tray, even slots on the PC.
 - **Verdicts are right except four planned mistakes:**
@@ -113,6 +113,13 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
   - `scenes_summary.txt`: the art scene's file hash (the art clean-up); the art office stays byte-unchanged by the builders.
   - `validator.txt`: 42 of 880 character keys have final art (the pilot's batch 1).
   - Unchanged: `cases.txt`, the Home and Title dumps, the play transcript, the 12 saves and `play_warnings.txt`. The profiles were not re-measured here.
+
+- **Redesign phase 3, traveller kinds and the displaced's forms** (`redesign/p03-traveller-kinds`, main at `4291de2` merged in):
+  - `cases.txt`: every traveller carries TC-610 Displacement Certificate, TC-620 Intake Declaration and TC-630 Return Order in place of the Travel Passport and the Transit Permit (the permit's Bond Currency goes); each form prints the traveller's Displacement No., the certificate their incident and Valid Until, the return order today's date; the record is the Displacement Registry entry (Displacement No., Incident, Found, Status "Awaiting return" added to Name, Born, Origin and Note); the claim line is the displaced's "Please. Send me home to {place}.". Nothing else moves: over all 6570 lines only the papers, the claim line and the record differ. Every claim, name, birth date, role, gender, liar, home, tell, answer, look, garment, premade and violator is the baseline's (the case, lie, dialog and look streams draw as before; the new values come from the new account stream).
+  - `play_transcript.txt`: the same papers and claim lines; each traveller's requests go through "Request papers >" (the Intake Declaration and the Return Order, one more "Your ..., please." / "Here you are." pair each); the verdicts' `claimSummary`. Every verdict, proof, payment and ending is unchanged, and so are the 12 saves. The transcript is now over 200 kB, so it is stored gzipped (`play_transcript.txt.gz`).
+  - `data_hashes.txt`, `world_generate.txt`: `Assets/Data` 435 → 437 files (the three TC templates in place of the passport and the permit; `CaseBlueprint_Investigation` renamed `CaseBlueprint_Displaced`, same GUID); the library (the claim per kind, the papers label, the agency's displaced ranges, no clue list), `Strings_en.asset` (the category words, the registry rows, CaseFactory's fallbacks) and `world_source.json`.
+  - `profile_A.txt`, `profile_B.txt`: re-measured. No new per-frame allocation or allocation site; every load within 25% of the old baseline (a first run B measured home → office at 1099 ms, 66% over; its re-run measured 803 ms and is the one packed).
+  - Unchanged: `validator.txt`, `contract.txt`, `scenes_summary.txt`, the three scene dumps (each rebuild equal: the builder's content checks moved into the validator, its output did not change) and `play_warnings.txt`. Runs A and B were identical.
 
 ## Baseline results (ff3a6e0)
 

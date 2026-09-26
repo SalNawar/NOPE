@@ -61,7 +61,6 @@ public static partial class ContentLibraryValidator
         // --- Null entries in every authored array ---
         issues += CheckNullEntries(lib.DayPlans, "DayPlans", lib);
         issues += CheckNullEntries(lib.Eras, "Eras", lib);
-        issues += CheckNullEntries(lib.Clues, "Clues", lib);
         issues += CheckNullEntries(lib.Legendaries, "Legendaries", lib);
         issues += CheckNullEntries(lib.Effects, "Effects", lib);
         issues += CheckNullEntries(lib.Upgrades, "Upgrades", lib);
@@ -105,6 +104,8 @@ public static partial class ContentLibraryValidator
 
         // --- Interview (wording, questions, dialogs, menus), upgrade ids, tell channels, small talk ---
         issues += CheckInterview(lib);
+        issues += CheckKinds(lib);
+        issues += CheckDeskFit(lib);
         issues += CheckUpgradeIds(lib);
         issues += CheckTellChannels(lib);
         issues += CheckSmallTalk(lib);
@@ -162,8 +163,8 @@ public static partial class ContentLibraryValidator
         var wording = new (string field, string text)[]
         {
             ("deskName", lines.deskName), ("opener", lines.opener?.text), ("openerLegendary", lines.openerLegendary?.text),
-            ("claim", lines.claim?.text), ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
-            ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("requestPrompt", lines.requestPrompt?.text),
+            ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
+            ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("papersLabel", lines.papersLabel), ("requestPrompt", lines.requestPrompt?.text),
             ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("backLabel", lines.backLabel),
             ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text), ("lookLabel", lines.lookLabel)
         };

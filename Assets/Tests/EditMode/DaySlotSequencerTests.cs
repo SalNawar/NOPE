@@ -89,4 +89,31 @@ public class DaySlotSequencerTests
         Assert.IsFalse(slots.SlotAbandoned);
         Assert.IsTrue(slots.IsWaiting);
     }
+
+    /// <summary>Audit R3-035: a decision that arrives with nothing waiting changes nothing.</summary>
+    [Test]
+    public void MarkResolved_WhileNotWaiting_IsANoOp()
+    {
+        var slots = new DaySlotSequencer(3);
+        slots.MarkResolved();
+        Assert.IsFalse(slots.IsWaiting);
+        Assert.IsFalse(slots.SlotAbandoned);
+        Assert.AreEqual(1, slots.CurrentSlot);
+        Assert.IsTrue(slots.CanStartSlot);
+    }
+
+    /// <summary>Audit R3-035: closing between two travellers lets the ended slot advance but starts no next one.</summary>
+    [Test]
+    public void CloseAfterCurrentSlot_BetweenSlots_StartsNoNextSlot()
+    {
+        var slots = new DaySlotSequencer(5);
+        slots.BeginWaiting();
+        slots.MarkResolved();
+        slots.Advance();
+        slots.CloseAfterCurrentSlot();
+        Assert.IsFalse(slots.CanStartSlot);
+        Assert.IsFalse(slots.IsWaiting);
+        Assert.IsFalse(slots.SlotAbandoned);
+        Assert.AreEqual(2, slots.CurrentSlot);
+    }
 }
