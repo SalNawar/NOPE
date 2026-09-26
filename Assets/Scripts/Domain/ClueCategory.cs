@@ -1,7 +1,9 @@
 /// <summary>
-/// Category used to route clues into the “right kind” of document and to match
-/// document fields against their reference book. Order is serialized — append
-/// only, never reorder.
+/// What a document field, an answer or a record row states: it decides what
+/// the value can be compared with (a reference book, the traveller's record,
+/// another paper) and how a report names it (ClueLabels). Order is serialized
+/// (templates, books, places, effects, saves) — append only, never reorder
+/// (SerializedEnumsTests pins every value).
 /// </summary>
 public enum ClueCategory
 {
@@ -18,5 +20,24 @@ public enum ClueCategory
     // Identity fields — validated against the agency's citizen records,
     // not the era reference books.
     Name,
-    BirthDate
+    BirthDate,
+
+    // The agency's numbers and the travel facts of the TC forms (traveller
+    // types, F4). Invariant: an honest traveller has one value per compared
+    // category, the same on every form, answer and record row.
+
+    /// <summary>The agency's number for the person: a Displacement No. ("DP-4471-02") for the displaced; a Citizen ID later.</summary>
+    CitizenId,
+
+    /// <summary>Where the traveller is sent: the claimed place's label (a displaced person's origin).</summary>
+    Destination,
+
+    /// <summary>The rift that displaced a person ("R-0311-07"): on their certificate, their return order and their registry entry.</summary>
+    Incident,
+
+    /// <summary>The date a departure is booked for. Directive-only: read against the desk calendar, never compared, never a proof.</summary>
+    DepartureDate,
+
+    /// <summary>The date a paper stops being valid. Directive-only: read against the desk calendar, never compared, never a proof.</summary>
+    Expiry
 }

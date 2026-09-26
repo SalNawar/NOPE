@@ -8811,6 +8811,36 @@
         "text": "BIRTH DATE",
         "gloss": "None",
         "tier": "Full"
+      },
+      {
+        "key": "category.CitizenId",
+        "text": "CITIZEN ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Destination",
+        "text": "DESTINATION",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Incident",
+        "text": "INCIDENT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.DepartureDate",
+        "text": "DEPARTURE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Expiry",
+        "text": "VALID UNTIL",
+        "gloss": "None",
+        "tier": "Full"
       }
     ],
     "languages": [
