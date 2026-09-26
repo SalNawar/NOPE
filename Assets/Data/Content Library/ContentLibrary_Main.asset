@@ -190,6 +190,10 @@ MonoBehaviour:
       id: interview.openerLegendary
       text: 'Priority arrival: {name}.'
     claims:
+    - kind: 0
+      line:
+        id: interview.claims.RichTourist
+        text: One leisure departure to {place}, please.
     - kind: 3
       line:
         id: interview.claims.Displaced
@@ -1305,3 +1309,72 @@ MonoBehaviour:
       foundWithinDays: 30
       validDaysMin: 3
       validDaysMax: 365
+    accounts:
+      validDaysMin: 3
+      validDaysMax: 365
+      tripsWithinDays: 1095
+      statuses:
+      - status: 0
+        debtMin: 0
+        debtMax: 0
+        tripsMin: 0
+        tripsMax: 3
+      - status: 1
+        debtMin: 0
+        debtMax: 18000
+        tripsMin: 0
+        tripsMax: 3
+      - status: 2
+        debtMin: 40000
+        debtMax: 320000
+        tripsMin: 0
+        tripsMax: 2
+    transponders:
+    - id: hopper2
+      transponderClass: 0
+      model: Hopper Mk II
+      prefix: HP
+      weight: 3
+    - id: aurelian9
+      transponderClass: 0
+      model: Aurelian 9
+      prefix: AU
+      weight: 2
+    - id: chronoselite
+      transponderClass: 0
+      model: Chronos Elite
+      prefix: CE
+      weight: 1
+    - id: ticktock
+      transponderClass: 1
+      model: Tick-Tock Basic
+      prefix: TT
+      weight: 3
+    - id: skiplite
+      transponderClass: 1
+      model: Skip Lite
+      prefix: SL
+      weight: 2
+    - id: driftbox3
+      transponderClass: 1
+      model: Driftbox 3
+      prefix: DB
+      weight: 1
+  present:
+    displayName: Temporal Customs Zone
+    year: 2150
+    birthYearMin: 2080
+    birthYearMax: 2132
+    facts:
+    - category: 4
+      value: Credits
+    - category: 0
+      value: Agency Standard English
+    - category: 3
+      value: Wrist comm
+    - category: 5
+      value: Directorate Tower
+    - category: 2
+      value: The Customs Directorate
+    - category: 6
+      value: tech jacket / coat-dress

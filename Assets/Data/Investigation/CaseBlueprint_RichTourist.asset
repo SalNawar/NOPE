@@ -10,14 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
-  m_Name: CaseBlueprint_Displaced
+  m_Name: CaseBlueprint_RichTourist
   m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
-  kind: 3
+  kind: 0
   documentTemplates:
-  - {fileID: 11400000, guid: a30c932960e045d3ab69ebfa9b35801a, type: 2}
-  - {fileID: 11400000, guid: b27f296a83e74c1e81e149aef150a1e4, type: 2}
-  - {fileID: 11400000, guid: a2fea840d59d4b21b132c5693924bb8c, type: 2}
-  contradictionChance: 0.5
+  - {fileID: 11400000, guid: 3d3d949a71f640ee997d316e81c9f803, type: 2}
+  - {fileID: 11400000, guid: 17eb2ae45d4944169f09e0d143588211, type: 2}
+  contradictionChance: 0
   archetypePool:
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
   - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}

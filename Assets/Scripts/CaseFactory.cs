@@ -21,7 +21,13 @@ using UnityEngine;
 /// displaced person's agency file (their Displacement No., incident, found
 /// date and certificate's Valid Until, AgencyNumbers) is drawn on their
 /// account stream (Seeds.ForAccount), counting from today's date on the
-/// agency calendar, and their forms and registry entry print it.
+/// agency calendar, and their forms and registry entry print it. The day's
+/// kinds (DayPlanSO kinds) decide the blueprint; a 2150 citizen (a tourist)
+/// comes from the present: a name from the Future places' lists together and
+/// a birth date in the present's years (the same case-stream draws), English
+/// speech, the destination's dress over their family country's looks, and a
+/// Citizen Account (AccountMaker) on their account stream, which their forms
+/// and their record print. Until phase 7 a citizen never lies.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -36,6 +42,15 @@ public sealed class CaseFactory
 
     /// <summary>Today's places (eras x allowed nations, at most one Future place), in book order (TodaysWorld).</summary>
     private readonly List<NationEraProfileSO> _todays;
+
+    /// <summary>The present (TodaysWorld.Present): a 2150 citizen's birth years and the year their age is counted from; null when the content has none.</summary>
+    private readonly PresentPlace _present;
+
+    /// <summary>The names 2150 citizens are drawn from (the Future places' lists together, ContentLibrarySO.CitizenNames).</summary>
+    private readonly CitizenNames _citizenNames;
+
+    /// <summary>Every past place's label, in library order: where a citizen's past trips went (AccountRequest.TripPlaces).</summary>
+    private readonly List<string> _pastPlaces;
 
     /// <summary>The current traveller's random stream (reset per case).</summary>
     private IRandomSource _rng = new SeededRandom(0);
@@ -86,7 +101,12 @@ public sealed class CaseFactory
         _lib = lib;
         _facts = today?.Facts ?? new FactTable();
         _todays = today != null ? new List<NationEraProfileSO>(today.Places) : new List<NationEraProfileSO>();
+        _present = today?.Present;
         _bookCategories = lib != null ? lib.ReferenceBookCategories() : new HashSet<ClueCategory>();
+        _citizenNames = lib != null ? lib.CitizenNames() : new CitizenNames(null);
+        _pastPlaces = lib != null
+            ? lib.Profiles.Where(p => p != null && p.era != null && !p.era.isFuture).Select(p => p.OriginLabel).ToList()
+            : new List<string>();
     }
 
     /// <summary>
@@ -228,26 +248,34 @@ public sealed class CaseFactory
             : violatorPlace != null ? violatorPlace.era
             : PickEraFromPlan(plan);
 
-        // 4) Decide blueprint (forced > weighted pick, with active-effect
-        //    weight multipliers applied).
+        // 4) Decide blueprint: forced > one weighted pick of the day's kinds
+        //    (active-effect weight multipliers applied; a premade's slot
+        //    draws only the displaced, TravellerKinds.PickWeight).
         CaseBlueprintSO blueprint =
             forcedBlueprint != null ? forcedBlueprint :
-            WeightedRandom.Pick(plan.PossibleBlueprints, b => b != null
-                ? b.Difficulty * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, b.name)
-                : 0f, _rng);
+            WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null
+                ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, legendary != null) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
+                : 0f, _rng)?.blueprint;
+
+        // A 2150 citizen (traveller types K2, K4) comes from the present.
+        bool citizen = legendary == null && blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
         NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, claimedEra);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
         string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
-        string givenName = ResolveGivenName(legendary, forcedPremade, place, caseIndex1Based);
+        string givenName = ResolveGivenName(legendary, forcedPremade, citizen ? _citizenNames.All : place != null ? place.AllNames : null, caseIndex1Based);
         TravellerGender gender = legendary != null ? legendary.gender
+            : citizen ? _citizenNames.GenderOf(givenName)
             : place == null ? TravellerGender.Unknown
             : TravellerGenders.FromNameLists(givenName, place.maleNames, place.femaleNames);
         string role = archetype != null ? archetype.displayName : UiText.Get("case.roleUnknown");
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
-        string birthDate = legendary != null ? legendary.birthDate : GenerateBirthDate(place);
+        string birthDate = legendary != null ? legendary.birthDate
+            : citizen ? GenerateBirthDate(_present != null ? _present.BirthYearMin : 0, _present != null ? _present.BirthYearMax : 0)
+            : GenerateBirthDate(place != null ? place.birthYearMin : 0, place != null ? place.birthYearMax : 0);
+        NationEraProfileSO family = citizen ? FamilyOf(givenName) : null;
         string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null, legendary != null ? legendary.introLine : null);
 
         var inst = new CaseInstance
@@ -259,7 +287,7 @@ public sealed class CaseFactory
             legendarySource = legendary,
             archetype = archetype,
             originLabel = originLabel,
-            tongueId = place != null && place.tongue != null ? place.tongue : string.Empty,
+            tongueId = !citizen && place != null && place.tongue != null ? place.tongue : string.Empty,
             visitorDisplayName = visitorName,
             visitorGivenName = givenName,
             trueBirthDate = birthDate,
@@ -275,9 +303,13 @@ public sealed class CaseFactory
 
         inst.kind = blueprint.Kind;
 
-        // 4.8) A displaced person's agency file, on their account stream (the forms and the registry print it).
+        // 4.8) The agency's file, on the account stream (the forms and the record print it):
+        //      a displaced person's registry numbers, or a 2150 citizen's Citizen Account.
         if (inst.kind == TravellerKind.Displaced && _today != null)
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
+        else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
+            inst.account = AccountMaker.Make(AccountRequestFor(status, family, blueprint), _lib.Agency.accounts, _lib.Agency.transponders,
+                                             _today.Value, _agencyNumbers, _accountRng);
 
         // 5) Merge authored timeline impacts (blueprint + legendary).
         if (blueprint.AuthoredImpacts != null)
@@ -300,12 +332,12 @@ public sealed class CaseFactory
         EraSO talkEra = place != null ? place.era : claimedEra;
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
-        inst.look = ComposeLook(inst, place, lie, legendary, caseIndex1Based);
+        inst.look = ComposeLook(inst, place, lie, legendary, family, caseIndex1Based);
 
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, claimAllowed={inst.claimAllowedByRules}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -316,8 +348,10 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Fills each document's structured fields from today's facts for the
-    /// case's claimed place (identity fields from the registered identity) and
-    /// returns them in paper order. Never null: empty when there are no documents.
+    /// case's claimed place (identity fields from the registered identity;
+    /// a citizen's Valid Until is their account's date for that form, the
+    /// expiring forms counted in paper order) and returns them in paper
+    /// order. Never null: empty when there are no documents.
     /// </summary>
     private List<DocumentField> PopulateDocumentFields(CaseInstance inst)
     {
@@ -326,11 +360,13 @@ public sealed class CaseFactory
         if (inst == null || _lib == null)
             return allFields;
 
+        int expiring = 0;
         foreach (DocumentInstance doc in inst.documents)
         {
             if (doc == null || doc.template == null || doc.template.fieldSpecs == null)
                 continue;
 
+            int expiryIndex = Expires(doc.template) ? expiring++ : 0;
             foreach (DocumentFieldSpec spec in doc.template.fieldSpecs)
             {
                 if (spec == null)
@@ -340,7 +376,7 @@ public sealed class CaseFactory
                 {
                     category = spec.category,
                     label = string.IsNullOrEmpty(spec.label) ? spec.category.ToString() : spec.label,
-                    value = ResolveFieldValue(spec.category, inst),
+                    value = ResolveFieldValue(spec.category, inst, expiryIndex),
                     page = Mathf.Max(0, spec.page)
                 };
 
@@ -365,12 +401,13 @@ public sealed class CaseFactory
     /// premade authored as a liar lies surely, from their true place, through
     /// papers and answers only. Exempt travellers (honest premades, a claim a
     /// rule forbids, no papers) draw nothing. Returns the plan, or null when
-    /// the traveller is exempt.
+    /// the traveller is exempt; a 2150 citizen is exempt until phase 7
+    /// (TravellerKinds.MayLieAboutPlace).
     /// </summary>
     private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state,
                              int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary)
     {
-        if (!Lies.MayLie(legendary != null && legendary.truePlace == null, inst.claimAllowedByRules, fields))
+        if (!TravellerKinds.MayLieAboutPlace(inst.kind) || !Lies.MayLie(legendary != null && legendary.truePlace == null, inst.claimAllowedByRules, fields))
             return null;
 
         // The homes the lie may come from: today's places, or a lying premade's own true place.
@@ -428,11 +465,14 @@ public sealed class CaseFactory
     /// <summary>
     /// How the traveller looks: a premade's whole picture; otherwise the
     /// claimed place's layers (Looks.Compose on the look stream), with one
-    /// garment of the true home for a dress tell. A missing place draws the
-    /// minimal look and an unknown gender is drawn on the look stream, each
-    /// with a warning.
+    /// garment of the true home for a dress tell. A 2150 citizen wears the
+    /// destination's dress (traveller types C1) with their family country's
+    /// skin and hair weights (<paramref name="family"/>: the Future place
+    /// whose list gave the name), their age counted from the present's year.
+    /// A missing place draws the minimal look and an unknown gender is drawn
+    /// on the look stream, each with a warning.
     /// </summary>
-    private TravellerLook ComposeLook(CaseInstance inst, NationEraProfileSO place, LiePlan lie, LegendarySO legendary, int caseIndex1Based)
+    private TravellerLook ComposeLook(CaseInstance inst, NationEraProfileSO place, LiePlan lie, LegendarySO legendary, NationEraProfileSO family, int caseIndex1Based)
     {
         if (legendary != null)
             return Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules);
@@ -449,7 +489,9 @@ public sealed class CaseFactory
         LookSource leak = lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance && inst.trueHome != null
             ? SourceOf(inst.trueHome)
             : null;
-        return Looks.Compose(SourceOf(place), leak, inst.gender, inst.trueBirthDate, place.year, place.looks, _lib.LookRules, _looksRng);
+        int year = family != null && _present != null ? _present.Year : place.year;
+        LookWeights weights = family != null ? family.looks : place.looks;
+        return Looks.Compose(SourceOf(place), leak, inst.gender, inst.trueBirthDate, year, weights, _lib.LookRules, _looksRng);
     }
 
     /// <summary>A place as the look rules see it: its ids, wardrobe and today's Culture fact.</summary>
@@ -494,21 +536,30 @@ public sealed class CaseFactory
     /// traveller's file (a departure is dated today); place fields come from
     /// today's facts for the claimed place, with a readable placeholder (and
     /// a warning) when content is missing; also each spoken answer's cover
-    /// value (AddAnswers). A liar's Papers tells overwrite the printed values
+    /// value (AddAnswers). A 2150 citizen's account values come from their
+    /// Citizen Account (the ID, the status, the transponder and its class,
+    /// the debt, and the Valid Until of their <paramref name="expiryIndex"/>th
+    /// expiring form). A liar's Papers tells overwrite the printed values
     /// afterwards (Disguise); an Answer tell replaces only the spoken value
     /// (Interview.Answer).
     /// </summary>
-    private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
+    private string ResolveFieldValue(ClueCategory category, CaseInstance inst, int expiryIndex = 0)
     {
+        CitizenAccount account = inst.account;
         switch (category)
         {
             case ClueCategory.Name: return inst.visitorGivenName;
             case ClueCategory.BirthDate: return inst.trueBirthDate;
             case ClueCategory.Destination: return inst.originLabel;
-            case ClueCategory.CitizenId: return AgencyValue(inst.displacement?.Number, category);
+            case ClueCategory.CitizenId: return AgencyValue(account != null ? account.CitizenId : inst.displacement?.Number, category);
             case ClueCategory.Incident: return AgencyValue(inst.displacement?.Incident, category);
-            case ClueCategory.Expiry: return AgencyValue(inst.displacement?.ValidUntil, category);
+            case ClueCategory.Expiry:
+                return AgencyValue(account != null ? account.ValidUntil.ElementAtOrDefault(expiryIndex) : inst.displacement?.ValidUntil, category);
             case ClueCategory.DepartureDate: return AgencyValue(_today != null ? AgencyCalendar.Write(_today.Value) : null, category);
+            case ClueCategory.AccountStatus: return AgencyValue(account?.Status.ToString(), category);
+            case ClueCategory.TransponderId: return AgencyValue(account?.Transponder, category);
+            case ClueCategory.TransponderClass: return AgencyValue(account?.TransponderClass.ToString(), category);
+            case ClueCategory.Debt: return AgencyValue(account != null ? AccountMaker.Credits(account.Debt) : null, category);
         }
 
         string value = _facts.Get(inst.claimedNation != null ? inst.claimedNation.id : null,
@@ -574,10 +625,11 @@ public sealed class CaseFactory
     /// <summary>
     /// The visitor's given name (no role suffix; records lookup key), unique
     /// within the day: premade name (a forced premade's is reserved before slot
-    /// 1) > the place's period names > generic subject (only when a place has
-    /// no names; the validator flags that).
+    /// 1) > a name of <paramref name="pool"/> (the claimed place's period names,
+    /// or a 2150 citizen's: the Future places' lists together) > generic
+    /// subject (only when the pool is empty; the validator flags that).
     /// </summary>
-    private string ResolveGivenName(LegendarySO legendary, bool forcedPremade, NationEraProfileSO place, int caseIndex1Based)
+    private string ResolveGivenName(LegendarySO legendary, bool forcedPremade, IReadOnlyList<string> pool, int caseIndex1Based)
     {
         if (legendary != null)
         {
@@ -587,7 +639,7 @@ public sealed class CaseFactory
             return legendary.displayName;
         }
 
-        string picked = _roster.Take(place != null ? place.AllNames : null, n => _rng.Range(0, n));
+        string picked = _roster.Take(pool, n => _rng.Range(0, n));
         if (picked != null)
             return picked;
 
@@ -596,18 +648,53 @@ public sealed class CaseFactory
         return fallback;
     }
 
-    /// <summary>A birth date within the place's birth-year range ("Unknown" when no place or birth years are authored).</summary>
-    private string GenerateBirthDate(NationEraProfileSO place)
+    /// <summary>A birth date within a birth-year range: a place's, or the present's for a 2150 citizen ("Unknown" when none is authored, both 0).</summary>
+    private string GenerateBirthDate(int yearMin, int yearMax)
     {
-        if (place == null || (place.birthYearMin == 0 && place.birthYearMax == 0))
+        if (yearMin == 0 && yearMax == 0)
             return "Unknown";
 
-        return BirthDates.Generate(place.birthYearMin, place.birthYearMax, _rng);
+        return BirthDates.Generate(yearMin, yearMax, _rng);
+    }
+
+    /// <summary>The Future place whose name list gave a 2150 citizen's name (CitizenNames.SourceOf): their family's country; null, with a warning, when no list holds it.</summary>
+    private NationEraProfileSO FamilyOf(string givenName)
+    {
+        int source = _citizenNames.SourceOf(givenName);
+        NationEraProfileSO family = source >= 0 ? _lib.GetProfileById(_citizenNames.Lists[source].Id) : null;
+        if (family == null)
+            Debug.LogWarning($"[CaseFactory] The 2150 citizen '{givenName}' is on no Future place's name list, so they have no family country (looks from the destination, no lineage). Check the Future places' names.");
+        return family;
     }
 
     /// <summary>
-    /// Builds the agency's citizen master record for a day's visitors: one
-    /// Displacement Registry entry each (traveller types §4.2), found by its
+    /// What the account maker needs for a citizen of <paramref name="status"/>
+    /// (explicit inputs, audit R3-025): their family country's past places as
+    /// lineages (in era order), every past place for their trips, and how many
+    /// of their blueprint's forms print a Valid Until.
+    /// </summary>
+    private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint) => new AccountRequest
+    {
+        Status = status,
+        Lineages = family != null && family.nation != null
+            ? _lib.Profiles.Where(p => p != null && p.nation == family.nation && p.era != null && !p.era.isFuture)
+                           .OrderBy(p => p.era.order)
+                           .Select(p => p.OriginLabel)
+                           .ToList()
+            : new List<string>(),
+        TripPlaces = _pastPlaces,
+        ExpiringForms = (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Count(t => t != null && Expires(t))
+    };
+
+    /// <summary>True when the form prints a Valid Until (an Expiry field).</summary>
+    private static bool Expires(DocumentTemplateSO template) =>
+        template.fieldSpecs != null && template.fieldSpecs.Any(s => s != null && s.category == ClueCategory.Expiry);
+
+    /// <summary>
+    /// Builds the agency's citizen master record for a day's visitors: a 2150
+    /// citizen's Citizen Account (AccountRecords.Record, traveller types §4.1:
+    /// the art's three groups, found by Citizen ID or name), or one
+    /// Displacement Registry entry (traveller types §4.2), found by its
     /// Displacement No. or name, a group of rows under UI string labels: Name,
     /// Displacement No., Born, Origin and Incident (evidence of their
     /// categories), Found, Status ("Awaiting return") and the clerk's Note (not
@@ -629,6 +716,12 @@ public sealed class CaseFactory
                 continue;
 
             string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.claimedNation, inst.claimedEra);
+            if (inst.account != null)
+            {
+                registry.Add(AccountRecords.Record(inst.visitorGivenName, inst.trueBirthDate, origin, inst.account, UiText.Get));
+                continue;
+            }
+
             string note = !inst.isLegendary ? UiText.Get("records.note.none")
                 : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
                 : UiText.Get("records.note.sealed");

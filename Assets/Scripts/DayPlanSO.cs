@@ -8,7 +8,7 @@ using UnityEngine;
 /// Owns:
 /// - Day identity (dayNumber)
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
-/// - Procedural generation knobs (blueprints, eras, the premade pool and chance)
+/// - Procedural generation knobs (the kinds' blueprints and weights, eras, the premade pool and chance)
 /// - Where today's liars may leak tells (tell count and tell channels)
 /// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
 /// - Event rules (fixed or random placement, including "random but after N cases")
@@ -34,8 +34,8 @@ public sealed class DayPlanSO : ScriptableObject
     // Procedural generation
     // -----------------------------
 
-    /// <summary>Blueprints available for procedural cases.</summary>
-    [SerializeField] private CaseBlueprintSO[] possibleBlueprints;
+    /// <summary>The day's traveller mix (traveller types K1): each kind's blueprint and weight, one weighted draw on the case stream (written by Generate World from days[].kinds).</summary>
+    [SerializeField] private KindWeight[] kinds;
 
     /// <summary>Weighted set of eras to pick the claimed (home) era from (optional).</summary>
     [SerializeField] private EraWeight[] eraWeights;
@@ -89,8 +89,19 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Public read-only number of visitors/cases.</summary>
     public int VisitorsCount => visitorsCount;
 
-    /// <summary>Public read-only blueprint pool.</summary>
-    public IReadOnlyList<CaseBlueprintSO> PossibleBlueprints => possibleBlueprints;
+    /// <summary>The day's traveller mix: each kind's blueprint and weight, in authored order.</summary>
+    public IReadOnlyList<KindWeight> Kinds => kinds ?? Array.Empty<KindWeight>();
+
+    /// <summary>The blueprints the day's mix draws from (set entries only, in authored order).</summary>
+    public IEnumerable<CaseBlueprintSO> PossibleBlueprints
+    {
+        get
+        {
+            foreach (KindWeight k in Kinds)
+                if (k != null && k.blueprint != null)
+                    yield return k.blueprint;
+        }
+    }
 
     /// <summary>Public read-only era weights.</summary>
     public IReadOnlyList<EraWeight> EraWeights => eraWeights;
@@ -304,6 +315,20 @@ public sealed class ForcedCaseSlot
 
     /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
     public LegendarySO legendary;
+}
+
+/// <summary>
+/// One kind's share of a day's travellers (traveller types K1, days[].kinds):
+/// the kind's blueprint and its weight in the day's one blueprint draw.
+/// </summary>
+[Serializable]
+public sealed class KindWeight
+{
+    /// <summary>The kind's blueprint (CaseBlueprintSO.Kind names the kind).</summary>
+    public CaseBlueprintSO blueprint;
+
+    /// <summary>Relative weight among the day's kinds (higher = more likely; 0 = never).</summary>
+    [Min(0f)] public float weight = 1f;
 }
 
 /// <summary>

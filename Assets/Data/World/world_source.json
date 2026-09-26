@@ -975,7 +975,16 @@
   },
   "content": {
     "library": "Assets/Data/Content Library/ContentLibrary_Main.asset",
-    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset",
+    "blueprints": [
+      {
+        "kind": "RichTourist",
+        "asset": "Assets/Data/Investigation/CaseBlueprint_RichTourist.asset"
+      },
+      {
+        "kind": "Displaced",
+        "asset": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset"
+      }
+    ],
     "dayPlanFolder": "Assets/Data/Investigation",
     "attributes": [
       {
@@ -1016,7 +1025,79 @@
       "foundWithinDays": 30,
       "validDaysMin": 3,
       "validDaysMax": 365
-    }
+    },
+    "accounts": {
+      "validDaysMin": 3,
+      "validDaysMax": 365,
+      "tripsWithinDays": 1095,
+      "statuses": [
+        {
+          "status": "Premium",
+          "debtMin": 0,
+          "debtMax": 0,
+          "tripsMin": 0,
+          "tripsMax": 3
+        },
+        {
+          "status": "Standard",
+          "debtMin": 0,
+          "debtMax": 18000,
+          "tripsMin": 0,
+          "tripsMax": 3
+        },
+        {
+          "status": "Eligible",
+          "debtMin": 40000,
+          "debtMax": 320000,
+          "tripsMin": 0,
+          "tripsMax": 2
+        }
+      ]
+    },
+    "transponders": [
+      {
+        "id": "hopper2",
+        "transponderClass": "Premium",
+        "model": "Hopper Mk II",
+        "prefix": "HP",
+        "weight": 3
+      },
+      {
+        "id": "aurelian9",
+        "transponderClass": "Premium",
+        "model": "Aurelian 9",
+        "prefix": "AU",
+        "weight": 2
+      },
+      {
+        "id": "chronoselite",
+        "transponderClass": "Premium",
+        "model": "Chronos Elite",
+        "prefix": "CE",
+        "weight": 1
+      },
+      {
+        "id": "ticktock",
+        "transponderClass": "Economy",
+        "model": "Tick-Tock Basic",
+        "prefix": "TT",
+        "weight": 3
+      },
+      {
+        "id": "skiplite",
+        "transponderClass": "Economy",
+        "model": "Skip Lite",
+        "prefix": "SL",
+        "weight": 2
+      },
+      {
+        "id": "driftbox3",
+        "transponderClass": "Economy",
+        "model": "Driftbox 3",
+        "prefix": "DB",
+        "weight": 1
+      }
+    ]
   },
   "eras": [
     {
@@ -6367,6 +6448,54 @@
       }
     }
   ],
+  "present": {
+    "displayName": "Temporal Customs Zone",
+    "year": 2150,
+    "facts": [
+      {
+        "category": "Currency",
+        "value": "Credits"
+      },
+      {
+        "category": "Language",
+        "value": "Agency Standard English"
+      },
+      {
+        "category": "Technology",
+        "value": "Wrist comm"
+      },
+      {
+        "category": "Geography",
+        "value": "Directorate Tower"
+      },
+      {
+        "category": "Politics",
+        "value": "The Customs Directorate"
+      }
+    ],
+    "wardrobe": {
+      "m": {
+        "signature": "Outfit",
+        "outfit": {
+          "label": "tech jacket"
+        },
+        "hair": {
+          "label": "short textured crop",
+          "artNation": "neutral"
+        }
+      },
+      "f": {
+        "signature": "Outfit",
+        "outfit": {
+          "label": "coat-dress"
+        },
+        "hair": {
+          "label": "sleek low bun",
+          "artNation": "neutral"
+        }
+      }
+    }
+  },
   "rules": [
     {
       "asset": "Rule_NoAncientEgypt",
@@ -6420,6 +6549,16 @@
       "channels": [
         "Papers"
       ],
+      "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 1
+        },
+        {
+          "kind": "Displaced",
+          "weight": 1
+        }
+      ],
       "eras": [
         {
           "era": "ancient",
@@ -6451,6 +6590,12 @@
       "channels": [
         "Papers",
         "Answer"
+      ],
+      "kinds": [
+        {
+          "kind": "Displaced",
+          "weight": 1
+        }
       ],
       "eras": [
         {
@@ -6498,6 +6643,12 @@
         "Answer",
         "Appearance"
       ],
+      "kinds": [
+        {
+          "kind": "Displaced",
+          "weight": 1
+        }
+      ],
       "eras": [
         {
           "era": "ancient",
@@ -6540,6 +6691,12 @@
         "Papers",
         "Answer",
         "Appearance"
+      ],
+      "kinds": [
+        {
+          "kind": "Displaced",
+          "weight": 1
+        }
       ],
       "eras": [
         {
@@ -6586,6 +6743,12 @@
         "Papers",
         "Answer",
         "Appearance"
+      ],
+      "kinds": [
+        {
+          "kind": "Displaced",
+          "weight": 1
+        }
       ],
       "eras": [
         {
@@ -6638,6 +6801,12 @@
         "Answer",
         "Appearance"
       ],
+      "kinds": [
+        {
+          "kind": "Displaced",
+          "weight": 1
+        }
+      ],
       "eras": [
         {
           "era": "ancient",
@@ -6688,6 +6857,10 @@
     "opener": "Next! Step forward, {honorific}.",
     "openerLegendary": "Priority arrival: {name}.",
     "claims": [
+      {
+        "kind": "RichTourist",
+        "text": "One leisure departure to {place}, please."
+      },
       {
         "kind": "Displaced",
         "text": "Please. Send me home to {place}."
@@ -9361,6 +9534,120 @@
         "tier": "Full"
       },
       {
+        "key": "records.group.account",
+        "text": "RECORDS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.group.forms",
+        "text": "FORMS ON FILE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.group.travel",
+        "text": "TRAVEL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.citizenId",
+        "text": "Citizen ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.standing",
+        "text": "Standing",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.debt",
+        "text": "Debt",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.lineage",
+        "text": "Lineage",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.transponder",
+        "text": "Transponder",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.transponderClass",
+        "text": "Transponder Class",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.waiver",
+        "text": "Stranding Waiver",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.proof",
+        "text": "Proof of means",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.contract",
+        "text": "Labour Contract",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.departure",
+        "text": "Booked departure",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.departureDate",
+        "text": "Departure date",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.trips",
+        "text": "Past trips",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.trip",
+        "text": "Past trip",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.standing.good",
+        "text": "Good",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.none",
+        "text": "None on file",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.trip.returned",
+        "text": "returned",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "case.roleUnknown",
         "text": "Traveler",
         "gloss": "None",
@@ -9657,6 +9944,30 @@
       {
         "key": "category.Expiry",
         "text": "VALID UNTIL",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.AccountStatus",
+        "text": "VISA CLASS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.TransponderId",
+        "text": "TRANSPONDER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.TransponderClass",
+        "text": "TRANSPONDER CLASS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Debt",
+        "text": "DEBT",
         "gloss": "None",
         "tier": "Full"
       }

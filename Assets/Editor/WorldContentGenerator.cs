@@ -73,6 +73,8 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckAgency(src, errors);
+        CheckDayKinds(src, authored, errors);
+        CheckPresent(src, errors);
         PcContent pc = CheckPc(src, errors);
         if (errors.Count > 0)
         {
@@ -114,10 +116,7 @@ public static partial class WorldContentGenerator
             .ToArray();
         var premadesById = premades.ToDictionary(m => m.id);
 
-        var soBlueprint = new SerializedObject(authored.blueprint);
-        SerializedArrays.Set(soBlueprint, "archetypePool", authored.archetypes);
-        soBlueprint.ApplyModifiedProperties();
-        EditorUtility.SetDirty(authored.blueprint);
+        WireBlueprints(authored);
 
         DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById)).ToArray();
 
@@ -146,6 +145,7 @@ public static partial class WorldContentGenerator
                     historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
+        WirePresent(authored.library, src);
         WritePc(authored.library, pc);
 
         int pruned = PruneOwnedFolders(written);
@@ -165,7 +165,7 @@ public static partial class WorldContentGenerator
     private sealed class Authored
     {
         public ContentLibrarySO library;
-        public CaseBlueprintSO blueprint;
+        public Dictionary<TravellerKind, CaseBlueprintSO> blueprints = new Dictionary<TravellerKind, CaseBlueprintSO>();
         public Dictionary<string, AttributeSO> attributes = new Dictionary<string, AttributeSO>();
         public ArchetypeSO[] archetypes;
         public ReferenceBookSO[] books;
@@ -177,12 +177,12 @@ public static partial class WorldContentGenerator
         var a = new Authored();
         if (content == null)
         {
-            errors.Add($"'{SourcePath}' has no \"content\" section (library, blueprint, dayPlanFolder, attributes, archetypes, books).");
+            errors.Add($"'{SourcePath}' has no \"content\" section (library, blueprints, dayPlanFolder, attributes, archetypes, books).");
             return a;
         }
 
         a.library = Require<ContentLibrarySO>(content.library, "content library", errors);
-        a.blueprint = Require<CaseBlueprintSO>(content.blueprint, "case blueprint", errors);
+        LoadBlueprints(content, a, errors);
         if (!AssetDatabase.IsValidFolder(content.dayPlanFolder ?? string.Empty))
             errors.Add($"Day plan folder '{content.dayPlanFolder}' does not exist.");
 
@@ -785,12 +785,10 @@ public static partial class WorldContentGenerator
         return templates;
     }
 
-    /// <summary>The wired blueprint and every day's forced blueprints (non-null).</summary>
+    /// <summary>Each kind's wired blueprint and every day's forced blueprints (non-null).</summary>
     private static List<CaseBlueprintSO> Blueprints(Authored authored)
     {
-        var blueprints = new List<CaseBlueprintSO>();
-        if (authored.blueprint != null)
-            blueprints.Add(authored.blueprint);
+        var blueprints = new List<CaseBlueprintSO>(authored.blueprints.Values);
         blueprints.AddRange(authored.forcedBlueprints.Values);
         return blueprints;
     }
@@ -1375,7 +1373,7 @@ public static partial class WorldContentGenerator
         tellChannels.arraySize = channels.Length;
         for (int i = 0; i < channels.Length; i++)
             tellChannels.GetArrayElementAtIndex(i).enumValueIndex = (int)(TellChannel)Enum.Parse(typeof(TellChannel), channels[i]);
-        SerializedArrays.Set(so, "possibleBlueprints", new Object[] { authored.blueprint });
+        WriteKinds(so, d, authored);
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
         SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
@@ -1732,6 +1730,7 @@ public static partial class WorldContentGenerator
         public int travellerAgeMax = 70;
         public LooksData looks;
         public ContentData content;
+        public PresentData present;
         public EraData[] eras;
         public CountryData[] countries;
         public PlaceData[] places;
@@ -1810,7 +1809,8 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class ContentData
     {
         public string library;
-        public string blueprint;
+        /// <summary>Each traveller kind's case blueprint (asset path).</summary>
+        public KindBlueprintData[] blueprints;
         public string dayPlanFolder;
         public AttributeData[] attributes;
         public string[] archetypes;
@@ -1858,6 +1858,8 @@ public static partial class WorldContentGenerator
         public int tells;
         /// <summary>Where this day's tells may show ("Papers", "Answer").</summary>
         public string[] channels;
+        /// <summary>The day's traveller mix: each kind's weight (traveller types K1).</summary>
+        public KindWeightData[] kinds;
         public EraWeightData[] eras;
         public string[] countries;
         public string[] rules;
