@@ -100,6 +100,9 @@ public sealed class CitizenRegistry
 {
     private readonly List<CitizenRecord> _records = new();
 
+    /// <summary>The records on file, in the order added.</summary>
+    public IReadOnlyList<CitizenRecord> Records => _records;
+
     /// <summary>Adds a record (ignored when null or unnamed).</summary>
     public void Add(CitizenRecord record)
     {
