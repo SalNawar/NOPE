@@ -5,7 +5,9 @@ using UnityEngine;
 
 /// <summary>
 /// JSON save/load for WorldState. One save slot for Alpha.
-/// File lives at Application.persistentDataPath/nope_save.json. A save is
+/// File lives at Folder/nope_save.json (SaveLocation: persistentDataPath in a
+/// player, the project's Library/EditorSaves in the editor, so each worktree's
+/// editor keeps its own save). A save is
 /// written whole to a temp file first, then swapped in atomically
 /// (File.Replace, the old save kept as a backup); a load that finds the save
 /// missing or unreadable recovers the run from the temp file or the backup
@@ -33,8 +35,11 @@ public static class SaveSystem
     /// <summary>Added to the save's path for the backup the replace keeps.</summary>
     private const string BackupSuffix = ".bak";
 
+    /// <summary>The save slot's folder (SaveLocation): Application.persistentDataPath in a player; in the editor the project's Library/EditorSaves, so parallel plays in several worktrees' editors never overwrite one another's save. Tools that set the slot aside keep their copies here too.</summary>
+    public static string Folder => SaveLocation.Folder(Application.isEditor, Application.dataPath, Application.persistentDataPath);
+
     /// <summary>Full save file path.</summary>
-    public static string SavePath => Path.Combine(Application.persistentDataPath, FileName);
+    public static string SavePath => Path.Combine(Folder, FileName);
 
     /// <summary>The file a save is written to before it replaces the save.</summary>
     private static string TempPath => SavePath + TempSuffix;
@@ -125,6 +130,7 @@ public static class SaveSystem
             var file = new SaveFile { version = SaveVersion, world = world };
             string json = JsonUtility.ToJson(file, prettyPrint: true);
 
+            Directory.CreateDirectory(Folder);
             File.WriteAllText(TempPath, json);
             Commit();
 

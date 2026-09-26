@@ -4,8 +4,9 @@ using UnityEngine;
 /// The PC desktop's layout and timing knobs (the PC redesign section 4.9;
 /// DeskConfigSO stays the physical desk): the taskbar and the compare dock
 /// under the icon area, the windows' title bars, the taskbar's window
-/// buttons, the double-click, and the Internet's caps (the news back issues,
-/// the browser's history). Created and assigned by Tools > TimeDesk >
+/// buttons, the double-click, the Internet's caps (the news back issues,
+/// the browser's history), the app windows' sizes and the Notes limits.
+/// Created and assigned by Tools > TimeDesk >
 /// Build Office UI (Assets/Data/Config/Desktop_Default.asset). The builder
 /// reads the sizes (re-run it after changing one); DesktopWindowManager
 /// reads the maximise area and the double-click at runtime.
@@ -50,6 +51,29 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The pages the browser's Back can return through.</summary>
     [Min(1)] public int browserHistory = 30;
+
+    [Header("App windows (redesign phase 25; restored sizes, desktop units)")]
+    /// <summary>The Mail window's size.</summary>
+    public Vector2 mailWindowSize = new Vector2(920f, 720f);
+
+    /// <summary>The Citizen Account window's size.</summary>
+    public Vector2 accountWindowSize = new Vector2(720f, 780f);
+
+    /// <summary>The Notes window's size.</summary>
+    public Vector2 notesWindowSize = new Vector2(780f, 720f);
+
+    /// <summary>The Settings window's size.</summary>
+    public Vector2 settingsWindowSize = new Vector2(640f, 720f);
+
+    [Header("Notes (redesign phase 25)")]
+    /// <summary>The most day pages Notes keeps (WorldState.notes); the oldest go first.</summary>
+    [Min(1)] public int notesDaysKept = 30;
+
+    /// <summary>The most characters a page's typed notes hold.</summary>
+    [Min(1)] public int notesMaxChars = 2000;
+
+    /// <summary>The most clippings a page holds.</summary>
+    [Min(1)] public int notesMaxClippings = 40;
 
     /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar and the dock (the icon area starts there).</summary>
     public float MaximisedBottom => taskbarHeight + dockHeight;

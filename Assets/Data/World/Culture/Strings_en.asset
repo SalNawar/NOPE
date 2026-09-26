@@ -240,7 +240,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: window.notes
-    text: Sticky Notes
+    text: Notes
     gloss: 0
     tier: 0
   - key: body.lexicon
@@ -253,10 +253,6 @@ MonoBehaviour:
     tier: 0
   - key: body.material
     text: Flags tech/materials beyond the claimed era. (upgrade)
-    gloss: 0
-    tier: 0
-  - key: body.notes
-    text: Your notes. (placeholder)
     gloss: 0
     tier: 0
   - key: browser.back
@@ -570,6 +566,354 @@ MonoBehaviour:
     text: Colours, fonts and the wallpaper always follow history. A language change
       applies the next time the office opens. Reduced motion shows translations at
       once.
+    gloss: 0
+    tier: 0
+  - key: startmenu.mail
+    text: Mail
+    gloss: 0
+    tier: 0
+  - key: startmenu.mailUnread
+    text: Mail ({0})
+    gloss: 0
+    tier: 0
+  - key: startmenu.account
+    text: Citizen Account
+    gloss: 0
+    tier: 0
+  - key: startmenu.notes
+    text: Notes
+    gloss: 0
+    tier: 0
+  - key: window.mail
+    text: Mail
+    gloss: 0
+    tier: 0
+  - key: window.mailUnread
+    text: Mail ({0} unread)
+    gloss: 0
+    tier: 0
+  - key: window.account
+    text: Citizen Account
+    gloss: 0
+    tier: 0
+  - key: window.shortcuts
+    text: Keyboard shortcuts
+    gloss: 0
+    tier: 0
+  - key: settings.keyboard
+    text: Keyboard
+    gloss: 0
+    tier: 0
+  - key: settings.showShortcuts
+    text: Show shortcuts
+    gloss: 0
+    tier: 0
+  - key: keys.card
+    text: 'Esc: leave a text field, close the Start menu or cancel a window drag;
+      with none of those, it leaves the PC.
+
+      Double-click a title bar: maximise
+      or restore the window.'
+    gloss: 0
+    tier: 0
+  - key: mail.inbox
+    text: INBOX
+    gloss: 0
+    tier: 0
+  - key: mail.none
+    text: No mail.
+    gloss: 0
+    tier: 0
+  - key: mail.select
+    text: Select a message to read it.
+    gloss: 0
+    tier: 0
+  - key: mail.unreadRow
+    text: "\u2022 {0}"
+    gloss: 0
+    tier: 0
+  - key: mail.rowMeta
+    text: "Day {0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: mail.form.title
+    text: INTERNAL MEMORANDUM
+    gloss: 0
+    tier: 0
+  - key: mail.form.to
+    text: TO
+    gloss: 0
+    tier: 0
+  - key: mail.form.from
+    text: FROM
+    gloss: 0
+    tier: 0
+  - key: mail.form.date
+    text: DATE
+    gloss: 0
+    tier: 0
+  - key: mail.form.ref
+    text: REF
+    gloss: 0
+    tier: 0
+  - key: mail.form.subject
+    text: SUBJECT
+    gloss: 0
+    tier: 0
+  - key: mail.to
+    text: All desk officers
+    gloss: 0
+    tier: 0
+  - key: mail.from.directorate
+    text: Customs Directorate
+    gloss: 0
+    tier: 0
+  - key: mail.from.times
+    text: The Temporal Times
+    gloss: 0
+    tier: 0
+  - key: mail.from.integrity
+    text: Timeline Integrity Office
+    gloss: 0
+    tier: 0
+  - key: mail.subject.memo
+    text: Today's directives
+    gloss: 0
+    tier: 0
+  - key: mail.subject.times
+    text: The Temporal Times, day {0}
+    gloss: 0
+    tier: 0
+  - key: mail.subject.citation
+    text: 'Citation notice: traveller {0}'
+    gloss: 0
+    tier: 0
+  - key: mail.body.noDirectives
+    text: No travel directives today.
+    gloss: 0
+    tier: 0
+  - key: mail.body.times
+    text: Today's edition is on the News site.
+    gloss: 0
+    tier: 0
+  - key: mail.body.timesArchived
+    text: This edition is kept in the News site's archive.
+    gloss: 0
+    tier: 0
+  - key: mail.body.citation
+    text: 'A copy of the citation slip you acknowledged:'
+    gloss: 0
+    tier: 0
+  - key: mail.link.rules
+    text: Open the directives >
+    gloss: 0
+    tier: 0
+  - key: mail.link.news
+    text: Read it on the News site >
+    gloss: 0
+    tier: 0
+  - key: mail.stamp
+    text: RECEIVED
+    gloss: 0
+    tier: 0
+  - key: account.form.title
+    text: CITIZEN RECORD EXTRACT
+    gloss: 0
+    tier: 0
+  - key: account.query
+    text: "Account holder: {0} \xB7 Citizen ID {1}"
+    gloss: 0
+    tier: 0
+  - key: account.group.records
+    text: RECORDS
+    gloss: 0
+    tier: 0
+  - key: account.group.forms
+    text: FORMS ON FILE
+    gloss: 0
+    tier: 0
+  - key: account.group.travel
+    text: TRAVEL
+    gloss: 0
+    tier: 0
+  - key: account.row.name
+    text: Name
+    gloss: 0
+    tier: 0
+  - key: account.row.born
+    text: Born
+    gloss: 0
+    tier: 0
+  - key: account.row.lineage
+    text: Lineage
+    gloss: 0
+    tier: 0
+  - key: account.row.citizenId
+    text: Citizen ID
+    gloss: 0
+    tier: 0
+  - key: account.row.status
+    text: Status
+    gloss: 0
+    tier: 0
+  - key: account.row.standing
+    text: Standing
+    gloss: 0
+    tier: 0
+  - key: account.row.debt
+    text: Debt
+    gloss: 0
+    tier: 0
+  - key: account.row.balance
+    text: Balance
+    gloss: 0
+    tier: 0
+  - key: account.row.employment
+    text: Employment
+    gloss: 0
+    tier: 0
+  - key: account.row.departure
+    text: Booked departure
+    gloss: 0
+    tier: 0
+  - key: account.row.note
+    text: Note
+    gloss: 0
+    tier: 0
+  - key: account.status.eligible
+    text: Eligible
+    gloss: 0
+    tier: 0
+  - key: account.status.standard
+    text: Standard
+    gloss: 0
+    tier: 0
+  - key: account.standing.good
+    text: Good
+    gloss: 0
+    tier: 0
+  - key: account.standing.frozen
+    text: Frozen
+    gloss: 0
+    tier: 0
+  - key: account.departure.none
+    text: None
+    gloss: 0
+    tier: 0
+  - key: account.departure.booked
+    text: Debt Relief departure, booked
+    gloss: 0
+    tier: 0
+  - key: account.instalmentRate
+    text: '{0}% of pay to Debt Relief'
+    gloss: 0
+    tier: 0
+  - key: account.unknown
+    text: "\u2013"
+    gloss: 0
+    tier: 0
+  - key: account.statement.title
+    text: STATEMENT OF ACCOUNT
+    gloss: 0
+    tier: 0
+  - key: account.col.day
+    text: DAY
+    gloss: 0
+    tier: 0
+  - key: account.col.wages
+    text: WAGES
+    gloss: 0
+    tier: 0
+  - key: account.col.fines
+    text: FINES
+    gloss: 0
+    tier: 0
+  - key: account.col.debtRelief
+    text: DEBT RELIEF
+    gloss: 0
+    tier: 0
+  - key: account.col.household
+    text: HOUSEHOLD
+    gloss: 0
+    tier: 0
+  - key: account.col.purchases
+    text: PURCHASES
+    gloss: 0
+    tier: 0
+  - key: account.col.balance
+    text: BALANCE
+    gloss: 0
+    tier: 0
+  - key: account.col.owed
+    text: OWED
+    gloss: 0
+    tier: 0
+  - key: account.statement.none
+    text: 'No entries yet: a day is written when its shift ends.'
+    gloss: 0
+    tier: 0
+  - key: account.statement.unit
+    text: Amounts in {0}.
+    gloss: 0
+    tier: 0
+  - key: account.finePrint
+    text: Departures are voluntary.
+    gloss: 0
+    tier: 0
+  - key: notes.days
+    text: DAYS
+    gloss: 0
+    tier: 0
+  - key: notes.day
+    text: Day {0}
+    gloss: 0
+    tier: 0
+  - key: notes.today
+    text: Day {0} (today)
+    gloss: 0
+    tier: 0
+  - key: notes.pageTitle
+    text: "NOTES \xB7 DAY {0}"
+    gloss: 0
+    tier: 0
+  - key: notes.clippings
+    text: CLIPPINGS
+    gloss: 0
+    tier: 0
+  - key: notes.notes
+    text: NOTES
+    gloss: 0
+    tier: 0
+  - key: notes.counter
+    text: '{0} / {1}'
+    gloss: 0
+    tier: 0
+  - key: notes.hint
+    text: Nothing here yet. Copy a text, then Paste clipping; or type below.
+    gloss: 0
+    tier: 0
+  - key: notes.paste
+    text: Paste clipping
+    gloss: 0
+    tier: 0
+  - key: notes.pasted
+    text: Pasted
+    gloss: 0
+    tier: 0
+  - key: notes.remove
+    text: X
+    gloss: 0
+    tier: 0
+  - key: notes.placeholder
+    text: Type your notes here...
+    gloss: 0
+    tier: 0
+  - key: notes.loose
+    text: Other clippings
+    gloss: 0
+    tier: 0
+  - key: notes.full
+    text: 'This page holds {0} clippings: remove one to paste another.'
     gloss: 0
     tier: 0
   - key: briefing.empty

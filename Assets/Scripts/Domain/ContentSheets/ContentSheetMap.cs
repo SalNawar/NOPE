@@ -31,7 +31,13 @@ public static class ContentSheetMap
                 Text("firstDate").Note("the desk calendar's date on day 1"),
                 Int("displaced.foundWithinDays").Note("a displaced person was found 1 to this many days before today"),
                 Int("displaced.validDaysMin").Note("the fewest days after today a Displacement Certificate is valid"),
-                Int("displaced.validDaysMax").Note("the most days after today a Displacement Certificate is valid")),
+                Int("displaced.validDaysMax").Note("the most days after today a Displacement Certificate is valid"),
+                Text("clerk.citizenId").Note("the clerk's own Citizen Account (the Citizen Account app)"),
+                Text("clerk.name"),
+                Text("clerk.born"),
+                Text("clerk.lineage"),
+                Text("clerk.employment"),
+                Text("clerk.note")),
             Rows("eras", "eras", Key("id", "era"),
                 Text("id").Required(),
                 Text("displayName"),
@@ -244,7 +250,7 @@ public static class ContentSheetMap
                     Text("category"),
                     Text("value"))).Note("history rules: when their conditions pass at night they rewrite a place's fact"));
 
-    /// <summary>The PC block: the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations.</summary>
+    /// <summary>The PC block: the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
     private static SheetSpec Pc() =>
         Single("pc", "pc",
             Rows("pcSites", "sites", Key("id", "site"),
@@ -275,7 +281,15 @@ public static class ContentSheetMap
             Rows("pcRelations", "ancestry.relations",
                 Text("person").Required().Note("a person's or a premade's id: the card it shows on"),
                 Text("kind"),
-                Text("other").Required().Note("the other card's id")).Note("one direction per row"));
+                Text("other").Required().Note("the other card's id")).Note("one direction per row"),
+            Rows("pcMail", "mail", Key("id", "mail"),
+                Text("id").Required(),
+                Int("fromDay").Note("the day it arrives (its date)"),
+                Int("untilDay").Note("the last day it is in the inbox; 0 keeps it for the run"),
+                Text("flag").Note("a story flag it waits for (blank: none)"),
+                Text("from"),
+                Text("subject"),
+                Values("pcMailBody", "body", Text("text")).Note("its paragraphs")).Note("Mail's authored messages"));
 
     private static SheetSpec Ui() =>
         Single("ui", "ui",
