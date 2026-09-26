@@ -24,8 +24,8 @@ public sealed class MailWindow : MonoBehaviour
     /// <summary>The Internet app's browser (the News link goes to the message's issue on the News site).</summary>
     [SerializeField] private BrowserWindow browser;
 
-    /// <summary>The window the Rules link opens (the Directives window; the Investigation app's Rules tab from phase 16).</summary>
-    [SerializeField] private DesktopWindow rulesWindow;
+    /// <summary>The Investigation app: the Rules link opens it on its Rules tab.</summary>
+    [SerializeField] private InvestigationApp investigation;
 
     /// <summary>The inbox list's content (rows are cloned into it).</summary>
     [SerializeField] private RectTransform listRoot;
@@ -180,7 +180,7 @@ public sealed class MailWindow : MonoBehaviour
         }
     }
 
-    /// <summary>Follows the open message's link: the Rules (the Directives window), or the News site's issue of the message's day (the Internet app).</summary>
+    /// <summary>Follows the open message's link: the Rules (the Investigation app's Rules tab), or the News site's issue of the message's day (the Internet app).</summary>
     private void FollowLink()
     {
         MailItem open = null;
@@ -191,8 +191,8 @@ public sealed class MailWindow : MonoBehaviour
         if (open == null)
             return;
 
-        if (open.Link == MailLink.Rules && rulesWindow != null)
-            rulesWindow.Open();
+        if (open.Link == MailLink.Rules && investigation != null)
+            investigation.ShowTab(AppTab.Rules);
         else if (open.Link == MailLink.News && apps != null)
         {
             apps.OpenApp("internet");

@@ -3,18 +3,20 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// A paper's scanned copy on the PC (redesign phase 5, PC spec §2.4, FO1): a
-/// window on the scanner's dark backing, the strip along its top ("SCANNED
-/// 10:42 · DESK SCANNER 1", the shift clock's time when the copy arrived), and
-/// the paper's form drawn by a FormView from the same DocumentForm the desk
-/// paper prints, so the copy is the paper: its pages stacked in a scroll. A
+/// A paper's scanned copy on the PC (redesign phase 5, PC spec §2.4, FO1):
+/// the Investigation app's Documents tab clones this page per paper
+/// (DocumentsView). On the scanner's dark backing it shows the document's
+/// name, the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
+/// when the copy arrived), and the paper's form drawn by a FormView from the
+/// same DocumentForm the desk paper prints, so the copy is the paper: its
+/// pages stacked in a scroll. A
 /// click on a box picks the field for the compare (EvidencePicks.ForField,
 /// the same pick as the held paper's box) and the box under the pointer tints.
 /// Every value shows in English, as filled (TR1).
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
-    /// <summary>The window's title: the document's name.</summary>
+    /// <summary>The document's name over the copy.</summary>
     [SerializeField] private TMP_Text titleText;
 
     /// <summary>The strip on the backing above the copy.</summary>

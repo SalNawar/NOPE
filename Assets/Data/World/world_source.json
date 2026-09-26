@@ -1023,7 +1023,12 @@
       "born": "9 Feb 2121",
       "lineage": "Victorian Britain",
       "employment": "Temporal Customs · Desk 3",
-      "note": "No remarks on file."
+      "note": "No remarks on file.",
+      "startDebt": 125430,
+      "garnishShare": 0.25,
+      "reliefEmployer": "Tyburn Mills Consortium",
+      "reliefWorksite": "Victorian Britain",
+      "reliefWage": 420
     }
   },
   "eras": [
@@ -7309,6 +7314,15 @@
       }
     ]
   },
+  "news": {
+    "debt": [
+      "Debt Relief Departures reach a record high.",
+      "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
+      "12,000 accounts frozen in default.",
+      "Premium families book Periclean Athens for the summer.",
+      "A stranded tourist's family inherits 212,000 cr."
+    ]
+  },
   "pc": {
     "sites": [
       {
@@ -8383,12 +8397,6 @@
         "tier": "Flavour"
       },
       {
-        "key": "records.title",
-        "text": "Citizen Records",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "records.search",
         "text": "SEARCH",
         "gloss": "Below",
@@ -8419,40 +8427,10 @@
         "tier": "Flavour"
       },
       {
-        "key": "window.directives",
-        "text": "Directives",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.scanner",
-        "text": "Deviation Report",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.settings",
         "text": "Settings",
         "gloss": "None",
         "tier": "Flavour"
-      },
-      {
-        "key": "icon.directives",
-        "text": "Directives",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "icon.scanner",
-        "text": "Deviation Report",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "icon.records",
-        "text": "Records",
-        "gloss": "None",
-        "tier": "Full"
       },
       {
         "key": "icon.internet",
@@ -8489,12 +8467,6 @@
         "text": "Settings",
         "gloss": "None",
         "tier": "Flavour"
-      },
-      {
-        "key": "icon.clueLog",
-        "text": "Clue Log",
-        "gloss": "None",
-        "tier": "Full"
       },
       {
         "key": "tray.day",
@@ -8599,6 +8571,162 @@
         "tier": "Full"
       },
       {
+        "key": "app.title",
+        "text": "Investigation",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.titleCase",
+        "text": "Investigation · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.counters",
+        "text": "Papers {0} of {1} received · {2} scanned · Deviations {3}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.documents",
+        "text": "Documents",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.records",
+        "text": "Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.reference",
+        "text": "Reference",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.transcript",
+        "text": "Transcript",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.report",
+        "text": "Report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.tab.rules",
+        "text": "Rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.chip.onDesk",
+        "text": "{0}: on the desk",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.chip.notHandedOver",
+        "text": "{0}: not handed over",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.doc.none",
+        "text": "The papers the traveller hands over show here once they are scanned.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.doc.scanHint",
+        "text": "On the desk: scan it to read it here.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.doc.askHint",
+        "text": "Not handed over: ask the traveller for it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.ref.claimedOnly",
+        "text": "Claimed place only",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.search",
+        "text": "Search this case and today's records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toolbar.steps",
+        "text": "Steps",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toolbar.split",
+        "text": "Split",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toolbar.keys",
+        "text": "F1 Keys",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.steps",
+        "text": "STEPS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.pinned",
+        "text": "PINNED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.recent",
+        "text": "RECENT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.sidebar.empty",
+        "text": "Nothing here yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toast.scanned",
+        "text": "{0} scanned",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.toast.open",
+        "text": "Open",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "book.claimedLabel",
+        "text": "{0} (claimed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "window.minimize",
         "text": "_",
         "gloss": "None",
@@ -8635,12 +8763,6 @@
         "tier": "Full"
       },
       {
-        "key": "window.transcript",
-        "text": "Case Notes: Interview",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.internet",
         "text": "Internet",
         "gloss": "None",
@@ -8649,12 +8771,6 @@
       {
         "key": "window.notes",
         "text": "Notes",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.investigation",
-        "text": "Investigation",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9589,6 +9705,54 @@
         "tier": "Full"
       },
       {
+        "key": "contract.title",
+        "text": "DEBT RELIEF LABOUR CONTRACT · TC-520",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.worker",
+        "text": "Worker",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.citizenId",
+        "text": "Citizen ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.employer",
+        "text": "Employer",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.worksite",
+        "text": "Worksite",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.term",
+        "text": "Term",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.wage",
+        "text": "Day Wage",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.term",
+        "text": "{0:N0} days",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "notes.days",
         "text": "DAYS",
         "gloss": "None",
@@ -9705,6 +9869,12 @@
       {
         "key": "results.penalties",
         "text": "Citation penalties: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.debtRelief",
+        "text": "Debt Relief instalment: -{0}   (still owed: {1:N0} {2})",
         "gloss": "None",
         "tier": "Full"
       },

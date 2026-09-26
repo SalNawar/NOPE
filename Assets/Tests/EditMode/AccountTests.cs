@@ -13,7 +13,7 @@ public class AccountTests
     /// <summary>A stand-in for the engine's source.</summary>
     private sealed class Source : IClerkAccountSource
     {
-        public ClerkContent Profile { get; set; } = new ClerkContent { citizenId = "773-2840-19", name = "Clerk", born = "9 Feb 2121", lineage = "Victorian Britain", employment = "Temporal Customs · Desk 3", note = "No remarks on file." };
+        public ClerkContent Profile { get; set; } = new ClerkContent { citizenId = "773-2840-19", name = "Clerk", born = "9 Feb 2121", lineage = "Victorian Britain", employment = "Temporal Customs · Desk 3", note = "No remarks on file.", startDebt = 125430, garnishShare = 0.25f, reliefEmployer = "Tyburn Mills Consortium", reliefWorksite = "Victorian Britain", reliefWage = 420 };
         public int Balance { get; set; }
         public ClerkDebtState Debt { get; set; } = ClerkDebtState.Unknown;
         public int ShiftInstalment { get; set; } = Account.Unknown;
@@ -173,7 +173,7 @@ public class AccountTests
     {
         CollectionAssert.IsEmpty(new Source().Profile.Problems());
         List<string> problems = new ClerkContent().Problems();
-        Assert.AreEqual(3, problems.Count);
+        Assert.AreEqual(6, problems.Count, "the id, name and employment, and the Debt Relief contract's employer, worksite and wage (phase 13)");
         Assert.IsTrue(problems[0].Contains("citizenId"));
     }
 }
