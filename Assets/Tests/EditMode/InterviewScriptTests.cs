@@ -8,13 +8,16 @@ using NUnit.Framework;
 /// Travel Passport and a Transit Permit (both handed over on request unless a
 /// test says otherwise), answers Currency honestly ("Deben")
 /// and Geography with an Answer tell ("Babylon"), has no Politics answer, and
-/// has a small-talk line. The rumour dialog is shaped like dlg_rumour.
+/// has a small-talk line. The rumour dialog is shaped like dlg_rumour. With a
+/// key-word rule, each traveller line carries the spans that stay English
+/// when it shows untranslated (the traveller-types spec's §8.1).
 /// </summary>
 public class InterviewScriptTests
 {
     private static InterviewLines Lines() => new InterviewLines
     {
         deskName = "DESK",
+        claim = new LineText("interview.claim", "I request passage home to {place}."),
         requestLabel = "Request {document}",
         requestPrompt = new LineText("interview.requestPrompt", "Your {document}, please."),
         requestReply = new LineText("interview.requestReply", "Here you are."),
@@ -55,10 +58,19 @@ public class InterviewScriptTests
     private static CaseDocument Doc(string name, DocumentHandOver handOver = DocumentHandOver.OnRequest) =>
         new CaseDocument { name = name, handOver = handOver };
 
-    private static InterviewCase Case(bool smallTalk = true, string intro = "Next! Step forward, sir.", CaseDocument[] documents = null) => new InterviewCase
+    /// <summary>The key-word rule as world_source.json authors it (translation.keyWords).</summary>
+    private static KeyWordRule KeyWordRule() => new KeyWordRule
+    {
+        slots = { "place", "name", "document" },
+        words = { "home", "please", "papers", "yes", "no", "Temporal Customs" },
+        digits = true
+    };
+
+    private static InterviewCase Case(bool smallTalk = true, string intro = "Next! Step forward, sir.", CaseDocument[] documents = null, KeyWordRule keyWords = null) => new InterviewCase
     {
         introLine = intro,
-        claimLine = "I request passage home to New Kingdom Egypt (Ancient).",
+        claimPlace = "New Kingdom Egypt (Ancient)",
+        keyWords = keyWords,
         claimedEraId = "ancient",
         documents = documents ?? new[] { Doc("Travel Passport"), Doc("Transit Permit") },
         answers = new[]
@@ -161,7 +173,7 @@ public class InterviewScriptTests
     [Test]
     public void ARequest_LeavesTheHubOnceChosen()
     {
-        var runner = new DialogRunner(Build(), InterviewScript.Opening(Case()));
+        var runner = new DialogRunner(Build(), InterviewScript.Opening(Lines(), Case()));
         Assert.IsNotNull(runner.Choose("request:1"));
         CollectionAssert.AreEqual(new[] { "request:0", "ask", "dlg:dlg_rumour" }, Ids(runner.Choices));
         Assert.IsNull(runner.Choose("request:1"), "it cannot be chosen twice");
@@ -315,13 +327,74 @@ public class InterviewScriptTests
     [Test]
     public void Opening_IsTheIntroThenTheClaim_OrTheClaimAloneWhenTheIntroIsBlank()
     {
-        IReadOnlyList<DialogLine> both = InterviewScript.Opening(Case());
+        IReadOnlyList<DialogLine> both = InterviewScript.Opening(Lines(), Case());
         CollectionAssert.AreEqual(new[] { "case.intro", "case.claim" }, LineIds(both));
         Assert.AreEqual(DialogSpeaker.Desk, both[0].Speaker);
         Assert.AreEqual(DialogSpeaker.Traveller, both[1].Speaker);
         Assert.AreEqual("I request passage home to New Kingdom Egypt (Ancient).", both[1].Text);
 
-        CollectionAssert.AreEqual(new[] { "case.claim" }, LineIds(InterviewScript.Opening(Case(intro: " "))));
+        CollectionAssert.AreEqual(new[] { "case.claim" }, LineIds(InterviewScript.Opening(Lines(), Case(intro: " "))));
+    }
+
+    [Test]
+    public void Opening_TheClaimIsFilledFromItsTemplate_OrIsThePlaceAloneWhenBlank()
+    {
+        InterviewLines blank = Lines();
+        blank.claim = null;
+        Assert.AreEqual("New Kingdom Egypt (Ancient)", InterviewScript.Opening(blank, Case())[1].Text);
+        Assert.AreEqual(Interview.Claim(Lines(), "New Kingdom Egypt (Ancient)"), InterviewScript.Opening(Lines(), Case())[1].Text, "the banner's text");
+    }
+
+    /// <summary>The English parts of a line (its key-word spans), joined by "|".</summary>
+    private static string English(DialogLine line) =>
+        string.Join("|", line.English.Select(s => line.Text.Substring(s.start, s.length)));
+
+    [Test]
+    public void TheClaim_KeepsHomeAndThePlaceEnglish_TheDesksOpenerHasNoSpans()
+    {
+        IReadOnlyList<DialogLine> opening = InterviewScript.Opening(Lines(), Case(keyWords: KeyWordRule()));
+        Assert.AreEqual("home|New Kingdom Egypt (Ancient)", English(opening[1]));
+        CollectionAssert.IsEmpty(opening[0].English, "the desk speaks English: nothing to keep");
+    }
+
+    [Test]
+    public void AnAnswer_KeepsItsValueInTheTongue_ButItsDigitsAndKeyWords()
+    {
+        InterviewCase c = Case(keyWords: KeyWordRule());
+        c.answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "No coin: 1000 deben of copper", isTell = false } };
+        DialogLine answer = Build(c).Node(InterviewScript.AskNodeId).Choices[1].Lines[1];
+        Assert.AreEqual("We trade with No coin: 1000 deben of copper.", answer.Text);
+        Assert.AreEqual("No|1000", English(answer), "{value} is not a key slot; a listed word and digits inside it still are");
+    }
+
+    [Test]
+    public void EveryOtherTravellerLine_CarriesItsSpans()
+    {
+        InterviewCase c = Case(keyWords: KeyWordRule());
+        c.smallTalk = new LineText("egypt_ancient.smalltalk.1", "Yes, the Nile rose on time back home.");
+        DialogGraph graph = Build(c, lines: LinesWithRequests());
+        DialogNode hub = graph.Node(InterviewScript.HubNodeId);
+
+        DialogLine requestReply = hub.Choices.First(ch => ch.Id == "request:0").Lines[1];
+        Assert.AreEqual(DialogSpeaker.Traveller, requestReply.Speaker);
+        CollectionAssert.IsEmpty(requestReply.English, "\"Here you are.\" holds no key word");
+        CollectionAssert.IsEmpty(hub.Choices.First(ch => ch.Id == "request:0").Lines[0].English, "the desk's prompt");
+
+        DialogLine smallTalk = graph.Node(InterviewScript.AskNodeId).Choices.First(ch => ch.Id == "smalltalk").Lines[1];
+        Assert.AreEqual("Yes|home", English(smallTalk));
+
+        DialogLine rumour = graph.Node("dlg_rumour/start").Lines[0];
+        Assert.AreEqual(DialogSpeaker.Traveller, rumour.Speaker);
+        CollectionAssert.IsEmpty(rumour.English, "\"News? Only a rumour.\" holds no key word");
+    }
+
+    [Test]
+    public void WithoutAKeyWordRule_NoLineKeepsAnything()
+    {
+        DialogLine claim = InterviewScript.Opening(Lines(), Case())[1];
+        Assert.IsNotNull(claim.English);
+        CollectionAssert.IsEmpty(claim.English);
+        CollectionAssert.IsEmpty(Build().Node(InterviewScript.AskNodeId).Choices[1].Lines[1].English);
     }
 
     [Test]
@@ -329,7 +402,7 @@ public class InterviewScriptTests
     {
         Assert.AreEqual("case.intro", InterviewScript.IntroLineId);
         Assert.AreEqual("case.claim", InterviewScript.ClaimLineId);
-        CollectionAssert.AreEqual(new[] { InterviewScript.IntroLineId, InterviewScript.ClaimLineId }, LineIds(InterviewScript.Opening(Case())));
+        CollectionAssert.AreEqual(new[] { InterviewScript.IntroLineId, InterviewScript.ClaimLineId }, LineIds(InterviewScript.Opening(Lines(), Case())));
 
         Assert.AreEqual("dlg_rumour.more", InterviewScript.ChoiceLineId("dlg_rumour", "more"));
         DialogChoice more = Build().Node("dlg_rumour/start").Choices[0];
@@ -379,7 +452,7 @@ public class InterviewScriptTests
     [Test]
     public void SaidSince_AfterARequest_IsTheTravellersReply_AndFromTheStart_IsTheClaim()
     {
-        var runner = new DialogRunner(Build(), InterviewScript.Opening(Case()));
+        var runner = new DialogRunner(Build(), InterviewScript.Opening(Lines(), Case()));
         CollectionAssert.AreEqual(new[] { InterviewScript.ClaimLineId }, LineIds(InterviewScript.SaidSince(runner.Transcript, 0)), "what the traveller says on arrival");
 
         int before = runner.Transcript.Count;
@@ -420,7 +493,7 @@ public class InterviewScriptTests
     [Test]
     public void AFullWalkThroughTheRumour_EndsBackAtTheHub()
     {
-        var runner = new DialogRunner(Build(), InterviewScript.Opening(Case()));
+        var runner = new DialogRunner(Build(), InterviewScript.Opening(Lines(), Case()));
         Assert.IsNotNull(runner.Choose("dlg:dlg_rumour"));
         Assert.IsNotNull(runner.Choose("dlg_rumour.more"));
         DialogChoice last = runner.Choose("dlg_rumour.noted");

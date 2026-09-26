@@ -259,6 +259,18 @@ public class TranslationTests
         StringAssert.Contains("'chinese'", unknown[0]);
     }
 
+    /// <summary>The key-word rule is part of the translation content: its problems (KeyWords.Problems) come with the rest.</summary>
+    [Test]
+    public void Problems_TheKeyWordRule()
+    {
+        TranslationRules rules = Rules();
+        rules.keyWords = new KeyWordRule { slots = { "place", "planet" }, words = { "home", "", "Home" }, digits = true };
+        List<string> problems = Translation.Problems(rules, Scripts, GoodPlaces);
+        Assert.AreEqual(3, problems.Count, string.Join(" | ", problems));
+        Assert.IsTrue(problems.All(p => p.StartsWith("translation.keyWords")), string.Join(" | ", problems));
+        StringAssert.Contains("'planet'", problems[0]);
+    }
+
     /// <summary>Exactly one problem, naming <paramref name="fragment"/>.</summary>
     private static void AssertOne(TranslationRules rules, IEnumerable<KeyValuePair<string, string>> places, string fragment)
     {

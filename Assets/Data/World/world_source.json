@@ -9677,6 +9677,22 @@
       "letterSeconds": 0.12,
       "scrambleSteps": 2
     },
+    "keyWords": {
+      "slots": [
+        "place",
+        "name",
+        "document"
+      ],
+      "words": [
+        "home",
+        "please",
+        "papers",
+        "yes",
+        "no",
+        "Temporal Customs"
+      ],
+      "digits": true
+    },
     "fallbackGlyphs": "olmnupqrystvwxazbcdfeghjik",
     "scripts": [
       {

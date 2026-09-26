@@ -62,14 +62,15 @@ public static partial class WorldContentGenerator
             RequireKey(keys, key, "translation (piece 9)", errors);
     }
 
-    /// <summary>The library's translation settings from the source (tongues copied as authored; packs without their costs).</summary>
+    /// <summary>The library's translation settings from the source (tongues and the key-word rule copied as authored; packs without their costs).</summary>
     private static TranslationSettings BuildTranslation(TranslationData t) => new TranslationSettings
     {
         rules = new TranslationRules
         {
             fromDay = t.fromDay,
             tongues = (t.tongues ?? Array.Empty<Tongue>()).ToList(),
-            packs = (t.packs ?? Array.Empty<PackData>()).Select(p => p == null ? null : new TranslatorPack { id = p.id, displayName = p.displayName }).ToList()
+            packs = (t.packs ?? Array.Empty<PackData>()).Select(p => p == null ? null : new TranslatorPack { id = p.id, displayName = p.displayName }).ToList(),
+            keyWords = t.keyWords
         },
         scripts = (t.scripts ?? Array.Empty<ScriptData>()).Select(s => s == null ? null : new TranslationScript
         {
@@ -136,12 +137,13 @@ public static partial class WorldContentGenerator
     // Source file shape (JsonUtility)
     // -----------------------------
 
-    /// <summary>world_source.json "translation" (piece 9).</summary>
+    /// <summary>world_source.json "translation" (piece 9; keyWords: the traveller-types spec's §8.1).</summary>
     [Serializable] private sealed class TranslationData
     {
         public int fromDay;
         public string announce;
         public FlipTiming flip;
+        public KeyWordRule keyWords;
         public string fallbackGlyphs;
         public ScriptData[] scripts;
         public PackData[] packs;

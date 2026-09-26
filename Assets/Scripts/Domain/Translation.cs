@@ -28,9 +28,9 @@ public static class Translation
     /// blank or duplicate tongue id; a blank display name; a script not in
     /// <paramref name="scriptIds"/>; a pack that is neither blank nor a pack
     /// id; a foreign tongue without glyphs; a blank or duplicate pack id or
-    /// name; a pack no tongue uses (its upgrades would buy nothing); a place
+    /// name; a pack no tongue uses (its translator would buy nothing); a place
     /// (<paramref name="placeTongues"/>: place id and tongue id) whose tongue
-    /// is blank or unknown.
+    /// is blank or unknown; the key-word rule's problems (KeyWords.Problems).
     /// </summary>
     public static List<string> Problems(TranslationRules rules, IEnumerable<string> scriptIds,
                                         IEnumerable<KeyValuePair<string, string>> placeTongues)
@@ -99,6 +99,7 @@ public static class Translation
                 problems.Add($"Place '{place.Key}' names the tongue '{place.Value}', which translation.tongues does not list.");
         }
 
+        problems.AddRange(KeyWords.Problems(rules.keyWords));
         return problems;
     }
 }

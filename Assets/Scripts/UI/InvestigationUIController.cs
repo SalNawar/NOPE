@@ -135,6 +135,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Today's translation (set by GameManager; null = everything plain).</summary>
     private TranslationPresenter _translation;
 
+    /// <summary>What of a traveller's lines stays English when they show untranslated (the library's translation.keyWords; set by GameManager with the translation).</summary>
+    private KeyWordRule _keyWords;
+
     /// <summary>The current traveller's translation (None between cases and when nothing is foreign).</summary>
     private CaseTranslation _caseTranslation = CaseTranslation.None;
 
@@ -305,10 +308,11 @@ public sealed class InvestigationUIController : MonoBehaviour
         _art = art;
     }
 
-    /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings.</summary>
+    /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings (their key-word rule included).</summary>
     public void SetTranslation(TranslationDay day, TranslationSettings settings)
     {
         _translation = new TranslationPresenter(day, settings);
+        _keyWords = settings != null && settings.rules != null ? settings.rules.keyWords : null;
     }
 
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
@@ -486,7 +490,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         var interviewCase = new InterviewCase
         {
             introLine = inst != null ? inst.introLine : null,
-            claimLine = inst != null ? inst.claimLine : null,
+            claimPlace = inst != null ? inst.originLabel : null,
+            keyWords = _keyWords,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
             answers = inst != null ? inst.answers : null,
@@ -499,7 +504,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             reachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
             reachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
             interviewCase);
-        _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
+        _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));
 
         if (transcriptWindow != null)
             transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController, _caseTranslation);

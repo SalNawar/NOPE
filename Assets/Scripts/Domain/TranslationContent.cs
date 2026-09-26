@@ -40,6 +40,24 @@ public sealed class TranslatorPack
     public string displayName;
 }
 
+/// <summary>
+/// The key-word rule (world_source.json translation.keyWords; the
+/// traveller-types spec's §8.1): what of an untranslated traveller's line
+/// stays English. KeyWords.Spans applies it, KeyWords.Problems checks it.
+/// </summary>
+[Serializable]
+public sealed class KeyWordRule
+{
+    /// <summary>The slots whose fill stays English ("place", "name", "document"; Interview's tokens).</summary>
+    public List<string> slots = new List<string>();
+
+    /// <summary>Words that stay English wherever they stand as whole words (case- and accent-insensitive; a word may hold spaces: "Temporal Customs").</summary>
+    public List<string> words = new List<string>();
+
+    /// <summary>True when digits stay English too (they are never drawn in glyphs, and count as key words).</summary>
+    public bool digits;
+}
+
 /// <summary>The translation rules the day reads (the content library's copy of world_source.json translation).</summary>
 [Serializable]
 public sealed class TranslationRules
@@ -52,4 +70,7 @@ public sealed class TranslationRules
 
     /// <summary>The translator packs, in shop order.</summary>
     public List<TranslatorPack> packs = new List<TranslatorPack>();
+
+    /// <summary>What of an untranslated traveller's line stays English.</summary>
+    public KeyWordRule keyWords = new KeyWordRule();
 }
