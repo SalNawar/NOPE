@@ -74,6 +74,7 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckAgency(src, errors);
+        CheckNews(src, errors);
         PcContent pc = CheckPc(src, errors);
         if (errors.Count > 0)
         {
@@ -149,6 +150,7 @@ public static partial class WorldContentGenerator
                     historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
+        WireNews(authored.library, src.news);
         WritePc(authored.library, pc);
 
         int pruned = PruneOwnedFolders(written);
@@ -1748,6 +1750,7 @@ public static partial class WorldContentGenerator
         public UiData ui;
         public TranslationData translation;
         public AgencyData agency;
+        public NewsData news;
         public PcData pc;
     }
 

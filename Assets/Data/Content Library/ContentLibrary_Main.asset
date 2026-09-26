@@ -1312,6 +1312,18 @@ MonoBehaviour:
       lineage: Victorian Britain
       employment: "Temporal Customs \xB7 Desk 3"
       note: No remarks on file.
+      startDebt: 125430
+      garnishShare: 0.25
+      reliefEmployer: Tyburn Mills Consortium
+      reliefWorksite: Victorian Britain
+      reliefWage: 420
+  news:
+    debt:
+    - Debt Relief Departures reach a record high.
+    - 'CLEAR YOUR DEBT: 180 days in the Victorian mills.'
+    - 12,000 accounts frozen in default.
+    - Premium families book Periclean Athens for the summer.
+    - A stranded tourist's family inherits 212,000 cr.
   mail:
   - id: welcome
     fromDay: 1

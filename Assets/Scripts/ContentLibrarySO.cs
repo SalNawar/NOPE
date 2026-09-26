@@ -101,6 +101,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The agency's printed name, programme line and day 1's date (written by Generate World from world_source.json "agency").</summary>
     [SerializeField] private AgencyContent agency = new();
 
+    [Header("News (redesign phase 13)")]
+    /// <summary>The morning paper's debt-theme lines (written by Generate World from world_source.json "news").</summary>
+    [SerializeField] private NewsContent news = new();
+
     [Header("Mail (redesign phase 25)")]
     /// <summary>The authored mail (written by Generate World from world_source.json "pc.mail"); the Mail app adds the day's generated messages.</summary>
     [SerializeField] private AuthoredMail[] mail;
@@ -286,6 +290,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The agency block: its name, programme line and first date (never null).</summary>
     public AgencyContent Agency => agency ?? new AgencyContent();
+
+    /// <summary>The morning paper's debt-theme lines (never null).</summary>
+    public NewsContent News => news ?? new NewsContent();
 
     /// <summary>The authored mail (never null).</summary>
     public IReadOnlyList<AuthoredMail> Mail => mail ?? System.Array.Empty<AuthoredMail>();

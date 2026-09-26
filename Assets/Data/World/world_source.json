@@ -1023,7 +1023,12 @@
       "born": "9 Feb 2121",
       "lineage": "Victorian Britain",
       "employment": "Temporal Customs · Desk 3",
-      "note": "No remarks on file."
+      "note": "No remarks on file.",
+      "startDebt": 125430,
+      "garnishShare": 0.25,
+      "reliefEmployer": "Tyburn Mills Consortium",
+      "reliefWorksite": "Victorian Britain",
+      "reliefWage": 420
     }
   },
   "eras": [
@@ -7309,6 +7314,15 @@
       }
     ]
   },
+  "news": {
+    "debt": [
+      "Debt Relief Departures reach a record high.",
+      "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
+      "12,000 accounts frozen in default.",
+      "Premium families book Periclean Athens for the summer.",
+      "A stranded tourist's family inherits 212,000 cr."
+    ]
+  },
   "pc": {
     "sites": [
       {
@@ -9589,6 +9603,54 @@
         "tier": "Full"
       },
       {
+        "key": "contract.title",
+        "text": "DEBT RELIEF LABOUR CONTRACT · TC-520",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.worker",
+        "text": "Worker",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.citizenId",
+        "text": "Citizen ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.employer",
+        "text": "Employer",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.worksite",
+        "text": "Worksite",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.term",
+        "text": "Term",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.row.wage",
+        "text": "Day Wage",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "contract.term",
+        "text": "{0:N0} days",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "notes.days",
         "text": "DAYS",
         "gloss": "None",
@@ -9705,6 +9767,12 @@
       {
         "key": "results.penalties",
         "text": "Citation penalties: -{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.debtRelief",
+        "text": "Debt Relief instalment: -{0}   (still owed: {1:N0} {2})",
         "gloss": "None",
         "tier": "Full"
       },
