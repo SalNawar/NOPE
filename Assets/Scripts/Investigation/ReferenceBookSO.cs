@@ -15,10 +15,6 @@ public sealed class ReferenceBookSO : ScriptableObject
     /// <summary>Category this book covers; matches DocumentField.category and the fact category.</summary>
     public ClueCategory category;
 
-    /// <summary>
-    /// Lists the claimed place's row first, then the places under era
-    /// headings, the claimed era first (BookLines.Arrange; the Costume Guide,
-    /// traveller types C3); off: today's rows as they are.
-    /// </summary>
+    /// <summary>True when the register lists today's places under era headings (the Costume Guide: the traveller-types spec's Q9; ReferenceRows).</summary>
     public bool groupByEra;
 }

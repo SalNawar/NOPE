@@ -1,121 +1,75 @@
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
-using UnityEngine;
 
 /// <summary>
 /// The investigation's day reference (the PC redesign RF1): today's travel
-/// directives (the Directives window's text, rewritten on every case), facts
-/// (the reference books' rows) and citizen registry (handed to the Citizen
-/// Records app), set once a day by GameManager through the façade, and the shelf of
-/// reference-book windows, built from the library on the first case with a
-/// desktop tile each, in two staggered rows of three. Plain C#;
-/// InvestigationUIController owns it.
+/// directives (the app's Rules tab text), facts (the Reference tab's
+/// registers) and citizen registry (the Records tab), set once a day by
+/// GameManager through the façade, and the reference books, built from the
+/// library into the Reference tab on the first case. A case's claim puts its
+/// row first in every register. Day sources: they work between travellers.
+/// Plain C#; InvestigationUIController owns it.
 /// </summary>
 public sealed class DayReference
 {
-    /// <summary>Where the book windows go and how they are laid out (the façade's serialized knobs).</summary>
-    public struct BookShelf
-    {
-        /// <summary>The book window template (inactive).</summary>
-        public ReferenceBookWindowController template;
-
-        /// <summary>The window layer the book windows open on.</summary>
-        public RectTransform windowLayer;
-
-        /// <summary>Where the first book window opens.</summary>
-        public Vector2 origin;
-
-        /// <summary>The horizontal step between the three book windows of a row.</summary>
-        public float columnStep;
-
-        /// <summary>The offset from one row of book windows to the next.</summary>
-        public Vector2 rowStep;
-    }
-
     private readonly TMP_Text _directivesText;
     private readonly CitizenRecordsWindowController _records;
     private readonly CompareController _compare;
-    private readonly DesktopTiles _tiles;
-    private readonly BookShelf _shelf;
+    private readonly ReferenceView _books;
 
     private string _directives = string.Empty;
-    private FactTable _facts;
-    private bool _booksBuilt;
 
-    /// <summary>The book windows built on the first case (each re-lists its rows for the traveller's claim).</summary>
-    private readonly List<ReferenceBookWindowController> _books = new List<ReferenceBookWindowController>();
-
-    /// <summary>The Directives window's text, the Citizen Records app, the compare (the book rows pick into it), the desktop's tiles and the book shelf's parts; any may be missing.</summary>
-    public DayReference(TMP_Text directivesText, CitizenRecordsWindowController records, CompareController compare, DesktopTiles tiles, BookShelf shelf)
+    /// <summary>The Rules tab's text, the Records tab's lookup, the compare (the book rows pick into it) and the Reference tab; any may be missing.</summary>
+    public DayReference(TMP_Text directivesText, CitizenRecordsWindowController records, CompareController compare, ReferenceView books)
     {
         _directivesText = directivesText;
         _records = records;
         _compare = compare;
-        _tiles = tiles;
-        _shelf = shelf;
+        _books = books;
     }
 
-    /// <summary>Sets the day's travel directives and writes them into the Directives window.</summary>
+    /// <summary>Sets the day's travel directives and writes them into the Rules tab.</summary>
     public void SetDirectives(IReadOnlyList<TravelRuleSO> rules)
     {
         _directives = BuildDirectives(rules);
         ShowDirectives();
     }
 
-    /// <summary>Writes today's directives into the Directives window (every case does).</summary>
+    /// <summary>Writes today's directives into the Rules tab (every case does).</summary>
     public void ShowDirectives()
     {
         if (_directivesText != null)
             _directivesText.text = _directives;
     }
 
-    /// <summary>Sets today's facts (the reference books render these rows).</summary>
-    public void SetFacts(FactTable facts) => _facts = facts;
+    /// <summary>Sets today's facts (the Reference tab's registers render these rows).</summary>
+    public void SetFacts(FactTable facts)
+    {
+        if (_books != null)
+            _books.SetFacts(facts, _compare);
+    }
 
-    /// <summary>Hands the day's citizen registry to the Records app, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
+    /// <summary>Hands the day's citizen registry to the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
         if (_records != null)
             _records.SetRegistry(registry, agency, agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null);
     }
 
-    /// <summary>Tells every book window the traveller's claimed place (the Costume Guide lists its row first and its era's places next).</summary>
-    public void SetClaim(string nationId, string eraId)
+    /// <summary>The first time only: the Reference tab's books from the library.</summary>
+    public void BuildBooks(ContentLibrarySO lib)
     {
-        foreach (ReferenceBookWindowController book in _books)
-            if (book != null)
-                book.SetClaim(nationId, eraId);
+        if (_books != null)
+            _books.BuildBooks(lib);
     }
 
-    /// <summary>The first time only: one window per reference book of the library (hidden), each with a desktop tile.</summary>
-    public void BuildBookShelf(ContentLibrarySO lib)
+    /// <summary>A new case's claim: its row first in every register, "Claimed place only" on (AP8).</summary>
+    public void SetClaim(CaseInstance inst)
     {
-        if (_booksBuilt)
-            return;
-
-        _booksBuilt = true;
-
-        if (lib == null || _shelf.template == null || !_tiles.Ready || _shelf.windowLayer == null)
-            return;
-
-        int i = 0;
-        foreach (ReferenceBookSO book in lib.ReferenceBooks)
-        {
-            if (book == null)
-                continue;
-
-            ReferenceBookWindowController win = Object.Instantiate(_shelf.template, _shelf.windowLayer);
-            win.SetBook(book, _facts, _compare, lib.Eras);
-            _books.Add(win);
-            if (win.transform is RectTransform rt)
-                rt.anchoredPosition = _shelf.origin + new Vector2((i % 3) * _shelf.columnStep, 0f) + (i / 3) * _shelf.rowStep;
-            win.gameObject.SetActive(false);
-
-            if (win.TryGetComponent(out DesktopWindow chrome))
-                _tiles.Add(book.displayName, chrome, false);
-            i++;
-        }
+        if (_books != null)
+            _books.SetClaim(inst != null && inst.claimedNation != null ? inst.claimedNation.id : null,
+                            inst != null && inst.claimedEra != null ? inst.claimedEra.id : null);
     }
 
     private static string BuildDirectives(IReadOnlyList<TravelRuleSO> rules)

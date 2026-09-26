@@ -59,9 +59,9 @@ public static partial class OfficeSceneUIBuilder
     // Mail (ML1, §2.12)
     // -----------------------------
 
-    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left, the memo form on the right. Rebuilt fresh.</summary>
+    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left, the memo form on the right; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
-                                                 DesktopWindow rulesWindow, out TMP_Text title)
+                                                 InvestigationApp investigation, out TMP_Text title)
     {
         DestroyChildIfPresent(windowLayer, "MailWindow");
         DesktopWindow chrome = BuildOSWindow(windowLayer, "MailWindow", null, null, null, config.mailWindowSize);
@@ -110,7 +110,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "feed", feed);
         SetRef(so, "apps", apps);
         SetRef(so, "browser", browser);
-        SetRef(so, "rulesWindow", rulesWindow);
+        Wire(so, "investigation", investigation);
         SetRef(so, "listRoot", list);
         SetRef(so, "rowTemplate", row);
         SetRef(so, "emptyText", empty);
