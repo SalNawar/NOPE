@@ -8204,12 +8204,12 @@
     "note": "neutral wallpaper, exists; 16:9, so the 4:3 desktop shows its middle 1440 x 1080"
    },
    {
-    "path": "Assets/Art/UI/Investigation/refbook_cover_culture.png",
+    "path": "Assets/Art/UI/Resources/Investigation/refbook_cover_culture.png",
     "size": [
      400,
      560
     ],
-    "note": "Costume Guide cover, text-free, like refbook_cover_currency.png; new file (+ .meta like the other covers)"
+    "note": "Costume Guide cover, text-free, like refbook_cover_currency.png; a by-name slot: drop the file in (the importer sets its import)"
    }
   ]
  }
