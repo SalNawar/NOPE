@@ -57,7 +57,9 @@ ignored) and exits 1. `--allow key,...` accepts named, documented regressions.
    stops with a modal "modified externally" dialog:
    `git checkout -- Assets/Data Assets/Scenes ProjectSettings "Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset" *.csproj`.
    The play and profile jobs back up and restore the player's save slot (`SaveSystem.Files`: the save, its temp file and its backup), the UI language and
-   motion preferences, and the run config's seed (set in memory only).
+   motion preferences, and the run config's seed (set in memory only). In the editor the slot lives in the project's
+   `Library/EditorSaves` (`SaveSystem.Folder`), so each worktree's editor has its own; the jobs set it aside there too,
+   never in the shared `Application.persistentDataPath`.
 4. Diff against the baseline:
 
        python tools/audit/golden.py diff --baseline docs/reviews/audit-baseline/golden \
