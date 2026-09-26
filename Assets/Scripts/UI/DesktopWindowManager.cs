@@ -130,6 +130,12 @@ public sealed class DesktopWindowManager : MonoBehaviour
             _stack.Close(Register(window));
     }
 
+    /// <summary>True while the window is open, shown or minimised (a window never opened is not).</summary>
+    public bool IsOpen(DesktopWindow window) => window != null && _ids.TryGetValue(window, out string id) && _stack.IsOpen(id);
+
+    /// <summary>True while the window is open and minimised.</summary>
+    public bool IsMinimised(DesktopWindow window) => window != null && _ids.TryGetValue(window, out string id) && _stack.IsMinimised(id);
+
     /// <summary>A title-bar or icon drag started (Escape may cancel it).</summary>
     public void BeginDrag(IDesktopDrag drag) => _drag = drag;
 
