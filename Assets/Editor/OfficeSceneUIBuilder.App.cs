@@ -46,9 +46,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A chip's widest and narrowest width (the row shrinks them to fit).</summary>
     private static readonly Vector2 AppChipWidth = new Vector2(64f, 220f);
 
-    /// <summary>The scanned page's width in the Documents tab (its height follows the pane).</summary>
-    private const float AppDocumentPageWidth = 640f;
-
     /// <summary>Rows per page of the lists the tabs page through until they scroll (phase 5's forms): the restored window's smallest pane fits these.</summary>
     private const int AppBookRowsPerPage = 10;
 
@@ -57,12 +54,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The scan toast's size, and its gap above the compare dock.</summary>
     private static readonly Vector2 AppToastSize = new Vector2(640f, 56f);
-
-    /// <summary>The scanner backing's colour (the scanned copies are diegetic: never themed).</summary>
-    private static readonly Color ScannerBacking = new Color(0.13f, 0.14f, 0.17f, 1f);
-
-    /// <summary>Light ink on the scanner backing.</summary>
-    private static readonly Color BackingInk = new Color(0.85f, 0.86f, 0.88f, 1f);
 
     /// <summary>The tabs' label keys, in TabOrder.Default.</summary>
     private static readonly Dictionary<AppTab, string> AppTabKeys = new Dictionary<AppTab, string>
@@ -297,42 +288,20 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The Documents tab (§2.4): the scanner's dark backing, the hint shown
-    /// instead of a copy, and the scanned page template (a white page with a
-    /// photo corner, its rows and Prev/Next), cloned per paper by DocumentsView.
+    /// The Documents tab (§2.4): the scanner's dark backing (the form style's),
+    /// the hint shown instead of a copy, and the scanned-copy page template (the
+    /// paper's form in a scroll, OfficeSceneUIBuilder.PcForms), cloned per
+    /// paper by DocumentsView.
     /// </summary>
     private static DocumentsView BuildDocumentsView(Transform content, out AppView view)
     {
-        Transform root = ViewRoot(content, "DocumentsView", ScannerBacking, ThemeRoleId.DiegeticBacking);
+        FormStyleSO style = EnsureFormStyle();
+        Transform root = ViewRoot(content, "DocumentsView", style.backing, ThemeRoleId.DiegeticBacking);
         TMP_Text hint = Text(root, "Hint", UiText.Get("app.doc.none"), 24, TextAlignmentOptions.Center, new Vector2(0.08f, 0.4f), new Vector2(0.92f, 0.6f),
-                             BackingInk, ThemeRoleId.DiegeticBacking);
+                             style.backingInk, ThemeRoleId.DiegeticBacking);
         hint.textWrappingMode = TextWrappingModes.Normal;
 
-        Transform page = Panel(root, "PageTemplate", new Vector2(0.5f, 0f), new Vector2(0.5f, 1f), Vector2.zero, new Vector2(AppDocumentPageWidth, -16f),
-                               ScannerBacking, ThemeRoleId.DiegeticBacking);
-        TMP_Text title = Text(page, "TitleText", UiText.Get("document.untitled"), 20, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.93f),
-                              new Vector2(0.97f, 0.995f), BackingInk, ThemeRoleId.DiegeticBacking, style: FontStyles.Bold);
-        Transform scan = Panel(page, "ScanPage", new Vector2(0.025f, 0.1f), new Vector2(0.975f, 0.925f), Vector2.zero, Vector2.zero,
-                               new Color(0.97f, 0.96f, 0.92f, 1f), ThemeRoleId.DiegeticPaper);
-        Transform photo = Panel(scan, "PhotoBox", new Vector2(0.74f, 0.72f), new Vector2(0.97f, 0.98f), Vector2.zero, Vector2.zero,
-                                new Color(0.55f, 0.56f, 0.58f, 1f), ThemeRoleId.DiegeticPhoto);
-        TravellerPortraitView portrait = BuildPortrait(photo);
-        PagedBody paged = BuildPagedBody(page, new Vector2(0.05f, 0.12f), new Vector2(0.95f, 0.9f), ThemeRoleId.DiegeticBacking, ThemeRoleId.DiegeticRow, false);
-        paged.page.color = BackingInk;
-
-        DocumentWindowController copy = page.gameObject.AddComponent<DocumentWindowController>();
-        var so = new SerializedObject(copy);
-        Wire(so, "titleText", title);
-        Wire(so, "pageText", paged.page);
-        Wire(so, "prevButton", paged.prev);
-        Wire(so, "nextButton", paged.next);
-        Wire(so, "fieldRowsRoot", paged.rowsRoot);
-        Wire(so, "fieldRowTemplate", paged.rowTemplate);
-        Wire(so, "photoBox", photo.gameObject);
-        Wire(so, "photo", portrait);
-        so.FindProperty("photoInset").floatValue = PhotoRowInset;
-        so.ApplyModifiedProperties();
-        page.gameObject.SetActive(false);
+        DocumentWindowController copy = BuildDocumentPage(root);
 
         DocumentsView documents = root.gameObject.AddComponent<DocumentsView>();
         var soView = new SerializedObject(documents);

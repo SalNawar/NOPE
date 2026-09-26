@@ -8,9 +8,10 @@ using UnityEngine;
 /// ("on the desk", "not handed over"; a scanned one reads its name alone and
 /// is available), and the chosen paper's scanned copy. A paper not scanned
 /// shows why instead (scan it on the desk, or ask the traveller for it); with
-/// nothing chosen the view says what arrives here. Today each copy is drawn
-/// by the scanned-page component (DocumentWindowController, one clone of the
-/// page template per paper); phase 5's FormView takes its place.
+/// nothing chosen the view says what arrives here. Each copy is the paper's
+/// form (phase 5): a clone of the scanned-page template per paper
+/// (DocumentWindowController over a FormView), drawn from the same
+/// DocumentForm the desk paper prints.
 /// CaseDocumentsPresenter fills it; nothing here opens or switches by itself.
 /// </summary>
 public sealed class DocumentsView : AppView
@@ -41,10 +42,11 @@ public sealed class DocumentsView : AppView
 
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
-    /// its document (a photo paper shows <paramref name="look"/>), the chips
+    /// its document and drawing its paper's form (<paramref name="forms"/>, in
+    /// paper order; a photo paper shows <paramref name="look"/>), the chips
     /// from <paramref name="papers"/>, nothing chosen.
     /// </summary>
-    public void SetCase(IReadOnlyList<DocumentInstance> documents, CasePapers papers, CompareController compare, TravellerLook look, CharacterArt art)
+    public void SetCase(IReadOnlyList<DocumentInstance> documents, IReadOnlyList<DocumentForm> forms, CasePapers papers, CompareController compare, TravellerLook look, CharacterArt art)
     {
         Clear();
         _papers = papers ?? new CasePapers(0);
@@ -54,12 +56,18 @@ public sealed class DocumentsView : AppView
                 DocumentWindowController page = Instantiate(pageTemplate, pageTemplate.transform.parent);
                 page.gameObject.name = "Page_" + i;
                 page.gameObject.SetActive(false);
-                page.SetDocument(documents[i], i, compare, look, art);
+                page.SetDocument(documents[i], i, forms != null && i < forms.Count ? forms[i] : null, compare, look, art);
                 _pages.Add(page);
-                DocumentInstance doc = documents[i];
-                _names.Add(doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"));
+                _names.Add(documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled"));
             }
         Refresh();
+    }
+
+    /// <summary>Paper <paramref name="index"/>'s copy arrived (its scan finished): its strip reads the time.</summary>
+    public void MarkScanned(int index)
+    {
+        if (index >= 0 && index < _pages.Count && _pages[index] != null)
+            _pages[index].MarkScanned();
     }
 
     /// <summary>The papers moved (handed over, scanned): the chips and the shown paper follow.</summary>

@@ -168,7 +168,7 @@ public static partial class OfficeSceneUIBuilder
         if (Mathf.Abs(paperAspect - style.metrics.aspect) > 0.002f)
             Debug.LogError($"[TimeDesk] The desk paper is {config.paperSize.x} x {config.paperSize.y} m (aspect {paperAspect:0.000}) but the form style's page aspect is {style.metrics.aspect:0.000}; set FormStyle_Agency's metrics.aspect or Desk_Default.paperSize so the forms fill the paper.");
 
-        var overlays = new List<(string, Rgba)> { ("the hover tint", FormStyleSO.Rgb(config.rowHoverTint)) };
+        var overlays = new List<(string, Rgba)> { ("the hover tint", FormStyleSO.Rgb(style.hoverTint)) };
         var themes = new List<ThemeSO>();
         if (library != null)
         {

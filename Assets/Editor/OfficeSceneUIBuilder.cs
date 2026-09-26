@@ -283,6 +283,7 @@ public static partial class OfficeSceneUIBuilder
         ShiftClockDriver shiftClock = gameManager.GetComponent<ShiftClockDriver>();
         if (shiftClock == null)
             shiftClock = gameManager.gameObject.AddComponent<ShiftClockDriver>();
+        WireDocumentClock(app.Documents, shiftClock);
 
         // The Office root: every click box, the desk, the traveller, the readouts,
         // the input rules and the binder that puts them on the art office at load.
@@ -380,9 +381,6 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
     // Window builders
     // -----------------------------
-
-    /// <summary>Extra right padding of a photo page's rows (desktop units), so none runs under the photo box (the scanned page's, 640 u wide).</summary>
-    private const float PhotoRowInset = 170f;
 
     /// <summary>
     /// The scanned page's photo: a 4:5 Portrait fitted inside the box, holding
