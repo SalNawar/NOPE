@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReferenceBookSO
   displayName: Index of Devices
   category: 3
+  groupByEra: 0

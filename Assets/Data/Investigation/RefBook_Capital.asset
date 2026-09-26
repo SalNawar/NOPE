@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReferenceBookSO
   displayName: Capitals Gazetteer
   category: 5
+  groupByEra: 0

@@ -6,7 +6,7 @@ public enum WakeReason
     /// <summary>A traveller was presented at the desk.</summary>
     TravellerPresented,
 
-    /// <summary>A desk scan finished (its scanned window has just opened on the PC).</summary>
+    /// <summary>A desk scan finished (its scanned copy has just reached the PC).</summary>
     ScanFinished
 }
 

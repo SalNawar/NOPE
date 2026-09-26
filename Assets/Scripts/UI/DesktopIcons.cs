@@ -22,9 +22,9 @@ using UnityEngine.UI;
 /// or text field has the keyboard, the arrow keys move the selection to the
 /// nearest icon that way and Enter opens it. Badges: an app's count or dot
 /// (SetBadge): Mail's is the Mail feed's unread count, redrawn whenever the
-/// feed changes; until the Investigation app exists (phase 16), a scan
-/// finishing while the interim Investigation window is hidden dots its icon,
-/// and the dot goes when the window shows.
+/// feed changes; the Investigation app dots its icon when something arrives
+/// while it is closed or minimised, and clears the dot when it shows
+/// (InvestigationApp).
 /// </summary>
 public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerClickHandler
 {
@@ -46,16 +46,9 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
     /// <summary>The icons, one per app.</summary>
     [SerializeField] private DesktopIconView[] icons = new DesktopIconView[0];
 
-    /// <summary>Interim until the Investigation app (phase 16): the desk whose finished scans dot the Investigation icon while its window is hidden.</summary>
-    [SerializeField] private DeskController desk;
-
-    /// <summary>Interim until the Investigation app (phase 16): the Investigation window whose showing clears the dot.</summary>
-    [SerializeField] private DesktopWindow investigationWindow;
-
     /// <summary>The Mail feed: its unread count is the Mail icon's badge.</summary>
     [SerializeField] private MailFeed mail;
 
-    private readonly Dictionary<string, int> _badges = new Dictionary<string, int>();
     private readonly List<string> _order = new List<string>();
     private readonly List<IconPlace> _others = new List<IconPlace>();
     private IconGrid _grid;
@@ -77,16 +70,12 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
     {
         if (config == null)
             Debug.LogWarning("[DesktopIcons] No DesktopConfigSO wired: the icons keep their built places. Run Tools > TimeDesk > Build Office UI.", this);
-        if (desk != null)
-            desk.ScanFinished += HandleScanFinished;
         if (mail != null)
             mail.Changed += ShowUnreadMail;
     }
 
     private void OnDestroy()
     {
-        if (desk != null)
-            desk.ScanFinished -= HandleScanFinished;
         if (mail != null)
             mail.Changed -= ShowUnreadMail;
     }
@@ -140,7 +129,6 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
     /// <summary>Shows an app's badge: a count, IconBadge.Dot, or 0 for none.</summary>
     public void SetBadge(string appId, int count)
     {
-        _badges[appId] = count;
         foreach (DesktopIconView icon in icons)
             if (icon != null && icon.AppId == appId)
                 icon.SetBadge(count);
@@ -192,10 +180,9 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
             contextMenu.ShowForDesktop(eventData);
     }
 
-    /// <summary>The keys (arrows, Enter) while the desktop takes input, and the interim Investigation dot.</summary>
+    /// <summary>The keys (arrows, Enter) while the desktop takes input.</summary>
     private void Update()
     {
-        ClearShownDots();
         if (raycaster == null || !raycaster.isActiveAndEnabled || (manager != null && manager.WindowFocused) || FieldFocused())
             return;
 
@@ -233,23 +220,6 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
         if (next != null)
             Select(IconOf(next));
     }
-
-    /// <summary>Interim (phase 16's app takes it over): a finished scan dots the Investigation icon while its window is hidden.</summary>
-    private void HandleScanFinished(int document)
-    {
-        if (!InvestigationShows)
-            SetBadge(DesktopAppIds.Investigation, IconBadge.Dot);
-    }
-
-    /// <summary>Interim: the Investigation icon's dot goes once its window shows.</summary>
-    private void ClearShownDots()
-    {
-        if (InvestigationShows && _badges.TryGetValue(DesktopAppIds.Investigation, out int count) && count == IconBadge.Dot)
-            SetBadge(DesktopAppIds.Investigation, 0);
-    }
-
-    /// <summary>True while the interim Investigation window shows (open and not minimised).</summary>
-    private bool InvestigationShows => investigationWindow != null && investigationWindow.gameObject.activeInHierarchy;
 
     /// <summary>The ids in the default order (the knob's, then any icon it does not name).</summary>
     private List<string> Order()
