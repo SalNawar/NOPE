@@ -44,6 +44,9 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new();
 
+    /// <summary>The form each of the current traveller's papers prints (redesign phase 4), in paper order.</summary>
+    private readonly List<DocumentForm> _caseForms = new();
+
     /// <summary>Papers whose window already has a desktop tile this case.</summary>
     private readonly HashSet<int> _iconedDocuments = new();
 
@@ -102,6 +105,7 @@ public sealed class CaseDocumentsPresenter
         _docIcons.Clear();
         _iconedDocuments.Clear();
         _caseDocuments.Clear();
+        _caseForms.Clear();
     }
 
     /// <summary>
@@ -109,9 +113,10 @@ public sealed class CaseDocumentsPresenter
     /// marked "on arrival" when the traveller steps up, the others through the
     /// traveller wheel. With the desk, each becomes a paper whose scan opens
     /// its window; without it, the window opens at the hand-over. Windows
-    /// spawn hidden.
+    /// spawn hidden. Each paper prints its document's form, headed with
+    /// <paramref name="agency"/>'s name and programme (redesign phase 4).
     /// </summary>
-    public void Present(CaseInstance inst)
+    public void Present(CaseInstance inst, AgencyContent agency)
     {
         if (inst != null)
         {
@@ -131,13 +136,14 @@ public sealed class CaseDocumentsPresenter
                     handOver = doc != null && doc.template != null ? doc.template.handOver : DocumentHandOver.OnRequest,
                     showsPhoto = doc != null && doc.template != null && doc.template.showsPhoto
                 });
+                _caseForms.Add(DocumentForm.For(doc, agency));
                 i++;
             }
         }
 
         if (_desk != null)
         {
-            _desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
+            _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
         }
         else
         {

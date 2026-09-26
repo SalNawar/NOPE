@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
-/// <summary>The UI string lookup (piece 6 U7): fallbacks, number formats, glosses, shaping and the table rules.</summary>
+/// <summary>The UI string lookup (piece 6 U7): fallbacks, number formats, glosses, shaping and the table rules; and today's flavour tables (the PC redesign TH3).</summary>
 public class UiStringsTests
 {
     private static UiStringEntry E(string key, string text, GlossStyle gloss = GlossStyle.None, StringTier tier = StringTier.Full) =>
@@ -145,5 +147,37 @@ public class UiStringsTests
         Assert.IsTrue(problems.Any(p => p.Contains("'full'") && p.Contains("flavour")));
         Assert.IsTrue(problems.Any(p => p.Contains("'day'") && p.Contains("placeholders")));
         Assert.IsTrue(problems.Any(p => p.Contains("'plain'") && p.Contains("U+0679")));
+    }
+
+    /// <summary>Today's ui block of world_source.json.</summary>
+    private static ContentNode TodaysUi([CallerFilePath] string here = "")
+    {
+        const string source = "Assets/Data/World/world_source.json";
+        string path = File.Exists(source) ? source : Path.Combine(Path.GetDirectoryName(here), "..", "..", "..", source);
+        return ContentJson.Parse(File.ReadAllText(path)).Get("ui");
+    }
+
+    /// <summary>The flavour keys of today's reading table, in table order.</summary>
+    private static List<string> FlavourKeys(ContentNode ui) =>
+        ui.Get("strings").Items.Where(e => e.Get("tier").Text == "Flavour").Select(e => e.Get("key").Text).ToList();
+
+    [Test]
+    public void TodaysFlavourLabels_AreThe28OfThePcRedesign()
+    {
+        List<string> flavour = FlavourKeys(TodaysUi());
+        Assert.AreEqual(28, flavour.Count, string.Join(", ", flavour));
+        foreach (string added in new[] { "icon.investigation", "icon.mail", "icon.account", "icon.settings" })
+            CollectionAssert.Contains(flavour, added);
+        foreach (string gone in new[] { "icon.directives", "icon.scanner", "icon.records", "icon.lexicon", "icon.dialect", "icon.material", "icon.clueLog", "window.directives", "window.scanner", "records.title" })
+            CollectionAssert.DoesNotContain(flavour, gone);
+    }
+
+    [Test]
+    public void EveryCultureLanguage_TranslatesExactlyTheFlavourLabels()
+    {
+        ContentNode ui = TodaysUi();
+        List<string> flavour = FlavourKeys(ui);
+        foreach (ContentNode language in ui.Get("languages").Items)
+            CollectionAssert.AreEquivalent(flavour, language.Get("entries").Items.Select(e => e.Get("key").Text).ToList(), language.Get("language").Text);
     }
 }

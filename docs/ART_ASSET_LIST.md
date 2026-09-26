@@ -79,12 +79,12 @@ A 4:3 canvas of 1440 × 1080, seen in the PC frame (its glass is 1120 × 840 at 
 |---|---|---|---|---|---|---|
 | Neutral wallpaper | behind the desktop until a country leads history | `Assets/Art/Generated/xp_bliss.png` (via `Theme_neutral`) | 1920 × 1080; the 4:3 desktop shows its middle 1440 × 1080 | keep | 1 | done |
 | Culture wallpapers × 8 | behind the desktop from the morning after a country leads | `Assets/Art/Culture/<id>/wallpaper.png` for `egypt`, `iraq`, `greece`, `italy`, `china`, `japan`, `britain`, `germany` (via `Theme_<id>`) | Generate World placeholders, 960 × 540 | **1440 × 1080**: ask ChatGPT for 1536 × 1024 and Claude crops the middle (UI_ART_RULES, "Wallpapers" and "The eight cultures") | 1 | placeholder |
-| Desktop icons × 17 | the icon column at the left: two columns of 82 × 60 tiles, text-only today | `Assets/Art/UI/Desktop/icon_<id>.png` (ids below) | 12 interim (128 × 128, a cream plate with a blue glyph), 5 missing | 128 × 128, a bold greyscale glyph on transparent (in an 82 × 60 tile it would show about 25 px tall in the frame), no plate | 2 | interim / missing |
+| Desktop icons × 6 | the six free-placed desktop icons (plan phase 17): a 72 × 72 glyph over its label in a 120 × 132 cell, tinted by the theme | `Assets/Art/UI/Desktop/icon_<id>.png` (ids below) | code-drawn placeholder glyphs (`DesktopIconPlaceholder`); the old interim `icon_internet` and `icon_notes` (cream plates) are not used | 128 × 128, a bold greyscale glyph on transparent (it shows about 56 px tall at 1080p), no plate | 2 | placeholder |
 | Cursors: arrow, hand | everywhere: the game's cursor, the hand over anything clickable | `Assets/Art/UI/Desktop/cursor_arrow.png`, `cursor_hand.png` (found by name, set in `InteractionFeedback_Default`) | interim 32 × 32 | 32 × 32; the tip (arrow) and the fingertip (hand) are the click point: the stored points are (3, 2) and (13, 3), so Claude re-measures them when new art lands | 1 | interim |
 | Cursors: grab, grabbing | over a desk paper and while dragging it | `cursor_grab.png`, `cursor_grabbing.png` | none (the hand shows) | 32 × 32 | 2 | missing, later |
 | UI kit × 9 | every window, button, bar and menu (table below) | `Assets/Art/UI/Desktop/` | code-drawn themed panels | greyscale 9-slice pieces | 2 | later |
 
-**Desktop icon ids.** Apps: `directives` (Directives), `scanner` (Deviation Report), `citizen_records` (Records), `cluelog` (Clue Log, the interview transcript), `internet`, `lexicon`, `dialect`, `material`, `notes`. Reference books: `currency` (Currency Ledger), `language` (Tongues & Scripts), `technology` (Index of Devices), `capital` (Capitals Gazetteer), `ruler` (Rulers & Regents), `culture` (Costume Guide). A traveller's documents: `passport` (Travel Passport), `permit` (Transit Permit). Interim art exists for the nine apps and the first three books; `capital`, `ruler`, `culture`, `passport` and `permit` are missing.
+**Desktop icon ids** (the PC redesign DK1; `DesktopAppIds`): `investigation`, `internet`, `mail`, `citizen_account`, `notes`, `settings`, and nothing else. The old tiles' interim glyphs (`directives`, `scanner`, `citizen_records`, `cluelog`, the books) move to the Investigation app's tab glyphs with the app (plan phase 16); `lexicon`, `dialect` and `material` are retired with their placeholder apps. The art is wired in plan phase 27 (art hooks); until then the game draws a placeholder glyph per id.
 
 **The UI kit (later).** UI_ART_RULES rule 5: greyscale only (white to mid grey), a flat middle and even borders so each piece stretches, no text or letter-shaped glyphs. The culture theme tints every piece. Not needed until Claude adds the theme slots.
 
@@ -202,7 +202,7 @@ What the player sees first comes first. Within a step, the Tier 1 files come fir
 2. **The morning briefing** sheet (1).
 3. **The office:** the scanner (Blender) and the travellers (the character brief's batches, its own track).
 4. **At the desk:** the wheel icons (6, Tier 1), the paper face (1, Tier 1), the speech bubble and its tail (2).
-5. **The PC:** the frame, close X and power button (3, Tier 1); the culture wallpapers (8, Tier 1; the first one shows from day 2 at the earliest); the desktop icons (17).
+5. **The PC:** the frame, close X and power button (3, Tier 1); the culture wallpapers (8, Tier 1; the first one shows from day 2 at the earliest); the desktop icons (6).
 6. **The end of the shift:** the citation slip and the shift ledger (2).
 7. **Home:** the background and the two panels (3, Tier 1); the upgrade icons (12); the slot machine, lever and symbols (7) with the slot and sleep panels (2); the family (6).
 8. **The endings:** the panel and the six illustrations (7).
@@ -214,7 +214,7 @@ What the player sees first comes first. Within a step, the Tier 1 files come fir
 2. **Logo:** the lettered "TIME SORTER" wordmark, the one image allowed to carry lettering.
 3. **Title buttons:** text-free 9-slice faces with the game's labels on (one button look everywhere).
 4. **Home background and ending illustrations:** redrawn in the cel style.
-5. **Desktop icons:** the 17 tiles get pictures, greyscale and tinted by the culture (rule 5); Claude changes the tile layout when they land.
+5. **Desktop icons:** superseded by the PC redesign's DK1: six icons, greyscale and tinted by the culture (rule 5), each a glyph over its label; the player places them.
 6. **Paper faces:** one face per document kind (passport, permit), with the photo frame; drawn from the faces' own brief after piece 10.
 7. **Reference book covers:** shown on the book's tile and at the top of its window.
 8. **Verdict ink mark:** a text-free tick or cross mark lands on the papers after the verdict.
@@ -241,7 +241,8 @@ Many retired files still sit in `Assets/Art` from the 2026-09-24 batch. Several 
 | `btn_desk_normal`/`_hover`/`_pressed`, `wheel_item_*`, `wheel_centre_*`, `desk_tooltip`, `speech_bubble` (420 × 110) | – | Replaced by the UI kit's button and tooltip (section 3) and the 9-slice speech bubble (section 2). |
 | `btn_min`/`btn_max`/`btn_close` (9 states), `start_button_normal`/`_pressed` | `UI/Desktop/` | Replaced by the kit's text-free `ui_button.png` and `start_button.png`. |
 | `icon_compare` | `UI/Desktop/` | There is no Compare app: comparing is the compare bar. |
-| `icon_settings`, `icon_power`, `tray_day`, `tray_credits`, `tray_stability` | `UI/Desktop/` | The Start menu and the tray print text. |
+| `icon_power`, `tray_day`, `tray_credits`, `tray_stability` | `UI/Desktop/` | The Start menu and the tray print text. (`icon_settings` came back as one of the six desktop icons.) |
+| `icon_lexicon`, `icon_dialect`, `icon_material` | `UI/Desktop/` | Their placeholder apps are retired (the PC redesign DK7). |
 | `scanner_backing`, `page_blank`, `refbook_page`, `claim_banner`, `compare_bar_neutral`/`_match`/`_mismatch`/`_deviation`, `citizen_records_frame`, `deviation_report_form`, `directives_sticky` | `UI/Investigation/` | Code-drawn themed windows and strips; the scanned copy reuses the paper face. |
 | `btn_accept`, `btn_deny` (normal, hover, pressed) | `UI/Investigation/` | Baked words. The decision buttons are themed per culture with fixed code glyphs (piece 6). |
 | `stamp_approved`, `stamp_denied`, `stamp_citation` | `UI/Investigation/`, `UI/DayFlow/` | Baked words, which break the language switch; the text-free ink marks (section 4) replace them. |

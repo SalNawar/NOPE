@@ -150,4 +150,7 @@ public sealed class DocumentInstance
 
     /// <summary>Number of pages this document spans (1-based count; DocumentRows.PageCount).</summary>
     public int PageCount => DocumentRows.PageCount(fields);
+
+    /// <summary>The paper's serial, printed with its barcode ("TC-610/583021"; FormSerials, set by CaseFactory).</summary>
+    public string serial = string.Empty;
 }

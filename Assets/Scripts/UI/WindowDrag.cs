@@ -14,7 +14,7 @@ using UnityEngine.EventSystems;
 /// knows the drag while it runs, so Escape can cancel it: the window goes
 /// back where it started. Focus comes from the manager's own press (WN2).
 /// </summary>
-public sealed class WindowDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler
+public sealed class WindowDrag : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerClickHandler, IDesktopDrag
 {
     /// <summary>The window that moves (defaults to this object's parent).</summary>
     [SerializeField] private RectTransform windowRoot;

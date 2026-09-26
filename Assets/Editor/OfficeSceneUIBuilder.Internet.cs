@@ -40,7 +40,7 @@ public static partial class OfficeSceneUIBuilder
     /// boxes at the library's body-text minimum; an error per failing pair).
     /// Returns the window.
     /// </summary>
-    private static DesktopWindow BuildInternetWindow(Transform windowLayer, Transform iconGrid, ContentLibrarySO library)
+    private static DesktopWindow BuildInternetWindow(Transform windowLayer, ContentLibrarySO library)
     {
         ContrastRules rules = library != null && library.CultureUi.contrast != null ? library.CultureUi.contrast : new ContrastRules();
         foreach ((string styleName, SiteStyle siteStyle) in SiteStyles.All)
@@ -126,12 +126,18 @@ public static partial class OfficeSceneUIBuilder
         SetAnchors(slide, Vector2.zero, Vector2.one);
         Transform handle = Panel(slide, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpBlue, ThemeRoleId.TitleBar);
         SetAnchors(handle, Vector2.zero, Vector2.one);
+        // Set through the serialized fields, not the setters: a setter drives the handle's anchors at once (even under the
+        // closed window), and a driven RectTransform is saved zeroed, so the saved scene would differ from the built one.
+        // The scrollbar drives the handle itself when the window opens; until then the handle keeps the anchors above
+        // (a page that fits: the handle fills the track).
         Scrollbar scrollbar = track.gameObject.AddComponent<Scrollbar>();
-        scrollbar.direction = Scrollbar.Direction.BottomToTop;
-        scrollbar.handleRect = (RectTransform)handle;
-        scrollbar.targetGraphic = handle.GetComponent<Image>();
-        scrollbar.size = 1f; // a page that fits: the handle fills the track (the anchors the scrollbar itself keeps, so rebuilds compare equal)
-        scrollbar.value = 0f;
+        var soBar = new SerializedObject(scrollbar);
+        soBar.FindProperty("m_Direction").enumValueIndex = (int)Scrollbar.Direction.BottomToTop;
+        soBar.FindProperty("m_HandleRect").objectReferenceValue = handle;
+        soBar.FindProperty("m_TargetGraphic").objectReferenceValue = handle.GetComponent<Image>();
+        soBar.FindProperty("m_Size").floatValue = 1f;
+        soBar.FindProperty("m_Value").floatValue = 0f;
+        soBar.ApplyModifiedProperties();
 
         ScrollRect scroll = area.gameObject.AddComponent<ScrollRect>();
         scroll.content = (RectTransform)content;
@@ -168,8 +174,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "statusText", status);
         SetRef(so, "page", renderer);
         so.ApplyModifiedProperties();
-
-        BuildDesktopIcon(iconGrid, "IconInternet", "icon.internet", chrome, "");
         return chrome;
     }
 

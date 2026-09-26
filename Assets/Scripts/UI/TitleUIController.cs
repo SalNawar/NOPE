@@ -44,11 +44,16 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>True if the ending panel is wired.</summary>
     public bool HasEndingPanel => endingPanel != null;
 
-    /// <summary>Hides both panels until a Show* call activates one.</summary>
+    /// <summary>
+    /// Hides both panels until a Show* call activates one. The panels are
+    /// optional, so each is tested with Unity's == (audit R4-010): an
+    /// unassigned serialized field is Unity's fake null in the Editor, which
+    /// ?. does not see, and SetActive on it would throw.
+    /// </summary>
     private void Awake()
     {
-        titlePanel?.SetActive(false);
-        endingPanel?.SetActive(false);
+        if (titlePanel != null) titlePanel.SetActive(false);
+        if (endingPanel != null) endingPanel.SetActive(false);
     }
 
     /// <summary>
@@ -60,7 +65,7 @@ public sealed class TitleUIController : MonoBehaviour
         if (titlePanel == null)
             return;
 
-        endingPanel?.SetActive(false);
+        if (endingPanel != null) endingPanel.SetActive(false);
         titlePanel.SetActive(true);
 
         if (titleText != null)
@@ -91,7 +96,7 @@ public sealed class TitleUIController : MonoBehaviour
         if (endingPanel == null)
             return;
 
-        titlePanel?.SetActive(false);
+        if (titlePanel != null) titlePanel.SetActive(false);
         endingPanel.SetActive(true);
 
         if (endingTitleText != null)

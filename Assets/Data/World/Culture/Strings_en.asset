@@ -58,7 +58,7 @@ MonoBehaviour:
   - key: records.title
     text: Citizen Records
     gloss: 0
-    tier: 1
+    tier: 0
   - key: records.search
     text: SEARCH
     gloss: 1
@@ -82,11 +82,11 @@ MonoBehaviour:
   - key: window.directives
     text: Directives
     gloss: 0
-    tier: 1
+    tier: 0
   - key: window.scanner
     text: Deviation Report
     gloss: 0
-    tier: 1
+    tier: 0
   - key: window.settings
     text: Settings
     gloss: 0
@@ -94,39 +94,43 @@ MonoBehaviour:
   - key: icon.directives
     text: Directives
     gloss: 0
-    tier: 1
+    tier: 0
   - key: icon.scanner
     text: Deviation Report
     gloss: 0
-    tier: 1
+    tier: 0
   - key: icon.records
     text: Records
     gloss: 0
-    tier: 1
+    tier: 0
   - key: icon.internet
     text: Internet
-    gloss: 0
-    tier: 1
-  - key: icon.lexicon
-    text: Lexicon
-    gloss: 0
-    tier: 1
-  - key: icon.dialect
-    text: Dialect
-    gloss: 0
-    tier: 1
-  - key: icon.material
-    text: Material
     gloss: 0
     tier: 1
   - key: icon.notes
     text: Notes
     gloss: 0
     tier: 1
+  - key: icon.investigation
+    text: Investigation
+    gloss: 0
+    tier: 1
+  - key: icon.mail
+    text: Mail
+    gloss: 0
+    tier: 1
+  - key: icon.account
+    text: Citizen Account
+    gloss: 0
+    tier: 1
+  - key: icon.settings
+    text: Settings
+    gloss: 0
+    tier: 1
   - key: icon.clueLog
     text: Clue Log
     gloss: 0
-    tier: 1
+    tier: 0
   - key: tray.day
     text: Day {0}
     gloss: 0
@@ -227,32 +231,12 @@ MonoBehaviour:
     text: Internet
     gloss: 0
     tier: 0
-  - key: window.lexicon
-    text: Lexicon
-    gloss: 0
-    tier: 0
-  - key: window.dialect
-    text: Dialect
-    gloss: 0
-    tier: 0
-  - key: window.material
-    text: Material Analysis
-    gloss: 0
-    tier: 0
   - key: window.notes
     text: Notes
     gloss: 0
     tier: 0
-  - key: body.lexicon
-    text: Wikipedia-style era glossary. (placeholder)
-    gloss: 0
-    tier: 0
-  - key: body.dialect
-    text: Notes on accents and phrasing. (placeholder)
-    gloss: 0
-    tier: 0
-  - key: body.material
-    text: Flags tech/materials beyond the claimed era. (upgrade)
+  - key: window.investigation
+    text: Investigation
     gloss: 0
     tier: 0
   - key: browser.back
@@ -562,6 +546,30 @@ MonoBehaviour:
     text: Reduced
     gloss: 0
     tier: 0
+  - key: settings.desktop
+    text: Desktop icons open with
+    gloss: 0
+    tier: 0
+  - key: settings.iconDouble
+    text: Double click
+    gloss: 0
+    tier: 0
+  - key: settings.iconSingle
+    text: Single click
+    gloss: 0
+    tier: 0
+  - key: settings.resetIcons
+    text: Reset icon positions
+    gloss: 0
+    tier: 0
+  - key: desktop.arrange
+    text: Arrange icons
+    gloss: 0
+    tier: 0
+  - key: menu.open
+    text: Open
+    gloss: 0
+    tier: 0
   - key: settings.note
     text: Colours, fonts and the wallpaper always follow history. A language change
       applies the next time the office opens. Reduced motion shows translations at
@@ -609,11 +617,15 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.card
-    text: 'Esc: leave a text field, close the Start menu or cancel a window drag;
-      with none of those, it leaves the PC.
+    text: 'Esc: close a menu, leave a text field, close the Start menu or cancel
+      a drag; with none of those, it leaves the PC.
 
-      Double-click a title bar: maximise
-      or restore the window.'
+      Desktop icons: double-click
+      one to open it (Settings can make it one click), drag it anywhere, arrows move
+      the selection and Enter opens it; right-click the desktop to arrange them.
+
+      Double-click
+      a title bar: maximise or restore the window.'
     gloss: 0
     tier: 0
   - key: mail.inbox

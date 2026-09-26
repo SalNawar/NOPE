@@ -15,14 +15,16 @@ using UnityEngine.UI;
 /// window's pressed, a minimised one's faded; a click minimises the focused
 /// window, else restores and focuses it). While the desktop takes input (its
 /// raycaster is on: BoothRules.DesktopInteractive), a press anywhere on the
-/// desktop closes the Start menu when it lands outside it, focuses the window
-/// under the pointer (its own raycast through the frame camera: a button
-/// inside a window takes the pointer-down itself), and on the empty desktop
+/// desktop closes the context menu and the Start menu when it lands outside
+/// them, focuses the window under the pointer (its own raycast through the
+/// frame camera: a button inside a window takes the pointer-down itself),
+/// and on the empty desktop (the wallpaper, the icons and their layer)
 /// leaves nothing focused; Escape runs the desktop's part of the chain
-/// (DesktopEscapeRule: leave a field, close the Start menu, cancel a drag)
-/// and stamps its frame, so the PC frame's Escape (OfficeViewController)
-/// skips that press. It runs before the EventSystem (whose script order is
-/// -1000; its cancel would leave a field first) and the office's pollers.
+/// (DesktopEscapeRule: close the context menu, leave a field, close the Start
+/// menu, cancel a window or icon drag) and stamps its frame, so the PC
+/// frame's Escape (OfficeViewController) skips that press. It runs before the
+/// EventSystem (whose script order is -1000; its cancel would leave a field
+/// first) and the office's pollers.
 /// </summary>
 [DefaultExecutionOrder(-1100)]
 public sealed class DesktopWindowManager : MonoBehaviour
@@ -42,7 +44,10 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>The Start menu's shell (a press outside the menu closes it; Escape closes it).</summary>
     [SerializeField] private DesktopShell shell;
 
-    /// <summary>The empty desktop's graphics (the wallpaper and the case dim): a press on one leaves no window focused.</summary>
+    /// <summary>The desktop's right-click menu (a press outside it closes it; Escape closes it first).</summary>
+    [SerializeField] private DesktopContextMenu contextMenu;
+
+    /// <summary>The empty desktop's graphics (the wallpaper and the icon layer): a press on one, or on anything in it (an icon), leaves no window focused.</summary>
     [SerializeField] private Graphic[] emptyDesktop;
 
     /// <summary>The focused window's button tint (pressed).</summary>
@@ -61,7 +66,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private readonly List<string> _scratch = new List<string>();
     private readonly List<RaycastResult> _hits = new List<RaycastResult>();
     private PointerEventData _press;
-    private WindowDrag _drag;
+    private IDesktopDrag _drag;
 
     /// <summary>Numbers the windows' ids.</summary>
     private int _registered;
@@ -76,8 +81,8 @@ public sealed class DesktopWindowManager : MonoBehaviour
     /// <summary>The frame in which the desktop last took an Escape press (-1: never); the PC frame's Escape skips that frame.</summary>
     public int EscapeTakenFrame { get; private set; } = -1;
 
-    /// <summary>A maximised window's bottom edge above the desktop's bottom (the taskbar and the dock).</summary>
-    public float MaximisedBottom => config != null ? config.MaximisedBottom : 0f;
+    /// <summary>True while a window has the focus (the desktop's own keys, the icons' arrows and Enter, wait until none has).</summary>
+    public bool WindowFocused => _stack.Focused != null;
 
     /// <summary>The double-click's time, in seconds.</summary>
     public float DoubleClickSeconds => config != null ? config.doubleClickSeconds : 0f;
@@ -125,11 +130,11 @@ public sealed class DesktopWindowManager : MonoBehaviour
             _stack.Close(Register(window));
     }
 
-    /// <summary>A title-bar drag started (Escape may cancel it).</summary>
-    public void BeginDrag(WindowDrag drag) => _drag = drag;
+    /// <summary>A title-bar or icon drag started (Escape may cancel it).</summary>
+    public void BeginDrag(IDesktopDrag drag) => _drag = drag;
 
-    /// <summary>A title-bar drag ended.</summary>
-    public void EndDrag(WindowDrag drag)
+    /// <summary>A title-bar or icon drag ended.</summary>
+    public void EndDrag(IDesktopDrag drag)
     {
         if (_drag == drag)
             _drag = null;
@@ -249,13 +254,15 @@ public sealed class DesktopWindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// A press on the desktop at a screen point: outside the Start menu it
-    /// closes the menu; in a window it focuses that window; on the empty
-    /// desktop it leaves nothing focused.
+    /// A press on the desktop at a screen point: outside the context menu or
+    /// the Start menu it closes that menu; in a window it focuses that window;
+    /// on the empty desktop it leaves nothing focused.
     /// </summary>
     private void Press(Vector2 screen)
     {
         GameObject top = TopHit(screen);
+        if (contextMenu != null && contextMenu.IsOpen && !contextMenu.IsPart(top))
+            contextMenu.Close();
         if (shell != null && shell.StartMenuOpen && !shell.IsStartMenuPart(top))
             shell.CloseStartMenu();
         if (top == null)
@@ -271,7 +278,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
         if (emptyDesktop == null)
             return;
         foreach (Graphic g in emptyDesktop)
-            if (g != null && g.gameObject == top)
+            if (g != null && top.transform.IsChildOf(g.transform))
             {
                 _stack.ClearFocus();
                 return;
@@ -300,9 +307,12 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private void Escape()
     {
         TMP_InputField field = FocusedField();
-        var state = new DesktopEscapeState(field != null, shell != null && shell.StartMenuOpen, _drag != null);
+        var state = new DesktopEscapeState(contextMenu != null && contextMenu.IsOpen, field != null, shell != null && shell.StartMenuOpen, _drag != null);
         switch (DesktopEscapeRule.Resolve(state))
         {
+            case DesktopEscape.CloseMenu:
+                contextMenu.Close();
+                break;
             case DesktopEscape.LeaveField:
                 field.DeactivateInputField();
                 if (EventSystem.current != null)
