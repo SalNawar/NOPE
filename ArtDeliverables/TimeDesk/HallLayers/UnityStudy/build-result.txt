@@ -1,0 +1,2 @@
+Built isolated Unity art study. OfficeScene not saved or modified.
+Renderers: 561
