@@ -72,10 +72,13 @@ public static class Interview
     }
 
     /// <summary>The traveller's claim sentence for a place label; the bare label when the template is blank (the banner never goes empty).</summary>
-    public static string Claim(InterviewLines lines, string placeLabel)
+    public static string Claim(InterviewLines lines, string placeLabel) => Fill(ClaimTemplate(lines), PlaceToken, placeLabel);
+
+    /// <summary>The claim's template: the authored one, or "{place}" alone when it is blank (the claim's key-word spans are taken over it).</summary>
+    public static string ClaimTemplate(InterviewLines lines)
     {
         string template = lines != null && lines.claim != null ? lines.claim.text : null;
-        return string.IsNullOrWhiteSpace(template) ? placeLabel ?? string.Empty : Fill(template, PlaceToken, placeLabel);
+        return string.IsNullOrWhiteSpace(template) ? Placeholder(PlaceToken) : template;
     }
 
     /// <summary>

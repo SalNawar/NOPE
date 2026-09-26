@@ -6,8 +6,11 @@ public sealed class InterviewCase
     /// <summary>The desk's opener (CaseInstance.introLine); skipped when blank.</summary>
     public string introLine;
 
-    /// <summary>The traveller's claim sentence (CaseInstance.claimLine).</summary>
-    public string claimLine;
+    /// <summary>The claimed place's label, the claim's {place} (CaseInstance.originLabel; the claim is filled as the banner's CaseInstance.claimLine is).</summary>
+    public string claimPlace;
+
+    /// <summary>What of the traveller's lines stays English when they show untranslated (translation.keyWords); null keeps nothing.</summary>
+    public KeyWordRule keyWords;
 
     /// <summary>The claimed era's id: picks each question's wording override.</summary>
     public string claimedEraId;
@@ -30,7 +33,10 @@ public sealed class InterviewCase
 /// about home >", "Look >", today's narrative dialogs), the ask menu ("&lt;
 /// Back" first, then the questions and small talk), the look menu ("&lt;
 /// Back" first, then one choice per visible garment) and every authored
-/// dialog's nodes. Pure, so every menu and line is tested headless.
+/// dialog's nodes. Every traveller line carries its key-word spans
+/// (KeyWords.Spans over its template and fills, InterviewCase.keyWords): the
+/// parts that stay English when it shows untranslated. Pure, so every menu
+/// and line is tested headless.
 /// </summary>
 public static class InterviewScript
 {
@@ -56,8 +62,12 @@ public static class InterviewScript
     /// </summary>
     public static string ChoiceLineId(string dialogId, string choiceId) => $"{dialogId}.{choiceId}";
 
-    /// <summary>The transcript's first lines: the desk's opener (<see cref="IntroLineId"/>, skipped when blank), then the traveller's claim (<see cref="ClaimLineId"/>).</summary>
-    public static IReadOnlyList<DialogLine> Opening(InterviewCase c)
+    /// <summary>
+    /// The transcript's first lines: the desk's opener (<see cref="IntroLineId"/>,
+    /// skipped when blank), then the traveller's claim (<see cref="ClaimLineId"/>:
+    /// Interview.Claim of the claimed place, with its key-word spans).
+    /// </summary>
+    public static IReadOnlyList<DialogLine> Opening(InterviewLines wording, InterviewCase c)
     {
         var lines = new List<DialogLine>();
         if (c == null)
@@ -65,7 +75,9 @@ public static class InterviewScript
 
         if (!string.IsNullOrWhiteSpace(c.introLine))
             lines.Add(new DialogLine(IntroLineId, DialogSpeaker.Desk, c.introLine));
-        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, c.claimLine));
+        var fills = new Dictionary<string, string> { { Interview.PlaceToken, c.claimPlace } };
+        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Claim(wording, c.claimPlace), null,
+                                 KeyWords.Spans(Interview.ClaimTemplate(wording), fills, c.keyWords)));
         return lines;
     }
 
@@ -76,11 +88,13 @@ public static class InterviewScript
         return new DialogLine(prompt.id, DialogSpeaker.Desk, prompt.text);
     }
 
-    /// <summary>The traveller's answer line: the (era's) template with the canonical value, carrying the answer's fact.</summary>
-    public static DialogLine AnswerLine(InterviewQuestion q, string eraId, InterviewAnswer a)
+    /// <summary>The traveller's answer line: the (era's) template with the canonical value, carrying the answer's fact and its key-word spans under <paramref name="keyWords"/> (null: none).</summary>
+    public static DialogLine AnswerLine(InterviewQuestion q, string eraId, InterviewAnswer a, KeyWordRule keyWords = null)
     {
         LineText answer = q.AnswerFor(eraId);
-        return DialogLine.Answer(answer.id, Interview.Fill(answer.text, Interview.ValueToken, a != null ? a.value : null), a);
+        string value = a != null ? a.value : null;
+        var fills = new Dictionary<string, string> { { Interview.ValueToken, value } };
+        return DialogLine.Answer(answer.id, Interview.Fill(answer.text, Interview.ValueToken, value), a, KeyWords.Spans(answer.text, fills, keyWords));
     }
 
     /// <summary>
@@ -124,6 +138,7 @@ public static class InterviewScript
                                     IReadOnlyList<AuthoredDialog> dialogs, InterviewCase c)
     {
         lines = lines ?? new InterviewLines();
+        KeyWordRule keyWords = c != null ? c.keyWords : null;
         var graph = new DialogGraph(HubNodeId);
         var hub = new DialogNode { Id = HubNodeId };
         var ask = new DialogNode { Id = AskNodeId };
@@ -142,7 +157,7 @@ public static class InterviewScript
                 Lines =
                 {
                     new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, doc.name)),
-                    new DialogLine(Id(lines.requestReply), DialogSpeaker.Traveller, Text(lines.requestReply))
+                    Said(Id(lines.requestReply), Text(lines.requestReply), null, keyWords)
                 },
                 Action = DialogAction.HandOverDocument,
                 DocumentIndex = i,
@@ -165,7 +180,7 @@ public static class InterviewScript
                     Lines =
                     {
                         new DialogLine(Id(r.prompt), DialogSpeaker.Desk, Text(r.prompt)),
-                        new DialogLine(Id(r.reply), DialogSpeaker.Traveller, Text(r.reply))
+                        Said(Id(r.reply), Text(r.reply), null, keyWords)
                     },
                     OneShot = true,
                     Kind = DialogChoiceKind.Request
@@ -188,7 +203,7 @@ public static class InterviewScript
                 {
                     Id = $"q:{q.id}",
                     Label = q.label,
-                    Lines = { PromptLine(q, eraId), AnswerLine(q, eraId, a) },
+                    Lines = { PromptLine(q, eraId), AnswerLine(q, eraId, a, keyWords) },
                     OneShot = true,
                     Kind = DialogChoiceKind.Question
                 });
@@ -204,7 +219,7 @@ public static class InterviewScript
                 Lines =
                 {
                     new DialogLine(Id(lines.smallTalkPrompt), DialogSpeaker.Desk, Text(lines.smallTalkPrompt)),
-                    new DialogLine(c.smallTalk.id, DialogSpeaker.Traveller, c.smallTalk.text)
+                    Said(c.smallTalk.id, c.smallTalk.text, null, keyWords)
                 },
                 OneShot = true,
                 Kind = DialogChoiceKind.Question
@@ -234,7 +249,7 @@ public static class InterviewScript
                 hub.Choices.Add(new DialogChoice { Id = $"dlg:{d.id}", Label = d.label, Next = NodeId(d, d.nodes[0].id), OneShot = true, Kind = DialogChoiceKind.Dialog });
                 foreach (ScriptNode node in d.nodes)
                     if (node != null)
-                        graph.Add(BuildNode(d, node));
+                        graph.Add(BuildNode(d, node, keyWords));
             }
         }
 
@@ -244,14 +259,14 @@ public static class InterviewScript
         return graph;
     }
 
-    /// <summary>An authored node as a runtime node: namespaced ids, the desk speaking each choice's label.</summary>
-    private static DialogNode BuildNode(AuthoredDialog d, ScriptNode node)
+    /// <summary>An authored node as a runtime node: namespaced ids, the desk speaking each choice's label, the traveller's lines with their key-word spans.</summary>
+    private static DialogNode BuildNode(AuthoredDialog d, ScriptNode node, KeyWordRule keyWords)
     {
         var built = new DialogNode { Id = NodeId(d, node.id) };
         if (node.lines != null)
             foreach (ScriptLine line in node.lines)
                 if (line != null)
-                    built.Lines.Add(new DialogLine(line.id, line.speaker, line.text, line.expression));
+                    built.Lines.Add(Authored(line, keyWords));
 
         if (node.choices == null)
             return built;
@@ -267,7 +282,7 @@ public static class InterviewScript
             if (choice.lines != null)
                 foreach (ScriptLine line in choice.lines)
                     if (line != null)
-                        runtime.Lines.Add(new DialogLine(line.id, line.speaker, line.text, line.expression));
+                        runtime.Lines.Add(Authored(line, keyWords));
 
             if (!string.IsNullOrEmpty(choice.next))
             {
@@ -289,6 +304,16 @@ public static class InterviewScript
 
     /// <summary>A dialog node's graph id.</summary>
     private static string NodeId(AuthoredDialog d, string nodeId) => $"{d.id}/{nodeId}";
+
+    /// <summary>A traveller's line with no fill, carrying its key-word spans.</summary>
+    private static DialogLine Said(string id, string text, string expression, KeyWordRule keyWords) =>
+        new DialogLine(id, DialogSpeaker.Traveller, text, expression, KeyWords.Spans(text, null, keyWords));
+
+    /// <summary>An authored line: the traveller's with its key-word spans; the desk's as it is (always English).</summary>
+    private static DialogLine Authored(ScriptLine line, KeyWordRule keyWords) =>
+        line.speaker == DialogSpeaker.Traveller
+            ? Said(line.id, line.text, line.expression, keyWords)
+            : new DialogLine(line.id, line.speaker, line.text, line.expression);
 
     /// <summary>The traveller's answer about a category, or null.</summary>
     private static InterviewAnswer AnswerFor(InterviewCase c, ClueCategory category)

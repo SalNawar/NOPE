@@ -21,9 +21,9 @@ using Object = UnityEngine.Object;
 /// and UI string tables (WorldContentGenerator.Culture.cs: one theme per
 /// country plus the neutral one, each passing the contrast check), the
 /// translation (WorldContentGenerator.Translation.cs: every place's tongue,
-/// the library's tongues, scripts, flip knobs and fallback cipher, one Papers
-/// and one Speech translator upgrade per pack and the one-shot notice
-/// trigger), points the case blueprint at the listed archetypes, then sets
+/// the library's tongues, scripts, flip knobs and fallback cipher, one Speech
+/// translator upgrade per pack and the one-shot notice trigger), points the
+/// case blueprint at the listed archetypes, then sets
 /// every world array of the content library and its look rules explicitly,
 /// and writes the PC block (WorldContentGenerator.Pc.cs: the Internet's
 /// sites, authored pages and Lineage Archive people).
@@ -129,9 +129,9 @@ public static partial class WorldContentGenerator
         // --- Culture: string tables, themes, placeholder wallpapers ---
         (ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables) = WriteCulture(culture, written);
 
-        // --- Translation: a Papers and a Speech translator per pack, the notice ---
+        // --- Translation: a Speech translator per pack (papers are always English), the notice ---
         UpgradeSO[] translators = (src.translation.packs ?? Array.Empty<PackData>())
-            .SelectMany(p => new[] { MakeTranslator(p, TranslatorKind.Written, src.translation, written), MakeTranslator(p, TranslatorKind.Spoken, src.translation, written) })
+            .Select(p => MakeTranslator(p, src.translation, written))
             .ToArray();
         TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, written);
 
@@ -1593,8 +1593,8 @@ public static partial class WorldContentGenerator
     /// unlock triggers, then the translation notice, then the history-rule
     /// triggers), the effects (the hand-authored ones kept in order, then the
     /// history-rule effects, then the leader effects) and the upgrades (the
-    /// hand-authored ones kept in order, then the translators in pack order,
-    /// Papers before Speech), sets the culture UI knobs, the neutral theme,
+    /// hand-authored ones kept in order, then the Speech translators in pack
+    /// order), sets the culture UI knobs, the neutral theme,
     /// the culture themes (country order), the string tables and the
     /// translation settings, and drops missing references from the rest.
     /// </summary>

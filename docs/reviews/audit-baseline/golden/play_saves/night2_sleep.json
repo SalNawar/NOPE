@@ -3,7 +3,7 @@
     "world": {
         "day": 3,
         "runSeed": 12345,
-        "money": 64,
+        "money": 104,
         "timelineStability": 80.0,
         "totalCitations": 2,
         "citationsToday": 0,
@@ -12,7 +12,7 @@
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
         "unlockedUpgradeIds": [
-            "interview_protocols"
+            "tr_near_east_spoken"
         ],
         "flags": [
             "premade:senenmut:met",
@@ -22,7 +22,6 @@
             "dlg:dlg_rumour:done",
             "rumour_calculators",
             "trig:unlock_q_ruler:fired",
-            "trig:unlock_q_born:fired",
             "trig:history_roman_aljabr:fired"
         ],
         "counters": [
@@ -319,7 +318,6 @@
                 "Art is now DOMINANT in Abbasid Baghdad.",
                 "HISTORY: Iraq now dominates the timeline. The Future belongs to Baghdad Garden City (Future).",
                 "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
-                "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
                 "HISTORY: Roman engineers reckon with al-jabr tables from Baghdad.",
                 "HISTORY: travellers brought Roman concrete to Periclean Athens (Ancient)."
             ]

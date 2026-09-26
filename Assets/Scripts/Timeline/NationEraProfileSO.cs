@@ -33,7 +33,7 @@ public sealed class NationEraProfileSO : ScriptableObject
     [TextArea]
     public string moment;
 
-    /// <summary>The tongue this place writes and speaks (piece 9): a translation.tongues[] id, from world_source.json places[].tongue.</summary>
+    /// <summary>The tongue this place speaks (piece 9; its travellers' papers are always English): a translation.tongues[] id, from world_source.json places[].tongue.</summary>
     public string tongue;
 
     /// <summary>Earliest birth year of a traveller from here (negative = BCE).</summary>
