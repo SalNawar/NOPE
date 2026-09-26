@@ -5,7 +5,8 @@ using System.Collections.Generic;
 /// The agency block of world_source.json (the traveller-types spec's F6; the
 /// PC spec's §4.8): the agency's printed name and programme line, and the
 /// date of the first day. Content, written into the content library by
-/// Generate World; later phases add the clerk's account and the agency's lists.
+/// Generate World, with the clerk's own account (phase 25; phase 13 adds its
+/// debt); later phases add the agency's lists.
 /// </summary>
 [Serializable]
 public sealed class AgencyContent
@@ -18,6 +19,9 @@ public sealed class AgencyContent
 
     /// <summary>Day 1's date, written as BirthDates writes dates ("14 Mar 2150").</summary>
     public string firstDate = string.Empty;
+
+    /// <summary>The clerk's own account as authored ("agency.clerk"; the Citizen Account app shows it, redesign phase 25; its checks are ClerkContent.Problems).</summary>
+    public ClerkContent clerk = new();
 
     /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from. Empty when sound.</summary>
     public List<string> Problems()
