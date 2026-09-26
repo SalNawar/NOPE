@@ -12,14 +12,16 @@ using UnityEngine;
 /// <see cref="Select"/> with a pick from EvidencePicks. The pair rule and MATCH
 /// are ComparePair's (each side's CompareEvidence.MatchValue: a garment shows
 /// its item but matches on its place's Culture value). The same text and
-/// colours are drawn in two bars: the PC's and the office strip (optional).
+/// colours are drawn in two bars: the PC's compare dock (the PC redesign DK9,
+/// CM2: docked above the taskbar, outside every window) and the office strip
+/// (optional).
 /// </summary>
 public sealed class CompareController : MonoBehaviour
 {
-    /// <summary>The PC's bar, shown while a value is picked.</summary>
+    /// <summary>The PC compare dock's pair, shown while a value is picked (over the dock's "click two values" hint; the dock itself shows while a traveller is at the desk).</summary>
     [SerializeField] private GameObject compareBar;
 
-    /// <summary>The PC bar's text: the compared values and the verdict.</summary>
+    /// <summary>The dock's text: the compared values and the verdict.</summary>
     [SerializeField] private TMP_Text compareText;
 
     /// <summary>The office compare strip (piece 10; optional), shown while a value is picked; its parent, the office case HUD, shows only while the frame is closed.</summary>
@@ -53,8 +55,12 @@ public sealed class CompareController : MonoBehaviour
     /// </summary>
     public event System.Action<CompareEvidence, CompareEvidence> PairCompared;
 
+    /// <summary>The two bars' texts (the dock's and the office strip's), gathered once (audit R4-026).</summary>
+    private TMP_Text[] _bars;
+
     private void Awake()
     {
+        _bars = new[] { compareText, officeText };
         if (compareBar != null)
             compareBar.SetActive(false);
         if (officeBar != null)
@@ -164,7 +170,7 @@ public sealed class CompareController : MonoBehaviour
     /// <summary>Writes the same text and colour into both bars' texts.</summary>
     private void WriteBars(string text, Color colour)
     {
-        foreach (TMP_Text t in new[] { compareText, officeText })
+        foreach (TMP_Text t in _bars)
         {
             if (t == null)
                 continue;
