@@ -1,6 +1,6 @@
-# Time Sorter: Character Art Brief v2.2 (for ChatGPT)
+# Time Sorter: Character Art Brief v2.3 (for ChatGPT)
 
-*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), and again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
+*2026-09-24, revised the same day after the review of v2 (Appendix E), on 2026-09-25 for the 3D office (v2.1: see "What changed in v2.1"), again on 2026-09-25 for the ReStory style (v2.2: see "What changed in v2.2"), and on 2026-09-26 for the 2150 clothes and accessory kit (v2.3). Replaces `docs/CHARACTER_ART_BRIEF.md` (v1). Follows the piece-4 characters design (layers, file names, canvas), its Amendment A1 (premade cast about half women), piece 5 (Future outfits), the office move (the game in the art side's 3D office) and Saleh's style direction: like ReStory's cute 2D anime-style customers, for both kinds of character, with flat cel colours, simple textures and neutral even lighting.*
 
 **The contract this brief follows.** This brief implements `docs/CHARACTER_ART_CONTRACT.md`, the tracked character-art contract of the piece-4 design (its W1 and R26). The older character contracts are retired: `ART_ASSET_LIST.md` section D (the 240 x 440 visitor trios and legendary pairs), its Tier-1 `traveller.png`, and the character direction in `PRODUCTION_PLAN.md`. No character art is delivered to them, and none goes to `Assets/Art/Office/Placeholder/traveller.png`: the game no longer uses that file. It stays on disk only because the art scene's leftover 2D booth (`OfficeRoot`, switched off when the office loads) and the art side's recovery scenes still reference it, and it goes when the art side deletes those leftovers (`docs/SCENE_CONTRACT_GAMEPLAY.md`).
 
@@ -18,6 +18,15 @@ Files that go with this brief (all in this folder, except the office screenshot)
 - `coverage.json`: every file name the game needs, so the delivery can be checked by a script.
 
 Attach whatever each prompt's "Attached:" line names.
+
+## What changed in v2.3 (2026-09-26): 2150 clothes and the accessory kit
+
+Every traveller must be dressed for the time they are going to, or they would cause a panic there (Saleh). A citizen of 2150 travelling into the past can get it wrong: another place's item, their own 2150 clothes, or one 2150 accessory over an otherwise right costume. Two things change for the art:
+
+1. **The neutral Future outfits become game files** (`outfit_m_neutral_future`, `outfit_f_neutral_future`): they are the present's clothes, which the game draws on a 2150 citizen who forgot their costume. They were working references only; draw them exactly as Batch 11 says.
+2. **New: the 2150 accessory kit** (Batch 12, section 24): four small items per gender (smart lenses, comm earpiece, transit badge, shoulder display), each readable at a glance above the desk and worn over any period costume. They are filed under the art nation `neutral` with their own name at the end (`accessory_m_neutral_future_lenses`).
+
+Nothing else changes.
 
 ## What changed in v2.2 (2026-09-25): the ReStory style
 
@@ -234,11 +243,13 @@ For Saleh only, never for ChatGPT (the game's starting weights, to review; they 
 | `accessory_[m/f]_[country]_[era].png` | `accessory_[m/f]_[country]_[era]` |
 | `outfit_[m/f]_[country]_future.png` | `outfit_[m/f]_[country]_future` |
 | `hair_[m/f]_neutral_future.png`, `facialhair_m_neutral_future.png` | `hair_[m/f]_neutral_future_[colour]`, `facialhair_m_neutral_future_[colour]` (shared by every Future place) |
+| `outfit_[m/f]_neutral_future.png` | `outfit_[m/f]_neutral_future` (the present's clothes, since v2.3) |
+| `accessory_[m/f]_neutral_future_[item].png` | `accessory_[m/f]_neutral_future_[item]` (the 2150 accessory kit; items: `lenses earpiece badge display`) |
 | `premade_[id]_[expression].png` | `premade_[id]_[neutral/happy/angry/worried]` |
 
 - Countries: `egypt iraq greece italy china japan britain germany`. Eras: `ancient medieval earlymodern industrial modern future`. Gender: `m` or `f`. Lower case, no spaces, underscores only.
 - Only what the look has: no file for "none" (no facial hair, no headwear, no accessory).
-- `outfit_[m/f]_neutral_future.png` is a working reference for the Future batch; the game has no key for it. Claude's working files are not game keys either: `mannequin_[m/f].png`, `style_card.png`, `premadebase_[m/f]_skin[N].png`.
+- `outfit_[m/f]_neutral_future.png` is the base of the Future batch and, since v2.3, a game file: the present's clothes. Claude's working files are not game keys: `mannequin_[m/f].png`, `style_card.png`, `premadebase_[m/f]_skin[N].png`.
 - The full list of game keys, with the raw file each comes from, is in `coverage.json`.
 
 ## 9. The prompts
@@ -465,6 +476,7 @@ The game runs on placeholder shapes until art arrives, and every file replaces i
 | 9 | Industrial era | day 4 |  |
 | 10 | Modern era | day 5 |  |
 | 11 | The Future | day 6 | only appears once a country leads history |
+| 12 | The 2150 accessory kit | day 2 | a 2150 citizen's costume error: one kit item over a right costume (the neutral Future outfits of Batch 11 are the other, 2150 clothes) |
 
 Batch 1 has to come first and Batch 2 second (premades and everything else need the approved base figures). After that the order is a recommendation: skipping ahead never breaks anything. Within a batch, send each place to Claude as soon as it is done. The UI art in `UI_ART_RULES.md` is a separate track in its own ChatGPT Project; start it any time after Batch 1.
 
@@ -2001,7 +2013,7 @@ MUST READ AT A GLANCE: the soft stand collar and clean geometric seams in slate 
 DO NOT DRAW: armour, helmets, visors, glowing parts, robot parts, weapons, logos, letters or readable text.
 ```
 
-Files: `outfit_m_neutral_future.png`, `outfit_f_neutral_future.png` (working references, not used in the game), `hair_m_neutral_future.png`, `hair_f_neutral_future.png`, `facialhair_m_neutral_future.png`
+Files: `outfit_m_neutral_future.png`, `outfit_f_neutral_future.png` (the base of every culture Future and, since v2.3, the present's clothes: import labels "tech jacket" / "coat-dress"), `hair_m_neutral_future.png`, `hair_f_neutral_future.png`, `facialhair_m_neutral_future.png`
 
 ### Future shaped by Egypt: Nile Arcology
 
@@ -2109,6 +2121,27 @@ Files: `outfit_m_germany_future.png`, `outfit_f_germany_future.png` (prompt 9.9)
 
 **Send to Claude.**
 
+## 24. Batch 12: the 2150 accessory kit (8 images)
+
+The travellers of 2150 must dress for the time they are going to. One who slips wears a single item of their own time over an otherwise right costume, and the player catches it by comparing it with the Costume Guide. These are those items: one small set, drawn for the man and for the woman. Folder: `Raw/batch12-2150-kit/`.
+
+```
+PAIR: neutral_future_kit (the 2150 accessory kit, the player's own time)
+Both: small, clean, practical 2150 gadgets in slate grey, sand and slate teal-blue, like the neutral Future outfits. Each stands on its own, over any period costume, and reads at a glance above the desk.
+- SMART LENSES: a pair of slim rimless smart lenses: two small rounded-rectangle lenses of flat, opaque pale blue-grey joined by a thin slate-grey bridge, sitting on the nose in front of the eyes.
+- COMM EARPIECE: a sleek slate teal-blue comm earpiece hooked over the ear on the viewer's left, with a short slim boom reaching forward along the cheek.
+- TRANSIT BADGE: a large rounded-rectangle transit badge in sand with slate teal-blue geometric panels, clipped to the upper chest on the viewer's right (no text, numbers or symbols).
+- SHOULDER DISPLAY: a curved slate-grey display panel strapped over the shoulder on the viewer's left, its face flat matte teal-blue (not lit, no text).
+MUST READ AT A GLANCE: each item's clean geometric shape in slate grey and teal-blue, unlike any period accessory.
+DO NOT DRAW: glowing parts, screens with pictures, letters, numbers or readable text, logos, cables, anything held in the hand.
+```
+
+For each item, send the PAIR block once, then prompt 9.8 (Accessory) with the item's name, once for the man and once for the woman.
+
+Files: `accessory_m_neutral_future_lenses.png`, `accessory_m_neutral_future_earpiece.png`, `accessory_m_neutral_future_badge.png`, `accessory_m_neutral_future_display.png`, `accessory_f_neutral_future_lenses.png`, `accessory_f_neutral_future_earpiece.png`, `accessory_f_neutral_future_badge.png`, `accessory_f_neutral_future_display.png`. Import labels (world_source.json `present.kit`): "smart lenses" (`lenses`); "comm earpiece" (`earpiece`); "transit badge" (`badge`); "shoulder display" (`display`).
+
+**Send to Claude.**
+
 ## Checklist before you send a place to Claude
 
 - Every file is a 1024 x 1536 portrait PNG (not square) saved with the download button, named exactly as listed.
@@ -2136,10 +2169,11 @@ Files: `outfit_m_germany_future.png`, `outfit_f_germany_future.png` (prompt 9.9)
 | Batch 8: premades (Johannes Gutenberg, Leonardo da Vinci, Aemilia Lanyer, Cecilia Gallerani) | 16 | 16 |
 | Batch 9: Industrial era | 64 | 161 |
 | Batch 10: Modern era | 61 | 146 |
-| Batch 11: the Future | 21 | 31 |
-| **Total** | **406** | **880** |
+| Batch 11: the Future | 21 | 33 |
+| Batch 12: the 2150 accessory kit | 8 | 8 |
+| **Total** | **414** | **890** |
 
-The game files include the five baked hair colours, the hair-back layers and the four premade expressions. The two neutral Future outfits are working references with no game file. `coverage.json` lists every game file.
+The game files include the five baked hair colours, the hair-back layers and the four premade expressions. `coverage.json` lists every game file.
 
 ## Appendix A. The 68 data fixes (brief_review.json `fixes`)
 
