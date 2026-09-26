@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// Condition type for an ending. Unused fields are ignored per type
-/// (see EndingService for evaluation logic). Serialized as ints: append only.
+/// (EndingRules.Met decides each). Serialized as ints: append only.
 /// </summary>
 public enum EndingConditionType
 {
@@ -63,13 +63,66 @@ public readonly struct EndingCandidate
     }
 }
 
+/// <summary>The run's numbers an ending condition reads, taken when a check runs (EndingRules.Met).</summary>
+public readonly struct EndingCheck
+{
+    /// <summary>Timeline stability now.</summary>
+    public readonly float Stability;
+
+    /// <summary>The wallet now.</summary>
+    public readonly int Money;
+
+    /// <summary>The run's day now.</summary>
+    public readonly int Day;
+
+    /// <summary>The firing line: stability at or below it is Fired (GameConfigSO.firedAtStability).</summary>
+    public readonly float FiredAtStability;
+
+    /// <summary>The bankruptcy line: money at or below it is Bankrupt (GameConfigSO.bankruptcyMoneyThreshold).</summary>
+    public readonly int BankruptAtMoney;
+
+    /// <summary>Creates a check's numbers.</summary>
+    public EndingCheck(float stability, int money, int day, float firedAtStability, int bankruptAtMoney)
+    {
+        Stability = stability;
+        Money = money;
+        Day = day;
+        FiredAtStability = firedAtStability;
+        BankruptAtMoney = bankruptAtMoney;
+    }
+}
+
 /// <summary>
-/// Which ending a check picks, pure so it is tested headless: failures end a
-/// run at any moment; the milestone (Retirement) only at the day boundary,
-/// where a reached attribute epilogue replaces it.
+/// The ending rules, pure so they are tested headless: whether each condition
+/// holds (Met), and which ending a check picks (Select): failures end a run at
+/// any moment; the milestone (Retirement) only at the day boundary, where a
+/// reached attribute epilogue replaces it.
 /// </summary>
 public static class EndingRules
 {
+    /// <summary>The firing rule: stability at or below the firing line (ShiftScoring's firedNow is the same rule).</summary>
+    public static bool IsFired(float stability, float firedAtStability) => stability <= firedAtStability;
+
+    /// <summary>
+    /// Whether an ending's condition holds now (audit R2-007, R2-021): Fired
+    /// at or below the firing line; Bankrupt at or below the bankruptcy line;
+    /// AttrTotalAtLeast when the ending's attribute total reaches
+    /// <paramref name="threshold"/> (<paramref name="attributeTotal"/> is null
+    /// when the ending names no attribute: never met); DayAtLeast from day
+    /// <paramref name="threshold"/>; any other type never.
+    /// </summary>
+    public static bool Met(EndingConditionType type, float threshold, float? attributeTotal, EndingCheck now)
+    {
+        switch (type)
+        {
+            case EndingConditionType.Fired: return IsFired(now.Stability, now.FiredAtStability);
+            case EndingConditionType.Bankrupt: return now.Money <= now.BankruptAtMoney;
+            case EndingConditionType.AttrTotalAtLeast: return attributeTotal.HasValue && attributeTotal.Value >= threshold;
+            case EndingConditionType.DayAtLeast: return now.Day >= threshold;
+            default: return false;
+        }
+    }
+
     /// <summary>Fired and Bankrupt are failures, DayAtLeast a milestone, AttrTotalAtLeast an epilogue; any other value a failure.</summary>
     public static EndingKind KindOf(EndingConditionType type)
     {
