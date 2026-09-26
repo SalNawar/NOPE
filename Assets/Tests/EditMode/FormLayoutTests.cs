@@ -24,7 +24,7 @@ public class FormLayoutTests
         {
             Calls++;
             float charWidth = size * (FormTextStyles.IsBold(role) ? 0.55f : 0.5f);
-            int perLine = Math.Max(1, (int)Math.Floor(width / charWidth));
+            int perLine = (int)Math.Max(1.0, Math.Min(1e6, Math.Floor(width / charWidth)));
             int lines = 1, used = 0;
             foreach (string word in (text ?? string.Empty).Split(' '))
             {

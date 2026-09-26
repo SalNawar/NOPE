@@ -583,12 +583,15 @@ public static class FormLayout
 
         // ---------------- Measuring ----------------
 
+        /// <summary>A width no line of a form reaches: a thousand pages across.</summary>
+        private float OneLineWidth => Math.Max(_width, _h) * 1000f;
+
         /// <summary>One line's height in a role's style at a size.</summary>
         private float Line(FormTextRole role, float size)
         {
             if (!_lines.TryGetValue((role, size), out float line))
             {
-                line = _measure.Height("Hg", role, size, float.MaxValue / 4f);
+                line = _measure.Height("Hg", role, size, OneLineWidth);
                 _lines[(role, size)] = line;
             }
             return line;
