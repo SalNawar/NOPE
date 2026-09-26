@@ -62,7 +62,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "compareController", compare);
         so.ApplyModifiedProperties();
 
-        OSWindowChrome chrome = win.GetComponent<OSWindowChrome>();
+        DesktopWindow chrome = win.GetComponent<DesktopWindow>();
         win.gameObject.SetActive(false); // opened by its icon
         BuildDesktopIcon(iconGrid, "IconRecords", "icon.records", chrome, "");
         return records;

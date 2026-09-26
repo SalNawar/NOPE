@@ -135,6 +135,14 @@ public class InterviewTests
         Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(null, "Babylonia (Ancient)"));
     }
 
+    [Test]
+    public void ClaimTemplate_IsTheAuthoredClaim_OrThePlaceAloneWhenBlank()
+    {
+        Assert.AreEqual("I request passage home to {place}.", Interview.ClaimTemplate(Lines()));
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(new InterviewLines()));
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(null));
+    }
+
     // -----------------------------
     // Small talk
     // -----------------------------

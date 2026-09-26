@@ -16,7 +16,9 @@ using UnityEngine.UI;
 /// translation's first day a line is in the claimed place's tongue, and with
 /// the region's Speech translator its letters flip into English behind the
 /// typing (its hold starts once the flip ends; opening the wheel finishes the
-/// flip at once). The bubble's answer lines are evidence (piece 10): while
+/// flip at once); without it the line stays in the script but for its key
+/// words (DialogLine.English), which show in English and never flip. The
+/// bubble's answer lines are evidence (piece 10): while
 /// an answer shows, the bubble's button takes a click (LineClicked, the
 /// DialogLine said; the pick lights the bubble while that line shows), and
 /// hovering the bubble holds its line (SpeechQueue.Hold). This host
@@ -306,14 +308,15 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (!_canOpen || _speech == null || lines == null)
             return;
 
-        Reveal flip = _translation.Bubble(0f);
+        SpeechTranslation speech = _translation.Speech;
         foreach (DialogLine line in lines)
         {
             if (line == null)
                 continue;
             _said.Add(line);
+            Reveal flip = _translation.Bubble(line, 0f);
             _speech.Say(line.Text, line.Expression,
-                flip.Kind == RevealKind.Flipping ? DisplayText.Remaining(line.Text, flip, _translation.Timing, _translation.ReducedMotion) : 0f,
+                flip.Kind == RevealKind.Flipping ? DisplayText.Remaining(line.Text, flip, speech.Timing, speech.ReducedMotion) : 0f,
                 _said.Count - 1);
         }
 
@@ -385,7 +388,7 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
         if (started || !_bubbleUp)
         {
             bubble.Show(_speech.Text, traveller != null ? traveller.Anchor : null, config.bubbleOffset, float.PositiveInfinity);
-            _flip.Show(bubble.Label, _speech.Text, _translation.Bubble(_speech.LineSeconds), _translation);
+            _flip.Show(bubble.Label, _speech.Text, _translation.Bubble(CurrentLine, _speech.LineSeconds), _translation);
             _bubbleUp = true;
             RefreshBubbleInput();
         }

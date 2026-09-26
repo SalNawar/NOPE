@@ -61,9 +61,9 @@ public sealed class TextFlip
         _reveal = reveal;
         _typed = -1;
         _tr = tr ?? CaseTranslation.None;
-        _progress = DisplayText.Progress(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+        _progress = DisplayText.Progress(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         Apply(reveal);
-        Running = reveal.Kind == RevealKind.Flipping && DisplayText.Remaining(_canonical, reveal, _tr.Timing, _tr.ReducedMotion) > 0f;
+        Running = reveal.Kind == RevealKind.Flipping && DisplayText.Remaining(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion) > 0f;
     }
 
     /// <summary>A running flip <paramref name="elapsed"/> seconds after its reveal: recomposes only when a letter changes; false once it has settled (its own font back).</summary>
@@ -72,9 +72,9 @@ public sealed class TextFlip
         if (!Running || _text == null)
             return false;
 
-        Reveal now = Reveal.Flipping(_reveal.Foreign, elapsed, _reveal.Row);
-        int progress = DisplayText.Progress(_canonical, now, _tr.Timing, _tr.ReducedMotion);
-        bool settled = DisplayText.Remaining(_canonical, now, _tr.Timing, _tr.ReducedMotion) <= 0f;
+        Reveal now = Reveal.Flipping(_reveal.Foreign, elapsed, _reveal.English);
+        int progress = DisplayText.Progress(_canonical, now, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
+        bool settled = DisplayText.Remaining(_canonical, now, _tr.Speech.Timing, _tr.Speech.ReducedMotion) <= 0f;
         if (progress != _progress || settled)
         {
             _progress = progress;
@@ -97,7 +97,7 @@ public sealed class TextFlip
             return;
 
         _typed = typed;
-        if (DisplayText.ReadsRightToLeft(_canonical, _shown, _tr.Timing, _tr.ReducedMotion))
+        if (DisplayText.ReadsRightToLeft(_canonical, _shown, _tr.Speech.Timing, _tr.Speech.ReducedMotion))
             Apply(_shown);
         else
             _text.maxVisibleCharacters = typed;
@@ -120,45 +120,46 @@ public sealed class TextFlip
         _reveal = Reveal.Plain;
         _typed = -1;
         if (_text != null)
-            SetFont(_text, _ownFont, _ownMaterial, false, null);
+            SetFont(_text, _ownFont, _ownFont, _ownMaterial);
     }
 
     /// <summary>
-    /// Writes a text that never animates (a transcript row, a clone of its
-    /// template): its DisplayText form, in the script's font while it shows
-    /// foreign cells.
+    /// Writes a text that never animates (a transcript row): its DisplayText
+    /// form, always in the font DisplayText.FontFor picks: the script's while
+    /// it shows foreign cells, else <paramref name="ownFont"/> with
+    /// <paramref name="ownMaterial"/> (the text's own, from its template), so a
+    /// row that held a foreign line before gets its own font back (audit
+    /// R4-024, the PC spec's TR3: rows may be pooled).
     /// </summary>
-    public static void Write(TMP_Text text, string canonical, Reveal reveal, CaseTranslation tr)
+    public static void Write(TMP_Text text, TMP_FontAsset ownFont, Material ownMaterial, string canonical, Reveal reveal, CaseTranslation tr)
     {
         if (text == null)
             return;
         tr = tr ?? CaseTranslation.None;
-        text.text = DisplayText.For(canonical, reveal, tr.Timing, tr.ReducedMotion);
-        if (!DisplayText.ShowsForeign(canonical, reveal, tr.Timing, tr.ReducedMotion))
-            return;
-        if (tr.Font != null)
-            text.font = tr.Font;
-        Fit(text);
+        SpeechTranslation speech = tr.Speech;
+        text.text = DisplayText.For(canonical, reveal, speech.Timing, speech.ReducedMotion);
+        SetFont(text, DisplayText.FontFor(canonical, reveal, speech.Timing, speech.ReducedMotion, tr.Font, ownFont), ownFont, ownMaterial);
+        if (DisplayText.ShowsForeign(canonical, reveal, speech.Timing, speech.ReducedMotion))
+            Fit(text);
     }
 
     /// <summary>Writes the reveal's form (typed out so far, while typing) and picks the font for it.</summary>
     private void Apply(Reveal reveal)
     {
         _shown = reveal;
-        bool foreign = DisplayText.ShowsForeign(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
-        SetFont(_text, _ownFont, _ownMaterial, foreign, _tr.Font);
-        if (foreign)
+        SetFont(_text, DisplayText.FontFor(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion, _tr.Font, _ownFont), _ownFont, _ownMaterial);
+        if (DisplayText.ShowsForeign(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion))
             Fit(_text);
         if (_typed < 0)
         {
-            _text.text = DisplayText.For(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+            _text.text = DisplayText.For(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
             return;
         }
 
-        bool rightToLeft = DisplayText.ReadsRightToLeft(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+        bool rightToLeft = DisplayText.ReadsRightToLeft(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         _text.text = rightToLeft
-            ? DisplayText.Typed(_canonical, reveal, _tr.Timing, _tr.ReducedMotion, _typed, HideOpen, HideClose)
-            : DisplayText.For(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+            ? DisplayText.Typed(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion, _typed, HideOpen, HideClose)
+            : DisplayText.For(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         _text.maxVisibleCharacters = rightToLeft ? int.MaxValue : _typed;
     }
 
@@ -169,10 +170,9 @@ public sealed class TextFlip
             UiText.FitLabel(text, true);
     }
 
-    /// <summary>The script's font while foreign cells show (when there is one), else the text's own font and material.</summary>
-    private static void SetFont(TMP_Text text, TMP_FontAsset own, Material ownMaterial, bool foreign, TMP_FontAsset script)
+    /// <summary>Sets <paramref name="font"/> (DisplayText.FontFor's pick; nothing when null or already set); the text's own font gets its own material back.</summary>
+    private static void SetFont(TMP_Text text, TMP_FontAsset font, TMP_FontAsset own, Material ownMaterial)
     {
-        TMP_FontAsset font = foreign && script != null ? script : own;
         if (font == null || text.font == font)
             return;
         text.font = font;

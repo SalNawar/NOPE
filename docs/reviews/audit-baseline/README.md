@@ -4,7 +4,8 @@ The safety net for the code audit and overhaul
 (`docs/superpowers/plans/2026-09-25-code-audit-overhaul-plan.md`, §2 Phase 0).
 Everything here was captured on commit `ff3a6e0` (local tag `audit-baseline`,
 branch `overhaul/audit`) and must stay identical after every slice, except
-changes that a slice documents as intended.
+changes that a slice documents as intended. A slice with such a change re-packs
+`golden/` (see "Re-baselines" below); the metrics stay those of `ff3a6e0`.
 
 ## What is here
 
@@ -89,9 +90,18 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
   - Day 4: the first rule violator is accepted.
 - **Home each night:**
   1. Treat every family member at condition 2 or worse, if affordable.
-  2. Buy Interview Protocols, then the Near East Papers translator, each once there is money to spare.
+  2. Buy Interview Protocols, then the Near East Speech translator, each once there is money to spare (the Near East Papers translator until the redesign's phase 1 retired it).
   3. Never spin the slot machine (its draw is unseeded, see below).
   4. Sleep.
+
+## Re-baselines
+
+- **Redesign phase 1, speech-only translation** (`redesign/p01-speech-translation`):
+  - `world_generate.txt`, `data_hashes.txt`: Generate World prunes the four Papers translators (`Assets/Data` 441 → 433 files) and rewrites the library and the translation notice.
+  - `play_transcript.txt` and 11 of the 12 saves (all but day 1's shift): Home buys the Near East Speech translator (80) on night 1, where the retired Papers one (100) was bought on night 3. Interview Protocols follow on night 3 instead of night 2, so day 3 asks no birth date and the protocols notice moves to day 4's paper. The notice text changes; every verdict is unchanged; money shifts by the prices.
+  - `scenes_summary.txt`: the build-settings line of phase 0's fix 1, documented in `docs/reviews/2026-09-26-audit-hotfix-gate.md` and packed here.
+  - `profile_A.txt`, `profile_B.txt`: re-measured. The office views allocate 736 B per frame (phase 0's fix 7); no new allocation site; every load within 25% of the old baseline.
+  - Unchanged: `cases.txt`, `validator.txt`, the three scene dumps (each rebuild equal), `contract.txt`, `play_warnings.txt`. Runs A and B were identical.
 
 ## Baseline results (ff3a6e0)
 
