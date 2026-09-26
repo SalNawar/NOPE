@@ -86,6 +86,11 @@ public static class Palette
                 problems.Add($"Palette map: role '{role}' is diegetic; it takes no seeds (only the neutral theme names its colours).");
                 continue;
             }
+            if (ThemeRoles.IsRetired(role))
+            {
+                problems.Add($"Palette map: role '{role}' is retired; remove its rule.");
+                continue;
+            }
             if (byRole.ContainsKey(role))
             {
                 problems.Add($"Palette map: role '{role}' has more than one rule.");
@@ -111,6 +116,11 @@ public static class Palette
                 problems.Add($"Override: role '{role}' is diegetic; only the neutral theme names its colours.");
                 continue;
             }
+            if (ThemeRoles.IsRetired(role))
+            {
+                problems.Add($"Override: role '{role}' is retired; remove it.");
+                continue;
+            }
 
             if (!byRole.TryGetValue(role, out ResolvedRole entry))
                 byRole[role] = entry = new ResolvedRole { Role = role };
@@ -125,13 +135,14 @@ public static class Palette
 
     /// <summary>
     /// The roles a theme lacks: every chrome role needs a colour, and with
-    /// <paramref name="includeDiegetic"/> (the neutral theme) every diegetic one too.
+    /// <paramref name="includeDiegetic"/> (the neutral theme) every diegetic one
+    /// too; a retired role never.
     /// </summary>
     public static List<ThemeRoleId> Missing(IReadOnlyList<ResolvedRole> roles, bool includeDiegetic)
     {
         var present = new HashSet<ThemeRoleId>((roles ?? Array.Empty<ResolvedRole>()).Where(r => r != null).Select(r => r.Role));
         return ((ThemeRoleId[])Enum.GetValues(typeof(ThemeRoleId)))
-            .Where(r => !present.Contains(r) && (includeDiegetic || !ThemeRoles.IsDiegetic(r)))
+            .Where(r => !present.Contains(r) && !ThemeRoles.IsRetired(r) && (includeDiegetic || !ThemeRoles.IsDiegetic(r)))
             .ToList();
     }
 

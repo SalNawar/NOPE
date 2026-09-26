@@ -7962,13 +7962,6 @@
         "textClass": "Text"
       },
       {
-        "role": "DeskDim",
-        "fill": "dark",
-        "alpha": 0.55,
-        "ink": "",
-        "textClass": "None"
-      },
-      {
         "role": "InputField",
         "fill": "white",
         "alpha": 1,
@@ -7993,6 +7986,69 @@
         "role": "ClickCatcher",
         "fill": "white",
         "alpha": 0,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "TabStrip",
+        "fill": "chrome",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "Tab",
+        "fill": "face",
+        "alpha": 1,
+        "ink": "faceInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "TabActive",
+        "fill": "paper",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "Sidebar",
+        "fill": "face",
+        "alpha": 1,
+        "ink": "faceInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "SearchResults",
+        "fill": "note",
+        "alpha": 1,
+        "ink": "ink",
+        "textClass": "Text"
+      },
+      {
+        "role": "Badge",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "accentInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "Toast",
+        "fill": "chromeDeep",
+        "alpha": 1,
+        "ink": "chromeInk",
+        "textClass": "Text"
+      },
+      {
+        "role": "FocusRing",
+        "fill": "accent",
+        "alpha": 1,
+        "ink": "",
+        "textClass": "None"
+      },
+      {
+        "role": "IconSelection",
+        "fill": "accent",
+        "alpha": 0.45,
         "ink": "",
         "textClass": "None"
       }
@@ -8171,11 +8227,6 @@
           "ink": ""
         },
         {
-          "role": "DeskDim",
-          "fill": "#0F121A8C",
-          "ink": ""
-        },
-        {
           "role": "StickyNote",
           "fill": "#FFF599F7",
           "ink": "#1A1714"
@@ -8234,6 +8285,16 @@
           "role": "DiegeticDevice",
           "fill": "#FFFFFF",
           "ink": "#5E5446"
+        },
+        {
+          "role": "DiegeticForm",
+          "fill": "#F7F5EB",
+          "ink": "#1A1714"
+        },
+        {
+          "role": "SiteContent",
+          "fill": "#FFFFFF",
+          "ink": "#1A1714"
         }
       ],
       "art": [
@@ -8325,7 +8386,7 @@
         "key": "records.title",
         "text": "Citizen Records",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "records.search",
@@ -8361,13 +8422,13 @@
         "key": "window.directives",
         "text": "Directives",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "window.scanner",
         "text": "Deviation Report",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "window.settings",
@@ -8379,41 +8440,23 @@
         "key": "icon.directives",
         "text": "Directives",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "icon.scanner",
         "text": "Deviation Report",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "icon.records",
         "text": "Records",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "icon.internet",
         "text": "Internet",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "icon.lexicon",
-        "text": "Lexicon",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "icon.dialect",
-        "text": "Dialect",
-        "gloss": "None",
-        "tier": "Flavour"
-      },
-      {
-        "key": "icon.material",
-        "text": "Material",
         "gloss": "None",
         "tier": "Flavour"
       },
@@ -8424,10 +8467,34 @@
         "tier": "Flavour"
       },
       {
+        "key": "icon.investigation",
+        "text": "Investigation",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.mail",
+        "text": "Mail",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.account",
+        "text": "Citizen Account",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "icon.settings",
+        "text": "Settings",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
         "key": "icon.clueLog",
         "text": "Clue Log",
         "gloss": "None",
-        "tier": "Flavour"
+        "tier": "Full"
       },
       {
         "key": "tray.day",
@@ -8580,44 +8647,14 @@
         "tier": "Full"
       },
       {
-        "key": "window.lexicon",
-        "text": "Lexicon",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.dialect",
-        "text": "Dialect",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "window.material",
-        "text": "Material Analysis",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "window.notes",
         "text": "Notes",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "body.lexicon",
-        "text": "Wikipedia-style era glossary. (placeholder)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "body.dialect",
-        "text": "Notes on accents and phrasing. (placeholder)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "body.material",
-        "text": "Flags tech/materials beyond the claimed era. (upgrade)",
+        "key": "window.investigation",
+        "text": "Investigation",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9078,6 +9115,42 @@
         "tier": "Full"
       },
       {
+        "key": "settings.desktop",
+        "text": "Desktop icons open with",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.iconDouble",
+        "text": "Double click",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.iconSingle",
+        "text": "Single click",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.resetIcons",
+        "text": "Reset icon positions",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "desktop.arrange",
+        "text": "Arrange icons",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.open",
+        "text": "Open",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.note",
         "text": "Colours, fonts and the wallpaper always follow history. A language change applies the next time the office opens. Reduced motion shows translations at once.",
         "gloss": "None",
@@ -9145,7 +9218,7 @@
       },
       {
         "key": "keys.card",
-        "text": "Esc: leave a text field, close the Start menu or cancel a window drag; with none of those, it leaves the PC.\nDouble-click a title bar: maximise or restore the window.",
+        "text": "Esc: close a menu, leave a text field, close the Start menu or cancel a drag; with none of those, it leaves the PC.\nDesktop icons: double-click one to open it (Settings can make it one click), drag it anywhere, arrows move the selection and Enter opens it; right-click the desktop to arrange them.\nDouble-click a title bar: maximise or restore the window.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -10240,10 +10313,6 @@
             "text": "إلى البيت"
           },
           {
-            "key": "records.title",
-            "text": "سجلات المواطنين"
-          },
-          {
             "key": "records.search",
             "text": "بحث"
           },
@@ -10264,52 +10333,32 @@
             "text": "تم الاطلاع"
           },
           {
-            "key": "window.directives",
-            "text": "التوجيهات"
-          },
-          {
-            "key": "window.scanner",
-            "text": "تقرير الانحرافات"
-          },
-          {
             "key": "window.settings",
             "text": "الإعدادات"
-          },
-          {
-            "key": "icon.directives",
-            "text": "التوجيهات"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "تقرير الانحرافات"
-          },
-          {
-            "key": "icon.records",
-            "text": "السجلات"
           },
           {
             "key": "icon.internet",
             "text": "الإنترنت"
           },
           {
-            "key": "icon.lexicon",
-            "text": "المعجم"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "اللهجات"
-          },
-          {
-            "key": "icon.material",
-            "text": "المواد"
-          },
-          {
             "key": "icon.notes",
             "text": "ملاحظات"
           },
           {
-            "key": "icon.clueLog",
-            "text": "سجل الأدلة"
+            "key": "icon.investigation",
+            "text": "التحقيق"
+          },
+          {
+            "key": "icon.mail",
+            "text": "البريد"
+          },
+          {
+            "key": "icon.account",
+            "text": "حساب المواطن"
+          },
+          {
+            "key": "icon.settings",
+            "text": "الإعدادات"
           },
           {
             "key": "tray.day",
@@ -10382,10 +10431,6 @@
             "text": "ΣΠΙΤΙ"
           },
           {
-            "key": "records.title",
-            "text": "Μητρώο Πολιτών"
-          },
-          {
             "key": "records.search",
             "text": "ΑΝΑΖΗΤΗΣΗ"
           },
@@ -10406,52 +10451,32 @@
             "text": "Ελήφθη"
           },
           {
-            "key": "window.directives",
-            "text": "Οδηγίες"
-          },
-          {
-            "key": "window.scanner",
-            "text": "Αναφορά αποκλίσεων"
-          },
-          {
             "key": "window.settings",
             "text": "Ρυθμίσεις"
-          },
-          {
-            "key": "icon.directives",
-            "text": "Οδηγίες"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "Αναφορά αποκλίσεων"
-          },
-          {
-            "key": "icon.records",
-            "text": "Μητρώο"
           },
           {
             "key": "icon.internet",
             "text": "Διαδίκτυο"
           },
           {
-            "key": "icon.lexicon",
-            "text": "Λεξικό"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "Διάλεκτος"
-          },
-          {
-            "key": "icon.material",
-            "text": "Υλικά"
-          },
-          {
             "key": "icon.notes",
             "text": "Σημειώσεις"
           },
           {
-            "key": "icon.clueLog",
-            "text": "Ενδείξεις"
+            "key": "icon.investigation",
+            "text": "Έρευνα"
+          },
+          {
+            "key": "icon.mail",
+            "text": "Αλληλογραφία"
+          },
+          {
+            "key": "icon.account",
+            "text": "Λογαριασμός πολίτη"
+          },
+          {
+            "key": "icon.settings",
+            "text": "Ρυθμίσεις"
           },
           {
             "key": "tray.day",
@@ -10524,10 +10549,6 @@
             "text": "A CASA"
           },
           {
-            "key": "records.title",
-            "text": "Anagrafe"
-          },
-          {
             "key": "records.search",
             "text": "CERCA"
           },
@@ -10548,52 +10569,32 @@
             "text": "Preso atto"
           },
           {
-            "key": "window.directives",
-            "text": "Direttive"
-          },
-          {
-            "key": "window.scanner",
-            "text": "Rapporto deviazioni"
-          },
-          {
             "key": "window.settings",
             "text": "Impostazioni"
-          },
-          {
-            "key": "icon.directives",
-            "text": "Direttive"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "Rapporto deviazioni"
-          },
-          {
-            "key": "icon.records",
-            "text": "Anagrafe"
           },
           {
             "key": "icon.internet",
             "text": "Internet"
           },
           {
-            "key": "icon.lexicon",
-            "text": "Lessico"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "Dialetto"
-          },
-          {
-            "key": "icon.material",
-            "text": "Materiali"
-          },
-          {
             "key": "icon.notes",
             "text": "Appunti"
           },
           {
-            "key": "icon.clueLog",
-            "text": "Indizi"
+            "key": "icon.investigation",
+            "text": "Indagine"
+          },
+          {
+            "key": "icon.mail",
+            "text": "Posta"
+          },
+          {
+            "key": "icon.account",
+            "text": "Conto del cittadino"
+          },
+          {
+            "key": "icon.settings",
+            "text": "Impostazioni"
           },
           {
             "key": "tray.day",
@@ -10666,10 +10667,6 @@
             "text": "NACH HAUSE"
           },
           {
-            "key": "records.title",
-            "text": "Einwohnerregister"
-          },
-          {
             "key": "records.search",
             "text": "SUCHEN"
           },
@@ -10690,52 +10687,32 @@
             "text": "Zur Kenntnis"
           },
           {
-            "key": "window.directives",
-            "text": "Anweisungen"
-          },
-          {
-            "key": "window.scanner",
-            "text": "Abweichungsbericht"
-          },
-          {
             "key": "window.settings",
             "text": "Einstellungen"
-          },
-          {
-            "key": "icon.directives",
-            "text": "Anweisungen"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "Abweichungsbericht"
-          },
-          {
-            "key": "icon.records",
-            "text": "Register"
           },
           {
             "key": "icon.internet",
             "text": "Internet"
           },
           {
-            "key": "icon.lexicon",
-            "text": "Lexikon"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "Mundart"
-          },
-          {
-            "key": "icon.material",
-            "text": "Material"
-          },
-          {
             "key": "icon.notes",
             "text": "Notizen"
           },
           {
-            "key": "icon.clueLog",
-            "text": "Hinweise"
+            "key": "icon.investigation",
+            "text": "Ermittlung"
+          },
+          {
+            "key": "icon.mail",
+            "text": "Post"
+          },
+          {
+            "key": "icon.account",
+            "text": "Bürgerkonto"
+          },
+          {
+            "key": "icon.settings",
+            "text": "Einstellungen"
           },
           {
             "key": "tray.day",
@@ -10808,10 +10785,6 @@
             "text": "回家"
           },
           {
-            "key": "records.title",
-            "text": "公民档案"
-          },
-          {
             "key": "records.search",
             "text": "搜索"
           },
@@ -10832,52 +10805,32 @@
             "text": "知悉"
           },
           {
-            "key": "window.directives",
-            "text": "指令"
-          },
-          {
-            "key": "window.scanner",
-            "text": "偏差报告"
-          },
-          {
             "key": "window.settings",
             "text": "设置"
-          },
-          {
-            "key": "icon.directives",
-            "text": "指令"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "偏差报告"
-          },
-          {
-            "key": "icon.records",
-            "text": "档案"
           },
           {
             "key": "icon.internet",
             "text": "互联网"
           },
           {
-            "key": "icon.lexicon",
-            "text": "词典"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "方言"
-          },
-          {
-            "key": "icon.material",
-            "text": "材料"
-          },
-          {
             "key": "icon.notes",
             "text": "便笺"
           },
           {
-            "key": "icon.clueLog",
-            "text": "线索"
+            "key": "icon.investigation",
+            "text": "调查"
+          },
+          {
+            "key": "icon.mail",
+            "text": "邮件"
+          },
+          {
+            "key": "icon.account",
+            "text": "公民账户"
+          },
+          {
+            "key": "icon.settings",
+            "text": "设置"
           },
           {
             "key": "tray.day",
@@ -10950,10 +10903,6 @@
             "text": "帰宅"
           },
           {
-            "key": "records.title",
-            "text": "住民記録"
-          },
-          {
             "key": "records.search",
             "text": "検索"
           },
@@ -10974,52 +10923,32 @@
             "text": "了解"
           },
           {
-            "key": "window.directives",
-            "text": "指示"
-          },
-          {
-            "key": "window.scanner",
-            "text": "逸脱報告"
-          },
-          {
             "key": "window.settings",
             "text": "設定"
-          },
-          {
-            "key": "icon.directives",
-            "text": "指示"
-          },
-          {
-            "key": "icon.scanner",
-            "text": "逸脱報告"
-          },
-          {
-            "key": "icon.records",
-            "text": "記録"
           },
           {
             "key": "icon.internet",
             "text": "インターネット"
           },
           {
-            "key": "icon.lexicon",
-            "text": "用語集"
-          },
-          {
-            "key": "icon.dialect",
-            "text": "方言"
-          },
-          {
-            "key": "icon.material",
-            "text": "素材"
-          },
-          {
             "key": "icon.notes",
             "text": "メモ"
           },
           {
-            "key": "icon.clueLog",
-            "text": "手がかり"
+            "key": "icon.investigation",
+            "text": "調査"
+          },
+          {
+            "key": "icon.mail",
+            "text": "メール"
+          },
+          {
+            "key": "icon.account",
+            "text": "市民口座"
+          },
+          {
+            "key": "icon.settings",
+            "text": "設定"
           },
           {
             "key": "tray.day",
