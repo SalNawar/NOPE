@@ -4,7 +4,8 @@ using UnityEngine;
 /// The PC desktop's layout and timing knobs (the PC redesign section 4.9;
 /// DeskConfigSO stays the physical desk): the taskbar and the compare dock
 /// under the icon area, the windows' title bars, the taskbar's window
-/// buttons, and the double-click. Created and assigned by Tools > TimeDesk >
+/// buttons, the double-click, and the Internet's caps (the news back issues,
+/// the browser's history). Created and assigned by Tools > TimeDesk >
 /// Build Office UI (Assets/Data/Config/Desktop_Default.asset). The builder
 /// reads the sizes (re-run it after changing one); DesktopWindowManager
 /// reads the maximise area and the double-click at runtime.
@@ -42,6 +43,13 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The farthest the second click may be from the first, in desktop units.</summary>
     [Min(0f)] public float doubleClickDistance = 6f;
+
+    [Header("Internet")]
+    /// <summary>The morning papers the News site keeps as back issues (WorldState.newsArchive; the oldest go first).</summary>
+    [Min(1)] public int newsArchiveIssues = 30;
+
+    /// <summary>The pages the browser's Back can return through.</summary>
+    [Min(1)] public int browserHistory = 30;
 
     /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar and the dock (the icon area starts there).</summary>
     public float MaximisedBottom => taskbarHeight + dockHeight;

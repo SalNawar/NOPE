@@ -72,6 +72,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Wording of the templated history news (written by Generate World from world_source.json "history.lines").</summary>
     [SerializeField] private HistoryLines historyLines = new();
 
+    [Header("PC")]
+    /// <summary>The PC's content: the Internet's sites, the Static sites' pages and the Lineage Archive's people (written by Generate World from world_source.json "pc").</summary>
+    [SerializeField] private PcContent pc = new();
+
     [Header("Characters")]
     /// <summary>Face bands, grey age, the premade garment label and confusable pairs (written by Generate World from world_source.json "looks").</summary>
     [SerializeField] private LookRules lookRules = new();
@@ -263,6 +267,9 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>The templated history news wording (never null).</summary>
     public HistoryLines HistoryLines => historyLines ?? new HistoryLines();
+
+    /// <summary>The PC's content: sites, authored pages, the Lineage Archive's people (never null).</summary>
+    public PcContent Pc => pc ?? new PcContent();
 
     /// <summary>The culture UI knobs (never null).</summary>
     public CultureUiSettings CultureUi => cultureUi ?? new CultureUiSettings();

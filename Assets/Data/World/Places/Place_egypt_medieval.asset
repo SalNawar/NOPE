@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
   era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
   year: 1340
+  moment: Mamluk Cairo under al-Nasir Muhammad, c. 1340 CE (the al-Khalij al-Nasiri
+    canal was dug in 1325 and the Nile flood was read at the Roda Nilometer)
   tongue: arabic
   birthYearMin: 1270
   birthYearMax: 1322

@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: ad7c9652453fa68478b952fe18744d30, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
   year: 1700
+  moment: Ottoman Cairo, c. 1700 (Cairo as hub of the Red Sea coffee trade; the yearly
+    cutting of the Khalij canal dam at the Nile flood)
   tongue: arabic
   birthYearMin: 1630
   birthYearMax: 1682

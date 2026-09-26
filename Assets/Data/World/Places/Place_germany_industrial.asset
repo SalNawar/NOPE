@@ -17,6 +17,9 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5e4069046b249fa489a2713e05e5ce7e, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   year: 1899
+  moment: Berlin c. 1899, during the boom in German electrical engineering (Siemens,
+    AEG) and chemistry (Bayer's aspirin, synthetic dyes), when Berlin's permanent
+    dress-reform exhibition opened
   tongue: german
   birthYearMin: 1829
   birthYearMax: 1881

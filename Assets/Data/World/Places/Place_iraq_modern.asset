@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 95ad3a011b9ac8d41a21a12ebc9dcbb2, type: 2}
   era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   year: 1956
+  moment: Baghdad c. 1956, the Development Board's modernist building boom (commissions
+    for Gropius, Le Corbusier and Wright) in the city where Zaha Hadid grew up
   tongue: arabic
   birthYearMin: 1886
   birthYearMax: 1938

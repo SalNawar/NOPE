@@ -49,6 +49,7 @@ public static class ContentSheetMap
             Dialogs(),
             Premades(),
             History(),
+            Pc(),
             Ui(),
             Translation());
 
@@ -97,7 +98,7 @@ public static class ContentSheetMap
             Text("country").Required().Ref("countries"),
             Text("era").Required().Ref("eras"),
             Text("displayName"),
-            Text("moment").Note("research context only (not generated)"),
+            Text("moment").Note("the place's moment in a sentence (Chronopedia's article)"),
             Int("year"),
             Text("tongue").Ref("tongues"),
             Rows("placeFacts", "facts",
@@ -220,6 +221,7 @@ public static class ContentSheetMap
             Text("lines.leaderGained"),
             Text("lines.leaderLost"),
             Text("lines.carry"),
+            Text("lines.dominant").Note("an attribute becomes dominant in a place: {attribute} and {place}"),
             Rows("historyRules", "rules", Key("id", "rule"),
                 Text("id").Required(),
                 Text("name"),
@@ -235,6 +237,39 @@ public static class ContentSheetMap
                     Text("place").Ref("places"),
                     Text("category"),
                     Text("value"))).Note("history rules: when their conditions pass at night they rewrite a place's fact"));
+
+    /// <summary>The PC block: the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations.</summary>
+    private static SheetSpec Pc() =>
+        Single("pc", "pc",
+            Rows("pcSites", "sites", Key("id", "site"),
+                Text("id").Required(),
+                Text("kind").OneOf("News", "History", "Ancestry", "Static").Note("the page builder that serves it"),
+                Text("name"),
+                Text("domain").Note("chronet://{domain}: lower-case letters, digits, dots and dashes"),
+                Text("glyph").Note("the start-page tile's art key"),
+                Text("blurb"),
+                Int("fromDay").Note("the first day it is listed")).Note("the Internet's sites"),
+            Rows("pcPages", "pages", Key("{site}/{path}", "page"),
+                Text("site").Required().Ref("pcSites"),
+                Text("path").Note("blank: the site's front page"),
+                Text("title"),
+                Rows("pcPageBlocks", "blocks",
+                    Text("kind").OneOf("Headline", "Heading", "Paragraph", "Note", "Link", "Box"),
+                    Text("text"),
+                    Text("address").Omit().Note("a Link's site name, domain or chronet:// address"),
+                    List("lines").Omit().Note("a Box's lines"))).Note("a Static site's authored pages"),
+            Bool("ancestry.includePremades").Note("the premades who are who they claim get cards"),
+            Rows("pcPeople", "ancestry.people", Key("id", "person"),
+                Text("id").Required(),
+                Text("name"),
+                Text("born"),
+                Text("died"),
+                Text("place").Ref("places"),
+                Text("note")).Note("the Lineage Archive's people of the past (no traveller's name)"),
+            Rows("pcRelations", "ancestry.relations",
+                Text("person").Required().Note("a person's or a premade's id: the card it shows on"),
+                Text("kind"),
+                Text("other").Required().Note("the other card's id")).Note("one direction per row"));
 
     private static SheetSpec Ui() =>
         Single("ui", "ui",

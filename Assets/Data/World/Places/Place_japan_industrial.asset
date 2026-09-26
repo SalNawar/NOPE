@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 5554785014bb65542a17c2f2e5366759, type: 2}
   era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   year: 1899
+  moment: Nagoya in the Meiji period, c. 1899, the time of Sakichi Toyoda's steam-powered
+    wooden loom (1896) and Japan's rapid industrialisation
   tongue: japanese
   birthYearMin: 1829
   birthYearMax: 1881

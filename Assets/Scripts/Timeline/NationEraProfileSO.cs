@@ -29,6 +29,10 @@ public sealed class NationEraProfileSO : ScriptableObject
     /// <summary>The place's moment year (negative = BCE); travellers' ages (their face) are measured against it.</summary>
     public int year;
 
+    /// <summary>The place's moment in a sentence (world_source.json places[].moment): Chronopedia's article reads it.</summary>
+    [TextArea]
+    public string moment;
+
     /// <summary>The tongue this place speaks (piece 9; its travellers' papers are always English): a translation.tongues[] id, from world_source.json places[].tongue.</summary>
     public string tongue;
 

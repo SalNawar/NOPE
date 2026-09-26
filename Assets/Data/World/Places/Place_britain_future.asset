@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
   year: 2150
+  moment: London behind a great Thames barrier, 2150
   tongue: english
   birthYearMin: 2080
   birthYearMax: 2132
