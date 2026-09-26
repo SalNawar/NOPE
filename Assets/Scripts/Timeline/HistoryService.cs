@@ -23,12 +23,11 @@ public static class HistoryService
         if (world == null || inst == null || !inst.IsLiar || config == null)
             return;
 
-        NationSO claimNation = inst.claimedNation != null ? inst.claimedNation : inst.nation;
         NationEraProfileSO home = inst.trueHome;
-        if (claimNation == null || inst.claimedEra == null || home.nation == null || home.era == null)
+        if (inst.claimedNation == null || inst.claimedEra == null || home.nation == null || home.era == null)
             return;
 
-        CarryRecord record = Carries.Make(home.nation.id, home.era.id, claimNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
+        CarryRecord record = Carries.Make(home.nation.id, home.era.id, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
         if (record == null)
             return;
 

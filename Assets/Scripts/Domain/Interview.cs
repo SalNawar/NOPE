@@ -71,14 +71,62 @@ public static class Interview
         return Fill(lines.opener != null ? lines.opener.text : null, HonorificToken, Honorific(gender, lines));
     }
 
-    /// <summary>The traveller's claim sentence for a place label; the bare label when the template is blank (the banner never goes empty).</summary>
-    public static string Claim(InterviewLines lines, string placeLabel) => Fill(ClaimTemplate(lines), PlaceToken, placeLabel);
+    /// <summary>A traveller's claim sentence for a place label, in their kind's words; the bare label when the kind has no line (the banner never goes empty).</summary>
+    public static string Claim(InterviewLines lines, TravellerKind kind, string placeLabel) => Fill(ClaimTemplate(lines, kind), PlaceToken, placeLabel);
 
-    /// <summary>The claim's template: the authored one, or "{place}" alone when it is blank (the claim's key-word spans are taken over it).</summary>
-    public static string ClaimTemplate(InterviewLines lines)
+    /// <summary>The claim's template for a kind: its authored line, or "{place}" alone when it has none or it is blank (the claim's key-word spans are taken over it).</summary>
+    public static string ClaimTemplate(InterviewLines lines, TravellerKind kind)
     {
-        string template = lines != null && lines.claim != null ? lines.claim.text : null;
+        LineText line = ClaimLine(lines, kind);
+        string template = line != null ? line.text : null;
         return string.IsNullOrWhiteSpace(template) ? Placeholder(PlaceToken) : template;
+    }
+
+    /// <summary>The first claim line of a kind (null entries skipped), or null when it has none.</summary>
+    public static LineText ClaimLine(InterviewLines lines, TravellerKind kind)
+    {
+        if (lines == null || lines.claims == null)
+            return null;
+
+        foreach (KindLine k in lines.claims)
+            if (k != null && k.kind == kind)
+                return k.line;
+
+        return null;
+    }
+
+    /// <summary>
+    /// Every problem of the per-kind claim lines, the one rule Generate World
+    /// and the content validator share: an empty entry, a kind listed twice, a
+    /// blank line, a line without {place}, and a kind in <paramref name="kindsInPlay"/>
+    /// (the kinds some blueprint makes) with no line. Empty when sound.
+    /// </summary>
+    public static List<string> ClaimProblems(IReadOnlyList<KindLine> claims, IEnumerable<TravellerKind> kindsInPlay)
+    {
+        var problems = new List<string>();
+        var listed = new HashSet<TravellerKind>();
+        foreach (KindLine k in claims ?? new KindLine[0])
+        {
+            if (k == null)
+            {
+                problems.Add("interview.claims: an entry is empty.");
+                continue;
+            }
+
+            if (!listed.Add(k.kind))
+                problems.Add($"interview.claims: {k.kind} is listed twice.");
+            string text = k.line != null ? k.line.text : null;
+            if (string.IsNullOrWhiteSpace(text))
+                problems.Add($"interview.claims: the line of {k.kind} is blank.");
+            else if (!HoldsToken(text, PlaceToken))
+                problems.Add($"interview.claims: the line of {k.kind} must hold {Placeholder(PlaceToken)}.");
+        }
+
+        foreach (TravellerKind kind in kindsInPlay ?? new TravellerKind[0])
+            if (!listed.Contains(kind))
+                problems.Add($"interview.claims: {kind} has no claim line, but a blueprint makes that kind.");
+
+        return problems;
     }
 
     /// <summary>

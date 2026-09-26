@@ -231,13 +231,16 @@ public static partial class OfficeSceneUIBuilder
         }
 
         // --- Investigation desk ---
-        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled overlay.
+        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled case overlay. The
+        // window layer sits on the host above it, never toggled, so a window opened between travellers (Settings, from
+        // the Start menu) shows too; the compare dock goes above the layer (BuildCompareDock).
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
 
         Transform investRoot = Panel(investHost, "InvestigationRoot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, DeskDimColor, ThemeRoleId.DeskDim);
-        Transform windowLayer = Panel(investRoot, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        MoveChildIfPresent(investRoot, "WindowLayer", investHost);
+        Transform windowLayer = Panel(investHost, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
 
         // Claim on a translucent XP-blue strip.
         Panel(investRoot, "ClaimStrip", new Vector2(0.06f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ClaimStrip);
@@ -313,7 +316,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The compare dock above the taskbar (the PC redesign DK9): the window
         // layer moves over the claim, the icons and Accept/Deny, the dock over it.
-        Transform compareBar = BuildCompareDock(investRoot, windowLayer, compare, out TMP_Text compareText);
+        Transform compareBar = BuildCompareDock(investHost, investRoot, windowLayer, compare, out TMP_Text compareText, out GameObject compareDock);
 
         investRoot.gameObject.SetActive(false);
 
@@ -326,13 +329,6 @@ public static partial class OfficeSceneUIBuilder
         }
         if (dayPlan == null) dayPlan = FindFirstAsset<DayPlanSO>();
         if (library == null) Debug.LogWarning("[TimeDesk] No ContentLibrarySO found — assign GameManager.contentLibrary manually.");
-        if (library != null && library.Interview != null)
-        {
-            int wheelFit = RadialLayout.MaxFit(deskConfig.wheelRadii.x, deskConfig.wheelRadii.y, deskConfig.wheelItemSize.x, deskConfig.wheelItemSize.y,
-                                               deskConfig.wheelCentreSize.x, deskConfig.wheelCentreSize.y, deskConfig.wheelItemGap, library.Interview.menuCapacity);
-            if (wheelFit < library.Interview.menuCapacity)
-                Debug.LogError($"[TimeDesk] The traveller wheel fits {wheelFit} choices, but the content library's interview menu capacity is {library.Interview.menuCapacity}; lower interview.menuCapacity in world_source.json or enlarge the wheel (Desk_Default: wheelRadii, wheelItemSize).");
-        }
         if (dayPlan == null) Debug.LogWarning("[TimeDesk] No DayPlanSO found — generate content first (Tools > TimeDesk).");
 
         DayOrchestrator orchestrator = Object.FindFirstObjectByType<DayOrchestrator>();
@@ -346,6 +342,9 @@ public static partial class OfficeSceneUIBuilder
         // windows are launched by the investigation icon grid), plus a Start menu
         // and the taskbar's way back to the office.
         BuildDesktopShell(canvas, bookShelf, windowLayer, library, officeView, monitorScreen);
+
+        // Mail, the Citizen Account, Notes, Settings' sections and the Start menu's apps (OfficeSceneUIBuilder.Apps).
+        BuildApps(canvas, windowLayer, bookShelf, gameManager, directivesWindow);
 
         // The window stack, the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
         BuildWindowManager(canvas, investRoot, officeView);
@@ -407,6 +406,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "acceptButton", acceptButton);
         SetRef(soInvest, "denyButton", denyButton);
         SetRef(soInvest, "compareController", compare);
+        SetRef(soInvest, "compareDock", compareDock);
         SetRef(soInvest, "windowLayer", windowLayer);
         SetRef(soInvest, "documentWindowTemplate", docTemplate);
         SetRef(soInvest, "bookWindowTemplate", bookTemplate);
@@ -1404,7 +1404,6 @@ public static partial class OfficeSceneUIBuilder
             ("IconLexicon",  "icon.lexicon",  "window.lexicon",  "body.lexicon", "archive_access"),
             ("IconDialect",  "icon.dialect",  "window.dialect",  "body.dialect", ""),
             ("IconMaterial", "icon.material", "window.material", "body.material", "adv_scanner"),
-            ("IconNotes",    "icon.notes",    "window.notes",    "body.notes", ""),
         };
 
         // The Internet app (the browser: OfficeSceneUIBuilder.Internet.cs), first in the icon column.
@@ -1502,48 +1501,6 @@ public static partial class OfficeSceneUIBuilder
         DesktopWindow chrome = BuildWinControls(win, header);
 
         win.gameObject.SetActive(false); // opened by its icon
-        return chrome;
-    }
-
-    /// <summary>
-    /// The Settings window (piece 6 U12, piece 9 R17), 580 × 520: "UI
-    /// language" with its two choices, "Motion" with Full and Reduced
-    /// (SettingsWindowController), and a note that a language change applies
-    /// at the next office load, that colours, fonts and the wallpaper follow
-    /// history, and that reduced motion shows translations at once. Every
-    /// row's anchors are re-applied on each build.
-    /// </summary>
-    private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
-    {
-        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(580f, 520f));
-        Transform win = chrome.transform;
-        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.78f), new Vector2(0.95f, 0.87f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f), null, ThemeRoleId.Button, "settings.followHistory");
-        SetAnchors(follow.transform, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f));
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        SetAnchors(english.transform, new Vector2(0.52f, 0.64f), new Vector2(0.95f, 0.76f));
-        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f), Ink,
-                               ThemeRoleId.WindowBody, "settings.motion");
-        SetAnchors(motion.transform, new Vector2(0.05f, 0.5f), new Vector2(0.95f, 0.59f));
-        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f), null, ThemeRoleId.Button, "settings.motionFull");
-        SetAnchors(full.transform, new Vector2(0.05f, 0.36f), new Vector2(0.48f, 0.48f));
-        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f), null, ThemeRoleId.Button, "settings.motionReduced");
-        SetAnchors(reduced.transform, new Vector2(0.52f, 0.36f), new Vector2(0.95f, 0.48f));
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f), Ink,
-                             ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.32f));
-        note.text = UiText.Get("settings.note");
-        note.textWrappingMode = TextWrappingModes.Normal;
-
-        SettingsWindowController controller = win.GetComponent<SettingsWindowController>();
-        if (controller == null)
-            controller = win.gameObject.AddComponent<SettingsWindowController>();
-        var so = new SerializedObject(controller);
-        SetRef(so, "followHistoryButton", follow);
-        SetRef(so, "alwaysEnglishButton", english);
-        SetRef(so, "fullMotionButton", full);
-        SetRef(so, "reducedMotionButton", reduced);
-        so.ApplyModifiedProperties();
         return chrome;
     }
 

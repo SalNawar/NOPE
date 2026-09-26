@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6997d03ff0b60940953b8689c459ea3, type: 3}
-  m_Name: CaseBlueprint_Investigation
+  m_Name: CaseBlueprint_Displaced
   m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
+  kind: 3
   difficulty: 2
   documentTemplates:
-  - {fileID: 11400000, guid: 7115ffb801437e74e952901ce77709be, type: 2}
-  - {fileID: 11400000, guid: cefbe7bd13caed14ba317cb4ca9e160f, type: 2}
-  totalCluesMin: 0
-  totalCluesMax: 0
+  - {fileID: 11400000, guid: a30c932960e045d3ab69ebfa9b35801a, type: 2}
+  - {fileID: 11400000, guid: b27f296a83e74c1e81e149aef150a1e4, type: 2}
+  - {fileID: 11400000, guid: a2fea840d59d4b21b132c5693924bb8c, type: 2}
   contradictionChance: 0.5
-  redHerringChance: 0.1
   archetypePool:
   - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
   - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}

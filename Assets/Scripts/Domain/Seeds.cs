@@ -11,7 +11,11 @@ public static class Seeds
     /// <summary>Salt for the day's guaranteed rule-violator stream ("VIOL").</summary>
     public const int ViolatorSalt = 0x56494F4C;
 
-    /// <summary>Salt for a traveller's legacy clue stream ("CLUE").</summary>
+    /// <summary>
+    /// Salt of the retired legacy clue stream ("CLUE"; audit R3-012 removed
+    /// the clue path). Kept so the salt is never reused: SeedsTests holds every
+    /// salt distinct.
+    /// </summary>
     public const int ClueSalt = 0x434C5545;
 
     /// <summary>Salt for a traveller's lie stream ("LIES").</summary>
@@ -55,12 +59,6 @@ public static class Seeds
     public static int ForViolators(int daySeed) => Mix(daySeed, ViolatorSalt);
 
     /// <summary>
-    /// Seed for one traveller's legacy clue draws, kept apart from the case
-    /// stream so clue settings never change who lies.
-    /// </summary>
-    public static int ForClues(int caseSeed) => Mix(caseSeed, ClueSalt);
-
-    /// <summary>
     /// Seed for one traveller's lie stream: the liar roll, the true-home pick
     /// and the tell picks. Kept apart from the case stream so lie tuning never
     /// changes who travellers are.
@@ -97,4 +95,16 @@ public static class Seeds
     /// from the day's raw stream the family conditions draw from.
     /// </summary>
     public static int ForSlot(int daySeed) => Mix(daySeed, SlotSalt);
+
+    /// <summary>Salt for a traveller's account stream ("ACCT").</summary>
+    public const int AccountSalt = 0x41434354;
+
+    /// <summary>
+    /// Seed for one traveller's agency numbers and dates (traveller types,
+    /// R2 and §4.3; AgencyNumbers): for the displaced, their Displacement
+    /// No., incident, found date and the certificate's Valid Until. Apart from
+    /// the case and lie streams, so tuning an amount or a range never changes
+    /// who travels or who lies.
+    /// </summary>
+    public static int ForAccount(int caseSeed) => Mix(caseSeed, AccountSalt);
 }

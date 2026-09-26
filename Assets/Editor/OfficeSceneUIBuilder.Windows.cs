@@ -7,7 +7,8 @@ using UnityEngine.UI;
 /// The office builder's desktop window parts (the PC redesign WN1-WN3, DK8,
 /// DK9, CM2): the desktop's knobs (DesktopConfigSO), the compare dock above
 /// the taskbar (outside every window: the window layer draws over the case's
-/// claim, icons and Accept/Deny, the dock over every window), the taskbar's
+/// claim, icons and Accept/Deny and shows with or without a case, the dock
+/// over every window), the taskbar's
 /// window buttons, and the window manager on the desktop canvas, wired to
 /// every window's chrome and to the frame's Escape. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; Build() calls these in its order.
@@ -18,15 +19,18 @@ public static partial class OfficeSceneUIBuilder
     private const string DesktopConfigPath = "Assets/Data/Config/Desktop_Default.asset";
 
     /// <summary>Returns the desktop's knobs, creating them with the defaults when missing.</summary>
-    private static DesktopConfigSO EnsureDesktopConfig()
+    private static DesktopConfigSO EnsureDesktopConfig() => EnsureConfigAsset<DesktopConfigSO>(DesktopConfigPath);
+
+    /// <summary>Returns the knobs asset at <paramref name="path"/> (under Assets/Data/Config), creating it with the defaults when missing (a designer's edits are kept).</summary>
+    private static T EnsureConfigAsset<T>(string path) where T : ScriptableObject
     {
-        DesktopConfigSO config = AssetDatabase.LoadAssetAtPath<DesktopConfigSO>(DesktopConfigPath);
+        T config = AssetDatabase.LoadAssetAtPath<T>(path);
         if (config != null)
             return config;
 
         PlaceholderPng.EnsureFolderTree("Assets/Data/Config");
-        config = ScriptableObject.CreateInstance<DesktopConfigSO>();
-        AssetDatabase.CreateAsset(config, DesktopConfigPath);
+        config = ScriptableObject.CreateInstance<T>();
+        AssetDatabase.CreateAsset(config, path);
         AssetDatabase.SaveAssets();
         return config;
     }
@@ -52,26 +56,29 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The compare dock (DK9, CM2): a strip the width of the desktop right
-    /// above the taskbar, shown with the case (it is the case root's last
-    /// child, so it draws over the window layer, which draws over the case's
-    /// claim, icons and Accept/Deny). Empty, it reads the keyed hint; its Pair
-    /// (the CompareController's bar, shown while a value is picked) covers the
-    /// hint with the compare text and a clear button (CompareController.Clear).
-    /// The PC's old floating CompareBar goes. Returns the pair; its text is
-    /// <paramref name="text"/>.
+    /// above the taskbar, built hidden and shown with the case (<paramref name="dock"/>,
+    /// the façade's). On the investigation host the case root comes first, then
+    /// the window layer (its windows draw over the case's claim, icons and
+    /// Accept/Deny), then the dock over every window. Empty, it reads the keyed
+    /// hint; its Pair (the CompareController's bar, shown while a value is
+    /// picked) covers the hint with the compare text and a clear button
+    /// (CompareController.Clear). The PC's old floating CompareBar goes.
+    /// Returns the pair; its text is <paramref name="text"/>.
     /// </summary>
-    private static Transform BuildCompareDock(Transform investRoot, Transform windowLayer, CompareController compare, out TMP_Text text)
+    private static Transform BuildCompareDock(Transform investHost, Transform investRoot, Transform windowLayer, CompareController compare,
+                                              out TMP_Text text, out GameObject dock)
     {
         DestroyChildIfPresent(investRoot, "CompareBar");
+        MoveChildIfPresent(investRoot, "CompareDock", investHost);
         DesktopConfigSO config = EnsureDesktopConfig();
 
-        Transform dock = Panel(investRoot, "CompareDock", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, config.taskbarHeight + config.dockHeight / 2f),
-                               new Vector2(0f, config.dockHeight), Tooltip, ThemeRoleId.CompareBar);
-        TMP_Text hint = Text(dock, "Hint", null, 20, TextAlignmentOptions.Left, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink,
+        Transform strip = Panel(investHost, "CompareDock", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, config.taskbarHeight + config.dockHeight / 2f),
+                                new Vector2(0f, config.dockHeight), Tooltip, ThemeRoleId.CompareBar);
+        TMP_Text hint = Text(strip, "Hint", null, 20, TextAlignmentOptions.Left, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink,
                              ThemeRoleId.CompareBar, "compare.dockHint", FontStyles.Italic);
         hint.raycastTarget = false;
 
-        Transform pair = Panel(dock, "Pair", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
+        Transform pair = Panel(strip, "Pair", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
         text = Text(pair, "CompareText", "", 22, TextAlignmentOptions.Center, new Vector2(0.02f, 0f), new Vector2(0.95f, 1f), Ink, ThemeRoleId.CompareBar);
         SetAnchors(text.transform, new Vector2(0.02f, 0f), new Vector2(0.95f, 1f));
         text.enableAutoSizing = true;
@@ -84,9 +91,25 @@ public static partial class OfficeSceneUIBuilder
         WirePersistentVoid(clear, "m_OnClick", compare, nameof(CompareController.Clear));
         pair.gameObject.SetActive(false);
 
+        investRoot.SetAsFirstSibling();
         windowLayer.SetAsLastSibling();
-        dock.SetAsLastSibling();
+        strip.SetAsLastSibling();
+        strip.gameObject.SetActive(false);
+        dock = strip.gameObject;
         return pair;
+    }
+
+    /// <summary>
+    /// Moves <paramref name="parent"/>'s child <paramref name="name"/>, with
+    /// everything on it, to <paramref name="to"/> (its layout re-applied by the
+    /// build after): a scene built while the window layer and the dock sat on
+    /// the case root keeps its windows when rebuilt.
+    /// </summary>
+    private static void MoveChildIfPresent(Transform parent, string name, Transform to)
+    {
+        Transform t = parent.Find(name);
+        if (t != null)
+            t.SetParent(to, false);
     }
 
     /// <summary>

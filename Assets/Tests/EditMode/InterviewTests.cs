@@ -38,7 +38,11 @@ public class InterviewTests
     {
         opener = new LineText("interview.opener", "Next! Step forward, {honorific}."),
         openerLegendary = new LineText("interview.openerLegendary", "Priority arrival: {name}."),
-        claim = new LineText("interview.claim", "I request passage home to {place}."),
+        claims =
+        {
+            new KindLine { kind = TravellerKind.RichTourist, line = new LineText("interview.claims.RichTourist", "One leisure departure to {place}, please.") },
+            new KindLine { kind = TravellerKind.Displaced, line = new LineText("interview.claims.Displaced", "Please. Send me home to {place}.") }
+        },
         honorificMale = "sir",
         honorificFemale = "madam",
         honorificUnknown = "traveller"
@@ -128,19 +132,57 @@ public class InterviewTests
     }
 
     [Test]
-    public void Claim_FillsThePlace_OrGivesTheBareLabelWhenTheTemplateIsBlank()
+    public void Claim_FillsTheKindsLine_OrGivesTheBareLabelWhenTheKindHasNone()
     {
-        Assert.AreEqual("I request passage home to Babylonia (Ancient).", Interview.Claim(Lines(), "Babylonia (Ancient)"));
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(new InterviewLines(), "Babylonia (Ancient)"));
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(null, "Babylonia (Ancient)"));
+        Assert.AreEqual("Please. Send me home to Babylonia (Ancient).", Interview.Claim(Lines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
+        Assert.AreEqual("One leisure departure to Babylonia (Ancient), please.", Interview.Claim(Lines(), TravellerKind.RichTourist, "Babylonia (Ancient)"), "each kind its own line");
+        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(Lines(), TravellerKind.Labourer, "Babylonia (Ancient)"), "no line for the kind");
+        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(new InterviewLines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
+        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(null, TravellerKind.Displaced, "Babylonia (Ancient)"));
     }
 
     [Test]
-    public void ClaimTemplate_IsTheAuthoredClaim_OrThePlaceAloneWhenBlank()
+    public void ClaimTemplate_IsTheKindsAuthoredClaim_OrThePlaceAloneWhenBlank()
     {
-        Assert.AreEqual("I request passage home to {place}.", Interview.ClaimTemplate(Lines()));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(new InterviewLines()));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(null));
+        Assert.AreEqual("Please. Send me home to {place}.", Interview.ClaimTemplate(Lines(), TravellerKind.Displaced));
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(Lines(), TravellerKind.PoorTourist));
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(new InterviewLines(), TravellerKind.Displaced));
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(null, TravellerKind.Displaced));
+
+        InterviewLines blank = Lines();
+        blank.claims[1].line.text = " ";
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(blank, TravellerKind.Displaced), "a blank line counts as none");
+        blank.claims.Insert(0, null);
+        Assert.AreEqual("{place}", Interview.ClaimTemplate(blank, TravellerKind.Displaced), "a null entry is skipped");
+    }
+
+    [Test]
+    public void ClaimLine_IsTheFirstEntryOfTheKind_OrNull()
+    {
+        Assert.AreEqual("interview.claims.Displaced", Interview.ClaimLine(Lines(), TravellerKind.Displaced).id);
+        Assert.IsNull(Interview.ClaimLine(Lines(), TravellerKind.Labourer));
+        Assert.IsNull(Interview.ClaimLine(null, TravellerKind.Displaced));
+    }
+
+    [Test]
+    public void ClaimProblems_EveryKindInPlayNeedsOneLineWithThePlace()
+    {
+        CollectionAssert.IsEmpty(Interview.ClaimProblems(Lines().claims, new[] { TravellerKind.Displaced, TravellerKind.RichTourist }));
+        CollectionAssert.IsEmpty(Interview.ClaimProblems(Lines().claims, new TravellerKind[0]), "a line for a kind not in play is allowed");
+
+        StringAssert.Contains("Labourer has no claim line", string.Join("\n", Interview.ClaimProblems(Lines().claims, new[] { TravellerKind.Labourer })));
+
+        InterviewLines broken = Lines();
+        broken.claims.Add(new KindLine { kind = TravellerKind.Displaced, line = new LineText("x", "Home to {place}.") });
+        broken.claims[0].line.text = "One leisure departure, please.";
+        broken.claims.Add(new KindLine { kind = TravellerKind.PoorTourist, line = new LineText("y", " ") });
+        broken.claims.Add(null);
+        string problems = string.Join("\n", Interview.ClaimProblems(broken.claims, new[] { TravellerKind.Displaced }));
+        StringAssert.Contains("Displaced is listed twice", problems);
+        StringAssert.Contains("RichTourist must hold {place}", problems);
+        StringAssert.Contains("PoorTourist is blank", problems);
+        StringAssert.Contains("an entry is empty", problems);
+        CollectionAssert.IsNotEmpty(Interview.ClaimProblems(null, new[] { TravellerKind.Displaced }), "no lines at all");
     }
 
     // -----------------------------

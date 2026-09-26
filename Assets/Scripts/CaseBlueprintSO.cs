@@ -2,14 +2,17 @@
 using UnityEngine;
 
 /// <summary>
-/// Defines how a procedural case is assembled:
-/// - which document templates are included
-/// - how many clues to inject
-/// - how often contradictions/red herrings appear
+/// Defines how a procedural case is assembled: the traveller's kind (one
+/// blueprint per kind, traveller types K1), which document templates they
+/// carry, how often they lie, and which archetypes they draw from.
 /// </summary>
 [CreateAssetMenu(fileName = "CaseBlueprint_", menuName = "TimeDesk/Case Blueprint", order = 4)]
 public sealed class CaseBlueprintSO : ScriptableObject
 {
+    /// <summary>The kind of traveller this blueprint makes (their papers, their claim line, what the desk may ask them for).</summary>
+    [Header("Kind")]
+    [SerializeField] private TravellerKind kind = TravellerKind.Displaced;
+
     /// <summary>Used as a selection weight / difficulty marker (designer-controlled).</summary>
     [Header("Difficulty")]
     [SerializeField, Range(1, 10)] private int difficulty = 1;
@@ -18,23 +21,9 @@ public sealed class CaseBlueprintSO : ScriptableObject
     [Header("Documents")]
     [SerializeField] private DocumentTemplateSO[] documentTemplates;
 
-    /// <summary>Minimum number of clue lines to inject into the case.</summary>
-    [Header("Clue Targets")]
-    [SerializeField, Min(0)] private int totalCluesMin = 2;
-
-    /// <summary>Maximum number of clue lines to inject into the case.</summary>
-    [SerializeField, Min(0)] private int totalCluesMax = 4;
-
-    /// <summary>
-    /// Chance per traveller to be a liar (plus the WorldState and effect
-    /// modifiers). The legacy clue path also reads it as the chance per clue
-    /// line to be a contradiction.
-    /// </summary>
-    [Header("Lie / Misdirection")]
+    /// <summary>Chance per traveller to be a liar (plus the WorldState and effect modifiers).</summary>
+    [Header("Lie")]
     [SerializeField, Range(0f, 1f)] private float contradictionChance = 0.25f;
-
-    /// <summary>Chance per clue line to be a red herring (plausible but irrelevant).</summary>
-    [SerializeField, Range(0f, 1f)] private float redHerringChance = 0.10f;
 
     /// <summary>Optional archetype pool for this blueprint (empty = pick from library).</summary>
     [Header("Timeline")]
@@ -49,30 +38,15 @@ public sealed class CaseBlueprintSO : ScriptableObject
     /// <summary>Public read-only authored impacts.</summary>
     public TimelineImpact[] AuthoredImpacts => authoredImpacts;
 
+    /// <summary>The kind of traveller this blueprint makes.</summary>
+    public TravellerKind Kind => kind;
+
     /// <summary>Public read-only difficulty.</summary>
     public int Difficulty => difficulty;
 
     /// <summary>Public read-only templates.</summary>
     public DocumentTemplateSO[] DocumentTemplates => documentTemplates;
 
-    /// <summary>Public read-only min clues.</summary>
-    public int TotalCluesMin => totalCluesMin;
-
-    /// <summary>Public read-only max clues.</summary>
-    public int TotalCluesMax => totalCluesMax;
-
     /// <summary>Public read-only contradiction chance.</summary>
     public float ContradictionChance => contradictionChance;
-
-    /// <summary>Public read-only red herring chance.</summary>
-    public float RedHerringChance => redHerringChance;
-
-    /// <summary>
-    /// Ensures min/max are sensible at edit-time.
-    /// </summary>
-    private void OnValidate()
-    {
-        if (totalCluesMax < totalCluesMin)
-            totalCluesMax = totalCluesMin;
-    }
 }

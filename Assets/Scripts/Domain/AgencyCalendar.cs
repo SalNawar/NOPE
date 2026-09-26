@@ -4,8 +4,10 @@ using System.Collections.Generic;
 /// <summary>
 /// The agency block of world_source.json (the traveller-types spec's F6; the
 /// PC spec's §4.8): the agency's printed name and programme line, and the
-/// date of the first day. Content, written into the content library by
-/// Generate World; later phases add the clerk's account and the agency's lists.
+/// date of the first day, and the day ranges a displaced person's file is
+/// drawn from (phase 3). Content, written into the content library by
+/// Generate World, with the clerk's own account (phase 25; phase 13 adds its
+/// debt); later phases add the agency's lists.
 /// </summary>
 [Serializable]
 public sealed class AgencyContent
@@ -19,7 +21,13 @@ public sealed class AgencyContent
     /// <summary>Day 1's date, written as BirthDates writes dates ("14 Mar 2150").</summary>
     public string firstDate = string.Empty;
 
-    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from. Empty when sound.</summary>
+    /// <summary>The day ranges of a displaced person's file (agency.displaced: found within 30 days, a certificate valid 3 to 365 days; AgencyNumbers.Displaced).</summary>
+    public DisplacementRanges displaced = new DisplacementRanges();
+
+    /// <summary>The clerk's own account as authored ("agency.clerk"; the Citizen Account app shows it, redesign phase 25; its checks are ClerkContent.Problems).</summary>
+    public ClerkContent clerk = new();
+
+    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most). Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -30,6 +38,15 @@ public sealed class AgencyContent
         string date = AgencyCalendar.FirstDateProblem(firstDate);
         if (date != null)
             problems.Add(date);
+        if (displaced == null)
+        {
+            problems.Add("agency.displaced is missing: the day ranges of a displaced person's file.");
+            return problems;
+        }
+        if (displaced.foundWithinDays < 1)
+            problems.Add($"agency.displaced.foundWithinDays is {displaced.foundWithinDays}: a displaced person is found at least 1 day before today.");
+        if (displaced.validDaysMin < 0 || displaced.validDaysMin > displaced.validDaysMax)
+            problems.Add($"agency.displaced.validDaysMin {displaced.validDaysMin} and validDaysMax {displaced.validDaysMax}: a certificate is valid from 0 <= validDaysMin <= validDaysMax days after today.");
         return problems;
     }
 }
@@ -43,22 +60,28 @@ public sealed class AgencyContent
 public static class AgencyCalendar
 {
     /// <summary>Today's date on shift day <paramref name="day"/> (1 = <paramref name="firstDate"/>); null when the first date is unreadable, not a calendar day of the common era, or the day is below 1.</summary>
-    public static string Today(string firstDate, int day)
-    {
-        if (day < 1 || !TryDate(firstDate, out DateTime first))
-            return null;
+    public static string Today(string firstDate, int day) => TryToday(firstDate, day, out DateTime today) ? Write(today) : null;
 
-        DateTime today;
+    /// <summary>Today's date on shift day <paramref name="day"/> as a date (the agency's number and date makers count from it); false as <see cref="Today"/> gives null.</summary>
+    public static bool TryToday(string firstDate, int day, out DateTime today)
+    {
+        today = default;
+        if (day < 1 || !TryDate(firstDate, out DateTime first))
+            return false;
+
         try
         {
             today = first.AddDays(day - 1);
         }
         catch (ArgumentOutOfRangeException)
         {
-            return null;
+            return false;
         }
-        return BirthDates.Format(today.Day, today.Month - 1, today.Year);
+        return true;
     }
+
+    /// <summary>A date as the calendar, the papers and the records print it ("14 Mar 2150", BirthDates.Format).</summary>
+    public static string Write(DateTime date) => BirthDates.Format(date.Day, date.Month - 1, date.Year);
 
     /// <summary>Null when <paramref name="firstDate"/> is a readable calendar day of the common era (BirthDates' format), else the problem.</summary>
     public static string FirstDateProblem(string firstDate) =>
