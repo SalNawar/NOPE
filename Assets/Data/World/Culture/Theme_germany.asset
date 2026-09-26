@@ -83,7 +83,7 @@ MonoBehaviour:
     textClass: 1
   - role: 8
     hasFill: 1
-    fill: {r: 1, g: 1, b: 1, a: 0.14}
+    fill: {r: 1, g: 1, b: 1, a: 0.05}
     hasInk: 0
     ink: {r: 0, g: 0, b: 0, a: 0}
     textClass: 0

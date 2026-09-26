@@ -8047,7 +8047,7 @@
       {
         "role": "TitleGloss",
         "fill": "white",
-        "alpha": 0.14,
+        "alpha": 0.05,
         "ink": "",
         "textClass": "None"
       },

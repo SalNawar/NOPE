@@ -324,7 +324,7 @@ public static partial class OfficeSceneUIBuilder
         label.fontSize = config.tabLabelSize;
         label.raycastTarget = false;
 
-        Transform gloss = Panel(button.transform, "Gloss", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.14f), ThemeRoleId.TitleGloss);
+        Transform gloss = Panel(button.transform, "Gloss", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.05f), ThemeRoleId.TitleGloss);
         gloss.GetComponent<Image>().raycastTarget = false;
         GetOrAdd<LayoutElement>(gloss.gameObject).ignoreLayout = true;
         gloss.SetAsFirstSibling();
