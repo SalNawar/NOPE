@@ -52,6 +52,7 @@ public class SeedsTests
         { "look", Seeds.ForLooks },
         { "legendary", Seeds.ForLegendary },
         { "account", Seeds.ForAccount },
+        { "forms", Seeds.ForForms },
     };
 
     [TestCase("lie")]
@@ -59,6 +60,7 @@ public class SeedsTests
     [TestCase("look")]
     [TestCase("legendary")]
     [TestCase("account")]
+    [TestCase("forms")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -89,7 +91,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.DebtNewsSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -113,6 +115,8 @@ public class SeedsTests
         Assert.AreEqual(1809927997, Seeds.ForLegendary(caseSeed));
         Assert.AreEqual(-917021711, Seeds.ForAccount(caseSeed));
         Assert.AreEqual(0x41434354, Seeds.AccountSalt, "\"ACCT\"");
+        Assert.AreEqual(-390461085, Seeds.ForForms(caseSeed));
+        Assert.AreEqual(0x464F524D, Seeds.FormsSalt, "\"FORM\"");
         Assert.AreEqual(-230985786, Seeds.ForDebtNews(12345));
         Assert.AreEqual(0x44454254, Seeds.DebtNewsSalt, "\"DEBT\"");
     }

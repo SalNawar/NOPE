@@ -116,6 +116,32 @@ public class DocumentRowsTests
     }
 
     /// <summary>
+    /// The form decides a field's page (redesign phase 4, PC spec FO4):
+    /// CaseFactory copies FormSpec.PageOf into DocumentField.page, so the
+    /// scanned copy pages exactly where the form breaks.
+    /// </summary>
+    [Test]
+    public void Pages_FollowTheFormsPageBreaks()
+    {
+        var form = new FormSpec
+        {
+            blocks = new[]
+            {
+                new FormBlock { kind = FormBlockKind.FieldRow, cells = new[] { new FormCell { field = 1, span = 12 } } },
+                new FormBlock { kind = FormBlockKind.PageBreak },
+                new FormBlock { kind = FormBlockKind.FieldRow, cells = new[] { new FormCell { field = 0, span = 6 }, new FormCell { field = 2, span = 6 } } }
+            }
+        };
+        var fields = new List<DocumentField> { F(ClueCategory.Name, "a"), F(ClueCategory.Currency, "b"), F(ClueCategory.Language, "c") };
+        for (int i = 0; i < fields.Count; i++)
+            fields[i].page = form.PageOf(i);
+
+        Assert.AreEqual(form.PageCount, DocumentRows.PageCount(fields));
+        CollectionAssert.AreEqual(new[] { "b" }, Labels(DocumentRows.OnPage(fields, 0)));
+        CollectionAssert.AreEqual(new[] { "a", "c" }, Labels(DocumentRows.OnPage(fields, 1)), "authored order within the page");
+    }
+
+    /// <summary>
     /// Phase 3: the displaced's three agency forms (DocTemplate_TC610/620/630,
     /// traveller types 3.8-3.10) are one page each, and each row's index is
     /// the field's place on the form: the index the forms engine lays out

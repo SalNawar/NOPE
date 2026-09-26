@@ -2,9 +2,8 @@ using TMPro;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using static SceneUiKit;
 
 /// <summary>
 /// One-click builder for the Title scene added in Alpha Phase 5: a title
@@ -12,7 +11,7 @@ using UnityEngine.UI;
 /// reached EndingSO, New Run). Like HomeSceneBuilder, this creates the
 /// Canvas, EventSystem, TitleSceneController and TitleUIController objects
 /// from scratch if they don't already exist. Safe to re-run: finds and skips
-/// pieces that already exist (by name).
+/// pieces that already exist (by name), through the shared SceneUiKit.
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -21,56 +20,12 @@ public static class TitleSceneBuilder
     public static void Build()
     {
         // --- Canvas + EventSystem ---
-        Canvas canvas = Object.FindFirstObjectByType<Canvas>();
-
-        if (canvas == null)
-        {
-            var canvasGo = new GameObject("Canvas", typeof(RectTransform));
-            canvas = canvasGo.AddComponent<Canvas>();
-            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-
-            var scaler = canvasGo.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1920f, 1080f);
-
-            canvasGo.AddComponent<GraphicRaycaster>();
-            Undo.RegisterCreatedObjectUndo(canvasGo, "Create Canvas");
-        }
-
+        Canvas canvas = SceneUiKit.EnsureCanvasAndEventSystem();
         Transform root = canvas.transform;
 
-        if (Object.FindFirstObjectByType<EventSystem>() == null)
-        {
-            var esGo = new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
-            Undo.RegisterCreatedObjectUndo(esGo, "Create EventSystem");
-        }
-
         // --- TitleSceneController (logic) + TitleUIController (UI) ---
-        TitleSceneController titleController = Object.FindFirstObjectByType<TitleSceneController>();
-
-        if (titleController == null)
-        {
-            var go = new GameObject("TitleSceneController");
-            titleController = go.AddComponent<TitleSceneController>();
-            Undo.RegisterCreatedObjectUndo(go, "Create TitleSceneController");
-        }
-
-        TitleUIController titleUI = Object.FindFirstObjectByType<TitleUIController>();
-
-        if (titleUI == null)
-        {
-            var go = new GameObject("TitleUI", typeof(RectTransform));
-            go.transform.SetParent(root, false);
-
-            var rt = (RectTransform)go.transform;
-            rt.anchorMin = Vector2.zero;
-            rt.anchorMax = Vector2.one;
-            rt.offsetMin = Vector2.zero;
-            rt.offsetMax = Vector2.zero;
-
-            titleUI = go.AddComponent<TitleUIController>();
-            Undo.RegisterCreatedObjectUndo(go, "Create TitleUI");
-        }
+        TitleSceneController titleController = SceneUiKit.FindOrCreateObject<TitleSceneController>("TitleSceneController");
+        TitleUIController titleUI = SceneUiKit.FindOrCreateStretched<TitleUIController>(root, "TitleUI");
 
         Transform uiRoot = titleUI.transform;
 
@@ -142,106 +97,5 @@ public static class TitleSceneBuilder
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");
-    }
-
-    /// <summary>Finds a child panel by name or creates it with the given anchors.</summary>
-    private static Transform FindOrCreatePanel(
-        Transform parent, string name, Vector2 anchorMin, Vector2 anchorMax,
-        Vector2 anchoredPos, Vector2 size, bool withBackground, Color bgColor = default)
-    {
-        Transform existing = parent.Find(name);
-
-        if (existing != null)
-            return existing;
-
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        var rt = (RectTransform)go.transform;
-        rt.anchorMin = anchorMin;
-        rt.anchorMax = anchorMax;
-        rt.anchoredPosition = anchoredPos;
-        rt.sizeDelta = size;
-
-        if (withBackground)
-        {
-            Image img = go.AddComponent<Image>();
-            img.color = bgColor == default ? new Color(0f, 0f, 0f, 0.85f) : bgColor;
-        }
-
-        Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
-        return go.transform;
-    }
-
-    /// <summary>Finds a child TMP text by name or creates one with relative anchors.</summary>
-    private static TMP_Text FindOrCreateText(
-        Transform parent, string name, string content, int fontSize,
-        TextAlignmentOptions alignment, Vector2 anchorMin, Vector2 anchorMax)
-    {
-        Transform existing = parent.Find(name);
-
-        if (existing != null)
-            return existing.GetComponent<TMP_Text>();
-
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        var rt = (RectTransform)go.transform;
-        rt.anchorMin = anchorMin;
-        rt.anchorMax = anchorMax;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
-
-        var text = go.AddComponent<TextMeshProUGUI>();
-        text.text = content;
-        text.fontSize = fontSize;
-        text.alignment = alignment;
-        text.color = Color.white;
-
-        Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
-        return text;
-    }
-
-    /// <summary>Finds a child button by name or creates one (Image + Button + TMP label).</summary>
-    private static Button FindOrCreateButton(
-        Transform parent, string name, string label, Vector2 anchorMin, Vector2 anchorMax)
-    {
-        Transform existing = parent.Find(name);
-
-        if (existing != null)
-            return existing.GetComponent<Button>();
-
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-
-        var rt = (RectTransform)go.transform;
-        rt.anchorMin = anchorMin;
-        rt.anchorMax = anchorMax;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
-
-        Image img = go.AddComponent<Image>();
-        img.color = new Color(0.95f, 0.95f, 0.95f, 1f);
-
-        Button btn = go.AddComponent<Button>();
-        btn.targetGraphic = img;
-
-        var labelGo = new GameObject("Label", typeof(RectTransform));
-        labelGo.transform.SetParent(go.transform, false);
-
-        var labelRt = (RectTransform)labelGo.transform;
-        labelRt.anchorMin = Vector2.zero;
-        labelRt.anchorMax = Vector2.one;
-        labelRt.offsetMin = Vector2.zero;
-        labelRt.offsetMax = Vector2.zero;
-
-        var labelText = labelGo.AddComponent<TextMeshProUGUI>();
-        labelText.text = label;
-        labelText.fontSize = 26;
-        labelText.alignment = TextAlignmentOptions.Center;
-        labelText.color = Color.black;
-
-        Undo.RegisterCreatedObjectUndo(go, $"Create {name}");
-        return btn;
     }
 }

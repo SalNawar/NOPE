@@ -8,36 +8,56 @@ using UnityEngine.EventSystems;
 /// A physical paper on the desk: a root on the desk plane carrying its
 /// Clickable and DeskDraggable, and a Sheet child lying flat, lifted by the
 /// paper's place in the stack (so the top paper is nearest the camera and wins
-/// the raycast), with the lit paper quad, the collider, the document's title
-/// and, on a photo document, the traveller's photo. With a row template (piece
-/// 10) the paper shows its document's whole face, like its scanned copy: every
-/// field row in page order (DocumentRows.Ordered), a label over its value,
-/// laid out by PaperFace, written through DocumentRowView (always in English:
-/// a paper never flips). Without one (a scene built before piece 10) it shows the
-/// title and the photo only. A click raises Clicked with the button and the
-/// row under the pointer (PaperFace.RowAt; DeskController routes it through
-/// PaperClicks). While examined (held in the hand; PaperExaminer owns the
-/// sheet's pose) the paper is evenly lit (its unlit examine material, the
-/// photo in the examine tint) and the row under the pointer tints; a picked
-/// row lights up (RowHighlight). Slides are linear moves in Update, only while
-/// one runs.
+/// the raycast), with the lit paper quad and the collider. The paper prints
+/// its document's form (redesign phase 4, PC spec FO1, §6.5): FormLayout
+/// places it at the paper's width, the same form as its scanned copy; each
+/// text is a TextMeshPro cloned from one template, sized and inked by its
+/// role (FormStyleSO); the boxes' fills and the section bands are one mesh
+/// under the hover and pick quads, and every outline, rule, barcode bar and
+/// checkbox one mesh over them, both built once when the paper binds; the seal
+/// is a faint quad behind the header, and the photo sits in its cell. Always
+/// English: a paper never flips. A click raises Clicked with the button and
+/// the slot under the pointer (FormLayout.SlotAt; DeskController routes it
+/// through PaperClicks). While examined (held in the hand; PaperExaminer owns
+/// the sheet's pose) the paper is evenly lit (its unlit examine material, the
+/// photo in the examine tint) and the box under the pointer tints; a picked
+/// box lights up (SlotHighlight). Slides are linear moves in Update, only
+/// while one runs.
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
-    /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider, texts and photo.</summary>
+    /// <summary>How far above the sheet each layer lies (metres toward the camera): the seal, the fills, the hover and pick quads, the lines, the photo, the texts.</summary>
+    private const float SealLift = 0.0001f, FillLift = 0.0002f, HighlightLift = 0.0003f, LineLift = 0.0004f, PhotoLift = 0.0005f, TextLift = 0.0006f;
+
+    /// <summary>The share of a dashed edge that is ink (the stamp area).</summary>
+    private const float DashShare = 0.55f;
+
+    /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider and the printed form.</summary>
     [SerializeField] private Transform sheet;
 
-    /// <summary>The document's title ("Travel Passport").</summary>
-    [SerializeField] private TextMeshPro title;
-
-    /// <summary>The photo's frame, shown only on a photo document.</summary>
+    /// <summary>The photo's frame (a quad PhotoAspect by 1, scaled to the photo cell's height), shown only on a photo document.</summary>
     [SerializeField] private GameObject photoSlot;
 
     /// <summary>The traveller's photo inside the frame (crop sprites).</summary>
     [SerializeField] private LookSpriteStack photo;
 
-    /// <summary>The inactive row cloned per field (children Label and Value, TextMeshPro, and Highlight, a quad); optional.</summary>
-    [SerializeField] private GameObject rowTemplate;
+    /// <summary>The text every printed word clones (its renderer off: it also measures the words).</summary>
+    [SerializeField] private TextMeshPro textTemplate;
+
+    /// <summary>The mesh of the boxes' fills and the section bands (vertex colours; drawn under the hover and pick quads).</summary>
+    [SerializeField] private MeshFilter fills;
+
+    /// <summary>The mesh of every outline, rule, barcode bar, checkbox and the stamp area's dash (vertex colours; drawn over the quads, under the texts).</summary>
+    [SerializeField] private MeshFilter lines;
+
+    /// <summary>The seal's quad (a unit square), printed faintly behind the header.</summary>
+    [SerializeField] private Renderer seal;
+
+    /// <summary>The inactive quad cloned per pickable box: its hover tint and its pick highlight.</summary>
+    [SerializeField] private Renderer highlightTemplate;
+
+    /// <summary>The forms' sizes and colours.</summary>
+    [SerializeField] private FormStyleSO style;
 
     /// <summary>The paper quad (its material swaps to the examine material while held).</summary>
     [SerializeField] private Renderer paperQuad;
@@ -51,44 +71,42 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The paper's drag.</summary>
     [SerializeField] private DeskDraggable drag;
 
-    /// <summary>One field row on the paper.</summary>
-    private sealed class RowView
+    /// <summary>One pickable box: the field it shows, its quad and its pick.</summary>
+    private sealed class SlotView
     {
         public DocumentRow Row;
-        public TMP_Text Label;
-        public TMP_Text Value;
         public Renderer Highlight;
         public bool Picked;
         public Color PickColour;
     }
 
-    /// <summary>A row of this paper as a compare highlight: tints the row's quad while picked (over the hover tint); null-safe once the paper is gone.</summary>
-    private sealed class PaperRowHighlight : ICompareHighlight
+    /// <summary>A box of this paper as a compare highlight: tints its quad while picked (over the hover tint); null-safe once the paper is gone.</summary>
+    private sealed class PaperSlotHighlight : ICompareHighlight
     {
         private readonly DeskDocument _paper;
-        private readonly int _row;
+        private readonly int _slot;
 
-        public PaperRowHighlight(DeskDocument paper, int row)
+        public PaperSlotHighlight(DeskDocument paper, int slot)
         {
             _paper = paper;
-            _row = row;
+            _slot = slot;
         }
 
         public void Show(bool picked, Color colour)
         {
             if (_paper != null)
-                _paper.SetPicked(_row, picked, colour);
+                _paper.SetPicked(_slot, picked, colour);
         }
     }
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
 
-    private readonly List<RowView> _rows = new List<RowView>();
+    private readonly List<SlotView> _slots = new List<SlotView>();
     private DeskConfigSO _config;
-    private FaceLayout _face;
+    private PlacedForm _form;
     private Material _ownPaperMaterial;
     private MaterialPropertyBlock _block;
-    private int _hoveredRow = -1;
+    private int _hoveredSlot = -1;
 
     private Vector3 _slideFrom;
     private Vector3 _slideTo;
@@ -108,10 +126,10 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>The lying sheet (PaperExaminer poses it while the paper is held).</summary>
     public Transform Sheet => sheet;
 
-    /// <summary>How many field rows the paper shows.</summary>
-    public int RowCount => _rows.Count;
+    /// <summary>How many pickable boxes the paper prints.</summary>
+    public int SlotCount => _slots.Count;
 
-    /// <summary>Raised on a click while the paper takes input: the paper, true for a right click, and the row under the pointer while held (-1: none, or not held).</summary>
+    /// <summary>Raised on a click while the paper takes input: the paper, true for a right click, and the box under the pointer while held (-1: none, or not held).</summary>
     public event Action<DeskDocument, bool, int> Clicked;
 
     /// <summary>Only while sliding: moves along the slide (its done callback on landing).</summary>
@@ -132,73 +150,105 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         done?.Invoke();
     }
 
+    /// <summary>The paper's printed meshes go with it (they were built for this paper alone).</summary>
+    private void OnDestroy()
+    {
+        foreach (MeshFilter filter in new[] { fills, lines })
+            if (filter != null && filter.sharedMesh != null)
+                Destroy(filter.sharedMesh);
+    }
+
     /// <summary>
-    /// Shows a document: its index and canonical title and, with a row
-    /// template, every field row laid out by PaperFace (at most its capacity)
-    /// with the title and the photo moved to the face's places.
+    /// Prints a document: <paramref name="form"/>'s spec laid out at the
+    /// paper's width with <paramref name="doc"/>'s content (its template's
+    /// words, the serial, the fields), its texts, meshes, seal and one quad per
+    /// pickable box; the photo moves to its cell. A paper without a form (a
+    /// scene built before phase 4) prints nothing but its paper.
     /// </summary>
-    public void Bind(int index, CaseDocument doc, DeskConfigSO config)
+    public void Bind(int index, CaseDocument doc, DocumentForm form, DeskConfigSO config)
     {
         Index = index;
         _config = config;
-        if (title != null)
-            title.text = doc != null ? doc.name : string.Empty;
-
-        _rows.Clear();
-        _face = null;
-        if (rowTemplate == null || config == null || doc == null)
+        _slots.Clear();
+        _form = null;
+        if (config == null || doc == null || form == null || style == null || textTemplate == null)
             return;
 
-        float height = config.paperSize.y;
-        IReadOnlyList<DocumentRow> ordered = DocumentRows.Ordered(doc.fields);
-        FaceLayout face = PaperFace.Layout(ordered.Count, doc.showsPhoto, config.paperSize.x / height, config.face);
-        _face = face;
-        if (title != null)
-            Place(title.rectTransform, face.Title, height);
-        if (photoSlot != null && face.HasPhoto)
-        {
-            Vector3 at = photoSlot.transform.localPosition;
-            photoSlot.transform.localPosition = new Vector3(face.Photo.CentreX * height, face.Photo.CentreY * height, at.z);
-        }
+        float width = config.paperSize.x;
+        _form = FormLayout.Layout(form.Spec, form.Data, width, style.metrics, new TmpFormText(textTemplate));
 
-        rowTemplate.SetActive(false);
-        for (int i = 0; i < face.Rows.Count; i++)
+        var fillMesh = new MeshBuilder();
+        var lineMesh = new MeshBuilder();
+        float rule = style.metrics.ruleWidth * _form.PageHeight;
+        foreach (FormItem item in _form.Items)
         {
-            GameObject row = Instantiate(rowTemplate, rowTemplate.transform.parent);
-            row.name = $"Row_{i}";
-            row.SetActive(true);
-            var view = new RowView
+            switch (item.Kind)
             {
-                Row = ordered[i],
-                Label = row.transform.Find("Label").GetComponent<TMP_Text>(),
-                Value = row.transform.Find("Value").GetComponent<TMP_Text>()
-            };
-            DocumentRowView.Write(view.Label, view.Value, view.Row);
-            Place(view.Label.rectTransform, face.Rows[i].Label, height);
-            Place(view.Value.rectTransform, face.Rows[i].Value, height);
-            Transform highlight = row.transform.Find("Highlight");
-            if (highlight != null)
-            {
-                FaceRect hit = face.Rows[i].Hit;
-                highlight.localPosition = new Vector3(hit.CentreX * height, hit.CentreY * height, highlight.localPosition.z);
-                highlight.localScale = new Vector3(hit.Width * height, hit.Height * height, 1f);
-                view.Highlight = highlight.GetComponent<Renderer>();
+                case FormItemKind.Text:
+                    Print(item);
+                    break;
+                case FormItemKind.Box:
+                    fillMesh.Rect(Local(item.Rect), style.boxFill);
+                    lineMesh.Outline(Local(item.Rect), rule, style.rule);
+                    break;
+                case FormItemKind.RowBand:
+                    fillMesh.Rect(Local(item.Rect), style.band);
+                    break;
+                case FormItemKind.Rule:
+                    lineMesh.Rect(Local(item.Rect), style.rule);
+                    break;
+                case FormItemKind.Bar:
+                    lineMesh.Rect(Local(item.Rect), style.ink);
+                    break;
+                case FormItemKind.Checkbox:
+                    lineMesh.Outline(Local(item.Rect), rule, style.rule);
+                    if (item.Text == FormLayout.Tick)
+                        lineMesh.Rect(Inset(Local(item.Rect), item.Rect.Width * 0.22f), style.ink);
+                    break;
+                case FormItemKind.StampArea:
+                    lineMesh.Dashed(Local(item.Rect), rule, rule * 4f, DashShare, style.stampDash);
+                    break;
+                case FormItemKind.Seal:
+                    PlaceSeal(item.Rect);
+                    break;
+                case FormItemKind.Photo:
+                    PlacePhoto(item.Rect);
+                    break;
             }
-            _rows.Add(view);
-            ApplyRowTint(i);
+        }
+        fillMesh.Apply(fills, FillLift);
+        lineMesh.Apply(lines, LineLift);
+
+        foreach (FormSlot s in _form.Slots)
+        {
+            if (s.Field < 0 || doc.fields == null || s.Field >= doc.fields.Count || doc.fields[s.Field] == null)
+                continue;
+            var view = new SlotView { Row = new DocumentRow(s.Field, doc.fields[s.Field]) };
+            if (highlightTemplate != null)
+            {
+                Renderer quad = Instantiate(highlightTemplate, highlightTemplate.transform.parent);
+                quad.name = $"Slot_{_slots.Count}";
+                quad.gameObject.SetActive(true);
+                Rect r = Local(s.Hit);
+                quad.transform.localPosition = new Vector3(r.center.x, r.center.y, -HighlightLift);
+                quad.transform.localScale = new Vector3(r.width, r.height, 1f);
+                view.Highlight = quad;
+            }
+            _slots.Add(view);
+            ApplySlotTint(_slots.Count - 1);
         }
     }
 
-    /// <summary>The document row shown as face row <paramref name="row"/> (callers pass a row from Clicked).</summary>
-    public DocumentRow FieldRow(int row) => _rows[row].Row;
+    /// <summary>The document row box <paramref name="slot"/> shows (callers pass a slot from Clicked).</summary>
+    public DocumentRow FieldAt(int slot) => _slots[slot].Row;
 
-    /// <summary>Face row <paramref name="row"/> as a compare highlight.</summary>
-    public ICompareHighlight RowHighlight(int row) => new PaperRowHighlight(this, row);
+    /// <summary>Box <paramref name="slot"/> as a compare highlight.</summary>
+    public ICompareHighlight SlotHighlight(int slot) => new PaperSlotHighlight(this, slot);
 
     /// <summary>
     /// Takes the paper into the hand or puts it back: while held it is evenly
     /// lit (the examine material; the photo in the examine tint instead of the
-    /// room's tint), its sheet is the examiner's (SetLift waits), and the row
+    /// room's tint), its sheet is the examiner's (SetLift waits), and the box
     /// under the pointer tints.
     /// </summary>
     public void SetExamined(bool examined)
@@ -219,26 +269,26 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             SetHovered(-1);
     }
 
-    /// <summary>A click while the paper takes input: Clicked with the button and, while held, the row under the pointer.</summary>
+    /// <summary>A click while the paper takes input: Clicked with the button and, while held, the box under the pointer.</summary>
     public void OnPointerClick(PointerEventData eventData)
     {
         if (click == null || !click.Interactable || eventData.button == PointerEventData.InputButton.Middle)
             return;
 
-        int row = IsExamined ? RowUnder(eventData) : -1;
-        Clicked?.Invoke(this, eventData.button == PointerEventData.InputButton.Right, row);
+        int slot = IsExamined ? SlotUnder(eventData) : -1;
+        Clicked?.Invoke(this, eventData.button == PointerEventData.InputButton.Right, slot);
     }
 
-    /// <summary>While held, the row under the pointer tints.</summary>
-    public void OnPointerMove(PointerEventData eventData) => SetHovered(IsExamined && click != null && click.Interactable ? RowUnder(eventData) : -1);
+    /// <summary>While held, the box under the pointer tints.</summary>
+    public void OnPointerMove(PointerEventData eventData) => SetHovered(IsExamined && click != null && click.Interactable ? SlotUnder(eventData) : -1);
 
-    /// <summary>The pointer left the paper: no row tints.</summary>
+    /// <summary>The pointer left the paper: no box tints.</summary>
     public void OnPointerExit(PointerEventData eventData) => SetHovered(-1);
 
-    /// <summary>The face row under the pointer's hit on this paper (-1: none).</summary>
-    private int RowUnder(PointerEventData eventData)
+    /// <summary>The pickable box under the pointer's hit on this paper (-1: none).</summary>
+    private int SlotUnder(PointerEventData eventData)
     {
-        if (_face == null || sheet == null || _config == null)
+        if (_form == null || sheet == null)
             return -1;
 
         RaycastResult hit = eventData.pointerCurrentRaycast;
@@ -248,40 +298,46 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             return -1;
 
         Vector3 local = sheet.InverseTransformPoint(hit.worldPosition);
-        float height = _config.paperSize.y;
-        return PaperFace.RowAt(_face, local.x / height, local.y / height);
+        int formSlot = FormLayout.SlotAt(_form, local.x + _form.Width / 2f, _form.PageHeight / 2f - local.y);
+        if (formSlot < 0)
+            return -1;
+        int field = _form.Slots[formSlot].Field;
+        for (int i = 0; i < _slots.Count; i++)
+            if (_slots[i].Row.Index == field)
+                return i;
+        return -1;
     }
 
-    /// <summary>Marks a face row picked (in <paramref name="colour"/>) or not.</summary>
-    private void SetPicked(int row, bool picked, Color colour)
+    /// <summary>Marks a box picked (in <paramref name="colour"/>) or not.</summary>
+    private void SetPicked(int slot, bool picked, Color colour)
     {
-        if (row < 0 || row >= _rows.Count)
+        if (slot < 0 || slot >= _slots.Count)
             return;
-        _rows[row].Picked = picked;
-        _rows[row].PickColour = colour;
-        ApplyRowTint(row);
+        _slots[slot].Picked = picked;
+        _slots[slot].PickColour = colour;
+        ApplySlotTint(slot);
     }
 
-    /// <summary>Tints the hovered row (the old one back).</summary>
-    private void SetHovered(int row)
+    /// <summary>Tints the hovered box (the old one back).</summary>
+    private void SetHovered(int slot)
     {
-        if (row == _hoveredRow)
+        if (slot == _hoveredSlot)
             return;
-        int old = _hoveredRow;
-        _hoveredRow = row;
-        ApplyRowTint(old);
-        ApplyRowTint(row);
+        int old = _hoveredSlot;
+        _hoveredSlot = slot;
+        ApplySlotTint(old);
+        ApplySlotTint(slot);
     }
 
-    /// <summary>A row's quad colour: the pick's colour, else the hover tint while hovered, else clear.</summary>
-    private void ApplyRowTint(int row)
+    /// <summary>A box's quad colour: the pick's colour, else the hover tint while hovered, else clear.</summary>
+    private void ApplySlotTint(int slot)
     {
-        if (row < 0 || row >= _rows.Count || _rows[row].Highlight == null)
+        if (slot < 0 || slot >= _slots.Count || _slots[slot].Highlight == null)
             return;
 
-        RowView view = _rows[row];
+        SlotView view = _slots[slot];
         Color colour = view.Picked ? view.PickColour
-            : row == _hoveredRow && _config != null ? _config.rowHoverTint
+            : slot == _hoveredSlot && _config != null ? _config.rowHoverTint
             : Color.clear;
         _block ??= new MaterialPropertyBlock();
         view.Highlight.GetPropertyBlock(_block);
@@ -293,7 +349,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     public void ShowPhoto(TravellerLook look, CharacterArt art, Color tint)
     {
         if (photoSlot != null)
-            photoSlot.SetActive(look != null);
+            photoSlot.SetActive(look != null && _form != null && HasPhotoItem());
         if (photo != null)
         {
             photo.Show(look, art);
@@ -339,10 +395,132 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         IsSliding = true;
     }
 
-    /// <summary>Centres a text on a face rectangle (the paper's height is 1) and sizes it to it, in the sheet's metres.</summary>
-    private static void Place(RectTransform text, FaceRect rect, float height)
+    // ---------------- Printing ----------------
+
+    /// <summary>Prints one text item: a clone of the template in its role's style and ink, over its rectangle.</summary>
+    private void Print(FormItem item)
     {
-        text.localPosition = new Vector3(rect.CentreX * height, rect.CentreY * height, text.localPosition.z);
-        text.sizeDelta = new Vector2(rect.Width * height, rect.Height * height);
+        TextMeshPro text = Instantiate(textTemplate, textTemplate.transform.parent);
+        text.name = item.Role.ToString();
+        TmpFormText.Style(text, item.Role, item.Size);
+        text.text = item.Text;
+        text.color = style.Ink(item.Role);
+        text.alignment = item.Align == FormTextAlign.Right ? TextAlignmentOptions.TopRight
+            : item.Align == FormTextAlign.Centre ? TextAlignmentOptions.Top
+            : TextAlignmentOptions.TopLeft;
+        Rect r = Local(item.Rect);
+        text.rectTransform.sizeDelta = new Vector2(r.width, r.height);
+        text.rectTransform.localPosition = new Vector3(r.center.x, r.center.y, -TextLift);
+        text.GetComponent<MeshRenderer>().enabled = true;
+    }
+
+    /// <summary>The seal: its quad over the header's seal rectangle, faint.</summary>
+    private void PlaceSeal(FaceRect rect)
+    {
+        if (seal == null)
+            return;
+        Rect r = Local(rect);
+        seal.transform.localPosition = new Vector3(r.center.x, r.center.y, -SealLift);
+        seal.transform.localScale = new Vector3(r.width, r.height, 1f);
+        _block ??= new MaterialPropertyBlock();
+        seal.GetPropertyBlock(_block);
+        _block.SetColor(BaseColorId, style.seal);
+        seal.SetPropertyBlock(_block);
+        seal.gameObject.SetActive(true);
+    }
+
+    /// <summary>The photo frame over the photo's rectangle (its quad is PhotoAspect by 1, so it scales by the height).</summary>
+    private void PlacePhoto(FaceRect rect)
+    {
+        if (photoSlot == null)
+            return;
+        Rect r = Local(rect);
+        photoSlot.transform.localPosition = new Vector3(r.center.x, r.center.y, -PhotoLift);
+        photoSlot.transform.localScale = new Vector3(r.height, r.height, 1f);
+    }
+
+    /// <summary>True when the placed form prints a photo.</summary>
+    private bool HasPhotoItem()
+    {
+        foreach (FormItem item in _form.Items)
+            if (item.Kind == FormItemKind.Photo)
+                return true;
+        return false;
+    }
+
+    /// <summary>A form-space rectangle (metres from the paper's top-left, y down) in the sheet's local space (centre origin, y up).</summary>
+    private Rect Local(FaceRect f) =>
+        new Rect(f.XMin - _form.Width / 2f, _form.PageHeight / 2f - f.YMax, f.Width, f.Height);
+
+    /// <summary>A rectangle shrunk by <paramref name="by"/> on every side.</summary>
+    private static Rect Inset(Rect r, float by) => new Rect(r.xMin + by, r.yMin + by, Mathf.Max(0f, r.width - 2f * by), Mathf.Max(0f, r.height - 2f * by));
+
+    /// <summary>Collects coloured quads in the sheet's plane into one mesh.</summary>
+    private sealed class MeshBuilder
+    {
+        private readonly List<Vector3> _vertices = new List<Vector3>();
+        private readonly List<Color> _colours = new List<Color>();
+        private readonly List<int> _triangles = new List<int>();
+        private float _z;
+
+        /// <summary>A filled rectangle.</summary>
+        public void Rect(Rect r, Color colour)
+        {
+            if (r.width <= 0f || r.height <= 0f)
+                return;
+            int v = _vertices.Count;
+            _vertices.Add(new Vector3(r.xMin, r.yMin, 0f));
+            _vertices.Add(new Vector3(r.xMin, r.yMax, 0f));
+            _vertices.Add(new Vector3(r.xMax, r.yMax, 0f));
+            _vertices.Add(new Vector3(r.xMax, r.yMin, 0f));
+            for (int i = 0; i < 4; i++)
+                _colours.Add(colour);
+            _triangles.AddRange(new[] { v, v + 1, v + 2, v, v + 2, v + 3 });
+        }
+
+        /// <summary>A rectangle's outline, <paramref name="width"/> thick, inside its edges.</summary>
+        public void Outline(Rect r, float width, Color colour)
+        {
+            Rect(new Rect(r.xMin, r.yMax - width, r.width, width), colour);
+            Rect(new Rect(r.xMin, r.yMin, r.width, width), colour);
+            Rect(new Rect(r.xMin, r.yMin + width, width, r.height - 2f * width), colour);
+            Rect(new Rect(r.xMax - width, r.yMin + width, width, r.height - 2f * width), colour);
+        }
+
+        /// <summary>A dashed outline: dashes about <paramref name="dash"/> long, <paramref name="share"/> of each ink.</summary>
+        public void Dashed(Rect r, float width, float dash, float share, Color colour)
+        {
+            Edge(r.xMin, r.yMax - width, r.width, true, width, dash, share, colour);
+            Edge(r.xMin, r.yMin, r.width, true, width, dash, share, colour);
+            Edge(r.xMin, r.yMin, r.height, false, width, dash, share, colour);
+            Edge(r.xMax - width, r.yMin, r.height, false, width, dash, share, colour);
+        }
+
+        private void Edge(float x, float y, float length, bool horizontal, float width, float dash, float share, Color colour)
+        {
+            int count = Mathf.Max(1, Mathf.RoundToInt(length / dash));
+            float step = length / count;
+            for (int i = 0; i < count; i++)
+            {
+                float at = i * step, ink = step * share;
+                Rect(horizontal ? new Rect(x + at, y, ink, width) : new Rect(x, y + at, width, ink), colour);
+            }
+        }
+
+        /// <summary>Puts the quads into <paramref name="filter"/>'s mesh, <paramref name="lift"/> above the sheet.</summary>
+        public void Apply(MeshFilter filter, float lift)
+        {
+            if (filter == null)
+                return;
+            _z = -lift;
+            for (int i = 0; i < _vertices.Count; i++)
+                _vertices[i] = new Vector3(_vertices[i].x, _vertices[i].y, _z);
+            var mesh = new Mesh { name = filter.name };
+            mesh.SetVertices(_vertices);
+            mesh.SetColors(_colours);
+            mesh.SetTriangles(_triangles, 0);
+            mesh.RecalculateBounds();
+            filter.sharedMesh = mesh;
+        }
     }
 }
