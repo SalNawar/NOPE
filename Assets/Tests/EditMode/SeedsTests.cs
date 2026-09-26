@@ -93,7 +93,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.FaultSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -121,6 +121,21 @@ public class SeedsTests
         Assert.AreEqual(0x464F524D, Seeds.FormsSalt, "\"FORM\"");
         Assert.AreEqual(-1684775777, Seeds.ForFaults(caseSeed));
         Assert.AreEqual(0x46414C54, Seeds.FaultSalt, "\"FALT\"");
+        Assert.AreEqual(-230985786, Seeds.ForDebtNews(12345));
+        Assert.AreEqual(0x44454254, Seeds.DebtNewsSalt, "\"DEBT\"");
+    }
+
+    /// <summary>The debt line's order (redesign phase 13) is the run's own stream, apart from the day's and every traveller's.</summary>
+    [Test]
+    public void DebtNewsStream_IsTheRunsOwn_ApartFromTheDaysStreams()
+    {
+        Assert.AreEqual(Seeds.ForDebtNews(12345), Seeds.ForDebtNews(12345));
+        Assert.AreNotEqual(Seeds.ForDebtNews(12345), Seeds.ForDebtNews(12346));
+        for (int day = 1; day <= 15; day++)
+        {
+            int daySeed = Seeds.Day(12345, day);
+            CollectionAssert.DoesNotContain(new[] { daySeed, Seeds.ForViolators(daySeed), Seeds.ForSlot(daySeed), Seeds.ForCase(daySeed, 1) }, Seeds.ForDebtNews(12345));
+        }
     }
 
     [Test]

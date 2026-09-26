@@ -41,8 +41,9 @@ public sealed class AccountDay
 /// <summary>
 /// The clerk's own account rows as authored (world_source.json
 /// "agency.clerk"; the traveller-types spec's D1 and §4.4). The name, birth
-/// date and lineage are Saleh's to author. Phase 13 adds the starting debt
-/// and the instalment share to this block.
+/// date and lineage are Saleh's to author. Phase 13 adds the starting debt,
+/// the instalment share and the clerk's own Debt Relief Labour Contract
+/// (TC-520, shown on the Debt Relief ending; ClerkDebt).
 /// </summary>
 [Serializable]
 public sealed class ClerkContent
@@ -65,7 +66,22 @@ public sealed class ClerkContent
     /// <summary>The record's note ("No remarks on file.").</summary>
     public string note = string.Empty;
 
-    /// <summary>What Generate World and the validator refuse: a blank Citizen ID, name or employment. Empty when sound.</summary>
+    /// <summary>The debt the clerk starts the run with, in cr (125,430; D1). The account shows it less WorldState.clerkDebtPaid.</summary>
+    public int startDebt;
+
+    /// <summary>The share of each shift's pay that goes to the debt at the shift's end (0.25; D2; ClerkDebt.SharePercent, ClerkDebt.Instalment).</summary>
+    public float garnishShare;
+
+    /// <summary>The employer on the clerk's own Debt Relief Labour Contract (TC-520), shown on the Debt Relief ending (D3).</summary>
+    public string reliefEmployer = string.Empty;
+
+    /// <summary>The worksite on that contract.</summary>
+    public string reliefWorksite = string.Empty;
+
+    /// <summary>That contract's day wage in cr; its term is the debt still owed at this wage (ClerkDebt.TermDays).</summary>
+    public int reliefWage;
+
+    /// <summary>What Generate World and the validator refuse: a blank Citizen ID, name or employment; a negative starting debt; a share of pay outside 0 to 1; a Debt Relief contract without its employer, worksite or a day wage of at least 1 cr. Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -75,15 +91,26 @@ public sealed class ClerkContent
             problems.Add("agency.clerk.name is blank: the clerk's name on the Citizen Account.");
         if (string.IsNullOrWhiteSpace(employment))
             problems.Add("agency.clerk.employment is blank: the clerk's employment row.");
+        if (startDebt < 0)
+            problems.Add($"agency.clerk.startDebt is {startDebt}: the clerk starts owing 0 cr or more.");
+        if (garnishShare < 0f || garnishShare > 1f)
+            problems.Add($"agency.clerk.garnishShare is {garnishShare}: the share of each shift's pay that goes to the debt is from 0 to 1.");
+        if (string.IsNullOrWhiteSpace(reliefEmployer))
+            problems.Add("agency.clerk.reliefEmployer is blank: the employer on the clerk's own Debt Relief Labour Contract.");
+        if (string.IsNullOrWhiteSpace(reliefWorksite))
+            problems.Add("agency.clerk.reliefWorksite is blank: the worksite on the clerk's own Debt Relief Labour Contract.");
+        if (reliefWage < 1)
+            problems.Add($"agency.clerk.reliefWage is {reliefWage}: the contract's day wage is at least 1 cr (its term is the debt at this wage).");
         return problems;
     }
 }
 
 /// <summary>
 /// What the clerk's account knows about the debt (the traveller-types spec's
-/// D1-D3). Phase 13 supplies it (agency.clerk.startDebt, the garnish share and
-/// WorldState.clerkDebtPaid); until then it is <see cref="Unknown"/>, and the
-/// Citizen Account shows "–" for the debt and the instalments.
+/// D1-D3): phase 13 supplies it (ClerkDebt.State: agency.clerk.startDebt, the
+/// garnish share and WorldState.clerkDebtPaid, frozen on the bankrupt ending);
+/// without a source it is <see cref="Unknown"/>, and the Citizen Account shows
+/// "–" for the debt and the instalments.
 /// </summary>
 public readonly struct ClerkDebtState
 {
@@ -138,10 +165,10 @@ public interface IClerkAccountSource
     /// <summary>The wallet now (WorldState.money).</summary>
     int Balance { get; }
 
-    /// <summary>The debt (ClerkDebtState.Unknown until phase 13).</summary>
+    /// <summary>The debt (ClerkDebtState.Unknown when no source gives it).</summary>
     ClerkDebtState Debt { get; }
 
-    /// <summary>The Debt Relief instalment taken from this shift's pay (Account.Unknown until phase 13).</summary>
+    /// <summary>The Debt Relief instalment taken from this shift's pay (Account.Unknown outside a shift's end, or when no source gives the debt).</summary>
     int ShiftInstalment { get; }
 }
 

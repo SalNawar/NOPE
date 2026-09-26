@@ -118,6 +118,16 @@ public static class Seeds
     /// </summary>
     public static int ForAccount(int caseSeed) => Mix(caseSeed, AccountSalt);
 
+    /// <summary>Salt for the run's debt-news order ("DEBT").</summary>
+    public const int DebtNewsSalt = 0x44454254;
+
+    /// <summary>
+    /// Seed for the order in which the morning paper runs through the debt
+    /// lines (redesign phase 13; DebtNews.Line): one stream for the whole run,
+    /// apart from every day's and traveller's, so the paper never shifts who
+    /// travels.
+    /// </summary>
+    public static int ForDebtNews(int runSeed) => Mix(runSeed, DebtNewsSalt);
     /// <summary>Salt for a traveller's fault stream ("FALT").</summary>
     public const int FaultSalt = 0x46414C54;
 

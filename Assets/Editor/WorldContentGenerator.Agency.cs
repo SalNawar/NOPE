@@ -8,7 +8,9 @@ using UnityEditor;
 /// line and day 1's date) is checked (AgencyContent.Problems) and written into
 /// the content library, where the desk calendar and the Records app read it;
 /// with it the clerk's own account ("agency.clerk", redesign phase 25:
-/// ClerkContent.Problems), which the Citizen Account app shows.
+/// ClerkContent.Problems), which the Citizen Account app shows, and from
+/// phase 13 the clerk's debt, its share of pay and the clerk's own Debt Relief
+/// Labour Contract.
 /// </summary>
 public static partial class WorldContentGenerator
 {
@@ -16,7 +18,11 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
-    [Serializable] private sealed class ClerkData { public string citizenId; public string name; public string born; public string lineage; public string employment; public string note; }
+    [Serializable] private sealed class ClerkData
+    {
+        public string citizenId; public string name; public string born; public string lineage; public string employment; public string note;
+        public int startDebt; public float garnishShare; public string reliefEmployer; public string reliefWorksite; public int reliefWage;
+    }
 
     /// <summary>The agency block's content (its fields verbatim).</summary>
     private static AgencyContent BuildAgency(AgencyData a) =>
@@ -26,7 +32,11 @@ public static partial class WorldContentGenerator
     private static ClerkContent BuildClerk(ClerkData c) =>
         c == null
             ? new ClerkContent()
-            : new ClerkContent { citizenId = c.citizenId, name = c.name, born = c.born, lineage = c.lineage, employment = c.employment, note = c.note };
+            : new ClerkContent
+            {
+                citizenId = c.citizenId, name = c.name, born = c.born, lineage = c.lineage, employment = c.employment, note = c.note,
+                startDebt = c.startDebt, garnishShare = c.garnishShare, reliefEmployer = c.reliefEmployer, reliefWorksite = c.reliefWorksite, reliefWage = c.reliefWage
+            };
 
     /// <summary>A missing "agency" section, or its problems (AgencyContent.Problems, the validator's rule).</summary>
     private static void CheckAgency(WorldSource src, List<string> errors)

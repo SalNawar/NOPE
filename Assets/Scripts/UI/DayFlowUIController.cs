@@ -136,6 +136,9 @@ public sealed class DayFlowUIController : MonoBehaviour
             if (ledger.TotalPenalties > 0)
                 sb.AppendLine(UiText.Format("results.penalties", ledger.TotalPenalties));
 
+            if (ledger.debtOwed != Account.Unknown)
+                sb.AppendLine(UiText.Format("results.debtRelief", ledger.debtInstalment, ledger.debtOwed, UiText.Currency(UiText.WalletForm.Short)));
+
             sb.AppendLine(UiText.Format("results.net", ledger.NetMoney, UiText.Currency(UiText.WalletForm.Inline), world.money));
             sb.AppendLine();
             sb.AppendLine(UiText.Format("results.stability", world.timelineStability, ledger.TotalStabilityDelta));

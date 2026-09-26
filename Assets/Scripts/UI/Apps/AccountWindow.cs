@@ -127,8 +127,8 @@ public sealed class AccountWindow : MonoBehaviour
             unitText.text = UiText.Format("account.statement.unit", UiText.Currency(UiText.WalletForm.Short));
     }
 
-    /// <summary>An amount of credits in the wallet's short word ("1,250 cr").</summary>
-    private static string Amount(int value) =>
+    /// <summary>An amount of credits in the wallet's short word ("1,250 cr"); the Debt Relief ending's papers word theirs the same way.</summary>
+    internal static string Amount(int value) =>
         value.ToString("N0", CultureInfo.InvariantCulture) + " " + UiText.Currency(UiText.WalletForm.Short);
 
     /// <summary>Cells placed at the statement's column starts (TMP position tags).</summary>

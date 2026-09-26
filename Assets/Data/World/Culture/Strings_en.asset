@@ -940,6 +940,38 @@ MonoBehaviour:
     text: Departures are voluntary.
     gloss: 0
     tier: 0
+  - key: contract.title
+    text: "DEBT RELIEF LABOUR CONTRACT \xB7 TC-520"
+    gloss: 0
+    tier: 0
+  - key: contract.row.worker
+    text: Worker
+    gloss: 0
+    tier: 0
+  - key: contract.row.citizenId
+    text: Citizen ID
+    gloss: 0
+    tier: 0
+  - key: contract.row.employer
+    text: Employer
+    gloss: 0
+    tier: 0
+  - key: contract.row.worksite
+    text: Worksite
+    gloss: 0
+    tier: 0
+  - key: contract.row.term
+    text: Term
+    gloss: 0
+    tier: 0
+  - key: contract.row.wage
+    text: Day Wage
+    gloss: 0
+    tier: 0
+  - key: contract.term
+    text: '{0:N0} days'
+    gloss: 0
+    tier: 0
   - key: notes.days
     text: DAYS
     gloss: 0
@@ -1018,6 +1050,10 @@ MonoBehaviour:
     tier: 0
   - key: results.penalties
     text: 'Citation penalties: -{0}'
+    gloss: 0
+    tier: 0
+  - key: results.debtRelief
+    text: 'Debt Relief instalment: -{0}   (still owed: {1:N0} {2})'
     gloss: 0
     tier: 0
   - key: results.net

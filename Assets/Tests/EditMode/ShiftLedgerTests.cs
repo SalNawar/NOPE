@@ -54,5 +54,19 @@ public class ShiftLedgerTests
         Assert.AreEqual(0, ledger.CorrectCount);
         Assert.AreEqual(0, ledger.WrongCount);
         Assert.AreEqual(0, ledger.UnprovenDenialCount);
+        Assert.AreEqual(0, ledger.debtInstalment);
+        Assert.AreEqual(Account.Unknown, ledger.debtOwed, "no debt known before the shift's end");
+    }
+
+    [Test]
+    public void NetMoney_IsPayLessPenaltiesLessTheDebtInstalment()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(Verdict(true, pay: 220));
+        ledger.verdicts.Add(Verdict(false, penalty: 15));
+        ledger.debtInstalment = 55;
+
+        Assert.AreEqual(220, ledger.TotalPay, "the pay stays the whole pay (the statement's WAGES)");
+        Assert.AreEqual(150, ledger.NetMoney, "the wallet's change: 220 - 15 - 55");
     }
 }
