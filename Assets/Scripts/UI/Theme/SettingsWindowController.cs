@@ -10,7 +10,10 @@ using UnityEngine.UI;
 /// (MotionPreference; reduced shows translations at once, from the next
 /// traveller); and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
-/// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange).
+/// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange);
+/// and the Investigation app (the PC redesign ST1, SG1): its steps checklist
+/// "Steps shown" (the default) or "Steps hidden" (StepsPanel.SetShown,
+/// remembered in DesktopPreferences; the toolbar's Steps repaints the pair).
 /// In each pair the chosen button shows the theme's accent colours (the
 /// SearchButton role), the other the default button colours. The
 /// Investigation section's Text size (100, 125, 150 %: the zoom levels) is
@@ -52,6 +55,14 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>The Investigation app (its default zoom).</summary>
     [SerializeField] private InvestigationApp app;
+    /// <summary>The Investigation app's steps checklist shows.</summary>
+    [SerializeField] private Button stepsShownButton;
+
+    /// <summary>The Investigation app's steps checklist is hidden.</summary>
+    [SerializeField] private Button stepsHiddenButton;
+
+    /// <summary>The steps checklist the pair shows or hides.</summary>
+    [SerializeField] private StepsPanel steps;
 
     /// <summary>The Keyboard section's "Show shortcuts".</summary>
     [SerializeField] private Button showShortcutsButton;
@@ -83,6 +94,18 @@ public sealed class SettingsWindowController : MonoBehaviour
         }
         if (showShortcutsButton != null && shortcutsWindow != null)
             showShortcutsButton.onClick.AddListener(shortcutsWindow.Open);
+        if (stepsShownButton != null)
+            stepsShownButton.onClick.AddListener(() => ChooseSteps(true));
+        if (stepsHiddenButton != null)
+            stepsHiddenButton.onClick.AddListener(() => ChooseSteps(false));
+        if (steps != null)
+            steps.ShownChanged += ShowSelection;
+    }
+
+    private void OnDestroy()
+    {
+        if (steps != null)
+            steps.ShownChanged -= ShowSelection;
     }
 
     private void OnEnable() => ShowSelection();
@@ -120,6 +143,16 @@ public sealed class SettingsWindowController : MonoBehaviour
     private int Level(int index) =>
         config != null && config.zoomLevels != null && index < config.zoomLevels.Length ? config.zoomLevels[index] : AppZoom.Normal;
 
+    /// <summary>Shows or hides the Investigation app's steps (remembered for the player; the checklist repaints this pair).</summary>
+    private void ChooseSteps(bool shown)
+    {
+        if (steps != null)
+            steps.SetShown(shown);
+        else
+            DesktopPreferences.StepsShown = shown;
+        ShowSelection();
+    }
+
     /// <summary>Lays the desktop's icons out in the default arrangement (and saves it).</summary>
     private void ResetIcons()
     {
@@ -144,6 +177,9 @@ public sealed class SettingsWindowController : MonoBehaviour
         int zoom = AppZoom.Parse(DesktopPreferences.DefaultZoom, config != null ? config.zoomLevels : null);
         for (int i = 0; i < textSizeButtons.Length; i++)
             Paint(textSizeButtons[i], Level(i) == zoom, theme);
+        bool stepsShown = DesktopPreferences.StepsShown;
+        Paint(stepsShownButton, stepsShown, theme);
+        Paint(stepsHiddenButton, !stepsShown, theme);
     }
 
     /// <summary>One button's colours from the theme.</summary>

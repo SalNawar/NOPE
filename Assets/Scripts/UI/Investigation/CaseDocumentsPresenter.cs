@@ -13,7 +13,8 @@ using System.Collections.Generic;
 /// what that shows: ScanArrival) and puts the paper and its fields into
 /// search's case layer (redesign phase 19: a document joins when it reaches
 /// the PC); nothing here opens a window. A held paper's row picked at the
-/// desk goes into the compare as its scanned copy's row would. It subscribes to the desk it was given (only a
+/// desk goes into the compare as its scanned copy's row would; a paper lifted
+/// into the hand is announced (Examined). It subscribes to the desk it was given (only a
 /// reachable one) and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
 /// </summary>
@@ -54,6 +55,9 @@ public sealed class CaseDocumentsPresenter
     /// <summary>A paper was handed over or scanned (the counters change).</summary>
     public event Action PapersChanged;
 
+    /// <summary>A paper (its index) was lifted into the hand at the desk to be read.</summary>
+    public event Action<int> Examined;
+
     /// <summary>The current traveller's documents, in paper order.</summary>
     public IReadOnlyList<CaseDocument> Documents => _caseDocuments;
 
@@ -68,6 +72,7 @@ public sealed class CaseDocumentsPresenter
         _listening = _desk;
         _listening.ScanFinished += Scan;
         _listening.FieldPicked += HandleFieldPicked;
+        _listening.PaperExamined += HandleExamined;
     }
 
     /// <summary>Stops listening (to the instance it attached to).</summary>
@@ -77,6 +82,7 @@ public sealed class CaseDocumentsPresenter
             return;
         _listening.ScanFinished -= Scan;
         _listening.FieldPicked -= HandleFieldPicked;
+        _listening.PaperExamined -= HandleExamined;
         _listening = null;
     }
 
@@ -188,6 +194,8 @@ public sealed class CaseDocumentsPresenter
         foreach (IndexEntry entry in IndexEntries.Paper(index, doc.name, fields, UiText.Get("search.title.row")))
             _index.Add(entry);
     }
+    /// <summary>A paper lifted into the hand: announced.</summary>
+    private void HandleExamined(int index) => Examined?.Invoke(index);
 
     /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>
     private void HandleFieldPicked(int index, DocumentRow row, ICompareHighlight highlight)

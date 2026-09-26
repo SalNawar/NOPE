@@ -358,6 +358,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(soInvest, "wheel", wheel);
         Wire(soInvest, "idleScreen", idleScreen);
         soInvest.ApplyModifiedProperties();
+        WireStepsToOffice(app.Steps, monitorScreen, invest);
 
         var soOrch = new SerializedObject(orchestrator);
         SetRef(soOrch, "eventDirector", eventDirector);
@@ -1275,6 +1276,7 @@ public static partial class OfficeSceneUIBuilder
         };
         DesktopIcons icons = BuildDesktopIcons(canvas, windows, feed, out DesktopContextMenu contextMenu);
         WireIconSettings(windows[DesktopAppIds.Settings], icons);
+        WireStepsSettings(windows[DesktopAppIds.Settings], app.Steps);
 
         Transform startMenu = BuildStartMenu(root, apps, out TMP_Text mailEntry, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
         var soFeed = new SerializedObject(feed);

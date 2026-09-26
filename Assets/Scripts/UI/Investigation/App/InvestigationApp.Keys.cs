@@ -33,7 +33,8 @@ using UnityEngine.UI;
 /// active, Ctrl+\ splits or joins, Ctrl+Shift+PgUp/PgDn move the active tab
 /// in the shared order, Ctrl+1…6 follow that order, Tab also visits the other
 /// pane's content, and Enter on a row with a smart link follows it in the same
-/// pane (Ctrl+Enter: the other pane). The steps come with phase 21.
+/// pane (Ctrl+Enter: the other pane). Ctrl+Shift+S shows or hides the steps
+/// checklist (phase 21).
 /// </summary>
 public sealed partial class InvestigationApp
 {
@@ -76,6 +77,9 @@ public sealed partial class InvestigationApp
 
     /// <summary>The desktop's context menu (a row's Copy value, Copy row, Pin, Pick for compare).</summary>
     [SerializeField] private DesktopContextMenu rowMenu;
+
+    /// <summary>The sidebar's steps checklist (Ctrl+Shift+S shows or hides it).</summary>
+    [SerializeField] private StepsPanel steps;
 
     private readonly AppClipboard _clipboard = new AppClipboard();
     private readonly List<RectTransform> _targets = new List<RectTransform>();
@@ -273,7 +277,10 @@ public sealed partial class InvestigationApp
             case AppCommand.ZoomReset:
                 SetZoom(DefaultZoom);
                 break;
-            // ToggleSteps comes with the steps (phase 21).
+            case AppCommand.ToggleSteps:
+                if (steps != null)
+                    steps.Toggle();
+                break;
         }
     }
 

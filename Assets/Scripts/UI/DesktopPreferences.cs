@@ -4,7 +4,8 @@ using UnityEngine;
 /// The player's desktop preferences (the PC redesign DK4, DK6, AP3, AP4,
 /// section 4.7): where the icons sit, whether one click or two opens an icon,
 /// the Investigation app's tab order, whether it shows two panes, its
-/// default zoom (Settings' Text size, KB5) and whether its sidebar shows.
+/// default zoom (Settings' Text size, KB5), whether its sidebar shows and
+/// whether its steps checklist shows (ST1).
 /// Per-player values in PlayerPrefs (the UiLanguagePreference pattern),
 /// outside the run save, so New Run keeps them; saved at once when set.
 /// Later phases add their own keys here (the steps).
@@ -41,10 +42,13 @@ public static class DesktopPreferences
     /// <summary>The stored value for one pane.</summary>
     private const string Off = "off";
 
-    /// <summary>The stored value for a hidden sidebar ("shown" or absent = shown).</summary>
+    /// <summary>The steps checklist's key (the PC redesign ST1).</summary>
+    private const string StepsKey = "TimeDesk.StepsShown";
+
+    /// <summary>The stored value for a hidden sidebar or hidden steps ("shown" or absent = shown).</summary>
     private const string Hidden = "hidden";
 
-    /// <summary>The stored value for a shown sidebar.</summary>
+    /// <summary>The stored value for a shown sidebar or shown steps.</summary>
     private const string Shown = "shown";
 
     /// <summary>The saved icon layout, or "" when the player never moved an icon (the default arrangement).</summary>
@@ -109,6 +113,17 @@ public static class DesktopPreferences
         set
         {
             PlayerPrefs.SetString(SidebarKey, value ? Shown : Hidden);
+            PlayerPrefs.Save();
+        }
+    }
+
+    /// <summary>True (the default) when the Investigation app's sidebar shows the steps checklist; false when the player hid it (the toolbar's Steps, Settings).</summary>
+    public static bool StepsShown
+    {
+        get => PlayerPrefs.GetString(StepsKey, Shown) != Hidden;
+        set
+        {
+            PlayerPrefs.SetString(StepsKey, value ? Shown : Hidden);
             PlayerPrefs.Save();
         }
     }

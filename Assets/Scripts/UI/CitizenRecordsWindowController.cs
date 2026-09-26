@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -18,7 +19,8 @@ using UnityEngine.UI;
 /// (RecordMismatch; another person's record proves nothing); it lights while
 /// its key is picked (AppRow). A smart link runs a lookup here and marks the
 /// found record's row of its category (Reveal); a lookup the player runs is
-/// announced (Searched) for the pane's history. The registry, the agency
+/// announced (Searched) for the pane's history and the steps checklist's "a
+/// record was looked up". The registry, the agency
 /// block and the date are injected per day by GameManager via
 /// InvestigationUIController. Each evidence row is marked with its key for
 /// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
@@ -84,7 +86,7 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     /// <summary>The lookup shown (trimmed; null: none).</summary>
     public string Query { get; private set; }
 
-    /// <summary>Raised when the player runs a lookup (SEARCH or Enter), not when a link runs one.</summary>
+    /// <summary>Raised when the player runs a lookup of a name or number (SEARCH or Enter), whatever it found; not when a link runs one.</summary>
     public event System.Action Searched;
 
     /// <summary>The record shown, or null.</summary>
@@ -121,8 +123,10 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     /// <summary>The player's lookup: the typed name or number (Searched tells the pane).</summary>
     public void Search()
     {
-        Look(searchInput != null ? searchInput.text : null);
-        Searched?.Invoke();
+        string query = searchInput != null ? searchInput.text : null;
+        Look(query);
+        if (!string.IsNullOrWhiteSpace(query))
+            Searched?.Invoke();
     }
 
     /// <summary>

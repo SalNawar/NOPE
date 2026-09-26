@@ -14,9 +14,9 @@ using UnityEngine.UI;
 /// field, Steps, Split (two panes side by side, saved per player, possible
 /// only while each pane gets a readable width: AppPanes.CanSplit, so a
 /// restored window has one pane and the button says why) and Keys (the search
-/// field is live since phase 19, InvestigationApp.Search, and Keys since phase
-/// 20; Steps is shown but not live until phase 21); the sidebar holds Steps (a placeholder until phase 21), Pinned
-/// and Recent. The keys, the focus ring, copy and paste, pins, recent items
+/// field is live since phase 19, InvestigationApp.Search, Keys since phase 20
+/// and Steps since phase 21: it shows or hides the sidebar's steps checklist,
+/// StepsPanel); the sidebar holds the steps, Pinned and Recent. The keys, the focus ring, copy and paste, pins, recent items
 /// and zoom are in InvestigationApp.Keys (redesign phase 20). Two
 /// panes share one tab order (TabOrder: dragged or moved from a tab's menu,
 /// saved per player in DesktopPreferences.AppTabs). The active pane is the
@@ -70,9 +70,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
 
     /// <summary>The Split button's hover hint: what it does, or why it cannot.</summary>
     [SerializeField] private TMP_Text splitHint;
-
-    /// <summary>Steps: shown, not live until its phase (21).</summary>
-    [SerializeField] private Selectable[] notYetLive = new Selectable[0];
 
     /// <summary>The Split button's tint while the split is on (pressed).</summary>
     [SerializeField] private Color splitOnTint = new Color(0.72f, 0.72f, 0.72f, 1f);
@@ -250,6 +247,25 @@ public sealed partial class InvestigationApp : MonoBehaviour
         Activate(pane);
     }
 
+    /// <summary>True while a showing pane shows <paramref name="tab"/> (the steps checklist reads what the player sees).</summary>
+    public bool Sees(AppTab tab)
+    {
+        foreach (AppTab shown in ShownTabs())
+            if (shown == tab)
+                return true;
+        return false;
+    }
+
+    /// <summary>The scanned paper a showing pane's Documents view shows (its copy, not the line saying why it cannot), or -1 (the steps checklist's "read").</summary>
+    public int SeenPaper()
+    {
+        foreach (AppPane pane in Panes())
+            if (IsShowing && (pane == leftPane || _split) && pane.ActiveTab == AppTab.Documents
+                && pane.View(AppTab.Documents) is DocumentsView documents && documents.ShowsCopy)
+                return documents.Selected;
+        return -1;
+    }
+
     /// <summary>Where a pick was picked (SmartLinks.ForKey over the case's papers): the dock's sides.</summary>
     public LinkTarget LinkFor(string pickKey) => SmartLinks.ForKey(pickKey, _papers);
 
@@ -270,7 +286,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
             OrderChanged();
     }
 
-    /// <summary>Wires the panes, the toolbar and the desktop's press, reads the saved order and split, and turns the toolbar's not-yet-live controls off (once; the app is driven while its window is closed).</summary>
+    /// <summary>Wires the panes, the toolbar and the desktop's press, and reads the saved order and split (once; the app is driven while its window is closed).</summary>
     private void Init()
     {
         if (_ready)
@@ -298,9 +314,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
             forwardButton.onClick.AddListener(() => _active.Forward());
         if (splitButton != null)
             splitButton.onClick.AddListener(ToggleSplit);
-        foreach (Selectable control in notYetLive)
-            if (control != null)
-                control.interactable = false;
 
         _manager = window != null ? window.Manager : null;
         if (_manager != null)

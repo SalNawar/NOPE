@@ -165,8 +165,8 @@ public static partial class OfficeSceneUIBuilder
             WirePersistentVoid(keys, "m_OnClick", keyboard, nameof(DesktopKeyboard.ToggleCard));
 
         Transform sidebar = Need(win, "AppBody/Sidebar");
-        SidebarEntryList pins = sidebar != null ? BuildSidebarList(sidebar, app.App, "Pinned", true, "app.pins.empty", 0.345f, 0.595f) : null;
-        SidebarEntryList recent = sidebar != null ? BuildSidebarList(sidebar, app.App, "Recent", false, "app.recent.empty", 0.01f, 0.26f) : null;
+        SidebarEntryList pins = sidebar != null ? BuildSidebarList(sidebar, app.App, "Pinned", true, "app.pins.empty", 0.262f, 0.428f) : null;
+        SidebarEntryList recent = sidebar != null ? BuildSidebarList(sidebar, app.App, "Recent", false, "app.recent.empty", 0.01f, 0.178f) : null;
 
         var zooms = new List<Object>();
         var pinButtons = new List<Object>();

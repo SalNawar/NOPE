@@ -151,4 +151,38 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, (int)DialogChoiceKind.Dialog);
         Assert.AreEqual(6, System.Enum.GetValues(typeof(DialogChoiceKind)).Length, "a new member is appended here too");
     }
+
+    /// <summary>The steps checklist's enums (redesign phase 21): stored in the content library's step sets (ContentLibrarySO.Pc.steps).</summary>
+    [Test]
+    public void StepEnums_KeepTheirSerializedInts()
+    {
+        Assert.AreEqual(0, (int)StepWhen.PapersReceived);
+        Assert.AreEqual(1, (int)StepWhen.PaperRead);
+        Assert.AreEqual(2, (int)StepWhen.Requested);
+        Assert.AreEqual(3, (int)StepWhen.RulesViewed);
+        Assert.AreEqual(4, (int)StepWhen.RecordViewed);
+        Assert.AreEqual(5, (int)StepWhen.Compared);
+        Assert.AreEqual(6, (int)StepWhen.Asked);
+        Assert.AreEqual(7, (int)StepWhen.LookedAt);
+        Assert.AreEqual(8, System.Enum.GetValues(typeof(StepWhen)).Length, "a new member is appended here too");
+
+        Assert.AreEqual(0, (int)StatementKind.Any);
+        Assert.AreEqual(1, (int)StatementKind.Field);
+        Assert.AreEqual(2, (int)StatementKind.Answer);
+        Assert.AreEqual(3, (int)StatementKind.Garment);
+        Assert.AreEqual(4, System.Enum.GetValues(typeof(StatementKind)).Length, "a new member is appended here too");
+
+        Assert.AreEqual(0, (int)TruthKind.Any);
+        Assert.AreEqual(1, (int)TruthKind.Reference);
+        Assert.AreEqual(2, (int)TruthKind.Record);
+        Assert.AreEqual(3, (int)TruthKind.Paper);
+        Assert.AreEqual(4, System.Enum.GetValues(typeof(TruthKind)).Length, "a new member is appended here too");
+
+        Assert.AreEqual(0, (int)StepLink.None);
+        Assert.AreEqual(1, (int)StepLink.Tab);
+        Assert.AreEqual(2, (int)StepLink.PrimaryName);
+        Assert.AreEqual(3, (int)StepLink.FirstUncheckedField);
+        Assert.AreEqual(4, (int)StepLink.CostumeClaimed);
+        Assert.AreEqual(5, System.Enum.GetValues(typeof(StepLink)).Length, "a new member is appended here too");
+    }
 }

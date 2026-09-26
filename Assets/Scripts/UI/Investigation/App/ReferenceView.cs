@@ -148,11 +148,11 @@ public sealed class ReferenceView : AppView, IAppItems
         RaiseChipsChanged();
     }
 
-    /// <summary>Chooses the book of the target's row (else its item), lifts "Claimed place only" when it hides the row, and marks the row found; no row: the mark clears.</summary>
+    /// <summary>Chooses the book of the target's row or book key (a step's jump: "bookof:Currency"; else its item), lifts "Claimed place only" when it hides the row, and marks the row found; no row: the mark clears.</summary>
     public override void Reveal(LinkTarget target)
     {
         int book = target.Item;
-        if (PickKeys.TryBookRow(target.Key, out ClueCategory category, out _, out _))
+        if (PickKeys.TryBookRow(target.Key, out ClueCategory category, out _, out _) || EntryKeys.TryBook(target.Key, out category))
             book = _books.FindIndex(b => b.category == category);
         if (book >= 0)
             Select(book);

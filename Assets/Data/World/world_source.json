@@ -7561,6 +7561,510 @@
     ]
   },
   "pc": {
+    "steps": {
+      "sets": [
+        {
+          "type": "default",
+          "steps": [
+            {
+              "id": "rules",
+              "when": "RulesViewed",
+              "jump": {
+                "source": "Rules"
+              }
+            },
+            {
+              "id": "papers",
+              "when": "PapersReceived",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "read",
+              "when": "PaperRead",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "identity",
+              "when": "Compared",
+              "categories": [
+                "Name",
+                "CitizenId",
+                "BirthDate"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "facts",
+              "when": "Compared",
+              "statement": "Field",
+              "truth": "Reference",
+              "jump": {
+                "link": "FirstUncheckedField"
+              }
+            },
+            {
+              "id": "questions",
+              "when": "Asked",
+              "hint": "steps.hint.wheel"
+            },
+            {
+              "id": "answers",
+              "when": "Compared",
+              "statement": "Answer",
+              "jump": {
+                "source": "Transcript"
+              }
+            },
+            {
+              "id": "dress",
+              "when": "Compared",
+              "categories": [
+                "Culture"
+              ],
+              "statement": "Garment",
+              "truth": "Reference",
+              "jump": {
+                "link": "CostumeClaimed"
+              }
+            }
+          ]
+        },
+        {
+          "type": "Displaced",
+          "steps": [
+            {
+              "id": "rules",
+              "when": "RulesViewed",
+              "jump": {
+                "source": "Rules"
+              }
+            },
+            {
+              "id": "papers",
+              "when": "PapersReceived",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "read",
+              "when": "PaperRead",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "identity",
+              "when": "Compared",
+              "categories": [
+                "Name",
+                "CitizenId",
+                "BirthDate"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "facts",
+              "when": "Compared",
+              "statement": "Field",
+              "truth": "Reference",
+              "jump": {
+                "link": "FirstUncheckedField"
+              }
+            },
+            {
+              "id": "questions",
+              "when": "Asked",
+              "hint": "steps.hint.wheel"
+            },
+            {
+              "id": "answers",
+              "when": "Compared",
+              "statement": "Answer",
+              "jump": {
+                "source": "Transcript"
+              }
+            },
+            {
+              "id": "dress",
+              "when": "Compared",
+              "categories": [
+                "Culture"
+              ],
+              "statement": "Garment",
+              "truth": "Reference",
+              "jump": {
+                "link": "CostumeClaimed"
+              }
+            },
+            {
+              "id": "returnOrder",
+              "when": "Compared",
+              "categories": [
+                "Destination",
+                "Incident"
+              ],
+              "statement": "Field",
+              "truth": "Paper",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "dates",
+              "when": "PaperRead",
+              "forms": [
+                "TC-630",
+                "TC-610"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 4
+            }
+          ]
+        },
+        {
+          "type": "RichTourist",
+          "steps": [
+            {
+              "id": "rules",
+              "when": "RulesViewed",
+              "jump": {
+                "source": "Rules"
+              }
+            },
+            {
+              "id": "papers",
+              "when": "PapersReceived",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "read",
+              "when": "PaperRead",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "identity",
+              "when": "Compared",
+              "categories": [
+                "Name",
+                "CitizenId",
+                "BirthDate"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "class",
+              "when": "Compared",
+              "categories": [
+                "AccountStatus"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "transponder",
+              "when": "Compared",
+              "categories": [
+                "TransponderId",
+                "TransponderClass"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "paperSet",
+              "when": "PaperRead",
+              "forms": [
+                "TC-101",
+                "TC-230"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 2
+            },
+            {
+              "id": "standing",
+              "when": "RecordViewed",
+              "jump": {
+                "link": "PrimaryName"
+              },
+              "fromDay": 3
+            },
+            {
+              "id": "facts",
+              "when": "Compared",
+              "categories": [
+                "Currency",
+                "Technology"
+              ],
+              "statement": "Field",
+              "truth": "Reference",
+              "jump": {
+                "link": "FirstUncheckedField"
+              },
+              "fromDay": 4
+            },
+            {
+              "id": "dress",
+              "when": "Compared",
+              "categories": [
+                "Culture"
+              ],
+              "statement": "Garment",
+              "truth": "Reference",
+              "jump": {
+                "link": "CostumeClaimed"
+              },
+              "fromDay": 2
+            },
+            {
+              "id": "dates",
+              "when": "PaperRead",
+              "forms": [
+                "TC-230",
+                "TC-101"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 4
+            }
+          ]
+        },
+        {
+          "type": "PoorTourist",
+          "inherit": "RichTourist",
+          "dataOnly": true,
+          "steps": [
+            {
+              "id": "paperSet",
+              "when": "PaperRead",
+              "forms": [
+                "TC-101",
+                "TC-230",
+                "TC-310",
+                "TC-415",
+                "TC-416",
+                "TC-417"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 2
+            },
+            {
+              "id": "dates",
+              "when": "PaperRead",
+              "forms": [
+                "TC-230",
+                "TC-101",
+                "TC-415",
+                "TC-416",
+                "TC-417"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 4
+            },
+            {
+              "id": "askMeans",
+              "when": "Requested",
+              "forms": [
+                "TC-415",
+                "TC-416",
+                "TC-417"
+              ],
+              "hint": "steps.hint.wheel"
+            },
+            {
+              "id": "waiver",
+              "when": "Compared",
+              "categories": [
+                "TransponderId",
+                "WaiverNo",
+                "Debt"
+              ],
+              "statement": "Field",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "means",
+              "when": "Compared",
+              "categories": [
+                "Credit",
+                "Funds",
+                "PolicyNo"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            }
+          ]
+        },
+        {
+          "type": "Labourer",
+          "dataOnly": true,
+          "steps": [
+            {
+              "id": "rules",
+              "when": "RulesViewed",
+              "jump": {
+                "source": "Rules"
+              }
+            },
+            {
+              "id": "papers",
+              "when": "PapersReceived",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "read",
+              "when": "PaperRead",
+              "jump": {
+                "source": "Documents"
+              }
+            },
+            {
+              "id": "identity",
+              "when": "Compared",
+              "categories": [
+                "Name",
+                "CitizenId",
+                "BirthDate"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "standing",
+              "when": "RecordViewed",
+              "jump": {
+                "link": "PrimaryName"
+              },
+              "fromDay": 3
+            },
+            {
+              "id": "contract",
+              "when": "Compared",
+              "categories": [
+                "Employer",
+                "Destination",
+                "Term",
+                "Wage"
+              ],
+              "statement": "Field",
+              "truth": "Record",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "paperSet",
+              "when": "PaperRead",
+              "forms": [
+                "TC-520",
+                "TC-230",
+                "TC-310"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 3
+            },
+            {
+              "id": "waiver",
+              "when": "Compared",
+              "categories": [
+                "TransponderId",
+                "WaiverNo",
+                "Debt"
+              ],
+              "statement": "Field",
+              "jump": {
+                "link": "PrimaryName"
+              }
+            },
+            {
+              "id": "facts",
+              "when": "Compared",
+              "categories": [
+                "Currency",
+                "Technology"
+              ],
+              "statement": "Field",
+              "truth": "Reference",
+              "jump": {
+                "link": "FirstUncheckedField"
+              },
+              "fromDay": 4
+            },
+            {
+              "id": "dress",
+              "when": "Compared",
+              "categories": [
+                "Culture"
+              ],
+              "statement": "Garment",
+              "truth": "Reference",
+              "jump": {
+                "link": "CostumeClaimed"
+              },
+              "fromDay": 2
+            },
+            {
+              "id": "dates",
+              "when": "PaperRead",
+              "forms": [
+                "TC-230"
+              ],
+              "jump": {
+                "source": "Documents"
+              },
+              "fromDay": 4
+            }
+          ]
+        }
+      ]
+    },
     "sites": [
       {
         "id": "news",
@@ -9991,13 +10495,157 @@
       },
       {
         "key": "settings.investigation",
-        "text": "Investigation: text size",
+        "text": "Investigation",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "settings.textSize",
         "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.rules",
+        "text": "Today's rules for the destination",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.papers",
+        "text": "Receive every paper",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.read",
+        "text": "Read every paper",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.identity",
+        "text": "Name, number and birth date in Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.facts",
+        "text": "Place facts against the books",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.questions",
+        "text": "Ask today's questions",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.answers",
+        "text": "Answers against the books or Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.dress",
+        "text": "Dress against the Costume Guide",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.returnOrder",
+        "text": "Return order against the certificate",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.dates",
+        "text": "Dates against today's calendar",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.class",
+        "text": "Visa class against the account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.transponder",
+        "text": "Transponder against the account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.paperSet",
+        "text": "Paper set against today's rules",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.standing",
+        "text": "Account standing in Records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.askMeans",
+        "text": "Ask for a proof of means",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.waiver",
+        "text": "Waiver against manifest and account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.means",
+        "text": "Proof of means against the account",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.contract",
+        "text": "Contract against the registered one",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.hint.wheel",
+        "text": "Use the traveller wheel: click the traveller at the desk.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.progress",
+        "text": "{0} ({1}/{2})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.none",
+        "text": "Steps show while a traveller is at the desk.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "steps.hidden",
+        "text": "Steps are hidden: Steps in the toolbar shows them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.stepsShown",
+        "text": "Steps shown",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.stepsHidden",
+        "text": "Steps hidden",
         "gloss": "None",
         "tier": "Full"
       },
