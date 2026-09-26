@@ -153,20 +153,28 @@ public static class History
     /// (also for a null state). Every edit applies from the day after it
     /// latched, and facts are only built for that day or later, so no day filter.
     /// </summary>
-    public static string Resolve(HistoryState history, string nationId, string eraId, ClueCategory category, string baseValue)
+    public static string Resolve(HistoryState history, string nationId, string eraId, ClueCategory category, string baseValue) =>
+        LatestEdit(history, nationId, eraId, category)?.value ?? baseValue;
+
+    /// <summary>
+    /// The edit <see cref="Resolve"/> reads: the newest latched edit of that
+    /// place and category with a non-blank value, or null (none, or a null
+    /// state). Chronopedia shows its day beside a revised value.
+    /// </summary>
+    public static FactEdit LatestEdit(HistoryState history, string nationId, string eraId, ClueCategory category)
     {
         if (history == null || history.factEdits == null)
-            return baseValue;
+            return null;
 
         for (int i = history.factEdits.Count - 1; i >= 0; i--)
         {
             FactEdit e = history.factEdits[i];
             if (e != null && e.category == category && !string.IsNullOrWhiteSpace(e.value) &&
                 string.Equals(e.nationId, nationId, StringComparison.Ordinal) && string.Equals(e.eraId, eraId, StringComparison.Ordinal))
-                return e.value;
+                return e;
         }
 
-        return baseValue;
+        return null;
     }
 
     /// <summary>
