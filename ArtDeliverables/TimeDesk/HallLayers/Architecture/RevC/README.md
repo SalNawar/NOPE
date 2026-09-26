@@ -12,6 +12,8 @@
 
 ## Drawings
 
+- **terminal-player-view-mockup.png:** generated player-view concept, 2026-09-27, edited from the actual LayoutWear runtime screenshot using C02 as spatial reference. Exact prompt saved alongside it. Shows the straight desk, lower gates, upper gallery, left city glazing and right circulation. This is not installed in Unity and is not a verified perspective blockout. The generated treatment is still too pristine/glossy, crowds too individually legible, and foreground preservation approximate; these remain refinement points, not approved material or mesh changes.
+
 - **C01_terminal_plan.png / .svg:** inspection concourse with lower and upper platform footprints, circulation, private booth, tower core and window relationship.
 - **C02_terminal_section.png / .svg:** three levels, the booth's view toward lower and upper platforms, stair connection and a larger booth privacy detail.
 
