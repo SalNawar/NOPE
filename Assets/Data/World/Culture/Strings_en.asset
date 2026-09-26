@@ -716,30 +716,6 @@ MonoBehaviour:
     text: "Day {0} \xB7 {1}"
     gloss: 0
     tier: 0
-  - key: mail.form.title
-    text: INTERNAL MEMORANDUM
-    gloss: 0
-    tier: 0
-  - key: mail.form.to
-    text: TO
-    gloss: 0
-    tier: 0
-  - key: mail.form.from
-    text: FROM
-    gloss: 0
-    tier: 0
-  - key: mail.form.date
-    text: DATE
-    gloss: 0
-    tier: 0
-  - key: mail.form.ref
-    text: REF
-    gloss: 0
-    tier: 0
-  - key: mail.form.subject
-    text: SUBJECT
-    gloss: 0
-    tier: 0
   - key: mail.to
     text: All desk officers
     gloss: 0
@@ -790,10 +766,6 @@ MonoBehaviour:
     tier: 0
   - key: mail.link.news
     text: Read it on the News site >
-    gloss: 0
-    tier: 0
-  - key: mail.stamp
-    text: RECEIVED
     gloss: 0
     tier: 0
   - key: account.form.title

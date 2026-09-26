@@ -9457,42 +9457,6 @@
         "tier": "Full"
       },
       {
-        "key": "mail.form.title",
-        "text": "INTERNAL MEMORANDUM",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.to",
-        "text": "TO",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.from",
-        "text": "FROM",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.date",
-        "text": "DATE",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.ref",
-        "text": "REF",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.subject",
-        "text": "SUBJECT",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "mail.to",
         "text": "All desk officers",
         "gloss": "None",
@@ -9567,12 +9531,6 @@
       {
         "key": "mail.link.news",
         "text": "Read it on the News site >",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.stamp",
-        "text": "RECEIVED",
         "gloss": "None",
         "tier": "Full"
       },

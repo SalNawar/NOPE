@@ -7,11 +7,10 @@ using UnityEngine.UI;
 /// <summary>
 /// The Mail app (the PC spec's ML1, §2.12): the inbox on the left (unread in
 /// bold with a bullet; the day and the sender under the subject) and the open
-/// message on the right, drawn as an internal memorandum (form TC-950: TO,
-/// FROM, DATE and REF boxes, the subject, the body, the link, the signature
-/// and the RECEIVED stamp). Opening a message marks it read (MailFeed). The
-/// memo is drawn with today's widgets through <see cref="ShowMemo"/>, the one
-/// place phase 5's forms engine replaces (Form_Memo).
+/// message on the right, drawn as an internal memorandum: its page kind,
+/// Form_Memo (TC-950: TO, DATE, FROM and REF boxes, the subject, the body,
+/// the sender's sign-off and the stamp area), on a FormView (phase 5), with
+/// the message's link over it. Opening a message marks it read (MailFeed).
 /// </summary>
 public sealed class MailWindow : MonoBehaviour
 {
@@ -36,34 +35,19 @@ public sealed class MailWindow : MonoBehaviour
     /// <summary>The list's "No mail." line.</summary>
     [SerializeField] private TMP_Text emptyText;
 
-    /// <summary>The memo form (hidden until a message is open).</summary>
-    [SerializeField] private GameObject memoRoot;
+    /// <summary>The memo's scroll (hidden until a message is open).</summary>
+    [SerializeField] private ScrollRect memoScroll;
+
+    /// <summary>The memo: the open message drawn as its form.</summary>
+    [SerializeField] private FormView memo;
+
+    /// <summary>The memo's page kind (Form_Memo, TC-950).</summary>
+    [SerializeField] private FormSpecSO memoForm;
 
     /// <summary>"Select a message to read it." (shown instead of the memo).</summary>
     [SerializeField] private TMP_Text selectText;
 
-    /// <summary>The memo's TO box.</summary>
-    [SerializeField] private TMP_Text toText;
-
-    /// <summary>The memo's FROM box.</summary>
-    [SerializeField] private TMP_Text fromText;
-
-    /// <summary>The memo's DATE box.</summary>
-    [SerializeField] private TMP_Text dateText;
-
-    /// <summary>The memo's REF box.</summary>
-    [SerializeField] private TMP_Text refText;
-
-    /// <summary>The memo's SUBJECT box.</summary>
-    [SerializeField] private TMP_Text subjectText;
-
-    /// <summary>The memo's body.</summary>
-    [SerializeField] private TMP_Text bodyText;
-
-    /// <summary>The signature line.</summary>
-    [SerializeField] private TMP_Text signatureText;
-
-    /// <summary>The link under the body (hidden when the message has none).</summary>
+    /// <summary>The message's link, over the memo (hidden when the message has none).</summary>
     [SerializeField] private Button linkButton;
 
     private readonly List<Button> _rows = new List<Button>();
@@ -154,26 +138,38 @@ public sealed class MailWindow : MonoBehaviour
             Open(items[index].Id);
     }
 
-    /// <summary>Draws the memo form for a message (nothing open: the "select a message" line).</summary>
+    /// <summary>Draws a message as its memo, Form_Memo (TO, DATE, FROM, REF, SUBJECT, the body, the sender's sign-off and the stamp area), with its link over it; nothing open: the "select a message" line.</summary>
     private void ShowMemo(MailItem m)
     {
-        if (memoRoot != null)
-            memoRoot.SetActive(m != null);
+        if (memoScroll != null)
+            memoScroll.gameObject.SetActive(m != null);
         if (selectText != null)
             selectText.gameObject.SetActive(m == null);
+        if (linkButton != null)
+            linkButton.gameObject.SetActive(m != null && m.Link != MailLink.None);
         if (m == null)
             return;
 
-        Set(toText, UiText.Get("mail.to"));
-        Set(fromText, MailText.From(m));
-        Set(dateText, MailText.Date(m.Day));
-        Set(refText, MailText.Ref(m));
-        Set(subjectText, MailText.Subject(m));
-        Set(bodyText, MailText.Body(m));
-        Set(signatureText, MailText.From(m));
+        if (memo != null && memoForm != null)
+        {
+            ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+            FormData page = memoForm.Page(library != null ? library.Agency : null);
+            page.Text = new Dictionary<string, string>
+            {
+                { "to", UiText.Get("mail.to") },
+                { "date", MailText.Date(m.Day) },
+                { "from", MailText.From(m) },
+                { "ref", MailText.Ref(m) },
+                { "subject", MailText.Subject(m) },
+                { "body", MailText.Body(m) },
+                { "signature", MailText.From(m) }
+            };
+            memo.Show(memoForm.form, page, _ => false);
+            if (memoScroll != null)
+                memoScroll.verticalNormalizedPosition = 1f;
+        }
         if (linkButton != null)
         {
-            linkButton.gameObject.SetActive(m.Link != MailLink.None);
             TMP_Text label = linkButton.GetComponentInChildren<TMP_Text>(true);
             if (label != null)
                 label.text = UiText.Get(m.Link == MailLink.Rules ? "mail.link.rules" : "mail.link.news");
@@ -213,11 +209,6 @@ public sealed class MailWindow : MonoBehaviour
         return null;
     }
 
-    private static void Set(TMP_Text text, string value)
-    {
-        if (text != null)
-            text.text = value;
-    }
 }
 
 /// <summary>The app windows' list rows (the inbox, the day list).</summary>

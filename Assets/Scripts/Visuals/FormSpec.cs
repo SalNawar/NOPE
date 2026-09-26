@@ -2,9 +2,8 @@ using System;
 
 /// <summary>
 /// The blocks a form is made of (PC spec FO2). Serialized in every form
-/// asset as an int, so the values are fixed: 3 (RecordGroups), 14 (Masthead)
-/// and 15 (Headline) are held for the phases that bring their pages (the
-/// Investigation app's records, the Internet's sites).
+/// asset as an int, so the values are fixed: 14 (Masthead) and 15 (Headline)
+/// are held for the Internet's sites.
 /// </summary>
 public enum FormBlockKind
 {
@@ -17,16 +16,19 @@ public enum FormBlockKind
     /// <summary>A row of boxed fields on the 12-column grid (cells); a cell may span rows (the photo).</summary>
     FieldRow = 2,
 
+    /// <summary>A record's groups (FormData.Groups): each a numbered section of boxes, two to a row, a value too long for half a row across it; each row a slot of the block's slot.</summary>
+    RecordGroups = 3,
+
     /// <summary>Options with a box each; the one equal to the block's field's value is ticked.</summary>
     Checkboxes = 4,
 
-    /// <summary>A header row (columns, shares) and the rows of the block's slot, each row a slot.</summary>
+    /// <summary>A header row (columns, shares) and the rows of the block's slot, each row a slot; a row of one cell in a table of several columns is a heading across it (a band, no slot).</summary>
     Table = 5,
 
     /// <summary>A paragraph: the block's text, else its slot's content.</summary>
     Paragraph = 6,
 
-    /// <summary>The block's field as a signatory's hand over a rule (UNSIGNED when blank) and the block's text as its caption.</summary>
+    /// <summary>The block's field (on a page kind, its slot's text) as a signatory's hand over a rule (UNSIGNED when blank) and the block's text as its caption.</summary>
     Signature = 7,
 
     /// <summary>The issuing facsimile line: the block's text, else "Issued by" and the agency.</summary>
@@ -103,7 +105,7 @@ public sealed class FormBlock
     /// <summary>The template field a Checkboxes or Signature block shows, or -1.</summary>
     public int field = -1;
 
-    /// <summary>The content slot a Table's rows or a Paragraph's text come from.</summary>
+    /// <summary>The content slot a Table's rows, a Paragraph's text, a page kind's Signature or a RecordGroups block's picks come from.</summary>
     public string slot = string.Empty;
 }
 

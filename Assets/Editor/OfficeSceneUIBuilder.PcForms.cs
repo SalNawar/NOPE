@@ -131,12 +131,35 @@ public static partial class OfficeSceneUIBuilder
         strip.textWrappingMode = TextWrappingModes.NoWrap;
         strip.overflowMode = TextOverflowModes.Ellipsis;
 
-        Transform area = Panel(page, "Scroll", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
+        ScrollRect scroll = BuildFormScroll(page, "Scroll", PcPageWidth, out FormView form);
+        PlaceRect(scroll.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
+
+        DocumentWindowController c = page.gameObject.AddComponent<DocumentWindowController>();
+        var so = new SerializedObject(c);
+        Wire(so, "titleText", title);
+        Wire(so, "scanStrip", strip);
+        Wire(so, "scroll", scroll);
+        Wire(so, "form", form);
+        so.ApplyModifiedProperties();
+        page.gameObject.SetActive(false);
+        return c;
+    }
+
+    /// <summary>
+    /// A form in a scroll under <paramref name="parent"/> (filling it inside
+    /// the margin; callers may place it): a masked viewport whose content is a
+    /// FormView <paramref name="formWidth"/> wide at its top centre, and an
+    /// auto-hiding scrollbar at the right in the backing's colours.
+    /// </summary>
+    private static ScrollRect BuildFormScroll(Transform parent, string name, float formWidth, out FormView form)
+    {
+        FormStyleSO style = EnsureFormStyle();
+        Transform area = Panel(parent, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -DocMargin));
         Transform viewport = Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(viewport, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-(DocScrollbar + DocGap), 0f));
         viewport.gameObject.AddComponent<RectMask2D>();
-        FormView form = BuildFormView(viewport, "Form", PcPageWidth);
+        form = BuildFormView(viewport, "Form", formWidth);
 
         Transform track = Panel(area, "Scrollbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backing, ThemeRoleId.DiegeticBacking);
         PlaceRect(track, new Vector2(1f, 0f), Vector2.one, new Vector2(-DocScrollbar, 0f), Vector2.zero);
@@ -163,16 +186,7 @@ public static partial class OfficeSceneUIBuilder
         scroll.scrollSensitivity = 40f;
         scroll.verticalScrollbar = scrollbar;
         scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
-
-        DocumentWindowController c = page.gameObject.AddComponent<DocumentWindowController>();
-        var so = new SerializedObject(c);
-        Wire(so, "titleText", title);
-        Wire(so, "scanStrip", strip);
-        Wire(so, "scroll", scroll);
-        Wire(so, "form", form);
-        so.ApplyModifiedProperties();
-        page.gameObject.SetActive(false);
-        return c;
+        return scroll;
     }
 
     /// <summary>The Documents tab's page template reads the shift clock for its scan strip (the clock is on the GameManager, built after the app).</summary>

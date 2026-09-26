@@ -9,10 +9,11 @@ using UnityEngine.UI;
 /// with its feed on the desktop canvas, the Citizen Account window (the
 /// clerk's Record Extract and Statement), the Notes window (days, clippings,
 /// the typed notes), and the Settings window in sections (Language, Motion,
-/// Desktop, Keyboard) with the shortcut card. The forms are drawn with
-/// today's widgets on diegetic paper (fixed colours, never themed), each in
-/// its own window component, so phase 5's forms engine replaces one drawing
-/// method per form. The three app windows are rebuilt fresh on each run
+/// Desktop, Keyboard) with the shortcut card. The memo is a form (phase 5:
+/// Form_Memo on a FormView, OfficeSceneUIBuilder.PcForms); the account's
+/// extract and statement are drawn with today's widgets on diegetic paper
+/// (fixed colours, never themed) until their page kinds fit the window. The
+/// three app windows are rebuilt fresh on each run
 /// (like Records); Settings keeps its objects. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; the desktop shell builds each app and
 /// registers it in DesktopApps (phase 17: BuildDesktopShell), before the
@@ -29,8 +30,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>A form box's outline and the forms' rules.</summary>
     private static readonly Color FormRule = new Color(0.45f, 0.42f, 0.35f, 1f);
 
-    /// <summary>The stamp's red ink.</summary>
-    private static readonly Color StampInk = new Color(0.66f, 0.12f, 0.1f, 1f);
+    /// <summary>The Mail memo's page kind (TC-950).</summary>
+    private const string MemoFormPath = "Assets/Data/Forms/Form_Memo.asset";
 
     /// <summary>A list row's height (the inbox, the day list).</summary>
     private const float AppRowHeight = 52f;
@@ -59,7 +60,7 @@ public static partial class OfficeSceneUIBuilder
     // Mail (ML1, §2.12)
     // -----------------------------
 
-    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left, the memo form on the right; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
+    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left; on the right the message's link over the memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
                                                  InvestigationApp investigation, out TMP_Text title)
     {
@@ -78,32 +79,13 @@ public static partial class OfficeSceneUIBuilder
                               ThemeRoleId.InputField, "mail.none", FontStyles.Italic);
         empty.raycastTarget = false;
 
-        Transform page = Panel(win, "MemoPage", new Vector2(0.38f, 0.02f), new Vector2(0.98f, 0.935f), Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
+        Button link = MakeButton(win, "LinkButton", "", new Vector2(0.52f, 0.885f), new Vector2(0.98f, 0.935f), new Color(0.15f, 0.3f, 0.5f, 1f), ThemeRoleId.SearchButton);
+        FitLabel(link, 17f);
+        Transform page = Panel(win, "MemoPage", new Vector2(0.38f, 0.02f), new Vector2(0.98f, 0.875f), Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
         TMP_Text select = Text(page, "SelectText", null, 18, TextAlignmentOptions.Center, new Vector2(0.05f, 0.4f), new Vector2(0.95f, 0.6f), Ink,
                                ThemeRoleId.DiegeticRow, "mail.select", FontStyles.Italic);
-        Transform memo = Panel(page, "Memo", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        FormTitle(memo, "mail.form.title", "TC-950", new Vector2(0.03f, 0.915f), new Vector2(0.97f, 0.985f));
-        TMP_Text to = FormField(memo, "To", "mail.form.to", new Vector2(0.03f, 0.8f), new Vector2(0.6f, 0.9f));
-        TMP_Text date = FormField(memo, "Date", "mail.form.date", new Vector2(0.62f, 0.8f), new Vector2(0.97f, 0.9f));
-        TMP_Text from = FormField(memo, "From", "mail.form.from", new Vector2(0.03f, 0.69f), new Vector2(0.6f, 0.79f));
-        TMP_Text reference = FormField(memo, "Ref", "mail.form.ref", new Vector2(0.62f, 0.69f), new Vector2(0.97f, 0.79f));
-        TMP_Text subject = FormField(memo, "Subject", "mail.form.subject", new Vector2(0.03f, 0.58f), new Vector2(0.97f, 0.68f));
-
-        TMP_Text body = Text(memo, "BodyText", "", 17, TextAlignmentOptions.TopLeft, new Vector2(0.04f, 0.23f), new Vector2(0.96f, 0.56f), Ink, ThemeRoleId.DiegeticRow);
-        body.textWrappingMode = TextWrappingModes.Normal;
-        body.overflowMode = TextOverflowModes.Ellipsis;
-        body.enableAutoSizing = true;
-        body.fontSizeMin = 13f;
-        body.fontSizeMax = 17f;
-
-        Button link = MakeButton(memo, "LinkButton", "", new Vector2(0.04f, 0.145f), new Vector2(0.62f, 0.215f), new Color(0.15f, 0.3f, 0.5f, 1f), ThemeRoleId.SearchButton);
-        FitLabel(link, 17f);
-
-        Panel(memo, "SignatureRule", new Vector2(0.04f, 0.11f), new Vector2(0.58f, 0.113f), Vector2.zero, Vector2.zero, FormRule, ThemeRoleId.DiegeticPaper);
-        TMP_Text signature = Text(memo, "SignatureText", "", 16, TextAlignmentOptions.TopLeft, new Vector2(0.04f, 0.03f), new Vector2(0.62f, 0.105f), Ink,
-                                  ThemeRoleId.DiegeticRow, style: FontStyles.Italic);
-        signature.raycastTarget = false;
-        BuildStamp(memo, "Stamp", "mail.stamp", new Vector2(0.68f, 0.03f), new Vector2(0.95f, 0.15f));
+        float memoWidth = config.mailWindowSize.x * 0.6f - DocMargin - DocGap - DocScrollbar;
+        ScrollRect memo = BuildFormScroll(page, "Memo", memoWidth, out FormView memoView);
 
         MailWindow component = win.gameObject.AddComponent<MailWindow>();
         var so = new SerializedObject(component);
@@ -114,15 +96,10 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "listRoot", list);
         SetRef(so, "rowTemplate", row);
         SetRef(so, "emptyText", empty);
-        SetRef(so, "memoRoot", memo.gameObject);
+        Wire(so, "memoScroll", memo);
+        Wire(so, "memo", memoView);
+        Wire(so, "memoForm", AssetDatabase.LoadAssetAtPath<FormSpecSO>(MemoFormPath));
         SetRef(so, "selectText", select);
-        SetRef(so, "toText", to);
-        SetRef(so, "fromText", from);
-        SetRef(so, "dateText", date);
-        SetRef(so, "refText", reference);
-        SetRef(so, "subjectText", subject);
-        SetRef(so, "bodyText", body);
-        SetRef(so, "signatureText", signature);
         SetRef(so, "linkButton", link);
         so.ApplyModifiedProperties();
 
@@ -503,31 +480,6 @@ public static partial class OfficeSceneUIBuilder
                                ThemeRoleId.DiegeticLabel);
         number.raycastTarget = false;
         Panel(area, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 1f), new Vector2(0f, 2f), FormRule, ThemeRoleId.DiegeticPaper);
-    }
-
-    /// <summary>A form's labelled box: the label (small, bold) over the value. Returns the value's text.</summary>
-    private static TMP_Text FormField(Transform parent, string name, string labelKey, Vector2 aMin, Vector2 aMax)
-    {
-        Transform box = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, FormBox, ThemeRoleId.DiegeticPaper);
-        DrawOutline(box);
-        TMP_Text label = Text(box, "Label", null, 12, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.6f), new Vector2(0.97f, 0.96f), RecordLabelInk,
-                              ThemeRoleId.DiegeticLabel, labelKey, FontStyles.Bold);
-        label.raycastTarget = false;
-        TMP_Text value = Text(box, "Value", "", 18, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.04f), new Vector2(0.97f, 0.62f), Ink, ThemeRoleId.DiegeticRow);
-        value.textWrappingMode = TextWrappingModes.NoWrap;
-        value.overflowMode = TextOverflowModes.Ellipsis;
-        value.raycastTarget = false;
-        return value;
-    }
-
-    /// <summary>A stamp: a red-outlined box, turned a little, with its keyed word.</summary>
-    private static void BuildStamp(Transform parent, string name, string key, Vector2 aMin, Vector2 aMax)
-    {
-        Transform stamp = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
-        stamp.localRotation = Quaternion.Euler(0f, 0f, 6f);
-        DrawOutline(stamp, StampInk, 2f);
-        TMP_Text word = Text(stamp, "Word", null, 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, StampInk, ThemeRoleId.DiegeticRow, key, FontStyles.Bold);
-        word.raycastTarget = false;
     }
 
     /// <summary>A thin outline round a box (the forms' ruled boxes).</summary>
