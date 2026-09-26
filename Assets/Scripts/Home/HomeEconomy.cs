@@ -1,11 +1,10 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Household economy for the Home phase (Phase 4): daily living expenses,
 /// family member condition drift, and treating conditions for credits.
-/// Stateless static helpers operating on WorldState + GameConfigSO.
+/// Stateless static helpers applying the Domain's HomeRules to WorldState +
+/// GameConfigSO.
 /// </summary>
 public static class HomeEconomy
 {
@@ -27,6 +26,7 @@ public static class HomeEconomy
         /// <summary>Number of family members at the time of billing.</summary>
         public readonly int memberCount;
 
+        /// <summary>Creates a report; the total is the sum of the three amounts.</summary>
         public ExpenseReport(int baseAmount, int memberAmount, int conditionAmount, int memberCount)
         {
             this.baseAmount = baseAmount;
@@ -38,16 +38,16 @@ public static class HomeEconomy
     }
 
     /// <summary>
-    /// Computes and deducts today's living expenses from world.money.
-    /// Safe to call with a null config (falls back to zero expenses).
+    /// Computes and deducts today's living expenses from world.money: the
+    /// base expense, the upkeep per family member and the medical drain per
+    /// condition point (HomeRules.DrainPoints). Safe to call with a null
+    /// config (falls back to zero expenses).
     /// </summary>
     public static ExpenseReport ApplyDailyExpenses(WorldState world, GameConfigSO config)
     {
-        Debug.Log($"[HomeEconomy] >>> Entering ApplyDailyExpenses (day {world?.day}).");
-
         if (world == null)
         {
-            Debug.LogWarning("[HomeEconomy] <<< Exiting ApplyDailyExpenses early — null world.");
+            Debug.LogWarning("[HomeEconomy] ApplyDailyExpenses: no world, so nothing is billed.");
             return default;
         }
 
@@ -59,15 +59,12 @@ public static class HomeEconomy
         int conditionTotal = 0;
         foreach (FamilyMemberData m in world.family.members)
             if (m != null)
-                conditionTotal += Mathf.Max(0, m.condition);
+                conditionTotal += HomeRules.DrainPoints(m.condition);
 
         int conditionAmount = (config != null ? config.expensePerConditionPoint : 0) * conditionTotal;
 
         var report = new ExpenseReport(baseAmount, memberAmount, conditionAmount, memberCount);
         world.money -= report.total;
-
-        Debug.Log($"[HomeEconomy] <<< Exiting ApplyDailyExpenses (base={report.baseAmount}, members={report.memberAmount} x{report.memberCount}, conditions={report.conditionAmount}, total={report.total}, money={world.money}).");
-
         return report;
     }
 
@@ -77,92 +74,42 @@ public static class HomeEconomy
 
     /// <summary>
     /// Spends credits to reduce a family member's condition by 1.
-    /// Returns true if the treatment was applied (enough money, condition &gt; 0).
+    /// Returns true if the treatment was applied (HomeRules.CanTreat: a
+    /// condition to treat and enough money).
     /// </summary>
     public static bool TreatFamilyMember(WorldState world, GameConfigSO config, int memberIndex)
     {
-        Debug.Log($"[HomeEconomy] >>> Entering TreatFamilyMember (memberIndex={memberIndex}).");
-
         if (world == null || memberIndex < 0 || memberIndex >= world.family.members.Count)
-        {
-            Debug.Log("[HomeEconomy] <<< Exiting TreatFamilyMember — invalid world or member index.");
             return false;
-        }
 
         FamilyMemberData member = world.family.members[memberIndex];
-
-        if (member == null || member.condition <= 0)
-        {
-            Debug.Log($"[HomeEconomy] <<< Exiting TreatFamilyMember — member {memberIndex} has no condition to treat.");
-            return false;
-        }
-
         int cost = GetCareCost(config);
 
-        if (world.money < cost)
-        {
-            Debug.Log($"[HomeEconomy] <<< Exiting TreatFamilyMember — not enough money ({world.money} < {cost}).");
+        if (member == null || !HomeRules.CanTreat(member.condition, world.money, cost))
             return false;
-        }
 
         world.money -= cost;
-        int before = member.condition;
-        member.condition = Mathf.Max(0, member.condition - 1);
-
-        Debug.Log($"[HomeEconomy] <<< Exiting TreatFamilyMember (member {memberIndex}: condition {before}->{member.condition}, cost={cost}, money={world.money}).");
-
+        member.condition = HomeRules.Treated(member.condition);
         return true;
     }
 
     /// <summary>
     /// Deterministically rolls condition drift for each family member based on the
-    /// given seed (e.g., RunManager.GetDaySeed()). Untreated members have a chance
-    /// to worsen by 1, capped at config.maxFamilyCondition.
+    /// given seed (e.g., RunManager.GetDaySeed()): a member worsens by 1, capped
+    /// at config.maxFamilyCondition, when their roll (HomeRules.Worsens) falls
+    /// below config.conditionWorsenChance. Nothing drifts without a config.
     /// </summary>
     public static void AdvanceFamilyConditions(WorldState world, GameConfigSO config, int seed)
     {
-        Debug.Log($"[HomeEconomy] >>> Entering AdvanceFamilyConditions (seed={seed}).");
-
-        if (world == null || world.family.members.Count == 0)
-        {
-            Debug.Log("[HomeEconomy] <<< Exiting AdvanceFamilyConditions — no family members.");
+        if (world == null || config == null || config.conditionWorsenChance <= 0f)
             return;
-        }
-
-        float chance = config != null ? config.conditionWorsenChance : 0f;
-        int cap = config != null ? config.maxFamilyCondition : 10;
-
-        if (chance <= 0f)
-        {
-            Debug.Log("[HomeEconomy] <<< Exiting AdvanceFamilyConditions — worsen chance is 0.");
-            return;
-        }
-
-        int worsened = 0;
 
         for (int i = 0; i < world.family.members.Count; i++)
         {
             FamilyMemberData member = world.family.members[i];
 
-            if (member == null)
-                continue;
-
-            unchecked
-            {
-                int memberSeed = seed * 397 ^ (i + 1) * 104729;
-                var rng = new System.Random(memberSeed);
-
-                if (rng.NextDouble() < chance)
-                {
-                    int before = member.condition;
-                    member.condition = Mathf.Min(cap, member.condition + 1);
-
-                    if (member.condition != before)
-                        worsened++;
-                }
-            }
+            if (member != null && HomeRules.Worsens(seed, i, config.conditionWorsenChance))
+                member.condition = HomeRules.Worsened(member.condition, config.maxFamilyCondition);
         }
-
-        Debug.Log($"[HomeEconomy] <<< Exiting AdvanceFamilyConditions ({worsened}/{world.family.members.Count} member(s) worsened, chance={chance:0.##}, cap={cap}).");
     }
 }

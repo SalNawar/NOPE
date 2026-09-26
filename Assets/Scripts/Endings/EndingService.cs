@@ -6,8 +6,8 @@ using UnityEngine;
 /// after every verdict and at the end of a shift that applied dialog
 /// consequences (GameManager, EndingMoment.Immediate); failures, the
 /// Retirement milestone and the attribute epilogues at the day boundary
-/// (RunManager.Sleep, EndingMoment.DayBoundary). Which one wins is the Domain
-/// rule EndingRules.Select.
+/// (RunManager.Sleep, EndingMoment.DayBoundary). Whether a condition holds is
+/// the Domain rule EndingRules.Met, which one wins EndingRules.Select.
 /// </summary>
 public static class EndingService
 {
@@ -18,13 +18,15 @@ public static class EndingService
     /// </summary>
     public static EndingSO Evaluate(WorldState world, ContentLibrarySO lib, GameConfigSO config, EndingMoment moment)
     {
-        Debug.Log($"[EndingService] >>> Entering Evaluate ({moment}; day {world?.day}, money={world?.money}, stability={world?.timelineStability:0.#}).");
-
         if (world == null || lib == null)
         {
-            Debug.LogWarning("[EndingService] <<< Exiting Evaluate early — null world/library.");
+            Debug.LogWarning("[EndingService] Evaluate: no world or content library, so no ending is checked.");
             return null;
         }
+
+        var now = new EndingCheck(world.timelineStability, world.money, world.day,
+            config != null ? config.firedAtStability : 0f,
+            config != null ? config.bankruptcyMoneyThreshold : -100);
 
         var endings = new List<EndingSO>();
         var candidates = new List<EndingCandidate>();
@@ -33,70 +35,25 @@ public static class EndingService
             if (ending == null)
                 continue;
 
-            bool met = Matches(ending, world, config);
-            if (met)
-                Debug.Log($"[EndingService] Evaluate: ending '{ending.id}' ({ending.displayName}) matches (priority={ending.priority}, {EndingRules.KindOf(ending.conditionType)}).");
-
             endings.Add(ending);
-            candidates.Add(new EndingCandidate(EndingRules.KindOf(ending.conditionType), ending.priority, met));
+            candidates.Add(new EndingCandidate(EndingRules.KindOf(ending.conditionType), ending.priority, Matches(ending, world, now)));
         }
 
         int winner = EndingRules.Select(candidates, moment);
         EndingSO best = winner >= 0 ? endings[winner] : null;
 
         if (best != null)
-            Debug.Log($"[EndingService] <<< Exiting Evaluate (selected '{best.id}' ({best.displayName}), priority={best.priority}).");
-        else
-            Debug.Log("[EndingService] <<< Exiting Evaluate (no ending matched, run continues).");
+            Debug.Log($"[EndingService] {moment}: the run ends with '{best.id}' ({best.displayName}), priority {best.priority}.");
 
         return best;
     }
 
-    /// <summary>Returns true if the given ending's condition currently holds.</summary>
-    private static bool Matches(EndingSO ending, WorldState world, GameConfigSO config)
+    /// <summary>Whether the ending's condition holds now (EndingRules.Met; an attribute ending reads its attribute's global total).</summary>
+    private static bool Matches(EndingSO ending, WorldState world, EndingCheck now)
     {
-        switch (ending.conditionType)
-        {
-            case EndingConditionType.Fired:
-            {
-                float firedAt = config != null ? config.firedAtStability : 0f;
-                bool pass = world.timelineStability <= firedAt;
-                Debug.Log($"[EndingService] Matches '{ending.id}' (Fired): stability={world.timelineStability:0.#} <= {firedAt:0.#} -> {pass}.");
-                return pass;
-            }
-
-            case EndingConditionType.Bankrupt:
-            {
-                int threshold = config != null ? config.bankruptcyMoneyThreshold : -100;
-                bool pass = world.money <= threshold;
-                Debug.Log($"[EndingService] Matches '{ending.id}' (Bankrupt): money={world.money} <= {threshold} -> {pass}.");
-                return pass;
-            }
-
-            case EndingConditionType.AttrTotalAtLeast:
-            {
-                if (ending.attribute == null)
-                {
-                    Debug.Log($"[EndingService] Matches '{ending.id}' (AttrTotalAtLeast): no attribute configured -> false.");
-                    return false;
-                }
-
-                float score = world.timeline.GetScore(TimelineKeys.GlobalAttr(ending.attribute));
-                bool pass = score >= ending.threshold;
-                Debug.Log($"[EndingService] Matches '{ending.id}' (AttrTotalAtLeast): {ending.attribute.displayName}={score:0.#} >= {ending.threshold:0.#} -> {pass}.");
-                return pass;
-            }
-
-            case EndingConditionType.DayAtLeast:
-            {
-                bool pass = world.day >= ending.threshold;
-                Debug.Log($"[EndingService] Matches '{ending.id}' (DayAtLeast): day={world.day} >= {ending.threshold:0.#} -> {pass}.");
-                return pass;
-            }
-
-            default:
-                Debug.Log($"[EndingService] Matches '{ending.id}': unknown conditionType '{ending.conditionType}' -> false.");
-                return false;
-        }
+        float? attributeTotal = ending.conditionType == EndingConditionType.AttrTotalAtLeast && ending.attribute != null
+            ? world.timeline.GetScore(TimelineKeys.GlobalAttr(ending.attribute))
+            : (float?)null;
+        return EndingRules.Met(ending.conditionType, ending.threshold, attributeTotal, now);
     }
 }
