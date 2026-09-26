@@ -9,12 +9,6 @@ public sealed class CaseInstance
     /// <summary>0-based case index used internally.</summary>
     public int caseIndex;
 
-    /// <summary>
-    /// The era the traveller claims as home and is sent to (the correct era on
-    /// the legacy era-pick path). A liar's real era is trueHome.era.
-    /// </summary>
-    public EraSO trueEra;
-
     /// <summary>True if this traveller is a premade character (named, drawn whole).</summary>
     public bool isLegendary;
 
@@ -23,9 +17,6 @@ public sealed class CaseInstance
 
     /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
     public ArchetypeSO archetype;
-
-    /// <summary>The nation the traveller claims as home (the destination; timeline impacts land here).</summary>
-    public NationSO nation;
 
     /// <summary>Label of the claimed place, "Abbasid Baghdad (Medieval)" (claim line and Citizen Records).</summary>
     public string originLabel;
@@ -58,10 +49,19 @@ public sealed class CaseInstance
     // Investigation (accept/deny)
     // -----------------------------
 
-    /// <summary>Nation the visitor CLAIMS to be traveling to (shown to player).</summary>
+    /// <summary>
+    /// The nation of the claimed place: where the traveller is sent (the
+    /// destination; timeline impacts land here), for every kind a displaced
+    /// person's stated home. Set even when the case has no blueprint (audit
+    /// R3-020 merged the duplicate `nation`).
+    /// </summary>
     public NationSO claimedNation;
 
-    /// <summary>Era the visitor CLAIMS to be traveling to (shown to player).</summary>
+    /// <summary>
+    /// The era of the claimed place (the correct era on the legacy era-pick
+    /// path). A liar's real era is trueHome.era. Set even when the case has no
+    /// blueprint (audit R3-020 merged the duplicate `trueEra`).
+    /// </summary>
     public EraSO claimedEra;
 
     /// <summary>

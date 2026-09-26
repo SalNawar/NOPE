@@ -18,16 +18,16 @@ public static class ShiftScoring
         GameConfigSO config,
         ContentLibrarySO lib = null)
     {
-        Debug.Log($"[ShiftScoring] >>> Entering Resolve (case {caseIndex1Based}, chosenEra='{chosenEra?.id}', trueEra='{inst?.trueEra?.id}').");
+        Debug.Log($"[ShiftScoring] >>> Entering Resolve (case {caseIndex1Based}, chosenEra='{chosenEra?.id}', claimedEra='{inst?.claimedEra?.id}').");
 
         var verdict = new CaseVerdict
         {
             caseIndex1Based = caseIndex1Based,
             visitorName = inst != null ? inst.visitorDisplayName : "Unknown",
             chosenEraId = chosenEra != null ? chosenEra.id : string.Empty,
-            trueEraId = inst != null && inst.trueEra != null ? inst.trueEra.id : string.Empty,
+            trueEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : string.Empty,
             wasLegendary = inst != null && inst.isLegendary,
-            correct = inst != null && inst.trueEra == chosenEra
+            correct = inst != null && inst.claimedEra == chosenEra
         };
 
         if (world == null || config == null)

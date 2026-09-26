@@ -205,7 +205,7 @@ public sealed class CaseFactory
         _violators.TryGetValue(caseIndex1Based, out NationEraProfileSO violatorPlace);
 
         // 3) Decide the claimed era (the traveller's stated home and destination).
-        EraSO trueEra = legendary != null ? legendary.trueEra
+        EraSO claimedEra = legendary != null ? legendary.trueEra
             : violatorPlace != null ? violatorPlace.era
             : PickEraFromPlan(plan);
 
@@ -219,9 +219,9 @@ public sealed class CaseFactory
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, trueEra);
+        NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, claimedEra);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
-        string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, trueEra);
+        string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
         string givenName = ResolveGivenName(legendary, forcedPremade, place, caseIndex1Based);
         TravellerGender gender = legendary != null ? legendary.gender
             : place == null ? TravellerGender.Unknown
@@ -234,11 +234,11 @@ public sealed class CaseFactory
         var inst = new CaseInstance
         {
             caseIndex = index0Based,
-            trueEra = trueEra,
+            claimedNation = nation,
+            claimedEra = claimedEra,
             isLegendary = legendary != null,
             legendarySource = legendary,
             archetype = archetype,
-            nation = nation,
             originLabel = originLabel,
             tongueId = place != null && place.tongue != null ? place.tongue : string.Empty,
             visitorDisplayName = visitorName,
@@ -265,16 +265,14 @@ public sealed class CaseFactory
         BuildDocuments(inst, blueprint);
 
         // 7) Investigation layer: stated claim, structured fields, the lie (if any), daily rules.
-        inst.claimedNation = nation;
-        inst.claimedEra = trueEra;
         inst.claimLine = Interview.Claim(_lib.Interview, originLabel);
-        inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
+        inst.claimAllowedByRules = plan.ClaimAllowed(nation, claimedEra);
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = Disguise(inst, fields, plan, blueprint, state, caseIndex1Based, place, legendary);
         AddAnswers(inst, lie);
 
         // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
-        EraSO talkEra = place != null ? place.era : trueEra;
+        EraSO talkEra = place != null ? place.era : claimedEra;
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
         inst.look = ComposeLook(inst, place, lie, legendary, caseIndex1Based);
@@ -520,20 +518,20 @@ public sealed class CaseFactory
     /// Picks the traveller's place: the premade's claimed place (if authored) >
     /// uniform pick among today's places in the claimed era > null (no place).
     /// </summary>
-    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO trueEra)
+    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra)
     {
         if (legendary != null && legendary.nation != null)
         {
-            NationEraProfileSO own = _lib.GetProfile(legendary.nation, trueEra);
+            NationEraProfileSO own = _lib.GetProfile(legendary.nation, claimedEra);
             if (own != null && !_todays.Contains(own))
                 Debug.LogWarning($"[CaseFactory] Premade '{legendary.displayName}' claims '{own.OriginLabel}', which is not in today's world, so their papers print placeholders. List them only on days that include their place.");
             return own;
         }
 
-        if (trueEra == null)
+        if (claimedEra == null)
             return null;
 
-        var candidates = _todays.Where(p => p.era == trueEra).ToList();
+        var candidates = _todays.Where(p => p.era == claimedEra).ToList();
         return candidates.Count == 0 ? null : candidates[_rng.Range(0, candidates.Count)];
     }
 
@@ -593,7 +591,7 @@ public sealed class CaseFactory
             {
                 fullName = inst.visitorGivenName,
                 birthDate = inst.trueBirthDate,
-                origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.nation, inst.trueEra),
+                origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.claimedNation, inst.claimedEra),
                 note = !inst.isLegendary ? "No remarks on file."
                     : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
                     : "Priority subject. Records sealed above your clearance."

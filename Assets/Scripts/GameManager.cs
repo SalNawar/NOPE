@@ -422,9 +422,9 @@ public sealed class GameManager : MonoBehaviour
 
         CaseInstance inst = _dayCases[idx];
 
-        string claimedEraId = inst.trueEra != null ? inst.trueEra.id : string.Empty;
+        string claimedEraId = inst.claimedEra != null ? inst.claimedEra.id : string.Empty;
         string archetypeName = inst.archetype != null ? inst.archetype.displayName : string.Empty;
-        string nationName = inst.nation != null ? inst.nation.displayName : string.Empty;
+        string nationName = inst.claimedNation != null ? inst.claimedNation.displayName : string.Empty;
         Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}.");
 
         // Clear the previous case's verdict line before showing the new case.
@@ -576,7 +576,7 @@ public sealed class GameManager : MonoBehaviour
         // No tuning config: keep the old simple correct/wrong behavior.
         if (_gameConfig == null)
         {
-            bool simpleCorrect = inst.trueEra == chosenEra;
+            bool simpleCorrect = inst.claimedEra == chosenEra;
             officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
             Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();
