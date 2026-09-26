@@ -65,6 +65,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: curled side parting
         leakable: 0
@@ -72,6 +73,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: mutton-chop whiskers
         leakable: 0
@@ -79,6 +81,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: top hat
         leakable: 1
@@ -86,6 +89,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: watch chain
         leakable: 0
@@ -93,6 +97,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
     female:
       signature: 3
       outfit:
@@ -102,6 +107,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: ringlets and bun
         leakable: 0
@@ -109,6 +115,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -116,6 +123,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: poke bonnet
         leakable: 1
@@ -123,6 +131,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: Paisley shawl
         leakable: 0
@@ -130,6 +139,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
   looks:
     skin:
     - 5
