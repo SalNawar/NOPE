@@ -224,7 +224,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: window.internet
-    text: Internet - News
+    text: Internet
     gloss: 0
     tier: 0
   - key: window.lexicon
@@ -243,10 +243,6 @@ MonoBehaviour:
     text: Sticky Notes
     gloss: 0
     tier: 0
-  - key: body.internet
-    text: Today's news feed. (placeholder)
-    gloss: 0
-    tier: 0
   - key: body.lexicon
     text: Wikipedia-style era glossary. (placeholder)
     gloss: 0
@@ -261,6 +257,34 @@ MonoBehaviour:
     tier: 0
   - key: body.notes
     text: Your notes. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: browser.back
+    text: <
+    gloss: 0
+    tier: 0
+  - key: browser.forward
+    text: '>'
+    gloss: 0
+    tier: 0
+  - key: browser.home
+    text: Home
+    gloss: 0
+    tier: 0
+  - key: browser.go
+    text: Go
+    gloss: 0
+    tier: 0
+  - key: browser.address
+    text: Type a site's name or address
+    gloss: 0
+    tier: 0
+  - key: browser.search
+    text: Search names
+    gloss: 0
+    tier: 0
+  - key: browser.searchButton
+    text: Search
     gloss: 0
     tier: 0
   - key: site.portal.title

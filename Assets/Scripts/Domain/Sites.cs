@@ -296,7 +296,7 @@ public static class Sites
         return page;
     }
 
-    /// <summary>The start page: a tile per listed site (its name, blurb and glyph).</summary>
+    /// <summary>The start page: a tile per listed site (its name and blurb; the glyph's art comes with the art hooks).</summary>
     public static SitePage Portal(SiteWorld world)
     {
         IPageWords w = world.Words;
@@ -307,7 +307,7 @@ public static class Sites
         {
             Kind = PageBlockKind.Tiles,
             Links = ListedOn(world.Sites, world.Day)
-                    .Select(s => new PageLink { Text = s.name, Detail = s.blurb, Glyph = s.glyph, Address = Address(s.domain) })
+                    .Select(s => new PageLink { Text = s.name, Detail = s.blurb, Address = Address(s.domain) })
                     .ToList()
         });
         return page;

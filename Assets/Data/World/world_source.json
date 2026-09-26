@@ -8536,7 +8536,7 @@
       },
       {
         "key": "window.internet",
-        "text": "Internet - News",
+        "text": "Internet",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8565,12 +8565,6 @@
         "tier": "Full"
       },
       {
-        "key": "body.internet",
-        "text": "Today's news feed. (placeholder)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "body.lexicon",
         "text": "Wikipedia-style era glossary. (placeholder)",
         "gloss": "None",
@@ -8591,6 +8585,48 @@
       {
         "key": "body.notes",
         "text": "Your notes. (placeholder)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.back",
+        "text": "<",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.forward",
+        "text": ">",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.home",
+        "text": "Home",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.go",
+        "text": "Go",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.address",
+        "text": "Type a site's name or address",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.search",
+        "text": "Search names",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.searchButton",
+        "text": "Search",
         "gloss": "None",
         "tier": "Full"
       },

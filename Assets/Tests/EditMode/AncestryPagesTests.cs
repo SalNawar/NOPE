@@ -95,7 +95,7 @@ public class AncestryPagesTests
 
         PageBlock son = page.Blocks.Single(b => b.Kind == PageBlockKind.Link && b.Text == "site.lineage.relation(Son|Senenmut)");
         Assert.AreEqual("chronet://lineage/person/senenmut", son.Address);
-        CollectionAssert.Contains(page.Links().ToList(), "chronet://lineage");
+        CollectionAssert.Contains(SiteFixture.Links(page).ToList(), "chronet://lineage");
 
         Assert.AreEqual("Senenmut", Open(w, "chronet://lineage/person/SENENMUT").Title, "ids ignore case");
         Assert.IsFalse(Sites.Page(w, "chronet://lineage/person/socrates").Found, "no card of an impostor");

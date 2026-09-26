@@ -53,9 +53,6 @@ public sealed class PageLink
     /// <summary>A second line (a tile's blurb); blank = none.</summary>
     public string Detail;
 
-    /// <summary>The art key of a tile's glyph (site_news, ...); blank = none.</summary>
-    public string Glyph;
-
     /// <summary>True for the chosen chip of a filter row.</summary>
     public bool Active;
 }
@@ -126,16 +123,6 @@ public sealed class PageBlock
         Lines = lines?.ToList() ?? new List<string>(),
         Links = links?.ToList() ?? new List<PageLink>()
     };
-
-    /// <summary>Every address this block links to (blank ones left out), in reading order.</summary>
-    public IEnumerable<string> Addresses()
-    {
-        var all = new List<string> { Address };
-        all.AddRange(Fields.Select(f => f.Address));
-        all.AddRange(Rows.SelectMany(r => r.Select(c => c.Address)));
-        all.AddRange(Links.Select(l => l.Address));
-        return all.Where(a => !string.IsNullOrWhiteSpace(a));
-    }
 }
 
 /// <summary>
@@ -158,9 +145,6 @@ public sealed class SitePage
 
     /// <summary>The blocks, top to bottom.</summary>
     public List<PageBlock> Blocks = new List<PageBlock>();
-
-    /// <summary>Every address the page links to, in reading order.</summary>
-    public IEnumerable<string> Links() => Blocks.SelectMany(b => b.Addresses());
 }
 
 /// <summary>

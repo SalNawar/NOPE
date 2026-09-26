@@ -9,6 +9,15 @@ using System.Linq;
 /// </summary>
 public static class SiteFixture
 {
+    /// <summary>Every address a page links to (blank ones left out), in reading order.</summary>
+    public static List<string> Links(SitePage page) =>
+        page.Blocks.SelectMany(b => new[] { b.Address }
+                                   .Concat(b.Fields.Select(f => f.Address))
+                                   .Concat(b.Rows.SelectMany(r => r.Select(c => c.Address)))
+                                   .Concat(b.Links.Select(l => l.Address)))
+                   .Where(a => !string.IsNullOrWhiteSpace(a))
+                   .ToList();
+
     /// <summary>Words that echo: the key, then the arguments in brackets.</summary>
     public sealed class EchoWords : IPageWords
     {

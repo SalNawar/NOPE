@@ -75,7 +75,6 @@ public class SitesTests
         CollectionAssert.AreEqual(new[] { "The Temporal Times", "Lineage Archive" }, tiles.Links.Select(l => l.Text));
         CollectionAssert.AreEqual(new[] { "chronet://times.tc", "chronet://lineage" }, tiles.Links.Select(l => l.Address));
         Assert.AreEqual("Today's edition.", tiles.Links[0].Detail);
-        Assert.AreEqual("site_news", tiles.Links[0].Glyph);
         Assert.AreEqual(Sites.PortalAddress, Sites.Page(w, "").Address, "a blank address is the start page");
     }
 
@@ -87,7 +86,7 @@ public class SitesTests
         Assert.IsFalse(missing.Found);
         Assert.AreEqual("chronet://atlantis/maps", missing.Address);
         Assert.IsTrue(missing.Blocks.Any(b => b.Text == "site.notFound.body(chronet://atlantis/maps)"));
-        CollectionAssert.Contains(missing.Links().ToList(), Sites.PortalAddress);
+        CollectionAssert.Contains(SiteFixture.Links(missing).ToList(), Sites.PortalAddress);
 
         w.Sites = new List<SiteSpec> { new SiteSpec { id = "news", kind = SiteKind.News, name = "Times", domain = "times.tc", fromDay = 4 } };
         Assert.IsFalse(Sites.Page(w, "chronet://times.tc").Found, "a site before its first day is not open");
@@ -125,7 +124,7 @@ public class SitesTests
         Assert.AreEqual(PageBlockKind.Masthead, front.Blocks[0].Kind);
         Assert.AreEqual("Desk Handbook", front.Blocks[0].Text);
         Assert.AreEqual("Stamp once.", front.Blocks.Single(b => b.Kind == PageBlockKind.Box).Lines.Single());
-        CollectionAssert.AreEqual(new[] { "chronet://handbook.tc/rules", "chronet://times.tc" }, front.Links().ToList());
+        CollectionAssert.AreEqual(new[] { "chronet://handbook.tc/rules", "chronet://times.tc" }, SiteFixture.Links(front).ToList());
         Assert.AreEqual("Be kind.", Sites.Page(w, "chronet://handbook.tc/rules").Blocks.Last().Text);
         Assert.IsFalse(Sites.Page(w, "chronet://handbook.tc/faq").Found);
     }
@@ -234,7 +233,7 @@ public class SitesTests
             SitePage page = Sites.Page(w, address);
             Assert.IsTrue(page.Found, $"{address} opens a page");
             Assert.AreEqual(page.Address, Sites.Page(w, page.Address).Address, $"{address}: its page's own address {page.Address} opens the same page");
-            foreach (string link in page.Links())
+            foreach (string link in SiteFixture.Links(page))
                 queue.Enqueue(link);
         }
         Assert.GreaterOrEqual(seen.Count, 30, "the crawl reaches the news, every article in the world, the present, the revisions, every search and card");

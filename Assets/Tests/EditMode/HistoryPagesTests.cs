@@ -56,11 +56,11 @@ public class HistoryPagesTests
     public void Article_LinksThePlacesPeople_TheRevisionsAndTheIndex()
     {
         SiteWorld w = SiteFixture.World();
-        List<string> links = Open(w, "chronet://chronopedia/egypt/ancient").Links().ToList();
+        List<string> links = SiteFixture.Links(Open(w, "chronet://chronopedia/egypt/ancient")).ToList();
         CollectionAssert.AreEqual(new[] { "chronet://lineage/search?country=egypt&era=ancient", "chronet://chronopedia/revisions", "chronet://chronopedia" }, links);
 
         w.Sites = new List<SiteSpec> { SiteFixture.Chronopedia };
-        CollectionAssert.AreEqual(new[] { "chronet://chronopedia/revisions", "chronet://chronopedia" }, Open(w, "chronet://chronopedia/egypt/ancient").Links().ToList(),
+        CollectionAssert.AreEqual(new[] { "chronet://chronopedia/revisions", "chronet://chronopedia" }, SiteFixture.Links(Open(w, "chronet://chronopedia/egypt/ancient")).ToList(),
                                   "no link to an unlisted Lineage Archive");
     }
 

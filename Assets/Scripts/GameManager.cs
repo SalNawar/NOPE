@@ -45,6 +45,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Optional: the booth's input and wake rules.</summary>
     [SerializeField] private BoothCoordinator booth;
 
+    /// <summary>The desktop's knobs: how many morning papers the News site keeps (the builder wires it).</summary>
+    [SerializeField] private DesktopConfigSO desktopConfig;
+
     /// <summary>Seed for deterministic day schedule randomness.</summary>
     [SerializeField] private int seed = 12345;
 
@@ -212,6 +215,12 @@ public sealed class GameManager : MonoBehaviour
             booth.BeginDay(_worldState.day);
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
+
+        // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
+        if (desktopConfig != null)
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues);
+        else
+            Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
 
         // Morning briefing first (if wired), then the day loop.
         if (dayFlowUI != null)
