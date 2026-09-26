@@ -106,11 +106,11 @@ public static class ContentSheetsMenu
     {
         var errors = new List<string>();
         List<RowTable> tables = ReadTables(path, errors);
-        if (tables == null || !Check(errors, $"reading {path}"))
+        if (!Check(errors, $"reading {path}") || tables == null)
             return false;
 
         ContentNode current = LoadSource(errors);
-        if (current == null || !Check(errors, "reading world_source.json"))
+        if (!Check(errors, "reading world_source.json") || current == null)
             return false;
         var unmapped = new List<string>();
         ContentSheets.Export(ContentSheetMap.World, current, unmapped);
@@ -118,7 +118,7 @@ public static class ContentSheetsMenu
             return false;
 
         ContentNode imported = ContentSheets.Import(ContentSheetMap.World, tables, errors);
-        if (imported == null || !Check(errors, $"importing {path}"))
+        if (!Check(errors, $"importing {path}") || imported == null)
             return false;
 
         string full = Full(SourcePath);
@@ -163,7 +163,7 @@ public static class ContentSheetsMenu
     {
         var errors = new List<string>();
         ContentNode world = LoadSource(errors);
-        if (world == null || !Check(errors, "reading world_source.json"))
+        if (!Check(errors, "reading world_source.json") || world == null)
             return null;
         List<RowTable> book = ContentSheets.Workbook(ContentSheetMap.World, world, errors, examples);
         return Check(errors, "exporting world_source.json (it holds content the sheets cannot: map it in ContentSheetMap)") ? book : null;
