@@ -1,9 +1,9 @@
 using NUnit.Framework;
 
 /// <summary>
-/// The investigation desk's reachability (audit R4-022; the PC redesign RF1): which of the rich desk, the evidence
-/// system, the interview, the look at the garments and the desk's papers are reachable from what the builder wired.
-/// GameManager generates the day's spoken and dress tells, and gates denials on evidence, from these.
+/// The investigation desk's reachability (audit R4-022; the PC redesign RF1): whether a case can show, and which of
+/// the evidence system, the interview, the look at the garments and the desk's papers are reachable from what the
+/// builder wired. GameManager generates the day's spoken and dress tells, and gates denials on evidence, from these.
 /// </summary>
 public class InvestigationWiringTests
 {
@@ -17,7 +17,7 @@ public class InvestigationWiringTests
     public void TheBuiltOffice_ReachesEverything_AndWarnsOfNothing()
     {
         InvestigationWiring w = Wired();
-        Assert.IsTrue(w.RichMode);
+        Assert.IsTrue(w.Wired);
         Assert.IsTrue(w.EvidenceSystemActive);
         Assert.IsTrue(w.InterviewReachable);
         Assert.IsTrue(w.AppearanceReachable);
@@ -32,21 +32,20 @@ public class InvestigationWiringTests
     [TestCase(true, false, true, true)]
     [TestCase(true, true, false, true)]
     [TestCase(true, true, true, false)]
-    public void WithoutAnyRichPart_TheTextFallback_ReadsAnswersAndDress_ButHasNoEvidenceNorDesk(bool documentTemplate, bool windowLayer, bool accept, bool deny)
+    public void WithoutAnyDeskWindow_NoCaseShows_NoEvidenceNorDesk_AndOnlyTheErrorIsDue(bool documentTemplate, bool windowLayer, bool accept, bool deny)
     {
-        InvestigationWiring w = Wired(documentTemplate, windowLayer, accept, deny, ring: false, transcript: false, compare: false);
-        Assert.IsFalse(w.RichMode);
+        InvestigationWiring w = Wired(documentTemplate, windowLayer, accept, deny);
+        Assert.IsFalse(w.Wired);
         Assert.IsFalse(w.EvidenceSystemActive);
-        Assert.IsTrue(w.InterviewReachable, "the fallback prints the answers");
-        Assert.IsTrue(w.AppearanceReachable, "the fallback prints the dress");
         Assert.IsFalse(w.DeskReachable);
-        Assert.IsFalse(w.InterviewMissing || w.AppearanceMissing || w.DeskMissing || w.RecordsMissing, "the fallback warns of nothing");
+        Assert.IsTrue(w.InterviewReachable && w.AppearanceReachable, "the wheel's parts are judged on their own");
+        Assert.IsFalse(w.InterviewMissing || w.AppearanceMissing || w.DeskMissing || w.RecordsMissing, "the error (no case) is the one message");
     }
 
     [TestCase(false, true, true)]
     [TestCase(true, false, true)]
     [TestCase(true, true, false)]
-    public void TheRichDesk_WithoutTheRing_TheTranscriptOrItsChrome_SpeaksNoTell(bool ring, bool transcript, bool chrome)
+    public void WithoutTheRing_TheTranscriptOrItsChrome_NoTellIsSpoken(bool ring, bool transcript, bool chrome)
     {
         InvestigationWiring w = Wired(ring: ring, transcript: transcript, transcriptChrome: chrome);
         Assert.IsFalse(w.InterviewReachable);
@@ -54,7 +53,7 @@ public class InvestigationWiringTests
     }
 
     [Test]
-    public void TheRichDesk_WithoutTheRingOrTheCompare_LeaksNoDress()
+    public void WithoutTheRingOrTheCompare_NoDressLeaks()
     {
         Assert.IsFalse(Wired(ring: false).AppearanceReachable);
         Assert.IsTrue(Wired(ring: false).AppearanceMissing);
@@ -64,9 +63,10 @@ public class InvestigationWiringTests
     }
 
     [Test]
-    public void TheEvidenceSystem_NeedsTheRichDeskAndTheCompare()
+    public void TheEvidenceSystem_NeedsTheDeskWindowsAndTheCompare()
     {
         Assert.IsFalse(Wired(compare: false).EvidenceSystemActive);
+        Assert.IsFalse(Wired(deny: false).EvidenceSystemActive);
         Assert.IsTrue(Wired(ring: false, transcript: false, desk: false, records: false).EvidenceSystemActive);
     }
 
@@ -79,7 +79,7 @@ public class InvestigationWiringTests
     }
 
     [Test]
-    public void TheDesk_IsReachableOnlyInTheRichDesk()
+    public void TheDesk_IsReachableOnlyWithTheDeskWindows()
     {
         Assert.IsFalse(Wired(desk: false).DeskReachable);
         Assert.IsTrue(Wired(desk: false).DeskMissing, "documents then open on the PC at the hand-over");

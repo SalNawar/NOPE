@@ -1,0 +1,17 @@
+{
+    "success": true,
+    "pcAndFloorUnchanged": true,
+    "gameplayUnchanged": true,
+    "phoneOnRight": true,
+    "nextNearMat": true,
+    "lampBehindNext": true,
+    "calculatorFacingPlayer": true,
+    "mouseWireHidden": true,
+    "nextMatGap": 0.06549999117851258,
+    "calculatorFacingAngle": 0.0,
+    "texturedRenderers": 11,
+    "portalOverlaps": 0,
+    "crowdGroups": 19,
+    "intersections": [],
+    "errors": []
+}

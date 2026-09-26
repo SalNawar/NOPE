@@ -1,0 +1,278 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1240" viewBox="0 0 1800 1240">
+<defs><marker id="ochre" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#B87927" stroke-width="1.6"/></marker><marker id="plum" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#75506F" stroke-width="1.6"/></marker><marker id="coral" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#B75348" stroke-width="1.6"/></marker></defs>
+<rect width="1800" height="1240" fill="#FAF7F0"/>
+<text x="55.00" y="47.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="700" text-anchor="start">
+<tspan x="55.00" dy="0">NOPE  /  HALL SPATIAL STUDY</tspan>
+</text>
+<text x="55.00" y="96.00" font-family="Arial, sans-serif" font-size="34" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="55.00" dy="0">Check the human scale before dressing the room</tspan>
+</text>
+<text x="57.00" y="131.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="57.00" dy="0">Section A–A  /  portal, desk and camera heights  /  proposed storage detail</tspan>
+</text>
+<text x="1735.00" y="49.00" font-family="Arial, sans-serif" font-size="24" fill="#302D33" font-weight="700" text-anchor="end">
+<tspan x="1735.00" dy="0">A02</tspan>
+</text>
+<line x1="55.00" y1="154.00" x2="1745.00" y2="154.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<rect x="180.00" y="670.00" width="994.00" height="9.80" fill="#AFA89D" stroke="#302D33" stroke-width="1.4" />
+<rect x="180.00" y="833.80" width="994.00" height="9.80" fill="#D8D0C4" stroke="#302D33" stroke-width="1.4" />
+<line x1="250.00" y1="670.00" x2="250.00" y2="268.20" stroke="#302D33" stroke-width="4"/>
+<line x1="1090.00" y1="670.00" x2="1090.00" y2="268.20" stroke="#302D33" stroke-width="4"/>
+<line x1="250.00" y1="268.20" x2="1090.00" y2="268.20" stroke="#726B70" stroke-width="1.3" stroke-dasharray="7 5"/>
+<text x="670.00" y="258.40" font-family="Arial, sans-serif" font-size="13" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="670.00" dy="0">EXISTING STRUCTURAL ENVELOPE ≈ 14.4 m — NOT A NEW CEILING</tspan>
+</text>
+<line x1="1090.00" y1="625.20" x2="1090.00" y2="311.60" stroke="#577285" stroke-width="5"/>
+<text x="1008.80" y="390.00" font-family="Arial, sans-serif" font-size="14" fill="#577285" font-weight="400" text-anchor="middle">
+<tspan x="1008.80" dy="0">REAR</tspan>
+<tspan x="1008.80" dy="18.900000000000002">GLAZING</tspan>
+</text>
+<line x1="1028.40" y1="401.20" x2="1090.00" y2="401.20" stroke="#577285" stroke-width="1"/>
+<line x1="1160.00" y1="670.00" x2="1160.00" y2="268.20" stroke="#726B70" stroke-width="0.9"/>
+<line x1="1155.00" y1="674.00" x2="1165.00" y2="666.00" stroke="#726B70" stroke-width="1"/>
+<line x1="1155.00" y1="272.20" x2="1165.00" y2="264.20" stroke="#726B70" stroke-width="1"/>
+<text x="1150" y="469.1" transform="rotate(-90 1150 469.1)" font-family="Arial" font-size="15" text-anchor="middle" fill="#726B70">14.35 m source envelope</text>
+<rect x="810.00" y="569.20" width="224.00" height="100.80" fill="none" stroke="#726B70" stroke-width="1" stroke-dasharray="5 5"/>
+<text x="983.60" y="586.00" font-family="Arial, sans-serif" font-size="10" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="983.60" dy="0">SIDE PASSAGE</tspan>
+<tspan x="983.60" dy="13.5">(projected)</tspan>
+</text>
+<rect x="544.00" y="544.00" width="39.20" height="58.80" fill="#E0E7E9" stroke="#577285" stroke-width="1" />
+<rect x="642.00" y="544.00" width="39.20" height="58.80" fill="#E0E7E9" stroke="#577285" stroke-width="1" />
+<text x="586.00" y="521.60" font-family="Arial, sans-serif" font-size="12" fill="#577285" font-weight="400" text-anchor="middle">
+<tspan x="586.00" dy="0">SMALLER SIDE WINDOWS</tspan>
+<tspan x="586.00" dy="16.200000000000003">2.4 m sill / 4.5 m head, proposed</tspan>
+</text>
+<rect x="298.45" y="640.32" width="70.83" height="4.48" fill="none" stroke="#B75348" stroke-width="1.8" stroke-dasharray="5 4"/>
+<rect x="318.60" y="640.60" width="30.80" height="3.36" fill="#D7B790" stroke="#302D33" stroke-width="2" />
+<line x1="321.68" y1="670.00" x2="321.68" y2="643.96" stroke="#302D33" stroke-width="3"/>
+<line x1="346.32" y1="670.00" x2="346.32" y2="643.96" stroke="#302D33" stroke-width="3"/>
+<circle cx="300.40" cy="624.64" r="3.36" fill="#FAF7F0" stroke="#302D33" stroke-width="1.5"/>
+<line x1="300.40" y1="628.56" x2="300.40" y2="649.84" stroke="#302D33" stroke-width="2"/>
+<path d="M 293.40 641.44 L 300.40 630.24 L 307.40 641.44" fill="none" stroke="#302D33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 295.36 670.00 L 300.40 649.84 L 305.44 670.00" fill="none" stroke="#302D33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="366.20" cy="624.64" r="3.36" fill="#FAF7F0" stroke="#302D33" stroke-width="1.5"/>
+<line x1="366.20" y1="628.56" x2="366.20" y2="649.84" stroke="#302D33" stroke-width="2"/>
+<path d="M 359.20 641.44 L 366.20 630.24 L 373.20 641.44" fill="none" stroke="#302D33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 361.16 670.00 L 366.20 649.84 L 371.24 670.00" fill="none" stroke="#302D33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="328.40" y="572.00" font-family="Arial, sans-serif" font-size="14" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="328.40" dy="0">CHECK DESK</tspan>
+</text>
+<text x="328.40" y="595.80" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="328.40" dy="0">1.05 m counter</tspan>
+<tspan x="328.40" dy="16.200000000000003">1.10 m target depth</tspan>
+</text>
+<line x1="318.60" y1="695.20" x2="349.40" y2="695.20" stroke="#726B70" stroke-width="0.9"/>
+<line x1="314.60" y1="700.20" x2="322.60" y2="690.20" stroke="#726B70" stroke-width="1"/>
+<line x1="345.40" y1="700.20" x2="353.40" y2="690.20" stroke="#726B70" stroke-width="1"/>
+<text x="334.00" y="686.20" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="334.00" dy="0">1.10 m</tspan>
+</text>
+<circle cx="260.64" cy="609.52" r="4.00" fill="#B75348" stroke="#B75348" stroke-width="1.4"/>
+<line x1="260.64" y1="609.52" x2="446.00" y2="642.20" stroke="#B75348" stroke-width="1.2" stroke-dasharray="5 5"/>
+<text x="65.00" y="520.00" font-family="Arial, sans-serif" font-size="13" fill="#B75348" font-weight="700" text-anchor="start">
+<tspan x="65.00" dy="0">SOURCE CAMERA</tspan>
+<tspan x="65.00" dy="17.55">2.16 m high</tspan>
+<tspan x="65.00" dy="17.55">10° downward</tspan>
+</text>
+<path d="M 166.00 552.00 L 260.64 609.52" fill="none" stroke="#B75348" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="300.40" cy="624.64" r="2.50" fill="#577285" stroke="#577285" stroke-width="1.4"/>
+<rect x="872.30" y="664.40" width="43.40" height="5.60" fill="#CAD4DA" stroke="#302D33" stroke-width="1.4" />
+<rect x="884.76" y="501.44" width="25.20" height="166.32" fill="#CAD4DA" stroke="#302D33" stroke-width="2" />
+<line x1="894.84" y1="650.12" x2="894.84" y2="519.08" stroke="#577285" stroke-width="4"/>
+<text x="894.00" y="462.80" font-family="Arial, sans-serif" font-size="15" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="894.00" dy="0">EXISTING PORTAL</tspan>
+</text>
+<text x="894.00" y="488.00" font-family="Arial, sans-serif" font-size="13" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="894.00" dy="0">6.0 m high</tspan>
+</text>
+<circle cx="832.40" cy="624.64" r="3.36" fill="#FAF7F0" stroke="#302D33" stroke-width="1.5"/>
+<line x1="832.40" y1="628.56" x2="832.40" y2="649.84" stroke="#302D33" stroke-width="2"/>
+<path d="M 825.40 641.44 L 832.40 630.24 L 839.40 641.44" fill="none" stroke="#302D33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M 827.36 670.00 L 832.40 649.84 L 837.44 670.00" fill="none" stroke="#302D33" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="728.80" y="639.20" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="728.80" dy="0">1.75 m</tspan>
+<tspan x="728.80" dy="16.200000000000003">human datum</tspan>
+</text>
+<line x1="349.40" y1="713.40" x2="872.30" y2="713.40" stroke="#726B70" stroke-width="0.9"/>
+<line x1="345.40" y1="718.40" x2="353.40" y2="708.40" stroke="#726B70" stroke-width="1"/>
+<line x1="868.30" y1="718.40" x2="876.30" y2="708.40" stroke="#726B70" stroke-width="1"/>
+<text x="610.85" y="704.40" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="610.85" dy="0">18.68 m desk-front to portal base</tspan>
+</text>
+<line x1="915.70" y1="713.40" x2="1090.00" y2="713.40" stroke="#726B70" stroke-width="0.9"/>
+<line x1="911.70" y1="718.40" x2="919.70" y2="708.40" stroke="#726B70" stroke-width="1"/>
+<line x1="1086.00" y1="718.40" x2="1094.00" y2="708.40" stroke="#726B70" stroke-width="1"/>
+<text x="1002.85" y="704.40" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="1002.85" dy="0">6.23 m</tspan>
+</text>
+<text x="678.40" y="787.60" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="678.40" dy="0">PROPOSED LOBBY / ADMISSIONS FLOOR BELOW  •  +0.00 BUILDING DATUM</tspan>
+</text>
+<text x="628.00" y="751.20" font-family="Arial, sans-serif" font-size="13" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="628.00" dy="0">HALL FLOOR = LEVEL 02  /  +6.00 m proposed  /  Unity local Y = 0</tspan>
+</text>
+<line x1="1230.00" y1="193.00" x2="1230.00" y2="830.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<text x="1270.00" y="218.00" font-family="Arial, sans-serif" font-size="22" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1270.00" dy="0">SANITY CHECK</tspan>
+</text>
+<text x="1270.00" y="256.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1270.00" dy="0">KEEP</tspan>
+</text>
+<text x="1270.00" y="283.00" font-family="Arial, sans-serif" font-size="16" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1270.00" dy="0">28 × 30 m works as a shared concourse.</tspan>
+<tspan x="1270.00" dy="21.6">It needs a public core, a staff side and</tspan>
+<tspan x="1270.00" dy="21.6">three counter bays to explain its size.</tspan>
+</text>
+<text x="1270.00" y="370.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1270.00" dy="0">REWORK BEFORE FINAL ART</tspan>
+</text>
+<text x="1270.00" y="397.00" font-family="Arial, sans-serif" font-size="16" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1270.00" dy="0">Current desk: 5.8 × 2.53 m.</tspan>
+<tspan x="1270.00" dy="21.6">Study target: 3.2 × 1.10 m per station.</tspan>
+<tspan x="1270.00" dy="21.6">Do not auto-scale the PC or its content.</tspan>
+</text>
+<text x="1270.00" y="484.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1270.00" dy="0">CAMERA DECISION STILL OPEN</tspan>
+</text>
+<text x="1270.00" y="511.00" font-family="Arial, sans-serif" font-size="16" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1270.00" dy="0">The 2.16 m source camera helps expose</tspan>
+<tspan x="1270.00" dy="21.6">the tabletop, but is above a 1.62 m</tspan>
+<tspan x="1270.00" dy="21.6">standing-eye reference. Blockout first.</tspan>
+</text>
+<text x="1270.00" y="598.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1270.00" dy="0">BUILDING LEVEL IS A PROPOSAL</tspan>
+</text>
+<text x="1270.00" y="625.00" font-family="Arial, sans-serif" font-size="16" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1270.00" dy="0">One floor above street admissions.</tspan>
+<tspan x="1270.00" dy="21.6">Public lift/stair on the left; secure</tspan>
+<tspan x="1270.00" dy="21.6">department circulation on the right.</tspan>
+</text>
+<text x="1270.00" y="712.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1270.00" dy="0">NO SCENE MUTATION</tspan>
+</text>
+<text x="1270.00" y="739.00" font-family="Arial, sans-serif" font-size="16" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1270.00" dy="0">Original floor, portal and gameplay</tspan>
+<tspan x="1270.00" dy="21.6">remain untouched. Desk resizing is</tspan>
+<tspan x="1270.00" dy="21.6">only an envelope study on these sheets.</tspan>
+</text>
+<line x1="55.00" y1="870.00" x2="1745.00" y2="870.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<text x="65.00" y="908.00" font-family="Arial, sans-serif" font-size="21" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="65.00" dy="0">L  /  LUGGAGE LOCKER BANK</tspan>
+</text>
+<text x="65.00" y="939.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="65.00" dy="0">Front elevation  •  mixed bag / suitcase sizes</tspan>
+</text>
+<rect x="95.00" y="976.80" width="212.80" height="148.20" fill="#DDC7B9" stroke="#302D33" stroke-width="1.8" />
+<line x1="95.00" y1="976.80" x2="95.00" y2="1125.00" stroke="#302D33" stroke-width="1"/>
+<line x1="95.00" y1="1052.80" x2="137.56" y2="1052.80" stroke="#302D33" stroke-width="1"/>
+<line x1="95.00" y1="1014.80" x2="137.56" y2="1014.80" stroke="#302D33" stroke-width="1"/>
+<circle cx="129.96" cy="1102.20" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="101.00" y="1102.20" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="101.00" dy="0">101</tspan>
+</text>
+<circle cx="129.96" cy="1039.88" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="101.00" y="1039.88" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="101.00" dy="0">102</tspan>
+</text>
+<circle cx="129.96" cy="995.80" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="101.00" y="995.80" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="101.00" dy="0">103</tspan>
+</text>
+<line x1="137.56" y1="976.80" x2="137.56" y2="1125.00" stroke="#302D33" stroke-width="1"/>
+<line x1="137.56" y1="1075.60" x2="180.12" y2="1075.60" stroke="#302D33" stroke-width="1"/>
+<line x1="137.56" y1="1026.20" x2="180.12" y2="1026.20" stroke="#302D33" stroke-width="1"/>
+<circle cx="172.52" cy="1102.20" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="143.56" y="1102.20" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="143.56" dy="0">104</tspan>
+</text>
+<circle cx="172.52" cy="1039.88" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="143.56" y="1039.88" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="143.56" dy="0">105</tspan>
+</text>
+<circle cx="172.52" cy="995.80" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="143.56" y="995.80" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="143.56" dy="0">106</tspan>
+</text>
+<line x1="180.12" y1="976.80" x2="180.12" y2="1125.00" stroke="#302D33" stroke-width="1"/>
+<line x1="180.12" y1="1052.80" x2="222.68" y2="1052.80" stroke="#302D33" stroke-width="1"/>
+<line x1="180.12" y1="1014.80" x2="222.68" y2="1014.80" stroke="#302D33" stroke-width="1"/>
+<circle cx="215.08" cy="1102.20" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="186.12" y="1102.20" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="186.12" dy="0">107</tspan>
+</text>
+<circle cx="215.08" cy="1039.88" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="186.12" y="1039.88" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="186.12" dy="0">108</tspan>
+</text>
+<circle cx="215.08" cy="995.80" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="186.12" y="995.80" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="186.12" dy="0">109</tspan>
+</text>
+<line x1="222.68" y1="976.80" x2="222.68" y2="1125.00" stroke="#302D33" stroke-width="1"/>
+<line x1="222.68" y1="1075.60" x2="265.24" y2="1075.60" stroke="#302D33" stroke-width="1"/>
+<line x1="222.68" y1="1026.20" x2="265.24" y2="1026.20" stroke="#302D33" stroke-width="1"/>
+<circle cx="257.64" cy="1102.20" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="228.68" y="1102.20" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="228.68" dy="0">110</tspan>
+</text>
+<circle cx="257.64" cy="1039.88" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="228.68" y="1039.88" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="228.68" dy="0">111</tspan>
+</text>
+<circle cx="257.64" cy="995.80" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="228.68" y="995.80" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="228.68" dy="0">112</tspan>
+</text>
+<line x1="265.24" y1="976.80" x2="265.24" y2="1125.00" stroke="#302D33" stroke-width="1"/>
+<line x1="265.24" y1="1052.80" x2="307.80" y2="1052.80" stroke="#302D33" stroke-width="1"/>
+<line x1="265.24" y1="1014.80" x2="307.80" y2="1014.80" stroke="#302D33" stroke-width="1"/>
+<circle cx="300.20" cy="1102.20" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="271.24" y="1102.20" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="271.24" dy="0">113</tspan>
+</text>
+<circle cx="300.20" cy="1039.88" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="271.24" y="1039.88" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="271.24" dy="0">114</tspan>
+</text>
+<circle cx="300.20" cy="995.80" r="2.00" fill="#302D33" stroke="#302D33" stroke-width="0.5"/>
+<text x="271.24" y="995.80" font-family="Arial, sans-serif" font-size="9" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="271.24" dy="0">115</tspan>
+</text>
+<line x1="95.00" y1="1146.00" x2="307.80" y2="1146.00" stroke="#726B70" stroke-width="0.9"/>
+<line x1="91.00" y1="1151.00" x2="99.00" y2="1141.00" stroke="#726B70" stroke-width="1"/>
+<line x1="303.80" y1="1151.00" x2="311.80" y2="1141.00" stroke="#726B70" stroke-width="1"/>
+<text x="201.40" y="1137.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="201.40" dy="0">2.8 m example module</tspan>
+</text>
+<line x1="75.00" y1="1125.00" x2="75.00" y2="976.80" stroke="#726B70" stroke-width="0.9"/>
+<line x1="70.00" y1="1129.00" x2="80.00" y2="1121.00" stroke="#726B70" stroke-width="1"/>
+<line x1="70.00" y1="980.80" x2="80.00" y2="972.80" stroke="#726B70" stroke-width="1"/>
+<text x="65" y="1050.9" transform="rotate(-90 65 1050.9)" font-family="Arial" font-size="15" text-anchor="middle" fill="#726B70">1.95 m</text>
+<text x="355.00" y="989.00" font-family="Arial, sans-serif" font-size="16" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="355.00" dy="0">Numbered key / coin locks.</tspan>
+<tspan x="355.00" dy="21.6">0.8 m cabinet depth.</tspan>
+<tspan x="355.00" dy="21.6">1.8 m clear standing apron.</tspan>
+<tspan x="355.00" dy="21.6">Two to three modules form the left bank.</tspan>
+</text>
+<text x="800.00" y="908.00" font-family="Arial, sans-serif" font-size="21" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="800.00" dy="0">P + A + B  /  A SMALL INSTITUTIONAL COLLECTION</tspan>
+</text>
+<text x="800.00" y="947.00" font-family="Arial, sans-serif" font-size="17" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="800.00" dy="0">One framed painting, one ceramic vessel and one stone relief.</tspan>
+<tspan x="800.00" dy="22.950000000000003">Use fixed display positions with plinths, cases or wall mounts.</tspan>
+<tspan x="800.00" dy="22.950000000000003">Neglect belongs to the display: faded labels, dust, failed lights, worn frames.</tspan>
+<tspan x="800.00" dy="22.950000000000003">These are layout markers; the final artifacts have not been selected.</tspan>
+</text>
+<text x="800.00" y="1070.00" font-family="Arial, sans-serif" font-size="18" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="800.00" dy="0">NEXT VISUAL: an untextured blockout from this plan,</tspan>
+<tspan x="800.00" dy="24.3">checked through the actual game camera before finished sprites.</tspan>
+</text>
+<line x1="55.00" y1="1172.00" x2="1745.00" y2="1172.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<text x="55.00" y="1200.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="55.00" dy="0">Orthographic section at equal horizontal / vertical scale. Side windows and passage shown projected, dashed where appropriate.</tspan>
+</text>
+<text x="1745.00" y="1200.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="end">
+<tspan x="1745.00" dy="0">26 SEP 2026  /  REV A  /  PROPOSAL</tspan>
+</text>
+</svg>

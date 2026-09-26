@@ -53,5 +53,5 @@ When replacing existing Tier 1 PNGs, preserve their .png.meta GUIDs. The origina
 
 Dimensions and alpha are checked across the manifest; SVG sources are parsed as XML. Generated scenes and props have been visually reviewed, with representative native UI/document/poster checks. This does not substitute for checking scale, readability, hit areas and alignment inside the actual Unity scenes. Characters and case-specific runtime content are deliberately absent.
 
-build_native_art.py recreates the native artwork. pack_art.py copies source images, applies the crop/resize packaging requested in the original asset brief, updates validation.json and creates gallery.html. Run the packer after the native exporter if re-exporting both.
+build_native_art.py and pack_art.py were removed on 2026-09-26 (their outputs are in Assets/Art and the SVG sources stay). build_native_art.py recreated the native artwork. pack_art.py copies source images, applies the crop/resize packaging requested in the original asset brief, updates validation.json and creates gallery.html. Run the packer after the native exporter if re-exporting both.
 

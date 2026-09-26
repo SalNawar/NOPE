@@ -1,0 +1,10 @@
+{
+    "success": true,
+    "pcAndFloorUnchanged": true,
+    "gameplayUnchanged": true,
+    "deskTransformsUnchanged": true,
+    "crowdGroups": 19,
+    "portalOverlaps": 0,
+    "assignedMaterials": 238,
+    "errors": []
+}

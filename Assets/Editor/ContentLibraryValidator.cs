@@ -13,10 +13,10 @@ using UnityEngine;
 /// in one-shot history-rule triggers), trigger, effect and ending fields, the
 /// culture themes and UI string tables (contrast included), and the
 /// translation (tongues, tables, every place's tongue, the translators, the
-/// notice).
+/// notice), and the agency block (its name, programme line and first date).
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
-public static class ContentLibraryValidator
+public static partial class ContentLibraryValidator
 {
     /// <summary>Runs validation across all ContentLibrarySO assets in the project.</summary>
     [MenuItem("Tools/TimeDesk/Validate Content Library")]
@@ -121,6 +121,9 @@ public static class ContentLibraryValidator
 
         // --- Translation (piece 9) ---
         issues += CheckTranslation(lib);
+
+        // --- The agency block (redesign phase 2) ---
+        issues += CheckAgency(lib);
 
         return issues;
     }

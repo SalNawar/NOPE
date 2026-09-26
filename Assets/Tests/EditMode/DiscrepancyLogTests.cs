@@ -1,3 +1,4 @@
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
@@ -55,6 +56,29 @@ public class DiscrepancyLogTests
     // -----------------------------
     // Record proof (identity)
     // -----------------------------
+
+    [Test]
+    public void BirthDateTell_VsTheRecordsBornRow_Registers()
+    {
+        // Redesign phase 2: a record is rows; its Born row is the evidence the Records app picks.
+        var record = new CitizenRecord(Traveller, null, new[]
+        {
+            new RecordGroup("REGISTRY ENTRY", new[]
+            {
+                new RecordRow("Name", Traveller, ClueCategory.Name),
+                new RecordRow("Born", "3 May 1131", ClueCategory.BirthDate),
+                new RecordRow("Origin", "Norvik (Medieval)")
+            })
+        });
+        RecordRow born = record.Groups[0].Rows.Single(r => r.IsEvidence && r.Category == ClueCategory.BirthDate);
+
+        Discrepancy d = DiscrepancyLog.Prove(TellIdentityField(ClueCategory.BirthDate, "3 May 1101"),
+            CompareEvidence.ForRecordField(born.Category, born.Value, record.FullName), ClaimNation, ClaimEra, Traveller);
+
+        Assert.NotNull(d);
+        Assert.AreEqual(DiscrepancyProof.RecordMismatch, d.provedBy);
+        Assert.AreEqual("3 May 1131", d.expectedValue);
+    }
 
     [Test]
     public void BirthDateTell_VsRecord_Registers_AsRecordMismatch()

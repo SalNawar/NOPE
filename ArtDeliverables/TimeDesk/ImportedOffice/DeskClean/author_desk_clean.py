@@ -1,13 +1,25 @@
-"""Final desktop art pass, local Blender geometry only. No room or gameplay edits.
+"""Final desktop art pass, local Blender geometry only. No room or gameplay edits (art side).
 Reuses editable project props where useful and reconstructs the desk equipment.
+
+Purpose: the editable source of the live desk props (the Clean_* FBX): keyboard,
+calculator, lamp, pen pot, stapler, binder, keys, blotter, the phone (refine_phone.py), and
+the Finish_*/Office_* props it loads and renames Clean_*.
+Inputs: ../../HybridScene/BlenderOffice/artlib.py; the Finish_Mouse, Till, Inkpad, FormSorter,
+Tray and PaperBundle collections of DeskFinish/DeskFinish.blend; Office_Stamp and Office_Next
+of HybridScene/BlenderOffice/Booth_Hardware.blend; refine_phone.py (the 3DreaMax phone).
+Outputs: Assets/Art/Office/DeskClean/Models/Clean_*.fbx (+ Exports/ copies),
+DeskClean_manifest.json and DeskClean.blend here; then it runs revise_desktop.py.
+Unity picks the FBX up on import; the Debt Relief pass owns their materials and layout, so
+there is no installer to rerun. Paths resolve from this file (any checkout or worktree).
+Run: blender --background --python ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/author_desk_clean.py
 """
 import sys,math,json
 from pathlib import Path
-P=Path('E:/unity/NOPE');HERE=P/'ArtDeliverables/TimeDesk/ImportedOffice/DeskClean'
+HERE=Path(__file__).resolve().parent;P=HERE.parents[3]  # the repo root
 sys.path.insert(0,str(P/'ArtDeliverables/TimeDesk/HybridScene/BlenderOffice'))
 import artlib as A
 from artlib import *
-HERE=P/'ArtDeliverables/TimeDesk/ImportedOffice/DeskClean'
+HERE=Path(__file__).resolve().parent  # again: artlib's star import replaced it
 A.HERE=HERE;A.OUT=P/'Assets/Art/Office/DeskClean'
 (A.OUT/'Models').mkdir(parents=True,exist_ok=True);(HERE/'Exports').mkdir(exist_ok=True)
 A.materials.clear();A.specs.clear()

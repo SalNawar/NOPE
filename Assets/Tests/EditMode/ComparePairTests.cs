@@ -138,7 +138,38 @@ public class ComparePairTests
         Assert.AreEqual("line:5", PickKeys.Line(5));
         Assert.AreEqual("garment:1", PickKeys.Garment(1));
         Assert.AreEqual("book:Currency:greece:ancient", PickKeys.BookRow(ClueCategory.Currency, "greece", "ancient"));
-        Assert.AreEqual("record:BirthDate", PickKeys.Record(ClueCategory.BirthDate));
+        Assert.AreEqual("record:552-1804-33:BirthDate", PickKeys.Record(ClueCategory.BirthDate, "552-1804-33"));
+    }
+
+    /// <summary>A record's Born row as the Records app picks it (EvidencePicks.ForRecord's key and evidence).</summary>
+    private static ComparePick RecordBorn(string name, string born, string number = null)
+    {
+        var record = new CitizenRecord(name, number, new[]
+        {
+            new RecordGroup("REGISTRY ENTRY", new[] { new RecordRow("Name", name, ClueCategory.Name), new RecordRow("Born", born, ClueCategory.BirthDate) })
+        });
+        RecordRow row = record.Groups[0].Rows[1];
+        return new ComparePick(PickKeys.Record(row.Category, record.Id), "Records · Born", row.Value,
+                               CompareEvidence.ForRecordField(row.Category, row.Value, record.FullName));
+    }
+
+    [Test]
+    public void TwoRecordsSameRow_AreTwoPicks()
+    {
+        // Audit R4-009: the key names whose record it is, so a second record's Born row pairs instead of clearing.
+        var pair = new ComparePair();
+        Assert.AreEqual(CompareStep.Pending, pair.Select(RecordBorn("Alice", "3 May 1131")));
+        Assert.AreEqual(CompareStep.Paired, pair.Select(RecordBorn("Bob", "9 Jun 1102")));
+        Assert.AreEqual("9 Jun 1102", pair.B.Shown);
+        Assert.AreEqual(CompareStep.Cleared, pair.Select(RecordBorn("Bob", "9 Jun 1102")), "the same record's row again is the same pick");
+    }
+
+    [Test]
+    public void PickKeys_RecordRowsKeyedByRecord()
+    {
+        Assert.AreNotEqual(PickKeys.Record(ClueCategory.BirthDate, "Alice"), PickKeys.Record(ClueCategory.BirthDate, "Bob"));
+        Assert.AreNotEqual(PickKeys.Record(ClueCategory.BirthDate, "Alice"), PickKeys.Record(ClueCategory.Name, "Alice"));
+        Assert.AreEqual(RecordBorn("Oren Hale", "2 Feb 2117", "552-1804-33").Key, PickKeys.Record(ClueCategory.BirthDate, "552-1804-33"), "a numbered record is keyed by its number");
     }
 
     [Test]
@@ -155,7 +186,7 @@ public class ComparePairTests
         var keys = new HashSet<string>
         {
             PickKeys.Field(1, 1), PickKeys.Line(1), PickKeys.Garment(1),
-            PickKeys.BookRow(ClueCategory.Currency, "1", "1"), PickKeys.Record(ClueCategory.Currency),
+            PickKeys.BookRow(ClueCategory.Currency, "1", "1"), PickKeys.Record(ClueCategory.Currency, "1"),
             PickKeys.BookRow(ClueCategory.Currency, null, null)
         };
         Assert.AreEqual(6, keys.Count);

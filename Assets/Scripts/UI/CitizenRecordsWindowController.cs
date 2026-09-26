@@ -1,124 +1,158 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The Citizen Records desktop app: type a name, get the agency's record for
-/// that person. The Name and Born rows are compare-clickable, so the
-/// traveller's own record can disprove their birth-date tell (RecordMismatch
-/// evidence; another person's record proves nothing).
-/// Registry is injected per day by GameManager via InvestigationUIController.
+/// The Citizen Records desktop app (redesign phase 2): under the agency's
+/// printed name and programme, type a name or an agency number to get the
+/// agency's record (CitizenRegistry.Find: a whole number first); the status
+/// line reads the query, whether a record is on file and today's date. The
+/// record's rows are listed generically, group by group (a group's title is a
+/// heading line), a page at a time (PagedRowsWindow). A row that is evidence
+/// is compare-clickable, keyed by its record (EvidencePicks.ForRecord), so
+/// the traveller's own record can disprove their birth-date tell
+/// (RecordMismatch; another person's record proves nothing). The registry,
+/// the agency block and the date are injected per day by GameManager via
+/// InvestigationUIController.
 /// </summary>
-public sealed class CitizenRecordsWindowController : MonoBehaviour
+public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
-    [Header("Search")]
+    [Header("Lookup")]
+    /// <summary>Where the player types a name or a number.</summary>
     [SerializeField] private TMP_InputField searchInput;
+
+    /// <summary>Runs the lookup (Enter in the field does too).</summary>
     [SerializeField] private Button searchButton;
 
-    [Header("Result")]
-    /// <summary>Status / instructions line ("Type a name...", "NO RECORD...").</summary>
+    /// <summary>The status line: the idle hint, or the query's result and today's date.</summary>
     [SerializeField] private TMP_Text statusText;
 
-    [SerializeField] private GameObject nameRow;
-    [SerializeField] private TMP_Text nameValueText;
-    [SerializeField] private GameObject bornRow;
-    [SerializeField] private TMP_Text bornValueText;
-    [SerializeField] private TMP_Text originText;
-    [SerializeField] private TMP_Text noteText;
+    /// <summary>The agency's printed name and programme line over the lookup.</summary>
+    [SerializeField] private TMP_Text agencyText;
 
     [Header("Compare")]
     [SerializeField] private CompareController compareController;
 
+    /// <summary>One listed line of the shown record: a group's heading, or one of its rows.</summary>
+    private readonly struct Line
+    {
+        public Line(string heading)
+        {
+            Heading = heading;
+            Row = default;
+        }
+
+        public Line(RecordRow row)
+        {
+            Heading = null;
+            Row = row;
+        }
+
+        /// <summary>The group's title for a heading line; null for a row.</summary>
+        public string Heading { get; }
+
+        /// <summary>The row of a row line.</summary>
+        public RecordRow Row { get; }
+    }
+
     private CitizenRegistry _registry;
     private CitizenRecord _current;
 
-    private void Awake()
+    /// <summary>Today's date in the agency's calendar (null when the agency block has no readable first date).</summary>
+    private string _today;
+
+    /// <summary>The shown record's lines, in order (empty when none is shown).</summary>
+    private readonly List<Line> _lines = new();
+
+    /// <inheritdoc />
+    protected override void Awake()
     {
+        base.Awake();
+
         if (searchButton != null)
             searchButton.onClick.AddListener(Search);
 
         if (searchInput != null)
             searchInput.onSubmit.AddListener(_ => Search());
 
-        WireRow(nameRow, () => _current != null ? _current.fullName : null, ClueCategory.Name, UiText.Get("records.compare.name"));
-        WireRow(bornRow, () => _current != null ? _current.birthDate : null, ClueCategory.BirthDate, UiText.Get("records.compare.born"));
-
         ShowIdle();
     }
 
-    /// <summary>Sets the day's registry and resets the view.</summary>
-    public void SetRegistry(CitizenRegistry registry)
+    /// <summary>Sets the day's registry, the agency block the window prints and today's date, and resets the view.</summary>
+    public void SetRegistry(CitizenRegistry registry, AgencyContent agency, string today)
     {
         _registry = registry;
-        _current = null;
+        _today = today;
+        if (agencyText != null)
+            agencyText.text = agency != null ? UiText.Format("records.agency", agency.name, agency.programme) : string.Empty;
         ShowIdle();
     }
 
-    /// <summary>Looks up the typed name and renders the record (or a miss).</summary>
+    /// <summary>Looks up the typed name or number and lists the record's rows (or says none is on file).</summary>
     public void Search()
     {
         string query = searchInput != null ? searchInput.text : null;
         _current = _registry != null ? _registry.Find(query) : null;
 
-        if (_current == null)
-        {
-            SetResultVisible(false);
-            if (statusText != null)
-                statusText.text = string.IsNullOrWhiteSpace(query)
-                    ? UiText.Get("records.idle")
-                    : UiText.Format("records.noRecord", query.Trim());
-            return;
-        }
-
-        SetResultVisible(true);
+        _lines.Clear();
+        if (_current != null)
+            foreach (RecordGroup group in _current.Groups)
+            {
+                if (!string.IsNullOrWhiteSpace(group.Title))
+                    _lines.Add(new Line(group.Title));
+                foreach (RecordRow row in group.Rows)
+                    _lines.Add(new Line(row));
+            }
 
         if (statusText != null)
-            statusText.text = UiText.Get("records.onFile");
-        if (nameValueText != null)
-            nameValueText.text = _current.fullName;
-        if (bornValueText != null)
-            bornValueText.text = _current.birthDate;
-        if (originText != null)
-            originText.text = UiText.Format("records.origin", _current.origin);
-        if (noteText != null)
-            noteText.text = _current.note;
+            statusText.text = string.IsNullOrWhiteSpace(query) ? UiText.Get("records.idle")
+                : _current != null ? UiText.Format("records.onFile", query.Trim(), _today ?? string.Empty)
+                : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
+
+        ShowPage(0);
     }
 
     private void ShowIdle()
     {
-        SetResultVisible(false);
+        _current = null;
+        _lines.Clear();
         if (statusText != null)
             statusText.text = UiText.Get("records.idle");
         if (searchInput != null)
             searchInput.text = string.Empty;
+        ShowPage(0);
     }
 
-    private void SetResultVisible(bool visible)
+    /// <inheritdoc />
+    protected override int RowCount => _lines.Count;
+
+    /// <summary>A heading line shows its group's title with no background and no click; a row line its label and value, compare-clickable only when it is evidence.</summary>
+    protected override void FillRow(int index, GameObject row, TMP_Text[] texts, Image background, Button button)
     {
-        if (nameRow != null) nameRow.SetActive(visible);
-        if (bornRow != null) bornRow.SetActive(visible);
-        if (originText != null) originText.gameObject.SetActive(visible);
-        if (noteText != null) noteText.gameObject.SetActive(visible);
-    }
+        Line line = _lines[index];
+        bool heading = line.Heading != null;
 
-    /// <summary>Makes a result row register itself with the compare system.</summary>
-    private void WireRow(GameObject row, System.Func<string> currentValue, ClueCategory category, string label)
-    {
-        if (row == null)
-            return;
-
-        Button btn = row.GetComponent<Button>();
-        Image bg = row.GetComponent<Image>();
-        if (btn == null)
-            return;
-
-        btn.onClick.AddListener(() =>
+        if (texts.Length > 0 && texts[0] != null)
         {
-            string value = currentValue();
-            if (string.IsNullOrEmpty(value) || compareController == null)
-                return;
+            texts[0].text = heading ? line.Heading : line.Row.Label;
+            texts[0].fontStyle = heading ? FontStyles.Bold : FontStyles.Normal;
+        }
+        if (texts.Length > 1 && texts[1] != null)
+            texts[1].text = heading ? string.Empty : line.Row.Value;
 
-            compareController.Select(EvidencePicks.ForRecord(category, label, value, _current.fullName), new ImageHighlight(bg));
-        });
+        if (background != null)
+            background.enabled = !heading;
+
+        bool pickable = !heading && line.Row.IsEvidence && !string.IsNullOrEmpty(line.Row.Value) && compareController != null;
+        if (button == null)
+            return;
+        button.enabled = pickable;
+        if (!pickable)
+            return;
+
+        CitizenRecord record = _current;
+        RecordRow picked = line.Row;
+        button.onClick.AddListener(() => compareController.Select(EvidencePicks.ForRecord(record, picked), new ImageHighlight(background)));
     }
 }

@@ -64,9 +64,6 @@ public sealed class InterviewPresenter
         _context = context;
     }
 
-    /// <summary>Today's interview (null before the first day; the text fallback prints its questions' answers).</summary>
-    public InterviewDay Day => _day;
-
     /// <summary>Starts listening to the wheel's bubble.</summary>
     public void Attach()
     {
