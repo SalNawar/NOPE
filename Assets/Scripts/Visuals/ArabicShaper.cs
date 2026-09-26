@@ -8,7 +8,10 @@ using System.Text;
 /// the four lam-alef ligatures) and a simplified bidi reorder into visual
 /// order, rendered left to right. Spaces inside a right-to-left run become
 /// no-break spaces, so TMP never breaks a line inside an Arabic phrase.
-/// Numbers and Latin inside keep their order. The reference model is
+/// Numbers and Latin inside keep their order, and a bracket pair around Latin
+/// that follows Latin reads with it (a simplified paired-bracket rule, audit
+/// R2-022: a place label such as "Abbasid Baghdad (Medieval)" stays whole in
+/// an Arabic line). The reference model is
 /// docs/superpowers/drafts/piece6-support/shaper.py.
 /// </summary>
 public static class ArabicShaper
@@ -46,6 +49,12 @@ public static class ArabicShaper
     /// <summary>The Lam letter.</summary>
     private const char Lam = 'ل';
 
+    /// <summary>Opening paired brackets; each closes with the character at the same place in <see cref="Closers"/>.</summary>
+    private const string Openers = "([{";
+
+    /// <summary>Closing paired brackets.</summary>
+    private const string Closers = ")]}";
+
     /// <summary>
     /// Logical Arabic text in visual order for left-to-right rendering: shaped
     /// letters, right-to-left runs reversed (brackets mirrored, spaces made
@@ -66,7 +75,7 @@ public static class ArabicShaper
         sources?.Clear();
         if (string.IsNullOrEmpty(logical))
             return string.Empty;
-        if (!logical.Any(Forms.ContainsKey))
+        if (!HasArabicLetter(logical))
         {
             for (int i = 0; sources != null && i < logical.Length; i++)
                 sources.Add(i);
@@ -86,28 +95,22 @@ public static class ArabicShaper
     /// </summary>
     private static string Reorder(List<char> shaped, List<int> from, char[] resolved, List<int> sources)
     {
-        // Each run holds the shaped characters' positions, so every visual character keeps its source.
-        var runs = new List<(char dir, List<int> at)>();
-        for (int i = 0; i < shaped.Count; i++)
-        {
-            if (runs.Count > 0 && runs[runs.Count - 1].dir == resolved[i])
-                runs[runs.Count - 1].at.Add(i);
-            else
-                runs.Add((resolved[i], new List<int> { i }));
-        }
-
+        // Runs (start..end of one direction) are walked from the last to the first, so every visual character keeps its source.
         var sb = new StringBuilder(shaped.Count);
-        for (int r = runs.Count - 1; r >= 0; r--)
+        for (int end = shaped.Count - 1; end >= 0;)
         {
-            List<int> at = runs[r].at;
-            bool rtl = runs[r].dir == 'R';
-            for (int k = 0; k < at.Count; k++)
+            int start = end;
+            while (start > 0 && resolved[start - 1] == resolved[end])
+                start--;
+            bool rtl = resolved[end] == 'R';
+            for (int k = 0; k <= end - start; k++)
             {
-                int i = rtl ? at[at.Count - 1 - k] : at[k];
+                int i = rtl ? end - k : start + k;
                 char c = shaped[i];
                 sb.Append(!rtl ? c : c == ' ' ? ' ' : Mirror.TryGetValue(c, out char m) ? m : c);
                 sources?.Add(from[i]);
             }
+            end = start - 1;
         }
         return sb.ToString();
     }
@@ -115,7 +118,8 @@ public static class ArabicShaper
     /// <summary>
     /// Each shaped character's direction for the reorder: R for Arabic, L for
     /// Latin and digits (and a % after a digit, a + or - before one, a . , or :
-    /// between two, which join the digit run); a neutral between two
+    /// between two, which join the digit run); a bracket pair takes a
+    /// direction by what it holds (PairBrackets); a neutral between two
     /// left-to-right runs is L, any other R (a right-to-left paragraph).
     /// </summary>
     private static char[] Directions(List<char> shaped)
@@ -128,6 +132,8 @@ public static class ArabicShaper
             if (dir[i] == 'N' && JoinsDigitRun(shaped, dir, i))
                 dir[i] = 'L';
 
+        PairBrackets(shaped, dir);
+
         var resolved = (char[])dir.Clone();
         for (int i = 0; i < dir.Length; i++)
         {
@@ -137,6 +143,57 @@ public static class ArabicShaper
             resolved[i] = l == 'L' && r == 'L' ? 'L' : 'R';
         }
         return resolved;
+    }
+
+    /// <summary>
+    /// A simplified paired-bracket rule (Unicode's N0 for a right-to-left
+    /// paragraph): each closing bracket pairs with the nearest open bracket of
+    /// its kind (brackets opened after that one are dropped). A pair holding
+    /// Arabic reads right to left; a pair holding only Latin or digits reads
+    /// left to right when the nearest strong character before it is Latin or a
+    /// digit, else right to left; a pair holding neither stays neutral. Pairs
+    /// are settled in the order they close, each seeing the ones settled before.
+    /// </summary>
+    private static void PairBrackets(List<char> shaped, char[] dir)
+    {
+        List<int> open = null;
+        for (int i = 0; i < shaped.Count; i++)
+        {
+            if (dir[i] != 'N')
+                continue;
+            if (Openers.IndexOf(shaped[i]) >= 0)
+            {
+                (open ??= new List<int>()).Add(i);
+                continue;
+            }
+
+            int kind = Closers.IndexOf(shaped[i]);
+            for (int k = (open?.Count ?? 0) - 1; kind >= 0 && k >= 0; k--)
+            {
+                int start = open[k];
+                if (Openers.IndexOf(shaped[start]) != kind)
+                    continue;
+                open.RemoveRange(k, open.Count - k);
+                char inside = Holds(dir, start, i);
+                if (inside != 'N')
+                    dir[start] = dir[i] = inside == 'L' && Neighbour(dir, start, -1) == 'L' ? 'L' : 'R';
+                break;
+            }
+        }
+    }
+
+    /// <summary>What a bracket pair holds between <paramref name="start"/> and <paramref name="end"/>: R when any Arabic, else L when any Latin or digit, else N.</summary>
+    private static char Holds(char[] dir, int start, int end)
+    {
+        char held = 'N';
+        for (int j = start + 1; j < end; j++)
+        {
+            if (dir[j] == 'R')
+                return 'R';
+            if (dir[j] == 'L')
+                held = 'L';
+        }
+        return held;
     }
 
     /// <summary>A neutral that joins a digit run: % after a digit, + or - before one, and . , or : between two.</summary>
@@ -190,6 +247,15 @@ public static class ArabicShaper
                 output.Add(f.iso);
         }
         return output;
+    }
+
+    /// <summary>True when the text holds a letter the tables shape (a plain loop: ToVisual runs on each recompose of a right-to-left text, audit R2-019).</summary>
+    private static bool HasArabicLetter(string text)
+    {
+        foreach (char c in text)
+            if (Forms.ContainsKey(c))
+                return true;
+        return false;
     }
 
     /// <summary>A letter that connects to the next one.</summary>
