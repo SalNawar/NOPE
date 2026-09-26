@@ -1008,6 +1008,11 @@
       "Assets/Data/Investigation/RefBook_Culture.asset"
     ]
   },
+  "agency": {
+    "name": "TEMPORAL CUSTOMS",
+    "programme": "Debt Relief Departures",
+    "firstDate": "14 Mar 2150"
+  },
   "eras": [
     {
       "id": "ancient",
@@ -8393,6 +8398,12 @@
         "tier": "Full"
       },
       {
+        "key": "compare.dockHint",
+        "text": "COMPARE    Click two values to compare them.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "slot.Outfit",
         "text": "OUTFIT",
         "gloss": "None",
@@ -8424,43 +8435,79 @@
       },
       {
         "key": "records.placeholder",
-        "text": "Type a full name…",
+        "text": "Name or number…",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "records.idle",
-        "text": "Type a citizen's name and press SEARCH.",
+        "text": "Type a name or a record number and press SEARCH.",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "records.noRecord",
-        "text": "NO RECORD matching \"{0}\".",
+        "text": "NO RECORD ON FILE for \"{0}\" · {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
         "key": "records.onFile",
-        "text": "RECORD ON FILE:",
+        "text": "Query \"{0}\" · 1 record on file · {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "records.origin",
-        "text": "Origin:  {0}",
+        "key": "records.agency",
+        "text": "{0} · {1}",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "records.compare.name",
-        "text": "Records · Name",
+        "key": "records.group.registry",
+        "text": "REGISTRY ENTRY",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "records.compare.born",
-        "text": "Records · Born",
+        "key": "records.row.name",
+        "text": "Name",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.born",
+        "text": "Born",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.origin",
+        "text": "Origin",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.note",
+        "text": "Note",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.note.none",
+        "text": "No remarks on file.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.note.sealed",
+        "text": "Priority subject. Records sealed above your clearance.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.compareLabel",
+        "text": "Records · {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8580,7 +8627,7 @@
       },
       {
         "key": "tooltip.day",
-        "text": "Day {0}",
+        "text": "Today: {0}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8597,110 +8644,8 @@
         "tier": "Full"
       },
       {
-        "key": "fallback.claim",
-        "text": "{0}\n\"{1}\"\n\n{2}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.documents",
-        "text": "— DOCUMENTS PRESENTED —",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.dress",
-        "text": "— TRAVELLER'S DRESS —",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.garment",
-        "text": "    {0}: {1} ({2})",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.document",
-        "text": "[{0}]",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.field",
-        "text": "    {0}: {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.record",
-        "text": "— AGENCY RECORD —",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.noRecord",
-        "text": "    No record on file.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.recordName",
-        "text": "    Name: {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.recordBorn",
-        "text": "    Born: {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.recordOrigin",
-        "text": "    Origin: {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.interview",
-        "text": "— INTERVIEW —",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.answer",
-        "text": "    {0}: {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.reference",
-        "text": "— REFERENCE (claimed place) —",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.bookEntry",
-        "text": "{0}: {1}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.noEntry",
-        "text": "(no entry)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.accept",
-        "text": "ACCEPT (approve travel)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "fallback.deny",
-        "text": "DENY (refuse travel)",
+        "key": "desk.calendar",
+        "text": "{0} · DAY {1}",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9670,13 +9615,28 @@
   },
   "translation": {
     "fromDay": 2,
-    "announce": "Budget cuts close the interpreter pool. From today, foreign papers and speech reach the desk untranslated; translators are sold at Home. The scanner still compares untranslated text with the books.",
+    "announce": "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
       "letterInterval": 0.04,
       "letterSeconds": 0.12,
-      "scrambleSteps": 2,
-      "rowStagger": 0.15
+      "scrambleSteps": 2
+    },
+    "keyWords": {
+      "slots": [
+        "place",
+        "name",
+        "document"
+      ],
+      "words": [
+        "home",
+        "please",
+        "papers",
+        "yes",
+        "no",
+        "Temporal Customs"
+      ],
+      "digits": true
     },
     "fallbackGlyphs": "olmnupqrystvwxazbcdfeghjik",
     "scripts": [
@@ -9839,25 +9799,21 @@
       {
         "id": "near_east",
         "displayName": "Near East",
-        "writtenCost": 100,
         "spokenCost": 80
       },
       {
         "id": "mediterranean",
         "displayName": "Mediterranean",
-        "writtenCost": 100,
         "spokenCost": 80
       },
       {
         "id": "east_asia",
         "displayName": "East Asia",
-        "writtenCost": 100,
         "spokenCost": 80
       },
       {
         "id": "north_europe",
         "displayName": "Northern Europe",
-        "writtenCost": 100,
         "spokenCost": 80
       }
     ],

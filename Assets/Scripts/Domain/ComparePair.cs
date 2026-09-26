@@ -127,6 +127,6 @@ public static class PickKeys
     /// <summary>A reference book's row by category and place ("book:Currency:greece:ancient").</summary>
     public static string BookRow(ClueCategory category, string nationId, string eraId) => "book:" + category + ":" + nationId + ":" + eraId;
 
-    /// <summary>A Citizen Records row by category ("record:BirthDate").</summary>
-    public static string Record(ClueCategory category) => "record:" + category;
+    /// <summary>A Citizen Records row by the record it belongs to (CitizenRecord.Id: its number, else its name) and its category ("record:552-1804-33:BirthDate"), so two records' rows are two picks (audit R4-009).</summary>
+    public static string Record(ClueCategory category, string recordId) => "record:" + recordId + ":" + category;
 }

@@ -184,7 +184,7 @@ public sealed class GameManager : MonoBehaviour
         if (investigationUI != null)
         {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
-            investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases));
+            investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases), contentLibrary.Agency, _worldState.day);
             investigationUI.SetFacts(_today.Facts);
             investigationUI.SetInterviewDay(interview);
             investigationUI.SetCharacterArt(_characterArt);
@@ -206,10 +206,6 @@ public sealed class GameManager : MonoBehaviour
         // READY sign releases the per-case gate (only meaningful when wired).
         if (readySign != null)
             readySign.onClick.AddListener(() => _readyGate.Release());
-
-        // The PC frame opening is a sighting of the scanned windows it shows (piece 10: their translation's reveal).
-        if (officeView != null && investigationUI != null)
-            officeView.ViewChanged += HandleViewChanged;
 
         // The booth's day (its day-1 notes) and phase: the briefing comes first.
         if (booth != null)
@@ -247,9 +243,6 @@ public sealed class GameManager : MonoBehaviour
         return interview;
     }
 
-    /// <summary>The office view changed: the investigation learns whether the PC frame is open (its scanned windows are then seen up close).</summary>
-    private void HandleViewChanged(OfficeView view) => investigationUI.SetFrameOpen(view == OfficeView.MonitorFocus);
-
     /// <summary>
     /// Unsubscribes to prevent event leaks on scene unload / play mode exit.
     /// </summary>
@@ -257,9 +250,6 @@ public sealed class GameManager : MonoBehaviour
     {
         if (shiftClock != null)
             shiftClock.Closed -= HandleShiftClosed;
-
-        if (officeView != null)
-            officeView.ViewChanged -= HandleViewChanged;
 
         _characterArt?.Dispose();
 

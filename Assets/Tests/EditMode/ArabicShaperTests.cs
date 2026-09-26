@@ -63,6 +63,25 @@ public class ArabicShaperTests
         Assert.IsEmpty(sources);
     }
 
+    /// <summary>Audit R2-022: Latin and digits inside Arabic keep their own order, each run where the right-to-left reading puts it.</summary>
+    [TestCase("ب Baghdad ت", "FE95 00A0 0042 0061 0067 0068 0064 0061 0064 00A0 FE8F", Description = "a Latin word between two Arabic ones")]
+    [TestCase("ب Abbasid Baghdad 12 ت", "FE95 00A0 0041 0062 0062 0061 0073 0069 0064 0020 0042 0061 0067 0068 0064 0061 0064 0020 0031 0032 00A0 FE8F", Description = "Latin and digits in one run, their plain spaces kept")]
+    [TestCase("ب Abbasid Baghdad (Medieval).", "002E 0041 0062 0062 0061 0073 0069 0064 0020 0042 0061 0067 0068 0064 0061 0064 0020 0028 004D 0065 0064 0069 0065 0076 0061 006C 0029 00A0 FE8F", Description = "a bracketed Latin label keeps its brackets; the full stop ends the line at its left")]
+    [TestCase("ب (Rome) ت", "FE95 00A0 0028 0052 006F 006D 0065 0029 00A0 FE8F", Description = "Latin in brackets after Arabic: the brackets read right to left around it")]
+    [TestCase("Rome (ب) Paris", "0050 0061 0072 0069 0073 00A0 0028 FE8F 0029 00A0 0052 006F 006D 0065", Description = "Arabic in brackets: the brackets keep the paragraph's direction")]
+    public void ToVisual_LatinInsideArabic_KeepsItsOrder(string logical, string expected)
+    {
+        Assert.AreEqual(expected, Codes(ArabicShaper.ToVisual(logical)));
+    }
+
+    /// <summary>A Latin span inside a right-to-left line (piece 9's key words) reads as one run: all of it, in order, brackets included.</summary>
+    [Test]
+    public void ToVisual_ALatinSpanInsideArabic_StaysWhole()
+    {
+        const string span = "home to Abbasid Baghdad (Medieval)";
+        StringAssert.Contains(span, ArabicShaper.ToVisual("ا ب " + span + "."));
+    }
+
     [Test]
     public void ToVisual_Null_IsEmpty()
     {
@@ -76,5 +95,15 @@ public class ArabicShaperTests
         StringAssert.Contains("U+0679", unsupported);
         foreach (string w in new[] { "قبول", "رفض", "لا", "الأدلة", "إلى", "الاستقرار: 87%", "عدم تطابق", "سجل الأدلة", "(اليوم)" })
             Assert.IsTrue(ArabicShaper.CanShape(w, out _), w);
+    }
+
+    /// <summary>Audit R2-022: the Arabic comma, question mark and digits are outside the tables (they would be reversed), so no table may use them.</summary>
+    [TestCase("،", "U+060C")]
+    [TestCase("؟", "U+061F")]
+    [TestCase("١", "U+0661")]
+    public void CanShape_RejectsArabicPunctuationAndDigits(string text, string code)
+    {
+        Assert.IsFalse(ArabicShaper.CanShape(text, out string unsupported));
+        StringAssert.Contains(code, unsupported);
     }
 }

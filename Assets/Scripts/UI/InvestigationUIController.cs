@@ -14,21 +14,16 @@ using UnityEngine.UI;
 /// document over as a physical paper on the desk (whose scan opens its
 /// window) or, where no desk is wired, straight to its draggable window,
 /// builds a shelf of reference books the player can open/stow, and offers the
-/// binary Accept/Deny. From translation's first day a traveller's papers and
-/// speech are in their claimed place's tongue (piece 9): the day's
-/// TranslationPresenter says how each traveller's text shows. A document's
-/// written reveal (one RevealClock for its paper and its scanned copy) starts
-/// at its first sighting (piece 10 X25): its paper lifted into the hand, the
-/// PC frame opening while its scanned window is open, or a scan opening its
-/// window while the frame is open. A held paper's row picked at the desk goes
-/// into the same compare as the PC's rows.
+/// binary Accept/Deny. Every document is filled in English (the redesign's
+/// F5); from translation's first day a traveller's speech is in their claimed
+/// place's tongue (piece 9): the day's TranslationPresenter says how each
+/// traveller's lines show. A held paper's row picked at the desk goes into the
+/// same compare as the PC's rows.
 ///
-/// Two modes:
-/// - RICH: when the desk has been built (document/book/shelf templates wired by
-///   the Tools &gt; TimeDesk office builder), it spawns draggable, comparable,
-///   multi-page windows.
-/// - FALLBACK: if those references are not wired yet, it builds a simple text
-///   panel at runtime so the Accept/Deny loop is fully playable immediately.
+/// It needs the desk the office builder wires (Tools &gt; TimeDesk &gt; Build
+/// Office UI: the document window template, the window layer, Accept and
+/// Deny); without it, it logs one error and shows no case (the text-mode
+/// fallback no scene could reach was deleted: audit R4-002).
 /// </summary>
 public sealed class InvestigationUIController : MonoBehaviour
 {
@@ -40,7 +35,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private Button denyButton;
     [SerializeField] private CompareController compareController;
 
-    [Header("Rich mode (optional — built by the office tool)")]
+    [Header("Desk windows (built by the office tool)")]
     [SerializeField] private RectTransform windowLayer;
     [SerializeField] private DocumentWindowController documentWindowTemplate;
     [SerializeField] private ReferenceBookWindowController bookWindowTemplate;
@@ -52,7 +47,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private TMP_Text scannerText;
 
     /// <summary>Scanner window chrome; opened when the first discrepancy registers.</summary>
-    [SerializeField] private OSWindowChrome scannerWindow;
+    [SerializeField] private DesktopWindow scannerWindow;
 
     [Header("Interaction / records")]
     /// <summary>The traveller wheel's ring: shows the current interview node's choices (requests, questions, dialog replies).</summary>
@@ -66,7 +61,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     [SerializeField] private TranscriptWindowController transcriptWindow;
 
     /// <summary>The transcript window's chrome; every interview choice but a document request opens it.</summary>
-    [SerializeField] private OSWindowChrome transcriptChrome;
+    [SerializeField] private DesktopWindow transcriptChrome;
 
     [Header("Desk")]
     /// <summary>The physical papers and the scanner (optional: without it documents open on request, straight to their windows).</summary>
@@ -109,9 +104,6 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new();
 
-    /// <summary>Each current document's written reveal, in paper order (shared by its scanned window and its desk paper).</summary>
-    private readonly List<RevealClock> _clocks = new();
-
     /// <summary>Papers whose window already has a desktop icon this case.</summary>
     private readonly HashSet<int> _iconedDocuments = new();
     private bool _booksBuilt;
@@ -119,9 +111,6 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>Today's facts (set by GameManager; the books render these rows).</summary>
     private FactTable _facts;
-
-    /// <summary>Today's citizen registry (set by GameManager; the text fallback prints the current traveller's record).</summary>
-    private CitizenRegistry _registry;
 
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new();
@@ -141,52 +130,45 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>Today's translation (set by GameManager; null = everything plain).</summary>
     private TranslationPresenter _translation;
 
+    /// <summary>What of a traveller's lines stays English when they show untranslated (the library's translation.keyWords; set by GameManager with the translation).</summary>
+    private KeyWordRule _keyWords;
+
     /// <summary>The current traveller's translation (None between cases and when nothing is foreign).</summary>
     private CaseTranslation _caseTranslation = CaseTranslation.None;
-
-    /// <summary>True while the PC frame is open (GameManager, from the office view): a scanned window shown then is seen up close.</summary>
-    private bool _frameOpen;
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int EvidenceCount => _discrepancies.Count;
 
     /// <summary>
-    /// True when the evidence loop is playable (rich desk + compare wired), so
-    /// scoring may gate denials on documented evidence.
+    /// True when the evidence loop is playable (the desk and the compare wired),
+    /// so scoring may gate denials on documented evidence.
     /// </summary>
-    public bool EvidenceSystemActive => RichMode && compareController != null;
+    public bool EvidenceSystemActive => Wired && compareController != null;
 
     /// <summary>
-    /// True when a traveller's answers can be read: always in the text
-    /// fallback; in the rich desk only when the wheel's ring, the transcript
-    /// window and its chrome are wired. When false, GameManager computes no answers
-    /// and generates no spoken tell that day. (Serialized references are
-    /// compared with != null: an unassigned one is Unity's fake null.)
+    /// True when a traveller's answers can be read: the wheel's ring, the
+    /// transcript window and its chrome are wired. When false, GameManager
+    /// computes no answers and generates no spoken tell that day. (Serialized
+    /// references are compared with != null: an unassigned one is Unity's fake null.)
     /// </summary>
     public bool InterviewReachable =>
-        !RichMode || (interactionPanel != null && transcriptWindow != null && transcriptChrome != null);
+        interactionPanel != null && transcriptWindow != null && transcriptChrome != null;
 
     /// <summary>
-    /// True when a traveller's garments can be looked at and compared: always
-    /// in the text fallback (which prints the dress); in the rich desk only
-    /// when the wheel's ring (its "Look >" menu) and the compare bar are wired.
-    /// When false, GameManager generates no dress tell that day.
+    /// True when a traveller's garments can be looked at and compared: the
+    /// wheel's ring (its "Look >" menu) and the compare bar are wired. When
+    /// false, GameManager generates no dress tell that day.
     /// </summary>
     public bool AppearanceReachable =>
-        !RichMode || (interactionPanel != null && compareController != null);
+        interactionPanel != null && compareController != null;
 
-    // Fallback state
-    private bool _fallbackBuilt;
-    private GameObject _fallbackPanel;
-    private TMP_Text _fallbackClaim;
-    private TMP_Text _fallbackBody;
-
-    private bool RichMode =>
+    /// <summary>True when the office builder wired the desk windows a case needs (the document window template, the window layer, Accept and Deny).</summary>
+    private bool Wired =>
         documentWindowTemplate != null && windowLayer != null &&
         acceptButton != null && denyButton != null;
 
-    /// <summary>True when documents become physical papers: the rich desk with the desk and all its parts wired (a partly wired desk takes the window path, so papers always reach the PC).</summary>
-    private bool DeskReachable => RichMode && desk != null && desk.IsReachable;
+    /// <summary>True when documents become physical papers: the wired desk windows and the desk with all its parts (a partly wired desk takes the window path, so papers always reach the PC).</summary>
+    private bool DeskReachable => Wired && desk != null && desk.IsReachable;
 
     private void Awake()
     {
@@ -205,26 +187,29 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (compareController != null)
             compareController.PairCompared += HandlePairCompared;
 
+        // Without the desk windows no case can be shown (there is no text fallback any more).
+        if (!Wired)
+            Debug.LogError("[InvestigationUIController] The desk windows are not wired (documentWindowTemplate, windowLayer, acceptButton or denyButton): no case can be shown. Run Tools > TimeDesk > Build Office UI.", this);
+
         // Birth-date tells are proven only against Citizen Records (RecordMismatch).
         if (EvidenceSystemActive && recordsWindow == null)
             Debug.LogWarning("[InvestigationUIController] Citizen Records not wired: birth-date tells cannot be proven. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Without the transcript nothing a traveller says could be read, so the day speaks no tell.
-        if (RichMode && !InterviewReachable)
+        if (Wired && !InterviewReachable)
             Debug.LogWarning("[InvestigationUIController] Traveller wheel or interview transcript not wired: questions are hidden and no tell is spoken today. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Without the wheel's look menu or the compare bar no garment could be compared, so the day leaks no dress.
-        if (RichMode && !AppearanceReachable)
+        if (Wired && !AppearanceReachable)
             Debug.LogWarning("[InvestigationUIController] Traveller wheel or compare bar not wired (interactionPanel or compareController): garments cannot be looked at and no dress tell is generated today. Run Tools > TimeDesk > Build Office UI.", this);
 
         // Without the desk every document still reaches the PC, as its window.
-        if (RichMode && !DeskReachable)
+        if (Wired && !DeskReachable)
             Debug.LogWarning("[InvestigationUIController] Desk scanner not wired: documents open on the PC when handed over (no physical papers). Run Tools > TimeDesk > Build Office UI.", this);
 
         if (DeskReachable)
         {
             desk.ScanFinished += OpenDocumentWindow;
-            desk.PaperExamined += Sighted;
             desk.FieldPicked += HandleFieldPicked;
         }
 
@@ -246,7 +231,6 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (DeskReachable)
         {
             desk.ScanFinished -= OpenDocumentWindow;
-            desk.PaperExamined -= Sighted;
             desk.FieldPicked -= HandleFieldPicked;
         }
 
@@ -290,12 +274,11 @@ public sealed class InvestigationUIController : MonoBehaviour
             scannerWindow.Open();
     }
 
-    /// <summary>Injects the day's citizen registry into the Records app and the text fallback.</summary>
-    public void SetCitizenRegistry(CitizenRegistry registry)
+    /// <summary>Injects the day's citizen registry into the Records app, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
+    public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
-        _registry = registry;
         if (recordsWindow != null)
-            recordsWindow.SetRegistry(registry);
+            recordsWindow.SetRegistry(registry, agency, agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null);
     }
 
     /// <summary>Injects today's facts (the reference books render these rows).</summary>
@@ -316,10 +299,11 @@ public sealed class InvestigationUIController : MonoBehaviour
         _art = art;
     }
 
-    /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings.</summary>
+    /// <summary>Injects the day-start translation (which tongues are foreign and translated today) and the library's translation settings (their key-word rule included).</summary>
     public void SetTranslation(TranslationDay day, TranslationSettings settings)
     {
         _translation = new TranslationPresenter(day, settings);
+        _keyWords = settings != null && settings.rules != null ? settings.rules.keyWords : null;
     }
 
     /// <summary>Rewrites the Scanner window body from the discrepancy log.</summary>
@@ -363,7 +347,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         return sb.ToString();
     }
 
-    /// <summary>Presents a case and waits for the player's Accept/Deny.</summary>
+    /// <summary>Presents a case and waits for the player's Accept/Deny (nothing shows when the desk windows are not wired: Awake logged why).</summary>
     public void ShowCase(CaseInstance inst, ContentLibrarySO lib, Action<bool> onDecision)
     {
         _onDecision = onDecision;
@@ -371,18 +355,16 @@ public sealed class InvestigationUIController : MonoBehaviour
         _discrepancies.Clear();
         RefreshScannerText();
 
-        if (RichMode)
+        if (Wired)
             ShowRich(inst, lib);
-        else
-            ShowFallback(inst, lib);
     }
 
-    /// <summary>Hides the investigation overlay (between cases); the desktop shows its idle line and the office's claim tag empties.</summary>
+    /// <summary>Hides the investigation overlay (between cases) and closes its windows (so the taskbar keeps no button for them); the desktop shows its idle line and the office's claim tag empties.</summary>
     public void Hide()
     {
+        CloseAllWindows();
         if (root != null) root.SetActive(false);
         if (hud != null) hud.SetClaim(string.Empty);
-        if (_fallbackPanel != null) _fallbackPanel.SetActive(false);
         if (idleScreen != null) idleScreen.SetActive(true);
     }
 
@@ -420,9 +402,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         _docIcons.Clear();
         _iconedDocuments.Clear();
         _caseDocuments.Clear();
-        _clocks.Clear();
 
-        // The traveller's tongue decides how their papers and speech show today.
+        // The traveller's tongue decides how their speech shows today (their papers are always English).
         _caseTranslation = _translation != null ? _translation.ForCase(inst) : CaseTranslation.None;
 
         // Documents are handed over, never taken: those marked "on arrival" when
@@ -438,10 +419,8 @@ public sealed class InvestigationUIController : MonoBehaviour
                 clone.gameObject.SetActive(false);
                 if (clone.transform is RectTransform rt)
                     rt.anchoredPosition = documentWindowOrigin + i * documentWindowStep;
-                var clock = new RevealClock();
-                clone.SetDocument(doc, i, compareController, inst.look, _art, _caseTranslation, clock);
+                clone.SetDocument(doc, i, compareController, inst.look, _art);
                 _docWindows.Add(clone);
-                _clocks.Add(clock);
                 _caseDocuments.Add(new CaseDocument
                 {
                     name = doc != null && doc.template != null ? doc.template.displayName : UiText.Get("document.untitled"),
@@ -455,7 +434,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         if (DeskReachable)
         {
-            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art, _caseTranslation, _clocks);
+            desk.BeginCase(_caseDocuments, inst != null ? inst.look : null, _art);
         }
         else
         {
@@ -500,7 +479,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         var interviewCase = new InterviewCase
         {
             introLine = inst != null ? inst.introLine : null,
-            claimLine = inst != null ? inst.claimLine : null,
+            claimPlace = inst != null ? inst.originLabel : null,
+            keyWords = _keyWords,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
             answers = inst != null ? inst.answers : null,
@@ -513,7 +493,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             reachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
             reachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
             interviewCase);
-        _runner = new DialogRunner(graph, InterviewScript.Opening(interviewCase));
+        _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));
 
         if (transcriptWindow != null)
             transcriptWindow.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, compareController, _caseTranslation);
@@ -622,57 +602,19 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>
     /// Opens a paper's scanned window and raises it (the desk's ScanFinished,
-    /// or a hand-over where no desk is wired); shown in the open frame, it is a
-    /// sighting (its translation's reveal), else it waits untranslated on the
-    /// office PC's small screen. The first time it opens this case, the paper
-    /// also gets a desktop icon at the top of the grid, which reopens the
-    /// window after it is closed.
+    /// or a hand-over where no desk is wired). The first time it opens this
+    /// case, the paper also gets a desktop icon at the top of the grid, which
+    /// reopens the window after it is closed.
     /// </summary>
     private void OpenDocumentWindow(int index)
     {
         DocumentWindowController window = index >= 0 && index < _docWindows.Count ? _docWindows[index] : null;
-        if (window == null)
+        if (window == null || !window.TryGetComponent(out DesktopWindow chrome))
             return;
 
-        window.gameObject.SetActive(true);
-        window.transform.SetAsLastSibling();
-        if (_frameOpen)
-            Sighted(index);
+        chrome.Open();
         if (_iconedDocuments.Add(index))
-            AddDesktopIcon(_caseDocuments[index].name, window.gameObject, true);
-    }
-
-    /// <summary>
-    /// The PC frame opened or closed (GameManager, from the office view):
-    /// opening it is a sighting of every scanned window that is open.
-    /// </summary>
-    public void SetFrameOpen(bool open)
-    {
-        _frameOpen = open;
-        if (!open)
-            return;
-
-        for (int i = 0; i < _docWindows.Count; i++)
-            if (_docWindows[i] != null && _docWindows[i].gameObject.activeSelf)
-                Sighted(i);
-    }
-
-    /// <summary>
-    /// Document <paramref name="index"/> is seen up close (piece 10 X25): its
-    /// written reveal starts the first time (DocumentReveal.Begin), and its
-    /// scanned window and its paper redraw from the shared clock.
-    /// </summary>
-    private void Sighted(int index)
-    {
-        if (index < 0 || index >= _clocks.Count || index >= _caseDocuments.Count)
-            return;
-        if (!DocumentReveal.Begin(_clocks[index], _caseTranslation, _caseDocuments[index].fields, Time.unscaledTime))
-            return;
-
-        if (index < _docWindows.Count && _docWindows[index] != null)
-            _docWindows[index].Refresh();
-        if (DeskReachable)
-            desk.RefreshPaper(index);
+            AddDesktopIcon(_caseDocuments[index].name, chrome, true);
     }
 
     /// <summary>The bubble's answer picked at the desk: it goes into the compare as the transcript's row would (the same pick), lighting the bubble while it shows.</summary>
@@ -690,19 +632,19 @@ public sealed class InvestigationUIController : MonoBehaviour
             }
     }
 
-    /// <summary>A held paper's row picked at the desk: the document's flip finishes on both surfaces, then the row goes into the compare (the same pick as its scanned copy's row).</summary>
+    /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>
     private void HandleFieldPicked(int index, DocumentRow row, ICompareHighlight highlight)
     {
         if (index < 0 || index >= _caseDocuments.Count || compareController == null)
             return;
 
-        _clocks[index].Finish();
-        compareController.Select(EvidencePicks.ForField(index, row, _caseDocuments[index].name, _caseTranslation), highlight);
+        compareController.Select(EvidencePicks.ForField(index, row, _caseDocuments[index].name), highlight);
     }
 
     /// <summary>
-    /// Closes every window on the window layer (templates are already
-    /// inactive; per-case document clones are destroyed separately).
+    /// Closes every window on the window layer through the desktop's window
+    /// manager, minimised ones too (templates are never opened; per-case
+    /// document clones are destroyed separately).
     /// </summary>
     private void CloseAllWindows()
     {
@@ -710,11 +652,8 @@ public sealed class InvestigationUIController : MonoBehaviour
             return;
 
         for (int i = 0; i < windowLayer.childCount; i++)
-        {
-            GameObject child = windowLayer.GetChild(i).gameObject;
-            if (child.activeSelf)
-                child.SetActive(false);
-        }
+            if (windowLayer.GetChild(i).TryGetComponent(out DesktopWindow window))
+                window.Close();
     }
 
     private void BuildBookShelf(ContentLibrarySO lib)
@@ -738,20 +677,21 @@ public sealed class InvestigationUIController : MonoBehaviour
             win.SetBook(book, _facts, compareController);
             if (win.transform is RectTransform rt)
                 rt.anchoredPosition = bookWindowOrigin + new Vector2((i % 3) * bookWindowColumnStep, 0f) + (i / 3) * bookWindowRowStep;
-            GameObject winGo = win.gameObject;
-            winGo.SetActive(false);
+            win.gameObject.SetActive(false);
 
-            AddDesktopIcon(book.displayName, winGo, false);
+            if (win.TryGetComponent(out DesktopWindow chrome))
+                AddDesktopIcon(book.displayName, chrome, false);
             i++;
         }
     }
 
     /// <summary>
-    /// Adds a desktop icon tile (in the icon grid) that toggles a window's
-    /// visibility. Document icons are tracked so they can be cleared per case and
-    /// sit at the top of the grid.
+    /// Adds a desktop icon tile (in the icon grid) that opens a window (a
+    /// minimised one restores), raised and focused, like every icon. Document
+    /// icons are tracked so they can be cleared per case and sit at the top of
+    /// the grid.
     /// </summary>
-    private void AddDesktopIcon(string label, GameObject window, bool isDocument)
+    private void AddDesktopIcon(string label, DesktopWindow window, bool isDocument)
     {
         if (bookShelfButtonTemplate == null || bookShelfRoot == null || window == null)
             return;
@@ -765,14 +705,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         if (text != null)
             text.text = label;
 
-        GameObject captured = window;
-        btn.onClick.AddListener(() =>
-        {
-            bool now = !captured.activeSelf;
-            captured.SetActive(now);
-            if (now)
-                captured.transform.SetAsLastSibling();
-        });
+        btn.onClick.AddListener(window.Open);
 
         if (isDocument)
             _docIcons.Add(btn.gameObject);
@@ -805,189 +738,5 @@ public sealed class InvestigationUIController : MonoBehaviour
         Action<bool> cb = _onDecision;
         _onDecision = null;
         cb?.Invoke(accepted);
-    }
-
-    // -----------------------------
-    // Fallback mode (no rich desk yet)
-    // -----------------------------
-
-    private void ShowFallback(CaseInstance inst, ContentLibrarySO lib)
-    {
-        EnsureFallback();
-
-        _fallbackPanel.SetActive(true);
-        _fallbackPanel.transform.SetAsLastSibling();
-
-        if (_fallbackClaim != null)
-            _fallbackClaim.text = inst != null
-                ? UiText.Format("fallback.claim", inst.visitorDisplayName, inst.claimLine, _directives)
-                : string.Empty;
-
-        if (_fallbackBody != null)
-            _fallbackBody.text = BuildFallbackBody(inst, lib, _facts, _registry, _day);
-    }
-
-    /// <summary>
-    /// The text fallback's body: the papers, the traveller's agency record (so
-    /// a birth-date tell can be spotted without the Records app), the
-    /// traveller's dress (each garment with its place's Culture value), their
-    /// answers to today's questions, and the claimed place's entry in each book.
-    /// </summary>
-    private static string BuildFallbackBody(CaseInstance inst, ContentLibrarySO lib, FactTable facts, CitizenRegistry registry, InterviewDay day)
-    {
-        var sb = new StringBuilder();
-
-        if (inst != null)
-        {
-            sb.AppendLine(UiText.Get("fallback.documents"));
-            foreach (DocumentInstance doc in inst.documents)
-            {
-                sb.AppendLine(UiText.Format("fallback.document", doc.template != null ? doc.template.displayName : UiText.Get("document.untitled")));
-                foreach (DocumentField f in doc.fields)
-                    sb.AppendLine(UiText.Format("fallback.field", f.label, f.value));
-            }
-            sb.AppendLine();
-
-            sb.AppendLine(UiText.Get("fallback.record"));
-            CitizenRecord record = registry != null ? registry.Find(inst.visitorGivenName) : null;
-            if (record == null)
-            {
-                sb.AppendLine(UiText.Get("fallback.noRecord"));
-            }
-            else
-            {
-                sb.AppendLine(UiText.Format("fallback.recordName", record.fullName));
-                sb.AppendLine(UiText.Format("fallback.recordBorn", record.birthDate));
-                sb.AppendLine(UiText.Format("fallback.recordOrigin", record.origin));
-            }
-            sb.AppendLine();
-
-            if (inst.look != null && inst.look.Garments.Count > 0)
-            {
-                sb.AppendLine(UiText.Get("fallback.dress"));
-                foreach (Garment g in inst.look.Garments)
-                    sb.AppendLine(UiText.Format("fallback.garment", UiText.Slot(g.Slot), g.Label, g.Value));
-                sb.AppendLine();
-            }
-
-            if (day != null)
-            {
-                sb.AppendLine(UiText.Get("fallback.interview"));
-                string eraId = inst.claimedEra != null ? inst.claimedEra.id : null;
-                foreach (InterviewQuestion q in day.Questions)
-                {
-                    InterviewAnswer answer = inst.answers.Find(a => a.category == q.category);
-                    if (answer == null)
-                        continue;
-                    sb.AppendLine(InterviewScript.PromptLine(q, eraId).Text);
-                    sb.AppendLine(UiText.Format("fallback.answer", inst.visitorGivenName, InterviewScript.AnswerLine(q, eraId, answer).Text));
-                }
-                sb.AppendLine();
-            }
-        }
-
-        if (lib != null && lib.ReferenceBooks.Count > 0)
-        {
-            sb.AppendLine(UiText.Get("fallback.reference"));
-            string nationId = inst != null && inst.claimedNation != null ? inst.claimedNation.id : null;
-            string eraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null;
-            foreach (ReferenceBookSO book in lib.ReferenceBooks)
-                if (book != null)
-                    sb.AppendLine(UiText.Format("fallback.bookEntry", book.displayName, (facts != null ? facts.Get(nationId, eraId, book.category) : null) ?? UiText.Get("fallback.noEntry")));
-        }
-
-        return sb.ToString();
-    }
-
-    private void EnsureFallback()
-    {
-        if (_fallbackBuilt)
-            return;
-
-        _fallbackBuilt = true;
-
-        Canvas canvas = GetComponentInParent<Canvas>();
-        if (canvas == null)
-            canvas = FindFirstObjectByType<Canvas>();
-
-        Transform parent = canvas != null ? canvas.transform : transform;
-
-        _fallbackPanel = NewUI("InvestigationFallback", parent);
-        Stretch((RectTransform)_fallbackPanel.transform, new Vector2(0.12f, 0.08f), new Vector2(0.88f, 0.92f));
-        Image bg = _fallbackPanel.AddComponent<Image>();
-        bg.color = new Color(0.09f, 0.11f, 0.16f, 0.98f);
-        Tag(_fallbackPanel, ThemeRoleId.Panel, ThemeTextKind.Body, null);
-
-        _fallbackClaim = NewText(_fallbackPanel.transform, "Claim", 24, TextAlignmentOptions.TopLeft,
-            new Vector2(0.04f, 0.78f), new Vector2(0.96f, 0.97f));
-        Tag(_fallbackClaim.gameObject, ThemeRoleId.Panel, ThemeTextKind.Body, null);
-        _fallbackBody = NewText(_fallbackPanel.transform, "Body", 20, TextAlignmentOptions.TopLeft,
-            new Vector2(0.04f, 0.16f), new Vector2(0.96f, 0.76f));
-        Tag(_fallbackBody.gameObject, ThemeRoleId.Panel, ThemeTextKind.Body, null);
-
-        Button accept = NewButton(_fallbackPanel.transform, "AcceptButton", "fallback.accept", ThemeRoleId.AcceptButton,
-            new Vector2(0.06f, 0.04f), new Vector2(0.48f, 0.13f), new Color(0.15f, 0.4f, 0.2f, 1f));
-        Button deny = NewButton(_fallbackPanel.transform, "DenyButton", "fallback.deny", ThemeRoleId.DenyButton,
-            new Vector2(0.52f, 0.04f), new Vector2(0.94f, 0.13f), new Color(0.45f, 0.16f, 0.16f, 1f));
-
-        WireDecisionButtons(accept, deny);
-
-        // The panel is built after the scene loaded: theme it now.
-        if (CultureThemeService.Instance != null)
-            CultureThemeService.Instance.ApplyTo(_fallbackPanel);
-    }
-
-    /// <summary>Tags a fallback graphic with its theme role (a label key only for keyed button labels).</summary>
-    private static void Tag(GameObject go, ThemeRoleId role, ThemeTextKind kind, string labelKey)
-    {
-        ThemeTag tag = go.AddComponent<ThemeTag>();
-        bool isText = go.TryGetComponent(out TMP_Text _);
-        tag.Configure(role, isText ? ThemePart.Ink : ThemePart.Fill, labelKey, FontStyles.Normal, kind, !string.IsNullOrEmpty(labelKey));
-    }
-
-    // -----------------------------
-    // Tiny runtime UI helpers (fallback only)
-    // -----------------------------
-
-    private static GameObject NewUI(string name, Transform parent)
-    {
-        var go = new GameObject(name, typeof(RectTransform));
-        go.transform.SetParent(parent, false);
-        return go;
-    }
-
-    private static void Stretch(RectTransform rt, Vector2 min, Vector2 max)
-    {
-        rt.anchorMin = min;
-        rt.anchorMax = max;
-        rt.offsetMin = Vector2.zero;
-        rt.offsetMax = Vector2.zero;
-    }
-
-    private static TMP_Text NewText(Transform parent, string name, int size, TextAlignmentOptions align, Vector2 min, Vector2 max)
-    {
-        GameObject go = NewUI(name, parent);
-        Stretch((RectTransform)go.transform, min, max);
-        var t = go.AddComponent<TextMeshProUGUI>();
-        t.fontSize = size;
-        t.alignment = align;
-        t.color = Color.white;
-        return t;
-    }
-
-    private static Button NewButton(Transform parent, string name, string labelKey, ThemeRoleId role, Vector2 min, Vector2 max, Color color)
-    {
-        GameObject go = NewUI(name, parent);
-        Stretch((RectTransform)go.transform, min, max);
-        Image img = go.AddComponent<Image>();
-        img.color = color;
-        Tag(go, role, ThemeTextKind.Button, null);
-        Button btn = go.AddComponent<Button>();
-        btn.targetGraphic = img;
-
-        TMP_Text t = NewText(go.transform, "Label", 22, TextAlignmentOptions.Center, Vector2.zero, Vector2.one);
-        t.text = UiText.Get(labelKey);
-        Tag(t.gameObject, role, ThemeTextKind.Button, labelKey);
-        return btn;
     }
 }

@@ -70,13 +70,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4310a94e0a8291a4380d458bff90205e, type: 2}
   - {fileID: 11400000, guid: f163b89b65df0ff4bb129a518b6ee741, type: 2}
   - {fileID: 11400000, guid: 1c15365f5ee847309cf3bf46489df055, type: 2}
-  - {fileID: 11400000, guid: 64dd5072307794d4db6d7042353661ca, type: 2}
   - {fileID: 11400000, guid: 2d7c9c249f77acc439c7ffd23bdffa5e, type: 2}
-  - {fileID: 11400000, guid: 2b852508ea777bc41a28f9dc645538b0, type: 2}
   - {fileID: 11400000, guid: 4d8e82e5d30485748834bd8ec3ea126c, type: 2}
-  - {fileID: 11400000, guid: 425102795edca4549a869be97bc38fa4, type: 2}
   - {fileID: 11400000, guid: 3c2b2e7640f956248bbdcd0a5072ae91, type: 2}
-  - {fileID: 11400000, guid: ec9c846f344b29e438d2c505f6a3048b, type: 2}
   - {fileID: 11400000, guid: 0a6982e0eb5e73c43884da142bd88222, type: 2}
   attributes:
   - {fileID: 11400000, guid: 856ba3bc57fff2b4489d6b7667d84fd0, type: 2}
@@ -918,6 +914,19 @@ MonoBehaviour:
         displayName: East Asia
       - id: north_europe
         displayName: Northern Europe
+      keyWords:
+        slots:
+        - place
+        - name
+        - document
+        words:
+        - home
+        - please
+        - papers
+        - yes
+        - no
+        - Temporal Customs
+        digits: 1
     scripts:
     - id: latin
       rightToLeft: 0
@@ -1020,5 +1029,8 @@ MonoBehaviour:
       letterInterval: 0.04
       letterSeconds: 0.12
       scrambleSteps: 2
-      rowStagger: 0.15
     fallbackGlyphs: olmnupqrystvwxazbcdfeghjik
+  agency:
+    name: TEMPORAL CUSTOMS
+    programme: Debt Relief Departures
+    firstDate: 14 Mar 2150

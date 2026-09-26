@@ -13,10 +13,10 @@ using UnityEngine;
 /// in one-shot history-rule triggers), trigger, effect and ending fields, the
 /// culture themes and UI string tables (contrast included), and the
 /// translation (tongues, tables, every place's tongue, the translators, the
-/// notice).
+/// notice), and the agency block (its name, programme line and first date).
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
-public static class ContentLibraryValidator
+public static partial class ContentLibraryValidator
 {
     /// <summary>Runs validation across all ContentLibrarySO assets in the project.</summary>
     [MenuItem("Tools/TimeDesk/Validate Content Library")]
@@ -121,6 +121,9 @@ public static class ContentLibraryValidator
 
         // --- Translation (piece 9) ---
         issues += CheckTranslation(lib);
+
+        // --- The agency block (redesign phase 2) ---
+        issues += CheckAgency(lib);
 
         return issues;
     }
@@ -727,11 +730,12 @@ public static class ContentLibraryValidator
     }
 
     /// <summary>
-    /// Translation (piece 9): the rules Generate World also checks, over the
-    /// library's settings and every place's tongue (TranslationSettings.Problems),
-    /// both translators of every pack among the upgrades, and the notice
-    /// trigger when foreign text starts after day 1. A library with no
-    /// translation data is one error (every tongue would read as English).
+    /// Translation (piece 9, speech only): the rules Generate World also
+    /// checks, over the library's settings and every place's tongue
+    /// (TranslationSettings.Problems), every pack's Speech translator among
+    /// the upgrades, and the notice trigger when foreign speech starts after
+    /// day 1. A library with no translation data is one error (every tongue
+    /// would read as English).
     /// </summary>
     private static int CheckTranslation(ContentLibrarySO lib)
     {
@@ -753,12 +757,11 @@ public static class ContentLibraryValidator
             Error(problem);
 
         foreach (TranslatorPack pack in (translation.rules.packs ?? new List<TranslatorPack>()).Where(p => p != null && !string.IsNullOrWhiteSpace(p.id)))
-            foreach (TranslatorKind kind in new[] { TranslatorKind.Written, TranslatorKind.Spoken })
-                if (lib.GetUpgradeById(Translation.UpgradeId(pack.id, kind)) == null)
-                    Error($"pack '{pack.id}' has no '{Translation.UpgradeId(pack.id, kind)}' upgrade");
+            if (lib.GetUpgradeById(Translation.UpgradeId(pack.id)) == null)
+                Error($"pack '{pack.id}' has no '{Translation.UpgradeId(pack.id)}' upgrade");
 
         if (translation.rules.fromDay > 1 && !lib.Triggers.Any(t => t != null && t.id == WorldContentGenerator.TranslationNoticeId))
-            Error($"foreign text starts on day {translation.rules.fromDay} but no '{WorldContentGenerator.TranslationNoticeId}' trigger announces it");
+            Error($"foreign speech starts on day {translation.rules.fromDay} but no '{WorldContentGenerator.TranslationNoticeId}' trigger announces it");
         return issues;
     }
 

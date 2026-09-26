@@ -3,20 +3,19 @@
 /// the PC or at the desk, becomes a ComparePick here: its key (PickKeys, so
 /// the same value is one pick on every surface), the bar's label, the text the
 /// bar shows (the canonical value, or piece 9's placeholder for an
-/// untranslated statement) and the canonical evidence. Its labels come from
-/// UiText and its shown text from CaseTranslation, so it lives with them;
-/// the keys and the evidence are the tested PickKeys and CompareEvidence.
+/// untranslated answer) and the canonical evidence. Its labels come from
+/// UiText and an answer's shown text from CaseTranslation, so it lives with
+/// them; the keys and the evidence are the tested PickKeys and CompareEvidence.
 /// </summary>
 public static class EvidencePicks
 {
-    /// <summary>A document's field row (the scanned page's or the desk paper's): "Travel Passport · Coin of Issue"; an untranslated value shows the placeholder.</summary>
-    public static ComparePick ForField(int document, DocumentRow row, string documentName, CaseTranslation tr)
+    /// <summary>A document's field row (the scanned page's or the desk paper's): "Travel Passport · Coin of Issue", its value as it is (papers are always English).</summary>
+    public static ComparePick ForField(int document, DocumentRow row, string documentName)
     {
-        tr = tr ?? CaseTranslation.None;
         DocumentField f = row.Field;
         return new ComparePick(PickKeys.Field(document, row.Index),
             UiText.Format("document.compareLabel", documentName, f.label),
-            tr.Shown(Translation.InTongue(f.category), tr.PapersTranslated, f.value),
+            f.value,
             CompareEvidence.FromDocumentField(f));
     }
 
@@ -26,7 +25,7 @@ public static class EvidencePicks
         tr = tr ?? CaseTranslation.None;
         return new ComparePick(PickKeys.Line(lineIndex),
             UiText.Format("compare.travellerLabel", UiText.Category(line.Category)),
-            tr.Shown(Translation.InTongue(line.Speaker), tr.SpeechTranslated, line.Value),
+            tr.Shown(line),
             CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell));
     }
 
@@ -44,7 +43,8 @@ public static class EvidencePicks
             fact.Value,
             fact.ToEvidence());
 
-    /// <summary>A row of <paramref name="owner"/>'s Citizen Record (its label from the app), a truth source for the name and the date of birth of that person only.</summary>
-    public static ComparePick ForRecord(ClueCategory category, string label, string value, string owner) =>
-        new ComparePick(PickKeys.Record(category), label, value, CompareEvidence.ForRecordField(category, value, owner));
+    /// <summary>An evidence row of a Citizen Record: "Records · Born", keyed by the record (PickKeys.Record), a truth source for that person only (DiscrepancyLog.Prove).</summary>
+    public static ComparePick ForRecord(CitizenRecord record, RecordRow row) =>
+        new ComparePick(PickKeys.Record(row.Category, record.Id), UiText.Format("records.compareLabel", row.Label), row.Value,
+                        CompareEvidence.ForRecordField(row.Category, row.Value, record.FullName));
 }

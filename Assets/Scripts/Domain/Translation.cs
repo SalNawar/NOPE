@@ -2,30 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-/// <summary>Which translator a text needs: Papers for documents (written), Speech for dialogue (spoken).</summary>
-public enum TranslatorKind
-{
-    /// <summary>Scanned papers.</summary>
-    Written,
-
-    /// <summary>The traveller's speech.</summary>
-    Spoken
-}
-
 /// <summary>
-/// Translation's fixed rules (piece 9): the translator upgrade ids, which
-/// document fields and speakers use the claimed place's tongue, and the
-/// content problems. Evidence never reads any of this: comparisons stay on
-/// the canonical values.
+/// Translation's fixed rules (piece 9; speech only since the redesign's phase
+/// 1: every document is filled in English, so only a traveller's speech is
+/// ever in a tongue): the Speech translator's upgrade id, which speakers use
+/// the claimed place's tongue, and the content problems. Evidence never reads
+/// any of this: comparisons stay on the canonical values.
 /// </summary>
 public static class Translation
 {
-    /// <summary>The upgrade id of a pack's translator, "tr_{pack}_written" or "tr_{pack}_spoken" (one grammar: the generator writes it, TranslationDay reads it).</summary>
-    public static string UpgradeId(string packId, TranslatorKind kind) =>
-        $"tr_{packId}_{(kind == TranslatorKind.Written ? "written" : "spoken")}";
-
-    /// <summary>True for a document field printed in the place's tongue: every place fact; never the Name or the BirthDate (the agency's own transliteration).</summary>
-    public static bool InTongue(ClueCategory category) => category != ClueCategory.Name && category != ClueCategory.BirthDate;
+    /// <summary>
+    /// The upgrade id of a pack's Speech translator, "tr_{pack}_spoken" (one
+    /// grammar: the generator writes it, TranslationDay reads it). Piece 9's
+    /// Papers translators ("tr_{pack}_written") are no longer made; an old save
+    /// that owns one keeps a harmless id.
+    /// </summary>
+    public static string UpgradeId(string packId) => $"tr_{packId}_spoken";
 
     /// <summary>True for a line spoken in the place's tongue: the traveller's (the desk speaks English).</summary>
     public static bool InTongue(DialogSpeaker speaker) => speaker == DialogSpeaker.Traveller;
@@ -36,9 +28,9 @@ public static class Translation
     /// blank or duplicate tongue id; a blank display name; a script not in
     /// <paramref name="scriptIds"/>; a pack that is neither blank nor a pack
     /// id; a foreign tongue without glyphs; a blank or duplicate pack id or
-    /// name; a pack no tongue uses (its upgrades would buy nothing); a place
+    /// name; a pack no tongue uses (its translator would buy nothing); a place
     /// (<paramref name="placeTongues"/>: place id and tongue id) whose tongue
-    /// is blank or unknown.
+    /// is blank or unknown; the key-word rule's problems (KeyWords.Problems).
     /// </summary>
     public static List<string> Problems(TranslationRules rules, IEnumerable<string> scriptIds,
                                         IEnumerable<KeyValuePair<string, string>> placeTongues)
@@ -107,6 +99,7 @@ public static class Translation
                 problems.Add($"Place '{place.Key}' names the tongue '{place.Value}', which translation.tongues does not list.");
         }
 
+        problems.AddRange(KeyWords.Problems(rules.keyWords));
         return problems;
     }
 }
@@ -114,9 +107,9 @@ public static class Translation
 /// <summary>
 /// Today's translation (piece 9 R18), fixed at the start of the office day: a
 /// tongue is foreign when it is known, not native and the day is at least
-/// fromDay; it is translated for a kind when it is foreign and the day-start
-/// snapshot owns its pack's translator of that kind. Copies what it reads, so
-/// later changes to the rules change nothing.
+/// fromDay; it is translated when it is foreign and the day-start snapshot
+/// owns its pack's Speech translator. Copies what it reads, so later changes
+/// to the rules change nothing.
 /// </summary>
 public sealed class TranslationDay
 {
@@ -156,7 +149,7 @@ public sealed class TranslationDay
         return t != null && !t.Native && _dayStart != null && _dayStart.Day >= _fromDay;
     }
 
-    /// <summary>True when the tongue is foreign today and the day-start snapshot owns its pack's translator of this kind.</summary>
-    public bool Translated(string tongueId, TranslatorKind kind) =>
-        Foreign(tongueId) && _dayStart.HasUpgrade(Translation.UpgradeId(TongueOf(tongueId).pack, kind));
+    /// <summary>True when the tongue is foreign today and the day-start snapshot owns its pack's Speech translator.</summary>
+    public bool Translated(string tongueId) =>
+        Foreign(tongueId) && _dayStart.HasUpgrade(Translation.UpgradeId(TongueOf(tongueId).pack));
 }

@@ -12,16 +12,15 @@ using UnityEngine.EventSystems;
 /// and, on a photo document, the traveller's photo. With a row template (piece
 /// 10) the paper shows its document's whole face, like its scanned copy: every
 /// field row in page order (DocumentRows.Ordered), a label over its value,
-/// laid out by PaperFace, the values written through DocumentRowView in the
-/// traveller's translation on the document's RevealClock (shared with the
-/// scanned copy). Without one (a scene built before piece 10) it shows the
+/// laid out by PaperFace, written through DocumentRowView (always in English:
+/// a paper never flips). Without one (a scene built before piece 10) it shows the
 /// title and the photo only. A click raises Clicked with the button and the
 /// row under the pointer (PaperFace.RowAt; DeskController routes it through
 /// PaperClicks). While examined (held in the hand; PaperExaminer owns the
 /// sheet's pose) the paper is evenly lit (its unlit examine material, the
 /// photo in the examine tint) and the row under the pointer tints; a picked
-/// row lights up (RowHighlight). Slides are linear moves and flips advance in
-/// Update, only while either runs.
+/// row lights up (RowHighlight). Slides are linear moves in Update, only while
+/// one runs.
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
@@ -58,8 +57,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         public DocumentRow Row;
         public TMP_Text Label;
         public TMP_Text Value;
-        public TMP_FontAsset OwnFont;
-        public Material OwnMaterial;
         public Renderer Highlight;
         public bool Picked;
         public Color PickColour;
@@ -87,9 +84,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
 
     private readonly List<RowView> _rows = new List<RowView>();
-    private readonly List<TextFlip> _flips = new List<TextFlip>();
-    private CaseTranslation _translation = CaseTranslation.None;
-    private RevealClock _clock = new RevealClock();
     private DeskConfigSO _config;
     private FaceLayout _face;
     private Material _ownPaperMaterial;
@@ -120,17 +114,9 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>Raised on a click while the paper takes input: the paper, true for a right click, and the row under the pointer while held (-1: none, or not held).</summary>
     public event Action<DeskDocument, bool, int> Clicked;
 
-    /// <summary>Only while sliding or flipping: moves along the slide (its done callback on landing) and advances the values' flips on the reveal's clock.</summary>
+    /// <summary>Only while sliding: moves along the slide (its done callback on landing).</summary>
     private void Update()
     {
-        if (_flips.Count > 0)
-        {
-            float elapsed = _clock.Elapsed(Time.unscaledTime);
-            for (int i = _flips.Count - 1; i >= 0; i--)
-                if (!_flips[i].Tick(elapsed))
-                    _flips.RemoveAt(i);
-        }
-
         if (!IsSliding)
             return;
 
@@ -149,20 +135,16 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     /// <summary>
     /// Shows a document: its index and canonical title and, with a row
     /// template, every field row laid out by PaperFace (at most its capacity)
-    /// with the title and the photo moved to the face's places, the values in
-    /// the traveller's translation on the document's reveal clock.
+    /// with the title and the photo moved to the face's places.
     /// </summary>
-    public void Bind(int index, CaseDocument doc, CaseTranslation translation, RevealClock clock, DeskConfigSO config)
+    public void Bind(int index, CaseDocument doc, DeskConfigSO config)
     {
         Index = index;
-        _translation = translation ?? CaseTranslation.None;
-        _clock = clock ?? new RevealClock();
         _config = config;
         if (title != null)
             title.text = doc != null ? doc.name : string.Empty;
 
         _rows.Clear();
-        _flips.Clear();
         _face = null;
         if (rowTemplate == null || config == null || doc == null)
             return;
@@ -191,8 +173,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                 Label = row.transform.Find("Label").GetComponent<TMP_Text>(),
                 Value = row.transform.Find("Value").GetComponent<TMP_Text>()
             };
-            view.OwnFont = view.Value.font;
-            view.OwnMaterial = view.Value.fontSharedMaterial;
+            DocumentRowView.Write(view.Label, view.Value, view.Row);
             Place(view.Label.rectTransform, face.Rows[i].Label, height);
             Place(view.Value.rectTransform, face.Rows[i].Value, height);
             Transform highlight = row.transform.Find("Highlight");
@@ -206,8 +187,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             _rows.Add(view);
             ApplyRowTint(i);
         }
-
-        Refresh();
     }
 
     /// <summary>The document row shown as face row <paramref name="row"/> (callers pass a row from Clicked).</summary>
@@ -308,20 +287,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         view.Highlight.GetPropertyBlock(_block);
         _block.SetColor(BaseColorId, colour);
         view.Highlight.SetPropertyBlock(_block);
-    }
-
-    /// <summary>Rewrites the values from the document's reveal clock (a sighting started it, or a row click finished it); flips that still run advance in Update.</summary>
-    public void Refresh()
-    {
-        _flips.Clear();
-        float now = Time.unscaledTime;
-        foreach (RowView view in _rows)
-        {
-            // Each write starts from the value's own font, so a flip remembers it (not the script's).
-            view.Value.font = view.OwnFont;
-            view.Value.fontSharedMaterial = view.OwnMaterial;
-            DocumentRowView.Write(view.Label, view.Value, view.Row, _translation, _clock, now, _flips);
-        }
     }
 
     /// <summary>Shows the traveller's photo in the frame (tinted into the room's light); a null look hides the frame (a document without a photo).</summary>

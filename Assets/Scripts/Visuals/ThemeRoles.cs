@@ -123,13 +123,13 @@ public enum ThemeRoleId
     /// <summary>Diegetic: the document's photo box and its label.</summary>
     DiegeticPhoto,
 
-    /// <summary>Diegetic: document, record and transcript rows and their texts, the record's origin.</summary>
+    /// <summary>Diegetic: document, record and transcript rows and their texts.</summary>
     DiegeticRow,
 
     /// <summary>Diegetic: record row labels.</summary>
     DiegeticLabel,
 
-    /// <summary>Diegetic: the record's clerk note.</summary>
+    /// <summary>Diegetic: a clerk's note ink (no builder graphic carries it since the Records rows went generic in redesign phase 2; kept, as roles are serialized and the themes colour it).</summary>
     DiegeticNote,
 
     /// <summary>Diegetic: the document window's dark scanner backing and its page footer.</summary>

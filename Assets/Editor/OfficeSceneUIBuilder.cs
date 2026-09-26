@@ -254,7 +254,7 @@ public static partial class OfficeSceneUIBuilder
 
         // Directives live in a sticky-note window (closed by default) opened
         // from a desktop icon, instead of a note that is always open.
-        OSWindowChrome directivesWindow = BuildOSWindow(windowLayer, "DirectivesWindow", "window.directives", null,
+        DesktopWindow directivesWindow = BuildOSWindow(windowLayer, "DirectivesWindow", "window.directives", null,
             UiText.Get("directives.none"), new Vector2(430f, 360f), ThemeRoleId.StickyNote);
         Image directivesImg = directivesWindow.GetComponent<Image>();
         if (directivesImg != null)
@@ -266,45 +266,15 @@ public static partial class OfficeSceneUIBuilder
         // documented for the current case (drives deny gating). Its object names
         // keep "Scanner"; the desk device is the scanner.
         DestroyChildIfPresent(windowLayer, "IconScannerWindow");
-        OSWindowChrome scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "window.scanner", null,
+        DesktopWindow scannerWindow = BuildOSWindow(windowLayer, "IconScannerWindow", "window.scanner", null,
             UiText.Get("scanner.idle"), new Vector2(560f, 420f));
         TMP_Text scannerText = scannerWindow.transform.Find("Body").GetComponent<TMP_Text>();
         BuildDesktopIcon(bookShelf, "IconScanner", "icon.scanner", scannerWindow, "");
 
         // Citizen Records app: the agency's master record of every (fake)
-        // human. Registry content is injected per day by GameManager.
-        DestroyChildIfPresent(windowLayer, "RecordsWindow");
-        OSWindowChrome recordsChrome = BuildOSWindow(windowLayer, "RecordsWindow", "records.title", null,
-            UiText.Get("records.idle"), new Vector2(520f, 430f));
-        Transform recWin = recordsChrome.transform;
-        TMP_Text recStatus = recWin.Find("Body").GetComponent<TMP_Text>();
-        var recStatusRt = (RectTransform)recStatus.transform;
-        recStatusRt.anchorMin = new Vector2(0.05f, 0.6f);
-        recStatusRt.anchorMax = new Vector2(0.95f, 0.7f);
-        TMP_InputField recSearchInput = BuildInputField(recWin, "SearchInput", "records.placeholder", new Vector2(0.05f, 0.74f), new Vector2(0.68f, 0.86f));
-        Button recSearchButton = MakeButton(recWin, "SearchButton", null, new Vector2(0.71f, 0.74f), new Vector2(0.95f, 0.86f), new Color(0.15f, 0.3f, 0.5f, 1f),
-                                            ThemeRoleId.SearchButton, "records.search");
-        (GameObject recNameRow, TMP_Text recNameValue) = BuildRecordRow(recWin, "NameRow", "Name", new Vector2(0.05f, 0.46f), new Vector2(0.95f, 0.56f));
-        (GameObject recBornRow, TMP_Text recBornValue) = BuildRecordRow(recWin, "BornRow", "Born", new Vector2(0.05f, 0.34f), new Vector2(0.95f, 0.44f));
-        TMP_Text recOrigin = Text(recWin, "OriginText", "", 17, TextAlignmentOptions.Left, new Vector2(0.06f, 0.24f), new Vector2(0.95f, 0.32f), Ink, ThemeRoleId.DiegeticRow);
-        TMP_Text recNote = Text(recWin, "NoteText", "", 15, TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.05f), new Vector2(0.95f, 0.22f), new Color(0.35f, 0.3f, 0.2f, 1f),
-                                ThemeRoleId.DiegeticNote, style: FontStyles.Italic);
-        CitizenRecordsWindowController records = recWin.GetComponent<CitizenRecordsWindowController>();
-        if (records == null)
-            records = recWin.gameObject.AddComponent<CitizenRecordsWindowController>();
-        var soRecords = new SerializedObject(records);
-        SetRef(soRecords, "searchInput", recSearchInput);
-        SetRef(soRecords, "searchButton", recSearchButton);
-        SetRef(soRecords, "statusText", recStatus);
-        SetRef(soRecords, "nameRow", recNameRow);
-        SetRef(soRecords, "nameValueText", recNameValue);
-        SetRef(soRecords, "bornRow", recBornRow);
-        SetRef(soRecords, "bornValueText", recBornValue);
-        SetRef(soRecords, "originText", recOrigin);
-        SetRef(soRecords, "noteText", recNote);
-        SetRef(soRecords, "compareController", compare);
-        soRecords.ApplyModifiedProperties();
-        BuildDesktopIcon(bookShelf, "IconRecords", "icon.records", recordsChrome, "");
+        // human, its rows listed group by group (OfficeSceneUIBuilder.Records).
+        // Registry content is injected per day by GameManager.
+        CitizenRecordsWindowController records = BuildRecordsWindow(windowLayer, bookShelf, compare);
 
         // Case Notes: Interview — the current traveller's transcript. Rebuilt
         // fresh each run (like Records), so its row template always has the
@@ -325,18 +295,9 @@ public static partial class OfficeSceneUIBuilder
         soTranscript.FindProperty("entriesPerPage").intValue = TranscriptRowsPerPage;
         soTranscript.ApplyModifiedProperties();
         ApplyTranscriptRowLayout(transcriptShell.rowTemplate);
-        OSWindowChrome transcriptChrome = transcriptWin.GetComponent<OSWindowChrome>();
+        DesktopWindow transcriptChrome = transcriptWin.GetComponent<DesktopWindow>();
         transcriptWin.gameObject.SetActive(false);
         BuildDesktopIcon(bookShelf, "IconClueLog", "icon.clueLog", transcriptChrome, "");
-
-        // Compare bar (XP tooltip-yellow, above the shelf). Auto-sizing keeps
-        // long verdict lines inside the bar.
-        Transform compareBar = Panel(investRoot, "CompareBar", new Vector2(0.1f, 0.27f), new Vector2(0.9f, 0.34f), Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
-        TMP_Text compareText = Text(compareBar, "CompareText", "", 22, TextAlignmentOptions.Center, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f), Ink, ThemeRoleId.CompareBar);
-        compareText.enableAutoSizing = true;
-        compareText.fontSizeMin = 11f;
-        compareText.fontSizeMax = 22f;
-        compareBar.gameObject.SetActive(false);
 
         // Accept / Deny (above the taskbar), each with a fixed glyph so a culture's colours never carry the meaning alone (piece 6 R8)
         Button acceptButton = MakeButton(investRoot, "AcceptButton", null, new Vector2(0.3f, 0.06f), new Vector2(0.49f, 0.15f), new Color(0.2f, 0.5f, 0.24f, 1f),
@@ -349,6 +310,10 @@ public static partial class OfficeSceneUIBuilder
         // Window templates (disabled, cloned at runtime)
         DocumentWindowController docTemplate = BuildDocumentWindow(windowLayer);
         ReferenceBookWindowController bookTemplate = BuildBookWindow(windowLayer);
+
+        // The compare dock above the taskbar (the PC redesign DK9): the window
+        // layer moves over the claim, the icons and Accept/Deny, the dock over it.
+        Transform compareBar = BuildCompareDock(investRoot, windowLayer, compare, out TMP_Text compareText);
 
         investRoot.gameObject.SetActive(false);
 
@@ -381,6 +346,9 @@ public static partial class OfficeSceneUIBuilder
         // windows are launched by the investigation icon grid), plus a Start menu
         // and the taskbar's way back to the office.
         BuildDesktopShell(canvas, bookShelf, windowLayer, library, officeView, monitorScreen);
+
+        // The window stack, the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
+        BuildWindowManager(canvas, investRoot, officeView);
 
         // Cursor + hover outline settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();
@@ -489,7 +457,7 @@ public static partial class OfficeSceneUIBuilder
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
         AssetDatabase.SaveAssets();
-        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (PC bar + office strip), Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
+        Debug.Log($"[TimeDesk] {GameplayScenePath} built, wired and saved (every UI graphic theme-tagged, the PC frame and the desktop's clone on the office PC with screen power, the desk with papers (their whole face, the passport photo; examined in the hand), scanner and reacting props, the layered traveller + wheel + speech bubble (answers pickable), the office case HUD and the stamp tray, the office's input rules, the binder and its scene contract, HUD, citation and verdict line over the office, briefing/results, claim, document (passport photo) + book windows, interview transcript, compare (the PC dock + office strip), the window manager and the taskbar's window buttons, Accept/Deny, GameManager, DaySystem). It loads on {ArtScenePath}.");
     }
 
     // -----------------------------
@@ -600,13 +568,13 @@ public static partial class OfficeSceneUIBuilder
     private static WindowShell BuildWindowShell(Transform win, string titleKey, string titleSample, ThemeRoleId frameRole, ThemeRoleId rowRole, bool rowLabelFits)
     {
         // XP title bar (drag handle) with gloss highlight + window controls.
-        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -15f), new Vector2(0f, 30f), HeaderBar, ThemeRoleId.TitleBar);
+        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), TitleBarPos, TitleBarSize, HeaderBar, ThemeRoleId.TitleBar);
         Panel(header, "Gloss", new Vector2(0f, 0.5f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.14f), ThemeRoleId.TitleGloss);
-        DraggableWindow drag = GetOrAdd<DraggableWindow>(header.gameObject);
+        WindowDrag drag = GetOrAdd<WindowDrag>(header.gameObject);
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "windowRoot", (RectTransform)win);
         soDrag.ApplyModifiedProperties();
-        TMP_Text title = Text(header, "TitleText", titleSample, 15, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.76f, 1f), Color.white,
+        TMP_Text title = Text(header, "TitleText", titleSample, TitleFontSize, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.76f, 1f), Color.white,
                               ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, titleKey != null);
         BuildWinControls(win, header);
 
@@ -1153,7 +1121,7 @@ public static partial class OfficeSceneUIBuilder
 
     private static void BuildTaskbar(Transform root, out TMP_Text dayText, out TMP_Text moneyText, out TMP_Text stabilityText, out TMP_Text clockText)
     {
-        Transform bar = Panel(root, "Taskbar", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, 18f), new Vector2(0f, 36f), XpBlue, ThemeRoleId.Taskbar);
+        Transform bar = Panel(root, "Taskbar", new Vector2(0f, 0f), new Vector2(1f, 0f), new Vector2(0f, TaskbarHeight / 2f), new Vector2(0f, TaskbarHeight), XpBlue, ThemeRoleId.Taskbar);
         Panel(bar, "TaskbarGloss", new Vector2(0f, 0.72f), new Vector2(1f, 1f), Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.18f), ThemeRoleId.TaskbarGloss);
 
         Transform start = Panel(bar, "StartButton", new Vector2(0f, 0f), new Vector2(0.12f, 1f), Vector2.zero, Vector2.zero, XpGreen, ThemeRoleId.StartButton);
@@ -1178,11 +1146,11 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Builds WORKING min/max/close buttons on a window header and wires an
-    /// OSWindowChrome on the window root. Shared by every window type so the
+    /// DesktopWindow on the window root. Shared by every window type so the
     /// chrome behaves identically everywhere. Destroys older decorative
     /// controls (pre-chrome builds used plain panels) before rebuilding.
     /// </summary>
-    private static OSWindowChrome BuildWinControls(Transform win, Transform header)
+    private static DesktopWindow BuildWinControls(Transform win, Transform header)
     {
         DestroyChildIfPresent(header, "MinBtn");
         DestroyChildIfPresent(header, "MaxBtn");
@@ -1192,9 +1160,9 @@ public static partial class OfficeSceneUIBuilder
         Button maxB = MakeButton(header, "MaxBtn", null, new Vector2(0.855f, 0.16f), new Vector2(0.915f, 0.86f), null, ThemeRoleId.Button, "window.maximize");
         Button closeB = MakeButton(header, "CloseBtn", null, new Vector2(0.925f, 0.16f), new Vector2(0.985f, 0.86f), XpRed, ThemeRoleId.CloseButton, "window.close");
 
-        OSWindowChrome chrome = win.GetComponent<OSWindowChrome>();
+        DesktopWindow chrome = win.GetComponent<DesktopWindow>();
         if (chrome == null)
-            chrome = win.gameObject.AddComponent<OSWindowChrome>();
+            chrome = win.gameObject.AddComponent<DesktopWindow>();
         var so = new SerializedObject(chrome);
         SetRef(so, "window", (RectTransform)win);
         SetRef(so, "minimizeButton", minB);
@@ -1447,17 +1415,17 @@ public static partial class OfficeSceneUIBuilder
             if (library != null && !string.IsNullOrEmpty(a.upgrade) && library.GetUpgradeById(a.upgrade) == null)
                 Debug.LogError($"[TimeDesk] Desktop icon '{a.name}' requires unknown upgrade '{a.upgrade}' (not in the content library's upgrades); it could never unlock.");
 
-            OSWindowChrome w = BuildOSWindow(windowLayer, a.name + "Window", a.titleKey, a.bodyKey, null);
+            DesktopWindow w = BuildOSWindow(windowLayer, a.name + "Window", a.titleKey, a.bodyKey, null);
             BuildDesktopIcon(iconGrid, a.name, a.labelKey, w, a.upgrade);
         }
 
-        OSWindowChrome settings = BuildSettingsWindow(windowLayer);
+        DesktopWindow settings = BuildSettingsWindow(windowLayer);
 
         // Rebuilt from scratch each run: the entries need fixed LayoutElement
         // heights or the vertical layout collapses them on top of each other
         // (three 46-px entries, 4 px apart, 6 px padding: 158 px).
         DestroyChildIfPresent(root, "StartMenu");
-        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.2f, 0f), new Vector2(0f, 119f), new Vector2(0f, 158f), new Color(0.1f, 0.12f, 0.18f, 0.97f), ThemeRoleId.StartMenu);
+        Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.2f, 0f), new Vector2(0f, StartMenuCentre(158f)), new Vector2(0f, 158f), new Color(0.1f, 0.12f, 0.18f, 0.97f), ThemeRoleId.StartMenu);
         AddVLayout(startMenu, 4f);
         Button settingsEntry = MakeButton(startMenu, "SettingsEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "startmenu.settings");
         SetLayoutHeight(settingsEntry, 46f);
@@ -1505,20 +1473,20 @@ public static partial class OfficeSceneUIBuilder
     /// and min/max/close chrome; its body is a keyed static text
     /// (<paramref name="bodyKey"/>) or a sample the controller rewrites.
     /// </summary>
-    private static OSWindowChrome BuildOSWindow(Transform layer, string name, string titleKey, string bodyKey, string bodySample, Vector2? size = null,
+    private static DesktopWindow BuildOSWindow(Transform layer, string name, string titleKey, string bodyKey, string bodySample, Vector2? size = null,
                                                 ThemeRoleId bodyRole = ThemeRoleId.WindowBody)
     {
         Transform win = Panel(layer, name, Center, Center, Vector2.zero, size ?? new Vector2(580f, 400f), Paper, bodyRole);
 
-        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(0f, -15f), new Vector2(0f, 30f), HeaderBar, ThemeRoleId.TitleBar);
-        DraggableWindow drag = header.GetComponent<DraggableWindow>();
+        Transform header = Panel(win, "Header", new Vector2(0f, 1f), new Vector2(1f, 1f), TitleBarPos, TitleBarSize, HeaderBar, ThemeRoleId.TitleBar);
+        WindowDrag drag = header.GetComponent<WindowDrag>();
         if (drag == null)
-            drag = header.gameObject.AddComponent<DraggableWindow>();
+            drag = header.gameObject.AddComponent<WindowDrag>();
         var soDrag = new SerializedObject(drag);
         SetRef(soDrag, "windowRoot", (RectTransform)win);
         soDrag.ApplyModifiedProperties();
 
-        Text(header, "TitleText", null, 15, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.7f, 1f), Color.white,
+        Text(header, "TitleText", null, TitleFontSize, TextAlignmentOptions.Left, new Vector2(0.04f, 0f), new Vector2(0.7f, 1f), Color.white,
              ThemeRoleId.TitleBar, titleKey, FontStyles.Bold, ThemeTextKind.Heading, true);
 
         TMP_Text bodyText = Text(win, "Body", bodySample, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.08f), new Vector2(0.95f, 0.82f), Ink, bodyRole, bodyKey);
@@ -1527,7 +1495,7 @@ public static partial class OfficeSceneUIBuilder
         if (win.GetComponent<RectMask2D>() == null)
             win.gameObject.AddComponent<RectMask2D>(); // nothing bleeds outside the window
 
-        OSWindowChrome chrome = BuildWinControls(win, header);
+        DesktopWindow chrome = BuildWinControls(win, header);
 
         win.gameObject.SetActive(false); // opened by its icon
         return chrome;
@@ -1541,9 +1509,9 @@ public static partial class OfficeSceneUIBuilder
     /// history, and that reduced motion shows translations at once. Every
     /// row's anchors are re-applied on each build.
     /// </summary>
-    private static OSWindowChrome BuildSettingsWindow(Transform windowLayer)
+    private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
     {
-        OSWindowChrome chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(580f, 520f));
+        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(580f, 520f));
         Transform win = chrome.transform;
         SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.78f), new Vector2(0.95f, 0.87f));
         Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.64f), new Vector2(0.48f, 0.76f), null, ThemeRoleId.Button, "settings.followHistory");
@@ -1595,21 +1563,8 @@ public static partial class OfficeSceneUIBuilder
         return input;
     }
 
-    /// <summary>Builds a compare-clickable label/value record row; returns row + value text.</summary>
-    private static (GameObject row, TMP_Text value) BuildRecordRow(Transform parent, string name, string label, Vector2 aMin, Vector2 aMax)
-    {
-        DestroyChildIfPresent(parent, name);
-        Transform row = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.7f), ThemeRoleId.DiegeticRow);
-        Button btn = row.gameObject.AddComponent<Button>();
-        btn.targetGraphic = row.GetComponent<Image>();
-
-        Text(row, "Label", label, 17, TextAlignmentOptions.Left, new Vector2(0.03f, 0f), new Vector2(0.3f, 1f), new Color(0.35f, 0.32f, 0.25f, 1f), ThemeRoleId.DiegeticLabel);
-        TMP_Text value = Text(row, "Value", "", 17, TextAlignmentOptions.Left, new Vector2(0.33f, 0f), new Vector2(0.97f, 1f), Ink, ThemeRoleId.DiegeticRow);
-        return (row.gameObject, value);
-    }
-
     /// <summary>Builds a desktop icon button bound to a window (its label keyed), with optional unlock-gating.</summary>
-    private static void BuildDesktopIcon(Transform grid, string name, string labelKey, OSWindowChrome window, string upgradeId)
+    private static void BuildDesktopIcon(Transform grid, string name, string labelKey, DesktopWindow window, string upgradeId)
     {
         Button btn = MakeButton(grid, name, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.3f, 0.45f, 0.85f), ThemeRoleId.DesktopIcon, labelKey);
         Transform labelObject = btn.transform.Find("Label");
