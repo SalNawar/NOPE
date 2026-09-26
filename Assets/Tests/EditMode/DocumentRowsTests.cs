@@ -115,4 +115,52 @@ public class DocumentRowsTests
         Assert.AreEqual(4, DocumentRows.PageCount(new List<DocumentField> { F(ClueCategory.Name, "x", 3), F(ClueCategory.Name, "y", 0) }));
     }
 
+    /// <summary>
+    /// Phase 3: the displaced's three agency forms (DocTemplate_TC610/620/630,
+    /// traveller types 3.8-3.10) are one page each, and each row's index is
+    /// the field's place on the form: the index the forms engine lays out
+    /// (the PC spec's FormCell.field).
+    /// </summary>
+    [TestCase("TC-610", 6)]
+    [TestCase("TC-620", 5)]
+    [TestCase("TC-630", 5)]
+    public void TheDisplacedForms_OnePageEach_RowsInFormOrder_IndexIsTheFormsField(string form, int fields)
+    {
+        List<DocumentField> tc = DisplacedForm(form);
+        IReadOnlyList<DocumentRow> rows = DocumentRows.Ordered(tc);
+        Assert.AreEqual(1, DocumentRows.PageCount(tc));
+        Assert.AreEqual(fields, rows.Count);
+        for (int i = 0; i < rows.Count; i++)
+        {
+            Assert.AreEqual(i, rows[i].Index);
+            Assert.AreSame(tc[i], rows[i].Field);
+        }
+        CollectionAssert.AreEqual(Labels(rows), Labels(DocumentRows.OnPage(tc, 0)), "the desk paper and the scanned page show the same rows");
+    }
+
+    /// <summary>The fields of the displaced's forms, as their templates list them.</summary>
+    private static List<DocumentField> DisplacedForm(string form)
+    {
+        switch (form)
+        {
+            case "TC-610":
+                return new List<DocumentField>
+                {
+                    F(ClueCategory.Name, "Full Name"), F(ClueCategory.CitizenId, "Displacement No."), F(ClueCategory.BirthDate, "Date of Birth"),
+                    F(ClueCategory.Destination, "Origin"), F(ClueCategory.Incident, "Incident"), F(ClueCategory.Expiry, "Valid Until")
+                };
+            case "TC-620":
+                return new List<DocumentField>
+                {
+                    F(ClueCategory.Name, "Declarant"), F(ClueCategory.CitizenId, "Displacement No."), F(ClueCategory.Currency, "Coin of Home"),
+                    F(ClueCategory.Language, "Native Tongue"), F(ClueCategory.Technology, "Effects Carried")
+                };
+            default:
+                return new List<DocumentField>
+                {
+                    F(ClueCategory.Name, "Returnee"), F(ClueCategory.CitizenId, "Displacement No."), F(ClueCategory.Destination, "Return To"),
+                    F(ClueCategory.Incident, "Incident"), F(ClueCategory.DepartureDate, "Departure")
+                };
+        }
+    }
 }
