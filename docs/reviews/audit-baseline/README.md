@@ -103,6 +103,13 @@ Title, New Run with run seed 12345 (`RunConfig.fixedRunSeed`, set in memory), da
   - `profile_A.txt`, `profile_B.txt`: re-measured. The office views allocate 736 B per frame (phase 0's fix 7); no new allocation site; every load within 25% of the old baseline.
   - Unchanged: `cases.txt`, `validator.txt`, the three scene dumps (each rebuild equal), `contract.txt`, `play_warnings.txt`. Runs A and B were identical.
 
+- **The art clean-up and the character pilot** (`verify/art-cleanup`, with main at `0cecc4a` and art at `f7d9d49` merged in):
+  - `contract.txt`: the office scene contract on the new desk layout. HandOver's default moves to (0.050, 1.070, 0.450), behind the NEXT sign; NextSign, Intercom, ReadoutNext and Calculator report the art's moved props. Still 0 anchors, 20 fallbacks, 3 defaults, 0 missing.
+  - `data_hashes.txt`: `OfficeSceneContract.asset` (the HandOver and NextSign defaults).
+  - `scenes_summary.txt`: the art scene's file hash (the art clean-up); the art office stays byte-unchanged by the builders.
+  - `validator.txt`: 42 of 880 character keys have final art (the pilot's batch 1).
+  - Unchanged: `cases.txt`, `world_generate.txt`, the three scene dumps (each rebuild equal), the play transcript, the 12 saves and `play_warnings.txt`. The profiles were not re-measured (no runtime code changed).
+
 ## Baseline results (ff3a6e0)
 
 - **Tests:** compile 0 errors; offline EditMode 1067 passed, 0 failed.
