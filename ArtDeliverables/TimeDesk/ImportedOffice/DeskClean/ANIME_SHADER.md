@@ -24,7 +24,7 @@ The custom Unity shader is `NOPE/Desk Anime`, in `Assets/Art/Office/DeskClean/De
 | Subtle contour | .10, 0 paper | Mild shape definition |
 | Cast shadow strength | 1 normally; .25 CRT fascia | Avoid amplifying tiny vent shadows into a second striped graphic |
 
-Use `Tools > Office Art > Apply Desk Anime Shading` to restore these material presets. The geometry/layout revision uses `Apply Desk Anime Revision`. Both are editor-only authoring tools; no runtime object generation is added.
+Use `Tools > Office Art > Apply Desk Anime Shading` to restore these presets on the Rebuilt CRT's `CRT2_*` materials; the desk props' `Desk_*` finishes get their presets from the Debt Relief pass. `Apply Desk Anime Revision` was removed on 2026-09-26 (a rerun reverted the approved layout). Editor-only; no runtime object generation is added.
 
 The shader includes its own forward, shadow caster, depth and depth-normal passes with consistent alpha clipping and material buffers. It supports the project's realtime main light and additional local lights, fog, instancing and screen-space ambient occlusion. It is an opaque/cutout art shader, not a replacement for transparent glass, particles, UI, or a baked-lightmap workflow. Blender renders are source/shape checks; Unity Game view is the shading authority.
 
@@ -38,4 +38,4 @@ The shader includes its own forward, shadow caster, depth and depth-normal passe
 
 `revise_desktop.py` exports only the phone, mouse and paper trial. `author_desk_clean.py` also invokes it after a full rebuild so the old phone or disconnected cable is not restored. Editable source is `DeskClean.blend`; the 2D texture is `Assets/Art/Office/DeskClean/Textures/PaperDetail2D.png`.
 
-Current checks are in `anime_validation.json` and `runtime_validation.json`. Earlier capture 60 and the original completion report describe the previous PBR checkpoint, which the user subsequently rejected for the phone and insufficient anime shading. This pass is a new visual iteration, not a claim of exact ReStory parity or user acceptance.
+This pass's checks are in `anime_validation.json` and `runtime_validation.json` (historical: their tools were removed on 2026-09-26; the current checks are the Debt Relief validators). Earlier capture 60 and the original completion report describe the previous PBR checkpoint, which the user subsequently rejected for the phone and insufficient anime shading. This pass is a new visual iteration, not a claim of exact ReStory parity or user acceptance.

@@ -1,0 +1,143 @@
+{
+  "roles": [
+    "stone neutral",
+    "natural wood",
+    "plastic and paper",
+    "accent A",
+    "accent B",
+    "accent C",
+    "office pad option"
+  ],
+  "palettes": [
+    {
+      "number": 1,
+      "name": "Ink and Apricot",
+      "colors": [
+        "#DDD7C7",
+        "#76513A",
+        "#E7DDC8",
+        "#537F7A",
+        "#CB8D6D",
+        "#B69A62",
+        "#724B53"
+      ]
+    },
+    {
+      "number": 2,
+      "name": "Patina Rose",
+      "colors": [
+        "#B9B6A7",
+        "#8C6547",
+        "#ECE0C8",
+        "#467678",
+        "#B17975",
+        "#B8A363",
+        "#344D61"
+      ]
+    },
+    {
+      "number": 3,
+      "name": "Civic Blues",
+      "colors": [
+        "#CDC5B6",
+        "#825D40",
+        "#E4DCCA",
+        "#5979A0",
+        "#BA785D",
+        "#7F917C",
+        "#595964"
+      ]
+    },
+    {
+      "number": 4,
+      "name": "Paper Orchid",
+      "colors": [
+        "#CAC8BA",
+        "#79583D",
+        "#E8DFC9",
+        "#9283A3",
+        "#557F73",
+        "#BCA16F",
+        "#68504F"
+      ]
+    },
+    {
+      "number": 5,
+      "name": "Dusk Registry",
+      "colors": [
+        "#B9BFC0",
+        "#785646",
+        "#E0D6BE",
+        "#6A536C",
+        "#BF9065",
+        "#718F95",
+        "#6D754F"
+      ]
+    },
+    {
+      "number": 6,
+      "name": "Ochre and Petrol",
+      "colors": [
+        "#C6C3B5",
+        "#8C6345",
+        "#E1DAC6",
+        "#BD9A59",
+        "#467179",
+        "#9B6660",
+        "#3F4C5B"
+      ]
+    },
+    {
+      "number": 7,
+      "name": "Faded Riviera",
+      "colors": [
+        "#C5C0B3",
+        "#A27750",
+        "#E8DDC9",
+        "#88AAA1",
+        "#C78E7B",
+        "#58748A",
+        "#5C665C"
+      ]
+    },
+    {
+      "number": 8,
+      "name": "Chrome and Cherry",
+      "colors": [
+        "#C6CBC6",
+        "#705346",
+        "#DDD5C2",
+        "#965B5C",
+        "#6D929D",
+        "#B9A77A",
+        "#405253"
+      ]
+    },
+    {
+      "number": 9,
+      "name": "Moss Signal",
+      "colors": [
+        "#C5C1AD",
+        "#795B41",
+        "#E4D9C2",
+        "#84936C",
+        "#5B748B",
+        "#BB7B62",
+        "#685265"
+      ]
+    },
+    {
+      "number": 10,
+      "name": "Lilac Terminal",
+      "colors": [
+        "#BDC2C3",
+        "#866145",
+        "#E6DEC8",
+        "#A293B0",
+        "#CAAA65",
+        "#5C8B84",
+        "#574D5E"
+      ]
+    }
+  ]
+}

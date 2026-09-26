@@ -1,0 +1,142 @@
+{
+  "roles": [
+    "ink and deep shadow",
+    "main architecture",
+    "desk and furniture",
+    "Art Deco trim",
+    "CRT plastic and paper",
+    "screen and signal accent"
+  ],
+  "options": [
+    {
+      "n": 1,
+      "name": "Cobalt Ministry",
+      "mood": "Blue state architecture, ivory computers, cyan signal.",
+      "colors": [
+        "#151C31",
+        "#405F9B",
+        "#383F55",
+        "#BE9A59",
+        "#D7DBDE",
+        "#71D5D4"
+      ]
+    },
+    {
+      "n": 2,
+      "name": "Oxide Sunrise",
+      "mood": "Dusty terracotta halls, oxblood desks, cool mint screens.",
+      "colors": [
+        "#2F2329",
+        "#BA6653",
+        "#594044",
+        "#C7A268",
+        "#E5D6C1",
+        "#A4CEBD"
+      ]
+    },
+    {
+      "n": 3,
+      "name": "Jade Authority",
+      "mood": "Oxidised jade, smoked walnut, antique brass.",
+      "colors": [
+        "#162B2C",
+        "#36625C",
+        "#573D33",
+        "#C6A15B",
+        "#D8D6B8",
+        "#90C5B8"
+      ]
+    },
+    {
+      "n": 4,
+      "name": "Lilac Directorate",
+      "mood": "Faded mauve concrete, aubergine furniture, pale citron electronics.",
+      "colors": [
+        "#282334",
+        "#8F829C",
+        "#4A3B59",
+        "#B8A77C",
+        "#DDD8CF",
+        "#D9E59A"
+      ]
+    },
+    {
+      "n": 5,
+      "name": "Amber Mainframe",
+      "mood": "Honey ochre walls, espresso furniture, cool petrol accents.",
+      "colors": [
+        "#251F21",
+        "#B78548",
+        "#49352C",
+        "#52837B",
+        "#E3D6B9",
+        "#EBCB75"
+      ]
+    },
+    {
+      "n": 6,
+      "name": "Arctic Bureau",
+      "mood": "Cold blue-grey civic halls, dark steel desks, orange CRT.",
+      "colors": [
+        "#1B2A36",
+        "#8BA8B0",
+        "#3E5663",
+        "#BF8C63",
+        "#E2E4D8",
+        "#E9A061"
+      ]
+    },
+    {
+      "n": 7,
+      "name": "Oxblood Registry",
+      "mood": "Wine-red halls, charcoal furniture, pale gold and mint.",
+      "colors": [
+        "#261F28",
+        "#723F50",
+        "#39323A",
+        "#C5A26A",
+        "#E3D8C4",
+        "#98BFA8"
+      ]
+    },
+    {
+      "n": 8,
+      "name": "Concrete Peach",
+      "mood": "Peach civic concrete, slate machines, desaturated teal trim.",
+      "colors": [
+        "#292E35",
+        "#C69682",
+        "#4C5A63",
+        "#71968C",
+        "#E5DCCC",
+        "#D8B95A"
+      ]
+    },
+    {
+      "n": 9,
+      "name": "Sulfur State",
+      "mood": "Yellow-olive bureaucracy, blue-black cabinets, oxidised copper.",
+      "colors": [
+        "#232B28",
+        "#8B9061",
+        "#3C4C49",
+        "#B37650",
+        "#DAD7B8",
+        "#B9CF8B"
+      ]
+    },
+    {
+      "n": 10,
+      "name": "Midnight Metro",
+      "mood": "Deep indigo halls, blue steel desks, coral signals and chrome.",
+      "colors": [
+        "#161E30",
+        "#3C5277",
+        "#29384D",
+        "#A1B2B7",
+        "#DBDCD3",
+        "#E09A85"
+      ]
+    }
+  ]
+}

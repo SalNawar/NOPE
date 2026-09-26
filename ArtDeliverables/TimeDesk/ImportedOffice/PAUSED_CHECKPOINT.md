@@ -1,4 +1,5 @@
 > Superseded by the current desk-only rollback and CRT study. Do not run the old whole-office build. See RESTORY_STYLE_GUIDE.md and BlenderCRT/provenance.md.
+> 2026-09-26: Claude removed the tools this document names (see the list in CURRENT_STATE.md) and the art tools no longer write the leftover gameplay objects. Read **Rules for the art side** in CURRENT_STATE.md first.
 
 # Paused checkpoint — 2026-09-24
 
@@ -18,7 +19,7 @@ Paused at the user's request. Do not continue art iterations until asked.
 
 The builder and layout contain changes made after capture 41: shadow-bias/fill adjustments, ceiling bounce lights, lower banners and departures board, and the newly generated `lamp_painted.png` atlas. These latest edits have compiled, but the builder has **not** been rerun to apply them to the saved scene. Do not mistake the saved scene for the latest manifest output.
 
-Continue by running `Tools/Office Art/Build Imported Office` in Edit mode, then inspect the actual Game view before saving further changes. Check floor/shadow artifacts, lamp palette, banner suspension, portal supports and paper surface contact. Exercise CRT focus/back and NEXT. The result has not reached demonstrated ReStory visual parity.
+(Historical: that builder was removed on 2026-09-26.) Continue by running `Tools/Office Art/Build Imported Office` in Edit mode, then inspect the actual Game view before saving further changes. Check floor/shadow artifacts, lamp palette, banner suspension, portal supports and paper surface contact. Exercise CRT focus/back and NEXT. The result has not reached demonstrated ReStory visual parity.
 
 ## References and recovery
 

@@ -4,7 +4,7 @@
 
 - Style source: user-selected `ReStory_current_reference.png`; see `../RESTORY_STYLE_GUIDE.md`.
 - Mesh source: 80s Office pack `SM_Monitor.FBX`, used by `Computer.prefab`. Vendor files remain unchanged.
-- Editable Blender source: `CRT_StyleStudy.blend`, containing before and after collections plus the comparison camera and lights. Rebuild using `style_crt.py` with Blender 5.2.
+- Editable Blender source: `CRT_StyleStudy.blend`, containing before and after collections plus the comparison camera and lights. `style_crt.py`, which built it with Blender 5.2, was removed on 2026-09-26 (this ivory study was rejected). Keep the .blend: `rebuild_crt.py` loads it for its before/after comparison.
 - New export: `Assets/Art/Office/ImportedOffice/Models/CRT_Painted.fbx`.
 - Texture: `Assets/Art/Office/ImportedOffice/Textures/computer_ivory_painted.png`, copied unchanged from the built-in image-generation output `exec-64bc0115-2fe4-44ae-80ff-3a29d8ea4abe.png`.
 - Image-generation inputs: original `T_Computer_BaseColor.PNG` atlas (edit target) and the selected ReStory screenshot (style reference).

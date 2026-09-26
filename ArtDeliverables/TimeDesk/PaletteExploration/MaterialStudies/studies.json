@@ -1,0 +1,165 @@
+{
+  "rules": "GOAL: a believable soft-anime game environment, subtly art-directed. Palette is a STYLE GUIDE, NOT a command to recolour every material.\nReference: use the original game's office screenshot as composition/layout anchor, NOT its flat rendering. Same central circular time portal, the bank of tall windows and city beyond, mixed anonymous crowd silhouettes in hall, boards at both sides, foreground wooden desk, left CRT/keyboard, middle rotary phone and till, right banker's lamp and stationery. No changed furniture shapes or new architecture. No painted colour-block art.\nMATERIALS MUST READ:\n1. Glass wall/window panes are TRANSPARENT glazing, not opaque colour panels. See the city through them, overlaid by subtle broad pale reflections of the room, a few soft diagonal highlights, double-surface edge reflections and thin metal mullions. Fresnel reflections stronger at oblique edges, high transmission in central panes. Keep glass clean, lightly cool-neutral, never saturated cyan.\n2. Individual BACKGROUND BUILDINGS have DIFFERENT believable materials and colours simultaneously: weathered terracotta brick, pale warm limestone, blue-grey concrete, muted sage-painted masonry, tan/ochre stone, occasional dark red brick. NOT repeated identical colours. Mixed warm lit and cool dark windows. Muted by atmospheric distance and viewed THROUGH glass. Same natural varied city across all options; NEVER tint the whole skyline to the option's accent.\n3. The desk is real natural WOOD with restrained recognisable grain, broad soft sheen and a clean surface. It never becomes a single flat painted palette colour.\n4. CRT casing is aged ABS PLASTIC: rounded moulded corners, seams, matte surface; display has dark reflective GLASS with restrained room reflections and a small Windows95/98 UI. Its screen is not a flat opaque blue rectangle.\n5. TELEPORTER IS ONE COHERENT MACHINE. Use the SAME brushed gunmetal/nickel ring in every study, subtle screws and continuous muted teal inner energy aperture, thin single-colour teal inner light. No multicoloured segments, rainbow rim, gold/copper patchwork, or palette-dependent portal energy colours. Its glow is low, local, not a room grade.\n6. Office pad is its own MATERIAL and specified colour in each study. It is leather or wool felt with realistic edge construction, restrained shading. Do not leave the same anonymous grey pad in every version. Never a blue cutting grid.\n7. Metal reads metallic through small sharp neutral highlights; plastics/enamel have broad restrained reflections; wood grain and leather/felt remain clean, simple, stylised, no gritty photoreal noise.\nART DIRECTION: soft clean 2D anime-inspired rendering with rounded objects, restrained cel shadows, subtle material highlights. Realistic material separation, not flat vector colour blocks. Retrofuturist Art Deco CIVIC BUREAUCRACY meets Windows95/98 computers. Deco is geometry and restrained hardware, not gold coating on everything. Neutral white daylight and gentle warm local lamp light; no global colour wash. Preserve clear midtones. Mix warm natural wood/paper with cool stone/glass and carefully limited coloured objects. The chosen accent family occupies about10–20% of the view. Never recolour floors, every column, crowds or buildings to match a named palette. Keep neutral stone original floor, paper ivory, crowd anonymous subdued cool-grey masses.\n",
+  "studies": [
+    {
+      "n": 1,
+      "name": "Archive Brass",
+      "desk": "smoked walnut with visible brown wood grain",
+      "pad": "deep oxblood leather, softened burgundy-brown, fine grain and a stitched edge",
+      "crt": "aged ivory ABS plastic",
+      "phone": "near-black bakelite with a soft reflected highlight",
+      "lamp": "bottle-green enamel with a brass stem",
+      "trim": "restrained aged brass",
+      "ui": "classic muted navy-blue Windows95 title bar",
+      "accent": [
+        "#6B3D3C",
+        "#334F43",
+        "#AD9058"
+      ]
+    },
+    {
+      "n": 2,
+      "name": "Porcelain Circuit",
+      "desk": "warm honey oak with clear natural grain",
+      "pad": "dark petrol-blue leather with a narrow stitched border",
+      "crt": "warm grey ABS plastic",
+      "phone": "muted burgundy bakelite",
+      "lamp": "warm ivory enamel with satin nickel stem",
+      "trim": "satin nickel",
+      "ui": "muted slate-blue Windows95 title bar",
+      "accent": [
+        "#375C63",
+        "#74494D",
+        "#B9B7AD"
+      ]
+    },
+    {
+      "n": 3,
+      "name": "Civic Walnut",
+      "desk": "medium warm walnut with visible grain and restrained wear",
+      "pad": "cognac-brown leather with a slightly darker stitched border",
+      "crt": "old ivory ABS plastic",
+      "phone": "graphite bakelite",
+      "lamp": "oxidised teal enamel, bronze stem",
+      "trim": "dark antique bronze",
+      "ui": "deep desaturated teal Windows95 title bar",
+      "accent": [
+        "#926342",
+        "#406967",
+        "#84714F"
+      ]
+    },
+    {
+      "n": 4,
+      "name": "Graphite Ledger",
+      "desk": "natural reddish mahogany with visible wood grain",
+      "pad": "warm charcoal-grey wool felt with a soft edge, not smooth plastic",
+      "crt": "oyster-grey ABS plastic",
+      "phone": "very dark navy bakelite",
+      "lamp": "cream enamel with brushed-steel stem",
+      "trim": "brushed steel",
+      "ui": "slate-blue Windows95 title bar with one tiny muted ochre status accent",
+      "accent": [
+        "#5A5652",
+        "#354457",
+        "#AC955C"
+      ]
+    },
+    {
+      "n": 5,
+      "name": "Tobacco and Steel",
+      "desk": "chestnut-brown wood with readable fine grain",
+      "pad": "desaturated navy leather, visible stitching and restrained sheen",
+      "crt": "yellowed beige ABS plastic",
+      "phone": "muted oxblood bakelite",
+      "lamp": "forest-green enamel, aluminium stem",
+      "trim": "satin aluminium",
+      "ui": "classic dusty blue Windows95 title bar",
+      "accent": [
+        "#3E5364",
+        "#704149",
+        "#436151"
+      ]
+    },
+    {
+      "n": 6,
+      "name": "Olive Archive",
+      "desk": "warm dark walnut with natural grain",
+      "pad": "muted olive leather with neat saddle stitching",
+      "crt": "ivory ABS plastic",
+      "phone": "warm-grey bakelite",
+      "lamp": "black enamel, antique-bronze stem",
+      "trim": "small dark bronze details",
+      "ui": "muted navy Windows95 title bar with tiny ochre status accent",
+      "accent": [
+        "#6D7354",
+        "#555650",
+        "#9B8158"
+      ]
+    },
+    {
+      "n": 7,
+      "name": "Terracotta Bureau",
+      "desk": "natural elm wood, warm tan with visible broad wood grain",
+      "pad": "dark chocolate-brown leather with a stitched border",
+      "crt": "grey-ivory ABS plastic",
+      "phone": "dusty terracotta enamel/plastic, subdued clay not candy orange",
+      "lamp": "bottle-green enamel, brass stem",
+      "trim": "subtle old brass",
+      "ui": "muted navy Windows95 title bar",
+      "accent": [
+        "#A66F59",
+        "#514039",
+        "#3F6051"
+      ]
+    },
+    {
+      "n": 8,
+      "name": "Slate Office",
+      "desk": "dark natural oak with a clearly readable brown grain",
+      "pad": "blue-grey wool felt with a soft material edge",
+      "crt": "warm-cream ABS plastic",
+      "phone": "charcoal bakelite",
+      "lamp": "faded oxblood enamel with nickel stem",
+      "trim": "satin nickel",
+      "ui": "muted teal Windows95 title bar",
+      "accent": [
+        "#61727B",
+        "#78494E",
+        "#A8ADA9"
+      ]
+    },
+    {
+      "n": 9,
+      "name": "Paper and Ink",
+      "desk": "pale worn oak with natural grain, not painted or bleached flat",
+      "pad": "very dark desaturated plum leather with clear stitched edge",
+      "crt": "light warm-grey ABS plastic",
+      "phone": "muted olive plastic",
+      "lamp": "ivory enamel on a dark stem",
+      "trim": "gunmetal with tiny nickel fasteners",
+      "ui": "muted blue Windows95 title bar",
+      "accent": [
+        "#544653",
+        "#798269",
+        "#85949A"
+      ]
+    },
+    {
+      "n": 10,
+      "name": "Midnight Executive",
+      "desk": "blackened walnut, still visibly brown wood grain rather than a painted black surface",
+      "pad": "warm tobacco-brown leather with a softly worn stitched edge",
+      "crt": "warm-grey ABS plastic",
+      "phone": "ivory bakelite",
+      "lamp": "dark petrol enamel with small brass stem",
+      "trim": "restrained dim antique brass",
+      "ui": "muted navy Windows95 title bar with small amber status accent",
+      "accent": [
+        "#916E4B",
+        "#355F62",
+        "#A48B56"
+      ]
+    }
+  ]
+}

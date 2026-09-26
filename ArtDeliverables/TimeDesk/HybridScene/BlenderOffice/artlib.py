@@ -1,9 +1,20 @@
-"""Editable Blender source for the reference-led PC art pass.
+"""Shared Blender library for the art side's editable office sources (art side).
 
-Run with Blender --background --python this_file. No Unity editor/runtime code.
-Coordinates passed to helpers are Unity-style: X right, Y up, Z back.
-Source objects retain their modeling modifiers in the .blend. Only export copies
-are evaluated and grouped by material. Nothing in the game creates this art.
+Purpose: material, mesh and FBX-export helpers for the BlenderOffice author_* scripts,
+DeskFinish/author_desk_finish.py (+ hardware_models, booth_detail_models) and the
+DeskClean scripts. Importing it resets the Blender scene (deletes every object and
+extra collection) and defines the base PC/desk materials. Coordinates passed to the
+helpers are Unity-style (X right, Y up, Z back). Source objects keep their modelling
+modifiers in the .blend; only export copies are evaluated and merged per material.
+No Unity editor or runtime code: nothing in the game creates this art.
+
+Inputs: Assets/Art/Office/Hybrid/BlenderPC/Textures/desk_walnut_albedo.png (optional).
+Outputs of export_library(name): one FBX per group() collection in OUT/Models
+(default Assets/Art/Office/Hybrid/BlenderOffice/Models; callers re-point artlib.OUT
+and artlib.HERE), a copy in HERE/Exports, HERE/{name}_manifest.json and HERE/{name}.blend.
+Paths resolve from this file, so every script runs from any checkout or worktree.
+
+Run: not on its own; the scripts above import it (blender --background --python <script>).
 """
 import bpy, math, json, sys, shutil, os
 from pathlib import Path

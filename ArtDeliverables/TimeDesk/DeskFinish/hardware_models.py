@@ -1,4 +1,11 @@
-"""Reference-led hardware meshes. All exported objects are in local asset space."""
+"""Reference-led hardware meshes. All exported objects are in local asset space (art side).
+
+Purpose: build_hardware(texture_dir) models the Finish_PC, Finish_Keyboard and Finish_Till
+groups and returns their attachment points (written to hardware_anchors.json).
+Inputs: artlib (already imported by the caller); ivory_plastic.png and petrol_enamel.png in
+texture_dir. Outputs: Blender collections only; the caller exports them.
+Run: not on its own; author_desk_finish.py imports it.
+"""
 import math
 import artlib as A
 from artlib import *

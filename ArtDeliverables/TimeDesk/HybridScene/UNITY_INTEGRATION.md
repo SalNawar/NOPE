@@ -44,7 +44,7 @@ The 24 September foreground correction is now installed from `Assets/Art/Office/
 
 Active assets are in `Assets/Art/Office/Hybrid`. Superseded building instances and the three machinery cutouts were removed from the scene. Their source artwork remains available in the deliverables. Pre-pass backups are in `BeforeUnityIntegration`, `BeforeSurfaceRefinement` and `BeforeHallRefinement`.
 
-`mesh_authoring.py`, `refine_booth_meshes.py` and `refine_environment_meshes.py` are offline mesh-authoring sources outside Assets. They are not Unity editor callbacks or runtime code. The Unity scene is authoritative for final placements; the original `Generated/scene_layout.json` is an earlier authoring proposal.
+`mesh_authoring.py`, `refine_booth_meshes.py` and `refine_environment_meshes.py` (removed on 2026-09-26, superseded by the BlenderOffice FBX; the OBJs they wrote stay) were offline mesh-authoring sources outside Assets. They are not Unity editor callbacks or runtime code. The Unity scene is authoritative for final placements; the original `Generated/scene_layout.json` is an earlier authoring proposal.
 
 ## Generated textures and prompts
 

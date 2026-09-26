@@ -1,3 +1,16 @@
+"""ChatGPT's UnitySkills client for art iterations (tooling, not a game asset).
+
+Purpose: drives the open Unity editor over the UnitySkills local REST API (ports 8090-8100,
+agent id Codex-ArtIteration): state(), stop(), start() (enters play mode and presses the
+morning briefing's Start Shift button, OfficeOverlayCanvas/BriefingPanel/Paper/ActionButton,
+which the gameplay layer builds; the art scene's leftover copy is switched off at load),
+call(skill, **args), batch(skill, items), save() (OfficeScene) and capture(label).
+Inputs: a running editor with UnitySkills on this project. Importing it finds the server.
+Outputs: capture(label) copies the Game-view screenshot from Assets/Screenshots to
+{label}.png in this folder.
+Run: import from Python (HANDOVER_2026-09-25.md): sys.path.insert(0, 'ArtDeliverables/
+TimeDesk/DeskFinish/Iterations'); from iteration_api import *
+"""
 import json,time,urllib.request,concurrent.futures
 from pathlib import Path
 HERE=Path(__file__).resolve().parent

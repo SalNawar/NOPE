@@ -10,7 +10,7 @@ The PC is an original unbranded interpretation of its proportions and material s
 - `TimeDesk_PC.blend`: editable Blender 5.2.2 source, assembled on its desk with
   an authoring camera and lights. Individual parts, curves, bevels and weighted
   normals are retained. These authoring lights are never exported to Unity.
-- `author_pc.py`: explicit offline Blender authoring source. It creates editable
+- `author_pc.py` (removed on 2026-09-26: its three FBX are unused since the Rebuilt CRT and the DeskFinish desk replaced this PC; keep `TimeDesk_PC.blend`, whose desk `DeskFinish/author_desk_finish.py` loads): explicit offline Blender authoring source. It creates editable
   objects and exports evaluated copies. It never edits a Unity scene or runs in-game.
 - `asset_manifest.json`: material palette and exported object/material mappings.
 - `PC_authoring_view.png`: earlier orange-palette Blender presentation, now superseded by the neutral casing revision; not a Unity screenshot.
