@@ -67,7 +67,8 @@ public static class _TimeDeskAuditProfile
     private static string Dir => Path.Combine(Root, SessionState.GetString(TagKey, "profX"));
     private static string ReportPath => Path.Combine(Dir, "profile_report.txt");
     private static string SummaryPath => Path.Combine(Dir, "profile_summary.txt");
-    private static string SaveBackup => Path.Combine(Root, "nope_save_backup_auditprofile.json");
+    /// <summary>Where the save slot is set aside during the play: beside it, in SaveSystem.Folder (in the editor this project's Library/EditorSaves, so a play in another worktree's editor never touches it).</summary>
+    private static string SaveBackup => Path.Combine(SaveSystem.Folder, "nope_save_backup_auditprofile.json");
 
     static _TimeDeskAuditProfile()
     {

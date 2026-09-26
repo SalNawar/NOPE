@@ -2,18 +2,23 @@ using System.Collections.Generic;
 
 /// <summary>
 /// A generated, playable case for the current shift.
-/// Created at runtime from data assets (blueprints, clue library, etc.).
+/// Created at runtime from data assets (blueprints, templates, places, premades).
 /// </summary>
 public sealed class CaseInstance
 {
     /// <summary>0-based case index used internally.</summary>
     public int caseIndex;
 
+    /// <summary>The traveller's kind, their blueprint's (traveller types K1): their papers and their claim line (left at the default without a blueprint).</summary>
+    public TravellerKind kind;
+
     /// <summary>
-    /// The era the traveller claims as home and is sent to (the correct era on
-    /// the legacy era-pick path). A liar's real era is trueHome.era.
+    /// A displaced person's agency file (AgencyNumbers.Displaced, on their
+    /// account stream): the Displacement No., incident, found date and
+    /// certificate's Valid Until their forms and registry entry print. Null
+    /// for another kind, or when the agency calendar cannot count today.
     /// </summary>
-    public EraSO trueEra;
+    public DisplacementFile displacement;
 
     /// <summary>True if this traveller is a premade character (named, drawn whole).</summary>
     public bool isLegendary;
@@ -23,9 +28,6 @@ public sealed class CaseInstance
 
     /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
     public ArchetypeSO archetype;
-
-    /// <summary>The nation the traveller claims as home (the destination; timeline impacts land here).</summary>
-    public NationSO nation;
 
     /// <summary>Label of the claimed place, "Abbasid Baghdad (Medieval)" (claim line and Citizen Records).</summary>
     public string originLabel;
@@ -58,10 +60,19 @@ public sealed class CaseInstance
     // Investigation (accept/deny)
     // -----------------------------
 
-    /// <summary>Nation the visitor CLAIMS to be traveling to (shown to player).</summary>
+    /// <summary>
+    /// The nation of the claimed place: where the traveller is sent (the
+    /// destination; timeline impacts land here), for every kind a displaced
+    /// person's stated home. Set even when the case has no blueprint (audit
+    /// R3-020 merged the duplicate `nation`).
+    /// </summary>
     public NationSO claimedNation;
 
-    /// <summary>Era the visitor CLAIMS to be traveling to (shown to player).</summary>
+    /// <summary>
+    /// The era of the claimed place (the correct era on the legacy era-pick
+    /// path). A liar's real era is trueHome.era. Set even when the case has no
+    /// blueprint (audit R3-020 merged the duplicate `trueEra`).
+    /// </summary>
     public EraSO claimedEra;
 
     /// <summary>
@@ -82,7 +93,7 @@ public sealed class CaseInstance
     /// <summary>True if the claimed destination is permitted by today's rules.</summary>
     public bool claimAllowedByRules = true;
 
-    /// <summary>The traveller's claim sentence (interview.claim with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
+    /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
     public string claimLine;
 
     /// <summary>The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers).</summary>
@@ -106,24 +117,15 @@ public sealed class CaseInstance
 
     /// <summary>Runtime documents built from templates.</summary>
     public readonly List<DocumentInstance> documents = new();
-
-    /// <summary>All clue assets used by this case.</summary>
-    public readonly List<ClueSO> usedClues = new();
 }
 
 /// <summary>
-/// A runtime document assembled from a template, containing clue lines.
+/// A runtime document built from a template: its structured fields, in the template's order.
 /// </summary>
 public sealed class DocumentInstance
 {
     /// <summary>Template this document was built from.</summary>
     public DocumentTemplateSO template;
-
-    /// <summary>Pre-rendered text for quick prototype UI display.</summary>
-    public string renderedText;
-
-    /// <summary>Raw clue references inside this document.</summary>
-    public readonly List<ClueSO> cluesInDoc = new();
 
     /// <summary>Structured, checkable fields (investigation feature).</summary>
     public readonly List<DocumentField> fields = new();

@@ -21,7 +21,8 @@ using UnityEngine.UI;
 /// saves. While the desktop takes input (its raycaster is on) and no window
 /// or text field has the keyboard, the arrow keys move the selection to the
 /// nearest icon that way and Enter opens it. Badges: an app's count or dot
-/// (SetBadge); until the Investigation app exists (phase 16), a scan
+/// (SetBadge): Mail's is the Mail feed's unread count, redrawn whenever the
+/// feed changes; until the Investigation app exists (phase 16), a scan
 /// finishing while the interim Investigation window is hidden dots its icon,
 /// and the dot goes when the window shows.
 /// </summary>
@@ -51,6 +52,9 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
     /// <summary>Interim until the Investigation app (phase 16): the Investigation window whose showing clears the dot.</summary>
     [SerializeField] private DesktopWindow investigationWindow;
 
+    /// <summary>The Mail feed: its unread count is the Mail icon's badge.</summary>
+    [SerializeField] private MailFeed mail;
+
     private readonly Dictionary<string, int> _badges = new Dictionary<string, int>();
     private readonly List<string> _order = new List<string>();
     private readonly List<IconPlace> _others = new List<IconPlace>();
@@ -75,12 +79,16 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
             Debug.LogWarning("[DesktopIcons] No DesktopConfigSO wired: the icons keep their built places. Run Tools > TimeDesk > Build Office UI.", this);
         if (desk != null)
             desk.ScanFinished += HandleScanFinished;
+        if (mail != null)
+            mail.Changed += ShowUnreadMail;
     }
 
     private void OnDestroy()
     {
         if (desk != null)
             desk.ScanFinished -= HandleScanFinished;
+        if (mail != null)
+            mail.Changed -= ShowUnreadMail;
     }
 
     /// <summary>The icons take the player's saved layout (or the default arrangement).</summary>
@@ -94,6 +102,14 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
                 icon.SetSelected(false);
                 icon.SetBadge(0);
             }
+        ShowUnreadMail();
+    }
+
+    /// <summary>The Mail icon's badge: the feed's unread count.</summary>
+    private void ShowUnreadMail()
+    {
+        if (mail != null)
+            SetBadge(DesktopAppIds.Mail, mail.Unread);
     }
 
     /// <summary>Selects one icon (the others lose their plate).</summary>

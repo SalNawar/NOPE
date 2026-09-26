@@ -537,6 +537,11 @@ public class DiscrepancyLogTests
     [TestCase(ClueCategory.Culture, "category.Culture")]
     [TestCase(ClueCategory.Name, "category.Name")]
     [TestCase(ClueCategory.BirthDate, "category.BirthDate")]
+    [TestCase(ClueCategory.CitizenId, "category.CitizenId")]
+    [TestCase(ClueCategory.Destination, "category.Destination")]
+    [TestCase(ClueCategory.Incident, "category.Incident")]
+    [TestCase(ClueCategory.DepartureDate, "category.DepartureDate")]
+    [TestCase(ClueCategory.Expiry, "category.Expiry")]
     public void ClueLabels_Key_OneKeyPerCategory(ClueCategory category, string expected)
     {
         Assert.AreEqual(expected, ClueLabels.Key(category));

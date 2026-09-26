@@ -235,13 +235,15 @@ public static partial class OfficeSceneUIBuilder
         }
 
         // --- Investigation desk ---
-        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled overlay.
+        // Persistent host (never toggled) holds the controllers; InvestigationRoot is the toggled case overlay. The
+        // window layer sits on the host above it, never toggled, so a window opened between travellers (an app from
+        // its desktop icon) shows too; the compare dock goes above the layer (BuildCompareDock).
         Transform investHost = Panel(root, "InvestigationUI", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         InvestigationUIController invest = GetOrAdd<InvestigationUIController>(investHost.gameObject);
         CompareController compare = GetOrAdd<CompareController>(investHost.gameObject);
 
         Transform investRoot = EnsureCaseRoot(investHost);
-        Transform windowLayer = EnsureWindowLayer(root, investRoot);
+        Transform windowLayer = EnsureWindowLayer(investHost, investRoot);
 
         // Claim on a translucent XP-blue strip, clear of the desktop's default icon column.
         Panel(investRoot, "ClaimStrip", new Vector2(0.12f, 0.87f), new Vector2(0.94f, 1f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ClaimStrip);
@@ -312,7 +314,7 @@ public static partial class OfficeSceneUIBuilder
 
         // The compare dock above the taskbar (the PC redesign DK9): the window
         // layer moves over the claim, the icons and Accept/Deny, the dock over it.
-        Transform compareBar = BuildCompareDock(investRoot, compare, out TMP_Text compareText);
+        Transform compareBar = BuildCompareDock(investHost, investRoot, windowLayer, compare, out TMP_Text compareText, out GameObject compareDock);
 
         investRoot.gameObject.SetActive(false);
 
@@ -325,13 +327,6 @@ public static partial class OfficeSceneUIBuilder
         }
         if (dayPlan == null) dayPlan = FindFirstAsset<DayPlanSO>();
         if (library == null) Debug.LogWarning("[TimeDesk] No ContentLibrarySO found — assign GameManager.contentLibrary manually.");
-        if (library != null && library.Interview != null)
-        {
-            int wheelFit = RadialLayout.MaxFit(deskConfig.wheelRadii.x, deskConfig.wheelRadii.y, deskConfig.wheelItemSize.x, deskConfig.wheelItemSize.y,
-                                               deskConfig.wheelCentreSize.x, deskConfig.wheelCentreSize.y, deskConfig.wheelItemGap, library.Interview.menuCapacity);
-            if (wheelFit < library.Interview.menuCapacity)
-                Debug.LogError($"[TimeDesk] The traveller wheel fits {wheelFit} choices, but the content library's interview menu capacity is {library.Interview.menuCapacity}; lower interview.menuCapacity in world_source.json or enlarge the wheel (Desk_Default: wheelRadii, wheelItemSize).");
-        }
         if (dayPlan == null) Debug.LogWarning("[TimeDesk] No DayPlanSO found — generate content first (Tools > TimeDesk).");
 
         DayOrchestrator orchestrator = Object.FindFirstObjectByType<DayOrchestrator>();
@@ -343,7 +338,8 @@ public static partial class OfficeSceneUIBuilder
 
         // Fake-OS desktop shell: the six apps' windows, their icons, the context
         // menu and the Start menu, and the taskbar's way back to the office.
-        BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, investigationWindow, officeView.transform.Find("Desk").GetComponent<DeskController>());
+        BuildDesktopShell(canvas, windowLayer, library, officeView, monitorScreen, investigationWindow, officeView.transform.Find("Desk").GetComponent<DeskController>(),
+                          gameManager, directivesWindow);
 
         // The window stack (every window built above), the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
         BuildWindowManager(canvas, officeView);
@@ -405,6 +401,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soInvest, "acceptButton", acceptButton);
         SetRef(soInvest, "denyButton", denyButton);
         SetRef(soInvest, "compareController", compare);
+        SetRef(soInvest, "compareDock", compareDock);
         SetRef(soInvest, "windowLayer", windowLayer);
         SetRef(soInvest, "documentWindowTemplate", docTemplate);
         SetRef(soInvest, "bookWindowTemplate", bookTemplate);
@@ -1372,41 +1369,53 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the fake-OS desktop shell: the six apps' windows, registered by
-    /// their DesktopAppIds id (the interim Investigation window, the Internet
-    /// browser, Mail and Citizen Account placeholders until phase 25, the Notes
-    /// placeholder, Settings), their icons and the context menu
+    /// Builds the fake-OS desktop shell: the six apps' windows, registered in
+    /// phase 25's DesktopApps by their DesktopAppIds id (the interim
+    /// Investigation window, the Internet browser, Mail with its feed, the
+    /// Citizen Account, Notes: OfficeSceneUIBuilder.Apps.cs; Settings in
+    /// sections), their icons and the context menu
     /// (OfficeSceneUIBuilder.Desktop.cs), a Start menu (the six apps, Arrange
     /// icons, Turn off screen and Quit game) wired to a DesktopShell on the
     /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here,
     /// after the view exists). The retired Lexicon, Dialect and Material
-    /// placeholders and their icons go. Idempotent.
+    /// placeholders and their icons go. <paramref name="rulesWindow"/> is what
+    /// Mail's Rules link opens. Idempotent.
     /// </summary>
     private static void BuildDesktopShell(Canvas canvas, Transform windowLayer, ContentLibrarySO library, OfficeViewController view, MonitorScreen screen,
-                                          DesktopWindow investigationWindow, DeskController desk)
+                                          DesktopWindow investigationWindow, DeskController desk, GameManager game, DesktopWindow rulesWindow)
     {
         Transform root = canvas.transform;
+        DesktopConfigSO config = EnsureDesktopConfig();
 
         // The earlier parallel desktop and the retired placeholder apps (the PC redesign DK7) go.
         DestroyChildIfPresent(root, "DesktopWindowLayer");
         DestroyChildIfPresent(windowLayer, "IconLexiconWindow");
         DestroyChildIfPresent(windowLayer, "IconDialectWindow");
         DestroyChildIfPresent(windowLayer, "IconMaterialWindow");
+        DestroyChildIfPresent(windowLayer, "IconNotesWindow");
 
         // Each app's window by its id (DesktopApps.OpenApp): an app's builder returns its window and it is registered here.
+        DesktopApps apps = GetOrAdd<DesktopApps>(root.gameObject);
+        MailFeed feed = GetOrAdd<MailFeed>(root.gameObject);
+        DesktopWindow internet = BuildInternetWindow(windowLayer, library);
         var windows = new Dictionary<string, DesktopWindow>
         {
             { DesktopAppIds.Investigation, investigationWindow },
-            { DesktopAppIds.Internet, BuildInternetWindow(windowLayer, library) },
-            { DesktopAppIds.Mail, BuildPlaceholderApp(windowLayer, "MailWindow", "window.mail", "body.mail") },
-            { DesktopAppIds.CitizenAccount, BuildPlaceholderApp(windowLayer, "AccountWindow", "window.account", "body.account") },
-            { DesktopAppIds.Notes, BuildOSWindow(windowLayer, "IconNotesWindow", "window.notes", "body.notes", null) },
+            { DesktopAppIds.Internet, internet },
+            { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), rulesWindow, out TMP_Text mailTitle) },
+            { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },
+            { DesktopAppIds.Notes, BuildNotesWindow(windowLayer, config) },
             { DesktopAppIds.Settings, BuildSettingsWindow(windowLayer) },
         };
-        DesktopIcons icons = BuildDesktopIcons(canvas, windows, desk, out DesktopApps apps, out DesktopContextMenu contextMenu);
+        DesktopIcons icons = BuildDesktopIcons(canvas, windows, desk, feed, out DesktopContextMenu contextMenu);
         WireIconSettings(windows[DesktopAppIds.Settings], icons);
 
-        Transform startMenu = BuildStartMenu(root, out List<(string id, Button button)> appEntries, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
+        Transform startMenu = BuildStartMenu(root, apps, out TMP_Text mailEntry, out Button arrangeEntry, out Button screenOffEntry, out Button quitEntry);
+        var soFeed = new SerializedObject(feed);
+        SetRef(soFeed, "game", game);
+        SetRef(soFeed, "startEntryLabel", mailEntry);
+        SetRef(soFeed, "windowTitle", mailTitle);
+        soFeed.ApplyModifiedProperties();
 
         // The taskbar's way back to the office (closes the PC frame), next to Start.
         Transform taskbar = root.Find("Taskbar");
@@ -1433,14 +1442,6 @@ public static partial class OfficeSceneUIBuilder
         var soShell = new SerializedObject(shell);
         SetRef(soShell, "startButton", startBtn);
         SetRef(soShell, "startMenu", startMenu.gameObject);
-        SerializedProperty entries = soShell.FindProperty("appEntries");
-        entries.arraySize = appEntries.Count;
-        for (int i = 0; i < appEntries.Count; i++)
-        {
-            entries.GetArrayElementAtIndex(i).FindPropertyRelative("id").stringValue = appEntries[i].id;
-            entries.GetArrayElementAtIndex(i).FindPropertyRelative("button").objectReferenceValue = appEntries[i].button;
-        }
-        SetRef(soShell, "apps", apps);
         SetRef(soShell, "arrangeButton", arrangeEntry);
         SetRef(soShell, "icons", icons);
         SetRef(soShell, "quitButton", quitEntry);
@@ -1487,71 +1488,6 @@ public static partial class OfficeSceneUIBuilder
 
         win.gameObject.SetActive(false); // opened by its icon
         return chrome;
-    }
-
-    /// <summary>
-    /// The Settings window (piece 6 U12, piece 9 R17; the PC redesign SG1's
-    /// Desktop section), 640 × 720: "UI language" with its two choices,
-    /// "Motion" with Full and Reduced, "Desktop icons open with" Double click
-    /// and Single click and "Reset icon positions"
-    /// (SettingsWindowController; the icon rows wired by WireIconSettings), and
-    /// a note that a language change applies at the next office load, that
-    /// colours, fonts and the wallpaper follow history, and that reduced
-    /// motion shows translations at once. Every row's anchors are re-applied
-    /// on each build.
-    /// </summary>
-    private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
-    {
-        DesktopWindow chrome = BuildOSWindow(windowLayer, "SettingsWindow", "window.settings", "settings.language", null, new Vector2(640f, 720f));
-        Transform win = chrome.transform;
-        SetAnchors(win.Find("Body"), new Vector2(0.05f, 0.885f), new Vector2(0.95f, 0.94f));
-        Button follow = MakeButton(win, "FollowHistoryButton", null, new Vector2(0.05f, 0.8f), new Vector2(0.48f, 0.875f), null, ThemeRoleId.Button, "settings.followHistory");
-        SetAnchors(follow.transform, new Vector2(0.05f, 0.8f), new Vector2(0.48f, 0.875f));
-        Button english = MakeButton(win, "AlwaysEnglishButton", null, new Vector2(0.52f, 0.8f), new Vector2(0.95f, 0.875f), null, ThemeRoleId.Button, "settings.alwaysEnglish");
-        SetAnchors(english.transform, new Vector2(0.52f, 0.8f), new Vector2(0.95f, 0.875f));
-        TMP_Text motion = Text(win, "MotionLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.72f), new Vector2(0.95f, 0.775f), Ink,
-                               ThemeRoleId.WindowBody, "settings.motion");
-        SetAnchors(motion.transform, new Vector2(0.05f, 0.72f), new Vector2(0.95f, 0.775f));
-        Button full = MakeButton(win, "FullMotionButton", null, new Vector2(0.05f, 0.635f), new Vector2(0.48f, 0.71f), null, ThemeRoleId.Button, "settings.motionFull");
-        SetAnchors(full.transform, new Vector2(0.05f, 0.635f), new Vector2(0.48f, 0.71f));
-        Button reduced = MakeButton(win, "ReducedMotionButton", null, new Vector2(0.52f, 0.635f), new Vector2(0.95f, 0.71f), null, ThemeRoleId.Button, "settings.motionReduced");
-        SetAnchors(reduced.transform, new Vector2(0.52f, 0.635f), new Vector2(0.95f, 0.71f));
-        TMP_Text desktop = Text(win, "DesktopLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.555f), new Vector2(0.95f, 0.61f), Ink,
-                                ThemeRoleId.WindowBody, "settings.desktop");
-        SetAnchors(desktop.transform, new Vector2(0.05f, 0.555f), new Vector2(0.95f, 0.61f));
-        Button iconDouble = MakeButton(win, "IconDoubleClickButton", null, new Vector2(0.05f, 0.47f), new Vector2(0.48f, 0.545f), null, ThemeRoleId.Button, "settings.iconDouble");
-        SetAnchors(iconDouble.transform, new Vector2(0.05f, 0.47f), new Vector2(0.48f, 0.545f));
-        Button iconSingle = MakeButton(win, "IconSingleClickButton", null, new Vector2(0.52f, 0.47f), new Vector2(0.95f, 0.545f), null, ThemeRoleId.Button, "settings.iconSingle");
-        SetAnchors(iconSingle.transform, new Vector2(0.52f, 0.47f), new Vector2(0.95f, 0.545f));
-        Button resetIcons = MakeButton(win, "ResetIconsButton", null, new Vector2(0.05f, 0.385f), new Vector2(0.95f, 0.46f), null, ThemeRoleId.Button, "settings.resetIcons");
-        SetAnchors(resetIcons.transform, new Vector2(0.05f, 0.385f), new Vector2(0.95f, 0.46f));
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.36f), Ink,
-                             ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.04f), new Vector2(0.95f, 0.36f));
-        note.text = UiText.Get("settings.note");
-        note.textWrappingMode = TextWrappingModes.Normal;
-
-        SettingsWindowController controller = win.GetComponent<SettingsWindowController>();
-        if (controller == null)
-            controller = win.gameObject.AddComponent<SettingsWindowController>();
-        var so = new SerializedObject(controller);
-        SetRef(so, "followHistoryButton", follow);
-        SetRef(so, "alwaysEnglishButton", english);
-        SetRef(so, "fullMotionButton", full);
-        SetRef(so, "reducedMotionButton", reduced);
-        SetRef(so, "iconDoubleClickButton", iconDouble);
-        SetRef(so, "iconSingleClickButton", iconSingle);
-        SetRef(so, "resetIconsButton", resetIcons);
-        so.ApplyModifiedProperties();
-        return chrome;
-    }
-
-    /// <summary>Gives the Settings window the desktop's icons (Reset icon positions arranges them).</summary>
-    private static void WireIconSettings(DesktopWindow settings, DesktopIcons icons)
-    {
-        var so = new SerializedObject(settings.GetComponent<SettingsWindowController>());
-        SetRef(so, "icons", icons);
-        so.ApplyModifiedProperties();
     }
 
     /// <summary>Builds a TMP input field (box + masked viewport + keyed placeholder + text).</summary>

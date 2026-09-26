@@ -26,7 +26,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   - {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   - {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
-  clues: []
   legendaries:
   - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
   - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
@@ -190,13 +189,16 @@ MonoBehaviour:
     openerLegendary:
       id: interview.openerLegendary
       text: 'Priority arrival: {name}.'
-    claim:
-      id: interview.claim
-      text: I request passage home to {place}.
+    claims:
+    - kind: 3
+      line:
+        id: interview.claims.Displaced
+        text: Please. Send me home to {place}.
     honorificMale: sir
     honorificFemale: madam
     honorificUnknown: traveller
     requestLabel: Request {document}
+    papersLabel: Request papers >
     requestPrompt:
       id: interview.requestPrompt
       text: Your {document}, please.
@@ -1299,3 +1301,28 @@ MonoBehaviour:
     name: TEMPORAL CUSTOMS
     programme: Debt Relief Departures
     firstDate: 14 Mar 2150
+    displaced:
+      foundWithinDays: 30
+      validDaysMin: 3
+      validDaysMax: 365
+    clerk:
+      citizenId: 773-2840-19
+      name: Theo Marlow
+      born: 9 Feb 2121
+      lineage: Victorian Britain
+      employment: "Temporal Customs \xB7 Desk 3"
+      note: No remarks on file.
+  mail:
+  - id: welcome
+    fromDay: 1
+    untilDay: 0
+    flag: 
+    from: Customs Directorate
+    subject: Welcome to Desk 3
+    body:
+    - Welcome to Temporal Customs. Every traveller at your desk wants to depart for
+      the past; your desk decides who goes.
+    - Check each paper against the Citizen Records and the reference books, log every
+      deviation before you deny, and follow the day's directives.
+    - Your pay is credited when each shift ends. Your Citizen Account holds your
+      statement. Departures are voluntary.

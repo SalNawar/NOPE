@@ -10,9 +10,9 @@ using UnityEngine.UI;
 /// compare dock and the taskbar, under the case chrome and every window;
 /// built in the default arrangement, the player's layout is restored at
 /// runtime), the desktop's context menu, the Start menu (the six apps,
-/// Arrange icons, Turn off screen, Quit game), and DesktopApps, the one
-/// OpenApp(id) entry point, with each app's window registered under its
-/// DesktopAppIds id. Until the Investigation app exists (phase 16), the
+/// Arrange icons, Turn off screen, Quit game), and phase 25's DesktopApps,
+/// the one OpenApp(id) entry point, with each app's window registered under
+/// its DesktopAppIds id. Until the Investigation app exists (phase 16), the
 /// Investigation icon opens an interim window holding today's case tiles
 /// (Directives, the Deviation Report, Records, the Clue Log, the reference
 /// books and the case's scanned documents). Also the canvas's layer order
@@ -49,18 +49,17 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Vector2 CaseTileCell = new Vector2(146f, 58f);
 
     /// <summary>
-    /// The window layer: every desktop window's parent, always active (an app
-    /// opens between travellers too), the icon area exactly (the desktop above
-    /// the compare dock and the taskbar, so no window covers them and a
-    /// maximised one fills it), masked to it. A layer an older build put under
-    /// the case root is moved out with its windows.
+    /// The window layer: every desktop window's parent, on the investigation
+    /// host after the case root (never toggled: an app opens between
+    /// travellers too), the icon area exactly (the desktop above the compare
+    /// dock and the taskbar, so no window covers them and a maximised one
+    /// fills it), masked to it. A layer an older build put under the case root
+    /// is moved out with its windows.
     /// </summary>
-    private static Transform EnsureWindowLayer(Transform root, Transform caseRoot)
+    private static Transform EnsureWindowLayer(Transform investHost, Transform caseRoot)
     {
-        Transform old = caseRoot.Find("WindowLayer");
-        if (old != null)
-            old.SetParent(root, false);
-        Transform layer = Panel(root, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        MoveChildIfPresent(caseRoot, "WindowLayer", investHost);
+        Transform layer = Panel(investHost, "WindowLayer", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceIconArea(layer);
         GetOrAdd<RectMask2D>(layer.gameObject);
         return layer;
@@ -136,27 +135,29 @@ public static partial class OfficeSceneUIBuilder
         WirePersistentVoid(tile, "m_OnClick", window, nameof(DesktopWindow.Open));
     }
 
-    /// <summary>A placeholder app window (Mail, Citizen Account: phase 25 builds the real ones) with its keyed title and body.</summary>
-    private static DesktopWindow BuildPlaceholderApp(Transform windowLayer, string name, string titleKey, string bodyKey)
+    /// <summary>Gives the Settings window the desktop's icons (Reset icon positions arranges them).</summary>
+    private static void WireIconSettings(DesktopWindow settings, DesktopIcons icons)
     {
-        DestroyChildIfPresent(windowLayer, name);
-        return BuildOSWindow(windowLayer, name, titleKey, bodyKey, null);
+        var so = new SerializedObject(settings.GetComponent<SettingsWindowController>());
+        SetRef(so, "icons", icons);
+        so.ApplyModifiedProperties();
     }
 
     /// <summary>
     /// The desktop's apps and icons: DesktopApps on the canvas (phase 25's
     /// registry: each app's window by id, and the Start menu's shell it
     /// closes), the icon layer (a transparent catcher over the icon area,
-    /// DesktopIcons) with one icon per id in the default arrangement, and the
+    /// DesktopIcons, whose Mail badge reads <paramref name="mail"/>'s unread
+    /// count) with one icon per id in the default arrangement, and the
     /// context menu. Every icon is rebuilt each run. Returns the icons.
     /// </summary>
-    private static DesktopIcons BuildDesktopIcons(Canvas canvas, IReadOnlyDictionary<string, DesktopWindow> windows, DeskController desk, out DesktopApps apps,
+    private static DesktopIcons BuildDesktopIcons(Canvas canvas, IReadOnlyDictionary<string, DesktopWindow> windows, DeskController desk, MailFeed mail,
                                                   out DesktopContextMenu contextMenu)
     {
         Transform root = canvas.transform;
         DesktopConfigSO config = EnsureDesktopConfig();
 
-        apps = GetOrAdd<DesktopApps>(root.gameObject);
+        DesktopApps apps = GetOrAdd<DesktopApps>(root.gameObject);
         var soApps = new SerializedObject(apps);
         SerializedProperty list = soApps.FindProperty("apps");
         list.arraySize = config.iconOrder.Length;
@@ -193,6 +194,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "contextMenu", contextMenu);
         SetRef(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
         SetRef(so, "desk", desk);
+        SetRef(so, "mail", mail);
         SetRef(so, "investigationWindow", windows.TryGetValue(DesktopAppIds.Investigation, out DesktopWindow investigation) ? investigation : null);
         SerializedArrays.Set(so, "icons", views.ToArray());
         so.ApplyModifiedProperties();
@@ -293,12 +295,15 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// The Start menu (DK8), rebuilt each run above the dock: an entry per app
-    /// in the default order (its desktop label; Settings keeps its Start-menu
-    /// label), then Arrange icons, Turn off screen and Quit game, each 40
-    /// units tall in a vertical layout. Returns the menu; the app entries come
-    /// out in <paramref name="appEntries"/>.
+    /// in the default order, each a persistent call to DesktopApps.OpenApp
+    /// with its id (which closes the menu), labelled as phase 25 labels Mail,
+    /// Citizen Account and Notes (the Mail feed writes its unread count into
+    /// the Mail entry, returned in <paramref name="mailLabel"/>), the other
+    /// apps by their desktop label and Settings by its Start-menu one; then
+    /// Arrange icons, Turn off screen and Quit game, each 40 units tall in a
+    /// vertical layout. Returns the menu.
     /// </summary>
-    private static Transform BuildStartMenu(Transform root, out List<(string id, Button button)> appEntries, out Button arrange, out Button screenOff, out Button quit)
+    private static Transform BuildStartMenu(Transform root, DesktopApps apps, out TMP_Text mailLabel, out Button arrange, out Button screenOff, out Button quit)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         int count = config.iconOrder.Length + 3;
@@ -308,13 +313,14 @@ public static partial class OfficeSceneUIBuilder
         Transform startMenu = Panel(root, "StartMenu", new Vector2(0f, 0f), new Vector2(0.2f, 0f), new Vector2(0f, StartMenuCentre(height)), new Vector2(0f, height),
                                     new Color(0.1f, 0.12f, 0.18f, 0.97f), ThemeRoleId.StartMenu);
         AddVLayout(startMenu, StartMenuSpacing);
-        appEntries = new List<(string, Button)>();
+        mailLabel = null;
         foreach (string id in config.iconOrder)
         {
-            string labelKey = id == DesktopAppIds.Settings ? "startmenu.settings" : AppLabelKeys[id];
-            Button entry = MakeButton(startMenu, "App_" + id, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, labelKey);
+            Button entry = MakeButton(startMenu, "App_" + id, null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, StartMenuLabelKey(id));
             SetLayoutHeight(entry, StartMenuEntryHeight);
-            appEntries.Add((id, entry));
+            WirePersistentString(entry, "m_OnClick", apps, nameof(DesktopApps.OpenApp), id);
+            if (id == DesktopAppIds.Mail)
+                mailLabel = entry.transform.Find("Label").GetComponent<TMP_Text>();
         }
         arrange = MakeButton(startMenu, "ArrangeEntry", null, Vector2.zero, Vector2.one, new Color(0.2f, 0.25f, 0.35f, 1f), ThemeRoleId.MenuEntry, "desktop.arrange");
         SetLayoutHeight(arrange, StartMenuEntryHeight);
@@ -326,10 +332,24 @@ public static partial class OfficeSceneUIBuilder
         return startMenu;
     }
 
+    /// <summary>An app's Start menu label: phase 25's for Mail, Citizen Account and Notes, the Start menu's own for Settings, else the desktop label.</summary>
+    private static string StartMenuLabelKey(string id)
+    {
+        switch (id)
+        {
+            case DesktopAppIds.Mail: return "startmenu.mail";
+            case DesktopAppIds.CitizenAccount: return "startmenu.account";
+            case DesktopAppIds.Notes: return "startmenu.notes";
+            case DesktopAppIds.Settings: return "startmenu.settings";
+            default: return AppLabelKeys[id];
+        }
+    }
+
     /// <summary>
     /// The desktop canvas's layers, bottom to top: the wallpaper, the idle
-    /// line, the icons, the gameplay hosts and the case chrome, the window
-    /// layer, the taskbar, the context menu, the Start menu.
+    /// line, the icons, the gameplay hosts (the investigation host holds the
+    /// case chrome, the window layer and the compare dock), the taskbar, the
+    /// context menu, the Start menu.
     /// </summary>
     private static void OrderDesktopLayers(Transform root)
     {
@@ -337,7 +357,7 @@ public static partial class OfficeSceneUIBuilder
         Transform icons = root.Find("DesktopIcons");
         if (idle != null && icons != null)
             icons.SetSiblingIndex(idle.GetSiblingIndex() + 1);
-        foreach (string top in new[] { "WindowLayer", "Taskbar", "ContextMenu", "StartMenu" })
+        foreach (string top in new[] { "Taskbar", "ContextMenu", "StartMenu" })
         {
             Transform t = root.Find(top);
             if (t != null)

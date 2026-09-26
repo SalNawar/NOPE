@@ -67,7 +67,7 @@ public enum ThemeRoleId
     /// <summary>The citation slip and its text.</summary>
     Alert,
 
-    /// <summary>Retired (the PC redesign TH2): was the Directives sticky note; no graphic takes it and the palette map has no rule for it.</summary>
+    /// <summary>A sticky note: Notes' clipping cards and their texts (was the Directives sticky note).</summary>
     StickyNote,
 
     /// <summary>The compare bar and its text.</summary>
@@ -208,6 +208,6 @@ public static class ThemeRoles
         }
     }
 
-    /// <summary>True for the retired roles (DeskDim, StickyNote): kept in the enum, taken by no graphic, with no palette rule and no colour a theme must have.</summary>
-    public static bool IsRetired(ThemeRoleId role) => role == ThemeRoleId.DeskDim || role == ThemeRoleId.StickyNote;
+    /// <summary>True for the retired roles (DeskDim, the PC redesign TH2): kept in the enum, taken by no graphic, with no palette rule and no colour a theme must have.</summary>
+    public static bool IsRetired(ThemeRoleId role) => role == ThemeRoleId.DeskDim;
 }

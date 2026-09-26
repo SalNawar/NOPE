@@ -66,6 +66,7 @@ public static partial class WorldContentGenerator
 
         var errors = new List<string>();
         Authored authored = LoadAuthored(src.content, src.days, errors);
+        AuthoredMail[] mail = CheckMail(errors);
         CheckReferences(src, authored, errors);
         CheckHistory(src, authored, errors);
         CheckInterview(src, authored, errors);
@@ -135,6 +136,8 @@ public static partial class WorldContentGenerator
             .Select(p => MakeTranslator(p, src.translation, written))
             .ToArray();
         TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, written);
+
+        WireMail(authored.library, mail);
 
         // Re-saving the book covers keeps their YAML in the current shape.
         foreach (ReferenceBookSO book in authored.books)
@@ -427,9 +430,9 @@ public static partial class WorldContentGenerator
         // --- The interview's wording and limits ---
         var wording = new (string field, string text)[]
         {
-            ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary), ("claim", iv.claim),
+            ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary),
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
-            ("requestLabel", iv.requestLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
+            ("requestLabel", iv.requestLabel), ("papersLabel", iv.papersLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
             ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel), ("smallTalkPrompt", iv.smallTalkPrompt),
             ("lookLabel", iv.lookLabel)
         };
@@ -443,7 +446,7 @@ public static partial class WorldContentGenerator
         foreach ((string field, string text, string token) in new[]
                  {
                      ("opener", iv.opener, Interview.HonorificToken), ("openerLegendary", iv.openerLegendary, Interview.NameToken),
-                     ("claim", iv.claim, Interview.PlaceToken), ("requestLabel", iv.requestLabel, Interview.DocumentToken),
+                     ("requestLabel", iv.requestLabel, Interview.DocumentToken),
                      ("requestPrompt", iv.requestPrompt, Interview.DocumentToken)
                  })
             if (!string.IsNullOrWhiteSpace(text) && !Interview.HoldsToken(text, token))
@@ -454,8 +457,9 @@ public static partial class WorldContentGenerator
         if (iv.maxLineChars < 1)
             errors.Add("interview.maxLineChars must be at least 1 (a missing value reads 0).");
 
-        foreach (string field in new[] { "opener", "openerLegendary", "claim", "requestPrompt", "requestReply", "smallTalkPrompt" })
+        foreach (string field in new[] { "opener", "openerLegendary", "requestPrompt", "requestReply", "smallTalkPrompt" })
             Id(InterviewLineId(field), $"interview.{field}");
+        CheckClaims(iv, authored, errors, Id);
 
         // --- Spoken requests: an id each, the three texts, ASCII, one set of line ids ---
         RequestData[] requests = iv.requests ?? Array.Empty<RequestData>();
@@ -659,7 +663,8 @@ public static partial class WorldContentGenerator
 
         Fits(InterviewLineId("opener"), iv.opener, Interview.HonorificToken, longestHonorific);
         Fits(InterviewLineId("openerLegendary"), iv.openerLegendary, Interview.NameToken, longestName);
-        Fits(InterviewLineId("claim"), iv.claim, Interview.PlaceToken, longestPlace);
+        foreach (ClaimData c in (iv.claims ?? Array.Empty<ClaimData>()).Where(c => c != null))
+            Fits(ClaimLineId(c.kind), c.text, Interview.PlaceToken, longestPlace);
         Fits(InterviewLineId("requestPrompt"), iv.requestPrompt, Interview.DocumentToken, longestDocument);
         Fits(InterviewLineId("requestReply"), iv.requestReply, Interview.ValueToken, 0);
         Fits(InterviewLineId("smallTalkPrompt"), iv.smallTalkPrompt, Interview.ValueToken, 0);
@@ -1439,11 +1444,12 @@ public static partial class WorldContentGenerator
         deskName = i.deskName,
         opener = new LineText(InterviewLineId("opener"), i.opener),
         openerLegendary = new LineText(InterviewLineId("openerLegendary"), i.openerLegendary),
-        claim = new LineText(InterviewLineId("claim"), i.claim),
+        claims = BuildClaims(i.claims),
         honorificMale = i.honorificMale,
         honorificFemale = i.honorificFemale,
         honorificUnknown = i.honorificUnknown,
         requestLabel = i.requestLabel,
+        papersLabel = i.papersLabel,
         requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
         requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
         askLabel = i.askLabel,
@@ -1634,7 +1640,6 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "themes", themes);
         SerializedArrays.Set(so, "stringTables", stringTables);
         so.FindProperty("translation").boxedValue = translation;
-        SerializedArrays.DropMissing(so, "clues");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }
@@ -1873,11 +1878,14 @@ public static partial class WorldContentGenerator
         public string deskName;
         public string opener;
         public string openerLegendary;
-        public string claim;
+        /// <summary>The claim per traveller kind (one row per kind; ids are generated).</summary>
+        public ClaimData[] claims;
         public string honorificMale;
         public string honorificFemale;
         public string honorificUnknown;
         public string requestLabel;
+        /// <summary>The hub entry that opens the papers menu ("Request papers >").</summary>
+        public string papersLabel;
         public string requestPrompt;
         public string requestReply;
         public string askLabel;

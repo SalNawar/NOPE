@@ -84,6 +84,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Read-only access to the current shift's ledger.</summary>
     public ShiftLedger Ledger => _ledger;
 
+    /// <summary>Raised when the player acknowledges a citation slip (Mail's citation notice arrives then; redesign phase 25).</summary>
+    public event System.Action<CaseVerdict> CitationAcknowledged;
+
     /// <summary>
     /// Initializes systems, generates cases once, and starts the day loop.
     /// </summary>
@@ -324,6 +327,9 @@ public sealed class GameManager : MonoBehaviour
             }
         }
 
+        // The clerk's statement gets the day's row (the Citizen Account; redesign phase 25).
+        ClerkAccountSource.RecordShift(_worldState, _ledger, contentLibrary, _gameConfig);
+
         // Continue from this save resumes at Home, never replaying this shift.
         _worldState.phase = RunPhase.Home;
 
@@ -431,10 +437,10 @@ public sealed class GameManager : MonoBehaviour
 
         CaseInstance inst = _dayCases[idx];
 
-        string claimedEraId = inst.trueEra != null ? inst.trueEra.id : string.Empty;
+        string claimedEraId = inst.claimedEra != null ? inst.claimedEra.id : string.Empty;
         string archetypeName = inst.archetype != null ? inst.archetype.displayName : string.Empty;
-        string nationName = inst.nation != null ? inst.nation.displayName : string.Empty;
-        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}, clues={inst.usedClues.Count}.");
+        string nationName = inst.claimedNation != null ? inst.claimedNation.displayName : string.Empty;
+        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}.");
 
         // Clear the previous case's verdict line before showing the new case.
         if (officeUI != null)
@@ -585,7 +591,7 @@ public sealed class GameManager : MonoBehaviour
         // No tuning config: keep the old simple correct/wrong behavior.
         if (_gameConfig == null)
         {
-            bool simpleCorrect = inst.trueEra == chosenEra;
+            bool simpleCorrect = inst.claimedEra == chosenEra;
             officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
             Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();
@@ -737,6 +743,8 @@ public sealed class GameManager : MonoBehaviour
                 booth.SetCitationPending(false);
             if (holdsClock)
                 shiftClock.Resume();
+            if (citation)
+                CitationAcknowledged?.Invoke(verdict);
             onContinue?.Invoke();
         });
     }

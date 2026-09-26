@@ -1,4 +1,3 @@
-using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,18 +35,11 @@ public sealed class DesktopWindow : MonoBehaviour
     /// <summary>The desktop's window manager (the builder wires it; a window without one, a leftover in the art office, does nothing).</summary>
     [SerializeField] private DesktopWindowManager manager;
 
-    /// <summary>Numbers the windows' ids (unique for the session).</summary>
-    private static int s_count;
-
-    private string _id;
     private bool _maximised;
     private Vector2 _restoreMin;
     private Vector2 _restoreMax;
     private Vector2 _restoreSize;
     private Vector2 _restorePos;
-
-    /// <summary>The window's id in the window stack (its object name and a session-unique number).</summary>
-    public string Id => _id ??= name + "#" + (++s_count).ToString(CultureInfo.InvariantCulture);
 
     /// <summary>The title bar's text, or the object's name when it has none.</summary>
     public string Title => titleText != null ? titleText.text : name;
@@ -63,12 +55,16 @@ public sealed class DesktopWindow : MonoBehaviour
         if (window == null)
             window = transform as RectTransform;
 
-        if (minimizeButton != null)
-            minimizeButton.onClick.AddListener(Minimise);
-        if (maximizeButton != null)
-            maximizeButton.onClick.AddListener(ToggleMaximise);
-        if (closeButton != null)
-            closeButton.onClick.AddListener(Close);
+        OnClick(minimizeButton, Minimise);
+        OnClick(maximizeButton, ToggleMaximise);
+        OnClick(closeButton, Close);
+    }
+
+    /// <summary>Wires a title-bar button (a missing one is skipped).</summary>
+    private static void OnClick(Button button, UnityEngine.Events.UnityAction action)
+    {
+        if (button != null)
+            button.onClick.AddListener(action);
     }
 
     /// <summary>Shows the window (a minimised one restores), raised and focused.</summary>

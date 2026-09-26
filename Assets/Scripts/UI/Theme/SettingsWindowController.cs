@@ -12,7 +12,9 @@ using UnityEngine.UI;
 /// with a "Double click" (the default) or a "Single click"
 /// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange).
 /// In each pair the chosen button shows the theme's accent colours (the
-/// SearchButton role), the other the default button colours.
+/// SearchButton role), the other the default button colours. The Keyboard
+/// section's "Show shortcuts" opens the shortcut card (redesign phase 25;
+/// the desktop's keys today; phase 20's F1 card replaces it).
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
@@ -40,6 +42,12 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>The desktop's icons (Reset icon positions).</summary>
     [SerializeField] private DesktopIcons icons;
 
+    /// <summary>The Keyboard section's "Show shortcuts".</summary>
+    [SerializeField] private Button showShortcutsButton;
+
+    /// <summary>The shortcut card it opens.</summary>
+    [SerializeField] private DesktopWindow shortcutsWindow;
+
     private void Awake()
     {
         if (followHistoryButton != null)
@@ -56,6 +64,8 @@ public sealed class SettingsWindowController : MonoBehaviour
             iconSingleClickButton.onClick.AddListener(() => ChooseIconOpen(true));
         if (resetIconsButton != null)
             resetIconsButton.onClick.AddListener(ResetIcons);
+        if (showShortcutsButton != null && shortcutsWindow != null)
+            showShortcutsButton.onClick.AddListener(shortcutsWindow.Open);
     }
 
     private void OnEnable() => ShowSelection();

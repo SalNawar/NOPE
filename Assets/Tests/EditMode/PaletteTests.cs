@@ -128,7 +128,7 @@ public class PaletteTests
     {
         List<ThemeRoleId> missing = Palette.Missing(new List<ResolvedRole>(), true);
         Assert.IsFalse(missing.Contains(ThemeRoleId.DeskDim));
-        Assert.IsFalse(missing.Contains(ThemeRoleId.StickyNote));
+        Assert.IsTrue(missing.Contains(ThemeRoleId.StickyNote), "a live role needs its colour");
         Assert.IsTrue(missing.Contains(ThemeRoleId.IconSelection));
         Assert.IsTrue(missing.Contains(ThemeRoleId.DiegeticForm));
     }
@@ -137,7 +137,7 @@ public class PaletteTests
     public void ARuleOrOverride_ForARetiredRole_IsAProblem()
     {
         var problems = new List<string>();
-        List<ResolvedRole> roles = Resolve(new[] { Rule("DeskDim", "bar", "text") }, new[] { new PaletteOverride { role = "StickyNote", fill = "#FFFFFF" } }, false, problems);
+        List<ResolvedRole> roles = Resolve(new[] { Rule("DeskDim", "bar", "text") }, new[] { new PaletteOverride { role = "DeskDim", fill = "#FFFFFF" } }, false, problems);
         Assert.IsEmpty(roles);
         Assert.AreEqual(2, problems.Count, string.Join("\n", problems));
         Assert.IsTrue(problems.All(p => p.Contains("retired")));

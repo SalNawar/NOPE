@@ -23,7 +23,7 @@ public readonly struct DesktopEscapeState
     /// <summary>A context menu is open (the desktop's right-click menu).</summary>
     public readonly bool MenuOpen;
 
-    /// <summary>A text field on the desktop has the keyboard (or had it at the end of the last frame).</summary>
+    /// <summary>A text field on the desktop has the keyboard.</summary>
     public readonly bool FieldFocused;
 
     /// <summary>The Start menu is open.</summary>

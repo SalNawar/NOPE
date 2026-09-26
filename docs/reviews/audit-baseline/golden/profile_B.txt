@@ -1,70 +1,70 @@
 WINDOW title (idle): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 368 B, mean 376 B, p95 368 B, max 832 B; frames allocating 240/240
-   PlayerLoop time per frame: median 0.59 ms, p95 0.76 ms; frame time median 1.47 ms, p95 1.88 ms
+   PlayerLoop GC alloc per frame: median 368 B, mean 378 B, p95 368 B, max 832 B; frames allocating 240/240
+   PlayerLoop time per frame: median 0.74 ms, p95 1.10 ms; frame time median 1.86 ms, p95 2.69 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 1.46 ms p95 1.88 ms; GC Allocated In Frame (whole main thread, editor included) median 12395 B mean 12503 B (241 samples)
+   recorder: main thread median 1.84 ms p95 2.68 ms; GC Allocated In Frame (whole main thread, editor included) median 12675 B mean 13000 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
-   site 8 B/frame avg, in 4/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
-LOAD title -> office (art + gameplay, briefing up): 909 ms, 1 frames
+   site 10 B/frame avg, in 5/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
+LOAD title -> office (art + gameplay, briefing up): 1030 ms, 1 frames
 WINDOW office + morning briefing (idle): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 736 B, mean 753 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.42 ms, p95 3.31 ms; frame time median 3.73 ms, p95 4.92 ms
+   PlayerLoop GC alloc per frame: median 736 B, mean 757 B, p95 736 B, max 1200 B; frames allocating 240/240
+   PlayerLoop time per frame: median 2.72 ms, p95 4.09 ms; frame time median 4.30 ms, p95 5.84 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 3.71 ms p95 4.93 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 12868 B (241 samples)
+   recorder: main thread median 4.28 ms p95 5.87 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13167 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
-   site 17 B/frame avg, in 9/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
+   site 21 B/frame avg, in 11/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
 WINDOW office view, before READY (no traveller): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 736 B, mean 754 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.32 ms, p95 3.13 ms; frame time median 3.57 ms, p95 4.65 ms
+   PlayerLoop GC alloc per frame: median 736 B, mean 758 B, p95 736 B, max 1200 B; frames allocating 240/240
+   PlayerLoop time per frame: median 2.74 ms, p95 4.16 ms; frame time median 4.24 ms, p95 5.63 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 3.55 ms p95 4.71 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 13037 B (241 samples)
+   recorder: main thread median 4.22 ms p95 5.73 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13158 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
-   site 17 B/frame avg, in 9/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
+   site 21 B/frame avg, in 11/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
    site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW office view, traveller at the desk (idle, bubble done): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 736 B, mean 756 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.52 ms, p95 3.61 ms; frame time median 3.91 ms, p95 5.13 ms
+   PlayerLoop GC alloc per frame: median 736 B, mean 758 B, p95 736 B, max 1200 B; frames allocating 240/240
+   PlayerLoop time per frame: median 3.04 ms, p95 4.39 ms; frame time median 4.55 ms, p95 6.27 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 3.90 ms p95 5.16 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 12873 B (241 samples)
+   recorder: main thread median 4.53 ms p95 6.40 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13347 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
-   site 19 B/frame avg, in 10/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
+   site 21 B/frame avg, in 11/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
    site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW desktop in the PC frame, traveller at the desk (idle): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 736 B, mean 758 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.88 ms, p95 3.66 ms; frame time median 4.31 ms, p95 5.50 ms
+   PlayerLoop GC alloc per frame: median 736 B, mean 761 B, p95 1200 B, max 1200 B; frames allocating 240/240
+   PlayerLoop time per frame: median 3.65 ms, p95 5.00 ms; frame time median 5.42 ms, p95 7.37 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 4.28 ms p95 5.51 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 12887 B (241 samples)
+   recorder: main thread median 5.40 ms p95 7.38 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13211 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: FrameCamera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
-   site 21 B/frame avg, in 11/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
+   site 25 B/frame avg, in 13/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
    site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW office view, traveller wheel open (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 736 B, mean 754 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.47 ms, p95 3.24 ms; frame time median 3.75 ms, p95 4.84 ms
+   PlayerLoop time per frame: median 2.53 ms, p95 3.87 ms; frame time median 3.99 ms, p95 5.33 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 3.73 ms p95 4.88 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 13037 B (241 samples)
+   recorder: main thread median 3.97 ms p95 5.35 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13150 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 17 B/frame avg, in 9/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
    site 0 B/frame avg, in 1/240 frames, 3 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunBehaviourUpdate > BehaviourUpdate > Assembly-CSharp.dll!::ShiftClockReadouts.Update() [Invoke]
 WINDOW office + shift report (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 736 B, mean 755 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.45 ms, p95 3.38 ms; frame time median 3.76 ms, p95 5.22 ms
+   PlayerLoop time per frame: median 2.55 ms, p95 4.11 ms; frame time median 4.04 ms, p95 5.94 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 3.74 ms p95 5.28 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 12872 B (241 samples)
+   recorder: main thread median 4.03 ms p95 6.01 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13154 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 19 B/frame avg, in 10/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
-LOAD office -> home (expenses up): 328 ms, 1 frames
+LOAD office -> home (expenses up): 357 ms, 1 frames
 WINDOW home, expenses panel (idle): 240 profiled frames (of 242)
-   PlayerLoop GC alloc per frame: median 368 B, mean 374 B, p95 368 B, max 832 B; frames allocating 240/240
-   PlayerLoop time per frame: median 0.59 ms, p95 0.88 ms; frame time median 1.50 ms, p95 2.23 ms
+   PlayerLoop GC alloc per frame: median 368 B, mean 378 B, p95 368 B, max 832 B; frames allocating 240/240
+   PlayerLoop time per frame: median 0.89 ms, p95 1.37 ms; frame time median 2.26 ms, p95 3.46 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 1.49 ms p95 2.24 ms; GC Allocated In Frame (whole main thread, editor included) median 12395 B mean 12506 B (241 samples)
+   recorder: main thread median 2.25 ms p95 3.45 ms; GC Allocated In Frame (whole main thread, editor included) median 12675 B mean 12753 B (241 samples)
    site 368 B/frame avg, in 240/240 frames, 4 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
-   site 6 B/frame avg, in 3/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
-LOAD home -> office (sleep, nightly resolve, day 2 briefing up): 663 ms, 1 frames
+   site 10 B/frame avg, in 5/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
+LOAD home -> office (sleep, nightly resolve, day 2 briefing up): 803 ms, 1 frames
 WINDOW day 2 office + morning briefing (idle): 240 profiled frames (of 242)
    PlayerLoop GC alloc per frame: median 736 B, mean 753 B, p95 736 B, max 1200 B; frames allocating 240/240
-   PlayerLoop time per frame: median 2.47 ms, p95 3.40 ms; frame time median 3.89 ms, p95 5.26 ms
+   PlayerLoop time per frame: median 2.46 ms, p95 3.84 ms; frame time median 3.88 ms, p95 5.40 ms
    EditorLoop GC alloc per frame (editor, not the game): median 0 B, mean 0 B
-   recorder: main thread median 3.87 ms p95 5.40 ms; GC Allocated In Frame (whole main thread, editor included) median 12763 B mean 13036 B (241 samples)
+   recorder: main thread median 3.86 ms p95 5.43 ms; GC Allocated In Frame (whole main thread, editor included) median 13043 B mean 13193 B (241 samples)
    site 736 B/frame avg, in 240/240 frames, 8 allocs/frame when present: PlayerLoop > RenderPlayModeViewCameras > UnityEngine.CoreModule.dll!UnityEngine.Rendering::RenderPipelineManager.DoRenderLoop_Internal() [Invoke] > Inl_UniversalRenderTotal > Inl_RenderCameraStack > Inl_ScriptableRenderContext.Submit > UniversalRenderPipeline.RenderSingleCameraInternal: Main Camera > ExecuteRenderGraph > DrawScreenSpaceUI > GUI.Repaint > UnityEngine.IMGUIModule.dll!UnityEngine::GUIUtility.BeginGUI() [Invoke]
    site 17 B/frame avg, in 9/240 frames, 6 allocs/frame when present: PlayerLoop > UpdateScene > Update.ScriptRunDelayedTasks > UnityEngine.CoreModule.dll!UnityEngine::UnitySynchronizationContext.ExecuteTasks() [Invoke]
