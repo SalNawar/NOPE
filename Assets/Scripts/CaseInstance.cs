@@ -30,7 +30,7 @@ public sealed class CaseInstance
     /// <summary>Label of the claimed place, "Abbasid Baghdad (Medieval)" (claim line and Citizen Records).</summary>
     public string originLabel;
 
-    /// <summary>The claimed place's tongue (piece 9): the traveller's papers and speech use it, never their true home's (empty without a place).</summary>
+    /// <summary>The claimed place's tongue (piece 9): the traveller speaks it, never their true home's (their papers are always English; empty without a place).</summary>
     public string tongueId = string.Empty;
 
     /// <summary>Authored impact overrides from the blueprint/legendary (may be empty).</summary>

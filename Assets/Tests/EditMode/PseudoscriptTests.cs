@@ -161,6 +161,20 @@ public class PseudoscriptTests
         Assert.AreEqual("小一火下衣大 小天衣木衣火 (文由 口衣一月天上)", Render("Silver shekel (by weight)", Table(Chinese)));
     }
 
+    /// <summary>The key words (the traveller-types spec's §8.1): a letter inside an English span is never a glyph; a letter outside is; nothing else ever is.</summary>
+    [Test]
+    public void IsGlyph_ALetterOutsideTheEnglishSpans()
+    {
+        const string line = "Go home, 12 x";
+        var english = new List<(int start, int length)> { (3, 4) };
+        bool[] glyphs = Enumerable.Range(0, line.Length).Select(i => Pseudoscript.IsGlyph(line, i, english)).ToArray();
+        CollectionAssert.AreEqual(new[] { true, true, false, false, false, false, false, false, false, false, false, false, true }, glyphs,
+            "G o | the space | h o m e (kept) | , space 1 2 space (no letters) | x");
+        Assert.IsTrue(Pseudoscript.IsGlyph(line, 3, null), "no spans: every letter is a glyph");
+        Assert.IsFalse(Pseudoscript.IsGlyph(line, 99, null), "past the end");
+        Assert.IsFalse(Pseudoscript.IsGlyph(null, 0, null));
+    }
+
     [Test]
     public void ADifferentTable_GivesADifferentString()
     {

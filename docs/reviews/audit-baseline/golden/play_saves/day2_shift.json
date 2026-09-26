@@ -3,7 +3,7 @@
     "world": {
         "day": 2,
         "runSeed": 12345,
-        "money": 205,
+        "money": 125,
         "timelineStability": 80.0,
         "totalCitations": 2,
         "citationsToday": 1,
@@ -11,7 +11,9 @@
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
-        "unlockedUpgradeIds": [],
+        "unlockedUpgradeIds": [
+            "tr_near_east_spoken"
+        ],
         "flags": [
             "premade:senenmut:met",
             "trig:unlock_q_capital:fired",
@@ -300,7 +302,7 @@
                 "Art is now DOMINANT in Babylonia.",
                 "Art is now DOMINANT in Periclean Athens.",
                 "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
-                "Budget cuts close the interpreter pool. From today, foreign papers and speech reach the desk untranslated; translators are sold at Home. The scanner still compares untranslated text with the books."
+                "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English."
             ]
         },
         "history": {

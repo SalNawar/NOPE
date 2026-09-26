@@ -39,9 +39,9 @@ public class DisplayTextTests
     public void ANullForeignText_BehavesAsPlain()
     {
         Assert.AreEqual(Shekel, For(Shekel, Reveal.Untranslated(null)));
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(null, 0f, 0)));
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(null, 0f)));
         Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Untranslated(null), Timing, false));
-        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(null, 0f, 0), Timing, false));
+        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(null, 0f), Timing, false));
     }
 
     [Test]
@@ -59,21 +59,21 @@ public class DisplayTextTests
     {
         ForeignText greek = Foreign(Greek);
         string foreign = For(Shekel, Reveal.Untranslated(greek));
-        Assert.AreEqual(foreign, For(Shekel, Reveal.Flipping(greek, 0f, 0)));
+        Assert.AreEqual(foreign, For(Shekel, Reveal.Flipping(greek, 0f)));
 
-        float duration = FlipSequence.Duration(20, 0, Timing);
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, duration, 0)));
-        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, duration, 0), Timing, false));
-        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, duration, 0), Timing, false));
+        float duration = FlipSequence.Duration(20, Timing);
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, duration)));
+        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, duration), Timing, false));
+        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, duration), Timing, false));
 
         // At 0.665 s letters 0-6 ("Silver s") have landed (the seventh at 0.66 s),
         // letters 7-9 are flipping and letter 10 (the 'e' at index 11) has not started.
-        string mid = For(Shekel, Reveal.Flipping(greek, 0.665f, 0));
+        string mid = For(Shekel, Reveal.Flipping(greek, 0.665f));
         StringAssert.StartsWith("Silver s", mid);
         Assert.AreNotEqual('h', mid[8], "the eighth letter is on its way");
         Assert.AreEqual(foreign.Substring(11), mid.Substring(11), "the letters that have not started are still foreign");
-        Assert.AreEqual(duration - 0.665f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0.665f, 0), Timing, false), 1e-5f);
-        Assert.IsTrue(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0.665f, 0), Timing, false));
+        Assert.AreEqual(duration - 0.665f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0.665f), Timing, false), 1e-5f);
+        Assert.IsTrue(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0.665f), Timing, false));
     }
 
     [Test]
@@ -81,39 +81,51 @@ public class DisplayTextTests
     {
         ForeignText greek = Foreign(Greek);
         // 'S' (letter 18) at 0.301 s: step 0, cell (18 + 7) % 26 = 25 ('κ'), upper-cased like its letter.
-        Assert.AreEqual("Κ", For("S", Reveal.Flipping(greek, 0.301f, 0)));
+        Assert.AreEqual("Κ", For("S", Reveal.Flipping(greek, 0.301f)));
         // At 0.361 s: step 1, cell (18 + 14) % 26 = 6 ('π').
-        Assert.AreEqual("π", For("s", Reveal.Flipping(greek, 0.361f, 0)));
-    }
-
-    [Test]
-    public void ARowStartsLater()
-    {
-        ForeignText greek = Foreign(Greek);
-        Assert.AreEqual(For("Deben", Reveal.Untranslated(greek)), For("Deben", Reveal.Flipping(greek, 0.44f, 1)));
-        Assert.AreEqual(FlipSequence.Duration(5, 1, Timing), DisplayText.Remaining("Deben", Reveal.Flipping(greek, 0f, 1), Timing, false), 1e-5f);
+        Assert.AreEqual("π", For("s", Reveal.Flipping(greek, 0.361f)));
     }
 
     [Test]
     public void ReducedMotion_ShowsTheCanonicalTextAtTheReveal()
     {
         ForeignText greek = Foreign(Greek);
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, 0f, 0), true));
-        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0f, 0), Timing, true));
-        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0f, 0), Timing, true));
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(greek, 0f), true));
+        Assert.AreEqual(0f, DisplayText.Remaining(Shekel, Reveal.Flipping(greek, 0f), Timing, true));
+        Assert.IsFalse(DisplayText.ShowsForeign(Shekel, Reveal.Flipping(greek, 0f), Timing, true));
         Assert.AreEqual(For(Shekel, Reveal.Untranslated(greek)), For(Shekel, Reveal.Untranslated(greek), true), "reduced motion translates nothing by itself");
+    }
+
+    /// <summary>
+    /// Audit R4-024 and R4-023 (the TextFlip font contract, the PC spec's TR3):
+    /// a text is written in the script's font exactly while it shows a foreign
+    /// or scramble cell (when the script has a font), else in its own; the
+    /// choice depends only on what it shows now, so a pooled row that held a
+    /// foreign line gets its own font back.
+    /// </summary>
+    [Test]
+    public void FontFor_TheScriptsWhileForeignCellsShow_ElseTheTextsOwn()
+    {
+        ForeignText greek = Foreign(Greek);
+        Assert.AreEqual("script", DisplayText.FontFor(Shekel, Reveal.Untranslated(greek), Timing, false, "script", "own"));
+        Assert.AreEqual("script", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 0.665f), Timing, false, "script", "own"), "mid-flip");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 5f), Timing, false, "script", "own"), "settled");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Flipping(greek, 0f), Timing, true, "script", "own"), "reduced motion");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Plain, Timing, false, "script", "own"), "a plain line after a foreign one: its own font again");
+        Assert.AreEqual("own", DisplayText.FontFor("1897", Reveal.Untranslated(greek), Timing, false, "script", "own"), "no letter, nothing foreign");
+        Assert.AreEqual("own", DisplayText.FontFor(Shekel, Reveal.Untranslated(greek), Timing, false, null, "own"), "the fallback cipher draws in the text's own font");
     }
 
     [Test]
     public void Progress_ChangesExactlyWhenTheShownTextDoes()
     {
         ForeignText greek = Foreign(Greek);
-        int previousProgress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, 0f, 0), Timing, false);
-        string previousText = For(Shekel, Reveal.Flipping(greek, 0f, 0));
+        int previousProgress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, 0f), Timing, false);
+        string previousText = For(Shekel, Reveal.Flipping(greek, 0f));
         for (float e = 0.0005f; e < 1.3f; e += 0.001f)
         {
-            int progress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, e, 0), Timing, false);
-            string text = For(Shekel, Reveal.Flipping(greek, e, 0));
+            int progress = DisplayText.Progress(Shekel, Reveal.Flipping(greek, e), Timing, false);
+            string text = For(Shekel, Reveal.Flipping(greek, e));
             Assert.AreEqual(progress != previousProgress, text != previousText, $"at {e}");
             previousProgress = progress;
             previousText = text;
@@ -129,9 +141,9 @@ public class DisplayTextTests
         Assert.AreEqual(ArabicShaper.ToVisual(logical), For(Shekel, Reveal.Untranslated(arabic)));
         Assert.IsFalse(For(Shekel, Reveal.Untranslated(arabic)).Contains('\0'));
 
-        string half = For(Shekel, Reveal.Flipping(arabic, 0.665f, 0));
+        string half = For(Shekel, Reveal.Flipping(arabic, 0.665f));
         StringAssert.Contains("Silver", half, "the English run keeps its order");
-        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(arabic, 5f, 0)));
+        Assert.AreEqual(Shekel, For(Shekel, Reveal.Flipping(arabic, 5f)));
     }
 
     /// <summary>
@@ -189,7 +201,7 @@ public class DisplayTextTests
         Assert.AreEqual("Deb[en]", Typed("Deben", Reveal.Plain, 3));
         Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", greek, Timing, false));
         Assert.IsFalse(DisplayText.ReadsRightToLeft("Deben", Reveal.Plain, Timing, false));
-        Assert.IsFalse(DisplayText.ReadsRightToLeft(Shekel, Reveal.Flipping(Foreign(Arabic, true), 5f, 0), Timing, false), "settled into English");
+        Assert.IsFalse(DisplayText.ReadsRightToLeft(Shekel, Reveal.Flipping(Foreign(Arabic, true), 5f), Timing, false), "settled into English");
         Assert.IsFalse(DisplayText.ReadsRightToLeft("1897", Reveal.Untranslated(Foreign(Arabic, true)), Timing, false), "no letter, nothing reversed");
         Assert.AreEqual(string.Empty, Typed(null, greek, 0));
     }
@@ -198,7 +210,7 @@ public class DisplayTextTests
     [Test]
     public void Typed_AFlippingRightToLeftLine_KeepsEveryCharacterInPlace_AndGrowsInReadingOrder()
     {
-        Reveal half = Reveal.Flipping(Foreign(Arabic, true), 0.665f, 0);
+        Reveal half = Reveal.Flipping(Foreign(Arabic, true), 0.665f);
         string shown = For(Shekel, half);
         Assert.IsTrue(DisplayText.ReadsRightToLeft(Shekel, half, Timing, false));
         int visible = -1;
@@ -227,6 +239,65 @@ public class DisplayTextTests
                 count++;
         }
         return count;
+    }
+
+    // -----------------------------
+    // Key words (the traveller-types spec's §8.1)
+    // -----------------------------
+
+    private const string Claim = "Please. Send me home to Periclean Athens (Ancient).";
+
+    /// <summary>"Please", "home" and the place stay English (as KeyWords.Spans gives them).</summary>
+    private static List<(int start, int length)> ClaimKeys() => new List<(int start, int length)> { (0, 6), (16, 4), (24, 26) };
+
+    [Test]
+    public void Untranslated_KeepsTheEnglishSpans_AndDrawsTheRestInGlyphs()
+    {
+        string shown = For(Claim, Reveal.Untranslated(Foreign(Greek), ClaimKeys()));
+        Assert.AreEqual(Claim.Length, shown.Length);
+        foreach ((int start, int length) s in ClaimKeys())
+            Assert.AreEqual(Claim.Substring(s.start, s.length), shown.Substring(s.start, s.length));
+        Assert.AreEqual(For("Send me", Reveal.Untranslated(Foreign(Greek))), shown.Substring(8, 7), "the rest as without spans");
+        Assert.AreEqual(For(Claim, Reveal.Untranslated(Foreign(Greek))), For(Claim, Reveal.Untranslated(Foreign(Greek), null)), "no spans: every letter");
+        Assert.IsTrue(DisplayText.ShowsForeign(Claim, Reveal.Untranslated(Foreign(Greek), ClaimKeys()), Timing, false));
+    }
+
+    [Test]
+    public void ALineAllKeyWords_IsPlain()
+    {
+        var all = new List<(int start, int length)> { (0, 3) };
+        Assert.AreEqual("Yes.", For("Yes.", Reveal.Untranslated(Foreign(Greek), all)));
+        Assert.IsFalse(DisplayText.ShowsForeign("Yes.", Reveal.Untranslated(Foreign(Greek), all), Timing, false), "nothing foreign: the text's own font");
+        Assert.AreEqual(0f, DisplayText.Remaining("Yes.", Reveal.Untranslated(Foreign(Greek), all), Timing, false));
+    }
+
+    [Test]
+    public void Flipping_NeverChangesTheEnglishSpans_AndOnlyTheGlyphsTakeTime()
+    {
+        ForeignText greek = Foreign(Greek);
+        int glyphLetters = FlipSequence.Letters(Claim, ClaimKeys());
+        float duration = FlipSequence.Duration(glyphLetters, Timing);
+        Assert.AreEqual(duration, DisplayText.Remaining(Claim, Reveal.Flipping(greek, 0f, ClaimKeys()), Timing, false), 1e-5f);
+        for (float e = 0f; e <= duration + 0.01f; e += 0.01f)
+        {
+            string shown = For(Claim, Reveal.Flipping(greek, e, ClaimKeys()));
+            foreach ((int start, int length) s in ClaimKeys())
+                Assert.AreEqual(Claim.Substring(s.start, s.length), shown.Substring(s.start, s.length), $"at {e}");
+        }
+        Assert.AreEqual(Claim, For(Claim, Reveal.Flipping(greek, duration, ClaimKeys())));
+        Assert.AreEqual(3 * glyphLetters, DisplayText.Progress(Claim, Reveal.Flipping(greek, duration, ClaimKeys()), Timing, false),
+            "each glyph letter starts, steps and lands; no English letter is a change point");
+    }
+
+    [Test]
+    public void RightToLeft_TheEnglishSpansReadInTheirOwnOrder()
+    {
+        const string claim = "I request passage home to Abbasid Baghdad (Medieval).";
+        var keys = new List<(int start, int length)> { (18, 4), (26, 26) };
+        string shown = For(claim, Reveal.Untranslated(Foreign(Arabic, true), keys));
+        StringAssert.Contains("Abbasid Baghdad (Medieval)", shown, "the place, brackets and all");
+        StringAssert.Contains("home", shown);
+        Assert.IsTrue(DisplayText.ReadsRightToLeft(claim, Reveal.Untranslated(Foreign(Arabic, true), keys), Timing, false));
     }
 
     [Test]

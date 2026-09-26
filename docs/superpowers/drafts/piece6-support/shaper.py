@@ -53,6 +53,26 @@ def visual(s):
             right = i+1<len(cps) and k[i+1]=='L' and chr(cps[i+1]).isdigit()
             if (chr(c) in '.,:' and left and right) or (chr(c) in '%' and left) or (chr(c) in '+-' and right):
                 k[i]='L'
+    # paired brackets (a simplified N0, RTL paragraph; audit R2-022): each closer pairs with the
+    # nearest open bracket of its kind; a pair holding R reads R; a pair holding only L reads L when
+    # the nearest strong character before it is L, else R; a pair holding neither stays neutral
+    opens=[]
+    for i,c in enumerate(cps):
+        if k[i]!='N': continue
+        ch=chr(c)
+        if ch in '([{': opens.append(i); continue
+        if ch not in ')]}': continue
+        want='([{'[')]}'.index(ch)]
+        for n in range(len(opens)-1,-1,-1):
+            s=opens[n]
+            if chr(cps[s])!=want: continue
+            del opens[n:]
+            inside=k[s+1:i]
+            held='R' if 'R' in inside else ('L' if 'L' in inside else 'N')
+            if held!='N':
+                before=next((k[j] for j in range(s-1,-1,-1) if k[j]!='N'),None)
+                k[s]=k[i]='L' if held=='L' and before=='L' else 'R'
+            break
     # neutrals between two L become L, else R (RTL paragraph)
     res=list(k)
     for i in range(len(k)):

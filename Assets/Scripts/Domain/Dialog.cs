@@ -99,16 +99,17 @@ public static class DialogChoiceKinds
     public static string IconName(DialogChoiceKind kind) => "wheel_" + kind.ToString().ToLowerInvariant();
 }
 
-/// <summary>One transcript line. Immutable; an answer line also carries the fact it states.</summary>
+/// <summary>One transcript line. Immutable; an answer line also carries the fact it states, and a traveller's line the spans that stay English when it shows untranslated.</summary>
 public sealed class DialogLine
 {
-    /// <summary>A spoken line, optionally with the expression a premade shows while saying it.</summary>
-    public DialogLine(string id, DialogSpeaker speaker, string text, string expression = null)
-        : this(id, speaker, text, false, default, null, false, expression)
+    /// <summary>A spoken line, optionally with the expression a premade shows while saying it and its key-word spans (KeyWords.Spans; null for none).</summary>
+    public DialogLine(string id, DialogSpeaker speaker, string text, string expression = null, IReadOnlyList<(int start, int length)> english = null)
+        : this(id, speaker, text, false, default, null, false, expression, english)
     {
     }
 
-    private DialogLine(string id, DialogSpeaker speaker, string text, bool isAnswer, ClueCategory category, string value, bool isTell, string expression)
+    private DialogLine(string id, DialogSpeaker speaker, string text, bool isAnswer, ClueCategory category, string value, bool isTell, string expression,
+                       IReadOnlyList<(int start, int length)> english)
     {
         Id = id;
         Speaker = speaker;
@@ -118,11 +119,12 @@ public sealed class DialogLine
         Value = value;
         IsTell = isTell;
         Expression = expression;
+        English = english ?? Array.Empty<(int start, int length)>();
     }
 
-    /// <summary>A traveller's answer line: its sentence, plus the answer's category, canonical value and tell flag (no expression).</summary>
-    public static DialogLine Answer(string id, string text, InterviewAnswer a) =>
-        new DialogLine(id, DialogSpeaker.Traveller, text, true, a != null ? a.category : default, a != null ? a.value : null, a != null && a.isTell, null);
+    /// <summary>A traveller's answer line: its sentence and key-word spans (null for none), plus the answer's category, canonical value and tell flag (no expression).</summary>
+    public static DialogLine Answer(string id, string text, InterviewAnswer a, IReadOnlyList<(int start, int length)> english = null) =>
+        new DialogLine(id, DialogSpeaker.Traveller, text, true, a != null ? a.category : default, a != null ? a.value : null, a != null && a.isTell, null, english);
 
     /// <summary>Stable id (the transcript names its row Line_{Id}).</summary>
     public string Id { get; }
@@ -147,6 +149,13 @@ public sealed class DialogLine
 
     /// <summary>The expression a premade shows while saying the line (a LookKeys.Expressions token), or null.</summary>
     public string Expression { get; }
+
+    /// <summary>
+    /// The spans of <see cref="Text"/> that stay English when the line shows
+    /// untranslated (the key words: KeyWords.Spans, from the formatter),
+    /// sorted and apart; empty for none (a desk line: always English). Never null.
+    /// </summary>
+    public IReadOnlyList<(int start, int length)> English { get; }
 }
 
 /// <summary>One choice the player can pick at a node.</summary>

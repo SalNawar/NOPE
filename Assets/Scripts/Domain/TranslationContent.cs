@@ -3,8 +3,9 @@ using System.Collections.Generic;
 
 /// <summary>
 /// A place's tongue (world_source.json translation.tongues[], piece 9): the
-/// language a traveller claiming the place writes and speaks, drawn in its
-/// script until the player owns its pack's translator.
+/// language a traveller claiming the place speaks, drawn in its script until
+/// the player owns its pack's Speech translator (their papers are always
+/// filled in English).
 /// </summary>
 [Serializable]
 public sealed class Tongue
@@ -28,7 +29,7 @@ public sealed class Tongue
     public bool Native => string.IsNullOrWhiteSpace(pack);
 }
 
-/// <summary>A translator pack: one region, sold at Home as a Papers (Written) and a Speech (Spoken) upgrade.</summary>
+/// <summary>A translator pack: one region, sold at Home as its Speech translator.</summary>
 [Serializable]
 public sealed class TranslatorPack
 {
@@ -39,11 +40,29 @@ public sealed class TranslatorPack
     public string displayName;
 }
 
+/// <summary>
+/// The key-word rule (world_source.json translation.keyWords; the
+/// traveller-types spec's §8.1): what of an untranslated traveller's line
+/// stays English. KeyWords.Spans applies it, KeyWords.Problems checks it.
+/// </summary>
+[Serializable]
+public sealed class KeyWordRule
+{
+    /// <summary>The slots whose fill stays English ("place", "name", "document"; Interview's tokens).</summary>
+    public List<string> slots = new List<string>();
+
+    /// <summary>Words that stay English wherever they stand as whole words (case- and accent-insensitive; a word may hold spaces: "Temporal Customs").</summary>
+    public List<string> words = new List<string>();
+
+    /// <summary>True when digits stay English too (they are never drawn in glyphs, and count as key words).</summary>
+    public bool digits;
+}
+
 /// <summary>The translation rules the day reads (the content library's copy of world_source.json translation).</summary>
 [Serializable]
 public sealed class TranslationRules
 {
-    /// <summary>The first office day on which a foreign tongue shows untranslated (at least 1).</summary>
+    /// <summary>The first office day on which a foreign tongue's speech shows untranslated (at least 1).</summary>
     public int fromDay;
 
     /// <summary>Every tongue a place may name.</summary>
@@ -51,4 +70,7 @@ public sealed class TranslationRules
 
     /// <summary>The translator packs, in shop order.</summary>
     public List<TranslatorPack> packs = new List<TranslatorPack>();
+
+    /// <summary>What of an untranslated traveller's line stays English.</summary>
+    public KeyWordRule keyWords = new KeyWordRule();
 }

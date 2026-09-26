@@ -9670,13 +9670,28 @@
   },
   "translation": {
     "fromDay": 2,
-    "announce": "Budget cuts close the interpreter pool. From today, foreign papers and speech reach the desk untranslated; translators are sold at Home. The scanner still compares untranslated text with the books.",
+    "announce": "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
       "letterInterval": 0.04,
       "letterSeconds": 0.12,
-      "scrambleSteps": 2,
-      "rowStagger": 0.15
+      "scrambleSteps": 2
+    },
+    "keyWords": {
+      "slots": [
+        "place",
+        "name",
+        "document"
+      ],
+      "words": [
+        "home",
+        "please",
+        "papers",
+        "yes",
+        "no",
+        "Temporal Customs"
+      ],
+      "digits": true
     },
     "fallbackGlyphs": "olmnupqrystvwxazbcdfeghjik",
     "scripts": [
@@ -9839,25 +9854,21 @@
       {
         "id": "near_east",
         "displayName": "Near East",
-        "writtenCost": 100,
         "spokenCost": 80
       },
       {
         "id": "mediterranean",
         "displayName": "Mediterranean",
-        "writtenCost": 100,
         "spokenCost": 80
       },
       {
         "id": "east_asia",
         "displayName": "East Asia",
-        "writtenCost": 100,
         "spokenCost": 80
       },
       {
         "id": "north_europe",
         "displayName": "Northern Europe",
-        "writtenCost": 100,
         "spokenCost": 80
       }
     ],
