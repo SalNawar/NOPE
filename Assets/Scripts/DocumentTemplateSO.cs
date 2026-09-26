@@ -6,7 +6,8 @@ using UnityEngine;
 /// asset listed on its kind's blueprint. Pure data: its number and name, its
 /// fields in form order (a field's index is its place on the form, the forms
 /// engine's FormCell.field), when it is handed over, whether it carries the
-/// photo, and the kinds the desk may ask for it.
+/// photo, the kinds the desk may ask for it, and its form (redesign phase 4:
+/// where the paper prints each field, FormLayout).
 /// </summary>
 [CreateAssetMenu(fileName = "DocTemplate_", menuName = "TimeDesk/Document Template", order = 11)]
 public sealed class DocumentTemplateSO : ScriptableObject
@@ -41,4 +42,14 @@ public sealed class DocumentTemplateSO : ScriptableObject
 
     /// <summary>True when the desk may ask a traveller of <paramref name="kind"/> for this form.</summary>
     public bool IsAskableBy(TravellerKind kind) => askableBy != null && System.Array.IndexOf(askableBy, kind) >= 0;
+
+    /// <summary>
+    /// The paper's form (PC spec FO3): its blocks and where each field is
+    /// printed, on the desk paper and its scanned copy alike. A field's page is
+    /// the page the form places it on (FO4). Build Office UI and the content
+    /// validator check that it places every field once and fits the paper
+    /// (FormLayout.Check).
+    /// </summary>
+    [Header("Form")]
+    public FormSpec form = new FormSpec();
 }

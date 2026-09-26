@@ -315,7 +315,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         CloseAllWindows();
         _documents.Clear();
         _interview.BeginCase(inst);
-        _documents.Present(inst);
+        _documents.Present(inst, lib != null ? lib.Agency : null);
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
         _reference.BuildBookShelf(lib);
 

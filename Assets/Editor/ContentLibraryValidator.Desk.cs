@@ -12,9 +12,9 @@ public static partial class ContentLibraryValidator
 {
     /// <summary>
     /// What the desk cannot show of this content: fewer paper spawn slots than
-    /// the most papers one traveller carries (MaxDocuments), a form with more
-    /// fields than its paper's face holds (PaperFace.Capacity; the forms
-    /// engine's layout check replaces it), and a traveller wheel that fits
+    /// the most papers one traveller carries (MaxDocuments), a template whose
+    /// form does not place each field once or does not fit the paper
+    /// (FormFitProblems, redesign phase 4), and a traveller wheel that fits
     /// fewer choices than the interview's menu capacity. Empty when it fits
     /// (and for a null library or desk).
     /// </summary>
@@ -29,17 +29,7 @@ public static partial class ContentLibraryValidator
         if (slots < maxPapers)
             problems.Add($"The desk has {slots} paper spawn slots but a traveller can carry {maxPapers} papers; add slots in Desk_Default.");
 
-        var checkedTemplates = new HashSet<DocumentTemplateSO>();
-        foreach (CaseBlueprintSO blueprint in TravellerBlueprints(library))
-            foreach (DocumentTemplateSO template in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : new DocumentTemplateSO[0])
-            {
-                if (template == null || !checkedTemplates.Add(template))
-                    continue;
-                int fields = template.fieldSpecs != null ? template.fieldSpecs.Length : 0;
-                int capacity = PaperFace.Capacity(template.showsPhoto, desk.face);
-                if (fields > capacity)
-                    problems.Add($"{template.displayName} has {fields} fields but a paper face holds {capacity}; raise Desk_Default.face or shorten the template.");
-            }
+        problems.AddRange(FormFitProblems(library));
 
         if (library.Interview != null)
         {

@@ -1,10 +1,10 @@
 using System;
-using UnityEngine;
 
 /// <summary>
 /// Designer-authored spec for one labeled field on a document template
-/// (e.g., category=Currency, label="Payment", page=0). The runtime value is
-/// filled by CaseFactory from the reference data for the case's nation+era.
+/// (e.g., category=Currency, label="Payment"). The runtime value is filled by
+/// CaseFactory from the reference data for the case's nation+era. Where it is
+/// printed, and so its page, is the template's form's (PC spec FO4).
 /// </summary>
 [Serializable]
 public sealed class DocumentFieldSpec
@@ -14,9 +14,6 @@ public sealed class DocumentFieldSpec
 
     /// <summary>Field label shown on the document (e.g., "Currency").</summary>
     public string label = "Field";
-
-    /// <summary>Which page of the document this field appears on (0-based).</summary>
-    [Min(0)] public int page = 0;
 }
 
 /// <summary>
@@ -37,7 +34,7 @@ public sealed class DocumentField
     /// <summary>Printed value on the visitor's document.</summary>
     public string value;
 
-    /// <summary>0-based page this field is on.</summary>
+    /// <summary>0-based page this field is on: where the template's form places it (FormSpec.PageOf, set by CaseFactory).</summary>
     public int page;
 
     /// <summary>True if this value is a liar's tell (anachronistic for the claim).</summary>

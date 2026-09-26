@@ -62,9 +62,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The placeholder bezel art's scale (it is drawn at half the frame's reference size).</summary>
     private const int FrameArtDivisor = 2;
 
-    /// <summary>The placeholder paper's colour.</summary>
-    private static readonly Color PaperCream = new Color(0.95f, 0.92f, 0.82f, 1f);
-
     /// <summary>The paper's photo frame (shown only on a photo document).</summary>
     private static readonly Color PhotoGrey = new Color(0.55f, 0.56f, 0.58f, 1f);
 
@@ -73,9 +70,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The desk notes' ink.</summary>
     private static readonly Color NoteInk = new Color(0.96f, 0.95f, 0.88f, 1f);
-
-    /// <summary>A paper row's label ink: a shade lighter than its value's (Ink), dark enough to reach 4.5:1 on the held paper as drawn under the art's tonemapping, the picked row's highlight included (the readability fix).</summary>
-    private static readonly Color PaperLabelInk = new Color(0.115f, 0.105f, 0.09f, 1f);
 
     /// <summary>The day-1 scan note's box (metres): two lines of the note at the size one line of the old, shorter note had.</summary>
     private static readonly Vector2 ScanHintBox = new Vector2(0.78f, 0.13f);
@@ -91,9 +85,6 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The margin of a note's backing around its text (metres).</summary>
     private static readonly Vector2 NoteBackingMargin = new Vector2(0.04f, 0.02f);
-
-    /// <summary>The smallest auto-size of a paper row's texts (TMP world units: a few millimetres).</summary>
-    private const float PaperTextMinSize = 0.03f;
 
     /// <summary>The desk's named spots (decoration hooks, item 7), in the desk plane's local XZ (metres): empty for now.</summary>
     private static readonly (string id, DeskSlotKind kind, Vector3 position)[] DeskSlots =
@@ -693,6 +684,7 @@ public static partial class OfficeSceneUIBuilder
         // Checks (the validator runs the same, audit R6-021): every paper a traveller carries has a spawn slot, every document's rows fit its paper's face, the wheel shows the menu capacity.
         foreach (string problem in ContentLibraryValidator.DeskFitProblems(library, config))
             Debug.LogError($"[TimeDesk] {problem}");
+        CheckFormStyle(library, config, EnsureFormStyle());
 
         return coordinator;
     }
@@ -808,12 +800,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>
     /// The inactive paper every handed-over document clones: a root (the
     /// DeskDocument, its DeskDraggable and Clickable) and its lying Sheet (the
-    /// click box on the Interactable layer, the lit paper quad the hover
-    /// outlines, the title, the hidden photo frame with the traveller's photo,
-    /// and the Rows root with its inactive RowTemplate: a Label and a Value
-    /// text and a Highlight quad), laid out by PaperFace from Desk_Default's
-    /// face (the runtime re-lays each paper from the same knobs); the unlit
-    /// examine material the paper wears while held. Rebuilt each run.
+    /// click box on the Interactable layer, the lit paper quad in the form
+    /// style's paper tone that the hover outlines, the hidden photo frame with
+    /// the traveller's photo, and the printing parts: BuildPaperPrint); the
+    /// unlit examine material the paper wears while held. The paper prints its
+    /// document's form when it binds (redesign phase 4). Rebuilt each run.
     /// </summary>
     private static DeskDocument BuildPaperTemplate(Transform desk, DeskConfigSO config)
     {
@@ -826,7 +817,7 @@ public static partial class OfficeSceneUIBuilder
         BoxCollider box = sheet.gameObject.AddComponent<BoxCollider>();
         box.size = new Vector3(size.x, size.y, 0.004f);
 
-        Sprite paperSprite = EnsureOfficeSprite("paper", PaperCream, 150, 200);
+        Sprite paperSprite = EnsureOfficeSprite("paper", EnsureFormStyle().paper, 150, 200);
         Material paperMaterial = EnsureMaterial("Paper", "Universal Render Pipeline/Lit", m =>
         {
             m.SetTexture("_BaseMap", paperSprite.texture);
@@ -843,53 +834,20 @@ public static partial class OfficeSceneUIBuilder
             m.SetColor("_BaseColor", Color.white);
         });
 
-        // The face (piece 10): where the title, the photo and the rows go (the runtime re-lays each paper from the same knobs).
-        float h = size.y;
-        FaceLayout face = PaperFace.Layout(1, true, size.x / h, config.face);
-        TextMeshPro title = PaperText(sheet, "Title", "Document", new Vector2(face.Title.CentreX * h, face.Title.CentreY * h), new Vector2(face.Title.Width * h, face.Title.Height * h), true);
-
-        float photoHeight = face.Photo.Height * h;
-        var photoSize = new Vector2(photoHeight * LookCanvas.PhotoAspect, photoHeight);
+        // The photo frame: PhotoAspect by 1 (the paper scales it to its form's photo cell) with the crop sprites one unit tall inside.
         Transform frame = EnsureChild(sheet, "PhotoSlot");
-        frame.localPosition = new Vector3(face.Photo.CentreX * h, face.Photo.CentreY * h, -0.0005f);
-        PrimitivePart(frame, "Frame", PrimitiveType.Quad, Vector3.zero, new Vector3(photoSize.x, photoSize.y, 1f), LitMaterial("Paper_PhotoFrame", PhotoGrey, 0.1f));
+        frame.localPosition = new Vector3(0f, 0f, -0.0005f);
+        PrimitivePart(frame, "Frame", PrimitiveType.Quad, Vector3.zero, new Vector3(LookCanvas.PhotoAspect, 1f, 1f), LitMaterial("Paper_PhotoFrame", PhotoGrey, 0.1f));
         frame.Find("Frame").GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
-
-        // The photo: crop sprites one unit tall, scaled to fill the frame's height.
         Transform portrait = EnsureChild(frame, "Photo");
         portrait.localPosition = new Vector3(0f, 0f, -0.0005f);
         portrait.localRotation = Quaternion.identity;
-        portrait.localScale = Vector3.one * (photoHeight * PhotoFill);
+        portrait.localScale = Vector3.one * PhotoFill;
         LookSpriteStack stack = portrait.gameObject.AddComponent<LookSpriteStack>();
         WireLayers(stack, portrait, 1, true);
         frame.gameObject.SetActive(false);
 
-        // The rows: one inactive template (a label over a value, and a highlight quad behind both) the paper clones per field.
-        Transform rows = EnsureChild(sheet, "Rows");
-        rows.localPosition = Vector3.zero;
-        rows.localRotation = Quaternion.identity;
-        Transform rowTemplate = EnsureChild(rows, "RowTemplate");
-        FaceRow first = face.Rows[0];
-        TextMeshPro label = PaperText(rowTemplate, "Label", "Label", new Vector2(first.Label.CentreX * h, first.Label.CentreY * h), new Vector2(first.Label.Width * h, first.Label.Height * h), false);
-        label.alignment = TextAlignmentOptions.BottomLeft;
-        label.color = PaperLabelInk;
-        label.fontSizeMin = PaperTextMinSize;
-        TextMeshPro value = PaperText(rowTemplate, "Value", "Value", new Vector2(first.Value.CentreX * h, first.Value.CentreY * h), new Vector2(first.Value.Width * h, first.Value.Height * h), false);
-        value.alignment = TextAlignmentOptions.TopLeft;
-        value.textWrappingMode = TextWrappingModes.Normal;
-        value.fontSizeMin = PaperTextMinSize;
-        Material highlightMaterial = EnsureMaterial("PaperRow_Highlight", "Universal Render Pipeline/Unlit", m =>
-        {
-            m.SetColor("_BaseColor", new Color(0f, 0f, 0f, 0f));
-            m.SetFloat("_Surface", 1f);
-            m.SetFloat("_Blend", 0f);
-            m.SetFloat("_QueueOffset", -10f);
-            BaseShaderGUI.SetMaterialKeywords(m);
-        });
-        PrimitivePart(rowTemplate, "Highlight", PrimitiveType.Quad, new Vector3(first.Hit.CentreX * h, first.Hit.CentreY * h, -0.0003f),
-                      new Vector3(first.Hit.Width * h, first.Hit.Height * h, 1f), highlightMaterial);
-        rowTemplate.Find("Highlight").GetComponent<MeshRenderer>().shadowCastingMode = ShadowCastingMode.Off;
-        rowTemplate.gameObject.SetActive(false);
+        PaperPrint print = BuildPaperPrint(sheet);
 
         Clickable click = root.gameObject.AddComponent<Clickable>();
         click.SetOutline(new Renderer[] { paper });
@@ -901,10 +859,14 @@ public static partial class OfficeSceneUIBuilder
         DeskDocument doc = root.gameObject.AddComponent<DeskDocument>();
         var so = new SerializedObject(doc);
         SetRef(so, "sheet", sheet);
-        SetRef(so, "title", title);
         SetRef(so, "photoSlot", frame.gameObject);
         SetRef(so, "photo", stack);
-        SetRef(so, "rowTemplate", rowTemplate.gameObject);
+        SetRef(so, "textTemplate", print.Text);
+        SetRef(so, "fills", print.Fills);
+        SetRef(so, "lines", print.Lines);
+        SetRef(so, "seal", print.Seal);
+        SetRef(so, "highlightTemplate", print.Slot);
+        SetRef(so, "style", EnsureFormStyle());
         SetRef(so, "paperQuad", paper);
         SetRef(so, "examineMaterial", examineMaterial);
         SetRef(so, "click", click);
