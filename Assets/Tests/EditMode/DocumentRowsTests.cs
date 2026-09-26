@@ -4,9 +4,9 @@ using NUnit.Framework;
 /// <summary>
 /// The one row source of a document (piece 10): the scanned page's rows and
 /// the desk paper's rows come from DocumentRows. The order is page by page,
-/// authored order within a page; each row keeps its index in the field list
-/// and its place among the rows in the tongue (piece 9's row stagger), across
-/// the document for the paper and within the page for the scanned page.
+/// authored order within a page; each row keeps its index in the field list.
+/// (Papers are always English since the redesign's phase 1, so rows no longer
+/// count their place among the rows in a tongue.)
 /// </summary>
 public class DocumentRowsTests
 {
@@ -65,30 +65,27 @@ public class DocumentRowsTests
     }
 
     [Test]
-    public void Ordered_TongueRowCountsAcrossDocument()
+    public void Ordered_EveryPageInTurn_EachRowKeepsItsFieldIndex()
     {
         IReadOnlyList<DocumentRow> passport = DocumentRows.Ordered(Passport());
-        CollectionAssert.AreEqual(new[] { 0, 0, 0, 1 }, new[] { passport[0].TongueRow, passport[1].TongueRow, passport[2].TongueRow, passport[3].TongueRow },
-            "the name and the date are not in the tongue and take no place; the coin is the first row in the tongue, the language the second");
+        CollectionAssert.AreEqual(new[] { "Full Name", "Date of Birth", "Coin of Issue", "Native Tongue" }, Labels(passport));
+        CollectionAssert.AreEqual(new[] { 0, 1, 2, 3 }, new[] { passport[0].Index, passport[1].Index, passport[2].Index, passport[3].Index });
 
         IReadOnlyList<DocumentRow> permit = DocumentRows.Ordered(Permit());
-        Assert.AreEqual("Declared Device", permit[0].Field.label);
-        Assert.AreEqual(0, permit[0].TongueRow);
-        Assert.AreEqual("Bond Currency", permit[1].Field.label);
-        Assert.AreEqual(1, permit[1].TongueRow, "across pages on the paper");
+        CollectionAssert.AreEqual(new[] { "Declared Device", "Bond Currency" }, Labels(permit), "across pages on the paper");
+        Assert.AreEqual(1, permit[1].Index);
     }
 
     [Test]
-    public void OnPage_TongueRowCountsWithinPage()
+    public void OnPage_OnePageOnly_EachRowKeepsItsFieldIndex()
     {
         IReadOnlyList<DocumentRow> page0 = DocumentRows.OnPage(Permit(), 0);
         IReadOnlyList<DocumentRow> page1 = DocumentRows.OnPage(Permit(), 1);
         Assert.AreEqual(1, page0.Count);
         Assert.AreEqual("Declared Device", page0[0].Field.label);
-        Assert.AreEqual(0, page0[0].TongueRow);
+        Assert.AreEqual(0, page0[0].Index);
         Assert.AreEqual(1, page1.Count);
         Assert.AreEqual("Bond Currency", page1[0].Field.label);
-        Assert.AreEqual(0, page1[0].TongueRow, "within its page on the scanned copy (piece 9's rule)");
         Assert.AreEqual(1, page1[0].Index);
     }
 
@@ -118,17 +115,4 @@ public class DocumentRowsTests
         Assert.AreEqual(4, DocumentRows.PageCount(new List<DocumentField> { F(ClueCategory.Name, "x", 3), F(ClueCategory.Name, "y", 0) }));
     }
 
-    [Test]
-    public void HasTongue_Passport_True() => Assert.IsTrue(DocumentRows.HasTongue(Passport()));
-
-    [Test]
-    public void HasTongue_NameAndBirthDateOnly_False() =>
-        Assert.IsFalse(DocumentRows.HasTongue(new List<DocumentField> { F(ClueCategory.Name, "n"), null, F(ClueCategory.BirthDate, "b") }));
-
-    [Test]
-    public void HasTongue_Empty_False()
-    {
-        Assert.IsFalse(DocumentRows.HasTongue(new List<DocumentField>()));
-        Assert.IsFalse(DocumentRows.HasTongue(null));
-    }
 }

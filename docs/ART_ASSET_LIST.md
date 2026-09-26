@@ -143,10 +143,10 @@ A traveller hands over a **Travel Passport** (with the photo) and a **Transit Pe
 | Slot machine | in the slot panel | `Assets/Art/Home/slot_machine.png` | interim 800 × 1000, portrait: it does not fit the landscape panel | a landscape machine that fills the 560 × 360 panel: 1000 × 640, the reels in the middle, no lever in the picture | 2 | interim |
 | Slot lever | beside the machine | `Assets/Art/Home/slot_lever.png` | interim 200 × 600 | 160 × 480, standing at the machine's right edge | 2 | interim |
 | Slot outcome symbols × 5 | the result of a spin | `Assets/Art/Home/slot_<outcome id>.png` for `small_win`, `jackpot_cash`, `busted_machine`, `forgery_warning`, `legendary_omen` | 5 interim at 256 × 256; two still carry older names (`slot_jackpot`, `slot_busted`) | 256 × 256 | 2 | interim |
-| Upgrade icons × 12 | one per shop row (the rows are text today) | `Assets/Art/Home/upgrade_<id>.png` (ids below) | 3 interim at 256 × 256 (`upgrade_archive_access`, and `upgrade_advanced_scanner` and `upgrade_diplomatic_contacts` under older names), 9 missing | 256 × 256, for about 48 px in a shop row | 2 | interim / missing |
+| Upgrade icons × 8 | one per shop row (the rows are text today) | `Assets/Art/Home/upgrade_<id>.png` (ids below) | 3 interim at 256 × 256 (`upgrade_archive_access`, and `upgrade_advanced_scanner` and `upgrade_diplomatic_contacts` under older names), 5 missing | 256 × 256, for about 48 px in a shop row | 2 | interim / missing |
 | Family portraits | the family rows: the Partner and the Kid (`RunConfig.startingFamilyMembers`), whose condition runs from 0 to 10 | `Assets/Art/Home/family_<member>_<band>.png` | none: the rows are text | 512 × 512, in the character style; 2 members × 3 condition bands | 2 | missing |
 
-**Upgrade ids (12).** `adv_scanner` (Advanced Scanner), `archive_access` (Archive Access), `diplo_contacts` (Diplomatic Contacts), `interview_protocols` (Interview Protocols), and the eight translators: `tr_near_east_written` and `tr_near_east_spoken` (Near East Translator: Papers, Speech), `tr_mediterranean_written`, `tr_mediterranean_spoken`, `tr_east_asia_written`, `tr_east_asia_spoken`, `tr_north_europe_written`, `tr_north_europe_spoken`.
+**Upgrade ids (8).** `adv_scanner` (Advanced Scanner), `archive_access` (Archive Access), `diplo_contacts` (Diplomatic Contacts), `interview_protocols` (Interview Protocols), and the four Speech translators (papers are always English, so the Papers translators retired): `tr_near_east_spoken` (Near East Translator: Speech), `tr_mediterranean_spoken`, `tr_east_asia_spoken`, `tr_north_europe_spoken`.
 
 - **Drawn by code, no art:** the HUD line and the rows. The buttons take the UI kit's button.
 
@@ -218,7 +218,7 @@ What the player sees first comes first. Within a step, the Tier 1 files come fir
 6. **Paper faces:** one face per document kind (passport, permit), with the photo frame; drawn from the faces' own brief after piece 10.
 7. **Reference book covers:** shown on the book's tile and at the top of its window.
 8. **Verdict ink mark:** a text-free tick or cross mark lands on the papers after the verdict.
-9. **Translator icons:** eight, one per region and kind (papers, speech).
+9. **Translator icons:** four, one per region (speech).
 10. **Family:** the Partner and the Kid are drawn in the character style, three condition bands each.
 11. **Slot machine:** "yes" did not pick between the two options here, so Claude chose a **landscape machine** drawn for the 560 × 360 panel: the Home screen's 800 × 600 layout has no room for a taller panel.
 

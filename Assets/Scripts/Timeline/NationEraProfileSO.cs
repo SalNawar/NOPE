@@ -29,7 +29,7 @@ public sealed class NationEraProfileSO : ScriptableObject
     /// <summary>The place's moment year (negative = BCE); travellers' ages (their face) are measured against it.</summary>
     public int year;
 
-    /// <summary>The tongue this place writes and speaks (piece 9): a translation.tongues[] id, from world_source.json places[].tongue.</summary>
+    /// <summary>The tongue this place speaks (piece 9; its travellers' papers are always English): a translation.tongues[] id, from world_source.json places[].tongue.</summary>
     public string tongue;
 
     /// <summary>Earliest birth year of a traveller from here (negative = BCE).</summary>

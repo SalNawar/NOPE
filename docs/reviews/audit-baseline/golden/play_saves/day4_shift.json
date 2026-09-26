@@ -3,7 +3,7 @@
     "world": {
         "day": 4,
         "runSeed": 12345,
-        "money": 193,
+        "money": 213,
         "timelineStability": 70.0,
         "totalCitations": 4,
         "citationsToday": 1,
@@ -12,8 +12,8 @@
         "forgeryChanceModifier": 0.0,
         "payRateMultiplier": 1.0,
         "unlockedUpgradeIds": [
-            "interview_protocols",
-            "tr_near_east_written"
+            "tr_near_east_spoken",
+            "interview_protocols"
         ],
         "flags": [
             "premade:senenmut:met",
@@ -23,10 +23,10 @@
             "dlg:dlg_rumour:done",
             "rumour_calculators",
             "trig:unlock_q_ruler:fired",
-            "trig:unlock_q_born:fired",
             "trig:history_roman_aljabr:fired",
             "premade:arib:met",
             "dlg:dlg_rumour_followup:done",
+            "trig:unlock_q_born:fired",
             "premade:gallerani:met"
         ],
         "counters": [
@@ -533,7 +533,9 @@
         },
         "tomorrow": {
             "briefingLines": [],
-            "newsLines": []
+            "newsLines": [
+                "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records."
+            ]
         },
         "history": {
             "leaderId": "iraq",
