@@ -34,23 +34,23 @@ public class ClickTimingTests
         Assert.IsFalse(ClickTiming.IsDouble(ClickTiming.Never, 0f, 0f, float.MaxValue, 0f, 0f, float.MaxValue, Distance));
     }
 
-    [Test]
-    public void DoubleClick_TheSecondQuickClickCompletesIt_AndAThirdStartsOver()
+    /// <summary>Clicks one target at (time, x) points on a row; whether each completed a double.</summary>
+    private static bool[] Clicks(params (float time, float x)[] clicks)
     {
-        var clicks = new DoubleClick();
-        Assert.IsFalse(clicks.Click(1f, 0f, 0f, Seconds, Distance), "the first click");
-        Assert.IsTrue(clicks.Click(1.2f, 1f, 1f, Seconds, Distance), "the second");
-        Assert.IsFalse(clicks.Click(1.3f, 1f, 1f, Seconds, Distance), "a third starts a new pair");
-        Assert.IsTrue(clicks.Click(1.5f, 1f, 1f, Seconds, Distance), "and completes it with a fourth");
+        var target = new DoubleClick();
+        var doubles = new bool[clicks.Length];
+        for (int i = 0; i < clicks.Length; i++)
+            doubles[i] = target.Click(clicks[i].time, clicks[i].x, 0f, Seconds, Distance);
+        return doubles;
     }
 
     [Test]
-    public void DoubleClick_ASlowOrFarSecondClickStartsANewPair()
-    {
-        var clicks = new DoubleClick();
-        clicks.Click(1f, 0f, 0f, Seconds, Distance);
-        Assert.IsFalse(clicks.Click(2f, 0f, 0f, Seconds, Distance), "too slow");
-        Assert.IsFalse(clicks.Click(2.1f, 50f, 0f, Seconds, Distance), "too far");
-        Assert.IsTrue(clicks.Click(2.2f, 51f, 0f, Seconds, Distance), "a pair with the far click");
-    }
+    public void DoubleClick_TheSecondQuickClickCompletesIt_AndAThirdStartsOver() =>
+        CollectionAssert.AreEqual(new[] { false, true, false, true }, Clicks((1f, 0f), (1.2f, 1f), (1.3f, 1f), (1.5f, 1f)),
+                                  "first, second, a third starting a new pair, a fourth completing it");
+
+    [Test]
+    public void DoubleClick_ASlowOrFarSecondClickStartsANewPair() =>
+        CollectionAssert.AreEqual(new[] { false, false, false, true }, Clicks((1f, 0f), (2f, 0f), (2.1f, 50f), (2.2f, 51f)),
+                                  "too slow, too far, then a pair with the far click");
 }

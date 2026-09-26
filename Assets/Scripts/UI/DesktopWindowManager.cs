@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,9 +21,10 @@ using UnityEngine.UI;
 /// leaves nothing focused; Escape runs the desktop's part of the chain
 /// (DesktopEscapeRule: leave a field, close the Start menu, cancel a drag)
 /// and stamps its frame, so the PC frame's Escape (OfficeViewController)
-/// skips that press. It runs before the office's pollers.
+/// skips that press. It runs before the EventSystem (whose script order is
+/// -1000; its cancel would leave a field first) and the office's pollers.
 /// </summary>
-[DefaultExecutionOrder(-100)]
+[DefaultExecutionOrder(-1100)]
 public sealed class DesktopWindowManager : MonoBehaviour
 {
     /// <summary>The desktop's knobs (the maximise area, the double-click).</summary>
@@ -50,13 +52,19 @@ public sealed class DesktopWindowManager : MonoBehaviour
     [SerializeField] private Color minimisedTint = new Color(1f, 1f, 1f, 0.55f);
 
     private readonly WindowStack _stack = new WindowStack();
+
+    /// <summary>Each window put under the stack, by its id, and each id by its window.</summary>
     private readonly Dictionary<string, DesktopWindow> _windows = new Dictionary<string, DesktopWindow>();
+    private readonly Dictionary<DesktopWindow, string> _ids = new Dictionary<DesktopWindow, string>();
+
     private readonly Dictionary<string, TaskbarButton> _buttons = new Dictionary<string, TaskbarButton>();
     private readonly List<string> _scratch = new List<string>();
     private readonly List<RaycastResult> _hits = new List<RaycastResult>();
     private PointerEventData _press;
     private WindowDrag _drag;
-    private bool _fieldFocusedAtFrameEnd;
+
+    /// <summary>Numbers the windows' ids.</summary>
+    private int _registered;
 
     /// <summary>One taskbar button and its label.</summary>
     private struct TaskbarButton
@@ -80,6 +88,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private void Awake()
     {
         _stack.Changed += Apply;
+        _press = new PointerEventData(EventSystem.current);
         if (taskbarButtonTemplate != null)
             taskbarButtonTemplate.gameObject.SetActive(false);
         if (config == null)
@@ -127,24 +136,28 @@ public sealed class DesktopWindowManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Puts a window under the stack (a new one is hidden until opened) and
-    /// returns its id; windows destroyed since (a case's document windows,
-    /// closed first) are dropped.
+    /// Puts a window under the stack (a new one gets an id and is hidden until
+    /// opened) and returns its id; windows destroyed since (a case's document
+    /// windows, closed first) are dropped.
     /// </summary>
     private string Register(DesktopWindow window)
     {
-        string id = window.Id;
-        if (_windows.ContainsKey(id))
-            return id;
+        if (_ids.TryGetValue(window, out string known))
+            return known;
 
         _scratch.Clear();
         foreach (KeyValuePair<string, DesktopWindow> pair in _windows)
             if (pair.Value == null && !_stack.IsOpen(pair.Key))
                 _scratch.Add(pair.Key);
         foreach (string gone in _scratch)
+        {
+            _ids.Remove(_windows[gone]);
             _windows.Remove(gone);
+        }
 
+        string id = window.name + "#" + (++_registered).ToString(CultureInfo.InvariantCulture);
         _windows.Add(id, window);
+        _ids.Add(window, id);
         if (window.gameObject.activeSelf)
             window.gameObject.SetActive(false);
         return id;
@@ -176,6 +189,16 @@ public sealed class DesktopWindowManager : MonoBehaviour
         if (taskbarButtons == null || taskbarButtonTemplate == null)
             return;
 
+        RemoveClosedButtons();
+        IReadOnlyList<string> order = _stack.TaskbarOrder;
+        for (int i = 0; i < order.Count; i++)
+            if (_windows.TryGetValue(order[i], out DesktopWindow window) && window != null)
+                ShowButton(order[i], window);
+    }
+
+    /// <summary>Removes the buttons of closed (or destroyed) windows.</summary>
+    private void RemoveClosedButtons()
+    {
         _scratch.Clear();
         foreach (KeyValuePair<string, TaskbarButton> pair in _buttons)
             if (!_stack.IsOpen(pair.Key) || !_windows.TryGetValue(pair.Key, out DesktopWindow w) || w == null)
@@ -186,32 +209,28 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 Destroy(_buttons[gone].Button.gameObject);
             _buttons.Remove(gone);
         }
+    }
 
-        IReadOnlyList<string> order = _stack.TaskbarOrder;
-        for (int i = 0; i < order.Count; i++)
+    /// <summary>A window's button, last in the strip so far: its title and its look.</summary>
+    private void ShowButton(string id, DesktopWindow window)
+    {
+        if (!_buttons.TryGetValue(id, out TaskbarButton button))
         {
-            string id = order[i];
-            if (!_windows.TryGetValue(id, out DesktopWindow window) || window == null)
-                continue;
-
-            if (!_buttons.TryGetValue(id, out TaskbarButton button))
-            {
-                Button clone = Instantiate(taskbarButtonTemplate, taskbarButtons);
-                clone.gameObject.name = "WindowButton";
-                clone.gameObject.SetActive(true);
-                clone.onClick.AddListener(() => _stack.TaskbarClick(id));
-                button = new TaskbarButton { Button = clone, Label = clone.GetComponentInChildren<TMP_Text>(true) };
-                _buttons.Add(id, button);
-            }
-
-            button.Button.transform.SetAsLastSibling();
-            if (button.Label != null)
-                button.Label.text = window.Title;
-            ColorBlock colours = button.Button.colors;
-            colours.normalColor = _stack.Focused == id ? focusedTint : _stack.IsMinimised(id) ? minimisedTint : Color.white;
-            colours.selectedColor = colours.normalColor;
-            button.Button.colors = colours;
+            Button clone = Instantiate(taskbarButtonTemplate, taskbarButtons);
+            clone.gameObject.name = "WindowButton";
+            clone.gameObject.SetActive(true);
+            clone.onClick.AddListener(() => _stack.TaskbarClick(id));
+            button = new TaskbarButton { Button = clone, Label = clone.GetComponentInChildren<TMP_Text>(true) };
+            _buttons.Add(id, button);
         }
+
+        button.Button.transform.SetAsLastSibling();
+        if (button.Label != null)
+            button.Label.text = window.Title;
+        ColorBlock colours = button.Button.colors;
+        colours.normalColor = _stack.Focused == id ? focusedTint : _stack.IsMinimised(id) ? minimisedTint : Color.white;
+        colours.selectedColor = colours.normalColor;
+        button.Button.colors = colours;
     }
 
     /// <summary>Polls the press and Escape while the desktop takes input.</summary>
@@ -229,10 +248,6 @@ public sealed class DesktopWindowManager : MonoBehaviour
             Escape();
     }
 
-    /// <summary>Remembers whether a field had the keyboard at the end of the frame (a field may leave itself on Escape before this component sees the press).</summary>
-    private void LateUpdate() =>
-        _fieldFocusedAtFrameEnd = raycaster != null && raycaster.isActiveAndEnabled && FocusedField() != null;
-
     /// <summary>
     /// A press on the desktop at a screen point: outside the Start menu it
     /// closes the menu; in a window it focuses that window; on the empty
@@ -246,29 +261,26 @@ public sealed class DesktopWindowManager : MonoBehaviour
         if (top == null)
             return;
 
-        DesktopWindow window = top.GetComponentInParent<DesktopWindow>();
-        if (window != null && _windows.ContainsKey(window.Id))
-        {
-            _stack.Focus(window.Id);
-            return;
-        }
+        foreach (KeyValuePair<string, DesktopWindow> pair in _windows)
+            if (pair.Value != null && top.transform.IsChildOf(pair.Value.transform))
+            {
+                _stack.Focus(pair.Key);
+                return;
+            }
 
-        if (emptyDesktop != null)
-            foreach (Graphic g in emptyDesktop)
-                if (g != null && g.gameObject == top)
-                {
-                    _stack.ClearFocus();
-                    return;
-                }
+        if (emptyDesktop == null)
+            return;
+        foreach (Graphic g in emptyDesktop)
+            if (g != null && g.gameObject == top)
+            {
+                _stack.ClearFocus();
+                return;
+            }
     }
 
     /// <summary>The top graphic under a screen point on the desktop canvas (through its event camera), or null.</summary>
     private GameObject TopHit(Vector2 screen)
     {
-        if (EventSystem.current == null)
-            return null;
-
-        _press ??= new PointerEventData(EventSystem.current);
         _press.position = screen;
         _hits.Clear();
         raycaster.Raycast(_press, _hits);
@@ -288,12 +300,11 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private void Escape()
     {
         TMP_InputField field = FocusedField();
-        var state = new DesktopEscapeState(field != null || _fieldFocusedAtFrameEnd, shell != null && shell.StartMenuOpen, _drag != null);
+        var state = new DesktopEscapeState(field != null, shell != null && shell.StartMenuOpen, _drag != null);
         switch (DesktopEscapeRule.Resolve(state))
         {
             case DesktopEscape.LeaveField:
-                if (field != null)
-                    field.DeactivateInputField();
+                field.DeactivateInputField();
                 if (EventSystem.current != null)
                     EventSystem.current.SetSelectedGameObject(null);
                 break;

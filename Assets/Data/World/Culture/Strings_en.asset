@@ -224,7 +224,7 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: window.internet
-    text: Internet - News
+    text: Internet
     gloss: 0
     tier: 0
   - key: window.lexicon
@@ -243,10 +243,6 @@ MonoBehaviour:
     text: Sticky Notes
     gloss: 0
     tier: 0
-  - key: body.internet
-    text: Today's news feed. (placeholder)
-    gloss: 0
-    tier: 0
   - key: body.lexicon
     text: Wikipedia-style era glossary. (placeholder)
     gloss: 0
@@ -261,6 +257,289 @@ MonoBehaviour:
     tier: 0
   - key: body.notes
     text: Your notes. (placeholder)
+    gloss: 0
+    tier: 0
+  - key: browser.back
+    text: <
+    gloss: 0
+    tier: 0
+  - key: browser.forward
+    text: '>'
+    gloss: 0
+    tier: 0
+  - key: browser.home
+    text: Home
+    gloss: 0
+    tier: 0
+  - key: browser.go
+    text: Go
+    gloss: 0
+    tier: 0
+  - key: browser.address
+    text: Type a site's name or address
+    gloss: 0
+    tier: 0
+  - key: browser.search
+    text: Search names
+    gloss: 0
+    tier: 0
+  - key: browser.searchButton
+    text: Search
+    gloss: 0
+    tier: 0
+  - key: site.portal.title
+    text: Start page
+    gloss: 0
+    tier: 0
+  - key: site.portal.masthead
+    text: CHRONET
+    gloss: 0
+    tier: 0
+  - key: site.portal.intro
+    text: The sites of the Temporal Customs network. Pick one, or type its name in
+      the address field.
+    gloss: 0
+    tier: 0
+  - key: site.notFound.title
+    text: Page not found
+    gloss: 0
+    tier: 0
+  - key: site.notFound.body
+    text: Nothing is filed at {0}.
+    gloss: 0
+    tier: 0
+  - key: site.home
+    text: Back to the start page
+    gloss: 0
+    tier: 0
+  - key: site.news.masthead
+    text: "{0} \xB7 online edition \xB7 Day {1}"
+    gloss: 0
+    tier: 0
+  - key: site.news.issueTitle
+    text: '{0}, day {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.backIssue
+    text: 'Back issue: the paper of day {0}.'
+    gloss: 0
+    tier: 0
+  - key: site.news.world
+    text: WORLD
+    gloss: 0
+    tier: 0
+  - key: site.news.notices
+    text: NOTICES
+    gloss: 0
+    tier: 0
+  - key: site.news.noNotices
+    text: No notices.
+    gloss: 0
+    tier: 0
+  - key: site.news.standings
+    text: TIMELINE STANDINGS
+    gloss: 0
+    tier: 0
+  - key: site.news.standing
+    text: '{0}. {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.noStandings
+    text: No standings yet.
+    gloss: 0
+    tier: 0
+  - key: site.news.archive
+    text: ARCHIVE
+    gloss: 0
+    tier: 0
+  - key: site.news.issueLink
+    text: Day {0}
+    gloss: 0
+    tier: 0
+  - key: site.news.allIssues
+    text: All back issues
+    gloss: 0
+    tier: 0
+  - key: site.news.today
+    text: Today's edition
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveTitle
+    text: Back issues
+    gloss: 0
+    tier: 0
+  - key: site.news.archiveRow
+    text: 'Day {0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: site.news.noBackIssues
+    text: No back issues yet.
+    gloss: 0
+    tier: 0
+  - key: site.news.quiet
+    text: A quiet day on the timeline.
+    gloss: 0
+    tier: 0
+  - key: site.history.intro
+    text: Every country in every era, as history stands today. A revised fact says
+      when it changed and what it was.
+    gloss: 0
+    tier: 0
+  - key: site.history.present
+    text: The present
+    gloss: 0
+    tier: 0
+  - key: site.history.revisions
+    text: Revisions
+    gloss: 0
+    tier: 0
+  - key: site.history.country
+    text: COUNTRY
+    gloss: 0
+    tier: 0
+  - key: site.history.none
+    text: "\u2014"
+    gloss: 0
+    tier: 0
+  - key: site.history.subtitle
+    text: "{0} \xB7 {1} \xB7 {2}"
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNote
+    text: 'This is the present: the Future belongs to its people.'
+    gloss: 0
+    tier: 0
+  - key: site.history.revised
+    text: Revised on day {0} (was {1})
+    gloss: 0
+    tier: 0
+  - key: site.history.people
+    text: People of {0} in the Lineage Archive
+    gloss: 0
+    tier: 0
+  - key: site.history.index
+    text: Index of places
+    gloss: 0
+    tier: 0
+  - key: site.history.presentNone
+    text: No power holds the Future. The present is unsettled until one rises.
+    gloss: 0
+    tier: 0
+  - key: site.history.whyCarry
+    text: Carried from {0}
+    gloss: 0
+    tier: 0
+  - key: site.history.whyRule
+    text: '{0}'
+    gloss: 0
+    tier: 0
+  - key: site.history.whyPending
+    text: Carried from {0} (pending)
+    gloss: 0
+    tier: 0
+  - key: site.history.noRevisions
+    text: History has not changed yet.
+    gloss: 0
+    tier: 0
+  - key: site.history.col.day
+    text: DAY
+    gloss: 0
+    tier: 0
+  - key: site.history.col.place
+    text: PLACE
+    gloss: 0
+    tier: 0
+  - key: site.history.col.fact
+    text: FACT
+    gloss: 0
+    tier: 0
+  - key: site.history.col.before
+    text: BEFORE
+    gloss: 0
+    tier: 0
+  - key: site.history.col.after
+    text: AFTER
+    gloss: 0
+    tier: 0
+  - key: site.history.col.why
+    text: WHY
+    gloss: 0
+    tier: 0
+  - key: site.lineage.intro
+    text: Records of citizens of the past. Search by name, or pick a country and
+      an era.
+    gloss: 0
+    tier: 0
+  - key: site.lineage.country
+    text: COUNTRY
+    gloss: 0
+    tier: 0
+  - key: site.lineage.era
+    text: ERA
+    gloss: 0
+    tier: 0
+  - key: site.lineage.all
+    text: All
+    gloss: 0
+    tier: 0
+  - key: site.lineage.count
+    text: '{0} records'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.hits
+    text: '{0} records match "{1}"'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.noHits
+    text: No record matches.
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.name
+    text: NAME
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.born
+    text: BORN
+    gloss: 0
+    tier: 0
+  - key: site.lineage.col.place
+    text: PLACE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.name
+    text: NAME
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.born
+    text: BORN
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.died
+    text: DIED
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.place
+    text: PLACE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.field.note
+    text: OCCUPATION / NOTE
+    gloss: 0
+    tier: 0
+  - key: site.lineage.unknown
+    text: Unknown
+    gloss: 0
+    tier: 0
+  - key: site.lineage.relations
+    text: RELATIONS
+    gloss: 0
+    tier: 0
+  - key: site.lineage.relation
+    text: '{0}: {1}'
+    gloss: 0
+    tier: 0
+  - key: site.lineage.back
+    text: Back to the search
     gloss: 0
     tier: 0
   - key: settings.language

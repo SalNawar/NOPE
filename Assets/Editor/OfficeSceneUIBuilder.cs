@@ -442,6 +442,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soGm, "shiftClock", shiftClock);
         SetRef(soGm, "travellerView", officeView.transform.Find("Traveller").GetComponent<TravellerView>());
         SetRef(soGm, "booth", booth);
+        SetRef(soGm, "desktopConfig", EnsureDesktopConfig());
         soGm.ApplyModifiedProperties();
 
         CheckThemeTags(canvas, officeCanvas);
@@ -1367,9 +1368,10 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Builds the fake-OS desktop shell: a left column of icons (some unlock-gated
-    /// by a library upgrade id, reported when the library does not know it) that
-    /// open placeholder windows with min/max/close chrome, a Start menu
+    /// Builds the fake-OS desktop shell: a left column of icons (the Internet
+    /// app's first; some unlock-gated by a library upgrade id, reported when the
+    /// library does not know it) that open the browser and placeholder windows
+    /// with min/max/close chrome, a Start menu
     /// (Settings, Turn off screen and Quit game) wired to a DesktopShell on the
     /// canvas, and the taskbar's "&lt; Desk" button (FocusOffice; built here, after
     /// the view exists). Idempotent.
@@ -1392,12 +1394,14 @@ public static partial class OfficeSceneUIBuilder
         // UpgradeSO.id values.
         var apps = new (string name, string labelKey, string titleKey, string bodyKey, string upgrade)[]
         {
-            ("IconInternet", "icon.internet", "window.internet", "body.internet", ""),
             ("IconLexicon",  "icon.lexicon",  "window.lexicon",  "body.lexicon", "archive_access"),
             ("IconDialect",  "icon.dialect",  "window.dialect",  "body.dialect", ""),
             ("IconMaterial", "icon.material", "window.material", "body.material", "adv_scanner"),
             ("IconNotes",    "icon.notes",    "window.notes",    "body.notes", ""),
         };
+
+        // The Internet app (the browser: OfficeSceneUIBuilder.Internet.cs), first in the icon column.
+        BuildInternetWindow(windowLayer, iconGrid, library);
 
         // BuildOSWindow keeps an existing window's texts, so the renamed Dialect and Material windows are rebuilt.
         DestroyChildIfPresent(windowLayer, "IconDialectWindow");

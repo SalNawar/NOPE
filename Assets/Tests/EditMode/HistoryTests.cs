@@ -97,6 +97,21 @@ public class HistoryTests
     }
 
     [Test]
+    public void LatestEdit_IsTheEditResolveReads()
+    {
+        var h = new HistoryState();
+        Assert.IsNull(History.LatestEdit(h, "egypt", "ancient", ClueCategory.Currency));
+        Assert.IsNull(History.LatestEdit(null, "egypt", "ancient", ClueCategory.Currency));
+
+        FactEdit sterling = Edit("egypt", "ancient", ClueCategory.Currency, "Sterling", 2);
+        h.factEdits.Add(sterling);
+        h.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, " ", 4));
+        h.factEdits.Add(Edit("greece", "ancient", ClueCategory.Currency, "Florin", 5));
+        Assert.AreSame(sterling, History.LatestEdit(h, "egypt", "ancient", ClueCategory.Currency), "the newest non-blank edit of the place and category");
+        Assert.IsNull(History.LatestEdit(h, "egypt", "ancient", ClueCategory.Language));
+    }
+
+    [Test]
     public void Latch_AppendsEditableNonBlankEdits_Only()
     {
         var h = new HistoryState();

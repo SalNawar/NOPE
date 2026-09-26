@@ -226,7 +226,8 @@ public static class TimelineService
                     newDominant.Add(key);
 
                     if (announce && tomorrowPlaces.Contains(profile) && !world.timeline.dominantKeys.Contains(key))
-                        news.Add($"{attrs[i].displayName} is now DOMINANT in {profile.displayName}.");
+                        news.Add(Interview.Fill(Interview.Fill(lib.HistoryLines.dominant?.text, History.AttributeToken, attrs[i].displayName),
+                                                Interview.PlaceToken, profile.displayName));
                 }
                 else if (tiers[i] == DominanceTier.Supporting)
                 {
