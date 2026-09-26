@@ -39,6 +39,9 @@ public sealed class DocumentsView : AppView
     /// <summary>True when the page template is wired (a case's papers can be shown).</summary>
     public bool Ready => pageTemplate != null;
 
+    /// <summary>True when the chosen paper's scanned copy shows (it is scanned), not the line saying why it cannot.</summary>
+    public bool ShowsCopy => _selected >= 0 && _papers.State(_selected) == PaperState.Scanned;
+
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
     /// its document (a photo paper shows <paramref name="look"/>), the chips

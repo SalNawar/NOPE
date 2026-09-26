@@ -20,6 +20,9 @@ public sealed class DayReference
 
     private string _directives = string.Empty;
 
+    /// <summary>Today's day number (set with the day's registry; the steps checklist lists a step from its first day).</summary>
+    public int Day { get; private set; } = 1;
+
     /// <summary>The Rules tab's text, the Records tab's lookup, the compare (the book rows pick into it) and the Reference tab; any may be missing.</summary>
     public DayReference(TMP_Text directivesText, CitizenRecordsWindowController records, CompareController compare, ReferenceView books)
     {
@@ -53,6 +56,7 @@ public sealed class DayReference
     /// <summary>Hands the day's citizen registry to the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
+        Day = day;
         if (_records != null)
             _records.SetRegistry(registry, agency, agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null);
     }

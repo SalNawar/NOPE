@@ -98,6 +98,14 @@ public sealed class ReferenceView : AppView
         Redraw();
     }
 
+    /// <summary>Shows the book of <paramref name="category"/> (a step's jump: its register keeps the claimed place's row first); nothing when no book has it.</summary>
+    public void ShowBook(ClueCategory category)
+    {
+        int index = _books.FindIndex(b => b.category == category);
+        if (index >= 0)
+            Select(index);
+    }
+
     /// <inheritdoc />
     public override void Select(int index)
     {

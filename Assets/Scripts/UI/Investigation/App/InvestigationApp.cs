@@ -8,9 +8,10 @@ using UnityEngine.UI;
 /// the desk), that fills the desktop the first time it opens. Its case header
 /// holds the claim, the counters ("Papers 2 of 3 received · 1 scanned ·
 /// Deviations 1") and the PC's Accept and Deny (the façade wires them); its
-/// toolbar holds Back, Forward, the search field, Steps, Split and Keys, shown
-/// but not live until their phases (18-21); the sidebar's Steps, Pinned and
-/// Recent are placeholders until then; one pane holds the six tabs.
+/// toolbar holds Back, Forward, the search field, Steps (live: it shows or
+/// hides the sidebar's steps checklist, StepsPanel), Split and Keys, the
+/// others shown but not live until their phases (18-20); the sidebar's
+/// Pinned and Recent are placeholders until then; one pane holds the six tabs.
 /// Nothing steals the view: something new for a tab badges it unless the
 /// player sees it (AppBadges), and dots the desktop's Investigation icon
 /// while the app is closed or minimised; a scan (ScanArrival) opens the app
@@ -37,7 +38,7 @@ public sealed class InvestigationApp : MonoBehaviour
     [SerializeField] private TMP_Text countersText;
 
     [Header("Toolbar")]
-    /// <summary>Back, Forward, the search field, Steps, Split and Keys: shown, not live until their phases (18-21).</summary>
+    /// <summary>Back, Forward, the search field, Split and Keys: shown, not live until their phases (18-20).</summary>
     [SerializeField] private Selectable[] notYetLive = new Selectable[0];
 
     [Header("Desktop")]
@@ -58,6 +59,9 @@ public sealed class InvestigationApp : MonoBehaviour
 
     /// <summary>True when the pane hosts a view for the tab.</summary>
     public bool Hosts(AppTab tab) => pane != null && pane.Hosts(tab);
+
+    /// <summary>The tab the pane shows (the steps checklist reads what the player sees).</summary>
+    public AppTab ActiveTab => pane != null ? pane.ActiveTab : AppTab.Documents;
 
     /// <summary>The first open: the app fills the desktop (P spec WN4).</summary>
     private void Start()

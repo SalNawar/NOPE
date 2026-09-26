@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,7 +15,9 @@ using UnityEngine.UI;
 /// the traveller's own record can disprove their birth-date tell
 /// (RecordMismatch; another person's record proves nothing). The registry,
 /// the agency block and the date are injected per day by GameManager via
-/// InvestigationUIController.
+/// InvestigationUIController. Each lookup is announced (Searched: the steps
+/// checklist's "a record was looked up"), and a step's jump looks a record up
+/// for the player (Lookup).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -89,6 +92,17 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         ShowIdle();
     }
 
+    /// <summary>Raised after each lookup of a name or number, whatever it found.</summary>
+    public event Action Searched;
+
+    /// <summary>Types <paramref name="query"/> into the lookup and runs it (a step's jump: the primary paper's record).</summary>
+    public void Lookup(string query)
+    {
+        if (searchInput != null)
+            searchInput.SetTextWithoutNotify(query ?? string.Empty);
+        Search();
+    }
+
     /// <summary>Looks up the typed name or number and lists the record's rows (or says none is on file).</summary>
     public void Search()
     {
@@ -111,6 +125,8 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
                 : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
 
         ShowPage(0);
+        if (!string.IsNullOrWhiteSpace(query))
+            Searched?.Invoke();
     }
 
     private void ShowIdle()

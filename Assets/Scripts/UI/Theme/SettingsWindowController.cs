@@ -10,7 +10,10 @@ using UnityEngine.UI;
 /// (MotionPreference; reduced shows translations at once, from the next
 /// traveller); and the desktop's icons (the PC redesign DK5, DK6): open
 /// with a "Double click" (the default) or a "Single click"
-/// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange).
+/// (DesktopPreferences), and "Reset icon positions" (DesktopIcons.Arrange);
+/// and the Investigation app (the PC redesign ST1, SG1): its steps checklist
+/// "Steps shown" (the default) or "Steps hidden" (StepsPanel.SetShown,
+/// remembered in DesktopPreferences; the toolbar's Steps repaints the pair).
 /// In each pair the chosen button shows the theme's accent colours (the
 /// SearchButton role), the other the default button colours. The Keyboard
 /// section's "Show shortcuts" opens the shortcut card (redesign phase 25;
@@ -42,6 +45,15 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>The desktop's icons (Reset icon positions).</summary>
     [SerializeField] private DesktopIcons icons;
 
+    /// <summary>The Investigation app's steps checklist shows.</summary>
+    [SerializeField] private Button stepsShownButton;
+
+    /// <summary>The Investigation app's steps checklist is hidden.</summary>
+    [SerializeField] private Button stepsHiddenButton;
+
+    /// <summary>The steps checklist the pair shows or hides.</summary>
+    [SerializeField] private StepsPanel steps;
+
     /// <summary>The Keyboard section's "Show shortcuts".</summary>
     [SerializeField] private Button showShortcutsButton;
 
@@ -66,6 +78,18 @@ public sealed class SettingsWindowController : MonoBehaviour
             resetIconsButton.onClick.AddListener(ResetIcons);
         if (showShortcutsButton != null && shortcutsWindow != null)
             showShortcutsButton.onClick.AddListener(shortcutsWindow.Open);
+        if (stepsShownButton != null)
+            stepsShownButton.onClick.AddListener(() => ChooseSteps(true));
+        if (stepsHiddenButton != null)
+            stepsHiddenButton.onClick.AddListener(() => ChooseSteps(false));
+        if (steps != null)
+            steps.ShownChanged += ShowSelection;
+    }
+
+    private void OnDestroy()
+    {
+        if (steps != null)
+            steps.ShownChanged -= ShowSelection;
     }
 
     private void OnEnable() => ShowSelection();
@@ -91,6 +115,16 @@ public sealed class SettingsWindowController : MonoBehaviour
         ShowSelection();
     }
 
+    /// <summary>Shows or hides the Investigation app's steps (remembered for the player; the checklist repaints this pair).</summary>
+    private void ChooseSteps(bool shown)
+    {
+        if (steps != null)
+            steps.SetShown(shown);
+        else
+            DesktopPreferences.StepsShown = shown;
+        ShowSelection();
+    }
+
     /// <summary>Lays the desktop's icons out in the default arrangement (and saves it).</summary>
     private void ResetIcons()
     {
@@ -112,6 +146,9 @@ public sealed class SettingsWindowController : MonoBehaviour
         bool single = DesktopPreferences.OpenIconsWithSingleClick;
         Paint(iconDoubleClickButton, !single, theme);
         Paint(iconSingleClickButton, single, theme);
+        bool stepsShown = DesktopPreferences.StepsShown;
+        Paint(stepsShownButton, stepsShown, theme);
+        Paint(stepsHiddenButton, !stepsShown, theme);
     }
 
     /// <summary>One button's colours from the theme.</summary>

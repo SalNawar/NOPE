@@ -103,6 +103,9 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>Raised when the papers held in the hand change (the booth's input rules read HeldCount).</summary>
     public event Action HoldsChanged;
 
+    /// <summary>Raised when a paper is lifted into the hand to be read, with its index (the steps checklist's "read").</summary>
+    public event Action<int> PaperExamined;
+
     private void Awake()
     {
         if (scanHint != null && config != null)
@@ -412,6 +415,7 @@ public sealed class DeskController : MonoBehaviour
         _readsToday++;
         RefreshHint();
         HoldsChanged?.Invoke();
+        PaperExamined?.Invoke(paper.Index);
     }
 
     /// <summary>Every held paper goes back where it lay (the desk catcher, Escape).</summary>

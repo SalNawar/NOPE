@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,10 @@ using UnityEngine.UI;
 /// dialog runner on the traveller wheel, the Transcript tab, the bubble),
 /// EvidencePresenter (the discrepancy log, the Report tab, the compare's
 /// DEVIATION LOGGED) and DayReference (the Rules, the Reference books' facts,
-/// the Records tab's registry). Nothing opens or closes a window by itself
+/// the Records tab's registry); it feeds the sidebar's steps checklist
+/// (StepsPanel) the case and its events (papers handed over, asked for and
+/// read at the desk, pairs compared, answers heard, garments looked at).
+/// Nothing opens or closes a window by itself
 /// but a scan (the app's ScanArrival): new lines and deviations badge their
 /// tabs, and the decision leaves every window as it is (the case's tabs show
 /// the no-case state). Every document is filled in English (the redesign's
@@ -45,6 +49,9 @@ public sealed class InvestigationUIController : MonoBehaviour
 
     /// <summary>The PC's compare dock (DK9), above the window layer so no window covers it; shown while a traveller is at the desk.</summary>
     [SerializeField] private GameObject compareDock;
+
+    /// <summary>The sidebar's steps checklist (optional: without it no steps show).</summary>
+    [SerializeField] private StepsPanel stepsPanel;
 
     [Header("The app's tabs")]
     /// <summary>The Documents tab: a chip per paper, the scanned copies.</summary>
@@ -156,6 +163,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.Attach();
         _documents.Scanned += HandleScanned;
         _documents.PapersChanged += ShowCounters;
+        _documents.PapersChanged += StepsReceived;
+        _documents.Examined += StepsRead;
+        _interview.Answered += StepsAsked;
+        _interview.LookedAt += StepsLookedAt;
+        if (compareController != null)
+            compareController.PairCompared += StepsCompared;
 
         if (stampTray != null)
         {
@@ -173,6 +186,8 @@ public sealed class InvestigationUIController : MonoBehaviour
         ShowCaseLayers(false);
         if (app != null)
             app.EndCase();
+        if (stepsPanel != null)
+            stepsPanel.EndCase();
     }
 
     /// <summary>The presenters over this component's references (the desk only when it is reachable).</summary>
@@ -181,7 +196,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         _reference = new DayReference(directivesText, recordsWindow, compareController, referenceView);
         _documents = new CaseDocumentsPresenter(documentsView, wiring.DeskReachable ? desk : null, compareController);
         _interview = new InterviewPresenter(interactionPanel, transcriptWindow, () => Arrived(AppTab.Transcript), wheel, compareController,
-                                            _documents.HandOver, () => _currentCase, this);
+                                            RequestPaper, () => _currentCase, this);
         _evidence = new EvidencePresenter(compareController, reportText, () =>
         {
             Arrived(AppTab.Report);
@@ -224,6 +239,12 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.Detach();
         _documents.Scanned -= HandleScanned;
         _documents.PapersChanged -= ShowCounters;
+        _documents.PapersChanged -= StepsReceived;
+        _documents.Examined -= StepsRead;
+        _interview.Answered -= StepsAsked;
+        _interview.LookedAt -= StepsLookedAt;
+        if (compareController != null)
+            compareController.PairCompared -= StepsCompared;
         if (_stampTrayListening != null)
         {
             _stampTrayListening.Decided -= Decide;
@@ -260,12 +281,14 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowRich(inst, lib);
     }
 
-    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state and the office's claim tag empties. No window closes.</summary>
+    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state, the steps go and the office's claim tag empties. No window closes.</summary>
     public void Hide()
     {
         ShowCaseLayers(false);
         if (app != null)
             app.EndCase();
+        if (stepsPanel != null)
+            stepsPanel.EndCase();
         if (hud != null)
             hud.SetClaim(string.Empty);
     }
@@ -283,8 +306,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// A case on the desk: the claim in the app's header and the office's tag
     /// (one text), the app on Documents with its badges cleared, today's
     /// directives, the papers presented, the interview started, the reference
-    /// books built the first time and turned to the claim, the compare
-    /// cleared. No window opens or closes.
+    /// books built the first time and turned to the claim, the steps of the
+    /// traveller's kind listed (the papers handed over on arrival received),
+    /// the compare cleared. No window opens or closes.
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)
     {
@@ -301,9 +325,70 @@ public sealed class InvestigationUIController : MonoBehaviour
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
         _reference.BuildBooks(lib);
         _reference.SetClaim(inst);
+        if (stepsPanel != null && inst != null)
+        {
+            stepsPanel.BeginCase(lib != null ? lib.Pc.steps : null, inst.kind, _reference.Day, StepPapers(inst), _interview.QuestionCategories,
+                                 lib != null ? lib.ReferenceBooks.Where(b => b != null).Select(b => b.category) : null);
+            StepsReceived();
+        }
 
         if (compareController != null)
             compareController.Clear();
+    }
+
+    /// <summary>The traveller's papers as the steps count them: each form's number, whether it is asked for, whether it is the photo paper, its fields.</summary>
+    private static List<StepPaper> StepPapers(CaseInstance inst) =>
+        inst.documents.Select(d => new StepPaper(FormOf(d), d != null && d.template != null && d.template.handOver == DocumentHandOver.OnRequest,
+                                                 d != null && d.template != null && d.template.showsPhoto, d != null ? d.fields : null)).ToList();
+
+    /// <summary>A document's form number (blank without a template).</summary>
+    private static string FormOf(DocumentInstance doc) => doc != null && doc.template != null ? doc.template.formNumber : string.Empty;
+
+    /// <summary>A paper asked for through the wheel: it is handed over, and the steps hear of the request.</summary>
+    private void RequestPaper(int index)
+    {
+        _documents.HandOver(index);
+        if (stepsPanel != null && _currentCase != null && index >= 0 && index < _currentCase.documents.Count)
+            stepsPanel.Requested(FormOf(_currentCase.documents[index]));
+    }
+
+    /// <summary>The steps hear of every paper handed over so far (on arrival, or asked for).</summary>
+    private void StepsReceived()
+    {
+        if (stepsPanel == null || _currentCase == null)
+            return;
+        CasePapers papers = _documents.Papers;
+        for (int i = 0; i < papers.Count; i++)
+            if (papers.State(i) != PaperState.NotHandedOver)
+                stepsPanel.Received(i);
+    }
+
+    /// <summary>A paper lifted into the hand: the steps count it read.</summary>
+    private void StepsRead(int paper)
+    {
+        if (stepsPanel != null && _currentCase != null)
+            stepsPanel.Read(paper);
+    }
+
+    /// <summary>An answer heard: the steps count its category asked.</summary>
+    private void StepsAsked(ClueCategory category)
+    {
+        if (stepsPanel != null && _currentCase != null)
+            stepsPanel.Asked(category);
+    }
+
+    /// <summary>A garment looked at: the steps hear of it.</summary>
+    private void StepsLookedAt()
+    {
+        if (stepsPanel != null && _currentCase != null)
+            stepsPanel.LookedAt();
+    }
+
+    /// <summary>A pair compared (whatever it showed): the steps hear of the check.</summary>
+    private void StepsCompared(CompareEvidence a, CompareEvidence b)
+    {
+        if (stepsPanel != null && _currentCase != null)
+            stepsPanel.Compared(a, b);
     }
 
     /// <summary>Something new for a case tab: the app badges it unless the player sees it.</summary>
