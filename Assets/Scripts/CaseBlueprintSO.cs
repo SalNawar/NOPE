@@ -2,12 +2,17 @@
 using UnityEngine;
 
 /// <summary>
-/// Defines how a procedural case is assembled: which document templates the
-/// traveller carries, how often they lie, and which archetypes they draw from.
+/// Defines how a procedural case is assembled: the traveller's kind (one
+/// blueprint per kind, traveller types K1), which document templates they
+/// carry, how often they lie, and which archetypes they draw from.
 /// </summary>
 [CreateAssetMenu(fileName = "CaseBlueprint_", menuName = "TimeDesk/Case Blueprint", order = 4)]
 public sealed class CaseBlueprintSO : ScriptableObject
 {
+    /// <summary>The kind of traveller this blueprint makes (their papers, their claim line, what the desk may ask them for).</summary>
+    [Header("Kind")]
+    [SerializeField] private TravellerKind kind = TravellerKind.Displaced;
+
     /// <summary>Used as a selection weight / difficulty marker (designer-controlled).</summary>
     [Header("Difficulty")]
     [SerializeField, Range(1, 10)] private int difficulty = 1;
@@ -32,6 +37,9 @@ public sealed class CaseBlueprintSO : ScriptableObject
 
     /// <summary>Public read-only authored impacts.</summary>
     public TimelineImpact[] AuthoredImpacts => authoredImpacts;
+
+    /// <summary>The kind of traveller this blueprint makes.</summary>
+    public TravellerKind Kind => kind;
 
     /// <summary>Public read-only difficulty.</summary>
     public int Difficulty => difficulty;

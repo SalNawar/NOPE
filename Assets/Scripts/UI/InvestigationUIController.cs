@@ -490,6 +490,7 @@ public sealed class InvestigationUIController : MonoBehaviour
         var interviewCase = new InterviewCase
         {
             introLine = inst != null ? inst.introLine : null,
+            kind = inst != null ? inst.kind : default,
             claimPlace = inst != null ? inst.originLabel : null,
             keyWords = _keyWords,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,

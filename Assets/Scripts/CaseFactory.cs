@@ -109,8 +109,9 @@ public sealed class CaseFactory
         InterviewLines wording = _lib.Interview;
         if (wording == null || string.IsNullOrWhiteSpace(wording.opener?.text) || string.IsNullOrWhiteSpace(wording.openerLegendary?.text))
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library's interview opener or legendary opener is blank, so a transcript may start with the claim. Run Tools > TimeDesk > Generate World.");
-        if (wording == null || string.IsNullOrWhiteSpace(wording.claim?.text))
-            Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no interview claim line, so the banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
+        foreach (TravellerKind kind in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints).Where(b => b != null).Select(b => b.Kind).Distinct())
+            if (string.IsNullOrWhiteSpace(Interview.ClaimLine(wording, kind)?.text))
+                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so their banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
 
         _channels = appearanceReachable ? plan.TellChannels : plan.TellChannels.Where(c => c != TellChannel.Appearance).ToList();
 
@@ -254,6 +255,8 @@ public sealed class CaseFactory
             return inst;
         }
 
+        inst.kind = blueprint.Kind;
+
         // 5) Merge authored timeline impacts (blueprint + legendary).
         if (blueprint.AuthoredImpacts != null)
             inst.authoredImpacts.AddRange(blueprint.AuthoredImpacts);
@@ -265,7 +268,7 @@ public sealed class CaseFactory
         BuildDocuments(inst, blueprint);
 
         // 7) Investigation layer: stated claim, structured fields, the lie (if any), daily rules.
-        inst.claimLine = Interview.Claim(_lib.Interview, originLabel);
+        inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
         inst.claimAllowedByRules = plan.ClaimAllowed(nation, claimedEra);
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = Disguise(inst, fields, plan, blueprint, state, caseIndex1Based, place, legendary);

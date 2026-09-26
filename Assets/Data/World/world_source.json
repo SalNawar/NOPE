@@ -975,7 +975,7 @@
   },
   "content": {
     "library": "Assets/Data/Content Library/ContentLibrary_Main.asset",
-    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Investigation.asset",
+    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset",
     "dayPlanFolder": "Assets/Data/Investigation",
     "attributes": [
       {
@@ -6677,11 +6677,17 @@
     "deskName": "DESK",
     "opener": "Next! Step forward, {honorific}.",
     "openerLegendary": "Priority arrival: {name}.",
-    "claim": "I request passage home to {place}.",
+    "claims": [
+      {
+        "kind": "Displaced",
+        "text": "Please. Send me home to {place}."
+      }
+    ],
     "honorificMale": "sir",
     "honorificFemale": "madam",
     "honorificUnknown": "traveller",
     "requestLabel": "Request {document}",
+    "papersLabel": "Request papers >",
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about home >",

@@ -6,6 +6,9 @@ public sealed class InterviewCase
     /// <summary>The desk's opener (CaseInstance.introLine); skipped when blank.</summary>
     public string introLine;
 
+    /// <summary>The traveller's kind (CaseInstance.kind): the claim is said in its words.</summary>
+    public TravellerKind kind;
+
     /// <summary>The claimed place's label, the claim's {place} (CaseInstance.originLabel; the claim is filled as the banner's CaseInstance.claimLine is).</summary>
     public string claimPlace;
 
@@ -29,11 +32,12 @@ public sealed class InterviewCase
 }
 
 /// <summary>
-/// Builds a traveller's interview graph: the hub (document requests, "Ask
-/// about home >", "Look >", today's narrative dialogs), the ask menu ("&lt;
-/// Back" first, then the questions and small talk), the look menu ("&lt;
-/// Back" first, then one choice per visible garment) and every authored
-/// dialog's nodes. Every traveller line carries its key-word spans
+/// Builds a traveller's interview graph: the hub (a document request, or
+/// "Request papers >" for two or more, the spoken requests, "Ask about home
+/// >", "Look >", today's narrative dialogs), the papers menu ("&lt; Back"
+/// first, then one request per document), the ask menu ("&lt; Back" first,
+/// then the questions and small talk), the look menu ("&lt; Back" first, then
+/// one choice per visible garment) and every authored dialog's nodes. Every traveller line carries its key-word spans
 /// (KeyWords.Spans over its template and fills, InterviewCase.keyWords): the
 /// parts that stay English when it shows untranslated. Pure, so every menu
 /// and line is tested headless.
@@ -45,6 +49,9 @@ public static class InterviewScript
 
     /// <summary>The ask menu's id.</summary>
     public const string AskNodeId = "ask";
+
+    /// <summary>The papers menu's id (traveller types I2): the documents a traveller hands over on request, when there are two or more.</summary>
+    public const string PapersNodeId = "papers";
 
     /// <summary>The look menu's id.</summary>
     public const string LookNodeId = "look";
@@ -65,7 +72,7 @@ public static class InterviewScript
     /// <summary>
     /// The transcript's first lines: the desk's opener (<see cref="IntroLineId"/>,
     /// skipped when blank), then the traveller's claim (<see cref="ClaimLineId"/>:
-    /// Interview.Claim of the claimed place, with its key-word spans).
+    /// Interview.Claim of the claimed place in their kind's words, with its key-word spans).
     /// </summary>
     public static IReadOnlyList<DialogLine> Opening(InterviewLines wording, InterviewCase c)
     {
@@ -76,8 +83,8 @@ public static class InterviewScript
         if (!string.IsNullOrWhiteSpace(c.introLine))
             lines.Add(new DialogLine(IntroLineId, DialogSpeaker.Desk, c.introLine));
         var fills = new Dictionary<string, string> { { Interview.PlaceToken, c.claimPlace } };
-        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Claim(wording, c.claimPlace), null,
-                                 KeyWords.Spans(Interview.ClaimTemplate(wording), fills, c.keyWords)));
+        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Claim(wording, c.kind, c.claimPlace), null,
+                                 KeyWords.Spans(Interview.ClaimTemplate(wording, c.kind), fills, c.keyWords)));
         return lines;
     }
 
@@ -118,8 +125,11 @@ public static class InterviewScript
     }
 
     /// <summary>
-    /// The traveller's graph. Hub: "request:{i}" per document handed over on
-    /// request (one-shot, hands document i over), then "act:{id}" per spoken
+    /// The traveller's graph. Hub: "request:{i}" for a traveller's one
+    /// document handed over on request (one-shot, hands document i over), or,
+    /// with two or more, "papers" (the papers menu: "back" first, then
+    /// "request:{i}" per such document, labelled with its name, one-shot,
+    /// staying in the menu), then "act:{id}" per spoken
     /// request (one-shot, the desk's prompt and the traveller's reply, no
     /// action), then "ask" when the ask menu has a question or small talk, then
     /// "look" when the traveller has a visible garment, then "dlg:{id}" per
@@ -142,28 +152,24 @@ public static class InterviewScript
         var graph = new DialogGraph(HubNodeId);
         var hub = new DialogNode { Id = HubNodeId };
         var ask = new DialogNode { Id = AskNodeId };
+        var papers = new DialogNode { Id = PapersNodeId };
+        papers.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
 
         IReadOnlyList<CaseDocument> documents = c != null && c.documents != null ? c.documents : new CaseDocument[0];
+        var requested = new List<int>();
         for (int i = 0; i < documents.Count; i++)
-        {
-            CaseDocument doc = documents[i];
-            if (doc == null || !doc.Requested)
-                continue;
+            if (documents[i] != null && documents[i].Requested)
+                requested.Add(i);
 
-            hub.Choices.Add(new DialogChoice
-            {
-                Id = $"request:{i}",
-                Label = Interview.Fill(lines.requestLabel, Interview.DocumentToken, doc.name),
-                Lines =
-                {
-                    new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, doc.name)),
-                    Said(Id(lines.requestReply), Text(lines.requestReply), null, keyWords)
-                },
-                Action = DialogAction.HandOverDocument,
-                DocumentIndex = i,
-                OneShot = true,
-                Kind = DialogChoiceKind.Request
-            });
+        if (requested.Count == 1)
+        {
+            hub.Choices.Add(Request(lines, documents[requested[0]], requested[0], Interview.Fill(lines.requestLabel, Interview.DocumentToken, documents[requested[0]].name), keyWords));
+        }
+        else if (requested.Count > 1)
+        {
+            hub.Choices.Add(new DialogChoice { Id = "papers", Label = lines.papersLabel, Next = PapersNodeId, Kind = DialogChoiceKind.Request });
+            foreach (int i in requested)
+                papers.Choices.Add(Request(lines, documents[i], i, documents[i].name, keyWords));
         }
 
         if (lines.requests != null)
@@ -254,10 +260,27 @@ public static class InterviewScript
         }
 
         graph.Add(hub);
+        graph.Add(papers);
         graph.Add(ask);
         graph.Add(look);
         return graph;
     }
+
+    /// <summary>A request for document <paramref name="index"/>: the desk's prompt and the traveller's reply, then the hand-over (one-shot, staying where it was chosen).</summary>
+    private static DialogChoice Request(InterviewLines lines, CaseDocument doc, int index, string label, KeyWordRule keyWords) => new DialogChoice
+    {
+        Id = $"request:{index}",
+        Label = label,
+        Lines =
+        {
+            new DialogLine(Id(lines.requestPrompt), DialogSpeaker.Desk, Interview.Fill(Text(lines.requestPrompt), Interview.DocumentToken, doc.name)),
+            Said(Id(lines.requestReply), Text(lines.requestReply), null, keyWords)
+        },
+        Action = DialogAction.HandOverDocument,
+        DocumentIndex = index,
+        OneShot = true,
+        Kind = DialogChoiceKind.Request
+    };
 
     /// <summary>An authored node as a runtime node: namespaced ids, the desk speaking each choice's label, the traveller's lines with their key-word spans.</summary>
     private static DialogNode BuildNode(AuthoredDialog d, ScriptNode node, KeyWordRule keyWords)
@@ -458,11 +481,14 @@ public static class DialogChecks
     /// <summary>
     /// Menus larger than the traveller wheel shows: the ask menu (1 back + the
     /// questions + 1 when there is small talk), the look menu (1 back + one
-    /// garment per LookSlot) or the hub (the most documents one traveller hands
-    /// over on request + every spoken request + the ask entry + the look entry
-    /// + every dialog bound to no premade, counted as offered at once, + 1 when
-    /// any dialog is bound to a premade: at most one premade stands at the
-    /// desk). Skipped when <paramref name="maxChoices"/> is 0 or less.
+    /// garment per LookSlot), the papers menu when one traveller can be asked
+    /// for two or more documents (1 back + the most documents one traveller
+    /// hands over on request) or the hub (one entry for those documents, a
+    /// direct request or the papers menu, + every spoken request + the ask
+    /// entry + the look entry + every dialog bound to no premade, counted as
+    /// offered at once, + 1 when any dialog is bound to a premade: at most one
+    /// premade stands at the desk). Skipped when <paramref name="maxChoices"/>
+    /// is 0 or less.
     /// </summary>
     public static List<string> MenuProblems(int questions, bool smallTalk, int maxRequestedDocuments, int spokenRequests, int dialogs, int premadeDialogs, int maxChoices)
     {
@@ -478,9 +504,14 @@ public static class DialogChecks
         if (look > maxChoices)
             problems.Add($"The look menu holds up to {look} choices (< Back, one per garment slot); the traveller wheel shows at most {maxChoices}.");
 
-        int hub = maxRequestedDocuments + spokenRequests + 2 + dialogs + (premadeDialogs > 0 ? 1 : 0);
+        int papers = 1 + maxRequestedDocuments;
+        if (maxRequestedDocuments > 1 && papers > maxChoices)
+            problems.Add($"The papers menu holds {papers} choices (< Back, {maxRequestedDocuments} request(s)); the traveller wheel shows at most {maxChoices}.");
+
+        string paperEntry = maxRequestedDocuments > 1 ? "the papers menu" : maxRequestedDocuments == 1 ? "1 document request" : "no document request";
+        int hub = (maxRequestedDocuments > 0 ? 1 : 0) + spokenRequests + 2 + dialogs + (premadeDialogs > 0 ? 1 : 0);
         if (hub > maxChoices)
-            problems.Add($"The hub holds {hub} choices ({maxRequestedDocuments} document request(s), {spokenRequests} spoken request(s), the ask and look entries, {dialogs} dialog(s){(premadeDialogs > 0 ? ", one premade's dialog" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
+            problems.Add($"The hub holds {hub} choices ({paperEntry}, {spokenRequests} spoken request(s), the ask and look entries, {dialogs} dialog(s){(premadeDialogs > 0 ? ", one premade's dialog" : string.Empty)}); the traveller wheel shows at most {maxChoices}.");
 
         return problems;
     }

@@ -16,7 +16,7 @@ using UnityEngine;
 /// notice).
 /// Access via Tools &gt; TimeDesk &gt; Validate Content Library.
 /// </summary>
-public static class ContentLibraryValidator
+public static partial class ContentLibraryValidator
 {
     /// <summary>Runs validation across all ContentLibrarySO assets in the project.</summary>
     [MenuItem("Tools/TimeDesk/Validate Content Library")]
@@ -104,6 +104,7 @@ public static class ContentLibraryValidator
 
         // --- Interview (wording, questions, dialogs, menus), upgrade ids, tell channels, small talk ---
         issues += CheckInterview(lib);
+        issues += CheckKinds(lib);
         issues += CheckUpgradeIds(lib);
         issues += CheckTellChannels(lib);
         issues += CheckSmallTalk(lib);
@@ -155,8 +156,8 @@ public static class ContentLibraryValidator
         var wording = new (string field, string text)[]
         {
             ("deskName", lines.deskName), ("opener", lines.opener?.text), ("openerLegendary", lines.openerLegendary?.text),
-            ("claim", lines.claim?.text), ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
-            ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("requestPrompt", lines.requestPrompt?.text),
+            ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
+            ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("papersLabel", lines.papersLabel), ("requestPrompt", lines.requestPrompt?.text),
             ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("backLabel", lines.backLabel),
             ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text), ("lookLabel", lines.lookLabel)
         };

@@ -9,6 +9,9 @@ public sealed class CaseInstance
     /// <summary>0-based case index used internally.</summary>
     public int caseIndex;
 
+    /// <summary>The traveller's kind, their blueprint's (traveller types K1): their papers and their claim line (left at the default without a blueprint).</summary>
+    public TravellerKind kind;
+
     /// <summary>True if this traveller is a premade character (named, drawn whole).</summary>
     public bool isLegendary;
 
@@ -82,7 +85,7 @@ public sealed class CaseInstance
     /// <summary>True if the claimed destination is permitted by today's rules.</summary>
     public bool claimAllowedByRules = true;
 
-    /// <summary>The traveller's claim sentence (interview.claim with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
+    /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
     public string claimLine;
 
     /// <summary>The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers).</summary>
