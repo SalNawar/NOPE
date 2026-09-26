@@ -32,6 +32,18 @@ public class ShiftLedgerTests
         Assert.AreEqual(1, ledger.UnprovenDenialCount);
     }
 
+    /// <summary>The citation's mistake key (the plan's phase 7 generalises the fault reasons; phase 10 brings the first, the costume error's panic).</summary>
+    [TestCase(true, false, "", "citation.acceptedWrong")]
+    [TestCase(true, false, null, "citation.acceptedWrong")]
+    [TestCase(true, false, "panic", "citation.acceptedWrong.panic")]
+    [TestCase(false, false, "panic", "citation.deniedWrong")]
+    [TestCase(false, true, "panic", "citation.unproven")]
+    [TestCase(false, true, "", "citation.unproven")]
+    public void MistakeKey_ByTheDecisionAndTheFaultReason(bool accepted, bool unproven, string reason, string expected)
+    {
+        Assert.AreEqual(expected, new CaseVerdict { accepted = accepted, unprovenDenial = unproven, faultReason = reason }.MistakeKey);
+    }
+
     [Test]
     public void EmptyLedger_IsAllZeroes()
     {
