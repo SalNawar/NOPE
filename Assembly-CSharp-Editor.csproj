@@ -13,7 +13,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{34361cf9-fc90-b3fd-9710-64446d1f253d}</ProjectGuid>
+    <ProjectGuid>{0c42ab99-d65a-4025-4a98-1e66de0aac85}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -45,29 +45,54 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.SourceGenerators.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.Properties.SourceGenerator.dll" />
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
-    <Analyzer Include="E:\unity\NOPE\Library\PackageCache\com.unity.ai.inference@9a123aee5df7\Runtime\Core\SourceGenerator\SourceGenerators.dll" />
-    <Analyzer Include="E:\unity\NOPE\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d\Runtime\SourceGenerators\netstandard2.0\EnumToLowerCase.dll" />
-    <Analyzer Include="E:\unity\NOPE\Library\PackageCache\com.unity.dt.app-ui@8ac7e730dd5d\Runtime\MVVM\SourceGenerators\netstandard2.0\MVVMSourceGenerators.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Editor\WorldContentGenerator.Kinds.cs" />
     <Compile Include="Assets\Editor\WorldContentGenerator.Culture.cs" />
     <Compile Include="Assets\Editor\OfficeSceneContractTools.cs" />
-    <Compile Include="Assets\Editor\OfficeArt\PackAssetCatalog.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeDebtReliefArt.LayoutWear.cs" />
+    <Compile Include="Assets\Editor\ContentSheetsMenu.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.Desk.cs" />
     <Compile Include="Assets\Editor\WorldContentGenerator.Translation.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Forms.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.App.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Art.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.Mail.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.News.cs" />
     <Compile Include="Assets\Editor\HomeSceneBuilder.cs" />
     <Compile Include="Assets\Editor\OfficeSceneUIBuilder.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.News.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Internet.cs" />
     <Compile Include="Assets\Editor\ContentLibraryValidator.cs" />
     <Compile Include="Assets\Editor\SerializedArrays.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeDebtReliefArt.Preview.cs" />
     <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Desk.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeDeskAnime.cs" />
     <Compile Include="Assets\Editor\PlaceholderPng.cs" />
-    <Compile Include="Assets\Editor\OfficeArt\OfficeSurfaceAudit.cs" />
-    <Compile Include="Assets\Editor\OfficeArt\ImportedOfficeBuilder.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.Forms.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.Agency.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Desktop.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.Pc.cs" />
+    <Compile Include="Assets\Editor\_ClaudeJobRunner.cs" />
+    <Compile Include="Assets\Editor\UiContrastCheck.cs" />
+    <Compile Include="Assets\Editor\ArtSlotImporter.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeDebtReliefArt.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Records.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeHallCrowds.cs" />
     <Compile Include="Assets\Editor\CharacterArtImporter.cs" />
-    <Compile Include="Assets\Editor\OfficeArt\OfficeDeskClean.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.Agency.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeHallFlags.cs" />
     <Compile Include="Assets\Editor\WorldContentGenerator.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.Present.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.Mail.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.PcForms.cs" />
+    <Compile Include="Assets\Editor\SceneUiKit.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Windows.cs" />
     <Compile Include="Assets\Editor\TitleSceneBuilder.cs" />
+    <Compile Include="Assets\Editor\OfficeSceneUIBuilder.Apps.cs" />
+    <Compile Include="Assets\Editor\WorldContentGenerator.Pc.cs" />
+    <Compile Include="Assets\Editor\ContentLibraryValidator.Kinds.cs" />
+    <Compile Include="Assets\Editor\OfficeArt\OfficeDebtReliefArt.Apply.cs" />
     <Compile Include="Assets\Editor\OfficeArt\OfficeCrtStudy.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -495,59 +520,26 @@
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="TextMateSharpPlastic">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\TextMateSharp\TextMateSharpPlastic.dll</HintPath>
-    </Reference>
-    <Reference Include="TextMateSharpPlastic.Grammars">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\TextMateSharp\TextMateSharpPlastic.Grammars.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.YamlDotNet">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Editor\VisualScripting.Core\Dependencies\YamlDotNet\Unity.VisualScripting.YamlDotNet.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Collections.LowLevel.ILSupport">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collections@5b6ebd78ccc0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.collections@5b6ebd78ccc0\Unity.Collections.LowLevel.ILSupport\Unity.Collections.LowLevel.ILSupport.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.ext.nunit@d8c07649098d\net40\unity-custom\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Plastic.Antlr3.Runtime">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\Unity.Plastic.Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="OnigwrapPlastic">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\TextMateSharp\Onigwrap\OnigwrapPlastic.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Plastic.Newtonsoft.Json">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\Unity.Plastic.Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="log4netPlastic">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\log4netPlastic.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.IonicZip">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Editor\VisualScripting.Core\Dependencies\DotNetZip\Unity.VisualScripting.IonicZip.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.ext.nunit@d8c07649098d\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System.IO.Hashing">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collections@5b6ebd78ccc0\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
-    </Reference>
-    <Reference Include="unityplastic">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collab-proxy@0b1559bcd34e\Lib\Editor\unityplastic.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.collections@5b6ebd78ccc0\Unity.Collections.Tests\System.IO.Hashing\System.IO.Hashing.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64\Runtime\Newtonsoft.Json.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.nuget.newtonsoft-json@4dfd81071c64\Runtime\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="AiEditorToolsSdk">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.ai.assistant@d9bb465c57d1\Modules\Unity.AI.Toolkit.Sdk\Editor\AiEditorToolsSdk.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.TextureAssets">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.visualscripting@8bed5ad90189\Editor\VisualScripting.Core\EditorAssetResources\Unity.VisualScripting.TextureAssets.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.ai.assistant@d9bb465c57d1\Modules\Unity.AI.Toolkit.Sdk\Editor\AiEditorToolsSdk.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff\Mono.Cecil.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.nuget.mono-cecil@ecb9724e46ff\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.collections@5b6ebd78ccc0\Unity.Collections.Tests\System.Runtime.CompilerServices.Unsafe\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\PackageCache\com.unity.collections@5b6ebd78ccc0\Unity.Collections.Tests\System.Runtime.CompilerServices.Unsafe\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\mscorlib.dll</HintPath>
@@ -925,332 +917,200 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TestRunner">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.TestRunner">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Common.Path.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Common.Path.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InternalAPIEngineBridge.001">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="PsdPlugin">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rendering.LightTransport.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Rendering.LightTransport.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Rendering.LightTransport.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.API.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.API.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.API.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Splines.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Common.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Splines.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.Integrations.Profiler.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.Integrations.Profiler.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.Integrations.Profiler.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime.Shared">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.2D.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.2D.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.2D.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.Tools.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.Tools.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.Undo">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Undo.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.Tools.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.MCP.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.MCP.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.MCP.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.UnifiedRayTracing.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.UnifiedRayTracing.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Aseprite.Common">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Aseprite.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InferenceEngine.MacBLAS">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.MacBLAS.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.UnifiedRayTracing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.Bridge.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.Bridge.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Aseprite.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Aseprite.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InferenceEngine.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.Bridge.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Extras.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem.ForUI">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.InputSystem.ForUI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.GPUDriven.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.GPUDriven.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Shaders">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="HFDownloader">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\HFDownloader.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\HFDownloader.dll</HintPath>
     </Reference>
     <Reference Include="UnitySkills.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnitySkills.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\UnitySkills.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Config.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Config.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Config.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.RenderPipelines.Core.Runtime.Shared">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.RenderPipelines.Core.Runtime.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor.Shared">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.Shared.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.SpriteShape.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InputSystem">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.InputSystem.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Splines">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.Redux">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Redux.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Splines.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.MCP.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.MCP.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InferenceEngine.ONNX.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.ONNX.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.MCP.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.Navigation">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Navigation.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI.Analytics">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEditor.UI.Analytics.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.IK.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\UnityEditor.UI.Analytics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.Agent.Dynamic.Extension.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.2D.Editor.Overrides">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.2D.Editor.Overrides.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.2D.Editor.Overrides.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Universal.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PathTracing.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.PathTracing.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tooling.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Tooling.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Shared.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.PathTracing.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Searcher.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.PlasticSCM.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Core">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Cinemachine.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Cinemachine.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Cinemachine">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Cinemachine.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEditorBridge.ShaderGraph.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.ShaderGraph.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Psdimporter.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.ShaderGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipelines.Core.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.Annotations.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.Annotations.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.MVVM">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.MVVM.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.Annotations.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Assistant.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Assistant.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Extras">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.IK.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.IK.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.SpriteShape.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.SpriteShape.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Assistant.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.AI.Tracing">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AI.Tracing.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.Redux.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Redux.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.AI.Tracing.dll</HintPath>
     </Reference>
     <Reference Include="Unity.SurfaceCache.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.SurfaceCache.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Common.Runtime">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.SurfaceCache.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Mathematics">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Multiplayer.Center.Common">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Multiplayer.Center.Common.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Core.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.Core.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
     </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.004">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.004.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Multiplayer.Center.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Multiplayer.Center.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.004.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PathTracing.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.PathTracing.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InferenceEngine.Tokenization">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.Tokenization.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.VisualScripting.State.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AppUI.Navigation.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.AppUI.Navigation.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.PathTracing.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Collections.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Collections.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Collections.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ShaderGraph.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InferenceEngine.iOSBLAS">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.iOSBLAS.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Settings.Editor">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.Settings.Editor.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\Unity.Settings.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InferenceEngine">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\Unity.InferenceEngine.dll</HintPath>
+      <HintPath>E:\unity\NOPE-feat-clock\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{725fda2a-d219-eaf2-30a8-18c390e9a76f}</Project>
+      <Project>{6b69b6e3-35a5-7f0b-ab5c-5bc7d2f03a5d}</Project>
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
     <ProjectReference Include="TimeDesk.Domain.csproj">
-      <Project>{07f1fae5-9363-3bf3-8705-90744a60f216}</Project>
+      <Project>{8c2b45a1-47a0-a1b2-9355-c5c7464b7b3a}</Project>
       <Name>TimeDesk.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="TimeDesk.Visuals.csproj">
-      <Project>{63f18b42-170a-b3a9-f343-042342fc1080}</Project>
+      <Project>{f7681253-9b18-24d2-31a2-a3c04aa2885e}</Project>
       <Name>TimeDesk.Visuals</Name>
     </ProjectReference>
   </ItemGroup>
