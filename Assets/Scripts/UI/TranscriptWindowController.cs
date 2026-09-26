@@ -49,7 +49,7 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         if (texts.Length > 0 && texts[0] != null)
             texts[0].text = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
         if (texts.Length > 1)
-            TextFlip.Write(texts[1], line.Text, _translation.Line(line.Speaker), _translation);
+            TextFlip.Write(texts[1], line.Text, _translation.Line(line), _translation);
 
         if (button == null)
             return;

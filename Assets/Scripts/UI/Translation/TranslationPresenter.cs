@@ -40,7 +40,7 @@ public sealed class TranslationPresenter
         TranslatorPack pack = _day.PackOf(tongue);
         (ForeignText text, TMP_FontAsset font) = Look(tongue);
         string placeholder = UiText.Format("compare.untranslated", tongue.displayName, pack != null ? pack.displayName : tongue.pack);
-        return new CaseTranslation(text, font, _day.Translated(id), _settings.flip, MotionPreference.Reduced, placeholder);
+        return new CaseTranslation(new SpeechTranslation(text, _day.Translated(id), _settings.flip, MotionPreference.Reduced, placeholder), font);
     }
 
     /// <summary>

@@ -1,73 +1,38 @@
 using TMPro;
 
 /// <summary>
-/// One traveller's speech translation (piece 9; speech only since the
-/// redesign's phase 1: papers are always English), paired up for the
-/// transcript and the wheel: whether the claimed place's tongue is foreign
-/// today, its look and script font, whether the region's Speech translator is
-/// owned, the flip's knobs and the motion choice, and the compare bar's
-/// placeholder. Each member is one call into tested rules:
-/// Translation.InTongue (Domain) decides who speaks the tongue, DisplayText
-/// (Visuals) how it shows.
+/// One traveller's speech translation for the transcript and the wheel
+/// (piece 9; speech only since the redesign's phase 1: papers are always
+/// English): the tested decisions (SpeechTranslation, Visuals) paired with the
+/// script's runtime font, the one engine type they need. Each member is one
+/// call into tested rules: Translation.InTongue (Domain) decides who speaks
+/// the tongue, SpeechTranslation and DisplayText (Visuals) how it shows.
 /// </summary>
 public sealed class CaseTranslation
 {
     /// <summary>Everything plain: a native or unknown tongue, before fromDay, or no translation data.</summary>
-    public static CaseTranslation None { get; } = new CaseTranslation();
+    public static CaseTranslation None { get; } = new CaseTranslation(SpeechTranslation.None, null);
 
-    private CaseTranslation()
+    /// <summary>A traveller's speech translation and the script's runtime font (null: the text's own font, the fallback cipher).</summary>
+    public CaseTranslation(SpeechTranslation speech, TMP_FontAsset font)
     {
-        Timing = new FlipTiming();
-        Placeholder = string.Empty;
-    }
-
-    /// <summary>A traveller whose tongue is foreign today.</summary>
-    public CaseTranslation(ForeignText text, TMP_FontAsset font, bool speechTranslated,
-                           FlipTiming timing, bool reducedMotion, string placeholder)
-    {
-        Foreign = true;
-        Text = text;
+        Speech = speech ?? SpeechTranslation.None;
         Font = font;
-        SpeechTranslated = speechTranslated;
-        Timing = timing ?? new FlipTiming();
-        ReducedMotion = reducedMotion;
-        Placeholder = placeholder ?? string.Empty;
     }
 
-    /// <summary>True when the claimed place's tongue is foreign today.</summary>
-    public bool Foreign { get; }
-
-    /// <summary>The tongue's look (its table and direction, or the fallback cipher); null when not foreign.</summary>
-    public ForeignText Text { get; }
+    /// <summary>The decisions and knobs (foreign, translated, the flip's timing, the motion choice, the placeholder).</summary>
+    public SpeechTranslation Speech { get; }
 
     /// <summary>The script's runtime font for foreign cells; null = the text's own font (the fallback cipher).</summary>
     public TMP_FontAsset Font { get; }
 
-    /// <summary>True when the region's Speech translator was owned at the start of the day.</summary>
-    public bool SpeechTranslated { get; }
+    /// <summary>A transcript line, settled: the traveller's in their tongue unless translated; the desk's always plain.</summary>
+    public Reveal Line(DialogLine line) =>
+        line != null ? Speech.Line(Translation.InTongue(line.Speaker)) : Reveal.Plain;
 
-    /// <summary>The flip's knobs.</summary>
-    public FlipTiming Timing { get; }
+    /// <summary>The bubble's traveller line <paramref name="lineSeconds"/> after it started: plain, untranslated, or flipping.</summary>
+    public Reveal Bubble(float lineSeconds) => Speech.Bubble(lineSeconds);
 
-    /// <summary>True when the player chose reduced motion (translations show at once).</summary>
-    public bool ReducedMotion { get; }
-
-    /// <summary>The compare bar's text for an untranslated side: "(untranslated Egyptian; Near East Translator)".</summary>
-    public string Placeholder { get; }
-
-    /// <summary>A transcript line, settled: plain when not foreign, the desk's, or with the Speech translator; else untranslated.</summary>
-    public Reveal Line(DialogSpeaker speaker) =>
-        !Foreign || !Translation.InTongue(speaker) || SpeechTranslated ? Reveal.Plain : Reveal.Untranslated(Text);
-
-    /// <summary>The bubble's current traveller line <paramref name="lineSeconds"/> after it started: plain, untranslated, or flipping.</summary>
-    public Reveal Bubble(float lineSeconds)
-    {
-        if (!Foreign)
-            return Reveal.Plain;
-        return SpeechTranslated ? Reveal.Flipping(Text, lineSeconds) : Reveal.Untranslated(Text);
-    }
-
-    /// <summary>The compare bar's text for a statement: the canonical value when it reads (not foreign, not in the tongue, or translated), else the placeholder. The evidence stays canonical either way.</summary>
-    public string Shown(bool inTongue, bool translated, string canonical) =>
-        !Foreign || !inTongue || translated ? canonical : Placeholder;
+    /// <summary>The compare bar's text for an answer: its canonical value when it reads, else the placeholder.</summary>
+    public string Shown(DialogLine answer) => Speech.Shown(Translation.InTongue(answer.Speaker), answer.Value);
 }

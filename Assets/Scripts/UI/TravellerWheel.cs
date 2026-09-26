@@ -307,13 +307,14 @@ public sealed class TravellerWheel : MonoBehaviour, IPointerClickHandler
             return;
 
         Reveal flip = _translation.Bubble(0f);
+        SpeechTranslation speech = _translation.Speech;
         foreach (DialogLine line in lines)
         {
             if (line == null)
                 continue;
             _said.Add(line);
             _speech.Say(line.Text, line.Expression,
-                flip.Kind == RevealKind.Flipping ? DisplayText.Remaining(line.Text, flip, _translation.Timing, _translation.ReducedMotion) : 0f,
+                flip.Kind == RevealKind.Flipping ? DisplayText.Remaining(line.Text, flip, speech.Timing, speech.ReducedMotion) : 0f,
                 _said.Count - 1);
         }
 

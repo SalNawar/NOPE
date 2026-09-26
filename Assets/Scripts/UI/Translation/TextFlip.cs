@@ -61,9 +61,9 @@ public sealed class TextFlip
         _reveal = reveal;
         _typed = -1;
         _tr = tr ?? CaseTranslation.None;
-        _progress = DisplayText.Progress(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+        _progress = DisplayText.Progress(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         Apply(reveal);
-        Running = reveal.Kind == RevealKind.Flipping && DisplayText.Remaining(_canonical, reveal, _tr.Timing, _tr.ReducedMotion) > 0f;
+        Running = reveal.Kind == RevealKind.Flipping && DisplayText.Remaining(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion) > 0f;
     }
 
     /// <summary>A running flip <paramref name="elapsed"/> seconds after its reveal: recomposes only when a letter changes; false once it has settled (its own font back).</summary>
@@ -73,8 +73,8 @@ public sealed class TextFlip
             return false;
 
         Reveal now = Reveal.Flipping(_reveal.Foreign, elapsed);
-        int progress = DisplayText.Progress(_canonical, now, _tr.Timing, _tr.ReducedMotion);
-        bool settled = DisplayText.Remaining(_canonical, now, _tr.Timing, _tr.ReducedMotion) <= 0f;
+        int progress = DisplayText.Progress(_canonical, now, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
+        bool settled = DisplayText.Remaining(_canonical, now, _tr.Speech.Timing, _tr.Speech.ReducedMotion) <= 0f;
         if (progress != _progress || settled)
         {
             _progress = progress;
@@ -97,7 +97,7 @@ public sealed class TextFlip
             return;
 
         _typed = typed;
-        if (DisplayText.ReadsRightToLeft(_canonical, _shown, _tr.Timing, _tr.ReducedMotion))
+        if (DisplayText.ReadsRightToLeft(_canonical, _shown, _tr.Speech.Timing, _tr.Speech.ReducedMotion))
             Apply(_shown);
         else
             _text.maxVisibleCharacters = typed;
@@ -133,8 +133,8 @@ public sealed class TextFlip
         if (text == null)
             return;
         tr = tr ?? CaseTranslation.None;
-        text.text = DisplayText.For(canonical, reveal, tr.Timing, tr.ReducedMotion);
-        if (!DisplayText.ShowsForeign(canonical, reveal, tr.Timing, tr.ReducedMotion))
+        text.text = DisplayText.For(canonical, reveal, tr.Speech.Timing, tr.Speech.ReducedMotion);
+        if (!DisplayText.ShowsForeign(canonical, reveal, tr.Speech.Timing, tr.Speech.ReducedMotion))
             return;
         if (tr.Font != null)
             text.font = tr.Font;
@@ -145,20 +145,20 @@ public sealed class TextFlip
     private void Apply(Reveal reveal)
     {
         _shown = reveal;
-        bool foreign = DisplayText.ShowsForeign(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+        bool foreign = DisplayText.ShowsForeign(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         SetFont(_text, _ownFont, _ownMaterial, foreign, _tr.Font);
         if (foreign)
             Fit(_text);
         if (_typed < 0)
         {
-            _text.text = DisplayText.For(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+            _text.text = DisplayText.For(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
             return;
         }
 
-        bool rightToLeft = DisplayText.ReadsRightToLeft(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+        bool rightToLeft = DisplayText.ReadsRightToLeft(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         _text.text = rightToLeft
-            ? DisplayText.Typed(_canonical, reveal, _tr.Timing, _tr.ReducedMotion, _typed, HideOpen, HideClose)
-            : DisplayText.For(_canonical, reveal, _tr.Timing, _tr.ReducedMotion);
+            ? DisplayText.Typed(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion, _typed, HideOpen, HideClose)
+            : DisplayText.For(_canonical, reveal, _tr.Speech.Timing, _tr.Speech.ReducedMotion);
         _text.maxVisibleCharacters = rightToLeft ? int.MaxValue : _typed;
     }
 

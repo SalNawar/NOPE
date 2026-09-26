@@ -25,7 +25,7 @@ public static class EvidencePicks
         tr = tr ?? CaseTranslation.None;
         return new ComparePick(PickKeys.Line(lineIndex),
             UiText.Format("compare.travellerLabel", UiText.Category(line.Category)),
-            tr.Shown(Translation.InTongue(line.Speaker), tr.SpeechTranslated, line.Value),
+            tr.Shown(line),
             CompareEvidence.ForAnswer(line.Category, line.Value, line.IsTell));
     }
 
