@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 /// <summary>
 /// A generated, playable case for the current shift.
-/// Created at runtime from data assets (blueprints, clue library, etc.).
+/// Created at runtime from data assets (blueprints, templates, places, premades).
 /// </summary>
 public sealed class CaseInstance
 {
@@ -106,24 +106,15 @@ public sealed class CaseInstance
 
     /// <summary>Runtime documents built from templates.</summary>
     public readonly List<DocumentInstance> documents = new();
-
-    /// <summary>All clue assets used by this case.</summary>
-    public readonly List<ClueSO> usedClues = new();
 }
 
 /// <summary>
-/// A runtime document assembled from a template, containing clue lines.
+/// A runtime document built from a template: its structured fields, in the template's order.
 /// </summary>
 public sealed class DocumentInstance
 {
     /// <summary>Template this document was built from.</summary>
     public DocumentTemplateSO template;
-
-    /// <summary>Pre-rendered text for quick prototype UI display.</summary>
-    public string renderedText;
-
-    /// <summary>Raw clue references inside this document.</summary>
-    public readonly List<ClueSO> cluesInDoc = new();
 
     /// <summary>Structured, checkable fields (investigation feature).</summary>
     public readonly List<DocumentField> fields = new();

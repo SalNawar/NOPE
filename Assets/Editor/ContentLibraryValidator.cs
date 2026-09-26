@@ -61,7 +61,6 @@ public static class ContentLibraryValidator
         // --- Null entries in every authored array ---
         issues += CheckNullEntries(lib.DayPlans, "DayPlans", lib);
         issues += CheckNullEntries(lib.Eras, "Eras", lib);
-        issues += CheckNullEntries(lib.Clues, "Clues", lib);
         issues += CheckNullEntries(lib.Legendaries, "Legendaries", lib);
         issues += CheckNullEntries(lib.Effects, "Effects", lib);
         issues += CheckNullEntries(lib.Upgrades, "Upgrades", lib);

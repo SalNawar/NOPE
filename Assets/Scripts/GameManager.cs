@@ -425,7 +425,7 @@ public sealed class GameManager : MonoBehaviour
         string claimedEraId = inst.trueEra != null ? inst.trueEra.id : string.Empty;
         string archetypeName = inst.archetype != null ? inst.archetype.displayName : string.Empty;
         string nationName = inst.nation != null ? inst.nation.displayName : string.Empty;
-        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}, clues={inst.usedClues.Count}.");
+        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}.");
 
         // Clear the previous case's verdict line before showing the new case.
         if (officeUI != null)

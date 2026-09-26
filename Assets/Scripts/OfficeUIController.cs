@@ -101,12 +101,12 @@ public sealed class OfficeUIController : MonoBehaviour
 
         SetResult(string.Empty);
 
-        // Documents (support 0, 1, or 2+ docs safely).
+        // Documents (support 0, 1, or 2+ docs safely): each one's name (the legacy era-pick screen shows no fields).
         if (doc1Text != null)
-            doc1Text.text = inst.documents.Count >= 1 ? inst.documents[0].renderedText : "(No document)";
+            doc1Text.text = DocumentName(inst, 0);
 
         if (doc2Text != null)
-            doc2Text.text = inst.documents.Count >= 2 ? inst.documents[1].renderedText : "(No document)";
+            doc2Text.text = DocumentName(inst, 1);
 
         // Rebuild buttons.
         ClearEraButtons();
@@ -201,6 +201,12 @@ public sealed class OfficeUIController : MonoBehaviour
     /// Updates the result label (call from GameManager after validation).
     /// </summary>
     public void SetResultText(string text) => SetResult(text);
+
+    /// <summary>The case's document at <paramref name="index"/> by its template's name, or "(No document)" when there is none.</summary>
+    private static string DocumentName(CaseInstance inst, int index) =>
+        index < inst.documents.Count && inst.documents[index] != null && inst.documents[index].template != null
+            ? inst.documents[index].template.displayName
+            : "(No document)";
 
     /// <summary>Writes the verdict line and shows its strip only while it has text.</summary>
     private void SetResult(string text)

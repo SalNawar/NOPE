@@ -1625,7 +1625,6 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "themes", themes);
         SerializedArrays.Set(so, "stringTables", stringTables);
         so.FindProperty("translation").boxedValue = translation;
-        SerializedArrays.DropMissing(so, "clues");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }

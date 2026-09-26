@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -39,84 +40,55 @@ public class SeedsTests
         CollectionAssert.AreNotEqual(a, b);
     }
 
+    /// <summary>
+    /// Every per-traveller stream, by name (audit R3-035: one table, so a new
+    /// salt is one row here and one TestCase below, not another copy of the
+    /// distinctness loop).
+    /// </summary>
+    private static readonly Dictionary<string, Func<int, int>> TravellerStreams = new Dictionary<string, Func<int, int>>
+    {
+        { "lie", Seeds.ForLies },
+        { "dialog", Seeds.ForDialog },
+        { "look", Seeds.ForLooks },
+        { "legendary", Seeds.ForLegendary },
+    };
+
+    [TestCase("lie")]
+    [TestCase("dialog")]
+    [TestCase("look")]
+    [TestCase("legendary")]
+    public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
+    {
+        Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
+                                                            .GetCustomAttributes(typeof(TestCaseAttribute), false).Length, "one TestCase per table row");
+        Func<int, int> stream = TravellerStreams[name];
+        int daySeed = Seeds.Day(12345, 2);
+        List<int> others = EveryOtherStream(daySeed, name);
+        var seeds = new HashSet<int>();
+        for (int c = 1; c <= 20; c++)
+        {
+            int caseSeed = Seeds.ForCase(daySeed, c);
+            int seed = stream(caseSeed);
+            Assert.AreEqual(seed, stream(caseSeed), $"case {c}: the {name} seed is not deterministic");
+            CollectionAssert.DoesNotContain(others, seed, $"case {c}: the {name} seed is another stream's");
+            seeds.Add(seed);
+        }
+        Assert.AreEqual(20, seeds.Count, $"{name} seeds repeat across travellers");
+    }
+
     [Test]
-    public void ViolatorAndClueStreams_AreDistinctFromEveryCaseStream()
+    public void ViolatorStream_IsDeterministic_AndApartFromEveryTravellersStreams()
     {
         int daySeed = Seeds.Day(12345, 2);
-        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
-        Assert.IsFalse(cases.Contains(Seeds.ForViolators(daySeed)));
-        Assert.IsFalse(cases.Contains(Seeds.ForClues(Seeds.ForCase(daySeed, 1))));
         Assert.AreEqual(Seeds.ForViolators(daySeed), Seeds.ForViolators(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "violator"), Seeds.ForViolators(daySeed));
     }
 
     [Test]
-    public void LieStream_IsDistinctFromCaseClueAndViolatorStreams()
+    public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        int daySeed = Seeds.Day(12345, 2);
-        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
-        var lies = new HashSet<int>();
-        for (int c = 1; c <= 20; c++)
-        {
-            int caseSeed = Seeds.ForCase(daySeed, c);
-            int lie = Seeds.ForLies(caseSeed);
-            Assert.IsFalse(cases.Contains(lie), $"case {c}: the lie seed is a case seed");
-            Assert.AreNotEqual(Seeds.ForClues(caseSeed), lie, $"case {c}: lie seed equals the clue seed");
-            Assert.AreNotEqual(Seeds.ForViolators(daySeed), lie, $"case {c}: lie seed equals the violator seed");
-            Assert.AreEqual(lie, Seeds.ForLies(caseSeed), $"case {c}: not deterministic");
-            lies.Add(lie);
-        }
-        Assert.AreEqual(20, lies.Count, "lie seeds repeat across cases");
-    }
-
-    [Test]
-    public void DialogStream_IsDistinctFromCaseClueLieAndViolatorStreams()
-    {
-        int daySeed = Seeds.Day(12345, 2);
-        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
-        var dialogs = new HashSet<int>();
-        for (int c = 1; c <= 20; c++)
-        {
-            int caseSeed = Seeds.ForCase(daySeed, c);
-            int dialog = Seeds.ForDialog(caseSeed);
-            Assert.IsFalse(cases.Contains(dialog), $"case {c}: the dialog seed is a case seed");
-            Assert.AreNotEqual(Seeds.ForClues(caseSeed), dialog, $"case {c}: dialog seed equals the clue seed");
-            Assert.AreNotEqual(Seeds.ForLies(caseSeed), dialog, $"case {c}: dialog seed equals the lie seed");
-            Assert.AreNotEqual(Seeds.ForViolators(daySeed), dialog, $"case {c}: dialog seed equals the violator seed");
-            Assert.AreEqual(dialog, Seeds.ForDialog(caseSeed), $"case {c}: not deterministic");
-            dialogs.Add(dialog);
-        }
-        Assert.AreEqual(20, dialogs.Count, "dialog seeds repeat across cases");
-    }
-
-    [Test]
-    public void LookAndLegendaryStreams_AreDistinct()
-    {
-        int daySeed = Seeds.Day(12345, 3);
-        var cases = new HashSet<int>(Enumerable.Range(1, 20).Select(c => Seeds.ForCase(daySeed, c)));
-        var looks = new HashSet<int>();
-        var legendaries = new HashSet<int>();
-        for (int c = 1; c <= 20; c++)
-        {
-            int caseSeed = Seeds.ForCase(daySeed, c);
-            int look = Seeds.ForLooks(caseSeed);
-            int legendary = Seeds.ForLegendary(caseSeed);
-            foreach ((string name, int seed) in new[] { ("look", look), ("legendary", legendary) })
-            {
-                Assert.IsFalse(cases.Contains(seed), $"case {c}: the {name} seed is a case seed");
-                Assert.AreNotEqual(Seeds.ForClues(caseSeed), seed, $"case {c}: {name} seed equals the clue seed");
-                Assert.AreNotEqual(Seeds.ForLies(caseSeed), seed, $"case {c}: {name} seed equals the lie seed");
-                Assert.AreNotEqual(Seeds.ForDialog(caseSeed), seed, $"case {c}: {name} seed equals the dialog seed");
-                Assert.AreNotEqual(Seeds.ForViolators(daySeed), seed, $"case {c}: {name} seed equals the violator seed");
-            }
-
-            Assert.AreNotEqual(look, legendary, $"case {c}: look and legendary seeds are equal");
-            Assert.AreEqual(look, Seeds.ForLooks(caseSeed), $"case {c}: look seed not deterministic");
-            Assert.AreEqual(legendary, Seeds.ForLegendary(caseSeed), $"case {c}: legendary seed not deterministic");
-            looks.Add(look);
-            legendaries.Add(legendary);
-        }
-        Assert.AreEqual(20, looks.Count, "look seeds repeat across cases");
-        Assert.AreEqual(20, legendaries.Count, "legendary seeds repeat across cases");
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt };
+        CollectionAssert.AllItemsAreUnique(salts);
     }
 
     [Test]
@@ -141,18 +113,31 @@ public class SeedsTests
         int slot = Seeds.ForSlot(daySeed);
 
         Assert.AreEqual(slot, Seeds.ForSlot(daySeed), "the same run and day give the same spins");
-        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed), slot);
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "slot"), slot);
         CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(slot), "the raw day stream");
         CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(night => Seeds.ForSlot(Seeds.Day(12345, night))).ToList(), "each night its own spins");
         Assert.AreNotEqual(slot, Seeds.ForSlot(Seeds.Day(999, 2)), "each run its own spins");
     }
 
-    /// <summary>The day's raw seed and every stream of the day: violators, and each of 20 travellers' case, clue, lie, dialog, look and premade streams.</summary>
-    private static List<int> EveryOtherStream(int daySeed)
+    /// <summary>
+    /// The day's raw seed and every stream of the day but <paramref name="except"/>:
+    /// the violator and slot streams, and each of 20 travellers' case stream and
+    /// every stream of <see cref="TravellerStreams"/>.
+    /// </summary>
+    private static List<int> EveryOtherStream(int daySeed, string except)
     {
-        var streams = new List<int> { daySeed, Seeds.ForViolators(daySeed) };
+        var streams = new List<int> { daySeed };
+        if (except != "violator")
+            streams.Add(Seeds.ForViolators(daySeed));
+        if (except != "slot")
+            streams.Add(Seeds.ForSlot(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
-            streams.AddRange(new[] { caseSeed, Seeds.ForClues(caseSeed), Seeds.ForLies(caseSeed), Seeds.ForDialog(caseSeed), Seeds.ForLooks(caseSeed), Seeds.ForLegendary(caseSeed) });
+        {
+            streams.Add(caseSeed);
+            foreach (KeyValuePair<string, Func<int, int>> stream in TravellerStreams)
+                if (stream.Key != except)
+                    streams.Add(stream.Value(caseSeed));
+        }
         return streams;
     }
 

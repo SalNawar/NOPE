@@ -15,8 +15,8 @@ using UnityEngine;
 /// small-talk line, and how they look (Looks: layers from the claimed place's
 /// wardrobe; a dress tell is one garment of the true home). Premades (named,
 /// drawn whole) stand in forced slots or roll from the day's pool. Every draw
-/// comes from seeded streams (per traveller: the case, legacy clue, lie,
-/// dialog, look and premade streams; plus the day's rule-violator stream), so
+/// comes from seeded streams (per traveller: the case, lie, dialog, look and
+/// premade streams; plus the day's rule-violator stream), so
 /// the same run, day and met premades always produce the same travellers.
 /// </summary>
 public sealed class CaseFactory
@@ -35,9 +35,6 @@ public sealed class CaseFactory
 
     /// <summary>The current traveller's random stream (reset per case).</summary>
     private IRandomSource _rng = new SeededRandom(0);
-
-    /// <summary>The current traveller's legacy clue stream, apart from <see cref="_rng"/> so clue settings never change who lies.</summary>
-    private IRandomSource _clueRng = new SeededRandom(0);
 
     /// <summary>The current traveller's lie stream (Seeds.ForLies), apart from <see cref="_rng"/> so lie tuning never changes who travellers are.</summary>
     private IRandomSource _lieRng = new SeededRandom(0);
@@ -137,7 +134,6 @@ public sealed class CaseFactory
             int caseIndex1Based = i + 1;
             int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
             _rng = new SeededRandom(caseSeed);
-            _clueRng = new SeededRandom(Seeds.ForClues(caseSeed));
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
             _dialogRng = new SeededRandom(Seeds.ForDialog(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
@@ -265,8 +261,8 @@ public sealed class CaseFactory
         if (legendary != null && legendary.authoredImpacts != null)
             inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
-        // 6) Build documents + inject (legacy) clues.
-        BuildDocumentsAndClues(inst, trueEra, blueprint, state);
+        // 6) Build the documents (their fields are filled below).
+        BuildDocuments(inst, blueprint);
 
         // 7) Investigation layer: stated claim, structured fields, the lie (if any), daily rules.
         inst.claimedNation = nation;
@@ -459,8 +455,7 @@ public sealed class CaseFactory
     /// <summary>
     /// The chance a traveller lies: the blueprint's contradiction chance plus
     /// tomorrow's slot modifier and active ForgeryChanceBonus effects, clamped
-    /// to 0..1. The legacy clue path reads the same knob as its per-clue
-    /// contradiction chance.
+    /// to 0..1.
     /// </summary>
     private float LiarChance(CaseBlueprintSO blueprint, WorldState state) =>
         Mathf.Clamp01(
@@ -698,190 +693,17 @@ public sealed class CaseFactory
         state != null && premade != null && state.HasFlag(FlagKeys.PremadeMet(premade.id));
 
     /// <summary>
-    /// Creates runtime documents and fills them with (legacy) clue text.
-    /// This is where contradictions and red herrings are injected.
+    /// Creates the traveller's runtime documents from the blueprint's
+    /// templates, in paper order (null templates skipped); their fields are
+    /// filled next (PopulateDocumentFields).
     /// </summary>
-    private void BuildDocumentsAndClues(CaseInstance inst, EraSO trueEra, CaseBlueprintSO blueprint, WorldState state)
+    private static void BuildDocuments(CaseInstance inst, CaseBlueprintSO blueprint)
     {
-        if (inst == null || trueEra == null || blueprint == null || _lib == null)
+        if (inst == null || blueprint == null || blueprint.DocumentTemplates == null)
             return;
 
-        if (blueprint.DocumentTemplates == null || blueprint.DocumentTemplates.Length == 0)
-            return;
-
-        // Decide how many total clue lines this case should contain.
-        int totalCluesTarget = _clueRng.Range(blueprint.TotalCluesMin, blueprint.TotalCluesMax + 1);
-
-        // Create runtime document instances from templates.
-        var docInstances = new List<DocumentInstance>();
         foreach (DocumentTemplateSO dt in blueprint.DocumentTemplates)
-        {
-            if (dt == null)
-                continue;
-
-            docInstances.Add(new DocumentInstance { template = dt });
-        }
-
-        // Build clue pools from the library:
-        // - supporting clues for the claimed era
-        // - contradicting clues against the claimed era
-        // - red herrings: irrelevant but plausible clues
-        IReadOnlyList<ClueSO> clueSource = _lib.Clues != null ? _lib.Clues : System.Array.Empty<ClueSO>();
-
-        var supportsTrueEra = clueSource.Where(c =>
-            c != null &&
-            c.supports != null &&
-            c.supports.Contains(trueEra) &&
-            IsClueAllowedByUpgrades(c, state)).ToList();
-
-        var contradictsTrueEra = clueSource.Where(c =>
-            c != null &&
-            c.contradicts != null &&
-            c.contradicts.Contains(trueEra) &&
-            IsClueAllowedByUpgrades(c, state)).ToList();
-
-        var redHerrings = clueSource.Where(c =>
-            c != null &&
-            IsClueAllowedByUpgrades(c, state) &&
-            (c.supports == null || !c.supports.Contains(trueEra)) &&
-            (c.contradicts == null || !c.contradicts.Contains(trueEra))
-        ).ToList();
-
-        // Effective contradiction chance: the same knob as the liar chance
-        // (blueprint base + tomorrow modifier + stacked ForgeryChanceBonus effects).
-        float effectiveContradictionChance = LiarChance(blueprint, state);
-
-        // Decide counts: how many contradictions and red herrings to inject.
-        int contradictions = 0;
-        for (int i = 0; i < totalCluesTarget; i++)
-            if (_clueRng.Value() < effectiveContradictionChance) contradictions++;
-
-        int herrings = 0;
-        for (int i = 0; i < totalCluesTarget; i++)
-            if (_clueRng.Value() < blueprint.RedHerringChance) herrings++;
-
-        contradictions = Mathf.Min(contradictions, totalCluesTarget);
-        herrings = Mathf.Min(herrings, totalCluesTarget - contradictions);
-
-        int supports = totalCluesTarget - contradictions - herrings;
-
-        // Pick clues from each pool without repeating.
-        var picked = new List<ClueSO>();
-        picked.AddRange(PickUnique(supportsTrueEra, supports));
-        picked.AddRange(PickUnique(contradictsTrueEra, contradictions));
-        picked.AddRange(PickUnique(redHerrings, herrings));
-
-        // Store global clue list on the case.
-        inst.usedClues.AddRange(picked);
-
-        // Distribute each clue into an appropriate document.
-        foreach (ClueSO clue in picked)
-        {
-            DocumentInstance doc = PickDocForClue(docInstances, clue);
-            if (doc == null)
-                continue;
-
-            doc.cluesInDoc.Add(clue);
-        }
-
-        // Render simple text for each document (prototype-friendly).
-        foreach (DocumentInstance doc in docInstances)
-        {
-            doc.renderedText = RenderDocText(doc);
-            inst.documents.Add(doc);
-        }
-    }
-
-    /// <summary>
-    /// Determines whether a clue is allowed to appear based on unlocked upgrades.
-    /// If a clue requires an upgrade (e.g., scanner), it won't be generated until unlocked.
-    /// </summary>
-    private static bool IsClueAllowedByUpgrades(ClueSO clue, WorldState state)
-    {
-        // If no upgrade is required, the clue is always eligible.
-        if (clue.requiresUpgradeToReveal == null)
-            return true;
-
-        // If state is missing, treat gated clues as unavailable.
-        if (state == null)
-            return false;
-
-        return state.unlockedUpgradeIds.Contains(clue.requiresUpgradeToReveal.id);
-    }
-
-    /// <summary>
-    /// Randomly picks up to 'count' unique items from a pool.
-    /// </summary>
-    private List<ClueSO> PickUnique(List<ClueSO> pool, int count)
-    {
-        var result = new List<ClueSO>();
-
-        if (pool == null || pool.Count == 0 || count <= 0)
-            return result;
-
-        var temp = new List<ClueSO>(pool);
-
-        for (int i = 0; i < count && temp.Count > 0; i++)
-        {
-            int idx = _clueRng.Range(0, temp.Count);
-            result.Add(temp[idx]);
-            temp.RemoveAt(idx);
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Chooses which document should contain a given clue.
-    /// Prefers templates whose preferredCategories include the clue’s category,
-    /// and respects each template’s maxClues limit when possible.
-    /// </summary>
-    private DocumentInstance PickDocForClue(List<DocumentInstance> docs, ClueSO clue)
-    {
-        if (docs == null || docs.Count == 0 || clue == null)
-            return null;
-
-        // Prefer docs that want this clue category and have room.
-        var preferred = docs.Where(d =>
-            d != null &&
-            d.template != null &&
-            d.template.preferredCategories != null &&
-            d.template.preferredCategories.Contains(clue.category) &&
-            d.cluesInDoc.Count < d.template.maxClues
-        ).ToList();
-
-        if (preferred.Count > 0)
-            return preferred[_clueRng.Range(0, preferred.Count)];
-
-        // Otherwise choose any doc that still has room.
-        var any = docs.Where(d =>
-            d != null &&
-            d.template != null &&
-            d.cluesInDoc.Count < d.template.maxClues
-        ).ToList();
-
-        if (any.Count > 0)
-            return any[_clueRng.Range(0, any.Count)];
-
-        // Worst case: all docs are "full" -> dump into a random doc anyway.
-        return docs[_clueRng.Range(0, docs.Count)];
-    }
-
-    /// <summary>
-    /// Produces a simple, readable document string from its clues.
-    /// This keeps the prototype UI trivial (just show a block of text).
-    /// </summary>
-    private static string RenderDocText(DocumentInstance doc)
-    {
-        string header = doc.template != null ? doc.template.displayName : "Document";
-
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine(header);
-        sb.AppendLine("----------------");
-
-        foreach (ClueSO clue in doc.cluesInDoc)
-            sb.AppendLine("• " + clue.text);
-
-        return sb.ToString();
+            if (dt != null)
+                inst.documents.Add(new DocumentInstance { template = dt });
     }
 }
