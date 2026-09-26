@@ -65,7 +65,7 @@ public static partial class OfficeSceneUIBuilder
     private static SearchResultsView BuildSearchResults(Transform win, float top)
     {
         DestroyChildIfPresent(win, "SearchResults");
-        Transform panel = Panel(win, "SearchResults", new Vector2(0.1f, 1f), new Vector2(0.7f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.StartMenu);
+        Transform panel = Panel(win, "SearchResults", new Vector2(0.1f, 1f), new Vector2(0.7f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.WindowBody);
         var rt = (RectTransform)panel;
         rt.pivot = new Vector2(0.5f, 1f);
         rt.anchoredPosition = new Vector2(0f, -top);
@@ -100,12 +100,12 @@ public static partial class OfficeSceneUIBuilder
         Button close = MakeButton(header, "CloseButton", null, new Vector2(1f, 0.14f), new Vector2(1f, 0.86f), null, ThemeRoleId.Button, "search.close");
         PlaceRect(close.transform, new Vector2(1f, 0.14f), new Vector2(1f, 0.86f), new Vector2(-104f, 0f), Vector2.zero);
 
-        RectTransform list = BuildScrollList(panel, "List", Vector2.zero, Vector2.one, 2f, Color.white, ThemeRoleId.StartMenu);
+        RectTransform list = BuildScrollList(panel, "List", Vector2.zero, Vector2.one, 2f, Color.white, ThemeRoleId.WindowBody);
         Transform box = list.parent.parent;
         PlaceRect(box, Vector2.zero, Vector2.one, new Vector2(6f, SearchFooterHeight), new Vector2(-6f, -SearchHeaderHeight));
 
         TMP_Text heading = Text(list, "HeadingTemplate", "REFERENCE", 15, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink,
-                                ThemeRoleId.StartMenu, style: FontStyles.Bold, kind: ThemeTextKind.Heading);
+                                ThemeRoleId.WindowBody, style: FontStyles.Bold, kind: ThemeTextKind.Heading);
         heading.margin = new Vector4(6f, 0f, 6f, 2f);
         heading.raycastTarget = false;
         SetLayoutHeight(heading, SearchHeadingHeight);
@@ -143,13 +143,13 @@ public static partial class OfficeSceneUIBuilder
         more.gameObject.SetActive(false);
 
         TMP_Text empty = Text(panel, "EmptyText", string.Empty, 18, TextAlignmentOptions.Center, new Vector2(0.05f, 0.3f), new Vector2(0.95f, 0.7f), Ink,
-                              ThemeRoleId.StartMenu);
+                              ThemeRoleId.WindowBody);
         empty.textWrappingMode = TextWrappingModes.Normal;
         empty.raycastTarget = false;
         empty.gameObject.SetActive(false);
 
         TMP_Text hint = Text(panel, "HintText", null, 14, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(1f, 0f), Ink,
-                             ThemeRoleId.StartMenu, "search.hint", FontStyles.Italic, ThemeTextKind.Body, true);
+                             ThemeRoleId.WindowBody, "search.hint", FontStyles.Italic, ThemeTextKind.Body, true);
         PlaceRect(hint.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(10f, 2f), new Vector2(-10f, SearchFooterHeight - 2f));
         hint.raycastTarget = false;
 

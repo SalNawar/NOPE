@@ -271,6 +271,78 @@ MonoBehaviour:
     text: Open
     gloss: 0
     tier: 0
+  - key: search.all
+    text: All
+    gloss: 0
+    tier: 0
+  - key: search.sourceChip
+    text: '{0} ({1})'
+    gloss: 0
+    tier: 0
+  - key: search.more
+    text: Show all {0} in {1}
+    gloss: 0
+    tier: 0
+  - key: search.none
+    text: Nothing in this case or today's records matches '{0}'.
+    gloss: 0
+    tier: 0
+  - key: search.noneChip
+    text: No untranslated line of this case is the same as the pasted clip.
+    gloss: 0
+    tier: 0
+  - key: search.hint
+    text: "Enter opens the first result \xB7 click a result to go there"
+    gloss: 0
+    tier: 0
+  - key: search.close
+    text: Close
+    gloss: 0
+    tier: 0
+  - key: search.glyph.documents
+    text: DOC
+    gloss: 0
+    tier: 0
+  - key: search.glyph.records
+    text: REC
+    gloss: 0
+    tier: 0
+  - key: search.glyph.reference
+    text: BOOK
+    gloss: 0
+    tier: 0
+  - key: search.glyph.transcript
+    text: TRN
+    gloss: 0
+    tier: 0
+  - key: search.glyph.report
+    text: DEV
+    gloss: 0
+    tier: 0
+  - key: search.glyph.rules
+    text: RULE
+    gloss: 0
+    tier: 0
+  - key: search.title.row
+    text: "{0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: search.title.rule
+    text: Rule {0}
+    gloss: 0
+    tier: 0
+  - key: search.title.line
+    text: "{0} \xB7 line {1}"
+    gloss: 0
+    tier: 0
+  - key: search.title.deviation
+    text: "Deviation \xB7 {0}"
+    gloss: 0
+    tier: 0
+  - key: search.revised
+    text: revised
+    gloss: 0
+    tier: 0
   - key: app.tabGlyph.documents
     text: DOC
     gloss: 0
@@ -896,11 +968,107 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: settings.investigation
-    text: 'Investigation: text size'
+    text: Investigation
     gloss: 0
     tier: 0
   - key: settings.textSize
     text: '{0} %'
+    gloss: 0
+    tier: 0
+  - key: steps.rules
+    text: Today's rules for the destination
+    gloss: 0
+    tier: 0
+  - key: steps.papers
+    text: Receive every paper
+    gloss: 0
+    tier: 0
+  - key: steps.read
+    text: Read every paper
+    gloss: 0
+    tier: 0
+  - key: steps.identity
+    text: Name, number and birth date in Records
+    gloss: 0
+    tier: 0
+  - key: steps.facts
+    text: Place facts against the books
+    gloss: 0
+    tier: 0
+  - key: steps.questions
+    text: Ask today's questions
+    gloss: 0
+    tier: 0
+  - key: steps.answers
+    text: Answers against the books or Records
+    gloss: 0
+    tier: 0
+  - key: steps.dress
+    text: Dress against the Costume Guide
+    gloss: 0
+    tier: 0
+  - key: steps.returnOrder
+    text: Return order against the certificate
+    gloss: 0
+    tier: 0
+  - key: steps.dates
+    text: Dates against today's calendar
+    gloss: 0
+    tier: 0
+  - key: steps.class
+    text: Visa class against the account
+    gloss: 0
+    tier: 0
+  - key: steps.transponder
+    text: Transponder against the account
+    gloss: 0
+    tier: 0
+  - key: steps.paperSet
+    text: Paper set against today's rules
+    gloss: 0
+    tier: 0
+  - key: steps.standing
+    text: Account standing in Records
+    gloss: 0
+    tier: 0
+  - key: steps.askMeans
+    text: Ask for a proof of means
+    gloss: 0
+    tier: 0
+  - key: steps.waiver
+    text: Waiver against manifest and account
+    gloss: 0
+    tier: 0
+  - key: steps.means
+    text: Proof of means against the account
+    gloss: 0
+    tier: 0
+  - key: steps.contract
+    text: Contract against the registered one
+    gloss: 0
+    tier: 0
+  - key: steps.hint.wheel
+    text: 'Use the traveller wheel: click the traveller at the desk.'
+    gloss: 0
+    tier: 0
+  - key: steps.progress
+    text: '{0} ({1}/{2})'
+    gloss: 0
+    tier: 0
+  - key: steps.none
+    text: Steps show while a traveller is at the desk.
+    gloss: 0
+    tier: 0
+  - key: steps.hidden
+    text: 'Steps are hidden: Steps in the toolbar shows them.'
+    gloss: 0
+    tier: 0
+  - key: settings.stepsShown
+    text: Steps shown
+    gloss: 0
+    tier: 0
+  - key: settings.stepsHidden
+    text: Steps hidden
     gloss: 0
     tier: 0
   - key: mail.inbox
