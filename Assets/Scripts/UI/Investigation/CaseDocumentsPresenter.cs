@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 /// <summary>
 /// The current traveller's documents (the PC redesign RF1, AP6): the papers
-/// the Investigation app's Documents tab shows (a chip each; a scanned one's
-/// copy), where each paper is (CasePapers: not handed over, on the desk,
+/// the Investigation app's Documents tabs show (one per pane: a chip each; a
+/// scanned one's copy, its fields linking by the case's claim), where each paper is (CasePapers: not handed over, on the desk,
 /// scanned; the app's counters), the documents as the desk and the interview
 /// read them, the hand-over and the scan. With the desk, each document
 /// becomes a paper (those handed over on arrival land at once) whose finished
@@ -18,7 +18,7 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class CaseDocumentsPresenter
 {
-    private readonly DocumentsView _view;
+    private readonly IReadOnlyList<DocumentsView> _views;
     private readonly DeskController _desk;
     private readonly CompareController _compare;
 
@@ -37,10 +37,10 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The desk whose events this listens to (null while detached).</summary>
     private DeskController _listening;
 
-    /// <summary>The app's Documents view, the desk (null when it is not reachable: documents then reach the PC at the hand-over) and the compare.</summary>
-    public CaseDocumentsPresenter(DocumentsView view, DeskController reachableDesk, CompareController compare)
+    /// <summary>The app's Documents views (one per pane; null entries are skipped), the desk (null when it is not reachable: documents then reach the PC at the hand-over) and the compare.</summary>
+    public CaseDocumentsPresenter(IReadOnlyList<DocumentsView> views, DeskController reachableDesk, CompareController compare)
     {
-        _view = view;
+        _views = views ?? Array.Empty<DocumentsView>();
         _desk = reachableDesk;
         _compare = compare;
     }
@@ -108,8 +108,10 @@ public sealed class CaseDocumentsPresenter
             }
 
         _papers = new CasePapers(_caseDocuments.Count);
-        if (_view != null)
-            _view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art);
+        CaseClaim claim = AppLinks.Claim(inst);
+        foreach (DocumentsView view in _views)
+            if (view != null)
+                view.SetCase(inst != null ? inst.documents : null, _caseForms, _papers, _compare, inst != null ? inst.look : null, _art, claim);
 
         if (_desk != null)
             _desk.BeginCase(_caseDocuments, _caseForms, inst != null ? inst.look : null, _art);
@@ -134,8 +136,9 @@ public sealed class CaseDocumentsPresenter
         _caseDocuments.Clear();
         _caseForms.Clear();
         _papers = new CasePapers(0);
-        if (_view != null)
-            _view.Clear();
+        foreach (DocumentsView view in _views)
+            if (view != null)
+                view.Clear();
     }
 
     /// <summary>A paper handed over: onto the desk (its scan comes later), or scanned at once where no desk is reachable.</summary>
@@ -148,8 +151,9 @@ public sealed class CaseDocumentsPresenter
         }
         if (!_papers.HandOver(index))
             return;
-        if (_view != null)
-            _view.Refresh();
+        foreach (DocumentsView view in _views)
+            if (view != null)
+                view.Refresh();
         PapersChanged?.Invoke();
     }
 
@@ -158,11 +162,12 @@ public sealed class CaseDocumentsPresenter
     {
         if (!_papers.Scan(index))
             return;
-        if (_view != null)
-        {
-            _view.MarkScanned(index);
-            _view.Refresh();
-        }
+        foreach (DocumentsView view in _views)
+            if (view != null)
+            {
+                view.MarkScanned(index);
+                view.Refresh();
+            }
         PapersChanged?.Invoke();
         Scanned?.Invoke(index);
     }

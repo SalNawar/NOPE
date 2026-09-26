@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// A back/forward stack (P spec AP9, IN1): the browser's pages today, the
-/// Investigation app's panes later. Go adds a new current entry and clears
+/// A back/forward stack (P spec AP9, IN1): the browser's pages and each pane
+/// of the Investigation app. Go adds a new current entry and clears
 /// everything after it; Back and Forward move through the entries. At most
 /// the cap's number of entries are kept (the oldest drops first); going to
-/// the current entry again changes nothing.
+/// the current entry again changes nothing; RemoveAll drops entries that no
+/// longer lead anywhere (a pane's places in the last traveller's papers).
 /// </summary>
 public sealed class NavHistory<T>
 {
@@ -60,6 +61,27 @@ public sealed class NavHistory<T>
         }
         at = _entries[--_index];
         return true;
+    }
+
+    /// <summary>
+    /// Drops every entry <paramref name="match"/> picks. A dropped current
+    /// entry hands over to the nearest kept one before it (else the first kept
+    /// one); nothing kept leaves the history empty.
+    /// </summary>
+    public void RemoveAll(Predicate<T> match)
+    {
+        for (int i = _entries.Count - 1; i >= 0; i--)
+        {
+            if (!match(_entries[i]))
+                continue;
+            _entries.RemoveAt(i);
+            if (i <= _index)
+                _index--;
+        }
+        if (_entries.Count == 0)
+            _index = -1;
+        else if (_index < 0)
+            _index = 0;
     }
 
     /// <summary>Steps forward: true with the entry after the current one, false (and default) when there is none.</summary>

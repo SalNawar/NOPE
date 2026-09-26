@@ -61,14 +61,13 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left; on the right the message's link over the memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
-                                                 InvestigationApp investigation, out TMP_Text title)
+                                                 InvestigationApp investigation)
     {
         DestroyChildIfPresent(windowLayer, "MailWindow");
         DesktopWindow chrome = BuildOSWindow(windowLayer, "MailWindow", null, null, null, config.mailWindowSize);
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
-        title = win.Find("Header/TitleText").GetComponent<TMP_Text>();
-        title.text = UiText.Get("window.mail");
+        win.Find("Header/TitleText").GetComponent<TMP_Text>().text = UiText.Get("window.mail");
 
         Text(win, "InboxLabel", null, 16, TextAlignmentOptions.BottomLeft, new Vector2(0.02f, 0.885f), new Vector2(0.36f, 0.935f), Ink,
              ThemeRoleId.WindowBody, "mail.inbox", FontStyles.Bold);

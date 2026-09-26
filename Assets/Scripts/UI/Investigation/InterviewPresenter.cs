@@ -7,7 +7,8 @@ using Object = UnityEngine.Object;
 /// The investigation's interview (the PC redesign RF1): the day's interview and
 /// translation (set by GameManager through the façade), the current
 /// traveller's dialog runner on the traveller wheel's ring, the transcript
-/// (the app's Transcript tab), and the wheel's bubble. A document request
+/// (the app's Transcript tab, one per pane; its answers link by the case's
+/// claim and record lookup: SmartLinks), and the wheel's bubble. A document request
 /// hands the document over (through the case's documents) and closes the
 /// wheel; a look at a garment puts it into the compare and closes the wheel;
 /// a choice that adds lines tells the app (the Transcript tab's badge;
@@ -20,7 +21,7 @@ using Object = UnityEngine.Object;
 public sealed class InterviewPresenter
 {
     private readonly InteractionPanelController _ring;
-    private readonly TranscriptWindowController _transcript;
+    private readonly IReadOnlyList<TranscriptWindowController> _transcripts;
     private readonly Action _spoke;
     private readonly TravellerWheel _wheel;
     private readonly CompareController _compare;
@@ -47,22 +48,32 @@ public sealed class InterviewPresenter
     private TravellerWheel _listening;
 
     /// <summary>
-    /// The wheel's ring, the transcript, the wheel and the compare (any may be
-    /// missing), what new transcript lines tell (the app's Transcript tab), the
-    /// hand-over of a document by index (CaseDocumentsPresenter.HandOver), the
-    /// façade's current case, and the object the logs name.
+    /// The wheel's ring, the transcripts (one per pane; null entries are
+    /// skipped), the wheel and the compare (any may be missing), what new
+    /// transcript lines tell (the app's Transcript tab), the hand-over of a
+    /// document by index (CaseDocumentsPresenter.HandOver), the façade's
+    /// current case, and the object the logs name.
     /// </summary>
-    public InterviewPresenter(InteractionPanelController ring, TranscriptWindowController transcript, Action spoke,
+    public InterviewPresenter(InteractionPanelController ring, IReadOnlyList<TranscriptWindowController> transcripts, Action spoke,
                               TravellerWheel wheel, CompareController compare, Action<int> handOver, Func<CaseInstance> currentCase, Object context)
     {
         _ring = ring;
-        _transcript = transcript;
+        _transcripts = transcripts ?? Array.Empty<TranscriptWindowController>();
         _spoke = spoke ?? throw new ArgumentNullException(nameof(spoke));
         _wheel = wheel;
         _compare = compare;
         _handOver = handOver ?? throw new ArgumentNullException(nameof(handOver));
         _currentCase = currentCase ?? throw new ArgumentNullException(nameof(currentCase));
         _context = context;
+    }
+
+    /// <summary>The case's documents' fields, in paper order (the answers' record lookup).</summary>
+    private static IEnumerable<IReadOnlyList<DocumentField>> Fields(IReadOnlyList<CaseDocument> documents)
+    {
+        if (documents == null)
+            yield break;
+        foreach (CaseDocument document in documents)
+            yield return document != null ? document.fields : null;
     }
 
     /// <summary>Starts listening to the wheel's bubble.</summary>
@@ -129,8 +140,11 @@ public sealed class InterviewPresenter
             interviewCase);
         _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));
 
-        if (_transcript != null)
-            _transcript.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, _compare, _caseTranslation);
+        CaseClaim claim = AppLinks.Claim(inst);
+        string lookup = SmartLinks.CaseLookup(Fields(documents), inst != null ? inst.visitorGivenName : null);
+        foreach (TranscriptWindowController transcript in _transcripts)
+            if (transcript != null)
+                transcript.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, _compare, _caseTranslation, claim, lookup);
 
         RefreshChoices();
 
@@ -202,8 +216,9 @@ public sealed class InterviewPresenter
         if (choice == null)
             return;
 
-        if (_transcript != null)
-            _transcript.Refresh();
+        foreach (TranscriptWindowController transcript in _transcripts)
+            if (transcript != null)
+                transcript.Refresh();
         if (_runner.Transcript.Count > before)
             _spoke();
 

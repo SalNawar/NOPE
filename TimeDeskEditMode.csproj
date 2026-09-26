@@ -13,7 +13,7 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{1834962a-3827-abd6-214a-66f82dd8b973}</ProjectGuid>
+    <ProjectGuid>{16e9283c-cf74-a582-2d44-47f4bbaebcc3}</ProjectGuid>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -47,76 +47,134 @@
     <Analyzer Include="C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Tools\BuildPipeline\Unity.SourceGenerators\Unity.UIToolkit.SourceGenerator.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Tests\EditMode\ContentSheetMapTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DeskGeometryTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ArabicShaperTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\FieldLengthsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\CultureChoiceTests.cs" />
     <Compile Include="Assets\Tests\EditMode\FlipSequenceTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\CostumeErrorsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ScoreKeyTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\TabOrderTests.cs" />
     <Compile Include="Assets\Tests\EditMode\CitizenRegistryTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\DesktopLayoutTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\HistoryPagesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\BoothRulesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\SpeechQueueTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\PaperLandingTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\DesktopEscapeRuleTests.cs" />
     <Compile Include="Assets\Tests\EditMode\OriginLabelsTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ContentSheetsTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\NavHistoryTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ReadyGateTests.cs" />
     <Compile Include="Assets\Tests\EditMode\RadialLayoutTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PaletteTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PagingTests.cs" />
     <Compile Include="Assets\Tests\EditMode\TravellerGendersTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\DebtNewsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DisplayTextTests.cs" />
     <Compile Include="Assets\Tests\EditMode\LookKeysTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\TravellerKindsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\SeededRandomTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ContrastTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SiteStylesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ShiftClockTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SaveFilesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\CrowdPaletteBlendTests.cs" />
     <Compile Include="Assets\Tests\EditMode\HistoryTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ClerkDebtTests.cs" />
     <Compile Include="Assets\Tests\EditMode\NameRosterTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ComparePairTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DiscrepancyLogTests.cs" />
     <Compile Include="Assets\Tests\EditMode\SeedsTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\NewsArchiveTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\MailboxTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ReactionCurveTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ViolatorSlotsTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SpeechTranslationTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DaySlotSequencerTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ReferenceRowsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PcScreenTests.cs" />
     <Compile Include="Assets\Tests\EditMode\CursorHotspotTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ArtSlotsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\InterviewTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\PresentTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ScreenMappingTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DeskPapersTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\BuildScenesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\OneShotTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\AccountTests.cs" />
     <Compile Include="Assets\Tests\EditMode\FactTableTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\CasePapersTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\AncestryPagesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ShopPricesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\RowTableTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\CitizenNamesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\KeyWordsTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\DesktopIconPlaceholderTests.cs" />
     <Compile Include="Assets\Tests\EditMode\LiesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DominanceTiersTests.cs" />
     <Compile Include="Assets\Tests\EditMode\WheelIconPlaceholderTests.cs" />
     <Compile Include="Assets\Tests\EditMode\WeightedRandomTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DayPlansTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\AgencyNumbersTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ScoreRankingTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\XlsxTests.cs" />
     <Compile Include="Assets\Tests\EditMode\InterviewScriptTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SitesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\LookCanvasTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SiteFixture.cs" />
+    <Compile Include="Assets\Tests\EditMode\FormSerialsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\InfluenceTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\InvestigationWiringTests.cs" />
     <Compile Include="Assets\Tests\EditMode\GatesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\HistoryChecksTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\FormContrastTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\NewsPagesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\AgencyCalendarTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ThemeRolesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ShiftLedgerTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PseudoscriptTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ScanArrivalTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SerializedEnumsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\LooksTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\HomeRulesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\CulturePlaceholdersTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PixelShapesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\RgbaTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ClickTimingTests.cs" />
     <Compile Include="Assets\Tests\EditMode\EndingRulesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\TranslationTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ForgeryTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\AppBadgesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\FormLayoutTests.cs" />
     <Compile Include="Assets\Tests\EditMode\OfficeContractTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\FormPaintTests.cs" />
     <Compile Include="Assets\Tests\EditMode\LayerPlaceholderTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ShiftFlowTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ScriptedRandom.cs" />
+    <Compile Include="Assets\Tests\EditMode\AccountMakerTests.cs" />
     <Compile Include="Assets\Tests\EditMode\UiStringsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\EffectOpsTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DialogRunnerTests.cs" />
     <Compile Include="Assets\Tests\EditMode\InterviewDayTests.cs" />
     <Compile Include="Assets\Tests\EditMode\NationLeaderTests.cs" />
     <Compile Include="Assets\Tests\EditMode\CarriesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\WindowStackTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PremadesTests.cs" />
     <Compile Include="Assets\Tests\EditMode\CultureCueTests.cs" />
     <Compile Include="Assets\Tests\EditMode\PlaceholderPaletteTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\BarcodeTests.cs" />
     <Compile Include="Assets\Tests\EditMode\ScriptedRandomTests.cs" />
     <Compile Include="Assets\Tests\EditMode\DialogChoiceKindsTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ExamineLayoutTests.cs" />
     <Compile Include="Assets\Tests\EditMode\BirthDatesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\DeskViewPoseTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SaveLocationTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\ContentJsonTests.cs" />
     <Compile Include="Assets\Tests\EditMode\VerdictRulesTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\SmartLinksTests.cs" />
+    <Compile Include="Assets\Tests\EditMode\NotesTests.cs" />
     <None Include="Assets\Tests\EditMode\TimeDeskEditMode.asmdef" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
@@ -545,7 +603,7 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>E:\unity\NOPE\Library\PackageCache\com.unity.ext.nunit@d8c07649098d\net40\unity-custom\nunit.framework.dll</HintPath>
+      <HintPath>E:\unity\NOPE-gpt\Library\PackageCache\com.unity.ext.nunit@d8c07649098d\net40\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\mscorlib.dll</HintPath>
@@ -923,25 +981,25 @@
       <HintPath>C:\Program Files\Unity\Hub\Editor\6000.4.11f1\Editor\Data\UnityReferenceAssemblies\unity-4.8-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TestRunner">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
+      <HintPath>E:\unity\NOPE-gpt\Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.TestRunner">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
+      <HintPath>E:\unity\NOPE-gpt\Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+      <HintPath>E:\unity\NOPE-gpt\Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>E:\unity\NOPE\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+      <HintPath>E:\unity\NOPE-gpt\Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="TimeDesk.Domain.csproj">
-      <Project>{07f1fae5-9363-3bf3-8705-90744a60f216}</Project>
+      <Project>{e8b9c1f8-962f-e0c5-4f1b-678a7c2ed5f0}</Project>
       <Name>TimeDesk.Domain</Name>
     </ProjectReference>
     <ProjectReference Include="TimeDesk.Visuals.csproj">
-      <Project>{63f18b42-170a-b3a9-f343-042342fc1080}</Project>
+      <Project>{03482227-edff-28f0-ea7a-e9f42317cd55}</Project>
       <Name>TimeDesk.Visuals</Name>
     </ProjectReference>
   </ItemGroup>

@@ -19,7 +19,8 @@ using UnityEngine.UI;
 /// them, focuses the window under the pointer (its own raycast through the
 /// frame camera: a button inside a window takes the pointer-down itself),
 /// and on the empty desktop (the wallpaper, the icons and their layer)
-/// leaves nothing focused; Escape runs the desktop's part of the chain
+/// leaves nothing focused, then tells who listens what was pressed (Pressed:
+/// the Investigation app's active pane); Escape runs the desktop's part of the chain
 /// (DesktopEscapeRule: close the context menu, leave a field, close the Start
 /// menu, cancel a window or icon drag) and stamps its frame, so the PC
 /// frame's Escape (OfficeViewController) skips that press. It runs before the
@@ -80,6 +81,9 @@ public sealed class DesktopWindowManager : MonoBehaviour
 
     /// <summary>The frame in which the desktop last took an Escape press (-1: never); the PC frame's Escape skips that frame.</summary>
     public int EscapeTakenFrame { get; private set; } = -1;
+
+    /// <summary>Raised on each press on the desktop with the top graphic under the pointer (null: nothing), before the press's click: the Investigation app makes the pane pressed in its active one.</summary>
+    public event System.Action<GameObject> Pressed;
 
     /// <summary>True while a window has the focus (the desktop's own keys, the icons' arrows and Enter, wait until none has).</summary>
     public bool WindowFocused => _stack.Focused != null;
@@ -274,6 +278,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private void Press(Vector2 screen)
     {
         GameObject top = TopHit(screen);
+        Pressed?.Invoke(top);
         if (contextMenu != null && contextMenu.IsOpen && !contextMenu.IsPart(top))
             contextMenu.Close();
         if (shell != null && shell.StartMenuOpen && !shell.IsStartMenuPart(top))

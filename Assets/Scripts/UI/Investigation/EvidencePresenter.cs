@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using TMPro;
 
@@ -9,7 +10,8 @@ using TMPro;
 /// desk, a true contradiction (DiscrepancyLog.Prove) is logged once per
 /// category: the report is rewritten, the compare reads DEVIATION LOGGED and
 /// the app hears of it (the Report tab's badge; nothing opens: CM5); a second
-/// proof of a logged category only reads ALREADY DOCUMENTED. The log clears
+/// proof of a logged category only reads ALREADY DOCUMENTED. The report is
+/// written into each pane's Report tab. The log clears
 /// with each case. It subscribes to the
 /// compare it was given and unsubscribes from that same instance (audit
 /// R4-003). Plain C#; InvestigationUIController owns it.
@@ -17,7 +19,7 @@ using TMPro;
 public sealed class EvidencePresenter
 {
     private readonly CompareController _compare;
-    private readonly TMP_Text _reportText;
+    private readonly IReadOnlyList<TMP_Text> _reportTexts;
     private readonly Action _logged;
     private readonly Func<CaseInstance> _currentCase;
 
@@ -27,11 +29,11 @@ public sealed class EvidencePresenter
     /// <summary>The compare whose pairs this listens to (null while detached).</summary>
     private CompareController _listening;
 
-    /// <summary>The compare and the Deviation Report's text (either may be missing), what a new deviation tells (the app's Report tab), and the façade's current case (null between cases).</summary>
-    public EvidencePresenter(CompareController compare, TMP_Text reportText, Action logged, Func<CaseInstance> currentCase)
+    /// <summary>The compare and the Deviation Report's texts (one per pane; either may be missing), what a new deviation tells (the app's Report tab), and the façade's current case (null between cases).</summary>
+    public EvidencePresenter(CompareController compare, IReadOnlyList<TMP_Text> reportTexts, Action logged, Func<CaseInstance> currentCase)
     {
         _compare = compare;
-        _reportText = reportText;
+        _reportTexts = reportTexts ?? Array.Empty<TMP_Text>();
         _logged = logged ?? throw new ArgumentNullException(nameof(logged));
         _currentCase = currentCase ?? throw new ArgumentNullException(nameof(currentCase));
     }
@@ -97,24 +99,27 @@ public sealed class EvidencePresenter
         _logged();
     }
 
-    /// <summary>Rewrites the Deviation Report's body from the discrepancy log.</summary>
+    /// <summary>Rewrites the Deviation Report's body from the discrepancy log, in every pane.</summary>
     private void RefreshReport()
     {
-        if (_reportText == null)
-            return;
-
+        string report;
         if (_discrepancies.Count == 0)
         {
-            _reportText.text = UiText.Get("scanner.idle");
-            return;
+            report = UiText.Get("scanner.idle");
+        }
+        else
+        {
+            var sb = new StringBuilder();
+            foreach (Discrepancy d in _discrepancies.Items)
+                sb.AppendLine(UiText.Format("list.bullet", UiText.Deviation(d)));
+
+            sb.AppendLine();
+            sb.AppendLine(UiText.Format("scanner.summary", _discrepancies.Count));
+            report = sb.ToString();
         }
 
-        var sb = new StringBuilder();
-        foreach (Discrepancy d in _discrepancies.Items)
-            sb.AppendLine(UiText.Format("list.bullet", UiText.Deviation(d)));
-
-        sb.AppendLine();
-        sb.AppendLine(UiText.Format("scanner.summary", _discrepancies.Count));
-        _reportText.text = sb.ToString();
+        foreach (TMP_Text text in _reportTexts)
+            if (text != null)
+                text.text = report;
     }
 }

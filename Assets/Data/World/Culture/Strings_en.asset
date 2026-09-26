@@ -271,6 +271,62 @@ MonoBehaviour:
     text: Open
     gloss: 0
     tier: 0
+  - key: app.tabGlyph.documents
+    text: DOC
+    gloss: 0
+    tier: 0
+  - key: app.tabGlyph.records
+    text: REC
+    gloss: 0
+    tier: 0
+  - key: app.tabGlyph.reference
+    text: REF
+    gloss: 0
+    tier: 0
+  - key: app.tabGlyph.transcript
+    text: TRN
+    gloss: 0
+    tier: 0
+  - key: app.tabGlyph.report
+    text: RPT
+    gloss: 0
+    tier: 0
+  - key: app.tabGlyph.rules
+    text: RUL
+    gloss: 0
+    tier: 0
+  - key: app.tabMenu.left
+    text: Move left
+    gloss: 0
+    tier: 0
+  - key: app.tabMenu.right
+    text: Move right
+    gloss: 0
+    tier: 0
+  - key: app.tabMenu.reset
+    text: Reset tab order
+    gloss: 0
+    tier: 0
+  - key: app.split.hint
+    text: Two panes side by side, or one
+    gloss: 0
+    tier: 0
+  - key: app.split.tooNarrow
+    text: Maximise the window for two panes
+    gloss: 0
+    tier: 0
+  - key: app.link.reference
+    text: 'Open the Reference: {0}, the claimed place'
+    gloss: 0
+    tier: 0
+  - key: app.link.records
+    text: 'Open Records: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.link.rules
+    text: Open the Rules
+    gloss: 0
+    tier: 0
   - key: book.claimedLabel
     text: '{0} (claimed)'
     gloss: 0
@@ -1077,6 +1133,22 @@ MonoBehaviour:
     tier: 0
   - key: compare.dockHint
     text: COMPARE    Click two values to compare them.
+    gloss: 0
+    tier: 0
+  - key: compare.dockSide
+    text: '{0}:  {1}'
+    gloss: 0
+    tier: 0
+  - key: compare.dockPending
+    text: pick another value
+    gloss: 0
+    tier: 0
+  - key: compare.dockDeviation
+    text: "\u25CF  DEVIATION LOGGED \xB7 Report"
+    gloss: 0
+    tier: 0
+  - key: compare.dockAlready
+    text: "ALREADY DOCUMENTED \xB7 Report"
     gloss: 0
     tier: 0
   - key: slot.Outfit

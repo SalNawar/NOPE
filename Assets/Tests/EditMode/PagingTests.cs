@@ -22,6 +22,17 @@ public class PagingTests
         Assert.AreEqual(2, Paging.First(2, 3, 0));
     }
 
+    [TestCase(0, 0)]
+    [TestCase(5, 0)]
+    [TestCase(6, 1)]
+    [TestCase(13, 2)]
+    [TestCase(-4, 0)]
+    public void PageOf_AtSixPerPage(int index, int page)
+    {
+        Assert.AreEqual(page, Paging.PageOf(index, 6));
+        Assert.AreEqual(index < 0 ? 0 : index, Paging.PageOf(index, 0), "a per-page count below one counts as one");
+    }
+
     [Test]
     public void Clamp_KeepsThePageInRange()
     {

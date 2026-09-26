@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-/// <summary>The browser's back/forward stack: Go, Back, Forward, the cap, and Go clearing forward.</summary>
+/// <summary>The back/forward stack (the browser's, each app pane's): Go, Back, Forward, the cap, Go clearing forward, and RemoveAll.</summary>
 public class NavHistoryTests
 {
     [Test]
@@ -82,5 +82,57 @@ public class NavHistoryTests
         one.Go(2);
         Assert.AreEqual(2, one.Current, "a cap below 1 counts as 1");
         Assert.IsFalse(one.CanBack);
+    }
+
+    [Test]
+    public void RemoveAll_KeepsTheOthersInOrder_AndTheCurrentWhenKept()
+    {
+        var h = new NavHistory<string>(30);
+        foreach (string s in new[] { "a", "B", "c", "D", "e" })
+            h.Go(s);
+        h.Back(out _);
+        h.Back(out _);
+        Assert.AreEqual("c", h.Current);
+        h.RemoveAll(s => s == s.ToUpperInvariant());
+        Assert.AreEqual("c", h.Current);
+        Assert.IsTrue(h.Back(out string at));
+        Assert.AreEqual("a", at);
+        Assert.IsTrue(h.Forward(out at));
+        Assert.IsTrue(h.Forward(out at));
+        Assert.AreEqual("e", at);
+        Assert.IsFalse(h.CanForward);
+    }
+
+    [Test]
+    public void RemoveAll_ADroppedCurrent_HandsOverToTheKeptOneBeforeIt()
+    {
+        var h = new NavHistory<string>(30);
+        foreach (string s in new[] { "a", "b", "C" })
+            h.Go(s);
+        h.RemoveAll(s => s == "C");
+        Assert.AreEqual("b", h.Current);
+        Assert.IsFalse(h.CanForward);
+
+        var first = new NavHistory<string>(30);
+        foreach (string s in new[] { "A", "b" })
+            first.Go(s);
+        first.Back(out _);
+        first.RemoveAll(s => s == "A");
+        Assert.AreEqual("b", first.Current, "nothing kept before it: the first kept one");
+        Assert.IsFalse(first.CanBack);
+    }
+
+    [Test]
+    public void RemoveAll_Everything_LeavesItEmpty()
+    {
+        var h = new NavHistory<string>(30);
+        h.Go("a");
+        h.Go("b");
+        h.RemoveAll(_ => true);
+        Assert.IsFalse(h.HasCurrent);
+        Assert.IsFalse(h.CanBack);
+        Assert.IsFalse(h.CanForward);
+        h.Go("c");
+        Assert.AreEqual("c", h.Current);
     }
 }

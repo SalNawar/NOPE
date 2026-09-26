@@ -11,8 +11,10 @@ using UnityEngine;
 /// nothing chosen the view says what arrives here. Each copy is the paper's
 /// form (phase 5): a clone of the scanned-page template per paper
 /// (DocumentWindowController over a FormView), drawn from the same
-/// DocumentForm the desk paper prints.
-/// CaseDocumentsPresenter fills it; nothing here opens or switches by itself.
+/// DocumentForm the desk paper prints; its fields link (SmartLinks). A link,
+/// Back or a dock side reveals a paper's field (Reveal: the paper chosen, the
+/// field scrolled to and outlined). Each pane has one; CaseDocumentsPresenter
+/// fills them all; nothing here opens or switches by itself.
 /// </summary>
 public sealed class DocumentsView : AppView
 {
@@ -43,10 +45,12 @@ public sealed class DocumentsView : AppView
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
     /// its document and drawing its paper's form (<paramref name="forms"/>, in
-    /// paper order; a photo paper shows <paramref name="look"/>), the chips
-    /// from <paramref name="papers"/>, nothing chosen.
+    /// paper order; a photo paper shows <paramref name="look"/>; the fields
+    /// link by the case's <paramref name="claim"/>), the chips from
+    /// <paramref name="papers"/>, nothing chosen.
     /// </summary>
-    public void SetCase(IReadOnlyList<DocumentInstance> documents, IReadOnlyList<DocumentForm> forms, CasePapers papers, CompareController compare, TravellerLook look, CharacterArt art)
+    public void SetCase(IReadOnlyList<DocumentInstance> documents, IReadOnlyList<DocumentForm> forms, CasePapers papers, CompareController compare, TravellerLook look,
+                        CharacterArt art, CaseClaim claim)
     {
         Clear();
         _papers = papers ?? new CasePapers(0);
@@ -56,7 +60,7 @@ public sealed class DocumentsView : AppView
                 DocumentWindowController page = Instantiate(pageTemplate, pageTemplate.transform.parent);
                 page.gameObject.name = "Page_" + i;
                 page.gameObject.SetActive(false);
-                page.SetDocument(documents[i], i, forms != null && i < forms.Count ? forms[i] : null, compare, look, art);
+                page.SetDocument(documents[i], i, forms != null && i < forms.Count ? forms[i] : null, compare, look, art, claim);
                 _pages.Add(page);
                 _names.Add(documents[i] != null ? documents[i].DisplayName : UiText.Get("document.untitled"));
             }
@@ -101,6 +105,18 @@ public sealed class DocumentsView : AppView
         _selected = index >= 0 && index < _pages.Count ? index : -1;
         ShowSelected();
         RaiseChipsChanged();
+    }
+
+    /// <summary>Chooses the target's paper (its item, else the paper its field key names) and outlines the field; no field: the outline clears.</summary>
+    public override void Reveal(LinkTarget target)
+    {
+        int paper = target.Item;
+        if (paper < 0 && PickKeys.TryField(target.Key, out int document, out _))
+            paper = document;
+        if (paper >= 0)
+            Select(paper);
+        if (_selected >= 0 && _selected < _pages.Count && _pages[_selected] != null)
+            _pages[_selected].RevealField(target.Key);
     }
 
     /// <summary>A paper's chip: its name when scanned (available), else where it is.</summary>
