@@ -66,6 +66,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: short Kolbe
         leakable: 0
@@ -73,6 +74,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: short rounded beard
         leakable: 0
@@ -80,6 +82,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: Barett
         leakable: 1
@@ -87,6 +90,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: gold chain
         leakable: 0
@@ -94,6 +98,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
     female:
       signature: 3
       outfit:
@@ -103,6 +108,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: plaits in gold net
         leakable: 0
@@ -110,6 +116,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -117,6 +124,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: Barett
         leakable: 1
@@ -124,6 +132,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: layered gold chains
         leakable: 0
@@ -131,6 +140,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
   looks:
     skin:
     - 4

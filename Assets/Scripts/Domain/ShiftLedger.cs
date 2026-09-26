@@ -171,4 +171,27 @@ public sealed class CaseVerdict
 
     /// <summary>True if a liar was denied without documented evidence.</summary>
     public bool unprovenDenial;
+
+    /// <summary>
+    /// The deviation fault that makes an accept wrong, as a citation key
+    /// suffix: "panic" for a costume error (CostumeErrors.FaultReason); empty
+    /// for none or a fault without its own reason yet (the plan's phase 7
+    /// gives each lie and directive its reason).
+    /// </summary>
+    public string faultReason = string.Empty;
+
+    /// <summary>The label of the place the traveller was to be sent (the claim; a panic citation names it).</summary>
+    public string destinationLabel = string.Empty;
+
+    /// <summary>
+    /// The UI string key of a wrong decision's mistake: "citation.unproven"
+    /// for an unproven denial, "citation.deniedWrong" for another denial,
+    /// "citation.acceptedWrong" plus "." and the fault reason (when there is
+    /// one) for an accept ({0} = the destination).
+    /// </summary>
+    public string MistakeKey =>
+        unprovenDenial ? "citation.unproven"
+        : !accepted ? "citation.deniedWrong"
+        : string.IsNullOrEmpty(faultReason) ? "citation.acceptedWrong"
+        : "citation.acceptedWrong." + faultReason;
 }

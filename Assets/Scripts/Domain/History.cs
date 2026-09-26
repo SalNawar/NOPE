@@ -102,6 +102,23 @@ public sealed class HistoryState
 
     /// <summary>Carries recorded at accept and not yet promoted, in record order.</summary>
     public List<CarryRecord> pendingCarries = new();
+
+    /// <summary>Costume errors accepted today, reported in the next morning's news (then cleared), in accept order.</summary>
+    public List<PanicRecord> pendingPanics = new();
+}
+
+/// <summary>An accepted costume error (traveller types P5): the traveller would cause a panic where they were sent.</summary>
+[Serializable]
+public sealed class PanicRecord
+{
+    /// <summary>The destination's label.</summary>
+    public string placeLabel;
+
+    /// <summary>The wrong item worn (its label).</summary>
+    public string item;
+
+    /// <summary>The day of the accept.</summary>
+    public int day;
 }
 
 /// <summary>Wording of the templated history news (content; English text in v1).</summary>
@@ -119,6 +136,9 @@ public sealed class HistoryLines
 
     /// <summary>An attribute becomes dominant in a place (the dominance news, audit R3-007); tokens {attribute} and {place}.</summary>
     public LineText dominant = new();
+
+    /// <summary>An accepted costume error caused a panic (traveller types P5); tokens {place} and {value} (the wrong item).</summary>
+    public LineText panic = new();
 }
 
 /// <summary>
@@ -210,4 +230,22 @@ public static class History
     /// </summary>
     public static int NewsSlots(int linesSoFar, int cap, int count) =>
         Math.Max(0, Math.Min(Math.Max(0, count), Math.Max(0, cap) - Math.Max(0, linesSoFar)));
+
+    /// <summary>
+    /// The next morning's panic lines (traveller types P5): one per accepted
+    /// costume error, in accept order, the template's {place} and {value}
+    /// filled with its destination and wrong item. None for a blank template
+    /// or no panics (null records skipped).
+    /// </summary>
+    public static List<string> PanicLines(string template, IReadOnlyList<PanicRecord> panics)
+    {
+        var lines = new List<string>();
+        if (string.IsNullOrWhiteSpace(template) || panics == null)
+            return lines;
+
+        foreach (PanicRecord panic in panics)
+            if (panic != null)
+                lines.Add(Interview.Fill(Interview.Fill(template, Interview.PlaceToken, panic.placeLabel), Interview.ValueToken, panic.item));
+        return lines;
+    }
 }

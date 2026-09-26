@@ -65,6 +65,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: short crop
         leakable: 0
@@ -72,6 +73,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: full beard
         leakable: 0
@@ -79,6 +81,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: checked turban
         leakable: 1
@@ -86,6 +89,7 @@ MonoBehaviour:
         back: 0
         covers: 01000000
         artNation: 
+        artVariant: 
       accessory:
         label: 
         leakable: 0
@@ -93,6 +97,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
     female:
       signature: 3
       outfit:
@@ -102,6 +107,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: pinned braids
         leakable: 0
@@ -109,6 +115,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -116,6 +123,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: futa shawl
         leakable: 1
@@ -123,6 +131,7 @@ MonoBehaviour:
         back: 0
         covers: 01000000
         artNation: 
+        artVariant: 
       accessory:
         label: qilada necklace
         leakable: 0
@@ -130,6 +139,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
   looks:
     skin:
     - 0

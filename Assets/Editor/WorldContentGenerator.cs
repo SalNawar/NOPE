@@ -12,8 +12,10 @@ using Object = UnityEngine.Object;
 /// and creates or updates the eras, nations, places (NationEraProfileSO with
 /// year, facts plus the Culture fact derived from the wardrobe, names, birth
 /// years, small talk, wardrobe and look weights; the eight Future places),
-/// travel rules, premade characters, day plans (tell count and tell channels,
-/// the premade pool, forced slots and chance), the interview (its wording,
+/// the present's look (its clothes and 2150 accessory kit, for costume
+/// errors), travel rules (closures and standing procedures), premade
+/// characters, day plans (tell count and tell channels, the premade pool,
+/// forced slots and chance, the costume error chance), the interview (its wording,
 /// spoken requests and menu capacity, questions, narrative dialogs, and a
 /// one-shot unlock-announcement trigger for every gated question), the
 /// history (one leader effect per country, one one-shot trigger and SetFact
@@ -147,7 +149,7 @@ public static partial class WorldContentGenerator
         WireLibrary(authored.library, days, src.eras.Select(e => eras[e.id]).ToArray(), src.countries.Select(c => nations[c.id]).ToArray(),
                     places, authored.archetypes, src.content.attributes.Select(a => authored.attributes[a.id]).ToArray(), authored.books,
                     BuildLines(src.interview), questions, dialogs, unlocks, BuildHistoryLines(src.history?.lines),
-                    historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
+                    historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), ToPresentLook(src.present), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
         WireNews(authored.library, src.news);
@@ -265,6 +267,9 @@ public static partial class WorldContentGenerator
                 errors.Add($"Rule '{r.asset}' references unknown country '{r.country}'.");
             if (!string.IsNullOrEmpty(r.era) && !eraIds.Contains(r.era))
                 errors.Add($"Rule '{r.asset}' references unknown era '{r.era}'.");
+            if (Enum.TryParse(r.type, out TravelRuleType procedure) && !TravelRuleSO.IsClosureType(procedure) &&
+                (string.IsNullOrWhiteSpace(r.description) || !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era)))
+                errors.Add($"Rule '{r.asset}' is a standing procedure ({r.type}): it needs its directive line (\"description\") and names no country or era.");
         }
 
         foreach (DayData d in src.days)
@@ -280,6 +285,8 @@ public static partial class WorldContentGenerator
                     errors.Add($"Day '{d.asset}' uses unknown rule '{r}'.");
             if (d.tells < 1)
                 errors.Add($"Day '{d.asset}' needs \"tells\" of at least 1.");
+            if (d.costumeErrorChance < 0f || d.costumeErrorChance > 1f)
+                errors.Add($"Day '{d.asset}' needs \"costumeErrorChance\" in 0..1.");
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
@@ -332,7 +339,8 @@ public static partial class WorldContentGenerator
                      ("leaderGained", h.lines?.leaderGained, new[] { History.NationToken, Interview.PlaceToken }),
                      ("leaderLost", h.lines?.leaderLost, new[] { History.NationToken }),
                      ("carry", h.lines?.carry, new[] { Interview.ValueToken, Interview.PlaceToken }),
-                     ("dominant", h.lines?.dominant, new[] { History.AttributeToken, Interview.PlaceToken })
+                     ("dominant", h.lines?.dominant, new[] { History.AttributeToken, Interview.PlaceToken }),
+                     ("panic", h.lines?.panic, new[] { Interview.PlaceToken, Interview.ValueToken })
                  })
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -939,6 +947,16 @@ public static partial class WorldContentGenerator
             cultures.Add((pid, culture));
         }
 
+        // --- The present's clothes and 2150 accessory kit (costume errors) ---
+        PresentLook present = CheckPresentLook(src.present, looks?.costumeErrors, cultures, errors);
+        if (present != null)
+        {
+            wardrobes.Add(("present", present.wardrobe));
+            foreach (TravellerGender gender in new[] { TravellerGender.Male, TravellerGender.Female })
+                foreach (LookItem item in present.Kit(gender))
+                    wardrobes.Add(($"present kit {LookKeys.GenderToken(gender)} '{item.artVariant}'", KitWardrobe(gender, item)));
+        }
+
         foreach (string problem in Looks.LabelProblems(wardrobes))
             errors.Add($"Wardrobe labels: {problem}");
 
@@ -1086,6 +1104,86 @@ public static partial class WorldContentGenerator
         }
     }
 
+    /// <summary>
+    /// The present's look (costume errors, traveller types C2): a wardrobe
+    /// with both genders (the wardrobe checks) and no accessory (the kit is its
+    /// accessories), a Culture value within the fact width that no place
+    /// shares (a 2150 garment names 2150); the kit's rows: gender m or f, an
+    /// ASCII label within the cap, a key-token variant unique per gender, at
+    /// least one item per gender; the variant weights non-negative with a
+    /// positive sum. Returns the look as the library stores it, or null when
+    /// it is missing.
+    /// </summary>
+    private static PresentLook CheckPresentLook(PresentData p, CostumeErrorsData weights, List<(string placeId, string value)> cultures, List<string> errors)
+    {
+        if (weights == null || weights.otherPlace < 0f || weights.presentClothes < 0f || weights.presentAccessory < 0f ||
+            weights.otherPlace + weights.presentClothes + weights.presentAccessory <= 0f)
+            errors.Add("looks.costumeErrors needs otherPlace, presentClothes and presentAccessory: non-negative weights with a positive sum.");
+
+        if (p == null || p.wardrobe == null || p.wardrobe.m == null || p.wardrobe.f == null)
+        {
+            errors.Add("\"present\" needs a wardrobe with \"m\" and \"f\" (the present's clothes, worn whole by a 2150 citizen who forgot their costume).");
+            return null;
+        }
+
+        CheckGenderLook(p.wardrobe.m, "The present m", errors);
+        CheckGenderLook(p.wardrobe.f, "The present f", errors);
+        foreach ((string g, GenderLookData look) in new[] { ("m", p.wardrobe.m), ("f", p.wardrobe.f) })
+            if (!string.IsNullOrWhiteSpace(look.accessory?.label))
+                errors.Add($"The present {g} wears an accessory; its accessories are the kit (present.kit).");
+
+        PresentLook present = ToPresentLook(p);
+        string culture = Looks.CultureValue(present.wardrobe);
+        if (culture != null && culture.Length > FactTable.MaxValueLength)
+            errors.Add($"The present's Culture value '{culture}' is {culture.Length} characters; a book row holds {FactTable.MaxValueLength}.");
+        foreach ((string place, string value) in cultures)
+            if (DiscrepancyLog.ValuesMatch(value, culture))
+                errors.Add($"The present and '{place}' share the Culture value '{culture}'; a 2150 garment must name 2150.");
+
+        foreach (KitItemData k in p.kit ?? Array.Empty<KitItemData>())
+        {
+            string owner = $"present.kit '{k.label}'";
+            if (k.gender != LookKeys.Male && k.gender != LookKeys.Female)
+                errors.Add($"{owner} has gender '{k.gender}' (\"m\" or \"f\").");
+            if (string.IsNullOrWhiteSpace(k.label) || k.label.Length > Looks.MaxLabelLength || !IsAscii(k.label))
+                errors.Add($"{owner} needs an ASCII label of at most {Looks.MaxLabelLength} characters.");
+            if (!LookKeys.IsToken(k.variant))
+                errors.Add($"{owner} has variant '{k.variant}', which is not a key token (lowercase letters and digits; it ends the item's art file name).");
+        }
+        foreach (TravellerGender gender in new[] { TravellerGender.Male, TravellerGender.Female })
+        {
+            IReadOnlyList<LookItem> kit = present.Kit(gender);
+            if (kit.Count == 0)
+                errors.Add($"present.kit has no {LookKeys.GenderToken(gender)} item (a 2150 accessory needs one).");
+            if (kit.Select(i => i.artVariant).Distinct().Count() != kit.Count)
+                errors.Add($"present.kit repeats a {LookKeys.GenderToken(gender)} variant (each item has its own drawing).");
+        }
+
+        return present;
+    }
+
+    /// <summary>A kit accessory as a wardrobe of its gender only (the per-gender label rule reads it as that gender's signature).</summary>
+    private static PlaceWardrobe KitWardrobe(TravellerGender gender, LookItem item)
+    {
+        var kit = new GenderLook { signature = LookSlot.Accessory, accessory = item };
+        return gender == TravellerGender.Male ? new PlaceWardrobe { male = kit } : new PlaceWardrobe { female = kit };
+    }
+
+    /// <summary>The present's look as the library stores it: its clothes, and each kit row as a leakable accessory drawn under its variant.</summary>
+    private static PresentLook ToPresentLook(PresentData p) => new PresentLook
+    {
+        wardrobe = ToWardrobe(p?.wardrobe),
+        kitMale = KitItems(p, LookKeys.Male),
+        kitFemale = KitItems(p, LookKeys.Female)
+    };
+
+    /// <summary>A gender's kit rows as leakable accessories drawn under their variants.</summary>
+    private static List<LookItem> KitItems(PresentData p, string gender) =>
+        (p?.kit ?? Array.Empty<KitItemData>())
+        .Where(k => k.gender == gender && !string.IsNullOrWhiteSpace(k.label))
+        .Select(k => new LookItem { label = k.label.Trim(), leakable = true, artVariant = k.variant })
+        .ToList();
+
     /// <summary>A gender's look: outfit and hair present, a real signature item, labels within the cap and ASCII, covers naming other slots, wig and back only on hair, an art nation (when given) that is a key token.</summary>
     private static void CheckGenderLook(GenderLookData g, string owner, List<string> errors)
     {
@@ -1222,7 +1320,8 @@ public static partial class WorldContentGenerator
         leaderGained = new LineText("history.leaderGained", l?.leaderGained),
         leaderLost = new LineText("history.leaderLost", l?.leaderLost),
         carry = new LineText("history.carry", l?.carry),
-        dominant = new LineText("history.dominant", l?.dominant)
+        dominant = new LineText("history.dominant", l?.dominant),
+        panic = new LineText("history.panic", l?.panic)
     };
 
     private static NationEraProfileSO MakePlace(PlaceData p, NationSO nation, EraSO era, CountryData country,
@@ -1312,6 +1411,12 @@ public static partial class WorldContentGenerator
         faceBands = l.faceBands.Select(b => new FaceBand { minAge = b.minAge, faces = b.faces.ToList() }).ToList(),
         greyFromAge = l.greyFromAge,
         wholeFigureLabel = l.wholeFigureLabel,
+        costumeErrors = new CostumeErrorWeights
+        {
+            otherPlace = l.costumeErrors?.otherPlace ?? 0f,
+            presentClothes = l.costumeErrors?.presentClothes ?? 0f,
+            presentAccessory = l.costumeErrors?.presentAccessory ?? 0f
+        },
         confusable = (l.confusable ?? Array.Empty<ConfusableData>()).Select(c => new ConfusablePair
         {
             placeA = c.a,
@@ -1383,6 +1488,7 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "possibleBlueprints", new Object[] { authored.blueprint });
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
+        so.FindProperty("costumeErrorChance").floatValue = d.costumeErrorChance;
         SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
         SerializedArrays.Set(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
 
@@ -1612,7 +1718,7 @@ public static partial class WorldContentGenerator
                                     ArchetypeSO[] archetypes, AttributeSO[] attributes, ReferenceBookSO[] books,
                                     InterviewLines interview, QuestionSO[] questions, DialogSO[] dialogs, TimelineTriggerSO[] unlocks,
                                     HistoryLines historyLines, TimelineTriggerSO[] historyTriggers, EffectSO[] historyEffects, EffectSO[] leaderEffects,
-                                    LegendarySO[] premades, LookRules lookRules,
+                                    LegendarySO[] premades, LookRules lookRules, PresentLook presentLook,
                                     UiData ui, ThemeSO neutralTheme, ThemeSO[] themes, UiStringTableSO[] stringTables,
                                     UpgradeSO[] translators, TimelineTriggerSO[] notices, TranslationSettings translation)
     {
@@ -1633,6 +1739,7 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "effects", HandAuthored(so, "effects").Concat(historyEffects).Concat(leaderEffects).ToArray());
         SerializedArrays.Set(so, "legendaries", premades);
         so.FindProperty("lookRules").boxedValue = lookRules;
+        so.FindProperty("presentLook").boxedValue = presentLook;
         so.FindProperty("cultureUi.readingLanguage").stringValue = ui.readingLanguage;
         so.FindProperty("cultureUi.glossPercent").intValue = ui.glossPercent;
         so.FindProperty("cultureUi.labelMinScale").floatValue = ui.labelMinScale;
@@ -1740,6 +1847,7 @@ public static partial class WorldContentGenerator
         public EraData[] eras;
         public CountryData[] countries;
         public PlaceData[] places;
+        public PresentData present;
         public RuleData[] rules;
         public DayData[] days;
         public InterviewData interview;
@@ -1760,10 +1868,20 @@ public static partial class WorldContentGenerator
         public FaceBandData[] faceBands;
         public int greyFromAge;
         public string wholeFigureLabel;
+        public CostumeErrorsData costumeErrors;
         public ConfusableData[] confusable;
     }
 
     [Serializable] private sealed class FaceBandData { public int minAge; public string[] faces; }
+
+    /// <summary>The weight of each costume error variant.</summary>
+    [Serializable] private sealed class CostumeErrorsData { public float otherPlace; public float presentClothes; public float presentAccessory; }
+
+    /// <summary>The present's look: its clothes and its 2150 accessory kit.</summary>
+    [Serializable] private sealed class PresentData { public WardrobeData wardrobe; public KitItemData[] kit; }
+
+    /// <summary>One kit accessory: its gender ("m" or "f"), its label and its art variant token.</summary>
+    [Serializable] private sealed class KitItemData { public string gender; public string label; public string variant; }
 
     /// <summary>Two places whose items in a slot look alike ("why" is a note for reviewers).</summary>
     [Serializable] private sealed class ConfusableData { public string a; public string b; public string slot; public string gender; }
@@ -1873,6 +1991,8 @@ public static partial class WorldContentGenerator
         public ForcedData[] forced;
         /// <summary>Chance per slot of a pooled premade (required above 0 with a pool).</summary>
         public float premadeChance;
+        /// <summary>Chance per 2150 citizen of a costume error (0..1).</summary>
+        public float costumeErrorChance;
     }
 
     /// <summary>The interview's wording and spoken requests (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>
@@ -1927,7 +2047,7 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class HistoryData { public HistoryLinesData lines; public HistoryRuleData[] rules; }
 
     /// <summary>The templated history lines ({nation}, {place}, {value}).</summary>
-    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; }
+    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; }
 
     /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits and prints its news line.</summary>
     [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 /// <summary>
@@ -159,5 +160,23 @@ public class HistoryTests
     {
         Assert.AreEqual(0, (int)EditCause.Rule);
         Assert.AreEqual(1, (int)EditCause.Carry);
+    }
+
+    [Test]
+    public void PanicLines_OnePerAcceptedCostumeError_InAcceptOrder()
+    {
+        var panics = new List<PanicRecord>
+        {
+            new PanicRecord { placeLabel = "Periclean Athens (Ancient)", item = "transit badge", day = 2 },
+            null,
+            new PanicRecord { placeLabel = "Abbasid Baghdad (Medieval)", item = "tech jacket", day = 2 }
+        };
+        CollectionAssert.AreEqual(new[]
+        {
+            "PANIC in Periclean Athens (Ancient): \"transit badge\".",
+            "PANIC in Abbasid Baghdad (Medieval): \"tech jacket\"."
+        }, History.PanicLines("PANIC in {place}: \"{value}\".", panics));
+        CollectionAssert.IsEmpty(History.PanicLines(" ", panics), "a blank template");
+        CollectionAssert.IsEmpty(History.PanicLines("PANIC in {place}.", null));
     }
 }

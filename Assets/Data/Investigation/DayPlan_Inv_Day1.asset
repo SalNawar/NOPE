@@ -28,6 +28,7 @@ MonoBehaviour:
   availableLegendaries: []
   tellCount: 1
   tellChannels: 00000000
+  costumeErrorChance: 0
   activeTravelRules: []
   guaranteeRuleViolators: 1
   forcedCases:

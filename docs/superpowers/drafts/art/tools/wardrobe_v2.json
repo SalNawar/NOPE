@@ -5632,6 +5632,38 @@
    }
   }
  ],
+ "presentClothes": {
+  "m": {
+   "outfit": "tech jacket",
+   "hair": "short textured crop"
+  },
+  "f": {
+   "outfit": "coat-dress",
+   "hair": "sleek low bun"
+  }
+ },
+ "presentKit": [
+  {
+   "variant": "lenses",
+   "label": "smart lenses",
+   "look": "a pair of slim rimless smart lenses: two small rounded-rectangle lenses of flat, opaque pale blue-grey joined by a thin slate-grey bridge, sitting on the nose in front of the eyes"
+  },
+  {
+   "variant": "earpiece",
+   "label": "comm earpiece",
+   "look": "a sleek slate teal-blue comm earpiece hooked over the ear on the viewer's left, with a short slim boom reaching forward along the cheek"
+  },
+  {
+   "variant": "badge",
+   "label": "transit badge",
+   "look": "a large rounded-rectangle transit badge in sand with slate teal-blue geometric panels, clipped to the upper chest on the viewer's right (no text, numbers or symbols)"
+  },
+  {
+   "variant": "display",
+   "label": "shoulder display",
+   "look": "a curved slate-grey display panel strapped over the shoulder on the viewer's left, its face flat matte teal-blue (not lit, no text)"
+  }
+ ],
  "fixLog": [
   {
    "n": 1,
