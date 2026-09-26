@@ -87,8 +87,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Mail window's size.</summary>
     public Vector2 mailWindowSize = new Vector2(920f, 720f);
 
-    /// <summary>The Citizen Account window's size.</summary>
-    public Vector2 accountWindowSize = new Vector2(720f, 780f);
+    /// <summary>The Citizen Account window's size: wide enough for the Statement's landscape page (982 u across, so its cells print at 13 px at 720p).</summary>
+    public Vector2 accountWindowSize = new Vector2(1020f, 800f);
 
     /// <summary>The Notes window's size.</summary>
     public Vector2 notesWindowSize = new Vector2(780f, 720f);

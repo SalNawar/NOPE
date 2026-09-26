@@ -34,7 +34,8 @@ public static partial class OfficeSceneUIBuilder
     /// the lines, the photo cell (a portrait), and the text template in the
     /// paper's text material (the desk paper's, so both print one ink). Every
     /// part is DiegeticForm (the photo's layers DiegeticPhoto); the templates,
-    /// the seal and the photo start inactive. Rebuilt fresh.
+    /// the seal, the photo and its frame's art start inactive. Rebuilt fresh.
+    /// The view prints at the width Show is given, else this one.
     /// </summary>
     private static FormView BuildFormView(Transform parent, string name, float width)
     {
@@ -64,6 +65,9 @@ public static partial class OfficeSceneUIBuilder
 
         Transform photoFrame = Panel(view, "Photo", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         TravellerPortraitView portrait = BuildPortrait(photoFrame);
+        Image frameArt = Panel(photoFrame, "FrameArt", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Color.white, ThemeRoleId.DiegeticForm).GetComponent<Image>();
+        frameArt.raycastTarget = false;
+        frameArt.gameObject.SetActive(false);
         photoFrame.gameObject.SetActive(false);
 
         Transform texts = Panel(view, "Texts", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -92,6 +96,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "lines", lines);
         Wire(so, "photoFrame", photoFrame);
         Wire(so, "photo", portrait);
+        Wire(so, "photoFrameArt", frameArt);
         Wire(so, "textsRoot", texts);
         Wire(so, "textTemplate", text);
         so.ApplyModifiedProperties();
@@ -140,12 +145,47 @@ public static partial class OfficeSceneUIBuilder
         strip.textWrappingMode = TextWrappingModes.NoWrap;
         strip.overflowMode = TextOverflowModes.Ellipsis;
 
-        Transform area = Panel(page, "Scroll", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
-        Transform viewport = Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        ScrollRect scroll = BuildFormScroll(page, "Scroll", PcPageWidth, out FormView form);
+        PlaceRect(scroll.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(stripTop + DocStrip + DocGap)));
+
+        DocumentWindowController c = page.gameObject.AddComponent<DocumentWindowController>();
+        var so = new SerializedObject(c);
+        Wire(so, "titleText", title);
+        Wire(so, "scanStrip", strip);
+        Wire(so, "scroll", scroll);
+        Wire(so, "form", form);
+        so.ApplyModifiedProperties();
+        page.gameObject.SetActive(false);
+        return c;
+    }
+
+    /// <summary>
+    /// A form in a scroll under <paramref name="parent"/> (filling it inside
+    /// the margin; callers may place it): a FormView <paramref name="formWidth"/>
+    /// wide at the top centre of the scroll's viewport, as its content.
+    /// </summary>
+    private static ScrollRect BuildFormScroll(Transform parent, string name, float formWidth, out FormView form)
+    {
+        ScrollRect scroll = BuildScrollArea(parent, name, out RectTransform viewport);
+        form = BuildFormView(viewport, "Form", formWidth);
+        scroll.content = (RectTransform)form.transform;
+        return scroll;
+    }
+
+    /// <summary>
+    /// A vertical scroll under <paramref name="parent"/> (filling it inside the
+    /// margin; callers may place it): a masked <paramref name="viewport"/> for
+    /// the caller's content and an auto-hiding scrollbar at the right in the
+    /// backing's colours. The caller sets the scroll's content.
+    /// </summary>
+    private static ScrollRect BuildScrollArea(Transform parent, string name, out RectTransform viewport)
+    {
+        FormStyleSO style = EnsureFormStyle();
+        Transform area = Panel(parent, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -DocMargin));
+        viewport = (RectTransform)Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(viewport, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-(DocScrollbar + DocGap), 0f));
         viewport.gameObject.AddComponent<RectMask2D>();
-        FormView form = BuildFormView(viewport, "Form", PcPageWidth);
 
         Transform track = Panel(area, "Scrollbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, style.backing, ThemeRoleId.DiegeticBacking);
         PlaceRect(track, new Vector2(1f, 0f), Vector2.one, new Vector2(-DocScrollbar, 0f), Vector2.zero);
@@ -164,24 +204,14 @@ public static partial class OfficeSceneUIBuilder
         soBar.ApplyModifiedProperties();
 
         ScrollRect scroll = area.gameObject.AddComponent<ScrollRect>();
-        scroll.content = (RectTransform)form.transform;
-        scroll.viewport = (RectTransform)viewport;
+        scroll.viewport = viewport;
         scroll.horizontal = false;
         scroll.vertical = true;
         scroll.movementType = ScrollRect.MovementType.Clamped;
         scroll.scrollSensitivity = 40f;
         scroll.verticalScrollbar = scrollbar;
         scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
-
-        DocumentWindowController c = page.gameObject.AddComponent<DocumentWindowController>();
-        var so = new SerializedObject(c);
-        Wire(so, "titleText", title);
-        Wire(so, "scanStrip", strip);
-        Wire(so, "scroll", scroll);
-        Wire(so, "form", form);
-        so.ApplyModifiedProperties();
-        page.gameObject.SetActive(false);
-        return c;
+        return scroll;
     }
 
     /// <summary>The Documents tab's page template reads the shift clock for its scan strip (the clock is on the GameManager, built after the app).</summary>

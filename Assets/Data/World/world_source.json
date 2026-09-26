@@ -9690,42 +9690,6 @@
         "tier": "Full"
       },
       {
-        "key": "mail.form.title",
-        "text": "INTERNAL MEMORANDUM",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.to",
-        "text": "TO",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.from",
-        "text": "FROM",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.date",
-        "text": "DATE",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.ref",
-        "text": "REF",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.form.subject",
-        "text": "SUBJECT",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "mail.to",
         "text": "All desk officers",
         "gloss": "None",
@@ -9800,12 +9764,6 @@
       {
         "key": "mail.link.news",
         "text": "Read it on the News site >",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "mail.stamp",
-        "text": "RECEIVED",
         "gloss": "None",
         "tier": "Full"
       },
@@ -9954,60 +9912,6 @@
         "tier": "Full"
       },
       {
-        "key": "account.statement.title",
-        "text": "STATEMENT OF ACCOUNT",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.day",
-        "text": "DAY",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.wages",
-        "text": "WAGES",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.fines",
-        "text": "FINES",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.debtRelief",
-        "text": "DEBT RELIEF",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.household",
-        "text": "HOUSEHOLD",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.purchases",
-        "text": "PURCHASES",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.balance",
-        "text": "BALANCE",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.col.owed",
-        "text": "OWED",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "account.statement.none",
         "text": "No entries yet: a day is written when its shift ends.",
         "gloss": "None",
@@ -10016,12 +9920,6 @@
       {
         "key": "account.statement.unit",
         "text": "Amounts in {0}.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "account.finePrint",
-        "text": "Departures are voluntary.",
         "gloss": "None",
         "tier": "Full"
       },

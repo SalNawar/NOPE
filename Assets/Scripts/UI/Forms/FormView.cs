@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,13 +9,19 @@ using UnityEngine.UI;
 /// <summary>
 /// A form drawn with uGUI on the PC (redesign phase 5, PC spec FO1, §6.5): the
 /// twin of the desk paper (DeskDocument). FormLayout places the form at the
-/// view's width (a document at 542 u is a page H = 708 u tall; a flow page
-/// grows with its rows) and the view draws that placed form: the paper, the
+/// width the caller gives (Show's width, else the view's own), and every size
+/// follows it (FormLayout.Layout): a document copy takes 542 u, a page H =
+/// 708 u tall; a page kind in the Investigation app's pane takes the pane's
+/// width, so its table cells reach 13 px at 720p (from about 564 u); a flow
+/// page grows with its rows. The view draws that placed form: the paper (its
+/// kind's face on a document when the art exists, ArtSlots.PaperFaces), the
 /// seal behind the header, the fills and bands under the slots' tints and
 /// every outline, rule, barcode bar, tick and the stamp area's dash over them
 /// (FormPaint's quads, which the desk paper prints too, one FormStrokes graphic
 /// per layer), a TextMeshPro per text cloned from one template and styled by
-/// its role (TmpFormText), and the traveller's photo in its cell. The layout
+/// its role (TmpFormText), and the traveller's photo in its cell (under the
+/// photo frame's art when it exists, as on the desk paper; the agency seal's
+/// art likewise). The layout
 /// measures with a hidden text of the template's font that the view makes
 /// for itself (TextMeshPro measures only once awake, and a window is filled
 /// while still inactive). Each pickable slot gets a button over its
@@ -58,6 +65,9 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The traveller's photo inside the cell.</summary>
     [SerializeField] private TravellerPortraitView photo;
 
+    /// <summary>The photo frame's art over the photo (inactive until its art, ArtSlots.PhotoFrame, is found).</summary>
+    [SerializeField] private Image photoFrameArt;
+
     /// <summary>The inactive ↗ cloned per linked slot (a small button with the drawn glyph and its hover hint).</summary>
     [SerializeField] private Button linkTemplate;
 
@@ -95,6 +105,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     private readonly List<LinkPart> _links = new List<LinkPart>();
     private TmpFormText _measure;
     private TextMeshProUGUI _measureText;
+    private Sprite _sealRing;
     private PlacedForm _form;
     private SlotPart _hovered;
     private CompareController _compare;
@@ -132,15 +143,18 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     }
 
     /// <summary>
-    /// Draws <paramref name="spec"/> showing <paramref name="data"/> at the
-    /// view's width and sets the view's height to the form's. The slots
+    /// Draws <paramref name="spec"/> showing <paramref name="data"/> at
+    /// <paramref name="width"/> (above 0: the view takes that width first;
+    /// else its own, fixed by its anchors) and sets the view's height to the
+    /// form's. Pass a document copy 542 u and a page kind its pane's width,
+    /// and Show again when the pane's width changes (a maximise). The slots
     /// <paramref name="pickable"/> accepts (every slot when null) get a button
     /// and tint under the pointer, lit while their key is picked (Bind); the
     /// slots <paramref name="linkHint"/> gives a hint get a ↗ with that hint.
     /// The found mark clears. Returns the placed form (null without a style or
     /// text template).
     /// </summary>
-    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, Func<FormSlot, string> linkHint = null)
+    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, float width = 0f, Func<FormSlot, string> linkHint = null)
     {
         _hovered = null;
         _form = null;
@@ -148,11 +162,12 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             return null;
 
         var rt = (RectTransform)transform;
+        if (width > 0f)
+            rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         _measure ??= new TmpFormText(MeasureText());
         _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
-        if (paper != null)
-            paper.color = style.paper;
+        ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null);
 
         int texts = 0;
         bool sealShown = false, photoShown = false;
@@ -178,6 +193,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             seal.gameObject.SetActive(sealShown);
         if (photoFrame != null)
             photoFrame.gameObject.SetActive(photoShown);
+        if (photoFrameArt != null)
+            photoFrameArt.gameObject.SetActive(photoShown && photoFrameArt.sprite != null);
 
         List<FormQuad> quads = FormPaint.Quads(_form, style.Palette(), style.metrics);
         if (fills != null)
@@ -216,6 +233,32 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         }
         if (found.gameObject.activeSelf != on)
             found.gameObject.SetActive(on);
+    }
+
+    /// <summary>
+    /// The form's art when delivered (redesign phase 27, ArtSlots): a
+    /// document's face by <paramref name="formNumber"/> (its kind's, else the
+    /// agency's plain face) on the paper, the agency seal's on the seal, the
+    /// photo frame's over the photo. A missing file keeps the style's plain
+    /// paper, the code-drawn ring and no frame; a page kind (no number) keeps
+    /// the plain paper.
+    /// </summary>
+    private void ShowArt(string formNumber)
+    {
+        if (paper != null)
+        {
+            Sprite face = formNumber != null ? SlotArt.Sprite(ArtSlots.PaperFaces(formNumber).ToArray()) : null;
+            paper.sprite = face;
+            paper.color = face != null ? Color.white : style.paper;
+        }
+        if (seal != null)
+        {
+            if (_sealRing == null)
+                _sealRing = seal.sprite;
+            seal.sprite = SlotArt.Sprite(ArtSlots.AgencySeal) ?? _sealRing;
+        }
+        if (photoFrameArt != null)
+            photoFrameArt.sprite = SlotArt.Sprite(ArtSlots.PhotoFrame);
     }
 
     /// <summary>Shows the traveller's photo in the photo cell (a null look empties it).</summary>

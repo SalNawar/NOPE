@@ -38,11 +38,40 @@ public sealed class FormData
     /// <summary>A page kind's text slots (a Paragraph's slot, a named cell's slot).</summary>
     public IReadOnlyDictionary<string, string> Text = new Dictionary<string, string>();
 
-    /// <summary>A page kind's table rows by slot, each row its cells' texts.</summary>
+    /// <summary>A page kind's table rows by slot, each row its cells' texts (one cell in a table of several columns: a heading row).</summary>
     public IReadOnlyDictionary<string, IReadOnlyList<string[]>> Rows = new Dictionary<string, IReadOnlyList<string[]>>();
+
+    /// <summary>A record's groups, for a RecordGroups block (the traveller-types spec's R1: a record's shape is data).</summary>
+    public IReadOnlyList<FormGroup> Groups = Array.Empty<FormGroup>();
 
     /// <summary>A copy (its lists shared).</summary>
     public FormData Copy() => (FormData)MemberwiseClone();
+
+    /// <summary>What a PC page kind starts from: the agency's name and programme over <paramref name="spec"/>'s own form number and title (a caller may name the page otherwise: a book's register).</summary>
+    public static FormData Page(FormSpec spec, string agency, string programme) => new FormData
+    {
+        Agency = agency ?? string.Empty,
+        Programme = programme ?? string.Empty,
+        FormNumber = spec != null ? spec.formNumber ?? string.Empty : string.Empty,
+        Title = spec != null ? spec.title ?? string.Empty : string.Empty
+    };
+}
+
+/// <summary>One group of a record's rows (a RecordGroups block prints it as a numbered section of boxes): its title and its (label, value) rows.</summary>
+public sealed class FormGroup
+{
+    /// <summary>A group from its title and rows.</summary>
+    public FormGroup(string title, IReadOnlyList<(string Label, string Value)> rows)
+    {
+        Title = title ?? string.Empty;
+        Rows = rows ?? Array.Empty<(string, string)>();
+    }
+
+    /// <summary>The group's title ("Records", "Forms on file", "Travel"); printed in capitals after its number.</summary>
+    public string Title { get; }
+
+    /// <summary>The group's rows, each a box: its label and value.</summary>
+    public IReadOnlyList<(string Label, string Value)> Rows { get; }
 }
 
 /// <summary>
@@ -342,7 +371,7 @@ public sealed class PlacedForm
     /// <summary>Its height: its pages on a fixed page, its content on a flow page.</summary>
     public float Height { get; }
 
-    /// <summary>H: one page's height (width / aspect), the unit of every size.</summary>
+    /// <summary>H: one page's height (width / aspect; width × aspect on a landscape page), the unit of every size.</summary>
     public float PageHeight { get; }
 
     /// <summary>The items in drawing order.</summary>
@@ -384,7 +413,14 @@ public static class FormLayout
     /// <summary>The words a probe value is cut from: real word lengths, so it wraps like a value.</summary>
     private const string ProbeWords = "Middle Egyptian, hieroglyphs and a reed brush ";
 
-    /// <summary>Lays out <paramref name="spec"/> showing <paramref name="data"/> at <paramref name="width"/> (the caller's units).</summary>
+    /// <summary>
+    /// Lays out <paramref name="spec"/> showing <paramref name="data"/> at
+    /// <paramref name="width"/> (the caller's units). Every size is in page
+    /// heights, H = width / aspect (width × aspect on a landscape page): the
+    /// wider the page, the larger its print. A document copy on the PC takes
+    /// 542 u (H = 708 u); a page kind in a pane takes the pane's width, so its
+    /// table cells reach 13 px at 720p from about 564 u.
+    /// </summary>
     public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure) =>
         new Placer(spec, data, width, m, measure, null).Run();
 
@@ -516,7 +552,7 @@ public static class FormLayout
             _measure = measure;
             _problems = problems;
             _width = width;
-            _h = width / _m.aspect;
+            _h = _spec.landscape ? width * _m.aspect : width / _m.aspect;
             _left = _m.marginX * _h;
             _content = width - 2f * _left;
             _column = (_content - (Columns - 1) * G(_m.gutter)) / Columns;
@@ -537,8 +573,9 @@ public static class FormLayout
                 switch (b.kind)
                 {
                     case FormBlockKind.Header: Header(); break;
-                    case FormBlockKind.Section: Section(b); break;
+                    case FormBlockKind.Section: Section(b.text); break;
                     case FormBlockKind.FieldRow: FieldRow(b); break;
+                    case FormBlockKind.RecordGroups: RecordGroups(b); break;
                     case FormBlockKind.Checkboxes: Checkboxes(b); break;
                     case FormBlockKind.Table: Table(b); break;
                     case FormBlockKind.Paragraph: Words(FormTextRole.Paragraph, !string.IsNullOrEmpty(b.text) ? b.text : SlotText(b.slot), _m.paragraphSize); break;
@@ -670,28 +707,34 @@ public static class FormLayout
             _y = titleTop + Math.Max(titleHeight, number) + G(_m.blockGap);
         }
 
-        private void Section(FormBlock b)
+        /// <summary>A section head: its text in capitals on a band across the content.</summary>
+        private void Section(string text)
         {
             float pad = G(_m.boxPadding);
             float size = G(_m.sectionSize);
-            float line = Height(b.text.ToUpperInvariant(), FormTextRole.Section, size, _content - 2f * pad);
+            string head = (text ?? string.Empty).ToUpperInvariant();
+            float line = Height(head, FormTextRole.Section, size, _content - 2f * pad);
             var band = FaceRect.FromTop(_left, _y, _content, line + pad);
             Add(FormItemKind.RowBand, band);
-            Text(FormTextRole.Section, (b.text ?? string.Empty).ToUpperInvariant(), _left + pad, _y + pad / 2f, _content - 2f * pad, size);
+            Text(FormTextRole.Section, head, _left + pad, _y + pad / 2f, _content - 2f * pad, size);
             _y = band.YMax + G(_m.rowGap);
         }
 
-        /// <summary>A box's content: its label and value, the value's fitted size and height; and the box's height.</summary>
-        private (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) BoxContent(FormCell c, float width)
+        /// <summary>A cell's box content: its label (its caption, else its field's) and value (its field's, else its slot's).</summary>
+        private (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) BoxContent(FormCell c, float width) =>
+            BoxContent(!string.IsNullOrEmpty(c.caption) ? c.caption : FieldLabel(c.field), c.field >= 0 ? FieldValue(c.field) : SlotText(c.slot), width, $"field {c.field}");
+
+        /// <summary>A box's content: its label and value, the value's fitted size and height; and the box's height (a value over the lines a box holds is reported as <paramref name="what"/>).</summary>
+        private (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) BoxContent(string label, string value, float width, string what)
         {
             float pad = G(_m.boxPadding);
             float inner = width - 2f * pad;
-            string label = !string.IsNullOrEmpty(c.caption) ? c.caption : FieldLabel(c.field);
-            string value = c.field >= 0 ? FieldValue(c.field) : SlotText(c.slot);
+            label ??= string.Empty;
+            value ??= string.Empty;
             float labelHeight = string.IsNullOrEmpty(label) ? 0f : Height(label, FormTextRole.Label, G(_m.labelSize), inner);
             (float size, float height, int lines) = FitValue(value, inner);
             if (lines > _m.maxValueLines)
-                _problems?.Add($"field {c.field} ({label})'s longest value needs {lines} lines at the floor; a box holds {_m.maxValueLines}");
+                _problems?.Add($"{what} ({label})'s longest value needs {lines} lines at the floor; a box holds {_m.maxValueLines}");
             return (label, value, size, height, labelHeight, pad + labelHeight + height + pad);
         }
 
@@ -706,7 +749,7 @@ public static class FormLayout
             return (floor, hFloor, Lines(hFloor, FormTextRole.Value, floor));
         }
 
-        private void DrawBox(FormCell c, FaceRect rect, int slot, (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) box)
+        private void DrawBox(FaceRect rect, int slot, (string label, string value, float valueSize, float valueHeight, float labelHeight, float boxHeight) box)
         {
             float pad = G(_m.boxPadding);
             Add(FormItemKind.Box, rect, slot);
@@ -762,7 +805,7 @@ public static class FormLayout
                 var full = FaceRect.FromTop(rect.XMin, top, rect.Width, rowHeight);
                 if (slot >= 0)
                     _slots[slot] = new FormSlot(slot, _slots[slot].Field, -1, _slots[slot].Source, full, _page);
-                DrawBox(cell, full, slot, box);
+                DrawBox(full, slot, box);
             }
 
             _lastRowBottom = top + rowHeight;
@@ -801,7 +844,7 @@ public static class FormLayout
                     var box = BoxContent(t.Cell, t.Width);
                     if (t.Slot >= 0)
                         _slots[t.Slot] = new FormSlot(t.Slot, _slots[t.Slot].Field, -1, _slots[t.Slot].Source, rect, _page);
-                    DrawBox(t.Cell, rect, t.Slot, box);
+                    DrawBox(rect, t.Slot, box);
                 }
                 for (int k = t.Column; k < t.Column + t.Span; k++)
                     _occupied[k] = 0;
@@ -860,15 +903,15 @@ public static class FormLayout
             for (int i = 0; i < n; i++)
                 widths[i] = total > 0f && b.shares != null && i < b.shares.Length && b.shares[i] > 0f ? _content * b.shares[i] / total : _content / n;
 
-            float headHeight = 0f;
+            float headHeight = 0f, headSize = G(_m.cellSize);
             for (int i = 0; i < n; i++)
-                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, G(_m.labelSize), widths[i] - 2f * pad));
+                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, headSize, widths[i] - 2f * pad));
             var band = FaceRect.FromTop(_left, _y, _content, headHeight + 2f * pad);
             Add(FormItemKind.RowBand, band);
             float x = _left;
             for (int i = 0; i < n; i++)
             {
-                Text(FormTextRole.Label, heads[i], x + pad, _y + pad, widths[i] - 2f * pad, G(_m.labelSize));
+                Text(FormTextRole.Label, heads[i], x + pad, _y + pad, widths[i] - 2f * pad, headSize);
                 x += widths[i];
             }
             _y = band.YMax;
@@ -878,6 +921,11 @@ public static class FormLayout
             for (int row = 0; row < rows.Count; row++)
             {
                 string[] cells = rows[row] ?? new string[0];
+                if (n > 1 && cells.Length == 1)
+                {
+                    HeadingRow(cells[0]);
+                    continue;
+                }
                 float height = 0f;
                 for (int i = 0; i < n; i++)
                     height = Math.Max(height, Measure(i < cells.Length ? cells[i] : string.Empty, FormTextRole.Cell, size, widths[i] - 2f * pad));
@@ -895,11 +943,89 @@ public static class FormLayout
             _y += G(_m.blockGap);
         }
 
+        /// <summary>A heading row across a table (an era's name in a register): its text in section capitals on a band, no slot.</summary>
+        private void HeadingRow(string text)
+        {
+            float pad = G(_m.boxPadding);
+            string head = (text ?? string.Empty).ToUpperInvariant();
+            float height = Height(head, FormTextRole.Section, G(_m.sectionSize), _content - 2f * pad);
+            var band = FaceRect.FromTop(_left, _y, _content, height + pad);
+            Add(FormItemKind.RowBand, band);
+            Text(FormTextRole.Section, head, _left + pad, _y + pad / 2f, _content - 2f * pad, G(_m.sectionSize));
+            _y = band.YMax;
+        }
+
+        /// <summary>
+        /// A record's groups (FormData.Groups): each group a section numbered
+        /// from 1 ("1  RECORDS"), its rows boxes two to a row in order, a value
+        /// too long for a half-row box at the floor on one line across the
+        /// row. Each row is a slot of the block's slot, its Row the row's place
+        /// counted across every group.
+        /// </summary>
+        private void RecordGroups(FormBlock b)
+        {
+            float half = 6 * _column + 5 * G(_m.gutter);
+            float inner = half - 2f * G(_m.boxPadding);
+            int number = 1, flat = 0;
+            foreach (FormGroup group in _data.Groups ?? Array.Empty<FormGroup>())
+            {
+                if (group == null)
+                    continue;
+                Section(string.IsNullOrEmpty(group.Title) ? number.ToString(CultureInfo.InvariantCulture) : $"{number}  {group.Title}");
+                number++;
+                var pending = new List<(string label, string value, int row)>();
+                foreach ((string label, string value) in group.Rows)
+                {
+                    if (FitValue(value ?? string.Empty, inner).lines > 1)
+                    {
+                        if (pending.Count > 0)
+                            BoxRow(pending, b.slot, 6);
+                        pending.Clear();
+                        BoxRow(new List<(string, string, int)> { (label, value, flat) }, b.slot, Columns);
+                    }
+                    else
+                    {
+                        pending.Add((label, value, flat));
+                        if (pending.Count == 2)
+                        {
+                            BoxRow(pending, b.slot, 6);
+                            pending.Clear();
+                        }
+                    }
+                    flat++;
+                }
+                if (pending.Count > 0)
+                    BoxRow(pending, b.slot, 6);
+            }
+        }
+
+        /// <summary>A row of boxes <paramref name="span"/> columns wide from the left, each a slot of <paramref name="source"/> (its row), as tall as the tallest.</summary>
+        private void BoxRow(List<(string label, string value, int row)> boxes, string source, int span)
+        {
+            float top = _y, pad = G(_m.boxPadding);
+            float width = span * _column + (span - 1) * G(_m.gutter);
+            float rowHeight = pad + G(_m.labelSize) * _m.capsLead + Line(FormTextRole.Value, G(_m.valueSize)) + pad;
+            var contents = new List<(string, string, float, float, float, float)>();
+            foreach ((string label, string value, int _) in boxes)
+            {
+                var content = BoxContent(label, value, width, "a record row");
+                contents.Add(content);
+                rowHeight = Math.Max(rowHeight, content.boxHeight);
+            }
+            for (int k = 0; k < boxes.Count; k++)
+            {
+                var rect = FaceRect.FromTop(_left + k * span * (_column + G(_m.gutter)), top, width, rowHeight);
+                DrawBox(rect, AddSlot(-1, boxes[k].row, source, rect), contents[k]);
+            }
+            _lastRowBottom = top + rowHeight;
+            _y = _lastRowBottom + G(_m.rowGap);
+        }
+
         private void Signature(FormBlock b)
         {
             float top = _y, pad = G(_m.boxPadding);
             float width = 7 * _column + 6 * G(_m.gutter);
-            string value = FieldValue(b.field);
+            string value = b.field >= 0 ? FieldValue(b.field) : SlotText(b.slot);
             bool blank = string.IsNullOrWhiteSpace(value);
             int slot = _slots.Count;
             float hand = Text(FormTextRole.Value, blank ? Unsigned : value, _left + pad, top, width - 2f * pad, blank ? G(_m.captionSize) : G(_m.valueSize), slot);

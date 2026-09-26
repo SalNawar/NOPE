@@ -9,10 +9,10 @@ using UnityEngine.UI;
 /// with its feed on the desktop canvas, the Citizen Account window (the
 /// clerk's Record Extract and Statement), the Notes window (days, clippings,
 /// the typed notes), and the Settings window in sections (Language, Motion,
-/// Desktop, Keyboard) with the shortcut card. The forms are drawn with
-/// today's widgets on diegetic paper (fixed colours, never themed), each in
-/// its own window component, so phase 5's forms engine replaces one drawing
-/// method per form. The three app windows are rebuilt fresh on each run
+/// Desktop, Keyboard) with the shortcut card. The memo, the account's extract
+/// and its statement are forms (phase 5: Form_Memo, Form_RecordExtract and
+/// Form_Statement on FormViews, OfficeSceneUIBuilder.PcForms), diegetic and
+/// never themed. The three app windows are rebuilt fresh on each run
 /// (like Records); Settings keeps its objects. Part of
 /// <see cref="OfficeSceneUIBuilder"/>; the desktop shell builds each app and
 /// registers it in DesktopApps (phase 17: BuildDesktopShell), before the
@@ -20,17 +20,17 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The forms' paper (the memo, the extract and the statement).</summary>
+    /// <summary>The paper tone behind Mail's memo page.</summary>
     private static readonly Color FormPaper = new Color(0.965f, 0.95f, 0.9f, 1f);
 
-    /// <summary>A form box's fill, a shade lighter than the paper.</summary>
-    private static readonly Color FormBox = new Color(1f, 0.995f, 0.97f, 1f);
+    /// <summary>The Mail memo's page kind (TC-950).</summary>
+    private const string MemoFormPath = "Assets/Data/Forms/Form_Memo.asset";
 
-    /// <summary>A form box's outline and the forms' rules.</summary>
-    private static readonly Color FormRule = new Color(0.45f, 0.42f, 0.35f, 1f);
+    /// <summary>The Citizen Account's page kinds: the Record Extract (TC-901) and the Statement (TC-960).</summary>
+    private const string RecordExtractFormPath = "Assets/Data/Forms/Form_RecordExtract.asset", StatementFormPath = "Assets/Data/Forms/Form_Statement.asset";
 
-    /// <summary>The stamp's red ink.</summary>
-    private static readonly Color StampInk = new Color(0.66f, 0.12f, 0.1f, 1f);
+    /// <summary>The gap between the Citizen Account's two pages (desktop units).</summary>
+    private const float AccountPageGap = 16f;
 
     /// <summary>A list row's height (the inbox, the day list).</summary>
     private const float AppRowHeight = 52f;
@@ -59,7 +59,7 @@ public static partial class OfficeSceneUIBuilder
     // Mail (ML1, §2.12)
     // -----------------------------
 
-    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left, the memo form on the right; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
+    /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left; on the right the message's link over the memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
                                                  InvestigationApp investigation)
     {
@@ -77,32 +77,13 @@ public static partial class OfficeSceneUIBuilder
                               ThemeRoleId.InputField, "mail.none", FontStyles.Italic);
         empty.raycastTarget = false;
 
-        Transform page = Panel(win, "MemoPage", new Vector2(0.38f, 0.02f), new Vector2(0.98f, 0.935f), Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
+        Button link = MakeButton(win, "LinkButton", "", new Vector2(0.52f, 0.885f), new Vector2(0.98f, 0.935f), new Color(0.15f, 0.3f, 0.5f, 1f), ThemeRoleId.SearchButton);
+        FitLabel(link, 17f);
+        Transform page = Panel(win, "MemoPage", new Vector2(0.38f, 0.02f), new Vector2(0.98f, 0.875f), Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
         TMP_Text select = Text(page, "SelectText", null, 18, TextAlignmentOptions.Center, new Vector2(0.05f, 0.4f), new Vector2(0.95f, 0.6f), Ink,
                                ThemeRoleId.DiegeticRow, "mail.select", FontStyles.Italic);
-        Transform memo = Panel(page, "Memo", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        FormTitle(memo, "mail.form.title", "TC-950", new Vector2(0.03f, 0.915f), new Vector2(0.97f, 0.985f));
-        TMP_Text to = FormField(memo, "To", "mail.form.to", new Vector2(0.03f, 0.8f), new Vector2(0.6f, 0.9f));
-        TMP_Text date = FormField(memo, "Date", "mail.form.date", new Vector2(0.62f, 0.8f), new Vector2(0.97f, 0.9f));
-        TMP_Text from = FormField(memo, "From", "mail.form.from", new Vector2(0.03f, 0.69f), new Vector2(0.6f, 0.79f));
-        TMP_Text reference = FormField(memo, "Ref", "mail.form.ref", new Vector2(0.62f, 0.69f), new Vector2(0.97f, 0.79f));
-        TMP_Text subject = FormField(memo, "Subject", "mail.form.subject", new Vector2(0.03f, 0.58f), new Vector2(0.97f, 0.68f));
-
-        TMP_Text body = Text(memo, "BodyText", "", 17, TextAlignmentOptions.TopLeft, new Vector2(0.04f, 0.23f), new Vector2(0.96f, 0.56f), Ink, ThemeRoleId.DiegeticRow);
-        body.textWrappingMode = TextWrappingModes.Normal;
-        body.overflowMode = TextOverflowModes.Ellipsis;
-        body.enableAutoSizing = true;
-        body.fontSizeMin = 13f;
-        body.fontSizeMax = 17f;
-
-        Button link = MakeButton(memo, "LinkButton", "", new Vector2(0.04f, 0.145f), new Vector2(0.62f, 0.215f), new Color(0.15f, 0.3f, 0.5f, 1f), ThemeRoleId.SearchButton);
-        FitLabel(link, 17f);
-
-        Panel(memo, "SignatureRule", new Vector2(0.04f, 0.11f), new Vector2(0.58f, 0.113f), Vector2.zero, Vector2.zero, FormRule, ThemeRoleId.DiegeticPaper);
-        TMP_Text signature = Text(memo, "SignatureText", "", 16, TextAlignmentOptions.TopLeft, new Vector2(0.04f, 0.03f), new Vector2(0.62f, 0.105f), Ink,
-                                  ThemeRoleId.DiegeticRow, style: FontStyles.Italic);
-        signature.raycastTarget = false;
-        BuildStamp(memo, "Stamp", "mail.stamp", new Vector2(0.68f, 0.03f), new Vector2(0.95f, 0.15f));
+        float memoWidth = config.mailWindowSize.x * 0.6f - DocMargin - DocGap - DocScrollbar;
+        ScrollRect memo = BuildFormScroll(page, "Memo", memoWidth, out FormView memoView);
 
         MailWindow component = win.gameObject.AddComponent<MailWindow>();
         var so = new SerializedObject(component);
@@ -113,15 +94,10 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "listRoot", list);
         SetRef(so, "rowTemplate", row);
         SetRef(so, "emptyText", empty);
-        SetRef(so, "memoRoot", memo.gameObject);
+        Wire(so, "memoScroll", memo);
+        Wire(so, "memo", memoView);
+        Wire(so, "memoForm", AssetDatabase.LoadAssetAtPath<FormSpecSO>(MemoFormPath));
         SetRef(so, "selectText", select);
-        SetRef(so, "toText", to);
-        SetRef(so, "fromText", from);
-        SetRef(so, "dateText", date);
-        SetRef(so, "refText", reference);
-        SetRef(so, "subjectText", subject);
-        SetRef(so, "bodyText", body);
-        SetRef(so, "signatureText", signature);
         SetRef(so, "linkButton", link);
         so.ApplyModifiedProperties();
 
@@ -135,10 +111,11 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
-    /// The Citizen Account window: one scrolling sheet of paper holding the
-    /// Record Extract (TC-901: title, the holder's line, the grouped rows) and
-    /// the Statement (TC-960: title, the column heads, the day rows, the unit,
-    /// the fine print, an empty stamp box). Rebuilt fresh.
+    /// The Citizen Account window (phase 5): one scroll whose content stacks
+    /// the Record Extract (a FormView at the PC page width, Form_RecordExtract)
+    /// and the Statement (a FormView across the scroll, Form_Statement's
+    /// landscape page, so its eight columns keep their type sizes), both
+    /// centred. AccountWindow fills and stacks them. Rebuilt fresh.
     /// </summary>
     private static DesktopWindow BuildAccountWindow(Transform windowLayer, DesktopConfigSO config)
     {
@@ -147,51 +124,25 @@ public static partial class OfficeSceneUIBuilder
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
 
-        RectTransform sheet = BuildScrollList(win, "Sheet", new Vector2(0.02f, 0.02f), new Vector2(0.98f, 0.935f), 6f, FormPaper, ThemeRoleId.DiegeticPaper);
-        VerticalLayoutGroup layout = sheet.GetComponent<VerticalLayoutGroup>();
-        layout.padding = new RectOffset(16, 16, 12, 16);
-
-        FormTitleRow(sheet, "ExtractTitle", "account.form.title", "TC-901");
-        TMP_Text query = LayoutText(sheet, "QueryText", 16, FontStyles.Italic, ThemeRoleId.DiegeticRow);
-        RectTransform extract = LayoutBlock(sheet, "Extract", 4f);
-        TMP_Text group = LayoutText(extract, "GroupTemplate", 15, FontStyles.Bold, ThemeRoleId.DiegeticLabel);
-        group.color = RecordLabelInk;
-        group.margin = new Vector4(0f, 8f, 0f, 0f);
-        RectTransform row = BuildLabelledRow(extract, "RowTemplate");
-
-        Panel(sheet, "StatementRule", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormRule, ThemeRoleId.DiegeticPaper);
-        SetLayoutHeight(sheet.Find("StatementRule"), 2f);
-        FormTitleRow(sheet, "StatementTitle", "account.statement.title", "TC-960");
-        TMP_Text head = LayoutText(sheet, "StatementHead", 13, FontStyles.Bold, ThemeRoleId.DiegeticLabel);
-        head.color = RecordLabelInk;
-        RectTransform statement = LayoutBlock(sheet, "Statement", 2f);
-        TMP_Text line = LayoutText(statement, "StatementRowTemplate", 15, FontStyles.Normal, ThemeRoleId.DiegeticRow);
-        TMP_Text none = LayoutText(statement, "StatementEmpty", 15, FontStyles.Italic, ThemeRoleId.DiegeticRow);
-        none.text = UiText.Get("account.statement.none");
-        TMP_Text unit = LayoutText(sheet, "UnitText", 13, FontStyles.Normal, ThemeRoleId.DiegeticRow);
-        TMP_Text fine = LayoutText(sheet, "FinePrint", 13, FontStyles.Italic, ThemeRoleId.DiegeticRow);
-        fine.text = UiText.Get("account.finePrint");
-        Transform stampRow = Panel(sheet, "StampRow", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        SetLayoutHeight(stampRow, 76f);
-        Transform stampBox = Panel(stampRow, "StampBox", new Vector2(0.72f, 0f), new Vector2(0.98f, 1f), Vector2.zero, Vector2.zero, FormBox, ThemeRoleId.DiegeticPaper);
-        DrawOutline(stampBox);
+        ScrollRect scroll = BuildScrollArea(win, "Sheet", out RectTransform viewport);
+        PlaceRect(scroll.transform, Vector2.zero, Vector2.one, new Vector2(DocMargin, DocMargin), new Vector2(-DocMargin, -(config.titleBarHeight + DocGap)));
+        var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
+        content.pivot = new Vector2(0.5f, 1f);
+        scroll.content = content;
+        float statementWidth = config.accountWindowSize.x - 2f * DocMargin - DocGap - DocScrollbar;
+        FormView extract = BuildFormView(content, "Extract", PcPageWidth);
+        FormView statement = BuildFormView(content, "Statement", statementWidth);
 
         AccountWindow component = win.gameObject.AddComponent<AccountWindow>();
         var so = new SerializedObject(component);
-        SetRef(so, "queryText", query);
-        SetRef(so, "extractRoot", extract);
-        SetRef(so, "groupTemplate", group);
-        SetRef(so, "rowTemplate", row);
-        SetRef(so, "statementHead", head);
-        SetRef(so, "statementRoot", statement);
-        SetRef(so, "statementRowTemplate", line);
-        SetRef(so, "statementEmpty", none);
-        SetRef(so, "unitText", unit);
+        Wire(so, "scroll", scroll);
+        Wire(so, "extract", extract);
+        Wire(so, "extractForm", AssetDatabase.LoadAssetAtPath<FormSpecSO>(RecordExtractFormPath));
+        Wire(so, "statement", statement);
+        Wire(so, "statementForm", AssetDatabase.LoadAssetAtPath<FormSpecSO>(StatementFormPath));
+        so.FindProperty("gap").floatValue = AccountPageGap;
         so.ApplyModifiedProperties();
 
-        group.gameObject.SetActive(false);
-        row.gameObject.SetActive(false);
-        line.gameObject.SetActive(false);
         win.gameObject.SetActive(false);
         return chrome;
     }
@@ -434,44 +385,6 @@ public static partial class OfficeSceneUIBuilder
         return card;
     }
 
-    /// <summary>A labelled row of the Record Extract: a box with the label (a fixed column) and the value (wrapping).</summary>
-    private static RectTransform BuildLabelledRow(Transform parent, string name)
-    {
-        var box = (RectTransform)Panel(parent, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, FormBox, ThemeRoleId.DiegeticPaper);
-        DrawOutline(box);
-        HorizontalLayoutGroup layout = GetOrAdd<HorizontalLayoutGroup>(box.gameObject);
-        layout.padding = new RectOffset(10, 10, 6, 6);
-        layout.spacing = 10f;
-        layout.childAlignment = TextAnchor.UpperLeft;
-        layout.childControlWidth = true;
-        layout.childControlHeight = true;
-        layout.childForceExpandWidth = false;
-        layout.childForceExpandHeight = false;
-
-        TMP_Text label = LayoutText(box, "Label", 14, FontStyles.Bold, ThemeRoleId.DiegeticLabel);
-        label.color = RecordLabelInk;
-        LayoutElement labelSize = GetOrAdd<LayoutElement>(label.gameObject);
-        labelSize.minWidth = 170f;
-        labelSize.preferredWidth = 170f;
-        labelSize.flexibleWidth = 0f;
-        TMP_Text value = LayoutText(box, "Value", 17, FontStyles.Normal, ThemeRoleId.DiegeticRow);
-        GetOrAdd<LayoutElement>(value.gameObject).flexibleWidth = 1f;
-        return box;
-    }
-
-    /// <summary>A block of a layout (its own vertical layout; its height follows its children).</summary>
-    private static RectTransform LayoutBlock(Transform parent, string name, float spacing)
-    {
-        var block = (RectTransform)Panel(parent, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        VerticalLayoutGroup layout = GetOrAdd<VerticalLayoutGroup>(block.gameObject);
-        layout.spacing = spacing;
-        layout.childControlWidth = true;
-        layout.childControlHeight = true;
-        layout.childForceExpandWidth = true;
-        layout.childForceExpandHeight = false;
-        return block;
-    }
-
     /// <summary>A wrapping text laid out by its parent (its height is its text's), in the ink of <paramref name="role"/>'s builder colour.</summary>
     private static TMP_Text LayoutText(Transform parent, string name, int size, FontStyles style, ThemeRoleId role)
     {
@@ -481,61 +394,6 @@ public static partial class OfficeSceneUIBuilder
         text.raycastTarget = false;
         text.richText = true;
         return text;
-    }
-
-    /// <summary>A form's title row in a layout: the title (bold) at the left and the form number at the right.</summary>
-    private static void FormTitleRow(Transform parent, string name, string titleKey, string formNumber)
-    {
-        Transform row = Panel(parent, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        SetLayoutHeight(row, 34f);
-        FormTitle(row, titleKey, formNumber, Vector2.zero, Vector2.one);
-    }
-
-    /// <summary>A form's title (bold, left) and its number (right) over the given area, with a rule under them.</summary>
-    private static void FormTitle(Transform parent, string titleKey, string formNumber, Vector2 aMin, Vector2 aMax)
-    {
-        Transform area = Panel(parent, "FormTitle", aMin, aMax, Vector2.zero, Vector2.zero, null);
-        TMP_Text title = Text(area, "Title", null, 20, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(0.78f, 1f), Ink,
-                              ThemeRoleId.DiegeticRow, titleKey, FontStyles.Bold);
-        title.raycastTarget = false;
-        TMP_Text number = Text(area, "FormNumber", formNumber, 14, TextAlignmentOptions.MidlineRight, new Vector2(0.78f, 0f), Vector2.one, RecordLabelInk,
-                               ThemeRoleId.DiegeticLabel);
-        number.raycastTarget = false;
-        Panel(area, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, 1f), new Vector2(0f, 2f), FormRule, ThemeRoleId.DiegeticPaper);
-    }
-
-    /// <summary>A form's labelled box: the label (small, bold) over the value. Returns the value's text.</summary>
-    private static TMP_Text FormField(Transform parent, string name, string labelKey, Vector2 aMin, Vector2 aMax)
-    {
-        Transform box = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, FormBox, ThemeRoleId.DiegeticPaper);
-        DrawOutline(box);
-        TMP_Text label = Text(box, "Label", null, 12, TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.6f), new Vector2(0.97f, 0.96f), RecordLabelInk,
-                              ThemeRoleId.DiegeticLabel, labelKey, FontStyles.Bold);
-        label.raycastTarget = false;
-        TMP_Text value = Text(box, "Value", "", 18, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.04f), new Vector2(0.97f, 0.62f), Ink, ThemeRoleId.DiegeticRow);
-        value.textWrappingMode = TextWrappingModes.NoWrap;
-        value.overflowMode = TextOverflowModes.Ellipsis;
-        value.raycastTarget = false;
-        return value;
-    }
-
-    /// <summary>A stamp: a red-outlined box, turned a little, with its keyed word.</summary>
-    private static void BuildStamp(Transform parent, string name, string key, Vector2 aMin, Vector2 aMax)
-    {
-        Transform stamp = Panel(parent, name, aMin, aMax, Vector2.zero, Vector2.zero, FormPaper, ThemeRoleId.DiegeticPaper);
-        stamp.localRotation = Quaternion.Euler(0f, 0f, 6f);
-        DrawOutline(stamp, StampInk, 2f);
-        TMP_Text word = Text(stamp, "Word", null, 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, StampInk, ThemeRoleId.DiegeticRow, key, FontStyles.Bold);
-        word.raycastTarget = false;
-    }
-
-    /// <summary>A thin outline round a box (the forms' ruled boxes).</summary>
-    private static void DrawOutline(Transform box, Color? colour = null, float width = 1f)
-    {
-        Outline outline = GetOrAdd<Outline>(box.gameObject);
-        outline.effectColor = colour ?? FormRule;
-        outline.effectDistance = new Vector2(width, -width);
-        outline.useGraphicAlpha = true;
     }
 
     /// <summary>A button's label shrinks to fit from <paramref name="size"/>.</summary>

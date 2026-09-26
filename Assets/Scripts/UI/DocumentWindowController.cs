@@ -81,7 +81,7 @@ public sealed class DocumentWindowController : MonoBehaviour
         if (form != null && paper != null)
         {
             form.Bind(compare, slot => Field(slot) != null ? PickKeys.Field(_index, slot.Field) : null);
-            form.Show(paper.Spec, paper.Data, slot => Field(slot) != null, LinkHint);
+            form.Show(paper.Spec, paper.Data, slot => Field(slot) != null, linkHint: LinkHint);
             form.ShowPhoto(paper.Data.HasPhoto ? look : null, art);
         }
         if (scroll != null)
