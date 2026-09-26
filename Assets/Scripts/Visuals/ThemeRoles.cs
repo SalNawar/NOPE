@@ -1,8 +1,9 @@
 /// <summary>
 /// The role of a themed UI graphic (piece 6): which theme colours it takes.
-/// Serialized by ThemeTag as an int: append only once shipped. Roles from
-/// DiegeticPaper on are diegetic (evidence and what the traveller says): the
-/// theme never touches them (ThemeRoles.IsDiegetic).
+/// Serialized by ThemeTag as an int: append only once shipped. The diegetic
+/// roles (evidence and what the traveller says) are listed in
+/// ThemeRoles.IsDiegetic: the theme never touches them. A role appended later
+/// is chrome unless it is added to that list.
 /// </summary>
 public enum ThemeRoleId
 {
@@ -148,6 +149,27 @@ public enum ThemeRoleId
 /// <summary>The rule that keeps theming off evidence (piece 6 Z4).</summary>
 public static class ThemeRoles
 {
-    /// <summary>True for the diegetic roles (DiegeticPaper and after): the theme never recolours or refonts them, and cultures may not override them.</summary>
-    public static bool IsDiegetic(ThemeRoleId role) => role >= ThemeRoleId.DiegeticPaper;
+    /// <summary>
+    /// True for the diegetic roles: the theme never recolours or refonts them,
+    /// and cultures may not override them. An explicit list (PC spec TH2,
+    /// audit R2-005), so a chrome role appended after them stays chrome.
+    /// </summary>
+    public static bool IsDiegetic(ThemeRoleId role)
+    {
+        switch (role)
+        {
+            case ThemeRoleId.DiegeticPaper:
+            case ThemeRoleId.DiegeticPhoto:
+            case ThemeRoleId.DiegeticRow:
+            case ThemeRoleId.DiegeticLabel:
+            case ThemeRoleId.DiegeticNote:
+            case ThemeRoleId.DiegeticBacking:
+            case ThemeRoleId.DiegeticBookRow:
+            case ThemeRoleId.DiegeticBubble:
+            case ThemeRoleId.DiegeticDevice:
+                return true;
+            default:
+                return false;
+        }
+    }
 }
