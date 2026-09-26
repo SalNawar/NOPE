@@ -271,6 +271,94 @@ MonoBehaviour:
     text: Open
     gloss: 0
     tier: 0
+  - key: steps.rules
+    text: Today's rules for the destination
+    gloss: 0
+    tier: 0
+  - key: steps.papers
+    text: Receive every paper
+    gloss: 0
+    tier: 0
+  - key: steps.read
+    text: Read every paper
+    gloss: 0
+    tier: 0
+  - key: steps.identity
+    text: Name, number and birth date in Records
+    gloss: 0
+    tier: 0
+  - key: steps.facts
+    text: Place facts against the books
+    gloss: 0
+    tier: 0
+  - key: steps.questions
+    text: Ask today's questions
+    gloss: 0
+    tier: 0
+  - key: steps.answers
+    text: Answers against the books or Records
+    gloss: 0
+    tier: 0
+  - key: steps.dress
+    text: Dress against the Costume Guide
+    gloss: 0
+    tier: 0
+  - key: steps.returnOrder
+    text: Return order against the certificate
+    gloss: 0
+    tier: 0
+  - key: steps.dates
+    text: Dates against today's calendar
+    gloss: 0
+    tier: 0
+  - key: steps.class
+    text: Visa class against the account
+    gloss: 0
+    tier: 0
+  - key: steps.transponder
+    text: Transponder against the account
+    gloss: 0
+    tier: 0
+  - key: steps.paperSet
+    text: Paper set against today's rules
+    gloss: 0
+    tier: 0
+  - key: steps.standing
+    text: Account standing in Records
+    gloss: 0
+    tier: 0
+  - key: steps.askMeans
+    text: Ask for a proof of means
+    gloss: 0
+    tier: 0
+  - key: steps.waiver
+    text: Waiver against manifest and account
+    gloss: 0
+    tier: 0
+  - key: steps.means
+    text: Proof of means against the account
+    gloss: 0
+    tier: 0
+  - key: steps.contract
+    text: Contract against the registered one
+    gloss: 0
+    tier: 0
+  - key: steps.hint.wheel
+    text: 'Use the traveller wheel: click the traveller at the desk.'
+    gloss: 0
+    tier: 0
+  - key: steps.progress
+    text: '{0} ({1}/{2})'
+    gloss: 0
+    tier: 0
+  - key: steps.none
+    text: Steps show while a traveller is at the desk.
+    gloss: 0
+    tier: 0
+  - key: steps.hidden
+    text: 'Steps are hidden: Steps in the toolbar shows them.'
+    gloss: 0
+    tier: 0
   - key: book.claimedLabel
     text: '{0} (claimed)'
     gloss: 0
@@ -682,6 +770,18 @@ MonoBehaviour:
     tier: 0
   - key: settings.showShortcuts
     text: Show shortcuts
+    gloss: 0
+    tier: 0
+  - key: settings.investigation
+    text: Investigation
+    gloss: 0
+    tier: 0
+  - key: settings.stepsShown
+    text: Steps shown
+    gloss: 0
+    tier: 0
+  - key: settings.stepsHidden
+    text: Steps hidden
     gloss: 0
     tier: 0
   - key: keys.card
