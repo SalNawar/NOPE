@@ -15,12 +15,6 @@ using System.Text;
 /// </summary>
 public static class KeyWords
 {
-    /// <summary>The slots a line can fill (Interview's tokens): the only names a rule may list.</summary>
-    private static readonly string[] KnownSlots =
-    {
-        Interview.PlaceToken, Interview.NameToken, Interview.DocumentToken, Interview.ValueToken, Interview.HonorificToken
-    };
-
     /// <summary>
     /// The character spans of the line <paramref name="template"/> gives with
     /// <paramref name="fills"/> (slot name to value; each "{slot}" replaced as
@@ -62,8 +56,8 @@ public static class KeyWords
         }
 
         foreach (string slot in rule.slots ?? new List<string>())
-            if (Array.IndexOf(KnownSlots, slot) < 0)
-                problems.Add($"translation.keyWords.slots: '{slot}' is not a slot a line fills ({string.Join(", ", KnownSlots)}).");
+            if (!IsSlot(slot))
+                problems.Add($"translation.keyWords.slots: '{slot}' is not a slot a line fills ({Interview.PlaceToken}, {Interview.NameToken}, {Interview.DocumentToken}, {Interview.ValueToken}, {Interview.HonorificToken}).");
 
         var seen = new HashSet<string>();
         foreach (string word in rule.words ?? new List<string>())
@@ -75,6 +69,11 @@ public static class KeyWords
         }
         return problems;
     }
+
+    /// <summary>True for a slot a line can fill (Interview's tokens): the only names a rule may list.</summary>
+    private static bool IsSlot(string slot) =>
+        slot == Interview.PlaceToken || slot == Interview.NameToken || slot == Interview.DocumentToken ||
+        slot == Interview.ValueToken || slot == Interview.HonorificToken;
 
     /// <summary>The template with its filled slots (one pass, left to right), adding each listed slot's non-empty fill as a span.</summary>
     private static string Fill(string template, IReadOnlyDictionary<string, string> fills, KeyWordRule rule, List<(int start, int length)> spans)

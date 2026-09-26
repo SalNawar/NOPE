@@ -102,9 +102,6 @@ public static class DialogChoiceKinds
 /// <summary>One transcript line. Immutable; an answer line also carries the fact it states, and a traveller's line the spans that stay English when it shows untranslated.</summary>
 public sealed class DialogLine
 {
-    /// <summary>No span: nothing kept English.</summary>
-    private static readonly (int start, int length)[] NoSpans = new (int start, int length)[0];
-
     /// <summary>A spoken line, optionally with the expression a premade shows while saying it and its key-word spans (KeyWords.Spans; null for none).</summary>
     public DialogLine(string id, DialogSpeaker speaker, string text, string expression = null, IReadOnlyList<(int start, int length)> english = null)
         : this(id, speaker, text, false, default, null, false, expression, english)
@@ -122,7 +119,7 @@ public sealed class DialogLine
         Value = value;
         IsTell = isTell;
         Expression = expression;
-        English = english ?? NoSpans;
+        English = english ?? Array.Empty<(int start, int length)>();
     }
 
     /// <summary>A traveller's answer line: its sentence and key-word spans (null for none), plus the answer's category, canonical value and tell flag (no expression).</summary>

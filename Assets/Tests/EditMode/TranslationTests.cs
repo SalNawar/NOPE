@@ -54,13 +54,33 @@ public class TranslationTests
         Assert.IsFalse(Translation.InTongue(DialogSpeaker.Desk));
     }
 
-    [Test]
-    public void ANativeTongue_IsNeverForeign()
+    /// <summary>
+    /// The day's decision table (piece 9 R18, speech only): a tongue is foreign
+    /// when it is known, not native and the day is on or after fromDay; it is
+    /// translated when it is foreign and the day-start snapshot owns its pack's
+    /// Speech translator.
+    /// </summary>
+    [TestCase(5, "tr_near_east_spoken", "english", false, false, Description = "a native tongue is never foreign")]
+    [TestCase(1, "tr_near_east_spoken", "egyptian", false, false, Description = "before fromDay nothing is foreign, even owning the translator")]
+    [TestCase(2, "", "egyptian", true, false, Description = "on fromDay, no translator")]
+    [TestCase(3, "tr_near_east_spoken", "egyptian", true, true, Description = "the pack's Speech translator")]
+    [TestCase(3, "tr_near_east_spoken", "arabic", true, true, Description = "every tongue of the pack")]
+    [TestCase(3, "tr_near_east_spoken", "greek", true, false, Description = "another pack's tongue")]
+    [TestCase(3, "tr_mediterranean_spoken", "egyptian", true, false, Description = "another pack's translator")]
+    [TestCase(3, "tr_near_east_written", "egyptian", true, false, Description = "a retired Papers translator an old save still owns is a harmless id")]
+    public void TheDay_SaysWhatIsForeignAndWhatIsTranslated(int dayNumber, string owned, string tongue, bool foreign, bool translated)
     {
-        var day = new TranslationDay(Rules(), Snap(5, new[] { "tr_near_east_spoken" }));
-        Assert.IsFalse(day.Foreign("english"));
-        Assert.IsFalse(day.Translated("english"));
-        Assert.IsNull(day.PackOf(day.TongueOf("english")));
+        var day = new TranslationDay(Rules(), Snap(dayNumber, owned.Length > 0 ? new[] { owned } : null));
+        Assert.AreEqual(foreign, day.Foreign(tongue), "foreign");
+        Assert.AreEqual(translated, day.Translated(tongue), "translated");
+    }
+
+    [Test]
+    public void PackOf_ForeignTonguesOnly()
+    {
+        var day = new TranslationDay(Rules(), Snap(2));
+        Assert.AreEqual("near_east", day.PackOf(day.TongueOf("egyptian")).id);
+        Assert.IsNull(day.PackOf(day.TongueOf("english")), "a native tongue has no pack");
     }
 
     [TestCase(null)]
@@ -71,49 +91,6 @@ public class TranslationTests
         var day = new TranslationDay(Rules(), Snap(5));
         Assert.IsNull(day.TongueOf(id));
         Assert.IsFalse(day.Foreign(id));
-    }
-
-    [Test]
-    public void BeforeFromDay_NothingIsForeign_EvenOwningTheTranslator()
-    {
-        var day = new TranslationDay(Rules(), Snap(1, new[] { "tr_near_east_spoken" }));
-        Assert.IsFalse(day.Foreign("egyptian"));
-        Assert.IsFalse(day.Translated("egyptian"));
-    }
-
-    [Test]
-    public void OnFromDay_WithNoTranslator_AForeignTongueIsNotTranslated()
-    {
-        var day = new TranslationDay(Rules(), Snap(2));
-        Assert.IsTrue(day.Foreign("egyptian"));
-        Assert.IsFalse(day.Translated("egyptian"));
-        Assert.AreEqual("near_east", day.PackOf(day.TongueOf("egyptian")).id);
-    }
-
-    [Test]
-    public void OwningThePacksSpeechTranslator_TranslatesItsTongues()
-    {
-        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_near_east_spoken" }));
-        Assert.IsTrue(day.Translated("arabic"));
-        Assert.IsTrue(day.Translated("egyptian"));
-        Assert.IsFalse(day.Translated("greek"));
-    }
-
-    /// <summary>A retired Papers translator an old save still owns ("tr_near_east_written") is a harmless id: it translates nothing.</summary>
-    [Test]
-    public void ARetiredPapersTranslator_TranslatesNothing()
-    {
-        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_near_east_written" }));
-        Assert.IsTrue(day.Foreign("egyptian"));
-        Assert.IsFalse(day.Translated("egyptian"));
-    }
-
-    [Test]
-    public void AnotherPacksTranslator_TranslatesNothingHere()
-    {
-        var day = new TranslationDay(Rules(), Snap(3, new[] { "tr_mediterranean_spoken" }));
-        Assert.IsFalse(day.Translated("egyptian"));
-        Assert.IsTrue(day.Translated("greek"));
     }
 
     [Test]
