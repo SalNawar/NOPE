@@ -1083,14 +1083,6 @@ MonoBehaviour:
     text: '{0}  [revised]'
     gloss: 0
     tier: 0
-  - key: book.eraHeading
-    text: "\u2014 {0} \u2014"
-    gloss: 0
-    tier: 0
-  - key: book.claimedLabel
-    text: '{0} (claimed)'
-    gloss: 0
-    tier: 0
   - key: compare.deviationLogged
     text: "\u25CF  DEVIATION LOGGED \u2014 {0}"
     gloss: 0
