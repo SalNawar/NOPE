@@ -1,0 +1,23 @@
+# Screen 03 — debt-relief building mood
+
+Tool: built-in image_gen, local image edit.
+
+Use case: precise-object-edit.
+Asset type: mood and material paint-over of an existing stylised Unity game screen.
+Input image: the supplied office screen is the EDIT TARGET. Preserve its camera, framing, perspective, room geometry, object scale and every existing desk object's position. This is a focused revision, not a new scene.
+
+Narrative: this is an ill-maintained government building in a harsh future. Citizens are sent into the past under a debt-relief programme and effectively have no choice. The institution advertises opportunity. It must look attractive and reassuring at first, then quietly disturbing when examined. Show bureaucratic coercion disguised as assistance through plausible environmental details. Keep the colourful, soft, clean anime/cel-shaded game art. Not horror, not an abandoned ruin, not a realistic grunge render.
+
+Retain the current twenty-colour material palette and existing object identities: burgundy plain leather office pad, coral phone, aubergine till, lavender tray, mustard cup, charcoal banker's lamp/NEXT housing, neutral PORCELAIN WHITE PC/mouse/stapler, warm paper, quiet walnut desk, natural cork boards, pale-gold 2D flags, aluminium portal casing, blue portal energy. NO green, teal, mint, sage or olive. No blanket blue/sepia/grey colour cast. Blue remains concentrated in the portal. Buildings behind glass retain independent plausible cream, clay, muted lavender-grey and stone colours. Glass stays visibly transparent with sparse reflections.
+
+Make these restrained, clearly readable changes:
+1. Give the building a history of inadequate maintenance with 3-5 deliberate, simple CEL-PAINTED wear details, mostly at the side booth wall panels and noticeboard borders: one broad mismatched repaint patch, a chipped lower plaster corner, an old taped repair on a noticeboard frame, faint residue from a removed notice. Worn edges are sparse broad marks. No high-frequency dirt/noise, no mould, no ruined glass, no damage across the floor.
+2. The existing overhead dark sign should be maintained and display an attractive, orderly government message in two lines: large "A FRESH START", smaller "DEBT RELIEF DEPARTURES". Restrained pale-gold Art Deco border, pale legible lettering, no neon. This is the cheerful official promise.
+3. Replace ONLY a couple of the existing small pinned papers on the cork boards with tidy institutional notices. On the right board put a coral/cream optimism poster headed "CLEAR YOUR DEBT" with a simple rising-sun geometric emblem. Below it a small sober notice says "ATTENDANCE REQUIRED". Do not add a huge poster or block the existing "100%" display. Preserve the existing "08:00", "01", "70", "NEXT" and "100%" text.
+4. Turn on the CRT with a restrained 1990s desktop account window, pale background, graphite borders, a small lavender title bar, a few orderly rows and an account balance. No green screen, no blue full-screen wash. Treat any tiny body text as secondary graphic marks, not a feature.
+5. The four existing tall flags remain flat 2D shapes. Pale gold slightly faded, one simple consistent geometric civic emblem, very little shading; no modelled cloth thickness. They represent institutional optimism, not an evil military faction.
+6. Keep the portal clean and perfectly maintained, its rim one coherent aluminium finish. Nearby architecture is tired. The ordinary desk equipment is cared for by a clerk; add only a tiny practical repair mark on the phone, no heavy distressing.
+7. Make the distant crowd read as overlapping, anonymous groups with connected shoulder masses and subtle neutral value layers. Preserve human scale and full legs, the central passage and their overall placement. No visible faces, clothing features or individual outlines. Their impersonal repetition should supply unease.
+8. Lighting: warm, reassuring light on the cared-for desk; neutral and slightly flatter institutional light in the hall with deeper quiet shadows near its upper edges. Preserve clear daytime visibility and colour separation. Do not make the whole scene gloomy or blue.
+
+Absolutely preserve: the restored floor's existing tile material/pattern/geometry, the actual floor silhouette and shadows from the reference, all desk models and placements, plain office pad with no grid, soft bevels, smooth broad walnut boards with almost no grain. No extra guards, barriers, people at the desk, cables, ceiling, blood, hazard stripes or new furniture. No dramatic cinematic effects or photoreal materials. Full original game screen only, no captions outside the scene, no swatches, no before/after panel.

@@ -1,0 +1,159 @@
+{
+  "title": "NOPE office 20-colour material palette",
+  "date": "2026-09-26",
+  "status": "Proposal; not applied to Unity materials",
+  "space": "sRGB hex base colours, not a 20-colour indexed-rendering limit",
+  "rules": [
+    "Material identity before palette repetition.",
+    "No green, teal, olive, sage or mint.",
+    "Strong blue limited to portal energy and tiny status accents.",
+    "Preserve restored floor and existing scene geometry.",
+    "Smooth warm wood; no busy grain.",
+    "Office pad is plain leather, never a repair grid.",
+    "Flags are actual 2D sprites.",
+    "Character generation remains paused."
+  ],
+  "colours": [
+    {
+      "id": "01",
+      "name": "Porcelain",
+      "hex": "#F0EFEB",
+      "role": "PC shell, mouse and stapler",
+      "note": "Neutral white plastic; avoid yellow or blue casts."
+    },
+    {
+      "id": "02",
+      "name": "Paper",
+      "hex": "#FFF2D9",
+      "role": "Forms and key legends",
+      "note": "Warm paper only; do not tint the PC this colour."
+    },
+    {
+      "id": "03",
+      "name": "Graphite",
+      "hex": "#353239",
+      "role": "Lamp shade, NEXT housing, cables",
+      "note": "Charcoal metal and dark plastic."
+    },
+    {
+      "id": "04",
+      "name": "Ink",
+      "hex": "#211F26",
+      "role": "Screens, lettering and deep seams",
+      "note": "Small high-contrast anchors."
+    },
+    {
+      "id": "05",
+      "name": "Aluminium",
+      "hex": "#B4B2B6",
+      "role": "Portal ring and window frames",
+      "note": "One coherent metal finish."
+    },
+    {
+      "id": "06",
+      "name": "Plaster",
+      "hex": "#D4C6B9",
+      "role": "Booth wall and separator panels",
+      "note": "Light, warm architectural neutral."
+    },
+    {
+      "id": "07",
+      "name": "Stone",
+      "hex": "#B9AB98",
+      "role": "Existing floor colour reference",
+      "note": "Preserve original floor; do not replace its texture or layout."
+    },
+    {
+      "id": "08",
+      "name": "Walnut",
+      "hex": "#704832",
+      "role": "Smooth desktop",
+      "note": "Broad clean boards, almost no visible grain."
+    },
+    {
+      "id": "09",
+      "name": "Warm timber",
+      "hex": "#966547",
+      "role": "Desk edge, stamp and form sorter",
+      "note": "Wood variation, not painted brown electronics."
+    },
+    {
+      "id": "10",
+      "name": "Cork",
+      "hex": "#BB955F",
+      "role": "Noticeboard inserts",
+      "note": "Quiet simplified cork, not noisy mottling."
+    },
+    {
+      "id": "11",
+      "name": "Oxblood",
+      "hex": "#823F50",
+      "role": "Plain leather office pad",
+      "note": "Large warm accent; no blue grid."
+    },
+    {
+      "id": "12",
+      "name": "Coral",
+      "hex": "#D77662",
+      "role": "Telephone casing",
+      "note": "Clear warm coral, not muddy brown."
+    },
+    {
+      "id": "13",
+      "name": "Aubergine",
+      "hex": "#604357",
+      "role": "Till enamel",
+      "note": "Darker and more violet than the leather pad."
+    },
+    {
+      "id": "14",
+      "name": "Apricot",
+      "hex": "#EDAD73",
+      "role": "Selected function keys and tiny labels",
+      "note": "Small functional accents."
+    },
+    {
+      "id": "15",
+      "name": "Mustard",
+      "hex": "#D5A535",
+      "role": "Ceramic pen cup",
+      "note": "A concentrated warm accent."
+    },
+    {
+      "id": "16",
+      "name": "Pale gold",
+      "hex": "#E6C575",
+      "role": "Flat flag sprites and small brass fittings",
+      "note": "Flags remain 2D."
+    },
+    {
+      "id": "17",
+      "name": "Terracotta",
+      "hex": "#B8755F",
+      "role": "One brick building",
+      "note": "Keep adjacent facades independently coloured."
+    },
+    {
+      "id": "18",
+      "name": "Lavender",
+      "hex": "#A18FAE",
+      "role": "Document tray and a few keycaps",
+      "note": "Light purple plastic; avoid blue/periwinkle."
+    },
+    {
+      "id": "19",
+      "name": "Signal blue",
+      "hex": "#4B8DBB",
+      "role": "Portal energy and tiny status indicators",
+      "note": "Only strong blue family; never the default prop colour."
+    },
+    {
+      "id": "20",
+      "name": "Pearl mist",
+      "hex": "#D0D3D5",
+      "role": "Distant crowd and sparse glass reflections",
+      "note": "Low-chroma neutral; glass stays see-through."
+    }
+  ]
+}
+

@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1210" viewBox="0 0 1600 1210" role="img" aria-labelledby="title desc">
+<title id="title">Office palette: 20 colours</title><desc id="desc">Twenty exact sRGB swatches with assigned object and material roles. No green. Blue is a limited signal colour.</desc>
+<rect width="1600" height="1210" fill="#F0EFEB"/>
+<g font-family="Segoe UI, Arial, sans-serif" fill="#211F26">
+<text x="44" y="42" font-size="17" letter-spacing="2">NOPE / OFFICE COLOUR STUDY 02</text>
+<text x="44" y="99" font-size="42" font-weight="650">20 colours. Distinct materials.</text>
+<text x="44" y="137" font-size="21">Warm wood, clear plastics, coloured enamel, neutral metal. Blue is an accent.</text>
+<g transform="translate(44,180)">
+<rect width="288" height="128" rx="9" fill="#F0EFEB" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">01</text>
+<text x="0" y="161" font-size="22" font-weight="600">Porcelain</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#F0EFEB</text>
+<text x="0" y="214" font-size="16">PC / mouse / stapler</text>
+</g>
+<g transform="translate(350,180)">
+<rect width="288" height="128" rx="9" fill="#FFF2D9" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">02</text>
+<text x="0" y="161" font-size="22" font-weight="600">Paper</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#FFF2D9</text>
+<text x="0" y="214" font-size="16">Forms / legends</text>
+</g>
+<g transform="translate(656,180)">
+<rect width="288" height="128" rx="9" fill="#353239" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">03</text>
+<text x="0" y="161" font-size="22" font-weight="600">Graphite</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#353239</text>
+<text x="0" y="214" font-size="16">Lamp / NEXT / cables</text>
+</g>
+<g transform="translate(962,180)">
+<rect width="288" height="128" rx="9" fill="#211F26" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">04</text>
+<text x="0" y="161" font-size="22" font-weight="600">Ink</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#211F26</text>
+<text x="0" y="214" font-size="16">Screens / lettering</text>
+</g>
+<g transform="translate(1268,180)">
+<rect width="288" height="128" rx="9" fill="#B4B2B6" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">05</text>
+<text x="0" y="161" font-size="22" font-weight="600">Aluminium</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#B4B2B6</text>
+<text x="0" y="214" font-size="16">Portal ring / frames</text>
+</g>
+<g transform="translate(44,416)">
+<rect width="288" height="128" rx="9" fill="#D4C6B9" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">06</text>
+<text x="0" y="161" font-size="22" font-weight="600">Plaster</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#D4C6B9</text>
+<text x="0" y="214" font-size="16">Walls / separators</text>
+</g>
+<g transform="translate(350,416)">
+<rect width="288" height="128" rx="9" fill="#B9AB98" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">07</text>
+<text x="0" y="161" font-size="22" font-weight="600">Stone</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#B9AB98</text>
+<text x="0" y="214" font-size="16">Existing floor reference</text>
+</g>
+<g transform="translate(656,416)">
+<rect width="288" height="128" rx="9" fill="#704832" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">08</text>
+<text x="0" y="161" font-size="22" font-weight="600">Walnut</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#704832</text>
+<text x="0" y="214" font-size="16">Smooth desktop</text>
+</g>
+<g transform="translate(962,416)">
+<rect width="288" height="128" rx="9" fill="#966547" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">09</text>
+<text x="0" y="161" font-size="22" font-weight="600">Warm timber</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#966547</text>
+<text x="0" y="214" font-size="16">Wood fittings / stamp</text>
+</g>
+<g transform="translate(1268,416)">
+<rect width="288" height="128" rx="9" fill="#BB955F" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">10</text>
+<text x="0" y="161" font-size="22" font-weight="600">Cork</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#BB955F</text>
+<text x="0" y="214" font-size="16">Noticeboard inserts</text>
+</g>
+<g transform="translate(44,652)">
+<rect width="288" height="128" rx="9" fill="#823F50" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">11</text>
+<text x="0" y="161" font-size="22" font-weight="600">Oxblood</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#823F50</text>
+<text x="0" y="214" font-size="16">Leather office pad</text>
+</g>
+<g transform="translate(350,652)">
+<rect width="288" height="128" rx="9" fill="#D77662" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">12</text>
+<text x="0" y="161" font-size="22" font-weight="600">Coral</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#D77662</text>
+<text x="0" y="214" font-size="16">Telephone casing</text>
+</g>
+<g transform="translate(656,652)">
+<rect width="288" height="128" rx="9" fill="#604357" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">13</text>
+<text x="0" y="161" font-size="22" font-weight="600">Aubergine</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#604357</text>
+<text x="0" y="214" font-size="16">Till enamel</text>
+</g>
+<g transform="translate(962,652)">
+<rect width="288" height="128" rx="9" fill="#EDAD73" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">14</text>
+<text x="0" y="161" font-size="22" font-weight="600">Apricot</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#EDAD73</text>
+<text x="0" y="214" font-size="16">Function keys / labels</text>
+</g>
+<g transform="translate(1268,652)">
+<rect width="288" height="128" rx="9" fill="#D5A535" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">15</text>
+<text x="0" y="161" font-size="22" font-weight="600">Mustard</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#D5A535</text>
+<text x="0" y="214" font-size="16">Ceramic pen cup</text>
+</g>
+<g transform="translate(44,888)">
+<rect width="288" height="128" rx="9" fill="#E6C575" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">16</text>
+<text x="0" y="161" font-size="22" font-weight="600">Pale gold</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#E6C575</text>
+<text x="0" y="214" font-size="16">2D flags / brass</text>
+</g>
+<g transform="translate(350,888)">
+<rect width="288" height="128" rx="9" fill="#B8755F" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">17</text>
+<text x="0" y="161" font-size="22" font-weight="600">Terracotta</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#B8755F</text>
+<text x="0" y="214" font-size="16">Brick facade</text>
+</g>
+<g transform="translate(656,888)">
+<rect width="288" height="128" rx="9" fill="#A18FAE" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">18</text>
+<text x="0" y="161" font-size="22" font-weight="600">Lavender</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#A18FAE</text>
+<text x="0" y="214" font-size="16">Tray / select keycaps</text>
+</g>
+<g transform="translate(962,888)">
+<rect width="288" height="128" rx="9" fill="#4B8DBB" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#FFF2D9">19</text>
+<text x="0" y="161" font-size="22" font-weight="600">Signal blue</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#4B8DBB</text>
+<text x="0" y="214" font-size="16">Portal energy</text>
+</g>
+<g transform="translate(1268,888)">
+<rect width="288" height="128" rx="9" fill="#D0D3D5" stroke="#211F26" stroke-opacity=".10"/>
+<text x="16" y="29" font-size="16" fill="#211F26">20</text>
+<text x="0" y="161" font-size="22" font-weight="600">Pearl mist</text>
+<text x="0" y="187" font-size="18" font-family="Consolas, monospace">#D0D3D5</text>
+<text x="0" y="214" font-size="16">Crowds / reflections</text>
+</g>
+<path d="M44 1136H1556" stroke="#B4B2B6"/>
+<text x="44" y="1173" font-size="18">Exact base colours in sRGB • Shading may vary • No green • Screen study, not yet applied in Unity</text>
+</g></svg>
+

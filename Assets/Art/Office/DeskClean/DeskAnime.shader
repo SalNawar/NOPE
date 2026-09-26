@@ -1,3 +1,14 @@
+// NOPE/Desk Anime: the illustrated desk shader (art side). Replaces URP's PBR lighting
+// with three tone bands (shadow, midtone, light) over a flat colour or illustration,
+// with a cool shadow and warm light multiplier, small painted highlights and a soft
+// grazing-angle contour. Receives main and additional light shadows, SSAO and fog;
+// optional alpha cutout (2D paper props).
+// Passes: DeskAnimeForward (UniversalForwardOnly), ShadowCaster, DepthOnly and
+// DepthNormalsOnly, all on one UnityPerMaterial buffer (SRP Batcher compatible).
+// Used by every desk prop and booth finish (the DebtRelief Desk_*/Booth_* materials)
+// and the Rebuilt CRT (CRT2_*). The presets and visual rules are in
+// ArtDeliverables/TimeDesk/ImportedOffice/DeskClean/ANIME_SHADER.md; the Debt Relief
+// pass and Apply Desk Anime Shading set them. No FallBack (triage B15).
 Shader "NOPE/Desk Anime"
 {
     Properties

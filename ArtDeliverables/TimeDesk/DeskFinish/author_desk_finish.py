@@ -1,4 +1,17 @@
-"""Editable foreground art with individually mapped painted surfaces."""
+"""Editable foreground art with individually mapped painted surfaces (art side).
+
+Purpose: the desk and its finishes: the Finish_* groups (desk, desk rail, boards, mat,
+lamp, intercom, ink pad, mouse, pencil rack, tray), plus the hardware from
+hardware_models.py (PC, keyboard, till) and the stationery and ephemera from
+booth_detail_models.py.
+Inputs: ../HybridScene/BlenderOffice/artlib.py; the PC_Desk collection of
+HybridScene/BlenderPC/TimeDesk_PC.blend (keep that .blend); Assets/Art/Office/DeskFinish/
+Textures (ivory_plastic, petrol_enamel, walnut_veneer).
+Outputs: Assets/Art/Office/DeskFinish/Models/Finish_*.fbx (+ Exports/ copies),
+DeskFinish_manifest.json, hardware_anchors.json and DeskFinish.blend here.
+DeskClean/author_desk_clean.py loads Finish_* collections from DeskFinish.blend.
+Run: blender --background --python ArtDeliverables/TimeDesk/DeskFinish/author_desk_finish.py
+"""
 import sys,math,json
 from pathlib import Path
 HERE=Path(__file__).resolve().parent;PROJECT=HERE.parents[2]

@@ -1,4 +1,14 @@
-"""Reference-led desk hardware, authored in Blender, with no gameplay scripts."""
+"""Reference-led desk hardware, authored in Blender, with no gameplay scripts (art side).
+
+Purpose: the booth hardware: the Office_* groups (blotter, calendar, instrument board,
+intercom, newspaper, NEXT sign, partition, stamp, till, tray, and the Office_Clock and
+Office_Stability wall displays).
+Inputs: artlib.py (this folder); Assets/Art/Office/Hybrid/Images/newspaper_print.png.
+Outputs: Assets/Art/Office/Hybrid/BlenderOffice/Models/Office_*.fbx (+ Exports/ copies),
+Booth_Hardware_manifest.json and Booth_Hardware.blend here. DeskClean/author_desk_clean.py
+loads Office_Next and Office_Stamp from that .blend.
+Run: blender --background --python ArtDeliverables/TimeDesk/HybridScene/BlenderOffice/author_booth.py
+"""
 import sys
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).resolve().parent))

@@ -1,11 +1,21 @@
-"""Revision 2: editable clean, soft CRT study. Geometry and renders, no image filters.
-Run with Blender 5.2 --background --python this_file.
+"""Revision 2: editable clean, soft CRT study. Geometry and renders, no image filters (art side).
+
+Purpose: the Rebuilt CRT, the live office PC (the user protects it: rerun only on request).
+Inputs: CRT_StyleStudy.blend here (the earlier ivory study, loaded for the before/after
+comparison; keep that .blend).
+Outputs: Assets/Art/Office/ImportedOffice/Models/CRT_Rebuilt.fbx (its CRT2_Glass object is
+the glass the gameplay layer finds, scene contract PCScreen: keep that name),
+CRT_Rebuilt_Study.blend and revision2.json here, and with --compare the
+revision2_before/after.png renders. Then Tools > Office Art > Apply Rebuilt CRT Study in Unity.
+Paths resolve from this file (any checkout or worktree).
+Run: blender --background --python ArtDeliverables/TimeDesk/ImportedOffice/BlenderCRT/rebuild_crt.py [-- --compare]
+(written for Blender 5.2).
 """
 import bpy, math, json, sys
 from pathlib import Path
 from mathutils import Vector
-P=Path('E:/unity/NOPE')
-HERE=P/'ArtDeliverables/TimeDesk/ImportedOffice/BlenderCRT'
+HERE=Path(__file__).resolve().parent
+P=HERE.parents[3]  # the repo root
 OUT=P/'Assets/Art/Office/ImportedOffice'
 bpy.ops.object.select_all(action='SELECT'); bpy.ops.object.delete(use_global=False)
 scene=bpy.context.scene
