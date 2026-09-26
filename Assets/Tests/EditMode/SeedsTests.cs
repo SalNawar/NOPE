@@ -147,6 +147,31 @@ public class SeedsTests
         Assert.AreNotEqual(slot, Seeds.ForSlot(Seeds.Day(999, 2)), "each run its own spins");
     }
 
+    /// <summary>
+    /// A traveller's forms seed (redesign phase 4, PC spec FO5): the value the
+    /// serials of their papers come from (FormSerials), salted apart from every
+    /// stream so a serial never shares a seed with a draw; the salt is pinned.
+    /// </summary>
+    [Test]
+    public void FormsSeed_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream()
+    {
+        Assert.AreEqual(0x464F524D, Seeds.FormsSalt, "\"FORM\"");
+        int daySeed = Seeds.Day(12345, 2);
+        List<int> others = EveryOtherStream(daySeed);
+        others.Add(Seeds.ForSlot(daySeed));
+        var seeds = new HashSet<int>();
+        for (int c = 1; c <= 20; c++)
+        {
+            int caseSeed = Seeds.ForCase(daySeed, c);
+            int forms = Seeds.ForForms(caseSeed);
+            Assert.AreEqual(forms, Seeds.ForForms(caseSeed), $"case {c}: not deterministic");
+            CollectionAssert.DoesNotContain(others, forms, $"case {c}: the forms seed is another stream's");
+            seeds.Add(forms);
+        }
+        Assert.AreEqual(20, seeds.Count, "forms seeds repeat across travellers");
+        Assert.AreEqual(Seeds.Mix(Seeds.ForCase(daySeed, 1), 0x464F524D), Seeds.ForForms(Seeds.ForCase(daySeed, 1)));
+    }
+
     /// <summary>The day's raw seed and every stream of the day: violators, and each of 20 travellers' case, clue, lie, dialog, look and premade streams.</summary>
     private static List<int> EveryOtherStream(int daySeed)
     {

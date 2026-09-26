@@ -87,6 +87,16 @@ public static class Seeds
     /// </summary>
     public static int ForLegendary(int caseSeed) => Mix(caseSeed, LegendarySalt);
 
+    /// <summary>Salt for a traveller's forms seed ("FORM").</summary>
+    public const int FormsSalt = 0x464F524D;
+
+    /// <summary>
+    /// One traveller's forms seed (redesign phase 4, PC spec FO5): the value
+    /// their papers' serials come from (FormSerials). A value, never a stream
+    /// draw, so printing a serial moves no other draw.
+    /// </summary>
+    public static int ForForms(int caseSeed) => Mix(caseSeed, FormsSalt);
+
     /// <summary>Salt for the night's slot-machine spins at Home ("SLOT").</summary>
     public const int SlotSalt = 0x534C4F54;
 

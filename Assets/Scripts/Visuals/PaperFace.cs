@@ -44,46 +44,6 @@ public sealed class PaperFaceTuning
     public float photoGap = 0.03f;
 }
 
-/// <summary>A rectangle on the paper's face, in the sheet's local space (the paper's height is 1; centre origin, y up).</summary>
-public readonly struct FaceRect
-{
-    /// <summary>A rectangle from its edges.</summary>
-    public FaceRect(float xMin, float yMin, float xMax, float yMax)
-    {
-        XMin = xMin;
-        YMin = yMin;
-        XMax = xMax;
-        YMax = yMax;
-    }
-
-    /// <summary>The left edge.</summary>
-    public float XMin { get; }
-
-    /// <summary>The bottom edge.</summary>
-    public float YMin { get; }
-
-    /// <summary>The right edge.</summary>
-    public float XMax { get; }
-
-    /// <summary>The top edge.</summary>
-    public float YMax { get; }
-
-    /// <summary>The width.</summary>
-    public float Width => XMax - XMin;
-
-    /// <summary>The height.</summary>
-    public float Height => YMax - YMin;
-
-    /// <summary>The centre's x.</summary>
-    public float CentreX => (XMin + XMax) / 2f;
-
-    /// <summary>The centre's y.</summary>
-    public float CentreY => (YMin + YMax) / 2f;
-
-    /// <summary>True when the point is inside (edges included).</summary>
-    public bool Contains(float x, float y) => x >= XMin && x <= XMax && y >= YMin && y <= YMax;
-}
-
 /// <summary>One row of a paper's face: its label over its value, and the rectangle a click or a hover picks it in (the label and the value, not the gap under them).</summary>
 public readonly struct FaceRow
 {
