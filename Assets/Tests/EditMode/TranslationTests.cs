@@ -11,7 +11,7 @@ using NUnit.Framework;
 /// </summary>
 public class TranslationTests
 {
-    /// <summary>English (native), Egyptian and Arabic (Near East), Greek (Mediterranean); foreign text from day 2.</summary>
+    /// <summary>English (native), Egyptian and Arabic (Near East), Greek (Mediterranean); foreign speech from day 2.</summary>
     private static TranslationRules Rules() => new TranslationRules
     {
         fromDay = 2,

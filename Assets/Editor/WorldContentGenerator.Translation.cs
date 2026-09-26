@@ -55,7 +55,7 @@ public static partial class WorldContentGenerator
                     errors.Add($"Upgrade '{AssetDatabase.GetAssetPath(u)}' has the id '{u.id}', which Generate World writes for a translator.");
 
         if (t.fromDay > 1 && (string.IsNullOrWhiteSpace(t.announce) || !IsAscii(t.announce)))
-            errors.Add("translation.announce must be non-blank ASCII (the morning paper announces foreign text the day it starts).");
+            errors.Add("translation.announce must be non-blank ASCII (the morning paper announces foreign speech the day it starts).");
 
         var keys = new HashSet<string>((src.ui?.strings ?? Array.Empty<StringData>()).Where(s => s != null).Select(s => s.key));
         foreach (string key in TranslationKeys)
@@ -103,7 +103,7 @@ public static partial class WorldContentGenerator
     }
 
     /// <summary>
-    /// Writes Translation/Trigger_TranslationNotice.asset when foreign text
+    /// Writes Translation/Trigger_TranslationNotice.asset when foreign speech
     /// starts after day 1: a one-shot trigger whose news line is the notice,
     /// firing the night before fromDay (DayAtLeast Gates.UnlockNight(fromDay)),
     /// so that morning's paper carries it. None when fromDay is 1.

@@ -50,7 +50,8 @@ public sealed class TranslationSettings
     /// and tongue id), blank or duplicate script ids, a font candidate naming
     /// neither a file nor a family, every foreign tongue's table
     /// (Pseudoscript.ParseTable; shapeable cells for a right-to-left script),
-    /// the fallback cipher (Pseudoscript.IsAsciiLetters) and negative flip knobs.
+    /// the fallback cipher (Pseudoscript.IsAsciiLetters), negative flip knobs
+    /// and, through Translation.Problems, the key-word rule (KeyWords.Problems).
     /// </summary>
     public List<string> Problems(IEnumerable<KeyValuePair<string, string>> placeTongues)
     {
