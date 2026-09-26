@@ -7,7 +7,9 @@ using System.Collections.Generic;
 /// upper-cases a one-character cell (Greek β becomes Β; scripts without case
 /// are unchanged); digits, spaces, punctuation and symbols pass through. One
 /// cell per canonical character, so the flip can turn cell i into character
-/// i. The same text always gives the same glyphs: no random stream.
+/// i. A line's English spans (its key words, the traveller-types spec's
+/// §8.1) are never glyphs: IsGlyph says which characters are. The same text
+/// always gives the same glyphs: no random stream.
 /// </summary>
 public static class Pseudoscript
 {
@@ -96,6 +98,22 @@ public static class Pseudoscript
 
         string cell = table[index];
         return char.IsUpper(c) && cell.Length == 1 ? char.ToUpperInvariant(cell[0]).ToString() : cell;
+    }
+
+    /// <summary>
+    /// True when character <paramref name="index"/> of <paramref name="text"/>
+    /// shows as a glyph: a letter (LetterIndex) outside every span of
+    /// <paramref name="english"/> (start, length; null: none), which stay
+    /// English. False for anything else and for an index outside the text.
+    /// </summary>
+    public static bool IsGlyph(string text, int index, IReadOnlyList<(int start, int length)> english)
+    {
+        if (text == null || index < 0 || index >= text.Length || LetterIndex(text[index]) < 0)
+            return false;
+        for (int i = 0; english != null && i < english.Count; i++)
+            if (index >= english[i].start && index < english[i].start + english[i].length)
+                return false;
+        return true;
     }
 
     /// <summary>True when the table's 26 cells are distinct lower-case ASCII letters (the fallback cipher's rule).</summary>

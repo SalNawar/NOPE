@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 /// <summary>The letter flip's knobs (ContentLibrarySO.Translation.flip, authored in world_source.json translation.flip).</summary>
 [Serializable]
@@ -34,14 +35,25 @@ public enum CellState
 /// The letter flip's timing (piece 9 T8; speech only since the redesign's
 /// phase 1, papers being always English): letter k starts at startDelay +
 /// k × letterInterval, passes through its scramble steps and lands
-/// letterSeconds later. Only letters count (their rank skips everything
-/// else). Negative knobs count as 0; an elapsed time that is NaN (not
+/// letterSeconds later. Only glyph letters count (their rank skips
+/// everything else, the English spans of key words included: they never
+/// flip). Negative knobs count as 0; an elapsed time that is NaN (not
 /// revealed yet) is before every start.
 /// </summary>
 public static class FlipSequence
 {
     /// <summary>The stride between scramble glyphs: any number coprime with 26, so consecutive steps differ from each other and from the letter.</summary>
     private const int ScrambleStride = 7;
+
+    /// <summary>How many letters of <paramref name="text"/> flip: its glyph letters (Pseudoscript.IsGlyph), never one in an English span of <paramref name="english"/> (null: none). Only they take time.</summary>
+    public static int Letters(string text, IReadOnlyList<(int start, int length)> english)
+    {
+        int letters = 0;
+        for (int i = 0; text != null && i < text.Length; i++)
+            if (Pseudoscript.IsGlyph(text, i, english))
+                letters++;
+        return letters;
+    }
 
     /// <summary>When the letter of this rank starts.</summary>
     public static float StartOf(int letterRank, FlipTiming t) =>

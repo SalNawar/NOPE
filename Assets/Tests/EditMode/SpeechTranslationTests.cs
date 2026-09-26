@@ -23,8 +23,8 @@ public class SpeechTranslationTests
     public void None_ShowsEverythingPlain()
     {
         SpeechTranslation none = SpeechTranslation.None;
-        Assert.AreEqual(RevealKind.Plain, none.Line(true).Kind);
-        Assert.AreEqual(RevealKind.Plain, none.Bubble(1f).Kind);
+        Assert.AreEqual(RevealKind.Plain, none.Line(true, null).Kind);
+        Assert.AreEqual(RevealKind.Plain, none.Bubble(1f, null).Kind);
         Assert.AreEqual("Deben", none.Shown(true, "Deben"));
         Assert.IsNotNull(none.Timing);
         Assert.IsFalse(none.ReducedMotion);
@@ -34,22 +34,35 @@ public class SpeechTranslationTests
     public void Untranslated_TheTravellersLinesShowTheirTongue_TheDesksStayPlain()
     {
         SpeechTranslation tr = Foreign(false);
-        Reveal line = tr.Line(true);
+        Reveal line = tr.Line(true, null);
         Assert.AreEqual(RevealKind.Untranslated, line.Kind);
         Assert.AreEqual(Pseudoscript.TableSize, line.Foreign.Table.Count, "in the tongue's look");
-        Assert.AreEqual(RevealKind.Plain, tr.Line(false).Kind, "the desk speaks English");
-        Assert.AreEqual(RevealKind.Untranslated, tr.Bubble(3f).Kind, "without the Speech translator the bubble never flips");
+        Assert.AreEqual(RevealKind.Plain, tr.Line(false, null).Kind, "the desk speaks English");
+        Assert.AreEqual(RevealKind.Untranslated, tr.Bubble(3f, null).Kind, "without the Speech translator the bubble never flips");
     }
 
     [Test]
     public void Translated_TheBubbleFlipsOnTheLinesClock_TheTranscriptIsSettled()
     {
         SpeechTranslation tr = Foreign(true);
-        Reveal bubble = tr.Bubble(0.25f);
+        Reveal bubble = tr.Bubble(0.25f, null);
         Assert.AreEqual(RevealKind.Flipping, bubble.Kind);
         Assert.AreEqual(0.25f, bubble.Elapsed);
-        Assert.AreEqual(RevealKind.Plain, tr.Line(true).Kind, "the transcript is the record: never animated");
+        Assert.AreEqual(RevealKind.Plain, tr.Line(true, null).Kind, "the transcript is the record: never animated");
         Assert.AreEqual(0.5f, tr.Timing.startDelay, "the flip's knobs");
+    }
+
+    /// <summary>The line's key-word spans go with its reveal, untranslated or flipping; a plain line needs none.</summary>
+    [Test]
+    public void TheLinesEnglishSpans_GoWithItsReveal()
+    {
+        var keys = new System.Collections.Generic.List<(int start, int length)> { (0, 4) };
+        Assert.AreSame(keys, Foreign(false).Line(true, keys).English);
+        Assert.AreSame(keys, Foreign(false).Bubble(1f, keys).English);
+        Reveal flipping = Foreign(true).Bubble(1f, keys);
+        Assert.AreEqual(RevealKind.Flipping, flipping.Kind);
+        Assert.AreSame(keys, flipping.English);
+        Assert.AreEqual(RevealKind.Plain, Foreign(true).Line(true, keys).Kind);
     }
 
     [Test]

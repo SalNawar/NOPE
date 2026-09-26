@@ -9670,7 +9670,7 @@
   },
   "translation": {
     "fromDay": 2,
-    "announce": "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated; translators are sold at Home. Papers are still filled in English.",
+    "announce": "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
       "letterInterval": 0.04,

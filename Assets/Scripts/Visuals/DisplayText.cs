@@ -31,24 +31,27 @@ public enum RevealKind
     Flipping
 }
 
-/// <summary>How a text shows: plain (canonical), untranslated (the foreign form), or flipping from the foreign form to canonical.</summary>
+/// <summary>How a text shows: plain (canonical), untranslated (the foreign form), or flipping from the foreign form to canonical; its English spans (key words) always as they are.</summary>
 public readonly struct Reveal
 {
-    private Reveal(RevealKind kind, ForeignText foreign, float elapsed)
+    private Reveal(RevealKind kind, ForeignText foreign, float elapsed, IReadOnlyList<(int start, int length)> english)
     {
         Kind = kind;
         Foreign = foreign;
         Elapsed = elapsed;
+        English = english;
     }
 
     /// <summary>The canonical text as it is.</summary>
     public static Reveal Plain => default;
 
-    /// <summary>The text in a tongue's glyphs.</summary>
-    public static Reveal Untranslated(ForeignText foreign) => new Reveal(RevealKind.Untranslated, foreign, 0f);
+    /// <summary>The text in a tongue's glyphs, but for its English spans (null: none).</summary>
+    public static Reveal Untranslated(ForeignText foreign, IReadOnlyList<(int start, int length)> english = null) =>
+        new Reveal(RevealKind.Untranslated, foreign, 0f, english);
 
-    /// <summary>The text <paramref name="elapsed"/> seconds into its flip.</summary>
-    public static Reveal Flipping(ForeignText foreign, float elapsed) => new Reveal(RevealKind.Flipping, foreign, elapsed);
+    /// <summary>The text <paramref name="elapsed"/> seconds into its flip; its English spans (null: none) never flip.</summary>
+    public static Reveal Flipping(ForeignText foreign, float elapsed, IReadOnlyList<(int start, int length)> english = null) =>
+        new Reveal(RevealKind.Flipping, foreign, elapsed, english);
 
     /// <summary>Plain, untranslated or flipping.</summary>
     public RevealKind Kind { get; }
@@ -58,6 +61,9 @@ public readonly struct Reveal
 
     /// <summary>Seconds since the reveal (flipping only).</summary>
     public float Elapsed { get; }
+
+    /// <summary>The text's spans that stay English (start, length: its key words, DialogLine.English), or null for none.</summary>
+    public IReadOnlyList<(int start, int length)> English { get; }
 }
 
 /// <summary>
@@ -66,9 +72,10 @@ public readonly struct Reveal
 /// English): the transcript's sentences and the traveller's line in the
 /// speech bubble go through it. Plain text
 /// shows as it is; untranslated text shows each letter as its tongue's cell
-/// (Pseudoscript); a flipping text turns into English letter by letter
-/// (FlipSequence), each letter passing through scramble glyphs of its tongue;
-/// reduced motion shows the English from the reveal. Right-to-left text is
+/// (Pseudoscript), but for its English spans (the key words, as they are); a
+/// flipping text turns into English letter by letter (FlipSequence), each
+/// glyph passing through scramble glyphs of its tongue while the English
+/// spans never change; reduced motion shows the English from the reveal. Right-to-left text is
 /// composed in logical order and shaped by ArabicShaper; a line typing out
 /// shows its characters in reading order (Typed). Never pass its
 /// result to CompareController or CompareEvidence: evidence stays canonical.
@@ -162,10 +169,11 @@ public static class DisplayText
     }
 
     /// <summary>
-    /// The composed text in logical order: each letter as its tongue's cell,
-    /// its scramble glyph while flipping, or English once landed; everything
-    /// else as it is. <paramref name="sources"/> (null skips it) receives each
-    /// character's index in <paramref name="canonical"/>.
+    /// The composed text in logical order: each glyph letter as its tongue's
+    /// cell, its scramble glyph while flipping, or English once landed;
+    /// everything else (the English spans included) as it is.
+    /// <paramref name="sources"/> (null skips it) receives each character's
+    /// index in <paramref name="canonical"/>.
     /// </summary>
     private static string Logical(string canonical, Reveal reveal, FlipTiming timing, bool reducedMotion, List<int> sources)
     {
@@ -177,7 +185,7 @@ public static class DisplayText
         {
             char c = canonical[k];
             int letter = Pseudoscript.LetterIndex(c);
-            if (letter < 0)
+            if (!Pseudoscript.IsGlyph(canonical, k, reveal.English))
             {
                 sb.Append(c);
             }
@@ -209,7 +217,7 @@ public static class DisplayText
     /// <summary>Seconds until the text settles: 0 when plain or settled, +infinity when untranslated (an unrevealed NaN time counts as not started).</summary>
     public static float Remaining(string canonical, Reveal reveal, FlipTiming timing, bool reducedMotion)
     {
-        int letters = Letters(canonical);
+        int letters = FlipSequence.Letters(canonical, reveal.English);
         if (IsPlain(reveal) || letters == 0)
             return 0f;
         if (reveal.Kind == RevealKind.Untranslated)
@@ -228,12 +236,12 @@ public static class DisplayText
             return 0;
         if (reducedMotion)
             return reveal.Elapsed >= 0f ? 1 : 0;
-        return FlipSequence.Progress(Letters(canonical), timing ?? DefaultTiming, reveal.Elapsed);
+        return FlipSequence.Progress(FlipSequence.Letters(canonical, reveal.English), timing ?? DefaultTiming, reveal.Elapsed);
     }
 
-    /// <summary>True while any foreign or scramble cell shows (the text then needs its script's font).</summary>
+    /// <summary>True while any foreign or scramble cell shows (the text then needs its script's font); never for a line that is all English spans.</summary>
     public static bool ShowsForeign(string canonical, Reveal reveal, FlipTiming timing, bool reducedMotion) =>
-        !IsPlain(reveal) && Letters(canonical) > 0 && !IsSettled(canonical, reveal, timing, reducedMotion);
+        !IsPlain(reveal) && FlipSequence.Letters(canonical, reveal.English) > 0 && !IsSettled(canonical, reveal, timing, reducedMotion);
 
     /// <summary>
     /// The font a text is written in: <paramref name="script"/> (the script's
@@ -251,14 +259,4 @@ public static class DisplayText
     /// <summary>A flipping text, revealed, whose every letter has landed.</summary>
     private static bool IsSettled(string canonical, Reveal reveal, FlipTiming timing, bool reducedMotion) =>
         reveal.Kind == RevealKind.Flipping && !float.IsNaN(reveal.Elapsed) && Remaining(canonical, reveal, timing, reducedMotion) <= 0f;
-
-    /// <summary>How many letters the text holds (only letters flip and take time).</summary>
-    private static int Letters(string canonical)
-    {
-        int letters = 0;
-        foreach (char c in canonical ?? string.Empty)
-            if (Pseudoscript.LetterIndex(c) >= 0)
-                letters++;
-        return letters;
-    }
 }

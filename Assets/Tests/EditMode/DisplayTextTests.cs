@@ -241,6 +241,65 @@ public class DisplayTextTests
         return count;
     }
 
+    // -----------------------------
+    // Key words (the traveller-types spec's §8.1)
+    // -----------------------------
+
+    private const string Claim = "Please. Send me home to Periclean Athens (Ancient).";
+
+    /// <summary>"Please", "home" and the place stay English (as KeyWords.Spans gives them).</summary>
+    private static readonly List<(int start, int length)> ClaimKeys = new List<(int start, int length)> { (0, 6), (16, 4), (24, 26) };
+
+    [Test]
+    public void Untranslated_KeepsTheEnglishSpans_AndDrawsTheRestInGlyphs()
+    {
+        string shown = For(Claim, Reveal.Untranslated(Foreign(Greek), ClaimKeys));
+        Assert.AreEqual(Claim.Length, shown.Length);
+        foreach ((int start, int length) s in ClaimKeys)
+            Assert.AreEqual(Claim.Substring(s.start, s.length), shown.Substring(s.start, s.length));
+        Assert.AreEqual(For("Send me", Reveal.Untranslated(Foreign(Greek))), shown.Substring(8, 7), "the rest as without spans");
+        Assert.AreEqual(For(Claim, Reveal.Untranslated(Foreign(Greek))), For(Claim, Reveal.Untranslated(Foreign(Greek), null)), "no spans: every letter");
+        Assert.IsTrue(DisplayText.ShowsForeign(Claim, Reveal.Untranslated(Foreign(Greek), ClaimKeys), Timing, false));
+    }
+
+    [Test]
+    public void ALineAllKeyWords_IsPlain()
+    {
+        var all = new List<(int start, int length)> { (0, 3) };
+        Assert.AreEqual("Yes.", For("Yes.", Reveal.Untranslated(Foreign(Greek), all)));
+        Assert.IsFalse(DisplayText.ShowsForeign("Yes.", Reveal.Untranslated(Foreign(Greek), all), Timing, false), "nothing foreign: the text's own font");
+        Assert.AreEqual(0f, DisplayText.Remaining("Yes.", Reveal.Untranslated(Foreign(Greek), all), Timing, false));
+    }
+
+    [Test]
+    public void Flipping_NeverChangesTheEnglishSpans_AndOnlyTheGlyphsTakeTime()
+    {
+        ForeignText greek = Foreign(Greek);
+        int glyphLetters = FlipSequence.Letters(Claim, ClaimKeys);
+        float duration = FlipSequence.Duration(glyphLetters, Timing);
+        Assert.AreEqual(duration, DisplayText.Remaining(Claim, Reveal.Flipping(greek, 0f, ClaimKeys), Timing, false), 1e-5f);
+        for (float e = 0f; e <= duration + 0.01f; e += 0.01f)
+        {
+            string shown = For(Claim, Reveal.Flipping(greek, e, ClaimKeys));
+            foreach ((int start, int length) s in ClaimKeys)
+                Assert.AreEqual(Claim.Substring(s.start, s.length), shown.Substring(s.start, s.length), $"at {e}");
+        }
+        Assert.AreEqual(Claim, For(Claim, Reveal.Flipping(greek, duration, ClaimKeys)));
+        Assert.AreEqual(3 * glyphLetters, DisplayText.Progress(Claim, Reveal.Flipping(greek, duration, ClaimKeys), Timing, false),
+            "each glyph letter starts, steps and lands; no English letter is a change point");
+    }
+
+    [Test]
+    public void RightToLeft_TheEnglishSpansReadInTheirOwnOrder()
+    {
+        const string claim = "I request passage home to Abbasid Baghdad (Medieval).";
+        var keys = new List<(int start, int length)> { (18, 4), (26, 26) };
+        string shown = For(claim, Reveal.Untranslated(Foreign(Arabic, true), keys));
+        StringAssert.Contains("Abbasid Baghdad (Medieval)", shown, "the place, brackets and all");
+        StringAssert.Contains("home", shown);
+        Assert.IsTrue(DisplayText.ReadsRightToLeft(claim, Reveal.Untranslated(Foreign(Arabic, true), keys), Timing, false));
+    }
+
     [Test]
     public void EveryCellStandsForOneCanonicalCharacter()
     {

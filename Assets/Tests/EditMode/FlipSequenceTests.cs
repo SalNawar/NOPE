@@ -117,6 +117,20 @@ public class FlipSequenceTests
         Assert.AreEqual(0, FlipSequence.Progress(0, t, 5f));
     }
 
+    /// <summary>Only glyph letters flip and take time: the English spans (key words), digits and punctuation never do.</summary>
+    [Test]
+    public void Letters_CountsOnlyTheLettersOutsideTheEnglishSpans()
+    {
+        const string claim = "I request passage home to Rome (Ancient).";
+        Assert.AreEqual(32, FlipSequence.Letters(claim, null));
+        var english = new List<(int start, int length)> { (18, 4), (26, 14) };
+        Assert.AreEqual(32 - 4 - 11, FlipSequence.Letters(claim, english), "'home' and 'Rome (Ancient)' stay English");
+        Assert.AreEqual(0, FlipSequence.Letters("1450, 12.", null));
+        Assert.AreEqual(0, FlipSequence.Letters(null, english));
+        Assert.Less(FlipSequence.Duration(FlipSequence.Letters(claim, english), T()), FlipSequence.Duration(FlipSequence.Letters(claim, null), T()),
+            "a line with key words flips sooner");
+    }
+
     [Test]
     public void NegativeKnobs_CountAsZero()
     {

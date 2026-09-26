@@ -26,12 +26,12 @@ public sealed class CaseTranslation
     /// <summary>The script's runtime font for foreign cells; null = the text's own font (the fallback cipher).</summary>
     public TMP_FontAsset Font { get; }
 
-    /// <summary>A transcript line, settled: the traveller's in their tongue unless translated; the desk's always plain.</summary>
+    /// <summary>A transcript line, settled: the traveller's in their tongue unless translated, its key words in English; the desk's always plain.</summary>
     public Reveal Line(DialogLine line) =>
-        line != null ? Speech.Line(Translation.InTongue(line.Speaker)) : Reveal.Plain;
+        line != null ? Speech.Line(Translation.InTongue(line.Speaker), line.English) : Reveal.Plain;
 
-    /// <summary>The bubble's traveller line <paramref name="lineSeconds"/> after it started: plain, untranslated, or flipping.</summary>
-    public Reveal Bubble(float lineSeconds) => Speech.Bubble(lineSeconds);
+    /// <summary>The bubble's traveller <paramref name="line"/> <paramref name="lineSeconds"/> after it started: plain, untranslated, or flipping, its key words in English (a null line: no key words).</summary>
+    public Reveal Bubble(DialogLine line, float lineSeconds) => Speech.Bubble(lineSeconds, line != null ? line.English : null);
 
     /// <summary>The compare bar's text for an answer: its canonical value when it reads, else the placeholder.</summary>
     public string Shown(DialogLine answer) => Speech.Shown(Translation.InTongue(answer.Speaker), answer.Value);
