@@ -20,12 +20,10 @@ using UnityEngine.UI;
 /// frame camera: a button inside a window takes the pointer-down itself),
 /// and on the empty desktop (the wallpaper, the icons and their layer)
 /// leaves nothing focused, then tells who listens what was pressed (Pressed:
-/// the Investigation app's active pane); Escape runs the desktop's part of the chain
-/// (DesktopEscapeRule: close the context menu, leave a field, close the Start
-/// menu, cancel a window or icon drag) and stamps its frame, so the PC
-/// frame's Escape (OfficeViewController) skips that press. It runs before the
-/// EventSystem (whose script order is -1000; its cancel would leave a field
-/// first) and the office's pollers.
+/// the Investigation app's active pane). It knows the window or icon drag under way, which
+/// the Escape chain (DesktopKeyboard, redesign phase 20) may cancel. It runs
+/// before the EventSystem (whose script order is -1000) and the office's
+/// pollers.
 /// </summary>
 [DefaultExecutionOrder(-1100)]
 public sealed class DesktopWindowManager : MonoBehaviour
@@ -79,14 +77,14 @@ public sealed class DesktopWindowManager : MonoBehaviour
         public TMP_Text Label;
     }
 
-    /// <summary>The frame in which the desktop last took an Escape press (-1: never); the PC frame's Escape skips that frame.</summary>
-    public int EscapeTakenFrame { get; private set; } = -1;
+    /// <summary>The focused window, or null (no window has the focus: the desktop's icons take the arrows and Enter).</summary>
+    public DesktopWindow FocusedWindow => _stack.Focused != null && _windows.TryGetValue(_stack.Focused, out DesktopWindow w) ? w : null;
 
     /// <summary>Raised on each press on the desktop with the top graphic under the pointer (null: nothing), before the press's click: the Investigation app makes the pane pressed in its active one.</summary>
     public event System.Action<GameObject> Pressed;
 
-    /// <summary>True while a window has the focus (the desktop's own keys, the icons' arrows and Enter, wait until none has).</summary>
-    public bool WindowFocused => _stack.Focused != null;
+    /// <summary>True while a title-bar or icon drag is under way (Escape cancels it).</summary>
+    public bool Dragging => _drag != null;
 
     /// <summary>The double-click's time, in seconds.</summary>
     public float DoubleClickSeconds => config != null ? config.doubleClickSeconds : 0f;
@@ -155,6 +153,13 @@ public sealed class DesktopWindowManager : MonoBehaviour
     {
         if (_drag == drag)
             _drag = null;
+    }
+
+    /// <summary>Cancels the drag under way: the window or icon goes back where it started (the Escape chain's CancelDrag).</summary>
+    public void CancelDrag()
+    {
+        if (_drag != null)
+            _drag.CancelDrag();
     }
 
     /// <summary>
@@ -255,7 +260,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
         button.Button.colors = colours;
     }
 
-    /// <summary>Polls the press and Escape while the desktop takes input.</summary>
+    /// <summary>Polls the press while the desktop takes input.</summary>
     private void Update()
     {
         if (raycaster == null || !raycaster.isActiveAndEnabled)
@@ -264,10 +269,6 @@ public sealed class DesktopWindowManager : MonoBehaviour
         Mouse mouse = Mouse.current;
         if (mouse != null && mouse.leftButton.wasPressedThisFrame)
             Press(mouse.position.ReadValue());
-
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard != null && keyboard.escapeKey.wasPressedThisFrame)
-            Escape();
     }
 
     /// <summary>
@@ -319,41 +320,5 @@ public sealed class DesktopWindowManager : MonoBehaviour
                 top = hit.gameObject;
             }
         return top;
-    }
-
-    /// <summary>The desktop's part of the Escape chain; a press it takes is stamped with the frame.</summary>
-    private void Escape()
-    {
-        TMP_InputField field = FocusedField();
-        var state = new DesktopEscapeState(contextMenu != null && contextMenu.IsOpen, field != null, shell != null && shell.StartMenuOpen, _drag != null);
-        switch (DesktopEscapeRule.Resolve(state))
-        {
-            case DesktopEscape.CloseMenu:
-                contextMenu.Close();
-                break;
-            case DesktopEscape.LeaveField:
-                field.DeactivateInputField();
-                if (EventSystem.current != null)
-                    EventSystem.current.SetSelectedGameObject(null);
-                break;
-            case DesktopEscape.CloseStartMenu:
-                shell.CloseStartMenu();
-                break;
-            case DesktopEscape.CancelDrag:
-                _drag.CancelDrag();
-                break;
-            default:
-                return;
-        }
-        EscapeTakenFrame = Time.frameCount;
-    }
-
-    /// <summary>The desktop's text field that has the keyboard, or null.</summary>
-    private TMP_InputField FocusedField()
-    {
-        GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
-        return selected != null && selected.transform.IsChildOf(transform) && selected.TryGetComponent(out TMP_InputField field) && field.isFocused
-            ? field
-            : null;
     }
 }

@@ -9654,8 +9654,242 @@
         "tier": "Full"
       },
       {
-        "key": "keys.card",
-        "text": "Esc: close a menu, leave a text field, close the Start menu or cancel a drag; with none of those, it leaves the PC.\nDesktop icons: double-click one to open it (Settings can make it one click), drag it anywhere, arrows move the selection and Enter opens it; right-click the desktop to arrange them.\nDouble-click a title bar: maximise or restore the window.",
+        "key": "keys.focusSearch",
+        "text": "Open the Investigation app and put the cursor in its search field",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.escape",
+        "text": "Close a menu, this card or the search; clear the search; leave a text field; close the Start menu or cancel a drag. With none of those, leave the PC",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.help",
+        "text": "Show or hide this card",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.openIcon",
+        "text": "Desktop: open the selected icon",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.icons",
+        "text": "Desktop: select the nearest icon that way",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.tabs",
+        "text": "Investigation: show the tab at that place",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.nextTab",
+        "text": "The next or previous tab (← → on the tab strip)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.moveTab",
+        "text": "Move the tab left or right",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.otherPane",
+        "text": "Make the other pane the active one",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.split",
+        "text": "Two panes, or back to one",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.sidebar",
+        "text": "Show or hide the sidebar",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.steps",
+        "text": "Show or hide the steps",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.history",
+        "text": "Back or forward in the pane",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.regions",
+        "text": "The next or previous part of the app: search, tabs, items, rows, sidebar, compare, Accept and Deny",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.rows",
+        "text": "Move the focus over the rows, chips, pins or buttons (← → too)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.follow",
+        "text": "Open the focused item, or follow a row's link",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.followOther",
+        "text": "Follow a row's link in the other pane",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.pick",
+        "text": "Pick the focused row for compare",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.copy",
+        "text": "Copy the focused row's value, or \"Label: value\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.paste",
+        "text": "Notes: paste the copied value as a clipping (a text field pastes as usual)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.pin",
+        "text": "Pin or unpin the focused row, or the pane's item",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "keys.zoom",
+        "text": "Zoom the panes in, out, or back to Settings' Text size",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.copyRow",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.copied",
+        "text": "Copied: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.row.line",
+        "text": "{0} · line {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.row.record",
+        "text": "{0} · {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.item.record",
+        "text": "Records · {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.pin",
+        "text": "Pin",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.pins.full",
+        "text": "Unpin something first: the pins are full.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.pins.empty",
+        "text": "Ctrl+P pins the focused row, or this pane's item (Pin). Right-click a pin to unpin it.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.recent.empty",
+        "text": "The papers, books and records you open show here.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.jump.gone",
+        "text": "That is not here any more.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "search.chip",
+        "text": "{0} · untranslated {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.copy",
+        "text": "Copy value",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.copyRow",
+        "text": "Copy row",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.pin",
+        "text": "Pin",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.unpin",
+        "text": "Unpin",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "menu.pick",
+        "text": "Pick for compare",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.investigation",
+        "text": "Investigation: text size",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "settings.textSize",
+        "text": "{0} %",
         "gloss": "None",
         "tier": "Full"
       },
@@ -10015,7 +10249,7 @@
       },
       {
         "key": "notes.hint",
-        "text": "Nothing here yet. Copy a text, then Paste clipping; or type below.",
+        "text": "Nothing here yet. Copy a value (Ctrl+C, or right-click a row: Copy value), then Ctrl+V or Paste clipping; or type below.",
         "gloss": "None",
         "tier": "Full"
       },

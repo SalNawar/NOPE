@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -224,10 +225,11 @@ public static partial class OfficeSceneUIBuilder
     /// 640 × 720, in titled sections: Language (Follow history / Always
     /// English), Motion (Full / Reduced), Desktop (open icons with Double
     /// click / Single click, Reset icon positions: phase 17; its icons wired
-    /// by WireIconSettings), Keyboard (Show shortcuts, which opens the
-    /// shortcut card), then the note. The Investigation section comes with
-    /// the features it sets (phases 18, 20 and 21). Existing objects are kept;
-    /// every row's anchors are re-applied on each build.
+    /// by WireIconSettings), Investigation (Text size: a button per zoom
+    /// level, redesign phase 20; phases 18 and 21 add their rows), Keyboard
+    /// (Show shortcuts, which opens the F1 card: BuildShortcutCard), then the
+    /// note. Existing objects are kept; every row's anchors are re-applied on
+    /// each build.
     /// </summary>
     private static DesktopWindow BuildSettingsWindow(Transform windowLayer)
     {
@@ -257,22 +259,40 @@ public static partial class OfficeSceneUIBuilder
         Button resetIcons = MakeButton(win, "ResetIconsButton", null, new Vector2(0.05f, 0.415f), new Vector2(0.48f, 0.485f), null, ThemeRoleId.Button, "settings.resetIcons");
         SetAnchors(resetIcons.transform, new Vector2(0.05f, 0.415f), new Vector2(0.48f, 0.485f));
 
-        TMP_Text keyboard = Text(win, "KeyboardLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f), Ink,
-                                 ThemeRoleId.WindowBody, "settings.keyboard");
-        Heading(keyboard, "settings.keyboard", new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f));
-        Button shortcuts = MakeButton(win, "ShowShortcutsButton", null, new Vector2(0.05f, 0.265f), new Vector2(0.48f, 0.335f), null, ThemeRoleId.Button, "settings.showShortcuts");
-        SetAnchors(shortcuts.transform, new Vector2(0.05f, 0.265f), new Vector2(0.48f, 0.335f));
+        DesktopConfigSO config = EnsureDesktopConfig();
+        TMP_Text investigation = Text(win, "InvestigationLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f), Ink,
+                                      ThemeRoleId.WindowBody, "settings.investigation");
+        Heading(investigation, "settings.investigation", new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f));
+        var textSizes = new List<Object>();
+        int levels = config.zoomLevels.Length;
+        for (int i = 0; i < levels; i++)
+        {
+            float from = 0.05f + i * 0.9f / levels;
+            var aMin = new Vector2(from + (i > 0 ? 0.01f : 0f), 0.265f);
+            var aMax = new Vector2(from + 0.9f / levels - (i < levels - 1 ? 0.01f : 0f), 0.335f);
+            Button size = MakeButton(win, "TextSizeButton_" + config.zoomLevels[i], null, aMin, aMax, null, ThemeRoleId.Button);
+            SetAnchors(size.transform, aMin, aMax);
+            TMP_Text sizeLabel = size.transform.Find("Label").GetComponent<TMP_Text>();
+            sizeLabel.text = UiText.Format("settings.textSize", config.zoomLevels[i]);
+            Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
+            textSizes.Add(size);
+        }
 
-        TMP_Text note = Text(win, "NoteText", null, 17, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.03f), new Vector2(0.95f, 0.245f), Ink,
+        TMP_Text keyboard = Text(win, "KeyboardLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.195f), new Vector2(0.95f, 0.25f), Ink,
+                                 ThemeRoleId.WindowBody, "settings.keyboard");
+        Heading(keyboard, "settings.keyboard", new Vector2(0.05f, 0.195f), new Vector2(0.95f, 0.25f));
+        Button shortcuts = MakeButton(win, "ShowShortcutsButton", null, new Vector2(0.05f, 0.115f), new Vector2(0.48f, 0.185f), null, ThemeRoleId.Button, "settings.showShortcuts");
+        SetAnchors(shortcuts.transform, new Vector2(0.05f, 0.115f), new Vector2(0.48f, 0.185f));
+
+        TMP_Text note = Text(win, "NoteText", null, 15, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.01f), new Vector2(0.95f, 0.105f), Ink,
                              ThemeRoleId.WindowBody, "settings.note");
-        SetAnchors(note.transform, new Vector2(0.05f, 0.03f), new Vector2(0.95f, 0.245f));
+        SetAnchors(note.transform, new Vector2(0.05f, 0.01f), new Vector2(0.95f, 0.105f));
+        note.fontSize = 15f;
         note.text = UiText.Get("settings.note");
         note.textWrappingMode = TextWrappingModes.Normal;
 
-        // The shortcut card: the desktop's keys today (phase 20's F1 card replaces it). Rebuilt fresh, so it keeps its place after the rebuilt windows.
-        DestroyChildIfPresent(windowLayer, "ShortcutsWindow");
-        DesktopWindow card = BuildOSWindow(windowLayer, "ShortcutsWindow", "window.shortcuts", "keys.card", null, new Vector2(620f, 300f));
-        SetAnchors(card.transform.Find("Body"), new Vector2(0.05f, 0.06f), new Vector2(0.95f, 0.84f));
+        // The shortcut card (F1; OfficeSceneUIBuilder.Keys), rebuilt fresh, so it keeps its place after the rebuilt windows.
+        DesktopWindow card = BuildShortcutCard(windowLayer);
 
         SettingsWindowController controller = GetOrAdd<SettingsWindowController>(win.gameObject);
         var so = new SerializedObject(controller);
@@ -283,6 +303,8 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "iconDoubleClickButton", iconDouble);
         SetRef(so, "iconSingleClickButton", iconSingle);
         SetRef(so, "resetIconsButton", resetIcons);
+        SerializedArrays.Set(so, "textSizeButtons", textSizes);
+        SetRef(so, "config", config);
         SetRef(so, "showShortcutsButton", shortcuts);
         SetRef(so, "shortcutsWindow", card);
         so.ApplyModifiedProperties();

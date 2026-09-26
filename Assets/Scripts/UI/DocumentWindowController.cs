@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,7 +18,9 @@ using UnityEngine.UI;
 /// claimed row, the traveller's record, the Rules) has a ↗ that follows it
 /// through the pane the copy is in (LK2); RevealField scrolls a field's box
 /// to the middle and outlines it. Every value shows in English, as filled
-/// (TR1).
+/// (TR1). Each pickable box is marked with its field's key for the keys, the
+/// copy and the pins (AppRow: the field's label and value), in the form's
+/// reading order.
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
@@ -37,6 +40,7 @@ public sealed class DocumentWindowController : MonoBehaviour
     [SerializeField] private ShiftClockDriver clock;
 
     private DocumentInstance _doc;
+    private readonly List<(FormSlot slot, Button button)> _armed = new List<(FormSlot, Button)>();
 
     /// <summary>The document's index in the case (its fields' pick keys).</summary>
     private int _index;
@@ -83,6 +87,7 @@ public sealed class DocumentWindowController : MonoBehaviour
             form.Bind(compare, slot => Field(slot) != null ? PickKeys.Field(_index, slot.Field) : null);
             form.Show(paper.Spec, paper.Data, slot => Field(slot) != null, linkHint: LinkHint);
             form.ShowPhoto(paper.Data.HasPhoto ? look : null, art);
+            MarkBoxes();
         }
         if (scroll != null)
             scroll.verticalNormalizedPosition = 1f;
@@ -117,6 +122,18 @@ public sealed class DocumentWindowController : MonoBehaviour
 
         FaceRect box = placed.Slots[slot].Hit;
         scroll.verticalNormalizedPosition = AppPanes.ScrollToMiddle(placed.Height, scroll.viewport.rect.height, box.YMin, box.Height);
+    }
+
+    /// <summary>Marks each pickable box with its field's pick key and label (AppRow), as the box's click picks it.</summary>
+    private void MarkBoxes()
+    {
+        form.ArmedSlots(_armed);
+        foreach ((FormSlot slot, Button button) in _armed)
+        {
+            DocumentField field = _doc.fields[slot.Field];
+            ComparePick pick = EvidencePicks.ForField(_index, new DocumentRow(slot.Field, field), _doc.DisplayName);
+            AppRow.Mark(button.gameObject, AppTab.Documents, pick.Key, pick.Label, field.label, field.value, button);
+        }
     }
 
     /// <summary>The field a slot shows (null for a table row or a slot past the document's fields).</summary>

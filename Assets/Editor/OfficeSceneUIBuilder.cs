@@ -278,8 +278,12 @@ public static partial class OfficeSceneUIBuilder
         Wire(soApp, "contextMenu", contextMenu != null ? contextMenu.GetComponent<DesktopContextMenu>() : null);
         soApp.ApplyModifiedProperties();
 
-        // The window stack (every window built above), the taskbar's window buttons and the frame's Escape stamp (the PC redesign WN1-WN3).
-        BuildWindowManager(canvas, officeView);
+        // The window stack (every window built above) and the taskbar's window buttons (the PC redesign WN1-WN3).
+        BuildWindowManager(canvas);
+
+        // The desktop's one keyboard poller and Escape chain, the F1 card, the focus ring, copy and paste, pins, recent items and zoom
+        // (OfficeSceneUIBuilder.Keys, redesign phase 20); the frame's Escape defers to its stamp.
+        BuildDesktopKeys(canvas, officeView, app, icons);
 
         // Cursor + hover outline settings (a persistent highlighter uses them in every scene).
         BuildInteractionFeedback();

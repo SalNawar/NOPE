@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 /// <summary>
 /// The desktop's six icons (the PC redesign DK1-DK6), on the icon layer: the
@@ -18,9 +15,10 @@ using UnityEngine.UI;
 /// choice); a drop goes through DesktopLayout.Drop and saves the layout;
 /// Arrange (the context menu, the Start menu, Settings' "Reset icon
 /// positions") lays the icons out column-first in the default order and
-/// saves. While the desktop takes input (its raycaster is on) and no window
-/// or text field has the keyboard, the arrow keys move the selection to the
-/// nearest icon that way and Enter opens it. Badges: an app's count or dot
+/// saves. While no window or text field has the keyboard, the arrow keys
+/// move the selection to the nearest icon that way and Enter opens it (the
+/// desktop's one keyboard poller, DesktopKeyboard, calls Step and
+/// OpenSelected). Badges: an app's count or dot
 /// (SetBadge): Mail's is the Mail feed's unread count, redrawn whenever the
 /// feed changes; the Investigation app dots its icon when something arrives
 /// while it is closed or minimised, and clears the dot when it shows
@@ -34,14 +32,11 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
     /// <summary>Opens an icon's app.</summary>
     [SerializeField] private DesktopApps apps;
 
-    /// <summary>The window manager: an icon drag is the one Escape may cancel, and a focused window takes the keyboard.</summary>
+    /// <summary>The window manager: an icon drag is one Escape may cancel.</summary>
     [SerializeField] private DesktopWindowManager manager;
 
     /// <summary>The desktop's right-click menu.</summary>
     [SerializeField] private DesktopContextMenu contextMenu;
-
-    /// <summary>The desktop canvas's raycaster (on only while the desktop takes input: the frame open, the screen on).</summary>
-    [SerializeField] private GraphicRaycaster raycaster;
 
     /// <summary>The icons, one per app.</summary>
     [SerializeField] private DesktopIconView[] icons = new DesktopIconView[0];
@@ -56,6 +51,9 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
 
     /// <summary>The icon area and the arrange grid (the icon layer's size and the knobs).</summary>
     public IconGrid Grid => _grid ??= MakeGrid();
+
+    /// <summary>True while an icon is selected (Enter opens it).</summary>
+    public bool HasSelection => _selected != null;
 
     /// <summary>True when one click opens an icon (Settings' choice).</summary>
     public bool OpensOnSingleClick => DesktopPreferences.OpenIconsWithSingleClick;
@@ -116,6 +114,9 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
         if (icon != null && apps != null)
             apps.OpenApp(icon.AppId);
     }
+
+    /// <summary>Enter: opens the selected icon's app (nothing when none is selected).</summary>
+    public void OpenSelected() => Open(_selected);
 
     /// <summary>Lays the icons out column-first in the default order and saves the layout (the context menu, the Start menu, Settings' reset).</summary>
     public void Arrange()
@@ -180,30 +181,8 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
             contextMenu.ShowForDesktop(eventData);
     }
 
-    /// <summary>The keys (arrows, Enter) while the desktop takes input.</summary>
-    private void Update()
-    {
-        if (raycaster == null || !raycaster.isActiveAndEnabled || (manager != null && manager.WindowFocused) || FieldFocused())
-            return;
-
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard == null)
-            return;
-
-        if (keyboard.upArrowKey.wasPressedThisFrame)
-            Step(0, -1);
-        else if (keyboard.downArrowKey.wasPressedThisFrame)
-            Step(0, 1);
-        else if (keyboard.leftArrowKey.wasPressedThisFrame)
-            Step(-1, 0);
-        else if (keyboard.rightArrowKey.wasPressedThisFrame)
-            Step(1, 0);
-        else if ((keyboard.enterKey.wasPressedThisFrame || keyboard.numpadEnterKey.wasPressedThisFrame) && _selected != null)
-            Open(_selected);
-    }
-
-    /// <summary>An arrow key: the nearest icon that way becomes the selection (the first icon when none is selected).</summary>
-    private void Step(int dx, int dy)
+    /// <summary>An arrow key (dx, dy: -1, 0 or 1; y down): the nearest icon that way becomes the selection (the first icon when none is selected).</summary>
+    public void Step(int dx, int dy)
     {
         if (_selected == null)
         {
@@ -268,12 +247,5 @@ public sealed class DesktopIcons : MonoBehaviour, IPointerDownHandler, IPointerC
         Vector2 origin = config != null ? config.iconOrigin : Vector2.zero;
         return new IconGrid(area.width, area.height, cell.x, cell.y, origin.x, origin.y,
                             config != null ? config.iconColumnStep : cell.x, config != null ? config.iconRowStep : cell.y);
-    }
-
-    /// <summary>True while a desktop text field has the keyboard (typing is not a shortcut).</summary>
-    private static bool FieldFocused()
-    {
-        GameObject selected = EventSystem.current != null ? EventSystem.current.currentSelectedGameObject : null;
-        return selected != null && selected.TryGetComponent(out TMP_InputField field) && field.isFocused;
     }
 }

@@ -129,6 +129,22 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The most clippings a page holds.</summary>
     [Min(1)] public int notesMaxClippings = 40;
 
+    [Header("Keys, clipboard, pins, zoom (redesign phase 20)")]
+    /// <summary>The most items the Investigation app's sidebar pins (a full board refuses a new pin).</summary>
+    [Min(1)] public int pinsMax = 20;
+
+    /// <summary>The recent items the sidebar lists (the oldest drops).</summary>
+    [Min(1)] public int recentItems = 10;
+
+    /// <summary>The panes' zoom levels, in %, smallest first (Ctrl+= and Ctrl+- step through them; Settings' Text size offers them).</summary>
+    public int[] zoomLevels = { 100, 125, 150 };
+
+    /// <summary>The keyboard focus ring's width (the FocusRing role's outline).</summary>
+    [Min(1f)] public float focusRingWidth = 3f;
+
+    /// <summary>The shortcut card's size (F1).</summary>
+    public Vector2 shortcutCardSize = new Vector2(760f, 800f);
+
     /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar and the dock (the icon area starts there).</summary>
     public float MaximisedBottom => taskbarHeight + dockHeight;
 }

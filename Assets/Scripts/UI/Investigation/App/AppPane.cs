@@ -23,8 +23,9 @@ using UnityEngine.UI;
 /// both strips. A tab is shown only by the player or by the app's own rules
 /// (a new case shows Documents in the left pane, AP8); a view never switches
 /// the tab. The active pane wears a 3 u accent frame while the app is split.
+/// The keys' focus ring walks its tabs and chips (AppPane.Keys, phase 20).
 /// </summary>
-public sealed class AppPane : MonoBehaviour
+public sealed partial class AppPane : MonoBehaviour
 {
     /// <summary>The tabs' buttons, indexed by the tab's value (AppTab).</summary>
     [SerializeField] private Button[] tabButtons = new Button[0];
