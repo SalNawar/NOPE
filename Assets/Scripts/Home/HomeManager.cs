@@ -29,6 +29,12 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Tonight's slot spins, drawn in turn from the run's own stream for the day (Seeds.ForSlot): a run replays, and Continue (Home again from the save made before it) cannot reroll a spin.</summary>
     private IRandomSource _slotRandom;
 
+    /// <summary>Tonight's household costs so far (the expenses and any care), for the clerk's statement.</summary>
+    private int _household;
+
+    /// <summary>Tonight's purchases so far (upgrades and slot spins), for the clerk's statement.</summary>
+    private int _purchases;
+
     /// <summary>Acquires the run, bills expenses, and starts the panel flow.</summary>
     private void Start()
     {
@@ -53,6 +59,8 @@ public sealed class HomeManager : MonoBehaviour
         _expenseReport = HomeEconomy.ApplyDailyExpenses(_world, _config);
         HomeEconomy.AdvanceFamilyConditions(_world, _config, run.GetDaySeed());
         _slotRandom = new SeededRandom(Seeds.ForSlot(run.GetDaySeed()));
+        _household = _expenseReport.total;
+        RecordStatement();
 
         homeUI?.UpdateHud(_world);
 
@@ -82,6 +90,8 @@ public sealed class HomeManager : MonoBehaviour
 
         if (HomeEconomy.TreatFamilyMember(_world, _config, memberIndex))
         {
+            _household += HomeEconomy.GetCareCost(_config);
+            RecordStatement();
             homeUI?.UpdateHud(_world);
 
             // Refresh the panel in place (report numbers don't change; rows do).
@@ -136,6 +146,7 @@ public sealed class HomeManager : MonoBehaviour
 
         _world.money -= cost;
         _world.UnlockUpgrade(upgrade.id);
+        _purchases += cost;
 
         if (upgrade.unlockEffect != null)
         {
@@ -145,6 +156,7 @@ public sealed class HomeManager : MonoBehaviour
         }
 
         homeUI?.UpdateHud(_world);
+        RecordStatement();
 
         // Re-show to refresh rows (costs/owned state) without advancing the flow.
         if (homeUI != null && homeUI.HasShopPanel)
@@ -195,12 +207,14 @@ public sealed class HomeManager : MonoBehaviour
         }
 
         _world.money -= spinCost;
+        _purchases += spinCost;
 
         SlotOutcomeSO outcome = WeightedRandom.Pick(outcomes, o => o != null ? o.weight : 0f, _slotRandom);
 
         if (outcome == null)
         {
             homeUI?.UpdateHud(_world);
+            RecordStatement();
             Debug.Log("[HomeManager] <<< Exiting HandleSpin — no outcome picked (nothing happens).");
             return "...nothing happens.";
         }
@@ -222,6 +236,7 @@ public sealed class HomeManager : MonoBehaviour
         }
 
         homeUI?.UpdateHud(_world);
+        RecordStatement();
 
         string line = !string.IsNullOrEmpty(outcome.resultLine) ? outcome.resultLine : outcome.displayName;
 
@@ -231,6 +246,10 @@ public sealed class HomeManager : MonoBehaviour
             ? $"{line} ({outcome.moneyDelta:+0;-0} {UiText.Currency(UiText.WalletForm.Inline)})"
             : line;
     }
+
+    /// <summary>Writes tonight's household costs, purchases and the wallet into the day's row of the clerk's statement (redesign phase 25; saved when Sleep saves).</summary>
+    private void RecordStatement() =>
+        ClerkAccountSource.RecordHome(_world, _household, _purchases, _lib, _config);
 
     /// <summary>Step 4: sleep prompt.</summary>
     private void ShowSleep()

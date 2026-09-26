@@ -129,6 +129,11 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int slotSpinCost = 10;
 
+    [Header("Citizen Account (redesign phase 25)")]
+    /// <summary>The most days the clerk's statement keeps (WorldState.accountDays); the oldest go first.</summary>
+    [Min(1)]
+    public int accountDaysKept = 60;
+
     /// <summary>Warns about history knobs that would silently disable a rule.</summary>
     private void OnValidate()
     {

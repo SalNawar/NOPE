@@ -10,6 +10,8 @@ using UnityEngine.UI;
 /// (MotionPreference; reduced shows translations at once, from the next
 /// traveller). In each pair the chosen button shows the theme's accent
 /// colours (the SearchButton role), the other the default button colours.
+/// The Keyboard section's "Show shortcuts" opens the shortcut card (redesign
+/// phase 25; the desktop's keys today; phase 20's F1 card replaces it).
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
@@ -25,6 +27,12 @@ public sealed class SettingsWindowController : MonoBehaviour
     /// <summary>Chooses Reduced motion (translations show at once).</summary>
     [SerializeField] private Button reducedMotionButton;
 
+    /// <summary>The Keyboard section's "Show shortcuts".</summary>
+    [SerializeField] private Button showShortcutsButton;
+
+    /// <summary>The shortcut card it opens.</summary>
+    [SerializeField] private DesktopWindow shortcutsWindow;
+
     private void Awake()
     {
         if (followHistoryButton != null)
@@ -35,6 +43,8 @@ public sealed class SettingsWindowController : MonoBehaviour
             fullMotionButton.onClick.AddListener(() => ChooseMotion(false));
         if (reducedMotionButton != null)
             reducedMotionButton.onClick.AddListener(() => ChooseMotion(true));
+        if (showShortcutsButton != null && shortcutsWindow != null)
+            showShortcutsButton.onClick.AddListener(shortcutsWindow.Open);
     }
 
     private void OnEnable() => ShowSelection();

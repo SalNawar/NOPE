@@ -94,6 +94,15 @@ public sealed class WorldState
     /// <summary>Where Continue resumes: the Office until the day's shift ends, Home after the end-of-shift save (a save without it resumes in the Office).</summary>
     public RunPhase phase = RunPhase.Office;
 
+    /// <summary>Mail: the ids of the messages opened (Mailbox.MarkRead). The messages are rebuilt from their sources by id, so only these flags are saved (redesign phase 25; an old save loads none).</summary>
+    public List<string> mailRead = new();
+
+    /// <summary>The clerk's statement: one row per day, written at the shift's end and at Home (Account.RecordShift, RecordHome; at most GameConfigSO.accountDaysKept; redesign phase 25; an old save loads none).</summary>
+    public List<AccountDay> accountDays = new();
+
+    /// <summary>Notes: one page per day with its typed notes and clippings (Notes.Page; redesign phase 25; saved with the run, so a quit mid-shift loses that shift's notes; an old save loads none).</summary>
+    public List<NotePage> notes = new();
+
     // -----------------------------
     // Flag helpers
     // -----------------------------

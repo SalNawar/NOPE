@@ -119,6 +119,9 @@ public static partial class ContentLibraryValidator
         // --- The culture themes and UI string tables (piece 6) ---
         issues += CheckCulture(lib);
 
+        // --- The authored mail (redesign phase 25; ContentLibraryValidator.Mail.cs) ---
+        issues += CheckMail(lib);
+
         // --- Translation (piece 9) ---
         issues += CheckTranslation(lib);
 

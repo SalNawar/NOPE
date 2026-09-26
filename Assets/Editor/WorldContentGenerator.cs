@@ -64,6 +64,7 @@ public static partial class WorldContentGenerator
 
         var errors = new List<string>();
         Authored authored = LoadAuthored(src.content, src.days, errors);
+        AuthoredMail[] mail = CheckMail(errors);
         CheckReferences(src, authored, errors);
         CheckHistory(src, authored, errors);
         CheckInterview(src, authored, errors);
@@ -132,6 +133,8 @@ public static partial class WorldContentGenerator
             .Select(p => MakeTranslator(p, src.translation, written))
             .ToArray();
         TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, written);
+
+        WireMail(authored.library, mail);
 
         // Re-saving the book covers keeps their YAML in the current shape.
         foreach (ReferenceBookSO book in authored.books)
