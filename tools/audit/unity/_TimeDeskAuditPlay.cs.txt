@@ -367,7 +367,7 @@ public static class _TimeDeskAuditPlay
 
     private static bool Once(string key) => MistakesMade.Add(key);
 
-    /// <summary>Every request at the hub, then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
+    /// <summary>Every request at the hub and in the papers menu, then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
     private static IEnumerator Interview(Office o, CaseInstance c, bool dialog)
     {
         var runner = (DialogRunner)Field(o.Ui, "_runner");
@@ -378,11 +378,18 @@ public static class _TimeDeskAuditPlay
             Call(o.Ui, "Choose", choice.Id);
         }
 
-        for (int guard = 0; guard < 12; guard++)
+        // Every request, in the papers menu ("Request papers >", phase 3) too: out of it by "< Back" once its forms are handed over.
+        for (int guard = 0; guard < 16; guard++)
         {
             DialogChoice request = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Request && !chosen.Contains(x.Id));
             if (request == null)
-                break;
+            {
+                DialogChoice up = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
+                if (up == null)
+                    break;
+                Call(o.Ui, "Choose", up.Id);
+                continue;
+            }
             Choose(request);
         }
         yield return Seconds(0.4f);

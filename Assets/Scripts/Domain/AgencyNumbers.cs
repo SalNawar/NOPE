@@ -42,8 +42,9 @@ public sealed class DisplacementFile
 /// value is drawn on the traveller's account stream (Seeds.ForAccount) in a
 /// fixed order, so tuning a range never changes who travels, and every
 /// number is unique within the day (like names), so a number never belongs
-/// to two travellers. Dates are the 2150 calendar's, written as
-/// BirthDates.Format writes dates. Pure, so every maker is tested headless.
+/// to two travellers. Dates are the agency calendar's (AgencyCalendar.TryToday
+/// gives today; AgencyCalendar.Write prints them). Pure, so every maker is
+/// tested headless.
 /// </summary>
 public static class AgencyNumbers
 {
@@ -65,7 +66,7 @@ public static class AgencyNumbers
         DateTime found = DaysAgo(today, ranges.foundWithinDays, rng);
         string incident = IncidentNumber(found, rng);
         DateTime validUntil = DaysAhead(today, ranges.validDaysMin, ranges.validDaysMax, rng);
-        return new DisplacementFile { Number = number, Incident = incident, Found = Date(found), ValidUntil = Date(validUntil) };
+        return new DisplacementFile { Number = number, Incident = incident, Found = AgencyCalendar.Write(found), ValidUntil = AgencyCalendar.Write(validUntil) };
     }
 
     /// <summary>A Displacement No., "DP-nnnn-nn": two draws, 0000-9999 then 00-99.</summary>
@@ -87,9 +88,6 @@ public static class AgencyNumbers
             (minDays, maxDays) = (maxDays, minDays);
         return today.AddDays(rng.Range(minDays, maxDays + 1));
     }
-
-    /// <summary>A date as the papers and the records print it ("14 Mar 2150", BirthDates.Format).</summary>
-    public static string Date(DateTime date) => BirthDates.Format(date.Day, date.Month - 1, date.Year);
 
     /// <summary>
     /// Draws until a value nobody has today, adds it to <paramref name="taken"/>

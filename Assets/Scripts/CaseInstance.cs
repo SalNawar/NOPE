@@ -12,6 +12,14 @@ public sealed class CaseInstance
     /// <summary>The traveller's kind, their blueprint's (traveller types K1): their papers and their claim line (left at the default without a blueprint).</summary>
     public TravellerKind kind;
 
+    /// <summary>
+    /// A displaced person's agency file (AgencyNumbers.Displaced, on their
+    /// account stream): the Displacement No., incident, found date and
+    /// certificate's Valid Until their forms and registry entry print. Null
+    /// for another kind, or when the agency calendar cannot count today.
+    /// </summary>
+    public DisplacementFile displacement;
+
     /// <summary>True if this traveller is a premade character (named, drawn whole).</summary>
     public bool isLegendary;
 

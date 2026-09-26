@@ -17,7 +17,11 @@ using UnityEngine;
 /// drawn whole) stand in forced slots or roll from the day's pool. Every draw
 /// comes from seeded streams (per traveller: the case, lie, dialog, look and
 /// premade streams; plus the day's rule-violator stream), so
-/// the same run, day and met premades always produce the same travellers.
+/// the same run, day and met premades always produce the same travellers. A
+/// displaced person's agency file (their Displacement No., incident, found
+/// date and certificate's Valid Until, AgencyNumbers) is drawn on their
+/// account stream (Seeds.ForAccount), counting from today's date on the
+/// agency calendar, and their forms and registry entry print it.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -47,6 +51,15 @@ public sealed class CaseFactory
 
     /// <summary>The current slot's premade stream (Seeds.ForLegendary): the premade roll and pick.</summary>
     private IRandomSource _legendaryRng = new SeededRandom(0);
+
+    /// <summary>The current traveller's account stream (Seeds.ForAccount): their agency numbers and dates, apart from every other stream.</summary>
+    private IRandomSource _accountRng = new SeededRandom(0);
+
+    /// <summary>Today's date on the agency calendar (AgencyCalendar.TryToday for the world's day); null when the agency block's first date is unreadable.</summary>
+    private System.DateTime? _today;
+
+    /// <summary>The agency numbers handed out today (a number belongs to one traveller a day, AgencyNumbers.TakeUnique).</summary>
+    private HashSet<string> _agencyNumbers = new HashSet<string>();
 
     /// <summary>Today's tell channels: the plan's, minus Appearance where no garment can be looked at.</summary>
     private IReadOnlyList<TellChannel> _channels = System.Array.Empty<TellChannel>();
@@ -119,6 +132,10 @@ public sealed class CaseFactory
         // match). The forced premades who will stand today are reserved first,
         // which also keeps them out of the day's random roll.
         _roster = new NameRoster();
+        _agencyNumbers = new HashSet<string>();
+        _today = AgencyCalendar.TryToday(_lib.Agency.firstDate, state.day, out System.DateTime today) ? today : (System.DateTime?)null;
+        if (_today == null)
+            Debug.LogError($"[CaseFactory] Day {state.day}: the agency calendar cannot count from agency.firstDate '{_lib.Agency.firstDate}', so the displaced's numbers and dates print placeholders. Run Tools > TimeDesk > Generate World.");
         foreach (ForcedCaseSlot forced in plan.ForcedCases)
             if (forced != null && forced.legendary != null && !IsMet(state, forced.legendary) && !_roster.Reserve(forced.legendary.displayName))
                 Debug.LogError($"[CaseFactory] Day {plan.DayNumber}: premade '{forced.legendary.displayName}' is forced twice, or shares a name with another forced premade. Check world_source.json days[].forced.");
@@ -139,6 +156,7 @@ public sealed class CaseFactory
             _dialogRng = new SeededRandom(Seeds.ForDialog(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
+            _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
 
@@ -227,7 +245,7 @@ public sealed class CaseFactory
         TravellerGender gender = legendary != null ? legendary.gender
             : place == null ? TravellerGender.Unknown
             : TravellerGenders.FromNameLists(givenName, place.maleNames, place.femaleNames);
-        string role = archetype != null ? archetype.displayName : "Traveler";
+        string role = archetype != null ? archetype.displayName : UiText.Get("case.roleUnknown");
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
         string birthDate = legendary != null ? legendary.birthDate : GenerateBirthDate(place);
         string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null, legendary != null ? legendary.introLine : null);
@@ -256,6 +274,10 @@ public sealed class CaseFactory
         }
 
         inst.kind = blueprint.Kind;
+
+        // 4.8) A displaced person's agency file, on their account stream (the forms and the registry print it).
+        if (inst.kind == TravellerKind.Displaced && _today != null)
+            inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
 
         // 5) Merge authored timeline impacts (blueprint + legendary).
         if (blueprint.AuthoredImpacts != null)
@@ -290,7 +312,7 @@ public sealed class CaseFactory
 
     /// <summary>Origin label when no place is authored for a nation+era (content gap).</summary>
     private static string FallbackOriginLabel(NationSO nation, EraSO era) =>
-        OriginLabels.Format(nation != null ? nation.displayName : "an unlisted land", era != null ? era.displayName : null);
+        OriginLabels.Format(nation != null ? nation.displayName : UiText.Get("case.unlistedLand"), era != null ? era.displayName : null);
 
     /// <summary>
     /// Fills each document's structured fields from today's facts for the
@@ -465,21 +487,29 @@ public sealed class CaseFactory
             TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
 
     /// <summary>
-    /// Resolves a field's value for the claim: identity fields come from the
-    /// registered identity (a liar's cover); place fields come from today's
-    /// facts for the claimed place, with a readable placeholder (and a warning)
-    /// when content is missing; also each spoken answer's cover value
-    /// (AddAnswers). A liar's Papers tells overwrite the printed values
+    /// Resolves a field's value for the claim, one value per category per
+    /// traveller (the traveller-types spec's F4): identity fields come from
+    /// the registered identity (a liar's cover); the destination is the
+    /// claimed place's label; the agency's numbers and dates from the
+    /// traveller's file (a departure is dated today); place fields come from
+    /// today's facts for the claimed place, with a readable placeholder (and
+    /// a warning) when content is missing; also each spoken answer's cover
+    /// value (AddAnswers). A liar's Papers tells overwrite the printed values
     /// afterwards (Disguise); an Answer tell replaces only the spoken value
     /// (Interview.Answer).
     /// </summary>
     private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
     {
-        if (category == ClueCategory.Name)
-            return inst.visitorGivenName;
-
-        if (category == ClueCategory.BirthDate)
-            return inst.trueBirthDate;
+        switch (category)
+        {
+            case ClueCategory.Name: return inst.visitorGivenName;
+            case ClueCategory.BirthDate: return inst.trueBirthDate;
+            case ClueCategory.Destination: return inst.originLabel;
+            case ClueCategory.CitizenId: return AgencyValue(inst.displacement?.Number, category);
+            case ClueCategory.Incident: return AgencyValue(inst.displacement?.Incident, category);
+            case ClueCategory.Expiry: return AgencyValue(inst.displacement?.ValidUntil, category);
+            case ClueCategory.DepartureDate: return AgencyValue(_today != null ? AgencyCalendar.Write(_today.Value) : null, category);
+        }
 
         string value = _facts.Get(inst.claimedNation != null ? inst.claimedNation.id : null,
                                   inst.claimedEra != null ? inst.claimedEra.id : null, category);
@@ -493,6 +523,9 @@ public sealed class CaseFactory
         Debug.LogWarning($"[CaseFactory] '{inst.originLabel}' has no {category} fact today; using a placeholder on the papers and in answers. Check the place's facts (Tools > TimeDesk > Validate Content Library).");
         return $"{category}:{e}";
     }
+
+    /// <summary>An agency number or date, or a stable placeholder when the traveller has none (the day's calendar error names the cause).</summary>
+    private static string AgencyValue(string value, ClueCategory category) => value ?? $"{category}:none";
 
     /// <summary>
     /// Picks the visitor archetype: the premade's > blueprint pool > library pool.
@@ -558,7 +591,7 @@ public sealed class CaseFactory
         if (picked != null)
             return picked;
 
-        string fallback = $"Subject #{caseIndex1Based}";
+        string fallback = UiText.Format("case.subject", caseIndex1Based);
         _roster.Reserve(fallback);
         return fallback;
     }
@@ -574,12 +607,14 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Builds the agency's citizen master record for a day's visitors: one
-    /// registry entry each (redesign phase 2), a group of rows (Name and Born
-    /// are evidence; Origin and the clerk's Note are not) under UI string
-    /// labels, with no agency number on file yet. Records carry the registered
-    /// identity: an honest traveller's, or a liar's cover (claimed origin).
-    /// They never reveal a true home. (Future: deliberately missing/corrupted
-    /// records + family history.)
+    /// Displacement Registry entry each (traveller types §4.2), found by its
+    /// Displacement No. or name, a group of rows under UI string labels: Name,
+    /// Displacement No., Born, Origin and Incident (evidence of their
+    /// categories), Found, Status ("Awaiting return") and the clerk's Note (not
+    /// evidence); the number, incident and found rows only with an agency file.
+    /// Records carry the registered identity: an honest traveller's, or a
+    /// liar's cover (claimed origin). They never reveal a true home. (Future:
+    /// deliberately missing/corrupted records + family history.)
     /// </summary>
     public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases)
     {
@@ -597,16 +632,20 @@ public sealed class CaseFactory
             string note = !inst.isLegendary ? UiText.Get("records.note.none")
                 : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
                 : UiText.Get("records.note.sealed");
-            registry.Add(new CitizenRecord(inst.visitorGivenName, null, new[]
+            DisplacementFile file = inst.displacement;
+            var rows = new List<RecordRow> { new RecordRow(UiText.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name) };
+            if (file != null)
+                rows.Add(new RecordRow(UiText.Get("records.row.number"), file.Number, ClueCategory.CitizenId));
+            rows.Add(new RecordRow(UiText.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate));
+            rows.Add(new RecordRow(UiText.Get("records.row.origin"), origin, ClueCategory.Destination));
+            if (file != null)
             {
-                new RecordGroup(UiText.Get("records.group.registry"), new[]
-                {
-                    new RecordRow(UiText.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name),
-                    new RecordRow(UiText.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate),
-                    new RecordRow(UiText.Get("records.row.origin"), origin),
-                    new RecordRow(UiText.Get("records.row.note"), note)
-                })
-            }));
+                rows.Add(new RecordRow(UiText.Get("records.row.incident"), file.Incident, ClueCategory.Incident));
+                rows.Add(new RecordRow(UiText.Get("records.row.found"), file.Found));
+            }
+            rows.Add(new RecordRow(UiText.Get("records.row.status"), UiText.Get("records.status.awaiting")));
+            rows.Add(new RecordRow(UiText.Get("records.row.note"), note));
+            registry.Add(new CitizenRecord(inst.visitorGivenName, file?.Number, new[] { new RecordGroup(UiText.Get("records.group.registry"), rows) }));
         }
 
         return registry;

@@ -27,15 +27,6 @@ public class AgencyNumbersTests
     }
 
     [Test]
-    public void Date_IsWrittenAsBirthDatesWritesDates()
-    {
-        Assert.AreEqual("14 Mar 2150", AgencyNumbers.Date(Today));
-        Assert.AreEqual(BirthDates.Format(1, 0, 2151), AgencyNumbers.Date(new DateTime(2151, 1, 1)));
-        Assert.IsTrue(BirthDates.TryParse(AgencyNumbers.Date(Today), out int day, out int month, out int year));
-        Assert.AreEqual((14, 2, 2150), (day, month, year), "the records read it back");
-    }
-
-    [Test]
     public void DaysAgo_OneToMaxDaysBeforeToday_AcrossMonthAndYear()
     {
         Assert.AreEqual(new DateTime(2150, 3, 13), AgencyNumbers.DaysAgo(Today, 30, new ScriptedRandom(ScriptStep.Range(0))), "at least a day ago");

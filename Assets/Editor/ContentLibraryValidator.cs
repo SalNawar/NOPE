@@ -105,6 +105,7 @@ public static partial class ContentLibraryValidator
         // --- Interview (wording, questions, dialogs, menus), upgrade ids, tell channels, small talk ---
         issues += CheckInterview(lib);
         issues += CheckKinds(lib);
+        issues += CheckDeskFit(lib);
         issues += CheckUpgradeIds(lib);
         issues += CheckTellChannels(lib);
         issues += CheckSmallTalk(lib);
