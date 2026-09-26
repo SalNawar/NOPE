@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Retirement
   bodyText: You made it. Years at the desk, thousands of cases, and the timeline
     still holding together. Time to put your feet up.
+  picture: {fileID: 21300000, guid: 6dc839da8083f0f4084bd9e6ca1a0c8e, type: 3}
   conditionType: 3
   attribute: {fileID: 0}
   threshold: 15
