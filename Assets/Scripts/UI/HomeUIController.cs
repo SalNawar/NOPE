@@ -112,14 +112,14 @@ public sealed class HomeUIController : MonoBehaviour
     /// <summary>Pending callback for the sleep button.</summary>
     private Action _onSleep;
 
-    /// <summary>True if the expenses panel is wired and can be shown.</summary>
-    public bool HasExpensesPanel => expensesPanel != null;
+    /// <summary>True if the expenses panel and its continue button are wired, so it can be shown and left (audit R4-014: a panel without its button would strand the flow).</summary>
+    public bool HasExpensesPanel => expensesPanel != null && expensesContinueButton != null;
 
-    /// <summary>True if the shop panel is wired and can be shown.</summary>
-    public bool HasShopPanel => shopPanel != null;
+    /// <summary>True if the shop panel and its continue button are wired, so it can be shown and left.</summary>
+    public bool HasShopPanel => shopPanel != null && shopContinueButton != null;
 
-    /// <summary>True if the slot panel is wired and can be shown.</summary>
-    public bool HasSlotPanel => slotPanel != null;
+    /// <summary>True if the slot panel and its continue button are wired, so it can be shown and left.</summary>
+    public bool HasSlotPanel => slotPanel != null && slotContinueButton != null;
 
     /// <summary>True if the sleep panel is wired and can be shown.</summary>
     public bool HasSleepPanel => sleepPanel != null && sleepButton != null;
