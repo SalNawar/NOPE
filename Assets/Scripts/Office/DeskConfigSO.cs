@@ -118,9 +118,6 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The photo's tint while its paper is held (evenly lit, unlike travellerTint on the desk).</summary>
     public Color examineTint = Color.white;
 
-    /// <summary>The tint on a held paper's box under the pointer (a picked box shows the compare highlight instead).</summary>
-    public Color rowHoverTint = new Color(0f, 0f, 0f, 0.06f);
-
     /// <summary>Where the stamp tray's centre sits from the stamp (overlay reference px): above it.</summary>
     public Vector2 stampTrayOffset = new Vector2(0f, 140f);
 

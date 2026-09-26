@@ -65,6 +65,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: Caesar crop
         leakable: 1
@@ -72,6 +73,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -79,6 +81,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: 
         leakable: 0
@@ -86,6 +89,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: 
         leakable: 0
@@ -93,6 +97,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
     female:
       signature: 1
       outfit:
@@ -102,6 +107,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: nodus roll
         leakable: 1
@@ -109,6 +115,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -116,6 +123,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: 
         leakable: 0
@@ -123,6 +131,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: pearl monile
         leakable: 0
@@ -130,6 +139,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
   looks:
     skin:
     - 1

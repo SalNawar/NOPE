@@ -25,6 +25,11 @@
     ],
     "greyFromAge": 60,
     "wholeFigureLabel": "Period dress",
+    "costumeErrors": {
+      "otherPlace": 2,
+      "presentClothes": 1,
+      "presentAccessory": 2
+    },
     "confusable": [
       {
         "a": "greece_ancient",
@@ -6380,6 +6385,72 @@
       }
     }
   ],
+  "present": {
+    "wardrobe": {
+      "m": {
+        "signature": "Outfit",
+        "outfit": {
+          "label": "tech jacket"
+        },
+        "hair": {
+          "label": "short textured crop",
+          "artNation": "neutral"
+        }
+      },
+      "f": {
+        "signature": "Outfit",
+        "outfit": {
+          "label": "coat-dress"
+        },
+        "hair": {
+          "label": "sleek low bun",
+          "artNation": "neutral"
+        }
+      }
+    },
+    "kit": [
+      {
+        "gender": "m",
+        "label": "smart lenses",
+        "variant": "lenses"
+      },
+      {
+        "gender": "m",
+        "label": "comm earpiece",
+        "variant": "earpiece"
+      },
+      {
+        "gender": "m",
+        "label": "transit badge",
+        "variant": "badge"
+      },
+      {
+        "gender": "m",
+        "label": "shoulder display",
+        "variant": "display"
+      },
+      {
+        "gender": "f",
+        "label": "smart lenses",
+        "variant": "lenses"
+      },
+      {
+        "gender": "f",
+        "label": "comm earpiece",
+        "variant": "earpiece"
+      },
+      {
+        "gender": "f",
+        "label": "transit badge",
+        "variant": "badge"
+      },
+      {
+        "gender": "f",
+        "label": "shoulder display",
+        "variant": "display"
+      }
+    ]
+  },
   "rules": [
     {
       "asset": "Rule_NoAncientEgypt",
@@ -6422,6 +6493,11 @@
       "country": "japan",
       "era": "modern",
       "description": "Typhoon warning: no travel to Showa Tokyo today."
+    },
+    {
+      "asset": "Rule_DressForDestination",
+      "type": "DressForDestination",
+      "description": "Dress for the destination. An item from another time or place causes a panic: check the Costume Guide."
     }
   ],
   "days": [
@@ -6454,7 +6530,8 @@
           "blueprint": ""
         }
       ],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.0
     },
     {
       "asset": "DayPlan_Inv_Day2",
@@ -6484,7 +6561,8 @@
         "britain"
       ],
       "rules": [
-        "Rule_NoAncientEgypt"
+        "Rule_NoAncientEgypt",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "aspasia",
@@ -6499,7 +6577,8 @@
           "blueprint": ""
         }
       ],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day3",
@@ -6528,7 +6607,8 @@
       "countries": [],
       "rules": [
         "Rule_NoMedievalChina",
-        "Rule_NoEarlyModernJapan"
+        "Rule_NoEarlyModernJapan",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6542,7 +6622,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day4",
@@ -6574,7 +6655,8 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoIndustrialBritain"
+        "Rule_NoIndustrialBritain",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6588,7 +6670,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day5",
@@ -6625,7 +6708,8 @@
       "countries": [],
       "rules": [
         "Rule_NoModernGermany",
-        "Rule_NoAncientEgypt"
+        "Rule_NoAncientEgypt",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6639,7 +6723,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     },
     {
       "asset": "DayPlan_Inv_Day6",
@@ -6679,7 +6764,8 @@
       ],
       "countries": [],
       "rules": [
-        "Rule_NoModernJapan"
+        "Rule_NoModernJapan",
+        "Rule_DressForDestination"
       ],
       "premades": [
         "socrates",
@@ -6693,7 +6779,8 @@
         "gallerani"
       ],
       "forced": [],
-      "premadeChance": 0.05
+      "premadeChance": 0.05,
+      "costumeErrorChance": 0.1
     }
   ],
   "interview": {
@@ -7108,7 +7195,8 @@
       "leaderGained": "HISTORY: {nation} now dominates the timeline. The Future belongs to {place}.",
       "leaderLost": "HISTORY: {nation} no longer dominates the timeline. The Future is unsettled until a new power rises.",
       "carry": "HISTORY: travellers brought {value} to {place}.",
-      "dominant": "{attribute} is now DOMINANT in {place}."
+      "dominant": "{attribute} is now DOMINANT in {place}.",
+      "panic": "PANIC in {place}: a traveller from the agency was seen in \"{value}\" and the street fled."
     },
     "rules": [
       {
@@ -10407,6 +10495,12 @@
         "tier": "Full"
       },
       {
+        "key": "citation.acceptedWrong.panic",
+        "text": "Approved a traveller who would cause a panic in {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "citation.deniedWrong",
         "text": "Denied a legitimate, permitted traveler.",
         "gloss": "None",
@@ -10546,7 +10640,7 @@
       },
       {
         "key": "deviation.claimMismatch.worn",
-        "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  expected: \"{2}\"",
+        "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  expected: \"{2}\" — would cause a panic",
         "gloss": "None",
         "tier": "Full"
       },
@@ -10564,7 +10658,7 @@
       },
       {
         "key": "deviation.foreignOrigin.worn",
-        "text": "{0} INCORRECT — traveller wears \"{1}\", which belongs to {2}",
+        "text": "{0} INCORRECT — traveller wears \"{1}\", which belongs to {2}: would cause a panic",
         "gloss": "None",
         "tier": "Full"
       },

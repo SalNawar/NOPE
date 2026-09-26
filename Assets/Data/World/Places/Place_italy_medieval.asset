@@ -63,6 +63,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: rounded short crop
         leakable: 0
@@ -70,6 +71,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -77,6 +79,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: mazzocchio hat
         leakable: 1
@@ -84,6 +87,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: 
         leakable: 0
@@ -91,6 +95,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
     female:
       signature: 3
       outfit:
@@ -100,6 +105,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       hair:
         label: drawn-back coil
         leakable: 0
@@ -107,6 +113,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       facialHair:
         label: 
         leakable: 0
@@ -114,6 +121,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       headwear:
         label: ghirlanda
         leakable: 1
@@ -121,6 +129,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
       accessory:
         label: pearl pendant jewel
         leakable: 0
@@ -128,6 +137,7 @@ MonoBehaviour:
         back: 0
         covers: 
         artNation: 
+        artVariant: 
   looks:
     skin:
     - 1

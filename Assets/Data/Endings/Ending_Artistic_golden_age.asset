@@ -16,6 +16,7 @@ MonoBehaviour:
   displayName: Artistic Golden Age
   bodyText: From classical marble to scroll paintings to bold new illustration, a
     golden age of art blossoms across every era you touched.
+  picture: {fileID: 21300000, guid: 7ed4aa1643f8c6b4bad471b7fed9303b, type: 3}
   conditionType: 2
   attribute: {fileID: 11400000, guid: 1955912a92898e641bf19e9e1ba380af, type: 2}
   threshold: 41

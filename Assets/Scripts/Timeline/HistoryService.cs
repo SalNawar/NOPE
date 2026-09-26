@@ -3,8 +3,8 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// History glue: records liar carries at accept, and at night latches the
-/// timeline leader and promotes carries. Every decision is a Domain call
+/// History glue: records liar carries and costume-error panics at accept, and
+/// at night latches the timeline leader, promotes carries and reports panics. Every decision is a Domain call
 /// (Influence, ScoreRanking, NationLeader, Carries, History); this class reads
 /// the content, writes WorldState.history, fills the news and logs.
 /// </summary>
@@ -33,6 +33,40 @@ public static class HistoryService
 
         world.history.pendingCarries.Add(record);
         Debug.Log($"[HistoryService] Carry recorded: '{record.value}' ({record.category}) from {inst.HomeLabel} to {inst.originLabel}.");
+    }
+
+    /// <summary>
+    /// At accept: an accepted costume error (traveller types P5) would cause a
+    /// panic in the destination; it is kept for the next morning's news
+    /// (ReportPanics). Travellers dressed right record nothing.
+    /// </summary>
+    public static void RecordPanic(WorldState world, CaseInstance inst)
+    {
+        if (world == null || inst == null || inst.costumeFault == CostumeError.None)
+            return;
+
+        world.history.pendingPanics ??= new List<PanicRecord>();
+        world.history.pendingPanics.Add(new PanicRecord { placeLabel = inst.originLabel, item = inst.CostumeItem, day = world.day });
+        Debug.Log($"[HistoryService] Panic recorded: '{inst.CostumeItem}' ({inst.costumeFault}) worn to {inst.originLabel}.");
+    }
+
+    /// <summary>
+    /// At night: one news line per panic recorded today (History.PanicLines
+    /// over history.lines.panic), then the record is cleared. A blank line
+    /// warns and reports nothing.
+    /// </summary>
+    public static void ReportPanics(WorldState world, ContentLibrarySO lib, List<string> news)
+    {
+        List<PanicRecord> panics = world.history.pendingPanics;
+        if (panics == null || panics.Count == 0)
+            return;
+
+        List<string> lines = History.PanicLines(lib.HistoryLines.panic?.text, panics);
+        if (lines.Count == 0)
+            Debug.LogWarning("[HistoryService] Panics were recorded but the content library has no panic line. Run Tools > TimeDesk > Generate World.");
+        news.AddRange(lines);
+        Debug.Log($"[HistoryService] {panics.Count} panic(s) reported: {string.Join("; ", panics.Select(p => $"'{p.item}' in {p.placeLabel}"))}.");
+        panics.Clear();
     }
 
     /// <summary>

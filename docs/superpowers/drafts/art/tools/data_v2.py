@@ -13,6 +13,8 @@
 6. Adds the piece-4 wardrobe proposals: a short label for every item, the signature slot per gender, leakable, wig,
    back and covers flags, ornaments to mask before recolouring, confusable pairs (hand-authored and generated), the
    DO NOT DRAW split, and the Future wardrobes.
+7. Adds the 2150 accessory kit (v2.3, 2026-09-26; traveller types C2-C4): the present's accessories, one of which a 2150
+   citizen can slip onto an otherwise right costume (a costume error), and the present's clothes (the neutral Future).
 Checks the full Looks.LabelProblems rule, the accessory rule and the desk-view rule (v2.1). Writes
 art/tools/wardrobe_v2.json and art/tools/confusable_candidates.txt and prints an audit.
 """
@@ -1084,6 +1086,30 @@ for fp in future:
                 if vm(it["label"], pl["wardrobe"][g]["signature"]["label"]):
                     problems.append(f"LabelProblems: {fp['id']} {g} {k} carries {pl['id']}'s signature label")
 
+# The present (2150, traveller types H1) and its accessory kit (C2-C4, v2.3). The present's clothes are the neutral
+# Future outfits and hair (their labels as world_source.json "present" authors them). The kit: one small set per gender,
+# the same four items, each on the head, face, neck, shoulders or upper chest (v2.1's desk-view rule), standing on its
+# own, filed under the art nation "neutral" with its own variant token (accessory_{g}_neutral_future_{variant}).
+PRESENT_CLOTHES = {"m": {"outfit": "tech jacket", "hair": "short textured crop"},
+                   "f": {"outfit": "coat-dress", "hair": "sleek low bun"}}
+PRESENT_KIT = [
+    {"variant": "lenses", "label": "smart lenses",
+     "look": "a pair of slim rimless smart lenses: two small rounded-rectangle lenses of flat, opaque pale blue-grey joined by a thin slate-grey bridge, sitting on the nose in front of the eyes"},
+    {"variant": "earpiece", "label": "comm earpiece",
+     "look": "a sleek slate teal-blue comm earpiece hooked over the ear on the viewer's left, with a short slim boom reaching forward along the cheek"},
+    {"variant": "badge", "label": "transit badge",
+     "look": "a large rounded-rectangle transit badge in sand with slate teal-blue geometric panels, clipped to the upper chest on the viewer's right (no text, numbers or symbols)"},
+    {"variant": "display", "label": "shoulder display",
+     "look": "a curved slate-grey display panel strapped over the shoulder on the viewer's left, its face flat matte teal-blue (not lit, no text)"},
+]
+for k in PRESENT_KIT:
+    if len(k["label"]) > 24:
+        problems.append(f"present kit {k['variant']} label over 24 characters")
+    for pl in places:
+        for g in ("m", "f"):
+            if vm(k["label"], pl["wardrobe"][g]["signature"]["label"]):
+                problems.append(f"LabelProblems: present kit {k['variant']} carries {pl['id']}'s {g} signature label")
+
 # Colour audit: risky words left anywhere a ChatGPT prompt will read.
 RISK = re.compile(r"\b(pink|purple|violet|magenta|lime|mauve|lilac|rose|green|emerald|jade|sheer|translucent|glow\w*)\b", re.I)
 audit = []
@@ -1097,8 +1123,11 @@ for p in places:
 for fp in future:
     for mm in RISK.finditer(fp["motifs"]):
         audit.append(f"{fp['id']} motifs: {mm.group(0)}")
+for k in PRESENT_KIT:
+    for mm in RISK.finditer(k["look"]):
+        audit.append(f"present kit {k['variant']}: {mm.group(0)}")
 
-out = {"places": places, "future": future, "fixLog": fix_log,
+out = {"places": places, "future": future, "presentClothes": PRESENT_CLOTHES, "presentKit": PRESENT_KIT, "fixLog": fix_log,
        "confusable": [{"a": a, "b": b, "slot": sl, "gender": g, "why": y} for a, b, sl, g, y in CONFUSABLE],
        "confusableHidden": [{"a": a, "b": b, "slot": sl, "gender": g, "why": y} for a, b, sl, g, y in CONFUSABLE_HIDDEN],
        "confusableAddedV21": len(CONFUSABLE_V21),

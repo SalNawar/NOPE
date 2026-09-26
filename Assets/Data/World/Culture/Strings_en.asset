@@ -1412,6 +1412,10 @@ MonoBehaviour:
     text: Approved a disguised traveller or a forbidden destination.
     gloss: 0
     tier: 0
+  - key: citation.acceptedWrong.panic
+    text: Approved a traveller who would cause a panic in {0}.
+    gloss: 0
+    tier: 0
   - key: citation.deniedWrong
     text: Denied a legitimate, permitted traveler.
     gloss: 0
@@ -1511,7 +1515,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.claimMismatch.worn
-    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  expected: \"{2}\""
+    text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  expected: \"{2}\" \u2014
+      would cause a panic"
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.papers
@@ -1523,7 +1528,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: deviation.foreignOrigin.worn
-    text: "{0} INCORRECT \u2014 traveller wears \"{1}\", which belongs to {2}"
+    text: "{0} INCORRECT \u2014 traveller wears \"{1}\", which belongs to {2}: would
+      cause a panic"
     gloss: 0
     tier: 0
   - key: deviation.recordMismatch.papers

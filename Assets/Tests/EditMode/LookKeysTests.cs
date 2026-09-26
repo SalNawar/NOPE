@@ -29,6 +29,42 @@ public class LookKeysTests
         Assert.AreEqual(colour, key.HairColour);
     }
 
+    [TestCase(null, null, "accessory_m_neutral_future")]
+    [TestCase("comm", null, "accessory_m_neutral_future_comm")]
+    [TestCase(" ", null, "accessory_m_neutral_future")]
+    [TestCase("comm", "brown", "accessory_m_neutral_future_comm_brown")]
+    public void AVariant_FollowsTheEra_BeforeAnyColour(string variant, string colour, string expected)
+    {
+        LookKey key = LookKeys.Garment(LookLayer.Accessory, TravellerGender.Male, "neutral", "future", colour, variant);
+        Assert.AreEqual(expected, key.Name);
+        Assert.AreEqual(colour, key.HairColour);
+    }
+
+    /// <summary>The present's look (costume errors, traveller types C2): its clothes, and a kit of two men's accessories and one women's.</summary>
+    private static PresentLook Present() => new PresentLook
+    {
+        wardrobe = new PlaceWardrobe
+        {
+            male = new GenderLook { signature = LookSlot.Outfit, outfit = new LookItem { label = "panelled coat-dress" }, hair = new LookItem { label = "short textured crop", wig = true } },
+            female = new GenderLook { signature = LookSlot.Outfit, outfit = new LookItem { label = "panelled coat-dress" } }
+        },
+        kitMale = { new LookItem { label = "wrist comm", leakable = true, artVariant = "comm" }, new LookItem { label = "transit badge", leakable = true, artVariant = "badge" } },
+        kitFemale = { new LookItem { label = "smart lenses", leakable = true, artVariant = "lenses" } }
+    };
+
+    [Test]
+    public void PresentRequired_ItsClothes_ThenEachKitItemUnderItsVariant_ForItsGenderOnly()
+    {
+        string[] keys = LookKeys.PresentRequired("neutral", "future", Present()).ToArray();
+
+        CollectionAssert.AreEqual(new[]
+        {
+            "outfit_m_neutral_future", "hair_m_neutral_future", "outfit_f_neutral_future",
+            "accessory_m_neutral_future_comm", "accessory_m_neutral_future_badge", "accessory_f_neutral_future_lenses"
+        }, keys);
+        CollectionAssert.IsEmpty(LookKeys.PresentRequired("neutral", "future", null));
+    }
+
     [Test]
     public void BodyHeadAndWhole_AreNotGarmentKeys()
     {

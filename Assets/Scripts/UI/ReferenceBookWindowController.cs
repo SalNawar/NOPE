@@ -12,11 +12,16 @@ using UnityEngine.UI;
 /// "(claimed)"; a row whose value history changed shows "[revised]" after its
 /// place: FactTable.IsChanged; the value and the evidence stay canonical); an
 /// era heading line (the Costume Guide) shows the era's name, with no
-/// background and no click. Each row is marked with its key for the keys,
+/// background and no click. The book's cover shows at the page's top when
+/// its art exists (SlotArt.CoverFor, redesign phase 27); without it the
+/// header stays as it was. Each row is marked with its key for the keys,
 /// the copy and the pins (AppRow), and a jump shows a row's page (ShowRow).
 /// </summary>
 public sealed class ReferenceBookWindowController : PagedRowsWindow
 {
+    /// <summary>The book's cover at the page's top (inactive until the book's cover art is found).</summary>
+    [SerializeField] private Image cover;
+
     private ReferenceBookSO _book;
     private FactTable _facts;
     private CompareController _compare;
@@ -30,6 +35,12 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
         _facts = facts;
         _compare = compare;
         SetTitle(book != null ? book.displayName : UiText.Get("book.untitled"));
+        if (cover != null)
+        {
+            Sprite art = SlotArt.CoverFor(book);
+            cover.sprite = art;
+            cover.gameObject.SetActive(art != null);
+        }
     }
 
     /// <summary>Shows the register's <paramref name="lines"/> from the first page (an era heading reads its name from <paramref name="eraNames"/>).</summary>

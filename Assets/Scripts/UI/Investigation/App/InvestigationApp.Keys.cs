@@ -604,10 +604,32 @@ public sealed partial class InvestigationApp
             foreach (PaneZoom zoom in zooms)
                 if (zoom != null && target != zoom.transform && target.IsChildOf(zoom.transform))
                 {
+                    clip = RevealInView(target, zoom);
                     zoom.Reveal(target);
-                    clip = (RectTransform)zoom.transform;
                 }
         focusRing.Show(target, clip);
+    }
+
+    /// <summary>
+    /// A row inside a view's own scroll (a scanned copy's page) is scrolled
+    /// into that scroll's viewport, which then cuts the ring; else the pane's
+    /// viewport does. Returns the viewport that cuts the ring.
+    /// </summary>
+    private static RectTransform RevealInView(RectTransform target, PaneZoom zoom)
+    {
+        ScrollRect inner = target.GetComponentInParent<ScrollRect>();
+        if (inner == null || inner.transform == zoom.transform || inner.content == null)
+            return (RectTransform)zoom.transform;
+        RectTransform viewport = inner.viewport != null ? inner.viewport : (RectTransform)inner.transform;
+        Bounds b = RectTransformUtility.CalculateRelativeRectTransformBounds(viewport, target);
+        Rect view = viewport.rect;
+        float shift = b.max.y > view.yMax ? view.yMax - b.max.y : b.min.y < view.yMin ? view.yMin - b.min.y : 0f;
+        if (shift != 0f)
+        {
+            inner.StopMovement();
+            inner.content.anchoredPosition += new Vector2(0f, shift);
+        }
+        return viewport;
     }
 
     /// <summary>A region without items shows the ring round it: the pane's content, the sidebar, the dock; else nothing.</summary>

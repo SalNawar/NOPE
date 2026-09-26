@@ -7,7 +7,8 @@ using NUnit.Framework;
 /// Office UI because forms are never themed: ink and labels on the paper and
 /// on a box, the section heads on their band, the fine print on the paper,
 /// the rules and the stamp area's dash as outlines (3:1), and the ink on each
-/// fill laid over a box (the hover tint, every theme's pick highlight).
+/// fill laid over a box (the hover tint, every theme's pick highlight), and
+/// the scan strip's text on the scanner backing (phase 5).
 /// </summary>
 public class FormContrastTests
 {
@@ -27,7 +28,9 @@ public class FormContrastTests
         Rule = Hex("#5B5347"),
         BoxFill = Hex("#FBF8F0"),
         Band = Hex("#E2DACA"),
-        StampDash = Hex("#6B6358")
+        StampDash = Hex("#6B6358"),
+        Backing = Hex("#212329"),
+        BackingInk = Hex("#D9DBE0")
     };
 
     [Test]
@@ -53,6 +56,15 @@ public class FormContrastTests
         p.Rule = Hex("#D8D2C4");
         List<string> problems = FormContrast.Problems(p, new List<(string, Rgba)>(), new ContrastRules());
         Assert.IsTrue(problems.Any(m => m.Contains("rule") && m.Contains("3.0")), string.Join("\n", problems));
+    }
+
+    [Test]
+    public void ADimScanStrip_IsReported_OnTheBacking()
+    {
+        FormPalette p = Spec();
+        p.BackingInk = Hex("#4A4D55");
+        List<string> problems = FormContrast.Problems(p, new List<(string, Rgba)>(), new ContrastRules());
+        Assert.IsTrue(problems.Single().Contains("scanner backing"), string.Join("\n", problems));
     }
 
     [Test]

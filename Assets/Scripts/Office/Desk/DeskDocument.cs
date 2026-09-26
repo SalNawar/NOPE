@@ -9,13 +9,18 @@ using UnityEngine.EventSystems;
 /// Clickable and DeskDraggable, and a Sheet child lying flat, lifted by the
 /// paper's place in the stack (so the top paper is nearest the camera and wins
 /// the raycast), with the lit paper quad and the collider. The paper prints
-/// its document's form (redesign phase 4, PC spec FO1, §6.5): FormLayout
-/// places it at the paper's width, the same form as its scanned copy; each
+/// its document's form (redesign phase 4, PC spec FO1, §6.5): FormLayout places
+/// it at the paper's width, the same form as its scanned copy (FormView); each
 /// text is a TextMeshPro cloned from one template, sized and inked by its
-/// role (FormStyleSO); the boxes' fills and the section bands are one mesh
-/// under the hover and pick quads, and every outline, rule, barcode bar and
-/// checkbox one mesh over them, both built once when the paper binds; the seal
-/// is a faint quad behind the header, and the photo sits in its cell. Always
+/// role (FormStyleSO); the strokes are FormPaint's, as on the PC: the boxes'
+/// fills and the section bands are one mesh under the hover and pick quads,
+/// and every outline, rule, barcode bar and checkbox one mesh over them, both
+/// built once when the paper binds; the seal
+/// is a faint quad behind the header, and the photo sits in its cell. The
+/// paper wears its kind's face and the photo frame its art when those files
+/// exist (redesign phase 27, ArtSlots: the paper's placeholder and the grey
+/// frame otherwise), and after the verdict its ink mark lands in the stamp
+/// area (ShowVerdict; nothing without the art). Always
 /// English: a paper never flips. A click raises Clicked with the button and
 /// the slot under the pointer (FormLayout.SlotAt; DeskController routes it
 /// through PaperClicks). While examined (held in the hand; PaperExaminer owns
@@ -26,11 +31,11 @@ using UnityEngine.EventSystems;
 /// </summary>
 public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointerMoveHandler, IPointerExitHandler
 {
-    /// <summary>How far above the sheet each layer lies (metres toward the camera): the seal, the fills, the hover and pick quads, the lines, the photo, the texts.</summary>
-    private const float SealLift = 0.0001f, FillLift = 0.0002f, HighlightLift = 0.0003f, LineLift = 0.0004f, PhotoLift = 0.0005f, TextLift = 0.0006f;
+    /// <summary>How far above the sheet each layer lies (metres toward the camera): the seal, the fills, the hover and pick quads, the lines, the photo, the texts, the verdict's ink.</summary>
+    private const float SealLift = 0.0001f, FillLift = 0.0002f, HighlightLift = 0.0003f, LineLift = 0.0004f, PhotoLift = 0.0005f, TextLift = 0.0006f, InkLift = 0.0007f;
 
-    /// <summary>The share of a dashed edge that is ink (the stamp area).</summary>
-    private const float DashShare = 0.55f;
+    /// <summary>Where the ink mark lands on a form with no stamp area: this share of the page's width and height at its bottom right.</summary>
+    private const float InkFallbackShare = 0.3f;
 
     /// <summary>The lying sheet: lifted by the stack, holding the paper, its collider and the printed form.</summary>
     [SerializeField] private Transform sheet;
@@ -40,6 +45,12 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
     /// <summary>The traveller's photo inside the frame (crop sprites).</summary>
     [SerializeField] private LookSpriteStack photo;
+
+    /// <summary>The photo frame's art quad over the photo (inactive until the photo frame's art, ArtSlots.PhotoFrame, is found; the grey frame behind is the fallback).</summary>
+    [SerializeField] private Renderer photoFrame;
+
+    /// <summary>The verdict's ink mark quad (a unit square, inactive until ShowVerdict finds the mark's art).</summary>
+    [SerializeField] private Renderer inkMark;
 
     /// <summary>The text every printed word clones (its renderer off: it also measures the words).</summary>
     [SerializeField] private TextMeshPro textTemplate;
@@ -100,6 +111,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     }
 
     private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+    private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
 
     private readonly List<SlotView> _slots = new List<SlotView>();
     private DeskConfigSO _config;
@@ -174,39 +186,17 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         if (config == null || doc == null || form == null || style == null || textTemplate == null)
             return;
 
+        ShowPaperArt(form.Data.FormNumber);
+
         float width = config.paperSize.x;
         _form = FormLayout.Layout(form.Spec, form.Data, width, style.metrics, new TmpFormText(textTemplate));
 
-        var fillMesh = new MeshBuilder();
-        var lineMesh = new MeshBuilder();
-        float rule = style.metrics.ruleWidth * _form.PageHeight;
         foreach (FormItem item in _form.Items)
         {
             switch (item.Kind)
             {
                 case FormItemKind.Text:
                     Print(item);
-                    break;
-                case FormItemKind.Box:
-                    fillMesh.Rect(Local(item.Rect), style.boxFill);
-                    lineMesh.Outline(Local(item.Rect), rule, style.rule);
-                    break;
-                case FormItemKind.RowBand:
-                    fillMesh.Rect(Local(item.Rect), style.band);
-                    break;
-                case FormItemKind.Rule:
-                    lineMesh.Rect(Local(item.Rect), style.rule);
-                    break;
-                case FormItemKind.Bar:
-                    lineMesh.Rect(Local(item.Rect), style.ink);
-                    break;
-                case FormItemKind.Checkbox:
-                    lineMesh.Outline(Local(item.Rect), rule, style.rule);
-                    if (item.Text == FormLayout.Tick)
-                        lineMesh.Rect(Inset(Local(item.Rect), item.Rect.Width * 0.22f), style.ink);
-                    break;
-                case FormItemKind.StampArea:
-                    lineMesh.Dashed(Local(item.Rect), rule, rule * 4f, DashShare, style.stampDash);
                     break;
                 case FormItemKind.Seal:
                     PlaceSeal(item.Rect);
@@ -216,6 +206,10 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
                     break;
             }
         }
+        var fillMesh = new MeshBuilder();
+        var lineMesh = new MeshBuilder();
+        foreach (FormQuad q in FormPaint.Quads(_form, style.Palette(), style.metrics))
+            (q.Layer == FormPaintLayer.Fill ? fillMesh : lineMesh).Rect(Local(q.Rect), new Color(q.Colour.R, q.Colour.G, q.Colour.B, q.Colour.A));
         fillMesh.Apply(fills, FillLift);
         lineMesh.Apply(lines, LineLift);
 
@@ -337,7 +331,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
 
         SlotView view = _slots[slot];
         Color colour = view.Picked ? view.PickColour
-            : slot == _hoveredSlot && _config != null ? _config.rowHoverTint
+            : slot == _hoveredSlot && style != null ? style.hoverTint
             : Color.clear;
         _block ??= new MaterialPropertyBlock();
         view.Highlight.GetPropertyBlock(_block);
@@ -355,6 +349,37 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             photo.Show(look, art);
             photo.SetTint(tint);
         }
+    }
+
+    /// <summary>
+    /// The verdict's ink mark (redesign phase 27): the tick for an accept, the
+    /// cross for a deny (ArtSlots.VerdictMark), printed over the form's stamp
+    /// area at the art's own aspect (the page's bottom right on a form with
+    /// none). Without the mark's art, or on a paper that prints no form,
+    /// nothing shows (today's look).
+    /// </summary>
+    public void ShowVerdict(bool accepted)
+    {
+        if (inkMark == null || _form == null)
+            return;
+        Texture2D mark = SlotArt.Texture(new[] { ArtSlots.VerdictMark(accepted) });
+        if (mark == null)
+            return;
+
+        FaceRect area = new FaceRect(_form.Width * (1f - InkFallbackShare), _form.PageHeight * (1f - InkFallbackShare), _form.Width, _form.PageHeight);
+        foreach (FormItem item in _form.Items)
+            if (item.Kind == FormItemKind.StampArea)
+                area = item.Rect;
+        Rect r = Local(area);
+        float aspect = mark.height > 0 ? (float)mark.width / mark.height : 1f;
+        Vector2 size = r.width / r.height > aspect ? new Vector2(r.height * aspect, r.height) : new Vector2(r.width, r.width / aspect);
+        inkMark.transform.localPosition = new Vector3(r.center.x, r.center.y, -InkLift);
+        inkMark.transform.localScale = new Vector3(size.x, size.y, 1f);
+        _block ??= new MaterialPropertyBlock();
+        inkMark.GetPropertyBlock(_block);
+        _block.SetTexture(BaseMapId, mark);
+        inkMark.SetPropertyBlock(_block);
+        inkMark.gameObject.SetActive(true);
     }
 
     /// <summary>Lifts the sheet off the desk plane (its place in the stack, or a dragged paper's lift), in metres; ignored while the paper is held in the hand (the examiner owns the sheet).</summary>
@@ -414,6 +439,43 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
         text.GetComponent<MeshRenderer>().enabled = true;
     }
 
+    /// <summary>
+    /// The paper's art when delivered (redesign phase 27, ArtSlots): its kind's
+    /// face by <paramref name="formNumber"/>, else the agency's plain face, on
+    /// the paper quad (held or lying: the block outlives the examine material's
+    /// swap); the photo frame's art over the photo; the agency seal's on the
+    /// seal. A missing file keeps the placeholder paper, the grey frame and the
+    /// code-drawn ring.
+    /// </summary>
+    private void ShowPaperArt(string formNumber)
+    {
+        _block ??= new MaterialPropertyBlock();
+        Texture2D face = paperQuad != null ? SlotArt.Texture(ArtSlots.PaperFaces(formNumber)) : null;
+        if (face != null)
+        {
+            paperQuad.GetPropertyBlock(_block);
+            _block.SetTexture(BaseMapId, face);
+            paperQuad.SetPropertyBlock(_block);
+        }
+
+        Texture2D frame = photoFrame != null ? SlotArt.Texture(new[] { ArtSlots.PhotoFrame }) : null;
+        if (frame != null)
+        {
+            photoFrame.GetPropertyBlock(_block);
+            _block.SetTexture(BaseMapId, frame);
+            photoFrame.SetPropertyBlock(_block);
+            photoFrame.gameObject.SetActive(true);
+        }
+
+        Texture2D mark = seal != null ? SlotArt.Texture(new[] { ArtSlots.AgencySeal }) : null;
+        if (mark != null)
+        {
+            seal.GetPropertyBlock(_block);
+            _block.SetTexture(BaseMapId, mark);
+            seal.SetPropertyBlock(_block);
+        }
+    }
+
     /// <summary>The seal: its quad over the header's seal rectangle, faint.</summary>
     private void PlaceSeal(FaceRect rect)
     {
@@ -452,10 +514,7 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
     private Rect Local(FaceRect f) =>
         new Rect(f.XMin - _form.Width / 2f, _form.PageHeight / 2f - f.YMax, f.Width, f.Height);
 
-    /// <summary>A rectangle shrunk by <paramref name="by"/> on every side.</summary>
-    private static Rect Inset(Rect r, float by) => new Rect(r.xMin + by, r.yMin + by, Mathf.Max(0f, r.width - 2f * by), Mathf.Max(0f, r.height - 2f * by));
-
-    /// <summary>Collects coloured quads in the sheet's plane into one mesh.</summary>
+    /// <summary>Collects coloured quads (FormPaint's) in the sheet's plane into one mesh.</summary>
     private sealed class MeshBuilder
     {
         private readonly List<Vector3> _vertices = new List<Vector3>();
@@ -476,35 +535,6 @@ public sealed class DeskDocument : MonoBehaviour, IPointerClickHandler, IPointer
             for (int i = 0; i < 4; i++)
                 _colours.Add(colour);
             _triangles.AddRange(new[] { v, v + 1, v + 2, v, v + 2, v + 3 });
-        }
-
-        /// <summary>A rectangle's outline, <paramref name="width"/> thick, inside its edges.</summary>
-        public void Outline(Rect r, float width, Color colour)
-        {
-            Rect(new Rect(r.xMin, r.yMax - width, r.width, width), colour);
-            Rect(new Rect(r.xMin, r.yMin, r.width, width), colour);
-            Rect(new Rect(r.xMin, r.yMin + width, width, r.height - 2f * width), colour);
-            Rect(new Rect(r.xMax - width, r.yMin + width, width, r.height - 2f * width), colour);
-        }
-
-        /// <summary>A dashed outline: dashes about <paramref name="dash"/> long, <paramref name="share"/> of each ink.</summary>
-        public void Dashed(Rect r, float width, float dash, float share, Color colour)
-        {
-            Edge(r.xMin, r.yMax - width, r.width, true, width, dash, share, colour);
-            Edge(r.xMin, r.yMin, r.width, true, width, dash, share, colour);
-            Edge(r.xMin, r.yMin, r.height, false, width, dash, share, colour);
-            Edge(r.xMax - width, r.yMin, r.height, false, width, dash, share, colour);
-        }
-
-        private void Edge(float x, float y, float length, bool horizontal, float width, float dash, float share, Color colour)
-        {
-            int count = Mathf.Max(1, Mathf.RoundToInt(length / dash));
-            float step = length / count;
-            for (int i = 0; i < count; i++)
-            {
-                float at = i * step, ink = step * share;
-                Rect(horizontal ? new Rect(x + at, y, ink, width) : new Rect(x, y + at, width, ink), colour);
-            }
         }
 
         /// <summary>Puts the quads into <paramref name="filter"/>'s mesh, <paramref name="lift"/> above the sheet.</summary>

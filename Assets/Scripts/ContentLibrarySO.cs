@@ -80,6 +80,12 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>The look knobs every traveller shares.</summary>
     public LookRules LookRules => lookRules;
 
+    /// <summary>The present's clothes and 2150 accessory kit, for costume errors (written by Generate World from world_source.json "present").</summary>
+    [SerializeField] private PresentLook presentLook = new();
+
+    /// <summary>What the present wears (costume errors: its clothes and its accessory kit).</summary>
+    public PresentLook PresentLook => presentLook ?? new PresentLook();
+
     [Header("Culture (piece 6)")]
     /// <summary>The culture UI knobs (written by Generate World from world_source.json "ui").</summary>
     [SerializeField] private CultureUiSettings cultureUi = new();

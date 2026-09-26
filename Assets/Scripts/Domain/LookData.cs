@@ -51,6 +51,14 @@ public sealed class LookItem
     /// </summary>
     public string artNation;
 
+    /// <summary>
+    /// Key token appended to this item's art file name after the era, so
+    /// several items of one place and slot each have their own drawing (the
+    /// 2150 accessory kit: "comm" gives accessory_m_neutral_future_comm);
+    /// blank = none.
+    /// </summary>
+    public string artVariant;
+
     /// <summary>True when there is an item (a non-blank label).</summary>
     public bool IsPresent => !string.IsNullOrWhiteSpace(label);
 
@@ -112,6 +120,33 @@ public sealed class PlaceWardrobe
         gender == TravellerGender.Male ? male : gender == TravellerGender.Female ? female : null;
 }
 
+/// <summary>
+/// What the present (2150, traveller types H1) wears, for costume errors (C2):
+/// its clothes, worn whole by a 2150 citizen who forgot their costume, and its
+/// accessory kit, one item of which can slip onto an otherwise right costume.
+/// Its art is filed under the present's nation token (<see cref="NationToken"/>)
+/// and the Future era, so the clothes reuse the neutral Future drawings.
+/// </summary>
+[Serializable]
+public sealed class PresentLook
+{
+    /// <summary>The present's nation token in art keys and placeholder colours ("neutral": no country).</summary>
+    public const string NationToken = "neutral";
+
+    /// <summary>The present's clothes (no accessory: the kit is its accessories).</summary>
+    public PlaceWardrobe wardrobe = new();
+
+    /// <summary>The men's accessory kit: leakable accessories, each drawn under its own art variant.</summary>
+    public List<LookItem> kitMale = new();
+
+    /// <summary>The women's accessory kit.</summary>
+    public List<LookItem> kitFemale = new();
+
+    /// <summary>A gender's kit (empty for Unknown).</summary>
+    public IReadOnlyList<LookItem> Kit(TravellerGender gender) =>
+        (gender == TravellerGender.Male ? kitMale : gender == TravellerGender.Female ? kitFemale : null) ?? (IReadOnlyList<LookItem>)Array.Empty<LookItem>();
+}
+
 /// <summary>One hair colour's weight among a place's travellers.</summary>
 [Serializable]
 public sealed class HairColourWeight
@@ -162,7 +197,7 @@ public sealed class ConfusablePair
     public string gender;
 }
 
-/// <summary>The look knobs shared by every traveller (face bands, grey hair, the premade garment label, confusable pairs).</summary>
+/// <summary>The look knobs shared by every traveller (face bands, grey hair, the premade garment label, the costume error weights, confusable pairs).</summary>
 [Serializable]
 public sealed class LookRules
 {
@@ -174,6 +209,9 @@ public sealed class LookRules
 
     /// <summary>The one garment a premade shows ("Period dress").</summary>
     public string wholeFigureLabel;
+
+    /// <summary>The weight of each costume error variant (CostumeErrors.Plan).</summary>
+    public CostumeErrorWeights costumeErrors = new();
 
     /// <summary>Pairs of places whose items in a slot look alike.</summary>
     public List<ConfusablePair> confusable = new();
