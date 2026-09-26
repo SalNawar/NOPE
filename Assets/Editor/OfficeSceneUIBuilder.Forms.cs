@@ -9,10 +9,10 @@ using UnityEngine.Rendering;
 /// FO10): the form style (FormStyleSO, created when missing), the desk paper's
 /// printing parts (the text template every printed word clones, the fills and
 /// lines meshes, the seal's quad, the quad each pickable box clones) and the
-/// forms' checks: every document template's form against the paper
-/// (DocumentForm.Problems, measured with the paper's own text) and the form
-/// style's contrast pairs with the hover tint and each theme's pick highlight
-/// over a box (FormContrast). Part of <see cref="OfficeSceneUIBuilder"/>.
+/// form style's checks: the paper's aspect and the contrast pairs with the
+/// hover tint and each theme's pick highlight over a box (FormContrast). Each
+/// template's form is checked by the desk fit
+/// (ContentLibraryValidator.DeskFitProblems). Part of <see cref="OfficeSceneUIBuilder"/>.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
@@ -129,36 +129,19 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// The forms' checks (FO7, FO10), logged as errors: the desk paper's aspect
-    /// against the form style's; every traveller's document template's form
-    /// (placed fields, the page's fit at the longest values, measured with the
-    /// paper's own text); and the style's contrast pairs, with the hover tint
-    /// and the pick highlight of the neutral theme and every culture over a box.
+    /// The form style's checks (FO7), logged as errors: the desk paper's aspect
+    /// against the style's page aspect, and the style's contrast pairs with the
+    /// hover tint and the pick highlight of the neutral theme and every culture
+    /// over a box. (Each template's form against the paper is the desk fit's,
+    /// ContentLibraryValidator.DeskFitProblems.)
     /// </summary>
-    private static void CheckForms(ContentLibrarySO library, DeskConfigSO config, FormStyleSO style, DeskController desk)
+    private static void CheckFormStyle(ContentLibrarySO library, DeskConfigSO config, FormStyleSO style)
     {
         if (style == null)
             return;
         float paperAspect = config.paperSize.y > 0f ? config.paperSize.x / config.paperSize.y : 0f;
         if (Mathf.Abs(paperAspect - style.metrics.aspect) > 0.002f)
             Debug.LogError($"[TimeDesk] The desk paper is {config.paperSize.x} x {config.paperSize.y} m (aspect {paperAspect:0.000}) but the form style's page aspect is {style.metrics.aspect:0.000}; set FormStyle_Agency's metrics.aspect or Desk_Default.paperSize so the forms fill the paper.");
-
-        DeskDocument paper = (DeskDocument)new SerializedObject(desk).FindProperty("paperTemplate").objectReferenceValue;
-        TextMeshPro text = paper != null ? (TextMeshPro)new SerializedObject(paper).FindProperty("textTemplate").objectReferenceValue : null;
-        if (library != null && text != null)
-        {
-            // Check lays a page out one unit tall; TMP measures in proportion to the size, so the paper's own text measures it as it prints.
-            var measure = new TmpFormText(text);
-            var checkedTemplates = new HashSet<DocumentTemplateSO>();
-            foreach (CaseBlueprintSO blueprint in ContentLibraryValidator.TravellerBlueprints(library))
-                foreach (DocumentTemplateSO template in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : new DocumentTemplateSO[0])
-                {
-                    if (template == null || !checkedTemplates.Add(template))
-                        continue;
-                    foreach (string problem in DocumentForm.Problems(template, library.Agency, style.metrics, measure))
-                        Debug.LogError($"[TimeDesk] {template.displayName} ({AssetDatabase.GetAssetPath(template)}): {problem} (FormLayout.Check at the desk paper; edit its form or FormStyle_Agency).", template);
-                }
-        }
 
         var overlays = new List<(string, Rgba)> { ("the hover tint", FormStyleSO.Rgb(config.rowHoverTint)) };
         var themes = new List<ThemeSO>();

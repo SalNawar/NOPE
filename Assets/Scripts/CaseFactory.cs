@@ -15,9 +15,13 @@ using UnityEngine;
 /// small-talk line, and how they look (Looks: layers from the claimed place's
 /// wardrobe; a dress tell is one garment of the true home). Premades (named,
 /// drawn whole) stand in forced slots or roll from the day's pool. Every draw
-/// comes from seeded streams (per traveller: the case, legacy clue, lie,
-/// dialog, look and premade streams; plus the day's rule-violator stream), so
-/// the same run, day and met premades always produce the same travellers.
+/// comes from seeded streams (per traveller: the case, lie, dialog, look and
+/// premade streams; plus the day's rule-violator stream), so
+/// the same run, day and met premades always produce the same travellers. A
+/// displaced person's agency file (their Displacement No., incident, found
+/// date and certificate's Valid Until, AgencyNumbers) is drawn on their
+/// account stream (Seeds.ForAccount), counting from today's date on the
+/// agency calendar, and their forms and registry entry print it.
 /// </summary>
 public sealed class CaseFactory
 {
@@ -36,9 +40,6 @@ public sealed class CaseFactory
     /// <summary>The current traveller's random stream (reset per case).</summary>
     private IRandomSource _rng = new SeededRandom(0);
 
-    /// <summary>The current traveller's legacy clue stream, apart from <see cref="_rng"/> so clue settings never change who lies.</summary>
-    private IRandomSource _clueRng = new SeededRandom(0);
-
     /// <summary>The current traveller's lie stream (Seeds.ForLies), apart from <see cref="_rng"/> so lie tuning never changes who travellers are.</summary>
     private IRandomSource _lieRng = new SeededRandom(0);
 
@@ -50,6 +51,15 @@ public sealed class CaseFactory
 
     /// <summary>The current slot's premade stream (Seeds.ForLegendary): the premade roll and pick.</summary>
     private IRandomSource _legendaryRng = new SeededRandom(0);
+
+    /// <summary>The current traveller's account stream (Seeds.ForAccount): their agency numbers and dates, apart from every other stream.</summary>
+    private IRandomSource _accountRng = new SeededRandom(0);
+
+    /// <summary>Today's date on the agency calendar (AgencyCalendar.TryToday for the world's day); null when the agency block's first date is unreadable.</summary>
+    private System.DateTime? _today;
+
+    /// <summary>The agency numbers handed out today (a number belongs to one traveller a day, AgencyNumbers.TakeUnique).</summary>
+    private HashSet<string> _agencyNumbers = new HashSet<string>();
 
     /// <summary>The current traveller's forms seed (Seeds.ForForms): a value their papers' serials come from, never a stream.</summary>
     private int _formsSeed;
@@ -115,8 +125,9 @@ public sealed class CaseFactory
         InterviewLines wording = _lib.Interview;
         if (wording == null || string.IsNullOrWhiteSpace(wording.opener?.text) || string.IsNullOrWhiteSpace(wording.openerLegendary?.text))
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library's interview opener or legendary opener is blank, so a transcript may start with the claim. Run Tools > TimeDesk > Generate World.");
-        if (wording == null || string.IsNullOrWhiteSpace(wording.claim?.text))
-            Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no interview claim line, so the banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
+        foreach (TravellerKind kind in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints).Where(b => b != null).Select(b => b.Kind).Distinct())
+            if (string.IsNullOrWhiteSpace(Interview.ClaimLine(wording, kind)?.text))
+                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so their banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
 
         _channels = appearanceReachable ? plan.TellChannels : plan.TellChannels.Where(c => c != TellChannel.Appearance).ToList();
 
@@ -124,6 +135,10 @@ public sealed class CaseFactory
         // match). The forced premades who will stand today are reserved first,
         // which also keeps them out of the day's random roll.
         _roster = new NameRoster();
+        _agencyNumbers = new HashSet<string>();
+        _today = AgencyCalendar.TryToday(_lib.Agency.firstDate, state.day, out System.DateTime today) ? today : (System.DateTime?)null;
+        if (_today == null)
+            Debug.LogError($"[CaseFactory] Day {state.day}: the agency calendar cannot count from agency.firstDate '{_lib.Agency.firstDate}', so the displaced's numbers and dates print placeholders. Run Tools > TimeDesk > Generate World.");
         foreach (ForcedCaseSlot forced in plan.ForcedCases)
             if (forced != null && forced.legendary != null && !IsMet(state, forced.legendary) && !_roster.Reserve(forced.legendary.displayName))
                 Debug.LogError($"[CaseFactory] Day {plan.DayNumber}: premade '{forced.legendary.displayName}' is forced twice, or shares a name with another forced premade. Check world_source.json days[].forced.");
@@ -140,11 +155,11 @@ public sealed class CaseFactory
             int caseIndex1Based = i + 1;
             int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
             _rng = new SeededRandom(caseSeed);
-            _clueRng = new SeededRandom(Seeds.ForClues(caseSeed));
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
             _dialogRng = new SeededRandom(Seeds.ForDialog(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
+            _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
             _formsSeed = Seeds.ForForms(caseSeed);
             results.Add(GenerateSingleCase(plan, state, i, caseIndex1Based));
         }
@@ -213,7 +228,7 @@ public sealed class CaseFactory
         _violators.TryGetValue(caseIndex1Based, out NationEraProfileSO violatorPlace);
 
         // 3) Decide the claimed era (the traveller's stated home and destination).
-        EraSO trueEra = legendary != null ? legendary.trueEra
+        EraSO claimedEra = legendary != null ? legendary.trueEra
             : violatorPlace != null ? violatorPlace.era
             : PickEraFromPlan(plan);
 
@@ -227,14 +242,14 @@ public sealed class CaseFactory
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, trueEra);
+        NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, claimedEra);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
-        string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, trueEra);
+        string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
         string givenName = ResolveGivenName(legendary, forcedPremade, place, caseIndex1Based);
         TravellerGender gender = legendary != null ? legendary.gender
             : place == null ? TravellerGender.Unknown
             : TravellerGenders.FromNameLists(givenName, place.maleNames, place.femaleNames);
-        string role = archetype != null ? archetype.displayName : "Traveler";
+        string role = archetype != null ? archetype.displayName : UiText.Get("case.roleUnknown");
         string visitorName = legendary != null ? givenName : $"{givenName} ({role})";
         string birthDate = legendary != null ? legendary.birthDate : GenerateBirthDate(place);
         string intro = Interview.Opener(_lib.Interview, gender, legendary != null ? legendary.displayName : null, legendary != null ? legendary.introLine : null);
@@ -242,11 +257,11 @@ public sealed class CaseFactory
         var inst = new CaseInstance
         {
             caseIndex = index0Based,
-            trueEra = trueEra,
+            claimedNation = nation,
+            claimedEra = claimedEra,
             isLegendary = legendary != null,
             legendarySource = legendary,
             archetype = archetype,
-            nation = nation,
             originLabel = originLabel,
             tongueId = place != null && place.tongue != null ? place.tongue : string.Empty,
             visitorDisplayName = visitorName,
@@ -262,6 +277,12 @@ public sealed class CaseFactory
             return inst;
         }
 
+        inst.kind = blueprint.Kind;
+
+        // 4.8) A displaced person's agency file, on their account stream (the forms and the registry print it).
+        if (inst.kind == TravellerKind.Displaced && _today != null)
+            inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
+
         // 5) Merge authored timeline impacts (blueprint + legendary).
         if (blueprint.AuthoredImpacts != null)
             inst.authoredImpacts.AddRange(blueprint.AuthoredImpacts);
@@ -269,20 +290,18 @@ public sealed class CaseFactory
         if (legendary != null && legendary.authoredImpacts != null)
             inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
-        // 6) Build documents + inject (legacy) clues.
-        BuildDocumentsAndClues(inst, trueEra, blueprint, state);
+        // 6) Build the documents (their fields are filled below).
+        BuildDocuments(inst, blueprint);
 
         // 7) Investigation layer: stated claim, structured fields, the lie (if any), daily rules.
-        inst.claimedNation = nation;
-        inst.claimedEra = trueEra;
-        inst.claimLine = Interview.Claim(_lib.Interview, originLabel);
-        inst.claimAllowedByRules = plan.ClaimAllowed(nation, trueEra);
+        inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
+        inst.claimAllowedByRules = plan.ClaimAllowed(nation, claimedEra);
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = Disguise(inst, fields, plan, blueprint, state, caseIndex1Based, place, legendary);
         AddAnswers(inst, lie);
 
         // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
-        EraSO talkEra = place != null ? place.era : trueEra;
+        EraSO talkEra = place != null ? place.era : claimedEra;
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
         inst.look = ComposeLook(inst, place, lie, legendary, caseIndex1Based);
@@ -297,7 +316,7 @@ public sealed class CaseFactory
 
     /// <summary>Origin label when no place is authored for a nation+era (content gap).</summary>
     private static string FallbackOriginLabel(NationSO nation, EraSO era) =>
-        OriginLabels.Format(nation != null ? nation.displayName : "an unlisted land", era != null ? era.displayName : null);
+        OriginLabels.Format(nation != null ? nation.displayName : UiText.Get("case.unlistedLand"), era != null ? era.displayName : null);
 
     /// <summary>
     /// Fills each document's structured fields from today's facts for the
@@ -464,8 +483,7 @@ public sealed class CaseFactory
     /// <summary>
     /// The chance a traveller lies: the blueprint's contradiction chance plus
     /// tomorrow's slot modifier and active ForgeryChanceBonus effects, clamped
-    /// to 0..1. The legacy clue path reads the same knob as its per-clue
-    /// contradiction chance.
+    /// to 0..1.
     /// </summary>
     private float LiarChance(CaseBlueprintSO blueprint, WorldState state) =>
         Mathf.Clamp01(
@@ -474,21 +492,29 @@ public sealed class CaseFactory
             TimelineEffects.SumFloat(state, _lib, EffectOpType.ForgeryChanceBonus));
 
     /// <summary>
-    /// Resolves a field's value for the claim: identity fields come from the
-    /// registered identity (a liar's cover); place fields come from today's
-    /// facts for the claimed place, with a readable placeholder (and a warning)
-    /// when content is missing; also each spoken answer's cover value
-    /// (AddAnswers). A liar's Papers tells overwrite the printed values
+    /// Resolves a field's value for the claim, one value per category per
+    /// traveller (the traveller-types spec's F4): identity fields come from
+    /// the registered identity (a liar's cover); the destination is the
+    /// claimed place's label; the agency's numbers and dates from the
+    /// traveller's file (a departure is dated today); place fields come from
+    /// today's facts for the claimed place, with a readable placeholder (and
+    /// a warning) when content is missing; also each spoken answer's cover
+    /// value (AddAnswers). A liar's Papers tells overwrite the printed values
     /// afterwards (Disguise); an Answer tell replaces only the spoken value
     /// (Interview.Answer).
     /// </summary>
     private string ResolveFieldValue(ClueCategory category, CaseInstance inst)
     {
-        if (category == ClueCategory.Name)
-            return inst.visitorGivenName;
-
-        if (category == ClueCategory.BirthDate)
-            return inst.trueBirthDate;
+        switch (category)
+        {
+            case ClueCategory.Name: return inst.visitorGivenName;
+            case ClueCategory.BirthDate: return inst.trueBirthDate;
+            case ClueCategory.Destination: return inst.originLabel;
+            case ClueCategory.CitizenId: return AgencyValue(inst.displacement?.Number, category);
+            case ClueCategory.Incident: return AgencyValue(inst.displacement?.Incident, category);
+            case ClueCategory.Expiry: return AgencyValue(inst.displacement?.ValidUntil, category);
+            case ClueCategory.DepartureDate: return AgencyValue(_today != null ? AgencyCalendar.Write(_today.Value) : null, category);
+        }
 
         string value = _facts.Get(inst.claimedNation != null ? inst.claimedNation.id : null,
                                   inst.claimedEra != null ? inst.claimedEra.id : null, category);
@@ -502,6 +528,9 @@ public sealed class CaseFactory
         Debug.LogWarning($"[CaseFactory] '{inst.originLabel}' has no {category} fact today; using a placeholder on the papers and in answers. Check the place's facts (Tools > TimeDesk > Validate Content Library).");
         return $"{category}:{e}";
     }
+
+    /// <summary>An agency number or date, or a stable placeholder when the traveller has none (the day's calendar error names the cause).</summary>
+    private static string AgencyValue(string value, ClueCategory category) => value ?? $"{category}:none";
 
     /// <summary>
     /// Picks the visitor archetype: the premade's > blueprint pool > library pool.
@@ -530,20 +559,20 @@ public sealed class CaseFactory
     /// Picks the traveller's place: the premade's claimed place (if authored) >
     /// uniform pick among today's places in the claimed era > null (no place).
     /// </summary>
-    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO trueEra)
+    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra)
     {
         if (legendary != null && legendary.nation != null)
         {
-            NationEraProfileSO own = _lib.GetProfile(legendary.nation, trueEra);
+            NationEraProfileSO own = _lib.GetProfile(legendary.nation, claimedEra);
             if (own != null && !_todays.Contains(own))
                 Debug.LogWarning($"[CaseFactory] Premade '{legendary.displayName}' claims '{own.OriginLabel}', which is not in today's world, so their papers print placeholders. List them only on days that include their place.");
             return own;
         }
 
-        if (trueEra == null)
+        if (claimedEra == null)
             return null;
 
-        var candidates = _todays.Where(p => p.era == trueEra).ToList();
+        var candidates = _todays.Where(p => p.era == claimedEra).ToList();
         return candidates.Count == 0 ? null : candidates[_rng.Range(0, candidates.Count)];
     }
 
@@ -567,7 +596,7 @@ public sealed class CaseFactory
         if (picked != null)
             return picked;
 
-        string fallback = $"Subject #{caseIndex1Based}";
+        string fallback = UiText.Format("case.subject", caseIndex1Based);
         _roster.Reserve(fallback);
         return fallback;
     }
@@ -583,12 +612,14 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Builds the agency's citizen master record for a day's visitors: one
-    /// registry entry each (redesign phase 2), a group of rows (Name and Born
-    /// are evidence; Origin and the clerk's Note are not) under UI string
-    /// labels, with no agency number on file yet. Records carry the registered
-    /// identity: an honest traveller's, or a liar's cover (claimed origin).
-    /// They never reveal a true home. (Future: deliberately missing/corrupted
-    /// records + family history.)
+    /// Displacement Registry entry each (traveller types §4.2), found by its
+    /// Displacement No. or name, a group of rows under UI string labels: Name,
+    /// Displacement No., Born, Origin and Incident (evidence of their
+    /// categories), Found, Status ("Awaiting return") and the clerk's Note (not
+    /// evidence); the number, incident and found rows only with an agency file.
+    /// Records carry the registered identity: an honest traveller's, or a
+    /// liar's cover (claimed origin). They never reveal a true home. (Future:
+    /// deliberately missing/corrupted records + family history.)
     /// </summary>
     public static CitizenRegistry BuildRegistry(IReadOnlyList<CaseInstance> cases)
     {
@@ -602,20 +633,24 @@ public sealed class CaseFactory
             if (inst == null || string.IsNullOrWhiteSpace(inst.visitorGivenName))
                 continue;
 
-            string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.nation, inst.trueEra);
+            string origin = !string.IsNullOrEmpty(inst.originLabel) ? inst.originLabel : FallbackOriginLabel(inst.claimedNation, inst.claimedEra);
             string note = !inst.isLegendary ? UiText.Get("records.note.none")
                 : inst.legendarySource != null && !string.IsNullOrWhiteSpace(inst.legendarySource.recordNote) ? inst.legendarySource.recordNote
                 : UiText.Get("records.note.sealed");
-            registry.Add(new CitizenRecord(inst.visitorGivenName, null, new[]
+            DisplacementFile file = inst.displacement;
+            var rows = new List<RecordRow> { new RecordRow(UiText.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name) };
+            if (file != null)
+                rows.Add(new RecordRow(UiText.Get("records.row.number"), file.Number, ClueCategory.CitizenId));
+            rows.Add(new RecordRow(UiText.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate));
+            rows.Add(new RecordRow(UiText.Get("records.row.origin"), origin, ClueCategory.Destination));
+            if (file != null)
             {
-                new RecordGroup(UiText.Get("records.group.registry"), new[]
-                {
-                    new RecordRow(UiText.Get("records.row.name"), inst.visitorGivenName, ClueCategory.Name),
-                    new RecordRow(UiText.Get("records.row.born"), inst.trueBirthDate, ClueCategory.BirthDate),
-                    new RecordRow(UiText.Get("records.row.origin"), origin),
-                    new RecordRow(UiText.Get("records.row.note"), note)
-                })
-            }));
+                rows.Add(new RecordRow(UiText.Get("records.row.incident"), file.Incident, ClueCategory.Incident));
+                rows.Add(new RecordRow(UiText.Get("records.row.found"), file.Found));
+            }
+            rows.Add(new RecordRow(UiText.Get("records.row.status"), UiText.Get("records.status.awaiting")));
+            rows.Add(new RecordRow(UiText.Get("records.row.note"), note));
+            registry.Add(new CitizenRecord(inst.visitorGivenName, file?.Number, new[] { new RecordGroup(UiText.Get("records.group.registry"), rows) }));
         }
 
         return registry;
@@ -711,190 +746,17 @@ public sealed class CaseFactory
         state != null && premade != null && state.HasFlag(FlagKeys.PremadeMet(premade.id));
 
     /// <summary>
-    /// Creates runtime documents and fills them with (legacy) clue text.
-    /// This is where contradictions and red herrings are injected.
+    /// Creates the traveller's runtime documents from the blueprint's
+    /// templates, in paper order (null templates skipped); their fields are
+    /// filled next (PopulateDocumentFields).
     /// </summary>
-    private void BuildDocumentsAndClues(CaseInstance inst, EraSO trueEra, CaseBlueprintSO blueprint, WorldState state)
+    private static void BuildDocuments(CaseInstance inst, CaseBlueprintSO blueprint)
     {
-        if (inst == null || trueEra == null || blueprint == null || _lib == null)
+        if (inst == null || blueprint == null || blueprint.DocumentTemplates == null)
             return;
 
-        if (blueprint.DocumentTemplates == null || blueprint.DocumentTemplates.Length == 0)
-            return;
-
-        // Decide how many total clue lines this case should contain.
-        int totalCluesTarget = _clueRng.Range(blueprint.TotalCluesMin, blueprint.TotalCluesMax + 1);
-
-        // Create runtime document instances from templates.
-        var docInstances = new List<DocumentInstance>();
         foreach (DocumentTemplateSO dt in blueprint.DocumentTemplates)
-        {
-            if (dt == null)
-                continue;
-
-            docInstances.Add(new DocumentInstance { template = dt });
-        }
-
-        // Build clue pools from the library:
-        // - supporting clues for the claimed era
-        // - contradicting clues against the claimed era
-        // - red herrings: irrelevant but plausible clues
-        IReadOnlyList<ClueSO> clueSource = _lib.Clues != null ? _lib.Clues : System.Array.Empty<ClueSO>();
-
-        var supportsTrueEra = clueSource.Where(c =>
-            c != null &&
-            c.supports != null &&
-            c.supports.Contains(trueEra) &&
-            IsClueAllowedByUpgrades(c, state)).ToList();
-
-        var contradictsTrueEra = clueSource.Where(c =>
-            c != null &&
-            c.contradicts != null &&
-            c.contradicts.Contains(trueEra) &&
-            IsClueAllowedByUpgrades(c, state)).ToList();
-
-        var redHerrings = clueSource.Where(c =>
-            c != null &&
-            IsClueAllowedByUpgrades(c, state) &&
-            (c.supports == null || !c.supports.Contains(trueEra)) &&
-            (c.contradicts == null || !c.contradicts.Contains(trueEra))
-        ).ToList();
-
-        // Effective contradiction chance: the same knob as the liar chance
-        // (blueprint base + tomorrow modifier + stacked ForgeryChanceBonus effects).
-        float effectiveContradictionChance = LiarChance(blueprint, state);
-
-        // Decide counts: how many contradictions and red herrings to inject.
-        int contradictions = 0;
-        for (int i = 0; i < totalCluesTarget; i++)
-            if (_clueRng.Value() < effectiveContradictionChance) contradictions++;
-
-        int herrings = 0;
-        for (int i = 0; i < totalCluesTarget; i++)
-            if (_clueRng.Value() < blueprint.RedHerringChance) herrings++;
-
-        contradictions = Mathf.Min(contradictions, totalCluesTarget);
-        herrings = Mathf.Min(herrings, totalCluesTarget - contradictions);
-
-        int supports = totalCluesTarget - contradictions - herrings;
-
-        // Pick clues from each pool without repeating.
-        var picked = new List<ClueSO>();
-        picked.AddRange(PickUnique(supportsTrueEra, supports));
-        picked.AddRange(PickUnique(contradictsTrueEra, contradictions));
-        picked.AddRange(PickUnique(redHerrings, herrings));
-
-        // Store global clue list on the case.
-        inst.usedClues.AddRange(picked);
-
-        // Distribute each clue into an appropriate document.
-        foreach (ClueSO clue in picked)
-        {
-            DocumentInstance doc = PickDocForClue(docInstances, clue);
-            if (doc == null)
-                continue;
-
-            doc.cluesInDoc.Add(clue);
-        }
-
-        // Render simple text for each document (prototype-friendly).
-        foreach (DocumentInstance doc in docInstances)
-        {
-            doc.renderedText = RenderDocText(doc);
-            inst.documents.Add(doc);
-        }
-    }
-
-    /// <summary>
-    /// Determines whether a clue is allowed to appear based on unlocked upgrades.
-    /// If a clue requires an upgrade (e.g., scanner), it won't be generated until unlocked.
-    /// </summary>
-    private static bool IsClueAllowedByUpgrades(ClueSO clue, WorldState state)
-    {
-        // If no upgrade is required, the clue is always eligible.
-        if (clue.requiresUpgradeToReveal == null)
-            return true;
-
-        // If state is missing, treat gated clues as unavailable.
-        if (state == null)
-            return false;
-
-        return state.unlockedUpgradeIds.Contains(clue.requiresUpgradeToReveal.id);
-    }
-
-    /// <summary>
-    /// Randomly picks up to 'count' unique items from a pool.
-    /// </summary>
-    private List<ClueSO> PickUnique(List<ClueSO> pool, int count)
-    {
-        var result = new List<ClueSO>();
-
-        if (pool == null || pool.Count == 0 || count <= 0)
-            return result;
-
-        var temp = new List<ClueSO>(pool);
-
-        for (int i = 0; i < count && temp.Count > 0; i++)
-        {
-            int idx = _clueRng.Range(0, temp.Count);
-            result.Add(temp[idx]);
-            temp.RemoveAt(idx);
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Chooses which document should contain a given clue.
-    /// Prefers templates whose preferredCategories include the clue’s category,
-    /// and respects each template’s maxClues limit when possible.
-    /// </summary>
-    private DocumentInstance PickDocForClue(List<DocumentInstance> docs, ClueSO clue)
-    {
-        if (docs == null || docs.Count == 0 || clue == null)
-            return null;
-
-        // Prefer docs that want this clue category and have room.
-        var preferred = docs.Where(d =>
-            d != null &&
-            d.template != null &&
-            d.template.preferredCategories != null &&
-            d.template.preferredCategories.Contains(clue.category) &&
-            d.cluesInDoc.Count < d.template.maxClues
-        ).ToList();
-
-        if (preferred.Count > 0)
-            return preferred[_clueRng.Range(0, preferred.Count)];
-
-        // Otherwise choose any doc that still has room.
-        var any = docs.Where(d =>
-            d != null &&
-            d.template != null &&
-            d.cluesInDoc.Count < d.template.maxClues
-        ).ToList();
-
-        if (any.Count > 0)
-            return any[_clueRng.Range(0, any.Count)];
-
-        // Worst case: all docs are "full" -> dump into a random doc anyway.
-        return docs[_clueRng.Range(0, docs.Count)];
-    }
-
-    /// <summary>
-    /// Produces a simple, readable document string from its clues.
-    /// This keeps the prototype UI trivial (just show a block of text).
-    /// </summary>
-    private static string RenderDocText(DocumentInstance doc)
-    {
-        string header = doc.template != null ? doc.template.displayName : "Document";
-
-        var sb = new System.Text.StringBuilder();
-        sb.AppendLine(header);
-        sb.AppendLine("----------------");
-
-        foreach (ClueSO clue in doc.cluesInDoc)
-            sb.AppendLine("• " + clue.text);
-
-        return sb.ToString();
+            if (dt != null)
+                inst.documents.Add(new DocumentInstance { template = dt });
     }
 }

@@ -17,6 +17,7 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
   era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
   year: 2150
+  moment: An island commonwealth running on wave power, 2150
   tongue: greek
   birthYearMin: 2080
   birthYearMax: 2132

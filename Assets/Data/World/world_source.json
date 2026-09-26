@@ -975,7 +975,7 @@
   },
   "content": {
     "library": "Assets/Data/Content Library/ContentLibrary_Main.asset",
-    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Investigation.asset",
+    "blueprint": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset",
     "dayPlanFolder": "Assets/Data/Investigation",
     "attributes": [
       {
@@ -1011,7 +1011,12 @@
   "agency": {
     "name": "TEMPORAL CUSTOMS",
     "programme": "Debt Relief Departures",
-    "firstDate": "14 Mar 2150"
+    "firstDate": "14 Mar 2150",
+    "displaced": {
+      "foundWithinDays": 30,
+      "validDaysMin": 3,
+      "validDaysMax": 365
+    }
   },
   "eras": [
     {
@@ -6682,11 +6687,17 @@
     "deskName": "DESK",
     "opener": "Next! Step forward, {honorific}.",
     "openerLegendary": "Priority arrival: {name}.",
-    "claim": "I request passage home to {place}.",
+    "claims": [
+      {
+        "kind": "Displaced",
+        "text": "Please. Send me home to {place}."
+      }
+    ],
     "honorificMale": "sir",
     "honorificFemale": "madam",
     "honorificUnknown": "traveller",
     "requestLabel": "Request {document}",
+    "papersLabel": "Request papers >",
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about home >",
@@ -7083,7 +7094,8 @@
     "lines": {
       "leaderGained": "HISTORY: {nation} now dominates the timeline. The Future belongs to {place}.",
       "leaderLost": "HISTORY: {nation} no longer dominates the timeline. The Future is unsettled until a new power rises.",
-      "carry": "HISTORY: travellers brought {value} to {place}."
+      "carry": "HISTORY: travellers brought {value} to {place}.",
+      "dominant": "{attribute} is now DOMINANT in {place}."
     },
     "rules": [
       {
@@ -7288,6 +7300,405 @@
         ]
       }
     ]
+  },
+  "pc": {
+    "sites": [
+      {
+        "id": "news",
+        "kind": "News",
+        "name": "The Temporal Times",
+        "domain": "times.tc",
+        "glyph": "site_news",
+        "blurb": "Today's edition and back issues.",
+        "fromDay": 1
+      },
+      {
+        "id": "history",
+        "kind": "History",
+        "name": "Chronopedia",
+        "domain": "chronopedia",
+        "glyph": "site_history",
+        "blurb": "Every place and era, as history stands today.",
+        "fromDay": 1
+      },
+      {
+        "id": "ancestry",
+        "kind": "Ancestry",
+        "name": "Lineage Archive",
+        "domain": "lineage",
+        "glyph": "site_ancestry",
+        "blurb": "Citizens of the past.",
+        "fromDay": 1
+      }
+    ],
+    "pages": [],
+    "ancestry": {
+      "includePremades": true,
+      "people": [
+        {
+          "id": "ramose",
+          "name": "Ramose",
+          "born": "",
+          "died": "",
+          "place": "egypt_ancient",
+          "note": "Father of Senenmut. A man of modest rank from Armant."
+        },
+        {
+          "id": "hatshepsut",
+          "name": "Hatshepsut",
+          "born": "c. 1507 BCE",
+          "died": "1458 BCE",
+          "place": "egypt_ancient",
+          "note": "Pharaoh of Egypt. Senenmut stewarded her household and built her temple."
+        },
+        {
+          "id": "neferure",
+          "name": "Neferure",
+          "born": "c. 1505 BCE",
+          "died": "",
+          "place": "egypt_ancient",
+          "note": "Daughter of Pharaoh Hatshepsut. Senenmut was her tutor."
+        },
+        {
+          "id": "pericles",
+          "name": "Pericles",
+          "born": "c. 495 BCE",
+          "died": "429 BCE",
+          "place": "greece_ancient",
+          "note": "Strategos of Athens. Companion of Aspasia."
+        },
+        {
+          "id": "pericles_younger",
+          "name": "Pericles the Younger",
+          "born": "c. 440 BCE",
+          "died": "406 BCE",
+          "place": "greece_ancient",
+          "note": "Son of Pericles and Aspasia. A general of Athens."
+        },
+        {
+          "id": "banbiao",
+          "name": "Ban Biao",
+          "born": "3",
+          "died": "54",
+          "place": "china_ancient",
+          "note": "Historian. Father of Ban Gu, Ban Chao and Ban Zhao."
+        },
+        {
+          "id": "bangu",
+          "name": "Ban Gu",
+          "born": "32",
+          "died": "92",
+          "place": "china_ancient",
+          "note": "Historian of the Han. Began the Book of Han, which his sister finished."
+        },
+        {
+          "id": "banchao",
+          "name": "Ban Chao",
+          "born": "32",
+          "died": "102",
+          "place": "china_ancient",
+          "note": "General who held the Western Regions for the Han."
+        },
+        {
+          "id": "mamun",
+          "name": "Caliph al-Ma'mun",
+          "born": "786",
+          "died": "833",
+          "place": "iraq_medieval",
+          "note": "Caliph in Baghdad. Patron of the House of Wisdom."
+        },
+        {
+          "id": "fust",
+          "name": "Johann Fust",
+          "born": "c. 1400",
+          "died": "1466",
+          "place": "germany_medieval",
+          "note": "Goldsmith and lender of Mainz. Financed Gutenberg's press."
+        },
+        {
+          "id": "schoeffer",
+          "name": "Peter Schoeffer",
+          "born": "c. 1425",
+          "died": "c. 1503",
+          "place": "germany_medieval",
+          "note": "Scribe and printer. Worked Gutenberg's press, then Fust's."
+        },
+        {
+          "id": "piero",
+          "name": "Ser Piero da Vinci",
+          "born": "1426",
+          "died": "1504",
+          "place": "italy_medieval",
+          "note": "Notary of Florence. Father of Leonardo."
+        },
+        {
+          "id": "verrocchio",
+          "name": "Andrea del Verrocchio",
+          "born": "c. 1435",
+          "died": "1488",
+          "place": "italy_medieval",
+          "note": "Sculptor and painter of Florence. Leonardo trained in his workshop."
+        },
+        {
+          "id": "ludovico",
+          "name": "Ludovico Sforza",
+          "born": "1452",
+          "died": "1508",
+          "place": "italy_earlymodern",
+          "note": "Duke of Milan. Patron of Leonardo."
+        },
+        {
+          "id": "bassano",
+          "name": "Baptiste Bassano",
+          "born": "",
+          "died": "1576",
+          "place": "britain_earlymodern",
+          "note": "Venetian-born court musician to the Tudors. Father of Aemilia Lanyer."
+        }
+      ],
+      "relations": [
+        {
+          "person": "senenmut",
+          "kind": "Father",
+          "other": "ramose"
+        },
+        {
+          "person": "senenmut",
+          "kind": "Pharaoh",
+          "other": "hatshepsut"
+        },
+        {
+          "person": "senenmut",
+          "kind": "Pupil",
+          "other": "neferure"
+        },
+        {
+          "person": "ramose",
+          "kind": "Son",
+          "other": "senenmut"
+        },
+        {
+          "person": "hatshepsut",
+          "kind": "Daughter",
+          "other": "neferure"
+        },
+        {
+          "person": "hatshepsut",
+          "kind": "Steward",
+          "other": "senenmut"
+        },
+        {
+          "person": "neferure",
+          "kind": "Mother",
+          "other": "hatshepsut"
+        },
+        {
+          "person": "neferure",
+          "kind": "Tutor",
+          "other": "senenmut"
+        },
+        {
+          "person": "aspasia",
+          "kind": "Companion",
+          "other": "pericles"
+        },
+        {
+          "person": "aspasia",
+          "kind": "Son",
+          "other": "pericles_younger"
+        },
+        {
+          "person": "pericles",
+          "kind": "Companion",
+          "other": "aspasia"
+        },
+        {
+          "person": "pericles",
+          "kind": "Son",
+          "other": "pericles_younger"
+        },
+        {
+          "person": "pericles_younger",
+          "kind": "Father",
+          "other": "pericles"
+        },
+        {
+          "person": "pericles_younger",
+          "kind": "Mother",
+          "other": "aspasia"
+        },
+        {
+          "person": "banzhao",
+          "kind": "Father",
+          "other": "banbiao"
+        },
+        {
+          "person": "banzhao",
+          "kind": "Brother",
+          "other": "bangu"
+        },
+        {
+          "person": "banzhao",
+          "kind": "Brother",
+          "other": "banchao"
+        },
+        {
+          "person": "banbiao",
+          "kind": "Son",
+          "other": "bangu"
+        },
+        {
+          "person": "banbiao",
+          "kind": "Son",
+          "other": "banchao"
+        },
+        {
+          "person": "banbiao",
+          "kind": "Daughter",
+          "other": "banzhao"
+        },
+        {
+          "person": "bangu",
+          "kind": "Father",
+          "other": "banbiao"
+        },
+        {
+          "person": "bangu",
+          "kind": "Sister",
+          "other": "banzhao"
+        },
+        {
+          "person": "bangu",
+          "kind": "Brother",
+          "other": "banchao"
+        },
+        {
+          "person": "banchao",
+          "kind": "Father",
+          "other": "banbiao"
+        },
+        {
+          "person": "banchao",
+          "kind": "Brother",
+          "other": "bangu"
+        },
+        {
+          "person": "banchao",
+          "kind": "Sister",
+          "other": "banzhao"
+        },
+        {
+          "person": "khwarizmi",
+          "kind": "Patron",
+          "other": "mamun"
+        },
+        {
+          "person": "arib",
+          "kind": "Patron",
+          "other": "mamun"
+        },
+        {
+          "person": "mamun",
+          "kind": "Scholar",
+          "other": "khwarizmi"
+        },
+        {
+          "person": "mamun",
+          "kind": "Court singer",
+          "other": "arib"
+        },
+        {
+          "person": "gutenberg",
+          "kind": "Financier",
+          "other": "fust"
+        },
+        {
+          "person": "gutenberg",
+          "kind": "Assistant",
+          "other": "schoeffer"
+        },
+        {
+          "person": "fust",
+          "kind": "Partner",
+          "other": "gutenberg"
+        },
+        {
+          "person": "fust",
+          "kind": "Son-in-law",
+          "other": "schoeffer"
+        },
+        {
+          "person": "schoeffer",
+          "kind": "Master",
+          "other": "gutenberg"
+        },
+        {
+          "person": "schoeffer",
+          "kind": "Father-in-law",
+          "other": "fust"
+        },
+        {
+          "person": "leonardo",
+          "kind": "Father",
+          "other": "piero"
+        },
+        {
+          "person": "leonardo",
+          "kind": "Teacher",
+          "other": "verrocchio"
+        },
+        {
+          "person": "leonardo",
+          "kind": "Patron",
+          "other": "ludovico"
+        },
+        {
+          "person": "leonardo",
+          "kind": "Sitter",
+          "other": "gallerani"
+        },
+        {
+          "person": "piero",
+          "kind": "Son",
+          "other": "leonardo"
+        },
+        {
+          "person": "verrocchio",
+          "kind": "Pupil",
+          "other": "leonardo"
+        },
+        {
+          "person": "ludovico",
+          "kind": "Painter",
+          "other": "leonardo"
+        },
+        {
+          "person": "ludovico",
+          "kind": "Companion",
+          "other": "gallerani"
+        },
+        {
+          "person": "gallerani",
+          "kind": "Companion",
+          "other": "ludovico"
+        },
+        {
+          "person": "gallerani",
+          "kind": "Portrait painter",
+          "other": "leonardo"
+        },
+        {
+          "person": "lanyer",
+          "kind": "Father",
+          "other": "bassano"
+        },
+        {
+          "person": "bassano",
+          "kind": "Daughter",
+          "other": "lanyer"
+        }
+      ]
+    }
   },
   "ui": {
     "readingLanguage": "en",
@@ -8141,7 +8552,7 @@
       },
       {
         "key": "window.internet",
-        "text": "Internet - News",
+        "text": "Internet",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8170,12 +8581,6 @@
         "tier": "Full"
       },
       {
-        "key": "body.internet",
-        "text": "Today's news feed. (placeholder)",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "body.lexicon",
         "text": "Wikipedia-style era glossary. (placeholder)",
         "gloss": "None",
@@ -8196,6 +8601,426 @@
       {
         "key": "body.notes",
         "text": "Your notes. (placeholder)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.back",
+        "text": "<",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.forward",
+        "text": ">",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.home",
+        "text": "Home",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.go",
+        "text": "Go",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.address",
+        "text": "Type a site's name or address",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.search",
+        "text": "Search names",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "browser.searchButton",
+        "text": "Search",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.portal.title",
+        "text": "Start page",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.portal.masthead",
+        "text": "CHRONET",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.portal.intro",
+        "text": "The sites of the Temporal Customs network. Pick one, or type its name in the address field.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.notFound.title",
+        "text": "Page not found",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.notFound.body",
+        "text": "Nothing is filed at {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.home",
+        "text": "Back to the start page",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.masthead",
+        "text": "{0} · online edition · Day {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.issueTitle",
+        "text": "{0}, day {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.backIssue",
+        "text": "Back issue: the paper of day {0}.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.world",
+        "text": "WORLD",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.notices",
+        "text": "NOTICES",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.noNotices",
+        "text": "No notices.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.standings",
+        "text": "TIMELINE STANDINGS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.standing",
+        "text": "{0}. {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.noStandings",
+        "text": "No standings yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.archive",
+        "text": "ARCHIVE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.issueLink",
+        "text": "Day {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.allIssues",
+        "text": "All back issues",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.today",
+        "text": "Today's edition",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.archiveTitle",
+        "text": "Back issues",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.archiveRow",
+        "text": "Day {0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.noBackIssues",
+        "text": "No back issues yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.quiet",
+        "text": "A quiet day on the timeline.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.intro",
+        "text": "Every country in every era, as history stands today. A revised fact says when it changed and what it was.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.present",
+        "text": "The present",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.revisions",
+        "text": "Revisions",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.country",
+        "text": "COUNTRY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.none",
+        "text": "—",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.subtitle",
+        "text": "{0} · {1} · {2}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.presentNote",
+        "text": "This is the present: the Future belongs to its people.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.revised",
+        "text": "Revised on day {0} (was {1})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.people",
+        "text": "People of {0} in the Lineage Archive",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.index",
+        "text": "Index of places",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.presentNone",
+        "text": "No power holds the Future. The present is unsettled until one rises.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.whyCarry",
+        "text": "Carried from {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.whyRule",
+        "text": "{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.whyPending",
+        "text": "Carried from {0} (pending)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.noRevisions",
+        "text": "History has not changed yet.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.col.day",
+        "text": "DAY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.col.place",
+        "text": "PLACE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.col.fact",
+        "text": "FACT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.col.before",
+        "text": "BEFORE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.col.after",
+        "text": "AFTER",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.history.col.why",
+        "text": "WHY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.intro",
+        "text": "Records of citizens of the past. Search by name, or pick a country and an era.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.country",
+        "text": "COUNTRY",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.era",
+        "text": "ERA",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.all",
+        "text": "All",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.count",
+        "text": "{0} records",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.hits",
+        "text": "{0} records match \"{1}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.noHits",
+        "text": "No record matches.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.col.name",
+        "text": "NAME",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.col.born",
+        "text": "BORN",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.col.place",
+        "text": "PLACE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.field.name",
+        "text": "NAME",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.field.born",
+        "text": "BORN",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.field.died",
+        "text": "DIED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.field.place",
+        "text": "PLACE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.field.note",
+        "text": "OCCUPATION / NOTE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.unknown",
+        "text": "Unknown",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.relations",
+        "text": "RELATIONS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.relation",
+        "text": "{0}: {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.lineage.back",
+        "text": "Back to the search",
         "gloss": "None",
         "tier": "Full"
       },
@@ -8506,6 +9331,54 @@
         "tier": "Full"
       },
       {
+        "key": "records.row.number",
+        "text": "Displacement No.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.incident",
+        "text": "Incident",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.found",
+        "text": "Found",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.row.status",
+        "text": "Status",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.status.awaiting",
+        "text": "Awaiting return",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "case.roleUnknown",
+        "text": "Traveler",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "case.unlistedLand",
+        "text": "an unlisted land",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "case.subject",
+        "text": "Subject #{0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "records.compareLabel",
         "text": "Records · {0}",
         "gloss": "None",
@@ -8754,6 +9627,36 @@
       {
         "key": "category.BirthDate",
         "text": "BIRTH DATE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.CitizenId",
+        "text": "CITIZEN ID",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Destination",
+        "text": "DESTINATION",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Incident",
+        "text": "INCIDENT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.DepartureDate",
+        "text": "DEPARTURE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Expiry",
+        "text": "VALID UNTIL",
         "gloss": "None",
         "tier": "Full"
       }

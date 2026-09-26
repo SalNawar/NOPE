@@ -321,10 +321,10 @@ public static class _TimeDeskAuditPlay
         if (gatherEvidence)
             yield return Evidence(o, c);
 
-        var runner = (DialogRunner)Field(o.Ui, "_runner");
+        var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
         foreach (DialogLine l in runner.Transcript)
             Line($"   [{l.Speaker}] {l.Text}{(l.IsAnswer ? $" <{l.Category}={l.Value}{(l.IsTell ? " TELL" : "")}>" : "")}");
-        var log = (DiscrepancyLog)Field(o.Ui, "_discrepancies");
+        var log = (DiscrepancyLog)Field(Field(o.Ui, "_evidence"), "_discrepancies");
         foreach (Discrepancy d in log.Items)
             Line($"   evidence: {d.category} {d.provedBy} from {d.source} value='{d.documentValue}' expected='{d.expectedValue}' origin='{d.actualOrigin}' | {UiText.Deviation(d)}");
         Line($"   evidence count {o.Ui.EvidenceCount}; plan: {plan}");
@@ -367,22 +367,29 @@ public static class _TimeDeskAuditPlay
 
     private static bool Once(string key) => MistakesMade.Add(key);
 
-    /// <summary>Every request at the hub, then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
+    /// <summary>Every request at the hub and in the papers menu, then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
     private static IEnumerator Interview(Office o, CaseInstance c, bool dialog)
     {
-        var runner = (DialogRunner)Field(o.Ui, "_runner");
+        var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
         var chosen = new HashSet<string>();
         void Choose(DialogChoice choice)
         {
             chosen.Add(choice.Id);
-            Call(o.Ui, "Choose", choice.Id);
+            Call(Field(o.Ui, "_interview"), "Choose", choice.Id);
         }
 
-        for (int guard = 0; guard < 12; guard++)
+        // Every request, in the papers menu ("Request papers >", phase 3) too: out of it by "< Back" once its forms are handed over.
+        for (int guard = 0; guard < 16; guard++)
         {
             DialogChoice request = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Request && !chosen.Contains(x.Id));
             if (request == null)
-                break;
+            {
+                DialogChoice up = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
+                if (up == null)
+                    break;
+                Call(Field(o.Ui, "_interview"), "Choose", up.Id);
+                continue;
+            }
             Choose(request);
         }
         yield return Seconds(0.4f);
@@ -427,10 +434,10 @@ public static class _TimeDeskAuditPlay
     private static IEnumerator Evidence(Office o, CaseInstance c)
     {
         var compare = (CompareController)Field(o.Ui, "compareController");
-        var tr = (CaseTranslation)Field(o.Ui, "_caseTranslation");
-        var facts = (FactTable)Field(o.Ui, "_facts");
+        var tr = (CaseTranslation)Field(Field(o.Ui, "_interview"), "_caseTranslation");
+        var facts = (FactTable)Field(Field(o.Ui, "_reference"), "_facts");
         var registry = (CitizenRegistry)Field(Field(o.Ui, "recordsWindow"), "_registry");
-        var runner = (DialogRunner)Field(o.Ui, "_runner");
+        var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
         ContentLibrarySO lib = RunManager.Instance.Library;
 
         ComparePick? Proof(ClueCategory category, string tellValue, bool home)
@@ -524,15 +531,15 @@ public static class _TimeDeskAuditPlay
                     compare.Clear();
                     DialogChoice look = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Look && !string.IsNullOrEmpty(x.Next));
                     if (look != null)
-                        Call(o.Ui, "Choose", look.Id);
+                        Call(Field(o.Ui, "_interview"), "Choose", look.Id);
                     DialogChoice item = runner.Choices.FirstOrDefault(x => x.Action == DialogAction.InspectGarment && x.GarmentIndex == gi);
                     if (item != null)
-                        Call(o.Ui, "Choose", item.Id);
+                        Call(Field(o.Ui, "_interview"), "Choose", item.Id);
                     else
                         Line($"   no Look choice for garment {gi}");
                     DialogChoice back = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Back);
                     if (back != null && item == null)
-                        Call(o.Ui, "Choose", back.Id);
+                        Call(Field(o.Ui, "_interview"), "Choose", back.Id);
                     return null;
                 }
                 yield return PairDress(o, compare, LookAt, () => Proof(Looks.EvidenceCategory, garment.Value, false), () => Proof(Looks.EvidenceCategory, garment.Value, true), $"dress {garment.Slot}");

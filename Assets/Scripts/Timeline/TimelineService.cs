@@ -70,7 +70,7 @@ public static class TimelineService
             impacts.AddRange(inst.authoredImpacts);
 
         NationEraProfileSO destProfile =
-            inst.nation != null ? lib.GetProfile(inst.nation, chosenEra) : null;
+            inst.claimedNation != null ? lib.GetProfile(inst.claimedNation, chosenEra) : null;
 
         foreach (TimelineImpact impact in impacts)
         {
@@ -85,15 +85,15 @@ public static class TimelineService
             // Profile-level (authored) or ad-hoc destination score.
             if (destProfile != null)
                 world.timeline.AddScore(TimelineKeys.ProfileAttr(destProfile, impact.attribute), delta);
-            else if (inst.nation != null)
-                world.timeline.AddScore(TimelineKeys.AdHocAttr(inst.nation, chosenEra, impact.attribute), delta);
+            else if (inst.claimedNation != null)
+                world.timeline.AddScore(TimelineKeys.AdHocAttr(inst.claimedNation, chosenEra, impact.attribute), delta);
 
             // Global attribute trend (endings / global dominance read this).
             world.timeline.AddScore(TimelineKeys.GlobalAttr(impact.attribute), delta);
 
             // Nation total.
-            if (impact.alsoAffectsNationScore && inst.nation != null)
-                world.timeline.AddScore(TimelineKeys.Nation(inst.nation), delta);
+            if (impact.alsoAffectsNationScore && inst.claimedNation != null)
+                world.timeline.AddScore(TimelineKeys.Nation(inst.claimedNation), delta);
         }
 
         // Tag counters for trigger conditions ("sent:tag:greek-warrior:greece480").
@@ -226,7 +226,8 @@ public static class TimelineService
                     newDominant.Add(key);
 
                     if (announce && tomorrowPlaces.Contains(profile) && !world.timeline.dominantKeys.Contains(key))
-                        news.Add($"{attrs[i].displayName} is now DOMINANT in {profile.displayName}.");
+                        news.Add(Interview.Fill(Interview.Fill(lib.HistoryLines.dominant?.text, History.AttributeToken, attrs[i].displayName),
+                                                Interview.PlaceToken, profile.displayName));
                 }
                 else if (tiers[i] == DominanceTier.Supporting)
                 {

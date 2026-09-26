@@ -50,4 +50,30 @@ public class ThemeRolesTests
     {
         Assert.IsFalse(ThemeRoles.IsDiegetic((ThemeRoleId)999), "an appended role is chrome until it is listed");
     }
+
+    /// <summary>Every role in its serialized order (ThemeTag stores the int): append only.</summary>
+    private static readonly ThemeRoleId[] InSerializedOrder =
+    {
+        ThemeRoleId.Desktop, ThemeRoleId.ScreenStrip, ThemeRoleId.Taskbar, ThemeRoleId.TaskbarGloss, ThemeRoleId.StartButton,
+        ThemeRoleId.Tray, ThemeRoleId.WindowBody, ThemeRoleId.TitleBar, ThemeRoleId.TitleGloss, ThemeRoleId.Button,
+        ThemeRoleId.CloseButton, ThemeRoleId.AcceptButton, ThemeRoleId.DenyButton, ThemeRoleId.WheelButton, ThemeRoleId.SearchButton,
+        ThemeRoleId.DesktopIcon, ThemeRoleId.DeskButton, ThemeRoleId.Panel, ThemeRoleId.ClaimStrip, ThemeRoleId.Alert,
+        ThemeRoleId.StickyNote, ThemeRoleId.CompareBar, ThemeRoleId.CompareMatch, ThemeRoleId.CompareMismatch, ThemeRoleId.CompareNeutral,
+        ThemeRoleId.SelectionHighlight, ThemeRoleId.StartMenu, ThemeRoleId.MenuEntry, ThemeRoleId.QuitEntry, ThemeRoleId.NewsletterBorder,
+        ThemeRoleId.Newsletter, ThemeRoleId.NewsletterButton, ThemeRoleId.DeskDim, ThemeRoleId.InputField, ThemeRoleId.InputPlaceholder,
+        ThemeRoleId.Tooltip, ThemeRoleId.ClickCatcher, ThemeRoleId.DiegeticPaper, ThemeRoleId.DiegeticPhoto, ThemeRoleId.DiegeticRow,
+        ThemeRoleId.DiegeticLabel, ThemeRoleId.DiegeticNote, ThemeRoleId.DiegeticBacking, ThemeRoleId.DiegeticBookRow, ThemeRoleId.DiegeticBubble,
+        ThemeRoleId.DiegeticDevice
+    };
+
+    /// <summary>Audit R1-003 for this enum: ThemeTag serializes the role as an int, so inserting or reordering a role would silently remap every tag in OfficeGameplay. Desktop = 0 .. DiegeticDevice = 45.</summary>
+    [Test]
+    public void EveryRole_KeepsItsSerializedInt()
+    {
+        for (int i = 0; i < InSerializedOrder.Length; i++)
+            Assert.AreEqual(i, (int)InSerializedOrder[i], InSerializedOrder[i].ToString());
+        Assert.AreEqual(37, (int)ThemeRoleId.DiegeticPaper);
+        Assert.AreEqual(45, (int)ThemeRoleId.DiegeticDevice);
+        Assert.AreEqual(InSerializedOrder.Length, Enum.GetValues(typeof(ThemeRoleId)).Length, "a new role is appended here too");
+    }
 }

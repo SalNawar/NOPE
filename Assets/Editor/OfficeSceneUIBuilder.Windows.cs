@@ -18,15 +18,18 @@ public static partial class OfficeSceneUIBuilder
     private const string DesktopConfigPath = "Assets/Data/Config/Desktop_Default.asset";
 
     /// <summary>Returns the desktop's knobs, creating them with the defaults when missing.</summary>
-    private static DesktopConfigSO EnsureDesktopConfig()
+    private static DesktopConfigSO EnsureDesktopConfig() => EnsureConfigAsset<DesktopConfigSO>(DesktopConfigPath);
+
+    /// <summary>Returns the knobs asset at <paramref name="path"/> (under Assets/Data/Config), creating it with the defaults when missing (a designer's edits are kept).</summary>
+    private static T EnsureConfigAsset<T>(string path) where T : ScriptableObject
     {
-        DesktopConfigSO config = AssetDatabase.LoadAssetAtPath<DesktopConfigSO>(DesktopConfigPath);
+        T config = AssetDatabase.LoadAssetAtPath<T>(path);
         if (config != null)
             return config;
 
         PlaceholderPng.EnsureFolderTree("Assets/Data/Config");
-        config = ScriptableObject.CreateInstance<DesktopConfigSO>();
-        AssetDatabase.CreateAsset(config, DesktopConfigPath);
+        config = ScriptableObject.CreateInstance<T>();
+        AssetDatabase.CreateAsset(config, path);
         AssetDatabase.SaveAssets();
         return config;
     }

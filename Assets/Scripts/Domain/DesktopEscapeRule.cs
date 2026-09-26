@@ -17,7 +17,7 @@ public enum DesktopEscape
 /// <summary>The desktop state the Escape rule reads.</summary>
 public readonly struct DesktopEscapeState
 {
-    /// <summary>A text field on the desktop has the keyboard (or had it at the end of the last frame).</summary>
+    /// <summary>A text field on the desktop has the keyboard.</summary>
     public readonly bool FieldFocused;
 
     /// <summary>The Start menu is open.</summary>

@@ -45,6 +45,9 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>Optional: the booth's input and wake rules.</summary>
     [SerializeField] private BoothCoordinator booth;
 
+    /// <summary>The desktop's knobs: how many morning papers the News site keeps (the builder wires it).</summary>
+    [SerializeField] private DesktopConfigSO desktopConfig;
+
     /// <summary>Seed for deterministic day schedule randomness.</summary>
     [SerializeField] private int seed = 12345;
 
@@ -212,6 +215,12 @@ public sealed class GameManager : MonoBehaviour
             booth.BeginDay(_worldState.day);
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
+
+        // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
+        if (desktopConfig != null)
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues);
+        else
+            Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
 
         // Morning briefing first (if wired), then the day loop.
         if (dayFlowUI != null)
@@ -422,10 +431,10 @@ public sealed class GameManager : MonoBehaviour
 
         CaseInstance inst = _dayCases[idx];
 
-        string claimedEraId = inst.trueEra != null ? inst.trueEra.id : string.Empty;
+        string claimedEraId = inst.claimedEra != null ? inst.claimedEra.id : string.Empty;
         string archetypeName = inst.archetype != null ? inst.archetype.displayName : string.Empty;
-        string nationName = inst.nation != null ? inst.nation.displayName : string.Empty;
-        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}, clues={inst.usedClues.Count}.");
+        string nationName = inst.claimedNation != null ? inst.claimedNation.displayName : string.Empty;
+        Debug.Log($"[GameManager] Case {caseIndex1Based}: visitor='{inst.visitorDisplayName}', claim='{inst.originLabel}', claimedEra='{claimedEraId}', archetype='{archetypeName}', nation='{nationName}', legendary={inst.isLegendary}, liar={inst.IsLiar}, home='{inst.HomeLabel}', gender={inst.gender}, documents={inst.documents.Count}.");
 
         // Clear the previous case's verdict line before showing the new case.
         if (officeUI != null)
@@ -576,7 +585,7 @@ public sealed class GameManager : MonoBehaviour
         // No tuning config: keep the old simple correct/wrong behavior.
         if (_gameConfig == null)
         {
-            bool simpleCorrect = inst.trueEra == chosenEra;
+            bool simpleCorrect = inst.claimedEra == chosenEra;
             officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
             Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (no GameConfig, simpleCorrect={simpleCorrect}).");
             orchestrator.MarkCaseResolved();

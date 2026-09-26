@@ -17,6 +17,8 @@ MonoBehaviour:
   nation: {fileID: 11400000, guid: 11efb99165e59dd40b2ee527420ce6f3, type: 2}
   era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
   year: 1700
+  moment: Greek Orthodox merchant community of Ioannina (Epirus) under Ottoman rule,
+    c. 1700
   tongue: greek
   birthYearMin: 1630
   birthYearMax: 1682

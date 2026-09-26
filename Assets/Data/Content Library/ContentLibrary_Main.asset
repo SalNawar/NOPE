@@ -26,7 +26,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
   - {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
   - {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
-  clues: []
   legendaries:
   - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
   - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
@@ -190,13 +189,16 @@ MonoBehaviour:
     openerLegendary:
       id: interview.openerLegendary
       text: 'Priority arrival: {name}.'
-    claim:
-      id: interview.claim
-      text: I request passage home to {place}.
+    claims:
+    - kind: 3
+      line:
+        id: interview.claims.Displaced
+        text: Please. Send me home to {place}.
     honorificMale: sir
     honorificFemale: madam
     honorificUnknown: traveller
     requestLabel: Request {document}
+    papersLabel: Request papers >
     requestPrompt:
       id: interview.requestPrompt
       text: Your {document}, please.
@@ -251,6 +253,271 @@ MonoBehaviour:
     carry:
       id: history.carry
       text: 'HISTORY: travellers brought {value} to {place}.'
+    dominant:
+      id: history.dominant
+      text: '{attribute} is now DOMINANT in {place}.'
+  pc:
+    sites:
+    - id: news
+      kind: 0
+      name: The Temporal Times
+      domain: times.tc
+      glyph: site_news
+      blurb: Today's edition and back issues.
+      fromDay: 1
+    - id: history
+      kind: 1
+      name: Chronopedia
+      domain: chronopedia
+      glyph: site_history
+      blurb: Every place and era, as history stands today.
+      fromDay: 1
+    - id: ancestry
+      kind: 2
+      name: Lineage Archive
+      domain: lineage
+      glyph: site_ancestry
+      blurb: Citizens of the past.
+      fromDay: 1
+    pages: []
+    ancestry:
+      includePremades: 1
+      people:
+      - id: ramose
+        name: Ramose
+        born: 
+        died: 
+        place: egypt_ancient
+        note: Father of Senenmut. A man of modest rank from Armant.
+      - id: hatshepsut
+        name: Hatshepsut
+        born: c. 1507 BCE
+        died: 1458 BCE
+        place: egypt_ancient
+        note: Pharaoh of Egypt. Senenmut stewarded her household and built her temple.
+      - id: neferure
+        name: Neferure
+        born: c. 1505 BCE
+        died: 
+        place: egypt_ancient
+        note: Daughter of Pharaoh Hatshepsut. Senenmut was her tutor.
+      - id: pericles
+        name: Pericles
+        born: c. 495 BCE
+        died: 429 BCE
+        place: greece_ancient
+        note: Strategos of Athens. Companion of Aspasia.
+      - id: pericles_younger
+        name: Pericles the Younger
+        born: c. 440 BCE
+        died: 406 BCE
+        place: greece_ancient
+        note: Son of Pericles and Aspasia. A general of Athens.
+      - id: banbiao
+        name: Ban Biao
+        born: 3
+        died: 54
+        place: china_ancient
+        note: Historian. Father of Ban Gu, Ban Chao and Ban Zhao.
+      - id: bangu
+        name: Ban Gu
+        born: 32
+        died: 92
+        place: china_ancient
+        note: Historian of the Han. Began the Book of Han, which his sister finished.
+      - id: banchao
+        name: Ban Chao
+        born: 32
+        died: 102
+        place: china_ancient
+        note: General who held the Western Regions for the Han.
+      - id: mamun
+        name: Caliph al-Ma'mun
+        born: 786
+        died: 833
+        place: iraq_medieval
+        note: Caliph in Baghdad. Patron of the House of Wisdom.
+      - id: fust
+        name: Johann Fust
+        born: c. 1400
+        died: 1466
+        place: germany_medieval
+        note: Goldsmith and lender of Mainz. Financed Gutenberg's press.
+      - id: schoeffer
+        name: Peter Schoeffer
+        born: c. 1425
+        died: c. 1503
+        place: germany_medieval
+        note: Scribe and printer. Worked Gutenberg's press, then Fust's.
+      - id: piero
+        name: Ser Piero da Vinci
+        born: 1426
+        died: 1504
+        place: italy_medieval
+        note: Notary of Florence. Father of Leonardo.
+      - id: verrocchio
+        name: Andrea del Verrocchio
+        born: c. 1435
+        died: 1488
+        place: italy_medieval
+        note: Sculptor and painter of Florence. Leonardo trained in his workshop.
+      - id: ludovico
+        name: Ludovico Sforza
+        born: 1452
+        died: 1508
+        place: italy_earlymodern
+        note: Duke of Milan. Patron of Leonardo.
+      - id: bassano
+        name: Baptiste Bassano
+        born: 
+        died: 1576
+        place: britain_earlymodern
+        note: Venetian-born court musician to the Tudors. Father of Aemilia Lanyer.
+      relations:
+      - person: senenmut
+        kind: Father
+        other: ramose
+      - person: senenmut
+        kind: Pharaoh
+        other: hatshepsut
+      - person: senenmut
+        kind: Pupil
+        other: neferure
+      - person: ramose
+        kind: Son
+        other: senenmut
+      - person: hatshepsut
+        kind: Daughter
+        other: neferure
+      - person: hatshepsut
+        kind: Steward
+        other: senenmut
+      - person: neferure
+        kind: Mother
+        other: hatshepsut
+      - person: neferure
+        kind: Tutor
+        other: senenmut
+      - person: aspasia
+        kind: Companion
+        other: pericles
+      - person: aspasia
+        kind: Son
+        other: pericles_younger
+      - person: pericles
+        kind: Companion
+        other: aspasia
+      - person: pericles
+        kind: Son
+        other: pericles_younger
+      - person: pericles_younger
+        kind: Father
+        other: pericles
+      - person: pericles_younger
+        kind: Mother
+        other: aspasia
+      - person: banzhao
+        kind: Father
+        other: banbiao
+      - person: banzhao
+        kind: Brother
+        other: bangu
+      - person: banzhao
+        kind: Brother
+        other: banchao
+      - person: banbiao
+        kind: Son
+        other: bangu
+      - person: banbiao
+        kind: Son
+        other: banchao
+      - person: banbiao
+        kind: Daughter
+        other: banzhao
+      - person: bangu
+        kind: Father
+        other: banbiao
+      - person: bangu
+        kind: Sister
+        other: banzhao
+      - person: bangu
+        kind: Brother
+        other: banchao
+      - person: banchao
+        kind: Father
+        other: banbiao
+      - person: banchao
+        kind: Brother
+        other: bangu
+      - person: banchao
+        kind: Sister
+        other: banzhao
+      - person: khwarizmi
+        kind: Patron
+        other: mamun
+      - person: arib
+        kind: Patron
+        other: mamun
+      - person: mamun
+        kind: Scholar
+        other: khwarizmi
+      - person: mamun
+        kind: Court singer
+        other: arib
+      - person: gutenberg
+        kind: Financier
+        other: fust
+      - person: gutenberg
+        kind: Assistant
+        other: schoeffer
+      - person: fust
+        kind: Partner
+        other: gutenberg
+      - person: fust
+        kind: Son-in-law
+        other: schoeffer
+      - person: schoeffer
+        kind: Master
+        other: gutenberg
+      - person: schoeffer
+        kind: Father-in-law
+        other: fust
+      - person: leonardo
+        kind: Father
+        other: piero
+      - person: leonardo
+        kind: Teacher
+        other: verrocchio
+      - person: leonardo
+        kind: Patron
+        other: ludovico
+      - person: leonardo
+        kind: Sitter
+        other: gallerani
+      - person: piero
+        kind: Son
+        other: leonardo
+      - person: verrocchio
+        kind: Pupil
+        other: leonardo
+      - person: ludovico
+        kind: Painter
+        other: leonardo
+      - person: ludovico
+        kind: Companion
+        other: gallerani
+      - person: gallerani
+        kind: Companion
+        other: ludovico
+      - person: gallerani
+        kind: Portrait painter
+        other: leonardo
+      - person: lanyer
+        kind: Father
+        other: bassano
+      - person: bassano
+        kind: Daughter
+        other: lanyer
   lookRules:
     faceBands:
     - minAge: 18
@@ -1034,3 +1301,7 @@ MonoBehaviour:
     name: TEMPORAL CUSTOMS
     programme: Debt Relief Departures
     firstDate: 14 Mar 2150
+    displaced:
+      foundWithinDays: 30
+      validDaysMin: 3
+      validDaysMax: 365

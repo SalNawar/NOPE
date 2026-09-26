@@ -4,9 +4,10 @@ using NUnit.Framework;
 
 /// <summary>
 /// The interview graph (hub, ask menu, merged dialogs) and the structure and
-/// capacity rules. Traveller under test: claims an Ancient place, carries a
-/// Travel Passport and a Transit Permit (both handed over on request unless a
-/// test says otherwise), answers Currency honestly ("Deben")
+/// capacity rules. Traveller under test: a displaced person who claims an
+/// Ancient place and carries the displaced's three forms (the Displacement
+/// Certificate handed over on arrival, the Intake Declaration and the Return
+/// Order on request, unless a test says otherwise), answers Currency honestly ("Deben")
 /// and Geography with an Answer tell ("Babylon"), has no Politics answer, and
 /// has a small-talk line. The rumour dialog is shaped like dlg_rumour. With a
 /// key-word rule, each traveller line carries the spans that stay English
@@ -17,8 +18,9 @@ public class InterviewScriptTests
     private static InterviewLines Lines() => new InterviewLines
     {
         deskName = "DESK",
-        claim = new LineText("interview.claim", "I request passage home to {place}."),
+        claims = { new KindLine { kind = TravellerKind.Displaced, line = new LineText("interview.claims.Displaced", "Please. Send me home to {place}.") } },
         requestLabel = "Request {document}",
+        papersLabel = "Request papers >",
         requestPrompt = new LineText("interview.requestPrompt", "Your {document}, please."),
         requestReply = new LineText("interview.requestReply", "Here you are."),
         askLabel = "Ask about home >",
@@ -66,13 +68,20 @@ public class InterviewScriptTests
         digits = true
     };
 
+    /// <summary>The displaced's three forms: the certificate on arrival, the declaration and the return order on request.</summary>
+    private static CaseDocument[] DisplacedForms() => new[]
+    {
+        Doc("Displacement Certificate", DocumentHandOver.OnArrival), Doc("Intake Declaration"), Doc("Return Order")
+    };
+
     private static InterviewCase Case(bool smallTalk = true, string intro = "Next! Step forward, sir.", CaseDocument[] documents = null, KeyWordRule keyWords = null) => new InterviewCase
     {
         introLine = intro,
+        kind = TravellerKind.Displaced,
         claimPlace = "New Kingdom Egypt (Ancient)",
         keyWords = keyWords,
         claimedEraId = "ancient",
-        documents = documents ?? new[] { Doc("Travel Passport"), Doc("Transit Permit") },
+        documents = documents ?? DisplacedForms(),
         answers = new[]
         {
             new InterviewAnswer { category = ClueCategory.Currency, value = "Deben", isTell = false },
@@ -139,60 +148,96 @@ public class InterviewScriptTests
     // -----------------------------
 
     [Test]
-    public void Hub_RequestsInPaperOrder_ThenAsk_ThenOneEntryPerDialog()
+    public void Hub_ThePapersSubMenu_ThenAsk_ThenOneEntryPerDialog()
     {
         DialogNode hub = Build().Node(InterviewScript.HubNodeId);
-        CollectionAssert.AreEqual(new[] { "request:0", "request:1", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
-        CollectionAssert.AreEqual(new[] { "Request Travel Passport", "Request Transit Permit", "Ask about home >", "Any news from home? >" },
+        CollectionAssert.AreEqual(new[] { "papers", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
+        CollectionAssert.AreEqual(new[] { "Request papers >", "Ask about home >", "Any news from home? >" },
                                   hub.Choices.Select(c => c.Label).ToArray());
 
-        DialogChoice ask = hub.Choices[2];
+        DialogChoice papers = hub.Choices[0];
+        Assert.AreEqual(InterviewScript.PapersNodeId, papers.Next);
+        Assert.AreEqual(DialogChoiceKind.Request, papers.Kind, "a sub-menu entry takes the kind of what it opens");
+        Assert.IsFalse(papers.OneShot, "the menu stays reachable, as the ask menu does");
+        CollectionAssert.IsEmpty(papers.Lines);
+
+        DialogChoice ask = hub.Choices[1];
         Assert.AreEqual(InterviewScript.AskNodeId, ask.Next);
         CollectionAssert.IsEmpty(ask.Lines);
 
-        DialogChoice dialog = hub.Choices[3];
+        DialogChoice dialog = hub.Choices[2];
         Assert.AreEqual("dlg_rumour/start", dialog.Next);
         Assert.IsTrue(dialog.OneShot);
     }
 
     [Test]
+    public void Papers_BackFirst_ThenOneRequestPerDocumentOnRequest_InPaperOrder_NamedByTheForm()
+    {
+        DialogNode papers = Build().Node(InterviewScript.PapersNodeId);
+        CollectionAssert.AreEqual(new[] { "back", "request:1", "request:2" }, Ids(papers.Choices), "the certificate came on arrival");
+        CollectionAssert.AreEqual(new[] { "< Back", "Intake Declaration", "Return Order" }, papers.Choices.Select(c => c.Label).ToArray());
+        Assert.AreEqual(DialogChoiceKind.Back, papers.Choices[0].Kind);
+        Assert.AreEqual(InterviewScript.HubNodeId, papers.Choices[0].Next);
+        Assert.IsFalse(papers.Choices[0].OneShot);
+        CollectionAssert.AreEqual(new[] { 1, 2 }, papers.Choices.Skip(1).Select(c => c.DocumentIndex).ToArray(), "each index stays the paper's place in the case");
+    }
+
+    [Test]
+    public void Papers_HoldsBackAndEveryRequest_StillOneHubEntry()
+    {
+        InterviewCase c = Case(documents: new[] { Doc("Leisure Departure Visa", DocumentHandOver.OnArrival), Doc("Departure Manifest"), Doc("Stranding Waiver"), Doc("Proof of Funds") });
+        DialogNode papers = Build(c).Node(InterviewScript.PapersNodeId);
+        Assert.AreEqual(4, papers.Choices.Count, "< Back + 3: the most one traveller is asked for (the spec's poor tourist)");
+        CollectionAssert.AreEqual(new[] { "papers", "ask", "dlg:dlg_rumour" }, Ids(Build(c).Node(InterviewScript.HubNodeId).Choices), "still one hub entry");
+    }
+
+    [Test]
     public void Request_SpeaksPromptAndReply_HandsItsDocumentOver_AndIsOneShot()
     {
-        DialogChoice permit = Build().Node(InterviewScript.HubNodeId).Choices[1];
-        Assert.AreEqual(DialogAction.HandOverDocument, permit.Action);
-        Assert.AreEqual(1, permit.DocumentIndex);
-        Assert.IsTrue(permit.OneShot, "a paper once handed over never goes back mid-case");
-        Assert.IsTrue(string.IsNullOrEmpty(permit.Next), "stays on the hub");
-        CollectionAssert.AreEqual(new[] { "interview.requestPrompt", "interview.requestReply" }, LineIds(permit.Lines));
-        Assert.AreEqual("Your Transit Permit, please.", permit.Lines[0].Text);
-        Assert.AreEqual(DialogSpeaker.Desk, permit.Lines[0].Speaker);
-        Assert.AreEqual("Here you are.", permit.Lines[1].Text);
-        Assert.AreEqual(DialogSpeaker.Traveller, permit.Lines[1].Speaker);
+        DialogChoice order = Build().Node(InterviewScript.PapersNodeId).Choices[2];
+        Assert.AreEqual(DialogAction.HandOverDocument, order.Action);
+        Assert.AreEqual(2, order.DocumentIndex);
+        Assert.AreEqual(DialogChoiceKind.Request, order.Kind);
+        Assert.IsTrue(order.OneShot, "a paper once handed over never goes back mid-case");
+        Assert.IsTrue(string.IsNullOrEmpty(order.Next), "stays in the papers menu");
+        CollectionAssert.AreEqual(new[] { "interview.requestPrompt", "interview.requestReply" }, LineIds(order.Lines));
+        Assert.AreEqual("Your Return Order, please.", order.Lines[0].Text);
+        Assert.AreEqual(DialogSpeaker.Desk, order.Lines[0].Speaker);
+        Assert.AreEqual("Here you are.", order.Lines[1].Text);
+        Assert.AreEqual(DialogSpeaker.Traveller, order.Lines[1].Speaker);
     }
 
     [Test]
-    public void ARequest_LeavesTheHubOnceChosen()
+    public void ARequest_LeavesThePapersMenuOnceChosen_AndBackReturnsToTheHub()
     {
         var runner = new DialogRunner(Build(), InterviewScript.Opening(Lines(), Case()));
+        Assert.IsNotNull(runner.Choose("papers"));
+        Assert.IsNotNull(runner.Choose("request:2"));
+        CollectionAssert.AreEqual(new[] { "back", "request:1" }, Ids(runner.Choices), "still in the papers menu");
+        Assert.IsNull(runner.Choose("request:2"), "it cannot be chosen twice");
         Assert.IsNotNull(runner.Choose("request:1"));
-        CollectionAssert.AreEqual(new[] { "request:0", "ask", "dlg:dlg_rumour" }, Ids(runner.Choices));
-        Assert.IsNull(runner.Choose("request:1"), "it cannot be chosen twice");
+        CollectionAssert.AreEqual(new[] { "back" }, Ids(runner.Choices), "every paper handed over: only the way back");
+        Assert.IsNotNull(runner.Choose("back"));
+        CollectionAssert.AreEqual(new[] { "papers", "ask", "dlg:dlg_rumour" }, Ids(runner.Choices));
     }
 
     [Test]
-    public void Hub_OnlyDocumentsHandedOverOnRequestGetARequest_KeepingThePaperIndex()
+    public void Hub_OneDocumentOnRequest_IsADirectRequest_KeepingThePaperIndex()
     {
-        InterviewCase c = Case(documents: new[] { Doc("Travel Passport", DocumentHandOver.OnArrival), Doc("Transit Permit") });
-        DialogNode hub = Build(c).Node(InterviewScript.HubNodeId);
-        CollectionAssert.AreEqual(new[] { "request:1", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
-        Assert.AreEqual("Request Transit Permit", hub.Choices[0].Label);
+        InterviewCase c = Case(documents: new[] { Doc("Displacement Certificate", DocumentHandOver.OnArrival), Doc("Intake Declaration") });
+        DialogGraph graph = Build(c);
+        DialogNode hub = graph.Node(InterviewScript.HubNodeId);
+        CollectionAssert.AreEqual(new[] { "request:1", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices), "no sub-menu for one form");
+        Assert.AreEqual("Request Intake Declaration", hub.Choices[0].Label);
         Assert.AreEqual(1, hub.Choices[0].DocumentIndex, "the index stays the paper's place in the case");
+        Assert.AreEqual(DialogChoiceKind.Request, hub.Choices[0].Kind);
+        CollectionAssert.AreEqual(new[] { "back" }, Ids(graph.Node(InterviewScript.PapersNodeId).Choices), "the papers menu holds no request");
     }
 
     [Test]
     public void Hub_HasNoRequest_WhenEveryDocumentIsHandedOverOnArrival()
     {
-        InterviewCase c = Case(documents: new[] { Doc("Travel Passport", DocumentHandOver.OnArrival), Doc("Transit Permit", DocumentHandOver.OnArrival) });
+        InterviewCase c = Case(documents: new[] { Doc("Displacement Certificate", DocumentHandOver.OnArrival), Doc("Intake Declaration", DocumentHandOver.OnArrival) });
         CollectionAssert.AreEqual(new[] { "ask", "dlg:dlg_rumour" }, Ids(Build(c).Node(InterviewScript.HubNodeId).Choices));
     }
 
@@ -202,7 +247,7 @@ public class InterviewScriptTests
         DialogGraph graph = Build(Dressed(new Garment(LookSlot.Hair, "Caesar crop", "Caesar crop / nodus roll", false)), lines: LinesWithRequests());
         var expected = new Dictionary<string, DialogChoiceKind>
         {
-            ["request:0"] = DialogChoiceKind.Request, ["request:1"] = DialogChoiceKind.Request,
+            ["papers"] = DialogChoiceKind.Request, ["request:1"] = DialogChoiceKind.Request, ["request:2"] = DialogChoiceKind.Request,
             ["act:step_closer"] = DialogChoiceKind.Request, ["act:speak_up"] = DialogChoiceKind.Request,
             ["ask"] = DialogChoiceKind.Question, ["look"] = DialogChoiceKind.Look, ["dlg:dlg_rumour"] = DialogChoiceKind.Dialog,
             ["back"] = DialogChoiceKind.Back, ["q:q_currency"] = DialogChoiceKind.Question, ["q:q_capital"] = DialogChoiceKind.Question,
@@ -211,7 +256,7 @@ public class InterviewScriptTests
         };
 
         var seen = new HashSet<string>();
-        foreach (string node in new[] { InterviewScript.HubNodeId, InterviewScript.AskNodeId, InterviewScript.LookNodeId, "dlg_rumour/start", "dlg_rumour/detail" })
+        foreach (string node in new[] { InterviewScript.HubNodeId, InterviewScript.PapersNodeId, InterviewScript.AskNodeId, InterviewScript.LookNodeId, "dlg_rumour/start", "dlg_rumour/detail" })
         {
             foreach (DialogChoice choice in graph.Node(node).Choices)
             {
@@ -227,14 +272,14 @@ public class InterviewScriptTests
     public void Hub_SpokenRequests_FollowTheDocumentRequests_BeforeAsk()
     {
         DialogNode hub = Build(lines: LinesWithRequests()).Node(InterviewScript.HubNodeId);
-        CollectionAssert.AreEqual(new[] { "request:0", "request:1", "act:step_closer", "act:speak_up", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
-        CollectionAssert.AreEqual(new[] { "Step closer", "Speak up" }, hub.Choices.Skip(2).Take(2).Select(c => c.Label).ToArray());
+        CollectionAssert.AreEqual(new[] { "papers", "act:step_closer", "act:speak_up", "ask", "dlg:dlg_rumour" }, Ids(hub.Choices));
+        CollectionAssert.AreEqual(new[] { "Step closer", "Speak up" }, hub.Choices.Skip(1).Take(2).Select(c => c.Label).ToArray());
     }
 
     [Test]
     public void ASpokenRequest_SpeaksPromptAndReply_IsOneShot_AndDoesNothingElse()
     {
-        DialogChoice closer = Build(lines: LinesWithRequests()).Node(InterviewScript.HubNodeId).Choices[2];
+        DialogChoice closer = Build(lines: LinesWithRequests()).Node(InterviewScript.HubNodeId).Choices[1];
         Assert.AreEqual(DialogAction.None, closer.Action, "no mechanic: the traveller only answers");
         Assert.AreEqual(-1, closer.DocumentIndex);
         Assert.IsTrue(closer.OneShot);
@@ -271,7 +316,7 @@ public class InterviewScriptTests
     public void Hub_HasNoAskEntry_WithoutQuestionsOrSmallTalk()
     {
         DialogNode hub = Build(Case(smallTalk: false), new InterviewQuestion[0], new AuthoredDialog[0]).Node(InterviewScript.HubNodeId);
-        CollectionAssert.AreEqual(new[] { "request:0", "request:1" }, Ids(hub.Choices));
+        CollectionAssert.AreEqual(new[] { "papers" }, Ids(hub.Choices));
     }
 
     [Test]
@@ -331,7 +376,7 @@ public class InterviewScriptTests
         CollectionAssert.AreEqual(new[] { "case.intro", "case.claim" }, LineIds(both));
         Assert.AreEqual(DialogSpeaker.Desk, both[0].Speaker);
         Assert.AreEqual(DialogSpeaker.Traveller, both[1].Speaker);
-        Assert.AreEqual("I request passage home to New Kingdom Egypt (Ancient).", both[1].Text);
+        Assert.AreEqual("Please. Send me home to New Kingdom Egypt (Ancient).", both[1].Text, "the displaced's claim line");
 
         CollectionAssert.AreEqual(new[] { "case.claim" }, LineIds(InterviewScript.Opening(Lines(), Case(intro: " "))));
     }
@@ -340,9 +385,13 @@ public class InterviewScriptTests
     public void Opening_TheClaimIsFilledFromItsTemplate_OrIsThePlaceAloneWhenBlank()
     {
         InterviewLines blank = Lines();
-        blank.claim = null;
+        blank.claims = null;
         Assert.AreEqual("New Kingdom Egypt (Ancient)", InterviewScript.Opening(blank, Case())[1].Text);
-        Assert.AreEqual(Interview.Claim(Lines(), "New Kingdom Egypt (Ancient)"), InterviewScript.Opening(Lines(), Case())[1].Text, "the banner's text");
+        Assert.AreEqual(Interview.Claim(Lines(), TravellerKind.Displaced, "New Kingdom Egypt (Ancient)"), InterviewScript.Opening(Lines(), Case())[1].Text, "the banner's text");
+
+        InterviewCase tourist = Case();
+        tourist.kind = TravellerKind.RichTourist;
+        Assert.AreEqual("New Kingdom Egypt (Ancient)", InterviewScript.Opening(Lines(), tourist)[1].Text, "a kind with no claim line says the place alone");
     }
 
     /// <summary>The English parts of a line (its key-word spans), joined by "|".</summary>
@@ -353,7 +402,7 @@ public class InterviewScriptTests
     public void TheClaim_KeepsHomeAndThePlaceEnglish_TheDesksOpenerHasNoSpans()
     {
         IReadOnlyList<DialogLine> opening = InterviewScript.Opening(Lines(), Case(keyWords: KeyWordRule()));
-        Assert.AreEqual("home|New Kingdom Egypt (Ancient)", English(opening[1]));
+        Assert.AreEqual("Please|home|New Kingdom Egypt (Ancient)", English(opening[1]));
         CollectionAssert.IsEmpty(opening[0].English, "the desk speaks English: nothing to keep");
     }
 
@@ -375,10 +424,12 @@ public class InterviewScriptTests
         DialogGraph graph = Build(c, lines: LinesWithRequests());
         DialogNode hub = graph.Node(InterviewScript.HubNodeId);
 
-        DialogLine requestReply = hub.Choices.First(ch => ch.Id == "request:0").Lines[1];
+        DialogNode papers = graph.Node(InterviewScript.PapersNodeId);
+        DialogLine requestReply = papers.Choices.First(ch => ch.Id == "request:1").Lines[1];
         Assert.AreEqual(DialogSpeaker.Traveller, requestReply.Speaker);
         CollectionAssert.IsEmpty(requestReply.English, "\"Here you are.\" holds no key word");
-        CollectionAssert.IsEmpty(hub.Choices.First(ch => ch.Id == "request:0").Lines[0].English, "the desk's prompt");
+        CollectionAssert.IsEmpty(papers.Choices.First(ch => ch.Id == "request:1").Lines[0].English, "the desk's prompt");
+        CollectionAssert.IsEmpty(hub.Choices.First(ch => ch.Id == "act:step_closer").Lines[1].English, "\"Like this?\" holds no key word");
 
         DialogLine smallTalk = graph.Node(InterviewScript.AskNodeId).Choices.First(ch => ch.Id == "smalltalk").Lines[1];
         Assert.AreEqual("Yes|home", English(smallTalk));
@@ -455,8 +506,9 @@ public class InterviewScriptTests
         var runner = new DialogRunner(Build(), InterviewScript.Opening(Lines(), Case()));
         CollectionAssert.AreEqual(new[] { InterviewScript.ClaimLineId }, LineIds(InterviewScript.SaidSince(runner.Transcript, 0)), "what the traveller says on arrival");
 
+        runner.Choose("papers");
         int before = runner.Transcript.Count;
-        runner.Choose("request:0");
+        runner.Choose("request:1");
         Assert.AreEqual("Here you are.", InterviewScript.SaidSince(runner.Transcript, before).Single().Text);
     }
 
@@ -499,7 +551,7 @@ public class InterviewScriptTests
         DialogChoice last = runner.Choose("dlg_rumour.noted");
 
         Assert.AreEqual(DialogAction.CompleteDialog, last.Action);
-        CollectionAssert.AreEqual(new[] { "request:0", "request:1", "ask" }, Ids(runner.Choices), "back at the hub, the dialog entry used");
+        CollectionAssert.AreEqual(new[] { "papers", "ask" }, Ids(runner.Choices), "back at the hub, the dialog entry used");
         CollectionAssert.AreEqual(
             new[] { "case.intro", "case.claim", "dlg_rumour.start.1", "dlg_rumour.more", "dlg_rumour.detail.1", "dlg_rumour.noted" },
             LineIds(runner.Transcript));
@@ -640,23 +692,36 @@ public class InterviewScriptTests
     }
 
     [Test]
-    public void MenuProblems_TheHub_RequestedDocumentsPlusAskPlusLookPlusDialogs_PremadeDialogsCountOnce()
+    public void MenuProblems_TheHub_PapersPlusAskPlusLookPlusDialogs_PremadeDialogsCountOnce()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 0, dialogs: 3, premadeDialogs: 3, maxChoices: 8),
-                                 "2 requests + ask + look + 3 dialogs + one premade's dialog = 8");
-        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 0, dialogs: 3, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 3, maxChoices: 8),
+                                 "1 request + ask + look + 4 dialogs + one premade's dialog = 8");
+        StringAssert.Contains("The hub holds 9 choices", Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 0, dialogs: 5, premadeDialogs: 3, maxChoices: 8), "the traveller wheel shows at most 8"));
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 0, dialogs: 4, premadeDialogs: 0, maxChoices: 7), "no premade dialog adds nothing");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 0, spokenRequests: 0, dialogs: 5, premadeDialogs: 0, maxChoices: 7), "no request adds nothing");
         CollectionAssert.IsEmpty(DialogChecks.MenuProblems(99, true, 99, 99, 99, 99, 0), "no capacity, no check");
     }
 
     [Test]
-    public void MenuProblems_TheHub_CountsEverySpokenRequest()
+    public void MenuProblems_TheHub_CountsEverySpokenRequest_AndThePapersMenuAsOneEntry()
     {
-        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
-                                 "the starter content: 1 document request + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");
-        string problem = Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 1, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+                                 "the displaced: the papers menu + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 3, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
+                                 "the spec's worst case: three forms on request still take one hub entry");
+        string problem = Only(DialogChecks.MenuProblems(1, false, maxRequestedDocuments: 2, spokenRequests: 3, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
                               "the traveller wheel shows at most 8");
-        StringAssert.Contains("The hub holds 9 choices (1 document request(s), 3 spoken request(s), the ask and look entries, 2 dialog(s), one premade's dialog)", problem);
+        StringAssert.Contains("The hub holds 9 choices (the papers menu, 3 spoken request(s), the ask and look entries, 2 dialog(s), one premade's dialog)", problem);
+        StringAssert.Contains("(1 document request, 3 spoken request(s)", Only(DialogChecks.MenuProblems(1, false, 1, 3, 2, 1, 8), "the traveller wheel shows at most 8"), "one form on request is a direct entry");
+    }
+
+    [Test]
+    public void MenuProblems_ThePapersMenu_BackPlusEveryRequest_OnlyWithTwoOrMore()
+    {
+        CollectionAssert.IsEmpty(DialogChecks.MenuProblems(0, false, maxRequestedDocuments: 7, spokenRequests: 0, dialogs: 0, premadeDialogs: 0, maxChoices: 8), "< Back + 7 = 8");
+        StringAssert.Contains("The papers menu holds 9 choices (< Back, 8 request(s)); the traveller wheel shows at most 8.",
+                              Only(DialogChecks.MenuProblems(0, false, 8, 0, 0, 0, 8), "the traveller wheel shows at most 8"));
+        StringAssert.Contains("The papers menu holds 7 choices", Only(DialogChecks.MenuProblems(0, false, 6, 0, 0, 0, 6), "the traveller wheel shows at most 6"));
     }
 
     [Test]
@@ -683,8 +748,8 @@ public class InterviewScriptTests
         DialogGraph graph = Build(Dressed(new Garment(LookSlot.Outfit, "pleated linen kilt", "wesekh collar", false),
                                           new Garment(LookSlot.Headwear, "top hat", "top hat / poke bonnet", true)));
         DialogNode hub = graph.Node(InterviewScript.HubNodeId);
-        CollectionAssert.AreEqual(new[] { "request:0", "request:1", "ask", "look", "dlg:dlg_rumour" }, Ids(hub.Choices));
-        DialogChoice look = hub.Choices[3];
+        CollectionAssert.AreEqual(new[] { "papers", "ask", "look", "dlg:dlg_rumour" }, Ids(hub.Choices));
+        DialogChoice look = hub.Choices[2];
         Assert.AreEqual("Look >", look.Label);
         Assert.AreEqual(InterviewScript.LookNodeId, look.Next);
         Assert.IsFalse(look.OneShot);

@@ -21,6 +21,14 @@ public class BirthDatesTests
         Assert.AreEqual(expected, BirthDates.Format(day, month, year));
     }
 
+    [TestCase(-1470, "1470 BCE")]
+    [TestCase(1340, "1340")]
+    [TestCase(2150, "2150")]
+    public void FormatYear_WritesTheYearAsDatesDo(int year, string expected)
+    {
+        Assert.AreEqual(expected, BirthDates.FormatYear(year));
+    }
+
     [TestCase("12 Mar 830", 12, 2, 830)]
     [TestCase("3 Jun 1450 BCE", 3, 5, -1450)]
     public void TryParse_ReadsBothForms(string text, int day, int month, int year)

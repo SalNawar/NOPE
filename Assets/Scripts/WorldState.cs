@@ -91,6 +91,9 @@ public sealed class WorldState
     /// <summary>History: the timeline leader, latched fact edits and pending carries (piece 5; an old save loads it empty).</summary>
     public HistoryState history = new();
 
+    /// <summary>The morning papers as printed, one issue per day in day order (the News site's back issues: recorded at the briefing, at most DesktopConfigSO.newsArchiveIssues; an old save loads it empty).</summary>
+    public List<NewsIssue> newsArchive = new();
+
     /// <summary>Where Continue resumes: the Office until the day's shift ends, Home after the end-of-shift save (a save without it resumes in the Office).</summary>
     public RunPhase phase = RunPhase.Office;
 

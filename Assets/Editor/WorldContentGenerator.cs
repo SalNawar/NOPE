@@ -24,7 +24,9 @@ using Object = UnityEngine.Object;
 /// the library's tongues, scripts, flip knobs and fallback cipher, one Speech
 /// translator upgrade per pack and the one-shot notice trigger), points the
 /// case blueprint at the listed archetypes, then sets
-/// every world array of the content library and its look rules explicitly.
+/// every world array of the content library and its look rules explicitly,
+/// and writes the PC block (WorldContentGenerator.Pc.cs: the Internet's
+/// sites, authored pages and Lineage Archive people).
 /// Idempotent: re-running converges to the source file. It owns the
 /// Eras/Nations/Places/Rules/Interview/History/Premades/Culture/Translation
 /// folders under Assets/Data/World (assets there that the source no longer
@@ -71,6 +73,7 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckAgency(src, errors);
+        PcContent pc = CheckPc(src, errors);
         if (errors.Count > 0)
         {
             foreach (string e in errors)
@@ -143,6 +146,7 @@ public static partial class WorldContentGenerator
                     historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
+        WritePc(authored.library, pc);
 
         int pruned = PruneOwnedFolders(written);
 
@@ -322,7 +326,8 @@ public static partial class WorldContentGenerator
                  {
                      ("leaderGained", h.lines?.leaderGained, new[] { History.NationToken, Interview.PlaceToken }),
                      ("leaderLost", h.lines?.leaderLost, new[] { History.NationToken }),
-                     ("carry", h.lines?.carry, new[] { Interview.ValueToken, Interview.PlaceToken })
+                     ("carry", h.lines?.carry, new[] { Interview.ValueToken, Interview.PlaceToken }),
+                     ("dominant", h.lines?.dominant, new[] { History.AttributeToken, Interview.PlaceToken })
                  })
         {
             if (string.IsNullOrWhiteSpace(text))
@@ -422,9 +427,9 @@ public static partial class WorldContentGenerator
         // --- The interview's wording and limits ---
         var wording = new (string field, string text)[]
         {
-            ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary), ("claim", iv.claim),
+            ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary),
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
-            ("requestLabel", iv.requestLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
+            ("requestLabel", iv.requestLabel), ("papersLabel", iv.papersLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
             ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel), ("smallTalkPrompt", iv.smallTalkPrompt),
             ("lookLabel", iv.lookLabel)
         };
@@ -438,7 +443,7 @@ public static partial class WorldContentGenerator
         foreach ((string field, string text, string token) in new[]
                  {
                      ("opener", iv.opener, Interview.HonorificToken), ("openerLegendary", iv.openerLegendary, Interview.NameToken),
-                     ("claim", iv.claim, Interview.PlaceToken), ("requestLabel", iv.requestLabel, Interview.DocumentToken),
+                     ("requestLabel", iv.requestLabel, Interview.DocumentToken),
                      ("requestPrompt", iv.requestPrompt, Interview.DocumentToken)
                  })
             if (!string.IsNullOrWhiteSpace(text) && !Interview.HoldsToken(text, token))
@@ -449,8 +454,9 @@ public static partial class WorldContentGenerator
         if (iv.maxLineChars < 1)
             errors.Add("interview.maxLineChars must be at least 1 (a missing value reads 0).");
 
-        foreach (string field in new[] { "opener", "openerLegendary", "claim", "requestPrompt", "requestReply", "smallTalkPrompt" })
+        foreach (string field in new[] { "opener", "openerLegendary", "requestPrompt", "requestReply", "smallTalkPrompt" })
             Id(InterviewLineId(field), $"interview.{field}");
+        CheckClaims(iv, authored, errors, Id);
 
         // --- Spoken requests: an id each, the three texts, ASCII, one set of line ids ---
         RequestData[] requests = iv.requests ?? Array.Empty<RequestData>();
@@ -654,7 +660,8 @@ public static partial class WorldContentGenerator
 
         Fits(InterviewLineId("opener"), iv.opener, Interview.HonorificToken, longestHonorific);
         Fits(InterviewLineId("openerLegendary"), iv.openerLegendary, Interview.NameToken, longestName);
-        Fits(InterviewLineId("claim"), iv.claim, Interview.PlaceToken, longestPlace);
+        foreach (ClaimData c in (iv.claims ?? Array.Empty<ClaimData>()).Where(c => c != null))
+            Fits(ClaimLineId(c.kind), c.text, Interview.PlaceToken, longestPlace);
         Fits(InterviewLineId("requestPrompt"), iv.requestPrompt, Interview.DocumentToken, longestDocument);
         Fits(InterviewLineId("requestReply"), iv.requestReply, Interview.ValueToken, 0);
         Fits(InterviewLineId("smallTalkPrompt"), iv.smallTalkPrompt, Interview.ValueToken, 0);
@@ -1209,7 +1216,8 @@ public static partial class WorldContentGenerator
     {
         leaderGained = new LineText("history.leaderGained", l?.leaderGained),
         leaderLost = new LineText("history.leaderLost", l?.leaderLost),
-        carry = new LineText("history.carry", l?.carry)
+        carry = new LineText("history.carry", l?.carry),
+        dominant = new LineText("history.dominant", l?.dominant)
     };
 
     private static NationEraProfileSO MakePlace(PlaceData p, NationSO nation, EraSO era, CountryData country,
@@ -1222,6 +1230,7 @@ public static partial class WorldContentGenerator
         place.nation = nation;
         place.era = era;
         place.year = p.year;
+        place.moment = p.moment ?? string.Empty;
         place.tongue = p.tongue;
         (place.birthYearMin, place.birthYearMax) = BirthYears(p, ageMin, ageMax);
         place.maleNames = p.maleNames ?? Array.Empty<string>();
@@ -1432,11 +1441,12 @@ public static partial class WorldContentGenerator
         deskName = i.deskName,
         opener = new LineText(InterviewLineId("opener"), i.opener),
         openerLegendary = new LineText(InterviewLineId("openerLegendary"), i.openerLegendary),
-        claim = new LineText(InterviewLineId("claim"), i.claim),
+        claims = BuildClaims(i.claims),
         honorificMale = i.honorificMale,
         honorificFemale = i.honorificFemale,
         honorificUnknown = i.honorificUnknown,
         requestLabel = i.requestLabel,
+        papersLabel = i.papersLabel,
         requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
         requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
         askLabel = i.askLabel,
@@ -1627,7 +1637,6 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "themes", themes);
         SerializedArrays.Set(so, "stringTables", stringTables);
         so.FindProperty("translation").boxedValue = translation;
-        SerializedArrays.DropMissing(so, "clues");
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
     }
@@ -1736,6 +1745,7 @@ public static partial class WorldContentGenerator
         public UiData ui;
         public TranslationData translation;
         public AgencyData agency;
+        public PcData pc;
     }
 
     /// <summary>The shared look knobs: face bands, grey age, the premade garment label, confusable place pairs.</summary>
@@ -1818,12 +1828,13 @@ public static partial class WorldContentGenerator
 
     [Serializable] private sealed class FactData { public string category; public string value; }
 
-    /// <summary>A place; "moment" in the source is research context only (not generated).</summary>
+    /// <summary>A place; its "moment" is the research context Chronopedia's article shows.</summary>
     [Serializable] private sealed class PlaceData
     {
         public string country;
         public string era;
         public string displayName;
+        public string moment;
         public int year;
         public string tongue;
         public FactData[] facts;
@@ -1864,11 +1875,14 @@ public static partial class WorldContentGenerator
         public string deskName;
         public string opener;
         public string openerLegendary;
-        public string claim;
+        /// <summary>The claim per traveller kind (one row per kind; ids are generated).</summary>
+        public ClaimData[] claims;
         public string honorificMale;
         public string honorificFemale;
         public string honorificUnknown;
         public string requestLabel;
+        /// <summary>The hub entry that opens the papers menu ("Request papers >").</summary>
+        public string papersLabel;
         public string requestPrompt;
         public string requestReply;
         public string askLabel;
@@ -1907,7 +1921,7 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class HistoryData { public HistoryLinesData lines; public HistoryRuleData[] rules; }
 
     /// <summary>The templated history lines ({nation}, {place}, {value}).</summary>
-    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; }
+    [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; }
 
     /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits and prints its news line.</summary>
     [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; }

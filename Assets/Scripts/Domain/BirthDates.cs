@@ -26,8 +26,10 @@ public static class BirthDates
             : $"travellerAgeMin {minAge} and travellerAgeMax {maxAge}: travellers' ages need 1 <= travellerAgeMin <= travellerAgeMax.";
 
     /// <summary>Writes a date; negative years get a BCE suffix.</summary>
-    public static string Format(int day, int monthIndex0, int year) =>
-        year < 0 ? $"{day} {Months[monthIndex0]} {-year} {Bce}" : $"{day} {Months[monthIndex0]} {year}";
+    public static string Format(int day, int monthIndex0, int year) => $"{day} {Months[monthIndex0]} {FormatYear(year)}";
+
+    /// <summary>Writes a year as dates do: "1470 BCE" for -1470, "1340" for 1340.</summary>
+    public static string FormatYear(int year) => year < 0 ? $"{-year} {Bce}" : year.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
     /// <summary>Reads a date written by <see cref="Format"/>. Year 0 is invalid.</summary>
     public static bool TryParse(string text, out int day, out int monthIndex0, out int year)
