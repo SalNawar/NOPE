@@ -7,7 +7,7 @@ using UnityEngine;
 /// buttons, the desktop's icons (their cell, the arrange grid, the default
 /// order, the drop's overlap share), the double-click, the Internet's caps
 /// (the news back issues, the browser's history), the app windows' sizes,
-/// the Investigation app's scan toast and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
+/// the Investigation app's scan toast and its chrome's sizes, and the Notes limits. Created and assigned by Tools > TimeDesk > Build Office
 /// UI (Assets/Data/Config/Desktop_Default.asset). The builder reads the sizes
 /// (re-run it after changing one); DesktopWindowManager and DesktopIcons read
 /// the double-click, DesktopIcons the icon knobs and InvestigationApp the
@@ -86,8 +86,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Mail window's size.</summary>
     public Vector2 mailWindowSize = new Vector2(920f, 720f);
 
-    /// <summary>The Citizen Account window's size.</summary>
-    public Vector2 accountWindowSize = new Vector2(720f, 780f);
+    /// <summary>The Citizen Account window's size: wide enough for the Statement's landscape page (982 u across, so its cells print at 13 px at 720p).</summary>
+    public Vector2 accountWindowSize = new Vector2(1020f, 800f);
 
     /// <summary>The Notes window's size.</summary>
     public Vector2 notesWindowSize = new Vector2(780f, 720f);
@@ -102,6 +102,19 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>How long a scan's toast shows, in seconds (WN5).</summary>
     [Min(0.5f)] public float toastSeconds = 4f;
 
+    [Header("The Investigation app's chrome (readability; desktop units)")]
+    /// <summary>A pane's tab strip height (the tabs stand on the strip's bottom edge, joined to the row under it).</summary>
+    [Min(1f)] public float tabStripHeight = 48f;
+
+    /// <summary>A tab's label size (26 units read 20 px at 1080p and 13.5 px at 720p; a label shrinks to fit a narrow strip and never wraps).</summary>
+    [Min(1f)] public float tabLabelSize = 26f;
+
+    /// <summary>The pane header's (the chip row's) height.</summary>
+    [Min(1f)] public float chipRowHeight = 48f;
+
+    /// <summary>A chip's label size; a chip squeezed by its row shrinks the label to three quarters of it, then cuts the text with "…".</summary>
+    [Min(1f)] public float chipLabelSize = 22f;
+
     [Header("Notes (redesign phase 25)")]
     /// <summary>The most day pages Notes keeps (WorldState.notes); the oldest go first.</summary>
     [Min(1)] public int notesDaysKept = 30;
@@ -111,6 +124,22 @@ public sealed class DesktopConfigSO : ScriptableObject
 
     /// <summary>The most clippings a page holds.</summary>
     [Min(1)] public int notesMaxClippings = 40;
+
+    [Header("Keys, clipboard, pins, zoom (redesign phase 20)")]
+    /// <summary>The most items the Investigation app's sidebar pins (a full board refuses a new pin).</summary>
+    [Min(1)] public int pinsMax = 20;
+
+    /// <summary>The recent items the sidebar lists (the oldest drops).</summary>
+    [Min(1)] public int recentItems = 10;
+
+    /// <summary>The panes' zoom levels, in %, smallest first (Ctrl+= and Ctrl+- step through them; Settings' Text size offers them).</summary>
+    public int[] zoomLevels = { 100, 125, 150 };
+
+    /// <summary>The keyboard focus ring's width (the FocusRing role's outline).</summary>
+    [Min(1f)] public float focusRingWidth = 3f;
+
+    /// <summary>The shortcut card's size (F1).</summary>
+    public Vector2 shortcutCardSize = new Vector2(760f, 800f);
 
     /// <summary>A maximised window's bottom edge above the desktop's bottom: the taskbar and the dock (the icon area starts there).</summary>
     public float MaximisedBottom => taskbarHeight + dockHeight;

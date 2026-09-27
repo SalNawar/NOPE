@@ -1,5 +1,5 @@
-OfficeGameplay: committed vs rebuilt: 6844 vs 6844 lines; same set=True; same order=True; only-left 0, only-right 0
-OfficeGameplay: rebuilt vs rebuilt again: 6844 vs 6844 lines; same set=True; same order=True; only-left 0, only-right 0
+OfficeGameplay: committed vs rebuilt: 7772 vs 7772 lines; same set=True; same order=True; only-left 0, only-right 0
+OfficeGameplay: rebuilt vs rebuilt again: 7772 vs 7772 lines; same set=True; same order=True; only-left 0, only-right 0
 HomeScene: committed vs rebuilt: 185 vs 185 lines; same set=True; same order=True; only-left 0, only-right 0
 HomeScene: rebuilt vs rebuilt again: 185 vs 185 lines; same set=True; same order=True; only-left 0, only-right 0
 TitleScene: committed vs rebuilt: 129 vs 129 lines; same set=True; same order=True; only-left 0, only-right 0
@@ -7,6 +7,6 @@ TitleScene: rebuilt vs rebuilt again: 129 vs 129 lines; same set=True; same orde
 build errors: office 0, home 0, title 0
 build warnings: office 0, home 0, title 0
 art office byte-unchanged by the builders: True
-committed scene file hashes: 2ca95205acdd9842a7a960f81758a57b553717d9 Assets/Scenes/OfficeGameplay.unity; 8b230240949e579372f0ee50b9b119526d88d9ae Assets/Scenes/HomeScene.unity; da7fdaf1009bf3df17e50916b7b735385448fb1e Assets/Scenes/TitleScene.unity; 953385d3ca698dd02a5744cbe0d23073861e428e Assets/Scenes/OfficeScene.unity
+committed scene file hashes: f8f397ec777dd606df9d366ab8d8465fb48b7aac Assets/Scenes/OfficeGameplay.unity; 8b230240949e579372f0ee50b9b119526d88d9ae Assets/Scenes/HomeScene.unity; da7fdaf1009bf3df17e50916b7b735385448fb1e Assets/Scenes/TitleScene.unity; 953385d3ca698dd02a5744cbe0d23073861e428e Assets/Scenes/OfficeScene.unity
 build settings: Assets/Scenes/TitleScene.unity, Assets/Scenes/OfficeScene.unity, Assets/Scenes/OfficeGameplay.unity, Assets/Scenes/HomeScene.unity, Assets/Scenes/Test_DayLoop.unity(off)
 contract report written; art dirty after it: False; art still byte-unchanged: True

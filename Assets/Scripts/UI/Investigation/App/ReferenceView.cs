@@ -13,9 +13,11 @@ using UnityEngine.UI;
 /// the register works between travellers too (a day source). Today each
 /// register is drawn by the book page component (ReferenceBookWindowController,
 /// one clone of the page template per book); phase 5's FormView takes its place.
-/// DayReference fills it.
+/// DayReference fills it. Its item is the chosen book ("bookof:Currency"); a
+/// jump shows a book, or a row's page ("Claimed place only" turned off when
+/// it hides the row; IAppItems).
 /// </summary>
-public sealed class ReferenceView : AppView
+public sealed class ReferenceView : AppView, IAppItems
 {
     /// <summary>A book's register page (inactive), cloned per book.</summary>
     [SerializeField] private ReferenceBookWindowController pageTemplate;
@@ -44,6 +46,39 @@ public sealed class ReferenceView : AppView
 
     /// <inheritdoc />
     public override int Selected => _selected;
+
+    /// <inheritdoc />
+    public string ItemKey => _selected >= 0 ? EntryKeys.Book(_books[_selected].category) : null;
+
+    /// <inheritdoc />
+    public string ItemTitle => _selected >= 0 ? _books[_selected].displayName : null;
+
+    /// <inheritdoc />
+    public bool Reveal(string key)
+    {
+        if (EntryKeys.TryBook(key, out ClueCategory category))
+            return SelectBook(category) >= 0;
+        if (!EntryKeys.TryBookRow(key, out category, out string nation, out string era))
+            return false;
+        int book = SelectBook(category);
+        if (book < 0)
+            return false;
+        if (claimedOnly != null && claimedOnly.isOn && !(nation == _claimedNation && era == _claimedEra))
+            claimedOnly.isOn = false;
+        return _pages[book].ShowRow(key);
+    }
+
+    /// <summary>Chooses the book of <paramref name="category"/>; its index, or -1 when the library has none.</summary>
+    private int SelectBook(ClueCategory category)
+    {
+        for (int i = 0; i < _books.Count; i++)
+            if (_books[i].category == category)
+            {
+                Select(i);
+                return i;
+            }
+        return -1;
+    }
 
     /// <summary>Today's facts and the compare the rows pick into; a built register redraws.</summary>
     public void SetFacts(FactTable facts, CompareController compare)

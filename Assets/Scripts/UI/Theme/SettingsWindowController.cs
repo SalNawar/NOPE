@@ -15,9 +15,11 @@ using UnityEngine.UI;
 /// "Steps shown" (the default) or "Steps hidden" (StepsPanel.SetShown,
 /// remembered in DesktopPreferences; the toolbar's Steps repaints the pair).
 /// In each pair the chosen button shows the theme's accent colours (the
-/// SearchButton role), the other the default button colours. The Keyboard
-/// section's "Show shortcuts" opens the shortcut card (redesign phase 25;
-/// the desktop's keys today; phase 20's F1 card replaces it).
+/// SearchButton role), the other the default button colours. The
+/// Investigation section's Text size (100, 125, 150 %: the zoom levels) is
+/// the app's default zoom (InvestigationApp.SetZoomDefault, saved in
+/// DesktopPreferences; Ctrl+0 goes back to it). The Keyboard section's "Show
+/// shortcuts" opens the shortcut card (the F1 card: the one shortcut table).
 /// </summary>
 public sealed class SettingsWindowController : MonoBehaviour
 {
@@ -44,6 +46,15 @@ public sealed class SettingsWindowController : MonoBehaviour
 
     /// <summary>The desktop's icons (Reset icon positions).</summary>
     [SerializeField] private DesktopIcons icons;
+
+    /// <summary>The Investigation section's Text size buttons, one per zoom level (DesktopConfigSO.zoomLevels, in order).</summary>
+    [SerializeField] private Button[] textSizeButtons = new Button[0];
+
+    /// <summary>The zoom levels.</summary>
+    [SerializeField] private DesktopConfigSO config;
+
+    /// <summary>The Investigation app (its default zoom).</summary>
+    [SerializeField] private InvestigationApp app;
 
     /// <summary>The Investigation app's steps checklist shows.</summary>
     [SerializeField] private Button stepsShownButton;
@@ -76,6 +87,12 @@ public sealed class SettingsWindowController : MonoBehaviour
             iconSingleClickButton.onClick.AddListener(() => ChooseIconOpen(true));
         if (resetIconsButton != null)
             resetIconsButton.onClick.AddListener(ResetIcons);
+        for (int i = 0; i < textSizeButtons.Length; i++)
+        {
+            int level = Level(i);
+            if (textSizeButtons[i] != null)
+                textSizeButtons[i].onClick.AddListener(() => ChooseTextSize(level));
+        }
         if (showShortcutsButton != null && shortcutsWindow != null)
             showShortcutsButton.onClick.AddListener(shortcutsWindow.Open);
         if (stepsShownButton != null)
@@ -115,6 +132,18 @@ public sealed class SettingsWindowController : MonoBehaviour
         ShowSelection();
     }
 
+    /// <summary>Stores the app's default zoom, shows it now, and shows the choice.</summary>
+    private void ChooseTextSize(int level)
+    {
+        if (app != null)
+            app.SetZoomDefault(level);
+        ShowSelection();
+    }
+
+    /// <summary>The zoom level of Text size button <paramref name="index"/> (100 % without the knobs).</summary>
+    private int Level(int index) =>
+        config != null && config.zoomLevels != null && index < config.zoomLevels.Length ? config.zoomLevels[index] : AppZoom.Normal;
+
     /// <summary>Shows or hides the Investigation app's steps (remembered for the player; the checklist repaints this pair).</summary>
     private void ChooseSteps(bool shown)
     {
@@ -146,6 +175,9 @@ public sealed class SettingsWindowController : MonoBehaviour
         bool single = DesktopPreferences.OpenIconsWithSingleClick;
         Paint(iconDoubleClickButton, !single, theme);
         Paint(iconSingleClickButton, single, theme);
+        int zoom = AppZoom.Parse(DesktopPreferences.DefaultZoom, config != null ? config.zoomLevels : null);
+        for (int i = 0; i < textSizeButtons.Length; i++)
+            Paint(textSizeButtons[i], Level(i) == zoom, theme);
         bool stepsShown = DesktopPreferences.StepsShown;
         Paint(stepsShownButton, stepsShown, theme);
         Paint(stepsHiddenButton, !stepsShown, theme);

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 /// template's FormSpec and what it shows (FormData): the agency block's name
 /// and programme, the template's form number and name, the paper's serial, the
 /// photo, and each field's label and value, always in English (forms are
-/// diegetic). The desk paper prints it; the PC's scanned copy will (phase 5).
+/// diegetic). The desk paper prints it, and the PC's scanned copy draws it (phase 5).
 /// Probe and Problems are the one form check Build Office UI and the content
 /// validator run on every template (FO10).
 /// </summary>
@@ -66,6 +66,8 @@ public sealed class DocumentForm
             problems.Add("its form sets a form number or title; a document prints its template's formNumber and displayName");
         if (!spec.fixedPage)
             problems.Add("its form flows; a document's form is a fixed page");
+        if (spec.landscape)
+            problems.Add("its form is landscape; a paper is portrait");
         if (spec.PageCount > 1)
             problems.Add($"its form has {spec.PageCount} pages; a paper is one page");
 

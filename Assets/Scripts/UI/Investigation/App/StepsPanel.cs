@@ -262,7 +262,7 @@ public sealed class StepsPanel : MonoBehaviour
             case StepTargetKind.Record:
                 app.ShowTab(AppTab.Records);
                 if (records != null)
-                    records.Lookup(target.Query);
+                    records.Show(target.Query, null);
                 break;
             case StepTargetKind.Book:
                 app.ShowTab(AppTab.Reference);

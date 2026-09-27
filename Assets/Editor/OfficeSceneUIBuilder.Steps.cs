@@ -9,17 +9,18 @@ using UnityEngine.UI;
 /// (StepsPanel: the "STEPS" heading, the line shown instead of the list, and
 /// a scrolling list with an inactive row, StepRowView: a tick box over its
 /// tick and the label that jumps), the toolbar's Steps toggle wired to
-/// StepsPanel.Toggle, the panel's references into the app, the façade and the
-/// PC's screen, and Settings' Investigation section (Steps shown / Steps
-/// hidden). The section is part of the app's window, which the App partial
+/// StepsPanel.Toggle, the panel's references into the app (and the panel
+/// into the app, for Ctrl+Shift+S), the façade and the PC's screen, and
+/// Settings' Investigation row (Steps shown / Steps hidden, beside phase 20's
+/// Text size). The section is part of the app's window, which the App partial
 /// rebuilds fresh on each run; the Settings rows keep their objects and have
 /// their anchors re-applied (the Apps partial's policy). Part of
 /// <see cref="OfficeSceneUIBuilder"/>.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The share of the sidebar's height the Steps section takes (at its top; Pinned and Recent share the rest).</summary>
-    private const float StepsSectionShare = 0.62f;
+    /// <summary>The share of the sidebar's height the Steps section takes (at its top; Pinned and Recent share the rest: BuildAppSidebar, BuildSidebarList).</summary>
+    private const float StepsSectionShare = 0.5f;
 
     /// <summary>The section's heading band (units, at its top).</summary>
     private const float StepsHeadingHeight = 44f;
@@ -105,7 +106,7 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
-    /// <summary>The steps' references into the app (its tabs, the toast, the knobs) and the toolbar's Steps toggle calling StepsPanel.Toggle.</summary>
+    /// <summary>The steps' references into the app (its tabs, the toast, the knobs), the toolbar's Steps toggle calling StepsPanel.Toggle, and the steps for the app's key (Ctrl+Shift+S, ShortcutMap's ToggleSteps).</summary>
     private static void WireStepsPanel(StepsPanel steps, AppParts parts, Button toggle, AppToast toast, DesktopConfigSO config)
     {
         var so = new SerializedObject(steps);
@@ -117,6 +118,9 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
         WirePersistentVoid(toggle, "m_OnClick", steps, nameof(StepsPanel.Toggle));
+        var soApp = new SerializedObject(parts.App);
+        Wire(soApp, "steps", steps);
+        soApp.ApplyModifiedProperties();
     }
 
     /// <summary>The PC's screen (whether the player looks at the desktop) for the steps, and the steps for the façade.</summary>
@@ -131,20 +135,18 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// Settings' Investigation section (SG1, §2.15) under Desktop: its heading
-    /// and the Steps shown / Steps hidden pair, wired into the window's
+    /// Settings' Investigation row's Steps shown / Steps hidden pair (SG1,
+    /// §2.15), on the right half of the Text size row (phase 20 builds the
+    /// heading and the sizes on its left half), wired into the window's
     /// controller (its checklist: WireStepsSettings). Existing objects are
     /// kept; the anchors are re-applied.
     /// </summary>
-    private static void BuildSettingsInvestigation(Transform win)
+    private static void BuildSettingsSteps(Transform win)
     {
-        TMP_Text heading = Text(win, "InvestigationLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f), Ink,
-                                ThemeRoleId.WindowBody, "settings.investigation");
-        Heading(heading, "settings.investigation", new Vector2(0.05f, 0.345f), new Vector2(0.95f, 0.4f));
-        Button shown = MakeButton(win, "StepsShownButton", null, new Vector2(0.05f, 0.265f), new Vector2(0.48f, 0.335f), null, ThemeRoleId.Button, "settings.stepsShown");
-        SetAnchors(shown.transform, new Vector2(0.05f, 0.265f), new Vector2(0.48f, 0.335f));
-        Button hidden = MakeButton(win, "StepsHiddenButton", null, new Vector2(0.52f, 0.265f), new Vector2(0.95f, 0.335f), null, ThemeRoleId.Button, "settings.stepsHidden");
-        SetAnchors(hidden.transform, new Vector2(0.52f, 0.265f), new Vector2(0.95f, 0.335f));
+        Button shown = MakeButton(win, "StepsShownButton", null, new Vector2(0.52f, 0.265f), new Vector2(0.73f, 0.335f), null, ThemeRoleId.Button, "settings.stepsShown");
+        SetAnchors(shown.transform, new Vector2(0.52f, 0.265f), new Vector2(0.73f, 0.335f));
+        Button hidden = MakeButton(win, "StepsHiddenButton", null, new Vector2(0.74f, 0.265f), new Vector2(0.95f, 0.335f), null, ThemeRoleId.Button, "settings.stepsHidden");
+        SetAnchors(hidden.transform, new Vector2(0.74f, 0.265f), new Vector2(0.95f, 0.335f));
 
         var so = new SerializedObject(GetOrAdd<SettingsWindowController>(win.gameObject));
         SetRef(so, "stepsShownButton", shown);

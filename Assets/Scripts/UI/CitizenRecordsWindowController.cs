@@ -15,9 +15,11 @@ using UnityEngine.UI;
 /// the traveller's own record can disprove their birth-date tell
 /// (RecordMismatch; another person's record proves nothing). The registry,
 /// the agency block and the date are injected per day by GameManager via
-/// InvestigationUIController. Each lookup is announced (Searched: the steps
-/// checklist's "a record was looked up"), and a step's jump looks a record up
-/// for the player (Lookup).
+/// InvestigationUIController. Each evidence row is marked with its key for
+/// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
+/// tells the Records tab (Looked), a lookup the player runs is announced
+/// (Searched: the steps checklist's "a record was looked up"), and a jump
+/// (a pin, a recent item, a step) shows a record and its row (Show).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -68,6 +70,12 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     /// <summary>The shown record's lines, in order (empty when none is shown).</summary>
     private readonly List<Line> _lines = new();
 
+    /// <summary>The record shown, or null.</summary>
+    public CitizenRecord Current => _current;
+
+    /// <summary>Raised after a lookup (a record shown, or none on file).</summary>
+    public event System.Action Looked;
+
     /// <inheritdoc />
     protected override void Awake()
     {
@@ -92,16 +100,8 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         ShowIdle();
     }
 
-    /// <summary>Raised after each lookup of a name or number, whatever it found.</summary>
+    /// <summary>Raised after each lookup of a name or number (typed, or a jump's), whatever it found; not after a blank one.</summary>
     public event Action Searched;
-
-    /// <summary>Types <paramref name="query"/> into the lookup and runs it (a step's jump: the primary paper's record).</summary>
-    public void Lookup(string query)
-    {
-        if (searchInput != null)
-            searchInput.SetTextWithoutNotify(query ?? string.Empty);
-        Search();
-    }
 
     /// <summary>Looks up the typed name or number and lists the record's rows (or says none is on file).</summary>
     public void Search()
@@ -127,6 +127,23 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         ShowPage(0);
         if (!string.IsNullOrWhiteSpace(query))
             Searched?.Invoke();
+        Looked?.Invoke();
+    }
+
+    /// <summary>A jump: looks up <paramref name="recordId"/> (its number, else its name) and shows the page of its row keyed <paramref name="rowKey"/> (null: the first page).</summary>
+    public void Show(string recordId, string rowKey)
+    {
+        if (searchInput != null)
+            searchInput.text = recordId ?? string.Empty;
+        Search();
+        if (rowKey == null || _current == null)
+            return;
+        for (int i = 0; i < _lines.Count; i++)
+            if (_lines[i].Heading == null && _lines[i].Row.IsEvidence && PickKeys.Record(_lines[i].Row.Category, _current.Id) == rowKey)
+            {
+                ShowRowAt(i);
+                return;
+            }
     }
 
     private void ShowIdle()
@@ -161,6 +178,9 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
             background.enabled = !heading;
 
         bool pickable = !heading && line.Row.IsEvidence && !string.IsNullOrEmpty(line.Row.Value) && compareController != null;
+        if (!heading && line.Row.IsEvidence && _current != null)
+            AppRow.Mark(row, AppTab.Records, PickKeys.Record(line.Row.Category, _current.Id), UiText.Format("app.row.record", _current.FullName, line.Row.Label),
+                        texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, pickable ? button : null);
         if (button == null)
             return;
         button.enabled = pickable;
