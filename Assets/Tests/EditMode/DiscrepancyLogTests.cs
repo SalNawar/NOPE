@@ -214,6 +214,16 @@ public class DiscrepancyLogTests
         Assert.AreEqual("latia — rome", d.actualOrigin);
     }
 
+    /// <summary>Audit R1-010: the origin proof names the row's label as it is; FactTable guarantees a label (R1-017), so Domain carries no English fallback.</summary>
+    [Test]
+    public void OriginProof_NamesTheRowsLabelVerbatim()
+    {
+        Discrepancy d = DiscrepancyLog.Prove(TellDocField("Aqueduct"), CompareEvidence.ForReferenceEntry(ClueCategory.Technology, "Aqueduct", "latia", "rome", " Latia — Republican Rome "), ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual(" Latia — Republican Rome ", d.actualOrigin);
+        Assert.AreEqual(d.actualOrigin, d.ReportOther);
+        Assert.Throws<System.ArgumentException>(() => new FactTable().Add("latia", "rome", " ", ClueCategory.Technology, "Aqueduct"), "a book row always has a label");
+    }
+
     [Test]
     public void EraOnlyEntry_AppliesToAnyNationOfThatEra()
     {

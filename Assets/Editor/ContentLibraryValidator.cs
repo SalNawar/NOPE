@@ -832,7 +832,7 @@ public static partial class ContentLibraryValidator
                 issues++;
             }
 
-            if (place.birthYearMin == 0 && place.birthYearMax == 0)
+            if (!BirthDates.HasYears(place.birthYearMin, place.birthYearMax))
             {
                 Debug.LogError($"[ContentLibraryValidator] Place '{place.name}' has no birth years (0..0); its visitors are born 'Unknown' and their birth dates can never carry a birth-date tell.", place);
                 issues++;

@@ -68,7 +68,7 @@ public struct CompareEvidence
     /// <summary>Reference side: era id the entry applies to.</summary>
     public string entryEraId;
 
-    /// <summary>Reference side: display label for the entry's origin ("Latia — Ancient Rome").</summary>
+    /// <summary>Reference side: display label for the entry's origin ("Latia — Ancient Rome"); never blank for a book row (FactTable.Add refuses one, audit R1-017), so a proof names the place as it is (audit R1-010: no English fallback in Domain).</summary>
     public string entryOriginLabel;
 
     /// <summary>Record side: the full name of the person the citizen record belongs to (Prove takes only the traveller's own).</summary>
@@ -302,7 +302,7 @@ public sealed class DiscrepancyLog
             {
                 category = statement.category,
                 documentValue = statement.value,
-                actualOrigin = string.IsNullOrEmpty(truth.entryOriginLabel) ? "a different era" : truth.entryOriginLabel,
+                actualOrigin = truth.entryOriginLabel,
                 provedBy = DiscrepancyProof.ForeignOrigin,
                 source = statement.kind
             };

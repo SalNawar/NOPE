@@ -9,7 +9,7 @@ public readonly struct HomeCandidate
     /// <summary>Era id of the place (matches EraSO.id).</summary>
     public readonly string EraId;
 
-    /// <summary>Earliest birth year of a traveller from here (negative = BCE; 0..0 = none authored).</summary>
+    /// <summary>Earliest birth year of a traveller from here (negative = BCE; 0..0 = none authored, BirthDates.HasYears).</summary>
     public readonly int BirthYearMin;
 
     /// <summary>Latest birth year of a traveller from here (negative = BCE).</summary>

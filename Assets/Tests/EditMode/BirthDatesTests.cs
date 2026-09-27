@@ -184,4 +184,17 @@ public class BirthDatesTests
     {
         Assert.AreEqual(expected, BirthDates.HasOtherYear(cover, yearMin, yearMax));
     }
+
+    /// <summary>Audit R1-014: 0..0 is the one "no birth years authored" convention.</summary>
+    [TestCase(0, 0, false)]
+    [TestCase(0, 1, true)]
+    [TestCase(-1, 0, true)]
+    [TestCase(2080, 2132, true)]
+    [TestCase(-1460, -1440, true)]
+    public void HasYears_OnlyTheZeroRangeIsNone(int yearMin, int yearMax, bool expected)
+    {
+        Assert.AreEqual(expected, BirthDates.HasYears(yearMin, yearMax));
+        if (!expected)
+            Assert.IsFalse(BirthDates.HasOtherYear("3 Jun 1450 BCE", yearMin, yearMax), "no years, no other year");
+    }
 }

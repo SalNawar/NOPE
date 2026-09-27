@@ -835,10 +835,10 @@ public sealed class CaseFactory
         return fallback;
     }
 
-    /// <summary>A birth date within a birth-year range: a place's, or the present's for a 2150 citizen ("Unknown" when none is authored, both 0).</summary>
+    /// <summary>A birth date within a birth-year range: a place's, or the present's for a 2150 citizen ("Unknown" when none is authored, BirthDates.HasYears).</summary>
     private string GenerateBirthDate(int yearMin, int yearMax)
     {
-        if (yearMin == 0 && yearMax == 0)
+        if (!BirthDates.HasYears(yearMin, yearMax))
             return "Unknown";
 
         return BirthDates.Generate(yearMin, yearMax, _rng);
