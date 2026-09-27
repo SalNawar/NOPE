@@ -59,11 +59,14 @@ public static partial class OfficeSceneUIBuilder
     /// above the taskbar, built hidden and shown with the case (<paramref name="dock"/>,
     /// the façade's). It is the investigation host's last child, so it draws
     /// over the window layer and the scan toast. Empty, it reads the keyed
-    /// hint; its Pair (the CompareController's bar, shown while a value is
-    /// picked) covers the hint with the compare text and a clear button
-    /// (CompareController.Clear). Returns the pair; its text is <paramref name="text"/>.
+    /// hint; its Pair (shown while a value is picked) covers the hint with
+    /// three columns (redesign phase 18): side A, the verdict and side B, each
+    /// a button (a side links back to its source in <paramref name="app"/>, the
+    /// verdict to the Report after a proof), and a clear button
+    /// (CompareController.Clear). Returns the CompareDock, which
+    /// <paramref name="compare"/> draws.
     /// </summary>
-    private static Transform BuildCompareDock(Transform investHost, CompareController compare, out TMP_Text text, out GameObject dock)
+    private static CompareDock BuildCompareDock(Transform investHost, CompareController compare, InvestigationApp app, out GameObject dock)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
 
@@ -74,22 +77,49 @@ public static partial class OfficeSceneUIBuilder
         hint.raycastTarget = false;
 
         Transform pair = Panel(strip, "Pair", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
-        text = Text(pair, "CompareText", "", 22, TextAlignmentOptions.Center, new Vector2(0.02f, 0f), new Vector2(0.95f, 1f), Ink, ThemeRoleId.CompareBar);
-        SetAnchors(text.transform, new Vector2(0.02f, 0f), new Vector2(0.95f, 1f));
-        text.enableAutoSizing = true;
-        text.fontSizeMin = 11f;
-        text.fontSizeMax = 22f;
-        text.raycastTarget = false;
+        Button sideA = DockColumn(pair, "SideA", new Vector2(0.01f, 0f), new Vector2(0.43f, 1f), TextAlignmentOptions.Right, FontStyles.Normal, out TMP_Text sideAText);
+        Button verdict = DockColumn(pair, "Verdict", new Vector2(0.44f, 0f), new Vector2(0.6f, 1f), TextAlignmentOptions.Center, FontStyles.Bold, out TMP_Text verdictText);
+        Button sideB = DockColumn(pair, "SideB", new Vector2(0.61f, 0f), new Vector2(0.945f, 1f), TextAlignmentOptions.Left, FontStyles.Normal, out TMP_Text sideBText);
 
         Button clear = MakeButton(pair, "ClearButton", null, new Vector2(0.955f, 0.15f), new Vector2(0.99f, 0.85f), XpRed, ThemeRoleId.CloseButton, "window.close");
         SetAnchors(clear.transform, new Vector2(0.955f, 0.15f), new Vector2(0.99f, 0.85f));
         WirePersistentVoid(clear, "m_OnClick", compare, nameof(CompareController.Clear));
         pair.gameObject.SetActive(false);
 
+        CompareDock columns = GetOrAdd<CompareDock>(strip.gameObject);
+        var so = new SerializedObject(columns);
+        Wire(so, "pair", pair.gameObject);
+        Wire(so, "sideA", sideA);
+        Wire(so, "sideAText", sideAText);
+        Wire(so, "verdict", verdict);
+        Wire(so, "verdictText", verdictText);
+        Wire(so, "sideB", sideB);
+        Wire(so, "sideBText", sideBText);
+        Wire(so, "app", app);
+        so.ApplyModifiedProperties();
+
         strip.SetAsLastSibling();
         strip.gameObject.SetActive(false);
         dock = strip.gameObject;
-        return pair;
+        return columns;
+    }
+
+    /// <summary>A column of the dock's pair: a flat button (no tint: CompareDock underlines a link) holding one auto-sizing line.</summary>
+    private static Button DockColumn(Transform pair, string name, Vector2 aMin, Vector2 aMax, TextAlignmentOptions align, FontStyles style, out TMP_Text text)
+    {
+        Transform column = Panel(pair, name, aMin, aMax, Vector2.zero, Vector2.zero, Tooltip, ThemeRoleId.CompareBar);
+        SetAnchors(column, aMin, aMax);
+        Button button = GetOrAdd<Button>(column.gameObject);
+        button.transition = Selectable.Transition.None;
+        button.targetGraphic = column.GetComponent<Image>();
+        text = Text(column, "Text", string.Empty, 20, align, new Vector2(0.01f, 0f), new Vector2(0.99f, 1f), Ink, ThemeRoleId.CompareBar, style: style);
+        text.enableAutoSizing = true;
+        text.fontSizeMin = 11f;
+        text.fontSizeMax = 20f;
+        text.textWrappingMode = TextWrappingModes.Normal;
+        text.overflowMode = TextOverflowModes.Ellipsis;
+        text.raycastTarget = false;
+        return button;
     }
 
     /// <summary>

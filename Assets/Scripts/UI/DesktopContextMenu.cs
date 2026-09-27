@@ -4,15 +4,17 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 /// <summary>
-/// The desktop's right-click menu (the PC redesign DK5, CP1, PR1, section
+/// The desktop's right-click menu (the PC redesign DK5, AP4, CP1, PR1, section
 /// 3.2): one themed panel whose builder-made entries are shown per target: on
-/// the empty desktop "Arrange icons" (DesktopIcons.Arrange), on an icon
-/// "Open" (its app), on a row of the Investigation app "Copy value", "Copy
-/// row", "Pin" or "Unpin" and, when the row can be picked, "Pick for
-/// compare". It opens with its top-left at the pointer, kept inside the
-/// desktop, above every window; an entry closes it, and so do a press
-/// outside it and Escape (the keyboard poller: DesktopEscape.CloseMenu,
-/// first in the chain). On the menu's panel, a child of the desktop canvas.
+/// the empty desktop "Arrange icons" (DesktopIcons.Arrange), on an icon "Open"
+/// (its app), on a tab of the Investigation app "Move left", "Move right" and
+/// "Reset tab order" (InvestigationApp.MoveTab, ResetTabOrder), on a row of the
+/// Investigation app "Copy value", "Copy row", "Pin" or "Unpin" and, when the
+/// row can be picked, "Pick for compare". It opens with its top-left at the
+/// pointer, kept inside the desktop, above every window; an entry closes it,
+/// and so do a press outside it and Escape (the keyboard poller:
+/// DesktopEscape.CloseMenu, first in the chain). On the menu's panel, a child
+/// of the desktop canvas.
 /// </summary>
 public sealed class DesktopContextMenu : MonoBehaviour
 {
@@ -21,6 +23,15 @@ public sealed class DesktopContextMenu : MonoBehaviour
 
     /// <summary>"Open" (an icon's entry).</summary>
     [SerializeField] private Button openEntry;
+
+    /// <summary>"Move left" (a tab's entry).</summary>
+    [SerializeField] private Button moveLeftEntry;
+
+    /// <summary>"Move right" (a tab's entry).</summary>
+    [SerializeField] private Button moveRightEntry;
+
+    /// <summary>"Reset tab order" (a tab's entry).</summary>
+    [SerializeField] private Button resetTabsEntry;
 
     /// <summary>"Copy value" (a row's entry).</summary>
     [SerializeField] private Button copyEntry;
@@ -37,9 +48,19 @@ public sealed class DesktopContextMenu : MonoBehaviour
     /// <summary>The desktop's icons (Arrange, Open).</summary>
     [SerializeField] private DesktopIcons icons;
 
+    /// <summary>What the menu was opened on: the empty desktop, an icon, a tab or a row.</summary>
+    private enum Target
+    {
+        Desktop,
+        Icon,
+        Tab,
+        Row
+    }
+
     private DesktopIconView _target;
-    private AppRow _row;
     private InvestigationApp _app;
+    private AppTab _tab;
+    private AppRow _row;
     private bool _wired;
 
     /// <summary>True while the menu shows.</summary>
@@ -49,39 +70,59 @@ public sealed class DesktopContextMenu : MonoBehaviour
     public bool IsPart(GameObject go) => go != null && go.transform.IsChildOf(transform);
 
     /// <summary>Opens the empty desktop's menu (Arrange icons) at the pointer.</summary>
-    public void ShowForDesktop(PointerEventData eventData) => Show(null, null, false, eventData);
+    public void ShowForDesktop(PointerEventData eventData) => Show(Target.Desktop, false, eventData);
 
     /// <summary>Opens an icon's menu (Open) at the pointer.</summary>
-    public void ShowForIcon(DesktopIconView icon, PointerEventData eventData) => Show(icon, null, false, eventData);
+    public void ShowForIcon(DesktopIconView icon, PointerEventData eventData)
+    {
+        _target = icon;
+        Show(Target.Icon, false, eventData);
+    }
+
+    /// <summary>Opens a tab's menu (Move left, Move right, Reset tab order) at the pointer.</summary>
+    public void ShowForTab(InvestigationApp app, AppTab tab, PointerEventData eventData)
+    {
+        _app = app;
+        _tab = tab;
+        Show(Target.Tab, false, eventData);
+    }
 
     /// <summary>Opens a row's menu (Copy value, Copy row, Pin or Unpin as <paramref name="pinned"/> says, Pick for compare when it can be picked) at the pointer.</summary>
     public void ShowForRow(InvestigationApp app, AppRow row, bool pinned, PointerEventData eventData)
     {
         _app = app;
-        Show(null, row, pinned, eventData);
+        _row = row;
+        Show(Target.Row, pinned, eventData);
     }
 
     /// <summary>Closes the menu.</summary>
     public void Close()
     {
         _target = null;
+        _app = null;
         _row = null;
         gameObject.SetActive(false);
     }
 
-    private void Show(DesktopIconView icon, AppRow row, bool pinned, PointerEventData eventData)
+    private void Show(Target target, bool pinned, PointerEventData eventData)
     {
         Wire();
-        _target = icon;
-        _row = row;
-        bool desktop = icon == null && row == null;
-        SetShown(arrangeEntry, desktop);
-        SetShown(openEntry, icon != null);
-        SetShown(copyEntry, row != null);
-        SetShown(copyRowEntry, row != null);
-        SetShown(pinEntry, row != null);
-        SetShown(pickEntry, row != null && row.Pickable);
-        if (pinEntry != null && row != null)
+        if (target != Target.Icon)
+            _target = null;
+        if (target != Target.Tab && target != Target.Row)
+            _app = null;
+        if (target != Target.Row)
+            _row = null;
+        Entry(arrangeEntry, target == Target.Desktop);
+        Entry(openEntry, target == Target.Icon);
+        Entry(moveLeftEntry, target == Target.Tab);
+        Entry(moveRightEntry, target == Target.Tab);
+        Entry(resetTabsEntry, target == Target.Tab);
+        Entry(copyEntry, target == Target.Row);
+        Entry(copyRowEntry, target == Target.Row);
+        Entry(pinEntry, target == Target.Row);
+        Entry(pickEntry, target == Target.Row && _row != null && _row.Pickable);
+        if (pinEntry != null && target == Target.Row)
         {
             TMP_Text label = pinEntry.GetComponentInChildren<TMP_Text>(true);
             if (label != null)
@@ -106,10 +147,11 @@ public sealed class DesktopContextMenu : MonoBehaviour
         menu.anchoredPosition = new Vector2(x, y) - (Vector2)bounds.center;
     }
 
-    private static void SetShown(Button entry, bool shown)
+    /// <summary>Shows or hides an entry (a missing one is skipped).</summary>
+    private static void Entry(Button entry, bool on)
     {
         if (entry != null)
-            entry.gameObject.SetActive(shown);
+            entry.gameObject.SetActive(on);
     }
 
     /// <summary>The entries' clicks, once (the menu starts hidden, so this runs on the first show).</summary>
@@ -122,6 +164,12 @@ public sealed class DesktopContextMenu : MonoBehaviour
             arrangeEntry.onClick.AddListener(Arrange);
         if (openEntry != null)
             openEntry.onClick.AddListener(OpenTarget);
+        if (moveLeftEntry != null)
+            moveLeftEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, -1)));
+        if (moveRightEntry != null)
+            moveRightEntry.onClick.AddListener(() => OnTab((app, tab) => app.MoveTab(tab, 1)));
+        if (resetTabsEntry != null)
+            resetTabsEntry.onClick.AddListener(() => OnTab((app, _) => app.ResetTabOrder()));
         if (copyEntry != null)
             copyEntry.onClick.AddListener(() => OnRow((app, row) => app.Copy(row, false)));
         if (copyRowEntry != null)
@@ -130,6 +178,26 @@ public sealed class DesktopContextMenu : MonoBehaviour
             pinEntry.onClick.AddListener(() => OnRow((app, row) => app.TogglePin(row)));
         if (pickEntry != null)
             pickEntry.onClick.AddListener(() => OnRow((app, row) => row.Pick()));
+    }
+
+    /// <summary>A tab's entry: the menu closes, then the app moves its tabs.</summary>
+    private void OnTab(System.Action<InvestigationApp, AppTab> act)
+    {
+        InvestigationApp app = _app;
+        AppTab tab = _tab;
+        Close();
+        if (app != null)
+            act(app, tab);
+    }
+
+    /// <summary>A row's entry: the menu closes, then the entry acts on the row (still there).</summary>
+    private void OnRow(System.Action<InvestigationApp, AppRow> act)
+    {
+        AppRow row = _row;
+        InvestigationApp app = _app;
+        Close();
+        if (row != null && app != null)
+            act(app, row);
     }
 
     private void Arrange()
@@ -145,15 +213,5 @@ public sealed class DesktopContextMenu : MonoBehaviour
         Close();
         if (icons != null && target != null)
             icons.Open(target);
-    }
-
-    /// <summary>A row's entry: the menu closes, then the entry acts on the row (still there).</summary>
-    private void OnRow(System.Action<InvestigationApp, AppRow> act)
-    {
-        AppRow row = _row;
-        InvestigationApp app = _app;
-        Close();
-        if (row != null && app != null)
-            act(app, row);
     }
 }

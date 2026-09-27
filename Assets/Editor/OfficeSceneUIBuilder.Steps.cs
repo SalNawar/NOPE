@@ -106,14 +106,11 @@ public static partial class OfficeSceneUIBuilder
         return view;
     }
 
-    /// <summary>The steps' references into the app (its tabs, the toast, the knobs), the toolbar's Steps toggle calling StepsPanel.Toggle, and the steps for the app's key (Ctrl+Shift+S, ShortcutMap's ToggleSteps).</summary>
+    /// <summary>The steps' references (the app: what the player sees and where a jump goes; the toast; the knobs), the toolbar's Steps toggle calling StepsPanel.Toggle, and the steps for the app's key (Ctrl+Shift+S, ShortcutMap's ToggleSteps).</summary>
     private static void WireStepsPanel(StepsPanel steps, AppParts parts, Button toggle, AppToast toast, DesktopConfigSO config)
     {
         var so = new SerializedObject(steps);
         Wire(so, "app", parts.App);
-        Wire(so, "documents", parts.Documents);
-        Wire(so, "records", parts.Records);
-        Wire(so, "reference", parts.Reference);
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();

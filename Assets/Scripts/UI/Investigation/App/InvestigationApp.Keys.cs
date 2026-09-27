@@ -28,10 +28,13 @@ using UnityEngine.UI;
 /// on it); the case's are dropped when a case starts or ends, the day's when
 /// the day starts. Ctrl+= and Ctrl+- zoom the panes' content (PaneZoom) to
 /// the next level (100, 125, 150 %), Ctrl+0 back to Settings' Text size.
-/// A mouse press hides the ring. Ctrl+Shift+S shows or hides the sidebar's
-/// steps checklist (StepsPanel, phase 21). Back, Forward, the other pane,
-/// the split, moving tabs and following links into the other pane come with
-/// phase 18.
+/// A mouse press hides the ring. With the two panes (phase 18) the keys act on
+/// the active pane: Alt+← and Alt+→ walk its history, F6 makes the other pane
+/// active, Ctrl+\ splits or joins, Ctrl+Shift+PgUp/PgDn move the active tab
+/// in the shared order, Ctrl+1…6 follow that order, Tab also visits the other
+/// pane's content, and Enter on a row with a smart link follows it in the same
+/// pane (Ctrl+Enter: the other pane). Ctrl+Shift+S shows or hides the
+/// sidebar's steps checklist (StepsPanel, phase 21).
 /// </summary>
 public sealed partial class InvestigationApp
 {
@@ -42,9 +45,6 @@ public sealed partial class InvestigationApp
     /// <summary>The search field's chip for a pasted untranslated line.</summary>
     [SerializeField] private SearchFieldChip searchChip;
 
-    /// <summary>The sidebar (Ctrl+B hides it).</summary>
-    [SerializeField] private GameObject sidebar;
-
     /// <summary>The panes' area beside the sidebar (it widens while the sidebar is hidden).</summary>
     [SerializeField] private RectTransform panes;
 
@@ -54,8 +54,8 @@ public sealed partial class InvestigationApp
     /// <summary>The sidebar's Recent list.</summary>
     [SerializeField] private SidebarEntryList recentList;
 
-    /// <summary>The pane header's pin button (it pins the pane's item).</summary>
-    [SerializeField] private Button pinButton;
+    /// <summary>Each pane header's pin button (it pins the active pane's item; a press on it makes its pane the active one first).</summary>
+    [SerializeField] private Button[] pinButtons = new Button[0];
 
     /// <summary>The keyboard focus ring.</summary>
     [SerializeField] private AppFocusRing focusRing;
@@ -125,15 +125,16 @@ public sealed partial class InvestigationApp
         _recent = new RecentList(config != null ? config.recentItems : 1);
         if (panes != null)
             _panesInset = panes.offsetMin.x;
-        if (pane != null)
+        foreach (AppPane pane in Panes())
             foreach (AppTab tab in TabOrder.Default)
             {
                 IAppView view = pane.View(tab);
                 if (view != null)
                     view.ChipsChanged += () => ItemChanged(view);
             }
-        if (pinButton != null)
-            pinButton.onClick.AddListener(PinPaneItem);
+        foreach (Button pin in pinButtons)
+            if (pin != null)
+                pin.onClick.AddListener(PinPaneItem);
         ApplySidebar(DesktopPreferences.SidebarShown);
         SetZoom(DefaultZoom);
         DrawLists();
@@ -229,7 +230,31 @@ public sealed partial class InvestigationApp
                 TurnPage(1);
                 break;
             case AppCommand.Follow:
-                Activate();
+                PressFocused(true);
+                break;
+            case AppCommand.FollowOther:
+                PressFocused(false);
+                break;
+            case AppCommand.Back:
+                ActivePane.Back();
+                break;
+            case AppCommand.Forward:
+                ActivePane.Forward();
+                break;
+            case AppCommand.OtherPane:
+                if (_split)
+                    Activate(Other(ActivePane));
+                Refocus();
+                break;
+            case AppCommand.ToggleSplit:
+                ToggleSplit();
+                Refocus();
+                break;
+            case AppCommand.MoveTabLeft:
+                MoveTab(ActivePane.ActiveTab, -1);
+                break;
+            case AppCommand.MoveTabRight:
+                MoveTab(ActivePane.ActiveTab, 1);
                 break;
             case AppCommand.Pick:
                 FocusedRow()?.Pick();
@@ -256,8 +281,6 @@ public sealed partial class InvestigationApp
                 if (steps != null)
                     steps.Toggle();
                 break;
-            // Back, Forward, OtherPane, ToggleSplit, MoveTabLeft, MoveTabRight and FollowOther come with
-            // the two panes and the smart links (redesign phase 18).
         }
     }
 
@@ -327,14 +350,14 @@ public sealed partial class InvestigationApp
             DrawLists();
     }
 
-    /// <summary>A pin or recent item clicked: its tab, its item and its row shown, the ring on the row, the item first in Recent.</summary>
+    /// <summary>A pin or recent item clicked: its tab, its item and its row shown in the active pane (SmartLinks.ForEntry, recorded in the pane's history), the ring on the row, the item first in Recent; an item that is gone says so.</summary>
     public void Jump(EntryItem item)
     {
         Init();
         if (window != null)
             window.Open();
-        pane.Show(item.Ref.Source);
-        if (!(pane.View(item.Ref.Source) is IAppItems items) || !items.Reveal(item.Ref.Key))
+        LinkTarget target = SmartLinks.ForEntry(item.Ref.Key, _papers);
+        if (target.IsNone || !ActivePane.Go(target))
         {
             Notice(UiText.Get("app.jump.gone"));
             return;
@@ -347,7 +370,7 @@ public sealed partial class InvestigationApp
     /// <summary>The active view showed another item (a chip chosen, a record looked up): it goes first in Recent.</summary>
     private void ItemChanged(IAppView view)
     {
-        if (!IsShowing || view.Tab != pane.ActiveTab || !(view is IAppItems items))
+        if (!IsShowing || !(view is IAppItems items) || !Showing(view))
             return;
         string key = items.ItemKey;
         if (key == null || (_opened.TryGetValue(view.Tab, out string last) && last == key))
@@ -368,33 +391,29 @@ public sealed partial class InvestigationApp
         SetRegion(AppRegion.Search, 0, true);
     }
 
-    /// <summary>The active pane shows the tab at <paramref name="position"/> (0-based; the default order until phase 18's own).</summary>
+    /// <summary>The active pane shows the tab at <paramref name="position"/> (0-based, in the shared tab order).</summary>
     private void ShowTabAt(int position)
     {
-        if (position < 0 || position >= TabOrder.Default.Count)
+        if (position < 0 || position >= _order.Tabs.Count)
             return;
-        pane.Show(TabOrder.Default[position]);
+        ActivePane.Show(_order.Tabs[position]);
         Refocus();
     }
 
     /// <summary>The next (1) or previous (-1) tab, round the strip.</summary>
     private void StepTab(int direction)
     {
-        int count = TabOrder.Default.Count;
-        int at = 0;
-        for (int i = 0; i < count; i++)
-            if (TabOrder.Default[i] == pane.ActiveTab)
-                at = i;
+        int count = _order.Tabs.Count;
+        int at = Mathf.Max(0, _order.PositionOf(ActivePane.ActiveTab));
         ShowTabAt(((at + direction) % count + count) % count);
     }
 
     /// <summary>Tab (1) or Shift+Tab (-1): the next region that is there; the first press starts at the search field (or the last region).</summary>
     private void MoveRegion(int direction)
     {
-        const bool split = false; // One pane until the split (redesign phase 18).
         AppRegion next = _ringOn
-            ? AppFocus.Next(_region, split, _sidebarShown, _caseOn, direction)
-            : direction > 0 ? AppRegion.Search : AppFocus.Next(AppRegion.Search, split, _sidebarShown, _caseOn, -1);
+            ? AppFocus.Next(_region, _split, _sidebarShown, _caseOn, direction)
+            : direction > 0 ? AppRegion.Search : AppFocus.Next(AppRegion.Search, _split, _sidebarShown, _caseOn, -1);
         SetRegion(next, -1, true);
     }
 
@@ -428,12 +447,10 @@ public sealed partial class InvestigationApp
     private int RegionItem(AppRegion region)
     {
         if (region == AppRegion.TabStrip)
-            for (int i = 0; i < TabOrder.Default.Count; i++)
-                if (TabOrder.Default[i] == pane.ActiveTab)
-                    return i;
+            return Mathf.Max(0, _order.PositionOf(ActivePane.ActiveTab));
         if (region == AppRegion.PaneHeader)
         {
-            IAppView view = pane.View(pane.ActiveTab);
+            IAppView view = ActivePane.View(ActivePane.ActiveTab);
             return view != null && view.Selected >= 0 ? view.Selected : 0;
         }
         return 0;
@@ -451,7 +468,7 @@ public sealed partial class InvestigationApp
     {
         Collect();
         int next = _item + delta;
-        if (_region == AppRegion.PaneContent && (next < 0 || next >= _targets.Count) && TurnPage(delta))
+        if (IsContent(_region) && (next < 0 || next >= _targets.Count) && TurnPage(delta))
             return;
         _item = Mathf.Clamp(next, 0, Mathf.Max(0, _targets.Count - 1));
         ShowRing();
@@ -468,7 +485,8 @@ public sealed partial class InvestigationApp
     /// <summary>PgUp (-1) or PgDn (1) in the content: the view's page turned, the ring on its first (or, going back, last) row; false when there is no page that way.</summary>
     private bool TurnPage(int direction)
     {
-        if (_region != AppRegion.PaneContent || !(pane.View(pane.ActiveTab) is Component view))
+        AppPane pane = ContentPane();
+        if (pane == null || !(pane.View(pane.ActiveTab) is Component view))
             return false;
         view.GetComponentsInChildren(false, _pagesScratch);
         if (_pagesScratch.Count == 0 || !_pagesScratch[0].TurnPage(direction))
@@ -479,12 +497,19 @@ public sealed partial class InvestigationApp
         return true;
     }
 
-    /// <summary>Enter: presses the focused item (a chip, the pin button, a pin or recent item, the dock's clear, Accept or Deny); a row's link comes with phase 18.</summary>
-    private void Activate()
+    /// <summary>Enter: presses the focused item (a chip, the pin button, a pin or recent item, the dock's clear, Accept or Deny) or follows the focused row's smart link in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>
+    private void PressFocused(bool samePane)
     {
         Collect();
-        if (_region == AppRegion.PaneContent || _item >= _targets.Count)
+        if (_item >= _targets.Count)
             return;
+        if (IsContent(_region))
+        {
+            AppRow row = _targets[_item].GetComponent<AppRow>();
+            if (row != null && !row.Link.IsNone)
+                Follow(ContentPane(), row.Link, samePane);
+            return;
+        }
         RectTransform target = _targets[_item];
         if (target.TryGetComponent(out Button button) && button.interactable)
             button.onClick.Invoke();
@@ -494,7 +519,7 @@ public sealed partial class InvestigationApp
     /// <summary>The row the ring is on in the content, or null.</summary>
     private AppRow FocusedRow()
     {
-        if (!_ringOn || _region != AppRegion.PaneContent)
+        if (!_ringOn || !IsContent(_region))
             return null;
         Collect();
         return _item < _targets.Count ? _targets[_item].GetComponent<AppRow>() : null;
@@ -505,7 +530,7 @@ public sealed partial class InvestigationApp
     {
         Collect();
         RectTransform target = _ringOn && _item < _targets.Count ? _targets[_item] : null;
-        if (target != null && _region == AppRegion.PaneContent && target.TryGetComponent(out AppRow row))
+        if (target != null && IsContent(_region) && target.TryGetComponent(out AppRow row))
             TogglePin(row);
         else if (target != null && _region == AppRegion.Sidebar && target.TryGetComponent(out SidebarEntryRow entry))
             Unpin(entry.Item.Ref.Key);
@@ -516,6 +541,7 @@ public sealed partial class InvestigationApp
     /// <summary>The pane header's pin (and Ctrl+P elsewhere): the item the pane shows, pinned or unpinned.</summary>
     private void PinPaneItem()
     {
+        AppPane pane = ActivePane;
         if (pane.View(pane.ActiveTab) is IAppItems items && items.ItemKey != null)
             TogglePin(items.ItemKey, items.ItemTitle);
     }
@@ -553,16 +579,20 @@ public sealed partial class InvestigationApp
                 Add(searchField);
                 break;
             case AppRegion.TabStrip:
-                foreach (AppTab tab in TabOrder.Default)
-                    Add(pane.TabButton(tab));
+                foreach (AppTab tab in _order.Tabs)
+                    Add(ActivePane.TabButton(tab));
                 break;
             case AppRegion.PaneHeader:
-                foreach (Button chip in pane.ChipButtons)
+                foreach (Button chip in ActivePane.ChipButtons)
                     Add(chip);
-                Add(pinButton);
+                foreach (Button pin in pinButtons)
+                    if (pin != null && pin.transform.IsChildOf(ActivePane.transform))
+                        Add(pin);
                 break;
             case AppRegion.PaneContent:
-                if (pane.View(pane.ActiveTab) is Component view && view.gameObject.activeInHierarchy)
+            case AppRegion.OtherPane:
+                AppPane pane = ContentPane();
+                if (pane != null && pane.View(pane.ActiveTab) is Component view && view.gameObject.activeInHierarchy)
                 {
                     view.GetComponentsInChildren(false, _rowScratch);
                     foreach (AppRow row in _rowScratch)
@@ -608,7 +638,7 @@ public sealed partial class InvestigationApp
         }
         RectTransform target = _item < _targets.Count ? _targets[_item] : RegionFrame();
         RectTransform clip = null;
-        if (_region == AppRegion.PaneContent && target != null)
+        if (IsContent(_region) && target != null)
             foreach (PaneZoom zoom in zooms)
                 if (zoom != null && target != zoom.transform && target.IsChildOf(zoom.transform))
                 {
@@ -643,10 +673,13 @@ public sealed partial class InvestigationApp
     /// <summary>A region without items shows the ring round it: the pane's content, the sidebar, the dock; else nothing.</summary>
     private RectTransform RegionFrame()
     {
-        if (_region == AppRegion.PaneContent && zooms.Length > 0 && zooms[0] != null)
-            return (RectTransform)zooms[0].transform;
+        AppPane pane = IsContent(_region) ? ContentPane() : null;
+        if (pane != null)
+            foreach (PaneZoom zoom in zooms)
+                if (zoom != null && zoom.transform.IsChildOf(pane.transform))
+                    return (RectTransform)zoom.transform;
         if (_region == AppRegion.Sidebar && sidebar != null)
-            return (RectTransform)sidebar.transform;
+            return sidebar;
         if (_region == AppRegion.Dock && compareDock != null && compareDock.gameObject.activeInHierarchy)
             return compareDock;
         return null;
@@ -656,10 +689,11 @@ public sealed partial class InvestigationApp
     private void ApplySidebar(bool shown)
     {
         _sidebarShown = shown;
-        if (sidebar != null && sidebar.activeSelf != shown)
-            sidebar.SetActive(shown);
+        if (sidebar != null && sidebar.gameObject.activeSelf != shown)
+            sidebar.gameObject.SetActive(shown);
         if (panes != null)
             panes.offsetMin = new Vector2(shown ? _panesInset : 0f, panes.offsetMin.y);
+        Layout();
         if (!shown && _region == AppRegion.Sidebar)
             SetRegion(AppRegion.PaneContent, 0, _ringOn);
     }
@@ -688,6 +722,29 @@ public sealed partial class InvestigationApp
             _item = Mathf.Clamp(_item, 0, Mathf.Max(0, _targets.Count - 1));
             ShowRing();
         }
+    }
+
+    /// <summary>The pane the keys act on: the active one.</summary>
+    private AppPane ActivePane => _active != null ? _active : leftPane;
+
+    /// <summary>True for a content region: the active pane's (PaneContent) or, while split, the other pane's (OtherPane).</summary>
+    private static bool IsContent(AppRegion region) => region == AppRegion.PaneContent || region == AppRegion.OtherPane;
+
+    /// <summary>The pane whose content the ring is in: the active one, or the other one in the OtherPane region; null outside the content.</summary>
+    private AppPane ContentPane()
+    {
+        if (_region == AppRegion.PaneContent)
+            return ActivePane;
+        return _region == AppRegion.OtherPane && _split ? Other(ActivePane) : null;
+    }
+
+    /// <summary>True when <paramref name="view"/> is the active view of a showing pane.</summary>
+    private bool Showing(IAppView view)
+    {
+        foreach (AppPane pane in Panes())
+            if ((pane == leftPane || _split) && pane.ActiveTab == view.Tab && pane.View(view.Tab) == view)
+                return true;
+        return false;
     }
 
     /// <summary>A short line on the app's toast (no Open).</summary>
