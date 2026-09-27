@@ -9,10 +9,11 @@ using UnityEngine;
 /// (DesktopConfigSO's debounce) from two characters or one digit, grouped by
 /// source in the tab order, each group capped (a chip or "Show all" filters
 /// to one source); Enter opens the first hit. A pasted foreign clip is a chip
-/// (SetChip, from the clipboard of redesign phase 20) that matches only equal
-/// untranslated lines of its tongue. It reads the app's index (CaseIndex) and
-/// fills the results panel (SearchResultsView); a chosen hit is Opened for
-/// the app to jump to.
+/// (SetChip, from the keys' SearchFieldChip on the same field) that matches
+/// only equal untranslated lines of its tongue. It reads the app's index
+/// (CaseIndex) and fills the results panel (SearchResultsView); a chosen hit
+/// is Opened for the app to jump to; Escape's CloseResults closes the panel
+/// and leaves the text.
 /// </summary>
 public sealed class SearchBox : MonoBehaviour
 {
@@ -34,6 +35,9 @@ public sealed class SearchBox : MonoBehaviour
 
     /// <summary>Raised when the player opens a hit (a click, or Enter on the first).</summary>
     public event Action<SearchHit> Opened;
+
+    /// <summary>True while the results panel shows.</summary>
+    public bool ResultsOpen => results != null && results.IsOpen;
 
     /// <summary>Searches <paramref name="index"/> (the app's); wires the field and the panel once.</summary>
     public void Bind(CaseIndex index)
@@ -59,24 +63,6 @@ public sealed class SearchBox : MonoBehaviour
         enabled = false;
     }
 
-    /// <summary>Puts the keyboard into the field (Ctrl+F).</summary>
-    public void Focus()
-    {
-        if (field == null || !field.gameObject.activeInHierarchy)
-            return;
-        field.Select();
-        field.ActivateInputField();
-    }
-
-    /// <summary>Sets the typed text (a paste) and shows its results at once.</summary>
-    public void SetQuery(string text)
-    {
-        if (field != null)
-            field.SetTextWithoutNotify(text ?? string.Empty);
-        _only = null;
-        Run();
-    }
-
     /// <summary>Sets the pasted foreign clip (null removes it) and shows the results at once.</summary>
     public void SetChip(SearchChip? chip)
     {
@@ -88,14 +74,20 @@ public sealed class SearchBox : MonoBehaviour
     /// <summary>The current traveller's script font: an untranslated snippet is drawn in it (null: the text's own font).</summary>
     public void SetScript(TMP_FontAsset font) => _script = font;
 
-    /// <summary>The case ended: the results close, the clip goes, the typed text stays for the next traveller.</summary>
-    public void EndCase()
+    /// <summary>Closes the results panel (Escape); the typed text stays, and typing on reopens it.</summary>
+    public void CloseResults()
     {
-        _chip = null;
         _due = -1f;
         enabled = false;
         if (results != null)
             results.Hide();
+    }
+
+    /// <summary>The case ended: the results close, the clip goes, the typed text stays for the next traveller.</summary>
+    public void EndCase()
+    {
+        _chip = null;
+        CloseResults();
     }
 
     /// <summary>Typing: the results update after the pause (the filter goes back to All).</summary>

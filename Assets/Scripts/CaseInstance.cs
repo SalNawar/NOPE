@@ -21,6 +21,14 @@ public sealed class CaseInstance
     /// </summary>
     public DisplacementFile displacement;
 
+    /// <summary>
+    /// A 2150 citizen's Citizen Account (AccountMaker.Make, on their account
+    /// stream; traveller types R1): the truth their papers print and the
+    /// Records app shows. Null for the displaced, or when the agency calendar
+    /// cannot count today.
+    /// </summary>
+    public CitizenAccount account;
+
     /// <summary>True if this traveller is a premade character (named, drawn whole).</summary>
     public bool isLegendary;
 
@@ -33,7 +41,7 @@ public sealed class CaseInstance
     /// <summary>Label of the claimed place, "Abbasid Baghdad (Medieval)" (claim line and Citizen Records).</summary>
     public string originLabel;
 
-    /// <summary>The claimed place's tongue (piece 9): the traveller speaks it, never their true home's (their papers are always English; empty without a place).</summary>
+    /// <summary>The tongue the traveller speaks (piece 9): the claimed place's for the displaced, never their true home's; empty (English) for a 2150 citizen (traveller types I3) or without a place. Papers are always English.</summary>
     public string tongueId = string.Empty;
 
     /// <summary>Authored impact overrides from the blueprint/legendary (may be empty).</summary>
@@ -42,16 +50,17 @@ public sealed class CaseInstance
     /// <summary>Display name for the visitor (given name + role suffix).</summary>
     public string visitorDisplayName;
 
-    /// <summary>The registered given name, from the claimed place's names (a liar's cover name; citizen-records lookup key).</summary>
+    /// <summary>The registered given name (a liar's cover name; citizen-records lookup key): from the claimed place's names, or for a 2150 citizen the Future places' lists together (traveller types K4).</summary>
     public string visitorGivenName;
 
     /// <summary>
-    /// The registered date of birth, from the claimed place's birth years (what
-    /// the agency has on file). A birth-date tell prints a different year on the papers.
+    /// The registered date of birth (what the agency has on file): from the
+    /// claimed place's birth years, or for a 2150 citizen the present's
+    /// (2080-2132). A birth-date tell prints a different year on the papers.
     /// </summary>
     public string trueBirthDate;
 
-    /// <summary>Gender from the claimed place's name list the given name came from, or the premade's (Unknown for "Subject #n").</summary>
+    /// <summary>Gender from the name list the given name came from (the claimed place's, or a citizen's merged 2150 lists), or the premade's (Unknown for "Subject #n").</summary>
     public TravellerGender gender;
 
     /// <summary>The desk's opener for this traveller (interview lines, with the traveller's honorific); the transcript's first line.</summary>

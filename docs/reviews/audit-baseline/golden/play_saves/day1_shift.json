@@ -3,10 +3,11 @@
     "world": {
         "day": 1,
         "runSeed": 12345,
-        "money": 135,
+        "money": 114,
         "timelineStability": 95.0,
         "totalCitations": 1,
         "citationsToday": 1,
+        "clerkDebtPaid": 21,
         "endingId": "",
         "legendaryChanceBonus": 0.0,
         "forgeryChanceModifier": 0.0,
@@ -18,7 +19,7 @@
         "counters": [
             {
                 "key": "sent:era:ancient",
-                "value": 5
+                "value": 6
             },
             {
                 "key": "sent:tag:merchant",
@@ -67,6 +68,30 @@
             {
                 "key": "sent:tag:culture:ancient",
                 "value": 3
+            },
+            {
+                "key": "sent:tag:diplomat",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:diplomat:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:politics:ancient",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy",
+                "value": 1
+            },
+            {
+                "key": "sent:tag:democracy:ancient",
+                "value": 1
             }
         ],
         "timeline": {
@@ -92,11 +117,19 @@
                     "value": 2.0
                 },
                 {
-                    "key": "attr:iraq_ancient:art",
-                    "value": 4.0
+                    "key": "attr:iraq_ancient:democracy",
+                    "value": 2.0
+                },
+                {
+                    "key": "attrTotal:democracy",
+                    "value": 2.0
                 },
                 {
                     "key": "nation:iraq",
+                    "value": 6.0
+                },
+                {
+                    "key": "attr:iraq_ancient:art",
                     "value": 4.0
                 }
             ],
@@ -247,8 +280,30 @@
             "leaderSinceDay": 0,
             "ranking": [],
             "factEdits": [],
-            "pendingCarries": []
+            "pendingCarries": [],
+            "pendingPanics": []
         },
-        "phase": 1
+        "newsArchive": [
+            {
+                "day": 1,
+                "briefing": [],
+                "news": []
+            }
+        ],
+        "phase": 1,
+        "mailRead": [],
+        "accountDays": [
+            {
+                "day": 1,
+                "wages": 85,
+                "fines": 0,
+                "debtRelief": 21,
+                "household": 0,
+                "purchases": 0,
+                "balance": 114,
+                "owed": 125409
+            }
+        ],
+        "notes": []
     }
 }

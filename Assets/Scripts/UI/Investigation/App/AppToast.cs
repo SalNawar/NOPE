@@ -28,6 +28,8 @@ public sealed class AppToast : MonoBehaviour
         Wire();
         if (text != null)
             text.text = line;
+        if (openButton != null && openButton.gameObject.activeSelf != (open != null))
+            openButton.gameObject.SetActive(open != null);
         _open = open;
         _until = Time.unscaledTime + seconds;
         gameObject.SetActive(true);

@@ -8,7 +8,11 @@ using System;
 /// and a name run to a book row (FactTable.MaxValueLength); an origin to the
 /// longest of the content's origin labels (the caller's); a birth date to the
 /// widest date BirthDates writes (a four-digit BCE year); the agency's numbers
-/// and dates to their makers' fixed widths (AgencyNumbers, AgencyCalendar).
+/// and dates to their makers' fixed widths (AgencyNumbers, AgencyCalendar,
+/// AccountMaker: a Citizen ID or a Displacement No., the wider); an account's
+/// status and transponder class to their longest name, a transponder to a
+/// book row (AccountRanges.Problems holds every model to it) and a debt to
+/// the widest the accounts may hold (AccountRanges.MaxDebt).
 /// </summary>
 public static class FieldLengths
 {
@@ -33,7 +37,13 @@ public static class FieldLengths
             case ClueCategory.Destination:
                 return longestOrigin;
             case ClueCategory.CitizenId:
-                return AgencyNumbers.DisplacementNumber(new Widest()).Length;
+                return Math.Max(AgencyNumbers.DisplacementNumber(new Widest()).Length, AccountMaker.CitizenId(new Widest()).Length);
+            case ClueCategory.AccountStatus:
+                return LongestName(typeof(CitizenStatus));
+            case ClueCategory.TransponderClass:
+                return LongestName(typeof(TransponderClass));
+            case ClueCategory.Debt:
+                return AccountMaker.Credits(AccountRanges.MaxDebt).Length;
             case ClueCategory.Incident:
                 return AgencyNumbers.IncidentNumber(WidestDay, new Widest()).Length;
             case ClueCategory.DepartureDate:
@@ -42,5 +52,14 @@ public static class FieldLengths
             default:
                 return FactTable.MaxValueLength;
         }
+    }
+
+    /// <summary>The longest name of an enum's values (a status or a class prints its name).</summary>
+    private static int LongestName(Type enumType)
+    {
+        int longest = 0;
+        foreach (string name in Enum.GetNames(enumType))
+            longest = Math.Max(longest, name.Length);
+        return longest;
     }
 }

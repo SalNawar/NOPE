@@ -178,7 +178,7 @@ public sealed class InterviewPresenter
             ForeignLine? foreign = DisplayText.ShowsForeign(line.Text, shown, speech.Timing, speech.ReducedMotion)
                 ? new ForeignLine(_tongueId, DisplayText.For(line.Text, shown, speech.Timing, speech.ReducedMotion))
                 : (ForeignLine?)null;
-            _index.Add(IndexEntries.Line(i, UiText.Format("search.title.line", speaker, i + 1), speaker, line.Text, line.English, foreign));
+            _index.Add(IndexEntries.Line(i, UiText.Format("app.row.line", speaker, i + 1), speaker, line.Text, line.English, foreign));
         }
     }
 

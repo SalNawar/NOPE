@@ -13,10 +13,11 @@ using UnityEngine.UI;
 /// the register works between travellers too (a day source). Today each
 /// register is drawn by the book page component (ReferenceBookWindowController,
 /// one clone of the page template per book); phase 5's FormView takes its place.
-/// DayReference fills it. A search result shows its row (Reveal: "Claimed
-/// place only" turned off when it hides the row).
+/// DayReference fills it. Its item is the chosen book ("bookof:Currency"); a
+/// jump shows a book, or a row's page ("Claimed place only" turned off when
+/// it hides the row; IAppItems).
 /// </summary>
-public sealed class ReferenceView : AppView
+public sealed class ReferenceView : AppView, IAppItems
 {
     /// <summary>A book's register page (inactive), cloned per book.</summary>
     [SerializeField] private ReferenceBookWindowController pageTemplate;
@@ -45,6 +46,39 @@ public sealed class ReferenceView : AppView
 
     /// <inheritdoc />
     public override int Selected => _selected;
+
+    /// <inheritdoc />
+    public string ItemKey => _selected >= 0 ? EntryKeys.Book(_books[_selected].category) : null;
+
+    /// <inheritdoc />
+    public string ItemTitle => _selected >= 0 ? _books[_selected].displayName : null;
+
+    /// <inheritdoc />
+    public bool Reveal(string key)
+    {
+        if (EntryKeys.TryBook(key, out ClueCategory category))
+            return SelectBook(category) >= 0;
+        if (!EntryKeys.TryBookRow(key, out category, out string nation, out string era))
+            return false;
+        int book = SelectBook(category);
+        if (book < 0)
+            return false;
+        if (claimedOnly != null && claimedOnly.isOn && !(nation == _claimedNation && era == _claimedEra))
+            claimedOnly.isOn = false;
+        return _pages[book].ShowRow(key);
+    }
+
+    /// <summary>Chooses the book of <paramref name="category"/>; its index, or -1 when the library has none.</summary>
+    private int SelectBook(ClueCategory category)
+    {
+        for (int i = 0; i < _books.Count; i++)
+            if (_books[i].category == category)
+            {
+                Select(i);
+                return i;
+            }
+        return -1;
+    }
 
     /// <summary>Today's facts and the compare the rows pick into; a built register redraws.</summary>
     public void SetFacts(FactTable facts, CompareController compare)
@@ -91,26 +125,6 @@ public sealed class ReferenceView : AppView
 
     /// <summary>The books, in their chips' order (a book's place is its item in the search index).</summary>
     public IReadOnlyList<ReferenceBookSO> Books => _books;
-
-    /// <summary>
-    /// A search result (redesign phase 19, SE4): book <paramref name="book"/>
-    /// chosen and the page of its row <paramref name="key"/> (its pick)
-    /// shown, "Claimed place only" turned off when it hides the row; the row
-    /// is returned as found.
-    /// </summary>
-    public FoundTarget Reveal(int book, string key)
-    {
-        if (book < 0 || book >= _pages.Count)
-            return default;
-        Select(book);
-        FoundTarget found = _pages[book].RevealRow(key);
-        if (found.Rect == null && claimedOnly != null && claimedOnly.isOn)
-        {
-            claimedOnly.isOn = false;
-            found = _pages[book].RevealRow(key);
-        }
-        return found;
-    }
 
     /// <summary>A new case's claim (null ids for none): its row comes first, and "Claimed place only" turns on (AP8).</summary>
     public void SetClaim(string nationId, string eraId)

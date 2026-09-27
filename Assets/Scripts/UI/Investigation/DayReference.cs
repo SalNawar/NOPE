@@ -93,7 +93,7 @@ public sealed class DayReference
                             inst != null && inst.claimedEra != null ? inst.claimedEra.id : null);
     }
 
-    /// <summary>Search's day layer from what the day has so far: the rules ("Rule n"), the books' rows (titled "book · place"; the country's name and "revised" matched too) and the records' rows ("name · label").</summary>
+    /// <summary>Search's day layer from what the day has so far: the rules ("Rule n"), the books' rows (titled "book · place"; the country's name and "revised" matched too) and the records' rows (titled as the keys title them, "name · label").</summary>
     private void IndexDay()
     {
         if (_index == null)
@@ -106,11 +106,10 @@ public sealed class DayReference
                 day.Add(IndexEntries.Rule(n, UiText.Format("search.title.rule", n + 1), rule.Summary()));
                 n++;
             }
-        string rowTitle = UiText.Get("search.title.row");
         if (_books != null && _facts != null)
             day.AddRange(IndexEntries.BookRows(_books.Books.Select(b => (b.category, b.displayName)).ToList(), _facts, CountryName,
-                                               UiText.Get("search.revised"), rowTitle));
-        day.AddRange(IndexEntries.Records(_registry, rowTitle));
+                                               UiText.Get("search.revised"), UiText.Get("search.title.row")));
+        day.AddRange(IndexEntries.Records(_registry, UiText.Get("app.row.record")));
         _index.SetDay(day);
     }
 

@@ -12,7 +12,7 @@ using System.Text;
 /// </summary>
 public sealed class IndexEntry
 {
-    /// <summary>The item's key: PickKeys' for a pickable row ("field:0:2", "line:5", "book:Currency:greece:ancient", "record:552-1804-33:BirthDate"); else "doc:0", "rec:{record id}", "rule:0", "dev:Currency".</summary>
+    /// <summary>The item's key: PickKeys' for a pickable row ("field:0:2", "line:5", "book:Currency:greece:ancient", "record:552-1804-33:BirthDate"); else EntryKeys' ("doc:0", "rec:{record id}", "rule:0", "dev:Currency").</summary>
     public string Key;
 
     /// <summary>The tab the item is in.</summary>
@@ -227,12 +227,6 @@ public sealed class CaseIndex
 /// </summary>
 public static class IndexEntries
 {
-    /// <summary>A paper as an item ("doc:0").</summary>
-    private static string PaperKey(int paper) => "doc:" + paper.ToString(CultureInfo.InvariantCulture);
-
-    /// <summary>A record as an item ("rec:552-1804-33").</summary>
-    private static string RecordKey(string recordId) => "rec:" + recordId;
-
     /// <summary>
     /// A scanned paper (Documents, case layer): the paper itself (titled and
     /// matched by its name) and each of its <paramref name="fields"/> (label
@@ -244,7 +238,7 @@ public static class IndexEntries
     {
         yield return new IndexEntry
         {
-            Key = PaperKey(paper), Source = AppTab.Documents, Item = paper, Title = name, Label = string.Empty, Text = name, Order = paper * 1000
+            Key = EntryKeys.Document(paper), Source = AppTab.Documents, Item = paper, Title = name, Label = string.Empty, Text = name, Order = paper * 1000
         };
         for (int f = 0; fields != null && f < fields.Count; f++)
         {
@@ -282,7 +276,7 @@ public static class IndexEntries
                         continue;
                     yield return new IndexEntry
                     {
-                        Key = line.IsEvidence ? PickKeys.Record(line.Category, record.Id) : RecordKey(record.Id),
+                        Key = line.IsEvidence ? PickKeys.Record(line.Category, record.Id) : EntryKeys.RecordCard(record.Id),
                         Source = AppTab.Records, Item = r, Row = at,
                         Title = Format(titleFormat, record.FullName, line.Label), Label = line.Label, Text = line.Value, Order = r * 1000 + at
                     };
@@ -349,14 +343,14 @@ public static class IndexEntries
     public static IndexEntry Deviation(int index, ClueCategory category, string title, string categoryWord, string text) =>
         new IndexEntry
         {
-            Key = "dev:" + category, Source = AppTab.Report, Item = index, Title = title, Label = categoryWord, Text = text, Order = index
+            Key = EntryKeys.Deviation(category), Source = AppTab.Report, Item = index, Title = title, Label = categoryWord, Text = text, Order = index
         };
 
     /// <summary>Rule <paramref name="index"/> of the day's directives (Rules, day layer): its summary as its text.</summary>
     public static IndexEntry Rule(int index, string title, string summary) =>
         new IndexEntry
         {
-            Key = "rule:" + index.ToString(CultureInfo.InvariantCulture), Source = AppTab.Rules, Item = index, Title = title,
+            Key = EntryKeys.Rule(index), Source = AppTab.Rules, Item = index, Title = title,
             Label = string.Empty, Text = summary, Order = index
         };
 

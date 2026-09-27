@@ -25,4 +25,7 @@ public static class Paging
     /// <summary>One past the index of the last item on the (clamped) page.</summary>
     public static int End(int page, int count, int perPage) =>
         Math.Min(Math.Max(0, count), First(page, count, perPage) + Math.Max(1, perPage));
+
+    /// <summary>The page item <paramref name="index"/> is on (a negative index: the first page); clamp it with the list's count.</summary>
+    public static int PageOf(int index, int perPage) => Math.Max(0, index) / Math.Max(1, perPage);
 }

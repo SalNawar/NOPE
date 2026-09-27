@@ -12,10 +12,11 @@ using UnityEngine;
 /// form (phase 5): a clone of the scanned-page template per paper
 /// (DocumentWindowController over a FormView), drawn from the same
 /// DocumentForm the desk paper prints.
-/// CaseDocumentsPresenter fills it; nothing here opens or switches by itself
-/// (a search result shows its paper and field: Reveal).
+/// CaseDocumentsPresenter fills it; nothing here opens or switches by itself.
+/// Its item is the chosen paper ("doc:0"); a jump shows a paper, or a
+/// field's paper (IAppItems; the focus ring brings the box into view).
 /// </summary>
-public sealed class DocumentsView : AppView
+public sealed class DocumentsView : AppView, IAppItems
 {
     /// <summary>The scanned page (inactive), cloned per paper of the case.</summary>
     [SerializeField] private DocumentWindowController pageTemplate;
@@ -40,6 +41,26 @@ public sealed class DocumentsView : AppView
 
     /// <summary>True when the page template is wired (a case's papers can be shown).</summary>
     public bool Ready => pageTemplate != null;
+
+    /// <inheritdoc />
+    public string ItemKey => _selected >= 0 ? EntryKeys.Document(_selected) : null;
+
+    /// <inheritdoc />
+    public string ItemTitle => _selected >= 0 && _selected < _names.Count ? _names[_selected] : null;
+
+    /// <inheritdoc />
+    public bool Reveal(string key)
+    {
+        if (EntryKeys.TryDocument(key, out int paper) && paper < _pages.Count)
+        {
+            Select(paper);
+            return true;
+        }
+        if (!EntryKeys.TryField(key, out paper, out _) || paper >= _pages.Count)
+            return false;
+        Select(paper);
+        return true;
+    }
 
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
@@ -69,15 +90,6 @@ public sealed class DocumentsView : AppView
     {
         if (index >= 0 && index < _pages.Count && _pages[index] != null)
             _pages[index].MarkScanned();
-    }
-
-    /// <summary>A search result (redesign phase 19, SE4): paper <paramref name="paper"/> chosen and its field <paramref name="field"/> (-1: the paper itself) returned as found, scrolled to the middle; nothing for a paper not scanned.</summary>
-    public FoundTarget Reveal(int paper, int field)
-    {
-        if (paper < 0 || paper >= _pages.Count || _pages[paper] == null || _papers.State(paper) != PaperState.Scanned)
-            return default;
-        Select(paper);
-        return _pages[paper].RevealField(field);
     }
 
     /// <summary>The papers moved (handed over, scanned): the chips and the shown paper follow.</summary>

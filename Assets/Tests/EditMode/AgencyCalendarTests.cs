@@ -82,14 +82,14 @@ public class AgencyCalendarTests
     [Test]
     public void AgencyContent_Problems_NoneWhenComplete()
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365) };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models() };
         CollectionAssert.IsEmpty(agency.Problems());
     }
 
     [Test]
     public void AgencyContent_Problems_OnePerBlankOrBadField()
     {
-        var agency = new AgencyContent { name = " ", programme = null, firstDate = "soon", displaced = Ranges(30, 3, 365) };
+        var agency = new AgencyContent { name = " ", programme = null, firstDate = "soon", displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models() };
         var problems = agency.Problems();
         Assert.AreEqual(3, problems.Count, string.Join(" | ", problems));
         StringAssert.Contains("agency.name", problems[0]);
@@ -101,7 +101,7 @@ public class AgencyCalendarTests
     [Test]
     public void AgencyContent_Problems_TheDisplacedRanges()
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(0, 5, 3) };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(0, 5, 3), accounts = Accounts(), transponders = Models() };
         var problems = agency.Problems();
         Assert.AreEqual(2, problems.Count, string.Join(" | ", problems));
         StringAssert.Contains("agency.displaced.foundWithinDays", problems[0]);
@@ -114,6 +114,36 @@ public class AgencyCalendarTests
         agency.displaced = Ranges(1, 0, 0);
         CollectionAssert.IsEmpty(agency.Problems(), "valid through today is allowed");
     }
+
+    /// <summary>Phase 6: the accounts' ranges and the transponder models (agency.accounts, agency.transponders) are the block's too.</summary>
+    [Test]
+    public void AgencyContent_Problems_TheAccounts()
+    {
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models() };
+        agency.transponders.RemoveAt(1);
+        StringAssert.Contains("no Economy model", string.Join(" | ", agency.Problems()), "AccountRanges.Problems over the block's models");
+        agency.accounts = null;
+        StringAssert.Contains("agency.accounts", string.Join(" | ", agency.Problems()), "a missing block");
+    }
+
+    private static AccountRanges Accounts() => new AccountRanges
+    {
+        validDaysMin = 3,
+        validDaysMax = 365,
+        tripsWithinDays = 1095,
+        statuses = new System.Collections.Generic.List<StatusRanges>
+        {
+            new StatusRanges { status = CitizenStatus.Premium, tripsMax = 3 },
+            new StatusRanges { status = CitizenStatus.Standard, debtMax = 18000, tripsMax = 3 },
+            new StatusRanges { status = CitizenStatus.Eligible, debtMin = 40000, debtMax = 320000, tripsMax = 2 }
+        }
+    };
+
+    private static System.Collections.Generic.List<TransponderModel> Models() => new System.Collections.Generic.List<TransponderModel>
+    {
+        new TransponderModel { id = "hopper2", transponderClass = TransponderClass.Premium, model = "Hopper Mk II", prefix = "HP", weight = 1f },
+        new TransponderModel { id = "tick", transponderClass = TransponderClass.Economy, model = "Tick-Tock Basic", prefix = "TT", weight = 1f }
+    };
 
     private static DisplacementRanges Ranges(int found, int min, int max) =>
         new DisplacementRanges { foundWithinDays = found, validDaysMin = min, validDaysMax = max };

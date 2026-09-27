@@ -190,7 +190,7 @@ public sealed class GameManager : MonoBehaviour
         if (investigationUI != null)
         {
             investigationUI.SetDirectives(dayPlan.ActiveTravelRules);
-            investigationUI.SetCitizenRegistry(CaseFactory.BuildRegistry(_dayCases), contentLibrary.Agency, _worldState.day);
+            investigationUI.SetCitizenRegistry(BuildRegistry(), contentLibrary.Agency, _worldState.day);
             investigationUI.SetFacts(_today.Facts);
             investigationUI.SetInterviewDay(interview);
             investigationUI.SetCharacterArt(_characterArt);
@@ -240,6 +240,20 @@ public sealed class GameManager : MonoBehaviour
             Debug.Log("[GameManager] <<< Exiting Start (starting day loop directly).");
             BeginShift(dayPlan, seed);
         }
+    }
+
+    /// <summary>
+    /// The day's Citizen Records (traveller types R1): each traveller's record
+    /// (CaseFactory.BuildRegistry), then the clerk's own account as the Citizen
+    /// Account app shows it this morning (AccountRecords.Clerk over
+    /// ClerkAccountSource: no row is evidence), found by 773-2840-19.
+    /// </summary>
+    private CitizenRegistry BuildRegistry()
+    {
+        CitizenRegistry registry = CaseFactory.BuildRegistry(_dayCases);
+        var clerk = new ClerkAccountSource(_worldState, contentLibrary);
+        registry.Add(AccountRecords.Clerk(clerk.Profile, Account.ExtractRows(clerk, UiText.Get, AccountMaker.Credits)));
+        return registry;
     }
 
     /// <summary>

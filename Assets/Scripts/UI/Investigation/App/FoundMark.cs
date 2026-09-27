@@ -2,30 +2,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-/// <summary>What a search jump found in a view: the row or box to mark, and what takes the keyboard focus there (null: nothing can).</summary>
-public readonly struct FoundTarget
-{
-    /// <summary>A found <paramref name="rect"/>, focusing <paramref name="focus"/>.</summary>
-    public FoundTarget(RectTransform rect, Selectable focus)
-    {
-        Rect = rect;
-        Focus = focus;
-    }
-
-    /// <summary>The found row or box (null: nothing found).</summary>
-    public RectTransform Rect { get; }
-
-    /// <summary>The found row's button (Space picks it next), or null.</summary>
-    public Selectable Focus { get; }
-}
-
 /// <summary>
 /// The found flash of a search jump (the PC redesign SE4): a clone of the
-/// app's inactive template laid over the found row or box (it goes with it
-/// when the row is redrawn), pulsing in the form style's found colour
-/// (FoundFlash: DesktopConfigSO's pulses over their time), then a steady
-/// outline until the next click or the next navigation (the app removes it);
-/// reduced motion shows the outline only. It is not the compare's highlight:
+/// app's inactive template laid over the found row or box (the row the keys'
+/// focus ring went to; it goes with the row when the page is redrawn),
+/// pulsing in the form style's found colour (FoundFlash: DesktopConfigSO's
+/// pulses over their time), then a steady outline until the next click or
+/// the next navigation (the app removes it); reduced motion shows the
+/// outline only. It is not the compare's highlight nor the focus ring:
 /// another colour, and it never picks.
 /// </summary>
 public sealed class FoundMark : MonoBehaviour

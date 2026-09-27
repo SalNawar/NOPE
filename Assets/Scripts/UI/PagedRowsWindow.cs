@@ -8,9 +8,10 @@ using UnityEngine.UI;
 /// transcript): a footer with prev/next and "Page n/m", and rows cloned from
 /// <see cref="entryRowTemplate"/> (a disabled row with two TMP texts, an Image
 /// background and a Button). Subclasses say how many rows there are and fill
-/// each one. The serialized field names are the ones the builder wires.
+/// each one. The keys turn its pages (IPagedRows) and a jump shows a row's
+/// page (ShowRowAt). The serialized field names are the ones the builder wires.
 /// </summary>
-public abstract class PagedRowsWindow : MonoBehaviour
+public abstract class PagedRowsWindow : MonoBehaviour, IPagedRows
 {
     /// <summary>Title in the window's header.</summary>
     [SerializeField] private TMP_Text titleText;
@@ -89,30 +90,29 @@ public abstract class PagedRowsWindow : MonoBehaviour
     /// <summary>Shows the newest page.</summary>
     public void ShowLastPage() => ShowPage(Paging.PageCount(RowCount, entriesPerPage) - 1);
 
-    /// <summary>
-    /// A search jump (redesign phase 19): shows the page row
-    /// <paramref name="index"/> is on and returns that row as found, with its
-    /// button when it is live (it takes the focus); nothing for a row that is
-    /// not there.
-    /// </summary>
-    protected FoundTarget ShowRowOf(int index)
+    /// <inheritdoc />
+    public bool TurnPage(int direction)
     {
-        if (index < 0 || index >= RowCount)
-            return default;
-        ShowPage(index / entriesPerPage);
-        int at = index - Paging.First(_page, RowCount, entriesPerPage);
-        if (at < 0 || at >= _rows.Count || _rows[at] == null)
-            return default;
-        Button button = _rows[at].GetComponent<Button>();
-        return new FoundTarget((RectTransform)_rows[at].transform, button != null && button.enabled ? button : null);
+        int target = Paging.Clamp(_page + direction, RowCount, entriesPerPage);
+        if (target == _page)
+            return false;
+        ShowPage(target);
+        return true;
     }
+
+    /// <summary>Shows the page row <paramref name="index"/> is on (a jump to it).</summary>
+    protected void ShowRowAt(int index) => ShowPage(Paging.PageOf(index, entriesPerPage));
 
     /// <summary>Replaces the row clones with the current page's rows.</summary>
     private void Rebuild()
     {
+        // Hidden at once (Destroy waits for the frame's end), so the keys never find a row that is going.
         foreach (GameObject r in _rows)
             if (r != null)
+            {
+                r.SetActive(false);
                 Destroy(r);
+            }
 
         _rows.Clear();
 

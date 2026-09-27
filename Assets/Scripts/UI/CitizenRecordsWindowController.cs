@@ -10,14 +10,17 @@ using UnityEngine.UI;
 /// (redesign phase 19, the PC spec's SE6: one matcher, so search and the
 /// lookup find the same records; a whole number or name ranks first); the
 /// status line reads the query, whether a record is on file and today's
-/// date. A search result jumps to a record's row (Reveal). The
+/// date. The
 /// record's rows are listed generically, group by group (a group's title is a
 /// heading line), a page at a time (PagedRowsWindow). A row that is evidence
 /// is compare-clickable, keyed by its record (EvidencePicks.ForRecord), so
 /// the traveller's own record can disprove their birth-date tell
 /// (RecordMismatch; another person's record proves nothing). The registry,
 /// the agency block and the date are injected per day by GameManager via
-/// InvestigationUIController.
+/// InvestigationUIController. Each evidence row is marked with its key for
+/// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
+/// tells the Records tab (Looked), and a jump (a pin, a search result) shows
+/// a record and its row (Show).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -72,6 +75,12 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     /// <summary>The shown record's lines, in order (empty when none is shown).</summary>
     private readonly List<Line> _lines = new();
 
+    /// <summary>The record shown, or null.</summary>
+    public CitizenRecord Current => _current;
+
+    /// <summary>Raised after a lookup (a record shown, or none on file).</summary>
+    public event System.Action Looked;
+
     /// <inheritdoc />
     protected override void Awake()
     {
@@ -105,27 +114,6 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         Show(found != null && found.Count > 0 ? RecordAt(found[0].Hits[0].Entry.Item) : null, query);
     }
 
-    /// <summary>
-    /// A search result (redesign phase 19, SE4): record <paramref name="record"/>
-    /// of the registry shown as its lookup by id would show it (the query its
-    /// number, else its name), on the page of its row <paramref name="row"/>
-    /// (in order across its groups; -1: its first row), which is returned as found.
-    /// </summary>
-    public FoundTarget Reveal(int record, int row)
-    {
-        CitizenRecord found = RecordAt(record);
-        if (found == null)
-            return default;
-        if (searchInput != null)
-            searchInput.SetTextWithoutNotify(found.Id);
-        Show(found, found.Id);
-        int rows = -1;
-        for (int i = 0; i < _lines.Count; i++)
-            if (_lines[i].Heading == null && ++rows == System.Math.Max(0, row))
-                return ShowRowOf(i);
-        return default;
-    }
-
     /// <summary>The registry's record at <paramref name="index"/>, or null.</summary>
     private CitizenRecord RecordAt(int index) =>
         _registry != null && index >= 0 && index < _registry.Records.Count ? _registry.Records[index] : null;
@@ -150,6 +138,23 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
                 : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
 
         ShowPage(0);
+        Looked?.Invoke();
+    }
+
+    /// <summary>A jump: looks up <paramref name="recordId"/> (its number, else its name) and shows the page of its row keyed <paramref name="rowKey"/> (null: the first page).</summary>
+    public void Show(string recordId, string rowKey)
+    {
+        if (searchInput != null)
+            searchInput.text = recordId ?? string.Empty;
+        Search();
+        if (rowKey == null || _current == null)
+            return;
+        for (int i = 0; i < _lines.Count; i++)
+            if (_lines[i].Heading == null && _lines[i].Row.IsEvidence && PickKeys.Record(_lines[i].Row.Category, _current.Id) == rowKey)
+            {
+                ShowRowAt(i);
+                return;
+            }
     }
 
     private void ShowIdle()
@@ -184,6 +189,9 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
             background.enabled = !heading;
 
         bool pickable = !heading && line.Row.IsEvidence && !string.IsNullOrEmpty(line.Row.Value) && compareController != null;
+        if (!heading && line.Row.IsEvidence && _current != null)
+            AppRow.Mark(row, AppTab.Records, PickKeys.Record(line.Row.Category, _current.Id), UiText.Format("app.row.record", _current.FullName, line.Row.Label),
+                        texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, pickable ? button : null);
         if (button == null)
             return;
         button.enabled = pickable;

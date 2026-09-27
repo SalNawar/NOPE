@@ -12,8 +12,9 @@ using UnityEngine.UI;
 /// heading, a hit with its glyph, title and snippet, "Show all"), the line
 /// shown when nothing matches and the footer's hint; and the found flash's
 /// inactive template (a pulsing fill and a 2-unit outline in the form style's
-/// found colour, tagged DiegeticForm so no theme recolours it). Rebuilt fresh
-/// with the app's window on each run; every reference it wires is checked
+/// found colour, tagged DiegeticForm so no theme recolours it). The field's
+/// chip for a pasted untranslated line is the keys' (BuildSearchChip). Rebuilt
+/// fresh with the app's window on each run; every reference it wires is checked
 /// (Wire). Part of <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp
 /// calls it.
 /// </summary>
@@ -45,12 +46,15 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Builds the search on the app's window <paramref name="win"/>: the
-    /// SearchBox on <paramref name="field"/>, the results panel from
+    /// SearchBox on the toolbar's search field, the results panel from
     /// <paramref name="top"/> (the toolbar's bottom) down, and the found
     /// flash's template; wires them into <paramref name="app"/>.
     /// </summary>
-    private static void BuildAppSearch(InvestigationApp app, Transform win, TMP_InputField field, float top, DesktopConfigSO config)
+    private static void BuildAppSearch(InvestigationApp app, Transform win, float top, DesktopConfigSO config)
     {
+        TMP_InputField field = Need(win, "Toolbar/SearchField")?.GetComponent<TMP_InputField>();
+        if (field == null)
+            return;
         SearchResultsView results = BuildSearchResults(win, top);
         FoundMark found = BuildFoundMark(win, config);
 

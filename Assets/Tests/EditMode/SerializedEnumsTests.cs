@@ -7,7 +7,7 @@ using NUnit.Framework;
 /// </summary>
 public class SerializedEnumsTests
 {
-    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry.</summary>
+    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt.</summary>
     [Test]
     public void ClueCategory_KeepsItsSerializedInts()
     {
@@ -25,7 +25,30 @@ public class SerializedEnumsTests
         Assert.AreEqual(11, (int)ClueCategory.Incident);
         Assert.AreEqual(12, (int)ClueCategory.DepartureDate);
         Assert.AreEqual(13, (int)ClueCategory.Expiry);
-        Assert.AreEqual(14, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(14, (int)ClueCategory.AccountStatus);
+        Assert.AreEqual(15, (int)ClueCategory.TransponderId);
+        Assert.AreEqual(16, (int)ClueCategory.TransponderClass);
+        Assert.AreEqual(17, (int)ClueCategory.Debt);
+        Assert.AreEqual(18, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>
+    [Test]
+    public void CitizenStatus_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)CitizenStatus.Premium);
+        Assert.AreEqual(1, (int)CitizenStatus.Standard);
+        Assert.AreEqual(2, (int)CitizenStatus.Eligible);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(CitizenStatus)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>TransponderClass: stored in the content library's transponder models (agency.transponders).</summary>
+    [Test]
+    public void TransponderClass_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)TransponderClass.Premium);
+        Assert.AreEqual(1, (int)TransponderClass.Economy);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(TransponderClass)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>

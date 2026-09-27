@@ -122,7 +122,6 @@ public static partial class OfficeSceneUIBuilder
         SetRef(so, "apps", apps);
         SetRef(so, "manager", GetOrAdd<DesktopWindowManager>(root.gameObject));
         SetRef(so, "contextMenu", contextMenu);
-        SetRef(so, "raycaster", canvas.GetComponent<GraphicRaycaster>());
         SetRef(so, "mail", mail);
         SerializedArrays.Set(so, "icons", views.ToArray());
         so.ApplyModifiedProperties();

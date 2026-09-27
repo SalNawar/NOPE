@@ -1254,7 +1254,7 @@ public static partial class ContentLibraryValidator
             if (place != null && place.nation != null && place.era != null)
                 keys.AddRange(LookKeys.Required(place.nation.id, place.era.id, place.wardrobe));
         if (lib.FutureEra != null)
-            keys.AddRange(LookKeys.PresentRequired(PresentLook.NationToken, lib.FutureEra.id, lib.PresentLook));
+            keys.AddRange(LookKeys.PresentRequired(Present.NeutralNationId, lib.FutureEra.id, lib.PresentLook));
         foreach (LegendarySO premade in lib.Legendaries)
             if (premade != null)
                 keys.AddRange(LookKeys.PremadeSet(premade.id));

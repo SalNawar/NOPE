@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5883a81534f4323a4019a102a0712d4, type: 3}
+  m_Name: Form_Statement
+  m_EditorClassIdentifier: Assembly-CSharp::FormSpecSO
+  form:
+    formNumber: 'TC-960'
+    title: 'Statement'
+    fixedPage: 0
+    landscape: 1
+    blocks:
+    - kind: 0
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 5
+      text: 
+      cells: []
+      columns:
+      - 'Day'
+      - 'Wages'
+      - 'Fines'
+      - 'Debt relief'
+      - 'Household'
+      - 'Purchases'
+      - 'Balance'
+      - 'Owed'
+      shares:
+      - 0.065
+      - 0.11
+      - 0.09
+      - 0.1
+      - 0.175
+      - 0.175
+      - 0.14
+      - 0.145
+      options: []
+      field: -1
+      slot: 'rows'
+    - kind: 6
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 'none'
+    - kind: 6
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 'unit'
+    - kind: 10
+      text: 'Departures are voluntary.'
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 11
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 

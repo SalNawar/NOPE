@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: CaseBlueprint_Displaced
   m_EditorClassIdentifier: Assembly-CSharp::CaseBlueprintSO
   kind: 3
-  difficulty: 2
   documentTemplates:
   - {fileID: 11400000, guid: a30c932960e045d3ab69ebfa9b35801a, type: 2}
   - {fileID: 11400000, guid: b27f296a83e74c1e81e149aef150a1e4, type: 2}

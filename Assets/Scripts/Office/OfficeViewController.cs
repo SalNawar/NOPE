@@ -16,17 +16,18 @@ public enum OfficeView
 /// The office's two views: clicking the PC opens its frame over the office
 /// (MonitorFocus); Escape, a click outside the frame, its close button and the
 /// desktop's "&lt; Desk" button close it (OfficeFocus). Escape closes the frame
-/// only when the desktop did not take the press (a field left, the Start menu
-/// closed, a drag cancelled: the desktop's stamp, the PC redesign KB3). The
-/// camera never moves. BoothCoordinator reads the view to gate the office's input.
+/// only when the desktop did not take the press (its keyboard poller ran the
+/// Escape chain first and stamped the frame: a menu or the shortcut card
+/// closed, the search cleared, a field left, the Start menu closed, a drag
+/// cancelled; the PC redesign KB3, section 3.5). The camera never moves. BoothCoordinator reads the view to gate the office's input.
 /// </summary>
 public sealed class OfficeViewController : MonoBehaviour
 {
     /// <summary>The PC frame the monitor view opens.</summary>
     [SerializeField] private PcFrame frame;
 
-    /// <summary>The desktop's window manager (optional): an Escape it took this frame does not close the frame.</summary>
-    [SerializeField] private DesktopWindowManager desktop;
+    /// <summary>The desktop's keyboard poller (optional): an Escape it took this frame does not close the frame.</summary>
+    [SerializeField] private DesktopKeyboard keyboard;
 
     /// <summary>The current view.</summary>
     public OfficeView Current { get; private set; } = OfficeView.OfficeFocus;
@@ -45,7 +46,7 @@ public sealed class OfficeViewController : MonoBehaviour
 
         Keyboard kb = Keyboard.current;
         if (kb != null && kb.escapeKey.wasPressedThisFrame && _changedFrame < Time.frameCount &&
-            (desktop == null || desktop.EscapeTakenFrame != Time.frameCount))
+            (keyboard == null || keyboard.EscapeTakenFrame != Time.frameCount))
             FocusOffice();
     }
 

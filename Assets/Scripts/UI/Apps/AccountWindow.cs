@@ -1,149 +1,129 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The Citizen Account app: the clerk's own account (the PC spec's AC1,
-/// §2.13; the traveller-types spec's D1-D3). On top the Record Extract (form
-/// TC-901): the account holder's line, then the rows of Account.ExtractRows
-/// under their group headings (Records, Forms on file, Travel) and the note;
-/// no row is pickable, the clerk is nobody's case. Below it the Statement
-/// (form TC-960): one row per day of WorldState.accountDays (DAY, WAGES,
-/// FINES, DEBT RELIEF, HOUSEHOLD, PURCHASES, BALANCE, OWED; "–" where no
-/// source gives a value yet), the amounts' unit, the fine print and an empty
-/// stamp box. Redrawn each time the window shows. The rows are drawn with
-/// today's widgets (<see cref="Draw"/>), the one place phase 5's forms engine
-/// replaces (Form_RecordExtract, Form_Statement). There is no lookup field:
-/// a traveller's record is the Investigation app's.
+/// §2.13; the traveller-types spec's D1-D3), two forms in one scroll (phase
+/// 5, FO9). On top the Record Extract (Form_RecordExtract, TC-901, a portrait
+/// page): the account holder's line, then the rows of Account.ExtractRows in
+/// their groups (Records, Forms on file, Travel) and the row with no group as
+/// the note line ("NOTE  No remarks on file."); no row is pickable, the
+/// clerk is nobody's case. Below it the Statement (Form_Statement, TC-960, a
+/// landscape page across the window, so its eight columns keep their type
+/// sizes): one row per day of WorldState.accountDays (DAY, WAGES, FINES, DEBT
+/// RELIEF, HOUSEHOLD, PURCHASES, BALANCE, OWED; "–" where no source gives a
+/// value yet), "No entries yet." while there is none, the amounts' unit, the
+/// fine print and the stamp area. Redrawn each time the window shows. There
+/// is no lookup field: a traveller's record is the Investigation app's.
 /// </summary>
 public sealed class AccountWindow : MonoBehaviour
 {
-    /// <summary>The account holder's line under the form's title.</summary>
-    [SerializeField] private TMP_Text queryText;
+    /// <summary>The scroll the two pages stack in (its content holds both).</summary>
+    [SerializeField] private ScrollRect scroll;
 
-    /// <summary>Where the extract's headings and rows are cloned (a vertical layout).</summary>
-    [SerializeField] private RectTransform extractRoot;
+    /// <summary>The Record Extract's page.</summary>
+    [SerializeField] private FormView extract;
 
-    /// <summary>A group heading template (inactive).</summary>
-    [SerializeField] private TMP_Text groupTemplate;
+    /// <summary>The Record Extract's page kind (Form_RecordExtract).</summary>
+    [SerializeField] private FormSpecSO extractForm;
 
-    /// <summary>A row template (inactive): a box with "Label" and "Value" texts.</summary>
-    [SerializeField] private RectTransform rowTemplate;
+    /// <summary>The Statement's page.</summary>
+    [SerializeField] private FormView statement;
 
-    /// <summary>The statement's column heads.</summary>
-    [SerializeField] private TMP_Text statementHead;
+    /// <summary>The Statement's page kind (Form_Statement, landscape).</summary>
+    [SerializeField] private FormSpecSO statementForm;
 
-    /// <summary>Where the statement's day rows are cloned (a vertical layout).</summary>
-    [SerializeField] private RectTransform statementRoot;
-
-    /// <summary>A statement row template (inactive).</summary>
-    [SerializeField] private TMP_Text statementRowTemplate;
-
-    /// <summary>"No entries yet" (shown while the statement has no row).</summary>
-    [SerializeField] private TMP_Text statementEmpty;
-
-    /// <summary>The amounts' unit line ("Amounts in cr.").</summary>
-    [SerializeField] private TMP_Text unitText;
-
-    /// <summary>Each column's start, in percent of the row's width.</summary>
-    private static readonly int[] ColumnStarts = { 0, 8, 20, 31, 46, 60, 74, 88 };
-
-    /// <summary>The statement's column heads' UI keys, in column order.</summary>
-    private static readonly string[] ColumnKeys =
-    {
-        "account.col.day", "account.col.wages", "account.col.fines", "account.col.debtRelief",
-        "account.col.household", "account.col.purchases", "account.col.balance", "account.col.owed"
-    };
-
-    private readonly List<GameObject> _drawn = new List<GameObject>();
-
-    private void Awake()
-    {
-        if (groupTemplate != null)
-            groupTemplate.gameObject.SetActive(false);
-        if (rowTemplate != null)
-            rowTemplate.gameObject.SetActive(false);
-        if (statementRowTemplate != null)
-            statementRowTemplate.gameObject.SetActive(false);
-    }
+    /// <summary>The gap between the two pages (desktop units).</summary>
+    [SerializeField] private float gap = 16f;
 
     private void OnEnable() => Draw();
 
-    /// <summary>Draws the extract and the statement from the run's account.</summary>
+    /// <summary>Draws the extract and the statement from the run's account, the statement under the extract.</summary>
     private void Draw()
     {
-        foreach (GameObject go in _drawn)
-            if (go != null)
-                Destroy(go);
-        _drawn.Clear();
-
         WorldState world = RunManager.HasInstance ? RunManager.Instance.World : null;
         ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+        AgencyContent agency = library != null ? library.Agency : null;
         var source = new ClerkAccountSource(world, library);
+        float bottom = 0f;
 
-        if (queryText != null)
-            queryText.text = UiText.Format("account.query", source.Profile.name, source.Profile.citizenId);
-
-        string group = null;
-        foreach (AccountRow row in Account.ExtractRows(source, UiText.Get, Amount))
+        if (extract != null && extractForm != null)
         {
-            if (row.Group != group && !string.IsNullOrEmpty(row.Group) && groupTemplate != null && extractRoot != null)
+            FormData page = extractForm.Page(agency);
+            List<AccountRow> rows = Account.ExtractRows(source, UiText.Get, Amount);
+            page.Text = new Dictionary<string, string>
             {
-                TMP_Text heading = Instantiate(groupTemplate, extractRoot);
-                heading.gameObject.SetActive(true);
-                heading.text = row.Group;
-                _drawn.Add(heading.gameObject);
-            }
-            group = row.Group;
+                { "query", UiText.Format("account.query", source.Profile.name, source.Profile.citizenId) },
+                { "note", Note(rows) }
+            };
+            page.Groups = Groups(rows);
+            extract.Show(extractForm.form, page, _ => false);
+            bottom = Stack(extract, bottom);
+        }
 
-            if (rowTemplate == null || extractRoot == null)
+        if (statement != null && statementForm != null)
+        {
+            List<AccountDay> days = world != null ? world.accountDays : new List<AccountDay>();
+            FormData page = statementForm.Page(agency);
+            page.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { "rows", days.ConvertAll(d => Account.StatementCells(d, UiText.Get)) } };
+            page.Text = new Dictionary<string, string>
+            {
+                { "none", days.Count == 0 ? UiText.Get("account.statement.none") : string.Empty },
+                { "unit", UiText.Format("account.statement.unit", UiText.Currency(UiText.WalletForm.Short)) }
+            };
+            statement.Show(statementForm.form, page, _ => false);
+            bottom = Stack(statement, bottom > 0f ? bottom + gap : 0f);
+        }
+
+        if (scroll != null && scroll.content != null)
+        {
+            scroll.content.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, bottom);
+            scroll.verticalNormalizedPosition = 1f;
+        }
+    }
+
+    /// <summary>Puts a page's top at <paramref name="top"/> in the scroll's content; returns its bottom.</summary>
+    private static float Stack(FormView page, float top)
+    {
+        var rt = (RectTransform)page.transform;
+        rt.anchoredPosition = new Vector2(rt.anchoredPosition.x, -top);
+        return top + rt.rect.height;
+    }
+
+    /// <summary>The extract's grouped rows as the form's groups, in order (a row joins the group before it while its group is the same); a row with no group is the note, not a group.</summary>
+    private static List<FormGroup> Groups(IReadOnlyList<AccountRow> rows)
+    {
+        var groups = new List<FormGroup>();
+        string title = null;
+        List<(string, string)> current = null;
+        foreach (AccountRow row in rows)
+        {
+            if (string.IsNullOrEmpty(row.Group))
                 continue;
-            RectTransform box = Instantiate(rowTemplate, extractRoot);
-            box.gameObject.SetActive(true);
-            SetChild(box, "Label", row.Label);
-            SetChild(box, "Value", row.Value);
-            _drawn.Add(box.gameObject);
-        }
-
-        if (statementHead != null)
-            statementHead.text = Columns(System.Array.ConvertAll(ColumnKeys, key => UiText.Get(key)));
-        List<AccountDay> days = world != null ? world.accountDays : new List<AccountDay>();
-        if (statementRowTemplate != null && statementRoot != null)
-            foreach (AccountDay d in days)
+            if (current == null || row.Group != title)
             {
-                TMP_Text line = Instantiate(statementRowTemplate, statementRoot);
-                line.gameObject.SetActive(true);
-                line.text = Columns(Account.StatementCells(d, UiText.Get));
-                _drawn.Add(line.gameObject);
+                current = new List<(string, string)>();
+                title = row.Group;
+                groups.Add(new FormGroup(title, current));
             }
-        if (statementEmpty != null)
-        {
-            statementEmpty.gameObject.SetActive(days.Count == 0);
-            statementEmpty.transform.SetAsLastSibling();
+            current.Add((row.Label, row.Value));
         }
-        if (unitText != null)
-            unitText.text = UiText.Format("account.statement.unit", UiText.Currency(UiText.WalletForm.Short));
+        return groups;
+    }
+
+    /// <summary>The note line: each row with no group as its label in capitals and its value ("NOTE  No remarks on file.").</summary>
+    private static string Note(IReadOnlyList<AccountRow> rows)
+    {
+        var lines = new List<string>();
+        foreach (AccountRow row in rows)
+            if (string.IsNullOrEmpty(row.Group))
+                lines.Add((row.Label ?? string.Empty).ToUpperInvariant() + "  " + row.Value);
+        return string.Join("\n", lines);
     }
 
     /// <summary>An amount of credits in the wallet's short word ("1,250 cr"); the Debt Relief ending's papers word theirs the same way.</summary>
     internal static string Amount(int value) =>
         value.ToString("N0", CultureInfo.InvariantCulture) + " " + UiText.Currency(UiText.WalletForm.Short);
-
-    /// <summary>Cells placed at the statement's column starts (TMP position tags).</summary>
-    private static string Columns(IReadOnlyList<string> cells)
-    {
-        var sb = new StringBuilder();
-        for (int i = 0; i < cells.Count && i < ColumnStarts.Length; i++)
-            sb.Append("<pos=").Append(ColumnStarts[i].ToString(CultureInfo.InvariantCulture)).Append("%>").Append(cells[i]);
-        return sb.ToString();
-    }
-
-    private static void SetChild(Transform parent, string name, string text)
-    {
-        Transform child = parent.Find(name);
-        if (child != null && child.TryGetComponent(out TMP_Text t))
-            t.text = text;
-    }
 }
