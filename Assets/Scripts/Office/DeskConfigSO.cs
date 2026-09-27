@@ -125,6 +125,13 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The camera tilted forward over the desk (a click on the mat): how far it moves from the art office's view (forward and up, metres), how much further it pitches than aiming at the mat's centre (degrees), and the blend's seconds (a cut under Reduced Motion).</summary>
     public DeskViewTuning deskView = new DeskViewTuning();
 
+    [Header("Anime hall (the art's SetTime hook, AnimeHallShiftLink)")]
+    /// <summary>Shift progress (0 opening, 1 closing) at which the anime hall's daylight starts turning to evening (the crowds' curve, CrowdPaletteBlend).</summary>
+    [Range(0f, 1f)] public float hallEveningStartsAt = 0.5f;
+
+    /// <summary>Shift progress at which the anime hall shows its full evening.</summary>
+    [Range(0f, 1f)] public float hallEveningFullAt = 0.9f;
+
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";

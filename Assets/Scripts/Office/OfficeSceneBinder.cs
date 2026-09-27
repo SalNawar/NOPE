@@ -16,9 +16,12 @@ using UnityEngine.SceneManagement;
 /// on the PC's glass, sizes the desk, its catcher and the scanner, hands the
 /// paper examiner the camera, poses the desk view from the art's Cinemachine
 /// camera and the mat, stands the traveller,
-/// binds the readouts to the art's texts (or shows the fallback HUD), and
-/// readies the office camera (a PhysicsRaycaster on the Interactable layer,
-/// the desktop's layer culled, its Cinemachine camera on top). Runs before
+/// binds the readouts to the art's texts (or shows the fallback HUD), points
+/// the anime hall's presentation at the shift clock (AnimeHallShiftLink) when
+/// the art carries one, and readies the office camera (a PhysicsRaycaster on
+/// the Interactable layer, the gameplay's layers drawn and the desktop's
+/// culled, an AudioListener when no scene has one, its Cinemachine camera on
+/// top). Runs before
 /// every other gameplay component (execution order -1000). An anchor found
 /// by a fallback path is logged; one on its default pose or missing is
 /// warned about once, naming the tool that adds anchors.
@@ -46,7 +49,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>Where each place is in the art office.</summary>
     [SerializeField] private OfficeSceneContractSO contract;
 
-    /// <summary>The desk tuning (the traveller's height and tint, the READY caption).</summary>
+    /// <summary>The desk tuning (the traveller's height and tint, the READY caption, the anime hall's evening).</summary>
     [SerializeField] private DeskConfigSO config;
 
     [Header("Office camera users")]
@@ -215,6 +218,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         BindReadySign();
         BindReadouts();
         BindProps();
+        BindHall(art);
         Report();
     }
 
@@ -222,7 +226,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // Camera
     // -----------------------------
 
-    /// <summary>The office camera raycasts the Interactable layer (and nothing else), never draws the desktop's layer, and shows the office's Cinemachine camera.</summary>
+    /// <summary>The office camera raycasts the Interactable layer (and nothing else), draws the gameplay's layers but never the desktop's, hears the game when nothing else does, and shows the office's Cinemachine camera.</summary>
     private void ReadyCamera(Camera cam)
     {
         // Physics2DRaycaster derives from PhysicsRaycaster: find (or add) a 3D one by its exact type.
@@ -239,9 +243,14 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         raycaster.eventMask = LayerMask.GetMask(OfficeLayers.Interactable);
         raycaster.maxRayIntersections = RaycastHits;
 
+        // An art camera culled to its own layers (the anime hall's draws only its art) would hide the papers and the traveller.
+        cam.cullingMask |= OfficeLayers.GameplayMask;
         int desktop = OfficeLayers.PcDesktopLayer;
         if (desktop >= 0)
             cam.cullingMask &= ~(1 << desktop);
+
+        if (FindAnyObjectByType<AudioListener>() == null)
+            cam.gameObject.AddComponent<AudioListener>();
 
         Transform vcam = At(OfficeAnchorId.OfficeVCam).Transform;
         if (vcam != null && vcam.TryGetComponent(out CinemachineCamera office))
@@ -483,6 +492,26 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         TMP_Text caption = TextOf(OfficeAnchorId.ReadoutNext);
         if (caption != null && config != null && !string.IsNullOrWhiteSpace(config.readyCaptionKey))
             caption.text = UiText.Get(config.readyCaptionKey);
+    }
+
+    // -----------------------------
+    // The anime hall
+    // -----------------------------
+
+    /// <summary>When the art office carries an anime hall presentation, a link on this object drives its time from the shift clock (the config's hall knobs); an art office without one needs nothing.</summary>
+    private void BindHall(Scene art)
+    {
+        if (config == null)
+            return;
+
+        foreach (GameObject root in art.GetRootGameObjects())
+        {
+            AnimeHallPresentation hall = root.GetComponentInChildren<AnimeHallPresentation>(false);
+            if (hall == null)
+                continue;
+            gameObject.AddComponent<AnimeHallShiftLink>().Configure(hall, config.hallEveningStartsAt, config.hallEveningFullAt);
+            return;
+        }
     }
 
     // -----------------------------

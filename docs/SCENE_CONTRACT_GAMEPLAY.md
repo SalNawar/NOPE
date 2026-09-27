@@ -4,11 +4,21 @@ The office is two scenes loaded together:
 
 | Scene | Owner | What it holds |
 |---|---|---|
-| `Assets/Scenes/OfficeScene.unity` | the **art side** (Blender/Codex) | the room, the desk, the PC, the props, the lights, the cameras. The **active** scene (its lighting and skybox). |
+| the **art office**: `Assets/Art/Office/AnimeHallLayers/AnimeHall.unity` (the anime terminal hall, live since art c75e1fe) or `Assets/Scenes/OfficeScene.unity` (the 3D room) | the **art side** (Blender/Codex/ChatGPT) | the room or hall, the desk, the PC, the props, the lights, the cameras. The **active** scene (its lighting and skybox). |
 | `Assets/Scenes/OfficeGameplay.unity` | the **gameplay side**, built only by `Tools > TimeDesk > Build Office UI (HUD + Panels)` | the game: GameManager, the PC desktop and its cameras, the PC frame, the papers, the scanner stand-in, the traveller, the wheel, the click boxes, the office binder. |
 
+**Which art office plays is a knob**: `officeSceneName` on
+`Assets/Resources/RunConfig.asset` (`AnimeHall` today; `OfficeScene` for the
+3D room). The game loads the art office by that scene name, so the scene may
+live anywhere under `Assets` as long as it is in the build list: Build Office
+UI keeps the named one enabled right after the title and lists every other
+art scene after Home, disabled (`BuildScenes.Order`); the editor tools below
+(`Check Office Scene Contract`, `Add Gameplay Anchors`) open the named scene
+(`ArtOfficeScene`). Switching the knob and running Build Office UI is the whole
+change.
+
 Loading the art office by any path (Title → New Run/Continue, Home → Sleep, or
-pressing Play on `OfficeScene.unity`) loads the gameplay layer additively on top
+pressing Play on the art scene) loads the gameplay layer additively on top
 (`OfficeScenes`). The builder never opens or writes the art scene, and the game
 never edits it: at load, `OfficeSceneBinder` finds the art's places through this
 contract and puts the gameplay pieces there (click boxes, papers, the traveller),
@@ -33,6 +43,9 @@ report of the current art scene: `Tools > TimeDesk > Check Office Scene Contract
 
 ## The anchors
 
+The fallbacks below are the 3D room's (art ea62550, the desk layout of 633e2e5).
+The anime hall's are in the next section.
+
 | Id | Used for | Found today (art ea62550, the desk layout of 633e2e5) | The art side may add |
 |---|---|---|---|
 | `PCScreen` | the PC: its click box opens the PC frame; the desktop is cloned onto its glass | fallback `ImportedOfficeDress/Desk/Retro CRT` | nothing needed. The glass is the renderer, or the submesh whose material, is named `Glass` or `Screen` (case-insensitive); keep that naming on any new PC. |
@@ -51,10 +64,53 @@ report of the current art scene: `Tools > TimeDesk > Check Office Scene Contract
 | `OfficeVCam` | the Cinemachine camera that frames the office (the game raises its priority) | fallback `Cameras/OfficeVCam` | — |
 
 **For the art side:** `Tools > TimeDesk > Add Gameplay Anchors (art office)`,
-run with `OfficeScene.unity` open, adds an empty `GameplayAnchors/Anchor_{id}` at
+run with the knob's art scene open, adds an empty `GameplayAnchors/Anchor_{id}` at
 the current default pose for every place still on a default (today: `Scanner`,
 `Traveller`, `HandOver`). Move them where the art wants them and save.
 The gameplay side does not run this tool on the art scene.
+
+## The anime hall (`AnimeHall.unity`, art c75e1fe)
+
+The hall is the art side's registered 2D layers (`Registered hall layers`, an
+`AnimeHallPresentation` with 58 sprite layers, a directional daylight and a
+point light, all on layer 29) behind the **preserved 3D desk** (`Approved 3D
+desk — preserved art`, the 633e2e5 layout as a flat list of `Prop__Material`
+mesh parts) and one camera, `Anime hall player preview`. What the contract
+finds there, by bare name (one part per prop: the part whose bounds stand for
+it; a click box, its hover outline and its reaction cover that part):
+
+| Id | Found | Note |
+|---|---|---|
+| `PCScreen` | `CRT2_Glass` | the glass itself, so the desktop's clone binds; the click box is the screen face |
+| `PCPower` | `CRT2_Orange` | the same knob mesh as the room's |
+| `DeskSurface` | `Clean_Blotter__DeskClean_Pad` | the blotter's top (1.069 m) is the paper plane; 1.45 × 1.02 m |
+| `NextSign` | `Clean_Next__DeskClean_ABS` | the sign's body |
+| `Intercom` | `Clean_Phone__DeskClean_PhoneBody` | |
+| `Stamp`, `Till`, `StabilityMonitor`, `Calendar`, `Clock` | `Clean_Stamp__DeskClean_Wood`, `Clean_Till__DeskClean_Green`, `Office_Stability__Plastic_WarmGrey`, `Office_Calendar__Office_TealDark`, `Office_Clock__Plastic_WarmGrey` | |
+| `Calculator`, `PenPot`, `Stapler` | `Clean_Calculator__DeskClean_Case`, `Clean_PenPot__DeskClean_ABS`, `Clean_Stapler__DeskClean_Case` | |
+| `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | found, **but they are empty meshes without a TextMeshPro component**, so the game shows its fallback HUD and the boards keep the static `Preview display — 09:00 / 01 / 100% / NEXT` TextMeshes |
+| `Scanner`, `Traveller`, `HandOver` | **default** poses | the same desk layout as the room, so the room's defaults hold |
+| `OfficeCamera` | `Anime hall player preview` | untagged, culled to layer 29, no AudioListener, no Cinemachine brain: the binder adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
+| `OfficeVCam` | **missing** | the desk view stays off (a warning at load) |
+
+What the hall must carry for the game to be whole (the art side, in
+`AnimeHall.unity`; nothing else reads these names):
+
+- the readouts as **TextMeshPro** texts named `DayNumber`, `StabilityPercent`,
+  `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` (then delete the four
+  `Preview display — …` TextMeshes, which would show stale values under them);
+- a Cinemachine camera named `OfficeVCam` under a `Cameras` root (or
+  `Anchor_OfficeVCam`) with a `CinemachineBrain` on the player camera, for the
+  desk view;
+- `Anchor_Scanner`, `Anchor_Traveller`, `Anchor_HandOver` (`Add Gameplay
+  Anchors`) where the hall wants them; a scanner model under `Anchor_Scanner`
+  hides the placeholder;
+- optional: group each prop's parts under one parent (`Retro CRT` with the
+  glass among its children, `Clerk hotline`, `Blender_Stamp`, …) or put an
+  `Anchor_{id}` over it, so the whole prop takes the click, the outline and the
+  reaction instead of one part; the daylight's culling mask may include
+  Default and Interactable so the papers and the traveller are lit by it;
+  the camera may be tagged `MainCamera`.
 
 ## Hooks the gameplay layer offers the art side
 
@@ -64,7 +120,16 @@ the gameplay side for a new hook when the art needs one.
 
 | Hook | What it gives | Used by |
 |---|---|---|
-| `ShiftClockDriver.Live` (`IShiftProgress`) | today's shift progress, `Progress01`: 0 at opening, 1 at closing (`ShiftClock.Progress01`); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours) |
+| `ShiftClockDriver.Live` (`IShiftProgress`) | today's shift progress, `Progress01`: 0 at opening, 1 at closing (`ShiftClock.Progress01`); null when no gameplay layer is loaded (the art office on its own, edit mode) | `OfficeHallCrowdPalette` (the crowds' morning to evening colours); `AnimeHallShiftLink` (the anime hall's daylight and ambient) |
+
+The anime hall's `AnimeHallPresentation` offers `SetTime(normalizedEvening)` and
+`SetPan(normalizedPan)` ("gameplay supplies time and pan"). The gameplay layer
+drives **time** only: at load the binder adds an `AnimeHallShiftLink` to its own
+object when the art office carries a presentation; each frame it reads the hook
+above and calls `SetTime` with the crowds' curve (`CrowdPaletteBlend.Evening`,
+`DeskConfigSO.hallEveningStartsAt` 0.5, `hallEveningFullAt` 0.9: morning until
+13:00, full evening from 16:12), writing only when the value changes. Without a
+gameplay clock the hall keeps the time its art authored. Pan is left to the art.
 
 ## What the art scene must not do (and what the game does about leftovers)
 

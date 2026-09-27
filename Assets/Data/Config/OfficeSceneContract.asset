@@ -16,18 +16,21 @@ MonoBehaviour:
   - id: 0
     fallbacks:
     - ImportedOfficeDress/Desk/Retro CRT
+    - CRT2_Glass
     hasDefault: 1
     defaultPosition: {x: -1.64, y: 1.43, z: -0.13}
     defaultYaw: 160
   - id: 1
     fallbacks:
     - ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange
+    - CRT2_Orange
     hasDefault: 1
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 2
     fallbacks:
     - HybridOffice/Booth/Finish_Mat
+    - Clean_Blotter__DeskClean_Pad
     hasDefault: 1
     defaultPosition: {x: 0, y: 1.07, z: -0.52}
     defaultYaw: 0
@@ -49,6 +52,7 @@ MonoBehaviour:
   - id: 6
     fallbacks:
     - HybridOffice/Booth/Blender_Next
+    - Clean_Next__DeskClean_ABS
     hasDefault: 1
     defaultPosition: {x: 0.13, y: 1.06, z: 0.16}
     defaultYaw: 180
@@ -56,36 +60,42 @@ MonoBehaviour:
     fallbacks:
     - ImportedOfficeDress/Desk/Clerk hotline
     - HybridOffice/Booth/Finish_Intercom
+    - Clean_Phone__DeskClean_PhoneBody
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 8
     fallbacks:
     - HybridOffice/Booth/Blender_Stamp
+    - Clean_Stamp__DeskClean_Wood
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 9
     fallbacks:
     - HybridOffice/Booth/Finish_Till
+    - Clean_Till__DeskClean_Green
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 10
     fallbacks:
     - HybridOffice/Booth/Blender_Stability
+    - Office_Stability__Plastic_WarmGrey
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 11
     fallbacks:
     - HybridOffice/Booth/Blender_DayCalendar
+    - Office_Calendar__Office_TealDark
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 12
     fallbacks:
     - HybridOffice/Booth/Blender_Clock
+    - Office_Clock__Plastic_WarmGrey
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
@@ -122,6 +132,7 @@ MonoBehaviour:
   - id: 18
     fallbacks:
     - Main Camera
+    - Anime hall player preview
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
@@ -134,18 +145,21 @@ MonoBehaviour:
   - id: 20
     fallbacks:
     - ImportedOfficeDress/Desk/Desk calculator
+    - Clean_Calculator__DeskClean_Case
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 21
     fallbacks:
     - ImportedOfficeDress/Desk/Pen pot
+    - Clean_PenPot__DeskClean_ABS
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
   - id: 22
     fallbacks:
     - ImportedOfficeDress/Desk/Forms stapler
+    - Clean_Stapler__DeskClean_Case
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0

@@ -203,10 +203,11 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>
     /// Keeps the build list in boot order (BuildScenes.Order, audit R3-001): the
-    /// title first (a player build boots it), then the art office, the gameplay
-    /// layer (whose load the art office brings) and Home, each enabled; every
-    /// other listed scene stays after them, disabled (the legacy Test_DayLoop).
-    /// Written only when it changes.
+    /// title first (a player build boots it), then the art office the knob names
+    /// (RunConfig.officeSceneName), the gameplay layer (whose load the art office
+    /// brings) and Home, each enabled; every other listed scene stays after them,
+    /// disabled (the other art office, the legacy Test_DayLoop). Written only when
+    /// it changes.
     /// </summary>
     private static void EnsureBuildSettings()
     {

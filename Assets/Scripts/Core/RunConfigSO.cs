@@ -31,7 +31,13 @@ public sealed class RunConfigSO : ScriptableObject
     public int startingDay = 1;
 
     [Header("Scenes")]
-    /// <summary>The art office (owned by the art side); loading it loads the gameplay layer on top (OfficeScenes).</summary>
+    /// <summary>
+    /// The art office (owned by the art side), by scene name: OfficeScene (Assets/Scenes, the 3D room) or
+    /// AnimeHall (Assets/Art/Office/AnimeHallLayers, the anime terminal hall). The knob that picks the
+    /// office the game plays in: loading it loads the gameplay layer on top (OfficeScenes); the scene
+    /// must be in the build list (Build Office UI keeps the named one enabled right after the title, the
+    /// other art scenes listed and disabled), and the editor tools open it by this name (ArtOfficeScene).
+    /// </summary>
     public string officeSceneName = "OfficeScene";
 
     /// <summary>The office's gameplay layer (the shift loop, the PC, the desk, the traveller), loaded additively on the art office.</summary>

@@ -20,4 +20,12 @@ public static class OfficeLayers
 
     /// <summary>The PCDesktop layer's index (-1 when the project lacks it).</summary>
     public static int PcDesktopLayer => LayerMask.NameToLayer(PcDesktop);
+
+    /// <summary>
+    /// The layers the gameplay layer's visible objects live on, which the office
+    /// camera must draw whatever the art culled it to: Default (the traveller,
+    /// the placeholders, the notes) and Interactable (the papers' sheets, the
+    /// click boxes). The binder adds them to the art camera's culling mask.
+    /// </summary>
+    public static int GameplayMask => 1 | (InteractableLayer >= 0 ? 1 << InteractableLayer : 0);
 }
