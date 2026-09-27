@@ -113,8 +113,8 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The places a pane's Back can return through (AP9).</summary>
     [Min(1)] public int paneHistory = 30;
 
-    /// <summary>The width a tab needs for its name at the tab label size: a strip narrower than six of these shows the inactive tabs' glyphs (AP3, AppPanes.TabsNarrow).</summary>
-    [Min(1f)] public float tabLabelWidth = 140f;
+    /// <summary>The width a tab's name is given before the strip collapses: a strip narrower than six of these shows the inactive tabs' glyphs, a wider one every name (six names that just fit shrink a little) (AP3, AppPanes.TabsNarrow).</summary>
+    [Min(1f)] public float tabLabelWidth = 130f;
 
     /// <summary>An inactive tab's width while it shows its glyph and its badge.</summary>
     [Min(1f)] public float tabGlyphWidth = 48f;
