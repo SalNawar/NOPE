@@ -14,9 +14,8 @@ using UnityEngine;
 /// DocumentForm the desk paper prints; its fields link (SmartLinks). A link,
 /// Back or a dock side reveals a paper's field (Reveal: the paper chosen, the
 /// field scrolled to and outlined). Each pane has one; CaseDocumentsPresenter
-/// fills them all; nothing here opens or switches by itself.
-/// Its item is the chosen paper ("doc:0"); a jump shows a paper, or a
-/// field's paper (IAppItems; the focus ring brings the box into view).
+/// fills them all; nothing here opens or switches by itself. Its item is the
+/// chosen paper ("doc:0", IAppItems: the pins and the recent items).
 /// </summary>
 public sealed class DocumentsView : AppView, IAppItems
 {
@@ -49,20 +48,6 @@ public sealed class DocumentsView : AppView, IAppItems
 
     /// <inheritdoc />
     public string ItemTitle => _selected >= 0 && _selected < _names.Count ? _names[_selected] : null;
-
-    /// <inheritdoc />
-    public bool Reveal(string key)
-    {
-        if (EntryKeys.TryDocument(key, out int paper) && paper < _pages.Count)
-        {
-            Select(paper);
-            return true;
-        }
-        if (!EntryKeys.TryField(key, out paper, out _) || paper >= _pages.Count)
-            return false;
-        Select(paper);
-        return true;
-    }
 
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
@@ -129,16 +114,18 @@ public sealed class DocumentsView : AppView, IAppItems
         RaiseChipsChanged();
     }
 
-    /// <summary>Chooses the target's paper (its item, else the paper its field key names) and outlines the field; no field: the outline clears.</summary>
-    public override void Reveal(LinkTarget target)
+    /// <summary>Chooses the target's paper (its item, else the paper its field key names) and outlines the field; no field: the outline clears. False when the case has no such paper.</summary>
+    public override bool Reveal(LinkTarget target)
     {
         int paper = target.Item;
         if (paper < 0 && PickKeys.TryField(target.Key, out int document, out _))
             paper = document;
         if (paper >= 0)
             Select(paper);
-        if (_selected >= 0 && _selected < _pages.Count && _pages[_selected] != null)
+        bool shown = _selected >= 0 && _selected < _pages.Count && _pages[_selected] != null;
+        if (shown)
             _pages[_selected].RevealField(target.Key);
+        return paper < 0 || (shown && _selected == paper);
     }
 
     /// <summary>A paper's chip: its name when scanned (available), else where it is.</summary>

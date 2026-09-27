@@ -43,10 +43,11 @@ public abstract class AppView : MonoBehaviour, IAppView
     }
 
     /// <inheritdoc />
-    public virtual void Reveal(LinkTarget target)
+    public virtual bool Reveal(LinkTarget target)
     {
         if (target.Item >= 0)
             Select(target.Item);
+        return target.Item < 0 || Selected == target.Item;
     }
 
     /// <summary>Tells the pane the chips changed.</summary>

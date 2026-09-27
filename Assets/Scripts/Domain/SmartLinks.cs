@@ -149,6 +149,24 @@ public static class SmartLinks
         return LinkTarget.None;
     }
 
+    /// <summary>
+    /// Where an item or row key leads (a pin or a recent item, phase 20;
+    /// EntryKeys' items beside PickKeys' rows): a document item to its
+    /// Documents chip, a book item to its book in the Reference (the item key
+    /// stands as the row key: the view chooses the book and marks no row), a
+    /// record item to its lookup, and a row as ForKey.
+    /// </summary>
+    public static LinkTarget ForEntry(string key, CasePapers papers)
+    {
+        if (EntryKeys.TryDocument(key, out int document))
+            return LinkTarget.ToTab(AppTab.Documents, document);
+        if (EntryKeys.TryBook(key, out _))
+            return LinkTarget.ToRow(AppTab.Reference, key);
+        if (EntryKeys.TryRecordCard(key, out string recordId))
+            return LinkTarget.ToRecords(recordId);
+        return ForKey(key, papers);
+    }
+
     /// <summary>A paper's record lookup: its Citizen ID field's value, else its Name field's, else null.</summary>
     private static string RecordLookup(IReadOnlyList<DocumentField> paper) =>
         Value(paper, ClueCategory.CitizenId) ?? Value(paper, ClueCategory.Name);

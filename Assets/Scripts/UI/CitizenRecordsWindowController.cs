@@ -19,8 +19,7 @@ using UnityEngine.UI;
 /// block and the date are injected per day by GameManager via
 /// InvestigationUIController. Each evidence row is marked with its key for
 /// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
-/// tells the Records tab (Looked), and a jump shows a record and its row
-/// (Show).
+/// tells the Records tab (Looked).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -118,12 +117,13 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     }
 
     /// <summary>
-    /// A smart link's or Back's lookup: <paramref name="query"/> typed and run
-    /// (null keeps the lookup shown), then the found record's row of
-    /// <paramref name="row"/> shown and marked found (null: the record's top,
-    /// nothing marked).
+    /// A smart link's, Back's or a jump's lookup: <paramref name="query"/>
+    /// typed and run (null keeps the lookup shown), then the found record's
+    /// row of <paramref name="row"/> shown and marked found (null: the
+    /// record's top, nothing marked). False when the lookup finds no record,
+    /// or the record has no such row.
     /// </summary>
-    public void Reveal(string query, ClueCategory? row)
+    public bool Reveal(string query, ClueCategory? row)
     {
         if (query != null)
         {
@@ -142,6 +142,7 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
             ShowPageOf(index);
         else
             ShowPage(query != null ? 0 : Page);
+        return (query == null || _current != null) && (!row.HasValue || index >= 0);
     }
 
     /// <summary>Looks up a name or number and lists the record's rows (or says none is on file), from the first page.</summary>
@@ -168,22 +169,6 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
 
         ShowPage(0);
         Looked?.Invoke();
-    }
-
-    /// <summary>A jump: looks up <paramref name="recordId"/> (its number, else its name) and shows the page of its row keyed <paramref name="rowKey"/> (null: the first page).</summary>
-    public void Show(string recordId, string rowKey)
-    {
-        if (searchInput != null)
-            searchInput.text = recordId ?? string.Empty;
-        Search();
-        if (rowKey == null || _current == null)
-            return;
-        for (int i = 0; i < _lines.Count; i++)
-            if (_lines[i].Heading == null && _lines[i].Row.IsEvidence && PickKeys.Record(_lines[i].Row.Category, _current.Id) == rowKey)
-            {
-                ShowPageOf(i);
-                return;
-            }
     }
 
     private void ShowIdle()

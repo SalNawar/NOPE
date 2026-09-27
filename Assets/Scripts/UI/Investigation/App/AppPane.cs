@@ -133,12 +133,8 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>The player shows the tab (a click on it): its view with the item it shows, recorded in the history.</summary>
     public void Show(AppTab tab) => Navigate(LinkTarget.ToTab(tab), true);
 
-    /// <summary>Goes to <paramref name="target"/> (a link, a dock side, the toast's paper, a jump): its tab, item and row, recorded in the history.</summary>
-    public void Go(LinkTarget target)
-    {
-        if (!target.IsNone)
-            Navigate(target, true);
-    }
+    /// <summary>Goes to <paramref name="target"/> (a link, a dock side, the toast's paper, a pin's or a recent item's jump): its tab, item and row, recorded in the history. False when the target is gone (None, or its view says so); the tab shows all the same.</summary>
+    public bool Go(LinkTarget target) => !target.IsNone && Navigate(target, true);
 
     /// <summary>Back through the history (not recorded again).</summary>
     public void Back()
@@ -277,21 +273,21 @@ public sealed partial class AppPane : MonoBehaviour
         Navigate(LinkTarget.ToTab(startTab), true);
     }
 
-    /// <summary>Shows the target's tab and sends its view there; recorded (<paramref name="record"/>) as the target when it names a row or a lookup, else as where the view is.</summary>
-    private void Navigate(LinkTarget target, bool record)
+    /// <summary>Shows the target's tab and sends its view there (true when the view finds the target); recorded (<paramref name="record"/>) as the target when it names a row or a lookup, else as where the view is.</summary>
+    private bool Navigate(LinkTarget target, bool record)
     {
         Init();
         _active = target.Tab;
         Apply();
         IAppView view = View(_active);
-        if (view != null)
-            view.Reveal(target);
+        bool there = view == null || view.Reveal(target);
         if (record)
         {
             _history.Go(target.Key != null || target.Query != null ? target : Spot());
             HistoryChanged?.Invoke(this);
         }
         Shown?.Invoke(this, _active);
+        return there;
     }
 
     /// <summary>Where the pane is: the active view's spot.</summary>

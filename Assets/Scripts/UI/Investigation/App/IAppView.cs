@@ -60,8 +60,10 @@ public interface IAppView
     /// item (-1: keep the one shown), then its row (a pick key: the page
     /// turned and a filter lifted until the row shows, the row marked found;
     /// null: nothing marked) or, in Records, its lookup and the found record's
-    /// row of its category. A link, Back, Forward and a jump all come here;
-    /// nothing is ever picked.
+    /// row of its category. A link, Back, Forward and a jump (a pin, a recent
+    /// item) all come here; nothing is ever picked. True when the target is
+    /// there; false when it is gone (a paper not scanned, a row the register
+    /// does not list, a record not on file), the tab shown all the same.
     /// </summary>
-    void Reveal(LinkTarget target);
+    bool Reveal(LinkTarget target);
 }

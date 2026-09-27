@@ -343,15 +343,14 @@ public sealed partial class InvestigationApp
             DrawLists();
     }
 
-    /// <summary>A pin or recent item clicked: its tab, its item and its row shown, the ring on the row, the item first in Recent.</summary>
+    /// <summary>A pin or recent item clicked: its tab, its item and its row shown in the active pane (SmartLinks.ForEntry, recorded in the pane's history), the ring on the row, the item first in Recent; an item that is gone says so.</summary>
     public void Jump(EntryItem item)
     {
         Init();
         if (window != null)
             window.Open();
-        AppPane pane = ActivePane;
-        pane.Show(item.Ref.Source);
-        if (!(pane.View(item.Ref.Source) is IAppItems items) || !items.Reveal(item.Ref.Key))
+        LinkTarget target = SmartLinks.ForEntry(item.Ref.Key, _papers);
+        if (target.IsNone || !ActivePane.Go(target))
         {
             Notice(UiText.Get("app.jump.gone"));
             return;

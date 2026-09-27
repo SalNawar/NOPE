@@ -168,6 +168,23 @@ public class SmartLinksTests
     }
 
     [Test]
+    public void ForEntry_AnItemToItsChipOrLookup_ARowAsForKey()
+    {
+        var papers = new CasePapers(2);
+        papers.Scan(1);
+        Assert.AreEqual(LinkTarget.ToTab(AppTab.Documents, 1), SmartLinks.ForEntry(EntryKeys.Document(1), papers));
+        Assert.AreEqual(LinkTarget.ToRow(AppTab.Reference, "bookof:Currency"), SmartLinks.ForEntry(EntryKeys.Book(ClueCategory.Currency), papers),
+                        "a book item keeps its key: the Reference chooses the book and marks no row");
+        Assert.AreEqual(LinkTarget.ToRecords("552-1804-33"), SmartLinks.ForEntry(EntryKeys.RecordCard("552-1804-33"), papers));
+        Assert.AreEqual(SmartLinks.ForKey(PickKeys.Field(1, 2), papers), SmartLinks.ForEntry(PickKeys.Field(1, 2), papers), "a row goes as ForKey");
+        Assert.AreEqual(SmartLinks.ForKey(PickKeys.Line(3), papers), SmartLinks.ForEntry(PickKeys.Line(3), papers));
+        Assert.IsTrue(SmartLinks.ForEntry(PickKeys.Field(0, 0), papers).IsNone, "a field of a paper not scanned is gone");
+        Assert.IsTrue(SmartLinks.ForEntry(PickKeys.Garment(0), papers).IsNone);
+        Assert.IsTrue(SmartLinks.ForEntry("doc:", papers).IsNone);
+        Assert.IsTrue(SmartLinks.ForEntry(null, papers).IsNone);
+    }
+
+    [Test]
     public void PickKeys_ReadBackAsWritten()
     {
         Assert.IsTrue(PickKeys.TryField(PickKeys.Field(2, 11), out int doc, out int field));

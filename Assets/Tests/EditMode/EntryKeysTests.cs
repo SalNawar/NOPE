@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-/// <summary>The navigable items' keys (the PC redesign section 4.2): the item keys, reading back PickKeys' row keys, each key's source and its scope.</summary>
+/// <summary>The navigable items' keys (the PC redesign section 4.2): the item keys, each key's source and its scope (PickKeys' row keys read through PickKeys).</summary>
 public class EntryKeysTests
 {
     [Test]
@@ -23,23 +23,10 @@ public class EntryKeysTests
     }
 
     [Test]
-    public void PickKeysRows_ReadBack()
+    public void ARecordNamedWithAColon_IsStillARecordsItem()
     {
-        Assert.IsTrue(EntryKeys.TryField(PickKeys.Field(1, 7), out int d, out int f));
-        Assert.AreEqual((1, 7), (d, f));
-        Assert.IsTrue(EntryKeys.TryLine(PickKeys.Line(12), out int line));
-        Assert.AreEqual(12, line);
-        Assert.IsTrue(EntryKeys.TryBookRow(PickKeys.BookRow(ClueCategory.Currency, "greece", "ancient"), out ClueCategory c, out string nation, out string era));
-        Assert.AreEqual((ClueCategory.Currency, "greece", "ancient"), (c, nation, era));
-        Assert.IsTrue(EntryKeys.TryRecordRow(PickKeys.Record(ClueCategory.BirthDate, "552-1804-33"), out string id, out ClueCategory row));
-        Assert.AreEqual(("552-1804-33", ClueCategory.BirthDate), (id, row));
-    }
-
-    [Test]
-    public void ARecordNamedWithAColon_StillReadsBack()
-    {
-        Assert.IsTrue(EntryKeys.TryRecordRow(PickKeys.Record(ClueCategory.Name, "Ra: Son"), out string id, out ClueCategory row));
-        Assert.AreEqual(("Ra: Son", ClueCategory.Name), (id, row));
+        Assert.IsTrue(EntryKeys.TryRef(PickKeys.Record(ClueCategory.Name, "Ra: Son"), out EntryRef r));
+        Assert.AreEqual(AppTab.Records, r.Source);
     }
 
     [TestCase("")]
@@ -57,12 +44,8 @@ public class EntryKeysTests
     public void Malformed_ReadAsNothing(string key)
     {
         Assert.IsFalse(EntryKeys.TryDocument(key, out _));
-        Assert.IsFalse(EntryKeys.TryField(key, out _, out _));
-        Assert.IsFalse(EntryKeys.TryLine(key, out _));
         Assert.IsFalse(EntryKeys.TryBook(key, out _));
-        Assert.IsFalse(EntryKeys.TryBookRow(key, out _, out _, out _));
         Assert.IsFalse(EntryKeys.TryRecordCard(key, out _));
-        Assert.IsFalse(EntryKeys.TryRecordRow(key, out _, out _));
         Assert.IsFalse(EntryKeys.TryRef(key, out _));
     }
 

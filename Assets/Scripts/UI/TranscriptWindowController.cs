@@ -57,8 +57,8 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         ShowLastPage();
     }
 
-    /// <summary>Turns to the page of the line <paramref name="lineKey"/> names (a Line pick key) and marks it found; any other key (or null) only clears the mark, on the page shown.</summary>
-    public void Reveal(string lineKey)
+    /// <summary>Turns to the page of the line <paramref name="lineKey"/> names (a Line pick key) and marks it found; any other key (or null) only clears the mark, on the page shown. False for a line the transcript does not have.</summary>
+    public bool Reveal(string lineKey)
     {
         bool mine = PickKeys.TryLine(lineKey, out int index) && index < _lines.Count;
         _foundKey = mine ? lineKey : null;
@@ -66,19 +66,12 @@ public sealed class TranscriptWindowController : PagedRowsWindow
             ShowPageOf(index);
         else
             ShowPage(Page);
+        return mine || lineKey == null;
     }
 
     /// <summary>Shows the newest page (call after lines were appended).</summary>
     public void Refresh() => ShowLastPage();
 
-    /// <summary>Shows the page line <paramref name="index"/> is on; false when there is no such line.</summary>
-    public bool ShowLine(int index)
-    {
-        if (index < 0 || index >= _lines.Count)
-            return false;
-        ShowPageOf(index);
-        return true;
-    }
 
     /// <inheritdoc />
     protected override int RowCount => _lines.Count;

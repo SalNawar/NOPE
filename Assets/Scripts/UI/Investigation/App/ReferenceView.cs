@@ -15,9 +15,9 @@ using UnityEngine.UI;
 /// one clone of the page template per book); phase 5's FormView takes its place.
 /// A link, Back or a dock side reveals a book row (Reveal: its book chosen,
 /// "Claimed place only" lifted when it hides the row, the page turned, the row
-/// marked). Each pane has one; DayReference fills them all. Its item is the chosen book ("bookof:Currency"); a
-/// jump shows a book, or a row's page ("Claimed place only" turned off when
-/// it hides the row; IAppItems).
+/// marked). Each pane has one; DayReference fills them all. Its item is the
+/// chosen book ("bookof:Currency", IAppItems), which a jump to it names as
+/// the target's key.
 /// </summary>
 public sealed class ReferenceView : AppView, IAppItems
 {
@@ -54,33 +54,6 @@ public sealed class ReferenceView : AppView, IAppItems
 
     /// <inheritdoc />
     public string ItemTitle => _selected >= 0 ? _books[_selected].displayName : null;
-
-    /// <inheritdoc />
-    public bool Reveal(string key)
-    {
-        if (EntryKeys.TryBook(key, out ClueCategory category))
-            return SelectBook(category) >= 0;
-        if (!EntryKeys.TryBookRow(key, out category, out string nation, out string era))
-            return false;
-        int book = SelectBook(category);
-        if (book < 0)
-            return false;
-        if (claimedOnly != null && claimedOnly.isOn && !(nation == _claimedNation && era == _claimedEra))
-            claimedOnly.isOn = false;
-        return _pages[book].ShowRow(key);
-    }
-
-    /// <summary>Chooses the book of <paramref name="category"/>; its index, or -1 when the library has none.</summary>
-    private int SelectBook(ClueCategory category)
-    {
-        for (int i = 0; i < _books.Count; i++)
-            if (_books[i].category == category)
-            {
-                Select(i);
-                return i;
-            }
-        return -1;
-    }
 
     /// <summary>Today's facts and the compare the rows pick into; a built register redraws.</summary>
     public void SetFacts(FactTable facts, CompareController compare)
@@ -145,21 +118,31 @@ public sealed class ReferenceView : AppView, IAppItems
         RaiseChipsChanged();
     }
 
-    /// <summary>Chooses the book of the target's row (else its item), lifts "Claimed place only" when it hides the row, and marks the row found; no row: the mark clears.</summary>
-    public override void Reveal(LinkTarget target)
+    /// <summary>
+    /// Chooses the book of the target's row (else the book its item key names,
+    /// else its item), lifts "Claimed place only" when it hides the row, and
+    /// marks the row found; no row: the mark clears. False when the library
+    /// has no such book or the register no such row.
+    /// </summary>
+    public override bool Reveal(LinkTarget target)
     {
         int book = target.Item;
-        if (PickKeys.TryBookRow(target.Key, out ClueCategory category, out _, out _))
+        bool row = PickKeys.TryBookRow(target.Key, out ClueCategory category, out _, out _);
+        if (row || EntryKeys.TryBook(target.Key, out category))
+        {
             book = _books.FindIndex(b => b.category == category);
+            if (book < 0)
+                return false;
+        }
         if (book >= 0)
             Select(book);
         if (_selected < 0 || _selected >= _pages.Count)
-            return;
+            return book < 0;
 
         ReferenceBookWindowController page = _pages[_selected];
-        if (target.Key != null && !page.Shows(target.Key) && claimedOnly != null && claimedOnly.isOn)
+        if (row && !page.Shows(target.Key) && claimedOnly != null && claimedOnly.isOn)
             claimedOnly.isOn = false;
-        page.RevealRow(target.Key);
+        return page.RevealRow(target.Key) || !row;
     }
 
     /// <summary>Every book's register from today's rows, the claim and the toggle.</summary>

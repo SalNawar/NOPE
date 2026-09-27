@@ -16,8 +16,7 @@ using UnityEngine.UI;
 /// turns to a row's page and marks it found. The book's cover shows at the
 /// page's top when its art exists (SlotArt.CoverFor, redesign phase 27);
 /// without it the header stays as it was. Each row is marked with its key for
-/// the keys, the copy and the pins (AppRow), and a jump shows a row's page
-/// (ShowRow).
+/// the keys, the copy and the pins (AppRow).
 /// </summary>
 public sealed class ReferenceBookWindowController : PagedRowsWindow
 {
@@ -60,8 +59,8 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
     /// <summary>True when the register shows the row <paramref name="rowKey"/> names (a BookRow pick key).</summary>
     public bool Shows(string rowKey) => IndexOf(rowKey) >= 0;
 
-    /// <summary>Turns to the page of the row <paramref name="rowKey"/> names and marks it found; a key it does not show (or null) only clears the mark, on the page shown.</summary>
-    public void RevealRow(string rowKey)
+    /// <summary>Turns to the page of the row <paramref name="rowKey"/> names and marks it found (true); a key it does not show (or null) only clears the mark, on the page shown (false).</summary>
+    public bool RevealRow(string rowKey)
     {
         int index = IndexOf(rowKey);
         _foundKey = index >= 0 ? rowKey : null;
@@ -69,6 +68,7 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
             ShowPageOf(index);
         else
             ShowPage(Page);
+        return index >= 0;
     }
 
     /// <summary>The line of the row <paramref name="rowKey"/> names, or -1.</summary>
@@ -84,21 +84,6 @@ public sealed class ReferenceBookWindowController : PagedRowsWindow
 
     /// <inheritdoc />
     protected override int RowCount => _lines.Count;
-
-    /// <summary>Shows the page of the row keyed <paramref name="key"/> (PickKeys.BookRow); false when the register does not list it.</summary>
-    public bool ShowRow(string key)
-    {
-        for (int i = 0; i < _lines.Count; i++)
-        {
-            ReferenceLine line = _lines[i];
-            if (!line.IsHeading && PickKeys.BookRow(line.Row.Category, line.Row.NationId, line.Row.EraId) == key)
-            {
-                ShowPageOf(i);
-                return true;
-            }
-        }
-        return false;
-    }
 
     /// <summary>A heading shows its era's name; a row its place and value, and a click puts the entry into the compare bar as a truth source.</summary>
     protected override void FillRow(int index, GameObject row, TMP_Text[] texts, Image background, Button button)
