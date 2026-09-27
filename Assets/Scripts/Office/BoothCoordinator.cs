@@ -132,13 +132,13 @@ public sealed class BoothCoordinator : MonoBehaviour
         Apply();
     }
 
-    /// <summary>Starts a day: the day-1 notes may show again on their days.</summary>
-    public void BeginDay(int day)
+    /// <summary>Starts a day with its scanner upgrades (<paramref name="scanners"/>, the desk's): the day-1 notes may show again on their days.</summary>
+    public void BeginDay(int day, ScannerDay scanners)
     {
         _day = day;
         _wheelOpenedToday = false;
         if (desk != null)
-            desk.BeginDay(day);
+            desk.BeginDay(day, scanners);
         Apply();
     }
 
@@ -160,7 +160,8 @@ public sealed class BoothCoordinator : MonoBehaviour
         Apply();
     }
 
-    private void HandleScanFinished(int _)
+    /// <summary>A scan finished (the paper and whether it was an analysis pass are the PC's, CaseDocumentsPresenter): the screen wakes and the rules re-apply.</summary>
+    private void HandleScanFinished(int paper, bool analysed)
     {
         if (screen != null)
             screen.Wake(WakeReason.ScanFinished);

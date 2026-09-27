@@ -39,6 +39,12 @@ public sealed class DeskView : MonoBehaviour
     [SerializeField] private Button backButton;
 
     private CinemachineCamera _office;
+    /// <summary>The desk camera sits this far above the art office's camera while on (the binder raises that one first; audit R5-015).</summary>
+    private const int PriorityAboveOffice = 1;
+
+    /// <summary>The desk camera's priority while off: under the art office's.</summary>
+    private const int IdlePriority = 0;
+
     private int _onPriority;
     private bool _toggleLive;
     private bool _returnLive;
@@ -103,8 +109,8 @@ public sealed class DeskView : MonoBehaviour
         deskCamera.transform.SetPositionAndRotation(art.position + level * tuning.forward + Vector3.up * tuning.rise,
                                                     Quaternion.LookRotation(level, Vector3.up) * Quaternion.Euler(pitch, 0f, 0f));
         deskCamera.Lens = office.Lens;
-        _onPriority = office.Priority.Value + 1;
-        deskCamera.Priority = IsOn ? _onPriority : 0;
+        _onPriority = office.Priority.Value + PriorityAboveOffice;
+        deskCamera.Priority = IsOn ? _onPriority : IdlePriority;
         deskCamera.gameObject.SetActive(true);
     }
 
@@ -227,7 +233,7 @@ public sealed class DeskView : MonoBehaviour
             _previous = CinemachineCore.GetBlendOverride;
             CinemachineCore.GetBlendOverride = _blend;
         }
-        deskCamera.Priority = on ? _onPriority : 0;
+        deskCamera.Priority = on ? _onPriority : IdlePriority;
         Changed?.Invoke();
     }
 

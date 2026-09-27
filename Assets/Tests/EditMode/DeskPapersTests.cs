@@ -466,4 +466,129 @@ public class DeskPapersTests
         Assert.AreEqual(2, p.OnDeskCount);
         Assert.IsFalse(p.CanDrag(1), "the permit waits for its request");
     }
+
+    // -----------------------------
+    // The Auto-Feed queue (the PC redesign SC3)
+    // -----------------------------
+
+    [Test]
+    public void Enqueue_OnlyAHandedOverPaper_Once()
+    {
+        DeskPapers p = Papers();
+        Assert.IsFalse(p.Enqueue(0), "still with the traveller");
+        Assert.IsFalse(p.Enqueue(9), "out of range");
+        Assert.IsTrue(p.HandOver(0));
+        Assert.IsTrue(p.Enqueue(0));
+        Assert.IsFalse(p.Enqueue(0), "already queued");
+        Assert.AreEqual(1, p.QueuedCount);
+        Assert.IsTrue(p.Hold(0, false).Held);
+        Assert.IsTrue(p.HandOver(2));
+        Assert.IsTrue(p.Enqueue(2));
+        Assert.AreEqual(2, p.QueuedCount);
+        Assert.IsFalse(p.ScannerBusy, "queueing scans nothing by itself");
+    }
+
+    [Test]
+    public void FeedNext_ScansTheQueuedPapers_InHandOverOrder_OneAtATime()
+    {
+        DeskPapers p = Papers();
+        Assert.IsTrue(p.HandOver(2));
+        Assert.IsTrue(p.Enqueue(2));
+        Assert.IsTrue(p.HandOver(0));
+        Assert.IsTrue(p.Enqueue(0));
+
+        Assert.AreEqual(2, p.FeedNext(null), "the paper handed over first goes first");
+        Assert.IsTrue(p.ScannerBusy);
+        Assert.IsFalse(p.ScanByHand, "the scanner fed itself");
+        Assert.IsFalse(p.CanDrag(2));
+        Assert.AreEqual(1, p.QueuedCount);
+        Assert.AreEqual(-1, p.FeedNext(null), "one at a time: a busy scanner feeds nothing");
+        Assert.AreEqual(2, p.Tick(Scan));
+        Assert.AreEqual(0, p.FeedNext(null));
+        Assert.AreEqual(0, p.Tick(Scan));
+        Assert.AreEqual(-1, p.FeedNext(null), "the queue is empty");
+        Assert.AreEqual(0, p.QueuedCount);
+        Assert.IsTrue(p.CanDrag(0) && p.CanDrag(2), "both are back on the desk");
+    }
+
+    [Test]
+    public void FeedNext_SkipsAHeldPaper_UntilItIsBackOnTheDesk()
+    {
+        DeskPapers p = AllOnDesk();
+        for (int i = 0; i < p.Count; i++)
+            Assert.IsTrue(p.Enqueue(i));
+        Assert.IsTrue(p.Hold(0, false).Held);
+
+        Assert.AreEqual(1, p.FeedNext(null), "the held paper waits its turn; the next goes ahead");
+        Assert.AreEqual(2, p.QueuedCount, "the held paper keeps its place in the queue");
+        Assert.AreEqual(1, p.Tick(Scan));
+        Assert.AreEqual(2, p.FeedNext(null));
+        Assert.AreEqual(2, p.Tick(Scan));
+        Assert.AreEqual(-1, p.FeedNext(null), "only the held paper is left");
+        Assert.IsTrue(p.PutBack(0));
+        Assert.AreEqual(0, p.FeedNext(null), "back on the desk, it takes its turn");
+        Assert.AreEqual(0, p.Tick(Scan));
+        Assert.AreEqual(0, p.QueuedCount);
+    }
+
+    [Test]
+    public void FeedNext_WaitsForAPaperTheControllerHoldsBack()
+    {
+        DeskPapers p = AllOnDesk();
+        Assert.IsTrue(p.Enqueue(0));
+        Assert.IsTrue(p.Enqueue(1));
+        bool landed = false;
+        Assert.AreEqual(1, p.FeedNext(i => i != 0 || landed), "a paper still sliding (or dragged) is skipped");
+        Assert.AreEqual(1, p.Tick(Scan));
+        Assert.AreEqual(-1, p.FeedNext(i => i != 0 || landed));
+        landed = true;
+        Assert.AreEqual(0, p.FeedNext(i => i != 0 || landed));
+    }
+
+    [Test]
+    public void ADropOnTheScanner_ScansByHand_AndTakesThePaperOutOfTheQueue()
+    {
+        DeskPapers p = AllOnDesk();
+        Assert.IsTrue(p.Enqueue(0));
+        Assert.IsTrue(p.Enqueue(1));
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(1, true));
+        Assert.IsTrue(p.ScanByHand);
+        Assert.AreEqual(1, p.QueuedCount, "the dropped paper is not fed again");
+        Assert.AreEqual(-1, p.FeedNext(null), "busy with the hand scan");
+        Assert.AreEqual(1, p.Tick(Scan));
+        Assert.IsFalse(p.ScanByHand, "idle again");
+        Assert.AreEqual(0, p.FeedNext(null));
+        Assert.IsFalse(p.ScanByHand);
+        Assert.AreEqual(DropOutcome.Refused, p.Drop(2, true), "a drop on the busy scanner slides back, as ever");
+    }
+
+    [Test]
+    public void AHandScan_TakesItsOwnDuration_AFedScanThePlainOne()
+    {
+        DeskPapers p = new DeskPapers(new[] { Doc("Travel Passport", DocumentHandOver.OnArrival), Doc("Letter", DocumentHandOver.OnArrival) }, Scan, 3f);
+        Assert.IsTrue(p.HandOver(0) && p.HandOver(1));
+        Assert.IsTrue(p.Enqueue(1));
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(0, true));
+        Assert.AreEqual(-1, p.Tick(Scan), "the analysis pass is longer than the plain scan");
+        Assert.AreEqual(0, p.Tick(3f - Scan));
+        Assert.AreEqual(1, p.FeedNext(null));
+        Assert.AreEqual(1, p.Tick(Scan), "the scanner's own feed keeps the plain duration");
+
+        DeskPapers same = new DeskPapers(new[] { Doc("Travel Passport", DocumentHandOver.OnArrival) }, Scan);
+        Assert.IsTrue(same.HandOver(0));
+        Assert.AreEqual(DropOutcome.Scanning, same.Drop(0, true));
+        Assert.AreEqual(0, same.Tick(Scan), "without the Analysis Scanner a scan by hand is the plain scan");
+    }
+
+    [Test]
+    public void ReturnAll_ClearsTheQueue_AndTheHandFlag()
+    {
+        DeskPapers p = AllOnDesk();
+        Assert.IsTrue(p.Enqueue(0) && p.Enqueue(1));
+        Assert.AreEqual(DropOutcome.Scanning, p.Drop(2, true));
+        p.ReturnAll();
+        Assert.AreEqual(0, p.QueuedCount);
+        Assert.IsFalse(p.ScanByHand);
+        Assert.AreEqual(-1, p.FeedNext(null));
+    }
 }

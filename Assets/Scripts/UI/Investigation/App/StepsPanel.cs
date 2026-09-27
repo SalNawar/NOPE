@@ -37,17 +37,8 @@ public sealed class StepsPanel : MonoBehaviour
     [SerializeField] private TMP_Text stateText;
 
     [Header("The app")]
-    /// <summary>The app: the tab the player sees, and the tab a jump shows.</summary>
+    /// <summary>The app: what the player sees (the showing panes' tabs and scanned copies), and where a jump goes (its active pane).</summary>
     [SerializeField] private InvestigationApp app;
-
-    /// <summary>The Documents tab: the scanned paper the player sees.</summary>
-    [SerializeField] private DocumentsView documents;
-
-    /// <summary>The Records tab's lookup: a lookup ticks "a record looked up"; a jump looks the primary paper's record up.</summary>
-    [SerializeField] private CitizenRecordsWindowController records;
-
-    /// <summary>The Reference tab: a jump chooses a book.</summary>
-    [SerializeField] private ReferenceView reference;
 
     /// <summary>The desktop's toast: a hint for a step done at the desk.</summary>
     [SerializeField] private AppToast toast;
@@ -64,8 +55,7 @@ public sealed class StepsPanel : MonoBehaviour
     private List<StepState> _states = new List<StepState>();
     private CaseProgress _progress;
     private bool _wired;
-    private int _seenTab = -2;
-    private int _seenPaper = -2;
+    private readonly List<int> _copies = new List<int>();
 
     /// <summary>Raised when the steps are shown or hidden (Settings repaints its choice).</summary>
     public event Action ShownChanged;
@@ -93,8 +83,6 @@ public sealed class StepsPanel : MonoBehaviour
         Wire();
         _steps = CaseSteps.Resolve(sets, kind.ToString(), day);
         _progress = new CaseProgress(papers, questions, books);
-        _seenTab = -2;
-        _seenPaper = -2;
         BuildRows();
         Redraw();
     }
@@ -134,43 +122,33 @@ public sealed class StepsPanel : MonoBehaviour
         Apply();
     }
 
-    private void OnDestroy()
-    {
-        if (_wired && records != null)
-            records.Searched -= HandleSearched;
-    }
-
-    /// <summary>What the player sees while looking at the PC: the Rules tab, or a scanned paper in Documents (checked when either changes).</summary>
+    /// <summary>What the player sees while looking at the PC: the Rules tab, or scanned papers in Documents, in either showing pane (each frame; the progress marks are idempotent and allocate nothing).</summary>
     private void LateUpdate()
     {
         if (_progress == null || app == null)
             return;
         bool looking = app.IsShowing && (screen == null || screen.IsInteractive);
-        int tab = looking ? (int)app.ActiveTab : -1;
-        int paper = tab == (int)AppTab.Documents && documents != null && documents.ShowsCopy ? documents.Selected : -1;
-        if (tab == _seenTab && paper == _seenPaper)
-            return;
-        _seenTab = tab;
-        _seenPaper = paper;
-
-        bool changed = tab == (int)AppTab.Rules && _progress.RulesViewed();
-        changed |= paper >= 0 && _progress.Read(paper);
+        bool changed = looking && app.Sees(AppTab.Rules) && _progress.RulesViewed();
+        _copies.Clear();
+        if (looking)
+            app.CopiesSeen(_copies);
+        foreach (int paper in _copies)
+            changed |= _progress.Read(paper);
         Changed(changed);
     }
 
-    /// <summary>Listens to the Records lookup and hides the row template (once; the panel may be driven while its window is closed).</summary>
+    /// <summary>Hides the row template (once; the panel may be driven while its window is closed).</summary>
     private void Wire()
     {
         if (_wired)
             return;
         _wired = true;
-        if (records != null)
-            records.Searched += HandleSearched;
         if (rowTemplate != null)
             rowTemplate.gameObject.SetActive(false);
     }
 
-    private void HandleSearched() => Changed(_progress != null && _progress.RecordViewed());
+    /// <summary>A record looked up in a Records tab (the façade hears it from DayReference): "a record looked up" ticks.</summary>
+    public void RecordViewed() => Changed(_progress != null && _progress.RecordViewed());
 
     private void Changed(bool changed)
     {
@@ -244,7 +222,7 @@ public sealed class StepsPanel : MonoBehaviour
         Redraw();
     }
 
-    /// <summary>The label: to where the step is done, in the app (or a hint toast for work at the desk).</summary>
+    /// <summary>The label: to where the step is done, in the app's active pane (its history records it; or a hint toast for work at the desk).</summary>
     private void Jump(int index)
     {
         if (_progress == null || index < 0 || index >= _steps.Count || app == null)
@@ -257,17 +235,13 @@ public sealed class StepsPanel : MonoBehaviour
                     toast.Show(UiText.Get(target.HintKey), config != null ? config.toastSeconds : 4f, null);
                 break;
             case StepTargetKind.Tab:
-                app.ShowTab(target.Tab);
+                app.Open(LinkTarget.ToTab(target.Tab), false);
                 break;
             case StepTargetKind.Record:
-                app.ShowTab(AppTab.Records);
-                if (records != null)
-                    records.Show(target.Query, null);
+                app.Open(LinkTarget.ToRecords(target.Query), false);
                 break;
             case StepTargetKind.Book:
-                app.ShowTab(AppTab.Reference);
-                if (reference != null)
-                    reference.ShowBook(target.Book);
+                app.Open(LinkTarget.ToRow(AppTab.Reference, EntryKeys.Book(target.Book)), false);
                 break;
         }
     }

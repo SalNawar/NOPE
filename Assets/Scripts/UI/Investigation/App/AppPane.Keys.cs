@@ -10,10 +10,7 @@ public sealed partial class AppPane
 {
     /// <summary>The tab's button on the strip, or null.</summary>
     public Button TabButton(AppTab tab)
-    {
-        int i = IndexOf(tab);
-        return i >= 0 && i < tabButtons.Length ? tabButtons[i] : null;
-    }
+        => At(tabButtons, tab);
 
     /// <summary>The active view's chips as drawn, left to right.</summary>
     public IReadOnlyList<Button> ChipButtons => _chips;

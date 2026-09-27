@@ -8,8 +8,8 @@ using NUnit.Framework;
 /// on a box, the section heads on their band, the fine print on the paper,
 /// the rules and the stamp area's dash as outlines (3:1), and the ink on each
 /// fill laid over a box (the hover tint, every theme's pick highlight), and
-/// the scan strip's text on the scanner backing (phase 5), and search's found
-/// outline on the paper and on a box (phase 19).
+/// the scan strip's text on the scanner backing (phase 5), and the Analysis
+/// Scanner's mark as an outline on a box and on the paper (phase 22).
 /// </summary>
 public class FormContrastTests
 {
@@ -32,7 +32,7 @@ public class FormContrastTests
         StampDash = Hex("#6B6358"),
         Backing = Hex("#212329"),
         BackingInk = Hex("#D9DBE0"),
-        Found = Hex("#1A6BE6")
+        Analysis = Hex("#8B2E22")
     };
 
     [Test]
@@ -70,19 +70,22 @@ public class FormContrastTests
     }
 
     [Test]
-    public void AFaintFoundOutline_IsReported_OnThePaperAndOnABox()
-    {
-        FormPalette p = Spec();
-        p.Found = Hex("#A8C8F0");
-        List<string> problems = FormContrast.Problems(p, new List<(string, Rgba)>(), new ContrastRules());
-        Assert.AreEqual(2, problems.Count(m => m.Contains("found outline")), string.Join(" | ", problems));
-    }
-
-    [Test]
     public void ADarkPickFill_IsReported_ByItsName()
     {
         var overlays = new List<(string, Rgba)> { ("the 'egypt' pick highlight", new Rgba(0.1f, 0.1f, 0.3f, 0.9f)) };
         List<string> problems = FormContrast.Problems(Spec(), overlays, new ContrastRules());
         Assert.IsTrue(problems.Single().Contains("egypt"), string.Join("\n", problems));
+    }
+
+    [Test]
+    public void TheAnalysisMark_IsCheckedAsAnOutline_OnABoxAndOnThePaper()
+    {
+        FormPalette p = Spec();
+        p.Analysis = Hex("#D8CFBD");
+        List<string> problems = FormContrast.Problems(p, null, new ContrastRules());
+        Assert.AreEqual(2, problems.Count, string.Join(" | ", problems));
+        StringAssert.StartsWith("Form analysis mark on a box is ", problems[0]);
+        StringAssert.Contains("it needs 3.0:1", problems[0]);
+        StringAssert.StartsWith("Form analysis mark on the paper is ", problems[1]);
     }
 }

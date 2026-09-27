@@ -129,4 +129,81 @@ public static class PickKeys
 
     /// <summary>A Citizen Records row by the record it belongs to (CitizenRecord.Id: its number, else its name) and its category ("record:552-1804-33:BirthDate"), so two records' rows are two picks (audit R4-009).</summary>
     public static string Record(ClueCategory category, string recordId) => "record:" + recordId + ":" + category;
+
+    /// <summary>Reads a Field key back: true with its document's and field's indices.</summary>
+    public static bool TryField(string key, out int document, out int field)
+    {
+        document = -1;
+        field = -1;
+        string[] parts = Parts(key, "field:", 2);
+        return parts != null && TryIndex(parts[0], out document) && TryIndex(parts[1], out field);
+    }
+
+    /// <summary>Reads a Line key back: true with its transcript index.</summary>
+    public static bool TryLine(string key, out int transcriptIndex)
+    {
+        transcriptIndex = -1;
+        string[] parts = Parts(key, "line:", 1);
+        return parts != null && TryIndex(parts[0], out transcriptIndex);
+    }
+
+    /// <summary>Reads a BookRow key back: true with its category and place.</summary>
+    public static bool TryBookRow(string key, out ClueCategory category, out string nationId, out string eraId)
+    {
+        category = default;
+        nationId = null;
+        eraId = null;
+        string[] parts = Parts(key, "book:", 3);
+        if (parts == null || !TryCategory(parts[0], out category))
+            return false;
+        nationId = parts[1];
+        eraId = parts[2];
+        return true;
+    }
+
+    /// <summary>Reads a Record key back: true with the record's id (the text up to the last ':', so a name keeps its own characters) and the row's category.</summary>
+    public static bool TryRecord(string key, out string recordId, out ClueCategory category)
+    {
+        recordId = null;
+        category = default;
+        const string prefix = "record:";
+        if (key == null || !key.StartsWith(prefix, System.StringComparison.Ordinal))
+            return false;
+        int split = key.LastIndexOf(':');
+        if (split <= prefix.Length - 1 || !TryCategory(key.Substring(split + 1), out category))
+            return false;
+        recordId = key.Substring(prefix.Length, split - prefix.Length);
+        return recordId.Length > 0;
+    }
+
+    /// <summary>The key's parts after <paramref name="prefix"/> when there are exactly <paramref name="count"/> non-blank ones, else null.</summary>
+    private static string[] Parts(string key, string prefix, int count)
+    {
+        if (key == null || !key.StartsWith(prefix, System.StringComparison.Ordinal))
+            return null;
+        string[] parts = key.Substring(prefix.Length).Split(':');
+        if (parts.Length != count)
+            return null;
+        foreach (string part in parts)
+            if (part.Length == 0)
+                return null;
+        return parts;
+    }
+
+    /// <summary>A non-negative index written in a key.</summary>
+    private static bool TryIndex(string text, out int index) =>
+        int.TryParse(text, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out index);
+
+    /// <summary>A category written by its name in a key (never by its number).</summary>
+    private static bool TryCategory(string text, out ClueCategory category)
+    {
+        foreach (ClueCategory c in (ClueCategory[])System.Enum.GetValues(typeof(ClueCategory)))
+            if (string.Equals(c.ToString(), text, System.StringComparison.Ordinal))
+            {
+                category = c;
+                return true;
+            }
+        category = default;
+        return false;
+    }
 }

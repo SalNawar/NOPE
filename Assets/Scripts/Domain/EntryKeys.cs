@@ -36,8 +36,9 @@ public readonly struct EntryRef
 /// a document ("doc:0"), a book ("bookof:Currency") and a record ("rec:{id}")
 /// as items, a rule ("rule:1") and a deviation ("dev:Currency") as search
 /// results, beside PickKeys' row keys (a field, a line, a book's row, a
-/// record's row), which this reads back. TryRef says which tab a key's item
-/// lives in (and so its scope), for pins and recent items. Pure.
+/// record's row; PickKeys reads those back). TryRef says which tab a key's
+/// item lives in (and so its scope), for pins and recent items; where a key
+/// leads is SmartLinks.ForEntry. Pure.
 /// </summary>
 public static class EntryKeys
 {
@@ -46,10 +47,6 @@ public static class EntryKeys
     private const string RecordCardPrefix = "rec:";
     private const string RulePrefix = "rule:";
     private const string DeviationPrefix = "dev:";
-    private const string FieldPrefix = "field:";
-    private const string LinePrefix = "line:";
-    private const string BookRowPrefix = "book:";
-    private const string RecordRowPrefix = "record:";
 
     /// <summary>Document <paramref name="document"/> of the case, as an item ("doc:0").</summary>
     public static string Document(int document) => DocumentPrefix + document.ToString(CultureInfo.InvariantCulture);
@@ -79,57 +76,18 @@ public static class EntryKeys
         return !string.IsNullOrEmpty(recordId);
     }
 
-    /// <summary>Reads PickKeys.Field ("field:0:2").</summary>
-    public static bool TryField(string key, out int document, out int field)
-    {
-        document = field = 0;
-        string rest = Rest(key, FieldPrefix);
-        int colon = rest != null ? rest.IndexOf(':') : -1;
-        return colon > 0 && Index(rest.Substring(0, colon), out document) && Index(rest.Substring(colon + 1), out field);
-    }
-
-    /// <summary>Reads PickKeys.Line ("line:5").</summary>
-    public static bool TryLine(string key, out int line) => TryIndex(key, LinePrefix, out line);
-
-    /// <summary>Reads PickKeys.BookRow ("book:Currency:greece:ancient").</summary>
-    public static bool TryBookRow(string key, out ClueCategory category, out string nationId, out string eraId)
-    {
-        category = default;
-        nationId = eraId = null;
-        string rest = Rest(key, BookRowPrefix);
-        string[] parts = rest != null ? rest.Split(':') : null;
-        if (parts == null || parts.Length != 3 || parts[1].Length == 0 || parts[2].Length == 0 || !TryCategory(parts[0], out category))
-            return false;
-        nationId = parts[1];
-        eraId = parts[2];
-        return true;
-    }
-
-    /// <summary>Reads PickKeys.Record ("record:552-1804-33:BirthDate"; the id may hold a colon, the category is after the last one).</summary>
-    public static bool TryRecordRow(string key, out string recordId, out ClueCategory category)
-    {
-        recordId = null;
-        category = default;
-        string rest = Rest(key, RecordRowPrefix);
-        int colon = rest != null ? rest.LastIndexOf(':') : -1;
-        if (colon <= 0 || !TryCategory(rest.Substring(colon + 1), out category))
-            return false;
-        recordId = rest.Substring(0, colon);
-        return true;
-    }
-
     /// <summary>The item a key names, with the tab it lives in; false for a key that is not the app's (a garment, a malformed key).</summary>
     public static bool TryRef(string key, out EntryRef entry)
     {
         entry = default;
         AppTab source;
-        if (TryDocument(key, out _) || TryField(key, out _, out _))
+        if (TryDocument(key, out _) || PickKeys.TryField(key, out _, out _))
             source = AppTab.Documents;
-        else if (TryLine(key, out _))
+        else if (PickKeys.TryLine(key, out _))
             source = AppTab.Transcript;
-        else if (TryBook(key, out _) || TryBookRow(key, out _, out _, out _))
+        else if (TryBook(key, out _) || PickKeys.TryBookRow(key, out _, out _, out _))
             source = AppTab.Reference;
-        else if (TryRecordCard(key, out _) || TryRecordRow(key, out _, out _))
+        else if (TryRecordCard(key, out _) || PickKeys.TryRecord(key, out _, out _))
             source = AppTab.Records;
         else
             return false;

@@ -10,10 +10,9 @@ using UnityEngine.UI;
 /// in the window, so it draws over the body): a header with the source chips'
 /// row and Close, the scrolling list with its inactive templates (a group's
 /// heading, a hit with its glyph, title and snippet, "Show all"), the line
-/// shown when nothing matches and the footer's hint; and the found flash's
-/// inactive template (a pulsing fill and a 2-unit outline in the form style's
-/// found colour, tagged DiegeticForm so no theme recolours it). The field's
-/// chip for a pasted untranslated line is the keys' (BuildSearchChip). Rebuilt
+/// shown when nothing matches and the footer's hint (a hit's row carries phase
+/// 18's found mark, as a link's target does). The field's chip for a pasted
+/// untranslated line is the keys' (BuildSearchChip). Rebuilt
 /// fresh with the app's window on each run; every reference it wires is checked
 /// (Wire). Part of <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp
 /// calls it.
@@ -41,14 +40,11 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The width of a hit's source glyph column.</summary>
     private const float SearchGlyphWidth = 72f;
 
-    /// <summary>The found outline's thickness (SE4: 2 u).</summary>
-    private const float FoundOutlineWidth = 2f;
-
     /// <summary>
     /// Builds the search on the app's window <paramref name="win"/>: the
     /// SearchBox on the toolbar's search field, the results panel from
-    /// <paramref name="top"/> (the toolbar's bottom) down, and the found
-    /// flash's template; wires them into <paramref name="app"/>.
+    /// <paramref name="top"/> (the toolbar's bottom) down; wires them into
+    /// <paramref name="app"/>.
     /// </summary>
     private static void BuildAppSearch(InvestigationApp app, Transform win, float top, DesktopConfigSO config)
     {
@@ -56,7 +52,6 @@ public static partial class OfficeSceneUIBuilder
         if (field == null)
             return;
         SearchResultsView results = BuildSearchResults(win, top);
-        FoundMark found = BuildFoundMark(win, config);
 
         SearchBox box = GetOrAdd<SearchBox>(field.gameObject);
         var soBox = new SerializedObject(box);
@@ -67,7 +62,6 @@ public static partial class OfficeSceneUIBuilder
 
         var so = new SerializedObject(app);
         Wire(so, "searchBox", box);
-        Wire(so, "foundTemplate", found);
         so.ApplyModifiedProperties();
     }
 
@@ -176,48 +170,5 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
         panel.gameObject.SetActive(false);
         return view;
-    }
-
-    /// <summary>
-    /// The found flash's template (SE4), inactive, out of any layout: a fill
-    /// that pulses and four 2-unit edges, in the form style's found colour;
-    /// nothing in it takes a click.
-    /// </summary>
-    private static FoundMark BuildFoundMark(Transform win, DesktopConfigSO config)
-    {
-        FormStyleSO style = EnsureFormStyle();
-        DestroyChildIfPresent(win, "FoundMarkTemplate");
-        Transform root = Panel(win, "FoundMarkTemplate", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        GetOrAdd<LayoutElement>(root.gameObject).ignoreLayout = true;
-
-        Transform pulse = Panel(root, "Pulse", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Color.clear, ThemeRoleId.DiegeticForm);
-        pulse.GetComponent<Image>().raycastTarget = false;
-
-        var edges = new Object[4];
-        (string name, Vector2 min, Vector2 max, Vector2 offMin, Vector2 offMax)[] sides =
-        {
-            ("Top", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -FoundOutlineWidth), Vector2.zero),
-            ("Bottom", Vector2.zero, new Vector2(1f, 0f), Vector2.zero, new Vector2(0f, FoundOutlineWidth)),
-            ("Left", Vector2.zero, new Vector2(0f, 1f), Vector2.zero, new Vector2(FoundOutlineWidth, 0f)),
-            ("Right", new Vector2(1f, 0f), Vector2.one, new Vector2(-FoundOutlineWidth, 0f), Vector2.zero),
-        };
-        for (int i = 0; i < sides.Length; i++)
-        {
-            Transform edge = Panel(root, sides[i].name, sides[i].min, sides[i].max, Vector2.zero, Vector2.zero, style.found, ThemeRoleId.DiegeticForm);
-            PlaceRect(edge, sides[i].min, sides[i].max, sides[i].offMin, sides[i].offMax);
-            Image image = edge.GetComponent<Image>();
-            image.raycastTarget = false;
-            edges[i] = image;
-        }
-
-        FoundMark mark = root.gameObject.AddComponent<FoundMark>();
-        var so = new SerializedObject(mark);
-        Wire(so, "pulse", pulse.GetComponent<Image>());
-        SerializedArrays.Set(so, "outline", edges);
-        Wire(so, "style", style);
-        Wire(so, "config", config);
-        so.ApplyModifiedProperties();
-        root.gameObject.SetActive(false);
-        return mark;
     }
 }

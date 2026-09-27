@@ -22,6 +22,17 @@ public class PagingTests
         Assert.AreEqual(2, Paging.First(2, 3, 0));
     }
 
+    [TestCase(0, 0)]
+    [TestCase(5, 0)]
+    [TestCase(6, 1)]
+    [TestCase(13, 2)]
+    [TestCase(-4, 0)]
+    public void PageOf_AtSixPerPage(int index, int page)
+    {
+        Assert.AreEqual(page, Paging.PageOf(index, 6));
+        Assert.AreEqual(index < 0 ? 0 : index, Paging.PageOf(index, 0), "a per-page count below one counts as one");
+    }
+
     [Test]
     public void Clamp_KeepsThePageInRange()
     {
@@ -42,16 +53,5 @@ public class PagingTests
         Assert.AreEqual(13, Paging.End(2, 13, 6));
         Assert.AreEqual(12, Paging.First(9, 13, 6), "the page is clamped first");
         Assert.AreEqual(0, Paging.End(0, 0, 6), "an empty list shows nothing");
-    }
-
-    [Test]
-    public void PageOf_ThePageAnItemIsOn()
-    {
-        Assert.AreEqual(0, Paging.PageOf(0, 6));
-        Assert.AreEqual(0, Paging.PageOf(5, 6));
-        Assert.AreEqual(1, Paging.PageOf(6, 6));
-        Assert.AreEqual(2, Paging.PageOf(12, 6));
-        Assert.AreEqual(0, Paging.PageOf(-3, 6), "before the first item: the first page");
-        Assert.AreEqual(4, Paging.PageOf(4, 0), "a per-page count below 1 counts as 1");
     }
 }

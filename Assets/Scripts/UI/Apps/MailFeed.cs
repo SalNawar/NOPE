@@ -15,8 +15,9 @@ using UnityEngine;
 /// the authored mail. It rebuilds the list (Mailbox.ForDays) when the day
 /// changes and when a slip is acknowledged; opening a message marks it read
 /// in WorldState.mailRead, the only saved state. The unread count shows on
-/// the Start menu's Mail entry and in the Mail window's title (the taskbar
-/// button shows the title); phase 17's icon badge reads <see cref="Unread"/>.
+/// the Start menu's Mail entry and in the Mail window's title (retitled
+/// through the window, so its taskbar button follows); phase 17's icon badge
+/// reads <see cref="Unread"/>.
 /// </summary>
 public sealed class MailFeed : MonoBehaviour
 {
@@ -26,8 +27,8 @@ public sealed class MailFeed : MonoBehaviour
     /// <summary>The Start menu's Mail entry label ("Mail (2)").</summary>
     [SerializeField] private TMP_Text startEntryLabel;
 
-    /// <summary>The Mail window's title ("Mail (2 unread)").</summary>
-    [SerializeField] private TMP_Text windowTitle;
+    /// <summary>The Mail window, retitled with the unread count ("Mail (2 unread)").</summary>
+    [SerializeField] private DesktopWindow mailWindow;
 
     private readonly List<CitationCopy> _citations = new List<CitationCopy>();
     private List<MailItem> _items = new List<MailItem>();
@@ -141,8 +142,8 @@ public sealed class MailFeed : MonoBehaviour
         int unread = Unread;
         if (startEntryLabel != null)
             startEntryLabel.text = unread > 0 ? UiText.Format("startmenu.mailUnread", unread) : UiText.Get("startmenu.mail");
-        if (windowTitle != null)
-            windowTitle.text = unread > 0 ? UiText.Format("window.mailUnread", unread) : UiText.Get("window.mail");
+        if (mailWindow != null)
+            mailWindow.SetTitle(unread > 0 ? UiText.Format("window.mailUnread", unread) : UiText.Get("window.mail"));
         Changed?.Invoke();
     }
 }

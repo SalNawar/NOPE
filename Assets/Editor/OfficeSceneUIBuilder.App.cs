@@ -5,27 +5,29 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The office builder's Investigation app (redesign phase 16; the PC spec's
-/// AP1-AP8, WN4, WN5, §2.2-§2.10, §5.2): one desktop window on the window
-/// layer ("Investigation"; the restored size from DesktopConfigSO, maximised
-/// on its first open) with its case header (the claim, the counters, the PC's
-/// Accept and Deny with their fixed glyphs), its toolbar (Back, Forward, the
-/// search field, Steps, Split, Keys: the search field is search's
-/// (OfficeSceneUIBuilder.Search: its SearchBox and results panel) and the
-/// keys' (OfficeSceneUIBuilder.Keys: its chip), Keys the keys', Steps the
-/// steps' (OfficeSceneUIBuilder.Steps); Back, Forward and Split built, not
-/// live until phase 18), its sidebar (the
-/// steps checklist at its top: OfficeSceneUIBuilder.Steps; Pinned and Recent:
-/// the keys' partial fills them) and one pane (AppPane): the six tabs in
-/// TabOrder.Default (BuildTab: each a plate on the chrome, its active look a
-/// paper plate with an ink bar, its badge an accent dot after the label), the
-/// chip row (BuildChipTemplate: a chip as wide as its label, the chosen one
-/// on an accent plate), the content with a view per tab and the no-case
-/// state over it. The views host today's page components (the scanned page,
-/// Citizen Records, a book's register, the transcript, the report's and the
-/// rules' texts), each behind IAppView, so phase 5's FormView replaces one
-/// view at a time; the scan toast goes on the investigation host above the
-/// window layer. Rebuilt fresh on each run (the one convergence policy of
+/// The office builder's Investigation app (redesign phases 16, 18 and 21; the
+/// PC spec's AP1-AP9, ST1, WN4, WN5, §2.2-§2.10, §5.2): one desktop window on
+/// the window layer ("Investigation"; the restored size from DesktopConfigSO,
+/// maximised on its first open) with its case header (the claim, the
+/// counters, the PC's Accept and Deny with their fixed glyphs), its toolbar
+/// (Back, Forward and Split live; the search field search's, its SearchBox and
+/// results panel (OfficeSceneUIBuilder.Search), and the keys', its chip; Keys
+/// the keys' (OfficeSceneUIBuilder.Keys); Steps the steps' (OfficeSceneUIBuilder.Steps)),
+/// its sidebar (the steps checklist at its top: OfficeSceneUIBuilder.Steps;
+/// Pinned and Recent: the keys' partial fills them) and two panes side by
+/// side (AppPane, built by OfficeSceneUIBuilder.Panes from the parts here:
+/// BuildTab, each tab a plate on the chrome, its active look a paper plate
+/// with an ink bar, its badge an accent dot in a slot reserved after the
+/// label; BuildChipTemplate, a chip as wide as its label, the chosen one on
+/// an accent plate; the left pane starts on Documents, the right one on
+/// Reference, and is hidden until the app splits). Each pane's views host
+/// today's page components (the scanned copy on FormView, Citizen Records, a
+/// book's register, the transcript, the report's and the rules' texts), each
+/// behind IAppView, so FormView replaces one view at a time; the rows of the
+/// registers, Records and the transcript light by key and carry the found
+/// mark (the transcript's answers their ↗); the scan toast goes on the
+/// investigation host above the window layer. Rebuilt fresh on each run (the
+/// one convergence policy of
 /// this partial, audit R6-008); every reference it wires is checked (Wire,
 /// audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls
 /// it in its order.
@@ -88,19 +90,19 @@ public static partial class OfficeSceneUIBuilder
         { AppTab.Rules, "app.tab.rules" },
     };
 
-    /// <summary>The app's parts the rest of Build wires (the façade, the desktop's registry, Mail).</summary>
+    /// <summary>The app's parts the rest of Build wires (the façade, the desktop's registry, Mail, the dock): each tab's views, one per pane, the left pane's first.</summary>
     private struct AppParts
     {
         public InvestigationApp App;
         public DesktopWindow Window;
         public Button Accept;
         public Button Deny;
-        public DocumentsView Documents;
-        public CitizenRecordsWindowController Records;
-        public ReferenceView Reference;
-        public TranscriptWindowController Transcript;
-        public TMP_Text ReportText;
-        public TMP_Text RulesText;
+        public DocumentsView[] Documents;
+        public CitizenRecordsWindowController[] Records;
+        public ReferenceView[] Reference;
+        public TranscriptWindowController[] Transcript;
+        public TMP_Text[] ReportText;
+        public TMP_Text[] RulesText;
         public StepsPanel Steps;
     }
 
@@ -138,26 +140,43 @@ public static partial class OfficeSceneUIBuilder
 
         var parts = new AppParts { Window = window };
         BuildAppHeader(win, top, out TMP_Text claim, out TMP_Text counters, out parts.Accept, out parts.Deny);
-        Selectable[] notYetLive = BuildAppToolbar(win, top + AppHeaderHeight, out Button stepsToggle);
+        AppToolbar toolbar = BuildAppToolbar(win, top + AppHeaderHeight);
 
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(top + AppHeaderHeight + AppToolbarHeight)));
-        parts.Steps = BuildAppSidebar(body);
-        AppPane pane = BuildAppPane(body, compare, config, ref parts);
+        Transform sidebar = BuildAppSidebar(body, out parts.Steps);
+        Transform panes = Panel(body, "Panes", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(panes, Vector2.zero, Vector2.one, new Vector2(AppSidebarWidth + AppDividerWidth, 0f), Vector2.zero);
+        AppPane left = BuildAppPane(panes, "PaneLeft", AppTab.Documents, compare, config, out PaneViews leftViews);
+        AppPane right = BuildAppPane(panes, "PaneRight", AppTab.Reference, compare, config, out PaneViews rightViews);
+        PlaceRect(right.transform, new Vector2(0.5f, 0f), Vector2.one, new Vector2(config.paneGap / 2f, 0f), Vector2.zero);
+        right.gameObject.SetActive(false);
+        parts.Documents = new[] { leftViews.Documents, rightViews.Documents };
+        parts.Records = new[] { leftViews.Records, rightViews.Records };
+        parts.Reference = new[] { leftViews.Reference, rightViews.Reference };
+        parts.Transcript = new[] { leftViews.Transcript, rightViews.Transcript };
+        parts.ReportText = new[] { leftViews.ReportText, rightViews.ReportText };
+        parts.RulesText = new[] { leftViews.RulesText, rightViews.RulesText };
 
         AppToast toast = BuildAppToast(investHost, config);
 
         parts.App = win.gameObject.AddComponent<InvestigationApp>();
         var so = new SerializedObject(parts.App);
         Wire(so, "window", window);
-        Wire(so, "pane", pane);
+        Wire(so, "leftPane", left);
+        Wire(so, "rightPane", right);
+        Wire(so, "body", body);
+        Wire(so, "sidebar", sidebar);
         Wire(so, "claimText", claim);
         Wire(so, "countersText", counters);
-        SerializedArrays.Set(so, "notYetLive", notYetLive);
+        Wire(so, "backButton", toolbar.Back);
+        Wire(so, "forwardButton", toolbar.Forward);
+        Wire(so, "splitButton", toolbar.Split);
+        Wire(so, "splitHint", toolbar.SplitHint);
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
-        WireStepsPanel(parts.Steps, parts, stepsToggle, toast, config);
+        WireStepsPanel(parts.Steps, parts, toolbar.Steps, toast, config);
         BuildAppSearch(parts.App, win, top + AppHeaderHeight + AppToolbarHeight, config);
         return parts;
     }
@@ -179,18 +198,32 @@ public static partial class OfficeSceneUIBuilder
         BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward, the search field, Steps, Split and Keys. Returns the ones not live yet (Back, Forward, Split: phase 18); the search field is search's (BuildAppSearch) and the keys' (BuildAppKeys), Keys the keys', Steps the steps' (WireStepsPanel).</summary>
-    private static Selectable[] BuildAppToolbar(Transform win, float top, out Button steps)
+    /// <summary>The toolbar's controls the app and the steps wire.</summary>
+    private struct AppToolbar
+    {
+        public Button Back;
+        public Button Forward;
+        public Button Split;
+        public TMP_Text SplitHint;
+        public Button Steps;
+    }
+
+    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field is search's (BuildAppSearch) and the keys' (BuildAppKeys), Keys the keys'; Steps the steps' (WireStepsPanel).</summary>
+    private static AppToolbar BuildAppToolbar(Transform win, float top)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
                               new Vector2(0f, AppToolbarHeight), XpFace, ThemeRoleId.WindowBody);
-        Button back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f);
-        Button forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f);
+        var toolbar = new AppToolbar
+        {
+            Back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f),
+            Forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f),
+        };
         BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
-        steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
-        Button split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
+        toolbar.Steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
+        toolbar.Split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
+        toolbar.SplitHint = BuildHoverHint(toolbar.Split, null, UiText.Get("app.split.hint"), AppSplitHintSize, new Vector2(1f, 1f), new Vector2(1f, 0f));
         ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
-        return new Selectable[] { back, forward, split };
+        return toolbar;
     }
 
     /// <summary>A toolbar button between two horizontal anchors (its label keyed).</summary>
@@ -201,12 +234,12 @@ public static partial class OfficeSceneUIBuilder
         return b;
     }
 
-    /// <summary>The sidebar (AP2): the steps checklist at its top (OfficeSceneUIBuilder.Steps, StepsSectionShare of the height), then Pinned and Recent sharing the rest, each a heading over a placeholder line the keys' partial replaces with its list (BuildSidebarList). Returns the steps.</summary>
-    private static StepsPanel BuildAppSidebar(Transform body)
+    /// <summary>The sidebar (AP2): the steps checklist at its top (OfficeSceneUIBuilder.Steps, StepsSectionShare of the height), then Pinned and Recent sharing the rest, each a heading over a placeholder line the keys' partial replaces with its list (BuildSidebarList). Returns the sidebar, and the steps in <paramref name="steps"/>.</summary>
+    private static Transform BuildAppSidebar(Transform body, out StepsPanel steps)
     {
         Transform side = Panel(body, "Sidebar", Vector2.zero, new Vector2(0f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.Sidebar);
         PlaceRect(side, Vector2.zero, new Vector2(0f, 1f), Vector2.zero, new Vector2(AppSidebarWidth, 0f));
-        StepsPanel steps = BuildStepsSection(side, 1f, 1f - StepsSectionShare);
+        steps = BuildStepsSection(side, 1f, 1f - StepsSectionShare);
         string[] sections = { "Pinned", "Recent" };
         string[] keys = { "app.sidebar.pinned", "app.sidebar.recent" };
         for (int i = 0; i < sections.Length; i++)
@@ -217,89 +250,7 @@ public static partial class OfficeSceneUIBuilder
             Text(side, sections[i] + "Empty", null, 16, TextAlignmentOptions.TopLeft, new Vector2(0.06f, high - 0.14f), new Vector2(0.94f, high - 0.075f), Ink,
                  ThemeRoleId.Sidebar, "app.sidebar.empty", FontStyles.Italic, ThemeTextKind.Body, true);
         }
-        return steps;
-    }
-
-    /// <summary>
-    /// The pane (AP2, AP3, AP5): the tab strip on the chrome (BuildTab, one tab
-    /// per source in TabOrder.Default), the chip row under it (BuildChipTemplate;
-    /// a chrome hairline, "Rule", along its bottom) and the content with the six
-    /// views and the no-case state. The strip's and the row's heights are
-    /// <paramref name="config"/>'s. Fills the views into <paramref name="parts"/>.
-    /// </summary>
-    private static AppPane BuildAppPane(Transform body, CompareController compare, DesktopConfigSO config, ref AppParts parts)
-    {
-        Transform paneRoot = Panel(body, "Pane", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(paneRoot, Vector2.zero, Vector2.one, new Vector2(AppSidebarWidth + AppDividerWidth, 0f), Vector2.zero);
-
-        float stripHeight = config.tabStripHeight;
-        float rowHeight = config.chipRowHeight;
-        Transform strip = Panel(paneRoot, "TabStrip", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -stripHeight / 2f),
-                                new Vector2(0f, stripHeight), XpBlue, ThemeRoleId.TabStrip);
-        HorizontalLayoutGroup tabs = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
-        tabs.padding = new RectOffset(8, 8, 6, 0);
-        tabs.spacing = 3f;
-        tabs.childAlignment = TextAnchor.LowerLeft;
-        tabs.childControlWidth = true;
-        tabs.childControlHeight = true;
-        tabs.childForceExpandWidth = false;
-        tabs.childForceExpandHeight = true;
-        var tabButtons = new List<Object>();
-        var tabActive = new List<Object>();
-        var tabBadges = new List<Object>();
-        foreach (AppTab tab in TabOrder.Default)
-        {
-            tabButtons.Add(BuildTab(strip, tab, config, out GameObject active, out GameObject badge));
-            tabActive.Add(active);
-            tabBadges.Add(badge);
-        }
-
-        Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(stripHeight + rowHeight / 2f)),
-                                 new Vector2(0f, rowHeight), Paper, ThemeRoleId.WindowBody);
-        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(header.gameObject);
-        row.padding = new RectOffset(8, 8, 6, 8);
-        row.spacing = 6f;
-        row.childAlignment = TextAnchor.MiddleLeft;
-        row.childControlWidth = true;
-        row.childControlHeight = true;
-        row.childForceExpandWidth = false;
-        row.childForceExpandHeight = true;
-        Button chip = BuildChipTemplate(header, config);
-        Transform rule = Panel(header, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, AppPaneRuleHeight / 2f), new Vector2(0f, AppPaneRuleHeight),
-                               XpBlue, ThemeRoleId.TabStrip);
-        rule.GetComponent<Image>().raycastTarget = false;
-        GetOrAdd<LayoutElement>(rule.gameObject).ignoreLayout = true;
-
-        Transform content = Panel(paneRoot, "Content", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.WindowBody);
-        PlaceRect(content, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(stripHeight + rowHeight)));
-        content.gameObject.AddComponent<RectMask2D>();
-
-        parts.Documents = BuildDocumentsView(content, out AppView documents);
-        parts.Records = BuildRecordsView(content, compare, out AppView records);
-        parts.Reference = BuildReferenceView(content);
-        parts.Transcript = BuildTranscriptView(content, out AppView transcript);
-        parts.ReportText = BuildTextView<ReportView>(content, "ReportView", "scanner.idle", out AppView report);
-        parts.RulesText = BuildTextView<RulesView>(content, "RulesView", "directives.none", out AppView rules);
-
-        Transform noCase = Panel(content, "NoCase", new Vector2(0.03f, 0.38f), new Vector2(0.97f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
-        noCase.GetComponent<Image>().raycastTarget = false;
-        TMP_Text noCaseText = Text(noCase, "Text", null, 80, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
-                                   ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading, true);
-        SetAnchors(noCaseText.transform, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f));
-        noCaseText.raycastTarget = false;
-        noCase.gameObject.SetActive(false);
-
-        AppPane pane = paneRoot.gameObject.AddComponent<AppPane>();
-        var so = new SerializedObject(pane);
-        SerializedArrays.Set(so, "tabButtons", tabButtons);
-        SerializedArrays.Set(so, "tabActive", tabActive);
-        SerializedArrays.Set(so, "tabBadges", tabBadges);
-        SerializedArrays.Set(so, "views", new Object[] { documents, records, parts.Reference, transcript, report, rules });
-        Wire(so, "chipStrip", header);
-        Wire(so, "chipTemplate", chip);
-        Wire(so, "noCase", noCase.gameObject);
-        so.ApplyModifiedProperties();
-        return pane;
+        return side;
     }
 
     /// <summary>
@@ -462,6 +413,7 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text title = Text(page, "TitleText", UiText.Get("book.untitled"), 22, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.915f),
                               new Vector2(0.6f, 0.985f), Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
         PagedBody paged = BuildPagedBody(page, new Vector2(0.03f, 0.12f), new Vector2(0.97f, 0.9f), ThemeRoleId.WindowBody, ThemeRoleId.DiegeticBookRow, true);
+        DecorateAppRow(paged.rowTemplate, false);
         ReferenceBookWindowController register = page.gameObject.AddComponent<ReferenceBookWindowController>();
         var so = new SerializedObject(register);
         Wire(so, "titleText", title);
@@ -477,17 +429,22 @@ public static partial class OfficeSceneUIBuilder
         return reference;
     }
 
-    /// <summary>The Transcript tab (§2.7): the interview's rows (the speaker column, the sentence wrapping) and Prev/Next.</summary>
+    /// <summary>The Transcript tab (§2.7): the interview's rows (the speaker column, the sentence wrapping; an answer's ↗ at the row's end) and Prev/Next.</summary>
     private static TranscriptWindowController BuildTranscriptView(Transform content, out AppView view)
     {
         Transform root = ViewRoot(content, "TranscriptView", Paper, ThemeRoleId.WindowBody);
         PagedBody paged = BuildPagedBody(root, new Vector2(0.03f, 0.12f), new Vector2(0.97f, 0.97f), ThemeRoleId.WindowBody, ThemeRoleId.DiegeticRow, false);
         ApplyTranscriptRowLayout(paged.rowTemplate);
+        DecorateAppRow(paged.rowTemplate, true);
         TranscriptWindowController transcript = root.gameObject.AddComponent<TranscriptWindowController>();
         var so = new SerializedObject(transcript);
         WirePaging(so, paged, AppBookRowsPerPage);
         so.ApplyModifiedProperties();
-        view = root.gameObject.AddComponent<TranscriptView>();
+        TranscriptView transcriptView = root.gameObject.AddComponent<TranscriptView>();
+        var soView = new SerializedObject(transcriptView);
+        Wire(soView, "transcript", transcript);
+        soView.ApplyModifiedProperties();
+        view = transcriptView;
         return transcript;
     }
 

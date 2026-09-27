@@ -169,11 +169,11 @@ public static partial class OfficeSceneUIBuilder
         SidebarEntryList recent = sidebar != null ? BuildSidebarList(sidebar, app.App, "Recent", false, "app.recent.empty", SidebarListBottom(1), SidebarListTop(1)) : null;
 
         var zooms = new List<Object>();
-        Button pinButton = null;
+        var pinButtons = new List<Object>();
         foreach (AppPane pane in win.GetComponentsInChildren<AppPane>(true))
         {
             zooms.Add(BuildPaneZoom(pane));
-            pinButton = BuildPinButton(pane);
+            pinButtons.Add(BuildPinButton(pane));
         }
 
         AppFocusRing ring = BuildFocusRing(win, config);
@@ -182,11 +182,10 @@ public static partial class OfficeSceneUIBuilder
         var so = new SerializedObject(app.App);
         Wire(so, "searchField", search);
         Wire(so, "searchChip", chip);
-        Wire(so, "sidebar", sidebar != null ? sidebar.gameObject : null);
-        Wire(so, "panes", Need(win, "AppBody/Pane"));
+        Wire(so, "panes", Need(win, "AppBody/Panes"));
         Wire(so, "pinsList", pins);
         Wire(so, "recentList", recent);
-        Wire(so, "pinButton", pinButton);
+        SerializedArrays.Set(so, "pinButtons", pinButtons);
         Wire(so, "focusRing", ring);
         SerializedArrays.Set(so, "zooms", zooms);
         Wire(so, "acceptButton", app.Accept);
