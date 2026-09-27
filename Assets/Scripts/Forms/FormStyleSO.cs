@@ -4,7 +4,8 @@ using UnityEngine;
 /// The forms' one style (redesign phases 4-5, PC spec FO7, §4.9, §6.4): the
 /// sizes every form is laid out at (FormMetrics, in page heights) and the
 /// colours it is printed in, on the desk paper (DeskDocument) and on the PC
-/// (FormView): the paper, the inks, the strokes, the hover tint on a box, and
+/// (FormView): the paper, the inks, the strokes, the hover tint on a box, the
+/// Analysis Scanner's mark and its strip lines (the PC redesign SC4), and
 /// the scanner's backing and strip behind a scanned copy. Forms are diegetic:
 /// no theme or culture touches them, so Build Office UI checks these colours
 /// once (FormContrast), with the hover tint and every theme's pick highlight
@@ -48,6 +49,9 @@ public sealed class FormStyleSO : ScriptableObject
     /// <summary>The tint on a pickable box under the pointer, on the held paper and on the PC (a picked box shows the compare highlight instead).</summary>
     public Color hoverTint = new Color(0f, 0f, 0f, 0.06f);
 
+    /// <summary>The Analysis Scanner's mark (the PC redesign SC4): the dashed outline on a contradicting pair's boxes on the scanned copies, checked as an outline on a box and on the paper (FO7).</summary>
+    public Color analysis = new Color(0.545f, 0.18f, 0.133f, 1f);
+
     /// <summary>The scanner's dark backing a scanned copy lies on (the PC's document window).</summary>
     [Header("Scanner backing")]
     public Color backing = new Color(0.129f, 0.137f, 0.161f, 1f);
@@ -57,6 +61,12 @@ public sealed class FormStyleSO : ScriptableObject
 
     /// <summary>The scan strip's printed words (English, like every form's): {0} is the shift clock's time when the copy arrived.</summary>
     public string scanStrip = "SCANNED {0} · DESK SCANNER 1";
+
+    /// <summary>The strip after an analysis pass that marked a contradicting pair (the Analysis Scanner, SC4): {0} is the shift clock's time.</summary>
+    public string analysedStrip = "ANALYSED {0} · 1 CONTRADICTION MARKED";
+
+    /// <summary>The strip after an analysis pass that found no undocumented contradiction between the scanned papers: {0} is the shift clock's time.</summary>
+    public string analysedCleanStrip = "ANALYSED {0} · NO CONTRADICTION BETWEEN THE SCANNED PAPERS";
 
     /// <summary>How much heavier the printed words are than the font (TextMeshPro's face dilate on the paper's text material): a held paper's small print needs the weight to read at 720p as drawn. Build Office UI writes it into the material.</summary>
     [Header("Print")]
@@ -92,7 +102,8 @@ public sealed class FormStyleSO : ScriptableObject
         Band = Rgb(band),
         StampDash = Rgb(stampDash),
         Backing = Rgb(backing),
-        BackingInk = Rgb(backingInk)
+        BackingInk = Rgb(backingInk),
+        Analysis = Rgb(analysis)
     };
 
     /// <summary>A Unity colour as an Rgba.</summary>

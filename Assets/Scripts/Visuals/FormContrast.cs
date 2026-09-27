@@ -33,13 +33,16 @@ public sealed class FormPalette
 
     /// <summary>The scan strip's text on the backing ("SCANNED 10:42 · DESK SCANNER 1").</summary>
     public Rgba BackingInk;
+
+    /// <summary>The Analysis Scanner's mark: the dashed outline on a contradicting pair's boxes on the PC (the PC redesign SC4).</summary>
+    public Rgba Analysis;
 }
 
 /// <summary>
 /// The form style's contrast pairs (PC spec FO7, §6.4), checked once by Build
 /// Office UI: forms are diegetic and never themed, so one check covers every
 /// culture. Texts need the body-text minimum (fine print and labels too: they
-/// are small); rules and the stamp dash the outline minimum; each fill laid
+/// are small); rules, the stamp dash and the analysis mark the outline minimum; each fill laid
 /// over a box (the hover tint, every theme's pick highlight) is composited
 /// over the box fill and must keep the ink readable. The scanner backing's
 /// strip text is checked on the backing (the PC's scanned copy, phase 5).
@@ -68,6 +71,8 @@ public static class FormContrast
         Pair("rule on the paper", p.Rule, p.Paper, ContrastClass.Glyph);
         Pair("rule on a box", p.Rule, p.BoxFill, ContrastClass.Glyph);
         Pair("stamp dash on the paper", p.StampDash, p.Paper, ContrastClass.Glyph);
+        Pair("analysis mark on a box", p.Analysis, p.BoxFill, ContrastClass.Glyph);
+        Pair("analysis mark on the paper", p.Analysis, p.Paper, ContrastClass.Glyph);
         Pair("scan strip text on the scanner backing", p.BackingInk, p.Backing, ContrastClass.Text);
         foreach ((string name, Rgba fill) in overlays ?? new List<(string, Rgba)>())
             Pair($"ink on {name} over a box", p.Ink, Contrast.Over(fill, p.BoxFill.WithAlpha(1f)), ContrastClass.Text);
