@@ -604,6 +604,13 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **FEATURES:** the search line; 50 (the lookup).
 - **Audit absorbed:** R1-007 (`CitizenRegistry`'s last dead members).
 - **Depends on:** 18.
+- **As built (2026-09-27, after phases 20 and 21, ahead of 18; branch `redesign/p19-search`):**
+  - Domain: `TextMatch` (Fold with its map back to the text as shown, Matches with the ranks, MatchesText), `SearchQuery` (words, "quoted phrases", a `SearchChip`, IsSearchable), `CaseIndex` (SetDay, Add, EndCase; Search grouped in the given order, capped, filtered to one source) and `IndexEntries` (one builder per item kind: Paper, Records, BookRows, Line, Deviation, Rule). An `IndexEntry` carries its tab, item, row, key and order; a `Mark` is in the text as shown. The item keys are phase 20's `EntryKeys`, which gains `Rule` and `Deviation`; a hit is titled as its row is for the keys (`app.row.line`, `app.row.record`). The Lineage Archive's name search runs `SearchQuery` and `TextMatch.MatchesText`, and `KeyWords` folds through `TextMatch.Fold` (one fold).
+  - `CitizenRegistry.Find` retired (R1-007): the Records lookup, and the accounts' lookup tests, run the index scoped to Records; a query's words find a number by its parts' starts too ("1804 33"), never their middle.
+  - The UI: `SearchBox` on the toolbar's field (phase 20's `SearchFieldChip` hands a pasted untranslated line in through `InvestigationApp.SetChip`), `SearchResultsView` (the panel: its source chips, headings, hits and "Show all"), `InvestigationApp.Search` (the app owns the index; a hit jumps through the views' `IAppItems.Reveal` and the keys' focus ring, as a pin does, goes first in Recent, is centred in its page's own scroll (`FoundFlash.CentredScroll`) and flashed by `FoundMark`, a clone laid over the row; the Report and the Rules, which have no rows yet, flash whole). The Escape chain's `CloseResults` step is live in `DesktopKeyboard`. The found colour is `FormStyleSO.found`, checked by `FormContrast`; the flash's pulses, time and strength and the search's debounce and cap are `DesktopConfigSO` "Search".
+  - An untranslated hit's snippet is drawn by setting the script's font on the snippet text (what `TextFlip.Write` does for a whole foreign line), not through `TextFlip.Write`, which needs the line's `Reveal`: the index keeps only what shows.
+  - Not bound: ↓ from the field into the hits (a row for phase 20's table) and Ctrl+Enter / Ctrl+click into the other pane (phase 18's second pane).
+  - The plan's day-5 displaced traveller is phase 12's; today the displaced speak their tongue from day 2, so the untranslated probes run on day 2.
 
 ### Phase 20 — Keys, clipboard, pins (L)
 
