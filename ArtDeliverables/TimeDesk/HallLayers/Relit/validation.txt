@@ -1,0 +1,7 @@
+Architecture backdrop renderers: 0
+Baked lightmaps: 0
+Realtime lights: 14
+Hall renderers: 3023
+Shader errors: 0
+Desk cloned unchanged from approved preview. OfficeScene not modified.
+Morning, evening and opposite-light captures made by the same camera and same geometry.

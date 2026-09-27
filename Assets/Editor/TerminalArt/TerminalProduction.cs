@@ -38,13 +38,13 @@ public static class TerminalProduction
         hall=new GameObject("Layered terminal art").transform;hall.SetParent(root);
         spriteMaterial=AssetDatabase.LoadAssetAtPath<Material>(Folder+"/PaintedSprite.mat");
         if(!spriteMaterial){spriteMaterial=new Material(Shader.Find("NOPE/Terminal Painted Sprite"));AssetDatabase.CreateAsset(spriteMaterial,Folder+"/PaintedSprite.mat");}
-        var architecture=Texture("Architecture");var furniture=Texture("Furnishings");
+        var architecture=Texture("Architecture");var furniture=Texture("Furnishings");var luggage=Texture("LuggageV2");
         Card("01 Architecture and baked lighting",architecture,new Rect(0,0,architecture.width,architecture.height),new Rect(0,0,1,1),65,0);
-        Card("02 Luggage lockers and waiting bench",furniture,new Rect(8,389,783,389),new Rect(.085f,.443f,.215f,.189f),40,10);
+        Card("02 Compact luggage storage",luggage,new Rect(0,0,luggage.width,luggage.height),new Rect(.287f,.556f,.078f,.0925f),35,10);
         Card("02 Neglected framed landscape",furniture,new Rect(306,143,151,240),new Rect(.215f,.257f,.033f,.093f),43,10);
         Card("02 Stone bust and plinth",furniture,new Rect(1130,226,167,450),new Rect(.672f,.375f,.028f,.134f),42,10);
         Card("02 Ceramic artifact display",furniture,new Rect(1350,425,312,341),new Rect(.798f,.515f,.064f,.124f),38,11);
-        Crowd(1,.31f,.65f,.058f,32);Crowd(2,.35f,.552f,.044f,42);Crowd(3,.635f,.562f,.047f,38);
+        Crowd(2,.35f,.552f,.044f,42);Crowd(3,.635f,.562f,.047f,38);
         Crowd(4,.77f,.529f,.041f,43);Crowd(5,.414f,.26f,.032f,54);Crowd(6,.589f,.26f,.032f,54);
         Crowd(3,.792f,.218f,.035f,55);Crowd(1,.922f,.184f,.032f,56);
         PrefabUtility.SaveAsPrefabAsset(hall.gameObject,Folder+"/FurnishedTerminalArt.prefab");
