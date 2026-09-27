@@ -459,7 +459,7 @@ public class DiscrepancyLogTests
         Assert.AreEqual("top hat / poke bonnet", Wears().MatchValue("top hat"), "a garment shows its item and matches on its place's value");
         Assert.AreEqual("Aqueduct", TellDocField().MatchValue("Aqueduct"));
         Assert.AreEqual("Longship", Entry("norvik", "medieval", "Longship").MatchValue("Longship"));
-        Assert.IsTrue(DiscrepancyLog.ValuesMatch(Wears().MatchValue("top hat"), Entry("b", "i", " TOP HAT / poke bonnet ", ClueCategory.Culture).MatchValue("x")));
+        Assert.IsTrue(Values.Match(Wears().MatchValue("top hat"), Entry("b", "i", " TOP HAT / poke bonnet ", ClueCategory.Culture).MatchValue("x")));
     }
 
     [Test]

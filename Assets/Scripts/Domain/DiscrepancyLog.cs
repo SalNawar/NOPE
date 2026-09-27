@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 /// <summary>Which kind of row a compare selection came from.</summary>
@@ -257,7 +256,7 @@ public sealed class DiscrepancyLog
             !string.IsNullOrEmpty(truth.entryEraId) && truth.entryEraId == claimedEraId &&
             (string.IsNullOrEmpty(truth.entryNationId) || truth.entryNationId == claimedNationId);
 
-        bool valuesMatch = ValuesMatch(statement.value, truth.value);
+        bool valuesMatch = Values.Match(statement.value, truth.value);
 
         if (entryAppliesToClaim && !valuesMatch)
         {
@@ -293,13 +292,13 @@ public sealed class DiscrepancyLog
     /// this traveller is (no era claim involved). Another person's record, or a
     /// row with no value, proves nothing (the audit's Phase 0: any record row
     /// proved, and another traveller's date always differs); the owner is
-    /// matched as every value is (ValuesMatch).
+    /// matched as every value is (Values.Match).
     /// </summary>
     private static Discrepancy RecordProof(CompareEvidence statement, CompareEvidence record, string travellerName)
     {
-        if (string.IsNullOrWhiteSpace(record.value) || string.IsNullOrWhiteSpace(travellerName) || !ValuesMatch(record.recordOwner, travellerName))
+        if (string.IsNullOrWhiteSpace(record.value) || string.IsNullOrWhiteSpace(travellerName) || !Values.Match(record.recordOwner, travellerName))
             return null;
-        if (ValuesMatch(statement.value, record.value))
+        if (Values.Match(statement.value, record.value))
             return null;
 
         return new Discrepancy
@@ -333,13 +332,4 @@ public sealed class DiscrepancyLog
     /// <summary>True for a statement row: a document field, a spoken answer or a worn garment.</summary>
     private static bool IsStatement(EvidenceKind kind) =>
         kind == EvidenceKind.DocumentField || kind == EvidenceKind.Answer || kind == EvidenceKind.Appearance;
-
-    /// <summary>
-    /// Case-insensitive, trimmed equality: the one value comparison (the
-    /// compare bar through CompareEvidence.MatchValue, Forgery.IsProvableTell,
-    /// TravellerGenders.FromNameLists, Looks.CultureValue, Looks.CanLeak and
-    /// Looks.LabelProblems).
-    /// </summary>
-    public static bool ValuesMatch(string x, string y) =>
-        string.Equals((x ?? string.Empty).Trim(), (y ?? string.Empty).Trim(), StringComparison.OrdinalIgnoreCase);
 }

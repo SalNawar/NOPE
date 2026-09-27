@@ -1219,7 +1219,7 @@ public static partial class ContentLibraryValidator
 
             foreach ((NationEraProfileSO other, string otherValue) in seen)
             {
-                if (DiscrepancyLog.ValuesMatch(value, otherValue))
+                if (Values.Match(value, otherValue))
                 {
                     Debug.LogError($"[ContentLibraryValidator] Places '{other.name}' and '{place.name}' share the Culture value '{value}' in '{lib.name}'; a dress proof must name one place.", place);
                     issues++;

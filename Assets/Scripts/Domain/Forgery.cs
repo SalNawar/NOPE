@@ -51,7 +51,7 @@ public static class Forgery
 
         string claimValue = facts.Get(claimNationId, claimEraId, category);
         string homeValue = facts.Get(home.NationId, home.EraId, category);
-        if (string.IsNullOrEmpty(claimValue) || string.IsNullOrEmpty(homeValue) || DiscrepancyLog.ValuesMatch(claimValue, homeValue))
+        if (string.IsNullOrEmpty(claimValue) || string.IsNullOrEmpty(homeValue) || Values.Match(claimValue, homeValue))
             return false;
 
         return !facts.TryFindOtherPlaceWith(category, home.NationId, home.EraId, homeValue, out _);

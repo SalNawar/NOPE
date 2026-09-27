@@ -66,9 +66,9 @@ public sealed class ComparePair
     /// <summary>
     /// True when a paired comparison matches: each side's CompareEvidence.MatchValue
     /// (a garment shows its item but matches on its place's Culture value)
-    /// under DiscrepancyLog.ValuesMatch; false before a pair.
+    /// under Values.Match; false before a pair.
     /// </summary>
-    public bool Matches => IsPaired && DiscrepancyLog.ValuesMatch(A.Evidence.MatchValue(A.Shown), B.Evidence.MatchValue(B.Shown));
+    public bool Matches => IsPaired && Values.Match(A.Evidence.MatchValue(A.Shown), B.Evidence.MatchValue(B.Shown));
 
     /// <summary>Picks a value (see the class summary) and says what it did.</summary>
     public CompareStep Select(ComparePick pick)

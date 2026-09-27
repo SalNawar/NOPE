@@ -940,7 +940,7 @@ public static partial class WorldContentGenerator
             if (culture.Length > FactTable.MaxValueLength)
                 errors.Add($"Place '{pid}' Culture value '{culture}' is {culture.Length} characters; a book row holds {FactTable.MaxValueLength}. Shorten a signature label.");
             foreach ((string other, string value) in cultures)
-                if (DiscrepancyLog.ValuesMatch(value, culture))
+                if (Values.Match(value, culture))
                     errors.Add($"Places '{other}' and '{pid}' share the Culture value '{culture}'; a dress tell must name one place.");
             cultures.Add((pid, culture));
         }
@@ -1135,7 +1135,7 @@ public static partial class WorldContentGenerator
         if (culture != null && culture.Length > FactTable.MaxValueLength)
             errors.Add($"The present's Culture value '{culture}' is {culture.Length} characters; a book row holds {FactTable.MaxValueLength}.");
         foreach ((string place, string value) in cultures)
-            if (DiscrepancyLog.ValuesMatch(value, culture))
+            if (Values.Match(value, culture))
                 errors.Add($"The present and '{place}' share the Culture value '{culture}'; a 2150 garment must name 2150.");
 
         foreach (KitItemData k in p.kit ?? Array.Empty<KitItemData>())

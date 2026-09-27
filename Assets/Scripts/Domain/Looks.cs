@@ -275,7 +275,7 @@ public static class Looks
 
         string male = m.label.Trim();
         string female = f.label.Trim();
-        return DiscrepancyLog.ValuesMatch(male, female) ? male : $"{male} / {female}";
+        return Values.Match(male, female) ? male : $"{male} / {female}";
     }
 
     /// <summary>
@@ -320,7 +320,7 @@ public static class Looks
                         continue;
 
                     GenderLook other = places[a].wardrobe.For(gender);
-                    if (a < b && other.Signature != null && other.Signature.IsPresent && DiscrepancyLog.ValuesMatch(other.Signature.label, signature.label))
+                    if (a < b && other.Signature != null && other.Signature.IsPresent && Values.Match(other.Signature.label, signature.label))
                     {
                         problems.Add($"'{places[a].placeId}' and '{places[b].placeId}' share the {g} signature label '{signature.label}'.");
                         continue;
@@ -331,7 +331,7 @@ public static class Looks
                         LookItem item = other.Item(slot);
                         if (slot == other.signature || item == null || !item.IsPresent)
                             continue;
-                        if (DiscrepancyLog.ValuesMatch(item.label, signature.label))
+                        if (Values.Match(item.label, signature.label))
                             problems.Add($"'{places[a].placeId}' {g} {SlotLabel(slot)} '{item.label}' is labelled like the {g} signature of '{places[b].placeId}'.");
                     }
                 }
@@ -376,7 +376,7 @@ public static class Looks
         if (own != null && own.IsPresent && own.wig == item.wig && ArtName(slot, gender, own, claim) == ArtName(slot, gender, item, home))
             return false;
 
-        if (own != null && own.IsPresent && DiscrepancyLog.ValuesMatch(own.label, item.label))
+        if (own != null && own.IsPresent && Values.Match(own.label, item.label))
             return false;
 
         if (rules != null && rules.IsConfusable(claim.PlaceId, home.PlaceId, slot, gender))

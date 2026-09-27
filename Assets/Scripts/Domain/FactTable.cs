@@ -131,7 +131,7 @@ public sealed class FactTable
     /// Another place of this category with this value (the uniqueness question
     /// behind provable tells and history checks): the first row of
     /// <paramref name="category"/> outside (<paramref name="nationId"/>,
-    /// <paramref name="eraId"/>) whose value DiscrepancyLog.ValuesMatch
+    /// <paramref name="eraId"/>) whose value Values.Match
     /// <paramref name="value"/>. False, with a default row, when none or the
     /// value is blank.
     /// </summary>
@@ -145,7 +145,7 @@ public sealed class FactTable
         {
             if (r.NationId == nationId && r.EraId == eraId)
                 continue;
-            if (DiscrepancyLog.ValuesMatch(r.Value, value))
+            if (Values.Match(r.Value, value))
             {
                 row = r;
                 return true;

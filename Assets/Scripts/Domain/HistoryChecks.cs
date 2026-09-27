@@ -50,7 +50,7 @@ public static class HistoryChecks
                 continue;
             }
 
-            if (DiscrepancyLog.ValuesMatch(e.value, baseWorld.Get(e.nationId, e.eraId, e.category)))
+            if (Values.Match(e.value, baseWorld.Get(e.nationId, e.eraId, e.category)))
                 problems.Add($"{what} equals the place's own value, so it would change nothing.");
             else if (baseWorld.TryFindOtherPlaceWith(e.category, e.nationId, e.eraId, e.value, out FactRow other))
                 problems.Add($"{what} equals {other.OriginLabel}'s {e.category}, so neither could leak a {e.category} tell while both are in the world.");
@@ -60,7 +60,7 @@ public static class HistoryChecks
                 FactEdit o = edits[j];
                 if (j == i || o == null || o.category != e.category || (o.nationId == e.nationId && o.eraId == e.eraId))
                     continue;
-                if (DiscrepancyLog.ValuesMatch(e.value, o.value))
+                if (Values.Match(e.value, o.value))
                 {
                     problems.Add($"{what} gives the value of history edit '{o.source}' to another place ({o.nationId}_{o.eraId}).");
                     break;

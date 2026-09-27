@@ -514,11 +514,11 @@ public sealed class CaseFactory
         List<LookSource> others = _todays
             .Where(p => p != place)
             .Select(SourceOf)
-            .Where(p => Looks.CanLeak(claim, p, inst.gender, _lib.LookRules) && !DiscrepancyLog.ValuesMatch(p.CultureValue, claim.CultureValue))
+            .Where(p => Looks.CanLeak(claim, p, inst.gender, _lib.LookRules) && !Values.Match(p.CultureValue, claim.CultureValue))
             .ToList();
         LookSource present = PresentSource();
         GenderLook presentLook = present?.Wardrobe?.For(inst.gender);
-        bool clothes = presentLook != null && presentLook.Signature.IsPresent && !DiscrepancyLog.ValuesMatch(present.CultureValue, claim.CultureValue);
+        bool clothes = presentLook != null && presentLook.Signature.IsPresent && !Values.Match(present.CultureValue, claim.CultureValue);
         LookSource kitOwner = KitOwner(present);
         List<LookSource> kit = kitOwner == null ? new List<LookSource>()
             : _lib.PresentLook.Kit(inst.gender).Select(item => Looks.KitSource(kitOwner, item))

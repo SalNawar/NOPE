@@ -86,7 +86,7 @@ public sealed class CitizenNames
         foreach (NameList men in Lists)
             foreach (string name in men.Male)
                 foreach (NameList women in Lists)
-                    if (women.Female.Any(f => DiscrepancyLog.ValuesMatch(f, name)))
+                    if (women.Female.Any(f => Values.Match(f, name)))
                         problems.Add($"The 2150 name '{name}' is a man's name in '{men.Id}' and a woman's in '{women.Id}', so a citizen's gender could not be told from it.");
         return problems;
     }
@@ -95,7 +95,7 @@ public sealed class CitizenNames
     private int IndexHolding(string name)
     {
         for (int i = 0; i < Lists.Count; i++)
-            if (Lists[i].Male.Concat(Lists[i].Female).Any(n => DiscrepancyLog.ValuesMatch(n, name)))
+            if (Lists[i].Male.Concat(Lists[i].Female).Any(n => Values.Match(n, name)))
                 return i;
         return -1;
     }
