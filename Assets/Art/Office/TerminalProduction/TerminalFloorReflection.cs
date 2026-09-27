@@ -28,7 +28,8 @@ public sealed class TerminalFloorReflection : MonoBehaviour
             if(!reflection){var go=new GameObject("Terminal floor reflection camera"){hideFlags=HideFlags.HideAndDontSave};reflection=go.AddComponent<Camera>();reflection.enabled=false;}
             if(!texture){texture=new RenderTexture(1024,576,24,RenderTextureFormat.DefaultHDR){name="Live concourse reflection",hideFlags=HideFlags.HideAndDontSave,useMipMap=true,autoGenerateMips=true};texture.Create();}
             reflection.CopyFrom(source);reflection.enabled=false;reflection.cullingMask=reflectedLayers;
-            reflection.targetTexture=texture;reflection.cameraType=CameraType.Reflection;
+            reflection.targetTexture=texture;// URP ignores AdditionalCameraData for Reflection cameras and otherwise selects this project's 2D default renderer.
+            reflection.cameraType=CameraType.Game;
             var data=reflection.GetUniversalAdditionalCameraData();data.SetRenderer(1);data.renderPostProcessing=false;data.renderShadows=false;
             var mirror=Matrix4x4.identity;mirror.m11=-1;mirror.m13=2*floorHeight;
             reflection.worldToCameraMatrix=source.worldToCameraMatrix*mirror;

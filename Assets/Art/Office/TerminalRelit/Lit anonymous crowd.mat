@@ -35,6 +35,6 @@ Material:
     - _TextureStrength: 1
     - _Wear: 0.035
     m_Colors:
-    - _BaseColor: {r: 0.42745098, g: 0.4117647, b: 0.44705883, a: 1}
+    - _BaseColor: {r: 0.5294118, g: 0.58431375, b: 0.6392157, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

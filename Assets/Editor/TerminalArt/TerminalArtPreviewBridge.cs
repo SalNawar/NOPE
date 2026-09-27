@@ -13,13 +13,14 @@ public static class TerminalArtPreviewBridge
     {
         if(EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode||!File.Exists(Request))return;
         string action=File.ReadAllText(Request).Trim();File.Delete(Request);
-        if(action!="rebuild")return;
+        if(action=="refresh"){AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);return;}
+        if(action!="rebuild"&&action!="layered")return;
         try{
             var scene=UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             bool ownScratch=scene.path=="" && Array.Exists(scene.GetRootGameObjects(),g=>g.name=="Dynamically lit grand terminal");
-            if(scene.path!="Assets/Art/Office/TerminalRelit/DynamicTerminal.unity" && !ownScratch)throw new InvalidOperationException("Art preview must be the active scene.");
+            if(scene.path!="Assets/Art/Office/TerminalRelit/DynamicTerminal.unity" && scene.path!="Assets/Art/Office/TerminalLayered/LayeredTerminal.unity" && !ownScratch)throw new InvalidOperationException("Art preview must be the active scene.");
             if(scene.isDirty)EditorSceneManager.SaveScene(scene,"Temp/TerminalArtBeforeRevision_"+DateTime.Now.ToString("yyyyMMdd_HHmmss")+".unity",true);
-            TerminalRelitProduction.Build();
+            if(action=="layered")TerminalLayeredProduction.Build();else TerminalRelitProduction.Build();
             EditorApplication.ExecuteMenuItem("Window/General/Game");
             File.WriteAllText("Temp/TerminalArtPreview.result","Built at "+DateTime.Now);
         }catch(Exception e){UnityEngine.Debug.LogException(e);File.WriteAllText("Temp/TerminalArtPreview.result",e.ToString());}

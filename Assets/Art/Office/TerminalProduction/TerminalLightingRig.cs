@@ -47,8 +47,8 @@ public sealed class TerminalLightingRig : MonoBehaviour
         RenderSettings.ambientSkyColor=Color.Lerp(new Color(.48f,.53f,.61f),new Color(.18f,.21f,.31f),evening);
         RenderSettings.ambientEquatorColor=Color.Lerp(new Color(.39f,.35f,.30f),new Color(.16f,.14f,.19f),evening);
         RenderSettings.ambientGroundColor=Color.Lerp(new Color(.14f,.12f,.11f),new Color(.045f,.04f,.07f),evening);
-        RenderSettings.fog=true;RenderSettings.fogMode=FogMode.ExponentialSquared;RenderSettings.fogDensity=.006f;
-        RenderSettings.fogColor=Color.Lerp(new Color(.76f,.73f,.67f),new Color(.15f,.16f,.25f),evening);
+        RenderSettings.fog=true;RenderSettings.fogMode=FogMode.ExponentialSquared;RenderSettings.fogDensity=.0028f;
+        RenderSettings.fogColor=Color.Lerp(new Color(.65f,.72f,.80f),new Color(.15f,.16f,.25f),evening);
         if(previewCamera)previewCamera.backgroundColor=RenderSettings.fogColor;
         if(practicals!=null)foreach(var l in practicals)if(l)l.intensity=Mathf.Lerp(5,14,evening);
     }

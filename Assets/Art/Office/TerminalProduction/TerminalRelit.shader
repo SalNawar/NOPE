@@ -36,7 +36,7 @@ Shader "NOPE/Terminal Relit"
    #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
    struct A {float4 p:POSITION;float3 n:NORMAL;float2 uv:TEXCOORD0;};
    struct V {float4 p:SV_POSITION;float3 w:TEXCOORD0;half3 n:TEXCOORD1;float2 uv:TEXCOORD2;half fog:TEXCOORD3;};
-   V Vert(A a){V o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);o.n=TransformObjectToWorldNormal(a.n);o.uv=TRANSFORM_TEX(a.uv,_BaseMap);o.fog=ComputeFogFactor(o.p.z);return o;}
+   V Vert(A a){V o;o.w=TransformObjectToWorld(a.p.xyz);o.p=TransformWorldToHClip(o.w);o.n=TransformObjectToWorldNormal(a.n);o.uv=TRANSFORM_TEX(a.uv,_BaseMap);o.fog=ComputeFogFactorZ0ToFar(max(0,-TransformWorldToView(o.w).z));return o;}
    half3 Shade(Light l,half3 n,half3 v){half d=saturate(dot(n,l.direction));half band=lerp(.06,1,smoothstep(.12,.72,d));half spec=pow(saturate(dot(n,normalize(l.direction+v))),24)*_Smoothness*d;return l.color*l.distanceAttenuation*l.shadowAttenuation*(band+spec);}
    half4 Frag(V i,FRONT_FACE_TYPE face:FRONT_FACE_SEMANTIC):SV_Target {
     half4 tex=SAMPLE_TEXTURE2D(_BaseMap,sampler_BaseMap,i.uv);half4 a=half4(lerp(half3(1,1,1),tex.rgb,_TextureStrength),tex.a)*_BaseColor;clip(a.a-_Cutoff);

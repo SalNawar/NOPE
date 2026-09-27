@@ -40,7 +40,7 @@ public static class TerminalRelitProduction
         camera=new GameObject("Player art camera").AddComponent<Camera>();camera.transform.SetParent(root);
         camera.transform.SetPositionAndRotation(new Vector3(0,2.16f,-2.62f),Quaternion.Euler(4,0,0));
         camera.fieldOfView=55;camera.aspect=16f/9;camera.nearClipPlane=.05f;camera.farClipPlane=700;
-        camera.clearFlags=CameraClearFlags.SolidColor;camera.allowHDR=true;
+        camera.clearFlags=CameraClearFlags.Skybox;camera.allowHDR=true;
         camera.GetUniversalAdditionalCameraData().SetRenderer(1);
         camera.GetUniversalAdditionalCameraData().antialiasing=AntialiasingMode.SubpixelMorphologicalAntiAliasing;
         camera.GetUniversalAdditionalCameraData().renderPostProcessing=true;
@@ -55,10 +55,13 @@ public static class TerminalRelitProduction
         glass.SetFloat("_ZWrite",0);glass.SetFloat("_Cull",0);glass.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
         glass.SetColor("_BaseColor",new Color(.65f,.78f,.87f,.075f));glass.renderQueue=3000;
         glass.shader=Shader.Find("NOPE/Terminal Clear Glass");glass.SetColor("_BaseColor",new Color(.54f,.71f,.79f,.025f));
-        Architecture();Platforms();Furnishings();City();Crowds();FinishComposition();
+        Architecture();Platforms();Furnishings();City();Crowds();FinishComposition();ArchitecturalDetail();
         var sun=new GameObject("Realtime window sun").AddComponent<Light>();sun.transform.SetParent(root);
         sun.type=LightType.Directional;sun.shadows=LightShadows.Soft;sun.shadowStrength=.72f;sun.shadowBias=.025f;sun.shadowNormalBias=.12f;
-        sun.lightmapBakeType=LightmapBakeType.Realtime;
+        sun.lightmapBakeType=LightmapBakeType.Realtime;RenderSettings.sun=sun;
+        var sky=AssetDatabase.LoadAssetAtPath<Material>(Folder+"/Terminal sky.mat");
+        if(!sky){sky=new Material(Shader.Find("Skybox/Procedural"));AssetDatabase.CreateAsset(sky,Folder+"/Terminal sky.mat");}
+        sky.SetColor("_SkyTint",new Color(.42f,.54f,.72f));sky.SetFloat("_AtmosphereThickness",.8f);sky.SetFloat("_Exposure",1.15f);sky.SetFloat("_SunSize",.035f);RenderSettings.skybox=sky;EditorUtility.SetDirty(sky);
         var task=new GameObject("Realtime desk task light").AddComponent<Light>();task.transform.SetParent(root);
         task.type=LightType.Spot;task.transform.position=new Vector3(.46f,1.9f,.62f);task.transform.rotation=Quaternion.Euler(70,180,0);
         task.color=new Color(1,.77f,.49f);task.range=3;task.spotAngle=85;task.intensity=2;task.lightmapBakeType=LightmapBakeType.Realtime;
@@ -149,14 +152,14 @@ public static class TerminalRelitProduction
     static void Architecture()
     {
         var floorMats=new[]{Mat("Floor limestone A","AAA08F"),Mat("Floor limestone B","B6AA96"),Mat("Floor limestone C","9E978C")};
-        foreach(var m in floorMats){m.SetFloat("_ReflectionStrength",.28f);m.SetFloat("_Smoothness",.35f);}
+        foreach(var m in floorMats){m.SetFloat("_ReflectionStrength",.52f);m.SetFloat("_Smoothness",.35f);}
         Box("Concourse foundation",new Vector3(0,Ground-.55f,66),new Vector3(70,1,124),dark);
         for(int x=-34;x<34;x+=4)for(int z=8;z<128;z+=4)
             Box("Stone floor slab",new Vector3(x+2,Ground-.025f,z+2),new Vector3(3.985f,.05f,3.985f),floorMats[Mathf.Abs(x*7+z*3)%3],.008f);
         foreach(float x in new[]{-15f,15f}){
             Box("Burgundy concourse inlay",new Vector3(x,Ground+.015f,64),new Vector3(1.3f,.025f,112),burgundy,.003f);
             foreach(float offset in new[]{-.72f,.72f})Box("Brass floor border",new Vector3(x+offset,Ground+.025f,64),new Vector3(.05f,.018f,112),brass,.003f);}
-        Box("Rear civic wall",new Vector3(0,12,127),new Vector3(70,38,2),stone);
+        Box("Rear civic wall",new Vector3(0,18,127),new Vector3(70,50,2),stone);
         Box("Right concourse wall",new Vector3(34,1,86),new Vector3(2,14,84),stone,.08f);
         // Freestanding fluted piers frame the gates and carry the bridge spans.
         foreach(float x in new[]{-17f,17f})foreach(float z in new[]{50f,90f}){
@@ -403,7 +406,7 @@ public static class TerminalRelitProduction
     {
         var colors=new[]{"9E8E87","B79A87","8B94A4","B7B0A7","8F8496","AD8776"};
         for(int i=0;i<96;i++){
-            float x=-60-(i%6)*22,z=-15+(i/6)*17,h=28+(i*37%78),y=-68+h*.5f;
+            float x=-60-(i%6)*22,z=-15+(i/6)*17+(i%6)*4,h=28+(i*37%78),y=-68+h*.5f;
             var m=Mat("City facade "+i%6,colors[i%6]);Box("City tower",new Vector3(x,y,z),new Vector3(12,h,14),m,.25f);
             Box("Tower crown",new Vector3(x,y+h*.5f+1,z),new Vector3(9,2,11),trim,.12f);
             for(int k=0;k<6;k++)Box("Tower vertical rib",new Vector3(x+6.05f,y,z-5+k*2),new Vector3(.2f,h,.20f),dark,.02f);
@@ -442,8 +445,8 @@ public static class TerminalRelitProduction
     static void FinishComposition()
     {
         // The mockup's inlays are actual shallow mesh strips, never baked shadows.
-        var red=Mat("Floor inlay burgundy stone","805759",.38f);red.SetFloat("_ReflectionStrength",.3f);
-        var pale=Mat("Floor inlay ivory stone","C7BBA5",.4f);pale.SetFloat("_ReflectionStrength",.3f);
+        var red=Mat("Floor inlay burgundy stone","805759",.38f);red.SetFloat("_ReflectionStrength",.55f);
+        var pale=Mat("Floor inlay ivory stone","C7BBA5",.4f);pale.SetFloat("_ReflectionStrength",.55f);
         foreach(float x in new[]{-12f,8f})Box("Floor inlay longitudinal band",new Vector3(x,Ground+.022f,66),new Vector3(2.1f,.026f,116),red,.004f);
         foreach(float z in new[]{16f,28f,54f,70f,86f,102f,118f})Box("Floor inlay cross band",new Vector3(0,Ground+.023f,z),new Vector3(66,.026f,1.6f),red,.004f);
         Box("Floor inlay central pale approach",new Vector3(-2,Ground+.035f,65),new Vector3(3.2f,.026f,114),pale,.004f);
@@ -477,6 +480,38 @@ public static class TerminalRelitProduction
         var volume=new GameObject("Terminal soft lamp bloom").AddComponent<Volume>();volume.transform.SetParent(root);volume.isGlobal=true;volume.sharedProfile=profile;
         camera.GetUniversalAdditionalCameraData().volumeLayerMask=1<<30;
     }
+    static void ArchitecturalDetail()
+    {
+        Box("Right entry wall closure",new Vector3(34,2,22),new Vector3(2,16,44),stone,.08f);
+        // Stone courses and inset coffers break the large empty architectural surfaces.
+        var recess=Mat("Coffer shadow stone","8B8075");
+        for(int z=25;z<124;z+=14)for(int i=1;i<12;i++){
+            float a=(i+.5f)*Mathf.PI/12;
+            var p=new Vector3(33.9f*Mathf.Cos(a),24.75f+11.9f*Mathf.Sin(a),z);
+            var panel=Box("Recessed vault coffer",p,new Vector3(6.1f,.18f,10.5f),recess,.05f);
+            panel.transform.rotation=Quaternion.Euler(0,0,(a-Mathf.PI*.5f)*Mathf.Rad2Deg);
+        }
+        // Decorative arch recesses behind the gallery gates, modelled for moving light.
+        foreach(float z in new[]{48f,64f,80f,100f}){
+            Box("Gallery arched recess lower",new Vector3(32.8f,16,z),new Vector3(.18f,10,9),recess,.04f);
+            for(int i=0;i<20;i++){
+                float a=i*Mathf.PI/20,b=(i+1)*Mathf.PI/20;
+                var p=new Vector3(32.5f,21+4.5f*Mathf.Sin(a),z+4.5f*Mathf.Cos(a));
+                var q=new Vector3(32.5f,21+4.5f*Mathf.Sin(b),z+4.5f*Mathf.Cos(b));
+                Beam("Gallery carved arch",p,q,.48f,trim);
+            }
+            foreach(float side in new[]{-1f,1f})Box("Gallery arch jamb",new Vector3(32.5f,16,z+side*4.5f),new Vector3(.65f,10,.55f),trim,.08f);
+        }
+        foreach(float z in new[]{46.8f,53.2f}){
+            Beam("Bridge brass handrail",new Vector3(-13.8f,UpperFloor+1.14f,z),new Vector3(13.8f,UpperFloor+1.14f,z),.055f,brass);
+            Beam("Bridge lower moulding",new Vector3(-13.8f,UpperFloor-.5f,z),new Vector3(13.8f,UpperFloor-.5f,z),.13f,trim);
+        }
+        // An actual doorway at the passage turn establishes the route into the building.
+        Box("Passage distant doorway",new Vector3(28,Ground+2.2f,71.4f),new Vector3(3.6f,4.4f,.12f),dark,.04f);
+        foreach(float x in new[]{26f,30f})Box("Passage door surround",new Vector3(x,Ground+2.3f,71.2f),new Vector3(.25f,4.6f,.25f),brass,.035f);
+        Box("Passage door crown",new Vector3(28,Ground+4.6f,71.2f),new Vector3(4.3f,.3f,.3f),trim,.04f);
+        Sign("TRANSIT SERVICES",new Vector3(28,Ground+5.2f,71.0f),5,.7f,.28f);
+    }
     static void Pendant(Vector3 p)
     {
         Beam("Pendant chain",p+Vector3.up, new Vector3(p.x,35,p.z),.07f,dark);
@@ -488,17 +523,19 @@ public static class TerminalRelitProduction
     }
     static void Crowds()
     {
-        var positions=new[]{new Vector3(-10,Ground,47),new Vector3(12,Ground,50),new Vector3(19,Ground,32),new Vector3(-11,UpperFloor,49),new Vector3(11,UpperFloor,49),new Vector3(25,UpperFloor,55),new Vector3(-26,WestLanding,38),new Vector3(-29,WestLanding,47)};
-        var mat=Mat("Lit anonymous crowd","6D6972");mat.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Office/HallCrowds/Textures/CrowdGroups_Atlas.png"));EditorUtility.SetDirty(mat);
+        var positions=new[]{new Vector3(-10,Ground,47),new Vector3(12,Ground,50),new Vector3(19,Ground,32),new Vector3(-11,UpperFloor,49),new Vector3(11,UpperFloor,49),new Vector3(25,UpperFloor,55),new Vector3(-26,WestLanding,38),new Vector3(-29,WestLanding,42),new Vector3(-18,Ground,28),new Vector3(-9,Ground,28),new Vector3(9,Ground,31),new Vector3(17,Ground,42),new Vector3(-8,Ground,64),new Vector3(7,Ground,62),new Vector3(-5,UpperFloor,49),new Vector3(5,UpperFloor,49),new Vector3(21,UpperFloor,44),new Vector3(21,UpperFloor,65)};
+        var mat=Mat("Lit anonymous crowd","8795A3");mat.SetTexture("_BaseMap",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Office/HallCrowds/Textures/CrowdGroups_Atlas.png"));EditorUtility.SetDirty(mat);
         for(int i=0;i<positions.Length;i++){
-            var mesh=AssetDatabase.LoadAssetAtPath<Mesh>("Assets/Art/Office/HallCrowds/Meshes/CrowdGroup_"+(i%6+1).ToString("00")+".asset");float s=1.8f/mesh.bounds.size.y;
+            var mesh=AssetDatabase.LoadAssetAtPath<Mesh>("Assets/Art/Office/HallCrowds/Meshes/CrowdGroup_"+(i%6+1).ToString("00")+".asset");float s=2.05f/mesh.bounds.size.y;
             var g=MeshObject("Anonymous travellers "+i,mesh,positions[i]-new Vector3(mesh.bounds.center.x,mesh.bounds.min.y,mesh.bounds.center.z)*s,mat);g.transform.localScale=Vector3.one*s;
         }
     }
     static void Capture(string name)
     {
         var rt=new RenderTexture(1920,1080,24);var old=RenderTexture.active;
-        try{camera.targetTexture=rt;camera.Render();RenderTexture.active=rt;var tex=new Texture2D(1920,1080,TextureFormat.RGB24,false);tex.ReadPixels(new Rect(0,0,1920,1080),0,0);tex.Apply();File.WriteAllBytes(Report+"/"+name,tex.EncodeToPNG());UnityEngine.Object.DestroyImmediate(tex);}
+        try{camera.targetTexture=rt;camera.Render();
+            if(name=="morning.png" && Shader.GetGlobalTexture("_TerminalFloorReflection") is RenderTexture reflected){RenderTexture.active=reflected;var debug=new Texture2D(reflected.width,reflected.height,TextureFormat.RGB24,false);debug.ReadPixels(new Rect(0,0,reflected.width,reflected.height),0,0);debug.Apply();File.WriteAllBytes("Temp/TerminalReflection.png",debug.EncodeToPNG());UnityEngine.Object.DestroyImmediate(debug);}
+            RenderTexture.active=rt;var tex=new Texture2D(1920,1080,TextureFormat.RGB24,false);tex.ReadPixels(new Rect(0,0,1920,1080),0,0);tex.Apply();File.WriteAllBytes(Report+"/"+name,tex.EncodeToPNG());UnityEngine.Object.DestroyImmediate(tex);}
         finally{camera.targetTexture=null;RenderTexture.active=old;rt.Release();UnityEngine.Object.DestroyImmediate(rt);}
     }
     static void Validate()
