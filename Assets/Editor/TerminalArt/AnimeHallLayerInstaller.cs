@@ -55,6 +55,13 @@ public static class AnimeHallLayerInstaller
         var sourceRoot = source.GetRootGameObjects().First(g => g.name == "Layered illustrated terminal");
         var sourceCamera = sourceRoot.GetComponentInChildren<Camera>();
         var sourceDesk = sourceRoot.transform.Cast<Transform>().First(t => t.name.StartsWith("Approved 3D desk"));
+        var previousInstallation = SceneManager.GetSceneByPath(Folder + "/AnimeHall.unity");
+        if (previousInstallation.isLoaded)
+        {
+            if (previousInstallation.isDirty)
+                throw new InvalidOperationException("Save the current AnimeHall scene before reinstalling its generated art.");
+            EditorSceneManager.CloseScene(previousInstallation,true);
+        }
         var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);
         SceneManager.SetActiveScene(scene);
         var root = new GameObject("Anime terminal - registered art and preserved desk");
@@ -138,7 +145,7 @@ public static class AnimeHallLayerInstaller
         }
         rig.layers = layers.ToArray();
         var sun = new GameObject("Realtime hall daylight").AddComponent<Light>();
-        sun.transform.SetParent(root.transform,false);
+        sun.transform.SetParent(hall,false);
         sun.type = LightType.Directional;
         sun.lightmapBakeType = LightmapBakeType.Realtime;
         sun.transform.rotation = Quaternion.Euler(38,-35,0);
@@ -146,7 +153,7 @@ public static class AnimeHallLayerInstaller
         sun.shadows = LightShadows.Soft;
         rig.daylight = sun;
         var local = new GameObject("Movable warm maintenance light").AddComponent<Light>();
-        local.transform.SetParent(root.transform,false);
+        local.transform.SetParent(hall,false);
         local.type = LightType.Point;
         local.lightmapBakeType = LightmapBakeType.Realtime;
         local.transform.position = forward - camera.transform.forward * 2f;
@@ -172,7 +179,9 @@ public static class AnimeHallLayerInstaller
     {
         try
         {
-            Capture(camera,"unity-installed.png",1920,1080);
+            rig.lightingAmount = 0;
+            rig.Apply();
+            Capture(camera,"unity-neutral-reference.png",1920,1080);
             rig.lightingAmount = 1;
             rig.evening = 0;
             rig.Apply();
@@ -189,7 +198,9 @@ public static class AnimeHallLayerInstaller
             rig.Apply();
             Capture(camera,"unity-left-pan.png",1920,1080);
             rig.lookLeft = 0;
+            rig.lightingAmount = 1;
             rig.Apply();
+            Capture(camera,"unity-installed.png",1920,1080);
             var errors = ShaderUtil.GetShaderMessages(Shader.Find("NOPE/Anime Hall Registered Layers"))
                 .Where(m => m.severity == UnityEditor.Rendering.ShaderCompilerMessageSeverity.Error).ToArray();
             if (errors.Length != 0) throw new InvalidOperationException(string.Join("\n",errors.Select(e=>e.message)));
@@ -197,7 +208,7 @@ public static class AnimeHallLayerInstaller
                 "Scene: " + scene.path + "\nRegistered sprite layers: " + rig.layers.Length +
                 "\nPreserved desk renderers: " + desk.GetComponentsInChildren<Renderer>().Length +
                 "\nShader errors: 0\nRealtime lights only. No lightmap baking was run." +
-                "\nCamera rendering: URP forward. Hall normals are approximate per-layer planes." +
+                "\nCamera rendering: URP forward. Shared camera-facing normals; per-layer material normals remain editable." +
                 "\nGameplay source and original art scene were not saved or rebuilt.\n");
             EditorSceneManager.SaveScene(scene);
         }

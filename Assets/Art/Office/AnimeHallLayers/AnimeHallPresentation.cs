@@ -11,7 +11,7 @@ public sealed class AnimeHallPresentation : MonoBehaviour
         public SpriteRenderer renderer;
     }
     public Layer[] layers = Array.Empty<Layer>();
-    [Range(0,1)] public float lightingAmount;
+    [Range(0,1)] public float lightingAmount = 1;
     [Range(0,1)] public float evening;
     [Range(0,1)] public float lookLeft;
     public Light daylight;

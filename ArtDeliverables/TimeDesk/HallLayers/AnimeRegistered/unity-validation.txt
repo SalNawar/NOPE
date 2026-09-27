@@ -1,0 +1,7 @@
+Scene: Assets/Art/Office/AnimeHallLayers/AnimeHall.unity
+Registered sprite layers: 58
+Preserved desk renderers: 164
+Shader errors: 0
+Realtime lights only. No lightmap baking was run.
+Camera rendering: URP forward. Shared camera-facing normals; per-layer material normals remain editable.
+Gameplay source and original art scene were not saved or rebuilt.
