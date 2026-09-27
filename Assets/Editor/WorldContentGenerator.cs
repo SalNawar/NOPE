@@ -287,6 +287,7 @@ public static partial class WorldContentGenerator
                 errors.Add($"Day '{d.asset}' needs \"tells\" of at least 1.");
             if (d.costumeErrorChance < 0f || d.costumeErrorChance > 1f)
                 errors.Add($"Day '{d.asset}' needs \"costumeErrorChance\" in 0..1.");
+            CheckLies(d, errors);
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
@@ -940,7 +941,7 @@ public static partial class WorldContentGenerator
             if (culture.Length > FactTable.MaxValueLength)
                 errors.Add($"Place '{pid}' Culture value '{culture}' is {culture.Length} characters; a book row holds {FactTable.MaxValueLength}. Shorten a signature label.");
             foreach ((string other, string value) in cultures)
-                if (DiscrepancyLog.ValuesMatch(value, culture))
+                if (Values.Match(value, culture))
                     errors.Add($"Places '{other}' and '{pid}' share the Culture value '{culture}'; a dress tell must name one place.");
             cultures.Add((pid, culture));
         }
@@ -1033,6 +1034,9 @@ public static partial class WorldContentGenerator
         }
 
         // --- Days: pools, forced slots, chance ---
+        var closures = new HashSet<string>((src.rules ?? Array.Empty<RuleData>())
+            .Where(r => ParseEnum(r.type, out TravelRuleType type) && TravelRuleSO.IsClosureType(type))
+            .Select(r => r.asset));
         foreach (DayData d in src.days)
         {
             string owner = $"Day '{d.asset}'";
@@ -1080,8 +1084,8 @@ public static partial class WorldContentGenerator
                     errors.Add($"{owner} forces premade '{f.premade}' twice.");
                 if (pool.Contains(f.premade))
                     errors.Add($"{owner} both forces and pools premade '{f.premade}'.");
-                if (d.rules != null && d.rules.Length > 0 && f.slot <= ViolatorSlots.Window(d.queue))
-                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
+                if ((d.rules ?? Array.Empty<string>()).Any(closures.Contains) && f.slot <= ViolatorSlots.Window(d.queue))
+                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with closures: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
             }
         }
 
@@ -1135,7 +1139,7 @@ public static partial class WorldContentGenerator
         if (culture != null && culture.Length > FactTable.MaxValueLength)
             errors.Add($"The present's Culture value '{culture}' is {culture.Length} characters; a book row holds {FactTable.MaxValueLength}.");
         foreach ((string place, string value) in cultures)
-            if (DiscrepancyLog.ValuesMatch(value, culture))
+            if (Values.Match(value, culture))
                 errors.Add($"The present and '{place}' share the Culture value '{culture}'; a 2150 garment must name 2150.");
 
         foreach (KitItemData k in p.kit ?? Array.Empty<KitItemData>())
@@ -1465,7 +1469,30 @@ public static partial class WorldContentGenerator
     }
 
     /// <summary>
-    /// Writes the day's queue, tell count, tell channels, eras, countries,
+    /// Refuses a day's lie that is no LieKind, listed twice, or that none of
+    /// the day's kinds can carry (LieKinds.AppliesTo): a lie nobody can tell
+    /// would be a content mistake that never shows.
+    /// </summary>
+    private static void CheckLies(DayData d, List<string> errors)
+    {
+        var seen = new HashSet<string>();
+        foreach (string name in d.lies ?? Array.Empty<string>())
+        {
+            if (!ParseEnum(name, out LieKind lie))
+            {
+                errors.Add($"Day '{d.asset}' enables unknown lie '{name}' (one of {string.Join(", ", Enum.GetNames(typeof(LieKind)))}).");
+                continue;
+            }
+            if (!seen.Add(name))
+                errors.Add($"Day '{d.asset}' lists the lie '{name}' twice.");
+            bool fits = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind) && LieKinds.AppliesTo(lie, kind));
+            if (!fits)
+                errors.Add($"Day '{d.asset}' enables the lie '{name}', which none of its kinds can carry.");
+        }
+    }
+
+    /// <summary>
+    /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
     /// rules, the premade pool and chance, and the forced slots (premade,
     /// blueprint or both; authoritative).
     /// </summary>
@@ -1483,6 +1510,11 @@ public static partial class WorldContentGenerator
         tellChannels.arraySize = channels.Length;
         for (int i = 0; i < channels.Length; i++)
             tellChannels.GetArrayElementAtIndex(i).enumValueIndex = (int)(TellChannel)Enum.Parse(typeof(TellChannel), channels[i]);
+        string[] lies = d.lies ?? Array.Empty<string>();
+        SerializedProperty lieKinds = so.FindProperty("lieKinds");
+        lieKinds.arraySize = lies.Length;
+        for (int i = 0; i < lies.Length; i++)
+            lieKinds.GetArrayElementAtIndex(i).enumValueIndex = (int)(LieKind)Enum.Parse(typeof(LieKind), lies[i]);
         WriteKinds(so, d, authored);
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
@@ -1977,6 +2009,8 @@ public static partial class WorldContentGenerator
         public int tells;
         /// <summary>Where this day's tells may show ("Papers", "Answer").</summary>
         public string[] channels;
+        /// <summary>The lies enabled this day (LieKind names; traveller types §6.1): each must fit one of the day's kinds.</summary>
+        public string[] lies;
         /// <summary>The day's traveller mix: each kind's weight (traveller types K1).</summary>
         public KindWeightData[] kinds;
         public EraWeightData[] eras;

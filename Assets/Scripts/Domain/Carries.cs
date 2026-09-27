@@ -13,7 +13,7 @@ public static class Carries
     /// <paramref name="category"/> in today's table, headed for the claim.
     /// Null when an id is blank, home equals claim, the category is not
     /// editable, the table is null, has no value for the home or does not hold
-    /// the claim, or the claim already has that value (DiscrepancyLog.ValuesMatch).
+    /// the claim, or the claim already has that value (Values.Match).
     /// </summary>
     public static CarryRecord Make(string fromNationId, string fromEraId, string toNationId, string toEraId,
                                    ClueCategory category, FactTable today, int day)
@@ -28,7 +28,7 @@ public static class Carries
 
         string value = today.Get(fromNationId, fromEraId, category);
         if (string.IsNullOrWhiteSpace(value) || today.OriginLabel(toNationId, toEraId) == null ||
-            DiscrepancyLog.ValuesMatch(value, today.Get(toNationId, toEraId, category)))
+            Values.Match(value, today.Get(toNationId, toEraId, category)))
             return null;
 
         return new CarryRecord
@@ -83,7 +83,7 @@ public static class Carries
             string value = list[list.Count - 1].value;
             FactEdit earlier = latched.FindLast(e => e.nationId == pair.to && e.eraId == pair.toEra && e.category == pair.category);
             string current = earlier != null ? earlier.value : world.Get(pair.to, pair.toEra, pair.category);
-            if (DiscrepancyLog.ValuesMatch(value, current))
+            if (Values.Match(value, current))
                 continue;
 
             string source = world.OriginLabel(pair.from, pair.fromEra) ?? $"{pair.from}_{pair.fromEra}";

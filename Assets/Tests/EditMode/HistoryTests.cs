@@ -64,7 +64,7 @@ public class HistoryTests
     }
 
     [TestCase("Deben", false, Description = "an edit equal to the base")]
-    [TestCase("  deben ", false, Description = "case and surrounding spaces do not count (ValuesMatch)")]
+    [TestCase("  deben ", false, Description = "case and surrounding spaces do not count (Values.Match)")]
     [TestCase(" ", false, Description = "a blank edit is ignored")]
     [TestCase("Sterling", true)]
     public void IsRevised_OneEdit(string value, bool expected)

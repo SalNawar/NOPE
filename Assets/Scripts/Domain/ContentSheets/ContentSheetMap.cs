@@ -186,6 +186,7 @@ public static class ContentSheetMap
             Int("queue"),
             Int("tells"),
             List("channels"),
+            List("lies").Note("the lies enabled this day (FalseOrigin, PoorPosingAsRich, DoctoredIdentity); a traveller draws among those that fit their kind"),
             Rows("dayKinds", "kinds",
                 Text("kind").Required().OneOf("RichTourist", "PoorTourist", "Labourer", "Displaced"),
                 Num("weight")).Note("the day's traveller mix: each kind's weight"),

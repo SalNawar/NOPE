@@ -206,8 +206,9 @@ public static class _TimeDeskAuditStatic
         string answers = string.Join(";", c.answers.Select(a => $"{a.category}={a.value}{(a.isTell ? "[TELL]" : "")}"));
         string look = c.look != null ? c.look.Describe() : "none";
         string garments = c.look != null ? string.Join(";", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}")) : "";
-        return $"seed={seed} day={day} leader={leader} slot={slot} claim='{c.originLabel}' name='{c.visitorGivenName}' born='{c.trueBirthDate}' role='{(c.archetype != null ? c.archetype.displayName : "")}' allowed={c.claimAllowedByRules} violator={(violatorPlace ?? "no")}" +
-               $" | liar={c.IsLiar} home='{c.HomeLabel}' tells=[{string.Join(",", tells)}] | papers={papers} | answers={answers}" +
+        string recordTells = string.Join(",", c.recordTells.Select(t => $"{t.Category}@{t.Document}"));
+        return $"seed={seed} day={day} leader={leader} slot={slot} claim='{c.originLabel}' name='{c.visitorGivenName}' born='{c.trueBirthDate}' role='{(c.archetype != null ? c.archetype.displayName : "")}' directive={c.directiveFault} violator={(violatorPlace ?? "no")}" +
+               $" | liar={c.IsLiar} home='{c.HomeLabel}' tells=[{string.Join(",", tells)}] recordTells=[{recordTells}] fault='{c.FaultReason}' | papers={papers} | answers={answers}" +
                $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} intro='{c.introLine}' claimLine='{c.claimLine}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
     }
 

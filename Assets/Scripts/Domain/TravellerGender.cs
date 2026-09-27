@@ -54,7 +54,7 @@ public static class TravellerGenders
             return false;
 
         foreach (string candidate in names)
-            if (DiscrepancyLog.ValuesMatch(candidate, name))
+            if (Values.Match(candidate, name))
                 return true;
 
         return false;

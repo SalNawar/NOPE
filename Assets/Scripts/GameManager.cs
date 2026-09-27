@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Connects DayOrchestrator -> CaseFactory -> OfficeUIController.
+/// Connects DayOrchestrator -> CaseFactory -> the investigation UI.
 /// Generates cases at day start, displays the active case on UI,
-/// validates the player's era choice, then advances the day.
+/// resolves the player's Accept/Deny decision, then advances the day.
 /// </summary>
 public sealed class GameManager : MonoBehaviour
 {
@@ -21,9 +21,9 @@ public sealed class GameManager : MonoBehaviour
     [SerializeField] private OfficeUIController officeUI;
 
     /// <summary>
-    /// Investigation UI (documents/books/compare + Accept/Deny). When assigned,
-    /// the office uses the accept/deny investigation loop; if null, it falls back
-    /// to the legacy era-pick UI on OfficeUIController.
+    /// Investigation UI (documents/books/compare + Accept/Deny): the one case
+    /// loop (audit R3-011: the legacy era-pick loop is gone). Without it the
+    /// office logs an error and shows no case (audit R4-002).
     /// </summary>
     [SerializeField] private InvestigationUIController investigationUI;
 
@@ -555,9 +555,10 @@ public sealed class GameManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Presents a case via the investigation UI (or legacy era UI): keeps only
-    /// this traveller's art, shows them in the booth, and marks a once-per-run
-    /// premade as met (FlagKeys.PremadeMet: they never come back this run).
+    /// Presents a case via the investigation UI: keeps only this traveller's
+    /// art, shows them in the booth, and marks a once-per-run premade as met
+    /// (FlagKeys.PremadeMet: they never come back this run). Without the
+    /// investigation UI no case can be shown: an error, and the slot resolves.
     /// </summary>
     private void ShowActiveCase(CaseInstance inst)
     {
@@ -567,10 +568,15 @@ public sealed class GameManager : MonoBehaviour
         if (inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
             _worldState.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
 
-        if (investigationUI != null)
-            investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
-        else
-            officeUI.ShowCase(inst, contentLibrary.Eras, HandlePlayerChoseEra);
+        if (investigationUI == null)
+        {
+            Debug.LogError("[GameManager] No InvestigationUIController is wired, so no case can be shown. Run Tools > TimeDesk > Build Office UI.");
+            SetTravellerAtDesk(false);
+            orchestrator.MarkCaseResolved();
+            return;
+        }
+
+        investigationUI.ShowCase(inst, contentLibrary, HandleDecision);
     }
 
     /// <summary>
@@ -579,90 +585,13 @@ public sealed class GameManager : MonoBehaviour
     private void HandleCaseSlotEnded(int caseIndex1Based)
     {
         Debug.Log($"[GameManager] >>> Entering HandleCaseSlotEnded (slot {caseIndex1Based}).");
-
-        // Optional: hide UI between cases, or keep it visible and overwrite contents.
-        // officeUI.Hide();
-
         Debug.Log($"[GameManager] <<< Exiting HandleCaseSlotEnded (slot {caseIndex1Based}).");
     }
 
     /// <summary>
-    /// Validates the player's choice, shows result, then advances the day.
-    /// </summary>
-    private void HandlePlayerChoseEra(EraSO chosenEra)
-    {
-        Debug.Log($"[GameManager] >>> Entering HandlePlayerChoseEra (slot {_activeCaseIndex1Based}, chosenEra='{chosenEra?.id}').");
-        SetTravellerAtDesk(false);
-
-        int idx = _activeCaseIndex1Based - 1;
-
-        if (_dayCases == null || idx < 0 || idx >= _dayCases.Count)
-        {
-            Debug.LogError("Player chose an era but the active case index is invalid.");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        CaseInstance inst = _dayCases[idx];
-
-        // No tuning config: keep the old simple correct/wrong behavior.
-        if (_gameConfig == null)
-        {
-            bool simpleCorrect = inst.claimedEra == chosenEra;
-            officeUI.SetResultText(UiText.Get(simpleCorrect ? "verdict.simpleCorrect" : "verdict.simpleWrong"));
-            Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (no GameConfig, simpleCorrect={simpleCorrect}).");
-            orchestrator.MarkCaseResolved();
-            return;
-        }
-
-        // Full economy path: resolve verdict, apply consequences, record it.
-        float stabilityBefore = _worldState.timelineStability;
-        int moneyBefore = _worldState.money;
-
-        CaseVerdict verdict = ShiftScoring.Resolve(inst, chosenEra, _activeCaseIndex1Based, _worldState, _gameConfig, contentLibrary);
-        _ledger.verdicts.Add(verdict);
-
-        // Timeline impacts: every send moves attribute/nation scores.
-        TimelineService.ApplyVerdictImpacts(inst, chosenEra, verdict.correct, _worldState, contentLibrary);
-
-        officeUI.UpdateHud(_worldState);
-
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: chose '{verdict.chosenEraId}', true='{verdict.trueEraId}', correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, citation={verdict.citationIssued} (freeWarning={verdict.wasFreeWarning}), money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
-
-        // Check for a game-over ending (e.g., fired from hitting the stability floor).
-        EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
-
-        if (ending != null)
-        {
-            Debug.Log($"[GameManager] Ending check: matched '{ending.id}' ({ending.displayName}).");
-
-            _worldState.endingId = ending.id;
-
-            if (RunManager.HasInstance)
-                RunManager.Instance.SaveNow();
-
-            Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (run ending '{ending.id}' — showing verdict then title scene).");
-
-            // Show the verdict, then hand off to the title scene instead of continuing the day.
-            ShowVerdictThen(verdict, HandleEndingReached);
-            return;
-        }
-
-        Debug.Log("[GameManager] Ending check: no ending matched, run continues.");
-
-        if (verdict.firedNow)
-            Debug.LogWarning("[GameManager] Stability hit firing threshold, but no matching EndingSO is authored yet — run continues.");
-
-        Debug.Log($"[GameManager] <<< Exiting HandlePlayerChoseEra (slot {_activeCaseIndex1Based} resolved, showing verdict then advancing).");
-
-        // Show the verdict (citation slip pauses the day if wired), then advance.
-        ShowVerdictThen(verdict, () => orchestrator.MarkCaseResolved());
-    }
-
-    /// <summary>
-    /// Resolves the player's Accept/Deny decision (investigation loop): scores it,
-    /// dispatches timeline impacts only on accept, checks for an ending, then
-    /// shows the verdict and advances the day.
+    /// Resolves the player's Accept/Deny decision (the one decision handler,
+    /// audit R3-017): scores it, dispatches timeline impacts only on accept,
+    /// checks for an ending, then shows the verdict and advances the day.
     /// </summary>
     private void HandleDecision(bool accepted)
     {
@@ -716,7 +645,7 @@ public sealed class GameManager : MonoBehaviour
         if (officeUI != null)
             officeUI.UpdateHud(_worldState);
 
-        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, liar={verdict.wasLiar}, home='{verdict.trueHomeLabel}', claimAllowed={inst.claimAllowedByRules}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
+        Debug.Log($"[Result] Case {_activeCaseIndex1Based}: accepted={accepted}, shouldAccept={inst.ShouldAccept}, fault='{inst.FaultReason}', home='{inst.HomeLabel}', directive={inst.directiveFault}, correct={verdict.correct}, pay={verdict.payAwarded}, penalty={verdict.moneyPenalty}, money {moneyBefore}->{_worldState.money}, stability {stabilityBefore:0.#}->{_worldState.timelineStability:0.#}, firedNow={verdict.firedNow}.");
 
         EndingSO ending = EndingService.Evaluate(_worldState, contentLibrary, _gameConfig, EndingMoment.Immediate);
 

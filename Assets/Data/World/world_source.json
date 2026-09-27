@@ -6603,6 +6603,11 @@
       "asset": "Rule_DressForDestination",
       "type": "DressForDestination",
       "description": "Dress for the destination. An item from another time or place causes a panic: check the Costume Guide."
+    },
+    {
+      "asset": "Rule_LeisureDepartures",
+      "type": "Procedure",
+      "description": "Leisure departures: a Leisure Visa and a Departure Manifest. Every paper must match the Citizen Account."
     }
   ],
   "days": [
@@ -6613,6 +6618,11 @@
       "tells": 1,
       "channels": [
         "Papers"
+      ],
+      "lies": [
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FalseOrigin"
       ],
       "kinds": [
         {
@@ -6636,7 +6646,9 @@
         "greece",
         "italy"
       ],
-      "rules": [],
+      "rules": [
+        "Rule_LeisureDepartures"
+      ],
       "premades": [],
       "forced": [
         {
@@ -6656,6 +6668,9 @@
       "channels": [
         "Papers",
         "Answer"
+      ],
+      "lies": [
+        "FalseOrigin"
       ],
       "kinds": [
         {
@@ -6711,6 +6726,9 @@
         "Answer",
         "Appearance"
       ],
+      "lies": [
+        "FalseOrigin"
+      ],
       "kinds": [
         {
           "kind": "Displaced",
@@ -6761,6 +6779,9 @@
         "Papers",
         "Answer",
         "Appearance"
+      ],
+      "lies": [
+        "FalseOrigin"
       ],
       "kinds": [
         {
@@ -6815,6 +6836,9 @@
         "Papers",
         "Answer",
         "Appearance"
+      ],
+      "lies": [
+        "FalseOrigin"
       ],
       "kinds": [
         {
@@ -6874,6 +6898,9 @@
         "Papers",
         "Answer",
         "Appearance"
+      ],
+      "lies": [
+        "FalseOrigin"
       ],
       "kinds": [
         {
@@ -11418,14 +11445,26 @@
         "tier": "Full"
       },
       {
-        "key": "citation.deniedWrong",
-        "text": "Denied a legitimate, permitted traveler.",
+        "key": "citation.acceptedWrong.forged",
+        "text": "Approved forged papers.",
         "gloss": "None",
         "tier": "Full"
       },
       {
-        "key": "citation.misrouted",
-        "text": "Subject misrouted: sent to '{0}', belonged to '{1}'.",
+        "key": "citation.acceptedWrong.disguised",
+        "text": "Approved a disguised traveller.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.closed",
+        "text": "Approved a closed destination.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.deniedWrong",
+        "text": "Denied a legitimate, permitted traveler.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -11594,6 +11633,12 @@
       {
         "key": "deviation.recordMismatch.worn",
         "text": "{0} INCORRECT — traveller wears: \"{1}\"  /  agency records: \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "deviation.crossMismatch.papers",
+        "text": "{0} INCONSISTENT — the papers disagree: \"{1}\"  /  \"{2}\"",
         "gloss": "None",
         "tier": "Full"
       },

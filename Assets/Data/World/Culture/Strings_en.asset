@@ -1592,12 +1592,20 @@ MonoBehaviour:
     text: Approved a traveller who would cause a panic in {0}.
     gloss: 0
     tier: 0
-  - key: citation.deniedWrong
-    text: Denied a legitimate, permitted traveler.
+  - key: citation.acceptedWrong.forged
+    text: Approved forged papers.
     gloss: 0
     tier: 0
-  - key: citation.misrouted
-    text: 'Subject misrouted: sent to ''{0}'', belonged to ''{1}''.'
+  - key: citation.acceptedWrong.disguised
+    text: Approved a disguised traveller.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.closed
+    text: Approved a closed destination.
+    gloss: 0
+    tier: 0
+  - key: citation.deniedWrong
+    text: Denied a legitimate, permitted traveler.
     gloss: 0
     tier: 0
   - key: citation.warning
@@ -1718,6 +1726,10 @@ MonoBehaviour:
     tier: 0
   - key: deviation.recordMismatch.worn
     text: "{0} INCORRECT \u2014 traveller wears: \"{1}\"  /  agency records: \"{2}\""
+    gloss: 0
+    tier: 0
+  - key: deviation.crossMismatch.papers
+    text: "{0} INCONSISTENT \u2014 the papers disagree: \"{1}\"  /  \"{2}\""
     gloss: 0
     tier: 0
   - key: category.Language

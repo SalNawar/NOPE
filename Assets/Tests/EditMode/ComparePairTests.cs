@@ -13,7 +13,7 @@ public class ComparePairTests
 {
     private static ComparePick Doc(int doc, int field, string value, ClueCategory c = ClueCategory.Currency) =>
         new ComparePick(PickKeys.Field(doc, field), "Travel Passport · Coin of Issue", value,
-                        CompareEvidence.FromDocumentField(new DocumentField { category = c, value = value }));
+                        CompareEvidence.FromDocumentField(new DocumentField { category = c, value = value }, 0));
 
     private static ComparePick Book(string value, string nation = "greece", string era = "ancient") =>
         new ComparePick(PickKeys.BookRow(ClueCategory.Currency, nation, era), "Currency Ledger · Periclean Athens", value,

@@ -40,12 +40,4 @@ public static class TravellerKinds
     /// </summary>
     public static float PickWeight(TravellerKind kind, float dayWeight, bool premade) =>
         premade && kind != TravellerKind.Displaced ? 0f : Math.Max(0f, dayWeight);
-
-    /// <summary>
-    /// True when the traveller may carry a place lie (Lies.Plan: a true home
-    /// elsewhere): the displaced only. A 2150 citizen's lies are record lies
-    /// (phase 7) and smuggling (phase 11), so until then a citizen is honest
-    /// and draws nothing on the lie stream.
-    /// </summary>
-    public static bool MayLieAboutPlace(TravellerKind kind) => kind == TravellerKind.Displaced;
 }

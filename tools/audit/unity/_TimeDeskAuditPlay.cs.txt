@@ -3,10 +3,12 @@
 // in the art office with the gameplay layer, Home between them, up to day 7's
 // morning paper. Every traveller: the READY sign, the interview (every request,
 // every question; slot 1 also runs its first dialog to the end), the evidence
-// for each tell through the real compare path, then a scripted verdict (the
-// right one, except four planned mistakes: an honest traveller denied on day 1,
-// a liar accepted on day 2, a liar denied without evidence on day 3, a rule
-// violator accepted on day 4). Home: treat any family member at condition 2+,
+// for each tell through the real compare path (a place tell against the book
+// row or the record; a record tell against the traveller's own record row;
+// two papers that disagree through the cross proof first), then a scripted
+// verdict (the right one, except four planned mistakes: an honest traveller
+// denied on day 1, a deviation fault accepted on day 2, one denied without
+// evidence on day 3, a closed destination accepted on day 4). Home: treat any family member at condition 2+,
 // buy Interview Protocols, then the Near East Speech translator, when there is
 // money for it (never the slot machine: its draw is unseeded). Driven by direct
 // calls from EditorApplication.update in the persistent editor (job runner);
@@ -271,7 +273,8 @@ public static class _TimeDeskAuditPlay
         string tells = string.Join(",", fields.Where(f => f.isAnachronism).Select(f => $"{f.category}/Papers").Distinct()
             .Concat(c.answers.Where(a => a.isTell).Select(a => $"{a.category}/Answer"))
             .Concat(c.look != null ? c.look.Garments.Where(g => g.IsTell).Select(g => $"{g.Slot}/Dress") : Enumerable.Empty<string>()));
-        Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} home='{c.HomeLabel}' allowed={c.claimAllowedByRules} shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}]");
+        string recordTells = string.Join(",", c.recordTells.Select(t => $"{t.Category}@{t.Document}"));
+        Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} home='{c.HomeLabel}' directive={c.directiveFault} fault='{c.FaultReason}' shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}] recordTells=[{recordTells}]");
         Line($"   papers: {string.Join(" ; ", c.documents.Select(d => (d.template != null ? d.template.displayName : "?") + ": " + string.Join(", ", d.fields.Select(f => $"{f.label}={f.value}{(f.isAnachronism ? "[TELL]" : "")}"))))}");
         if (c.look != null)
             Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
@@ -280,31 +283,31 @@ public static class _TimeDeskAuditPlay
         string plan;
         bool accept;
         bool gatherEvidence;
-        if (day == 1 && slot >= 2 && c.ShouldAccept && !c.IsLiar && Once("d1-deny-honest"))
+        if (day == 1 && slot >= 2 && c.ShouldAccept && Once("d1-deny-honest"))
         {
             plan = "MISTAKE deny an honest traveller";
             accept = false;
             gatherEvidence = false;
         }
-        else if (day == 2 && c.IsLiar && Once("d2-accept-liar"))
+        else if (day == 2 && c.HasDeviationFault && Once("d2-accept-liar"))
         {
-            plan = "MISTAKE accept a liar";
+            plan = "MISTAKE accept a deviation fault";
             accept = true;
             gatherEvidence = false;
         }
-        else if (day == 3 && c.IsLiar && Once("d3-unproven-denial"))
+        else if (day == 3 && c.HasDeviationFault && Once("d3-unproven-denial"))
         {
-            plan = "MISTAKE deny a liar without evidence";
+            plan = "MISTAKE deny a deviation fault without evidence";
             accept = false;
             gatherEvidence = false;
         }
-        else if (day == 4 && !c.claimAllowedByRules && !c.IsLiar && Once("d4-accept-violator"))
+        else if (day == 4 && c.HasDirectiveFault && Once("d4-accept-violator"))
         {
-            plan = "MISTAKE accept a rule violator";
+            plan = "MISTAKE accept a closed destination";
             accept = true;
             gatherEvidence = false;
         }
-        else if (c.IsLiar)
+        else if (c.HasDeviationFault)
         {
             plan = "prove the tells, deny";
             accept = false;
@@ -432,7 +435,7 @@ public static class _TimeDeskAuditPlay
         yield return Frames(2);
     }
 
-    /// <summary>Proves each of a liar's tells through the real compare path: the tell picked, then the claimed place's book row (or the citizen record for a birth date); a dress tell is picked through the wheel's Look menu.</summary>
+    /// <summary>Proves each of a liar's tells through the real compare path: two papers that disagree first (the cross proof, one pair per category), then each tell picked against the claimed place's book row (or the traveller's own record row for a record category); a dress tell is picked through the wheel's Look menu.</summary>
     private static IEnumerator Evidence(Office o, CaseInstance c)
     {
         var compare = (CompareController)Field(o.Ui, "compareController");
@@ -444,7 +447,7 @@ public static class _TimeDeskAuditPlay
 
         ComparePick? Proof(ClueCategory category, string tellValue, bool home)
         {
-            if (category == ClueCategory.BirthDate || category == ClueCategory.Name)
+            if (Forgery.IsRecordCategory(category) || category == ClueCategory.Name)
             {
                 CitizenRecord rec = registry.Find(c.visitorGivenName);
                 RecordRow? recordRow = rec?.Groups.SelectMany(g => g.Rows).Where(r => r.IsEvidence && r.Category == category).Cast<RecordRow?>().FirstOrDefault();
@@ -486,8 +489,22 @@ public static class _TimeDeskAuditPlay
             Line($"   evidence FAILED for {what}");
         }
 
-        // Papers: the first tell field of each category.
+        // Two papers that disagree (a borrowed manifest, a doctored ID): the cross proof, one pair per category.
         var done = new HashSet<ClueCategory>();
+        foreach (PaperContradiction x in PaperChecks.Contradictions(c.documents.Select(p => (IReadOnlyList<DocumentField>)p.fields).ToList()))
+        {
+            if (!done.Add(x.Category))
+                continue;
+            int before = o.Ui.EvidenceCount;
+            compare.Clear();
+            compare.Select(EvidencePicks.ForField(x.DocumentA, new DocumentRow(x.FieldA, c.documents[x.DocumentA].fields[x.FieldA]), c.documents[x.DocumentA].DisplayName), null);
+            compare.Select(EvidencePicks.ForField(x.DocumentB, new DocumentRow(x.FieldB, c.documents[x.DocumentB].fields[x.FieldB]), c.documents[x.DocumentB].DisplayName), null);
+            yield return Frames(1);
+            if (o.Ui.EvidenceCount == before)
+                Line($"   evidence FAILED for the cross proof of {x.Category}");
+        }
+
+        // Papers: the first tell field of each category not yet documented.
         for (int d = 0; d < c.documents.Count; d++)
         {
             DocumentInstance doc = c.documents[d];

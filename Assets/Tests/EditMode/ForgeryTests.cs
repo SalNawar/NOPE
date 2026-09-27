@@ -128,4 +128,42 @@ public class ForgeryTests
         foreach (ClueCategory category in new[] { ClueCategory.Language, ClueCategory.Material, ClueCategory.Politics, ClueCategory.Technology, ClueCategory.Currency, ClueCategory.Geography, ClueCategory.Culture })
             Assert.IsFalse(Forgery.IsProvableCategory(category, null), category.ToString());
     }
+
+    /// <summary>Redesign phase 7 (traveller types L2, §6.2): every record category is provable as the birth date is, whatever the books: the record proves it.</summary>
+    [TestCase(ClueCategory.BirthDate)]
+    [TestCase(ClueCategory.CitizenId)]
+    [TestCase(ClueCategory.Destination)]
+    [TestCase(ClueCategory.Incident)]
+    [TestCase(ClueCategory.AccountStatus)]
+    [TestCase(ClueCategory.TransponderId)]
+    [TestCase(ClueCategory.TransponderClass)]
+    [TestCase(ClueCategory.Debt)]
+    public void IsProvableCategory_ARecordCategory_IsAlways_TheRecordProvesIt(ClueCategory category)
+    {
+        Assert.IsTrue(Forgery.IsRecordCategory(category));
+        Assert.IsTrue(Forgery.IsProvableCategory(category, null));
+        Assert.IsTrue(Forgery.IsProvableCategory(category, new HashSet<ClueCategory>()));
+    }
+
+    /// <summary>A directive-only category (read against the calendar) is never a tell, even with a book for it.</summary>
+    [TestCase(ClueCategory.DepartureDate)]
+    [TestCase(ClueCategory.Expiry)]
+    public void IsProvableCategory_ADirectiveOnlyCategory_IsNever_EvenWithEveryBook(ClueCategory category)
+    {
+        Assert.IsTrue(Forgery.IsDirectiveOnly(category));
+        Assert.IsFalse(Forgery.IsRecordCategory(category));
+        Assert.IsFalse(Forgery.IsProvableCategory(category, EveryBook()));
+    }
+
+    /// <summary>Every category is exactly one of: a name (never), directive-only, a record category, or a place fact (a book decides), so a new category must be placed.</summary>
+    [Test]
+    public void EveryCategory_IsClassifiedOnce()
+    {
+        foreach (ClueCategory category in (ClueCategory[])System.Enum.GetValues(typeof(ClueCategory)))
+        {
+            int kinds = (category == ClueCategory.Name ? 1 : 0) + (Forgery.IsDirectiveOnly(category) ? 1 : 0) + (Forgery.IsRecordCategory(category) ? 1 : 0)
+                        + (Forgery.IsProvableCategory(category, EveryBook()) && !Forgery.IsRecordCategory(category) ? 1 : 0);
+            Assert.AreEqual(1, kinds, category.ToString());
+        }
+    }
 }

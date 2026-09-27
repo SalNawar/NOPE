@@ -85,7 +85,7 @@ public class FactTableTests
     {
         FactTable t = Today();
         Assert.IsTrue(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", "  silver SHEKEL ", out FactRow row),
-                      "another case and leading/trailing spaces still match (DiscrepancyLog.ValuesMatch)");
+                      "another case and leading/trailing spaces still match (Values.Match)");
         Assert.AreEqual("iraq", row.NationId);
         Assert.AreEqual("Babylonia (Ancient)", row.OriginLabel);
 
@@ -97,7 +97,7 @@ public class FactTableTests
     public void TryFindOtherPlaceWith_FalseForInternalSpacing_AnotherCategory_AndBlank()
     {
         FactTable t = Today();
-        Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", "Silver  shekel", out _), "ValuesMatch only trims and ignores case");
+        Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", "Silver  shekel", out _), "Values.Match only trims and ignores case");
         Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Language, "egypt", "ancient", "Silver shekel", out _), "another category's equal value");
         Assert.IsFalse(t.TryFindOtherPlaceWith(ClueCategory.Currency, "egypt", "ancient", " ", out FactRow none));
         Assert.IsNull(none.NationId);

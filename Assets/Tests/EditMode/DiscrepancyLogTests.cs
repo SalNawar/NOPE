@@ -1,4 +1,6 @@
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 /// <summary>
@@ -212,6 +214,16 @@ public class DiscrepancyLogTests
         Assert.AreEqual("latia — rome", d.actualOrigin);
     }
 
+    /// <summary>Audit R1-010: the origin proof names the row's label as it is; FactTable guarantees a label (R1-017), so Domain carries no English fallback.</summary>
+    [Test]
+    public void OriginProof_NamesTheRowsLabelVerbatim()
+    {
+        Discrepancy d = DiscrepancyLog.Prove(TellDocField("Aqueduct"), CompareEvidence.ForReferenceEntry(ClueCategory.Technology, "Aqueduct", "latia", "rome", " Latia — Republican Rome "), ClaimNation, ClaimEra, Traveller);
+        Assert.AreEqual(" Latia — Republican Rome ", d.actualOrigin);
+        Assert.AreEqual(d.actualOrigin, d.ReportOther);
+        Assert.Throws<System.ArgumentException>(() => new FactTable().Add("latia", "rome", " ", ClueCategory.Technology, "Aqueduct"), "a book row always has a label");
+    }
+
     [Test]
     public void EraOnlyEntry_AppliesToAnyNationOfThatEra()
     {
@@ -262,10 +274,94 @@ public class DiscrepancyLogTests
     }
 
     [Test]
-    public void TwoDocumentFields_DoNotRegister()
+    public void TwoDocumentFields_OfOnePaper_DoNotRegister()
     {
+        // Both on the first paper (document 0, the default): the cross proof needs two papers (Paper below).
         var log = new DiscrepancyLog();
         Assert.IsNull(Register(log, TellDocField(), TellDocField("Something"), ClaimNation, ClaimEra));
+    }
+
+    // -----------------------------
+    // Two papers that disagree (redesign phase 7, traveller types L4)
+    // -----------------------------
+
+    /// <summary>A field of paper <paramref name="document"/> (EvidencePicks.ForField gives the index).</summary>
+    private static CompareEvidence Paper(int document, ClueCategory category, string value, bool isTell) =>
+        CompareEvidence.FromDocumentField(new DocumentField { category = category, value = value, isAnachronism = isTell }, document);
+
+    [Test]
+    public void TwoPapers_ThatDisagreeOnACategory_OneATell_ProveACrossMismatch_NamingNeither()
+    {
+        // A borrowed manifest: its Citizen ID (the tell) is not the visa's.
+        Discrepancy d = DiscrepancyLog.Prove(
+            Paper(1, ClueCategory.CitizenId, "552-1804-33", true),
+            Paper(0, ClueCategory.CitizenId, "418-0937-52", false),
+            ClaimNation, ClaimEra, Traveller);
+
+        Assert.NotNull(d);
+        Assert.AreEqual(DiscrepancyProof.CrossMismatch, d.provedBy);
+        Assert.AreEqual(ClueCategory.CitizenId, d.category);
+        Assert.AreEqual(EvidenceKind.DocumentField, d.source);
+        Assert.AreEqual("deviation.crossMismatch.papers", d.ReportKey);
+        Assert.AreEqual("418-0937-52", d.documentValue, "the first paper's value, in paper order, whichever side was picked first");
+        Assert.AreEqual("552-1804-33", d.ReportOther, "the other paper's value");
+        Assert.IsNull(d.actualOrigin);
+    }
+
+    [Test]
+    public void TheCrossProof_WorksWithoutAClaimEra_AndWithTheTellOnEitherSide()
+    {
+        Discrepancy d = DiscrepancyLog.Prove(Paper(0, ClueCategory.AccountStatus, "Premium", true), Paper(1, ClueCategory.AccountStatus, "Standard", false), null, null, null);
+        Assert.AreEqual(DiscrepancyProof.CrossMismatch, d?.provedBy);
+        Assert.AreEqual("Premium", d.documentValue);
+        Assert.AreEqual("Standard", d.ReportOther);
+    }
+
+    [Test]
+    public void TwoPapers_ThatDisagree_WithNoTell_ProveNothing()
+    {
+        // Two honest boxes never disagree; a coincidence between two honest values is not a proof.
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(0, ClueCategory.CitizenId, "418-0937-52", false), Paper(1, ClueCategory.CitizenId, "552-1804-33", false), ClaimNation, ClaimEra, Traveller));
+    }
+
+    [Test]
+    public void TheCrossProof_NeedsTwoPapers_OneCategory_AndValuesThatDiffer()
+    {
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(1, ClueCategory.CitizenId, "552-1804-33", true), Paper(1, ClueCategory.CitizenId, "418-0937-52", false), ClaimNation, ClaimEra, Traveller), "one paper");
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(-1, ClueCategory.CitizenId, "552-1804-33", true), Paper(0, ClueCategory.CitizenId, "418-0937-52", false), ClaimNation, ClaimEra, Traveller), "a paper unknown");
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(1, ClueCategory.CitizenId, "552-1804-33", true), Paper(0, ClueCategory.TransponderId, "418-0937-52", false), ClaimNation, ClaimEra, Traveller), "two categories");
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(1, ClueCategory.CitizenId, " 418-0937-52 ", true), Paper(0, ClueCategory.CitizenId, "418-0937-52", false), ClaimNation, ClaimEra, Traveller), "the same value");
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(1, ClueCategory.Expiry, "1 Jan 2150", true), Paper(0, ClueCategory.Expiry, "27 Mar 2150", false), ClaimNation, ClaimEra, Traveller), "directive-only");
+        Assert.IsNull(DiscrepancyLog.Prove(Paper(1, ClueCategory.Name, "Mara", true), Paper(0, ClueCategory.Name, "Nebamun", false), ClaimNation, ClaimEra, Traveller), "a name");
+    }
+
+    [Test]
+    public void AnAnswerAgainstAPaper_StaysAHint_EvenWhenThePaperIsATell()
+    {
+        // Papers prove, answers hint (Saleh's Q3): only two papers cross-prove.
+        Assert.IsNull(DiscrepancyLog.Prove(CompareEvidence.ForAnswer(ClueCategory.Currency, "Deben", false), Paper(1, ClueCategory.Currency, "Denarius", true), ClaimNation, ClaimEra, Traveller));
+        Assert.IsNull(DiscrepancyLog.Prove(CompareEvidence.ForAnswer(ClueCategory.Currency, "Denarius", true), Paper(1, ClueCategory.Currency, "Deben", false), ClaimNation, ClaimEra, Traveller));
+    }
+
+    [Test]
+    public void OneProofPerCategory_TheCrossProofAndTheRecordProofOfOneCategory_DocumentOnce()
+    {
+        var log = new DiscrepancyLog();
+        Assert.IsTrue(log.Add(DiscrepancyLog.Prove(Paper(1, ClueCategory.CitizenId, "552-1804-33", true), Paper(0, ClueCategory.CitizenId, "418-0937-52", false), ClaimNation, ClaimEra, Traveller)));
+        Assert.IsFalse(log.Add(DiscrepancyLog.Prove(Paper(1, ClueCategory.CitizenId, "552-1804-33", true), CompareEvidence.ForRecordField(ClueCategory.CitizenId, "418-0937-52", Traveller), ClaimNation, ClaimEra, Traveller)));
+        Assert.AreEqual(1, log.Count);
+        Assert.AreEqual(DiscrepancyProof.CrossMismatch, log.Items[0].provedBy);
+    }
+
+    [Test]
+    public void EveryRecordCategory_ProvesAgainstTheTravellersRecord()
+    {
+        foreach (ClueCategory category in new[] { ClueCategory.CitizenId, ClueCategory.AccountStatus, ClueCategory.TransponderId, ClueCategory.TransponderClass, ClueCategory.Debt, ClueCategory.Destination, ClueCategory.Incident })
+        {
+            Discrepancy d = DiscrepancyLog.Prove(Paper(0, category, "forged", true), CompareEvidence.ForRecordField(category, "on file", Traveller), ClaimNation, ClaimEra, Traveller);
+            Assert.AreEqual(DiscrepancyProof.RecordMismatch, d?.provedBy, category.ToString());
+            Assert.AreEqual("deviation.recordMismatch.papers", d.ReportKey, category.ToString());
+        }
     }
 
     [Test]
@@ -459,7 +555,7 @@ public class DiscrepancyLogTests
         Assert.AreEqual("top hat / poke bonnet", Wears().MatchValue("top hat"), "a garment shows its item and matches on its place's value");
         Assert.AreEqual("Aqueduct", TellDocField().MatchValue("Aqueduct"));
         Assert.AreEqual("Longship", Entry("norvik", "medieval", "Longship").MatchValue("Longship"));
-        Assert.IsTrue(DiscrepancyLog.ValuesMatch(Wears().MatchValue("top hat"), Entry("b", "i", " TOP HAT / poke bonnet ", ClueCategory.Culture).MatchValue("x")));
+        Assert.IsTrue(Values.Match(Wears().MatchValue("top hat"), Entry("b", "i", " TOP HAT / poke bonnet ", ClueCategory.Culture).MatchValue("x")));
     }
 
     [Test]
@@ -523,6 +619,9 @@ public class DiscrepancyLogTests
     [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.None, "deviation.claimMismatch.papers")]
     [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.Appearance, "deviation.claimMismatch.worn")]
     [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Appearance, "deviation.foreignOrigin.worn")]
+    [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.DocumentField, "deviation.crossMismatch.papers")]
+    [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.Answer, "deviation.crossMismatch.papers")]
+    [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.Appearance, "deviation.crossMismatch.papers")]
     public void ReportKeyFor_NamesTheProofAndWhoStatedIt(DiscrepancyProof proof, EvidenceKind statement, string expected)
     {
         Assert.AreEqual(expected, Discrepancy.ReportKeyFor(proof, statement));
@@ -561,9 +660,43 @@ public class DiscrepancyLogTests
     [TestCase(ClueCategory.Incident, "category.Incident")]
     [TestCase(ClueCategory.DepartureDate, "category.DepartureDate")]
     [TestCase(ClueCategory.Expiry, "category.Expiry")]
+    [TestCase(ClueCategory.AccountStatus, "category.AccountStatus")]
+    [TestCase(ClueCategory.TransponderId, "category.TransponderId")]
+    [TestCase(ClueCategory.TransponderClass, "category.TransponderClass")]
+    [TestCase(ClueCategory.Debt, "category.Debt")]
     public void ClueLabels_Key_OneKeyPerCategory(ClueCategory category, string expected)
     {
         Assert.AreEqual(expected, ClueLabels.Key(category));
+    }
+
+    /// <summary>The English UI string of <paramref name="key"/> in world_source.json (null when missing).</summary>
+    private static string UiString(string key, [CallerFilePath] string here = "")
+    {
+        const string source = "Assets/Data/World/world_source.json";
+        string path = File.Exists(source) ? source : Path.Combine(Path.GetDirectoryName(here), "..", "..", "..", source);
+        ContentNode strings = ContentJson.Parse(File.ReadAllText(path)).Get("ui").Get("strings");
+        ContentNode entry = strings.Items.FirstOrDefault(s => s.Get("key").Text == key);
+        return entry?.Get("text").Text;
+    }
+
+    /// <summary>Every report line a real proof can produce has its template in the UI strings ({0} the category word, {1} the stated value, {2} ReportOther).</summary>
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.DocumentField)]
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.Answer)]
+    [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.Appearance)]
+    [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.DocumentField)]
+    [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Answer)]
+    [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Appearance)]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.DocumentField)]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.Answer)]
+    [TestCase(DiscrepancyProof.RecordMismatch, EvidenceKind.Appearance)]
+    [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.DocumentField)]
+    public void EveryReportLine_HasItsUiString(DiscrepancyProof proof, EvidenceKind statement)
+    {
+        string text = UiString(Discrepancy.ReportKeyFor(proof, statement));
+        Assert.NotNull(text, Discrepancy.ReportKeyFor(proof, statement));
+        StringAssert.Contains("{0}", text);
+        StringAssert.Contains("{1}", text);
+        StringAssert.Contains("{2}", text);
     }
 
     [Test]
