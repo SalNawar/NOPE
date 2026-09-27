@@ -179,7 +179,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     private void BuildPresenters(InvestigationWiring wiring)
     {
         _reference = new DayReference(directivesText, recordsWindow, compareController, referenceView);
-        _documents = new CaseDocumentsPresenter(documentsView, wiring.DeskReachable ? desk : null, compareController);
+        _documents = new CaseDocumentsPresenter(documentsView, wiring.DeskReachable ? desk : null, compareController, () => _evidence.DocumentedCategories);
         _interview = new InterviewPresenter(interactionPanel, transcriptWindow, () => Arrived(AppTab.Transcript), wheel, compareController,
                                             _documents.HandOver, () => _currentCase, this);
         _evidence = new EvidencePresenter(compareController, reportText, () =>

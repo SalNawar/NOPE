@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Upgrade_AdvancedScanner
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: adv_scanner
-  displayName: Advanced Scanner
-  description: Reveals an additional clue category during inspections.
-  cost: 200
-  unlockEffect: {fileID: 11400000, guid: 204fc91addc6bfb438d1eff353f9b074, type: 2}
+  displayName: Analysis Scanner
+  description: A scan by hand takes longer and marks one contradiction between the
+    scanned papers on the PC, from the next shift.
+  cost: 300
+  unlockEffect: {fileID: 0}

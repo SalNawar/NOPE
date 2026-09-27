@@ -8,7 +8,9 @@ using UnityEngine.UI;
 /// the Investigation app's Documents tab clones this page per paper
 /// (DocumentsView). On the scanner's dark backing it shows the document's
 /// name, the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
-/// when the copy arrived), and the paper's form drawn by a FormView from the
+/// when the copy arrived; after an analysis pass "ANALYSED 10:44 · 1
+/// CONTRADICTION MARKED" or "... NO CONTRADICTION BETWEEN THE SCANNED
+/// PAPERS", the form style's words), and the paper's form drawn by a FormView from the
 /// same DocumentForm the desk paper prints, so the copy is the paper: its
 /// pages stacked in a scroll. A
 /// click on a box picks the field for the compare (EvidencePicks.ForField,
@@ -78,12 +80,26 @@ public sealed class DocumentWindowController : MonoBehaviour
     }
 
     /// <summary>The copy arrived on the PC (its scan finished): the strip reads the shift clock's time now.</summary>
-    public void MarkScanned()
+    public void MarkScanned() => Strip(form != null && form.Style != null ? form.Style.scanStrip : null);
+
+    /// <summary>An analysis pass ended on this paper (the Analysis Scanner): the strip reads the time and whether a contradicting pair was marked (<paramref name="contradiction"/>), in the form style's words.</summary>
+    public void MarkAnalysed(bool contradiction) =>
+        Strip(form != null && form.Style != null ? (contradiction ? form.Style.analysedStrip : form.Style.analysedCleanStrip) : null);
+
+    /// <summary>The analysis marks on this copy: the dashed outline on each of <paramref name="fields"/>' boxes (FormView.SetMarks).</summary>
+    public void SetMarks(IReadOnlyList<int> fields)
     {
-        if (scanStrip == null || form == null || form.Style == null)
+        if (form != null)
+            form.SetMarks(fields);
+    }
+
+    /// <summary>Writes the strip from <paramref name="template"/> ({0}: the shift clock's time now, "--:--" without a clock); nothing without a strip or a template.</summary>
+    private void Strip(string template)
+    {
+        if (scanStrip == null || template == null)
             return;
         string time = clock != null && clock.Clock != null ? ShiftClock.Format(clock.Clock.CurrentMinute) : "--:--";
-        scanStrip.text = string.Format(form.Style.scanStrip, time);
+        scanStrip.text = string.Format(template, time);
     }
 
     /// <summary>Marks each pickable box with its field's pick key and label (AppRow), as the box's click picks it.</summary>

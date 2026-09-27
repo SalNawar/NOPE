@@ -393,6 +393,9 @@ public static class TimelineService
     public static TranslationDay BuildTranslationDay(ContentLibrarySO lib, WorldState world) =>
         new TranslationDay(lib != null && lib.Translation.HasData ? lib.Translation.rules : null, Snapshot(world, null));
 
+    /// <summary>Today's scanner upgrades (the PC redesign SC1): the Auto-Feed and the Analysis Scanner as the day-start snapshot owns them, fixed at day start like the translation.</summary>
+    public static ScannerDay BuildScannerDay(WorldState world) => ScannerDay.From(Snapshot(world, null));
+
     /// <summary>
     /// Returns true if every condition on the trigger passes (Gates.AllPass):
     /// one snapshot per trigger, so a trigger sees the flags that earlier
