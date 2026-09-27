@@ -29,17 +29,20 @@ public readonly struct HomeCandidate
     }
 }
 
-/// <summary>What one traveller's lie roll decided.</summary>
+/// <summary>What one traveller's lie plan decided.</summary>
 public enum LieOutcome
 {
-    /// <summary>The traveller really comes from the place they claim.</summary>
+    /// <summary>The traveller is honest (no plan was drawn).</summary>
     Honest,
 
     /// <summary>The traveller comes from another of today's places; their papers, answers or dress leak tells.</summary>
     Liar,
 
-    /// <summary>The roll said liar, but no other place today could give a tell; the traveller stays honest.</summary>
-    NoPossibleLie
+    /// <summary>The roll said liar, but no tell could show (no other place today could give one; no field of the lie's forms could be forged); the traveller stays honest.</summary>
+    NoPossibleLie,
+
+    /// <summary>The traveller is who they say, from where they say, but their papers forge record fields their own record disproves (RecordLies).</summary>
+    Forger
 }
 
 /// <summary>Where a liar's tell shows; serialized in DayPlanSO, append only.</summary>
@@ -55,11 +58,39 @@ public enum TellChannel
     Appearance
 }
 
-/// <summary>The outcome of one traveller's lie roll: the true home and the tells the liar leaks, on the papers, in speech or in dress.</summary>
+/// <summary>One record tell (RecordLies): the forged value of one category on one paper, by the paper's index in the case.</summary>
+public readonly struct RecordTell
+{
+    /// <summary>The paper, by its index in the case.</summary>
+    public readonly int Document;
+
+    /// <summary>The forged category.</summary>
+    public readonly ClueCategory Category;
+
+    /// <summary>The false value printed.</summary>
+    public readonly string Value;
+
+    /// <summary>Creates a record tell.</summary>
+    public RecordTell(int document, ClueCategory category, string value)
+    {
+        Document = document;
+        Category = category;
+        Value = value;
+    }
+}
+
+/// <summary>
+/// The outcome of one traveller's lie plan: the true home and the tells the
+/// liar leaks, on the papers, in speech or in dress (a place lie, Lies.Plan),
+/// or the record tells a forger prints (a record lie, RecordLies.Plan).
+/// </summary>
 public sealed class LiePlan
 {
     /// <summary>Shared empty tell list.</summary>
     private static readonly ClueCategory[] NoTells = new ClueCategory[0];
+
+    /// <summary>Shared empty record tell list.</summary>
+    private static readonly RecordTell[] NoRecordTells = new RecordTell[0];
 
     /// <summary>The value of each tell category, printed or spoken (the home's fact, or the tell birth date).</summary>
     private readonly Dictionary<ClueCategory, string> _values;
@@ -67,67 +98,112 @@ public sealed class LiePlan
     /// <summary>The channel each tell category leaks on.</summary>
     private readonly Dictionary<ClueCategory, TellChannel> _channels;
 
-    /// <summary>Creates a plan (Lies.Plan only).</summary>
-    internal LiePlan(LieOutcome outcome, int homeIndex, IReadOnlyList<ClueCategory> tells,
+    /// <summary>Creates a place-lie plan (Lies.Plan only).</summary>
+    internal LiePlan(LieOutcome outcome, LieKind kind, int homeIndex, IReadOnlyList<ClueCategory> tells,
                      Dictionary<ClueCategory, string> values, Dictionary<ClueCategory, TellChannel> channels)
+        : this(outcome, kind, homeIndex, tells, values, channels, NoRecordTells)
+    {
+    }
+
+    /// <summary>Creates a record-lie plan (RecordLies.Plan only).</summary>
+    internal LiePlan(LieOutcome outcome, LieKind kind, IReadOnlyList<RecordTell> recordTells)
+        : this(outcome, kind, -1, NoTells, new Dictionary<ClueCategory, string>(), new Dictionary<ClueCategory, TellChannel>(), recordTells)
+    {
+    }
+
+    private LiePlan(LieOutcome outcome, LieKind kind, int homeIndex, IReadOnlyList<ClueCategory> tells,
+                    Dictionary<ClueCategory, string> values, Dictionary<ClueCategory, TellChannel> channels, IReadOnlyList<RecordTell> recordTells)
     {
         Outcome = outcome;
+        Kind = kind;
         HomeIndex = homeIndex;
         Tells = tells;
         _values = values;
         _channels = channels;
+        RecordTells = recordTells;
     }
 
     /// <summary>A plan with no home and no tells.</summary>
-    internal static LiePlan Without(LieOutcome outcome) =>
-        new LiePlan(outcome, -1, NoTells, new Dictionary<ClueCategory, string>(), new Dictionary<ClueCategory, TellChannel>());
+    internal static LiePlan Without(LieOutcome outcome, LieKind kind) =>
+        new LiePlan(outcome, kind, -1, NoTells, new Dictionary<ClueCategory, string>(), new Dictionary<ClueCategory, TellChannel>());
 
-    /// <summary>What the roll decided.</summary>
+    /// <summary>What the plan decided.</summary>
     public LieOutcome Outcome { get; }
+
+    /// <summary>The lie planned (Lies.Roll's pick).</summary>
+    public LieKind Kind { get; }
 
     /// <summary>Index of the true home in the (unfiltered) list Lies.Plan was given; -1 unless <see cref="LieOutcome.Liar"/>.</summary>
     public int HomeIndex { get; }
 
-    /// <summary>The tell categories, in pick order; empty unless <see cref="LieOutcome.Liar"/>.</summary>
+    /// <summary>The place-tell categories, in pick order; empty unless <see cref="LieOutcome.Liar"/>.</summary>
     public IReadOnlyList<ClueCategory> Tells { get; }
 
-    /// <summary>The channel a tell category leaks on, or null when the category is not a tell.</summary>
+    /// <summary>The record tells, in the lie's fixed order; empty unless <see cref="LieOutcome.Forger"/>.</summary>
+    public IReadOnlyList<RecordTell> RecordTells { get; }
+
+    /// <summary>The channel a place-tell category leaks on, or null when the category is not a tell.</summary>
     public TellChannel? ChannelOf(ClueCategory category) =>
         _channels.TryGetValue(category, out TellChannel channel) ? channel : (TellChannel?)null;
 
-    /// <summary>A tell's value (the true home's fact, or the tell birth date), or null when the category is not a tell.</summary>
+    /// <summary>A place tell's value (the true home's fact, or the tell birth date), or null when the category is not a tell.</summary>
     public string TellValue(ClueCategory category) =>
         _values.TryGetValue(category, out string value) ? value : null;
 
     /// <summary>
-    /// Rewrites every field whose category is a Papers tell with the tell's
-    /// value and flags it as an anachronism. An Answer or Appearance tell
-    /// leaves the papers on the cover. Changes nothing for an Honest or
-    /// NoPossibleLie plan.
+    /// Rewrites the tells into the papers and flags each rewritten field as a
+    /// tell: a Papers place tell rewrites every field of its category on every
+    /// paper; a record tell rewrites the fields of its category on its own
+    /// paper only (a borrowed manifest rewrites that form, not every Citizen
+    /// ID). An Answer or Appearance tell leaves the papers on the cover.
+    /// Changes nothing for an Honest or NoPossibleLie plan. Null papers and
+    /// fields are skipped.
     /// </summary>
-    public void ApplyTo(IEnumerable<DocumentField> fields)
+    public void ApplyTo(IReadOnlyList<IReadOnlyList<DocumentField>> documents)
     {
-        if (fields == null)
+        if (documents == null)
             return;
 
-        foreach (DocumentField field in fields)
+        for (int d = 0; d < documents.Count; d++)
         {
-            if (field != null && ChannelOf(field.category) == TellChannel.Papers)
+            IReadOnlyList<DocumentField> paper = documents[d];
+            if (paper == null)
+                continue;
+
+            foreach (DocumentField field in paper)
             {
-                field.value = _values[field.category];
-                field.isAnachronism = true;
+                if (field == null)
+                    continue;
+
+                if (ChannelOf(field.category) == TellChannel.Papers)
+                {
+                    field.value = _values[field.category];
+                    field.isAnachronism = true;
+                }
+
+                foreach (RecordTell tell in RecordTells)
+                {
+                    if (tell.Document == d && tell.Category == field.category)
+                    {
+                        field.value = tell.Value;
+                        field.isAnachronism = true;
+                    }
+                }
             }
         }
     }
 }
 
 /// <summary>
-/// Who lies about their home, where they really come from, and which tells
-/// they leak on their papers, in their answers or in their dress. Pure and seeded, so every
-/// rule and the draw order are tested headless. Draws on the traveller's lie
-/// stream (Seeds.ForLies), in this order: the roll; for a liar, the home; one
-/// pick per tell (a category/channel option); then the birth year when
-/// BirthDate is a tell on either channel.
+/// Who lies, which lie, and for a place lie where they really come from and
+/// which tells they leak on their papers, in their answers or in their dress.
+/// Pure and seeded, so every rule and the draw order are tested headless.
+/// Draws on the traveller's lie stream (Seeds.ForLies), in this order:
+/// <see cref="Roll"/> (the roll, then the kind when two or more lies are
+/// enabled for this traveller today); then the planner: for a place lie
+/// (<see cref="Plan"/>) the home, one pick per tell (a category/channel
+/// option), then the birth year when BirthDate is a tell on either channel;
+/// for a record lie RecordLies.Plan (the variant, then each forged value).
 /// </summary>
 public static class Lies
 {
@@ -153,18 +229,38 @@ public static class Lies
     /// honest unless authored as liars), a claim today's rules allow, and
     /// papers to leak tells on. Exempt travellers make no draw.
     /// </summary>
-    public static bool MayLie(bool honestPremade, bool claimAllowed, IReadOnlyList<DocumentField> papers) =>
-        !honestPremade && claimAllowed && papers != null && papers.Count > 0;
+    public static bool MayLie(bool honestPremade, bool claimAllowed, bool hasPapers) =>
+        !honestPremade && claimAllowed && hasPapers;
 
     /// <summary>
-    /// Rolls one traveller's lie. With probability <paramref name="liarChance"/>
-    /// the traveller lies. A (category, channel) option of another of today's
-    /// places is open when <paramref name="channels"/> allows the channel and
-    /// Forgery.IsProvableTell holds: Papers for a category the papers print
-    /// (first-appearance order), then Answer for one of
-    /// <paramref name="answerTellCategories"/> (today's question categories that
-    /// may carry an Answer tell, in question order; InterviewDay.AnswerTellCategories),
-    /// then Appearance for Culture (Looks.EvidenceCategory) when the place's
+    /// Rolls one traveller's lie (traveller types K5, §6.2): with probability
+    /// <paramref name="liarChance"/> the traveller lies (one Value draw), and
+    /// the lie is one of <paramref name="lieKinds"/> (the lies enabled today
+    /// that fit the traveller's kind, in the plan's order: LieKinds.For),
+    /// picked uniformly with one Range draw when two or more are enabled, so
+    /// a one-lie day draws as before. Null: honest. No lie enabled, or a null
+    /// <paramref name="rng"/>: honest with no draw.
+    /// </summary>
+    public static LieKind? Roll(float liarChance, IReadOnlyList<LieKind> lieKinds, IRandomSource rng)
+    {
+        if (rng == null || lieKinds == null || lieKinds.Count == 0)
+            return null;
+
+        if (!(rng.Value() < liarChance))
+            return null;
+
+        return lieKinds.Count == 1 ? lieKinds[0] : lieKinds[rng.Range(0, lieKinds.Count)];
+    }
+
+    /// <summary>
+    /// Plans a rolled place lie (a false origin). A (category, channel) option
+    /// of another of today's places is open when <paramref name="channels"/>
+    /// allows the channel and Forgery.IsProvableTell holds: Papers for a
+    /// category the papers print (first-appearance order), then Answer for
+    /// one of <paramref name="answerTellCategories"/> (today's question
+    /// categories that may carry an Answer tell, in question order;
+    /// InterviewDay.AnswerTellCategories), then Appearance for Culture
+    /// (Looks.EvidenceCategory) when the place's
     /// HomeCandidate.AppearanceLeakable holds.
     /// The true home is picked uniformly among the places with at least one
     /// open option, and max(1, min(<paramref name="tellCount"/>, the distinct
@@ -174,14 +270,14 @@ public static class Lies
     /// whom no place qualifies is NoPossibleLie. A null <paramref name="rng"/>
     /// is Honest with no draw; a null list counts as empty.
     /// </summary>
-    public static LiePlan Plan(float liarChance, int tellCount,
+    public static LiePlan Plan(int tellCount,
                                string claimNationId, string claimEraId, string coverBirthDate,
                                IReadOnlyList<HomeCandidate> todays, IReadOnlyList<DocumentField> papers,
                                IReadOnlyList<ClueCategory> answerTellCategories, IReadOnlyList<TellChannel> channels,
                                FactTable facts, ICollection<ClueCategory> bookCategories, IRandomSource rng)
     {
-        if (rng == null || !(rng.Value() < liarChance))
-            return LiePlan.Without(LieOutcome.Honest);
+        if (rng == null)
+            return LiePlan.Without(LieOutcome.Honest, LieKind.FalseOrigin);
 
         bool papersOpen = Allows(channels, TellChannel.Papers);
         bool answersOpen = Allows(channels, TellChannel.Answer);
@@ -220,7 +316,7 @@ public static class Lies
         }
 
         if (candidates.Count == 0)
-            return LiePlan.Without(LieOutcome.NoPossibleLie);
+            return LiePlan.Without(LieOutcome.NoPossibleLie, LieKind.FalseOrigin);
 
         int pick = rng.Range(0, candidates.Count);
         int homeIndex = candidates[pick];
@@ -247,7 +343,7 @@ public static class Lies
         if (tells.Contains(ClueCategory.BirthDate))
             values[ClueCategory.BirthDate] = BirthDates.PickOtherYear(coverBirthDate, home.BirthYearMin, home.BirthYearMax, rng);
 
-        return new LiePlan(LieOutcome.Liar, homeIndex, tells.AsReadOnly(), values, channelOf);
+        return new LiePlan(LieOutcome.Liar, LieKind.FalseOrigin, homeIndex, tells.AsReadOnly(), values, channelOf);
     }
 
     /// <summary>True when the channel list holds the channel (a null list holds none).</summary>

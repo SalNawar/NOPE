@@ -29,9 +29,9 @@ public class InterviewTests
         new DocumentField { category = ClueCategory.Currency, label = "Coin of Issue", value = "Deben", page = 0 }
     };
 
-    /// <summary>A lie plan over today = [Egypt, Iraq], asking about the capital.</summary>
-    private static LiePlan Plan(float chance, TellChannel channel, params ScriptStep[] script) =>
-        Lies.Plan(chance, 1, "egypt", "ancient", Cover, new[] { Egypt, Iraq }, Papers(),
+    /// <summary>A place-lie plan over today = [Egypt, Iraq], asking about the capital (the roll already made: Lies.Roll).</summary>
+    private static LiePlan Plan(TellChannel channel, params ScriptStep[] script) =>
+        Lies.Plan(1, "egypt", "ancient", Cover, new[] { Egypt, Iraq }, Papers(),
                   new[] { ClueCategory.Geography }, new[] { channel }, Facts(), Books, new ScriptedRandom(script));
 
     private static InterviewLines Lines() => new InterviewLines
@@ -55,9 +55,10 @@ public class InterviewTests
     [Test]
     public void Answer_WithoutASpokenTell_IsTheCover()
     {
-        LiePlan honest = Plan(0f, TellChannel.Answer, ScriptStep.Value(0.5f));
-        LiePlan noLie = Lies.Plan(1f, 1, "egypt", "ancient", Cover, new[] { Egypt }, Papers(), new[] { ClueCategory.Geography },
-                                  new[] { TellChannel.Answer }, Facts(), Books, new ScriptedRandom(ScriptStep.Value(0f)));
+        LiePlan honest = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Egypt, Iraq }, Papers(), new[] { ClueCategory.Geography },
+                                   new[] { TellChannel.Answer }, Facts(), Books, null);
+        LiePlan noLie = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Egypt }, Papers(), new[] { ClueCategory.Geography },
+                                  new[] { TellChannel.Answer }, Facts(), Books, new ScriptedRandom());
         Assert.AreEqual(LieOutcome.Honest, honest.Outcome);
         Assert.AreEqual(LieOutcome.NoPossibleLie, noLie.Outcome);
 
@@ -73,7 +74,7 @@ public class InterviewTests
     [Test]
     public void Answer_AnAnswerTell_GivesTheTrueHomesValue_AndIsATell()
     {
-        LiePlan liar = Plan(1f, TellChannel.Answer, ScriptStep.Value(0f), ScriptStep.Range(0), ScriptStep.Range(0));
+        LiePlan liar = Plan(TellChannel.Answer, ScriptStep.Range(0), ScriptStep.Range(0));
         Assert.AreEqual(TellChannel.Answer, liar.ChannelOf(ClueCategory.Geography));
 
         InterviewAnswer a = Interview.Answer(ClueCategory.Geography, "Thebes", liar);
@@ -88,7 +89,7 @@ public class InterviewTests
     [Test]
     public void Answer_APapersTell_AnswersWithTheCover()
     {
-        LiePlan liar = Plan(1f, TellChannel.Papers, ScriptStep.Value(0f), ScriptStep.Range(0), ScriptStep.Range(0));
+        LiePlan liar = Plan(TellChannel.Papers, ScriptStep.Range(0), ScriptStep.Range(0));
         Assert.AreEqual(TellChannel.Papers, liar.ChannelOf(ClueCategory.Currency));
 
         InterviewAnswer a = Interview.Answer(ClueCategory.Currency, "Deben", liar);

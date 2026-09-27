@@ -21,15 +21,25 @@ public enum TravelRuleType
     /// closes no destination; a 2150 citizen's costume error breaks it, a
     /// deviation fault proven against the Costume Guide (CostumeErrors).
     /// </summary>
-    DressForDestination
+    DressForDestination,
+
+    /// <summary>
+    /// A procedure line with no predicate (traveller types §5.3): what the
+    /// desk checks for a kind ("Leisure departures: a Leisure Visa and a
+    /// Departure Manifest. Every paper must match the Citizen Account."). It
+    /// closes no destination and plans no violator; the liars break it (L1,
+    /// L2: record lies proven against the account, RecordLies).
+    /// </summary>
+    Procedure
 }
 
 /// <summary>
 /// A daily travel restriction announced in the morning briefing. The player
 /// must DENY an otherwise-valid traveler whose claimed destination violates an
-/// active closure. A standing procedure (dress for the destination) closes no
-/// destination: its line tells the player what to check. Rules are listed on
-/// a DayPlan and evaluated per case.
+/// active closure (a directive fault, DirectiveFault.ClosedDestination). A
+/// standing procedure (dress for the destination, a kind's procedure line)
+/// closes no destination: its line tells the player what to check. Rules are
+/// listed on a DayPlan and evaluated per case.
 /// </summary>
 [CreateAssetMenu(fileName = "Rule_", menuName = "TimeDesk/Travel Rule", order = 6)]
 public sealed class TravelRuleSO : ScriptableObject

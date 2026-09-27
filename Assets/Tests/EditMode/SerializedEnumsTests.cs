@@ -51,6 +51,16 @@ public class SerializedEnumsTests
         Assert.AreEqual(2, System.Enum.GetValues(typeof(TransponderClass)).Length, "a new member is appended here too");
     }
 
+    /// <summary>LieKind: stored in DayPlanSO.lieKinds (world_source.json days[].lies).</summary>
+    [Test]
+    public void LieKind_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)LieKind.FalseOrigin);
+        Assert.AreEqual(1, (int)LieKind.PoorPosingAsRich);
+        Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+    }
+
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>
     [Test]
     public void TravellerKind_KeepsItsSerializedInts()

@@ -59,7 +59,7 @@ public sealed class ShiftLedger
     /// <summary>Number of wrong sends.</summary>
     public int WrongCount => verdicts.Count - CorrectCount;
 
-    /// <summary>Denials of liars made without documented evidence.</summary>
+    /// <summary>Denials of deviation faults made without documented evidence.</summary>
     public int UnprovenDenialCount
     {
         get
@@ -111,13 +111,7 @@ public sealed class CaseVerdict
     /// <summary>Visitor display name (for the report).</summary>
     public string visitorName;
 
-    /// <summary>Era the player chose.</summary>
-    public string chosenEraId;
-
-    /// <summary>The claimed era, where the traveller is sent (the correct era on the legacy era-pick path). A liar's real home is <see cref="trueHomeLabel"/>.</summary>
-    public string trueEraId;
-
-    /// <summary>True if the send was correct.</summary>
+    /// <summary>True if the decision was correct.</summary>
     public bool correct;
 
     /// <summary>True if this case was a legendary.</summary>
@@ -151,17 +145,8 @@ public sealed class CaseVerdict
     /// <summary>True if the player accepted (approved travel); false = denied.</summary>
     public bool accepted;
 
-    /// <summary>True if accepting was the correct call (honest + allowed).</summary>
+    /// <summary>True if accepting was the correct call (no fault of either kind, VerdictRules).</summary>
     public bool shouldAccept;
-
-    /// <summary>True if the traveller lied about their home.</summary>
-    public bool wasLiar;
-
-    /// <summary>Where the traveller really comes from: the claimed place for an honest traveller.</summary>
-    public string trueHomeLabel = string.Empty;
-
-    /// <summary>True if the claimed destination was permitted by today's rules.</summary>
-    public bool claimAllowed = true;
 
     /// <summary>The visitor's stated travel claim, for the report.</summary>
     public string claimSummary = string.Empty;
@@ -169,14 +154,14 @@ public sealed class CaseVerdict
     /// <summary>Discrepancies documented in the scanner when the decision was made.</summary>
     public int evidenceCount;
 
-    /// <summary>True if a liar was denied without documented evidence.</summary>
+    /// <summary>True if a deviation fault was denied without documented evidence.</summary>
     public bool unprovenDenial;
 
     /// <summary>
-    /// The deviation fault that makes an accept wrong, as a citation key
-    /// suffix: "panic" for a costume error (CostumeErrors.FaultReason); empty
-    /// for none or a fault without its own reason yet (the plan's phase 7
-    /// gives each lie and directive its reason).
+    /// The traveller's one fault (Faults.Reason), as a citation key suffix:
+    /// "closed" for a closed destination, "panic" for a costume error
+    /// (CostumeErrors.FaultReason), "forged" for a record lie, "disguised"
+    /// for a place lie; empty for no fault.
     /// </summary>
     public string faultReason = string.Empty;
 
