@@ -39,13 +39,13 @@ public sealed class SearchFieldChip : MonoBehaviour
 
     private void Awake() => Init();
 
-    /// <summary>Clears the typed text and the chip (Escape's ClearSearch).</summary>
+    /// <summary>Clears the typed text and then the chip (Escape's ClearSearch; the text first, so search sees an empty field when the chip goes and shows nothing).</summary>
     public void Clear()
     {
         Init();
-        ShowChip(null);
         if (field != null)
             field.text = string.Empty;
+        ShowChip(null);
     }
 
     /// <summary>Wires the field and the chip once.</summary>

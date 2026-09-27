@@ -60,8 +60,8 @@ public sealed class SearchResultsView : MonoBehaviour
     /// <summary>Raised when a chip or "Show all" filters to a source (null: All).</summary>
     public event Action<AppTab?> Filtered;
 
-    /// <summary>True while the panel shows.</summary>
-    public bool IsOpen => gameObject.activeSelf;
+    /// <summary>True while the panel shows (not while its window is down: a minimised app's stale panel takes no Escape).</summary>
+    public bool IsOpen => gameObject.activeInHierarchy;
 
     /// <summary>The first hit listed (Enter opens it); false when none is.</summary>
     public bool TryFirst(out SearchHit hit)
