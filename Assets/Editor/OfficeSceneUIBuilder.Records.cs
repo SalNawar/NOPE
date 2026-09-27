@@ -10,7 +10,8 @@ using UnityEngine.UI;
 /// lookup (a name or a number, SEARCH) and the status line. Its rows are the
 /// transcript's label-and-value layout (a fixed label column, the value
 /// wrapping), so a record's long note fits; a row's label keeps the record
-/// label's ink (DiegeticLabel). Built with the app (fresh on each run).
+/// label's ink (DiegeticLabel); a row lights by its key and carries the found
+/// mark (phase 18). Built with each pane of the app (fresh on each run).
 /// Part of <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp calls it.
 /// </summary>
 public static partial class OfficeSceneUIBuilder
@@ -37,6 +38,7 @@ public static partial class OfficeSceneUIBuilder
         TMP_Text rowLabel = paged.rowTemplate.transform.Find("Label").GetComponent<TMP_Text>();
         rowLabel.color = RecordLabelInk;
         Tag(rowLabel, ThemeRoleId.DiegeticLabel, ThemePart.Ink);
+        DecorateAppRow(paged.rowTemplate, false);
 
         CitizenRecordsWindowController records = root.gameObject.AddComponent<CitizenRecordsWindowController>();
         var so = new SerializedObject(records);
@@ -48,7 +50,11 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "compareController", compare);
         so.ApplyModifiedProperties();
 
-        view = root.gameObject.AddComponent<RecordsView>();
+        RecordsView recordsView = root.gameObject.AddComponent<RecordsView>();
+        var soView = new SerializedObject(recordsView);
+        Wire(soView, "records", records);
+        soView.ApplyModifiedProperties();
+        view = recordsView;
         return records;
     }
 }

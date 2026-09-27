@@ -706,7 +706,7 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>A primitive part of a stand-in prop (no collider: the prop's click box takes the clicks).</summary>
-    private static void PrimitivePart(Transform parent, string name, PrimitiveType type, Vector3 position, Vector3 size, Material material)
+    private static GameObject PrimitivePart(Transform parent, string name, PrimitiveType type, Vector3 position, Vector3 size, Material material)
     {
         GameObject part = GameObject.CreatePrimitive(type);
         part.name = name;
@@ -716,6 +716,16 @@ public static partial class OfficeSceneUIBuilder
         part.transform.localScale = size;
         if (material != null)
             part.GetComponent<MeshRenderer>().sharedMaterial = material;
+        return part;
+    }
+
+    /// <summary>A placeholder part of a scanner upgrade (the PC redesign SC6): a cube like PrimitivePart's, turned by <paramref name="rotation"/>, inactive until the upgrade is owned (DeskScanner.ShowUpgrades).</summary>
+    private static GameObject UpgradePart(Transform parent, string name, Vector3 position, Vector3 size, Quaternion rotation, Material material)
+    {
+        GameObject part = PrimitivePart(parent, name, PrimitiveType.Cube, position, size, material);
+        part.transform.localRotation = rotation;
+        part.SetActive(false);
+        return part;
     }
 
     /// <summary>
@@ -728,7 +738,8 @@ public static partial class OfficeSceneUIBuilder
     /// makes it live) and the Examiner (poses held
     /// papers; the PC frame bounds their region); Office/Scanner (the
     /// DeskScanner, its click box, Clickable and reaction, and a stand-in
-    /// flatbed machine the binder shows where the art has no scanner); the
+    /// flatbed machine the binder shows where the art has no scanner, with
+    /// the upgrades' feeder tray and analysis lamp, inactive until owned: SC6); the
     /// day-1 scan note. Idempotent.
     /// </summary>
     private static DeskController BuildDesk(Transform office, DeskConfigSO config, PcFrame pcFrame, out DeskScanner scanner, out GameObject scannerPlaceholder, out TextMeshPro scanHint)
@@ -741,10 +752,15 @@ public static partial class OfficeSceneUIBuilder
         PrimitivePart(machine, "Bed", PrimitiveType.Cube, new Vector3(0f, 0.051f, 0.01f), new Vector3(0.34f, 0.004f, 0.25f), LitMaterial("Placeholder_ScannerGlass", new Color(0.08f, 0.16f, 0.17f), 0.85f));
         PrimitivePart(machine, "Hinge", PrimitiveType.Cube, new Vector3(0f, 0.06f, 0.15f), new Vector3(0.4f, 0.03f, 0.03f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
         PrimitivePart(machine, "Light", PrimitiveType.Cube, new Vector3(0.16f, 0.052f, -0.135f), new Vector3(0.02f, 0.006f, 0.02f), LitMaterial("Placeholder_ScannerLight", new Color(0.35f, 0.95f, 0.45f), 0.6f));
+        // The upgrades' parts (SC6), shown by DeskScanner.ShowUpgrades while owned: the Auto-Feed's sheet tray leaning on the hinge, the Analysis's lamp bar across the bed.
+        GameObject tray = UpgradePart(machine, "FeederTray", new Vector3(0f, 0.09f, 0.19f), new Vector3(0.3f, 0.006f, 0.12f), Quaternion.Euler(-35f, 0f, 0f), LitMaterial("Placeholder_ScannerTrim", new Color(0.84f, 0.78f, 0.65f), 0.3f));
+        GameObject lamp = UpgradePart(machine, "AnalysisLamp", new Vector3(0f, 0.11f, -0.1f), new Vector3(0.3f, 0.014f, 0.024f), Quaternion.identity, LitMaterial("Placeholder_ScannerLamp", new Color(0.78f, 0.72f, 0.98f), 0.7f));
         scannerPlaceholder = machine.gameObject;
         var soScanner = new SerializedObject(scanner);
         soScanner.FindProperty("dropSize").vector2Value = new Vector2(0.4f, 0.32f);
         soScanner.FindProperty("bedCentre").vector3Value = new Vector3(0f, 0.056f, 0.01f);
+        SetRef(soScanner, "feederTray", tray);
+        SetRef(soScanner, "analysisLamp", lamp);
         soScanner.ApplyModifiedProperties();
 
         scanHint = FloatingNote(office, "ScanHint", true);

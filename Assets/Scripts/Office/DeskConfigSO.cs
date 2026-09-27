@@ -44,6 +44,9 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>Seconds a desk scan takes (the shift clock keeps running).</summary>
     [Min(0.1f)] public float scanSeconds = 1.5f;
 
+    /// <summary>Seconds a scan by hand takes with the Analysis Scanner (the analysis pass, the PC redesign SC4); a scan the Auto-Feed Scanner feeds itself keeps scanSeconds.</summary>
+    [Min(0.1f)] public float analysisScanSeconds = 3f;
+
     /// <summary>The day-1 note above the scanner: a UI string key (world_source.json ui.strings; empty = no note).</summary>
     public string scanHintKey = "desk.scanHint";
 

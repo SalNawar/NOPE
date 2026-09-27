@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// <see cref="entryRowTemplate"/> (a disabled row with two TMP texts, an Image
 /// background and a Button). Subclasses say how many rows there are and fill
 /// each one. The keys turn its pages (IPagedRows) and a jump shows a row's
-/// page (ShowRowAt). The serialized field names are the ones the builder wires.
+/// page (ShowPageOf). The serialized field names are the ones the builder wires.
 /// </summary>
 public abstract class PagedRowsWindow : MonoBehaviour, IPagedRows
 {
@@ -90,6 +90,11 @@ public abstract class PagedRowsWindow : MonoBehaviour, IPagedRows
     /// <summary>Shows the newest page.</summary>
     public void ShowLastPage() => ShowPage(Paging.PageCount(RowCount, entriesPerPage) - 1);
 
+    /// <summary>The page shown (0-based).</summary>
+    protected int Page => _page;
+
+    /// <summary>Shows the page row <paramref name="index"/> is on (a link, Back or a jump turning to it).</summary>
+    protected void ShowPageOf(int index) => ShowPage(Paging.PageOf(index, entriesPerPage));
     /// <inheritdoc />
     public bool TurnPage(int direction)
     {
@@ -99,9 +104,6 @@ public abstract class PagedRowsWindow : MonoBehaviour, IPagedRows
         ShowPage(target);
         return true;
     }
-
-    /// <summary>Shows the page row <paramref name="index"/> is on (a jump to it).</summary>
-    protected void ShowRowAt(int index) => ShowPage(Paging.PageOf(index, entriesPerPage));
 
     /// <summary>Replaces the row clones with the current page's rows.</summary>
     private void Rebuild()

@@ -12,12 +12,16 @@ using UnityEngine.UI;
 /// heading line), a page at a time (PagedRowsWindow). A row that is evidence
 /// is compare-clickable, keyed by its record (EvidencePicks.ForRecord), so
 /// the traveller's own record can disprove their birth-date tell
-/// (RecordMismatch; another person's record proves nothing). The registry,
-/// the agency block and the date are injected per day by GameManager via
+/// (RecordMismatch; another person's record proves nothing); it lights while
+/// its key is picked (AppRow). A smart link runs a lookup here and marks the
+/// found record's row of its category (Reveal); a lookup the player runs is
+/// announced (Searched) for the pane's history. The registry, the agency
+/// block and the date are injected per day by GameManager via
 /// InvestigationUIController. Each evidence row is marked with its key for
 /// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
-/// tells the Records tab (Looked), and a jump shows a record and its row
-/// (Show).
+/// tells the Records tab (Looked: the recent items, and the steps checklist's
+/// "a record was looked up" through DayReference), and the player's typed
+/// lookup is announced (Searched: the pane's history).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -68,6 +72,15 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
     /// <summary>The shown record's lines, in order (empty when none is shown).</summary>
     private readonly List<Line> _lines = new();
 
+    /// <summary>The row a link went to (its pick key; null: none), marked found.</summary>
+    private string _foundKey;
+
+    /// <summary>The lookup shown (trimmed; null: none).</summary>
+    public string Query { get; private set; }
+
+    /// <summary>Raised when the player runs a lookup (SEARCH or Enter), not when a link runs one.</summary>
+    public event System.Action Searched;
+
     /// <summary>The record shown, or null.</summary>
     public CitizenRecord Current => _current;
 
@@ -85,6 +98,7 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         if (searchInput != null)
             searchInput.onSubmit.AddListener(_ => Search());
 
+
         ShowIdle();
     }
 
@@ -98,10 +112,47 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         ShowIdle();
     }
 
-    /// <summary>Looks up the typed name or number and lists the record's rows (or says none is on file).</summary>
+    /// <summary>The player's lookup: the typed name or number (Searched tells the pane).</summary>
     public void Search()
     {
-        string query = searchInput != null ? searchInput.text : null;
+        Look(searchInput != null ? searchInput.text : null);
+        Searched?.Invoke();
+    }
+
+    /// <summary>
+    /// A smart link's, Back's or a jump's lookup: <paramref name="query"/>
+    /// typed and run (null keeps the lookup shown), then the found record's
+    /// row of <paramref name="row"/> shown and marked found (null: the
+    /// record's top, nothing marked). False when the lookup finds no record,
+    /// or the record has no such row.
+    /// </summary>
+    public bool Reveal(string query, ClueCategory? row)
+    {
+        if (query != null)
+        {
+            if (searchInput != null)
+                searchInput.SetTextWithoutNotify(query);
+            Look(query);
+        }
+
+        int index = -1;
+        if (row.HasValue && _current != null)
+            for (int i = 0; i < _lines.Count && index < 0; i++)
+                if (_lines[i].Heading == null && _lines[i].Row.IsEvidence && _lines[i].Row.Category == row.Value)
+                    index = i;
+        _foundKey = index >= 0 ? PickKeys.Record(row.Value, _current.Id) : null;
+        if (index >= 0)
+            ShowPageOf(index);
+        else
+            ShowPage(query != null ? 0 : Page);
+        return (query == null || _current != null) && (!row.HasValue || index >= 0);
+    }
+
+    /// <summary>Looks up a name or number and lists the record's rows (or says none is on file), from the first page.</summary>
+    private void Look(string query)
+    {
+        Query = string.IsNullOrWhiteSpace(query) ? null : query.Trim();
+        _foundKey = null;
         _current = _registry != null ? _registry.Find(query) : null;
 
         _lines.Clear();
@@ -123,25 +174,11 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         Looked?.Invoke();
     }
 
-    /// <summary>A jump: looks up <paramref name="recordId"/> (its number, else its name) and shows the page of its row keyed <paramref name="rowKey"/> (null: the first page).</summary>
-    public void Show(string recordId, string rowKey)
-    {
-        if (searchInput != null)
-            searchInput.text = recordId ?? string.Empty;
-        Search();
-        if (rowKey == null || _current == null)
-            return;
-        for (int i = 0; i < _lines.Count; i++)
-            if (_lines[i].Heading == null && _lines[i].Row.IsEvidence && PickKeys.Record(_lines[i].Row.Category, _current.Id) == rowKey)
-            {
-                ShowRowAt(i);
-                return;
-            }
-    }
-
     private void ShowIdle()
     {
         _current = null;
+        Query = null;
+        _foundKey = null;
         _lines.Clear();
         if (statusText != null)
             statusText.text = UiText.Get("records.idle");
@@ -182,6 +219,13 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
 
         CitizenRecord record = _current;
         RecordRow picked = line.Row;
-        button.onClick.AddListener(() => compareController.Select(EvidencePicks.ForRecord(record, picked), new ImageHighlight(background)));
+        ComparePick pick = EvidencePicks.ForRecord(record, picked);
+        AppRow mark = row.GetComponent<AppRow>();
+        if (mark != null)
+        {
+            mark.Bind(compareController, pick.Key);
+            mark.SetFound(pick.Key == _foundKey);
+        }
+        button.onClick.AddListener(() => compareController.Select(pick, null));
     }
 }

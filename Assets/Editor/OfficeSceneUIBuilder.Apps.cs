@@ -62,14 +62,13 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The Mail window: INBOX (a scrolling list of message rows) on the left; on the right the message's link over the memo, a Form_Memo page (TC-950) on a FormView in a scroll; the directive memo's link opens <paramref name="investigation"/> on its Rules tab. Rebuilt fresh.</summary>
     private static DesktopWindow BuildMailWindow(Transform windowLayer, DesktopConfigSO config, MailFeed feed, DesktopApps apps, BrowserWindow browser,
-                                                 InvestigationApp investigation, out TMP_Text title)
+                                                 InvestigationApp investigation)
     {
         DestroyChildIfPresent(windowLayer, "MailWindow");
         DesktopWindow chrome = BuildOSWindow(windowLayer, "MailWindow", null, null, null, config.mailWindowSize);
         Transform win = chrome.transform;
         Object.DestroyImmediate(win.Find("Body").gameObject);
-        title = win.Find("Header/TitleText").GetComponent<TMP_Text>();
-        title.text = UiText.Get("window.mail");
+        win.Find("Header/TitleText").GetComponent<TMP_Text>().text = UiText.Get("window.mail");
 
         Text(win, "InboxLabel", null, 16, TextAlignmentOptions.BottomLeft, new Vector2(0.02f, 0.885f), new Vector2(0.36f, 0.935f), Ink,
              ThemeRoleId.WindowBody, "mail.inbox", FontStyles.Bold);
@@ -227,8 +226,10 @@ public static partial class OfficeSceneUIBuilder
     /// English), Motion (Full / Reduced), Desktop (open icons with Double
     /// click / Single click, Reset icon positions: phase 17; its icons wired
     /// by WireIconSettings), Investigation (Text size: a button per zoom
-    /// level, redesign phase 20; phases 18 and 21 add their rows), Keyboard
-    /// (Show shortcuts, which opens the F1 card: BuildShortcutCard), then the
+    /// level, redesign phase 20, on the row's left half; Steps shown / Steps
+    /// hidden on its right half, phase 21: BuildSettingsSteps; phase 18 adds
+    /// its row), Keyboard (Show shortcuts, which opens the F1 card:
+    /// BuildShortcutCard), then the
     /// note. Existing objects are kept; every row's anchors are re-applied on
     /// each build.
     /// </summary>
@@ -268,9 +269,9 @@ public static partial class OfficeSceneUIBuilder
         int levels = config.zoomLevels.Length;
         for (int i = 0; i < levels; i++)
         {
-            float from = 0.05f + i * 0.9f / levels;
-            var aMin = new Vector2(from + (i > 0 ? 0.01f : 0f), 0.265f);
-            var aMax = new Vector2(from + 0.9f / levels - (i < levels - 1 ? 0.01f : 0f), 0.335f);
+            float from = 0.05f + i * 0.43f / levels;
+            var aMin = new Vector2(from + (i > 0 ? 0.005f : 0f), 0.265f);
+            var aMax = new Vector2(from + 0.43f / levels - (i < levels - 1 ? 0.005f : 0f), 0.335f);
             Button size = MakeButton(win, "TextSizeButton_" + config.zoomLevels[i], null, aMin, aMax, null, ThemeRoleId.Button);
             SetAnchors(size.transform, aMin, aMax);
             TMP_Text sizeLabel = size.transform.Find("Label").GetComponent<TMP_Text>();
@@ -278,6 +279,7 @@ public static partial class OfficeSceneUIBuilder
             Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
             textSizes.Add(size);
         }
+        BuildSettingsSteps(win);
 
         TMP_Text keyboard = Text(win, "KeyboardLabel", null, 20, TextAlignmentOptions.TopLeft, new Vector2(0.05f, 0.195f), new Vector2(0.95f, 0.25f), Ink,
                                  ThemeRoleId.WindowBody, "settings.keyboard");

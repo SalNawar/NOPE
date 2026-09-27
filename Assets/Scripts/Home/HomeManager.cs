@@ -62,7 +62,7 @@ public sealed class HomeManager : MonoBehaviour
         _household = _expenseReport.total;
         RecordStatement();
 
-        homeUI?.UpdateHud(_world);
+        RefreshHud();
 
         Debug.Log("[HomeManager] <<< Exiting Start (showing Expenses panel).");
 
@@ -92,7 +92,7 @@ public sealed class HomeManager : MonoBehaviour
         {
             _household += HomeEconomy.GetCareCost(_config);
             RecordStatement();
-            homeUI?.UpdateHud(_world);
+            RefreshHud();
 
             // Refresh the panel in place (report numbers don't change; rows do).
             if (homeUI != null && homeUI.HasExpensesPanel)
@@ -111,7 +111,7 @@ public sealed class HomeManager : MonoBehaviour
     {
         Debug.Log("[HomeManager] >>> Entering ShowShop.");
 
-        homeUI?.UpdateHud(_world);
+        RefreshHud();
 
         if (homeUI != null && homeUI.HasShopPanel)
             homeUI.ShowShop(_world, _lib, HandleBuyUpgrade, ShowSlot);
@@ -122,7 +122,7 @@ public sealed class HomeManager : MonoBehaviour
         }
     }
 
-    /// <summary>Purchases an upgrade (if affordable and not already owned), then refreshes the shop.</summary>
+    /// <summary>Purchases an upgrade (if affordable at its discounted price, HomeEconomy.UpgradeCost, and not already owned), then refreshes the shop.</summary>
     private void HandleBuyUpgrade(UpgradeSO upgrade)
     {
         Debug.Log($"[HomeManager] >>> Entering HandleBuyUpgrade (upgrade='{upgrade?.displayName}').");
@@ -133,10 +133,7 @@ public sealed class HomeManager : MonoBehaviour
             return;
         }
 
-        float discountPercent = _lib != null
-            ? TimelineEffects.GetShopDiscountPercent(_world, _lib, upgrade.id)
-            : 0f;
-        int cost = Mathf.RoundToInt(upgrade.cost * (1f - discountPercent / 100f));
+        int cost = HomeEconomy.UpgradeCost(_world, _lib, upgrade, out float discountPercent);
 
         if (_world.money < cost)
         {
@@ -155,7 +152,7 @@ public sealed class HomeManager : MonoBehaviour
                 _world.day, upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);
         }
 
-        homeUI?.UpdateHud(_world);
+        RefreshHud();
         RecordStatement();
 
         // Re-show to refresh rows (costs/owned state) without advancing the flow.
@@ -170,7 +167,7 @@ public sealed class HomeManager : MonoBehaviour
     {
         Debug.Log("[HomeManager] >>> Entering ShowSlot.");
 
-        homeUI?.UpdateHud(_world);
+        RefreshHud();
 
         if (homeUI != null && homeUI.HasSlotPanel)
             homeUI.ShowSlot(_world, _config, HandleSpin, ShowSleep);
@@ -213,7 +210,7 @@ public sealed class HomeManager : MonoBehaviour
 
         if (outcome == null)
         {
-            homeUI?.UpdateHud(_world);
+            RefreshHud();
             RecordStatement();
             Debug.Log("[HomeManager] <<< Exiting HandleSpin — no outcome picked (nothing happens).");
             return "...nothing happens.";
@@ -235,7 +232,7 @@ public sealed class HomeManager : MonoBehaviour
                 _world.day, duration, applyInstantOps: true);
         }
 
-        homeUI?.UpdateHud(_world);
+        RefreshHud();
         RecordStatement();
 
         string line = !string.IsNullOrEmpty(outcome.resultLine) ? outcome.resultLine : outcome.displayName;
@@ -256,7 +253,7 @@ public sealed class HomeManager : MonoBehaviour
     {
         Debug.Log("[HomeManager] >>> Entering ShowSleep.");
 
-        homeUI?.UpdateHud(_world);
+        RefreshHud();
 
         if (homeUI != null && homeUI.HasSleepPanel)
             homeUI.ShowSleep(_world, HandleSleep);
@@ -283,5 +280,12 @@ public sealed class HomeManager : MonoBehaviour
         }
 
         RunManager.Instance.Sleep();
+    }
+
+    /// <summary>Refreshes the HUD when the UI is wired (Unity's own null check, never ?. on a serialized reference: audit R2-013).</summary>
+    private void RefreshHud()
+    {
+        if (homeUI != null)
+            homeUI.UpdateHud(_world);
     }
 }

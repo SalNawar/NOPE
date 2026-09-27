@@ -19,7 +19,8 @@ using UnityEngine.UI;
 /// them, focuses the window under the pointer (its own raycast through the
 /// frame camera: a button inside a window takes the pointer-down itself),
 /// and on the empty desktop (the wallpaper, the icons and their layer)
-/// leaves nothing focused. It knows the window or icon drag under way, which
+/// leaves nothing focused, then tells who listens what was pressed (Pressed:
+/// the Investigation app's active pane). It knows the window or icon drag under way, which
 /// the Escape chain (DesktopKeyboard, redesign phase 20) may cancel. It runs
 /// before the EventSystem (whose script order is -1000) and the office's
 /// pollers.
@@ -78,6 +79,9 @@ public sealed class DesktopWindowManager : MonoBehaviour
 
     /// <summary>The focused window, or null (no window has the focus: the desktop's icons take the arrows and Enter).</summary>
     public DesktopWindow FocusedWindow => _stack.Focused != null && _windows.TryGetValue(_stack.Focused, out DesktopWindow w) ? w : null;
+
+    /// <summary>Raised on each press on the desktop with the top graphic under the pointer (null: nothing), before the press's click: the Investigation app makes the pane pressed in its active one.</summary>
+    public event System.Action<GameObject> Pressed;
 
     /// <summary>True while a title-bar or icon drag is under way (Escape cancels it).</summary>
     public bool Dragging => _drag != null;
@@ -275,6 +279,7 @@ public sealed class DesktopWindowManager : MonoBehaviour
     private void Press(Vector2 screen)
     {
         GameObject top = TopHit(screen);
+        Pressed?.Invoke(top);
         if (contextMenu != null && contextMenu.IsOpen && !contextMenu.IsPart(top))
             contextMenu.Close();
         if (shell != null && shell.StartMenuOpen && !shell.IsStartMenuPart(top))

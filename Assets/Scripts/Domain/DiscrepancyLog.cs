@@ -190,14 +190,24 @@ public sealed class DiscrepancyLog
 {
     private readonly List<Discrepancy> _items = new();
 
+    /// <summary>The documented categories (one discrepancy each).</summary>
+    private readonly HashSet<ClueCategory> _categories = new();
+
     /// <summary>Registered discrepancies, in registration order.</summary>
     public IReadOnlyList<Discrepancy> Items => _items;
 
     /// <summary>Number of registered discrepancies.</summary>
     public int Count => _items.Count;
 
+    /// <summary>The documented categories, one discrepancy each: what the Analysis Scanner no longer marks (PaperAnalysis.First).</summary>
+    public IReadOnlyCollection<ClueCategory> Categories => _categories;
+
     /// <summary>Empties the log (call when a new case starts).</summary>
-    public void Clear() => _items.Clear();
+    public void Clear()
+    {
+        _items.Clear();
+        _categories.Clear();
+    }
 
     /// <summary>
     /// Whether a compared pair proves a contradiction of the current claim by
@@ -319,12 +329,8 @@ public sealed class DiscrepancyLog
     /// </summary>
     public bool Add(Discrepancy proof)
     {
-        if (proof == null)
+        if (proof == null || !_categories.Add(proof.category))
             return false;
-
-        foreach (Discrepancy existing in _items)
-            if (existing.category == proof.category)
-                return false;
 
         _items.Add(proof);
         return true;

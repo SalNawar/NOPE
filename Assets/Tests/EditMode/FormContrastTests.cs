@@ -8,7 +8,8 @@ using NUnit.Framework;
 /// on a box, the section heads on their band, the fine print on the paper,
 /// the rules and the stamp area's dash as outlines (3:1), and the ink on each
 /// fill laid over a box (the hover tint, every theme's pick highlight), and
-/// the scan strip's text on the scanner backing (phase 5).
+/// the scan strip's text on the scanner backing (phase 5), and the Analysis
+/// Scanner's mark as an outline on a box and on the paper (phase 22).
 /// </summary>
 public class FormContrastTests
 {
@@ -30,7 +31,8 @@ public class FormContrastTests
         Band = Hex("#E2DACA"),
         StampDash = Hex("#6B6358"),
         Backing = Hex("#212329"),
-        BackingInk = Hex("#D9DBE0")
+        BackingInk = Hex("#D9DBE0"),
+        Analysis = Hex("#8B2E22")
     };
 
     [Test]
@@ -73,5 +75,17 @@ public class FormContrastTests
         var overlays = new List<(string, Rgba)> { ("the 'egypt' pick highlight", new Rgba(0.1f, 0.1f, 0.3f, 0.9f)) };
         List<string> problems = FormContrast.Problems(Spec(), overlays, new ContrastRules());
         Assert.IsTrue(problems.Single().Contains("egypt"), string.Join("\n", problems));
+    }
+
+    [Test]
+    public void TheAnalysisMark_IsCheckedAsAnOutline_OnABoxAndOnThePaper()
+    {
+        FormPalette p = Spec();
+        p.Analysis = Hex("#D8CFBD");
+        List<string> problems = FormContrast.Problems(p, null, new ContrastRules());
+        Assert.AreEqual(2, problems.Count, string.Join(" | ", problems));
+        StringAssert.StartsWith("Form analysis mark on a box is ", problems[0]);
+        StringAssert.Contains("it needs 3.0:1", problems[0]);
+        StringAssert.StartsWith("Form analysis mark on the paper is ", problems[1]);
     }
 }
