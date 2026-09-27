@@ -1,15 +1,15 @@
 {
   "canvas": {"width": 4562, "height": 724},
-  "coordinateSystem": "Display pixels, origin at top-left; hall remains native size. City registration transform is a preview, not a verified physical camera solution.",
+  "coordinateSystem": "Display pixels, origin at top-left. Preview registration, not a verified physical camera reconstruction.",
   "basePanels": [
     {"file": "left-city-v2-neutral.png", "x": 0, "y": -36.6666667, "width": 2390, "height": 844.6666667, "clipToCanvas": true},
-    {"file": "right-hall-v2-neutral.png", "x": 2390, "y": 0, "width": 2172, "height": 724}
+    {"file": "right-hall-v11-clear-arrow.png", "nativeWidth": 2172, "nativeHeight": 724, "x": 2390, "y": 0, "width": 2172, "height": 724}
   ],
   "joinCorrection": {
-    "enabled": false,
-    "file": "seam-transition-v1.png", "x": 1086, "y": 0, "width": 2172, "height": 724,
-    "clipPixelsX": [197, 1379],
-    "compositing": "Opaque inside clip, no feather. Boundaries follow shared window mullions. Hall interior beyond global x2465 uses original panel only."
+    "enabled": true,
+    "file": "seam-continuity-v2.png", "x": 1273.87, "y": 0, "width": 2172, "height": 724,
+    "clipPixelsX": [580, 1410],
+    "compositing": "Opaque hard-clipped replacement, no feathering across unregistered edges. Boundaries follow existing mullions. Future transparency requires removing underlying base pixels in the patch footprint."
   },
-  "status": "Blended patch disabled: it doubled portal contours. Measured city transform aligns handrail slope and height. City shoreline continuity and architectural review remain; no Unity light test or layer extraction yet."
+  "status": "Station furnishing study: secure portal bays, closed department doors and corresponding pictograms, upper exit-sign repair, clear entrances, revised glazing corner, rear ground-floor portals set back and clock removed. Exterior remains a single placeholder layer for later regeneration. No new layer extraction, Unity changes or lighting test in this pass."
 }

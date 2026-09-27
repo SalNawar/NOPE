@@ -1,5 +1,7 @@
 # Two-panel panoramic study
 
+Latest direction: a fresh 1990s 2D anime redraw replaces the degraded rendering chain. See `ANIME_REDRAW.md`, `hall-anime-redraw-v1.png` and `anime-hall-preview.html`. The earlier panorama below is preserved as a layout reference, not the final art master.
+
 User approved separate city and hall panels side by side. Both are2172x724 pixels. At native equal scale, total width4344px and height724px. Original hall pixels are preserved by copying, not regenerating or shrinking. No Unity changes.
 
 Left-city-v1 is generated using built-in imagegen; right-hall-v1 is the corrected hall from exec-e095d60e. Both lack crowds/desk/text. This is NOT a seamless production panorama yet: rail height and perspective differ at the join, and skyline silhouettes need registration. Match the transition with overlapping artwork and retain a common camera horizon. Do not hide mismatch by squeezing/stretching hall. City/window must later be separated for parallax and runtime lighting; residual painted reflections/shading remain.

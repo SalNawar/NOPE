@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Terminal hall — fresh anime redraw</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#191b20;color:#ece8e2;font:14px system-ui}header{min-height:64px;display:flex;align-items:center;gap:16px;padding:12px 24px;flex-wrap:wrap}button,a{color:inherit}button{padding:8px 14px;background:#30343e;border:1px solid #616879;border-radius:5px;cursor:pointer}header span{color:#beb9b2}main{overflow:auto;max-height:calc(100vh - 64px)}img{display:block;width:100%;height:auto;max-width:none}body.native img{width:2172px;height:724px}body.native main{width:100%}
+</style>
+<header><strong>Fresh 2D anime redraw</strong><span>Hall master · exterior placeholder · lighting layers pending</span><button id="native" aria-pressed="false">100% detail</button><a href="panorama-preview.html">Previous panorama</a></header>
+<main><img src="hall-anime-redraw-v1.png" alt="Freshly drawn retro-futurist terminal hall with five secure portal bays, closed department doors and blank exterior windows"></main>
+<script>document.querySelector('#native').onclick=function(){const enabled=document.body.classList.toggle('native');this.setAttribute('aria-pressed',String(enabled));this.textContent=enabled?'Fit image':'100% detail'};</script>
+</html>
