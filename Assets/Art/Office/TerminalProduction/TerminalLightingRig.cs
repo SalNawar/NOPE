@@ -44,11 +44,11 @@ public sealed class TerminalLightingRig : MonoBehaviour
         daylight.color=Color.Lerp(new Color(1,.91f,.77f),new Color(.72f,.73f,1),evening);
         daylight.intensity=Mathf.Lerp(1.45f,.23f,evening);
         RenderSettings.ambientMode=AmbientMode.Trilight;
-        RenderSettings.ambientSkyColor=Color.Lerp(new Color(.36f,.43f,.52f),new Color(.18f,.21f,.31f),evening);
-        RenderSettings.ambientEquatorColor=Color.Lerp(new Color(.27f,.25f,.24f),new Color(.16f,.14f,.19f),evening);
+        RenderSettings.ambientSkyColor=Color.Lerp(new Color(.48f,.53f,.61f),new Color(.18f,.21f,.31f),evening);
+        RenderSettings.ambientEquatorColor=Color.Lerp(new Color(.39f,.35f,.30f),new Color(.16f,.14f,.19f),evening);
         RenderSettings.ambientGroundColor=Color.Lerp(new Color(.14f,.12f,.11f),new Color(.045f,.04f,.07f),evening);
-        RenderSettings.fog=true;RenderSettings.fogMode=FogMode.ExponentialSquared;RenderSettings.fogDensity=.0028f;
-        RenderSettings.fogColor=Color.Lerp(new Color(.70f,.75f,.79f),new Color(.15f,.16f,.25f),evening);
+        RenderSettings.fog=true;RenderSettings.fogMode=FogMode.ExponentialSquared;RenderSettings.fogDensity=.006f;
+        RenderSettings.fogColor=Color.Lerp(new Color(.76f,.73f,.67f),new Color(.15f,.16f,.25f),evening);
         if(previewCamera)previewCamera.backgroundColor=RenderSettings.fogColor;
         if(practicals!=null)foreach(var l in practicals)if(l)l.intensity=Mathf.Lerp(5,14,evening);
     }

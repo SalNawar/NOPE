@@ -30,7 +30,8 @@ Material:
     m_Ints: []
     m_Floats:
     - _Cutoff: 0.45
-    - _Smoothness: 0.08
+    - _ReflectionStrength: 0.28
+    - _Smoothness: 0.35
     - _TextureStrength: 1
     - _Wear: 0.035
     m_Colors:

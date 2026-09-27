@@ -24,3 +24,11 @@ Select **Dynamically lit grand terminal**. Its **Terminal Lighting Rig** compone
 `DynamicTerminalArt.prefab` contains hall art only. The scene includes the desk, preview camera and lighting rig. This is an art scene; it does not replace OfficeScene, install gameplay routes, connect the time-of-day system, or provide input for camera panning. Claude can drive `TerminalLightingRig.SetTime(0..1)` through an agreed gameplay hook. Renderer index 1 is the project's existing forward renderer.
 
 Regenerate with `TerminalRelitProduction.Build` (editor menu or Unity batchmode; omit `-quit`, as capture and exit are handled by the builder). Never use the removed legacy art rebuild menus. Neutral atlas generation used the built-in image tool; the exact prompt is in `neutral-decor.prompt.md`.
+
+## Mockup alignment revision — 27 September
+
+The front piers now project at 32.3% and 67.7% of image width. The 36 m bridge joins their line at Z=50; its deck and the right gallery both finish at Y=11. The piers include passages at this level. The west landing measures 14 x 18 m with a supported stair. Existing Hall_Portal prefab geometry replaces all four simplified rings, with the two upper gates angled toward their gallery.
+
+Added burgundy/ivory/brass floor inlays, a transparent four-pane desk partition, a luggage alcove and cart, a deeper signed right passage, vaulted ribs, pendant lights and denser city geometry. Floor reflections render the live scene. Morning, evening and reversed-sun captures retain zero baked lightmaps. The measured bounds and comparison are recorded in `measured-anchors.md` and `MOCKUP_AUDIT.md`.
+
+The composition is closer, but the city and ceiling remain simpler than the illustrated reference, the luggage display is less prominent, and floor reflections are subtler. These are remaining art-quality gaps, not evidence of an exact match. Runtime performance has not been profiled.

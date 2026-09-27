@@ -7,6 +7,7 @@ Shader "NOPE/Terminal Relit"
   _Smoothness("Broad highlight",Range(0,1))=.1
   _Wear("Subtle surface variation",Range(0,1))=.035
   _TextureStrength("Albedo detail strength",Range(0,1))=1
+  _ReflectionStrength("Live floor reflection",Range(0,1))=0
  }
  SubShader {
   Tags {"RenderPipeline"="UniversalPipeline" "RenderType"="TransparentCutout" "Queue"="AlphaTest"}
@@ -15,8 +16,9 @@ Shader "NOPE/Terminal Relit"
   #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
   #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
   TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
+  TEXTURE2D(_TerminalFloorReflection);SAMPLER(sampler_TerminalFloorReflection);float4x4 _TerminalFloorVP;
   CBUFFER_START(UnityPerMaterial)
-   float4 _BaseMap_ST; half4 _BaseColor; half _Cutoff,_Smoothness,_Wear,_TextureStrength;
+   float4 _BaseMap_ST; half4 _BaseColor; half _Cutoff,_Smoothness,_Wear,_TextureStrength,_ReflectionStrength;
   CBUFFER_END
   ENDHLSL
   Pass {
@@ -47,7 +49,13 @@ Shader "NOPE/Terminal Relit"
     AmbientOcclusionFactor ao=GetScreenSpaceAmbientOcclusion(GetNormalizedScreenSpaceUV(i.p));lighting*=ao.indirectAmbientOcclusion;
     #endif
     half variation=1-_Wear*(.5+.5*sin(i.w.x*3.1+i.w.z*1.7)*sin(i.w.y*4.3+i.w.z*.7));
-    return half4(MixFog(a.rgb*lighting*variation,i.fog),1);
+    half3 result=a.rgb*lighting*variation;
+    if(_ReflectionStrength>0 && n.y>.7){
+        float4 rp=mul(_TerminalFloorVP,float4(i.w,1));float2 ruv=rp.xy/rp.w*.5+.5;
+        half3 reflection=SAMPLE_TEXTURE2D_LOD(_TerminalFloorReflection,sampler_TerminalFloorReflection,ruv,2.8).rgb;
+        half fresnel=.35+.65*pow(1-saturate(dot(n,v)),3);result=lerp(result,reflection,_ReflectionStrength*fresnel);
+    }
+    return half4(MixFog(result,i.fog),1);
    }
    ENDHLSL
   }
