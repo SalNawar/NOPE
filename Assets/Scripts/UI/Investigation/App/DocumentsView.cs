@@ -62,6 +62,9 @@ public sealed class DocumentsView : AppView, IAppItems
         return true;
     }
 
+    /// <summary>True when the chosen paper's scanned copy shows (it is scanned), not the line saying why it cannot.</summary>
+    public bool ShowsCopy => _selected >= 0 && _papers.State(_selected) == PaperState.Scanned;
+
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
     /// its document and drawing its paper's form (<paramref name="forms"/>, in

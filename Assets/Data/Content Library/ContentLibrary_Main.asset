@@ -265,6 +265,540 @@ MonoBehaviour:
       text: 'PANIC in {place}: a traveller from the agency was seen in "{value}"
         and the street fled.'
   pc:
+    steps:
+      sets:
+      - type: default
+        inherit: 
+        dataOnly: 0
+        steps:
+        - id: rules
+          when: 3
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 5
+          hint: 
+          fromDay: 1
+        - id: papers
+          when: 0
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: read
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: identity
+          when: 5
+          categories:
+          - Name
+          - CitizenId
+          - BirthDate
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: facts
+          when: 5
+          categories: []
+          statement: 1
+          truth: 1
+          forms: []
+          link: 3
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: questions
+          when: 6
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 0
+          tab: 0
+          hint: steps.hint.wheel
+          fromDay: 1
+        - id: answers
+          when: 5
+          categories: []
+          statement: 2
+          truth: 0
+          forms: []
+          link: 1
+          tab: 3
+          hint: 
+          fromDay: 1
+        - id: dress
+          when: 5
+          categories:
+          - Culture
+          statement: 3
+          truth: 1
+          forms: []
+          link: 4
+          tab: 0
+          hint: 
+          fromDay: 1
+      - type: Displaced
+        inherit: 
+        dataOnly: 0
+        steps:
+        - id: rules
+          when: 3
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 5
+          hint: 
+          fromDay: 1
+        - id: papers
+          when: 0
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: read
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: identity
+          when: 5
+          categories:
+          - Name
+          - CitizenId
+          - BirthDate
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: facts
+          when: 5
+          categories: []
+          statement: 1
+          truth: 1
+          forms: []
+          link: 3
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: questions
+          when: 6
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 0
+          tab: 0
+          hint: steps.hint.wheel
+          fromDay: 1
+        - id: answers
+          when: 5
+          categories: []
+          statement: 2
+          truth: 0
+          forms: []
+          link: 1
+          tab: 3
+          hint: 
+          fromDay: 1
+        - id: dress
+          when: 5
+          categories:
+          - Culture
+          statement: 3
+          truth: 1
+          forms: []
+          link: 4
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: returnOrder
+          when: 5
+          categories:
+          - Destination
+          - Incident
+          statement: 1
+          truth: 3
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: dates
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-630
+          - TC-610
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 4
+      - type: RichTourist
+        inherit: 
+        dataOnly: 0
+        steps:
+        - id: rules
+          when: 3
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 5
+          hint: 
+          fromDay: 1
+        - id: papers
+          when: 0
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: read
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: identity
+          when: 5
+          categories:
+          - Name
+          - CitizenId
+          - BirthDate
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: class
+          when: 5
+          categories:
+          - AccountStatus
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: transponder
+          when: 5
+          categories:
+          - TransponderId
+          - TransponderClass
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: paperSet
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-101
+          - TC-230
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 2
+        - id: standing
+          when: 4
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 3
+        - id: facts
+          when: 5
+          categories:
+          - Currency
+          - Technology
+          statement: 1
+          truth: 1
+          forms: []
+          link: 3
+          tab: 0
+          hint: 
+          fromDay: 4
+        - id: dress
+          when: 5
+          categories:
+          - Culture
+          statement: 3
+          truth: 1
+          forms: []
+          link: 4
+          tab: 0
+          hint: 
+          fromDay: 2
+        - id: dates
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-230
+          - TC-101
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 4
+      - type: PoorTourist
+        inherit: RichTourist
+        dataOnly: 1
+        steps:
+        - id: paperSet
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-101
+          - TC-230
+          - TC-310
+          - TC-415
+          - TC-416
+          - TC-417
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 2
+        - id: dates
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-230
+          - TC-101
+          - TC-415
+          - TC-416
+          - TC-417
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 4
+        - id: askMeans
+          when: 2
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-415
+          - TC-416
+          - TC-417
+          link: 0
+          tab: 0
+          hint: steps.hint.wheel
+          fromDay: 1
+        - id: waiver
+          when: 5
+          categories:
+          - TransponderId
+          - WaiverNo
+          - Debt
+          statement: 1
+          truth: 0
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: means
+          when: 5
+          categories:
+          - Credit
+          - Funds
+          - PolicyNo
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+      - type: Labourer
+        inherit: 
+        dataOnly: 1
+        steps:
+        - id: rules
+          when: 3
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 5
+          hint: 
+          fromDay: 1
+        - id: papers
+          when: 0
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: read
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: identity
+          when: 5
+          categories:
+          - Name
+          - CitizenId
+          - BirthDate
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: standing
+          when: 4
+          categories: []
+          statement: 0
+          truth: 0
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 3
+        - id: contract
+          when: 5
+          categories:
+          - Employer
+          - Destination
+          - Term
+          - Wage
+          statement: 1
+          truth: 2
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: paperSet
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-520
+          - TC-230
+          - TC-310
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 3
+        - id: waiver
+          when: 5
+          categories:
+          - TransponderId
+          - WaiverNo
+          - Debt
+          statement: 1
+          truth: 0
+          forms: []
+          link: 2
+          tab: 0
+          hint: 
+          fromDay: 1
+        - id: facts
+          when: 5
+          categories:
+          - Currency
+          - Technology
+          statement: 1
+          truth: 1
+          forms: []
+          link: 3
+          tab: 0
+          hint: 
+          fromDay: 4
+        - id: dress
+          when: 5
+          categories:
+          - Culture
+          statement: 3
+          truth: 1
+          forms: []
+          link: 4
+          tab: 0
+          hint: 
+          fromDay: 2
+        - id: dates
+          when: 1
+          categories: []
+          statement: 0
+          truth: 0
+          forms:
+          - TC-230
+          link: 1
+          tab: 0
+          hint: 
+          fromDay: 4
     sites:
     - id: news
       kind: 0

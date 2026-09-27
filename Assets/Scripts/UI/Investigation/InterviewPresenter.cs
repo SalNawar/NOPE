@@ -12,10 +12,12 @@ using Object = UnityEngine.Object;
 /// wheel; a look at a garment puts it into the compare and closes the wheel;
 /// a choice that adds lines tells the app (the Transcript tab's badge;
 /// nothing opens: WN5); the traveller's new lines go to the bubble; a
-/// finished dialog is recorded for the shift. Each line joins search's case
-/// layer as it is spoken (redesign phase 19, SE5): as shown, so a line the
-/// player hears untranslated is found only by its key words and its speaker,
-/// and shows its glyphs. The bubble's answer, picked at the desk, goes
+/// finished dialog is recorded for the shift; each answer heard and each look
+/// at a garment is announced (Answered, LookedAt: the steps checklist). Each
+/// line joins search's case layer as it is spoken (redesign phase 19, SE5): as
+/// shown, so a line the player hears untranslated is found only by its key
+/// words and its speaker, and shows its glyphs. The bubble's answer, picked at
+/// the desk, goes
 /// into the compare as its transcript row would. It subscribes to the wheel
 /// it was given and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
@@ -53,6 +55,18 @@ public sealed class InterviewPresenter
     /// <summary>The current traveller's name (the transcript's speaker) and tongue (search's clip match).</summary>
     private string _travellerName = string.Empty;
     private string _tongueId;
+
+    /// <summary>The categories of the questions offered to the current traveller (none when the interview is not reachable).</summary>
+    private IReadOnlyList<ClueCategory> _questionCategories = Array.Empty<ClueCategory>();
+
+    /// <summary>Raised for each answer the traveller gives, with its category.</summary>
+    public event Action<ClueCategory> Answered;
+
+    /// <summary>Raised when the player looks at one of the traveller's garments.</summary>
+    public event Action LookedAt;
+
+    /// <summary>The categories of the questions offered to the current traveller (none when the interview is not reachable).</summary>
+    public IReadOnlyList<ClueCategory> QuestionCategories => _questionCategories;
 
     /// <summary>
     /// The wheel's ring, the transcript, the wheel and the compare (any may be
@@ -131,6 +145,7 @@ public sealed class InterviewPresenter
             _wheel.SetTranslation(_caseTranslation);
 
         _runner = null;
+        _questionCategories = Array.Empty<ClueCategory>();
         if (_day == null)
         {
             Debug.LogError("[InvestigationUIController] No interview day was injected (GameManager.SetInterviewDay), so the traveller wheel is empty.", _context);
@@ -139,6 +154,7 @@ public sealed class InterviewPresenter
             return;
         }
 
+        _questionCategories = interviewReachable ? _day.AskableCategories : Array.Empty<ClueCategory>();
         InterviewCase interviewCase = CaseFor(inst, documents, interviewReachable, appearanceReachable);
         string premadeDialog = inst != null && inst.legendarySource != null ? inst.legendarySource.dialogId : null;
         DialogGraph graph = InterviewScript.Build(_day.Lines,
@@ -251,6 +267,9 @@ public sealed class InterviewPresenter
         IndexLines(before);
         if (_runner.Transcript.Count > before)
             _spoke();
+        for (int i = before; i < _runner.Transcript.Count; i++)
+            if (_runner.Transcript[i].IsAnswer)
+                Answered?.Invoke(_runner.Transcript[i].Category);
 
         if (choice.Action == DialogAction.HandOverDocument)
         {
@@ -283,10 +302,12 @@ public sealed class InterviewPresenter
     {
         CaseInstance current = _currentCase();
         IReadOnlyList<Garment> garments = current != null && current.look != null ? current.look.Garments : null;
-        if (_compare == null || garments == null || garmentIndex < 0 || garmentIndex >= garments.Count)
+        if (garments == null || garmentIndex < 0 || garmentIndex >= garments.Count)
             return;
 
-        _compare.Select(EvidencePicks.ForGarment(garmentIndex, garments[garmentIndex]), null);
+        LookedAt?.Invoke();
+        if (_compare != null)
+            _compare.Select(EvidencePicks.ForGarment(garmentIndex, garments[garmentIndex]), null);
     }
 
     /// <summary>The bubble's answer picked at the desk: it goes into the compare as the transcript's row would (the same pick), lighting the bubble while it shows.</summary>

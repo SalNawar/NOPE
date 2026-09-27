@@ -29,6 +29,9 @@ public sealed class DayReference
     private CitizenRegistry _registry;
     private ContentLibrarySO _library;
 
+    /// <summary>Today's day number (set with the day's registry; the steps checklist lists a step from its first day).</summary>
+    public int Day { get; private set; } = 1;
+
     /// <summary>The Rules tab's text, the Records tab's lookup, the compare (the book rows pick into it), the Reference tab and search's index (its day layer); any may be missing.</summary>
     public DayReference(TMP_Text directivesText, CitizenRecordsWindowController records, CompareController compare, ReferenceView books, CaseIndex index)
     {
@@ -68,6 +71,7 @@ public sealed class DayReference
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
         _registry = registry;
+        Day = day;
         IndexDay();
         if (_records != null)
             _records.SetRegistry(registry, _index, agency, agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null);

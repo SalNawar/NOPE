@@ -9,12 +9,13 @@ using UnityEngine.UI;
 /// holds the claim, the counters ("Papers 2 of 3 received · 1 scanned ·
 /// Deviations 1") and the PC's Accept and Deny (the façade wires them); its
 /// toolbar holds Back, Forward, the search field, Steps, Split and Keys (the
-/// search field is live since phase 19, InvestigationApp.Search, and Keys
-/// since phase 20; the others are shown but not live until their phases, 18
-/// and 21); the sidebar holds Steps (a placeholder until phase 21), Pinned
-/// and Recent; one pane holds the six tabs. The keys, the focus ring, copy
-/// and paste, pins, recent items and zoom are in InvestigationApp.Keys
-/// (redesign phase 20).
+/// search field is live since phase 19, InvestigationApp.Search, Keys since
+/// phase 20, Steps since phase 21: it
+/// shows or hides the sidebar's steps checklist, StepsPanel; Back, Forward
+/// and Split are shown but not live until phase 18); the sidebar holds the
+/// steps, Pinned and Recent; one pane holds the six tabs. The keys, the
+/// focus ring, copy and paste, pins, recent items and zoom are in
+/// InvestigationApp.Keys (redesign phase 20).
 /// Nothing steals the view: something new for a tab badges it unless the
 /// player sees it (AppBadges), and dots the desktop's Investigation icon
 /// while the app is closed or minimised; a scan (ScanArrival) opens the app
@@ -41,7 +42,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     [SerializeField] private TMP_Text countersText;
 
     [Header("Toolbar")]
-    /// <summary>Back, Forward, Steps and Split: shown, not live until their phases (18, 21).</summary>
+    /// <summary>Back, Forward and Split: shown, not live until phase 18.</summary>
     [SerializeField] private Selectable[] notYetLive = new Selectable[0];
 
     [Header("Desktop")]
@@ -65,6 +66,9 @@ public sealed partial class InvestigationApp : MonoBehaviour
 
     /// <summary>True when the pane hosts a view for the tab.</summary>
     public bool Hosts(AppTab tab) => pane != null && pane.Hosts(tab);
+
+    /// <summary>The tab the pane shows (the steps checklist reads what the player sees).</summary>
+    public AppTab ActiveTab => pane != null ? pane.ActiveTab : AppTab.Documents;
 
     /// <summary>The first open: the app fills the desktop (P spec WN4).</summary>
     private void Start()

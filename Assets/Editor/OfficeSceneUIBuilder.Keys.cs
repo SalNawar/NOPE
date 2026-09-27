@@ -165,8 +165,8 @@ public static partial class OfficeSceneUIBuilder
             WirePersistentVoid(keys, "m_OnClick", keyboard, nameof(DesktopKeyboard.ToggleCard));
 
         Transform sidebar = Need(win, "AppBody/Sidebar");
-        SidebarEntryList pins = sidebar != null ? BuildSidebarList(sidebar, app.App, "Pinned", true, "app.pins.empty", 0.345f, 0.595f) : null;
-        SidebarEntryList recent = sidebar != null ? BuildSidebarList(sidebar, app.App, "Recent", false, "app.recent.empty", 0.01f, 0.26f) : null;
+        SidebarEntryList pins = sidebar != null ? BuildSidebarList(sidebar, app.App, "Pinned", true, "app.pins.empty", SidebarListBottom(0), SidebarListTop(0)) : null;
+        SidebarEntryList recent = sidebar != null ? BuildSidebarList(sidebar, app.App, "Recent", false, "app.recent.empty", SidebarListBottom(1), SidebarListTop(1)) : null;
 
         var zooms = new List<Object>();
         Button pinButton = null;
@@ -222,6 +222,15 @@ public static partial class OfficeSceneUIBuilder
         so.ApplyModifiedProperties();
         return chip;
     }
+
+    /// <summary>The top of the sidebar's section <paramref name="index"/> (0 Pinned, 1 Recent) under the steps' share (BuildAppSidebar lays the headings out the same way).</summary>
+    private static float SidebarSectionTop(int index) => (1f - StepsSectionShare) * (1f - index / 2f);
+
+    /// <summary>Where section <paramref name="index"/>'s list starts, under its heading.</summary>
+    private static float SidebarListTop(int index) => SidebarSectionTop(index) - 0.075f;
+
+    /// <summary>Where section <paramref name="index"/>'s list ends, above the next section.</summary>
+    private static float SidebarListBottom(int index) => SidebarSectionTop(index) - (1f - StepsSectionShare) / 2f + 0.01f;
 
     /// <summary>A sidebar list (PR1, PR2) under its heading, between <paramref name="bottom"/> and <paramref name="top"/>: a scrolling list of jump rows and its empty hint; the section's placeholder goes.</summary>
     private static SidebarEntryList BuildSidebarList(Transform sidebar, InvestigationApp app, string section, bool pins, string hintKey, float bottom, float top)
