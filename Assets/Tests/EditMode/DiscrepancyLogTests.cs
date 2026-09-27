@@ -610,6 +610,8 @@ public class DiscrepancyLogTests
     [TestCase(DiscrepancyProof.ClaimMismatch, EvidenceKind.Appearance, "deviation.claimMismatch.worn")]
     [TestCase(DiscrepancyProof.ForeignOrigin, EvidenceKind.Appearance, "deviation.foreignOrigin.worn")]
     [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.DocumentField, "deviation.crossMismatch.papers")]
+    [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.Answer, "deviation.crossMismatch.papers")]
+    [TestCase(DiscrepancyProof.CrossMismatch, EvidenceKind.Appearance, "deviation.crossMismatch.papers")]
     public void ReportKeyFor_NamesTheProofAndWhoStatedIt(DiscrepancyProof proof, EvidenceKind statement, string expected)
     {
         Assert.AreEqual(expected, Discrepancy.ReportKeyFor(proof, statement));

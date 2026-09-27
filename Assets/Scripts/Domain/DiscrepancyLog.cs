@@ -168,8 +168,10 @@ public sealed class Discrepancy
 
     /// <summary>
     /// The UI string key of a deviation line: "deviation." + claimMismatch /
-    /// foreignOrigin / recordMismatch / crossMismatch + "." + said (an answer), worn (a garment
-    /// the traveller wears) or papers (any other statement). The English templates live in world_source.json
+    /// foreignOrigin / recordMismatch + "." + said (an answer), worn (a garment
+    /// the traveller wears) or papers (any other statement); a cross proof is
+    /// always two papers, so "deviation.crossMismatch.papers" whatever the
+    /// statement kind. The English templates live in world_source.json
     /// ui.strings ({0} = the category word, {1} = the stated value, {2} = ReportOther).
     /// </summary>
     public static string ReportKeyFor(DiscrepancyProof proof, EvidenceKind statement)
@@ -178,7 +180,8 @@ public sealed class Discrepancy
                    : proof == DiscrepancyProof.RecordMismatch ? "recordMismatch"
                    : proof == DiscrepancyProof.CrossMismatch ? "crossMismatch"
                    : "claimMismatch";
-        string who = statement == EvidenceKind.Answer ? "said" : statement == EvidenceKind.Appearance ? "worn" : "papers";
+        string who = proof == DiscrepancyProof.CrossMismatch ? "papers"
+                   : statement == EvidenceKind.Answer ? "said" : statement == EvidenceKind.Appearance ? "worn" : "papers";
         return "deviation." + how + "." + who;
     }
 

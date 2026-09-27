@@ -1034,6 +1034,9 @@ public static partial class WorldContentGenerator
         }
 
         // --- Days: pools, forced slots, chance ---
+        var closures = new HashSet<string>((src.rules ?? Array.Empty<RuleData>())
+            .Where(r => ParseEnum(r.type, out TravelRuleType type) && TravelRuleSO.IsClosureType(type))
+            .Select(r => r.asset));
         foreach (DayData d in src.days)
         {
             string owner = $"Day '{d.asset}'";
@@ -1081,8 +1084,8 @@ public static partial class WorldContentGenerator
                     errors.Add($"{owner} forces premade '{f.premade}' twice.");
                 if (pool.Contains(f.premade))
                     errors.Add($"{owner} both forces and pools premade '{f.premade}'.");
-                if (d.rules != null && d.rules.Length > 0 && f.slot <= ViolatorSlots.Window(d.queue))
-                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
+                if ((d.rules ?? Array.Empty<string>()).Any(closures.Contains) && f.slot <= ViolatorSlots.Window(d.queue))
+                    Debug.LogWarning($"[WorldContentGenerator] {owner} forces premade '{f.premade}' into slot {f.slot}, in the first half of a day with closures: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.");
             }
         }
 
