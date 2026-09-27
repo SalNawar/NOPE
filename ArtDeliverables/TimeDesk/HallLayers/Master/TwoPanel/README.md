@@ -1,6 +1,6 @@
 # Two-panel panoramic study
 
-Latest direction: a fresh 1990s 2D anime redraw replaces the degraded rendering chain. See `ANIME_REDRAW.md`, `hall-anime-redraw-v1.png` and `anime-hall-preview.html`. The earlier panorama below is preserved as a layout reference, not the final art master.
+Latest art study: `hall-anime-platform-v8.png` has the taller front platform guard, terracotta floor, varied wall finishes and no false upper elevator frame. It retains v7's distinct rear equipment and solid upper-right walls. See `ANIME_REDRAW.md`, `hall-platform-v8-prompt.txt` and `anime-hall-preview.html`. Unity layer installation is being prepared under `Assets/Art/Office/AnimeHallLayers`; see `../../AnimeRegistered/README.md` for its exact status. The earlier panorama below is preserved as a layout reference, not the current art master.
 
 User approved separate city and hall panels side by side. Both are2172x724 pixels. At native equal scale, total width4344px and height724px. Original hall pixels are preserved by copying, not regenerating or shrinking. No Unity changes.
 
