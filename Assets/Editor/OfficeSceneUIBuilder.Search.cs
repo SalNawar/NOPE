@@ -24,22 +24,22 @@ public static partial class OfficeSceneUIBuilder
     private const float SearchPanelHeight = 520f;
 
     /// <summary>The panel's header (the chips and Close) height.</summary>
-    private const float SearchHeaderHeight = 44f;
+    private const float SearchHeaderHeight = 48f;
 
     /// <summary>The panel's footer (the hint) height.</summary>
-    private const float SearchFooterHeight = 28f;
+    private const float SearchFooterHeight = 34f;
 
     /// <summary>A hit's row height (its title over its snippet).</summary>
-    private const float SearchHitHeight = 62f;
+    private const float SearchHitHeight = 74f;
 
     /// <summary>A group heading's height.</summary>
-    private const float SearchHeadingHeight = 28f;
+    private const float SearchHeadingHeight = 34f;
 
     /// <summary>"Show all"'s height.</summary>
-    private const float SearchMoreHeight = 34f;
+    private const float SearchMoreHeight = 40f;
 
     /// <summary>The width of a hit's source glyph column.</summary>
-    private const float SearchGlyphWidth = 64f;
+    private const float SearchGlyphWidth = 72f;
 
     /// <summary>The found outline's thickness (SE4: 2 u).</summary>
     private const float FoundOutlineWidth = 2f;
@@ -85,7 +85,7 @@ public static partial class OfficeSceneUIBuilder
         Transform header = Panel(panel, "Header", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(header, new Vector2(0f, 1f), Vector2.one, new Vector2(6f, -SearchHeaderHeight), new Vector2(-6f, 0f));
         Transform chips = Panel(header, "Chips", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        PlaceRect(chips, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-110f, 0f));
+        PlaceRect(chips, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(-120f, 0f));
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(chips.gameObject);
         row.padding = new RectOffset(0, 0, 6, 6);
         row.spacing = 4f;
@@ -96,25 +96,25 @@ public static partial class OfficeSceneUIBuilder
         row.childForceExpandHeight = true;
         Button chip = MakeButton(chips, "ChipTemplate", "All", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
         LayoutElement chipSize = GetOrAdd<LayoutElement>(chip.gameObject);
-        chipSize.minWidth = 56f;
-        chipSize.preferredWidth = 148f;
+        chipSize.minWidth = 64f;
+        chipSize.preferredWidth = 170f;
         chipSize.flexibleWidth = 0f;
         TMP_Text chipLabel = chip.transform.Find("Label").GetComponent<TMP_Text>();
         chipLabel.enableAutoSizing = true;
-        chipLabel.fontSizeMin = 12f;
-        chipLabel.fontSizeMax = 16f;
+        chipLabel.fontSizeMin = 16f;
+        chipLabel.fontSizeMax = 20f;
         chipLabel.textWrappingMode = TextWrappingModes.NoWrap;
         chipLabel.overflowMode = TextOverflowModes.Ellipsis;
         chipLabel.margin = new Vector4(6f, 0f, 6f, 0f);
         chip.gameObject.SetActive(false);
         Button close = MakeButton(header, "CloseButton", null, new Vector2(1f, 0.14f), new Vector2(1f, 0.86f), null, ThemeRoleId.Button, "search.close");
-        PlaceRect(close.transform, new Vector2(1f, 0.14f), new Vector2(1f, 0.86f), new Vector2(-104f, 0f), Vector2.zero);
+        PlaceRect(close.transform, new Vector2(1f, 0.14f), new Vector2(1f, 0.86f), new Vector2(-114f, 0f), Vector2.zero);
 
         RectTransform list = BuildScrollList(panel, "List", Vector2.zero, Vector2.one, 2f, Color.white, ThemeRoleId.WindowBody);
         Transform box = list.parent.parent;
         PlaceRect(box, Vector2.zero, Vector2.one, new Vector2(6f, SearchFooterHeight), new Vector2(-6f, -SearchHeaderHeight));
 
-        TMP_Text heading = Text(list, "HeadingTemplate", "REFERENCE", 15, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink,
+        TMP_Text heading = Text(list, "HeadingTemplate", "REFERENCE", 18, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink,
                                 ThemeRoleId.WindowBody, style: FontStyles.Bold, kind: ThemeTextKind.Heading);
         heading.margin = new Vector4(6f, 0f, 6f, 2f);
         heading.raycastTarget = false;
@@ -125,13 +125,13 @@ public static partial class OfficeSceneUIBuilder
         SetLayoutHeight(hit, SearchHitHeight);
         TMP_Text blank = hit.transform.Find("Label").GetComponent<TMP_Text>();
         Object.DestroyImmediate(blank.gameObject);
-        TMP_Text glyph = Text(hit.transform, "Glyph", "BOOK", 13, TextAlignmentOptions.Center, Vector2.zero, new Vector2(0f, 1f), Ink,
+        TMP_Text glyph = Text(hit.transform, "Glyph", "BOOK", 16, TextAlignmentOptions.Center, Vector2.zero, new Vector2(0f, 1f), Ink,
                               ThemeRoleId.MenuEntry, style: FontStyles.Bold, kind: ThemeTextKind.Button);
         PlaceRect(glyph.transform, Vector2.zero, new Vector2(0f, 1f), new Vector2(4f, 4f), new Vector2(SearchGlyphWidth, -4f));
-        TMP_Text title = Text(hit.transform, "Title", "Currency Ledger · Periclean Athens (Ancient)", 17, TextAlignmentOptions.BottomLeft, new Vector2(0f, 0.5f), Vector2.one, Ink,
+        TMP_Text title = Text(hit.transform, "Title", "Currency Ledger · Periclean Athens (Ancient)", 22, TextAlignmentOptions.BottomLeft, new Vector2(0f, 0.5f), Vector2.one, Ink,
                               ThemeRoleId.MenuEntry, style: FontStyles.Bold, kind: ThemeTextKind.Button);
         PlaceRect(title.transform, new Vector2(0f, 0.5f), Vector2.one, new Vector2(SearchGlyphWidth + 8f, 0f), new Vector2(-8f, -3f));
-        TMP_Text snippet = Text(hit.transform, "Snippet", "Drachma", 16, TextAlignmentOptions.TopLeft, Vector2.zero, new Vector2(1f, 0.5f), Ink,
+        TMP_Text snippet = Text(hit.transform, "Snippet", "Drachma", 20, TextAlignmentOptions.TopLeft, Vector2.zero, new Vector2(1f, 0.5f), Ink,
                                 ThemeRoleId.MenuEntry, kind: ThemeTextKind.Button);
         PlaceRect(snippet.transform, Vector2.zero, new Vector2(1f, 0.5f), new Vector2(SearchGlyphWidth + 8f, 3f), new Vector2(-8f, 0f));
         foreach (TMP_Text t in new[] { glyph, title, snippet })
@@ -146,19 +146,19 @@ public static partial class OfficeSceneUIBuilder
         Button more = MakeButton(list, "MoreTemplate", "Show all", Vector2.zero, Vector2.one, null, ThemeRoleId.MenuEntry);
         SetLayoutHeight(more, SearchMoreHeight);
         TMP_Text moreLabel = more.transform.Find("Label").GetComponent<TMP_Text>();
-        moreLabel.fontSize = 16f;
+        moreLabel.fontSize = 20f;
         moreLabel.fontStyle = FontStyles.Italic;
         moreLabel.alignment = TextAlignmentOptions.MidlineLeft;
         moreLabel.margin = new Vector4(SearchGlyphWidth + 8f, 0f, 8f, 0f);
         more.gameObject.SetActive(false);
 
-        TMP_Text empty = Text(panel, "EmptyText", string.Empty, 18, TextAlignmentOptions.Center, new Vector2(0.05f, 0.3f), new Vector2(0.95f, 0.7f), Ink,
+        TMP_Text empty = Text(panel, "EmptyText", string.Empty, 22, TextAlignmentOptions.Center, new Vector2(0.05f, 0.3f), new Vector2(0.95f, 0.7f), Ink,
                               ThemeRoleId.WindowBody);
         empty.textWrappingMode = TextWrappingModes.Normal;
         empty.raycastTarget = false;
         empty.gameObject.SetActive(false);
 
-        TMP_Text hint = Text(panel, "HintText", null, 14, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(1f, 0f), Ink,
+        TMP_Text hint = Text(panel, "HintText", null, 18, TextAlignmentOptions.MidlineLeft, Vector2.zero, new Vector2(1f, 0f), Ink,
                              ThemeRoleId.WindowBody, "search.hint", FontStyles.Italic, ThemeTextKind.Body, true);
         PlaceRect(hint.transform, Vector2.zero, new Vector2(1f, 0f), new Vector2(10f, 2f), new Vector2(-10f, SearchFooterHeight - 2f));
         hint.raycastTarget = false;

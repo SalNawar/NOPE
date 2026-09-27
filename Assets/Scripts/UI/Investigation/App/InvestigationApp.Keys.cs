@@ -300,7 +300,7 @@ public sealed partial class InvestigationApp
             rowMenu.ShowForRow(this, row, _pins.IsPinned(row.Key), eventData);
     }
 
-    /// <summary>Copies <paramref name="row"/>'s value as shown, or "Label: value" (<paramref name="wholeRow"/>), to the clipboard and the system clipboard.</summary>
+    /// <summary>Copies <paramref name="row"/>'s value as shown, or "Label: value" (<paramref name="wholeRow"/>), to the clipboard and the system clipboard; the toast names an untranslated line by its source (its glyphs are not in the chrome's font).</summary>
     public void Copy(AppRow row, bool wholeRow)
     {
         if (row == null)
@@ -310,7 +310,7 @@ public sealed partial class InvestigationApp
         if (_clipboard.Current != clip)
             return;
         GUIUtility.systemCopyBuffer = clip.Text;
-        Notice(UiText.Format("app.copied", clip.Text));
+        Notice(UiText.Format("app.copied", clip.Foreign ? clip.SourceLabel : clip.Text));
     }
 
     /// <summary>Pins <paramref name="row"/>, or unpins it.</summary>
