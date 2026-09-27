@@ -25,6 +25,29 @@ public static class TerminalHallModules
         var r=go.AddComponent<SpriteRenderer>();r.sprite=sprite;r.sharedMaterial=mat;r.sortingOrder=order;return r;
     }
     static Sprite white;
+    // Screen-space quadrilateral follows the supporting plane, rather than facing
+    // every furnishing squarely toward the player. Dense tessellation avoids a diagonal UV seam.
+    static MeshRenderer Projected(string name,Sprite sprite,Vector2 tl,Vector2 tr,Vector2 br,Vector2 bl,Material material,int order)
+    {
+        var go=new GameObject("LH_"+name);go.transform.SetParent(root);
+        var vertices=new List<Vector3>();var uv=new List<Vector2>();var indices=new List<int>();
+        const int steps=16;Rect rect=sprite.rect;
+        for(int y=0;y<=steps;y++)for(int x=0;x<=steps;x++){
+            float u=x/(float)steps,v=y/(float)steps;
+            Vector2 p=Vector2.Lerp(Vector2.Lerp(bl,br,u),Vector2.Lerp(tl,tr,u),v);
+            vertices.Add(cam.ViewportToWorldPoint(new Vector3(p.x,1-p.y,40)));
+            uv.Add(new Vector2((rect.x+u*rect.width)/sprite.texture.width,(rect.y+v*rect.height)/sprite.texture.height));
+            if(x<steps&&y<steps){int k=y*(steps+1)+x;indices.AddRange(new[]{k,k+1,k+steps+2,k,k+steps+2,k+steps+1});}
+        }
+        var mesh=new Mesh();mesh.SetVertices(vertices);mesh.SetUVs(0,uv);mesh.SetTriangles(indices,0);mesh.RecalculateBounds();
+        string path=Folder+name+" projection.asset";var old=AssetDatabase.LoadAssetAtPath<Mesh>(path);
+        if(old){EditorUtility.CopySerialized(mesh,old);Object.DestroyImmediate(mesh);mesh=old;EditorUtility.SetDirty(old);}else AssetDatabase.CreateAsset(mesh,path);
+        // Centre local geometry so the normal hall pan also moves these layers correctly.
+        var centre=mesh.bounds.center;var points=mesh.vertices;for(int i=0;i<points.Length;i++)points[i]-=centre;mesh.vertices=points;mesh.RecalculateBounds();go.transform.position=centre;EditorUtility.SetDirty(mesh);
+        go.AddComponent<MeshFilter>().sharedMesh=mesh;
+        var mat=Mat(name+" surface",material.GetColor("_Color"));mat.SetFloat("_Mode",material.GetFloat("_Mode"));mat.SetTexture("_MainTex",sprite.texture);EditorUtility.SetDirty(mat);
+        var r=go.AddComponent<MeshRenderer>();r.sharedMaterial=mat;r.sortingOrder=order;return r;
+    }
     static SpriteRenderer Box(string name,float x,float y,float w,float h,Material mat,int order=10)=>Image(name,white,x,y,w,h,mat,order);
     static TextMesh Text(string name,string value,float x,float y,float size,Color color)
     {
@@ -32,13 +55,11 @@ public static class TerminalHallModules
         var t=go.AddComponent<TextMesh>();t.font=AssetDatabase.LoadAssetAtPath<Font>("Assets/TextMesh Pro/Fonts/LiberationSans.ttf");t.text=value;t.fontSize=72;t.characterSize=size;t.anchor=TextAnchor.MiddleLeft;t.color=color;
         var r=t.GetComponent<MeshRenderer>();r.sharedMaterial=t.font.material;r.sortingOrder=45;return t;
     }
-    static void Rail(Vector2 a,Vector2 b,int posts)
+    static void Rail(Vector2 a,Vector2 b,int posts,float heightA=.028f,float heightB=.028f)
     {
         var steel=Mat("Railing graphite",new Color(.22f,.25f,.28f));var brass=Mat("Railing worn brass",new Color(.55f,.43f,.26f));
-        for(int i=0;i<=posts;i++){var p=Vector2.Lerp(a,b,i/(float)posts);Box("Railing post",p.x,p.y-.014f,.0018f,.028f,steel,15);}
-        var centre=(a+b)*.5f;var delta=b-a;
-        float width=Mathf.Sqrt(delta.x*delta.x+delta.y*delta.y/(cam.aspect*cam.aspect));
-        foreach(float offset in new[]{.028f,.010f}){var rail=Box("Rail continuous handrail",centre.x,centre.y-offset,width,.0025f,brass,16);rail.transform.Rotate(0,0,Mathf.Atan2(-delta.y,delta.x*cam.aspect)*Mathf.Rad2Deg);}
+        for(int i=0;i<=posts;i++){float t=i/(float)posts;var p=Vector2.Lerp(a,b,t);float h=Mathf.Lerp(heightA,heightB,t);Box("Railing post",p.x,p.y-h*.5f,.0018f,h,steel,15);}
+        foreach(float fraction in new[]{1f,.36f}){var start=a-Vector2.up*heightA*fraction;var end=b-Vector2.up*heightB*fraction;var centre=(start+end)*.5f;var delta=end-start;float width=Mathf.Sqrt(delta.x*delta.x+delta.y*delta.y/(cam.aspect*cam.aspect));var rail=Box("Rail continuous handrail",centre.x,centre.y,width,.0025f,brass,16);rail.transform.Rotate(0,0,Mathf.Atan2(-delta.y,delta.x*cam.aspect)*Mathf.Rad2Deg);}
     }
     public static void Build(Transform parent,Camera camera,SpriteRenderer shell,Texture2D floor,Texture2D fixtures)
     {
@@ -53,11 +74,22 @@ public static class TerminalHallModules
         var cloth=Sprite("Flag cloth cutout",atlas,new Rect(994,1024-1005,300,508));
         var view=parent.gameObject.AddComponent<HallDisplayView>();view.portalEnergy=new Renderer[4];view.destinations=new TextMesh[4];view.statuses=new TextMesh[4];view.gateLabels=new TextMesh[4];
         var metal=Mat("Portal independent graphite",Color.white);
-        float[,] gates={{.475f,.51f,.195f,.235f},{.586f,.447f,.067f,.09f},{.752f,.215f,.056f,.09f},{.85f,.172f,.07f,.12f}};
+        float[,] gates={{.493f,.478f,.175f,.205f},{.586f,.444f,.067f,.09f},{.752f,.215f,.056f,.09f},{.85f,.172f,.07f,.12f}};
         for(int i=0;i<4;i++){
             float x=gates[i,0],y=gates[i,1],w=gates[i,2],h=gates[i,3];
-            Image("Portal "+(i+1)+" frame",portal,x,y,w,h,metal,13);
-            view.portalEnergy[i]=Box("Portal "+(i+1)+" energy",x,y-h*.095f,w*.47f,h*.64f,Mat("Portal "+(i+1)+" energy",new Color(.06f,.30f,.50f),6),12);
+            var energy=Mat("Portal "+(i+1)+" energy",new Color(.06f,.30f,.50f),6);
+            if(i<2){
+                Image("Portal "+(i+1)+" frame",portal,x,y,w,h,metal,13);
+                view.portalEnergy[i]=Box("Portal "+(i+1)+" energy",x,y-h*.095f,w*.47f,h*.64f,energy,12);
+            }else{
+                // Both portals stand along the receding right gallery: right edges are nearer/taller.
+                float left=x-w*.36f,right=x+w*.36f;
+                float baseLeft=.301f-.30f*(left-.60f),baseRight=.301f-.30f*(right-.60f);
+                Vector2 tl=new Vector2(left,baseLeft-h*.87f),tr=new Vector2(right,baseRight-h*1.08f),br=new Vector2(right,baseRight),bl=new Vector2(left,baseLeft);
+                Projected("Portal "+(i+1)+" frame",portal,tl,tr,br,bl,metal,13);
+                Vector2 At(float u,float v)=>Vector2.Lerp(Vector2.Lerp(bl,br,u),Vector2.Lerp(tl,tr,u),v);
+                view.portalEnergy[i]=Projected("Portal "+(i+1)+" energy",white,At(.265f,.915f),At(.735f,.915f),At(.735f,.275f),At(.265f,.275f),energy,12);
+            }
         }
         var cloths=new List<SpriteRenderer>();var logos=new List<SpriteRenderer>();
         foreach(float x in new[]{.311f,.683f}){
@@ -65,12 +97,11 @@ public static class TerminalHallModules
             var logo=Box("Replaceable flag emblem",x,.12f,.012f,.034f,Mat("Flag emblem gold",new Color(.8f,.62f,.30f)),10);logo.transform.Rotate(0,0,45);logos.Add(logo);
         }view.flagCloth=cloths.ToArray();view.flagLogos=logos.ToArray();
         var lm=Mat("Lamps independent metal and glass",Color.white);lm.SetFloat("_Mode",2.2f);EditorUtility.SetDirty(lm);
-        foreach(var p in new[]{new Vector2(.282f,.342f),new Vector2(.709f,.342f),new Vector2(.365f,.39f),new Vector2(.627f,.39f)})Image("Paired bay sconce",lamp,p.x,p.y,.014f,.065f,lm,14);
+        foreach(var p in new[]{new Vector2(.282f,.342f),new Vector2(.678f,.342f),new Vector2(.365f,.39f),new Vector2(.627f,.39f)})Image("Paired bay sconce",lamp,p.x,p.y,.014f,.065f,lm,14);
         Rail(new Vector2(.374f,.247f),new Vector2(.633f,.247f),12);
-        Rail(new Vector2(.724f,.246f),new Vector2(.944f,.182f),12);
+        Rail(new Vector2(.724f,.273f),new Vector2(.944f,.205f),12,.019f,.030f);
         Rail(new Vector2(.04f,.446f),new Vector2(.236f,.414f),10);
-        Box("Locker contact shadow",.202f,.662f,.162f,.027f,Mat("Storage contact shadow",new Color(.16f,.12f,.11f,.28f),6),17);
-        Image("Grounded station lockers",lockers,.202f,.598f,.155f,.14f,Mat("Station lockers enamel",Color.white),18);
+        Projected("Station lockers following left wall",lockers,new Vector2(.145f,.550f),new Vector2(.274f,.490f),new Vector2(.274f,.604f),new Vector2(.145f,.683f),Mat("Station lockers enamel",Color.white),18);
         var board=Mat("Departure board housing",new Color(.08f,.10f,.13f),5);var amber=new Color(1,.77f,.36f);
         Box("Board outer metal frame",.503f,.125f,.316f,.191f,Mat("Board brushed frame",new Color(.29f,.31f,.33f)),39);
         Box("Close departure board",.503f,.125f,.31f,.18f,board,40);

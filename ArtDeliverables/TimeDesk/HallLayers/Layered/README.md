@@ -33,3 +33,5 @@ Build with Tools > Terminal Art > Build Layered Lit Hall. The restricted local p
 ## Generation record
 
 Built-in image generation used the preserved HallNeutral and HallLeftExtension as references. Prompts requested exact composition; architecture-only transparent layers with floor/signage/fixtures removed; separate worn ivory/burgundy/gold floor without cast shadows; and transparent cutouts of a portal frame, repeated sconce, modern station lockers and neutral logo-free flag. Selected outputs are saved in Assets/Art/Office/TerminalLayered/Textures. Earlier plates remain as source references.
+
+Perspective correction: upper portal cards and left station storage now use individually projected quadrilateral meshes following their supporting planes. Rail heights vary along the right gallery; upper crowds are anchored to walkway lines. Ground portal, right sconce and artifact plinth placement were revised. These remain painted 2.5D views rather than free-camera geometry.

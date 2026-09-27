@@ -36,7 +36,19 @@ public static class TerminalLayeredProduction
         architecture.sharedMaterial=hallMat;architecture.sortingOrder=0;
         foreach(var r in hall.GetComponentsInChildren<SpriteRenderer>().Where(r=>r!=architecture)){r.sharedMaterial=Material("Furnishing responsive lighting",2);r.sortingOrder+=20;}
         var crowdMat=Material("Crowd responsive lighting",2);crowdMat.SetTexture("_MainTex",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Office/HallCrowds/Textures/CrowdGroups_Atlas.png"));crowdMat.SetColor("_Color",new Color(.42f,.47f,.53f,1));EditorUtility.SetDirty(crowdMat);
-        foreach(var crowd in hall.GetComponentsInChildren<MeshRenderer>().Where(r=>r.name.StartsWith("03 Anonymous")))crowd.sharedMaterial=crowdMat;
+        foreach(var crowd in hall.GetComponentsInChildren<MeshRenderer>().Where(r=>r.name.StartsWith("03 Anonymous"))){
+            crowd.sharedMaterial=crowdMat;
+            var screen=camera.WorldToViewportPoint(crowd.bounds.center);
+            if(screen.y>.65f){
+                float foot=screen.x>.70f ? .301f-.30f*(screen.x-.60f) : .253f;
+                var mesh=crowd.GetComponent<MeshFilter>().sharedMesh;
+                var baseWorld=crowd.transform.TransformPoint(new Vector3(mesh.bounds.center.x,mesh.bounds.min.y,mesh.bounds.center.z));
+                var bottom=camera.WorldToViewportPoint(baseWorld);
+                crowd.transform.position+=camera.ViewportToWorldPoint(new Vector3(bottom.x,1-foot,bottom.z))-baseWorld;
+            }
+        }
+        var bust=hall.GetComponentsInChildren<SpriteRenderer>().First(r=>r.name.Contains("Stone bust"));
+        var bustPoint=camera.WorldToViewportPoint(bust.transform.position);bustPoint.y-=.026f;bust.transform.position=camera.ViewportToWorldPoint(bustPoint);
         var cityRoot=new GameObject("00 Independent city panorama").transform;cityRoot.SetParent(hall);
         CityPanorama(city,cityRoot);
         var luggage=hall.GetComponentsInChildren<SpriteRenderer>().First(r=>r.name.Contains("Compact luggage"));
