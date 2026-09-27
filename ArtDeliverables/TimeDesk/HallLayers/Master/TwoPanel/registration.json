@@ -1,0 +1,13 @@
+{
+  "canvas": {"width": 4344, "height": 724},
+  "coordinateSystem": "Pixels, origin at top-left; no panel resizing",
+  "basePanels": [
+    {"file": "left-city-v2-neutral.png", "x": 0, "y": 0, "width": 2172, "height": 724},
+    {"file": "right-hall-v2-neutral.png", "x": 2172, "y": 0, "width": 2172, "height": 724}
+  ],
+  "joinCorrection": {
+    "file": "seam-transition-v1.png", "x": 1086, "y": 0, "width": 2172, "height": 724,
+    "opacityRampX": [[0, 0], [0.08, 1], [0.92, 1], [1, 0]]
+  },
+  "status": "Visual pan study. Not yet exported as two flattened corrected masters. No Unity light test or layer extraction yet."
+}

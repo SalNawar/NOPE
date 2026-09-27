@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Hall panorama — registration preview</title><style>
+*{box-sizing:border-box}body{margin:0;background:#191b20;color:#eee;font:14px system-ui}header{height:68px;padding:16px 24px;display:flex;gap:20px;align-items:center}button{padding:8px 14px;background:#30343e;border:1px solid #616879;border-radius:5px;color:#fff;cursor:pointer}input{flex:1}#view{width:min(100vw,calc((100vh - 68px) * 3));height:auto;aspect-ratio:3/1;margin:0 auto;position:relative;overflow:hidden;background:#303841}#strip{position:absolute;display:flex;height:100%;will-change:transform}#strip img{height:100%;width:auto;max-width:none;display:block;flex:none}#patch{position:absolute;left:25%;top:0;width:50%!important;height:100%;mask-image:linear-gradient(to right,transparent,black 8%,black 92%,transparent);pointer-events:none}#seam{position:absolute;width:2px;height:100%;background:#eaa553;opacity:0;pointer-events:none}body.guides #seam{opacity:.8}#patch[hidden]{display:none!important}#label{white-space:nowrap}
+</style><header><button onclick="setPan(0)">City</button><button onclick="setPan(.5)">Join</button><button onclick="setPan(1)">Hall</button><input id="pan" type="range" min="0" max="1" step=".001" value=".5"><button onclick="document.body.classList.toggle('guides')">Seam guide</button><button onclick="document.querySelector('#patch').hidden=!document.querySelector('#patch').hidden">Compare join</button><span id="label">Full-panel pan preview</span></header><div id="view"><div id="strip"><img src="left-city-v2-neutral.png"><img src="right-hall-v2-neutral.png"><img id="patch" src="seam-transition-v1.png"><div id="seam"></div></div></div><script>
+const strip=document.querySelector('#strip'),view=document.querySelector('#view'),pan=document.querySelector('#pan');function update(){const h=view.clientHeight,w=h*6;strip.style.width=w+'px';strip.style.transform='translateX('+(-(w-view.clientWidth)*Number(pan.value))+'px)';document.querySelector('#seam').style.left=(h*3)+'px'}function setPan(v){pan.value=v;update()}pan.oninput=update;onresize=update;if(location.search.includes('capture')){document.querySelector('header').style.display='none';view.style.width='100vw';view.style.height='100vh';view.style.aspectRatio='auto'}update();
+</script></html>
+
+
+
+
+
+
