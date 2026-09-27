@@ -1,0 +1,7 @@
+Independent city and alpha-cut hall layers.
+Separate furnishing and crowd layers.
+Camera-space normal-map lighting, animated portal emission and simulated window shadows.
+Morning, evening, changed-direction and left-view captures completed.
+Shader errors: 0
+Baked Unity lightmaps: 0
+Desk source and gameplay unchanged.

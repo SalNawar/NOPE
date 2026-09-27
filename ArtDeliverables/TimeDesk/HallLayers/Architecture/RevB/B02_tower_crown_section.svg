@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1240" viewBox="0 0 1800 1240">
+<defs><marker id="ochre" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#B87927" stroke-width="1.6"/></marker><marker id="plum" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#75506F" stroke-width="1.6"/></marker><marker id="coral" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#B75348" stroke-width="1.6"/></marker></defs>
+<rect width="1800" height="1240" fill="#FAF7F0"/>
+<text x="55.00" y="47.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="700" text-anchor="start">
+<tspan x="55.00" dy="0">NOPE  /  HALL SPATIAL STUDY</tspan>
+</text>
+<text x="55.00" y="96.00" font-family="Arial, sans-serif" font-size="34" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="55.00" dy="0">Grand hall, human-scale workstation, city below</tspan>
+</text>
+<text x="57.00" y="131.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="57.00" dy="0">Section + local window view  /  tower height deliberately left open  /  no camera implementation</tspan>
+</text>
+<text x="1735.00" y="49.00" font-family="Arial, sans-serif" font-size="24" fill="#302D33" font-weight="700" text-anchor="end">
+<tspan x="1735.00" dy="0">B02</tspan>
+</text>
+<line x1="55.00" y1="154.00" x2="1745.00" y2="154.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<rect x="130.00" y="538.00" width="800.00" height="10.00" fill="#BDB4A5" stroke="#302D33" stroke-width="1.5" />
+<line x1="130.00" y1="538.00" x2="130.00" y2="298.00" stroke="#302D33" stroke-width="4"/>
+<line x1="930.00" y1="538.00" x2="930.00" y2="298.00" stroke="#302D33" stroke-width="4"/>
+<line x1="130.00" y1="298.00" x2="930.00" y2="298.00" stroke="#726B70" stroke-width="1.5" stroke-dasharray="6 5"/>
+<line x1="930.00" y1="526.00" x2="930.00" y2="318.00" stroke="#577285" stroke-width="4"/>
+<text x="530.00" y="268.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="530.00" dy="0">60 × 80 m FOOTPRINT  /  24 m HIGH VOLUME, PROPOSED</tspan>
+</text>
+<line x1="990.00" y1="538.00" x2="990.00" y2="298.00" stroke="#726B70" stroke-width="0.9"/>
+<line x1="985.00" y1="542.00" x2="995.00" y2="534.00" stroke="#726B70" stroke-width="1"/>
+<line x1="985.00" y1="302.00" x2="995.00" y2="294.00" stroke="#726B70" stroke-width="1"/>
+<text x="980" y="418.0" transform="rotate(-90 980 418.0)" font-family="Arial" font-size="15" text-anchor="middle" fill="#726B70">24 m proposed clear height</text>
+<rect x="230.00" y="526.80" width="25.30" height="1.20" fill="#D7B790" stroke="#302D33" stroke-width="1.5" />
+<line x1="232.00" y1="538.00" x2="232.00" y2="528.00" stroke="#302D33" stroke-width="2"/>
+<line x1="253.00" y1="538.00" x2="253.00" y2="528.00" stroke="#302D33" stroke-width="2"/>
+<circle cx="215.00" cy="521.80" r="1.30" fill="#302D33" stroke="#302D33" stroke-width="1.4"/>
+<line x1="215.00" y1="523.20" x2="215.00" y2="531.50" stroke="#302D33" stroke-width="1.6"/>
+<line x1="215.00" y1="531.50" x2="213.00" y2="538.00" stroke="#302D33" stroke-width="1.1"/>
+<line x1="215.00" y1="531.50" x2="217.00" y2="538.00" stroke="#302D33" stroke-width="1.1"/>
+<circle cx="270.00" cy="521.80" r="1.30" fill="#302D33" stroke="#302D33" stroke-width="1.4"/>
+<line x1="270.00" y1="523.20" x2="270.00" y2="531.50" stroke="#302D33" stroke-width="1.6"/>
+<line x1="270.00" y1="531.50" x2="268.00" y2="538.00" stroke="#302D33" stroke-width="1.1"/>
+<line x1="270.00" y1="531.50" x2="272.00" y2="538.00" stroke="#302D33" stroke-width="1.1"/>
+<circle cx="490.00" cy="521.80" r="1.30" fill="#302D33" stroke="#302D33" stroke-width="1.4"/>
+<line x1="490.00" y1="523.20" x2="490.00" y2="531.50" stroke="#302D33" stroke-width="1.6"/>
+<line x1="490.00" y1="531.50" x2="488.00" y2="538.00" stroke="#302D33" stroke-width="1.1"/>
+<line x1="490.00" y1="531.50" x2="492.00" y2="538.00" stroke="#302D33" stroke-width="1.1"/>
+<rect x="525.00" y="478.00" width="10.00" height="60.00" fill="#CAD4DA" stroke="#302D33" stroke-width="1.5" />
+<text x="530.00" y="448.00" font-family="Arial, sans-serif" font-size="13" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="530.00" dy="0">PORTAL</tspan>
+<tspan x="530.00" dy="17.55">6 m source scale</tspan>
+</text>
+<text x="270.00" y="581.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="270.00" dy="0">HUMANS ≈ 1.75 m</tspan>
+<tspan x="270.00" dy="16.200000000000003">FURNITURE NOT ENLARGED</tspan>
+</text>
+<text x="720.00" y="581.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="720.00" dy="0">SOURCE PORTAL SIZE RETAINED IN STUDY</tspan>
+<tspan x="720.00" dy="16.200000000000003">Framing needs a perspective check</tspan>
+</text>
+<text x="520.00" y="358.00" font-family="Arial, sans-serif" font-size="22" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="520.00" dy="0">The room dwarfs its occupants.</tspan>
+</text>
+<text x="520.00" y="398.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="520.00" dy="0">Tall piers, long bays, deep reveals and uninterrupted glazing.</tspan>
+</text>
+<text x="1100.00" y="238.00" font-family="Arial, sans-serif" font-size="20" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1100.00" dy="0">THE UPPER CROWN OF A GOVERNMENT TOWER</tspan>
+</text>
+<text x="1100.00" y="274.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1100.00" dy="0">The hall occupies the upper civic crown.</tspan>
+<tspan x="1100.00" dy="24.3">Public lifts travel up from admissions far below.</tspan>
+<tspan x="1100.00" dy="24.3">The tower’s exact height and floor number remain open.</tspan>
+<tspan x="1100.00" dy="24.3">C-SUITES branches into the controlled upper core.</tspan>
+</text>
+<text x="1100.00" y="407.00" font-family="Arial, sans-serif" font-size="18" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1100.00" dy="0">THE CITY VIEW NEEDS VERTICAL DEPTH</tspan>
+</text>
+<text x="1100.00" y="440.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1100.00" dy="0">Show roofs and occupied levels below, distant towers,</tspan>
+<tspan x="1100.00" dy="24.3">and several layers of city massing. It should feel like</tspan>
+<tspan x="1100.00" dy="24.3">looking out from the institution above the city.</tspan>
+</text>
+<line x1="55.00" y1="660.00" x2="1745.00" y2="660.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<text x="65.00" y="703.00" font-family="Arial, sans-serif" font-size="23" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="65.00" dy="0">LEFT VIEW  /  LOCAL TRANSVERSE SECTION</tspan>
+</text>
+<text x="65.00" y="733.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="65.00" dy="0">Diagrammatic: the tower / city is context, not a final skyline design.</tspan>
+</text>
+<rect x="60.00" y="1030.00" width="60.00" height="84.00" fill="#D7DDE0" stroke="#D8D0C4" stroke-width="1" />
+<rect x="144.00" y="1039.00" width="60.00" height="45.00" fill="#D7DDE0" stroke="#D8D0C4" stroke-width="1" />
+<rect x="225.00" y="1042.00" width="60.00" height="90.00" fill="#D7DDE0" stroke="#D8D0C4" stroke-width="1" />
+<rect x="360.00" y="994.00" width="510.00" height="18.00" fill="#BDB4A5" stroke="#302D33" stroke-width="1.4" />
+<line x1="360.00" y1="994.00" x2="360.00" y2="769.00" stroke="#302D33" stroke-width="6"/>
+<line x1="360.00" y1="961.00" x2="360.00" y2="769.00" stroke="#577285" stroke-width="3"/>
+<line x1="366.00" y1="961.00" x2="366.00" y2="769.00" stroke="#577285" stroke-width="1"/>
+<text x="360.00" y="754.00" font-family="Arial, sans-serif" font-size="12" fill="#577285" font-weight="700" text-anchor="middle">
+<tspan x="360.00" dy="0">GLASS CONTINUES UP TO THE HIGH HALL</tspan>
+</text>
+<circle cx="568.20" cy="945.40" r="4.00" fill="#FAF7F0" stroke="#302D33" stroke-width="1.4"/>
+<line x1="568.20" y1="949.60" x2="568.20" y2="974.50" stroke="#302D33" stroke-width="2"/>
+<line x1="568.20" y1="974.50" x2="561.00" y2="994.00" stroke="#302D33" stroke-width="2"/>
+<line x1="568.20" y1="974.50" x2="574.50" y2="994.00" stroke="#302D33" stroke-width="2"/>
+<path d="M 568.20 945.40 L 360.00 952.00 L 210.00 1000.00" fill="none" stroke="#577285" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="360.00" y1="1041.00" x2="568.20" y2="1041.00" stroke="#726B70" stroke-width="0.9"/>
+<line x1="356.00" y1="1046.00" x2="364.00" y2="1036.00" stroke="#726B70" stroke-width="1"/>
+<line x1="564.20" y1="1046.00" x2="572.20" y2="1036.00" stroke="#726B70" stroke-width="1"/>
+<text x="464.10" y="1032.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="464.10" dy="0">~7 m shortest distance to glazing</tspan>
+</text>
+<text x="645.00" y="904.00" font-family="Arial, sans-serif" font-size="13" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="645.00" dy="0">PLAYER / WINDOW-END STATION</tspan>
+</text>
+<text x="410.00" y="1094.00" font-family="Arial, sans-serif" font-size="13" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="410.00" dy="0">Pan ray projected into this section; actual view is oblique.</tspan>
+</text>
+<text x="65.00" y="824.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="65.00" dy="0">CITY FAR BELOW</tspan>
+<tspan x="65.00" dy="18.900000000000002">Building height not fixed</tspan>
+</text>
+<text x="1010.00" y="727.00" font-family="Arial, sans-serif" font-size="21" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1010.00" dy="0">WHAT THE PAN CHANGES</tspan>
+</text>
+<text x="1010.00" y="766.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1010.00" dy="0">Use real depth for window reveals, piers, desk and nearby props.</tspan>
+<tspan x="1010.00" dy="24.3">A flat front-facing hall painting would break when viewed sideways.</tspan>
+<tspan x="1010.00" dy="24.3">Distant city layers, mounted pictures and distant crowds can still</tspan>
+<tspan x="1010.00" dy="24.3">use sprites where their angle and depth remain believable.</tspan>
+</text>
+<text x="1010.00" y="907.00" font-family="Arial, sans-serif" font-size="19" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1010.00" dy="0">NEXT SANITY CHECK</tspan>
+</text>
+<text x="1010.00" y="943.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1010.00" dy="0">Build one plain spatial model and inspect both camera views.</tspan>
+<tspan x="1010.00" dy="24.3">Test the corkboards and partitions across the entire pan.</tspan>
+<tspan x="1010.00" dy="24.3">The portal gets smaller at this greater viewing distance.</tspan>
+<tspan x="1010.00" dy="24.3">Keep the actual pan controls and interaction rules with Claude.</tspan>
+</text>
+<line x1="55.00" y1="1172.00" x2="1745.00" y2="1172.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<text x="55.00" y="1200.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="55.00" dy="0">Perspective framing, interaction preservation and the pan range are unresolved until the shared-camera blockout.</tspan>
+</text>
+<text x="1745.00" y="1200.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="end">
+<tspan x="1745.00" dy="0">26 SEP 2026  /  REV B  /  PROPOSAL</tspan>
+</text>
+</svg>

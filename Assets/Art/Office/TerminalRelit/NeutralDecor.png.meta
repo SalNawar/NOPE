@@ -1,0 +1,962 @@
+fileFormatVersion: 2
+guid: 92267af6aa44c114caa334cfb838e5fa
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1729563389053492714
+    second: NeutralDecor_0
+  - first:
+      213: -4941902460464393947
+    second: NeutralDecor_1
+  - first:
+      213: -5986849976636336158
+    second: NeutralDecor_2
+  - first:
+      213: -960241888039680577
+    second: NeutralDecor_3
+  - first:
+      213: 4191971723059218949
+    second: NeutralDecor_4
+  - first:
+      213: -2769768965926194401
+    second: NeutralDecor_5
+  - first:
+      213: 7887951152900487488
+    second: NeutralDecor_6
+  - first:
+      213: 6698467691205307131
+    second: NeutralDecor_7
+  - first:
+      213: -3719753413988686821
+    second: NeutralDecor_8
+  - first:
+      213: -2940284732496956772
+    second: NeutralDecor_9
+  - first:
+      213: -449912844235397500
+    second: NeutralDecor_10
+  - first:
+      213: 8323280598559074073
+    second: NeutralDecor_11
+  - first:
+      213: 1247619804928016692
+    second: NeutralDecor_12
+  - first:
+      213: 6455303123372160167
+    second: NeutralDecor_13
+  - first:
+      213: 2181649660207060671
+    second: NeutralDecor_14
+  - first:
+      213: -3611991133863947665
+    second: NeutralDecor_15
+  - first:
+      213: -4026871204040037343
+    second: NeutralDecor_16
+  - first:
+      213: 1524351243871537663
+    second: NeutralDecor_17
+  - first:
+      213: 3362771624139913616
+    second: NeutralDecor_18
+  - first:
+      213: -2628776606215653373
+    second: NeutralDecor_19
+  - first:
+      213: 5911373691371326857
+    second: NeutralDecor_20
+  - first:
+      213: -7590546056195015334
+    second: NeutralDecor_21
+  - first:
+      213: 3133291085005177601
+    second: NeutralDecor_22
+  - first:
+      213: -7934380898863437241
+    second: NeutralDecor_23
+  - first:
+      213: 4629956546228780235
+    second: NeutralDecor_24
+  - first:
+      213: 7711478758622314647
+    second: NeutralDecor_25
+  - first:
+      213: 2161587214240897091
+    second: NeutralDecor_26
+  - first:
+      213: -2025184396123734799
+    second: NeutralDecor_27
+  - first:
+      213: 1914593758457899335
+    second: NeutralDecor_28
+  - first:
+      213: 1894133712819647671
+    second: NeutralDecor_29
+  - first:
+      213: -9137637773635862965
+    second: NeutralDecor_30
+  - first:
+      213: -5357021532224282393
+    second: NeutralDecor_31
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: NeutralDecor_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 503
+        width: 672
+        height: 743
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aeddd0d1db4a00810800000000000000
+      internalID: 1729563389053492714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_1
+      rect:
+        serializedVersion: 2
+        x: 703
+        y: 616
+        width: 536
+        height: 596
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 521146145e5da6bb0800000000000000
+      internalID: -4941902460464393947
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_2
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 1189
+        width: 11
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2e7190b7aaf6aeca0800000000000000
+      internalID: -5986849976636336158
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_3
+      rect:
+        serializedVersion: 2
+        x: 896
+        y: 1203
+        width: 23
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb5c1f427198ca2f0800000000000000
+      internalID: -960241888039680577
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_4
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 1201
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50a4d657210ec2a30800000000000000
+      internalID: 4191971723059218949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_5
+      rect:
+        serializedVersion: 2
+        x: 930
+        y: 1211
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f137114eccdcf89d0800000000000000
+      internalID: -2769768965926194401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_6
+      rect:
+        serializedVersion: 2
+        x: 936
+        y: 1205
+        width: 108
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 049344a08c1a77d60800000000000000
+      internalID: 7887951152900487488
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_7
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 1164
+        width: 11
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bfa29b900ecb5fc50800000000000000
+      internalID: 6698467691205307131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_8
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 1148
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1468236af7c06cc0800000000000000
+      internalID: -3719753413988686821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_9
+      rect:
+        serializedVersion: 2
+        x: 599
+        y: 719
+        width: 11
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c92b3053d920237d0800000000000000
+      internalID: -2940284732496956772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_10
+      rect:
+        serializedVersion: 2
+        x: 488
+        y: 648
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 486a673e6a691c9f0800000000000000
+      internalID: -449912844235397500
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_11
+      rect:
+        serializedVersion: 2
+        x: 504
+        y: 648
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 917a3031b9b328370800000000000000
+      internalID: 8323280598559074073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_12
+      rect:
+        serializedVersion: 2
+        x: 808
+        y: 658
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4310a773a9f605110800000000000000
+      internalID: 1247619804928016692
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_13
+      rect:
+        serializedVersion: 2
+        x: 794
+        y: 612
+        width: 13
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a431123df7d59950800000000000000
+      internalID: 6455303123372160167
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_14
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 632
+        width: 13
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb65efc9ec6c64e10800000000000000
+      internalID: 2181649660207060671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 550
+        height: 616
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f62dd2e6331afddc0800000000000000
+      internalID: -3611991133863947665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_16
+      rect:
+        serializedVersion: 2
+        x: 685
+        y: 15
+        width: 524
+        height: 612
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 12ca1f6a9fdad18c0800000000000000
+      internalID: -4026871204040037343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_17
+      rect:
+        serializedVersion: 2
+        x: 1115
+        y: 610
+        width: 9
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff943e34165972510800000000000000
+      internalID: 1524351243871537663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_18
+      rect:
+        serializedVersion: 2
+        x: 1214
+        y: 531
+        width: 21
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0997f95b9f6faae20800000000000000
+      internalID: 3362771624139913616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_19
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 585
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 308b8a0ca95b48bd0800000000000000
+      internalID: -2628776606215653373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_20
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 583
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98d07c07d0b690250800000000000000
+      internalID: 5911373691371326857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_21
+      rect:
+        serializedVersion: 2
+        x: 530
+        y: 568
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5df04d0496f8a690800000000000000
+      internalID: -7590546056195015334
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_22
+      rect:
+        serializedVersion: 2
+        x: 663
+        y: 312
+        width: 35
+        height: 82
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 103c1a314afab7b20800000000000000
+      internalID: 3133291085005177601
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_23
+      rect:
+        serializedVersion: 2
+        x: 1155
+        y: 385
+        width: 6
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74aa9925c9a63e190800000000000000
+      internalID: -7934380898863437241
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_24
+      rect:
+        serializedVersion: 2
+        x: 1160
+        y: 387
+        width: 7
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bccf57fb2f8e04040800000000000000
+      internalID: 4629956546228780235
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_25
+      rect:
+        serializedVersion: 2
+        x: 697
+        y: 340
+        width: 20
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 79047a4e21da40b60800000000000000
+      internalID: 7711478758622314647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_26
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 294
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 348dad76e108ffd10800000000000000
+      internalID: 2161587214240897091
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_27
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 172
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1fc7168858915e3e0800000000000000
+      internalID: -2025184396123734799
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_28
+      rect:
+        serializedVersion: 2
+        x: 153
+        y: 152
+        width: 7
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 749201e11e0029a10800000000000000
+      internalID: 1914593758457899335
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_29
+      rect:
+        serializedVersion: 2
+        x: 585
+        y: 103
+        width: 31
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b4f4b58390594a10800000000000000
+      internalID: 1894133712819647671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_30
+      rect:
+        serializedVersion: 2
+        x: 601
+        y: 51
+        width: 27
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4e3e30bbd6903180800000000000000
+      internalID: -9137637773635862965
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: NeutralDecor_31
+      rect:
+        serializedVersion: 2
+        x: 603
+        y: 0
+        width: 29
+        height: 53
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7e027a59c4908a5b0800000000000000
+      internalID: -5357021532224282393
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      NeutralDecor_0: 1729563389053492714
+      NeutralDecor_1: -4941902460464393947
+      NeutralDecor_10: -449912844235397500
+      NeutralDecor_11: 8323280598559074073
+      NeutralDecor_12: 1247619804928016692
+      NeutralDecor_13: 6455303123372160167
+      NeutralDecor_14: 2181649660207060671
+      NeutralDecor_15: -3611991133863947665
+      NeutralDecor_16: -4026871204040037343
+      NeutralDecor_17: 1524351243871537663
+      NeutralDecor_18: 3362771624139913616
+      NeutralDecor_19: -2628776606215653373
+      NeutralDecor_2: -5986849976636336158
+      NeutralDecor_20: 5911373691371326857
+      NeutralDecor_21: -7590546056195015334
+      NeutralDecor_22: 3133291085005177601
+      NeutralDecor_23: -7934380898863437241
+      NeutralDecor_24: 4629956546228780235
+      NeutralDecor_25: 7711478758622314647
+      NeutralDecor_26: 2161587214240897091
+      NeutralDecor_27: -2025184396123734799
+      NeutralDecor_28: 1914593758457899335
+      NeutralDecor_29: 1894133712819647671
+      NeutralDecor_3: -960241888039680577
+      NeutralDecor_30: -9137637773635862965
+      NeutralDecor_31: -5357021532224282393
+      NeutralDecor_4: 4191971723059218949
+      NeutralDecor_5: -2769768965926194401
+      NeutralDecor_6: 7887951152900487488
+      NeutralDecor_7: 6698467691205307131
+      NeutralDecor_8: -3719753413988686821
+      NeutralDecor_9: -2940284732496956772
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
