@@ -128,6 +128,7 @@ public static partial class OfficeSceneUIBuilder
 
         EnsureLayer(OfficeLayers.Interactable);
         EnsureLayer(OfficeLayers.PcDesktop);
+        EnsureSortingLayer(OfficeLayers.SortingLayer);
         Scene scene = File.Exists(GameplayScenePath)
             ? EditorSceneManager.OpenScene(GameplayScenePath, OpenSceneMode.Single)
             : EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);

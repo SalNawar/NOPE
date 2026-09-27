@@ -167,6 +167,14 @@ Other art-side fixes found by the move:
 - Two layers are the gameplay layer's: `Interactable` (every click box; the
   office camera's `PhysicsRaycaster` sees only it) and `PCDesktop` (the desktop
   canvas and its two cameras, far below the office; the office camera never draws it).
+- One sorting layer is the gameplay layer's: `Gameplay`, after `Default`, for
+  its world sprites and notes (the traveller's figure, the day-1 desk notes).
+  Transparent objects sort by sorting layer and order before depth, so the art
+  may use any orders on `Default` (the hall's registered layers use 0..57) and
+  the traveller still draws in front of them. Art sprites stay on `Default`.
+- The office camera is the art's, but at load the binder adds the gameplay's
+  layers (`Default`, `Interactable`) to its culling mask, removes `PCDesktop`,
+  and adds an `AudioListener` when no loaded scene has one.
 - Nothing from the gameplay layer is parented into the art scene; the binder
   places gameplay objects by world position.
 - The art's own colliders are ignored by input (they are not on `Interactable`).
