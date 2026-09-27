@@ -210,14 +210,34 @@ public static class TerminalRelitProduction
         Rail(new Vector3(-24.5f,UpperFloor,43.5f),new Vector3(-24.5f,UpperFloor,78));
         Box("West lift upper connection",new Vector3(-26,UpperFloor-.7f,77),new Vector3(9,1.4f,4),stone,.08f);
         // A clear left stair descends towards the main concourse, not towards the desk.
-        Box("West landing",new Vector3(-27,WestLanding-.5f,43),new Vector3(14,1,18),stone,.08f);
+        Box("West landing",new Vector3(-27,WestLanding-.5f,40),new Vector3(14,1,12),stone,.08f);
         Rail(new Vector3(-33,WestLanding,34),new Vector3(-20,WestLanding,34));
-        for(int i=0;i<44;i++)Box("West stair tread",new Vector3(-20+(i+.5f)*.32f,WestLanding-(i+1)*.2f-.10f,40),new Vector3(.33f,.20f,5),trim,.015f);
-        foreach(float z in new[]{37.4f,42.6f}){
-            Rail(new Vector3(-20,WestLanding,z),new Vector3(-5.92f,Ground,z));
-            Beam("Stone stair stringer",new Vector3(-20,WestLanding-.6f,z),new Vector3(-5.92f,Ground-.6f,z),.65f,stone);}
-        foreach(float z in new[]{34f,51f})Box("West landing pier",new Vector3(-21,(Ground+WestLanding)*.5f,z),new Vector3(2,WestLanding-Ground,2),stone,.10f);
-        Box("West landing outer support",new Vector3(-32,(Ground+WestLanding)*.5f,43),new Vector3(2,WestLanding-Ground,18),stone,.10f);
+        // The flight follows the west edge in depth, leaving the portal approach open.
+        var stairTop=new Vector3(-20,WestLanding,40);
+        var stairFoot=new Vector3(-14,-1.6f,44);
+        var run=stairFoot-stairTop;run.y=0;
+        var across=Vector3.Cross(Vector3.up,run.normalized);
+        var stairRotation=Quaternion.LookRotation(run.normalized);
+        for(int i=0;i<26;i++){
+            var centre=Vector3.Lerp(stairTop,stairFoot,(i+.5f)/26f);
+            centre.y=WestLanding-(i+1)*.2f-.10f;
+            Box("West stair tread",centre,new Vector3(3,.20f,run.magnitude/26f+.01f),trim,.015f).transform.rotation=stairRotation;
+        }
+        foreach(float side in new[]{-1.55f,1.55f}){
+            var offset=across*side;
+            Rail(stairTop+offset,stairFoot+offset);
+            Beam("Stone stair stringer",stairTop+offset-Vector3.up*.4f,stairFoot+offset-Vector3.up*.4f,.38f,stone);
+        }
+        Box("West intermediate stair landing",new Vector3(-14,-1.85f,44),new Vector3(3.2f,.5f,3.5f),stone,.04f);
+        // Short return flight reaches the concourse without entering the portal's safety ring.
+        for(int i=0;i<18;i++)Box("West return stair tread",new Vector3(-14,-1.6f-(i+1)*.2f-.10f,42.25f-(i+.5f)*.34f),new Vector3(3,.2f,.35f),trim,.015f);
+        foreach(float x in new[]{-15.55f,-12.45f}){
+            Rail(new Vector3(x,-1.6f,42.25f),new Vector3(x,Ground,36.13f));
+            Beam("Return stair support",new Vector3(x,-2,42.25f),new Vector3(x,Ground-.4f,36.13f),.38f,stone);
+        }
+        foreach(float x in new[]{-15f,-13f})Box("Intermediate landing support",new Vector3(x,(Ground-2.1f)*.5f,44),new Vector3(.5f,-2.1f-Ground,.5f),stone,.03f);
+        foreach(float z in new[]{34f,44f})Box("West landing pier",new Vector3(-21,(Ground+WestLanding)*.5f,z),new Vector3(2,WestLanding-Ground,2),stone,.10f);
+        Box("West landing outer support",new Vector3(-32,(Ground+WestLanding)*.5f,40),new Vector3(2,WestLanding-Ground,12),stone,.10f);
         // Vertical circulation sits behind the bridge, preserving the open window vista.
         Box("West passenger lift core",new Vector3(-29,5,78),new Vector3(5,23,6),stone,.12f);
         foreach(float y in new[]{Ground,UpperFloor}){
@@ -300,7 +320,7 @@ public static class TerminalRelitProduction
             var pa=basePoint+new Vector3(Mathf.Sin(a)*radius*1.40f,.54f,Mathf.Cos(a)*radius*.98f);
             var pb=basePoint+new Vector3(Mathf.Sin(b)*radius*1.40f,.54f,Mathf.Cos(b)*radius*.98f);Rail(pa,pb);
         }
-        foreach(float side in new[]{-1f,1f})Lantern(basePoint+(number>=3?new Vector3(-3.5f,0,side*(radius+1.3f)):new Vector3(side*(radius+1.6f),0,-.5f)),4);
+        foreach(float side in new[]{-1f,1f})Lantern(basePoint+(number>=3?new Vector3(20-basePoint.x,0,side*(radius+1.3f)):new Vector3(side*(radius+1.6f),0,-.5f)),4);
     }
     static void Platforms()
     {
@@ -331,7 +351,7 @@ public static class TerminalRelitProduction
     static void Furnishings()
     {
         // True station luggage compartments, all anchored to the concourse.
-        Vector3 p=new Vector3(-16,Ground,43.8f);
+        Vector3 p=new Vector3(-21,Ground,41.8f);
         Box("Luggage bank solid casing",p+Vector3.up*1.4f,new Vector3(4.5f,2.8f,1.1f),dark,.065f);
         for(int x=0;x<5;x++)for(int y=0;y<3;y++){
             var d=p+new Vector3(-1.78f+x*.89f,.48f+y*.87f,-.575f);
@@ -350,10 +370,10 @@ public static class TerminalRelitProduction
         var atlas=AssetDatabase.LoadAssetAtPath<Texture2D>(Folder+"/NeutralDecor.png");
         if(atlas){
             foreach(var pos in new[]{new Vector3(-17,19.5f,46.8f),new Vector3(17,19.5f,46.8f),new Vector3(-17,19.5f,86.8f)})Card("Civic cloth banner",atlas,new Vector2(.145f,.505f),new Vector2(.24f,.485f),pos,new Vector2(4.2f,12));
-            var framePos=new Vector3(-29,8,74.55f);
+            var framePos=new Vector3(-17,7,46.65f);
             Box("Neglected painting backing",framePos,new Vector3(2.8f,2.2f,.15f),brass);
             Card("Displayed landscape",atlas,new Vector2(.56f,.60f),new Vector2(.38f,.30f),framePos+Vector3.back*.10f,new Vector2(2.65f,2.05f));
-            Artifact(atlas,new Vector3(17,Ground,52),false);Artifact(atlas,new Vector3(24,Ground,29),true);
+            Artifact(atlas,new Vector3(17,Ground,45.7f),false);Artifact(atlas,new Vector3(24,Ground,29),true);
         }
     }
     static void Bench(Vector3 p)
@@ -437,12 +457,12 @@ public static class TerminalRelitProduction
         Beam("Desk partition slim top rail",new Vector3(-8,1.24f,4.45f),new Vector3(8,1.24f,4.45f),.043f,dark);
         Beam("Desk partition lower rail",new Vector3(-8,.07f,4.45f),new Vector3(8,.07f,4.45f),.042f,brass);
         foreach(float x in new[]{-8f,-4f,4f,8f})Box("Desk partition post",new Vector3(x,.62f,4.45f),new Vector3(.055f,1.24f,.055f),dark,.012f);
-        foreach(var p in new[]{new Vector3(-12,26,52),new Vector3(12,26,52),new Vector3(29,27,46),new Vector3(0,27,96)})Pendant(p);
+        foreach(var p in new[]{new Vector3(-12,24,52),new Vector3(12,24,52),new Vector3(29,24,46),new Vector3(0,27,96)})Pendant(p);
         // Enclose the left storage alcove and ground its furniture beneath the stair.
-        Box("Luggage alcove back",new Vector3(-16,Ground+1.8f,45.0f),new Vector3(7,3.6f,.22f),stone,.04f);
-        Box("Luggage alcove lintel",new Vector3(-16,Ground+3.65f,44.5f),new Vector3(7.2f,.3f,1.3f),trim,.05f);
-        foreach(float x in new[]{-19.5f,-12.5f})Box("Luggage alcove jamb",new Vector3(x,Ground+1.8f,44.5f),new Vector3(.23f,3.6f,1.3f),trim,.04f);
-        var cart=new Vector3(-12,Ground,45);
+        Box("Luggage alcove back",new Vector3(-21,Ground+1.8f,43.0f),new Vector3(7,3.6f,.22f),stone,.04f);
+        Box("Luggage alcove lintel",new Vector3(-21,Ground+3.65f,42.5f),new Vector3(7.2f,.3f,1.3f),trim,.05f);
+        foreach(float x in new[]{-24.5f,-17.5f})Box("Luggage alcove jamb",new Vector3(x,Ground+1.8f,42.5f),new Vector3(.23f,3.6f,1.3f),trim,.04f);
+        var cart=new Vector3(-17,Ground,40);
         Box("Luggage cart platform",cart+Vector3.up*.27f,new Vector3(1.1f,.12f,1.5f),brass,.04f);
         foreach(float x in new[]{-.4f,.4f})foreach(float z in new[]{-.55f,.55f})Primitive("Luggage cart wheel",PrimitiveType.Sphere,cart+new Vector3(x,.11f,z),new Vector3(.20f,.20f,.20f),dark);
         foreach(float x in new[]{-.45f,.45f})Beam("Luggage cart handle",cart+new Vector3(x,.3f,.55f),cart+new Vector3(x,1.3f,.55f),.055f,brass);

@@ -33,3 +33,9 @@ Inspect the new morning, evening and opposite-light captures after these correct
 Latest captures: 27 September, 15:18. Front pier centres project at X=0.323/0.677; bridge and gallery tops both equal Y=11. Four existing portal instances and four partition panes are present, bench feet are grounded, and validation reports zero baked lightmaps and zero Terminal Relit shader errors. The bridge now terminates visually at the front piers and the partition no longer clouds the floor.
 
 Remaining visual differences: the city silhouette and ceiling ornament are simpler than the reference; the luggage alcove is less prominent; the stair occupies more of the central view; the departure board typography needs further polish. Evening lighting is intentionally much darker than the daytime reference. No claim of pixel-perfect equivalence or runtime performance validation is made.
+
+### Stair and placement correction — 27 September, 15:34
+
+Rejected the original 5 m wide single flight crossing toward Gate 01, and rejected a rear relocation that concealed it behind the pier. The installed stair uses a 3 m wide, 26-riser main flight from (-20, 3.6, 40) to (-14, -1.6, 44), an intermediate landing, and an 18-riser return flight to the concourse. The landing is now 14 x 12 m. The luggage bank moves to (-21, -5.2, 41.8), visible below the landing. These supersede the earlier stair dimensions and placement notes.
+
+Also moved upper-gallery lamps off the portal apertures, lowered the central pendant fixtures into view, mounted the painting visibly on the left pier, and moved the bust out of the right pier. Reviewed the refreshed forward render rather than relying only on structural checks. Dynamic-lighting captures still report zero baked lightmaps and zero Terminal Relit shader errors.

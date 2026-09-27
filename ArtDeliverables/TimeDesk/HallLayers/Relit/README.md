@@ -32,3 +32,5 @@ The front piers now project at 32.3% and 67.7% of image width. The 36 m bridge j
 Added burgundy/ivory/brass floor inlays, a transparent four-pane desk partition, a luggage alcove and cart, a deeper signed right passage, vaulted ribs, pendant lights and denser city geometry. Floor reflections render the live scene. Morning, evening and reversed-sun captures retain zero baked lightmaps. The measured bounds and comparison are recorded in `measured-anchors.md` and `MOCKUP_AUDIT.md`.
 
 The composition is closer, but the city and ceiling remain simpler than the illustrated reference, the luggage display is less prominent, and floor reflections are subtler. These are remaining art-quality gaps, not evidence of an exact match. Runtime performance has not been profiled.
+
+The subsequent stair correction replaces the oversized flight with a 3 m wide main/return stair and intermediate landing, reduces the west landing to 14 x 12 m, and brings luggage storage into view beneath it. The audit records the final dimensions; earlier 14 x 18 m dimensions are superseded. Upper lamps, pendants and displayed artifacts were repositioned after camera-view inspection.
