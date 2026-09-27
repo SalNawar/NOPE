@@ -6,8 +6,9 @@ using System.Text;
 
 /// <summary>
 /// One searchable item of the Investigation app (the PC redesign §4.2): where
-/// it is (its source tab, the item and row there, its key), what the results
-/// show (its title and snippet) and what is matched (its label and text).
+/// it is (its source tab, the item there, its key: a row's key names the row),
+/// what the results show (its title and snippet) and what is matched (its
+/// label and text).
 /// Filled once, before it is added to the index (IndexEntries builds them).
 /// </summary>
 public sealed class IndexEntry
@@ -18,11 +19,8 @@ public sealed class IndexEntry
     /// <summary>The tab the item is in.</summary>
     public AppTab Source;
 
-    /// <summary>The item in its source: a paper (Documents), a record (Records: its place in the registry), a book (Reference: its place among the books), a line (Transcript), a deviation (Report), a rule (Rules); -1 for none.</summary>
+    /// <summary>The item in its source: a paper (Documents), a record (Records: its place in the registry, which the lookup opens), a book (Reference: its place among the books), a line (Transcript), a deviation (Report), a rule (Rules); -1 for none.</summary>
     public int Item = -1;
-
-    /// <summary>The row in the item: a paper's field, a record's row (in order across its groups); -1 for the item itself.</summary>
-    public int Row = -1;
 
     /// <summary>The result's title ("Departure Manifest · Currency Carried"); ranked, never matched.</summary>
     public string Title;
@@ -247,7 +245,7 @@ public static class IndexEntries
                 continue;
             yield return new IndexEntry
             {
-                Key = PickKeys.Field(paper, f), Source = AppTab.Documents, Item = paper, Row = f,
+                Key = PickKeys.Field(paper, f), Source = AppTab.Documents, Item = paper,
                 Title = Format(titleFormat, name, label), Label = label, Text = value, Order = paper * 1000 + f + 1
             };
         }
@@ -257,8 +255,8 @@ public static class IndexEntries
     /// Every row of every record in <paramref name="registry"/> (Records, day
     /// layer), in order: titled by <paramref name="titleFormat"/> ({0} the
     /// record's name, {1} the row's label), matched by label and value (a row
-    /// without a value is skipped, its place kept); an evidence row keyed as
-    /// its pick, any other as its record.
+    /// without a value is skipped); an evidence row keyed as its pick, any
+    /// other as its record.
     /// </summary>
     public static IEnumerable<IndexEntry> Records(CitizenRegistry registry, string titleFormat)
     {
@@ -277,7 +275,7 @@ public static class IndexEntries
                     yield return new IndexEntry
                     {
                         Key = line.IsEvidence ? PickKeys.Record(line.Category, record.Id) : EntryKeys.RecordCard(record.Id),
-                        Source = AppTab.Records, Item = r, Row = at,
+                        Source = AppTab.Records, Item = r,
                         Title = Format(titleFormat, record.FullName, line.Label), Label = line.Label, Text = line.Value, Order = r * 1000 + at
                     };
                 }

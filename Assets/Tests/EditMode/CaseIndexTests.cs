@@ -122,7 +122,7 @@ public class CaseIndexTests
                                   "grouped in the given source order");
         CollectionAssert.AreEqual(new[] { "Intake Declaration · Coin of Home" }, Titles(groups[0]));
         Assert.AreEqual(PickKeys.Field(1, 0), groups[0].Hits[0].Entry.Key);
-        Assert.AreEqual((1, 0), (groups[0].Hits[0].Entry.Item, groups[0].Hits[0].Entry.Row));
+        Assert.AreEqual(1, groups[0].Hits[0].Entry.Item);
         Assert.AreEqual(PickKeys.Line(4), groups[2].Hits[0].Entry.Key);
 
         CollectionAssert.AreEqual(new[] { "Intake Declaration" }, Titles(Search(index, "intake").Single()), "a paper by its name");
@@ -279,7 +279,6 @@ public class CaseIndexTests
         Assert.AreEqual("Bjorn", LookupName(index, registry, " dp-0412-07 "));
         IndexEntry hit = Lookup(index, "552-1804-33");
         Assert.AreEqual(PickKeys.Record(ClueCategory.CitizenId, "552-1804-33"), hit.Key);
-        Assert.AreEqual(1, hit.Row, "the Displacement No. row, after the name");
     }
 
     [Test]
@@ -307,7 +306,7 @@ public class CaseIndexTests
         CitizenRegistry registry = Registry(Entry("Bjorn", "3 May 1131", "DP-0412-07"));
         List<IndexEntry> rows = IndexEntries.Records(registry, "{0} · {1}").ToList();
         CollectionAssert.AreEqual(new[] { "Bjorn · Name", "Bjorn · Displacement No.", "Bjorn · Born", "Bjorn · Origin", "Bjorn · Note" }, rows.Select(r => r.Title));
-        CollectionAssert.AreEqual(new[] { 0, 1, 2, 3, 4 }, rows.Select(r => r.Row));
+        CollectionAssert.AreEqual(new[] { 0, 1, 2, 3, 4 }, rows.Select(r => r.Order), "in the record's order across its groups");
         Assert.AreEqual(PickKeys.Record(ClueCategory.BirthDate, "DP-0412-07"), rows[2].Key);
         Assert.AreEqual("rec:DP-0412-07", rows[4].Key, "a row that is not evidence is the record's");
         Assert.IsTrue(rows.All(r => r.Source == AppTab.Records && r.Item == 0));
