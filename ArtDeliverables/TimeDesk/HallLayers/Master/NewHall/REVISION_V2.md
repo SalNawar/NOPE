@@ -1,0 +1,21 @@
+# Raised panorama v2
+
+Built-in imagegen edit of restarted-raised-panorama-v1.png. Output: raised-panorama-v2-no-text.png.
+
+Expanded recessed locker bank, removed stair-top duplicate elevator doorway, retained one lower lift entrance, added continuous service conduits/vents and blanked all readable text. Hall panorama and broad left city view retained; no crowds or desk. Tiny decorative marks above some right entrances remain; these should be blanked in final overlay preparation. This remains a concept with painted form shading, not verified unlit albedo or a tested Unity pan. Existing Unity scene unchanged.
+
+## Prompt
+
+Edit the attached panoramic hall painting with these specific corrections, preserving the 3:1 ultrawide aspect and exact camera position, raised checkpoint viewpoint, stairs in their clear bay, three lower portals in aligned triangular formation, two upper portals, functional bridge, and city-dominated left side for camera panning. NO people or crowds, NO desk. This is a game environment plate, not a poster.
+
+REMOVE ALL WRITING EVERYWHERE. Absolutely no letters, words, numbers, logos, emblems, pictograms or pseudo-text on any part of this image: windows, piers, flags, beam, door headers, locker doors, portal bases, artifact plaques and departure board. Leave empty sign panels above the existing three right-side corridor entrances, preserving their functions and doors. Departure board is completely blank dark screen. Flags plain burgundy fabric without emblems. All portal numbers removed. All glass markings removed. Runtime UI adds text later.
+
+LOCKERS: replace the entire solid lower LEFT retaining-wall frontage below the observation promenade with a large bank of futuristic train-station luggage lockers, approximately forty compartments. Several coherent modules with different compartment sizes: small square valuables, medium bags, tall cases, wide luggage. Orderly outer grid, recessed flush, gunmetal and subdued ochre enamel metal, blank dark access screen per module, integrated latches. Bank extends toward the left image edge under walkway, does NOT obstruct or cover glazing, floor route or stair flight. Keep stair and landing untouched and clear.
+
+ELEVATORS: eliminate the confusing pair of adjacent lift-looking entrances around the left stair pier. Keep ONE clear elevator portal on the lower floor immediately to the right of the staircase in a coherent solid lift core. Replace the extra elevator-looking doorway at the stair-top landing with a recessed blank maintenance cabinet and wall, no second lift portal. Clearly express this one enclosed shaft extending vertically to upper level without duplicate side-by-side lift shafts. Upper bridge remains connected to real landings.
+
+GROUNDED SCI-FI: add realistic engineered retrofits integrated with this once-grand terminal: vertical enclosed cable trunking attached to outer pier faces and entering floor service trenches; symmetrical rectangular ventilation grilles beneath the bridge; bolted matte metal protective paneling at pier bases; flush service access covers and maintenance couplings built into all five portal bases; functional segmented inset door frames and blank access controls at right corridor entrances. These systems connect logically, no random loose cables, fantasy neon, glowing magic or floating screens. Worn institutional science-fiction transport hub, not Victorian brass steampunk. Preserve neglected artifact niches.
+
+LEFT PAN RULE: left forty percent must remain an expansive uninterrupted city-viewing zone through glazing, with varied skyline visible far below. Do not crop or zoom. No new equipment, bulky pillars, signage or displays obstructs the city viewing window. Same continuous panoramic horizon. City can later be isolated behind window frame.
+
+Style: clean stylized handpainted anime environment, soft edges and restrained broad material variation. Worn grey mineral surfaces, graphite hardware, burgundy accents, ochre lockers, limited bronze trims. Neutral diffuse shading, matte floor with NO specular reflections, no directional sunlight or cast window shadows, all lamp diffusers unlit and no portal effects. Keep the structural silhouette and floor levels coherent. One full panorama.
