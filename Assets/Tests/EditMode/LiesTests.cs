@@ -334,7 +334,7 @@ public class LiesTests
 
         foreach (DocumentField f in papers.Where(f => f.isAnachronism))
         {
-            CompareEvidence doc = CompareEvidence.FromDocumentField(f);
+            CompareEvidence doc = CompareEvidence.FromDocumentField(f, 0);
             if (f.category == ClueCategory.BirthDate)
             {
                 Discrepancy record = DiscrepancyLog.Prove(doc, CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover, Traveller), "egypt", "ancient", Traveller);

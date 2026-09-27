@@ -10842,6 +10842,12 @@
         "tier": "Full"
       },
       {
+        "key": "deviation.crossMismatch.papers",
+        "text": "{0} INCONSISTENT — the papers disagree: \"{1}\"  /  \"{2}\"",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "category.Language",
         "text": "LANGUAGE",
         "gloss": "None",

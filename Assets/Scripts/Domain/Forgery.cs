@@ -3,27 +3,60 @@ using System.Collections.Generic;
 /// <summary>
 /// Which categories can carry a liar's tell, on the papers or in an answer:
 /// only those the player can disprove; a place-fact tell's origin proof can
-/// only name the true home. Pure, so the decision table is tested headless.
+/// only name the true home. Every category is one of: a name (never a tell),
+/// a directive-only date (read against the calendar, never compared), a
+/// record category (the traveller's own record proves it; the record lies'
+/// forged fields, RecordLies) or a place fact (a reference book proves it).
+/// Pure, so the decision table is tested headless.
 /// </summary>
 public static class Forgery
 {
     /// <summary>
+    /// True for a directive-only category: a departure date or a Valid Until,
+    /// read against the desk calendar by the Directives (traveller types P1,
+    /// F7), never compared with a truth and never a tell.
+    /// </summary>
+    public static bool IsDirectiveOnly(ClueCategory category) =>
+        category == ClueCategory.DepartureDate || category == ClueCategory.Expiry;
+
+    /// <summary>
+    /// True for a record category: a value the traveller's own record (the
+    /// Citizen Account or the Displacement Registry entry) holds and proves,
+    /// whatever the books: the birth date, the agency number, the destination,
+    /// the incident, and the account's status, transponder, class and debt.
+    /// </summary>
+    public static bool IsRecordCategory(ClueCategory category)
+    {
+        switch (category)
+        {
+            case ClueCategory.BirthDate:
+            case ClueCategory.CitizenId:
+            case ClueCategory.Destination:
+            case ClueCategory.Incident:
+            case ClueCategory.AccountStatus:
+            case ClueCategory.TransponderId:
+            case ClueCategory.TransponderClass:
+            case ClueCategory.Debt:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
     /// Whether any tell in this category could ever be proven: the one rule
-    /// interview questions and tells share. Never a name; always a birth date
-    /// (the Citizen Record proves it); a place fact exactly when
+    /// interview questions and tells share. Never a name; never a
+    /// directive-only date; always a record category (the traveller's own
+    /// record proves it, redesign phase 7); a place fact exactly when
     /// <paramref name="bookCategories"/> is non-null and holds the category.
     /// </summary>
     public static bool IsProvableCategory(ClueCategory category, ICollection<ClueCategory> bookCategories)
     {
-        switch (category)
-        {
-            case ClueCategory.Name:
-                return false;
-            case ClueCategory.BirthDate:
-                return true;
-            default:
-                return bookCategories != null && bookCategories.Contains(category);
-        }
+        if (category == ClueCategory.Name || IsDirectiveOnly(category))
+            return false;
+        if (IsRecordCategory(category))
+            return true;
+        return bookCategories != null && bookCategories.Contains(category);
     }
 
     /// <summary>

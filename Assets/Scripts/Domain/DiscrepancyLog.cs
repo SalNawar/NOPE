@@ -32,7 +32,14 @@ public enum DiscrepancyProof
     ForeignOrigin,
 
     /// <summary>The statement differs from the agency's citizen record.</summary>
-    RecordMismatch
+    RecordMismatch,
+
+    /// <summary>
+    /// Two of the traveller's papers disagree on one compared category
+    /// (PaperChecks; redesign phase 7, traveller types L4): one of them is
+    /// forged, and the report names neither.
+    /// </summary>
+    CrossMismatch
 }
 
 /// <summary>
@@ -67,13 +74,17 @@ public struct CompareEvidence
     /// <summary>Record side: the full name of the person the citizen record belongs to (Prove takes only the traveller's own).</summary>
     public string recordOwner;
 
-    /// <summary>Evidence for a clicked document-field row.</summary>
-    public static CompareEvidence FromDocumentField(DocumentField field) => new CompareEvidence
+    /// <summary>Document side: the paper the field is on, by its index in the case (EvidencePicks.ForField; -1 when unknown, 0 when unset). Two fields of one paper never cross-prove.</summary>
+    public int document;
+
+    /// <summary>Evidence for a clicked document-field row of paper <paramref name="document"/> (its index in the case; -1 when unknown).</summary>
+    public static CompareEvidence FromDocumentField(DocumentField field, int document) => new CompareEvidence
     {
         kind = EvidenceKind.DocumentField,
         category = field.category,
         value = field.value,
-        isAnachronism = field.isAnachronism
+        isAnachronism = field.isAnachronism,
+        document = document
     };
 
     /// <summary>Evidence for a clicked reference-book entry row.</summary>
@@ -152,12 +163,12 @@ public sealed class Discrepancy
     /// <summary>The UI string key of this deviation's report line (ReportKeyFor).</summary>
     public string ReportKey => ReportKeyFor(provedBy, source);
 
-    /// <summary>The value the statement is held against: the expected or recorded value, or the place the stated value belongs to.</summary>
+    /// <summary>The value the statement is held against: the expected or recorded value, the other paper's value (a cross proof), or the place the stated value belongs to.</summary>
     public string ReportOther => provedBy == DiscrepancyProof.ForeignOrigin ? actualOrigin : expectedValue;
 
     /// <summary>
     /// The UI string key of a deviation line: "deviation." + claimMismatch /
-    /// foreignOrigin / recordMismatch + "." + said (an answer), worn (a garment
+    /// foreignOrigin / recordMismatch / crossMismatch + "." + said (an answer), worn (a garment
     /// the traveller wears) or papers (any other statement). The English templates live in world_source.json
     /// ui.strings ({0} = the category word, {1} = the stated value, {2} = ReportOther).
     /// </summary>
@@ -165,6 +176,7 @@ public sealed class Discrepancy
     {
         string how = proof == DiscrepancyProof.ForeignOrigin ? "foreignOrigin"
                    : proof == DiscrepancyProof.RecordMismatch ? "recordMismatch"
+                   : proof == DiscrepancyProof.CrossMismatch ? "crossMismatch"
                    : "claimMismatch";
         string who = statement == EvidenceKind.Answer ? "said" : statement == EvidenceKind.Appearance ? "worn" : "papers";
         return "deviation." + how + "." + who;
@@ -183,6 +195,9 @@ public sealed class Discrepancy
 /// - MATCH proof: a liar's tell equals a reference entry that does
 ///   NOT apply to the claim — the value provably belongs somewhere else
 ///   (e.g. papers claim Medieval but the declared device matches Ancient Rome).
+/// - CROSS proof: two of the traveller's papers disagree on one compared
+///   category and one of them is a tell (PaperChecks; papers prove, answers
+///   hint). The report names neither paper as the forgery.
 /// <see cref="Add"/> documents it once per category.
 /// </summary>
 public sealed class DiscrepancyLog
@@ -201,14 +216,20 @@ public sealed class DiscrepancyLog
     /// <summary>
     /// Whether a compared pair proves a contradiction of the current claim by
     /// <paramref name="travellerName"/>: the proof, or null when it proves
-    /// nothing. The statement side (a document field, an answer or a garment)
+    /// nothing. Two fields of two different papers prove a cross mismatch
+    /// when they contradict (PaperChecks.Contradict) and one is a tell.
+    /// Otherwise the statement side (a document field, an answer or a garment)
     /// must be a liar's tell and face exactly one truth source (a reference
     /// entry, or a field of the traveller's own citizen record that holds a
-    /// value) of the same category; two statements or two truths prove
-    /// nothing. Pure: no log changes.
+    /// value) of the same category; two spoken or worn statements, an answer
+    /// against a paper (a hint, never a proof) or two truths prove nothing.
+    /// Pure: no log changes.
     /// </summary>
     public static Discrepancy Prove(CompareEvidence a, CompareEvidence b, string claimedNationId, string claimedEraId, string travellerName)
     {
+        if (a.kind == EvidenceKind.DocumentField && b.kind == EvidenceKind.DocumentField)
+            return CrossProof(a, b);
+
         CompareEvidence statement, truth;
         if (IsStatement(a.kind))
         {
@@ -285,6 +306,33 @@ public sealed class DiscrepancyLog
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// Cross proof (redesign phase 7, traveller types L4): two fields of two
+    /// different papers (both known and not the same paper) that contradict
+    /// (PaperChecks.Contradict: one compared category, values that differ),
+    /// one of them a tell. The stated value is the first paper's (in paper
+    /// order, whichever side was picked first) and the other paper's value
+    /// is what it is held against; neither is named as the forgery.
+    /// </summary>
+    private static Discrepancy CrossProof(CompareEvidence a, CompareEvidence b)
+    {
+        if (a.document < 0 || b.document < 0 || a.document == b.document)
+            return null;
+        if (!(a.isAnachronism || b.isAnachronism) || !PaperChecks.Contradict(a.category, a.value, b.category, b.value))
+            return null;
+
+        CompareEvidence first = a.document < b.document ? a : b;
+        CompareEvidence second = a.document < b.document ? b : a;
+        return new Discrepancy
+        {
+            category = first.category,
+            documentValue = first.value,
+            expectedValue = second.value,
+            provedBy = DiscrepancyProof.CrossMismatch,
+            source = EvidenceKind.DocumentField
+        };
     }
 
     /// <summary>
