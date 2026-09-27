@@ -5,9 +5,10 @@ using NUnit.Framework;
 /// <summary>
 /// The Analysis Scanner's rule (the PC redesign SC4, SC5; traveller types L4):
 /// among the scanned papers, the first pair of fields of one compared category
-/// on two documents whose values differ, in document order then field order,
+/// on two documents whose values differ (PaperChecks.Contradictions, the one
+/// rule the cross proof reads too), in document order then field order,
 /// skipping the categories the Deviation Report holds; papers against papers
-/// only, one pair per pass, and never a directive-only date.
+/// only, one pair per pass, and never a directive-only date or a name.
 /// </summary>
 public class PaperAnalysisTests
 {
@@ -98,19 +99,32 @@ public class PaperAnalysisTests
     }
 
     [Test]
-    public void DirectiveOnlyDates_AreNeverCompared()
+    public void DirectiveOnlyDates_AndNames_AreNeverCompared_TheOneRule()
     {
         var docs = new[]
         {
-            Doc("Visa", F(ClueCategory.Expiry, "2 Apr 2150"), F(ClueCategory.DepartureDate, "14 Mar 2150")),
-            Doc("Manifest", F(ClueCategory.Expiry, "9 Apr 2150"), F(ClueCategory.DepartureDate, "15 Mar 2150"))
+            Doc("Visa", F(ClueCategory.Expiry, "2 Apr 2150"), F(ClueCategory.DepartureDate, "14 Mar 2150"), F(ClueCategory.Name, "Mara")),
+            Doc("Manifest", F(ClueCategory.Expiry, "9 Apr 2150"), F(ClueCategory.DepartureDate, "15 Mar 2150"), F(ClueCategory.Name, "Nebamun"))
         };
         CollectionAssert.IsEmpty(PaperAnalysis.Contradictions(docs, null));
-        Assert.IsFalse(PaperAnalysis.IsCompared(ClueCategory.DepartureDate));
-        Assert.IsFalse(PaperAnalysis.IsCompared(ClueCategory.Expiry));
+        Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.DepartureDate));
+        Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Expiry));
+        Assert.IsFalse(PaperChecks.IsCompared(ClueCategory.Name), "never a tell (Forgery), so never a pair");
         foreach (ClueCategory category in System.Enum.GetValues(typeof(ClueCategory)))
-            if (category != ClueCategory.DepartureDate && category != ClueCategory.Expiry)
-                Assert.IsTrue(PaperAnalysis.IsCompared(category), category.ToString());
+            if (category != ClueCategory.DepartureDate && category != ClueCategory.Expiry && category != ClueCategory.Name)
+                Assert.IsTrue(PaperChecks.IsCompared(category), category.ToString());
+    }
+
+    /// <summary>The scanner marks exactly the pairs the cross proof accepts: the same rule, the same pairs, in the same order.</summary>
+    [Test]
+    public void Contradictions_AreTheCrossProofsPairs()
+    {
+        CaseDocument[] docs = Set();
+        docs[2].fields[0].value = "552-1804-34";
+        List<PaperContradiction> checks = PaperChecks.Contradictions(docs.Select(d => d.fields).ToList());
+        CollectionAssert.AreEqual(checks.Select(c => (c.DocumentA, c.FieldA, c.DocumentB, c.FieldB)).ToList(),
+                                  PaperAnalysis.Contradictions(docs, null).Select(m => (m.DocA, m.FieldA, m.DocB, m.FieldB)).ToList());
+        Assert.AreEqual(3, checks.Count, "the visa's and the manifest's IDs against the waiver's, and the two transponders");
     }
 
     [Test]

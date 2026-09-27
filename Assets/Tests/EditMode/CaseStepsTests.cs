@@ -54,7 +54,7 @@ public class CaseStepsTests
 
     private static StepState State(StepSpec step, CaseProgress p) => CaseSteps.Evaluate(new[] { step }, p).Single();
 
-    private static CompareEvidence Field(ClueCategory c, string v) => CompareEvidence.FromDocumentField(F(c, v));
+    private static CompareEvidence Field(ClueCategory c, string v) => CompareEvidence.FromDocumentField(F(c, v), 0);
 
     private static CompareEvidence Book(ClueCategory c, string v) => CompareEvidence.ForReferenceEntry(c, v, "egypt", "ancient", "Egypt (Ancient)");
 

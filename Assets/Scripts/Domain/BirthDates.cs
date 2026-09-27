@@ -25,6 +25,9 @@ public static class BirthDates
             ? null
             : $"travellerAgeMin {minAge} and travellerAgeMax {maxAge}: travellers' ages need 1 <= travellerAgeMin <= travellerAgeMax.";
 
+    /// <summary>True when a place has birth years authored: the range 0..0 is the one convention for none (audit R1-014; HomeCandidate, CaseFactory and the validator read it here).</summary>
+    public static bool HasYears(int yearMin, int yearMax) => !(yearMin == 0 && yearMax == 0);
+
     /// <summary>Writes a date; negative years get a BCE suffix.</summary>
     public static string Format(int day, int monthIndex0, int year) => $"{day} {Months[monthIndex0]} {FormatYear(year)}";
 
@@ -88,12 +91,13 @@ public static class BirthDates
     }
 
     /// <summary>
-    /// True when <paramref name="coverDate"/> is readable and [yearMin, yearMax]
-    /// (bounds may be reversed) holds a year that is neither 0 nor the cover
-    /// date's year, so a birth-date tell can be drawn. Draws nothing.
+    /// True when <paramref name="coverDate"/> is readable, years are authored
+    /// (<see cref="HasYears"/>) and [yearMin, yearMax] (bounds may be
+    /// reversed) holds a year that is neither 0 nor the cover date's year, so
+    /// a birth-date tell can be drawn. Draws nothing.
     /// </summary>
     public static bool HasOtherYear(string coverDate, int yearMin, int yearMax) =>
-        TryParse(coverDate, out _, out _, out int coverYear) && OtherYearCount(coverYear, yearMin, yearMax) > 0;
+        HasYears(yearMin, yearMax) && TryParse(coverDate, out _, out _, out int coverYear) && OtherYearCount(coverYear, yearMin, yearMax) > 0;
 
     /// <summary>
     /// A birth-date tell: the cover date's day and month with a year drawn

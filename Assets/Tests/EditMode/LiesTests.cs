@@ -3,7 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
-/// Lie planning. Today, in order: the claim New Kingdom Egypt; a twin (Greece)
+/// The lie roll (Lies.Roll: the roll, then the kind) and the place lie's
+/// planning (Lies.Plan, after the roll). Today, in order: the claim New Kingdom Egypt; a twin (Greece)
 /// whose values equal Egypt's under the scanner comparison and who has no
 /// birth years; Babylonia (Iraq), different in every book category and born
 /// 1460..1440 BCE (around the cover year 1450 BCE); Republican Rome (Italy),
@@ -84,8 +85,14 @@ public class LiesTests
     }
 
     private static LiePlan Plan(IRandomSource rng, int tellCount = 1, IReadOnlyList<HomeCandidate> todays = null,
-                                List<DocumentField> papers = null, float chance = 0.5f, FactTable facts = null) =>
-        Lies.Plan(chance, tellCount, "egypt", "ancient", Cover, todays ?? Today4, papers ?? Papers(), None, PapersOnly, facts ?? Facts(), Books, rng);
+                                List<DocumentField> papers = null, FactTable facts = null) =>
+        Lies.Plan(tellCount, "egypt", "ancient", Cover, todays ?? Today4, papers ?? Papers(), None, PapersOnly, facts ?? Facts(), Books, rng);
+
+    /// <summary>The papers as ApplyTo takes them: one paper per list.</summary>
+    private static IReadOnlyList<IReadOnlyList<DocumentField>> Docs(params IReadOnlyList<DocumentField>[] papers) => papers;
+
+    /// <summary>The lies enabled for a displaced traveller today: the false origin alone.</summary>
+    private static readonly LieKind[] OneLie = { LieKind.FalseOrigin };
 
     private static ScriptedRandom Script(params ScriptStep[] steps) => new ScriptedRandom(steps);
     private static ScriptStep V(float roll) => ScriptStep.Value(roll);
@@ -94,47 +101,114 @@ public class LiesTests
     [Test]
     public void MayLie_NotHonestPremades_WithAnAllowedClaimAndPapers()
     {
-        Assert.IsTrue(Lies.MayLie(false, true, Papers()), "an ordinary traveller, or a premade authored as a liar");
-        Assert.IsFalse(Lies.MayLie(true, true, Papers()), "an honest premade");
-        Assert.IsFalse(Lies.MayLie(false, false, Papers()), "forbidden claim");
-        Assert.IsFalse(Lies.MayLie(false, true, null), "no papers");
-        Assert.IsFalse(Lies.MayLie(false, true, new List<DocumentField>()), "empty papers");
+        Assert.IsTrue(Lies.MayLie(false, true, true), "an ordinary traveller, or a premade authored as a liar");
+        Assert.IsFalse(Lies.MayLie(true, true, true), "an honest premade");
+        Assert.IsFalse(Lies.MayLie(false, false, true), "forbidden claim");
+        Assert.IsFalse(Lies.MayLie(false, true, false), "no papers");
     }
 
+    // -----------------------------
+    // The roll (redesign phase 7): the roll, then the kind when two or more lies are enabled
+    // -----------------------------
+
+    /// <summary>Day 1's lies for a rich tourist: poor posing as rich, then a doctored identity (LieKinds.For keeps the plan's order).</summary>
+    private static readonly LieKind[] TwoLies = { LieKind.PoorPosingAsRich, LieKind.DoctoredIdentity };
+
     [Test]
-    public void ARollAtOrAboveTheChance_IsHonest_AfterExactlyOneDraw()
+    public void Roll_AtOrAboveTheChance_IsHonest_AfterExactlyOneDraw()
     {
         ScriptedRandom rng = Script(V(0.5f));
-        LiePlan plan = Plan(rng, chance: 0.5f);
-        Assert.AreEqual(LieOutcome.Honest, plan.Outcome);
-        Assert.AreEqual(-1, plan.HomeIndex);
-        CollectionAssert.IsEmpty(plan.Tells);
+        Assert.IsNull(Lies.Roll(0.5f, OneLie, rng));
         Assert.IsTrue(rng.Done);
+
+        ScriptedRandom two = Script(V(0.5f));
+        Assert.IsNull(Lies.Roll(0.5f, TwoLies, two), "no kind draw for an honest traveller");
+        Assert.IsTrue(two.Done);
     }
 
     [Test]
-    public void ChanceZero_NeverLies_ChanceOne_AlwaysLies()
+    public void Roll_OneLieEnabled_DrawsTheRollOnly_AsBefore()
+    {
+        ScriptedRandom rng = Script(V(0.2f));
+        Assert.AreEqual(LieKind.FalseOrigin, Lies.Roll(0.5f, OneLie, rng));
+        Assert.IsTrue(rng.Done, "the roll alone: today's displaced keep their draws");
+    }
+
+    [Test]
+    public void Roll_TwoOrMoreLiesEnabled_DrawsTheKind_UniformlyInThePlansOrder()
+    {
+        ScriptedRandom first = Script(V(0.2f), R(0));
+        Assert.AreEqual(LieKind.PoorPosingAsRich, Lies.Roll(0.5f, TwoLies, first));
+        Assert.IsTrue(first.Done, "the roll, then the kind");
+
+        ScriptedRandom second = Script(V(0.2f), R(1));
+        Assert.AreEqual(LieKind.DoctoredIdentity, Lies.Roll(0.5f, TwoLies, second));
+        Assert.IsTrue(second.Done);
+    }
+
+    [Test]
+    public void Roll_ChanceZeroNeverLies_ChanceOneAlwaysLies()
     {
         for (int seed = 0; seed < 300; seed++)
         {
-            Assert.AreEqual(LieOutcome.Honest, Plan(new SeededRandom(seed), chance: 0f).Outcome, $"seed {seed}");
-            Assert.AreEqual(LieOutcome.Liar, Plan(new SeededRandom(seed), chance: 1f).Outcome, $"seed {seed}");
+            Assert.IsNull(Lies.Roll(0f, TwoLies, new SeededRandom(seed)), $"seed {seed}");
+            Assert.NotNull(Lies.Roll(1f, TwoLies, new SeededRandom(seed)), $"seed {seed}");
+            Assert.AreEqual(LieKind.FalseOrigin, Lies.Roll(1f, OneLie, new SeededRandom(seed)), $"seed {seed}");
         }
+    }
+
+    [Test]
+    public void Roll_NoLieEnabled_OrNoStream_IsHonest_WithNoDraw()
+    {
+        ScriptedRandom rng = Script();
+        Assert.IsNull(Lies.Roll(1f, new LieKind[0], rng));
+        Assert.IsNull(Lies.Roll(1f, null, rng));
+        Assert.IsTrue(rng.Done);
+        Assert.IsNull(Lies.Roll(1f, TwoLies, null));
+    }
+
+    [Test]
+    public void Roll_TheSameSeed_GivesTheSameKind()
+    {
+        for (int seed = 0; seed < 100; seed++)
+            Assert.AreEqual(Lies.Roll(1f, TwoLies, new SeededRandom(seed)), Lies.Roll(1f, TwoLies, new SeededRandom(seed)), $"seed {seed}");
+    }
+
+    // -----------------------------
+    // The place lie's plan (the roll already made)
+    // -----------------------------
+
+    [Test]
+    public void Plan_WithoutAStream_IsHonest_WithNoDraw()
+    {
+        LiePlan plan = Plan(null);
+        Assert.AreEqual(LieOutcome.Honest, plan.Outcome);
+        Assert.AreEqual(LieKind.FalseOrigin, plan.Kind);
+        Assert.AreEqual(-1, plan.HomeIndex);
+        CollectionAssert.IsEmpty(plan.Tells);
+        CollectionAssert.IsEmpty(plan.RecordTells);
+    }
+
+    [Test]
+    public void Plan_AlwaysPlansTheLie_TheRollIsTheCallers()
+    {
+        for (int seed = 0; seed < 300; seed++)
+            Assert.AreEqual(LieOutcome.Liar, Plan(new SeededRandom(seed)).Outcome, $"seed {seed}");
     }
 
     [Test]
     public void GoldenOrder_PlaceFact_RollThenHomeThenTell()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(1));
+        ScriptedRandom rng = Script(R(0), R(1));
         List<DocumentField> papers = Papers();
         LiePlan plan = Plan(rng, papers: papers);
 
         Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
         Assert.AreEqual(2, plan.HomeIndex, "an index into todays, not into the filtered candidates (the twin was dropped)");
         CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells);
-        Assert.IsTrue(rng.Done, "exactly three draws");
+        Assert.IsTrue(rng.Done, "exactly two draws: the home, then the tell");
 
-        plan.ApplyTo(papers);
+        plan.ApplyTo(Docs(papers));
         HomeCandidate home = Today4[plan.HomeIndex];
         foreach (DocumentField f in papers.Where(f => f.category == ClueCategory.Currency))
             Assert.AreEqual(Facts().Get(home.NationId, home.EraId, ClueCategory.Currency), f.value);
@@ -143,15 +217,15 @@ public class LiesTests
     [Test]
     public void GoldenOrder_BirthDate_RollThenHomeThenTellThenYear()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(0), R(2));
+        ScriptedRandom rng = Script(R(0), R(0), R(2));
         List<DocumentField> papers = Papers();
         LiePlan plan = Plan(rng, papers: papers);
 
         CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate }, plan.Tells);
-        Assert.IsTrue(rng.Done, "exactly four draws");
+        Assert.IsTrue(rng.Done, "exactly three draws: the home, the tell, the year");
 
         // Iraq's years without the cover year, ascending: 1460..1451 BCE, 1449..1440 BCE; index 2 is 1458 BCE.
-        plan.ApplyTo(papers);
+        plan.ApplyTo(Docs(papers));
         Assert.AreEqual("3 Jun 1458 BCE", papers.Single(f => f.category == ClueCategory.BirthDate).value);
     }
 
@@ -160,7 +234,7 @@ public class LiesTests
     {
         ClueCategory TellAt(int index)
         {
-            ScriptedRandom rng = Script(V(0f), R(0), R(index));
+            ScriptedRandom rng = Script(R(0), R(index));
             LiePlan plan = Plan(rng);
             Assert.IsTrue(rng.Done);
             return plan.Tells.Single();
@@ -174,18 +248,18 @@ public class LiesTests
     [Test]
     public void TellCount_IsCappedAtTheHomesEligibleCategories_WithoutRepeats()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(0), R(0), R(0), R(0), R(0));
+        ScriptedRandom rng = Script(R(0), R(0), R(0), R(0), R(0), R(0));
         LiePlan plan = Plan(rng, tellCount: 9);
         Assert.AreEqual(4, plan.Tells.Count);
         Assert.AreEqual(4, plan.Tells.Distinct().Count());
         Assert.AreEqual(1, plan.Tells.Count(t => t == ClueCategory.Currency));
-        Assert.IsTrue(rng.Done, "roll, home, four tells, birth year");
+        Assert.IsTrue(rng.Done, "home, four tells, birth year");
     }
 
     [Test]
     public void TellCountBelowOne_StillGivesOneTell()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(1));
+        ScriptedRandom rng = Script(R(0), R(1));
         LiePlan plan = Plan(rng, tellCount: 0);
         CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells);
         Assert.IsTrue(rng.Done);
@@ -196,7 +270,7 @@ public class LiesTests
     {
         for (int seed = 0; seed < 300; seed++)
         {
-            LiePlan plan = Plan(new SeededRandom(seed), tellCount: 9, papers: Papers(withPermit: false), chance: 1f);
+            LiePlan plan = Plan(new SeededRandom(seed), tellCount: 9, papers: Papers(withPermit: false));
             CollectionAssert.DoesNotContain(plan.Tells, ClueCategory.Technology, $"seed {seed}");
         }
     }
@@ -206,16 +280,16 @@ public class LiesTests
     {
         for (int seed = 0; seed < 500; seed++)
         {
-            LiePlan plan = Plan(new SeededRandom(seed), chance: 1f);
+            LiePlan plan = Plan(new SeededRandom(seed));
             Assert.AreEqual(LieOutcome.Liar, plan.Outcome, $"seed {seed}");
             Assert.That(plan.HomeIndex, Is.EqualTo(2).Or.EqualTo(3), $"seed {seed}");
         }
     }
 
     [Test]
-    public void OnlyTheClaimAndTheTwinToday_IsNoPossibleLie_AfterOneDraw()
+    public void OnlyTheClaimAndTheTwinToday_IsNoPossibleLie_WithNoDraw()
     {
-        ScriptedRandom rng = Script(V(0f));
+        ScriptedRandom rng = Script();
         LiePlan plan = Plan(rng, todays: new[] { Egypt, Twin });
         Assert.AreEqual(LieOutcome.NoPossibleLie, plan.Outcome);
         Assert.AreEqual(-1, plan.HomeIndex);
@@ -226,11 +300,11 @@ public class LiesTests
     [Test]
     public void EligibilityIsPerHome_ItalyOnlyGivesCurrency()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(0));
+        ScriptedRandom rng = Script(R(0), R(0));
         LiePlan plan = Plan(rng, tellCount: 9, todays: new[] { Egypt, Italy });
         Assert.AreEqual(1, plan.HomeIndex);
         CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells);
-        Assert.IsTrue(rng.Done, "no birth-year draw: Italy's only year is the cover year");
+        Assert.IsTrue(rng.Done, "the home and the tell; no birth-year draw: Italy's only year is the cover year");
     }
 
     [Test]
@@ -245,29 +319,29 @@ public class LiesTests
         facts.Add("greece", "ancient", "Greece", ClueCategory.Currency, "silver shekel");
         var papers = new List<DocumentField> { Field(ClueCategory.Currency, "Coin of Issue", "Deben", 0) };
 
-        ScriptedRandom rng = Script(V(0f));
-        LiePlan plan = Lies.Plan(1f, 1, "egypt", "ancient", Cover, new[] { claim, iraq, greece }, papers, None, PapersOnly, facts, Books, rng);
+        ScriptedRandom rng = Script();
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { claim, iraq, greece }, papers, None, PapersOnly, facts, Books, rng);
         Assert.AreEqual(LieOutcome.NoPossibleLie, plan.Outcome);
         Assert.IsTrue(rng.Done);
 
         var italy = new HomeCandidate("italy", "ancient", 0, 0);
         facts.Add("italy", "ancient", "Italy", ClueCategory.Currency, "Denarius");
         for (int seed = 0; seed < 100; seed++)
-            Assert.AreEqual(3, Lies.Plan(1f, 1, "egypt", "ancient", Cover, new[] { claim, iraq, greece, italy }, papers, None, PapersOnly, facts, Books, new SeededRandom(seed)).HomeIndex, $"seed {seed}");
+            Assert.AreEqual(3, Lies.Plan(1, "egypt", "ancient", Cover, new[] { claim, iraq, greece, italy }, papers, None, PapersOnly, facts, Books, new SeededRandom(seed)).HomeIndex, $"seed {seed}");
     }
 
     [Test]
     public void TheSameSeed_GivesTheSamePlan()
     {
-        LiePlan x = Plan(new SeededRandom(7), tellCount: 2, chance: 1f);
-        LiePlan y = Plan(new SeededRandom(7), tellCount: 2, chance: 1f);
+        LiePlan x = Plan(new SeededRandom(7), tellCount: 2);
+        LiePlan y = Plan(new SeededRandom(7), tellCount: 2);
         Assert.AreEqual(x.Outcome, y.Outcome);
         Assert.AreEqual(x.HomeIndex, y.HomeIndex);
         CollectionAssert.AreEqual(x.Tells, y.Tells);
 
         List<DocumentField> px = Papers(), py = Papers();
-        x.ApplyTo(px);
-        y.ApplyTo(py);
+        x.ApplyTo(Docs(px));
+        y.ApplyTo(Docs(py));
         CollectionAssert.AreEqual(px.Select(f => f.value).ToList(), py.Select(f => f.value).ToList());
     }
 
@@ -275,7 +349,7 @@ public class LiesTests
     public void ApplyTo_RewritesAndFlagsEveryFieldOfTheTellCategory_AndNothingElse()
     {
         List<DocumentField> papers = Papers();
-        Plan(Script(V(0f), R(0), R(1))).ApplyTo(papers);
+        Plan(Script(R(0), R(1))).ApplyTo(Docs(papers));
 
         List<DocumentField> honest = Papers();
         for (int i = 0; i < papers.Count; i++)
@@ -299,7 +373,7 @@ public class LiesTests
         for (int index = 0; index < 20; index++)
         {
             List<DocumentField> papers = Papers();
-            Plan(Script(V(0f), R(0), R(0), R(index))).ApplyTo(papers);
+            Plan(Script(R(0), R(0), R(index))).ApplyTo(Docs(papers));
             DocumentField born = papers.Single(f => f.category == ClueCategory.BirthDate);
             Assert.IsTrue(born.isAnachronism);
             Assert.IsTrue(BirthDates.TryParse(born.value, out int d, out int m, out int y), born.value);
@@ -314,8 +388,8 @@ public class LiesTests
     public void ApplyTo_AnHonestOrImpossiblePlan_ChangesNothing()
     {
         List<DocumentField> papers = Papers();
-        Plan(Script(V(0.9f))).ApplyTo(papers);
-        Plan(Script(V(0f)), todays: new[] { Egypt, Twin }).ApplyTo(papers);
+        Plan(null).ApplyTo(Docs(papers));
+        Plan(Script(), todays: new[] { Egypt, Twin }).ApplyTo(Docs(papers));
 
         List<DocumentField> honest = Papers();
         for (int i = 0; i < papers.Count; i++)
@@ -330,11 +404,11 @@ public class LiesTests
     {
         FactTable facts = Facts();
         List<DocumentField> papers = Papers();
-        Plan(Script(V(0f), R(0), R(0), R(0), R(0), R(0), R(0)), tellCount: 9, papers: papers, facts: facts).ApplyTo(papers);
+        Plan(Script(R(0), R(0), R(0), R(0), R(0), R(0)), tellCount: 9, papers: papers, facts: facts).ApplyTo(Docs(papers));
 
         foreach (DocumentField f in papers.Where(f => f.isAnachronism))
         {
-            CompareEvidence doc = CompareEvidence.FromDocumentField(f);
+            CompareEvidence doc = CompareEvidence.FromDocumentField(f, 0);
             if (f.category == ClueCategory.BirthDate)
             {
                 Discrepancy record = DiscrepancyLog.Prove(doc, CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover, Traveller), "egypt", "ancient", Traveller);
@@ -384,7 +458,7 @@ public class LiesTests
     private static LiePlan PlanSpoken(IRandomSource rng, IReadOnlyList<ClueCategory> answerTellCategories, IReadOnlyList<TellChannel> channels,
                                       int tellCount = 1, IReadOnlyList<HomeCandidate> todays = null, List<DocumentField> papers = null,
                                       FactTable facts = null) =>
-        Lies.Plan(0.5f, tellCount, "egypt", "ancient", Cover, todays ?? Today4, papers ?? Papers(), answerTellCategories, channels,
+        Lies.Plan(tellCount, "egypt", "ancient", Cover, todays ?? Today4, papers ?? Papers(), answerTellCategories, channels,
                   facts ?? AnswerFacts(), AnswerBooks, rng);
 
     /// <summary>Every field still shows Egypt's honest value, unflagged.</summary>
@@ -402,7 +476,7 @@ public class LiesTests
     public void GoldenOrder_Answer_TheOptionsArePapersThenAnswers()
     {
         // Iraq's options: P:BirthDate, P:Currency, P:Language, P:Technology, A:Currency, A:Geography.
-        ScriptedRandom rng = Script(V(0f), R(0), R(5));
+        ScriptedRandom rng = Script(R(0), R(5));
         List<DocumentField> papers = Papers();
         LiePlan plan = PlanSpoken(rng, new[] { ClueCategory.Currency, ClueCategory.Geography }, Both, papers: papers);
 
@@ -413,16 +487,16 @@ public class LiesTests
         Assert.AreEqual("Babylon", plan.TellValue(ClueCategory.Geography));
         Assert.IsNull(plan.ChannelOf(ClueCategory.Currency), "not a tell");
         Assert.IsNull(plan.TellValue(ClueCategory.Currency), "not a tell");
-        Assert.IsTrue(rng.Done, "exactly three draws");
+        Assert.IsTrue(rng.Done, "exactly two draws");
 
-        plan.ApplyTo(papers);
+        plan.ApplyTo(Docs(papers));
         AssertPapersAreTheCover(papers);
     }
 
     [Test]
     public void AnAnswerTell_InAPrintedCategory_LeavesThePapersOnTheCover()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(4));
+        ScriptedRandom rng = Script(R(0), R(4));
         List<DocumentField> papers = Papers();
         LiePlan plan = PlanSpoken(rng, new[] { ClueCategory.Currency, ClueCategory.Geography }, Both, papers: papers);
 
@@ -431,21 +505,21 @@ public class LiesTests
         Assert.AreEqual("Silver shekel", plan.TellValue(ClueCategory.Currency));
         Assert.IsTrue(rng.Done);
 
-        plan.ApplyTo(papers);
+        plan.ApplyTo(Docs(papers));
         AssertPapersAreTheCover(papers);
     }
 
     [Test]
     public void ACategoryLeaksOnOneChannelOnly()
     {
-        ScriptedRandom rng = Script(V(0f), R(0), R(0), R(0), R(0), R(0), R(0), R(0));
+        ScriptedRandom rng = Script(R(0), R(0), R(0), R(0), R(0), R(0), R(0));
         LiePlan plan = PlanSpoken(rng, new[] { ClueCategory.Currency, ClueCategory.Geography }, Both, tellCount: 9);
 
         CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate, ClueCategory.Currency, ClueCategory.Language, ClueCategory.Technology, ClueCategory.Geography }, plan.Tells);
         CollectionAssert.AreEqual(
             new TellChannel?[] { TellChannel.Papers, TellChannel.Papers, TellChannel.Papers, TellChannel.Papers, TellChannel.Answer },
             plan.Tells.Select(t => plan.ChannelOf(t)).ToArray());
-        Assert.IsTrue(rng.Done, "roll, home, five tells, then the birth year: 8 draws");
+        Assert.IsTrue(rng.Done, "home, five tells, then the birth year: 7 draws");
     }
 
     [Test]
@@ -461,16 +535,16 @@ public class LiesTests
             Assert.AreEqual(y.HomeIndex, x.HomeIndex, $"seed {seed}");
             CollectionAssert.AreEqual(y.Tells, x.Tells, $"seed {seed}");
 
-            x.ApplyTo(asked);
-            y.ApplyTo(unasked);
+            x.ApplyTo(Docs(asked));
+            y.ApplyTo(Docs(unasked));
             CollectionAssert.AreEqual(unasked.Select(f => f.value).ToList(), asked.Select(f => f.value).ToList(), $"seed {seed}");
         }
     }
 
     [Test]
-    public void AnswerOnly_WithNoTellCarryingQuestion_IsNoPossibleLie_AfterOneDraw()
+    public void AnswerOnly_WithNoTellCarryingQuestion_IsNoPossibleLie_WithNoDraw()
     {
-        ScriptedRandom rng = Script(V(0f));
+        ScriptedRandom rng = Script();
         Assert.AreEqual(LieOutcome.NoPossibleLie, PlanSpoken(rng, None, AnswerOnly).Outcome);
         Assert.IsTrue(rng.Done);
     }
@@ -487,7 +561,7 @@ public class LiesTests
         facts.Add("syria", "ancient", "Ugarit (Ancient)", ClueCategory.Geography, "Ugarit");
         var todays = new[] { Egypt, syria };
 
-        ScriptedRandom spoken = Script(V(0f), R(0), R(0));
+        ScriptedRandom spoken = Script(R(0), R(0));
         LiePlan plan = PlanSpoken(spoken, new[] { ClueCategory.Geography }, Both, todays: todays, facts: facts);
         Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
         Assert.AreEqual(1, plan.HomeIndex);
@@ -495,7 +569,7 @@ public class LiesTests
         Assert.AreEqual("Ugarit", plan.TellValue(ClueCategory.Geography));
         Assert.IsTrue(spoken.Done);
 
-        ScriptedRandom printed = Script(V(0f));
+        ScriptedRandom printed = Script();
         Assert.AreEqual(LieOutcome.NoPossibleLie, PlanSpoken(printed, new[] { ClueCategory.Geography }, PapersOnly, todays: todays, facts: facts).Outcome);
         Assert.IsTrue(printed.Done);
     }
@@ -504,7 +578,7 @@ public class LiesTests
     public void ABirthDateAnswerTell_KeepsThePapersOnTheCover_AndDrawsTheYearLast()
     {
         // Only Iraq has a birth year other than the cover's.
-        ScriptedRandom rng = Script(V(0f), R(0), R(0), R(2));
+        ScriptedRandom rng = Script(R(0), R(0), R(2));
         List<DocumentField> papers = Papers();
         LiePlan plan = PlanSpoken(rng, new[] { ClueCategory.BirthDate }, AnswerOnly, papers: papers);
 
@@ -512,9 +586,9 @@ public class LiesTests
         CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate }, plan.Tells);
         Assert.AreEqual(TellChannel.Answer, plan.ChannelOf(ClueCategory.BirthDate));
         Assert.AreEqual("3 Jun 1458 BCE", plan.TellValue(ClueCategory.BirthDate));
-        Assert.IsTrue(rng.Done, "roll, home, tell, year");
+        Assert.IsTrue(rng.Done, "home, tell, year");
 
-        plan.ApplyTo(papers);
+        plan.ApplyTo(Docs(papers));
         AssertPapersAreTheCover(papers);
     }
 
@@ -526,8 +600,8 @@ public class LiesTests
         facts.Add("iraq", "ancient", "Babylonia (Ancient)", ClueCategory.Politics, "sultan mustafa ii");
         var books = new HashSet<ClueCategory>(AnswerBooks) { ClueCategory.Politics };
 
-        ScriptedRandom rng = Script(V(0f));
-        LiePlan plan = Lies.Plan(1f, 1, "egypt", "ancient", Cover, new[] { Egypt, Iraq }, Papers(), new[] { ClueCategory.Politics }, AnswerOnly, facts, books, rng);
+        ScriptedRandom rng = Script();
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Egypt, Iraq }, Papers(), new[] { ClueCategory.Politics }, AnswerOnly, facts, books, rng);
         Assert.AreEqual(LieOutcome.NoPossibleLie, plan.Outcome);
         Assert.IsTrue(rng.Done);
     }
@@ -536,7 +610,7 @@ public class LiesTests
     public void EveryAnswerTell_ProvesAgainstTheClaimAndTheHome_AndNothingElse()
     {
         FactTable facts = AnswerFacts();
-        LiePlan plan = PlanSpoken(Script(V(0f), R(0), R(0), R(0)), new[] { ClueCategory.Currency, ClueCategory.Geography }, AnswerOnly, tellCount: 9, facts: facts);
+        LiePlan plan = PlanSpoken(Script(R(0), R(0), R(0)), new[] { ClueCategory.Currency, ClueCategory.Geography }, AnswerOnly, tellCount: 9, facts: facts);
         CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Geography }, plan.Tells);
 
         foreach (ClueCategory category in plan.Tells)
@@ -563,7 +637,7 @@ public class LiesTests
             }
         }
 
-        LiePlan born = PlanSpoken(Script(V(0f), R(0), R(0), R(2)), new[] { ClueCategory.BirthDate }, AnswerOnly);
+        LiePlan born = PlanSpoken(Script(R(0), R(0), R(2)), new[] { ClueCategory.BirthDate }, AnswerOnly);
         Discrepancy record = DiscrepancyLog.Prove(
             CompareEvidence.ForAnswer(ClueCategory.BirthDate, born.TellValue(ClueCategory.BirthDate), true),
             CompareEvidence.ForRecordField(ClueCategory.BirthDate, Cover, Traveller), "egypt", "ancient", Traveller);
@@ -594,16 +668,16 @@ public class LiesTests
     private static HomeCandidate Leakable(HomeCandidate p) => new HomeCandidate(p.NationId, p.EraId, p.BirthYearMin, p.BirthYearMax, true);
 
     private static LiePlan PlanDress(IRandomSource rng, IReadOnlyList<HomeCandidate> todays, IReadOnlyList<TellChannel> channels,
-                                     FactTable facts = null, IReadOnlyList<ClueCategory> asked = null, float chance = 0.5f) =>
-        Lies.Plan(chance, 1, "egypt", "ancient", Cover, todays, Papers(), asked ?? None, channels, facts ?? FactsWithDress(), BooksAndDress, rng);
+                                     FactTable facts = null, IReadOnlyList<ClueCategory> asked = null) =>
+        Lies.Plan(1, "egypt", "ancient", Cover, todays, Papers(), asked ?? None, channels, facts ?? FactsWithDress(), BooksAndDress, rng);
 
     [Test]
     public void GoldenOrder_ADressTellIsTheLastOptionOfAHome()
     {
         // Iraq's options: Papers BirthDate, Currency, Language, Technology, then Appearance Culture.
-        ScriptedRandom rng = Script(V(0.1f), R(0), R(4));
+        ScriptedRandom rng = Script(R(0), R(4));
         List<DocumentField> papers = Papers();
-        LiePlan plan = Lies.Plan(0.5f, 1, "egypt", "ancient", Cover, new[] { Egypt, Twin, Leakable(Iraq), Italy }, papers, None, All3, FactsWithDress(), BooksAndDress, rng);
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Egypt, Twin, Leakable(Iraq), Italy }, papers, None, All3, FactsWithDress(), BooksAndDress, rng);
 
         Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
         Assert.AreEqual(2, plan.HomeIndex);
@@ -612,10 +686,10 @@ public class LiesTests
         Assert.AreEqual("curled beard / gold fillet", plan.TellValue(ClueCategory.Culture));
 
         List<string> before = papers.Select(f => f.value).ToList();
-        plan.ApplyTo(papers);
+        plan.ApplyTo(Docs(papers));
         CollectionAssert.AreEqual(before, papers.Select(f => f.value).ToList(), "a dress tell leaves the papers on the cover");
         Assert.IsFalse(papers.Any(f => f.isAnachronism));
-        Assert.IsTrue(rng.Done, "roll, home, one tell");
+        Assert.IsTrue(rng.Done, "home, one tell");
     }
 
     [Test]
@@ -623,7 +697,7 @@ public class LiesTests
     {
         for (int seed = 0; seed < 300; seed++)
         {
-            LiePlan plan = PlanDress(new SeededRandom(seed), Today4, All3, chance: 1f);
+            LiePlan plan = PlanDress(new SeededRandom(seed), Today4, All3);
             Assert.IsNull(plan.ChannelOf(ClueCategory.Culture), $"seed {seed}");
         }
     }
@@ -640,8 +714,8 @@ public class LiesTests
         facts.Add("japan", "ancient", "Kofun Yamato (Ancient)", ClueCategory.Culture, "mizura / magatama beads");
         var todays = new[] { Egypt, dressTwin };
 
-        Assert.AreEqual(LieOutcome.NoPossibleLie, PlanDress(Script(V(0f)), todays, Both, facts).Outcome, "without Appearance");
-        LiePlan plan = PlanDress(Script(V(0f), R(0), R(0)), todays, All3, facts);
+        Assert.AreEqual(LieOutcome.NoPossibleLie, PlanDress(Script(), todays, Both, facts).Outcome, "without Appearance");
+        LiePlan plan = PlanDress(Script(R(0), R(0)), todays, All3, facts);
         Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
         Assert.AreEqual(1, plan.HomeIndex);
         Assert.AreEqual(TellChannel.Appearance, plan.ChannelOf(ClueCategory.Culture));
@@ -653,8 +727,8 @@ public class LiesTests
         var leakable = new[] { Egypt, Leakable(Twin), Leakable(Iraq), Leakable(Italy) };
         for (int seed = 0; seed <= 300; seed++)
         {
-            LiePlan before = Lies.Plan(0.5f, 2, "egypt", "ancient", Cover, Today4, Papers(), new[] { ClueCategory.Currency }, Both, Facts(), Books, new SeededRandom(seed));
-            LiePlan after = Lies.Plan(0.5f, 2, "egypt", "ancient", Cover, leakable, Papers(), new[] { ClueCategory.Currency }, Both, FactsWithDress(), BooksAndDress, new SeededRandom(seed));
+            LiePlan before = Lies.Plan(2, "egypt", "ancient", Cover, Today4, Papers(), new[] { ClueCategory.Currency }, Both, Facts(), Books, new SeededRandom(seed));
+            LiePlan after = Lies.Plan(2, "egypt", "ancient", Cover, leakable, Papers(), new[] { ClueCategory.Currency }, Both, FactsWithDress(), BooksAndDress, new SeededRandom(seed));
             Assert.AreEqual(before.Outcome, after.Outcome, $"seed {seed}");
             Assert.AreEqual(before.HomeIndex, after.HomeIndex, $"seed {seed}");
             CollectionAssert.AreEqual(before.Tells, after.Tells, $"seed {seed}");
@@ -671,17 +745,17 @@ public class LiesTests
     {
         for (int seed = 0; seed < 300; seed++)
         {
-            LiePlan plan = PlanDress(new SeededRandom(seed), new[] { Egypt, Twin, Leakable(Iraq), Italy }, All3, FactsWithDress(shared: true), chance: 1f);
+            LiePlan plan = PlanDress(new SeededRandom(seed), new[] { Egypt, Twin, Leakable(Iraq), Italy }, All3, FactsWithDress(shared: true));
             Assert.IsNull(plan.ChannelOf(ClueCategory.Culture), $"seed {seed}: Iraq's dress belongs to Rome too, so it cannot prove Iraq");
         }
     }
 
     [Test]
-    public void APremadeLiar_OneCandidateAtChanceOne_KeepsTheAnswerOptions()
+    public void APremadeLiar_OneCandidate_KeepsTheAnswerOptions()
     {
         // Iraq's options: Papers BirthDate, Currency, Language, Technology, then Answer Currency.
-        ScriptedRandom rng = Script(V(0.99f), R(0), R(4));
-        LiePlan plan = Lies.Plan(1f, 1, "egypt", "ancient", Cover, new[] { Iraq }, Papers(), new[] { ClueCategory.Currency }, Both, Facts(), Books, rng);
+        ScriptedRandom rng = Script(R(0), R(4));
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Iraq }, Papers(), new[] { ClueCategory.Currency }, Both, Facts(), Books, rng);
         Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
         Assert.AreEqual(0, plan.HomeIndex);
         Assert.AreEqual(TellChannel.Answer, plan.ChannelOf(ClueCategory.Currency));
@@ -692,7 +766,7 @@ public class LiesTests
     public void ADressTell_ProvesAgainstTheClaimAndTheHome_AndNothingElse()
     {
         FactTable facts = FactsWithDress();
-        LiePlan plan = PlanDress(Script(V(0.1f), R(0), R(4)), new[] { Egypt, Twin, Leakable(Iraq), Italy }, All3, facts);
+        LiePlan plan = PlanDress(Script(R(0), R(4)), new[] { Egypt, Twin, Leakable(Iraq), Italy }, All3, facts);
         CompareEvidence worn = CompareEvidence.ForAppearance(ClueCategory.Culture, plan.TellValue(ClueCategory.Culture), true);
         foreach (FactRow row in facts.Rows(ClueCategory.Culture))
         {

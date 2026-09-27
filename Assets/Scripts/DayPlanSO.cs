@@ -9,7 +9,7 @@ using UnityEngine;
 /// - Day identity (dayNumber)
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
 /// - Procedural generation knobs (the kinds' blueprints and weights, eras, the premade pool and chance)
-/// - Where today's liars may leak tells (tell count and tell channels)
+/// - Which lies today's liars may tell (lie kinds), and where a place lie may leak tells (tell count and tell channels)
 /// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
 /// - Event rules (fixed or random placement, including "random but after N cases")
 /// </summary>
@@ -71,6 +71,13 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField, Range(0f, 1f)] private float costumeErrorChance;
 
+    /// <summary>
+    /// The lies enabled today (traveller types §6.1; a traveller draws among
+    /// those that fit their kind, LieKinds.For, on the lie roll). Written by
+    /// Tools > TimeDesk > Generate World from world_source.json days[].lies.
+    /// </summary>
+    [SerializeField] private LieKind[] lieKinds;
+
     // -----------------------------
     // Scripted overrides
     // -----------------------------
@@ -130,6 +137,9 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Chance per 2150 citizen of a costume error today.</summary>
     public float CostumeErrorChance => costumeErrorChance;
+
+    /// <summary>The lies enabled today, in authored order (empty when unset).</summary>
+    public IReadOnlyList<LieKind> EnabledLies => lieKinds ?? Array.Empty<LieKind>();
 
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();

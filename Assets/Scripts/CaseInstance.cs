@@ -112,11 +112,32 @@ public sealed class CaseInstance
     public string CostumeItem =>
         costumeFault == CostumeError.None ? string.Empty : look?.Garments.FirstOrDefault(g => g.IsTell)?.Label ?? string.Empty;
 
-    /// <summary>True when the traveller has a deviation fault (traveller types P1): a lie about their home, or a costume error. Denying one needs a logged deviation.</summary>
-    public bool HasDeviationFault => IsLiar || costumeFault != CostumeError.None;
+    /// <summary>
+    /// The record tells a forger prints (RecordLies, traveller types L2):
+    /// the forged categories on their papers, each disproved by the
+    /// traveller's own Citizen Account and, where two papers disagree, by
+    /// each other (the cross proof). Empty for everyone else.
+    /// </summary>
+    public IReadOnlyList<RecordTell> recordTells = System.Array.Empty<RecordTell>();
 
-    /// <summary>True if the claimed destination is permitted by today's rules.</summary>
-    public bool claimAllowedByRules = true;
+    /// <summary>True when the traveller's papers forge record fields (a record lie: poor posing as rich, a doctored identity).</summary>
+    public bool IsForger => recordTells.Count > 0;
+
+    /// <summary>True when the traveller has a deviation fault (traveller types P1): a lie about their home, a record lie or a costume error. Denying one needs a logged deviation.</summary>
+    public bool HasDeviationFault => IsLiar || IsForger || costumeFault != CostumeError.None;
+
+    /// <summary>
+    /// The traveller's directive fault (traveller types P1): what today's
+    /// Directives forbid in the claim, read against them with no evidence
+    /// needed (a closed destination); None when the Directives allow it.
+    /// </summary>
+    public DirectiveFault directiveFault;
+
+    /// <summary>True when the Directives forbid the traveller's claim (a directive fault).</summary>
+    public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
+
+    /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
+    public string FaultReason => Faults.Reason(directiveFault, costumeFault, IsForger, IsLiar);
 
     /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
     public string claimLine;
@@ -135,12 +156,11 @@ public sealed class CaseInstance
     public TravellerLook look;
 
     /// <summary>
-    /// The correct decision: accept only a traveller with no deviation fault
-    /// whose destination is permitted today; deny a liar, a costume error or
-    /// a rule-breaking destination (VerdictRules' liar input is the deviation
-    /// fault until the plan's phase 7 names it).
+    /// The correct decision (traveller types §5.2): accept only a traveller
+    /// with no fault; deny a deviation fault (a liar, a forger, a costume
+    /// error) or a directive fault (a closed destination).
     /// </summary>
-    public bool ShouldAccept => VerdictRules.ShouldAccept(HasDeviationFault, claimAllowedByRules);
+    public bool ShouldAccept => VerdictRules.ShouldAccept(HasDeviationFault, HasDirectiveFault);
 
     /// <summary>Runtime documents built from templates.</summary>
     public readonly List<DocumentInstance> documents = new();

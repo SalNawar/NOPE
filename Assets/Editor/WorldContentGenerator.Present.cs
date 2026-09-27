@@ -94,7 +94,7 @@ public static partial class WorldContentGenerator
 
         foreach (PlaceData p in src.places)
         {
-            if ((p.facts ?? Array.Empty<FactData>()).Any(f => f.category == category && DiscrepancyLog.ValuesMatch(f.value, value)))
+            if ((p.facts ?? Array.Empty<FactData>()).Any(f => f.category == category && Values.Match(f.value, value)))
                 errors.Add($"The present's {category} '{value}' is also '{PlaceId(p)}''s; the present's row must name one place.");
         }
     }

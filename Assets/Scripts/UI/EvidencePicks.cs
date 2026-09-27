@@ -16,7 +16,7 @@ public static class EvidencePicks
         return new ComparePick(PickKeys.Field(document, row.Index),
             UiText.Format("document.compareLabel", documentName, f.label),
             f.value,
-            CompareEvidence.FromDocumentField(f));
+            CompareEvidence.FromDocumentField(f, document));
     }
 
     /// <summary>A traveller's answer (the transcript's row or the bubble's line <paramref name="lineIndex"/> of the transcript): "Traveller · CURRENCY"; an untranslated answer shows the placeholder.</summary>
