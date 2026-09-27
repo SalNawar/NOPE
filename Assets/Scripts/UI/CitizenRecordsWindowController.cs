@@ -19,7 +19,9 @@ using UnityEngine.UI;
 /// block and the date are injected per day by GameManager via
 /// InvestigationUIController. Each evidence row is marked with its key for
 /// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
-/// tells the Records tab (Looked).
+/// tells the Records tab (Looked: the recent items, and the steps checklist's
+/// "a record was looked up" through DayReference), and the player's typed
+/// lookup is announced (Searched: the pane's history).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -168,6 +170,8 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
                 : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
 
         ShowPage(0);
+        if (!string.IsNullOrWhiteSpace(query))
+            Searched?.Invoke();
         Looked?.Invoke();
     }
 

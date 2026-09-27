@@ -5,27 +5,28 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// The office builder's Investigation app (redesign phases 16 and 18; the PC
-/// spec's AP1-AP9, WN4, WN5, §2.2-§2.10, §5.2): one desktop window on the
-/// window layer ("Investigation"; the restored size from DesktopConfigSO,
+/// The office builder's Investigation app (redesign phases 16, 18 and 21; the
+/// PC spec's AP1-AP9, ST1, WN4, WN5, §2.2-§2.10, §5.2): one desktop window on
+/// the window layer ("Investigation"; the restored size from DesktopConfigSO,
 /// maximised on its first open) with its case header (the claim, the
 /// counters, the PC's Accept and Deny with their fixed glyphs), its toolbar
-/// (Back, Forward and Split live; the search field and Keys live since phase
-/// 20; Steps built, not live until phase 21), its sidebar (Steps, Pinned,
-/// Recent: the keys' partial, OfficeSceneUIBuilder.Keys, fills Pinned and
-/// Recent) and two panes side by side (AppPane, built by
-/// OfficeSceneUIBuilder.Panes from the parts here: BuildTab, each tab a plate
-/// on the chrome, its active look a paper plate with an ink bar, its badge an
-/// accent dot in a slot reserved after the label; BuildChipTemplate, a chip as
-/// wide as its label, the chosen one on an accent plate; the left pane starts
-/// on Documents, the right one on Reference, and is hidden until the app
-/// splits). Each pane's views host today's page components (the scanned copy
-/// on FormView, Citizen Records, a book's register, the transcript, the
-/// report's and the rules' texts), each behind IAppView, so FormView replaces
-/// one view at a time; the rows of the registers, Records and the transcript
-/// light by key and carry the found mark (the transcript's answers their ↗);
-/// the scan toast goes on the investigation host above the window layer.
-/// Rebuilt fresh on each run (the one convergence policy of
+/// (Back, Forward and Split live; the search field and Keys the keys'
+/// (OfficeSceneUIBuilder.Keys); Steps the steps' (OfficeSceneUIBuilder.Steps)),
+/// its sidebar (the steps checklist at its top: OfficeSceneUIBuilder.Steps;
+/// Pinned and Recent: the keys' partial fills them) and two panes side by
+/// side (AppPane, built by OfficeSceneUIBuilder.Panes from the parts here:
+/// BuildTab, each tab a plate on the chrome, its active look a paper plate
+/// with an ink bar, its badge an accent dot in a slot reserved after the
+/// label; BuildChipTemplate, a chip as wide as its label, the chosen one on
+/// an accent plate; the left pane starts on Documents, the right one on
+/// Reference, and is hidden until the app splits). Each pane's views host
+/// today's page components (the scanned copy on FormView, Citizen Records, a
+/// book's register, the transcript, the report's and the rules' texts), each
+/// behind IAppView, so FormView replaces one view at a time; the rows of the
+/// registers, Records and the transcript light by key and carry the found
+/// mark (the transcript's answers their ↗); the scan toast goes on the
+/// investigation host above the window layer. Rebuilt fresh on each run (the
+/// one convergence policy of
 /// this partial, audit R6-008); every reference it wires is checked (Wire,
 /// audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls
 /// it in its order.
@@ -101,6 +102,7 @@ public static partial class OfficeSceneUIBuilder
         public TranscriptWindowController[] Transcript;
         public TMP_Text[] ReportText;
         public TMP_Text[] RulesText;
+        public StepsPanel Steps;
     }
 
     /// <summary>Sets an object reference, logging an error when the property does not exist (audit R6-004: a renamed field is never skipped silently).</summary>
@@ -141,7 +143,7 @@ public static partial class OfficeSceneUIBuilder
 
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(top + AppHeaderHeight + AppToolbarHeight)));
-        Transform sidebar = BuildAppSidebar(body);
+        Transform sidebar = BuildAppSidebar(body, out parts.Steps);
         Transform panes = Panel(body, "Panes", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(panes, Vector2.zero, Vector2.one, new Vector2(AppSidebarWidth + AppDividerWidth, 0f), Vector2.zero);
         AppPane left = BuildAppPane(panes, "PaneLeft", AppTab.Documents, compare, config, out PaneViews leftViews);
@@ -170,10 +172,10 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "forwardButton", toolbar.Forward);
         Wire(so, "splitButton", toolbar.Split);
         Wire(so, "splitHint", toolbar.SplitHint);
-        SerializedArrays.Set(so, "notYetLive", toolbar.NotYetLive);
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
+        WireStepsPanel(parts.Steps, parts, toolbar.Steps, toast, config);
         return parts;
     }
 
@@ -194,17 +196,17 @@ public static partial class OfficeSceneUIBuilder
         BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
     }
 
-    /// <summary>The toolbar's controls the app wires.</summary>
+    /// <summary>The toolbar's controls the app and the steps wire.</summary>
     private struct AppToolbar
     {
         public Button Back;
         public Button Forward;
         public Button Split;
         public TMP_Text SplitHint;
-        public Selectable[] NotYetLive;
+        public Button Steps;
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field and Keys are the keys' (BuildAppKeys); Steps built, not live until phase 21.</summary>
+    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field and Keys are the keys' (BuildAppKeys); Steps the steps' (WireStepsPanel).</summary>
     private static AppToolbar BuildAppToolbar(Transform win, float top)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
@@ -215,11 +217,10 @@ public static partial class OfficeSceneUIBuilder
             Forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f),
         };
         BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
-        Button steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
+        toolbar.Steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
         toolbar.Split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
         toolbar.SplitHint = BuildHoverHint(toolbar.Split, null, UiText.Get("app.split.hint"), AppSplitHintSize, new Vector2(1f, 1f), new Vector2(1f, 0f));
         ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
-        toolbar.NotYetLive = new Selectable[] { steps };
         return toolbar;
     }
 
@@ -231,16 +232,17 @@ public static partial class OfficeSceneUIBuilder
         return b;
     }
 
-    /// <summary>The sidebar (AP2): Steps, Pinned and Recent, each a heading over a placeholder line until phases 20-21 fill them. Returns it.</summary>
-    private static Transform BuildAppSidebar(Transform body)
+    /// <summary>The sidebar (AP2): the steps checklist at its top (OfficeSceneUIBuilder.Steps, StepsSectionShare of the height), then Pinned and Recent sharing the rest, each a heading over a placeholder line the keys' partial replaces with its list (BuildSidebarList). Returns the sidebar, and the steps in <paramref name="steps"/>.</summary>
+    private static Transform BuildAppSidebar(Transform body, out StepsPanel steps)
     {
         Transform side = Panel(body, "Sidebar", Vector2.zero, new Vector2(0f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.Sidebar);
         PlaceRect(side, Vector2.zero, new Vector2(0f, 1f), Vector2.zero, new Vector2(AppSidebarWidth, 0f));
-        string[] sections = { "Steps", "Pinned", "Recent" };
-        string[] keys = { "app.sidebar.steps", "app.sidebar.pinned", "app.sidebar.recent" };
+        steps = BuildStepsSection(side, 1f, 1f - StepsSectionShare);
+        string[] sections = { "Pinned", "Recent" };
+        string[] keys = { "app.sidebar.pinned", "app.sidebar.recent" };
         for (int i = 0; i < sections.Length; i++)
         {
-            float high = 1f - i / 3f;
+            float high = (1f - StepsSectionShare) * (1f - i / 2f);
             Text(side, sections[i] + "Heading", null, 18, TextAlignmentOptions.TopLeft, new Vector2(0.06f, high - 0.07f), new Vector2(0.94f, high - 0.015f), Ink,
                  ThemeRoleId.Sidebar, keys[i], FontStyles.Bold, ThemeTextKind.Heading, true);
             Text(side, sections[i] + "Empty", null, 16, TextAlignmentOptions.TopLeft, new Vector2(0.06f, high - 0.14f), new Vector2(0.94f, high - 0.075f), Ink,

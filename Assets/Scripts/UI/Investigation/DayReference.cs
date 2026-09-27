@@ -21,7 +21,13 @@ public sealed class DayReference
 
     private string _directives = string.Empty;
 
-    /// <summary>The Rules tabs' texts, the Records tabs' lookups, the compare (the book rows pick into it) and the Reference tabs (one each per pane; null entries are skipped).</summary>
+    /// <summary>Today's day number (set with the day's registry; the steps checklist lists a step from its first day).</summary>
+    public int Day { get; private set; } = 1;
+
+    /// <summary>Raised after a lookup of a name or number in any Records tab (typed, or a link's or a jump's), whatever it found; not after a blank one (the steps checklist's "a record looked up").</summary>
+    public event System.Action RecordLookedUp;
+
+    /// <summary>The Rules tabs' texts, the Records tabs' lookups (each announces its lookups here), the compare (the book rows pick into it) and the Reference tabs (one each per pane; null entries are skipped).</summary>
     public DayReference(IReadOnlyList<TMP_Text> directivesTexts, IReadOnlyList<CitizenRecordsWindowController> records, CompareController compare,
                         IReadOnlyList<ReferenceView> books)
     {
@@ -29,6 +35,16 @@ public sealed class DayReference
         _records = records ?? System.Array.Empty<CitizenRecordsWindowController>();
         _compare = compare;
         _books = books ?? System.Array.Empty<ReferenceView>();
+        foreach (CitizenRecordsWindowController lookup in _records)
+            if (lookup != null)
+                lookup.Looked += () => LookedUp(lookup);
+    }
+
+    /// <summary>A Records tab looked something up: announced unless the lookup was blank.</summary>
+    private void LookedUp(CitizenRecordsWindowController lookup)
+    {
+        if (lookup.Query != null)
+            RecordLookedUp?.Invoke();
     }
 
     /// <summary>Sets the day's travel directives and writes them into the Rules tab.</summary>
@@ -57,6 +73,7 @@ public sealed class DayReference
     /// <summary>Hands the day's citizen registry to the Records tab, with the agency block and today's date (<paramref name="day"/> in the agency's calendar) its extract prints.</summary>
     public void SetCitizenRegistry(CitizenRegistry registry, AgencyContent agency, int day)
     {
+        Day = day;
         string today = agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null;
         foreach (CitizenRecordsWindowController records in _records)
             if (records != null)

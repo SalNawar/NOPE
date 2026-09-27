@@ -303,9 +303,25 @@ public static class ContentSheetMap
                     Text("category"),
                     Text("value"))).Note("history rules: when their conditions pass at night they rewrite a place's fact"));
 
-    /// <summary>The PC block: the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
+    /// <summary>The PC block: the steps checklist's sets, the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
     private static SheetSpec Pc() =>
         Single("pc", "pc",
+            Rows("pcStepSets", "steps.sets", Key("type", "stepSet"),
+                Text("type").Required().OneOf("default", "RichTourist", "PoorTourist", "Labourer", "Displaced").Note("a traveller kind, or default: the steps of a kind with no set of its own"),
+                Text("inherit").Omit().Ref("pcStepSets").Note("the set whose steps it starts from; its own step of the same id replaces the parent's (blank: none)"),
+                Bool("dataOnly").Omit().Note("true while the kind is not in play yet: its forms and categories may name what a later phase adds"),
+                Rows("pcSteps", "steps",
+                    Text("id").Required().Note("its label is the UI string steps.{id}"),
+                    Text("when").Required().OneOf("PapersReceived", "PaperRead", "Requested", "RulesViewed", "RecordViewed", "Compared", "Asked", "LookedAt")
+                        .Note("the check it waits for, never what the check found"),
+                    List("categories").Omit().Note("the categories a Compared or Asked step counts (blank: derived from the case)"),
+                    Text("statement").Omit().OneOf("Any", "Field", "Answer", "Garment").Note("a Compared step's statement side (blank: any)"),
+                    Text("truth").Omit().OneOf("Any", "Reference", "Record", "Paper").Note("a Compared step's truth side (blank: any)"),
+                    List("forms").Omit().Note("the form numbers a paper step counts (blank: every paper)"),
+                    Text("jump.source").Omit().OneOf("Documents", "Records", "Reference", "Transcript", "Report", "Rules").Note("the tab a click on the step shows"),
+                    Text("jump.link").Omit().OneOf("PrimaryName", "FirstUncheckedField", "CostumeClaimed").Note("where a click goes instead of a tab"),
+                    Text("hint").Omit().Ref("uiStrings").Note("the UI string of the toast a click shows instead of a jump"),
+                    Int("fromDay").Omit().Note("its first day (blank: day 1)")).Note("a set's steps, in order")).Note("the optional steps checklist, one set per traveller kind"),
             Rows("pcSites", "sites", Key("id", "site"),
                 Text("id").Required(),
                 Text("kind").OneOf("News", "History", "Ancestry", "Static").Note("the page builder that serves it"),

@@ -11,28 +11,29 @@ using UnityEngine.UI;
 /// holds the claim, the counters ("Papers 2 of 3 received · 1 scanned ·
 /// Deviations 1") and the PC's Accept and Deny (the façade wires them); its
 /// toolbar holds Back and Forward (the active pane's history), the search
-/// field, Steps, Split (two panes side by side, saved per player, possible
-/// only while each pane gets a readable width: AppPanes.CanSplit, so a
-/// restored window has one pane and the button says why) and Keys (the search
-/// field and Keys are live since phase 20; Steps is shown but not live until
-/// phase 21); the sidebar holds Steps (a placeholder until phase 21), Pinned
-/// and Recent. The keys, the focus ring, copy and paste, pins, recent items
-/// and zoom are in InvestigationApp.Keys (redesign phase 20). Two
+/// field, Steps (it shows or hides the sidebar's steps checklist, StepsPanel,
+/// phase 21), Split (two panes side by side, saved per player, possible only
+/// while each pane gets a readable width: AppPanes.CanSplit, so a restored
+/// window has one pane and the button says why) and Keys (the search field
+/// and Keys are live since phase 20); the sidebar holds the steps checklist,
+/// Pinned and Recent. The keys, the focus ring, copy and paste, pins, recent
+/// items and zoom are in InvestigationApp.Keys (redesign phase 20). Two
 /// panes share one tab order (TabOrder: dragged or moved from a tab's menu,
 /// saved per player in DesktopPreferences.AppTabs). The active pane is the
 /// last one pressed (the desktop's press, DesktopWindowManager.Pressed) or
 /// sent somewhere; it wears the accent frame. A row's smart link goes to the
 /// other pane (Ctrl held, or one pane: the same pane, and Back returns);
-/// the compare dock's sides, the toast and Mail's memo open in the active
-/// pane (Open). Nothing steals the view: something new for a tab badges it
-/// unless a showing pane shows it (AppBadges), and dots the desktop's
-/// Investigation icon while the app is closed or minimised; a scan
-/// (ScanArrival) opens the app only when it is closed, shows the paper only in
-/// a Documents view showing none, and toasts ("… scanned", Open shows it). A
-/// new case shows Documents in the left pane (the right one keeps its
-/// source), drops the last traveller's places from both histories and clears
-/// the badges; at the decision the case sources show the no-case state.
-/// InvestigationUIController drives it.
+/// the compare dock's sides, the toast, Mail's memo and a step's label open
+/// in the active pane (Open). The steps checklist reads what the player sees
+/// (Sees, CopiesSeen: the showing panes' tabs and scanned copies). Nothing
+/// steals the view: something new for a tab badges it unless a showing pane
+/// shows it (AppBadges), and dots the desktop's Investigation icon while the
+/// app is closed or minimised; a scan (ScanArrival) opens the app only when
+/// it is closed, shows the paper only in a Documents view showing none, and
+/// toasts ("… scanned", Open shows it). A new case shows Documents in the
+/// left pane (the right one keeps its source), drops the last traveller's
+/// places from both histories and clears the badges; at the decision the
+/// case sources show the no-case state. InvestigationUIController drives it.
 /// </summary>
 public sealed partial class InvestigationApp : MonoBehaviour
 {
@@ -71,9 +72,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
     /// <summary>The Split button's hover hint: what it does, or why it cannot.</summary>
     [SerializeField] private TMP_Text splitHint;
 
-    /// <summary>Steps: shown, not live until its phase (21).</summary>
-    [SerializeField] private Selectable[] notYetLive = new Selectable[0];
-
     /// <summary>The Split button's tint while the split is on (pressed).</summary>
     [SerializeField] private Color splitOnTint = new Color(0.72f, 0.72f, 0.72f, 1f);
 
@@ -105,8 +103,29 @@ public sealed partial class InvestigationApp : MonoBehaviour
 
     /// <summary>True when the panes host a view for the tab.</summary>
     public bool Hosts(AppTab tab) => leftPane != null && leftPane.Hosts(tab);
+
+    /// <summary>True when a showing pane shows the tab (the steps checklist: the Rules read while the player looks at the PC).</summary>
+    public bool Sees(AppTab tab)
+    {
+        foreach (AppTab shown in ShownTabs())
+            if (shown == tab)
+                return true;
+        return false;
+    }
+
+    /// <summary>Fills <paramref name="into"/> with the papers whose scanned copies the showing panes show on Documents (the steps checklist: a paper read on the PC).</summary>
+    public void CopiesSeen(List<int> into)
+    {
+        into.Clear();
+        if (!IsShowing)
+            return;
+        foreach (AppPane pane in Panes())
+            if ((pane == leftPane || _split) && pane.ActiveTab == AppTab.Documents && pane.View(AppTab.Documents) is DocumentsView documents && documents.ShowsCopy)
+                into.Add(documents.Selected);
+    }
     /// <summary>The app's window (the keyboard poller's "app focused").</summary>
     public DesktopWindow Window => window;
+
 
 
     /// <summary>The first open: the app fills the desktop (P spec WN4).</summary>
@@ -296,9 +315,6 @@ public sealed partial class InvestigationApp : MonoBehaviour
             forwardButton.onClick.AddListener(() => _active.Forward());
         if (splitButton != null)
             splitButton.onClick.AddListener(ToggleSplit);
-        foreach (Selectable control in notYetLive)
-            if (control != null)
-                control.interactable = false;
 
         _manager = window != null ? window.Manager : null;
         if (_manager != null)
