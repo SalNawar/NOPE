@@ -118,4 +118,28 @@ public class FormPaintTests
         CollectionAssert.IsEmpty(FormPaint.Quads(null, Palette(), M));
         CollectionAssert.IsEmpty(FormPaint.Quads(Form(Item(FormItemKind.Box, FaceRect.FromTop(0f, 0f, 5f, 5f))), null, M));
     }
+
+    [Test]
+    public void TheAnalysisMark_IsADashedOutline_OverTheMarkedFieldsBoxOnly_InTheAnalysisColour()
+    {
+        FaceRect box0 = FaceRect.FromTop(10f, 10f, 40f, 10f), box1 = FaceRect.FromTop(10f, 30f, 40f, 10f);
+        var slots = new List<FormSlot> { new FormSlot(0, 0, -1, "", box0, 0), new FormSlot(1, 3, -1, "", box1, 0), new FormSlot(2, -1, 0, "rows", box0, 0) };
+        var form = new PlacedForm(100f, 100f, 100f, new List<FormItem>(), slots, new List<float> { 0f });
+        var mark = new Rgba(0.5f, 0.1f, 0.1f);
+
+        List<FormQuad> quads = FormPaint.MarkQuads(form, new[] { 3 }, mark, M);
+        Assert.AreEqual(12, quads.Count, "5 dashes along each 40-unit edge (8 units apart, 2 wide) and 1 along each 10-unit side");
+        Assert.IsTrue(quads.All(q => q.Layer == FormPaintLayer.Line && q.Colour.Equals(mark)), "over the form's strokes, in the analysis colour");
+        Assert.IsTrue(quads.All(q => q.Rect.XMin >= box1.XMin - Eps && q.Rect.XMax <= box1.XMax + Eps && q.Rect.YMin >= box1.YMin - Eps && q.Rect.YMax <= box1.YMax + Eps), "inside the marked box");
+        Assert.IsTrue(quads.All(q => System.Math.Abs(q.Rect.Width - 2f) < Eps || System.Math.Abs(q.Rect.Height - 2f) < Eps), "MarkRules (2) rule widths thick");
+        Assert.IsTrue(quads.Any(q => System.Math.Abs(q.Rect.YMin - box1.YMin) < Eps) && quads.Any(q => System.Math.Abs(q.Rect.YMax - box1.YMax) < Eps)
+                      && quads.Any(q => System.Math.Abs(q.Rect.XMin - box1.XMin) < Eps) && quads.Any(q => System.Math.Abs(q.Rect.XMax - box1.XMax) < Eps), "along all four edges");
+        Assert.IsFalse(quads.Any(q => q.Rect.YMax <= box0.YMax + Eps), "the other field's box and the table row (field -1) are not marked");
+
+        CollectionAssert.IsEmpty(FormPaint.MarkQuads(form, new int[0], mark, M));
+        CollectionAssert.IsEmpty(FormPaint.MarkQuads(form, null, mark, M));
+        CollectionAssert.IsEmpty(FormPaint.MarkQuads(null, new[] { 3 }, mark, M));
+        CollectionAssert.IsEmpty(FormPaint.MarkQuads(form, new[] { 7 }, mark, M), "a field the form does not place");
+        Assert.AreEqual(2f, FormPaint.MarkRules);
+    }
 }

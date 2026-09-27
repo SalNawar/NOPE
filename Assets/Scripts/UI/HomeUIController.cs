@@ -263,7 +263,7 @@ public sealed class HomeUIController : MonoBehaviour
 
     /// <summary>
     /// Shows the upgrade shop: one row per upgrade with its (discounted) cost
-    /// (ShopPrices.Discounted, the rule the purchase charges) and a Buy
+    /// (HomeEconomy.UpgradeCost, the price the purchase charges) and a Buy
     /// button, a page at a time. Invokes onBuy(upgrade) when
     /// purchased, onContinue when the player moves on to the slot machine (or
     /// immediately if unwired). Opening the shop shows its first page; showing
@@ -320,10 +320,7 @@ public sealed class HomeUIController : MonoBehaviour
             UpgradeSO upgrade = upgrades[i];
 
             bool owned = world.HasUpgrade(upgrade.id);
-            float discountPercent = lib != null
-                ? TimelineEffects.GetShopDiscountPercent(world, lib, upgrade.id)
-                : 0f;
-            int cost = ShopPrices.Discounted(upgrade.cost, discountPercent);
+            int cost = HomeEconomy.UpgradeCost(world, lib, upgrade, out float discountPercent);
 
             string label = owned
                 ? $"{upgrade.displayName} (owned)"

@@ -6,18 +6,29 @@ using UnityEngine;
 /// (DeskController, DeskPapers.Drop), and the scanner pulses when a scan
 /// finishes. The office binder puts it on the art's scanner (or shows its
 /// placeholder machine where the contract's default pose is) and sizes the
-/// drop area and the bed.
+/// drop area and the bed. The placeholder machine shows a feeder tray while
+/// the Auto-Feed Scanner is owned and a lamp while the Analysis Scanner is
+/// (the PC redesign SC6), until the art adds them.
 /// </summary>
 public sealed class DeskScanner : MonoBehaviour
 {
+    /// <summary>The click box's height over the scanner's foot (metres): the binder sizes the box and the default bed sits halfway up it (audit R5-015).</summary>
+    public const float BoxHeight = 0.12f;
+
     /// <summary>The drop area, in local XZ, centred on the transform.</summary>
     [SerializeField] private Vector2 dropSize = new Vector2(0.4f, 0.32f);
 
     /// <summary>Where a scanning paper lies, in local units (on the scanner's glass).</summary>
-    [SerializeField] private Vector3 bedCentre = new Vector3(0f, 0.06f, 0f);
+    [SerializeField] private Vector3 bedCentre = new Vector3(0f, BoxHeight / 2f, 0f);
 
     /// <summary>The scanner's click reaction, played when a scan finishes (optional).</summary>
     [SerializeField] private DeskReaction reaction;
+
+    /// <summary>The placeholder machine's feeder tray, shown while the Auto-Feed Scanner is owned (optional: the art's scanner brings its own).</summary>
+    [SerializeField] private GameObject feederTray;
+
+    /// <summary>The placeholder machine's analysis lamp, shown while the Analysis Scanner is owned (optional).</summary>
+    [SerializeField] private GameObject analysisLamp;
 
     /// <summary>The drop area's size in local XZ.</summary>
     public Vector2 DropSize => dropSize;
@@ -38,6 +49,15 @@ public sealed class DeskScanner : MonoBehaviour
 
     /// <summary>The bed's centre in world space.</summary>
     public Vector3 BedPoint => transform.TransformPoint(bedCentre);
+
+    /// <summary>Shows the placeholder parts of the day's upgrades: the feeder tray with the Auto-Feed, the lamp with the Analysis (SC6).</summary>
+    public void ShowUpgrades(ScannerDay day)
+    {
+        if (feederTray != null)
+            feederTray.SetActive(day.AutoFeed);
+        if (analysisLamp != null)
+            analysisLamp.SetActive(day.Analysis);
+    }
 
     /// <summary>Plays the scanner's reaction (a finished scan).</summary>
     public void Pulse()

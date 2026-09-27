@@ -29,7 +29,14 @@ using UnityEngine.UI;
 /// papers are allowed and a drag out of the hand only while the drag-out is
 /// (BoothRules.HeldDragOutLive: never beside the open frame, audit R5-001);
 /// papers not allowed take no raycasts at all (spec R38). A drag cut short (the
-/// paper disabled mid-drag) sends it back to where it was picked up.
+/// paper disabled mid-drag) sends it back to where it was picked up. The day's
+/// scanner upgrades (ScannerDay, from the day-start snapshot: BeginDay) change
+/// the scan (the PC redesign SC2-SC4): with the Auto-Feed a handed-over paper
+/// joins DeskPapers' queue and, once landed and not dragged, slides onto the
+/// scanner by itself, in hand-over order, one at a time (FeedScanner); with
+/// the Analysis a scan by hand takes the analysis pass (the longer scan) and
+/// ScanFinished says so, for the PC to mark the scanned papers. The
+/// placeholder scanner shows its tray and lamp for the owned upgrades (SC6).
 /// </summary>
 public sealed class DeskController : MonoBehaviour
 {
@@ -84,6 +91,12 @@ public sealed class DeskController : MonoBehaviour
     private int _readsToday;
     private int _handedOver;
 
+    /// <summary>The day's scanner upgrades (BeginDay).</summary>
+    private ScannerDay _scanners;
+
+    /// <summary>The Auto-Feed's readiness rule, made once (no delegate per frame).</summary>
+    private Func<int, bool> _landed;
+
     /// <summary>The paper being dragged, or -1.</summary>
     private int _dragged = -1;
 
@@ -94,8 +107,8 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>How many papers are held in the hand.</summary>
     public int HeldCount => _state != null ? _state.HeldCount : 0;
 
-    /// <summary>Raised when a scan finishes, with the paper's index (its scanned copy reaches the PC: the Investigation app's Documents tab).</summary>
-    public event Action<int> ScanFinished;
+    /// <summary>Raised when a scan finishes, with the paper's index and whether it was an analysis pass (a scan by hand with the Analysis Scanner): its scanned copy reaches the PC (the Investigation app's Documents tab), which marks the papers after an analysis.</summary>
+    public event Action<int, bool> ScanFinished;
 
     /// <summary>Raised when a box of a held paper is picked for comparison: the paper's index, the field's row and where it lights up.</summary>
     public event Action<int, DocumentRow, ICompareHighlight> FieldPicked;
@@ -108,6 +121,7 @@ public sealed class DeskController : MonoBehaviour
 
     private void Awake()
     {
+        _landed = Landed;
         if (scanHint != null && config != null)
             scanHint.text = UiText.Get(config.scanHintKey);
         if (deskCatcher != null)
@@ -118,15 +132,21 @@ public sealed class DeskController : MonoBehaviour
         RefreshHint();
     }
 
-    /// <summary>Advances a running scan (a finished paper slides back to where it was picked up); Escape puts every held paper back while that is allowed.</summary>
+    /// <summary>Advances a running scan (a finished paper slides back to where it was picked up) or feeds the idle scanner its next queued paper (the Auto-Feed Scanner); Escape puts every held paper back while that is allowed.</summary>
     private void Update()
     {
         if (_escapeLive && _escapeLiveSince < Time.frameCount && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             PutBackAll(false);
 
-        if (_state == null || !_state.ScannerBusy)
+        if (_state == null)
             return;
+        if (!_state.ScannerBusy)
+        {
+            FeedScanner();
+            return;
+        }
 
+        bool analysed = _state.ScanByHand && _scanners.Analysis;
         int done = _state.Tick(Time.deltaTime);
         if (done < 0)
             return;
@@ -136,15 +156,38 @@ public sealed class DeskController : MonoBehaviour
         scanner.Pulse();
         _scansToday++;
         RefreshHint();
-        ScanFinished?.Invoke(done);
+        ScanFinished?.Invoke(done, analysed);
     }
 
-    /// <summary>Starts a day: nothing read or scanned yet (the scan note may show again on its days).</summary>
-    public void BeginDay(int day)
+    /// <summary>The Auto-Feed Scanner (SC3): while the scanner is idle, the next queued paper that lies still on the desk slides onto the bed and scans (DeskPapers.FeedNext: hand-over order, one at a time; a held paper waits its turn), then back to where it lay.</summary>
+    private void FeedScanner()
+    {
+        if (!_scanners.AutoFeed)
+            return;
+
+        int next = _state.FeedNext(_landed);
+        if (next < 0)
+            return;
+
+        // It goes back to where it lay once scanned, as a dragged paper goes back to where it was picked up.
+        _papers[next].GetComponent<DeskDraggable>().RememberPosition();
+        Slide(_papers[next], scanner.BedPoint);
+        _stack.BringToFront(next);
+        ApplyStack();
+    }
+
+    /// <summary>True when paper <paramref name="i"/> lies still on the desk: handed over, landed and not being dragged.</summary>
+    private bool Landed(int i) => _papers[i] != null && !_papers[i].IsSliding && _dragged != i;
+
+    /// <summary>Starts a day with its scanner upgrades (<paramref name="scanners"/>: the day-start snapshot's, so a scanner bought tonight works tomorrow): nothing read or scanned yet (the scan note may show again on its days); the placeholder scanner shows the owned upgrades' parts.</summary>
+    public void BeginDay(int day, ScannerDay scanners)
     {
         _day = day;
+        _scanners = scanners;
         _scansToday = 0;
         _readsToday = 0;
+        if (scanner != null)
+            scanner.ShowUpgrades(scanners);
         RefreshHint();
     }
 
@@ -155,7 +198,7 @@ public sealed class DeskController : MonoBehaviour
         _forms = forms ?? Array.Empty<DocumentForm>();
         _look = look;
         _art = art;
-        _state = new DeskPapers(_documents, config.scanSeconds);
+        _state = new DeskPapers(_documents, config.scanSeconds, _scanners.Analysis ? config.analysisScanSeconds : config.scanSeconds);
         _papers.Clear();
         for (int i = 0; i < _state.Count; i++)
             _papers.Add(null);
@@ -172,13 +215,16 @@ public sealed class DeskController : MonoBehaviour
     /// <summary>
     /// Hands paper <paramref name="i"/> over: a clone of the template appears at
     /// the hand-over point, on top of the stack, and slides to the next spawn
-    /// slot (slots are reused in order). Nothing happens unless DeskPapers
-    /// agrees (a paper is handed over once).
+    /// slot (slots are reused in order); with the Auto-Feed Scanner it joins
+    /// the scan queue. Nothing happens unless DeskPapers agrees (a paper is
+    /// handed over once).
     /// </summary>
     public void HandOver(int i)
     {
         if (_state == null || !_state.HandOver(i))
             return;
+        if (_scanners.AutoFeed)
+            _state.Enqueue(i);
 
         DeskDocument paper = Instantiate(paperTemplate, paperRoot);
         paper.transform.position = handOverPoint.position;

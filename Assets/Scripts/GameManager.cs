@@ -213,9 +213,9 @@ public sealed class GameManager : MonoBehaviour
         if (readySign != null)
             readySign.onClick.AddListener(() => _readyGate.Release());
 
-        // The booth's day (its day-1 notes) and phase: the briefing comes first.
+        // The booth's day (its day-1 notes; the scanner upgrades fixed at day start, like the translation) and phase: the briefing comes first.
         if (booth != null)
-            booth.BeginDay(_worldState.day);
+            booth.BeginDay(_worldState.day, TimelineService.BuildScannerDay(_worldState));
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.#}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 

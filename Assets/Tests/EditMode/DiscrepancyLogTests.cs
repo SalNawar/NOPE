@@ -566,4 +566,23 @@ public class DiscrepancyLogTests
         Assert.AreEqual(expected, ClueLabels.Key(category));
     }
 
+    [Test]
+    public void Categories_AreTheDocumentedOnes_OnePerCategory()
+    {
+        var log = new DiscrepancyLog();
+        CollectionAssert.IsEmpty(log.Categories);
+
+        Discrepancy Currency() => new Discrepancy { category = ClueCategory.Currency, documentValue = "denarius", expectedValue = "drachma", provedBy = DiscrepancyProof.ClaimMismatch, source = EvidenceKind.DocumentField };
+        Assert.IsTrue(log.Add(Currency()));
+        Assert.IsFalse(log.Add(Currency()), "one discrepancy per category");
+        Assert.IsTrue(log.Add(new Discrepancy { category = ClueCategory.Language, documentValue = "Latin", expectedValue = "Attic Greek", provedBy = DiscrepancyProof.ClaimMismatch, source = EvidenceKind.Answer }));
+        CollectionAssert.AreEquivalent(new[] { ClueCategory.Currency, ClueCategory.Language }, log.Categories);
+        Assert.AreEqual(2, log.Count);
+        Assert.IsFalse(log.Add(null));
+
+        log.Clear();
+        CollectionAssert.IsEmpty(log.Categories);
+        Assert.AreEqual(0, log.Count);
+        Assert.IsTrue(log.Add(Currency()), "a new case documents the category again");
+    }
 }

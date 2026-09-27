@@ -13,7 +13,11 @@ using System.Collections.Generic;
 /// what that shows: ScanArrival); nothing here opens a window. A held
 /// paper's row picked at the desk goes into the compare as its scanned
 /// copy's row would; a paper lifted into the hand is announced (Examined).
-/// It subscribes to the desk it was given (only a
+/// An analysis pass (the Analysis Scanner, a scan by hand) marks the first
+/// contradicting pair the Deviation Report does not hold on both scanned
+/// copies for the rest of the case, and the analysed copy's strip says so
+/// (PaperAnalysis; the PC redesign SC4, SC5): nothing picked, logged or
+/// opened. It subscribes to the desk it was given (only a
 /// reachable one) and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
 /// </summary>
@@ -22,6 +26,12 @@ public sealed class CaseDocumentsPresenter
     private readonly IReadOnlyList<DocumentsView> _views;
     private readonly DeskController _desk;
     private readonly CompareController _compare;
+
+    /// <summary>The Deviation Report's documented categories (the evidence presenter's), read at each analysis pass.</summary>
+    private readonly Func<IReadOnlyCollection<ClueCategory>> _documented;
+
+    /// <summary>The case's analysis marks so far, each once (a mark lasts for the case).</summary>
+    private readonly List<AnalysisMark> _marks = new List<AnalysisMark>();
 
     /// <summary>The current traveller's documents in paper order (name, fields, hand-over, photo).</summary>
     private readonly List<CaseDocument> _caseDocuments = new List<CaseDocument>();
@@ -38,12 +48,13 @@ public sealed class CaseDocumentsPresenter
     /// <summary>The desk whose events this listens to (null while detached).</summary>
     private DeskController _listening;
 
-    /// <summary>The app's Documents views (one per pane; null entries are skipped), the desk (null when it is not reachable: documents then reach the PC at the hand-over) and the compare.</summary>
-    public CaseDocumentsPresenter(IReadOnlyList<DocumentsView> views, DeskController reachableDesk, CompareController compare)
+    /// <summary>The app's Documents views (one per pane; null entries are skipped), the desk (null when it is not reachable: documents then reach the PC at the hand-over), the compare, and the Deviation Report's documented categories (what an analysis pass skips).</summary>
+    public CaseDocumentsPresenter(IReadOnlyList<DocumentsView> views, DeskController reachableDesk, CompareController compare, Func<IReadOnlyCollection<ClueCategory>> documented)
     {
         _views = views ?? Array.Empty<DocumentsView>();
         _desk = reachableDesk;
         _compare = compare;
+        _documented = documented ?? throw new ArgumentNullException(nameof(documented));
     }
 
     /// <summary>A paper reached the PC (its index): scanned at the desk, or handed over where no desk is wired.</summary>
@@ -67,7 +78,7 @@ public sealed class CaseDocumentsPresenter
         if (_desk == null)
             return;
         _listening = _desk;
-        _listening.ScanFinished += Scan;
+        _listening.ScanFinished += HandleScanFinished;
         _listening.FieldPicked += HandleFieldPicked;
         _listening.PaperExamined += HandleExamined;
     }
@@ -77,7 +88,7 @@ public sealed class CaseDocumentsPresenter
     {
         if (_listening == null)
             return;
-        _listening.ScanFinished -= Scan;
+        _listening.ScanFinished -= HandleScanFinished;
         _listening.FieldPicked -= HandleFieldPicked;
         _listening.PaperExamined -= HandleExamined;
         _listening = null;
@@ -100,6 +111,7 @@ public sealed class CaseDocumentsPresenter
     {
         _caseDocuments.Clear();
         _caseForms.Clear();
+        _marks.Clear();
         if (inst != null)
             foreach (DocumentInstance doc in inst.documents)
             {
@@ -141,6 +153,7 @@ public sealed class CaseDocumentsPresenter
             _desk.EndCase(accepted);
         _caseDocuments.Clear();
         _caseForms.Clear();
+        _marks.Clear();
         _papers = new CasePapers(0);
         foreach (DocumentsView view in _views)
             if (view != null)
@@ -161,6 +174,37 @@ public sealed class CaseDocumentsPresenter
             if (view != null)
                 view.Refresh();
         PapersChanged?.Invoke();
+    }
+
+    /// <summary>The desk's scan finished: the copy reaches the PC (once per paper); an analysis pass (the Analysis Scanner, a scan by hand) then reads the scanned papers.</summary>
+    private void HandleScanFinished(int index, bool analysed)
+    {
+        Scan(index);
+        if (analysed)
+            Analyse(index);
+    }
+
+    /// <summary>
+    /// The analysis pass (the PC redesign SC4, SC5): the first contradicting
+    /// pair among the scanned papers whose category the Deviation Report does
+    /// not hold (PaperAnalysis.First) is marked on both scanned copies for the
+    /// rest of the case, in every pane's Documents view, and paper
+    /// <paramref name="index"/>'s strip says whether a pair was marked. Nothing
+    /// is picked, logged, opened or switched: the player still compares the
+    /// two fields.
+    /// </summary>
+    private void Analyse(int index)
+    {
+        AnalysisMark? mark = PaperAnalysis.First(_caseDocuments, _papers, _documented());
+        if (mark.HasValue && !_marks.Contains(mark.Value))
+            _marks.Add(mark.Value);
+        foreach (DocumentsView view in _views)
+            if (view != null)
+            {
+                if (mark.HasValue)
+                    view.ShowMarks(_marks);
+                view.MarkAnalysed(index, mark.HasValue);
+            }
     }
 
     /// <summary>A paper's copy reaches the PC (the desk's ScanFinished, or a hand-over where no desk is wired): once per paper; its strip reads the time.</summary>

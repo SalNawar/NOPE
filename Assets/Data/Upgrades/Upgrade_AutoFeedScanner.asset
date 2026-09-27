@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 633ce1469e2ac064aa273d138f70aebc, type: 3}
-  m_Name: Upgrade_ArchiveAccess
+  m_Name: Upgrade_AutoFeedScanner
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
-  id: archive_access
-  displayName: Archive Access
-  description: Grants access to historical archives, reducing shop prices.
-  cost: 300
-  unlockEffect: {fileID: 11400000, guid: d84dddd24193a8849840cf0d983a4c4f, type: 2}
+  id: scanner_autofeed
+  displayName: Auto-Feed Scanner
+  description: Papers handed over feed themselves into the scanner, in order, from
+    the next shift.
+  cost: 200
+  unlockEffect: {fileID: 0}

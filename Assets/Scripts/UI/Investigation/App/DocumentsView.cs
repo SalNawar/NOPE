@@ -13,9 +13,12 @@ using UnityEngine;
 /// (DocumentWindowController over a FormView), drawn from the same
 /// DocumentForm the desk paper prints; its fields link (SmartLinks). A link,
 /// Back or a dock side reveals a paper's field (Reveal: the paper chosen, the
-/// field scrolled to and outlined). Each pane has one; CaseDocumentsPresenter
-/// fills them all; nothing here opens or switches by itself. Its item is the
-/// chosen paper ("doc:0", IAppItems: the pins and the recent items).
+/// field scrolled to and outlined). After an analysis pass (the Analysis
+/// Scanner) the copies draw the case's marks (a dashed outline on each
+/// marked field) and the analysed copy's strip says what the pass found.
+/// Each pane has one; CaseDocumentsPresenter fills them all; nothing here
+/// opens or switches by itself. Its item is the chosen paper ("doc:0",
+/// IAppItems: the pins and the recent items).
 /// </summary>
 public sealed class DocumentsView : AppView, IAppItems
 {
@@ -82,6 +85,29 @@ public sealed class DocumentsView : AppView, IAppItems
     {
         if (index >= 0 && index < _pages.Count && _pages[index] != null)
             _pages[index].MarkScanned();
+    }
+
+    /// <summary>Paper <paramref name="index"/> was analysed (the Analysis Scanner, a scan by hand): its strip reads the time and whether a contradicting pair was marked (<paramref name="contradiction"/>).</summary>
+    public void MarkAnalysed(int index, bool contradiction)
+    {
+        if (index >= 0 && index < _pages.Count && _pages[index] != null)
+            _pages[index].MarkAnalysed(contradiction);
+    }
+
+    /// <summary>The case's analysis marks (every pair marked so far): each copy draws the dashed outline on its marked fields (the PC redesign SC4, SC5).</summary>
+    public void ShowMarks(IReadOnlyList<AnalysisMark> marks)
+    {
+        for (int i = 0; i < _pages.Count; i++)
+        {
+            if (_pages[i] == null)
+                continue;
+            var fields = new List<int>();
+            foreach (AnalysisMark mark in marks)
+                foreach (int field in mark.FieldsOf(i))
+                    if (!fields.Contains(field))
+                        fields.Add(field);
+            _pages[i].SetMarks(fields);
+        }
     }
 
     /// <summary>The papers moved (handed over, scanned): the chips and the shown paper follow.</summary>

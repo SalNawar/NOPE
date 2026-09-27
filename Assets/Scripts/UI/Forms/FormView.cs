@@ -31,7 +31,9 @@ using UnityEngine.UI;
 /// so a value shown in both panes lights in both and a redrawn form is lit
 /// again. A slot with a smart link gets a ↗ at its box's top right (LK2: a
 /// click raises LinkClicked; the link never picks), and MarkFound outlines
-/// the box a link went to. The view sets its own height to the form's, so a
+/// the box a link went to. The Analysis Scanner's marks (SetMarks: a dashed
+/// outline in the style's analysis colour on a field's box, FormPaint.MarkQuads)
+/// draw over the lines. The view sets its own height to the form's, so a
 /// scroll rect can hold it. Its parts are the builder's, tagged DiegeticForm
 /// (forms are never themed), and pooled: a new Show reuses them. Always
 /// English (TR1): values are written as they are.
@@ -103,6 +105,12 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     private readonly List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
     private readonly List<SlotPart> _parts = new List<SlotPart>();
     private readonly List<LinkPart> _links = new List<LinkPart>();
+
+    /// <summary>The shown form's own quads (FormPaint.Quads), redrawn with the marks.</summary>
+    private List<FormQuad> _quads = new List<FormQuad>();
+
+    /// <summary>The fields marked by the Analysis Scanner on this form.</summary>
+    private readonly List<int> _marks = new List<int>();
     private TmpFormText _measure;
     private TextMeshProUGUI _measureText;
     private Sprite _sealRing;
@@ -169,6 +177,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     {
         _hovered = null;
         _form = null;
+        _marks.Clear();
         if (style == null || textTemplate == null)
             return null;
 
@@ -207,11 +216,10 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (photoFrameArt != null)
             photoFrameArt.gameObject.SetActive(photoShown && photoFrameArt.sprite != null);
 
-        List<FormQuad> quads = FormPaint.Quads(_form, style.Palette(), style.metrics);
+        _quads = FormPaint.Quads(_form, style.Palette(), style.metrics);
         if (fills != null)
-            fills.Set(quads, FormPaintLayer.Fill);
-        if (lines != null)
-            lines.Set(quads, FormPaintLayer.Line);
+            fills.Set(_quads, FormPaintLayer.Fill);
+        DrawLines();
 
         int parts = 0, links = 0;
         for (int s = 0; s < _form.Slots.Count; s++)
@@ -270,6 +278,30 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         }
         if (photoFrameArt != null)
             photoFrameArt.sprite = SlotArt.Sprite(ArtSlots.PhotoFrame);
+    }
+
+    /// <summary>The Analysis Scanner's marks (the PC redesign SC4): a dashed outline in the style's analysis colour over the box of each field in <paramref name="fields"/> (null or empty: none), over the form's own lines; the next Show drops them.</summary>
+    public void SetMarks(IReadOnlyList<int> fields)
+    {
+        _marks.Clear();
+        if (fields != null)
+            _marks.AddRange(fields);
+        DrawLines();
+    }
+
+    /// <summary>The lines layer: the form's outlines, rules, bars, ticks and dash, then the analysis marks over them.</summary>
+    private void DrawLines()
+    {
+        if (lines == null)
+            return;
+        if (_marks.Count == 0 || _form == null)
+        {
+            lines.Set(_quads, FormPaintLayer.Line);
+            return;
+        }
+        var all = new List<FormQuad>(_quads);
+        all.AddRange(FormPaint.MarkQuads(_form, _marks, FormStyleSO.Rgb(style.analysis), style.metrics));
+        lines.Set(all, FormPaintLayer.Line);
     }
 
     /// <summary>Shows the traveller's photo in the photo cell (a null look empties it).</summary>
