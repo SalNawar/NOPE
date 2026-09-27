@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -16,8 +17,9 @@ using UnityEngine.UI;
 /// the agency block and the date are injected per day by GameManager via
 /// InvestigationUIController. Each evidence row is marked with its key for
 /// the keys, the copy and the pins (AppRow: "Aster Vale · Born"); a lookup
-/// tells the Records tab (Looked), and a jump shows a record and its row
-/// (Show).
+/// tells the Records tab (Looked), a lookup the player runs is announced
+/// (Searched: the steps checklist's "a record was looked up"), and a jump
+/// (a pin, a recent item, a step) shows a record and its row (Show).
 /// </summary>
 public sealed class CitizenRecordsWindowController : PagedRowsWindow
 {
@@ -98,6 +100,9 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
         ShowIdle();
     }
 
+    /// <summary>Raised after each lookup of a name or number (typed, or a jump's), whatever it found; not after a blank one.</summary>
+    public event Action Searched;
+
     /// <summary>Looks up the typed name or number and lists the record's rows (or says none is on file).</summary>
     public void Search()
     {
@@ -120,6 +125,8 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
                 : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
 
         ShowPage(0);
+        if (!string.IsNullOrWhiteSpace(query))
+            Searched?.Invoke();
         Looked?.Invoke();
     }
 

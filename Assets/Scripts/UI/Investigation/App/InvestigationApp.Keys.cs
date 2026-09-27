@@ -28,9 +28,10 @@ using UnityEngine.UI;
 /// on it); the case's are dropped when a case starts or ends, the day's when
 /// the day starts. Ctrl+= and Ctrl+- zoom the panes' content (PaneZoom) to
 /// the next level (100, 125, 150 %), Ctrl+0 back to Settings' Text size.
-/// A mouse press hides the ring. Back, Forward, the other pane, the split,
-/// moving tabs and following links into the other pane come with phase 18,
-/// the steps with phase 21.
+/// A mouse press hides the ring. Ctrl+Shift+S shows or hides the sidebar's
+/// steps checklist (StepsPanel, phase 21). Back, Forward, the other pane,
+/// the split, moving tabs and following links into the other pane come with
+/// phase 18.
 /// </summary>
 public sealed partial class InvestigationApp
 {
@@ -76,6 +77,9 @@ public sealed partial class InvestigationApp
 
     /// <summary>The desktop's context menu (a row's Copy value, Copy row, Pin, Pick for compare).</summary>
     [SerializeField] private DesktopContextMenu rowMenu;
+
+    /// <summary>The sidebar's steps checklist (Ctrl+Shift+S shows or hides it).</summary>
+    [SerializeField] private StepsPanel steps;
 
     private readonly AppClipboard _clipboard = new AppClipboard();
     private readonly List<RectTransform> _targets = new List<RectTransform>();
@@ -248,8 +252,12 @@ public sealed partial class InvestigationApp
             case AppCommand.ZoomReset:
                 SetZoom(DefaultZoom);
                 break;
+            case AppCommand.ToggleSteps:
+                if (steps != null)
+                    steps.Toggle();
+                break;
             // Back, Forward, OtherPane, ToggleSplit, MoveTabLeft, MoveTabRight and FollowOther come with
-            // the two panes and the smart links (redesign phase 18); ToggleSteps with the steps (phase 21).
+            // the two panes and the smart links (redesign phase 18).
         }
     }
 

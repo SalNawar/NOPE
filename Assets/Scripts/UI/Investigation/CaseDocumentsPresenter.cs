@@ -12,11 +12,12 @@ using System.Collections.Generic;
 /// it is handed over. A paper reaching the PC raises Scanned (the app decides
 /// what that shows: ScanArrival); nothing here opens a window. A held
 /// paper's row picked at the desk goes into the compare as its scanned
-/// copy's row would. An analysis pass (the Analysis Scanner, a scan by hand)
-/// marks the first contradicting pair the Deviation Report does not hold on
-/// both scanned copies for the rest of the case, and the analysed copy's
-/// strip says so (PaperAnalysis; the PC redesign SC4, SC5): nothing picked,
-/// logged or opened. It subscribes to the desk it was given (only a
+/// copy's row would; a paper lifted into the hand is announced (Examined).
+/// An analysis pass (the Analysis Scanner, a scan by hand) marks the first
+/// contradicting pair the Deviation Report does not hold on both scanned
+/// copies for the rest of the case, and the analysed copy's strip says so
+/// (PaperAnalysis; the PC redesign SC4, SC5): nothing picked, logged or
+/// opened. It subscribes to the desk it was given (only a
 /// reachable one) and unsubscribes from that same instance (audit R4-003).
 /// Plain C#; InvestigationUIController owns it.
 /// </summary>
@@ -62,6 +63,9 @@ public sealed class CaseDocumentsPresenter
     /// <summary>A paper was handed over or scanned (the counters change).</summary>
     public event Action PapersChanged;
 
+    /// <summary>A paper (its index) was lifted into the hand at the desk to be read.</summary>
+    public event Action<int> Examined;
+
     /// <summary>The current traveller's documents, in paper order.</summary>
     public IReadOnlyList<CaseDocument> Documents => _caseDocuments;
 
@@ -76,6 +80,7 @@ public sealed class CaseDocumentsPresenter
         _listening = _desk;
         _listening.ScanFinished += HandleScanFinished;
         _listening.FieldPicked += HandleFieldPicked;
+        _listening.PaperExamined += HandleExamined;
     }
 
     /// <summary>Stops listening (to the instance it attached to).</summary>
@@ -85,6 +90,7 @@ public sealed class CaseDocumentsPresenter
             return;
         _listening.ScanFinished -= HandleScanFinished;
         _listening.FieldPicked -= HandleFieldPicked;
+        _listening.PaperExamined -= HandleExamined;
         _listening = null;
     }
 
@@ -207,6 +213,9 @@ public sealed class CaseDocumentsPresenter
         PapersChanged?.Invoke();
         Scanned?.Invoke(index);
     }
+
+    /// <summary>A paper lifted into the hand: announced.</summary>
+    private void HandleExamined(int index) => Examined?.Invoke(index);
 
     /// <summary>A held paper's row picked at the desk: it goes into the compare (the same pick as its scanned copy's row).</summary>
     private void HandleFieldPicked(int index, DocumentRow row, ICompareHighlight highlight)

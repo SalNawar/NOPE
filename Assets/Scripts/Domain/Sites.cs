@@ -44,10 +44,13 @@ public sealed class SiteSpec
     public int fromDay = 1;
 }
 
-/// <summary>The content library's PC block (world_source.json "pc", through Generate World): the sites, their authored pages and the Lineage Archive's people.</summary>
+/// <summary>The content library's PC block (world_source.json "pc", through Generate World): the steps checklist's sets, the sites, their authored pages and the Lineage Archive's people.</summary>
 [Serializable]
 public sealed class PcContent
 {
+    /// <summary>The optional steps checklist's sets, one per traveller kind and the default (CaseSteps, StepSets).</summary>
+    public StepSetData steps = new StepSetData();
+
     /// <summary>Every site, in start-page order.</summary>
     public List<SiteSpec> sites = new List<SiteSpec>();
 

@@ -10,14 +10,16 @@ using UnityEngine.UI;
 /// layer ("Investigation"; the restored size from DesktopConfigSO, maximised
 /// on its first open) with its case header (the claim, the counters, the PC's
 /// Accept and Deny with their fixed glyphs), its toolbar (Back, Forward, the
-/// search field, Steps, Split, Keys: Back, Forward, Steps and Split built, not
-/// live until phases 18 and 21), its sidebar (Steps, Pinned, Recent: the
-/// keys' partial, OfficeSceneUIBuilder.Keys, fills Pinned and Recent) and one
-/// pane (AppPane): the six tabs in TabOrder.Default (BuildTab: each a plate
-/// on the chrome, its active look a paper plate with an ink bar, its badge
-/// an accent dot after the label), the chip row (BuildChipTemplate: a chip as
-/// wide as its label, the chosen one on an accent plate), the content with a
-/// view per tab and the no-case state over it. The views host today's page components (the scanned page,
+/// search field, Steps, Split, Keys: the search field and Keys are the keys'
+/// (OfficeSceneUIBuilder.Keys), Steps the steps' (OfficeSceneUIBuilder.Steps);
+/// Back, Forward and Split built, not live until phase 18), its sidebar (the
+/// steps checklist at its top: OfficeSceneUIBuilder.Steps; Pinned and Recent:
+/// the keys' partial fills them) and one pane (AppPane): the six tabs in
+/// TabOrder.Default (BuildTab: each a plate on the chrome, its active look a
+/// paper plate with an ink bar, its badge an accent dot after the label), the
+/// chip row (BuildChipTemplate: a chip as wide as its label, the chosen one
+/// on an accent plate), the content with a view per tab and the no-case
+/// state over it. The views host today's page components (the scanned page,
 /// Citizen Records, a book's register, the transcript, the report's and the
 /// rules' texts), each behind IAppView, so phase 5's FormView replaces one
 /// view at a time; the scan toast goes on the investigation host above the
@@ -97,6 +99,7 @@ public static partial class OfficeSceneUIBuilder
         public TranscriptWindowController Transcript;
         public TMP_Text ReportText;
         public TMP_Text RulesText;
+        public StepsPanel Steps;
     }
 
     /// <summary>Sets an object reference, logging an error when the property does not exist (audit R6-004: a renamed field is never skipped silently).</summary>
@@ -133,11 +136,11 @@ public static partial class OfficeSceneUIBuilder
 
         var parts = new AppParts { Window = window };
         BuildAppHeader(win, top, out TMP_Text claim, out TMP_Text counters, out parts.Accept, out parts.Deny);
-        Selectable[] notYetLive = BuildAppToolbar(win, top + AppHeaderHeight);
+        Selectable[] notYetLive = BuildAppToolbar(win, top + AppHeaderHeight, out Button stepsToggle);
 
         Transform body = Panel(win, "AppBody", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         PlaceRect(body, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(top + AppHeaderHeight + AppToolbarHeight)));
-        BuildAppSidebar(body);
+        parts.Steps = BuildAppSidebar(body);
         AppPane pane = BuildAppPane(body, compare, config, ref parts);
 
         AppToast toast = BuildAppToast(investHost, config);
@@ -152,6 +155,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "toast", toast);
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
+        WireStepsPanel(parts.Steps, parts, stepsToggle, toast, config);
         return parts;
     }
 
@@ -172,18 +176,18 @@ public static partial class OfficeSceneUIBuilder
         BuildDecisionGlyph(deny, ThemeRoleId.DenyButton, false);
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward, the search field, Steps, Split and Keys. Returns the ones not live yet (Back, Forward, Steps, Split: phases 18 and 21); the search field and Keys are the keys' (BuildAppKeys).</summary>
-    private static Selectable[] BuildAppToolbar(Transform win, float top)
+    /// <summary>The toolbar (AP2): Back, Forward, the search field, Steps, Split and Keys. Returns the ones not live yet (Back, Forward, Split: phase 18); the search field and Keys are the keys' (BuildAppKeys), Steps the steps' (WireStepsPanel).</summary>
+    private static Selectable[] BuildAppToolbar(Transform win, float top, out Button steps)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
                               new Vector2(0f, AppToolbarHeight), XpFace, ThemeRoleId.WindowBody);
         Button back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f);
         Button forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f);
         BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
-        Button steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
+        steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
         Button split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
         ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
-        return new Selectable[] { back, forward, steps, split };
+        return new Selectable[] { back, forward, split };
     }
 
     /// <summary>A toolbar button between two horizontal anchors (its label keyed).</summary>
@@ -194,21 +198,23 @@ public static partial class OfficeSceneUIBuilder
         return b;
     }
 
-    /// <summary>The sidebar (AP2): Steps, Pinned and Recent, each a heading over a placeholder line until phases 20-21 fill them.</summary>
-    private static void BuildAppSidebar(Transform body)
+    /// <summary>The sidebar (AP2): the steps checklist at its top (OfficeSceneUIBuilder.Steps, StepsSectionShare of the height), then Pinned and Recent sharing the rest, each a heading over a placeholder line the keys' partial replaces with its list (BuildSidebarList). Returns the steps.</summary>
+    private static StepsPanel BuildAppSidebar(Transform body)
     {
         Transform side = Panel(body, "Sidebar", Vector2.zero, new Vector2(0f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.Sidebar);
         PlaceRect(side, Vector2.zero, new Vector2(0f, 1f), Vector2.zero, new Vector2(AppSidebarWidth, 0f));
-        string[] sections = { "Steps", "Pinned", "Recent" };
-        string[] keys = { "app.sidebar.steps", "app.sidebar.pinned", "app.sidebar.recent" };
+        StepsPanel steps = BuildStepsSection(side, 1f, 1f - StepsSectionShare);
+        string[] sections = { "Pinned", "Recent" };
+        string[] keys = { "app.sidebar.pinned", "app.sidebar.recent" };
         for (int i = 0; i < sections.Length; i++)
         {
-            float high = 1f - i / 3f;
+            float high = (1f - StepsSectionShare) * (1f - i / 2f);
             Text(side, sections[i] + "Heading", null, 18, TextAlignmentOptions.TopLeft, new Vector2(0.06f, high - 0.07f), new Vector2(0.94f, high - 0.015f), Ink,
                  ThemeRoleId.Sidebar, keys[i], FontStyles.Bold, ThemeTextKind.Heading, true);
             Text(side, sections[i] + "Empty", null, 16, TextAlignmentOptions.TopLeft, new Vector2(0.06f, high - 0.14f), new Vector2(0.94f, high - 0.075f), Ink,
                  ThemeRoleId.Sidebar, "app.sidebar.empty", FontStyles.Italic, ThemeTextKind.Body, true);
         }
+        return steps;
     }
 
     /// <summary>

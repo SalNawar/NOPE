@@ -4,23 +4,31 @@ using System.Linq;
 using UnityEditor;
 
 /// <summary>
-/// Generate World's PC block (P spec IN2, §4.8): world_source.json "pc"
-/// (the Internet's sites, the Static sites' authored pages and the Lineage
-/// Archive's people and relations) is checked (Sites.Problems,
-/// AncestryPages.Problems, the UI string keys the pages write with) and
-/// written into the content library's pc block (ContentLibrarySO.Pc).
+/// Generate World's PC block (P spec IN2, ST3, §4.8): world_source.json "pc"
+/// (the steps checklist's sets, the Internet's sites, the Static sites'
+/// authored pages and the Lineage Archive's people and relations) is checked
+/// (StepSets.Parse and StepSets.Problems against the UI strings and the
+/// blueprints' forms, Sites.Problems, AncestryPages.Problems, the UI string
+/// keys the pages write with) and written into the content library's pc
+/// block (ContentLibrarySO.Pc).
 /// </summary>
 public static partial class WorldContentGenerator
 {
     /// <summary>
-    /// Reads the pc block into the library's shape and checks it: every site
-    /// and block kind known, the content rules, and every Sites.WordKeys key
-    /// in ui.strings. Returns what WritePc writes.
+    /// Reads the pc block into the library's shape and checks it: the step
+    /// sets' names and rules (a form a step counts is on one of the authored
+    /// blueprints' papers), every site and block kind known, the content
+    /// rules, and every Sites.WordKeys key in ui.strings. Returns what WritePc
+    /// writes.
     /// </summary>
-    private static PcContent CheckPc(WorldSource src, List<string> errors)
+    private static PcContent CheckPc(WorldSource src, Authored authored, List<string> errors)
     {
         var pc = new PcContent();
         PcData data = src.pc;
+        var keys = new HashSet<string>((src.ui?.strings ?? Array.Empty<StringData>()).Where(s => s != null).Select(s => s.key));
+        pc.steps = StepSets.Parse(data?.steps, errors);
+        errors.AddRange(StepSets.Problems(pc.steps, keys, DocumentTemplates(authored).Select(t => t.formNumber).ToList()));
+
         foreach (SiteData s in data?.sites ?? Array.Empty<SiteData>())
         {
             if (s == null)
@@ -59,7 +67,6 @@ public static partial class WorldContentGenerator
                                                 .Concat(premades.Select(m => m.name));
         errors.AddRange(AncestryPages.Problems(pc.ancestry, premades.Select(m => m.id).ToList(), new HashSet<string>(src.places.Select(PlaceId)), travellerNames));
 
-        var keys = new HashSet<string>((src.ui?.strings ?? Array.Empty<StringData>()).Where(s => s != null).Select(s => s.key));
         foreach (string key in Sites.WordKeys)
             RequireKey(keys, key, "the Internet's pages (Sites.WordKeys)", errors);
         return pc;
@@ -81,6 +88,7 @@ public static partial class WorldContentGenerator
     /// <summary>world_source.json "pc".</summary>
     [Serializable] private sealed class PcData
     {
+        public StepsSource steps;
         public SiteData[] sites;
         public StaticPageData[] pages;
         public AncestryData ancestry;
