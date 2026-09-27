@@ -1,5 +1,7 @@
 # Joined panorama preview
 
+Superseded by SHARPNESS_FIX.md: the feathered repaint caused double portal edges and is now disabled. Current preview uses only two source images with measured city registration. Historical inspection notes below describe the previous assembly.
+
 Open panorama-preview.html or serve this directory on localhost and open that file. City, Join and Hall show each full-width panel and the transition; slider moves continuously. Compare join toggles the repair overlay. Seam guide marks the original panel boundary.
 
 Two original neutral panels remain unchanged at2172x724 each. Total master extent4344x724. A2172x724 registered repaint atx1086 repairs the central discontinuity; edges blend only inside its overlap margins. Exact placement is in registration.json. This is a non-destructive image assembly preview, not a flattened replacement or Unity asset.
@@ -20,4 +22,3 @@ Use this registered composite as the extraction reference, preserving all compon
 Built-in image generation was used for the joint repaint. The input was a native-scale browser capture of the two neutral panels at their join, not a newly compressed hall image.
 Prompt:
 Precise seamless panoramic JOIN REPAIR. Input shows two adjacent panels with a vertical discontinuity EXACTLY down center. Keep output same3:1 crop, same camera and EVERYTHING in outer left25% and right25% pixel-aligned and unchanged. Only repaint the central transition to make this one continuous scene. The brass handrail currently abruptly drops at center: repair to ONE continuous straight/slightly panoramic handrail with no kink or break, smoothly rejoining unmodified ends. Same for stone wall cap and locker rows beneath. Preserve all window mullions; arrange consistent perspective spacing with no doubled seam. City river shoreline/buildings currently jump at center: repaint a coherent continuous river and neighborhood across the center without mirrored/repeated towers. Match sky hue/horizon on both sides. No new structural pillar or other object to cover the join. Geometry must be genuinely continuous. Keep exact right stair/door/portal positions and leftmost city. Preserve neutral diffuse unlit material appearance, no new shadows or highlights, remove any central water sparkle. NO text, people or desk. This image is a correction patch inside a wider master, so do not crop, zoom, shift, reframe or change outer margins.
-
