@@ -34,8 +34,9 @@ public readonly struct PaperContradiction
 /// prove, answers hint): the agency's forms are the agency's word, so two of
 /// a traveller's papers that disagree on one compared category prove one of
 /// them forged. One rule serves the cross proof (DiscrepancyLog.Prove, when
-/// one side is a tell) and the Analysis Scanner (the PC spec's SC3), so the
-/// scanner can never mark a pair the player cannot log. Pure.
+/// one side is a tell) and the Analysis Scanner (PaperAnalysis, the PC
+/// spec's SC4), so the scanner can never mark a pair the player cannot log.
+/// Pure.
 /// </summary>
 public static class PaperChecks
 {
@@ -48,11 +49,12 @@ public static class PaperChecks
         category != ClueCategory.Name && !Forgery.IsDirectiveOnly(category);
 
     /// <summary>
-    /// The one rule: two boxes contradict when they share a compared category
-    /// and their values are not the same value (Values.Match).
+    /// The one rule: two boxes contradict when they share a compared category,
+    /// both state a value (a blank box states nothing) and their values are
+    /// not the same value (Values.Match).
     /// </summary>
     public static bool Contradict(ClueCategory categoryA, string valueA, ClueCategory categoryB, string valueB) =>
-        categoryA == categoryB && IsCompared(categoryA) && !Values.Match(valueA, valueB);
+        categoryA == categoryB && IsCompared(categoryA) && !string.IsNullOrWhiteSpace(valueA) && !string.IsNullOrWhiteSpace(valueB) && !Values.Match(valueA, valueB);
 
     /// <summary>
     /// Every pair of boxes on two different papers of <paramref name="documents"/>

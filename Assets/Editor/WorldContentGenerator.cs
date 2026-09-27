@@ -79,7 +79,7 @@ public static partial class WorldContentGenerator
         CheckDayKinds(src, authored, errors);
         CheckPresent(src, errors);
         CheckNews(src, errors);
-        PcContent pc = CheckPc(src, errors);
+        PcContent pc = CheckPc(src, authored, errors);
         if (errors.Count > 0)
         {
             foreach (string e in errors)

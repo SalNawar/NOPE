@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>Which printed layer a quad goes in: under the slots' hover and pick tints, or over them.</summary>
 public enum FormPaintLayer
@@ -39,7 +40,9 @@ public readonly struct FormQuad
 /// the stamp area's dash, as coloured rectangles in form space. Both renderers
 /// draw these quads: the desk paper (DeskDocument, one mesh per layer) and the
 /// PC (FormView, one graphic per layer), so the paper and its scanned copy
-/// print the same strokes. Texts, the seal and the photo are the renderers'.
+/// print the same strokes. The PC alone adds the Analysis Scanner's marks
+/// (MarkQuads, the PC redesign SC4, SC5: the desk paper is a physical
+/// object). Texts, the seal and the photo are the renderers'.
 /// Pure and engine-free.
 /// </summary>
 public static class FormPaint
@@ -52,6 +55,9 @@ public static class FormPaint
 
     /// <summary>How far a tick sits inside its checkbox, as a share of the box's width.</summary>
     public const float TickInset = 0.22f;
+
+    /// <summary>An analysis mark's width, in rule widths: the dashed outline reads over the box's own outline.</summary>
+    public const float MarkRules = 2f;
 
     /// <summary>
     /// The quads <paramref name="form"/> prints in <paramref name="palette"/>'s
@@ -92,6 +98,27 @@ public static class FormPaint
                     break;
             }
         }
+        return quads;
+    }
+
+    /// <summary>
+    /// The Analysis Scanner's marks (the PC redesign SC4): a dashed outline in
+    /// <paramref name="colour"/> (the form style's analysis colour) over the box
+    /// of each slot of <paramref name="form"/> whose field is in
+    /// <paramref name="fields"/> (a table row is never marked), MarkRules rule
+    /// widths thick in whole dashes like the stamp area's, in the Line layer
+    /// over the form's own strokes. None without a form or fields.
+    /// </summary>
+    public static List<FormQuad> MarkQuads(PlacedForm form, IReadOnlyCollection<int> fields, Rgba colour, FormMetrics m)
+    {
+        var quads = new List<FormQuad>();
+        if (form == null || fields == null || fields.Count == 0)
+            return quads;
+
+        float width = (m ?? new FormMetrics()).ruleWidth * form.PageHeight * MarkRules;
+        foreach (FormSlot slot in form.Slots)
+            if (slot.Field >= 0 && fields.Contains(slot.Field))
+                Dashed(quads, slot.Hit, width, width * DashRules, colour);
         return quads;
     }
 

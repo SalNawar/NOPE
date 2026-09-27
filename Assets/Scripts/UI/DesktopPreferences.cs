@@ -1,12 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// The player's desktop preferences (the PC redesign DK4, DK6, KB5, section
-/// 4.7): where the icons sit, whether one click or two opens an icon, the
-/// Investigation app's default zoom (Settings' Text size) and whether its
-/// sidebar shows. Per-player values in PlayerPrefs (the UiLanguagePreference
-/// pattern), outside the run save, so New Run keeps them; saved at once when
-/// set. Later phases add their own keys here (the app's tabs, steps).
+/// The player's desktop preferences (the PC redesign DK4, DK6, KB5, ST1,
+/// section 4.7): where the icons sit, whether one click or two opens an icon,
+/// the Investigation app's default zoom (Settings' Text size), whether its
+/// sidebar shows and whether its steps checklist shows.
+/// Per-player values in PlayerPrefs (the UiLanguagePreference pattern),
+/// outside the run save, so New Run keeps them; saved at once when set.
+/// Later phases add their own keys here (the app's tabs and split).
 /// </summary>
 public static class DesktopPreferences
 {
@@ -28,10 +29,13 @@ public static class DesktopPreferences
     /// <summary>The stored value for "Double click".</summary>
     private const string Double = "double";
 
-    /// <summary>The stored value for a hidden sidebar ("shown" or absent = shown).</summary>
+    /// <summary>The steps checklist's key (the PC redesign ST1).</summary>
+    private const string StepsKey = "TimeDesk.StepsShown";
+
+    /// <summary>The stored value for a hidden sidebar or hidden steps ("shown" or absent = shown).</summary>
     private const string Hidden = "hidden";
 
-    /// <summary>The stored value for a shown sidebar.</summary>
+    /// <summary>The stored value for a shown sidebar or shown steps.</summary>
     private const string Shown = "shown";
 
     /// <summary>The saved icon layout, or "" when the player never moved an icon (the default arrangement).</summary>
@@ -74,6 +78,17 @@ public static class DesktopPreferences
         set
         {
             PlayerPrefs.SetString(SidebarKey, value ? Shown : Hidden);
+            PlayerPrefs.Save();
+        }
+    }
+
+    /// <summary>True (the default) when the Investigation app's sidebar shows the steps checklist; false when the player hid it (the toolbar's Steps, Settings).</summary>
+    public static bool StepsShown
+    {
+        get => PlayerPrefs.GetString(StepsKey, Shown) != Hidden;
+        set
+        {
+            PlayerPrefs.SetString(StepsKey, value ? Shown : Hidden);
             PlayerPrefs.Save();
         }
     }

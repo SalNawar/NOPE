@@ -35,8 +35,11 @@ public sealed class DeskDraggable : MonoBehaviour, IBeginDragHandler, IDragHandl
     /// <summary>Raised when a drag is cut short: the object was disabled mid-drag (its owner took its input away, or it is being destroyed), so no release will come.</summary>
     public event Action<DeskDraggable> DragCancelled;
 
-    /// <summary>Where the object was when the last drag started.</summary>
+    /// <summary>Where the object was when the last drag started, or when RememberPosition last took note.</summary>
     public Vector3 PickUpPosition { get; private set; }
+
+    /// <summary>Takes note of where the object lies now as its pick-up point: the scanner feeding itself a paper (the Auto-Feed Scanner) sends it back here after the scan, as a dragged paper goes back to where it was picked up.</summary>
+    public void RememberPosition() => PickUpPosition = transform.position;
 
     /// <summary>True while a drag should take the object by its centre (no grab offset): a paper dragged out of the hand drops under the pointer (DeskController sets it while the paper is held).</summary>
     public bool GrabAtCentre { get; set; }

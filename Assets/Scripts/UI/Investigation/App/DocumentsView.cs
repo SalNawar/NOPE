@@ -11,7 +11,9 @@ using UnityEngine;
 /// nothing chosen the view says what arrives here. Each copy is the paper's
 /// form (phase 5): a clone of the scanned-page template per paper
 /// (DocumentWindowController over a FormView), drawn from the same
-/// DocumentForm the desk paper prints.
+/// DocumentForm the desk paper prints. After an analysis pass (the Analysis
+/// Scanner) the copies draw the case's marks (a dashed outline on each
+/// marked field) and the analysed copy's strip says what the pass found.
 /// CaseDocumentsPresenter fills it; nothing here opens or switches by itself.
 /// Its item is the chosen paper ("doc:0"); a jump shows a paper, or a
 /// field's paper (IAppItems; the focus ring brings the box into view).
@@ -62,6 +64,9 @@ public sealed class DocumentsView : AppView, IAppItems
         return true;
     }
 
+    /// <summary>True when the chosen paper's scanned copy shows (it is scanned), not the line saying why it cannot.</summary>
+    public bool ShowsCopy => _selected >= 0 && _papers.State(_selected) == PaperState.Scanned;
+
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to
     /// its document and drawing its paper's form (<paramref name="forms"/>, in
@@ -90,6 +95,29 @@ public sealed class DocumentsView : AppView, IAppItems
     {
         if (index >= 0 && index < _pages.Count && _pages[index] != null)
             _pages[index].MarkScanned();
+    }
+
+    /// <summary>Paper <paramref name="index"/> was analysed (the Analysis Scanner, a scan by hand): its strip reads the time and whether a contradicting pair was marked (<paramref name="contradiction"/>).</summary>
+    public void MarkAnalysed(int index, bool contradiction)
+    {
+        if (index >= 0 && index < _pages.Count && _pages[index] != null)
+            _pages[index].MarkAnalysed(contradiction);
+    }
+
+    /// <summary>The case's analysis marks (every pair marked so far): each copy draws the dashed outline on its marked fields (the PC redesign SC4, SC5).</summary>
+    public void ShowMarks(IReadOnlyList<AnalysisMark> marks)
+    {
+        for (int i = 0; i < _pages.Count; i++)
+        {
+            if (_pages[i] == null)
+                continue;
+            var fields = new List<int>();
+            foreach (AnalysisMark mark in marks)
+                foreach (int field in mark.FieldsOf(i))
+                    if (!fields.Contains(field))
+                        fields.Add(field);
+            _pages[i].SetMarks(fields);
+        }
     }
 
     /// <summary>The papers moved (handed over, scanned): the chips and the shown paper follow.</summary>

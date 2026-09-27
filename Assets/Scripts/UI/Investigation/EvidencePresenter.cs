@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using TMPro;
 
@@ -38,6 +39,9 @@ public sealed class EvidencePresenter
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
     public int Count => _discrepancies.Count;
+
+    /// <summary>The documented categories of the current case (the Deviation Report's): what the Analysis Scanner no longer marks (CaseDocumentsPresenter).</summary>
+    public IReadOnlyCollection<ClueCategory> DocumentedCategories => _discrepancies.Categories;
 
     /// <summary>Starts listening to the compare's pairs.</summary>
     public void Attach()

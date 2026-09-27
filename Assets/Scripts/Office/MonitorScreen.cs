@@ -69,6 +69,9 @@ public sealed class MonitorScreen : MonoBehaviour
     /// <summary>Holds the screen on (a pending citation slip) or releases it.</summary>
     public void SetHeld(bool held) => _screen.SetHeld(held);
 
+    /// <summary>True while the desktop takes input (BoothRules.DesktopInteractive: the frame open, the screen on, no newsletter): the player is looking at the PC.</summary>
+    public bool IsInteractive { get; private set; }
+
     /// <summary>
     /// Lets the desktop take input or not (its raycaster). Turning it off also
     /// clears the EventSystem's selection when it is on the desktop, so a focused
@@ -76,6 +79,7 @@ public sealed class MonitorScreen : MonoBehaviour
     /// </summary>
     public void SetInteractive(bool on)
     {
+        IsInteractive = on;
         if (desktopRaycaster != null)
             desktopRaycaster.enabled = on;
         if (on || desktopCanvas == null)

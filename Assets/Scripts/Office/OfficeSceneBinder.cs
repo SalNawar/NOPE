@@ -149,6 +149,12 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     /// <summary>The power knob's click box (metres).</summary>
     private const float PowerKnobSize = 0.08f;
 
+    /// <summary>The art office camera's priority; the desk view sits one above it (DeskView; audit R5-015).</summary>
+    private const int OfficeCameraPriority = 100;
+
+    /// <summary>How far above the art scanner's top its bed lies (metres), so a scanning paper clears the glass.</summary>
+    private const float ScannerBedLift = 0.002f;
+
     /// <summary>How far above the desk a hint floats (metres).</summary>
     private const float HintHeight = 0.28f;
 
@@ -246,7 +252,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
         Transform vcam = At(OfficeAnchorId.OfficeVCam).Transform;
         if (vcam != null && vcam.TryGetComponent(out CinemachineCamera office))
         {
-            office.Priority = 100;
+            office.Priority = OfficeCameraPriority;
             if (cam.TryGetComponent(out CinemachineBrain _))
                 _officeVcam = office;
         }
@@ -330,7 +336,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             if (artScanner)
             {
                 s.SetPositionAndRotation(new Vector3(spot.Bounds.center.x, spot.Bounds.min.y, spot.Bounds.center.z), Quaternion.identity);
-                scanner.Configure(new Vector2(spot.Bounds.size.x, spot.Bounds.size.z), new Vector3(0f, spot.Bounds.size.y + 0.002f, 0f));
+                scanner.Configure(new Vector2(spot.Bounds.size.x, spot.Bounds.size.z), new Vector3(0f, spot.Bounds.size.y + ScannerBedLift, 0f));
             }
             else
             {
@@ -339,15 +345,17 @@ public sealed class OfficeSceneBinder : MonoBehaviour
 
             if (scanner.TryGetComponent(out BoxCollider box))
             {
-                box.center = new Vector3(0f, 0.06f, 0f);
-                box.size = new Vector3(scanner.DropSize.x, 0.12f, scanner.DropSize.y);
+                box.center = new Vector3(0f, DeskScanner.BoxHeight / 2f, 0f);
+                box.size = new Vector3(scanner.DropSize.x, DeskScanner.BoxHeight, scanner.DropSize.y);
             }
             if (scanner.TryGetComponent(out Clickable scannerClick))
                 scannerClick.SetOutline(artScanner ? spot.Transform.GetComponentsInChildren<Renderer>(false) : RenderersOf(scannerPlaceholder));
 
+            // Every corner of the drop area, so a marker scanner yawed off the desk's axes is covered whole (audit R5-010).
+            Vector2 half = scanner.DropSize / 2f;
             Bounds drop = new Bounds(s.position, Vector3.zero);
-            drop.Encapsulate(s.TransformPoint(new Vector3(-scanner.DropSize.x / 2f, 0f, -scanner.DropSize.y / 2f)));
-            drop.Encapsulate(s.TransformPoint(new Vector3(scanner.DropSize.x / 2f, 0f, scanner.DropSize.y / 2f)));
+            foreach (Vector3 corner in new[] { new Vector3(-half.x, 0f, -half.y), new Vector3(half.x, 0f, -half.y), new Vector3(-half.x, 0f, half.y), new Vector3(half.x, 0f, half.y) })
+                drop.Encapsulate(s.TransformPoint(corner));
             area = DeskRect.Union(deskRect, new DeskRect(drop.center.x, drop.center.z, drop.size.x, drop.size.z));
 
             if (scanHint != null)

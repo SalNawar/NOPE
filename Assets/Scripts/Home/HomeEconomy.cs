@@ -112,4 +112,18 @@ public static class HomeEconomy
                 member.condition = HomeRules.Worsened(member.condition, config.maxFamilyCondition);
         }
     }
+
+    /// <summary>
+    /// What <paramref name="upgrade"/> costs tonight: its listed cost with the
+    /// active shop discount off (TimelineEffects.GetShopDiscountPercent, none
+    /// without a library) through ShopPrices.Discounted; the one place the
+    /// price the shop shows and the price a purchase charges come from (audit
+    /// R2-006, R4-013). <paramref name="discountPercent"/> is that discount, for
+    /// the row's label.
+    /// </summary>
+    public static int UpgradeCost(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade, out float discountPercent)
+    {
+        discountPercent = world != null && lib != null && upgrade != null ? TimelineEffects.GetShopDiscountPercent(world, lib, upgrade.id) : 0f;
+        return ShopPrices.Discounted(upgrade != null ? upgrade.cost : 0, discountPercent);
+    }
 }

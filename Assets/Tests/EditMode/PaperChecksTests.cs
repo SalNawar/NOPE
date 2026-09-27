@@ -105,6 +105,14 @@ public class PaperChecksTests
         CollectionAssert.AreEqual(new[] { (0, 1), (1, 2) }, found.Select(c => (c.DocumentA, c.DocumentB)).ToArray());
     }
 
+    /// <summary>A blank box states nothing (the Analysis Scanner's rule, phase 22, now the one rule's).</summary>
+    [Test]
+    public void ABlankValue_StatesNothing()
+    {
+        var blank = new List<DocumentField> { F(ClueCategory.CitizenId, " "), F(ClueCategory.AccountStatus, null) };
+        CollectionAssert.IsEmpty(Check(Visa(), blank));
+    }
+
     [Test]
     public void NullDocumentsAndFields_AreSkipped()
     {
@@ -117,6 +125,8 @@ public class PaperChecksTests
 
     [TestCase(ClueCategory.CitizenId, "a", ClueCategory.CitizenId, "b", true)]
     [TestCase(ClueCategory.CitizenId, "a", ClueCategory.CitizenId, " A ", false)]
+    [TestCase(ClueCategory.CitizenId, "a", ClueCategory.CitizenId, " ", false)]
+    [TestCase(ClueCategory.CitizenId, null, ClueCategory.CitizenId, "b", false)]
     [TestCase(ClueCategory.CitizenId, "a", ClueCategory.AccountStatus, "b", false)]
     [TestCase(ClueCategory.Expiry, "a", ClueCategory.Expiry, "b", false)]
     [TestCase(ClueCategory.DepartureDate, "a", ClueCategory.DepartureDate, "b", false)]

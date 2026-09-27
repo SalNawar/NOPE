@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 /// <summary>When the traveller hands a document over. Serialized on DocumentTemplateSO: append only.</summary>
@@ -106,7 +107,11 @@ public readonly struct HoldResult
 /// can be held in the hand (piece 10), two at a time: it takes the slot on its
 /// side when free, else the other; with both full, the paper held longest goes
 /// back to the desk and the new one takes its slot. A held paper can be dragged
-/// (out of the hand) but must be put back before it drops. Pure, so every
+/// (out of the hand) but must be put back before it drops. With the Auto-Feed
+/// Scanner (the PC redesign SC3) handed-over papers join a queue and scan
+/// themselves in hand-over order, one at a time (FeedNext), a held or unready
+/// paper skipped until it is back on the desk; a scan by hand (a drop) takes
+/// its own duration (the Analysis Scanner's pass, SC4). Pure, so every
 /// state and outcome is tested headless; DeskController animates them.
 /// </summary>
 public sealed class DeskPapers
@@ -134,7 +139,18 @@ public sealed class DeskPapers
     }
 
     private readonly PaperState[] _states;
+
+    /// <summary>Seconds a scan the scanner feeds itself takes.</summary>
     private readonly float _scanSeconds;
+
+    /// <summary>Seconds a scan by hand (a paper dropped on the scanner) takes: the analysis pass's when the Analysis Scanner is owned, else the plain scan's.</summary>
+    private readonly float _handScanSeconds;
+
+    /// <summary>The running scan's duration.</summary>
+    private float _running;
+
+    /// <summary>The Auto-Feed queue: the papers waiting to scan themselves, in hand-over order.</summary>
+    private readonly List<int> _queue = new List<int>();
 
     /// <summary>The paper being scanned, or -1.</summary>
     private int _scanning = -1;
@@ -148,13 +164,19 @@ public sealed class DeskPapers
     /// <summary>The held papers, held longest first.</summary>
     private readonly List<int> _holdOrder = new List<int>();
 
-    /// <summary>Every paper starts with the traveller; a null list means no papers; a scan shorter than 0.01 s is raised to it.</summary>
-    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds)
+    /// <summary>Every paper starts with the traveller; a null list means no papers; a scan shorter than 0.01 s is raised to it; a scan by hand takes as long as any scan.</summary>
+    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds) : this(documents, scanSeconds, scanSeconds)
+    {
+    }
+
+    /// <summary>Every paper starts with the traveller; a null list means no papers; a scan the scanner feeds itself takes <paramref name="scanSeconds"/> and a scan by hand <paramref name="handScanSeconds"/> (each raised to 0.01 s when shorter).</summary>
+    public DeskPapers(IReadOnlyList<CaseDocument> documents, float scanSeconds, float handScanSeconds)
     {
         _states = new PaperState[documents != null ? documents.Count : 0];
         _slots = new ExamineSlot[_states.Length];
         ArrivalIndices = CaseDocuments.ArrivalIndices(documents);
         _scanSeconds = scanSeconds > MinScanSeconds ? scanSeconds : MinScanSeconds;
+        _handScanSeconds = handScanSeconds > MinScanSeconds ? handScanSeconds : MinScanSeconds;
     }
 
     /// <summary>How many papers the case has.</summary>
@@ -162,6 +184,12 @@ public sealed class DeskPapers
 
     /// <summary>True while a scan runs.</summary>
     public bool ScannerBusy => _scanning >= 0;
+
+    /// <summary>True while the running scan was started by hand (a drop on the scanner), the Analysis Scanner's trigger; false while the scanner fed itself or is idle.</summary>
+    public bool ScanByHand { get; private set; }
+
+    /// <summary>The papers waiting to scan themselves (the Auto-Feed queue).</summary>
+    public int QueuedCount => _queue.Count;
 
     /// <summary>The papers handed over on arrival, in paper order (CaseDocuments.ArrivalIndices).</summary>
     public IReadOnlyList<int> ArrivalIndices { get; }
@@ -193,6 +221,45 @@ public sealed class DeskPapers
 
         _states[i] = PaperState.OnDesk;
         return true;
+    }
+
+    /// <summary>
+    /// Queues a handed-over paper to scan itself (the Auto-Feed Scanner: the
+    /// controller enqueues each hand-over while the upgrade is owned); false
+    /// when it is not on the desk or in the hand, is already queued, or is out
+    /// of range.
+    /// </summary>
+    public bool Enqueue(int i)
+    {
+        if (!CanDrag(i) || _queue.Contains(i))
+            return false;
+
+        _queue.Add(i);
+        return true;
+    }
+
+    /// <summary>
+    /// Feeds the scanner its next paper while it is idle: the first queued
+    /// paper that lies on the desk (not held) and that <paramref name="ready"/>
+    /// admits (null: every paper; the controller: landed and not being dragged)
+    /// leaves the queue and starts scanning, not by hand, and its index is
+    /// returned; -1 while the scanner is busy or no queued paper is ready. A
+    /// paper skipped keeps its place for the next turn.
+    /// </summary>
+    public int FeedNext(Func<int, bool> ready)
+    {
+        if (ScannerBusy)
+            return -1;
+
+        foreach (int i in _queue)
+        {
+            if (StateOf(i) != PaperState.OnDesk || (ready != null && !ready(i)))
+                continue;
+
+            BeginScan(i, false);
+            return i;
+        }
+        return -1;
     }
 
     /// <summary>True while the paper is on the desk or held in the hand (the drag-out); false out of range.</summary>
@@ -267,8 +334,8 @@ public sealed class DeskPapers
     /// Decides a released paper: a paper that is not on the desk (held in the
     /// hand, or an index out of range) is Refused and nothing changes; a paper on the desk stays
     /// where it was dropped unless it is over the scanner, where it starts
-    /// scanning while the scanner is idle and is Refused while it is busy. A
-    /// scanned paper may be scanned again.
+    /// scanning by hand while the scanner is idle (a queued paper leaves the
+    /// queue) and is Refused while it is busy. A scanned paper may be scanned again.
     /// </summary>
     public DropOutcome Drop(int i, bool overScanner)
     {
@@ -279,15 +346,15 @@ public sealed class DeskPapers
         if (ScannerBusy)
             return DropOutcome.Refused;
 
-        BeginScan(i);
+        BeginScan(i, true);
         return DropOutcome.Scanning;
     }
 
     /// <summary>
     /// Advances a running scan by a positive amount (0 and negative amounts
-    /// are ignored). When it reaches the scan duration the paper goes back on
-    /// the desk and its index is returned; otherwise, or with no scan
-    /// running, -1.
+    /// are ignored). When it reaches the scan's duration (the hand scan's for
+    /// a drop, else the plain one) the paper goes back on the desk and its
+    /// index is returned; otherwise, or with no scan running, -1.
     /// </summary>
     public int Tick(float seconds)
     {
@@ -295,17 +362,18 @@ public sealed class DeskPapers
             return -1;
 
         _elapsed += seconds;
-        if (_elapsed < _scanSeconds)
+        if (_elapsed < _running)
             return -1;
 
         int done = _scanning;
         _states[done] = PaperState.OnDesk;
         _scanning = -1;
         _elapsed = 0f;
+        ScanByHand = false;
         return done;
     }
 
-    /// <summary>Every paper goes back to the traveller's side for good (none stays held); a running scan is cancelled and never finishes.</summary>
+    /// <summary>Every paper goes back to the traveller's side for good (none stays held, none stays queued); a running scan is cancelled and never finishes.</summary>
     public void ReturnAll()
     {
         for (int i = 0; i < _states.Length; i++)
@@ -314,16 +382,21 @@ public sealed class DeskPapers
             _slots[i] = ExamineSlot.None;
         }
         _holdOrder.Clear();
+        _queue.Clear();
         _scanning = -1;
         _elapsed = 0f;
+        ScanByHand = false;
     }
 
-    /// <summary>Puts a paper on the scanner's bed and starts the timer (Drop is the only caller).</summary>
-    private void BeginScan(int i)
+    /// <summary>Puts a paper on the scanner's bed and starts the timer for its kind of scan (Drop and FeedNext are the callers); a queued paper leaves the queue.</summary>
+    private void BeginScan(int i, bool byHand)
     {
         _states[i] = PaperState.Scanning;
         _scanning = i;
         _elapsed = 0f;
+        _running = byHand ? _handScanSeconds : _scanSeconds;
+        ScanByHand = byHand;
+        _queue.Remove(i);
     }
 
     /// <summary>A paper's state (callers check the range).</summary>
