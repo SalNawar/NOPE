@@ -33,6 +33,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Atmosphere: 0
     - _Mode: 5
     m_Colors:
     - _Color: {r: 0.08, g: 0.1, b: 0.13, a: 1}

@@ -1,0 +1,364 @@
+fileFormatVersion: 2
+guid: b83980b1a8112a54eba67a2d26030e07
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4460991716604094859
+    second: 44-portal-04-upper-left-secure-bay_0
+  - first:
+      213: -4010452951782118530
+    second: 44-portal-04-upper-left-secure-bay_1
+  - first:
+      213: 7107156362860905062
+    second: 44-portal-04-upper-left-secure-bay_2
+  - first:
+      213: -2491273113071826480
+    second: 44-portal-04-upper-left-secure-bay_3
+  - first:
+      213: -3605631277073069238
+    second: 44-portal-04-upper-left-secure-bay_4
+  - first:
+      213: -4490864854890191286
+    second: 44-portal-04-upper-left-secure-bay_5
+  - first:
+      213: 952555949256802723
+    second: 44-portal-04-upper-left-secure-bay_6
+  - first:
+      213: 7655354230515498012
+    second: 44-portal-04-upper-left-secure-bay_7
+  - first:
+      213: -281525785565111095
+    second: 44-portal-04-upper-left-secure-bay_8
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_0
+      rect:
+        serializedVersion: 2
+        x: 1562
+        y: 472
+        width: 102
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b89a526b450a8ed30800000000000000
+      internalID: 4460991716604094859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_1
+      rect:
+        serializedVersion: 2
+        x: 1665
+        y: 482
+        width: 69
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7b2c94e9420858c0800000000000000
+      internalID: -4010452951782118530
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_2
+      rect:
+        serializedVersion: 2
+        x: 1738
+        y: 475
+        width: 52
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6624b738e01b1a260800000000000000
+      internalID: 7107156362860905062
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_3
+      rect:
+        serializedVersion: 2
+        x: 1562
+        y: 456
+        width: 26
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d94fd09d483d6dd0800000000000000
+      internalID: -2491273113071826480
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_4
+      rect:
+        serializedVersion: 2
+        x: 1587
+        y: 456
+        width: 43
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4b850bf47936fdc0800000000000000
+      internalID: -3605631277073069238
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_5
+      rect:
+        serializedVersion: 2
+        x: 1634
+        y: 456
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a46ebf5453e3da1c0800000000000000
+      internalID: -4490864854890191286
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_6
+      rect:
+        serializedVersion: 2
+        x: 1643
+        y: 456
+        width: 40
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a10328c698283d00800000000000000
+      internalID: 952555949256802723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_7
+      rect:
+        serializedVersion: 2
+        x: 1682
+        y: 456
+        width: 37
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c1cf8a3ec184d3a60800000000000000
+      internalID: 7655354230515498012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 44-portal-04-upper-left-secure-bay_8
+      rect:
+        serializedVersion: 2
+        x: 1723
+        y: 456
+        width: 66
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cc57442ac1d71cf0800000000000000
+      internalID: -281525785565111095
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      44-portal-04-upper-left-secure-bay_0: 4460991716604094859
+      44-portal-04-upper-left-secure-bay_1: -4010452951782118530
+      44-portal-04-upper-left-secure-bay_2: 7107156362860905062
+      44-portal-04-upper-left-secure-bay_3: -2491273113071826480
+      44-portal-04-upper-left-secure-bay_4: -3605631277073069238
+      44-portal-04-upper-left-secure-bay_5: -4490864854890191286
+      44-portal-04-upper-left-secure-bay_6: 952555949256802723
+      44-portal-04-upper-left-secure-bay_7: 7655354230515498012
+      44-portal-04-upper-left-secure-bay_8: -281525785565111095
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

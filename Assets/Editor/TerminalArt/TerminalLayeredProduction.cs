@@ -19,7 +19,7 @@ public static class TerminalLayeredProduction
     public static void Build()
     {
         Directory.CreateDirectory(Report);ShaderUtil.allowAsyncCompilation=false;
-        var albedo=Texture("HallShell",false);var normals=Texture("HallNormals",true);var city=Texture("City",false);
+        var albedo=Texture("HallShell",false);var city=Texture("City",false);
         var source=EditorSceneManager.OpenScene("Assets/Art/Office/TerminalProduction/FurnishedTerminal.unity",OpenSceneMode.Single);
         var scene=EditorSceneManager.NewScene(NewSceneSetup.EmptyScene,NewSceneMode.Additive);SceneManager.SetActiveScene(scene);
         root=UnityEngine.Object.Instantiate(source.GetRootGameObjects().First(g=>g.name=="Furnished Terminal Preview")).transform;
@@ -32,30 +32,15 @@ public static class TerminalLayeredProduction
         var oldSize=architecture.sprite.bounds.size;
         architecture.sprite=SpriteAsset("Hall shell modular",albedo);
         var scale=architecture.transform.localScale;scale.x*=oldSize.x/architecture.sprite.bounds.size.x;scale.y*=oldSize.y/architecture.sprite.bounds.size.y;architecture.transform.localScale=scale;
-        var hallMat=Material("Hall responsive lighting",0);hallMat.SetTexture("_NormalTex",normals);EditorUtility.SetDirty(hallMat);
+        var hallMat=Material("Clean shell ambient lighting",2);EditorUtility.SetDirty(hallMat);
         architecture.sharedMaterial=hallMat;architecture.sortingOrder=0;
-        foreach(var r in hall.GetComponentsInChildren<SpriteRenderer>().Where(r=>r!=architecture)){r.sharedMaterial=Material("Furnishing responsive lighting",2);r.sortingOrder+=20;}
-        var crowdMat=Material("Crowd responsive lighting",2);crowdMat.SetTexture("_MainTex",AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Art/Office/HallCrowds/Textures/CrowdGroups_Atlas.png"));crowdMat.SetColor("_Color",new Color(.42f,.47f,.53f,1));EditorUtility.SetDirty(crowdMat);
-        foreach(var crowd in hall.GetComponentsInChildren<MeshRenderer>().Where(r=>r.name.StartsWith("03 Anonymous"))){
-            crowd.sharedMaterial=crowdMat;
-            var screen=camera.WorldToViewportPoint(crowd.bounds.center);
-            if(screen.y>.65f){
-                float foot=screen.x>.70f ? .301f-.30f*(screen.x-.60f) : .253f;
-                var mesh=crowd.GetComponent<MeshFilter>().sharedMesh;
-                var baseWorld=crowd.transform.TransformPoint(new Vector3(mesh.bounds.center.x,mesh.bounds.min.y,mesh.bounds.center.z));
-                var bottom=camera.WorldToViewportPoint(baseWorld);
-                crowd.transform.position+=camera.ViewportToWorldPoint(new Vector3(bottom.x,1-foot,bottom.z))-baseWorld;
-            }
-        }
-        var bust=hall.GetComponentsInChildren<SpriteRenderer>().First(r=>r.name.Contains("Stone bust"));
-        var bustPoint=camera.WorldToViewportPoint(bust.transform.position);bustPoint.y-=.026f;bust.transform.position=camera.ViewportToWorldPoint(bustPoint);
+        // Clean architectural baseline. No furnishing builder is called here.
+        foreach(var child in hall.Cast<Transform>().Where(t=>t!=architecture.transform).ToArray())UnityEngine.Object.DestroyImmediate(child.gameObject);
         var cityRoot=new GameObject("00 Independent city panorama").transform;cityRoot.SetParent(hall);
         CityPanorama(city,cityRoot);
-        var luggage=hall.GetComponentsInChildren<SpriteRenderer>().First(r=>r.name.Contains("Compact luggage"));
-        UnityEngine.Object.DestroyImmediate(luggage.gameObject);
-        TerminalHallModules.Build(hall,camera,architecture,Texture("Floor",false),Texture("ModularFixtures",false));
+        var floor=Texture("Floor",false);var floorGo=UnityEngine.Object.Instantiate(architecture.gameObject,hall);floorGo.name="LH_Separate worn floor";
+        var fr=floorGo.GetComponent<SpriteRenderer>();fr.sprite=SpriteAsset("Separate floor",floor);fr.sharedMaterial=Material("Floor independent finish",4);fr.sortingOrder=-2;
         WindowExtension();
-        AddPartition();
         rig=root.gameObject.AddComponent<LayeredHallRig>();rig.view=camera;rig.cityLayer=cityRoot;rig.hallLayer=architecture.transform;
         rig.deskSun=root.GetComponentsInChildren<Light>().First(l=>l.type==LightType.Directional);rig.sunDirection=-.65f;rig.animatePortal=false;rig.Apply();
         RenderSettings.fog=false;LightmapSettings.lightmaps=Array.Empty<LightmapData>();
@@ -81,13 +66,9 @@ public static class TerminalLayeredProduction
                 rig.sunDirection=-.65f;rig.Evening();Capture("evening.png");rig.Morning();rig.Left();Capture("left-window.png");rig.Forward();
                 var errors=ShaderUtil.GetShaderMessages(Shader.Find("NOPE/Layered Hall Lighting")).Where(m=>m.severity==UnityEditor.Rendering.ShaderCompilerMessageSeverity.Error).ToArray();
                 if(errors.Length>0)throw new Exception(string.Join("\n",errors.Select(e=>e.message)));
-                var display=hall.GetComponent<HallDisplayView>();
-                if(display.destinations.Length!=4 || display.flagCloth.Length!=2)throw new Exception("Missing editable display or flag bindings.");
-                display.SetGate(0,"01","HOOK TEST",false);
-                if(display.destinations[0].text!="HOOK TEST" || display.portalEnergy[0].enabled)throw new Exception("Display presentation hook failed.");
-                display.SetGate(0,"01","DESTINATION A",true);
-                File.WriteAllText(Report+"/validation.txt","Independent city and alpha-cut hall layers.\nSeparate furnishing and crowd layers.\nCamera-space normal-map lighting, animated portal emission and simulated window shadows.\nMorning, evening, changed-direction and left-view captures completed.\nShader errors: 0\nBaked Unity lightmaps: "+LightmapSettings.lightmaps.Length+"\nDesk source and gameplay unchanged.\n");
-                rig.animatePortal=true;EditorSceneManager.SaveScene(SceneManager.GetActiveScene(),Folder+"/LayeredTerminal.unity");
+                if(hall.GetComponentsInChildren<Renderer>().Length!=5)throw new Exception("Unexpected hall object in clean baseline.");
+                File.WriteAllText(Report+"/validation.txt","Clean hall baseline: architecture, floor, left continuation and separate city only.\nHall renderers: 5\nNo hall props, crowds, portals, flags, signs, lamps, railings or artwork.\nOld object-bearing normal map disconnected; no ghost shading.\nForward, evening, direction and left-pan captures completed.\nShader errors: 0\nBaked Unity lightmaps: "+LightmapSettings.lightmaps.Length+"\nDesk source and gameplay unchanged.\n");
+                rig.animatePortal=false;EditorSceneManager.SaveScene(SceneManager.GetActiveScene(),Folder+"/LayeredTerminal.unity");
                 SessionState.SetBool("TerminalLayeredCapturePending",false);
             }catch(Exception e){Debug.LogException(e);File.WriteAllText(Report+"/build-error.txt",e.ToString());}
         };EditorApplication.update+=tick;

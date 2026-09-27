@@ -1,0 +1,1014 @@
+fileFormatVersion: 2
+guid: 524e6c65d2e7c0340b754692e91c9cfe
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4299623726775638900
+    second: 06-concourse-terracotta-floor_0
+  - first:
+      213: 350900720852005634
+    second: 06-concourse-terracotta-floor_1
+  - first:
+      213: 3617326359799883226
+    second: 06-concourse-terracotta-floor_2
+  - first:
+      213: -7581418345219876044
+    second: 06-concourse-terracotta-floor_3
+  - first:
+      213: 7662404800647057916
+    second: 06-concourse-terracotta-floor_4
+  - first:
+      213: 2018288026404422144
+    second: 06-concourse-terracotta-floor_5
+  - first:
+      213: 2072458348278223560
+    second: 06-concourse-terracotta-floor_6
+  - first:
+      213: 5515143880342398389
+    second: 06-concourse-terracotta-floor_7
+  - first:
+      213: 5460747890838159418
+    second: 06-concourse-terracotta-floor_8
+  - first:
+      213: -693920645168037738
+    second: 06-concourse-terracotta-floor_9
+  - first:
+      213: -3997256870880412271
+    second: 06-concourse-terracotta-floor_10
+  - first:
+      213: -1958417386199226823
+    second: 06-concourse-terracotta-floor_11
+  - first:
+      213: -1899752408139343413
+    second: 06-concourse-terracotta-floor_12
+  - first:
+      213: -2516055589373118972
+    second: 06-concourse-terracotta-floor_13
+  - first:
+      213: -4978627728553449599
+    second: 06-concourse-terracotta-floor_14
+  - first:
+      213: 2451888671111592179
+    second: 06-concourse-terracotta-floor_15
+  - first:
+      213: -373009213214117512
+    second: 06-concourse-terracotta-floor_16
+  - first:
+      213: 1155378988197401705
+    second: 06-concourse-terracotta-floor_17
+  - first:
+      213: -9129832032850683718
+    second: 06-concourse-terracotta-floor_18
+  - first:
+      213: -7607122498321030525
+    second: 06-concourse-terracotta-floor_19
+  - first:
+      213: -3107511576720811032
+    second: 06-concourse-terracotta-floor_20
+  - first:
+      213: 568600380474470655
+    second: 06-concourse-terracotta-floor_21
+  - first:
+      213: 8072924747199008861
+    second: 06-concourse-terracotta-floor_22
+  - first:
+      213: 3256721407572135972
+    second: 06-concourse-terracotta-floor_23
+  - first:
+      213: -9155835088780365463
+    second: 06-concourse-terracotta-floor_24
+  - first:
+      213: 1001139350353532571
+    second: 06-concourse-terracotta-floor_25
+  - first:
+      213: -5405058587332732115
+    second: 06-concourse-terracotta-floor_26
+  - first:
+      213: 2631203722929464978
+    second: 06-concourse-terracotta-floor_27
+  - first:
+      213: -3594809855408516926
+    second: 06-concourse-terracotta-floor_28
+  - first:
+      213: -1718110284826847731
+    second: 06-concourse-terracotta-floor_29
+  - first:
+      213: 4025010937068276264
+    second: 06-concourse-terracotta-floor_30
+  - first:
+      213: 4304688832781636827
+    second: 06-concourse-terracotta-floor_31
+  - first:
+      213: 2480106574973861788
+    second: 06-concourse-terracotta-floor_32
+  - first:
+      213: -3741390289640284932
+    second: 06-concourse-terracotta-floor_33
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_0
+      rect:
+        serializedVersion: 2
+        x: 656
+        y: 172
+        width: 866
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 47b9d46cff45bab30800000000000000
+      internalID: 4299623726775638900
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_1
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 84
+        width: 116
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 203ffc1b856aed400800000000000000
+      internalID: 350900720852005634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_2
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 84
+        width: 103
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad56788a823533230800000000000000
+      internalID: 3617326359799883226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_3
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 84
+        width: 106
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43b1a8fde2469c690800000000000000
+      internalID: -7581418345219876044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_4
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 84
+        width: 105
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf1d0dba194565a60800000000000000
+      internalID: 7662404800647057916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_5
+      rect:
+        serializedVersion: 2
+        x: 894
+        y: 136
+        width: 17
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00282444446620c10800000000000000
+      internalID: 2018288026404422144
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_6
+      rect:
+        serializedVersion: 2
+        x: 1029
+        y: 40
+        width: 120
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8c29aec23e9d2cc10800000000000000
+      internalID: 2072458348278223560
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_7
+      rect:
+        serializedVersion: 2
+        x: 1133
+        y: 123
+        width: 12
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5b56af0832ab98c40800000000000000
+      internalID: 5515143880342398389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_8
+      rect:
+        serializedVersion: 2
+        x: 1172
+        y: 84
+        width: 115
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a304f51464978cb40800000000000000
+      internalID: 5460747890838159418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_9
+      rect:
+        serializedVersion: 2
+        x: 1297
+        y: 84
+        width: 128
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 690037a89d2be56f0800000000000000
+      internalID: -693920645168037738
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_10
+      rect:
+        serializedVersion: 2
+        x: 1435
+        y: 84
+        width: 107
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19dfe27ed04e688c0800000000000000
+      internalID: -3997256870880412271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_11
+      rect:
+        serializedVersion: 2
+        x: 1529
+        y: 125
+        width: 32
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93665ad63cd42d4e0800000000000000
+      internalID: -1958417386199226823
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_12
+      rect:
+        serializedVersion: 2
+        x: 1530
+        y: 84
+        width: 45
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc959a70049b2a5e0800000000000000
+      internalID: -1899752408139343413
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_13
+      rect:
+        serializedVersion: 2
+        x: 1585
+        y: 15
+        width: 41
+        height: 127
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4067748a5cc251dd0800000000000000
+      internalID: -2516055589373118972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_14
+      rect:
+        serializedVersion: 2
+        x: 228
+        y: 84
+        width: 60
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18769a2757c58eab0800000000000000
+      internalID: -4978627728553449599
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_15
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 84
+        width: 108
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3f8396671cbd60220800000000000000
+      internalID: 2451888671111592179
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_16
+      rect:
+        serializedVersion: 2
+        x: 886
+        y: 38
+        width: 133
+        height: 66
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 871bc6cc81ec2daf0800000000000000
+      internalID: -373009213214117512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_17
+      rect:
+        serializedVersion: 2
+        x: 1632
+        y: 0
+        width: 479
+        height: 117
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 964d47c711bb80010800000000000000
+      internalID: 1155378988197401705
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_18
+      rect:
+        serializedVersion: 2
+        x: 41
+        y: 28
+        width: 119
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ab8d3f653225c4180800000000000000
+      internalID: -9129832032850683718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_19
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 30
+        width: 118
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38261bc54621e6690800000000000000
+      internalID: -7607122498321030525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_20
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 31
+        width: 116
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8eb542e6fa6efd4d0800000000000000
+      internalID: -3107511576720811032
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_21
+      rect:
+        serializedVersion: 2
+        x: 424
+        y: 33
+        width: 108
+        height: 41
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff03551980314e700800000000000000
+      internalID: 568600380474470655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_22
+      rect:
+        serializedVersion: 2
+        x: 542
+        y: 34
+        width: 103
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d50d14f094ac80070800000000000000
+      internalID: 8072924747199008861
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_23
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 36
+        width: 106
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4205fb68dd2323d20800000000000000
+      internalID: 3256721407572135972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_24
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 37
+        width: 105
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96170371f70ffe080800000000000000
+      internalID: -9155835088780365463
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_25
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 42
+        width: 128
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b96dc745fe2c4ed00800000000000000
+      internalID: 1001139350353532571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_26
+      rect:
+        serializedVersion: 2
+        x: 1297
+        y: 43
+        width: 128
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d2b9bdf1adf5df4b0800000000000000
+      internalID: -5405058587332732115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_27
+      rect:
+        serializedVersion: 2
+        x: 1435
+        y: 57
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29665e468d9e38420800000000000000
+      internalID: 2631203722929464978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_28
+      rect:
+        serializedVersion: 2
+        x: 1441
+        y: 45
+        width: 35
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c05d4d8b7bac1ec0800000000000000
+      internalID: -3594809855408516926
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_29
+      rect:
+        serializedVersion: 2
+        x: 1463
+        y: 45
+        width: 17
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0653f38ccb0828e0800000000000000
+      internalID: -1718110284826847731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_30
+      rect:
+        serializedVersion: 2
+        x: 1490
+        y: 46
+        width: 30
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82a44013f16bbd730800000000000000
+      internalID: 4025010937068276264
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_31
+      rect:
+        serializedVersion: 2
+        x: 1530
+        y: 39
+        width: 45
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bd45a8aafa35dbb30800000000000000
+      internalID: 4304688832781636827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_32
+      rect:
+        serializedVersion: 2
+        x: 3
+        y: 28
+        width: 22
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c9f7d6e2acb1b6220800000000000000
+      internalID: 2480106574973861788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 06-concourse-terracotta-floor_33
+      rect:
+        serializedVersion: 2
+        x: 2121
+        y: 0
+        width: 49
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfc15e3ba59e31cc0800000000000000
+      internalID: -3741390289640284932
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      06-concourse-terracotta-floor_0: 4299623726775638900
+      06-concourse-terracotta-floor_1: 350900720852005634
+      06-concourse-terracotta-floor_10: -3997256870880412271
+      06-concourse-terracotta-floor_11: -1958417386199226823
+      06-concourse-terracotta-floor_12: -1899752408139343413
+      06-concourse-terracotta-floor_13: -2516055589373118972
+      06-concourse-terracotta-floor_14: -4978627728553449599
+      06-concourse-terracotta-floor_15: 2451888671111592179
+      06-concourse-terracotta-floor_16: -373009213214117512
+      06-concourse-terracotta-floor_17: 1155378988197401705
+      06-concourse-terracotta-floor_18: -9129832032850683718
+      06-concourse-terracotta-floor_19: -7607122498321030525
+      06-concourse-terracotta-floor_2: 3617326359799883226
+      06-concourse-terracotta-floor_20: -3107511576720811032
+      06-concourse-terracotta-floor_21: 568600380474470655
+      06-concourse-terracotta-floor_22: 8072924747199008861
+      06-concourse-terracotta-floor_23: 3256721407572135972
+      06-concourse-terracotta-floor_24: -9155835088780365463
+      06-concourse-terracotta-floor_25: 1001139350353532571
+      06-concourse-terracotta-floor_26: -5405058587332732115
+      06-concourse-terracotta-floor_27: 2631203722929464978
+      06-concourse-terracotta-floor_28: -3594809855408516926
+      06-concourse-terracotta-floor_29: -1718110284826847731
+      06-concourse-terracotta-floor_3: -7581418345219876044
+      06-concourse-terracotta-floor_30: 4025010937068276264
+      06-concourse-terracotta-floor_31: 4304688832781636827
+      06-concourse-terracotta-floor_32: 2480106574973861788
+      06-concourse-terracotta-floor_33: -3741390289640284932
+      06-concourse-terracotta-floor_4: 7662404800647057916
+      06-concourse-terracotta-floor_5: 2018288026404422144
+      06-concourse-terracotta-floor_6: 2072458348278223560
+      06-concourse-terracotta-floor_7: 5515143880342398389
+      06-concourse-terracotta-floor_8: 5460747890838159418
+      06-concourse-terracotta-floor_9: -693920645168037738
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

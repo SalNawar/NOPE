@@ -1,0 +1,1638 @@
+fileFormatVersion: 2
+guid: 0443abae74d87ed4bb875bc6afb81a28
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1616936828696232593
+    second: 53-portal-01-front-painted-glass_0
+  - first:
+      213: -3261315165811543888
+    second: 53-portal-01-front-painted-glass_1
+  - first:
+      213: -3269047733233388482
+    second: 53-portal-01-front-painted-glass_2
+  - first:
+      213: -328775509178204881
+    second: 53-portal-01-front-painted-glass_3
+  - first:
+      213: 1862689082596712490
+    second: 53-portal-01-front-painted-glass_4
+  - first:
+      213: -8351112480041033088
+    second: 53-portal-01-front-painted-glass_5
+  - first:
+      213: 2333285903186792957
+    second: 53-portal-01-front-painted-glass_6
+  - first:
+      213: 4055356595342925469
+    second: 53-portal-01-front-painted-glass_7
+  - first:
+      213: -6828172829349925354
+    second: 53-portal-01-front-painted-glass_8
+  - first:
+      213: 7722898550586603277
+    second: 53-portal-01-front-painted-glass_9
+  - first:
+      213: -8768495502251575892
+    second: 53-portal-01-front-painted-glass_10
+  - first:
+      213: 7501249332349766077
+    second: 53-portal-01-front-painted-glass_11
+  - first:
+      213: 3732607479237369496
+    second: 53-portal-01-front-painted-glass_12
+  - first:
+      213: 1818569121499907568
+    second: 53-portal-01-front-painted-glass_13
+  - first:
+      213: 8261488034132550328
+    second: 53-portal-01-front-painted-glass_14
+  - first:
+      213: 2262554247256793228
+    second: 53-portal-01-front-painted-glass_15
+  - first:
+      213: 2303280034333036405
+    second: 53-portal-01-front-painted-glass_16
+  - first:
+      213: 1374542379178647581
+    second: 53-portal-01-front-painted-glass_17
+  - first:
+      213: 5518699431503135894
+    second: 53-portal-01-front-painted-glass_18
+  - first:
+      213: 1776068167437762057
+    second: 53-portal-01-front-painted-glass_19
+  - first:
+      213: 3659496335813411898
+    second: 53-portal-01-front-painted-glass_20
+  - first:
+      213: 4409685753886670569
+    second: 53-portal-01-front-painted-glass_21
+  - first:
+      213: 5628771202124863108
+    second: 53-portal-01-front-painted-glass_22
+  - first:
+      213: 1188424068057731116
+    second: 53-portal-01-front-painted-glass_23
+  - first:
+      213: -2850004539088695556
+    second: 53-portal-01-front-painted-glass_24
+  - first:
+      213: -8127637389877513651
+    second: 53-portal-01-front-painted-glass_25
+  - first:
+      213: -4020239276546640569
+    second: 53-portal-01-front-painted-glass_26
+  - first:
+      213: -9218383935792665266
+    second: 53-portal-01-front-painted-glass_27
+  - first:
+      213: -5656781884723487755
+    second: 53-portal-01-front-painted-glass_28
+  - first:
+      213: 7966668639809869958
+    second: 53-portal-01-front-painted-glass_29
+  - first:
+      213: -6434107595001563698
+    second: 53-portal-01-front-painted-glass_30
+  - first:
+      213: 3252432534766768803
+    second: 53-portal-01-front-painted-glass_31
+  - first:
+      213: 4826241558596935801
+    second: 53-portal-01-front-painted-glass_32
+  - first:
+      213: -8082943221773377714
+    second: 53-portal-01-front-painted-glass_33
+  - first:
+      213: -6036006397048607201
+    second: 53-portal-01-front-painted-glass_34
+  - first:
+      213: -2017392589401262065
+    second: 53-portal-01-front-painted-glass_35
+  - first:
+      213: 8122009568559260015
+    second: 53-portal-01-front-painted-glass_36
+  - first:
+      213: 8881147511798520120
+    second: 53-portal-01-front-painted-glass_37
+  - first:
+      213: 3803362589796607613
+    second: 53-portal-01-front-painted-glass_38
+  - first:
+      213: 3023750384656849704
+    second: 53-portal-01-front-painted-glass_39
+  - first:
+      213: 6406146771085738069
+    second: 53-portal-01-front-painted-glass_40
+  - first:
+      213: 6027524501733535643
+    second: 53-portal-01-front-painted-glass_41
+  - first:
+      213: -2260933720654793966
+    second: 53-portal-01-front-painted-glass_42
+  - first:
+      213: -5138898178061463058
+    second: 53-portal-01-front-painted-glass_43
+  - first:
+      213: 8615447358177427226
+    second: 53-portal-01-front-painted-glass_44
+  - first:
+      213: 2096339836633839801
+    second: 53-portal-01-front-painted-glass_45
+  - first:
+      213: -541839971807715512
+    second: 53-portal-01-front-painted-glass_46
+  - first:
+      213: 1016438538384638070
+    second: 53-portal-01-front-painted-glass_47
+  - first:
+      213: -2574555031522261549
+    second: 53-portal-01-front-painted-glass_48
+  - first:
+      213: 2953571615790787964
+    second: 53-portal-01-front-painted-glass_49
+  - first:
+      213: 5307916960480121849
+    second: 53-portal-01-front-painted-glass_50
+  - first:
+      213: -4603929139421196712
+    second: 53-portal-01-front-painted-glass_51
+  - first:
+      213: 7651101939244807604
+    second: 53-portal-01-front-painted-glass_52
+  - first:
+      213: 869149896533876425
+    second: 53-portal-01-front-painted-glass_53
+  - first:
+      213: 8309862678842438901
+    second: 53-portal-01-front-painted-glass_54
+  - first:
+      213: 8127047966980509402
+    second: 53-portal-01-front-painted-glass_55
+  - first:
+      213: -8254483773775319426
+    second: 53-portal-01-front-painted-glass_56
+  - first:
+      213: -4392577488737230172
+    second: 53-portal-01-front-painted-glass_57
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_0
+      rect:
+        serializedVersion: 2
+        x: 834
+        y: 191
+        width: 32
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1928fa29a73807610800000000000000
+      internalID: 1616936828696232593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_1
+      rect:
+        serializedVersion: 2
+        x: 903
+        y: 209
+        width: 36
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0b07539c22b7db2d0800000000000000
+      internalID: -3261315165811543888
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_2
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 225
+        width: 18
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e34f3d2286202a2d0800000000000000
+      internalID: -3269047733233388482
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_3
+      rect:
+        serializedVersion: 2
+        x: 922
+        y: 225
+        width: 8
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2db5949a64ff6bf0800000000000000
+      internalID: -328775509178204881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_4
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 212
+        width: 51
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a20ec270ad999d910800000000000000
+      internalID: 1862689082596712490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_5
+      rect:
+        serializedVersion: 2
+        x: 1048
+        y: 190
+        width: 86
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 082a2db0273ea1c80800000000000000
+      internalID: -8351112480041033088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_6
+      rect:
+        serializedVersion: 2
+        x: 1137
+        y: 214
+        width: 25
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: df110eaaa2f716020800000000000000
+      internalID: 2333285903186792957
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_7
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 219
+        width: 16
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9ed3f65655874830800000000000000
+      internalID: 4055356595342925469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_8
+      rect:
+        serializedVersion: 2
+        x: 1183
+        y: 188
+        width: 23
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61eaf992df47d31a0800000000000000
+      internalID: -6828172829349925354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_9
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 172
+        width: 41
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d07f718605f3d2b60800000000000000
+      internalID: 7722898550586603277
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_10
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 189
+        width: 11
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ca53fa55ccb005680800000000000000
+      internalID: -8768495502251575892
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_11
+      rect:
+        serializedVersion: 2
+        x: 880
+        y: 192
+        width: 22
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db90852468ac91860800000000000000
+      internalID: 7501249332349766077
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_12
+      rect:
+        serializedVersion: 2
+        x: 898
+        y: 191
+        width: 22
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89ed8e5e9b2ecc330800000000000000
+      internalID: 3732607479237369496
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_13
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 194
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f50f761bfadc3910800000000000000
+      internalID: 1818569121499907568
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_14
+      rect:
+        serializedVersion: 2
+        x: 1129
+        y: 195
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b26c968893b6a270800000000000000
+      internalID: 8261488034132550328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_15
+      rect:
+        serializedVersion: 2
+        x: 1138
+        y: 204
+        width: 6
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c80eac0b915366f10800000000000000
+      internalID: 2262554247256793228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_16
+      rect:
+        serializedVersion: 2
+        x: 1159
+        y: 175
+        width: 19
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57f8ba8ecf4e6ff10800000000000000
+      internalID: 2303280034333036405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_17
+      rect:
+        serializedVersion: 2
+        x: 1196
+        y: 172
+        width: 35
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d10e9afd20b531310800000000000000
+      internalID: 1374542379178647581
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_18
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 190
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69405e4c4eb569c40800000000000000
+      internalID: 5518699431503135894
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_19
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 177
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90eb109969cd5a810800000000000000
+      internalID: 1776068167437762057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_20
+      rect:
+        serializedVersion: 2
+        x: 882
+        y: 179
+        width: 18
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a348001578429c230800000000000000
+      internalID: 3659496335813411898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_21
+      rect:
+        serializedVersion: 2
+        x: 895
+        y: 173
+        width: 33
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9eef38364d9523d30800000000000000
+      internalID: 4409685753886670569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_22
+      rect:
+        serializedVersion: 2
+        x: 919
+        y: 190
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 486d998f5996d1e40800000000000000
+      internalID: 5628771202124863108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_23
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 173
+        width: 11
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c201b13b4612e7010800000000000000
+      internalID: 1188424068057731116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_24
+      rect:
+        serializedVersion: 2
+        x: 992
+        y: 190
+        width: 33
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cfe0e5fb8ffb278d0800000000000000
+      internalID: -2850004539088695556
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_25
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 190
+        width: 23
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d42fa212bd4d43f80800000000000000
+      internalID: -8127637389877513651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_26
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 174
+        width: 52
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7453d599dad3538c0800000000000000
+      internalID: -4020239276546640569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_27
+      rect:
+        serializedVersion: 2
+        x: 845
+        y: 172
+        width: 21
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4d29e7c6a8b11080800000000000000
+      internalID: -9218383935792665266
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_28
+      rect:
+        serializedVersion: 2
+        x: 1178
+        y: 172
+        width: 18
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5fb1135c8d21f71b0800000000000000
+      internalID: -5656781884723487755
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_29
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 118
+        width: 49
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6889c1f2bea4f8e60800000000000000
+      internalID: 7966668639809869958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_30
+      rect:
+        serializedVersion: 2
+        x: 839
+        y: 113
+        width: 37
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec5f9415b3575b6a0800000000000000
+      internalID: -6434107595001563698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_31
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 129
+        width: 24
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3a252b28826f22d20800000000000000
+      internalID: 3252432534766768803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_32
+      rect:
+        serializedVersion: 2
+        x: 946
+        y: 143
+        width: 7
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 970e56480214af240800000000000000
+      internalID: 4826241558596935801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_33
+      rect:
+        serializedVersion: 2
+        x: 955
+        y: 123
+        width: 28
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4fdb8e07fd93df80800000000000000
+      internalID: -8082943221773377714
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_34
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 130
+        width: 35
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1eaee9792ccb3ca0800000000000000
+      internalID: -6036006397048607201
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_35
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 130
+        width: 43
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f087b38e028c004e0800000000000000
+      internalID: -2017392589401262065
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_36
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 120
+        width: 26
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f616c4c9bac27b070800000000000000
+      internalID: 8122009568559260015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_37
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 138
+        width: 26
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 839589e8b9c204b70800000000000000
+      internalID: 8881147511798520120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_38
+      rect:
+        serializedVersion: 2
+        x: 1114
+        y: 136
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d7626d4df1248c430800000000000000
+      internalID: 3803362589796607613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_39
+      rect:
+        serializedVersion: 2
+        x: 1166
+        y: 112
+        width: 36
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82b1cee44f486f920800000000000000
+      internalID: 3023750384656849704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_40
+      rect:
+        serializedVersion: 2
+        x: 1197
+        y: 116
+        width: 34
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 550c49d0c8437e850800000000000000
+      internalID: 6406146771085738069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_41
+      rect:
+        serializedVersion: 2
+        x: 806
+        y: 123
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b9f6ac0699116a350800000000000000
+      internalID: 6027524501733535643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_42
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 116
+        width: 28
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2133baf82cc8f90e0800000000000000
+      internalID: -2260933720654793966
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_43
+      rect:
+        serializedVersion: 2
+        x: 947
+        y: 125
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ee19eb78557fea8b0800000000000000
+      internalID: -5138898178061463058
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_44
+      rect:
+        serializedVersion: 2
+        x: 953
+        y: 117
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1f3e35c9b7309770800000000000000
+      internalID: 8615447358177427226
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_45
+      rect:
+        serializedVersion: 2
+        x: 966
+        y: 113
+        width: 52
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b87f0b79f1b71d10800000000000000
+      internalID: 2096339836633839801
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_46
+      rect:
+        serializedVersion: 2
+        x: 1031
+        y: 120
+        width: 48
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 84f1b4b9a6ffa78f0800000000000000
+      internalID: -541839971807715512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_47
+      rect:
+        serializedVersion: 2
+        x: 1100
+        y: 124
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6700f60277d1b1e00800000000000000
+      internalID: 1016438538384638070
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_48
+      rect:
+        serializedVersion: 2
+        x: 844
+        y: 108
+        width: 12
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d5cb63e6d7554cd0800000000000000
+      internalID: -2574555031522261549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_49
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 95
+        width: 94
+        height: 28
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c7de2e16cb13df820800000000000000
+      internalID: 2953571615790787964
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_50
+      rect:
+        serializedVersion: 2
+        x: 1029
+        y: 84
+        width: 105
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9f350be5a5289a940800000000000000
+      internalID: 5307916960480121849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_51
+      rect:
+        serializedVersion: 2
+        x: 1102
+        y: 117
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 85ecab127de8b10c0800000000000000
+      internalID: -4603929139421196712
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_52
+      rect:
+        serializedVersion: 2
+        x: 1167
+        y: 97
+        width: 47
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b53dfc2dac2e2a60800000000000000
+      internalID: 7651101939244807604
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_53
+      rect:
+        serializedVersion: 2
+        x: 854
+        y: 98
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9ce1877d937df0c00800000000000000
+      internalID: 869149896533876425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_54
+      rect:
+        serializedVersion: 2
+        x: 865
+        y: 91
+        width: 32
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5f4fda03410925370800000000000000
+      internalID: 8309862678842438901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_55
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 95
+        width: 18
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ade0f68211319c070800000000000000
+      internalID: 8127047966980509402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_56
+      rect:
+        serializedVersion: 2
+        x: 979
+        y: 87
+        width: 38
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e7e65ebedbe227d80800000000000000
+      internalID: -8254483773775319426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 53-portal-01-front-painted-glass_57
+      rect:
+        serializedVersion: 2
+        x: 1032
+        y: 95
+        width: 44
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4a2a07ffb0e6a03c0800000000000000
+      internalID: -4392577488737230172
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      53-portal-01-front-painted-glass_0: 1616936828696232593
+      53-portal-01-front-painted-glass_1: -3261315165811543888
+      53-portal-01-front-painted-glass_10: -8768495502251575892
+      53-portal-01-front-painted-glass_11: 7501249332349766077
+      53-portal-01-front-painted-glass_12: 3732607479237369496
+      53-portal-01-front-painted-glass_13: 1818569121499907568
+      53-portal-01-front-painted-glass_14: 8261488034132550328
+      53-portal-01-front-painted-glass_15: 2262554247256793228
+      53-portal-01-front-painted-glass_16: 2303280034333036405
+      53-portal-01-front-painted-glass_17: 1374542379178647581
+      53-portal-01-front-painted-glass_18: 5518699431503135894
+      53-portal-01-front-painted-glass_19: 1776068167437762057
+      53-portal-01-front-painted-glass_2: -3269047733233388482
+      53-portal-01-front-painted-glass_20: 3659496335813411898
+      53-portal-01-front-painted-glass_21: 4409685753886670569
+      53-portal-01-front-painted-glass_22: 5628771202124863108
+      53-portal-01-front-painted-glass_23: 1188424068057731116
+      53-portal-01-front-painted-glass_24: -2850004539088695556
+      53-portal-01-front-painted-glass_25: -8127637389877513651
+      53-portal-01-front-painted-glass_26: -4020239276546640569
+      53-portal-01-front-painted-glass_27: -9218383935792665266
+      53-portal-01-front-painted-glass_28: -5656781884723487755
+      53-portal-01-front-painted-glass_29: 7966668639809869958
+      53-portal-01-front-painted-glass_3: -328775509178204881
+      53-portal-01-front-painted-glass_30: -6434107595001563698
+      53-portal-01-front-painted-glass_31: 3252432534766768803
+      53-portal-01-front-painted-glass_32: 4826241558596935801
+      53-portal-01-front-painted-glass_33: -8082943221773377714
+      53-portal-01-front-painted-glass_34: -6036006397048607201
+      53-portal-01-front-painted-glass_35: -2017392589401262065
+      53-portal-01-front-painted-glass_36: 8122009568559260015
+      53-portal-01-front-painted-glass_37: 8881147511798520120
+      53-portal-01-front-painted-glass_38: 3803362589796607613
+      53-portal-01-front-painted-glass_39: 3023750384656849704
+      53-portal-01-front-painted-glass_4: 1862689082596712490
+      53-portal-01-front-painted-glass_40: 6406146771085738069
+      53-portal-01-front-painted-glass_41: 6027524501733535643
+      53-portal-01-front-painted-glass_42: -2260933720654793966
+      53-portal-01-front-painted-glass_43: -5138898178061463058
+      53-portal-01-front-painted-glass_44: 8615447358177427226
+      53-portal-01-front-painted-glass_45: 2096339836633839801
+      53-portal-01-front-painted-glass_46: -541839971807715512
+      53-portal-01-front-painted-glass_47: 1016438538384638070
+      53-portal-01-front-painted-glass_48: -2574555031522261549
+      53-portal-01-front-painted-glass_49: 2953571615790787964
+      53-portal-01-front-painted-glass_5: -8351112480041033088
+      53-portal-01-front-painted-glass_50: 5307916960480121849
+      53-portal-01-front-painted-glass_51: -4603929139421196712
+      53-portal-01-front-painted-glass_52: 7651101939244807604
+      53-portal-01-front-painted-glass_53: 869149896533876425
+      53-portal-01-front-painted-glass_54: 8309862678842438901
+      53-portal-01-front-painted-glass_55: 8127047966980509402
+      53-portal-01-front-painted-glass_56: -8254483773775319426
+      53-portal-01-front-painted-glass_57: -4392577488737230172
+      53-portal-01-front-painted-glass_6: 2333285903186792957
+      53-portal-01-front-painted-glass_7: 4055356595342925469
+      53-portal-01-front-painted-glass_8: -6828172829349925354
+      53-portal-01-front-painted-glass_9: 7722898550586603277
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
