@@ -9,11 +9,15 @@ using UnityEngine.UI;
 /// <summary>
 /// One pane of the Investigation app (the PC redesign AP2-AP5, AP8, AP9): its
 /// tab strip (one tab per source, laid out in the app's shared TabOrder, each
-/// with a badge and a tooltip naming it; on a strip too narrow for every
-/// label the inactive tabs show their glyphs: AppPanes.TabsNarrow), its
-/// header (the active view's chips: a click shows that item) and its content
-/// (the active tab's view; between travellers a case source shows the
-/// no-case state, "Waiting for the next traveller", instead). The app has two
+/// with a badge and a tooltip naming it; the active tab wears its active
+/// look, the paper plate with the ink bar the builder made; on a strip too
+/// narrow for every name the inactive tabs collapse to their glyphs and their
+/// badges: AppPanes.TabsNarrow), its header (the active view's chips: a click
+/// shows that item; the chosen chip wears its "Chosen" accent look, one not
+/// readable yet is dimmed) and its content (the active tab's view; between
+/// travellers a case source shows the no-case state, "Waiting for the next
+/// traveller", instead). The views are IAppView components, so a view drawn
+/// by the forms engine drops in for today's. The app has two
 /// panes, each with its own views and its own back/forward history
 /// (NavHistory of LinkTargets: every tab switch, item switch, lookup and link
 /// is recorded; Back and Forward walk it without recording). A link followed
@@ -23,8 +27,9 @@ using UnityEngine.UI;
 /// both strips. A tab is shown only by the player or by the app's own rules
 /// (a new case shows Documents in the left pane, AP8); a view never switches
 /// the tab. The active pane wears a 3 u accent frame while the app is split.
+/// The keys' focus ring walks its tabs and chips (AppPane.Keys, phase 20).
 /// </summary>
-public sealed class AppPane : MonoBehaviour
+public sealed partial class AppPane : MonoBehaviour
 {
     /// <summary>The tabs' buttons, indexed by the tab's value (AppTab).</summary>
     [SerializeField] private Button[] tabButtons = new Button[0];
@@ -65,9 +70,6 @@ public sealed class AppPane : MonoBehaviour
     /// <summary>The desktop's knobs: the tabs' label and glyph widths, the history's length.</summary>
     [SerializeField] private DesktopConfigSO config;
 
-    /// <summary>The chosen chip's tint (pressed).</summary>
-    [SerializeField] private Color chosenTint = new Color(0.72f, 0.72f, 0.72f, 1f);
-
     /// <summary>An unavailable item's chip tint (dimmed; it still shows why when clicked).</summary>
     [SerializeField] private Color unavailableTint = new Color(1f, 1f, 1f, 0.55f);
 
@@ -78,6 +80,8 @@ public sealed class AppPane : MonoBehaviour
     private AppTab _active;
     private bool _caseOn;
     private bool _ready;
+    private float _tabMinWidth = -1f;
+    private int _tabPadding = -1;
 
     /// <summary>Raised when a tab is shown (the app clears its badge).</summary>
     public event Action<AppPane, AppTab> Shown;
@@ -332,7 +336,13 @@ public sealed class AppPane : MonoBehaviour
         DrawChips();
     }
 
-    /// <summary>On a narrow strip the inactive tabs show their glyphs at the glyph width, the active one its name; otherwise every tab its name, sharing the strip.</summary>
+    /// <summary>
+    /// On a narrow strip the inactive tabs collapse to their glyphs and badges
+    /// at the glyph width (the plate's padding gone, the glyph and the badge
+    /// centred), the active one keeps its name; otherwise every tab is as wide
+    /// as its name, on the plate the builder made (its padding and narrowest
+    /// width, read once before the first collapse).
+    /// </summary>
     private void LayoutTabs()
     {
         if (tabStrip == null || config == null)
@@ -347,16 +357,26 @@ public sealed class AppPane : MonoBehaviour
             if (mark != null && mark.activeSelf != glyph)
                 mark.SetActive(glyph);
             Button button = At(tabButtons, tab);
-            LayoutElement size = button != null ? button.GetComponent<LayoutElement>() : null;
-            if (size == null)
+            if (button == null || !button.TryGetComponent(out LayoutElement size) || !button.TryGetComponent(out HorizontalLayoutGroup plate))
                 continue;
-            size.minWidth = config.tabGlyphWidth;
-            size.preferredWidth = glyph ? config.tabGlyphWidth : config.tabLabelWidth;
-            size.flexibleWidth = glyph ? 0f : 1f;
+            if (_tabMinWidth < 0f)
+            {
+                _tabMinWidth = size.minWidth;
+                _tabPadding = plate.padding.left;
+            }
+            size.minWidth = glyph ? config.tabGlyphWidth : _tabMinWidth;
+            size.preferredWidth = glyph ? config.tabGlyphWidth : -1f;
+            int padding = glyph ? 0 : _tabPadding;
+            if (plate.padding.left != padding)
+            {
+                plate.padding.left = padding;
+                plate.padding.right = padding;
+                LayoutRebuilder.MarkLayoutForRebuild((RectTransform)button.transform);
+            }
         }
     }
 
-    /// <summary>The active view's chips (none while the no-case state shows), the chosen one pressed, an unavailable one dimmed.</summary>
+    /// <summary>The active view's chips (none while the no-case state shows): the chosen one wears its accent look, an unavailable one is dimmed.</summary>
     private void DrawChips()
     {
         foreach (Button chip in _chips)
@@ -373,11 +393,13 @@ public sealed class AppPane : MonoBehaviour
             Button chip = Instantiate(chipTemplate, chipStrip);
             chip.gameObject.name = "Chip_" + i;
             chip.gameObject.SetActive(true);
-            TMP_Text label = chip.GetComponentInChildren<TMP_Text>(true);
-            if (label != null)
+            foreach (TMP_Text label in chip.GetComponentsInChildren<TMP_Text>(true))
                 label.text = items[i].Label;
+            Transform chosen = chip.transform.Find("Chosen");
+            if (chosen != null && chosen.gameObject.activeSelf != (i == view.Selected))
+                chosen.gameObject.SetActive(i == view.Selected);
             ColorBlock colours = chip.colors;
-            colours.normalColor = i == view.Selected ? chosenTint : items[i].Available ? Color.white : unavailableTint;
+            colours.normalColor = items[i].Available ? Color.white : unavailableTint;
             colours.selectedColor = colours.normalColor;
             chip.colors = colours;
             AppTab tab = view.Tab;

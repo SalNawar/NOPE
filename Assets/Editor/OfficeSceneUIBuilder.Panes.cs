@@ -7,10 +7,10 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's Investigation app panes (redesign phase 18; the PC
 /// spec's AP2-AP4, AP9, LK2, CM3): a pane (AppPane) with its tab strip (the
-/// six tabs, each with its name, its glyph for a narrow strip, its active
-/// look, its badge, a tooltip naming it and the handle that drags it or opens
-/// its menu), its chip row, its content with a view per tab and the no-case
-/// state, and its 3 u accent frame; the rows' parts that light by key, carry
+/// six tabs of OfficeSceneUIBuilder.App's BuildTab, each with its glyph for a
+/// narrow strip, a tooltip naming it and the handle that drags it or opens
+/// its menu), its chip row (BuildChipTemplate), its content with a view per
+/// tab and the no-case state, and its 3 u accent frame; the rows' parts that light by key, carry
 /// the found mark and, for a statement, the ↗ (DecorateAppRow); the ↗ itself
 /// (a drawn glyph in the link ink, 28 u, with its hover hint) and the found
 /// outline, which the forms' FormView clones too; and the small hover hints of
@@ -72,13 +72,18 @@ public static partial class OfficeSceneUIBuilder
         Transform paneRoot = Panel(area, name, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
         AppPane pane = paneRoot.gameObject.AddComponent<AppPane>();
 
-        Transform strip = Panel(paneRoot, "TabStrip", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -AppTabStripHeight / 2f),
-                                new Vector2(0f, AppTabStripHeight), XpBlue, ThemeRoleId.TabStrip);
-        AddHLayout(strip, 2f);
-        HorizontalLayoutGroup tabsRow = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
-        tabsRow.padding = new RectOffset(4, 4, 4, 0);
-        tabsRow.childForceExpandWidth = false;
-        tabsRow.childAlignment = TextAnchor.MiddleLeft;
+        float stripHeight = config.tabStripHeight;
+        float rowHeight = config.chipRowHeight;
+        Transform strip = Panel(paneRoot, "TabStrip", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -stripHeight / 2f),
+                                new Vector2(0f, stripHeight), XpBlue, ThemeRoleId.TabStrip);
+        HorizontalLayoutGroup tabs = GetOrAdd<HorizontalLayoutGroup>(strip.gameObject);
+        tabs.padding = new RectOffset(8, 8, 6, 0);
+        tabs.spacing = 3f;
+        tabs.childAlignment = TextAnchor.LowerLeft;
+        tabs.childControlWidth = true;
+        tabs.childControlHeight = true;
+        tabs.childForceExpandWidth = false;
+        tabs.childForceExpandHeight = true;
         var tabButtons = new List<Object>();
         var tabActive = new List<Object>();
         var tabBadges = new List<Object>();
@@ -94,32 +99,24 @@ public static partial class OfficeSceneUIBuilder
             tabGlyphs.Add(glyph);
         }
 
-        Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(AppTabStripHeight + AppPaneHeaderHeight / 2f)),
-                                 new Vector2(0f, AppPaneHeaderHeight), Paper, ThemeRoleId.WindowBody);
+        Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(stripHeight + rowHeight / 2f)),
+                                 new Vector2(0f, rowHeight), Paper, ThemeRoleId.WindowBody);
         HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(header.gameObject);
-        row.padding = new RectOffset(6, 6, 4, 4);
-        row.spacing = 4f;
+        row.padding = new RectOffset(8, 8, 6, 8);
+        row.spacing = 6f;
         row.childAlignment = TextAnchor.MiddleLeft;
         row.childControlWidth = true;
         row.childControlHeight = true;
         row.childForceExpandWidth = false;
         row.childForceExpandHeight = true;
-        Button chip = MakeButton(header, "ChipTemplate", "Chip", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
-        LayoutElement chipSize = GetOrAdd<LayoutElement>(chip.gameObject);
-        chipSize.minWidth = AppChipWidth.x;
-        chipSize.preferredWidth = AppChipWidth.y;
-        chipSize.flexibleWidth = 0f;
-        TMP_Text chipLabel = chip.transform.Find("Label").GetComponent<TMP_Text>();
-        chipLabel.enableAutoSizing = true;
-        chipLabel.fontSizeMin = 11f;
-        chipLabel.fontSizeMax = 17f;
-        chipLabel.textWrappingMode = TextWrappingModes.NoWrap;
-        chipLabel.overflowMode = TextOverflowModes.Ellipsis;
-        chipLabel.margin = new Vector4(6f, 0f, 6f, 0f);
-        chip.gameObject.SetActive(false);
+        Button chip = BuildChipTemplate(header, config);
+        Transform rule = Panel(header, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, AppPaneRuleHeight / 2f), new Vector2(0f, AppPaneRuleHeight),
+                               XpBlue, ThemeRoleId.TabStrip);
+        rule.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(rule.gameObject).ignoreLayout = true;
 
         Transform content = Panel(paneRoot, "Content", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.WindowBody);
-        PlaceRect(content, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(AppTabStripHeight + AppPaneHeaderHeight)));
+        PlaceRect(content, Vector2.zero, Vector2.one, Vector2.zero, new Vector2(0f, -(stripHeight + rowHeight)));
         content.gameObject.AddComponent<RectMask2D>();
 
         views = new PaneViews
@@ -162,39 +159,24 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
-    /// One tab of a pane's strip: its button (its name, sized by the pane's
-    /// layout), its glyph (hidden: a narrow strip's inactive tab shows it),
-    /// its active look (with its name), its badge, a tooltip above it naming it,
+    /// One tab of a pane's strip: the app's tab (BuildTab: the plate with its
+    /// name, its active look, its badge in its slot), plus its glyph (a layout
+    /// child after the name, hidden: a narrow strip's inactive tab shows it in
+    /// the name's place, the badge beside it), a tooltip above it naming it,
     /// and its handle (drag along the strip, right-click for its menu).
     /// </summary>
     private static Button BuildPaneTab(Transform strip, AppTab tab, AppPane pane, DesktopConfigSO config, out GameObject active, out GameObject badge,
                                        out GameObject label, out GameObject glyph)
     {
-        Button button = MakeButton(strip, "Tab_" + tab, null, Vector2.zero, Vector2.one, XpFace, ThemeRoleId.Tab, AppTabKeys[tab]);
-        LayoutElement size = GetOrAdd<LayoutElement>(button.gameObject);
-        size.minWidth = config.tabGlyphWidth;
-        size.preferredWidth = config.tabLabelWidth;
-        size.flexibleWidth = 1f;
+        Button button = BuildTab(strip, tab, config, out active, out badge);
         label = button.transform.Find("Label").gameObject;
 
-        TMP_Text glyphText = Text(button.transform, "Glyph", null, 18, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink,
-                                  ThemeRoleId.Tab, AppTabGlyphKeys[tab], FontStyles.Bold, ThemeTextKind.Button, true);
+        TMP_Text glyphText = Text(button.transform, "Glyph", null, Mathf.RoundToInt(config.tabLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one,
+                                  Color.white, ThemeRoleId.Tab, AppTabGlyphKeys[tab], FontStyles.Bold, ThemeTextKind.Button);
         glyphText.raycastTarget = false;
         glyph = glyphText.gameObject;
+        glyph.transform.SetSiblingIndex(label.transform.GetSiblingIndex() + 1);
         glyph.SetActive(false);
-
-        Transform look = Panel(button.transform, "Active", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.TabActive);
-        look.GetComponent<Image>().raycastTarget = false;
-        TMP_Text activeLabel = Text(look, "Label", null, 22, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink,
-                                    ThemeRoleId.TabActive, AppTabKeys[tab], FontStyles.Bold, ThemeTextKind.Button, true);
-        activeLabel.raycastTarget = false;
-        active = look.gameObject;
-        active.SetActive(false);
-
-        Transform dot = Panel(button.transform, "Badge", Vector2.one, Vector2.one, new Vector2(-10f, -10f), new Vector2(14f, 14f), XpGreen, ThemeRoleId.Badge);
-        dot.GetComponent<Image>().raycastTarget = false;
-        badge = dot.gameObject;
-        badge.SetActive(false);
 
         BuildHoverHint(button, AppTabKeys[tab], null, AppTabHintSize, new Vector2(0.5f, 1f), new Vector2(0.5f, 0f));
 

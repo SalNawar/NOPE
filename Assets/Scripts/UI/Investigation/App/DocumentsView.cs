@@ -15,8 +15,10 @@ using UnityEngine;
 /// Back or a dock side reveals a paper's field (Reveal: the paper chosen, the
 /// field scrolled to and outlined). Each pane has one; CaseDocumentsPresenter
 /// fills them all; nothing here opens or switches by itself.
+/// Its item is the chosen paper ("doc:0"); a jump shows a paper, or a
+/// field's paper (IAppItems; the focus ring brings the box into view).
 /// </summary>
-public sealed class DocumentsView : AppView
+public sealed class DocumentsView : AppView, IAppItems
 {
     /// <summary>The scanned page (inactive), cloned per paper of the case.</summary>
     [SerializeField] private DocumentWindowController pageTemplate;
@@ -41,6 +43,26 @@ public sealed class DocumentsView : AppView
 
     /// <summary>True when the page template is wired (a case's papers can be shown).</summary>
     public bool Ready => pageTemplate != null;
+
+    /// <inheritdoc />
+    public string ItemKey => _selected >= 0 ? EntryKeys.Document(_selected) : null;
+
+    /// <inheritdoc />
+    public string ItemTitle => _selected >= 0 && _selected < _names.Count ? _names[_selected] : null;
+
+    /// <inheritdoc />
+    public bool Reveal(string key)
+    {
+        if (EntryKeys.TryDocument(key, out int paper) && paper < _pages.Count)
+        {
+            Select(paper);
+            return true;
+        }
+        if (!EntryKeys.TryField(key, out paper, out _) || paper >= _pages.Count)
+            return false;
+        Select(paper);
+        return true;
+    }
 
     /// <summary>
     /// A new case: one scanned page per paper (hidden until chosen), bound to

@@ -123,6 +123,17 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The forms' style the view prints in.</summary>
     public FormStyleSO Style => style;
 
+    /// <summary>Fills <paramref name="into"/> with the shown form's pickable slots and their buttons, in slot order (the reading order: the keys' rows, AppRow).</summary>
+    public void ArmedSlots(List<(FormSlot slot, Button button)> into)
+    {
+        into.Clear();
+        if (_form == null)
+            return;
+        foreach (SlotPart part in _parts)
+            if (part.Button.gameObject.activeSelf && part.Slot >= 0 && part.Slot < _form.Slots.Count)
+                into.Add((_form.Slots[part.Slot], part.Button));
+    }
+
     /// <summary>
     /// Tints each box while the key <paramref name="keyOf"/> gives it is
     /// picked in <paramref name="compare"/> (null key: never), now and on

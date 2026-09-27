@@ -128,10 +128,11 @@ public static partial class OfficeSceneUIBuilder
     /// shrinking from the widest to the narrowest button knob as windows
     /// open) and the desktop's raycaster (the shell, the context menu and the
     /// empty desktop are wired with the icons: BuildDesktopShell); every
-    /// window's chrome gets the manager, its title text and the title size,
-    /// and the office view defers its Escape to the manager's stamp. Idempotent.
+    /// window's chrome gets the manager, its title text and the title size
+    /// (the office view defers its Escape to the keyboard poller's stamp:
+    /// BuildDesktopKeys). Idempotent.
     /// </summary>
-    private static DesktopWindowManager BuildWindowManager(Canvas canvas, OfficeViewController view)
+    private static DesktopWindowManager BuildWindowManager(Canvas canvas)
     {
         DesktopConfigSO config = EnsureDesktopConfig();
         Transform root = canvas.transform;
@@ -183,9 +184,6 @@ public static partial class OfficeSceneUIBuilder
             soWindow.ApplyModifiedProperties();
         }
 
-        var soView = new SerializedObject(view);
-        SetRef(soView, "desktop", manager);
-        soView.ApplyModifiedProperties();
         return manager;
     }
 }

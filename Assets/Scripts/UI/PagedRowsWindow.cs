@@ -8,9 +8,10 @@ using UnityEngine.UI;
 /// transcript): a footer with prev/next and "Page n/m", and rows cloned from
 /// <see cref="entryRowTemplate"/> (a disabled row with two TMP texts, an Image
 /// background and a Button). Subclasses say how many rows there are and fill
-/// each one. The serialized field names are the ones the builder wires.
+/// each one. The keys turn its pages (IPagedRows) and a jump shows a row's
+/// page (ShowPageOf). The serialized field names are the ones the builder wires.
 /// </summary>
-public abstract class PagedRowsWindow : MonoBehaviour
+public abstract class PagedRowsWindow : MonoBehaviour, IPagedRows
 {
     /// <summary>Title in the window's header.</summary>
     [SerializeField] private TMP_Text titleText;
@@ -92,15 +93,28 @@ public abstract class PagedRowsWindow : MonoBehaviour
     /// <summary>The page shown (0-based).</summary>
     protected int Page => _page;
 
-    /// <summary>Shows the page row <paramref name="index"/> is on (a link or Back turning to it).</summary>
+    /// <summary>Shows the page row <paramref name="index"/> is on (a link, Back or a jump turning to it).</summary>
     protected void ShowPageOf(int index) => ShowPage(Paging.PageOf(index, entriesPerPage));
+    /// <inheritdoc />
+    public bool TurnPage(int direction)
+    {
+        int target = Paging.Clamp(_page + direction, RowCount, entriesPerPage);
+        if (target == _page)
+            return false;
+        ShowPage(target);
+        return true;
+    }
 
     /// <summary>Replaces the row clones with the current page's rows.</summary>
     private void Rebuild()
     {
+        // Hidden at once (Destroy waits for the frame's end), so the keys never find a row that is going.
         foreach (GameObject r in _rows)
             if (r != null)
+            {
+                r.SetActive(false);
                 Destroy(r);
+            }
 
         _rows.Clear();
 

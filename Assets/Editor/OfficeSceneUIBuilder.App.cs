@@ -10,17 +10,22 @@ using UnityEngine.UI;
 /// window layer ("Investigation"; the restored size from DesktopConfigSO,
 /// maximised on its first open) with its case header (the claim, the
 /// counters, the PC's Accept and Deny with their fixed glyphs), its toolbar
-/// (Back, Forward and Split live; the search field, Steps and Keys built, not
-/// live until phases 19-21), its sidebar (Steps, Pinned, Recent: placeholders
-/// until phases 20-21) and two panes side by side (AppPane, built by
-/// OfficeSceneUIBuilder.Panes: the left one starts on Documents, the right one
-/// on Reference, and is hidden until the app splits). Each pane's views host
-/// today's page components (the scanned copy on FormView, Citizen Records, a
-/// book's register, the transcript, the report's and the rules' texts), each
-/// behind IAppView, so FormView replaces one view at a time; the rows of the
-/// registers, Records and the transcript light by key and carry the found
-/// mark (the transcript's answers their ↗); the scan toast goes on the
-/// investigation host above the window layer. Rebuilt fresh on each run (the one convergence policy of
+/// (Back, Forward and Split live; the search field and Keys live since phase
+/// 20; Steps built, not live until phase 21), its sidebar (Steps, Pinned,
+/// Recent: the keys' partial, OfficeSceneUIBuilder.Keys, fills Pinned and
+/// Recent) and two panes side by side (AppPane, built by
+/// OfficeSceneUIBuilder.Panes from the parts here: BuildTab, each tab a plate
+/// on the chrome, its active look a paper plate with an ink bar, its badge an
+/// accent dot in a slot reserved after the label; BuildChipTemplate, a chip as
+/// wide as its label, the chosen one on an accent plate; the left pane starts
+/// on Documents, the right one on Reference, and is hidden until the app
+/// splits). Each pane's views host today's page components (the scanned copy
+/// on FormView, Citizen Records, a book's register, the transcript, the
+/// report's and the rules' texts), each behind IAppView, so FormView replaces
+/// one view at a time; the rows of the registers, Records and the transcript
+/// light by key and carry the found mark (the transcript's answers their ↗);
+/// the scan toast goes on the investigation host above the window layer.
+/// Rebuilt fresh on each run (the one convergence policy of
 /// this partial, audit R6-008); every reference it wires is checked (Wire,
 /// audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls
 /// it in its order.
@@ -39,14 +44,29 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The gap between the sidebar and the pane.</summary>
     private const float AppDividerWidth = 6f;
 
-    /// <summary>A pane's tab strip height.</summary>
-    private const float AppTabStripHeight = 44f;
+    /// <summary>A tab's narrowest width: on a strip too narrow for every label the tabs shrink towards it and their labels shrink to fit (phase 18 shows glyphs instead).</summary>
+    private const float AppTabMinWidth = 96f;
 
-    /// <summary>A pane's header (the chip row) height.</summary>
-    private const float AppPaneHeaderHeight = 40f;
+    /// <summary>The room at each end of a tab's label.</summary>
+    private const int AppTabPadding = 18;
 
-    /// <summary>A chip's widest and narrowest width (the row shrinks them to fit).</summary>
-    private static readonly Vector2 AppChipWidth = new Vector2(64f, 220f);
+    /// <summary>The gap between a tab's label and its badge slot.</summary>
+    private const float AppTabGap = 6f;
+
+    /// <summary>The bar along the active tab's top edge (in the body's ink: an accent would read under 3:1 on the paper plate in four cultures' themes).</summary>
+    private const float AppTabBarHeight = 4f;
+
+    /// <summary>A tab's badge dot, after its label (its slot is always reserved, so a badge never moves the label).</summary>
+    private const float AppTabBadgeSize = 12f;
+
+    /// <summary>The hairline under the chip row (2 units, so it still draws at 720p).</summary>
+    private const float AppPaneRuleHeight = 2f;
+
+    /// <summary>A chip's narrowest width: a chip is as wide as its label, and the row shrinks chips towards this to fit.</summary>
+    private const float AppChipMinWidth = 120f;
+
+    /// <summary>The room at each end of a chip's label.</summary>
+    private const int AppChipPadding = 12;
 
     /// <summary>Rows per page of the lists the tabs page through until they scroll (phase 5's forms): the restored window's smallest pane fits these.</summary>
     private const int AppBookRowsPerPage = 10;
@@ -184,7 +204,7 @@ public static partial class OfficeSceneUIBuilder
         public Selectable[] NotYetLive;
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field, Steps and Keys built, not live until phases 19-21.</summary>
+    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field and Keys are the keys' (BuildAppKeys); Steps built, not live until phase 21.</summary>
     private static AppToolbar BuildAppToolbar(Transform win, float top)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),
@@ -194,12 +214,12 @@ public static partial class OfficeSceneUIBuilder
             Back = ToolbarButton(bar, "BackButton", "browser.back", 0.005f, 0.045f),
             Forward = ToolbarButton(bar, "ForwardButton", "browser.forward", 0.05f, 0.09f),
         };
-        TMP_InputField search = BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
+        BuildInputField(bar, "SearchField", "app.search", new Vector2(0.1f, 0.14f), new Vector2(0.7f, 0.86f));
         Button steps = ToolbarButton(bar, "StepsButton", "app.toolbar.steps", 0.71f, 0.79f);
         toolbar.Split = ToolbarButton(bar, "SplitButton", "app.toolbar.split", 0.8f, 0.88f);
         toolbar.SplitHint = BuildHoverHint(toolbar.Split, null, UiText.Get("app.split.hint"), AppSplitHintSize, new Vector2(1f, 1f), new Vector2(1f, 0f));
-        Button keys = ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
-        toolbar.NotYetLive = new Selectable[] { search, steps, keys };
+        ToolbarButton(bar, "KeysButton", "app.toolbar.keys", 0.89f, 0.995f);
+        toolbar.NotYetLive = new Selectable[] { steps };
         return toolbar;
     }
 
@@ -227,6 +247,123 @@ public static partial class OfficeSceneUIBuilder
                  ThemeRoleId.Sidebar, "app.sidebar.empty", FontStyles.Italic, ThemeTextKind.Body, true);
         }
         return side;
+    }
+
+    /// <summary>
+    /// One tab of a strip (AP3's look): a plate in the Tab role (the chrome,
+    /// lightened by a gloss) carrying its label in the chrome's ink, as wide as
+    /// the label (never narrower than AppTabMinWidth; squeezed, the label shrinks
+    /// to fit); its badge, an accent dot in a slot reserved after the label, so
+    /// a badge never moves it; and its active look over both, shown by AppPane
+    /// while the tab is active: a paper plate in the TabActive role joined to
+    /// the row below, a bar in the body's ink along its top and the label in
+    /// that ink, placed exactly over the inactive label. Returns the button;
+    /// <paramref name="active"/> and <paramref name="badge"/> are what the pane
+    /// toggles.
+    /// </summary>
+    private static Button BuildTab(Transform strip, AppTab tab, DesktopConfigSO config, out GameObject active, out GameObject badge)
+    {
+        Button button = MakeButton(strip, "Tab_" + tab, null, Vector2.zero, Vector2.one, XpBlue, ThemeRoleId.Tab, AppTabKeys[tab]);
+        LayoutElement size = GetOrAdd<LayoutElement>(button.gameObject);
+        size.minWidth = AppTabMinWidth;
+        size.flexibleWidth = 0f;
+        HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(button.gameObject);
+        line.padding = new RectOffset(AppTabPadding, AppTabPadding, 0, 0);
+        line.spacing = AppTabGap;
+        line.childAlignment = TextAnchor.MiddleCenter;
+        line.childControlWidth = true;
+        line.childControlHeight = true;
+        line.childForceExpandWidth = false;
+        line.childForceExpandHeight = true;
+
+        TMP_Text label = button.transform.Find("Label").GetComponent<TMP_Text>();
+        label.fontSize = config.tabLabelSize;
+        label.raycastTarget = false;
+
+        Transform gloss = Panel(button.transform, "Gloss", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, new Color(1f, 1f, 1f, 0.05f), ThemeRoleId.TitleGloss);
+        gloss.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(gloss.gameObject).ignoreLayout = true;
+        gloss.SetAsFirstSibling();
+
+        Transform look = Panel(button.transform, "Active", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, Paper, ThemeRoleId.TabActive);
+        look.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(look.gameObject).ignoreLayout = true;
+        Transform bar = Panel(look, "TopBar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -AppTabBarHeight / 2f), new Vector2(0f, AppTabBarHeight), Ink);
+        Image barImage = bar.GetComponent<Image>();
+        Tag(barImage, ThemeRoleId.TabActive, ThemePart.Ink);
+        barImage.raycastTarget = false;
+        TMP_Text activeLabel = Text(look, "Label", null, Mathf.RoundToInt(config.tabLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink,
+                                    ThemeRoleId.TabActive, AppTabKeys[tab], FontStyles.Normal, ThemeTextKind.Button, true);
+        var activeRect = (RectTransform)activeLabel.transform;
+        activeRect.offsetMin = new Vector2(AppTabPadding, 0f);
+        activeRect.offsetMax = new Vector2(-(AppTabPadding + AppTabGap + AppTabBadgeSize), 0f);
+        activeLabel.raycastTarget = false;
+        look.gameObject.SetActive(false);
+
+        Transform slot = Panel(button.transform, "BadgeSlot", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        LayoutElement slotSize = GetOrAdd<LayoutElement>(slot.gameObject);
+        slotSize.minWidth = AppTabBadgeSize;
+        slotSize.preferredWidth = AppTabBadgeSize;
+        slotSize.flexibleWidth = 0f;
+        Transform dot = Panel(slot, "Badge", Center, Center, Vector2.zero, new Vector2(AppTabBadgeSize, AppTabBadgeSize), XpGreen, ThemeRoleId.Badge);
+        Image dotImage = dot.GetComponent<Image>();
+        dotImage.sprite = AssetDatabase.GetBuiltinExtraResource<Sprite>("UI/Skin/Knob.psd");
+        dotImage.raycastTarget = false;
+        dot.gameObject.SetActive(false);
+
+        active = look.gameObject;
+        badge = dot.gameObject;
+        return button;
+    }
+
+    /// <summary>
+    /// The chip row's template (AP5; hidden, cloned by AppPane per item of the
+    /// active view): a button in the Button role as wide as its label (never
+    /// narrower than AppChipMinWidth; the label at DesktopConfigSO's chip size,
+    /// shrinking to three quarters of it before its text is cut with "…"),
+    /// and over it the chosen look, "Chosen": an accent plate (the Badge role)
+    /// with the same text in bold, shown by the pane for the item the view shows.
+    /// </summary>
+    private static Button BuildChipTemplate(Transform header, DesktopConfigSO config)
+    {
+        Button chip = MakeButton(header, "ChipTemplate", "Chip", Vector2.zero, Vector2.one, null, ThemeRoleId.Button);
+        LayoutElement chipSize = GetOrAdd<LayoutElement>(chip.gameObject);
+        chipSize.minWidth = AppChipMinWidth;
+        chipSize.flexibleWidth = 0f;
+        HorizontalLayoutGroup line = GetOrAdd<HorizontalLayoutGroup>(chip.gameObject);
+        line.padding = new RectOffset(AppChipPadding, AppChipPadding, 0, 0);
+        line.childAlignment = TextAnchor.MiddleCenter;
+        line.childControlWidth = true;
+        line.childControlHeight = true;
+        line.childForceExpandWidth = false;
+        line.childForceExpandHeight = true;
+        ChipLabel(chip.transform.Find("Label").GetComponent<TMP_Text>(), config);
+
+        Transform chosen = Panel(chip.transform, "Chosen", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpGreen, ThemeRoleId.Badge);
+        chosen.GetComponent<Image>().raycastTarget = false;
+        GetOrAdd<LayoutElement>(chosen.gameObject).ignoreLayout = true;
+        TMP_Text chosenLabel = Text(chosen, "Label", "Chip", Mathf.RoundToInt(config.chipLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one,
+                                    Color.white, ThemeRoleId.Badge, null, FontStyles.Bold, ThemeTextKind.Button);
+        var chosenRect = (RectTransform)chosenLabel.transform;
+        chosenRect.offsetMin = new Vector2(AppChipPadding, 0f);
+        chosenRect.offsetMax = new Vector2(-AppChipPadding, 0f);
+        ChipLabel(chosenLabel, config);
+        chosen.gameObject.SetActive(false);
+
+        chip.gameObject.SetActive(false);
+        return chip;
+    }
+
+    /// <summary>A chip label's fit: one line at the chip size, shrinking to three quarters of it, then cut with "…"; it takes no raycasts.</summary>
+    private static void ChipLabel(TMP_Text label, DesktopConfigSO config)
+    {
+        label.enableAutoSizing = true;
+        label.fontSizeMax = config.chipLabelSize;
+        label.fontSizeMin = config.chipLabelSize * 0.75f;
+        label.textWrappingMode = TextWrappingModes.NoWrap;
+        label.overflowMode = TextOverflowModes.Ellipsis;
+        label.margin = Vector4.zero;
+        label.raycastTarget = false;
     }
 
     /// <summary>A view's root: the whole content, hidden until its tab shows.</summary>

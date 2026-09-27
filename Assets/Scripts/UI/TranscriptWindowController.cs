@@ -17,7 +17,10 @@ using UnityEngine.UI;
 /// animated); an untranslated answer shows in the bar as the placeholder,
 /// while its evidence stays the canonical value. Every sentence is written in
 /// the font TextFlip picks from the row template's own (the script's only
-/// while foreign cells show). Rows are named Line_{id}.
+/// while foreign cells show). Rows are named Line_{id}; each is marked with
+/// its line key for the keys, the copy and the pins (AppRow: "Nikias · line
+/// 7"; an untranslated line keeps its tongue, so its copy is a foreign clip),
+/// and a jump shows a line's page (ShowLine).
 /// </summary>
 public sealed class TranscriptWindowController : PagedRowsWindow
 {
@@ -68,6 +71,15 @@ public sealed class TranscriptWindowController : PagedRowsWindow
     /// <summary>Shows the newest page (call after lines were appended).</summary>
     public void Refresh() => ShowLastPage();
 
+    /// <summary>Shows the page line <paramref name="index"/> is on; false when there is no such line.</summary>
+    public bool ShowLine(int index)
+    {
+        if (index < 0 || index >= _lines.Count)
+            return false;
+        ShowPageOf(index);
+        return true;
+    }
+
     /// <inheritdoc />
     protected override int RowCount => _lines.Count;
 
@@ -77,13 +89,18 @@ public sealed class TranscriptWindowController : PagedRowsWindow
         DialogLine line = _lines[index];
         row.name = $"Line_{line.Id}";
 
+        string speaker = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
         if (texts.Length > 0 && texts[0] != null)
-            texts[0].text = line.Speaker == DialogSpeaker.Desk ? _deskName : _travellerName;
+            texts[0].text = speaker;
         if (texts.Length > 1)
         {
             ReadOwnFont();
             TextFlip.Write(texts[1], _ownFont, _ownMaterial, line.Text, _translation.Line(line), _translation);
         }
+        AppRow marked = AppRow.Mark(row, AppTab.Transcript, PickKeys.Line(index), UiText.Format("app.row.line", speaker, index + 1),
+                                    texts.Length > 0 ? texts[0] : null, texts.Length > 1 ? texts[1] : null, line.IsAnswer ? button : null);
+        if (_translation.Untranslated(line))
+            marked.MarkUntranslated(_translation.TongueId, _translation.TongueName, line.Text);
 
         AppRow mark = row.GetComponent<AppRow>();
         if (mark != null)

@@ -14,8 +14,10 @@ using UnityEngine.UI;
 /// field, Steps, Split (two panes side by side, saved per player, possible
 /// only while each pane gets a readable width: AppPanes.CanSplit, so a
 /// restored window has one pane and the button says why) and Keys (the search
-/// field, Steps and Keys are shown but not live until their phases 19-21);
-/// the sidebar's Steps, Pinned and Recent are placeholders until then. Two
+/// field and Keys are live since phase 20; Steps is shown but not live until
+/// phase 21); the sidebar holds Steps (a placeholder until phase 21), Pinned
+/// and Recent. The keys, the focus ring, copy and paste, pins, recent items
+/// and zoom are in InvestigationApp.Keys (redesign phase 20). Two
 /// panes share one tab order (TabOrder: dragged or moved from a tab's menu,
 /// saved per player in DesktopPreferences.AppTabs). The active pane is the
 /// last one pressed (the desktop's press, DesktopWindowManager.Pressed) or
@@ -32,7 +34,7 @@ using UnityEngine.UI;
 /// the badges; at the decision the case sources show the no-case state.
 /// InvestigationUIController drives it.
 /// </summary>
-public sealed class InvestigationApp : MonoBehaviour
+public sealed partial class InvestigationApp : MonoBehaviour
 {
     /// <summary>The app's window (maximised on the first open).</summary>
     [SerializeField] private DesktopWindow window;
@@ -69,7 +71,7 @@ public sealed class InvestigationApp : MonoBehaviour
     /// <summary>The Split button's hover hint: what it does, or why it cannot.</summary>
     [SerializeField] private TMP_Text splitHint;
 
-    /// <summary>The search field, Steps and Keys: shown, not live until their phases (19-21).</summary>
+    /// <summary>Steps: shown, not live until its phase (21).</summary>
     [SerializeField] private Selectable[] notYetLive = new Selectable[0];
 
     /// <summary>The Split button's tint while the split is on (pressed).</summary>
@@ -103,6 +105,9 @@ public sealed class InvestigationApp : MonoBehaviour
 
     /// <summary>True when the panes host a view for the tab.</summary>
     public bool Hosts(AppTab tab) => leftPane != null && leftPane.Hosts(tab);
+    /// <summary>The app's window (the keyboard poller's "app focused").</summary>
+    public DesktopWindow Window => window;
+
 
     /// <summary>The first open: the app fills the desktop (P spec WN4).</summary>
     private void Start()
@@ -158,6 +163,7 @@ public sealed class InvestigationApp : MonoBehaviour
         leftPane.Show(AppTab.Documents);
         if (toast != null)
             toast.Hide();
+        KeysBeginCase(travellerName);
     }
 
     /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller.</summary>
@@ -175,6 +181,7 @@ public sealed class InvestigationApp : MonoBehaviour
             pane.SetCase(false);
         if (toast != null)
             toast.Hide();
+        KeysEndCase();
     }
 
     /// <summary>Writes the counters from the case's papers (kept: a dock side from a paper links only once it is scanned) and the logged deviations.</summary>
@@ -296,6 +303,7 @@ public sealed class InvestigationApp : MonoBehaviour
         _manager = window != null ? window.Manager : null;
         if (_manager != null)
             _manager.Pressed += Pressed;
+        InitKeys();
         Layout();
         RefreshHistoryButtons();
     }
@@ -318,7 +326,7 @@ public sealed class InvestigationApp : MonoBehaviour
     {
         if (leftPane == null || body == null)
             return;
-        float sidebarWidth = sidebar != null ? sidebar.rect.width : 0f;
+        float sidebarWidth = sidebar != null && sidebar.gameObject.activeSelf ? sidebar.rect.width : 0f;
         bool fits = rightPane != null && config != null && AppPanes.CanSplit(body.rect.width, sidebarWidth, config.paneMinWidth);
         _split = _splitWanted && fits;
 
