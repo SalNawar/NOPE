@@ -9678,6 +9678,30 @@
         "tier": "Full"
       },
       {
+        "key": "compare.dockSide",
+        "text": "{0}:  {1}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockPending",
+        "text": "pick another value",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockDeviation",
+        "text": "●  DEVIATION LOGGED · Report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "compare.dockAlready",
+        "text": "ALREADY DOCUMENTED · Report",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "book.claimedLabel",
         "text": "{0} (claimed)",
         "gloss": "None",

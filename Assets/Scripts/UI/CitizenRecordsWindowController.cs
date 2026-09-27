@@ -80,6 +80,7 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
 
     /// <summary>Raised when the player runs a lookup (SEARCH or Enter), not when a link runs one.</summary>
     public event System.Action Searched;
+
     /// <summary>The record shown, or null.</summary>
     public CitizenRecord Current => _current;
 
@@ -170,8 +171,6 @@ public sealed class CitizenRecordsWindowController : PagedRowsWindow
                 : UiText.Format("records.noRecord", query.Trim(), _today ?? string.Empty);
 
         ShowPage(0);
-        if (!string.IsNullOrWhiteSpace(query))
-            Searched?.Invoke();
         Looked?.Invoke();
     }
 
