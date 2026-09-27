@@ -9,8 +9,8 @@ using UnityEngine.UI;
 /// (DocumentsView). On the scanner's dark backing it shows the document's
 /// name, the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
 /// when the copy arrived; after an analysis pass "ANALYSED 10:44 · 1
-/// CONTRADICTION MARKED" or "... NO CONTRADICTION BETWEEN THE SCANNED
-/// PAPERS", the form style's words), and the paper's form drawn by a FormView from the
+/// CONTRADICTION MARKED" or "... THE SCANNED PAPERS AGREE", the form
+/// style's words), and the paper's form drawn by a FormView from the
 /// same DocumentForm the desk paper prints, so the copy is the paper: its
 /// pages stacked in a scroll. A
 /// click on a box picks the field for the compare (EvidencePicks.ForField,

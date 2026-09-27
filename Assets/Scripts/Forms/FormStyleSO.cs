@@ -65,8 +65,8 @@ public sealed class FormStyleSO : ScriptableObject
     /// <summary>The strip after an analysis pass that marked a contradicting pair (the Analysis Scanner, SC4): {0} is the shift clock's time.</summary>
     public string analysedStrip = "ANALYSED {0} · 1 CONTRADICTION MARKED";
 
-    /// <summary>The strip after an analysis pass that found no undocumented contradiction between the scanned papers: {0} is the shift clock's time.</summary>
-    public string analysedCleanStrip = "ANALYSED {0} · NO CONTRADICTION BETWEEN THE SCANNED PAPERS";
+    /// <summary>The strip after an analysis pass that found no undocumented contradiction between the scanned papers: {0} is the shift clock's time (the spec's longer line overflows the copy's strip at the PC page width).</summary>
+    public string analysedCleanStrip = "ANALYSED {0} · THE SCANNED PAPERS AGREE";
 
     /// <summary>How much heavier the printed words are than the font (TextMeshPro's face dilate on the paper's text material): a held paper's small print needs the weight to read at 720p as drawn. Build Office UI writes it into the material.</summary>
     [Header("Print")]

@@ -156,7 +156,7 @@ public sealed class DeskController : MonoBehaviour
         ScanFinished?.Invoke(done, analysed);
     }
 
-    /// <summary>The Auto-Feed Scanner (SC3): while the scanner is idle, the next queued paper that lies still on the desk slides onto the bed and scans (DeskPapers.FeedNext: hand-over order, one at a time; a held paper waits its turn).</summary>
+    /// <summary>The Auto-Feed Scanner (SC3): while the scanner is idle, the next queued paper that lies still on the desk slides onto the bed and scans (DeskPapers.FeedNext: hand-over order, one at a time; a held paper waits its turn), then back to where it lay.</summary>
     private void FeedScanner()
     {
         if (!_scanners.AutoFeed)
@@ -166,6 +166,8 @@ public sealed class DeskController : MonoBehaviour
         if (next < 0)
             return;
 
+        // It goes back to where it lay once scanned, as a dragged paper goes back to where it was picked up.
+        _papers[next].GetComponent<DeskDraggable>().RememberPosition();
         Slide(_papers[next], scanner.BedPoint);
         _stack.BringToFront(next);
         ApplyStack();
