@@ -146,6 +146,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9ff9da122c991fc459d831c09cd523eb, type: 2}
   - {fileID: 11400000, guid: c3fb011a0dec4c94bb1a24978e1bcf78, type: 2}
   - {fileID: 11400000, guid: 5b4a14c18c1434d44bc1e220e94d34d2, type: 2}
+  - {fileID: 11400000, guid: cec6c4ad2fccb1c4fbd099fec3218972, type: 2}
+  - {fileID: 11400000, guid: a4aa7a46c000b714294dccb3f98b1add, type: 2}
   - {fileID: 11400000, guid: e654e3aa0bc6bae449fcdca1aaaef69b, type: 2}
   - {fileID: 11400000, guid: f13d3ee5d615e02498845a500b2e25d5, type: 2}
   - {fileID: 11400000, guid: f3311937c05234244bf44a92a293d6f7, type: 2}
@@ -208,6 +210,7 @@ MonoBehaviour:
       id: interview.requestReply
       text: Here you are.
     askLabel: Ask about home >
+    tripAskLabel: Ask about the trip >
     backLabel: < Back
     smallTalkLabel: Small talk
     lookLabel: Look >
@@ -238,6 +241,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1562f77be6cc1814aaef56e11a8aafc2, type: 2}
   - {fileID: 11400000, guid: 2fc68eb6daa19434a8bd8e9e0a36ad4a, type: 2}
   - {fileID: 11400000, guid: 5e062f2ca111eaf42843494b0fa32990, type: 2}
+  - {fileID: 11400000, guid: ef9b31f8e47014647bcac369073b1cf8, type: 2}
+  - {fileID: 11400000, guid: 74c771b7d3015ea4badaf339f1c984ec, type: 2}
   - {fileID: 11400000, guid: 4e129f565a2b6744d8a133e8c39bda8f, type: 2}
   dialogs:
   - {fileID: 11400000, guid: 330b52d57beff584e9353e8cddf2e621, type: 2}

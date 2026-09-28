@@ -30,4 +30,5 @@ MonoBehaviour:
       answer:
         id: q_currency.ancient.answer
         text: We trade with {value}.
+    kinds: 03000000
   conditions: []

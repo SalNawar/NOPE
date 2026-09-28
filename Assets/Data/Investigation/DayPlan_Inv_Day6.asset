@@ -44,12 +44,14 @@ MonoBehaviour:
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.1
-  lieKinds: 01000000020000000000000003000000
+  lieKinds: 0100000002000000000000000300000004000000
   activeTravelRules:
   - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
   - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
+  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
   forcedCases:
   - caseIndex1Based: 8
