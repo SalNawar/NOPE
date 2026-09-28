@@ -13,11 +13,11 @@ using UnityEditor;
 public static partial class WorldContentGenerator
 {
     /// <summary>The news block as authored ("news").</summary>
-    [Serializable] private sealed class NewsData { public string[] debt; }
+    [Serializable] private sealed class NewsData { public string[] debt; public string stranded; }
 
     /// <summary>The news block's content (its lines verbatim; none when the section is missing).</summary>
     private static NewsContent BuildNews(NewsData n) =>
-        new NewsContent { debt = (n?.debt ?? Array.Empty<string>()).ToList() };
+        new NewsContent { debt = (n?.debt ?? Array.Empty<string>()).ToList(), stranded = n?.stranded ?? string.Empty };
 
     /// <summary>The news block's problems (NewsContent.Problems, the validator's rule).</summary>
     private static void CheckNews(WorldSource src, List<string> errors) => errors.AddRange(BuildNews(src.news).Problems());
