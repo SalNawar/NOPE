@@ -11,10 +11,10 @@ using NUnit.Framework;
 /// </summary>
 public class TranslationTests
 {
-    /// <summary>English (native), Egyptian and Arabic (Near East), Greek (Mediterranean); foreign speech from day 2.</summary>
+    /// <summary>English (native), Egyptian and Arabic (Near East), Greek (Mediterranean); foreign speech from day 3.</summary>
     private static TranslationRules Rules() => new TranslationRules
     {
-        fromDay = 2,
+        fromDay = 3,
         tongues = new List<Tongue>
         {
             new Tongue { id = "english", displayName = "English", script = "latin", pack = "", glyphs = "" },
@@ -61,8 +61,8 @@ public class TranslationTests
     /// Speech translator.
     /// </summary>
     [TestCase(5, "tr_near_east_spoken", "english", false, false, Description = "a native tongue is never foreign")]
-    [TestCase(1, "tr_near_east_spoken", "egyptian", false, false, Description = "before fromDay nothing is foreign, even owning the translator")]
-    [TestCase(2, "", "egyptian", true, false, Description = "on fromDay, no translator")]
+    [TestCase(2, "tr_near_east_spoken", "egyptian", false, false, Description = "before fromDay nothing is foreign, even owning the translator")]
+    [TestCase(3, "", "egyptian", true, false, Description = "on fromDay, no translator")]
     [TestCase(3, "tr_near_east_spoken", "egyptian", true, true, Description = "the pack's Speech translator")]
     [TestCase(3, "tr_near_east_spoken", "arabic", true, true, Description = "every tongue of the pack")]
     [TestCase(3, "tr_near_east_spoken", "greek", true, false, Description = "another pack's tongue")]
@@ -115,7 +115,7 @@ public class TranslationTests
     public void EditingTheRulesAfterwards_ChangesNothing()
     {
         TranslationRules rules = Rules();
-        var day = new TranslationDay(rules, Snap(2, new[] { "tr_near_east_spoken" }));
+        var day = new TranslationDay(rules, Snap(3, new[] { "tr_near_east_spoken" }));
         rules.fromDay = 9;
         rules.tongues[1].pack = "";
         rules.tongues[1].displayName = "Changed";
@@ -132,6 +132,31 @@ public class TranslationTests
     public void Problems_ACleanSet_HasNone()
     {
         CollectionAssert.IsEmpty(Translation.Problems(Rules(), Scripts, GoodPlaces));
+    }
+
+    /// <summary>The notice runs in the paper of the day before fromDay (traveller types I3: "from tomorrow"), so it fires two nights before.</summary>
+    [TestCase(5, 3, Description = "day 5's speech: night 3, so day 4's paper")]
+    [TestCase(3, 1, Description = "the earliest fromDay with a notice: the first night")]
+    public void NoticeNight_TwoNightsBeforeFromDay(int fromDay, int night)
+    {
+        Assert.AreEqual(night, Translation.NoticeNight(fromDay));
+        Assert.AreEqual(Gates.UnlockNight(fromDay) - 1, Translation.NoticeNight(fromDay), "one night before the unlock night");
+    }
+
+    [Test]
+    public void Problems_FromDayTwo_LeavesNoNightForTheNotice()
+    {
+        TranslationRules rules = Rules();
+        rules.fromDay = 2;
+        AssertOne(rules, GoodPlaces, "fromDay is 2");
+    }
+
+    [Test]
+    public void Problems_FromDayOne_HasNoNoticeAndNoProblem()
+    {
+        TranslationRules rules = Rules();
+        rules.fromDay = 1;
+        CollectionAssert.IsEmpty(Translation.Problems(rules, Scripts, GoodPlaces));
     }
 
     [Test]

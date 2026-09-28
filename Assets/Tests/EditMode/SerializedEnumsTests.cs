@@ -58,7 +58,21 @@ public class SerializedEnumsTests
         Assert.AreEqual(0, (int)LieKind.FalseOrigin);
         Assert.AreEqual(1, (int)LieKind.PoorPosingAsRich);
         Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
-        Assert.AreEqual(3, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(3, (int)LieKind.FakeDisplaced);
+        Assert.AreEqual(4, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 12 appends ReturnHome.</summary>
+    [Test]
+    public void TravelRuleType_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)TravelRuleType.EraForbidden);
+        Assert.AreEqual(1, (int)TravelRuleType.NationForbidden);
+        Assert.AreEqual(2, (int)TravelRuleType.NationEraForbidden);
+        Assert.AreEqual(3, (int)TravelRuleType.DressForDestination);
+        Assert.AreEqual(4, (int)TravelRuleType.Procedure);
+        Assert.AreEqual(5, (int)TravelRuleType.ReturnHome);
+        Assert.AreEqual(6, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>

@@ -23,9 +23,21 @@ public static class Translation
     public static bool InTongue(DialogSpeaker speaker) => speaker == DialogSpeaker.Traveller;
 
     /// <summary>
+    /// The nightly-resolve day on which the notice fires (traveller types I3):
+    /// the night before the morning paper of the day before
+    /// <paramref name="fromDay"/> (Gates.UnlockNight of that day), so the
+    /// paper says "from tomorrow" and a Speech translator bought that night
+    /// is in force when foreign speech reaches the desk. Meaningful for a
+    /// fromDay of at least 3 (<see cref="Problems"/> refuses 2: no night
+    /// comes before day 1's paper; 1 has no notice at all).
+    /// </summary>
+    public static int NoticeNight(int fromDay) => Gates.UnlockNight(fromDay - 1);
+
+    /// <summary>
     /// Content problems (the generator and the validator both report them),
-    /// one message per problem naming its ids: null rules; fromDay below 1; a
-    /// blank or duplicate tongue id; a blank display name; a script not in
+    /// one message per problem naming its ids: null rules; fromDay below 1, or
+    /// 2 (the notice runs the day before, <see cref="NoticeNight"/>, and no
+    /// night comes before day 1's paper); a blank or duplicate tongue id; a blank display name; a script not in
     /// <paramref name="scriptIds"/>; a pack that is neither blank nor a pack
     /// id; a foreign tongue without glyphs; a blank or duplicate pack id or
     /// name; a pack no tongue uses (its translator would buy nothing); a place
@@ -44,6 +56,8 @@ public static class Translation
 
         if (rules.fromDay < 1)
             problems.Add($"translation.fromDay is {rules.fromDay}; it must be at least 1.");
+        else if (rules.fromDay == 2)
+            problems.Add("translation.fromDay is 2: the notice runs in the paper of the day before, and no night comes before day 1's paper; use 1 (no notice) or at least 3.");
 
         var scripts = new HashSet<string>(scriptIds ?? Array.Empty<string>());
         var packIds = new HashSet<string>();

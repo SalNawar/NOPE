@@ -253,8 +253,10 @@ public static class Lies
     }
 
     /// <summary>
-    /// Plans a rolled place lie (a false origin). A (category, channel) option
-    /// of another of today's places is open when <paramref name="channels"/>
+    /// Plans a rolled place lie: a false origin among <paramref name="todays"/>
+    /// (L7), or, with the present as the one candidate, the fake displaced
+    /// (L8; <paramref name="kind"/> names which, and the plan carries it). A
+    /// (category, channel) option of a candidate place is open when <paramref name="channels"/>
     /// allows the channel and Forgery.IsProvableTell holds: Papers for a
     /// category the papers print (first-appearance order), then Answer for
     /// one of <paramref name="answerTellCategories"/> (today's question
@@ -274,10 +276,11 @@ public static class Lies
                                string claimNationId, string claimEraId, string coverBirthDate,
                                IReadOnlyList<HomeCandidate> todays, IReadOnlyList<DocumentField> papers,
                                IReadOnlyList<ClueCategory> answerTellCategories, IReadOnlyList<TellChannel> channels,
-                               FactTable facts, ICollection<ClueCategory> bookCategories, IRandomSource rng)
+                               FactTable facts, ICollection<ClueCategory> bookCategories, IRandomSource rng,
+                               LieKind kind = LieKind.FalseOrigin)
     {
         if (rng == null)
-            return LiePlan.Without(LieOutcome.Honest, LieKind.FalseOrigin);
+            return LiePlan.Without(LieOutcome.Honest, kind);
 
         bool papersOpen = Allows(channels, TellChannel.Papers);
         bool answersOpen = Allows(channels, TellChannel.Answer);
@@ -316,7 +319,7 @@ public static class Lies
         }
 
         if (candidates.Count == 0)
-            return LiePlan.Without(LieOutcome.NoPossibleLie, LieKind.FalseOrigin);
+            return LiePlan.Without(LieOutcome.NoPossibleLie, kind);
 
         int pick = rng.Range(0, candidates.Count);
         int homeIndex = candidates[pick];
@@ -343,7 +346,7 @@ public static class Lies
         if (tells.Contains(ClueCategory.BirthDate))
             values[ClueCategory.BirthDate] = BirthDates.PickOtherYear(coverBirthDate, home.BirthYearMin, home.BirthYearMax, rng);
 
-        return new LiePlan(LieOutcome.Liar, LieKind.FalseOrigin, homeIndex, tells.AsReadOnly(), values, channelOf);
+        return new LiePlan(LieOutcome.Liar, kind, homeIndex, tells.AsReadOnly(), values, channelOf);
     }
 
     /// <summary>True when the channel list holds the channel (a null list holds none).</summary>

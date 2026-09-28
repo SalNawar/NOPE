@@ -267,16 +267,21 @@ public static partial class WorldContentGenerator
                 errors.Add($"Rule '{r.asset}' references unknown country '{r.country}'.");
             if (!string.IsNullOrEmpty(r.era) && !eraIds.Contains(r.era))
                 errors.Add($"Rule '{r.asset}' references unknown era '{r.era}'.");
-            if (Enum.TryParse(r.type, out TravelRuleType procedure) && !TravelRuleSO.IsClosureType(procedure) &&
+            if (Enum.TryParse(r.type, out TravelRuleType procedure) && !Directives.IsClosure(procedure) &&
                 (string.IsNullOrWhiteSpace(r.description) || !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era)))
                 errors.Add($"Rule '{r.asset}' is a standing procedure ({r.type}): it needs its directive line (\"description\") and names no country or era.");
         }
 
+        var futureIds = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
         foreach (DayData d in src.days)
         {
             foreach (EraWeightData w in d.eras ?? Array.Empty<EraWeightData>())
+            {
                 if (!eraIds.Contains(w.era))
                     errors.Add($"Day '{d.asset}' weights unknown era '{w.era}'.");
+                else if (futureIds.Contains(w.era) && w.weight > 0f)
+                    errors.Add($"Day '{d.asset}' weights the Future era '{w.era}': the Future is the present, never a destination (traveller types H2).");
+            }
             foreach (string c in d.countries ?? Array.Empty<string>())
                 if (!countryIds.Contains(c))
                     errors.Add($"Day '{d.asset}' allows unknown country '{c}'.");
@@ -288,6 +293,7 @@ public static partial class WorldContentGenerator
             if (d.costumeErrorChance < 0f || d.costumeErrorChance > 1f)
                 errors.Add($"Day '{d.asset}' needs \"costumeErrorChance\" in 0..1.");
             CheckLies(d, errors);
+            CheckReturnHome(d, src.rules, errors);
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
@@ -1035,7 +1041,7 @@ public static partial class WorldContentGenerator
 
         // --- Days: pools, forced slots, chance ---
         var closures = new HashSet<string>((src.rules ?? Array.Empty<RuleData>())
-            .Where(r => ParseEnum(r.type, out TravelRuleType type) && TravelRuleSO.IsClosureType(type))
+            .Where(r => ParseEnum(r.type, out TravelRuleType type) && Directives.IsClosure(type))
             .Select(r => r.asset));
         foreach (DayData d in src.days)
         {
@@ -1489,6 +1495,25 @@ public static partial class WorldContentGenerator
             if (!fits)
                 errors.Add($"Day '{d.asset}' enables the lie '{name}', which none of its kinds can carry.");
         }
+    }
+
+    /// <summary>
+    /// Refuses a day that lists the displaced's return home (a ReturnHome
+    /// rule) without a displaced kind and a place lie they can carry
+    /// (LieKinds.IsPlaceLie): the rule's guaranteed liar (Directives.Guarantees)
+    /// could not be made, and its line would name a fault nobody has.
+    /// </summary>
+    private static void CheckReturnHome(DayData d, RuleData[] rules, List<string> errors)
+    {
+        bool returnHome = (d.rules ?? Array.Empty<string>())
+            .Any(id => (rules ?? Array.Empty<RuleData>()).Any(r => r != null && r.asset == id && ParseEnum(r.type, out TravelRuleType type) && type == TravelRuleType.ReturnHome));
+        if (!returnHome)
+            return;
+
+        bool displaced = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind) && kind == TravellerKind.Displaced);
+        bool placeLie = (d.lies ?? Array.Empty<string>()).Any(name => ParseEnum(name, out LieKind lie) && LieKinds.IsPlaceLie(lie));
+        if (!displaced || !placeLie)
+            errors.Add($"Day '{d.asset}' lists the displaced's return home (a ReturnHome rule) but {(displaced ? "enables no place lie (FalseOrigin, FakeDisplaced)" : "weights no Displaced kind")}, so no traveller could break it.");
     }
 
     /// <summary>

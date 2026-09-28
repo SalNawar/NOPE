@@ -234,7 +234,7 @@ public sealed class DayOrchestrator : MonoBehaviour
                 missed.Add($"forced case {forced.name} (slot {s})");
 
             if (dayPlan != null && dayPlan.TryGetForcedPremade(s, out LegendarySO premade) &&
-                Premades.SlotSource(true, _worldState != null && _worldState.HasFlag(FlagKeys.PremadeMet(premade.id)), false) == PremadeSlot.Forced)
+                Premades.SlotSource(true, _worldState != null && _worldState.HasMetPremade(premade.id), false) == PremadeSlot.Forced)
                 missed.Add($"forced premade {premade.displayName} (slot {s})");
         }
 
