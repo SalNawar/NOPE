@@ -638,6 +638,9 @@ public static class FormLayout
         /// <summary>How many lines a measured height is.</summary>
         private int Lines(float height, FormTextRole role, float size) => Math.Max(1, (int)Math.Round(height / Line(role, size)));
 
+        /// <summary>A one-line fit is judged at this share of the width: a bold line TextMeshPro measures as just fitting can still wrap when drawn (the title of a narrow page).</summary>
+        private const float OneLineGuard = 0.96f;
+
         /// <summary>The size a text keeps on one line, from <paramref name="max"/> down to <paramref name="min"/> (H), in the caller's units.</summary>
         private float OneLine(string text, FormTextRole role, float max, float min, float width)
         {
@@ -645,7 +648,7 @@ public static class FormLayout
             for (int i = 0; i < steps; i++)
             {
                 float size = G(max - (max - min) * i / steps);
-                if (Lines(Measure(text, role, size, width), role, size) <= 1)
+                if (Lines(Measure(text, role, size, width * OneLineGuard), role, size) <= 1)
                     return size;
             }
             return G(min);

@@ -167,6 +167,18 @@ public static class SmartLinks
         return ForKey(key, papers);
     }
 
+    /// <summary>
+    /// A directive's place (a closure of one nation in one era; the Rules
+    /// tab's rows): the row of that place in the book of
+    /// <paramref name="book"/> (the library's first), so the register shows
+    /// the place. None without both ids or a book (a closure of a whole era
+    /// or nation names no one row).
+    /// </summary>
+    public static LinkTarget ForPlace(string nationId, string eraId, ClueCategory? book) =>
+        book.HasValue && !string.IsNullOrEmpty(nationId) && !string.IsNullOrEmpty(eraId)
+            ? LinkTarget.ToRow(AppTab.Reference, PickKeys.BookRow(book.Value, nationId, eraId))
+            : LinkTarget.None;
+
     /// <summary>A paper's record lookup: its Citizen ID field's value, else its Name field's, else null.</summary>
     private static string RecordLookup(IReadOnlyList<DocumentField> paper) =>
         Value(paper, ClueCategory.CitizenId) ?? Value(paper, ClueCategory.Name);
