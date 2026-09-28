@@ -1623,6 +1623,10 @@ MonoBehaviour:
     text: Good
     gloss: 0
     tier: 0
+  - key: records.standing.frozen
+    text: 'Frozen: default, {0}'
+    gloss: 0
+    tier: 0
   - key: records.none
     text: None on file
     gloss: 0
@@ -1670,6 +1674,14 @@ MonoBehaviour:
     tier: 0
   - key: citation.acceptedWrong.closed
     text: Approved a closed destination.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: Approved incomplete paperwork.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: Approved a frozen account.
     gloss: 0
     tier: 0
   - key: citation.deniedWrong
@@ -1870,5 +1882,17 @@ MonoBehaviour:
     tier: 0
   - key: category.Debt
     text: DEBT
+    gloss: 0
+    tier: 0
+  - key: category.Employer
+    text: EMPLOYER
+    gloss: 0
+    tier: 0
+  - key: category.Term
+    text: TERM
+    gloss: 0
+    tier: 0
+  - key: category.Wage
+    text: WAGE
     gloss: 0
     tier: 0

@@ -317,6 +317,11 @@ public class AccountMakerTests
         r.statuses[1].debtMax = 100;
         r.statuses[2].tripsMin = -1;
         r.statuses.RemoveAt(0);
+        r.frozenWithinDays = 0;
+        r.contract.termMin = 10;
+        r.contract.termMax = 100_000;
+        r.contract.wageMin = 0;
+        r.contract.wageMax = 10_000_000;
         var models = Transponders();
         models.Add(new TransponderModel { id = "tick", transponderClass = TransponderClass.Economy, model = " ", prefix = "", weight = 0f });
 
@@ -331,6 +336,11 @@ public class AccountMakerTests
         Assert.IsTrue(problems.Any(p => p.Contains("model")));
         Assert.IsTrue(problems.Any(p => p.Contains("prefix")));
         Assert.IsTrue(problems.Any(p => p.Contains("weight")));
+        Assert.IsTrue(problems.Any(p => p.Contains("frozenWithinDays")));
+        Assert.IsTrue(problems.Any(p => p.Contains("term range")));
+        Assert.IsTrue(problems.Any(p => p.Contains("99999 days")));
+        Assert.IsTrue(problems.Any(p => p.Contains("day wage range")));
+        Assert.IsTrue(problems.Any(p => p.Contains("9,999,999 cr")));
     }
 
     [Test]

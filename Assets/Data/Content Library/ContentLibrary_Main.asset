@@ -192,6 +192,10 @@ MonoBehaviour:
       line:
         id: interview.claims.RichTourist
         text: One leisure departure to {place}, please.
+    - kind: 2
+      line:
+        id: interview.claims.Labourer
+        text: One Debt Relief departure to {place}. I have a contract to work.
     - kind: 3
       line:
         id: interview.claims.Displaced
@@ -1865,6 +1869,7 @@ MonoBehaviour:
       validDaysMin: 3
       validDaysMax: 365
       tripsWithinDays: 1095
+      frozenWithinDays: 30
       statuses:
       - status: 0
         debtMin: 0
@@ -1881,6 +1886,11 @@ MonoBehaviour:
         debtMax: 320000
         tripsMin: 0
         tripsMax: 2
+      contract:
+        termMin: 90
+        termMax: 720
+        wageMin: 180
+        wageMax: 520
     transponders:
     - id: hopper2
       transponderClass: 0
@@ -1912,6 +1922,37 @@ MonoBehaviour:
       model: Driftbox 3
       prefix: DB
       weight: 1
+    employers:
+    - id: nile_quarry
+      era: ancient
+      name: Nile Quarry Syndicate
+    - id: tigris_canal
+      era: ancient
+      name: Tigris Canal Works
+    - id: caravan_guild
+      era: medieval
+      name: Silk Road Caravan Guild
+    - id: cairo_aqueduct
+      era: medieval
+      name: Cairo Aqueduct Trust
+    - id: edo_timber
+      era: earlymodern
+      name: Edo Timber Company
+    - id: arsenal_holdings
+      era: earlymodern
+      name: Venetian Arsenal Holdings
+    - id: tyburn
+      era: industrial
+      name: Tyburn Mills Consortium
+    - id: ruhr_colliery
+      era: industrial
+      name: Ruhr Colliery Partners
+    - id: weimar_rail
+      era: modern
+      name: Weimar Rail Works
+    - id: showa_shipyard
+      era: modern
+      name: Showa Shipyard Group
   news:
     debt:
     - Debt Relief Departures reach a record high.

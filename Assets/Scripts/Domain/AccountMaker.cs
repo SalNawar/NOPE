@@ -66,6 +66,9 @@ public sealed class Employer
 [Serializable]
 public sealed class ContractRanges
 {
+    /// <summary>The longest term a contract may hold, so the widest term fits its box on a form (FieldLengths.Longest; "99999 days").</summary>
+    public const int MaxTermDays = 99_999;
+
     /// <summary>The shortest term, in days (a whole number of 30-day months).</summary>
     public int termMin;
 
@@ -178,8 +181,12 @@ public sealed class AccountRanges
         {
             if (contract.termMin < AccountMaker.MonthDays || contract.termMin > contract.termMax)
                 problems.Add($"agency.accounts.contract: the term range {contract.termMin}-{contract.termMax} must run from at least {AccountMaker.MonthDays} days upwards.");
+            if (contract.termMax > ContractRanges.MaxTermDays)
+                problems.Add($"agency.accounts.contract: the term {contract.termMax} is above {AccountMaker.Term(ContractRanges.MaxTermDays)}, the widest a form prints.");
             if (contract.wageMin < 1 || contract.wageMin > contract.wageMax)
                 problems.Add($"agency.accounts.contract: the day wage range {contract.wageMin}-{contract.wageMax} must run from at least 1 cr upwards.");
+            if (contract.wageMax > MaxDebt)
+                problems.Add($"agency.accounts.contract: the day wage {contract.wageMax} is above {AccountMaker.Credits(MaxDebt)}, the widest a form prints.");
         }
 
         foreach (CitizenStatus status in (CitizenStatus[])Enum.GetValues(typeof(CitizenStatus)))

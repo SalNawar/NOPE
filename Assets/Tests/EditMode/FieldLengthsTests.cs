@@ -28,6 +28,15 @@ public class FieldLengthsTests
         Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(category, 40));
     }
 
+    /// <summary>The contract's boxes (phase 9): a wage as wide as the widest debt, a term as wide as the longest term ("99999 days"), an employer a book row.</summary>
+    [Test]
+    public void TheContractsRows_AWageLikeADebt_ATermOfFiveDigits_AnEmployerLikeARow()
+    {
+        Assert.AreEqual(FieldLengths.Longest(ClueCategory.Debt, 40), FieldLengths.Longest(ClueCategory.Wage, 40));
+        Assert.AreEqual("99999 days".Length, FieldLengths.Longest(ClueCategory.Term, 40));
+        Assert.AreEqual(FactTable.MaxValueLength, FieldLengths.Longest(ClueCategory.Employer, 40));
+    }
+
     [Test]
     public void ABirthDate_IsTheWidestDateBirthDatesWrites()
     {

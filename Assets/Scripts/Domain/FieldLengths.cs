@@ -43,7 +43,10 @@ public static class FieldLengths
             case ClueCategory.TransponderClass:
                 return LongestName(typeof(TransponderClass));
             case ClueCategory.Debt:
+            case ClueCategory.Wage:
                 return AccountMaker.Credits(AccountRanges.MaxDebt).Length;
+            case ClueCategory.Term:
+                return AccountMaker.Term(ContractRanges.MaxTermDays).Length;
             case ClueCategory.Incident:
                 return AgencyNumbers.IncidentNumber(WidestDay, new Widest()).Length;
             case ClueCategory.DepartureDate:

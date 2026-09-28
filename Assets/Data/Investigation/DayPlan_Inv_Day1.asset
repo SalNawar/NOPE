@@ -33,9 +33,11 @@ MonoBehaviour:
   tellChannels: 00000000
   costumeErrorChance: 0
   lieKinds: 010000000200000000000000
+  violationChance: 0
   activeTravelRules:
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   guaranteeRuleViolators: 1
+  guaranteedRules: []
   forcedCases:
   - caseIndex1Based: 3
     caseBlueprint: {fileID: 0}

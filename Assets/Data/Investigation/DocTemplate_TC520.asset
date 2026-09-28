@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411096b30c5d9bb4f9142a8207326fb1, type: 3}
   m_Name: DocTemplate_TC520
   m_EditorClassIdentifier: Assembly-CSharp::DocumentTemplateSO
-  displayName: Debt Relief Labour Contract
+  displayName: Labour Contract
   formNumber: TC-520
   fieldSpecs:
   - category: 7
@@ -44,7 +44,7 @@ MonoBehaviour:
       field: -1
       slot: 
     - kind: 1
-      text: 1  WORKER
+      text: 1  CONTRACT
       cells: []
       columns: []
       shares: []
@@ -85,32 +85,6 @@ MonoBehaviour:
     - kind: 2
       text: 
       cells:
-      - field: 4
-        slot: 
-        caption: 
-        span: 6
-        rows: 1
-      - field: 5
-        slot: 
-        caption: 
-        span: 6
-        rows: 1
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 1
-      text: 2  CONTRACT
-      cells: []
-      columns: []
-      shares: []
-      options: []
-      field: -1
-      slot: 
-    - kind: 2
-      text: 
-      cells:
       - field: 2
         slot: 
         caption: 
@@ -134,8 +108,26 @@ MonoBehaviour:
       options: []
       field: -1
       slot: 
+    - kind: 2
+      text: 
+      cells:
+      - field: 4
+        slot: 
+        caption: 
+        span: 6
+        rows: 1
+      - field: 5
+        slot: 
+        caption: 
+        span: 6
+        rows: 1
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
     - kind: 12
-      text: Debt Relief Act of 2144. The term runs from the date of departure. Any alteration voids this contract.
+      text: Debt Relief Act of 2144. Alterations void this contract.
       cells: []
       columns: []
       shares: []
