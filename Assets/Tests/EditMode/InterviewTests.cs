@@ -143,6 +143,21 @@ public class InterviewTests
     }
 
     [Test]
+    public void AskLabel_TheTripForACitizen_HomeForTheDisplaced_HomeWhenTheTripLabelIsBlank()
+    {
+        var lines = new InterviewLines { askLabel = "Ask about home >", tripAskLabel = "Ask about the trip >" };
+        Assert.AreEqual("Ask about the trip >", Interview.AskLabel(lines, TravellerKind.RichTourist));
+        Assert.AreEqual("Ask about the trip >", Interview.AskLabel(lines, TravellerKind.PoorTourist));
+        Assert.AreEqual("Ask about the trip >", Interview.AskLabel(lines, TravellerKind.Labourer));
+        Assert.AreEqual("Ask about home >", Interview.AskLabel(lines, TravellerKind.Displaced));
+
+        lines.tripAskLabel = " ";
+        Assert.AreEqual("Ask about home >", Interview.AskLabel(lines, TravellerKind.Labourer));
+        Assert.AreEqual(string.Empty, Interview.AskLabel(null, TravellerKind.Displaced));
+        Assert.AreEqual(string.Empty, Interview.AskLabel(new InterviewLines(), TravellerKind.Displaced));
+    }
+
+    [Test]
     public void ClaimTemplate_IsTheKindsAuthoredClaim_OrThePlaceAloneWhenBlank()
     {
         Assert.AreEqual("Please. Send me home to {place}.", Interview.ClaimTemplate(Lines(), TravellerKind.Displaced));
