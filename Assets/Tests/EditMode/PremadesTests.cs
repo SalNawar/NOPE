@@ -25,6 +25,14 @@ public class PremadesTests
         Assert.AreEqual(expected, Premades.IsRollable(met, nameTaken));
     }
 
+    /// <summary>The famous arrive on day 6 (traveller types K3, section 2.3): its forced slots, 8 and 11 of a queue of 14, are in the second half, outside the guaranteed faulty travellers' window (ViolatorSlots.Window).</summary>
+    [TestCase(8)]
+    [TestCase(11)]
+    public void Day6ForcedSlots_AreOutsideTheViolatorWindow(int slot)
+    {
+        Assert.Greater(slot, ViolatorSlots.Window(14));
+    }
+
     [Test]
     public void Roll_NoCandidates_IsMinusOne_WithNoDraw()
     {
