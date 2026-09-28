@@ -1,0 +1,624 @@
+fileFormatVersion: 2
+guid: 90aa6db284dd0cc4abec2142e8ca99b9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 7361304347250224827
+    second: 55-portal-03-rear-right-painted-glass_0
+  - first:
+      213: -1394348948017863043
+    second: 55-portal-03-rear-right-painted-glass_1
+  - first:
+      213: 2706718303848595521
+    second: 55-portal-03-rear-right-painted-glass_2
+  - first:
+      213: 6779343828677621210
+    second: 55-portal-03-rear-right-painted-glass_3
+  - first:
+      213: -5355132426304834479
+    second: 55-portal-03-rear-right-painted-glass_4
+  - first:
+      213: 2822071274164050635
+    second: 55-portal-03-rear-right-painted-glass_5
+  - first:
+      213: 702679400159128200
+    second: 55-portal-03-rear-right-painted-glass_6
+  - first:
+      213: 925961961587024813
+    second: 55-portal-03-rear-right-painted-glass_7
+  - first:
+      213: 3437898293691435802
+    second: 55-portal-03-rear-right-painted-glass_8
+  - first:
+      213: 682100283890185073
+    second: 55-portal-03-rear-right-painted-glass_9
+  - first:
+      213: -1468142904524441108
+    second: 55-portal-03-rear-right-painted-glass_10
+  - first:
+      213: -1427638640262630337
+    second: 55-portal-03-rear-right-painted-glass_11
+  - first:
+      213: -5471754945407591011
+    second: 55-portal-03-rear-right-painted-glass_12
+  - first:
+      213: 4906033067477647971
+    second: 55-portal-03-rear-right-painted-glass_13
+  - first:
+      213: -7373260731072446717
+    second: 55-portal-03-rear-right-painted-glass_14
+  - first:
+      213: -6967305673448645618
+    second: 55-portal-03-rear-right-painted-glass_15
+  - first:
+      213: 4555309194046152517
+    second: 55-portal-03-rear-right-painted-glass_16
+  - first:
+      213: -6759118707236956644
+    second: 55-portal-03-rear-right-painted-glass_17
+  - first:
+      213: 4636434921870347243
+    second: 55-portal-03-rear-right-painted-glass_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_0
+      rect:
+        serializedVersion: 2
+        x: 1067
+        y: 304
+        width: 18
+        height: 52
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bbe636d4d4b982660800000000000000
+      internalID: 7361304347250224827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_1
+      rect:
+        serializedVersion: 2
+        x: 1074
+        y: 297
+        width: 36
+        height: 43
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d76a474f40746ace0800000000000000
+      internalID: -1394348948017863043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_2
+      rect:
+        serializedVersion: 2
+        x: 1085
+        y: 345
+        width: 6
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14081ffd4f1309520800000000000000
+      internalID: 2706718303848595521
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_3
+      rect:
+        serializedVersion: 2
+        x: 1087
+        y: 339
+        width: 13
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad5f09e2b41151e50800000000000000
+      internalID: 6779343828677621210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_4
+      rect:
+        serializedVersion: 2
+        x: 1120
+        y: 332
+        width: 45
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 154bce45e6fbea5b0800000000000000
+      internalID: -5355132426304834479
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_5
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 307
+        width: 43
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bcad1633fd20a2720800000000000000
+      internalID: 2822071274164050635
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_6
+      rect:
+        serializedVersion: 2
+        x: 1179
+        y: 336
+        width: 33
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 88a2875013b60c900800000000000000
+      internalID: 702679400159128200
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_7
+      rect:
+        serializedVersion: 2
+        x: 1192
+        y: 336
+        width: 12
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da32be38f7da9dc00800000000000000
+      internalID: 925961961587024813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_8
+      rect:
+        serializedVersion: 2
+        x: 1204
+        y: 305
+        width: 32
+        height: 34
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1b4669884ed5bf20800000000000000
+      internalID: 3437898293691435802
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_9
+      rect:
+        serializedVersion: 2
+        x: 1212
+        y: 340
+        width: 13
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 173b772289e477900800000000000000
+      internalID: 682100283890185073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_10
+      rect:
+        serializedVersion: 2
+        x: 1221
+        y: 316
+        width: 11
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce97f409ecb10abe0800000000000000
+      internalID: -1468142904524441108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_11
+      rect:
+        serializedVersion: 2
+        x: 1074
+        y: 298
+        width: 28
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f34368b7832003ce0800000000000000
+      internalID: -1427638640262630337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_12
+      rect:
+        serializedVersion: 2
+        x: 1117
+        y: 306
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9d5ef42edb6014b0800000000000000
+      internalID: -5471754945407591011
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_13
+      rect:
+        serializedVersion: 2
+        x: 1117
+        y: 302
+        width: 36
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3624353e41bb51440800000000000000
+      internalID: 4906033067477647971
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_14
+      rect:
+        serializedVersion: 2
+        x: 1128
+        y: 307
+        width: 25
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30ff6182e6aeca990800000000000000
+      internalID: -7373260731072446717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_15
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 303
+        width: 35
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0c978487682f4f90800000000000000
+      internalID: -6967305673448645618
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_16
+      rect:
+        serializedVersion: 2
+        x: 1210
+        y: 300
+        width: 22
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54f1131b395b73f30800000000000000
+      internalID: 4555309194046152517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_17
+      rect:
+        serializedVersion: 2
+        x: 1118
+        y: 296
+        width: 34
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c16917cd859c232a0800000000000000
+      internalID: -6759118707236956644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 55-portal-03-rear-right-painted-glass_18
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 296
+        width: 35
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: beb4c4e1ffce75040800000000000000
+      internalID: 4636434921870347243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      55-portal-03-rear-right-painted-glass_0: 7361304347250224827
+      55-portal-03-rear-right-painted-glass_1: -1394348948017863043
+      55-portal-03-rear-right-painted-glass_10: -1468142904524441108
+      55-portal-03-rear-right-painted-glass_11: -1427638640262630337
+      55-portal-03-rear-right-painted-glass_12: -5471754945407591011
+      55-portal-03-rear-right-painted-glass_13: 4906033067477647971
+      55-portal-03-rear-right-painted-glass_14: -7373260731072446717
+      55-portal-03-rear-right-painted-glass_15: -6967305673448645618
+      55-portal-03-rear-right-painted-glass_16: 4555309194046152517
+      55-portal-03-rear-right-painted-glass_17: -6759118707236956644
+      55-portal-03-rear-right-painted-glass_18: 4636434921870347243
+      55-portal-03-rear-right-painted-glass_2: 2706718303848595521
+      55-portal-03-rear-right-painted-glass_3: 6779343828677621210
+      55-portal-03-rear-right-painted-glass_4: -5355132426304834479
+      55-portal-03-rear-right-painted-glass_5: 2822071274164050635
+      55-portal-03-rear-right-painted-glass_6: 702679400159128200
+      55-portal-03-rear-right-painted-glass_7: 925961961587024813
+      55-portal-03-rear-right-painted-glass_8: 3437898293691435802
+      55-portal-03-rear-right-painted-glass_9: 682100283890185073
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,9 @@
+{
+    "implementation": "2.5D sprite hall with baked lighting, real 3D desk and realtime foreground lights",
+    "sourceScene": "OfficeScene remains unchanged",
+    "spriteCount": 5,
+    "rendererCount": 176,
+    "cameraPitch": 4.0,
+    "cameraFov": 55.0,
+    "limitation": "Fixed-view art preview; no gameplay routing or continuous left-pan hookup"
+}

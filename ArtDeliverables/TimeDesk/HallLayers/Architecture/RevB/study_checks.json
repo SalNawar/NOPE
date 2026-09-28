@@ -1,0 +1,44 @@
+{
+  "scope": "Architectural proposal only; no Unity changes",
+  "user_confirmed": [
+    "Massive grand hall",
+    "At top of mega government tower",
+    "Fictional city overlooking view",
+    "Player can pan left to window",
+    "Building entry -> desk check -> portal departure"
+  ],
+  "proposed_hall_metres": [
+    60,
+    80,
+    24
+  ],
+  "proposed_counter_count": 5,
+  "source_floor_area_square_metres": 840,
+  "proposed_floor_area_square_metres": 4800,
+  "floor_area_ratio": 5.71,
+  "study_eye_plan_xz": [
+    -23.06,
+    3.55
+  ],
+  "window_wall_x": -30,
+  "study_eye_to_window_metres": 6.94,
+  "study_eye_to_portal_plan_distance_metres": 39.0,
+  "source_portal_height_metres": 6,
+  "approximate_portal_vertical_angular_size_degrees": 8.8,
+  "study_main_heading_degrees": 36.25,
+  "study_left_window_target_xz": [
+    -30,
+    20
+  ],
+  "study_left_window_heading_degrees": -22.87,
+  "study_eye_to_window_target_metres": 17.85,
+  "heading_change_degrees": 59.12,
+  "important_limitations": [
+    "The initial straight-left window look required about 126 degrees of turn. The revised oblique look requires about 59 degrees; this is not a committed pan range.",
+    "Tower absolute height / floor number unspecified.",
+    "Original floor appearance and near-field module must be preserved; expanded floor must not be made by stretching the source.",
+    "Desk footprint preserved as source-size placeholders in B01, not automatically reduced as in Rev A.",
+    "This is an adjacency / massing study, not fully checked furniture navigation.",
+    "Runtime camera / traveller anchors / PC focus require Claude-owned integration."
+  ]
+}

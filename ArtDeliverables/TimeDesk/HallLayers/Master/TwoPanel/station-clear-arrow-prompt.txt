@@ -1,0 +1,5 @@
+EDIT TARGET is the supplied wide 2172x724 scene. Change ONLY the top-rightmost green plaque on the wall above the upstairs chairs. It is near the extreme right edge at x2125,y153. Everything else stays unchanged.
+
+COMPLETELY ERASE all white people/figures/glyphs from that green plaque. Paint just ONE SINGLE LARGE IVORY HORIZONTAL RIGHT ARROW, like this simple geometric symbol: → . A thick straight horizontal shaft and ONE triangular arrowhead pointing right. NOTHING ELSE on that plaque: NO people, NO running figures, NO heads, NO legs, NO letters, NO exit text, NO extra arrow, NO dots. The entire green sign face contains only a bold centered right-pointing arrow. Keep the small plaque physically attached to the same wall, same perspective, thin metal border, matte surface. Ensure it is clearly different from the original two-person symbol.
+
+Preserve all other pixels/composition with maximum fidelity. Do not touch any other signs, doors, portals, glass security gates, fixtures, floor, city, camera or materials. Full original 3:1 panorama output; no cropping, zoom, added text, or new light effects.

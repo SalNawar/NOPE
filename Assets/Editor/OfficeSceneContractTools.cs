@@ -9,7 +9,8 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// The office scene contract's editor tools (docs/SCENE_CONTRACT_GAMEPLAY.md):
 /// Check Office Scene Contract lists how each anchor resolves in the art office
-/// (read-only: the scene is never saved); Add Gameplay Anchors is for the art
+/// (the scene RunConfig.officeSceneName names, ArtOfficeScene; read-only: the
+/// scene is never saved); Add Gameplay Anchors is for the art
 /// side: in the open art office it creates GameplayAnchors/Anchor_{id} for
 /// each place the gameplay would otherwise put on its default pose (the
 /// scanner, the traveller, the hand-over point, the PC's power knob), at that
@@ -17,22 +18,23 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public static class OfficeSceneContractTools
 {
-    /// <summary>The art office.</summary>
-    private const string ArtScenePath = "Assets/Scenes/OfficeScene.unity";
+    /// <summary>The art office the knob names (RunConfig.officeSceneName).</summary>
+    private static string ArtScenePath => ArtOfficeScene.Path;
 
     /// <summary>The contract asset.</summary>
     private const string ContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
 
-    /// <summary>Opens the art office (when it is not open and nothing is unsaved) and logs how every anchor resolves.</summary>
+    /// <summary>Opens the art office the knob names (when it is not open and nothing is unsaved) and logs how every anchor resolves.</summary>
     [MenuItem("Tools/TimeDesk/Check Office Scene Contract")]
     public static void Check()
     {
-        Scene art = SceneManager.GetSceneByPath(ArtScenePath);
+        string path = ArtScenePath;
+        Scene art = SceneManager.GetSceneByPath(path);
         if (!art.IsValid() || !art.isLoaded)
         {
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
                 return;
-            art = EditorSceneManager.OpenScene(ArtScenePath, OpenSceneMode.Single);
+            art = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);
         }
 
         Debug.Log(Report(art));
@@ -75,9 +77,10 @@ public static class OfficeSceneContractTools
     public static void AddAnchors()
     {
         Scene art = SceneManager.GetActiveScene();
-        if (EditorApplication.isPlaying || art.path != ArtScenePath)
+        string path = ArtScenePath;
+        if (EditorApplication.isPlaying || art.path != path)
         {
-            Debug.LogError($"[OfficeSceneContract] Open {ArtScenePath} (edit mode, active scene) to add its gameplay anchors. Nothing was changed.");
+            Debug.LogError($"[OfficeSceneContract] Open {path} (edit mode, active scene) to add its gameplay anchors. Nothing was changed.");
             return;
         }
 

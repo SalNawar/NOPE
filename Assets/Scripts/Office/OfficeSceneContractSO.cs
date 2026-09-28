@@ -4,8 +4,9 @@ using UnityEngine;
 /// <summary>
 /// The office scene contract (docs/SCENE_CONTRACT_GAMEPLAY.md): where the
 /// gameplay layer (Assets/Scenes/OfficeGameplay.unity) finds each named place
-/// in the art office (Assets/Scenes/OfficeScene.unity), which the art side
-/// owns. For every anchor: an object named Anchor_{id} first (the art side's
+/// in the art office (RunConfig.officeSceneName: Assets/Scenes/OfficeScene.unity
+/// or the anime hall, Assets/Art/Office/AnimeHallLayers/AnimeHall.unity), which
+/// the art side owns. For every anchor: an object named Anchor_{id} first (the art side's
 /// explicit mark), then these fallback paths to existing objects, then the
 /// default pose. It also lists the art scene's leftover gameplay objects the
 /// layer switches off at load. Created by Tools > TimeDesk > Build Office UI
@@ -51,32 +52,39 @@ public sealed class OfficeSceneContractSO : ScriptableObject
         }
     }
 
-    /// <summary>Every anchor the gameplay layer resolves (the defaults fit the art office at art ea62550: the desk layout of 633e2e5).</summary>
+    /// <summary>
+    /// Every anchor the gameplay layer resolves. The first fallbacks are the old art
+    /// office's (art ea62550: the desk layout of 633e2e5); the later bare names are the
+    /// anime hall's preserved desk (art c75e1fe), whose props are flat lists of
+    /// "Prop__Material" mesh parts, one part each here (the one whose bounds stand for
+    /// the prop; the PC's must be its glass, which the desktop's clone binds to). The
+    /// defaults fit both, as the hall keeps the same desk layout.
+    /// </summary>
     public AnchorSpec[] anchors =
     {
-        new AnchorSpec(OfficeAnchorId.PCScreen, new[] { "ImportedOfficeDress/Desk/Retro CRT" }, true, new Vector3(-1.64f, 1.43f, -0.13f), 160f),
-        new AnchorSpec(OfficeAnchorId.PCPower, new[] { "ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange" }, true, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.DeskSurface, new[] { "HybridOffice/Booth/Finish_Mat" }, true, new Vector3(0f, 1.07f, -0.52f)),
+        new AnchorSpec(OfficeAnchorId.PCScreen, new[] { "ImportedOfficeDress/Desk/Retro CRT", "CRT2_Glass" }, true, new Vector3(-1.64f, 1.43f, -0.13f), 160f),
+        new AnchorSpec(OfficeAnchorId.PCPower, new[] { "ImportedOfficeDress/Desk/Retro CRT/Rebuilt CRT/CRT2_Orange", "CRT2_Orange" }, true, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.DeskSurface, new[] { "HybridOffice/Booth/Finish_Mat", "Clean_Blotter__DeskClean_Pad" }, true, new Vector3(0f, 1.07f, -0.52f)),
         new AnchorSpec(OfficeAnchorId.Scanner, null, true, new Vector3(1.02f, 1.06f, -0.46f), 180f),
         new AnchorSpec(OfficeAnchorId.Traveller, null, true, new Vector3(0f, 0f, 1.6f), 180f),
         new AnchorSpec(OfficeAnchorId.HandOver, null, true, new Vector3(0.05f, 1.07f, 0.45f)),
-        new AnchorSpec(OfficeAnchorId.NextSign, new[] { "HybridOffice/Booth/Blender_Next" }, true, new Vector3(0.13f, 1.06f, 0.16f), 180f),
-        new AnchorSpec(OfficeAnchorId.Intercom, new[] { "ImportedOfficeDress/Desk/Clerk hotline", "HybridOffice/Booth/Finish_Intercom" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Stamp, new[] { "HybridOffice/Booth/Blender_Stamp" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Till, new[] { "HybridOffice/Booth/Finish_Till" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.StabilityMonitor, new[] { "HybridOffice/Booth/Blender_Stability" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Calendar, new[] { "HybridOffice/Booth/Blender_DayCalendar" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Clock, new[] { "HybridOffice/Booth/Blender_Clock" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.NextSign, new[] { "HybridOffice/Booth/Blender_Next", "Clean_Next__DeskClean_ABS" }, true, new Vector3(0.13f, 1.06f, 0.16f), 180f),
+        new AnchorSpec(OfficeAnchorId.Intercom, new[] { "ImportedOfficeDress/Desk/Clerk hotline", "HybridOffice/Booth/Finish_Intercom", "Clean_Phone__DeskClean_PhoneBody" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.Stamp, new[] { "HybridOffice/Booth/Blender_Stamp", "Clean_Stamp__DeskClean_Wood" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.Till, new[] { "HybridOffice/Booth/Finish_Till", "Clean_Till__DeskClean_Green" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.StabilityMonitor, new[] { "HybridOffice/Booth/Blender_Stability", "Office_Stability__Plastic_WarmGrey" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.Calendar, new[] { "HybridOffice/Booth/Blender_DayCalendar", "Office_Calendar__Office_TealDark" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.Clock, new[] { "HybridOffice/Booth/Blender_Clock", "Office_Clock__Plastic_WarmGrey" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutDay, new[] { "DayNumber" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutStability, new[] { "StabilityPercent" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutCredits, new[] { "CreditsNumber" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutClock, new[] { "ShiftClockDisplay" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.ReadoutNext, new[] { "NextLabel" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.OfficeCamera, new[] { "Main Camera" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.OfficeCamera, new[] { "Main Camera", "Anime hall player preview" }, false, Vector3.zero),
         new AnchorSpec(OfficeAnchorId.OfficeVCam, new[] { "Cameras/OfficeVCam" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Calculator, new[] { "ImportedOfficeDress/Desk/Desk calculator" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.PenPot, new[] { "ImportedOfficeDress/Desk/Pen pot" }, false, Vector3.zero),
-        new AnchorSpec(OfficeAnchorId.Stapler, new[] { "ImportedOfficeDress/Desk/Forms stapler" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.Calculator, new[] { "ImportedOfficeDress/Desk/Desk calculator", "Clean_Calculator__DeskClean_Case" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.PenPot, new[] { "ImportedOfficeDress/Desk/Pen pot", "Clean_PenPot__DeskClean_ABS" }, false, Vector3.zero),
+        new AnchorSpec(OfficeAnchorId.Stapler, new[] { "ImportedOfficeDress/Desk/Forms stapler", "Clean_Stapler__DeskClean_Case" }, false, Vector3.zero),
     };
 
     /// <summary>

@@ -1,5 +1,7 @@
 # Hall architecture study — revision A
 
+**Historical proposal.** The user subsequently specified a massive, grand hall at the top of a government megatower and a leftward window pan. [Revision B](RevB/README.md) supersedes this revision's low-floor location, hall envelope and left arrival-core arrangement. Revision A's source measurements remain useful; its proposed layout is not approved for implementation.
+
 2026-09-26. The user requested a top view and side view, with a sanity check, before further hall art. These are measured design drawings, not changes to Unity. They supersede the latest screen mockup as the spatial planning reference; the proposed architecture still needs the user's review.
 
 ## Drawings

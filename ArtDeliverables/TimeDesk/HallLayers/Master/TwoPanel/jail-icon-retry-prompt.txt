@@ -1,0 +1,6 @@
+Edit ONLY the small DARK CHARCOAL department sign over the MIDDLE door on the lower right wall. This is the sign with a TINY PERSON AND THREE BARS, directly BETWEEN the small burgundy HEART sign on its left and the LARGE burgundy CROWNED OFFICE CHAIR sign on its right.
+
+Replace the tiny person-and-bars graphic on that SMALL DARK MIDDLE SIGN with a much larger bold IVORY JAIL CELL icon: a square outline, three thick vertical bars, and ONE solid padlock. High contrast, very simple geometry, centered and filling the header height. NO person or ticket remains.
+
+DO NOT CHANGE the large burgundy crowned-chair sign to its right. DO NOT CHANGE the heart sign to its left. Both those signs must remain exactly as supplied.
+Preserve the full panoramic image, all architecture, foreground stairs/rails and every other feature. No global restyling or lighting changes. Full original 2172x724 panorama output. Only the SMALL DARK MIDDLE sign changes.

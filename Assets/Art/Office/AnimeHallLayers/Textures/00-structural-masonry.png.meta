@@ -1,0 +1,494 @@
+fileFormatVersion: 2
+guid: bcc6cb2a0d6a54048824c30cde372cca
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -797968839112877222
+    second: 00-structural-masonry_0
+  - first:
+      213: -5061989023255812149
+    second: 00-structural-masonry_1
+  - first:
+      213: -2778168044306255484
+    second: 00-structural-masonry_2
+  - first:
+      213: 1867704044144077736
+    second: 00-structural-masonry_3
+  - first:
+      213: -1422611146794340088
+    second: 00-structural-masonry_4
+  - first:
+      213: -5880653920057115360
+    second: 00-structural-masonry_5
+  - first:
+      213: -7043166633113084473
+    second: 00-structural-masonry_6
+  - first:
+      213: 2264204467373433574
+    second: 00-structural-masonry_7
+  - first:
+      213: -1006065972597845942
+    second: 00-structural-masonry_8
+  - first:
+      213: 4492012570436925647
+    second: 00-structural-masonry_9
+  - first:
+      213: -2093055033698989418
+    second: 00-structural-masonry_10
+  - first:
+      213: 6895632923494690082
+    second: 00-structural-masonry_11
+  - first:
+      213: 1976330303877880099
+    second: 00-structural-masonry_12
+  - first:
+      213: -8380750634670698751
+    second: 00-structural-masonry_13
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 9
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: 00-structural-masonry_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 28
+        width: 29
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5b98d2919b0de4f0800000000000000
+      internalID: -797968839112877222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_1
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 38
+        width: 139
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc729eb8dc330c9b0800000000000000
+      internalID: -5061989023255812149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_2
+      rect:
+        serializedVersion: 2
+        x: 89
+        y: 172
+        width: 34
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 481b8c012e6f179d0800000000000000
+      internalID: -2778168044306255484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_3
+      rect:
+        serializedVersion: 2
+        x: 122
+        y: 84
+        width: 38
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aba4c0ceea6be910800000000000000
+      internalID: 1867704044144077736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_4
+      rect:
+        serializedVersion: 2
+        x: 127
+        y: 172
+        width: 362
+        height: 118
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 801ffc503bed14ce0800000000000000
+      internalID: -1422611146794340088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_5
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 84
+        width: 118
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02dbcffaa68b36ea0800000000000000
+      internalID: -5880653920057115360
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_6
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 102
+        width: 130
+        height: 60
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7cd19637345a14e90800000000000000
+      internalID: -7043166633113084473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_7
+      rect:
+        serializedVersion: 2
+        x: 468
+        y: 233
+        width: 24
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6e265a087f11c6f10800000000000000
+      internalID: 2264204467373433574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_8
+      rect:
+        serializedVersion: 2
+        x: 493
+        y: 281
+        width: 27
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a4092ba045cb902f0800000000000000
+      internalID: -1006065972597845942
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_9
+      rect:
+        serializedVersion: 2
+        x: 522
+        y: 291
+        width: 58
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc87b7312a5d65e30800000000000000
+      internalID: 4492012570436925647
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_10
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 122
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 69a470d4989f3f2e0800000000000000
+      internalID: -2093055033698989418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_11
+      rect:
+        serializedVersion: 2
+        x: 611
+        y: 157
+        width: 115
+        height: 432
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22da36afb9532bf50800000000000000
+      internalID: 6895632923494690082
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_12
+      rect:
+        serializedVersion: 2
+        x: 1336
+        y: 0
+        width: 836
+        height: 534
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3291b79b0f55d6b10800000000000000
+      internalID: 1976330303877880099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: 00-structural-masonry_13
+      rect:
+        serializedVersion: 2
+        x: 1654
+        y: 75
+        width: 90
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 10fc25d63b791bb80800000000000000
+      internalID: -8380750634670698751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      00-structural-masonry_0: -797968839112877222
+      00-structural-masonry_1: -5061989023255812149
+      00-structural-masonry_10: -2093055033698989418
+      00-structural-masonry_11: 6895632923494690082
+      00-structural-masonry_12: 1976330303877880099
+      00-structural-masonry_13: -8380750634670698751
+      00-structural-masonry_2: -2778168044306255484
+      00-structural-masonry_3: 1867704044144077736
+      00-structural-masonry_4: -1422611146794340088
+      00-structural-masonry_5: -5880653920057115360
+      00-structural-masonry_6: -7043166633113084473
+      00-structural-masonry_7: 2264204467373433574
+      00-structural-masonry_8: -1006065972597845942
+      00-structural-masonry_9: 4492012570436925647
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

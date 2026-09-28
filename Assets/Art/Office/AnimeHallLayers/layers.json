@@ -1,0 +1,1286 @@
+{
+  "width": 2172,
+  "height": 724,
+  "source": "hall-anime-platform-v8.png",
+  "sourceSha256": "c352f0d17d102247ecb672219aebde560315611715bd7b181d8406397a279fef",
+  "method": "Mutually exclusive visible-pixel masks; no image resampling",
+  "limitations": "Fixed-view visible surfaces; security glass includes painted transmission; no hidden-surface completion in extracted PNGs",
+  "layers": [
+    {
+      "id": "00 Structural masonry",
+      "file": "00-structural-masonry.png",
+      "order": 0,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 48321,
+      "visibleBounds": [
+        0,
+        136,
+        2172,
+        724
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "01 Ceiling and overhead services",
+      "file": "01-ceiling-and-overhead-services.png",
+      "order": 1,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 110187,
+      "visibleBounds": [
+        694,
+        0,
+        2172,
+        136
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        -1,
+        -0.35
+      ]
+    },
+    {
+      "id": "02 Window frames",
+      "file": "02-window-frames.png",
+      "order": 2,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 105283,
+      "visibleBounds": [
+        0,
+        0,
+        1348,
+        572
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "03 Exterior placeholder single layer",
+      "file": "03-exterior-placeholder-single-layer.png",
+      "order": 3,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 232253,
+      "visibleBounds": [
+        0,
+        0,
+        1322,
+        571
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "04 Upper right service walls",
+      "file": "04-upper-right-service-walls.png",
+      "order": 4,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 78755,
+      "visibleBounds": [
+        1475,
+        88,
+        2172,
+        262
+      ],
+      "suggestedSurfaceNormal": [
+        -1,
+        0,
+        -0.15
+      ]
+    },
+    {
+      "id": "05 Lower right department walls",
+      "file": "05-lower-right-department-walls.png",
+      "order": 5,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 158547,
+      "visibleBounds": [
+        1341,
+        307,
+        2172,
+        723
+      ],
+      "suggestedSurfaceNormal": [
+        -1,
+        0,
+        -0.3
+      ]
+    },
+    {
+      "id": "06 Concourse terracotta floor",
+      "file": "06-concourse-terracotta-floor.png",
+      "order": 6,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 192672,
+      "visibleBounds": [
+        4,
+        336,
+        2169,
+        724
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        1,
+        -0.08
+      ]
+    },
+    {
+      "id": "07 Upper gallery floor",
+      "file": "07-upper-gallery-floor.png",
+      "order": 7,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 17954,
+      "visibleBounds": [
+        1475,
+        262,
+        2172,
+        300
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "id": "08 Bridge fascia",
+      "file": "08-bridge-fascia.png",
+      "order": 8,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 24680,
+      "visibleBounds": [
+        533,
+        264,
+        1349,
+        308
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "09 Left elevator pier",
+      "file": "09-left-elevator-pier.png",
+      "order": 9,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 44270,
+      "visibleBounds": [
+        550,
+        0,
+        694,
+        418
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "10 Right load bearing pier",
+      "file": "10-right-load-bearing-pier.png",
+      "order": 10,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 40390,
+      "visibleBounds": [
+        1333,
+        0,
+        1475,
+        472
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "11 Left stair structure",
+      "file": "11-left-stair-structure.png",
+      "order": 11,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 25742,
+      "visibleBounds": [
+        411,
+        404,
+        688,
+        617
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0.65,
+        -0.65
+      ]
+    },
+    {
+      "id": "12 Foreground platform",
+      "file": "12-foreground-platform.png",
+      "order": 12,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 58406,
+      "visibleBounds": [
+        0,
+        676,
+        1655,
+        724
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "id": "13 Flag left cloth",
+      "file": "13-flag-left-cloth.png",
+      "order": 13,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 12067,
+      "visibleBounds": [
+        722,
+        0,
+        784,
+        198
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "14 Flag right cloth",
+      "file": "14-flag-right-cloth.png",
+      "order": 14,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 10839,
+      "visibleBounds": [
+        1299,
+        0,
+        1355,
+        197
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "15 Departure board frame",
+      "file": "15-departure-board-frame.png",
+      "order": 15,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 9221,
+      "visibleBounds": [
+        842,
+        12,
+        1152,
+        183
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "16 Departure board blank display",
+      "file": "16-departure-board-blank-display.png",
+      "order": 16,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 28016,
+      "visibleBounds": [
+        853,
+        74,
+        1142,
+        173
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "17 Detention door",
+      "file": "17-detention-door.png",
+      "order": 17,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5721,
+      "visibleBounds": [
+        1391,
+        400,
+        1453,
+        516
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "18 Medbay door",
+      "file": "18-medbay-door.png",
+      "order": 18,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 7100,
+      "visibleBounds": [
+        1482,
+        440,
+        1558,
+        551
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "19 Executive suites door",
+      "file": "19-executive-suites-door.png",
+      "order": 19,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 6935,
+      "visibleBounds": [
+        1595,
+        486,
+        1683,
+        607
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "20 Detention pictogram",
+      "file": "20-detention-pictogram.png",
+      "order": 20,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 3423,
+      "visibleBounds": [
+        1387,
+        351,
+        1458,
+        414
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "21 Medbay pictogram",
+      "file": "21-medbay-pictogram.png",
+      "order": 21,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5370,
+      "visibleBounds": [
+        1478,
+        374,
+        1561,
+        456
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "22 Executive suites pictogram",
+      "file": "22-executive-suites-pictogram.png",
+      "order": 22,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 7784,
+      "visibleBounds": [
+        1592,
+        402,
+        1685,
+        504
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "23 Lower elevator doors",
+      "file": "23-lower-elevator-doors.png",
+      "order": 23,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 7789,
+      "visibleBounds": [
+        579,
+        303,
+        648,
+        427
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "24 Upper side elevator door",
+      "file": "24-upper-side-elevator-door.png",
+      "order": 24,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2558,
+      "visibleBounds": [
+        671,
+        157,
+        698,
+        264
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "25 Left parcel lockers",
+      "file": "25-left-parcel-lockers.png",
+      "order": 25,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 31900,
+      "visibleBounds": [
+        0,
+        443,
+        475,
+        687
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "26 Rear baggage scanner",
+      "file": "26-rear-baggage-scanner.png",
+      "order": 26,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5666,
+      "visibleBounds": [
+        722,
+        314,
+        821,
+        403
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "27 Rear waiting seat",
+      "file": "27-rear-waiting-seat.png",
+      "order": 27,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2640,
+      "visibleBounds": [
+        951,
+        328,
+        1056,
+        361
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "28 Rear water dispenser",
+      "file": "28-rear-water-dispenser.png",
+      "order": 28,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 528,
+      "visibleBounds": [
+        1057,
+        316,
+        1072,
+        353
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "29 Rear mixed parcel cabinets",
+      "file": "29-rear-mixed-parcel-cabinets.png",
+      "order": 29,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 3277,
+      "visibleBounds": [
+        1214,
+        308,
+        1280,
+        367
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "30 Rear maintenance rover",
+      "file": "30-rear-maintenance-rover.png",
+      "order": 30,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2128,
+      "visibleBounds": [
+        1275,
+        310,
+        1331,
+        382
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "31 Right vending machine",
+      "file": "31-right-vending-machine.png",
+      "order": 31,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 11643,
+      "visibleBounds": [
+        1716,
+        470,
+        1812,
+        633
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "32 Right waiting seats",
+      "file": "32-right-waiting-seats.png",
+      "order": 32,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 13478,
+      "visibleBounds": [
+        1770,
+        544,
+        1940,
+        674
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "33 Right waste bin",
+      "file": "33-right-waste-bin.png",
+      "order": 33,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 3757,
+      "visibleBounds": [
+        1921,
+        586,
+        1969,
+        679
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "34 Left waste bin",
+      "file": "34-left-waste-bin.png",
+      "order": 34,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2033,
+      "visibleBounds": [
+        592,
+        546,
+        633,
+        614
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "35 Framed historical artwork",
+      "file": "35-framed-historical-artwork.png",
+      "order": 35,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 6473,
+      "visibleBounds": [
+        1863,
+        414,
+        1932,
+        522
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "36 Armillary display",
+      "file": "36-armillary-display.png",
+      "order": 36,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2965,
+      "visibleBounds": [
+        1954,
+        455,
+        2012,
+        533
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "37 Stone bust display",
+      "file": "37-stone-bust-display.png",
+      "order": 37,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 4045,
+      "visibleBounds": [
+        2057,
+        457,
+        2124,
+        555
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "38 Portal 01 front secure bay",
+      "file": "38-portal-01-front-secure-bay.png",
+      "order": 38,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 38422,
+      "visibleBounds": [
+        804,
+        475,
+        1238,
+        639
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "39 Portal 01 front metal ring",
+      "file": "39-portal-01-front-metal-ring.png",
+      "order": 39,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 12207,
+      "visibleBounds": [
+        938,
+        405,
+        1117,
+        586
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "40 Portal 02 rear left secure bay",
+      "file": "40-portal-02-rear-left-secure-bay.png",
+      "order": 40,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 6565,
+      "visibleBounds": [
+        801,
+        362,
+        985,
+        430
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "41 Portal 02 rear left metal ring",
+      "file": "41-portal-02-rear-left-metal-ring.png",
+      "order": 41,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 3287,
+      "visibleBounds": [
+        863,
+        328,
+        946,
+        407
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "42 Portal 03 rear right secure bay",
+      "file": "42-portal-03-rear-right-secure-bay.png",
+      "order": 42,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5909,
+      "visibleBounds": [
+        1065,
+        363,
+        1242,
+        432
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "43 Portal 03 rear right metal ring",
+      "file": "43-portal-03-rear-right-metal-ring.png",
+      "order": 43,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2947,
+      "visibleBounds": [
+        1098,
+        329,
+        1181,
+        406
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "44 Portal 04 upper left secure bay",
+      "file": "44-portal-04-upper-left-secure-bay.png",
+      "order": 44,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5470,
+      "visibleBounds": [
+        1563,
+        202,
+        1789,
+        267
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "45 Portal 04 upper left metal ring",
+      "file": "45-portal-04-upper-left-metal-ring.png",
+      "order": 45,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5292,
+      "visibleBounds": [
+        1647,
+        153,
+        1754,
+        264
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "46 Portal 05 upper right secure bay",
+      "file": "46-portal-05-upper-right-secure-bay.png",
+      "order": 46,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 6918,
+      "visibleBounds": [
+        1798,
+        202,
+        2082,
+        269
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "47 Portal 05 upper right metal ring",
+      "file": "47-portal-05-upper-right-metal-ring.png",
+      "order": 47,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 7966,
+      "visibleBounds": [
+        1877,
+        135,
+        2022,
+        271
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "48 Foreground tall platform railing",
+      "file": "48-foreground-tall-platform-railing.png",
+      "order": 48,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 72863,
+      "visibleBounds": [
+        0,
+        531,
+        2172,
+        724
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "49 Bridge and upper gallery railing",
+      "file": "49-bridge-and-upper-gallery-railing.png",
+      "order": 49,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 19623,
+      "visibleBounds": [
+        530,
+        243,
+        2172,
+        282
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "50 Left observation and stair railing",
+      "file": "50-left-observation-and-stair-railing.png",
+      "order": 50,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 13318,
+      "visibleBounds": [
+        0,
+        369,
+        683,
+        595
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "51 Fixture diffusers",
+      "file": "51-fixture-diffusers.png",
+      "order": 51,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 8123,
+      "visibleBounds": [
+        783,
+        0,
+        1995,
+        169
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "52 Fire safety cabinets",
+      "file": "52-fire-safety-cabinets.png",
+      "order": 52,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 3482,
+      "visibleBounds": [
+        542,
+        185,
+        1478,
+        441
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "53 Portal 01 front painted glass",
+      "file": "53-portal-01-front-painted-glass.png",
+      "order": 53,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 10626,
+      "visibleBounds": [
+        806,
+        475,
+        1230,
+        639
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "54 Portal 02 rear left painted glass",
+      "file": "54-portal-02-rear-left-painted-glass.png",
+      "order": 54,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2878,
+      "visibleBounds": [
+        804,
+        366,
+        983,
+        430
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "55 Portal 03 rear right painted glass",
+      "file": "55-portal-03-rear-right-painted-glass.png",
+      "order": 55,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 2856,
+      "visibleBounds": [
+        1068,
+        366,
+        1235,
+        427
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "56 Portal 04 upper left painted glass",
+      "file": "56-portal-04-upper-left-painted-glass.png",
+      "order": 56,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 3868,
+      "visibleBounds": [
+        1574,
+        203,
+        1788,
+        263
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    },
+    {
+      "id": "57 Portal 05 upper right painted glass",
+      "file": "57-portal-05-upper-right-painted-glass.png",
+      "order": 57,
+      "normal": [
+        0,
+        0,
+        -1
+      ],
+      "visiblePixels": 5092,
+      "visibleBounds": [
+        1802,
+        202,
+        2074,
+        267
+      ],
+      "suggestedSurfaceNormal": [
+        0,
+        0,
+        -1
+      ]
+    }
+  ]
+}

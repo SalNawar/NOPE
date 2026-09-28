@@ -1,0 +1,24 @@
+{
+  "stage": "isolated art blockout, not live integration",
+  "unity_version": "6000.4.11f1",
+  "source_scene_diffs": [],
+  "compile_errors": [],
+  "screenshots": {
+    "forward.png": 1263883,
+    "left-pan.png": 1076434
+  },
+  "builder_result": "Built isolated Unity art study. OfficeScene not saved or modified.\nRenderers: 561",
+  "visual_review": [
+    "Four gates on two departure levels visible",
+    "Left panorama checked from actual camera position",
+    "Main guard rail removed in favour of frameless glass",
+    "Desk runtime screens absent by design in art-only copy"
+  ],
+  "not_verified": [
+    "Live traveller route",
+    "Runtime camera pan",
+    "Navigation",
+    "Final material and lighting match",
+    "Performance on target hardware"
+  ]
+}
