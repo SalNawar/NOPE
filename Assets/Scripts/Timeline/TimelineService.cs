@@ -382,7 +382,29 @@ public static class TimelineService
             if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
                 premadeDialogs.Add(premade.dialogId);
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs);
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib));
+    }
+
+    /// <summary>
+    /// The agency forms of the library's day plans (every blueprint's
+    /// templates, each once, in first-appearance order) as the interview's
+    /// requests see them (traveller types I2): the papers menu lists those a
+    /// kind may be asked for.
+    /// </summary>
+    public static List<AskableForm> AgencyForms(ContentLibrarySO lib)
+    {
+        var forms = new List<AskableForm>();
+        var seen = new HashSet<DocumentTemplateSO>();
+        foreach (DayPlanSO plan in lib != null ? lib.DayPlans : System.Array.Empty<DayPlanSO>())
+        {
+            if (plan == null)
+                continue;
+            foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
+                foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
+                    if (t != null && seen.Add(t))
+                        forms.Add(new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? System.Array.Empty<TravellerKind>()));
+        }
+        return forms;
     }
 
     /// <summary>

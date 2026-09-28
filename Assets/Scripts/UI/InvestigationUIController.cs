@@ -339,7 +339,7 @@ public sealed class InvestigationUIController : MonoBehaviour
 
         _reference.ShowDirectives();
         _interview.BeginCase(inst);
-        _documents.Present(inst, lib != null ? lib.Agency : null);
+        _documents.Present(inst, lib != null ? lib.Agency : null, lib != null ? lib.Interview : null);
         _interview.Start(inst, _documents.Documents, InterviewReachable, AppearanceReachable);
         _reference.BuildBooks(lib);
         _reference.SetClaim(inst);

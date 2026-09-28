@@ -17,18 +17,22 @@ public sealed class InterviewDay
     private readonly List<string> _problems = new List<string>();
     private readonly HashSet<string> _premadeDialogIds = new HashSet<string>();
     private readonly ShiftLedger _ledger;
+    private readonly IReadOnlyList<AskableForm> _forms;
 
     /// <summary>
     /// Decides today's interview once, from the day-start snapshot.
     /// <paramref name="premadeDialogIds"/> are the dialogs premades name
     /// (LegendarySO.dialogId): each is offered only while its premade is at the desk.
+    /// <paramref name="forms"/> are the day's agency forms (the blueprints'
+    /// templates): AskableForms lists those a kind may be asked for.
     /// </summary>
     public InterviewDay(InterviewLines lines, IReadOnlyList<Gated<InterviewQuestion>> questions,
                         IReadOnlyList<Gated<AuthoredDialog>> dialogs, GateSnapshot snapshot, ShiftLedger ledger,
-                        IEnumerable<string> premadeDialogIds)
+                        IEnumerable<string> premadeDialogIds, IReadOnlyList<AskableForm> forms = null)
     {
         Lines = lines ?? new InterviewLines();
         _ledger = ledger ?? new ShiftLedger();
+        _forms = forms ?? new AskableForm[0];
         if (premadeDialogIds != null)
             foreach (string id in premadeDialogIds)
                 if (!string.IsNullOrWhiteSpace(id))
@@ -68,6 +72,9 @@ public sealed class InterviewDay
 
     /// <summary>The interview's fixed wording and layout limits.</summary>
     public InterviewLines Lines { get; }
+
+    /// <summary>The forms the desk may ask a traveller of <paramref name="kind"/> for (FormRequests.For over the day's forms), in template order.</summary>
+    public IReadOnlyList<AskableForm> AskableForms(TravellerKind kind) => FormRequests.For(kind, _forms);
 
     /// <summary>Today's askable questions, in library order.</summary>
     public IReadOnlyList<InterviewQuestion> Questions => _questions;

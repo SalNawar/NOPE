@@ -66,6 +66,15 @@ public class SerializedEnumsTests
         Assert.AreEqual(3, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
+    /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
+    [Test]
+    public void MissingFormVariant_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)MissingFormVariant.Honest);
+        Assert.AreEqual(1, (int)MissingFormVariant.Missing);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(MissingFormVariant)).Length, "a new member is appended here too");
+    }
+
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>
     [Test]
     public void TravellerKind_KeepsItsSerializedInts()

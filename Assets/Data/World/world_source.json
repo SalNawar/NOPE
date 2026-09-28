@@ -986,6 +986,10 @@
         "asset": "Assets/Data/Investigation/CaseBlueprint_RichTourist.asset"
       },
       {
+        "kind": "PoorTourist",
+        "asset": "Assets/Data/Investigation/CaseBlueprint_PoorTourist.asset"
+      },
+      {
         "kind": "Displaced",
         "asset": "Assets/Data/Investigation/CaseBlueprint_Displaced.asset"
       }
@@ -6634,7 +6638,7 @@
     {
       "asset": "Rule_LeisureDepartures",
       "type": "Procedure",
-      "description": "Leisure departures: a Leisure Visa and a Departure Manifest. Every paper must match the Citizen Account."
+      "description": "Leisure departures: a Leisure Visa and a Departure Manifest; a Standard visa also needs a signed Stranding Waiver and a proof of means. Every paper must match the Citizen Account."
     }
   ],
   "days": [
@@ -6655,6 +6659,11 @@
         {
           "kind": "RichTourist",
           "weight": 1
+        },
+        {
+          "kind": "PoorTourist",
+          "weight": 1,
+          "honest": true
         },
         {
           "kind": "Displaced",
@@ -7001,6 +7010,12 @@
     "honorificUnknown": "traveller",
     "requestLabel": "Request {document}",
     "papersLabel": "Request papers >",
+    "askGroups": [
+      {
+        "id": "proof",
+        "label": "Proof of means"
+      }
+    ],
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about home >",
@@ -7019,6 +7034,44 @@
         "label": "Speak up",
         "prompt": "Speak up, please. I can barely hear you.",
         "reply": "Sorry. Is this better?"
+      }
+    ],
+    "missingFormReplies": [
+      {
+        "kind": "RichTourist",
+        "request": "TC-310",
+        "variant": "Honest",
+        "text": "It's a Premium unit, I don't need one."
+      },
+      {
+        "kind": "RichTourist",
+        "request": "proof",
+        "variant": "Honest",
+        "text": "I pay my own way."
+      },
+      {
+        "kind": "Labourer",
+        "request": "proof",
+        "variant": "Honest",
+        "text": "Debt Relief pays my way."
+      },
+      {
+        "kind": "PoorTourist",
+        "request": "TC-310",
+        "variant": "Missing",
+        "text": "I... didn't get round to that one."
+      },
+      {
+        "kind": "PoorTourist",
+        "request": "proof",
+        "variant": "Missing",
+        "text": "I... didn't get round to that one."
+      },
+      {
+        "kind": "Labourer",
+        "request": "TC-310",
+        "variant": "Missing",
+        "text": "I... didn't get round to that one."
       }
     ],
     "menuCapacity": 8,
@@ -7917,7 +7970,6 @@
         {
           "type": "PoorTourist",
           "inherit": "RichTourist",
-          "dataOnly": true,
           "steps": [
             {
               "id": "paperSet",
