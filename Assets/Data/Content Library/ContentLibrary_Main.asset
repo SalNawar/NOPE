@@ -192,6 +192,10 @@ MonoBehaviour:
       line:
         id: interview.claims.RichTourist
         text: One leisure departure to {place}, please.
+    - kind: 1
+      line:
+        id: interview.claims.PoorTourist
+        text: One leisure departure to {place}, please.
     - kind: 3
       line:
         id: interview.claims.Displaced
@@ -201,6 +205,46 @@ MonoBehaviour:
     honorificUnknown: traveller
     requestLabel: Request {document}
     papersLabel: Request papers >
+    askGroups:
+    - id: proof
+      label: Proof of means
+    missingFormReplies:
+    - kind: 0
+      request: TC-310
+      variant: 0
+      line:
+        id: interview.missingFormReplies.RichTourist.TC-310.Honest
+        text: It's a Premium unit, I don't need one.
+    - kind: 0
+      request: proof
+      variant: 0
+      line:
+        id: interview.missingFormReplies.RichTourist.proof.Honest
+        text: I pay my own way.
+    - kind: 2
+      request: proof
+      variant: 0
+      line:
+        id: interview.missingFormReplies.Labourer.proof.Honest
+        text: Debt Relief pays my way.
+    - kind: 1
+      request: TC-310
+      variant: 1
+      line:
+        id: interview.missingFormReplies.PoorTourist.TC-310.Missing
+        text: I... didn't get round to that one.
+    - kind: 1
+      request: proof
+      variant: 1
+      line:
+        id: interview.missingFormReplies.PoorTourist.proof.Missing
+        text: I... didn't get round to that one.
+    - kind: 2
+      request: TC-310
+      variant: 1
+      line:
+        id: interview.missingFormReplies.Labourer.TC-310.Missing
+        text: I... didn't get round to that one.
     requestPrompt:
       id: interview.requestPrompt
       text: Your {document}, please.
@@ -594,7 +638,7 @@ MonoBehaviour:
           fromDay: 4
       - type: PoorTourist
         inherit: RichTourist
-        dataOnly: 1
+        dataOnly: 0
         steps:
         - id: paperSet
           when: 1
@@ -1865,6 +1909,7 @@ MonoBehaviour:
       validDaysMin: 3
       validDaysMax: 365
       tripsWithinDays: 1095
+      waiverPrefix: SW
       statuses:
       - status: 0
         debtMin: 0
@@ -1912,6 +1957,25 @@ MonoBehaviour:
       model: Driftbox 3
       prefix: DB
       weight: 1
+    proofs:
+    - form: TC-415
+      category: 19
+      weight: 1
+      amountMin: 4000
+      amountMax: 12000
+      prefix: 
+    - form: TC-416
+      category: 20
+      weight: 1
+      amountMin: 3000
+      amountMax: 15000
+      prefix: 
+    - form: TC-417
+      category: 21
+      weight: 1
+      amountMin: 0
+      amountMax: 0
+      prefix: TI
     strandChance: 0.08
     strandFine: 150
   news:
