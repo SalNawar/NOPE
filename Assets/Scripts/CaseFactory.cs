@@ -364,7 +364,7 @@ public sealed class CaseFactory
         inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = lieKind == null ? null
-            : lieKind == LieKind.FalseOrigin ? Disguise(inst, fields, plan, caseIndex1Based, place, legendary)
+            : LieKinds.IsPlaceLie(lieKind.Value) ? Disguise(inst, fields, plan, caseIndex1Based, place, legendary, lieKind.Value)
             : Forge(inst, lieKind.Value, caseIndex1Based);
         AddAnswers(inst, lie);
 
@@ -457,19 +457,23 @@ public sealed class CaseFactory
         inst.documents.Select(d => (IReadOnlyList<DocumentField>)d.fields).ToList();
 
     /// <summary>
-    /// Plans a rolled false origin and applies it (Lies.Plan): the liar gets
-    /// a true home among today's other places; every field of each
-    /// Papers-tell category is rewritten with that home's value, while an Answer
-    /// or Appearance tell leaves the papers on the cover (AddAnswers speaks an
-    /// answer; ComposeLook dresses the garment). A home's dress may leak only
-    /// when Looks.CanLeak holds for the claim and the traveller's gender. A
-    /// premade authored as a liar lies from their true place, through papers
-    /// and answers only. Returns the plan, or null for a premade whose true
-    /// place is not in today's world (they stay honest).
+    /// Plans a rolled place lie and applies it (Lies.Plan): a false origin
+    /// (L7) gets a true home among today's other places; the fake displaced
+    /// (L8, <paramref name="kind"/>) come from the present, the one candidate
+    /// (TodaysWorld.Present, whose row today's facts hold, so the origin
+    /// proof names 2150). Every field of each Papers-tell category is
+    /// rewritten with the source's value, while an Answer or Appearance tell
+    /// leaves the papers on the cover (AddAnswers speaks an answer;
+    /// ComposeLook dresses the garment). A home's dress may leak only when
+    /// Looks.CanLeak holds for the claim and the traveller's gender (the
+    /// present's whole outfit never does). A premade authored as a liar lies
+    /// from their true place, through papers and answers only. Returns the
+    /// plan, or null for a premade whose true place is not in today's world,
+    /// or a fake displaced person without a present (they stay honest).
     /// </summary>
-    private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary)
+    private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary, LieKind kind)
     {
-        // The homes the lie may come from: today's places, or a lying premade's own true place.
+        // The homes the lie may come from: today's places (L7), the present (L8), or a lying premade's own true place.
         List<NationEraProfileSO> homes = _todays;
         IReadOnlyList<TellChannel> channels = _channels;
         if (legendary != null)
@@ -483,13 +487,34 @@ public sealed class CaseFactory
             homes = new List<NationEraProfileSO> { legendary.truePlace };
             channels = _channels.Where(c => c != TellChannel.Appearance).ToList();
         }
+        else if (kind == LieKind.FakeDisplaced)
+        {
+            if (_present == null)
+            {
+                Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a fake displaced person, but today has no present to come from, so they stay honest. Run Tools > TimeDesk > Generate World.");
+                return null;
+            }
 
-        // The homes as the lie rules see them, in order (HomeIndex indexes both).
+            homes = new List<NationEraProfileSO>();
+        }
+
+        // The homes as the lie rules see them, in order (HomeIndex indexes both): today's places, or the present alone.
         LookSource claim = place != null ? SourceOf(place) : null;
         var todays = new List<HomeCandidate>(homes.Count);
+        var labels = new List<string>(homes.Count);
         foreach (NationEraProfileSO p in homes)
+        {
             todays.Add(new HomeCandidate(p.nation.id, p.era.id, p.birthYearMin, p.birthYearMax,
                                          Looks.CanLeak(claim, SourceOf(p), inst.gender, _lib.LookRules)));
+            labels.Add(PlaceLabel(p));
+        }
+        if (kind == LieKind.FakeDisplaced)
+        {
+            LookSource present = PresentSource();
+            todays.Add(new HomeCandidate(_present.NationId, _present.EraId, _present.BirthYearMin, _present.BirthYearMax,
+                                         present != null && Looks.CanLeak(claim, present, inst.gender, _lib.LookRules)));
+            labels.Add(_present.Label);
+        }
 
         LiePlan lie = Lies.Plan(
             plan.TellCount,
@@ -502,16 +527,19 @@ public sealed class CaseFactory
             channels,
             _facts,
             _bookCategories,
-            _lieRng);
+            _lieRng,
+            kind);
 
         if (lie.Outcome == LieOutcome.NoPossibleLie)
         {
-            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled a liar, but no other place today differs from '{inst.originLabel}' in a fact its papers print, today's questions ask or its dress could leak (with a reference book), or in birth year, so the traveller stays honest. Widen the day's eras or countries, add a reference book, or allow more tell channels.");
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled {kind}, but no candidate home today differs from '{inst.originLabel}' in a fact its papers print, today's questions ask or its dress could leak (with a reference book), or in birth year, so the traveller stays honest. Widen the day's eras or countries, add a reference book, or allow more tell channels.");
         }
         else if (lie.Outcome == LieOutcome.Liar)
         {
-            inst.trueHome = homes[lie.HomeIndex];
-            inst.trueHomeLabel = PlaceLabel(inst.trueHome);
+            HomeCandidate home = todays[lie.HomeIndex];
+            inst.tellSourceNationId = home.NationId;
+            inst.tellSourceEraId = home.EraId;
+            inst.trueHomeLabel = labels[lie.HomeIndex];
             lie.ApplyTo(Papers(inst));
         }
 
@@ -673,12 +701,28 @@ public sealed class CaseFactory
         if (inst.gender == TravellerGender.Unknown)
             Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: '{inst.visitorGivenName}' has no known gender (not on the place's name lists); the look draws one. Check the place's names.");
 
-        LookSource leak = costume.source ?? (lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance && inst.trueHome != null
-            ? SourceOf(inst.trueHome)
-            : null);
+        LookSource leak = costume.source ?? (lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance ? TellSource(inst) : null);
         int year = family != null && _present != null ? _present.Year : place.year;
         LookWeights weights = family != null ? family.looks : place.looks;
         return Looks.Compose(SourceOf(place), leak, inst.gender, inst.trueBirthDate, year, weights, _lib.LookRules, _looksRng, costume.whole);
+    }
+
+    /// <summary>
+    /// A liar's tell source as the look rules see it (a dress tell's
+    /// garment): today's place with the tell source's ids, or the present
+    /// (a fake displaced person); null for an honest traveller or a source
+    /// today's world does not hold.
+    /// </summary>
+    private LookSource TellSource(CaseInstance inst)
+    {
+        if (!inst.IsLiar)
+            return null;
+
+        NationEraProfileSO home = _todays.FirstOrDefault(p => p.nation != null && p.era != null && p.nation.id == inst.tellSourceNationId && p.era.id == inst.tellSourceEraId);
+        if (home != null)
+            return SourceOf(home);
+
+        return _present != null && _present.NationId == inst.tellSourceNationId && _present.EraId == inst.tellSourceEraId ? PresentSource() : null;
     }
 
     /// <summary>A place as the look rules see it: its ids, wardrobe and today's Culture fact.</summary>

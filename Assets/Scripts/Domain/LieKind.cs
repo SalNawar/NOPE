@@ -16,7 +16,10 @@ public enum LieKind
     PoorPosingAsRich,
 
     /// <summary>L2, a doctored identity: a tourist's visa with another Citizen ID or another birth year.</summary>
-    DoctoredIdentity
+    DoctoredIdentity,
+
+    /// <summary>L8, the fake displaced: a 2150 citizen posing as a displaced person, whose papers or answers leak the present's values (a place lie whose one candidate home is the present).</summary>
+    FakeDisplaced
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -26,14 +29,16 @@ public static class LieKinds
     /// True when a traveller of <paramref name="kind"/> may carry
     /// <paramref name="lie"/> (traveller types §6.1): a false origin is the
     /// displaced's (a 2150 citizen is who they say and comes from where they
-    /// say); poor posing as rich is drawn from the rich entry; a doctored
-    /// identity is a tourist's.
+    /// say), and so is the fake displaced (a 2150 citizen posing as one);
+    /// poor posing as rich is drawn from the rich entry; a doctored identity
+    /// is a tourist's.
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
         switch (lie)
         {
             case LieKind.FalseOrigin:
+            case LieKind.FakeDisplaced:
                 return kind == TravellerKind.Displaced;
             case LieKind.PoorPosingAsRich:
                 return kind == TravellerKind.RichTourist;
@@ -58,8 +63,11 @@ public static class LieKinds
         return lies;
     }
 
-    /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for the place lie, planned by Lies.Plan.</summary>
-    public static bool IsRecordLie(LieKind lie) => lie != LieKind.FalseOrigin;
+    /// <summary>True for a place lie, planned by Lies.Plan: the false origin (another of today's places) or the fake displaced (the present as the one candidate home).</summary>
+    public static bool IsPlaceLie(LieKind lie) => lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced;
+
+    /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie.</summary>
+    public static bool IsRecordLie(LieKind lie) => !IsPlaceLie(lie);
 
     /// <summary>
     /// The status of the account a citizen really holds (the truth their
