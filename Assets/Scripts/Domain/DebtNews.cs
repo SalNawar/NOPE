@@ -4,8 +4,8 @@ using System.Collections.Generic;
 /// <summary>
 /// The morning paper's debt-theme lines as authored (world_source.json
 /// "news"; the traveller-types spec's §10, T1; redesign phase 13), written by
-/// Generate World into the content library. The strandings' line
-/// ("news.stranded") joins this block with the strandings.
+/// Generate World into the content library: the debt lines and the
+/// strandings' line ("news.stranded"; Strandings.Lines).
 /// </summary>
 [Serializable]
 public sealed class NewsContent
@@ -13,10 +13,17 @@ public sealed class NewsContent
     /// <summary>The debt-economy lines, one of which each morning's paper carries ("news.debt"; DebtNews.Line). Empty prints none.</summary>
     public List<string> debt = new();
 
-    /// <summary>What Generate World and the validator refuse: a blank debt line. Empty when sound.</summary>
+    /// <summary>The line the morning paper prints per traveller stranded the day before ("news.stranded"; tokens {name} and {place}; Strandings.Lines).</summary>
+    public string stranded = string.Empty;
+
+    /// <summary>What Generate World and the validator refuse: a blank debt line, or a stranding line that is blank or lacks {name} or {place}. Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
+        if (string.IsNullOrWhiteSpace(stranded))
+            problems.Add("news.stranded is blank: the line the morning paper prints for each stranded traveller, with {name} and {place}.");
+        else if (!Interview.HoldsToken(stranded, Interview.NameToken) || !Interview.HoldsToken(stranded, Interview.PlaceToken))
+            problems.Add("news.stranded must hold {name} and {place}: the stranded traveller and where they are lost.");
         if (debt == null)
             return problems;
         for (int i = 0; i < debt.Count; i++)

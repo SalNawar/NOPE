@@ -1146,7 +1146,9 @@
         "amountMax": 0,
         "prefix": "TI"
       }
-    ]
+    ],
+    "strandChance": 0.08,
+    "strandFine": 150
   },
   "eras": [
     {
@@ -7648,6 +7650,7 @@
     ]
   },
   "news": {
+    "stranded": "Stranded: {name}, lost in {place} when an Economy transponder failed.",
     "debt": [
       "Debt Relief Departures reach a record high.",
       "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
@@ -11221,6 +11224,18 @@
       {
         "key": "results.unproven",
         "text": "Undocumented denials: {0} (log a deviation before denying)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.stranded",
+        "text": "Stranded in transit: {0}   (an Economy transponder failed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.strandingFine",
+        "text": "Stranding fine: -{0}   (let through without a signed waiver)",
         "gloss": "None",
         "tier": "Full"
       },

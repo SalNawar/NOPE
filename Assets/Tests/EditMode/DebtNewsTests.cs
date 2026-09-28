@@ -51,14 +51,25 @@ public class DebtNewsTests
         Assert.AreEqual("only", DebtNews.Line(new[] { "only" }, 12345, 9));
     }
 
+    private const string Stranded = "Stranded: {name}, lost in {place} when an Economy transponder failed.";
+
     [Test]
     public void NewsContentProblems_RefuseABlankLine()
     {
-        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList() }.Problems());
-        CollectionAssert.IsEmpty(new NewsContent().Problems(), "an empty pool prints no debt line");
+        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList(), stranded = Stranded }.Problems());
+        CollectionAssert.IsEmpty(new NewsContent { stranded = Stranded }.Problems(), "an empty pool prints no debt line");
 
-        List<string> problems = new NewsContent { debt = new List<string> { "A line.", " " } }.Problems();
+        List<string> problems = new NewsContent { debt = new List<string> { "A line.", " " }, stranded = Stranded }.Problems();
         Assert.AreEqual(1, problems.Count);
         StringAssert.Contains("news.debt", problems[0]);
+    }
+
+    /// <summary>Redesign phase 13b: the stranding line (Strandings.Lines) names the traveller and the place, so it must hold both tokens.</summary>
+    [Test]
+    public void NewsContentProblems_TheStrandingLineHoldsItsTokens()
+    {
+        StringAssert.Contains("news.stranded", new NewsContent { debt = Pool.ToList() }.Problems().Single(), "a blank line");
+        StringAssert.Contains("{place}", new NewsContent { debt = Pool.ToList(), stranded = "Stranded: {name}." }.Problems().Single(), "no place");
+        StringAssert.Contains("{name}", new NewsContent { debt = Pool.ToList(), stranded = "Lost in {place}." }.Problems().Single(), "no name");
     }
 }
