@@ -1912,6 +1912,8 @@ MonoBehaviour:
       model: Driftbox 3
       prefix: DB
       weight: 1
+    strandChance: 0.08
+    strandFine: 150
   news:
     debt:
     - Debt Relief Departures reach a record high.
@@ -1919,6 +1921,7 @@ MonoBehaviour:
     - 12,000 accounts frozen in default.
     - Premium families book Periclean Athens for the summer.
     - A stranded tourist's family inherits 212,000 cr.
+    stranded: 'Stranded: {name}, lost in {place} when an Economy transponder failed.'
   mail:
   - id: welcome
     fromDay: 1
