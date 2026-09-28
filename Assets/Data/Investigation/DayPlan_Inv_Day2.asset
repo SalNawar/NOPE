@@ -15,9 +15,8 @@ MonoBehaviour:
   dayNumber: 2
   visitorsCount: 10
   kinds:
-  - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
-    weight: 1
-    honest: 0
+  - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
+    weight: 3
   eraWeights:
   - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
     weight: 1
@@ -30,22 +29,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4b0b57812ca3f22438c33d550e807800, type: 2}
   - {fileID: 11400000, guid: 6295fd2e336590749b2d764705103c9e, type: 2}
   - {fileID: 11400000, guid: 94cf9ca28c539d14c97f5d8a05e45cfb, type: 2}
-  legendaryBaseChance: 0.05
-  availableLegendaries:
-  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
-  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
-  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
-  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  legendaryBaseChance: 0
+  availableLegendaries: []
   tellCount: 1
   tellChannels: 0000000001000000
   costumeErrorChance: 0.1
-  lieKinds: 00000000
+  lieKinds: 0100000002000000
   activeTravelRules:
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   guaranteeRuleViolators: 1
-  forcedCases:
-  - caseIndex1Based: 6
-    caseBlueprint: {fileID: 0}
-    legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  forcedCases: []
   eventRules: []

@@ -17,7 +17,7 @@ public sealed class TodaysWorld
         Present = present;
     }
 
-    /// <summary>Today's places in book order: the plan's eras and countries, and at most one Future place (the leader's).</summary>
+    /// <summary>Today's places (the destinations) in book order: the plan's eras and countries, never a Future place (History.IsDestination).</summary>
     public IReadOnlyList<NationEraProfileSO> Places { get; }
 
     /// <summary>Today's facts with history applied, the present's row last (what papers, books, tells and answers read).</summary>

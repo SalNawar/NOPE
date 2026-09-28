@@ -94,6 +94,62 @@ public class LiesTests
     /// <summary>The lies enabled for a displaced traveller today: the false origin alone.</summary>
     private static readonly LieKind[] OneLie = { LieKind.FalseOrigin };
 
+    /// <summary>The present as a candidate home (L8, the fake displaced): the neutral present's ids and its citizens' birth years; its dress never leaks.</summary>
+    private static readonly HomeCandidate Present2150 = new HomeCandidate(Present.NeutralNationId, "future", 2080, 2132);
+
+    /// <summary>Today's facts with the present's row last (Present.AddRow), as every book lists it.</summary>
+    private static FactTable FactsWithPresent()
+    {
+        FactTable t = Facts();
+        Add(t, Present2150, "Temporal Customs Zone (2150)", "Credits", "Agency Standard English", "Wrist comm");
+        return t;
+    }
+
+    /// <summary>
+    /// The fake displaced (L8): the same plan with the present as its one
+    /// candidate, so the pick is one Range over that candidate, the tells
+    /// carry the present's values and the plan keeps the lie's kind (the
+    /// eligible tells are BirthDate, Currency, Language and Technology in
+    /// paper order: Range(1) is Currency).
+    /// </summary>
+    [Test]
+    public void Plan_TheFakeDisplaced_ComesFromThePresent_AndKeepsItsKind()
+    {
+        var rng = new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(1));
+        List<DocumentField> papers = Papers();
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Present2150 }, papers, None, PapersOnly, FactsWithPresent(), Books, rng, LieKind.FakeDisplaced);
+
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        Assert.AreEqual(LieKind.FakeDisplaced, plan.Kind);
+        Assert.AreEqual(0, plan.HomeIndex, "the present is the one candidate");
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells);
+        Assert.AreEqual("Credits", plan.TellValue(ClueCategory.Currency), "the present's value");
+        Assert.IsTrue(rng.Done);
+
+        plan.ApplyTo(Docs(papers));
+        Assert.IsTrue(papers.Where(f => f.category == ClueCategory.Currency).All(f => f.value == "Credits" && f.isAnachronism), "every Currency field names 2150's money");
+    }
+
+    /// <summary>A fake displaced person's birth-year tell is a 2150 year (BirthDates.PickOtherYear over the present's years).</summary>
+    [Test]
+    public void Plan_TheFakeDisplaced_BirthYearTell_IsAPresentYear()
+    {
+        var rng = new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Present2150 }, Papers(), None, PapersOnly, FactsWithPresent(), Books, rng, LieKind.FakeDisplaced);
+
+        Assert.AreEqual(LieKind.FakeDisplaced, plan.Kind);
+        CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate }, plan.Tells);
+        StringAssert.EndsWith(" 2080", plan.TellValue(ClueCategory.BirthDate), "the first present year, the day and month kept");
+    }
+
+    /// <summary>Without the kind the plan is the false origin, as every caller before L8 had it.</summary>
+    [Test]
+    public void Plan_WithoutAKind_IsTheFalseOrigin()
+    {
+        Assert.AreEqual(LieKind.FalseOrigin, Plan(new SeededRandom(1)).Kind);
+        Assert.AreEqual(LieKind.FalseOrigin, Plan(null).Kind);
+    }
+
     private static ScriptedRandom Script(params ScriptStep[] steps) => new ScriptedRandom(steps);
     private static ScriptStep V(float roll) => ScriptStep.Value(roll);
     private static ScriptStep R(int offset) => ScriptStep.Range(offset);
