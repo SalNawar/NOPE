@@ -23,6 +23,7 @@ MonoBehaviour:
       id: q_capital.answer
       text: Our capital is {value}.
     overrides: []
+    kinds: 03000000
   conditions:
   - type: 8
     key: 

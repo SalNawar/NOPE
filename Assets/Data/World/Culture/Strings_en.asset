@@ -1672,6 +1672,18 @@ MonoBehaviour:
     text: Approved a closed destination.
     gloss: 0
     tier: 0
+  - key: citation.acceptedWrong.smuggled
+    text: Let 2150 goods leave 2150.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.wrongDate
+    text: Approved a departure on the wrong date.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.expired
+    text: Approved an expired paper.
+    gloss: 0
+    tier: 0
   - key: citation.deniedWrong
     text: Denied a legitimate, permitted traveler.
     gloss: 0

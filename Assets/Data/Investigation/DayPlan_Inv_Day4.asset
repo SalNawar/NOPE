@@ -15,6 +15,8 @@ MonoBehaviour:
   dayNumber: 4
   visitorsCount: 12
   kinds:
+  - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
+    weight: 1
   - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
     weight: 1
   eraWeights:
@@ -41,10 +43,16 @@ MonoBehaviour:
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.1
-  lieKinds: 00000000
+  lieKinds: 00000000010000000200000003000000
   activeTravelRules:
   - {fileID: 11400000, guid: 715dc87bb156a1644811671799952619, type: 2}
+  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   guaranteeRuleViolators: 1
+  guaranteedRules:
+  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
   forcedCases: []
   eventRules: []

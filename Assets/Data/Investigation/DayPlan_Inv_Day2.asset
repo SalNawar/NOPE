@@ -43,6 +43,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f2e488996b7c2c7478e0d157733694a2, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   guaranteeRuleViolators: 1
+  guaranteedRules: []
   forcedCases:
   - caseIndex1Based: 6
     caseBlueprint: {fileID: 0}
