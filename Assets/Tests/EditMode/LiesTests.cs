@@ -98,6 +98,142 @@ public class LiesTests
     private static ScriptStep V(float roll) => ScriptStep.Value(roll);
     private static ScriptStep R(int offset) => ScriptStep.Range(offset);
 
+    // -----------------------------
+    // Smuggling: the present as the only candidate, the category filter
+    // -----------------------------
+
+    /// <summary>The present (traveller types H1) as a home candidate: the neutral present's ids and its citizens' birth years.</summary>
+    private static readonly HomeCandidate Present = new HomeCandidate("neutral", "future", 2080, 2132);
+
+    /// <summary>The present's label, as its row in every book prints it.</summary>
+    private const string PresentLabel = "Temporal Customs Zone (Future)";
+
+    /// <summary>Facts() with the present's row last (Present.AddRow): Credits, Agency Standard English, Wrist comm.</summary>
+    private static FactTable FactsWithPresent()
+    {
+        FactTable t = Facts();
+        Add(t, Present, PresentLabel, "Credits", "Agency Standard English", "Wrist comm");
+        return t;
+    }
+
+    /// <summary>A smuggler's plan: Egypt's honest claim, the present as the only candidate, Currency and Technology only.</summary>
+    private static LiePlan Smuggle(IRandomSource rng, IReadOnlyList<TellChannel> channels, IReadOnlyList<ClueCategory> asked, int tellCount = 1,
+                                   List<DocumentField> papers = null, FactTable facts = null, IReadOnlyList<HomeCandidate> candidates = null) =>
+        Lies.Plan(tellCount, "egypt", "ancient", Cover, candidates ?? new[] { Present }, papers ?? Papers(), asked, channels,
+                  facts ?? FactsWithPresent(), Books, rng, Lies.SmuggledCategories, LieKind.Smuggling);
+
+    [Test]
+    public void Smuggling_ThePresentIsTheOnlyCandidate_AndOnlyTheSmuggledCategoriesAreOptions()
+    {
+        // The papers print Name, BirthDate, Currency, Language, Technology, Currency: the filter leaves P:Currency, P:Technology.
+        List<DocumentField> papers = Papers();
+        LiePlan plan = Smuggle(Script(R(0), R(0), R(0)), PapersOnly, None, tellCount: 9, papers: papers);
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        Assert.AreEqual(LieKind.Smuggling, plan.Kind);
+        Assert.AreEqual(0, plan.HomeIndex, "the present, index 0 of the candidate list");
+        CollectionAssert.AreEquivalent(new[] { ClueCategory.Currency, ClueCategory.Technology }, plan.Tells);
+        Assert.AreEqual("Credits", plan.TellValue(ClueCategory.Currency));
+        Assert.AreEqual("Wrist comm", plan.TellValue(ClueCategory.Technology));
+        Assert.IsNull(plan.TellValue(ClueCategory.Language), "the tongue is never smuggled");
+        Assert.IsNull(plan.TellValue(ClueCategory.BirthDate), "nor the birth year");
+
+        plan.ApplyTo(Docs(papers));
+        foreach (DocumentField f in papers)
+            Assert.AreEqual(f.category == ClueCategory.Currency || f.category == ClueCategory.Technology, f.isAnachronism, f.label);
+        Assert.AreEqual("Credits", papers[2].value, "Coin of Issue");
+        Assert.AreEqual("Credits", papers[5].value, "Bond Currency (every field of the category)");
+        Assert.AreEqual("Wrist comm", papers[4].value, "Declared Device");
+    }
+
+    [Test]
+    public void Smuggling_GoldenOrder_TheHomeThenOneTell_TheFilterKeepsTheOptionsOrder()
+    {
+        // Options after the filter, in order: P:Currency, P:Technology, then the asked A:Technology, A:Currency; R(2) picks the spoken device.
+        LiePlan plan = Smuggle(Script(R(0), R(2)), Both, new[] { ClueCategory.Technology, ClueCategory.Currency });
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        CollectionAssert.AreEqual(new[] { ClueCategory.Technology }, plan.Tells);
+        Assert.AreEqual(TellChannel.Answer, plan.ChannelOf(ClueCategory.Technology));
+        Assert.AreEqual("Wrist comm", plan.TellValue(ClueCategory.Technology));
+
+        plan = Smuggle(Script(R(0), R(3)), Both, new[] { ClueCategory.Technology, ClueCategory.Currency });
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells);
+        Assert.AreEqual(TellChannel.Answer, plan.ChannelOf(ClueCategory.Currency), "the fourth option is the spoken currency");
+        Assert.AreEqual("Credits", plan.TellValue(ClueCategory.Currency));
+    }
+
+    [Test]
+    public void Smuggling_NeverLeaksInDress_AndNeverFromAnotherPlace()
+    {
+        var leakable = new HomeCandidate("neutral", "future", 2080, 2132, appearanceLeakable: true);
+        FactTable facts = FactsWithPresent();
+        facts.Add("neutral", "future", PresentLabel, ClueCategory.Culture, "tech jacket");
+        facts.Add("egypt", "ancient", "New Kingdom Egypt (Ancient)", ClueCategory.Culture, "pleated kilt");
+        var books = new HashSet<ClueCategory>(Books) { ClueCategory.Culture };
+        LiePlan plan = Lies.Plan(9, "egypt", "ancient", Cover, new[] { leakable }, Papers(), None, new[] { TellChannel.Papers, TellChannel.Appearance },
+                                 facts, books, Script(R(0), R(0), R(0)), Lies.SmuggledCategories, LieKind.Smuggling);
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        CollectionAssert.AreEquivalent(new[] { ClueCategory.Currency, ClueCategory.Technology }, plan.Tells, "no dress option: the filter has no Culture");
+
+        // Given every candidate of the day, the filter still never picks a place whose Currency and Technology equal the claim's.
+        plan = Smuggle(Script(R(0), R(0)), PapersOnly, None, candidates: new[] { Twin, Present });
+        Assert.AreEqual(1, plan.HomeIndex, "the twin has no differing smuggled category; the present is the one candidate");
+    }
+
+    [Test]
+    public void Smuggling_WithoutTheChannels_OrThePresentInTheTable_IsNoPossibleLie_CarryingTheKind()
+    {
+        LiePlan plan = Smuggle(Script(), AnswerOnly, None);
+        Assert.AreEqual(LieOutcome.NoPossibleLie, plan.Outcome, "nothing asked, papers closed");
+        Assert.AreEqual(LieKind.Smuggling, plan.Kind);
+
+        plan = Smuggle(Script(), PapersOnly, None, facts: Facts());
+        Assert.AreEqual(LieOutcome.NoPossibleLie, plan.Outcome, "the present has no row today");
+
+        plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Present }, Papers(), None, PapersOnly, FactsWithPresent(), Books, null, Lies.SmuggledCategories, LieKind.Smuggling);
+        Assert.AreEqual(LieOutcome.Honest, plan.Outcome, "no stream: honest, no draw");
+        Assert.AreEqual(LieKind.Smuggling, plan.Kind);
+    }
+
+    [Test]
+    public void ASmuggledTell_ProvesAgainstTheClaimsRow_AndNamesThePresent()
+    {
+        FactTable facts = FactsWithPresent();
+        List<DocumentField> papers = Papers();
+        Smuggle(Script(R(0), R(0), R(0)), PapersOnly, None, tellCount: 9, papers: papers, facts: facts).ApplyTo(Docs(papers));
+
+        foreach (DocumentField f in papers.Where(f => f.isAnachronism))
+        {
+            CompareEvidence doc = CompareEvidence.FromDocumentField(f, 0);
+            foreach (FactRow row in facts.Rows(f.category))
+            {
+                Discrepancy d = DiscrepancyLog.Prove(doc, row.ToEvidence(), "egypt", "ancient", Traveller);
+                string where = $"{f.label} vs {row.OriginLabel}";
+                if (row.NationId == "egypt")
+                {
+                    Assert.AreEqual(DiscrepancyProof.ClaimMismatch, d?.provedBy, where);
+                }
+                else if (row.NationId == "neutral")
+                {
+                    Assert.AreEqual(DiscrepancyProof.ForeignOrigin, d?.provedBy, where);
+                    Assert.AreEqual(PresentLabel, d.actualOrigin, where);
+                }
+                else
+                {
+                    Assert.IsNull(d, where);
+                }
+            }
+        }
+    }
+
+    [Test]
+    public void AFalseOrigin_WithNoFilter_PlansAsBefore_AndCarriesItsKind()
+    {
+        LiePlan plan = Plan(Script(R(0), R(1)));
+        Assert.AreEqual(LieKind.FalseOrigin, plan.Kind);
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells, "Iraq's second option");
+    }
+
     [Test]
     public void MayLie_NotHonestPremades_WithAnAllowedClaimAndPapers()
     {

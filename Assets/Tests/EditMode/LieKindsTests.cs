@@ -16,6 +16,10 @@ public class LieKindsTests
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.PoorTourist, true)]
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.Labourer, false)]
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.Displaced, false)]
+    [TestCase(LieKind.Smuggling, TravellerKind.RichTourist, true)]
+    [TestCase(LieKind.Smuggling, TravellerKind.PoorTourist, true)]
+    [TestCase(LieKind.Smuggling, TravellerKind.Labourer, true)]
+    [TestCase(LieKind.Smuggling, TravellerKind.Displaced, true)]
     public void AppliesTo_TheCataloguesKinds(LieKind lie, TravellerKind kind, bool expected)
     {
         Assert.AreEqual(expected, LieKinds.AppliesTo(lie, kind));
@@ -30,6 +34,10 @@ public class LieKindsTests
         CollectionAssert.AreEqual(new[] { LieKind.FalseOrigin }, LieKinds.For(day, TravellerKind.Displaced));
         CollectionAssert.IsEmpty(LieKinds.For(day, TravellerKind.Labourer));
         CollectionAssert.IsEmpty(LieKinds.For(null, TravellerKind.Displaced));
+
+        var day4 = new List<LieKind> { LieKind.FalseOrigin, LieKind.Smuggling };
+        CollectionAssert.AreEqual(new[] { LieKind.FalseOrigin, LieKind.Smuggling }, LieKinds.For(day4, TravellerKind.Displaced), "the displaced draw between both");
+        CollectionAssert.AreEqual(new[] { LieKind.Smuggling }, LieKinds.For(day4, TravellerKind.Labourer), "a citizen's only lie that day");
     }
 
     [Test]
@@ -42,9 +50,9 @@ public class LieKindsTests
     }
 
     [Test]
-    public void OnlyTheFalseOrigin_IsAPlaceLie()
+    public void TheFalseOriginAndSmuggling_AreThePlaceLies()
     {
         foreach (LieKind lie in (LieKind[])System.Enum.GetValues(typeof(LieKind)))
-            Assert.AreEqual(lie != LieKind.FalseOrigin, LieKinds.IsRecordLie(lie), lie.ToString());
+            Assert.AreEqual(lie != LieKind.FalseOrigin && lie != LieKind.Smuggling, LieKinds.IsRecordLie(lie), lie.ToString());
     }
 }

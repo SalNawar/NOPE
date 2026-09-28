@@ -16,7 +16,16 @@ public enum LieKind
     PoorPosingAsRich,
 
     /// <summary>L2, a doctored identity: a tourist's visa with another Citizen ID or another birth year.</summary>
-    DoctoredIdentity
+    DoctoredIdentity,
+
+    /// <summary>
+    /// L6, smuggling: 2150 currency or technology on the way out. The
+    /// traveller's claim is honest; the manifest (or the declaration) or an
+    /// answer gives the present's value for Currency or Technology, proven
+    /// against the destination's book row or the present's (Lies.Plan with
+    /// the present as the only candidate and Lies.SmuggledCategories).
+    /// </summary>
+    Smuggling
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -27,7 +36,8 @@ public static class LieKinds
     /// <paramref name="lie"/> (traveller types §6.1): a false origin is the
     /// displaced's (a 2150 citizen is who they say and comes from where they
     /// say); poor posing as rich is drawn from the rich entry; a doctored
-    /// identity is a tourist's.
+    /// identity is a tourist's; smuggling is every kind's (the days decide
+    /// when: 2150 citizens from day 4, the displaced from day 5).
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
@@ -39,6 +49,8 @@ public static class LieKinds
                 return kind == TravellerKind.RichTourist;
             case LieKind.DoctoredIdentity:
                 return kind == TravellerKind.RichTourist || kind == TravellerKind.PoorTourist;
+            case LieKind.Smuggling:
+                return true;
             default:
                 return false;
         }
@@ -58,8 +70,8 @@ public static class LieKinds
         return lies;
     }
 
-    /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for the place lie, planned by Lies.Plan.</summary>
-    public static bool IsRecordLie(LieKind lie) => lie != LieKind.FalseOrigin;
+    /// <summary>True for a record lie, planned by RecordLies against the traveller's own record; false for a place lie (a false origin, smuggling), planned by Lies.Plan.</summary>
+    public static bool IsRecordLie(LieKind lie) => lie != LieKind.FalseOrigin && lie != LieKind.Smuggling;
 
     /// <summary>
     /// The status of the account a citizen really holds (the truth their

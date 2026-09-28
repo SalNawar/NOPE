@@ -58,7 +58,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(0, (int)LieKind.FalseOrigin);
         Assert.AreEqual(1, (int)LieKind.PoorPosingAsRich);
         Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
-        Assert.AreEqual(3, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(3, (int)LieKind.Smuggling);
+        Assert.AreEqual(4, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>

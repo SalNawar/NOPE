@@ -201,9 +201,11 @@ public sealed class LiePlan
 /// Draws on the traveller's lie stream (Seeds.ForLies), in this order:
 /// <see cref="Roll"/> (the roll, then the kind when two or more lies are
 /// enabled for this traveller today); then the planner: for a place lie
-/// (<see cref="Plan"/>) the home, one pick per tell (a category/channel
-/// option), then the birth year when BirthDate is a tell on either channel;
-/// for a record lie RecordLies.Plan (the variant, then each forged value).
+/// (<see cref="Plan"/>: a false origin among today's other places, or
+/// smuggling from the present in <see cref="SmuggledCategories"/>) the home,
+/// one pick per tell (a category/channel option), then the birth year when
+/// BirthDate is a tell on either channel; for a record lie RecordLies.Plan
+/// (the variant, then each forged value).
 /// </summary>
 public static class Lies
 {
@@ -223,6 +225,9 @@ public static class Lies
             Channel = channel;
         }
     }
+
+    /// <summary>The categories a smuggler's tells come from (traveller types L1, L6): the currency carried and the technology declared, never a place's tongue, capital, ruler or dress.</summary>
+    public static readonly ClueCategory[] SmuggledCategories = { ClueCategory.Currency, ClueCategory.Technology };
 
     /// <summary>
     /// Whether a traveller may lie at all: not an honest premade (premades are
@@ -269,21 +274,27 @@ public static class Lies
     /// of its category, so a category leaks on one channel only. A liar for
     /// whom no place qualifies is NoPossibleLie. A null <paramref name="rng"/>
     /// is Honest with no draw; a null list counts as empty.
+    /// <paramref name="filter"/> (traveller types L1, L6) keeps only those
+    /// categories' options, the dress option included only when it holds
+    /// Culture; null keeps every option. The plan carries
+    /// <paramref name="kind"/> (a false origin, or smuggling: the present as
+    /// the only candidate and <see cref="SmuggledCategories"/>).
     /// </summary>
     public static LiePlan Plan(int tellCount,
                                string claimNationId, string claimEraId, string coverBirthDate,
                                IReadOnlyList<HomeCandidate> todays, IReadOnlyList<DocumentField> papers,
                                IReadOnlyList<ClueCategory> answerTellCategories, IReadOnlyList<TellChannel> channels,
-                               FactTable facts, ICollection<ClueCategory> bookCategories, IRandomSource rng)
+                               FactTable facts, ICollection<ClueCategory> bookCategories, IRandomSource rng,
+                               ICollection<ClueCategory> filter = null, LieKind kind = LieKind.FalseOrigin)
     {
         if (rng == null)
-            return LiePlan.Without(LieOutcome.Honest, LieKind.FalseOrigin);
+            return LiePlan.Without(LieOutcome.Honest, kind);
 
         bool papersOpen = Allows(channels, TellChannel.Papers);
         bool answersOpen = Allows(channels, TellChannel.Answer);
-        bool dressOpen = Allows(channels, TellChannel.Appearance);
-        List<ClueCategory> printed = papersOpen ? PrintedCategories(papers) : new List<ClueCategory>();
-        List<ClueCategory> asked = answersOpen ? Distinct(answerTellCategories) : new List<ClueCategory>();
+        bool dressOpen = Allows(channels, TellChannel.Appearance) && (filter == null || filter.Contains(Looks.EvidenceCategory));
+        List<ClueCategory> printed = papersOpen ? Keep(PrintedCategories(papers), filter) : new List<ClueCategory>();
+        List<ClueCategory> asked = answersOpen ? Keep(Distinct(answerTellCategories), filter) : new List<ClueCategory>();
 
         var candidates = new List<int>();
         var optionsByCandidate = new List<List<TellOption>>();
@@ -316,7 +327,7 @@ public static class Lies
         }
 
         if (candidates.Count == 0)
-            return LiePlan.Without(LieOutcome.NoPossibleLie, LieKind.FalseOrigin);
+            return LiePlan.Without(LieOutcome.NoPossibleLie, kind);
 
         int pick = rng.Range(0, candidates.Count);
         int homeIndex = candidates[pick];
@@ -343,7 +354,17 @@ public static class Lies
         if (tells.Contains(ClueCategory.BirthDate))
             values[ClueCategory.BirthDate] = BirthDates.PickOtherYear(coverBirthDate, home.BirthYearMin, home.BirthYearMax, rng);
 
-        return new LiePlan(LieOutcome.Liar, LieKind.FalseOrigin, homeIndex, tells.AsReadOnly(), values, channelOf);
+        return new LiePlan(LieOutcome.Liar, kind, homeIndex, tells.AsReadOnly(), values, channelOf);
+    }
+
+    /// <summary>The categories of <paramref name="list"/> that <paramref name="filter"/> holds, in order (every one for a null filter).</summary>
+    private static List<ClueCategory> Keep(List<ClueCategory> list, ICollection<ClueCategory> filter)
+    {
+        if (filter == null)
+            return list;
+
+        list.RemoveAll(c => !filter.Contains(c));
+        return list;
     }
 
     /// <summary>True when the channel list holds the channel (a null list holds none).</summary>
