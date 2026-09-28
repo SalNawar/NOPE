@@ -103,7 +103,7 @@ public class LiesTests
     {
         Assert.IsTrue(Lies.MayLie(false, true, true), "an ordinary traveller, or a premade authored as a liar");
         Assert.IsFalse(Lies.MayLie(true, true, true), "an honest premade");
-        Assert.IsFalse(Lies.MayLie(false, false, true), "forbidden claim");
+        Assert.IsFalse(Lies.MayLie(false, false, true), "a planned fault: a forbidden claim, a guaranteed procedure's breaker");
         Assert.IsFalse(Lies.MayLie(false, true, false), "no papers");
     }
 

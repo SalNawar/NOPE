@@ -54,5 +54,17 @@ public enum ClueCategory
     TransponderClass,
 
     /// <summary>What a citizen owes, in credits ("0 cr", "212,000 cr").</summary>
-    Debt
+    Debt,
+
+    // A labourer's registered Debt Relief Labour Contract (traveller types
+    // §3.7, phase 9): on TC-520 and the account's Forms on file.
+
+    /// <summary>The contract's employer ("Tyburn Mills Consortium").</summary>
+    Employer,
+
+    /// <summary>The contract's term ("180 days").</summary>
+    Term,
+
+    /// <summary>The contract's day wage ("420 cr").</summary>
+    Wage
 }

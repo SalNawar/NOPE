@@ -139,4 +139,15 @@ public static class Seeds
     /// who travels, who lies or how they look.
     /// </summary>
     public static int ForFaults(int caseSeed) => Mix(caseSeed, FaultSalt);
+
+    /// <summary>Salt for the day's event-placement stream ("EVNT").</summary>
+    public const int EventSalt = 0x45564E54;
+
+    /// <summary>
+    /// Seed for the day's event placements (DayPlanSO.ResolveSchedule; audit
+    /// R3-010: the schedule drew from an unsalted System.Random on the day's
+    /// raw seed), apart from the day's raw stream and every traveller's, so
+    /// placing an event never shifts who travels.
+    /// </summary>
+    public static int ForEvents(int daySeed) => Mix(daySeed, EventSalt);
 }

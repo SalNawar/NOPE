@@ -18,7 +18,7 @@ using UnityEditor;
 public static partial class WorldContentGenerator
 {
     /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; }
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public Employer[] employers; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData
@@ -27,8 +27,8 @@ public static partial class WorldContentGenerator
         public int startDebt; public float garnishShare; public string reliefEmployer; public string reliefWorksite; public int reliefWage;
     }
 
-    /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name).</summary>
-    [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public StatusData[] statuses; }
+    /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name; the contract ranges, phase 9).</summary>
+    [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public int frozenWithinDays; public StatusData[] statuses; public ContractRanges contract; }
 
     /// <summary>One status's ranges as authored ("agency.accounts.statuses"; the status by name).</summary>
     [Serializable] private sealed class StatusData { public string status; public int debtMin; public int debtMax; public int tripsMin; public int tripsMax; }
@@ -50,6 +50,7 @@ public static partial class WorldContentGenerator
                 validDaysMin = a.accounts.validDaysMin,
                 validDaysMax = a.accounts.validDaysMax,
                 tripsWithinDays = a.accounts.tripsWithinDays,
+                frozenWithinDays = a.accounts.frozenWithinDays,
                 statuses = (a.accounts.statuses ?? Array.Empty<StatusData>())
                     .Select(s => new StatusRanges
                     {
@@ -59,7 +60,8 @@ public static partial class WorldContentGenerator
                         tripsMin = s.tripsMin,
                         tripsMax = s.tripsMax
                     })
-                    .ToList()
+                    .ToList(),
+                contract = a.accounts.contract
             },
             transponders = (a.transponders ?? Array.Empty<TransponderData>())
                 .Select(t => new TransponderModel
@@ -70,7 +72,8 @@ public static partial class WorldContentGenerator
                     prefix = t.prefix,
                     weight = t.weight
                 })
-                .ToList()
+                .ToList(),
+            employers = (a.employers ?? Array.Empty<Employer>()).Where(e => e != null).ToList()
         };
 
     /// <summary>The clerk's rows (verbatim; a missing block reads blank and fails ClerkContent.Problems).</summary>
@@ -100,6 +103,15 @@ public static partial class WorldContentGenerator
         foreach (TransponderData t in src.agency.transponders ?? Array.Empty<TransponderData>())
             if (!ParseEnum(t.transponderClass, out TransponderClass _))
                 errors.Add($"agency.transponders '{t.id}': '{t.transponderClass}' is not a transponder class ({string.Join(", ", Enum.GetNames(typeof(TransponderClass)))}).");
+
+        // The employers (phase 9): each of a known era, and every past era with at least one, so a labourer bound anywhere has a contract.
+        var eraIds = new HashSet<string>((src.eras ?? Array.Empty<EraData>()).Select(e => e.id));
+        foreach (Employer e in src.agency.employers ?? Array.Empty<Employer>())
+            if (e != null && !string.IsNullOrWhiteSpace(e.era) && !eraIds.Contains(e.era))
+                errors.Add($"agency.employers '{e.id}' hires for unknown era '{e.era}'.");
+        foreach (EraData era in (src.eras ?? Array.Empty<EraData>()).Where(e => !e.future))
+            if (agency.EmployersOf(era.id).Count == 0)
+                errors.Add($"agency.employers has no employer for the era '{era.id}', so a labourer bound there would have no registered contract.");
     }
 
     /// <summary>Writes the agency block into the content library.</summary>

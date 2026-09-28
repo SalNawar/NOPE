@@ -16,7 +16,13 @@ public enum LieKind
     PoorPosingAsRich,
 
     /// <summary>L2, a doctored identity: a tourist's visa with another Citizen ID or another birth year.</summary>
-    DoctoredIdentity
+    DoctoredIdentity,
+
+    /// <summary>L4, a debtor posing as a tourist: an Eligible citizen drawn from a tourist entry, whose visa and manifest print the tourist's classes.</summary>
+    DebtorPosingAsTourist,
+
+    /// <summary>L5, a forged contract: a labourer's contract with a higher wage, a shorter term, another employer or another worksite than the one registered.</summary>
+    ForgedContract
 }
 
 /// <summary>The lies' rules: which kinds of traveller each lie fits, and which lies are record lies. Pure.</summary>
@@ -27,7 +33,8 @@ public static class LieKinds
     /// <paramref name="lie"/> (traveller types §6.1): a false origin is the
     /// displaced's (a 2150 citizen is who they say and comes from where they
     /// say); poor posing as rich is drawn from the rich entry; a doctored
-    /// identity is a tourist's.
+    /// identity and a debtor posing as a tourist are a tourist's; a forged
+    /// contract is a labourer's.
     /// </summary>
     public static bool AppliesTo(LieKind lie, TravellerKind kind)
     {
@@ -38,7 +45,10 @@ public static class LieKinds
             case LieKind.PoorPosingAsRich:
                 return kind == TravellerKind.RichTourist;
             case LieKind.DoctoredIdentity:
+            case LieKind.DebtorPosingAsTourist:
                 return kind == TravellerKind.RichTourist || kind == TravellerKind.PoorTourist;
+            case LieKind.ForgedContract:
+                return kind == TravellerKind.Labourer;
             default:
                 return false;
         }
@@ -65,9 +75,12 @@ public static class LieKinds
     /// The status of the account a citizen really holds (the truth their
     /// papers must match): poor posing as rich is a Standard citizen drawn
     /// from the rich entry (L1), so their account is Standard whatever the
-    /// kind's status (AccountMaker.StatusOf); every other traveller holds
-    /// their kind's.
+    /// kind's status (AccountMaker.StatusOf); a debtor posing as a tourist is
+    /// an Eligible citizen drawn from a tourist entry (L4); every other
+    /// traveller holds their kind's.
     /// </summary>
     public static CitizenStatus TrueStatus(LieKind? lie, CitizenStatus kindStatus) =>
-        lie == LieKind.PoorPosingAsRich ? CitizenStatus.Standard : kindStatus;
+        lie == LieKind.PoorPosingAsRich ? CitizenStatus.Standard
+        : lie == LieKind.DebtorPosingAsTourist ? CitizenStatus.Eligible
+        : kindStatus;
 }

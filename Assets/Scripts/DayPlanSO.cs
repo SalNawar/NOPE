@@ -78,6 +78,14 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private LieKind[] lieKinds;
 
+    /// <summary>
+    /// Chance per honest traveller of breaking one of today's rolled
+    /// procedures (the paper set, the debt standing; traveller types P4;
+    /// Directives.Roll on the fault stream): 0 before their first day.
+    /// Written by Generate World from world_source.json days[].violationChance.
+    /// </summary>
+    [SerializeField, Range(0f, 1f)] private float violationChance;
+
     // -----------------------------
     // Scripted overrides
     // -----------------------------
@@ -86,10 +94,18 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField] private TravelRuleSO[] activeTravelRules;
 
     /// <summary>
-    /// Each active rule sends at least one violator, placed in the first half
-    /// of the queue, so the day's directives are always tested.
+    /// Each active closure sends at least one violator, placed in the first
+    /// half of the queue, so the day's directives are always tested.
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
+
+    /// <summary>
+    /// The standing procedures guaranteed one faulty traveller today, in the
+    /// first half of the queue beside the closures' violators (traveller
+    /// types P4: each procedure on its first day; Directives.CanGuarantee).
+    /// Written by Generate World from world_source.json days[].guarantee.
+    /// </summary>
+    [SerializeField] private TravelRuleSO[] guaranteedRules;
 
     /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
@@ -141,10 +157,16 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>The lies enabled today, in authored order (empty when unset).</summary>
     public IReadOnlyList<LieKind> EnabledLies => lieKinds ?? Array.Empty<LieKind>();
 
+    /// <summary>Chance per honest traveller of breaking one of today's rolled procedures.</summary>
+    public float ViolationChance => violationChance;
+
+    /// <summary>The standing procedures guaranteed a faulty traveller today (set entries only, in authored order).</summary>
+    public IReadOnlyList<TravelRuleSO> GuaranteedRules => guaranteedRules ?? Array.Empty<TravelRuleSO>();
+
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
 
-    /// <summary>Whether each active rule is guaranteed a violator in the first half of the queue.</summary>
+    /// <summary>Whether each active closure is guaranteed a violator in the first half of the queue.</summary>
     public bool GuaranteeRuleViolators => guaranteeRuleViolators;
 
     /// <summary>Every forced case's blueprint (set slots only, in authored order); the content validator counts their documents.</summary>
@@ -235,15 +257,17 @@ public sealed class DayPlanSO : ScriptableObject
     }
 
     /// <summary>
-    /// Resolves eventRules into a concrete schedule using a deterministic seed.
-    /// Random placement happens here (once), so runtime lookups are fast and stable.
+    /// Resolves eventRules into a concrete schedule using a deterministic seed:
+    /// the day's event stream (Seeds.ForEvents of <paramref name="seed"/>, the
+    /// day's seed; audit R3-010), apart from every traveller's. Random
+    /// placement happens here (once), so runtime lookups are fast and stable.
     /// </summary>
     public ResolvedDaySchedule ResolveSchedule(int seed)
     {
         var schedule = new ResolvedDaySchedule();
 
         int total = Mathf.Max(1, visitorsCount);
-        var rng = new System.Random(seed);
+        var rng = new SeededRandom(Seeds.ForEvents(seed));
 
         // Tracks reserved slots for exclusive events to reduce collisions.
         var reservedExclusive = new HashSet<(DayEventTrigger trigger, int caseIndex1Based)>();
@@ -257,7 +281,7 @@ public sealed class DayPlanSO : ScriptableObject
             if (minInclusive > maxInclusive)
                 minInclusive = maxInclusive;
 
-            return rng.Next(minInclusive, maxInclusive + 1);
+            return rng.Range(minInclusive, maxInclusive + 1);
         }
 
         if (eventRules == null || eventRules.Count == 0)

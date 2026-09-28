@@ -8,6 +8,8 @@ public class FaultsTests
 {
     [TestCase(DirectiveFault.None, "")]
     [TestCase(DirectiveFault.ClosedDestination, "closed")]
+    [TestCase(DirectiveFault.IncompletePapers, "incomplete")]
+    [TestCase(DirectiveFault.FrozenAccount, "frozen")]
     public void Reason_OfADirectiveFault(DirectiveFault fault, string expected)
     {
         Assert.AreEqual(expected, Faults.Reason(fault));
@@ -17,6 +19,8 @@ public class FaultsTests
     public void Reason_TheDirectiveFirst_ThenTheCostume_TheRecordLie_ThePlaceLie_ElseNone()
     {
         Assert.AreEqual("closed", Faults.Reason(DirectiveFault.ClosedDestination, CostumeError.OtherPlace, true, true), "a directive fault outranks the rest (never generated together, K5)");
+        Assert.AreEqual("incomplete", Faults.Reason(DirectiveFault.IncompletePapers, CostumeError.None, false, false));
+        Assert.AreEqual("frozen", Faults.Reason(DirectiveFault.FrozenAccount, CostumeError.None, true, false));
         Assert.AreEqual("panic", Faults.Reason(DirectiveFault.None, CostumeError.PresentClothes, false, false));
         Assert.AreEqual("forged", Faults.Reason(DirectiveFault.None, CostumeError.None, true, false));
         Assert.AreEqual("disguised", Faults.Reason(DirectiveFault.None, CostumeError.None, false, true));
@@ -37,6 +41,8 @@ public class FaultsTests
     [TestCase("forged", "forged papers")]
     [TestCase("disguised", "disguised traveller")]
     [TestCase("closed", "closed destination")]
+    [TestCase("incomplete", "incomplete paperwork")]
+    [TestCase("frozen", "frozen account")]
     [TestCase("panic", "would cause a panic in {0}")]
     public void EveryReason_HasItsCitationLine(string reason, string says)
     {

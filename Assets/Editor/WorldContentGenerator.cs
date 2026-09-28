@@ -261,15 +261,17 @@ public static partial class WorldContentGenerator
 
         foreach (RuleData r in src.rules)
         {
-            if (!Enum.TryParse(r.type, out TravelRuleType _))
-                errors.Add($"Rule '{r.asset}' has unknown type '{r.type}'.");
+            if (!ParseEnum(r.type, out TravelRuleType type))
+                errors.Add($"Rule '{r.asset}' has unknown type '{r.type}' (one of {string.Join(", ", Enum.GetNames(typeof(TravelRuleType)))}).");
             if (!string.IsNullOrEmpty(r.country) && !countryIds.Contains(r.country))
                 errors.Add($"Rule '{r.asset}' references unknown country '{r.country}'.");
             if (!string.IsNullOrEmpty(r.era) && !eraIds.Contains(r.era))
                 errors.Add($"Rule '{r.asset}' references unknown era '{r.era}'.");
-            if (Enum.TryParse(r.type, out TravelRuleType procedure) && !TravelRuleSO.IsClosureType(procedure) &&
-                (string.IsNullOrWhiteSpace(r.description) || !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era)))
-                errors.Add($"Rule '{r.asset}' is a standing procedure ({r.type}): it needs its directive line (\"description\") and names no country or era.");
+            foreach (string kind in r.kinds ?? Array.Empty<string>())
+                if (!ParseEnum(kind, out TravellerKind _))
+                    errors.Add($"Rule '{r.asset}' lists '{kind}', which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
+            if (ParseEnum(r.type, out type))
+                errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description)));
         }
 
         foreach (DayData d in src.days)
@@ -287,7 +289,10 @@ public static partial class WorldContentGenerator
                 errors.Add($"Day '{d.asset}' needs \"tells\" of at least 1.");
             if (d.costumeErrorChance < 0f || d.costumeErrorChance > 1f)
                 errors.Add($"Day '{d.asset}' needs \"costumeErrorChance\" in 0..1.");
+            if (d.violationChance < 0f || d.violationChance > 1f)
+                errors.Add($"Day '{d.asset}' needs \"violationChance\" in 0..1.");
             CheckLies(d, errors);
+            CheckDirectives(src, d, authored, errors);
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
@@ -1035,7 +1040,7 @@ public static partial class WorldContentGenerator
 
         // --- Days: pools, forced slots, chance ---
         var closures = new HashSet<string>((src.rules ?? Array.Empty<RuleData>())
-            .Where(r => ParseEnum(r.type, out TravelRuleType type) && TravelRuleSO.IsClosureType(type))
+            .Where(r => ParseEnum(r.type, out TravelRuleType type) && Directives.IsClosure(type))
             .Select(r => r.asset));
         foreach (DayData d in src.days)
         {
@@ -1464,9 +1469,45 @@ public static partial class WorldContentGenerator
         rule.nation = !string.IsNullOrEmpty(r.country) ? nations[r.country] : null;
         rule.era = !string.IsNullOrEmpty(r.era) ? eras[r.era] : null;
         rule.description = r.description;
+        rule.kinds = RuleKinds(r).ToArray();
         EditorUtility.SetDirty(rule);
         return rule;
     }
+
+    /// <summary>The kinds a rule lists, as the Domain rules see them (names that are no kind are left out; CheckReferences reports them).</summary>
+    private static List<TravellerKind> RuleKinds(RuleData r) =>
+        (r.kinds ?? Array.Empty<string>()).Where(k => ParseEnum(k, out TravellerKind _)).Select(k => (TravellerKind)Enum.Parse(typeof(TravellerKind), k)).ToList();
+
+    /// <summary>
+    /// Refuses a day's Directives the Domain rule refuses (Directives.DayProblems,
+    /// the validator's rule too): a paper set or debt standing none of the
+    /// day's kinds can break, and a guaranteed rule that is not active, cannot
+    /// be guaranteed, is listed twice or that no kind can break. The kinds
+    /// are the day's with a positive weight, each with its blueprint's form
+    /// numbers. A guarantee naming an unknown rule is reported here.
+    /// </summary>
+    private static void CheckDirectives(WorldSource src, DayData d, Authored authored, List<string> errors)
+    {
+        var byAsset = (src.rules ?? Array.Empty<RuleData>()).Where(r => r != null).GroupBy(r => r.asset).ToDictionary(g => g.Key, g => g.First());
+        var active = new List<Directives.RuleEntry>();
+        foreach (string name in d.rules ?? Array.Empty<string>())
+            if (byAsset.TryGetValue(name ?? string.Empty, out RuleData r) && ParseEnum(r.type, out TravelRuleType type))
+                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r)));
+        foreach (string name in d.guarantee ?? Array.Empty<string>())
+            if (!byAsset.ContainsKey(name ?? string.Empty))
+                errors.Add($"Day '{d.asset}' guarantees unknown rule '{name}'.");
+
+        var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)>();
+        foreach (KindWeightData k in d.kinds ?? Array.Empty<KindWeightData>())
+            if (k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind))
+                kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? FormNumbers(b) : new string[0]));
+
+        errors.AddRange(Directives.DayProblems(d.asset, active, kinds, d.guarantee));
+    }
+
+    /// <summary>The form numbers of a blueprint's templates (null templates skipped).</summary>
+    private static List<string> FormNumbers(CaseBlueprintSO blueprint) =>
+        (blueprint.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList();
 
     /// <summary>
     /// Refuses a day's lie that is no LieKind, listed twice, or that none of
@@ -1493,8 +1534,8 @@ public static partial class WorldContentGenerator
 
     /// <summary>
     /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
-    /// rules, the premade pool and chance, and the forced slots (premade,
-    /// blueprint or both; authoritative).
+    /// rules, the guaranteed rules and violation chance, the premade pool and
+    /// chance, and the forced slots (premade, blueprint or both; authoritative).
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, Authored authored, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules,
@@ -1519,8 +1560,10 @@ public static partial class WorldContentGenerator
         SerializedArrays.Set(so, "availableLegendaries", (d.premades ?? Array.Empty<string>()).Select(id => (Object)premades[id]).ToArray());
         so.FindProperty("legendaryBaseChance").floatValue = d.premadeChance;
         so.FindProperty("costumeErrorChance").floatValue = d.costumeErrorChance;
+        so.FindProperty("violationChance").floatValue = d.violationChance;
         SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
         SerializedArrays.Set(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
+        SerializedArrays.Set(so, "guaranteedRules", (d.guarantee ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
 
         ForcedData[] forcedData = d.forced ?? Array.Empty<ForcedData>();
         SerializedProperty forced = so.FindProperty("forcedCases");
@@ -1996,7 +2039,8 @@ public static partial class WorldContentGenerator
         public LooksWeightData looks;
     }
 
-    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; }
+    /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set or debt standing, the kinds it is read for.</summary>
+    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; }
 
     [Serializable] private sealed class EraWeightData { public string era; public float weight; }
 
@@ -2024,6 +2068,10 @@ public static partial class WorldContentGenerator
         public float premadeChance;
         /// <summary>Chance per 2150 citizen of a costume error (0..1).</summary>
         public float costumeErrorChance;
+        /// <summary>Chance per honest traveller of breaking a rolled procedure (0..1; traveller types P4).</summary>
+        public float violationChance;
+        /// <summary>The standing procedures guaranteed a faulty traveller today (rule asset names among "rules"; each on its first day).</summary>
+        public string[] guarantee;
     }
 
     /// <summary>The interview's wording and spoken requests (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>

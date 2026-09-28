@@ -983,6 +983,29 @@ public static partial class ContentLibraryValidator
                 }
             }
 
+            // The Directives (phase 9; the rule Generate World checks its source with): each rule's shape, and the day's
+            // rolled procedures and guarantees against the kinds of the day (Directives.RuleProblems, DayProblems).
+            foreach (TravelRuleSO rule in plan.ActiveTravelRules.Where(r => r != null).Distinct())
+                foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description)))
+                {
+                    Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", rule);
+                    issues++;
+                }
+            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds)).ToList();
+            var kinds = plan.Kinds.Where(k => k != null && k.blueprint != null && k.weight > 0f)
+                .Select(k => (k.blueprint.Kind, (IReadOnlyCollection<string>)(k.blueprint.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList()))
+                .ToList();
+            foreach (string problem in Directives.DayProblems(plan.name, active, kinds, plan.GuaranteedRules.Where(r => r != null).Select(r => r.name).ToList()))
+            {
+                Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plan);
+                issues++;
+            }
+            foreach (TravelRuleSO rule in plan.GuaranteedRules.Where(r => r != null && !plan.ActiveTravelRules.Contains(r)))
+            {
+                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' guarantees rule '{rule.name}', which is not among its active rules (run Tools > TimeDesk > Generate World).", plan);
+                issues++;
+            }
+
             var forced = plan.ForcedCases.Where(f => f != null && f.legendary != null).ToList();
             foreach (LegendarySO legend in (plan.AvailableLegendaries ?? Array.Empty<LegendarySO>()).Concat(forced.Select(f => f.legendary)))
             {

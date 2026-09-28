@@ -90,10 +90,21 @@ public class SeedsTests
         CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "violator"), Seeds.ForViolators(daySeed));
     }
 
+    /// <summary>Audit R3-010 (phase 9): the day's event placements draw from their own salted stream, apart from the day's raw seed and every other stream.</summary>
+    [Test]
+    public void EventStream_IsDeterministic_AndApartFromEveryOtherStream()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        Assert.AreEqual(Seeds.ForEvents(daySeed), Seeds.ForEvents(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "events"), Seeds.ForEvents(daySeed));
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(Seeds.ForEvents(daySeed)), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(day => Seeds.ForEvents(Seeds.Day(12345, day))).ToList(), "each day its own placements");
+    }
+
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -123,6 +134,8 @@ public class SeedsTests
         Assert.AreEqual(0x46414C54, Seeds.FaultSalt, "\"FALT\"");
         Assert.AreEqual(-230985786, Seeds.ForDebtNews(12345));
         Assert.AreEqual(0x44454254, Seeds.DebtNewsSalt, "\"DEBT\"");
+        Assert.AreEqual(-1597173572, Seeds.ForEvents(daySeed));
+        Assert.AreEqual(0x45564E54, Seeds.EventSalt, "\"EVNT\"");
     }
 
     /// <summary>The debt line's order (redesign phase 13) is the run's own stream, apart from the day's and every traveller's.</summary>
@@ -134,7 +147,7 @@ public class SeedsTests
         for (int day = 1; day <= 15; day++)
         {
             int daySeed = Seeds.Day(12345, day);
-            CollectionAssert.DoesNotContain(new[] { daySeed, Seeds.ForViolators(daySeed), Seeds.ForSlot(daySeed), Seeds.ForCase(daySeed, 1) }, Seeds.ForDebtNews(12345));
+            CollectionAssert.DoesNotContain(new[] { daySeed, Seeds.ForViolators(daySeed), Seeds.ForSlot(daySeed), Seeds.ForEvents(daySeed), Seeds.ForCase(daySeed, 1) }, Seeds.ForDebtNews(12345));
         }
     }
 
@@ -178,6 +191,8 @@ public class SeedsTests
             streams.Add(Seeds.ForViolators(daySeed));
         if (except != "slot")
             streams.Add(Seeds.ForSlot(daySeed));
+        if (except != "events")
+            streams.Add(Seeds.ForEvents(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
         {
             streams.Add(caseSeed);

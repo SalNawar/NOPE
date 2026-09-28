@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// The agency block of world_source.json (the traveller-types spec's F6; the
@@ -34,6 +35,13 @@ public sealed class AgencyContent
     /// <summary>The transponder models citizens travel on (agency.transponders: a weighted list per class).</summary>
     public List<TransponderModel> transponders = new List<TransponderModel>();
 
+    /// <summary>The Debt Relief programme's employers (agency.employers: one per row, each of one era; a labourer's contract names one of the worksite's era, AccountMaker.Make).</summary>
+    public List<Employer> employers = new List<Employer>();
+
+    /// <summary>The printed names of the employers of <paramref name="eraId"/>, in authored order.</summary>
+    public List<string> EmployersOf(string eraId) =>
+        (employers ?? new List<Employer>()).Where(e => e != null && e.era == eraId).Select(e => e.name).ToList();
+
     /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), and the accounts' ranges and transponder models (AccountRanges.Problems). Empty when sound.</summary>
     public List<string> Problems()
     {
@@ -58,6 +66,21 @@ public sealed class AgencyContent
             problems.Add("agency.accounts is missing: the ranges a 2150 citizen's account is drawn from.");
         else
             problems.AddRange(accounts.Problems(transponders));
+
+        var employerIds = new HashSet<string>();
+        foreach (Employer e in employers ?? new List<Employer>())
+        {
+            if (e == null)
+                continue;
+            if (string.IsNullOrWhiteSpace(e.id) || !employerIds.Add(e.id))
+                problems.Add($"agency.employers: the id '{e.id}' is blank or listed twice.");
+            if (string.IsNullOrWhiteSpace(e.era))
+                problems.Add($"agency.employers '{e.id}': the era is blank.");
+            if (string.IsNullOrWhiteSpace(e.name))
+                problems.Add($"agency.employers '{e.id}': the name is blank.");
+            else if (e.name.Length > FactTable.MaxValueLength)
+                problems.Add($"agency.employers '{e.id}': '{e.name}' is {e.name.Length} characters; a form's box and a book row hold {FactTable.MaxValueLength}.");
+        }
         return problems;
     }
 }

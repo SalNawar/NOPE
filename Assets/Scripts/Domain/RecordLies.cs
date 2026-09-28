@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,6 +20,41 @@ public readonly struct RecordForm
 }
 
 /// <summary>
+/// What the record lies' makers draw from beside the account (explicit
+/// inputs, audit R3-025): the cover birth date and the present's years (the
+/// year maker), the agency's transponder models and today's numbers (the
+/// transponder and number makers), the status a debtor's tourist papers pose
+/// as (L4), and the era's employers and today's other open places (the
+/// contract makers, L5).
+/// </summary>
+public sealed class RecordLieContext
+{
+    /// <summary>The registered birth date (the visa's honest value): the year maker keeps its day and month.</summary>
+    public string CoverBirthDate;
+
+    /// <summary>The present's earliest birth year (BirthDates.PickOtherYear).</summary>
+    public int BirthYearMin;
+
+    /// <summary>The present's latest birth year.</summary>
+    public int BirthYearMax;
+
+    /// <summary>The agency's transponder models (a borrowed manifest's transponder is another model of the class needed).</summary>
+    public IReadOnlyList<TransponderModel> Transponders;
+
+    /// <summary>The agency numbers handed out today, which every fresh number joins.</summary>
+    public ISet<string> TakenToday;
+
+    /// <summary>The status the traveller's papers pose as: the kind they were drawn from (AccountMaker.StatusOf), for a debtor posing as a tourist (L4); null otherwise.</summary>
+    public CitizenStatus? PosedStatus;
+
+    /// <summary>The employers of the worksite's era, by printed name (the account's among them): a forged contract names another (L5).</summary>
+    public IReadOnlyList<string> Employers;
+
+    /// <summary>Today's other open places' labels (never the claim, never a closed one, which would add a directive fault): a forged contract swaps the worksite for one (L5).</summary>
+    public IReadOnlyList<string> OpenPlaces;
+}
+
+/// <summary>
 /// The record lies (traveller types L2, §6.2-6.3): a 2150 citizen who is who
 /// they say, from where they say, but whose papers forge fields their own
 /// Citizen Account disproves. Each lie names its forged fields (form,
@@ -33,10 +69,13 @@ public readonly struct RecordForm
 public static class RecordLies
 {
     /// <summary>The Leisure Departure Visa's form number: its class, Citizen ID and birth date are what the tourists' lies forge.</summary>
-    public const string Visa = "TC-101";
+    public const string Visa = Directives.Visa;
 
     /// <summary>The Departure Manifest's form number: its Citizen ID, transponder and class are what a borrowed manifest carries.</summary>
-    public const string Manifest = "TC-230";
+    public const string Manifest = Directives.Manifest;
+
+    /// <summary>The Debt Relief Labour Contract's form number: its employer, worksite, term and wage are what a forged contract rewrites.</summary>
+    public const string Contract = Directives.Contract;
 
     /// <summary>One forged field: the form it is on and its category.</summary>
     private readonly struct Forged
@@ -77,6 +116,21 @@ public static class RecordLies
     /// <summary>A doctored identity (L2), the year: the visa's birth date has another year.</summary>
     private static readonly Forged[] DoctoredYear = { new Forged(Visa, ClueCategory.BirthDate) };
 
+    /// <summary>A debtor posing as a tourist (L4), with rich papers: the visa's class and the manifest's class read the posed status's (Premium); the same fields as the forged rich set.</summary>
+    private static readonly Forged[] DebtorAsTourist = RichForged;
+
+    /// <summary>A forged contract (L5), the wage: the contract's day wage is 1.5 to 3 times the registered one.</summary>
+    private static readonly Forged[] ContractWage = { new Forged(Contract, ClueCategory.Wage) };
+
+    /// <summary>A forged contract (L5), the term: the contract's term is a quarter to six tenths of the registered one.</summary>
+    private static readonly Forged[] ContractTerm = { new Forged(Contract, ClueCategory.Term) };
+
+    /// <summary>A forged contract (L5), the employer: another employer of the era.</summary>
+    private static readonly Forged[] ContractEmployer = { new Forged(Contract, ClueCategory.Employer) };
+
+    /// <summary>A forged contract (L5), the worksite: another place open today.</summary>
+    private static readonly Forged[] ContractWorksite = { new Forged(Contract, ClueCategory.Destination) };
+
     /// <summary>Each record lie's variants, in draw order (the variant draw indexes the ones that can show).</summary>
     private static IReadOnlyList<Forged[]> VariantsOf(LieKind kind)
     {
@@ -86,6 +140,10 @@ public static class RecordLies
                 return new[] { RichForged, RichBorrowed };
             case LieKind.DoctoredIdentity:
                 return new[] { DoctoredId, DoctoredYear };
+            case LieKind.DebtorPosingAsTourist:
+                return new[] { DebtorAsTourist };
+            case LieKind.ForgedContract:
+                return new[] { ContractWage, ContractTerm, ContractEmployer, ContractWorksite };
             default:
                 return new Forged[0][];
         }
@@ -97,26 +155,20 @@ public static class RecordLies
     /// <paramref name="forms"/> (their papers in case order, honest as
     /// printed): the variant among those that can show (each of its named
     /// fields is printed and its maker can make a false value), then each
-    /// forged value in the variant's fixed order. The birth year comes from
-    /// the present's years (<paramref name="birthYearMin"/>,
-    /// <paramref name="birthYearMax"/>) around <paramref name="coverBirthDate"/>
-    /// (BirthDates.PickOtherYear); fresh numbers never belong to anyone today
-    /// (<paramref name="takenToday"/>, which they join); a transponder is
-    /// another model of the class needed among <paramref name="transponders"/>.
-    /// NoPossibleLie, with no draw, when no variant can show; Honest, with no
-    /// draw, for a null <paramref name="rng"/>, a null account or a place lie.
+    /// forged value in the variant's fixed order, drawing what the makers
+    /// need from <paramref name="context"/>. NoPossibleLie, with no draw,
+    /// when no variant can show; Honest, with no draw, for a null
+    /// <paramref name="rng"/>, a null account or context, or a place lie.
     /// </summary>
-    public static LiePlan Plan(LieKind kind, IReadOnlyList<RecordForm> forms, CitizenAccount account,
-                               string coverBirthDate, int birthYearMin, int birthYearMax,
-                               IReadOnlyList<TransponderModel> transponders, ISet<string> takenToday, IRandomSource rng)
+    public static LiePlan Plan(LieKind kind, IReadOnlyList<RecordForm> forms, CitizenAccount account, RecordLieContext context, IRandomSource rng)
     {
-        if (rng == null || account == null || !LieKinds.IsRecordLie(kind))
+        if (rng == null || account == null || context == null || !LieKinds.IsRecordLie(kind))
             return LiePlan.Without(LieOutcome.Honest, kind);
 
         forms = forms ?? new RecordForm[0];
         var showable = new List<Forged[]>();
         foreach (Forged[] variant in VariantsOf(kind))
-            if (variant.All(f => Prints(forms, f) && CanForge(f.Category, account, coverBirthDate, birthYearMin, birthYearMax, transponders)))
+            if (variant.All(f => Prints(forms, f) && CanForge(kind, f.Category, account, context)))
                 showable.Add(variant);
 
         if (showable.Count == 0)
@@ -126,7 +178,7 @@ public static class RecordLies
         var tells = new List<RecordTell>(chosen.Length);
         foreach (Forged field in chosen)
         {
-            string value = FalseValue(field.Category, account, coverBirthDate, birthYearMin, birthYearMax, transponders, takenToday, rng);
+            string value = FalseValue(kind, field.Category, account, context, rng);
             for (int d = 0; d < forms.Count; d++)
                 if (forms[d].FormNumber == field.Form)
                     tells.Add(new RecordTell(d, field.Category, value));
@@ -139,43 +191,63 @@ public static class RecordLies
     private static bool Prints(IReadOnlyList<RecordForm> forms, Forged field) =>
         forms.Any(f => f.FormNumber == field.Form && f.Fields != null && f.Fields.Any(x => x != null && x.category == field.Category));
 
-    /// <summary>True when the category's maker can make a false value for this account (draws nothing).</summary>
-    private static bool CanForge(ClueCategory category, CitizenAccount account, string coverBirthDate, int birthYearMin, int birthYearMax,
-                                 IReadOnlyList<TransponderModel> transponders)
+    /// <summary>The class of transponder the posed status travels on; null without a posed status.</summary>
+    private static TransponderClass? PosedClass(RecordLieContext context) =>
+        context.PosedStatus.HasValue ? AccountMaker.ClassOf(context.PosedStatus.Value) : (TransponderClass?)null;
+
+    /// <summary>True when the category's maker can make a false value for this account (draws nothing); a debtor's classes are the posed status's, which must differ from the account's.</summary>
+    private static bool CanForge(LieKind kind, ClueCategory category, CitizenAccount account, RecordLieContext context)
     {
+        bool posed = kind == LieKind.DebtorPosingAsTourist;
         switch (category)
         {
             case ClueCategory.AccountStatus:
-                return HigherStatuses(account.Status).Count > 0;
+                return posed ? context.PosedStatus.HasValue && context.PosedStatus.Value != account.Status : HigherStatuses(account.Status).Count > 0;
             case ClueCategory.TransponderClass:
-                return FalseTransponderClass(account.TransponderClass) != null;
+                return posed ? PosedClass(context).HasValue && PosedClass(context).Value != account.TransponderClass : FalseTransponderClass(account.TransponderClass) != null;
             case ClueCategory.TransponderId:
-                return ModelsOf(FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass, transponders).Count > 0;
+                return ModelsOf(FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass, context.Transponders).Count > 0;
             case ClueCategory.CitizenId:
                 return true;
             case ClueCategory.BirthDate:
-                return BirthDates.HasOtherYear(coverBirthDate, birthYearMin, birthYearMax);
+                return BirthDates.HasOtherYear(context.CoverBirthDate, context.BirthYearMin, context.BirthYearMax);
+            case ClueCategory.Wage:
+                return account.Wage > 0;
+            case ClueCategory.Term:
+                return account.TermDays > 0;
+            case ClueCategory.Employer:
+                return account.HasContract && Others(context.Employers, account.Employer).Count > 0;
+            case ClueCategory.Destination:
+                return account.HasContract && (context.OpenPlaces?.Count ?? 0) > 0;
             default:
                 return false;
         }
     }
 
-    /// <summary>The category's false value (the makers below); the transponder is one of the class the forged papers need (the false class when the class is forged).</summary>
-    private static string FalseValue(ClueCategory category, CitizenAccount account, string coverBirthDate, int birthYearMin, int birthYearMax,
-                                     IReadOnlyList<TransponderModel> transponders, ISet<string> takenToday, IRandomSource rng)
+    /// <summary>The category's false value (the makers below); the transponder is one of the class the forged papers need (the false class when the class is forged); a debtor's classes are the posed status's (no draw).</summary>
+    private static string FalseValue(LieKind kind, ClueCategory category, CitizenAccount account, RecordLieContext context, IRandomSource rng)
     {
+        bool posed = kind == LieKind.DebtorPosingAsTourist;
         switch (category)
         {
             case ClueCategory.AccountStatus:
-                return FalseStatus(account.Status, rng).ToString();
+                return posed ? context.PosedStatus.Value.ToString() : FalseStatus(account.Status, rng).ToString();
             case ClueCategory.TransponderClass:
-                return FalseTransponderClass(account.TransponderClass).ToString();
+                return posed ? PosedClass(context).Value.ToString() : FalseTransponderClass(account.TransponderClass).ToString();
             case ClueCategory.TransponderId:
-                return FalseTransponder(FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass, account.Transponder, transponders, takenToday, rng);
+                return FalseTransponder(FalseTransponderClass(account.TransponderClass) ?? account.TransponderClass, account.Transponder, context.Transponders, context.TakenToday, rng);
             case ClueCategory.CitizenId:
-                return FreshCitizenId(takenToday, rng);
+                return FreshCitizenId(context.TakenToday, rng);
+            case ClueCategory.Wage:
+                return AccountMaker.Credits(FalseWage(account.Wage, rng));
+            case ClueCategory.Term:
+                return AccountMaker.Term(FalseTerm(account.TermDays, rng));
+            case ClueCategory.Employer:
+                return OtherOf(context.Employers, account.Employer, rng);
+            case ClueCategory.Destination:
+                return context.OpenPlaces[rng.Range(0, context.OpenPlaces.Count)];
             default:
-                return BirthDates.PickOtherYear(coverBirthDate, birthYearMin, birthYearMax, rng);
+                return BirthDates.PickOtherYear(context.CoverBirthDate, context.BirthYearMin, context.BirthYearMax, rng);
         }
     }
 
@@ -219,7 +291,9 @@ public static class RecordLies
     /// fresh serial nobody holds today (AgencyNumbers.TakeUnique, which joins
     /// <paramref name="takenToday"/>), printed as accounts print it
     /// (AccountMaker.TransponderName). Null, with no draw, without a model of
-    /// the class.
+    /// the class. Also the paper-set maker's Economy unit for a Premium
+    /// citizen (Directives, PaperSetBreak.EconomyManifest), whose own model is
+    /// Premium, so every Economy model qualifies.
     /// </summary>
     public static string FalseTransponder(TransponderClass needed, string ownTransponder, IReadOnlyList<TransponderModel> transponders,
                                           ISet<string> takenToday, IRandomSource rng)
@@ -238,9 +312,48 @@ public static class RecordLies
     /// <summary>True when a printed transponder ("Hopper Mk II · HP-40718") is of <paramref name="model"/>.</summary>
     private static bool IsModelOf(string transponder, TransponderModel model) =>
         !string.IsNullOrEmpty(transponder) && !string.IsNullOrEmpty(model.model) &&
-        transponder.StartsWith(model.model + " ", System.StringComparison.Ordinal);
+        transponder.StartsWith(model.model + " ", StringComparison.Ordinal);
 
     /// <summary>A Citizen ID nobody holds today (AgencyNumbers.TakeUnique over AccountMaker.CitizenId: three draws per attempt), which joins <paramref name="takenToday"/>.</summary>
     public static string FreshCitizenId(ISet<string> takenToday, IRandomSource rng) =>
         AgencyNumbers.TakeUnique(takenToday, () => AccountMaker.CitizenId(rng));
+
+    /// <summary>
+    /// A forged day wage (§6.3): the registered <paramref name="wage"/> times
+    /// 1.5 to 3 (one Value draw), rounded to 10 cr; one step up when the
+    /// rounding lands on the registered wage, so it always differs.
+    /// </summary>
+    public static int FalseWage(int wage, IRandomSource rng)
+    {
+        int forged = RoundTo(wage * (1.5 + 1.5 * rng.Value()), 10);
+        return forged == wage ? forged + 10 : forged;
+    }
+
+    /// <summary>
+    /// A forged term (§6.3): the registered <paramref name="days"/> times
+    /// 0.25 to 0.6 (one Value draw), rounded to whole months
+    /// (AccountMaker.MonthDays) and at least one; one month down when the
+    /// rounding lands on the registered term (up, when that would be none).
+    /// </summary>
+    public static int FalseTerm(int days, IRandomSource rng)
+    {
+        int forged = Math.Max(AccountMaker.MonthDays, RoundTo(days * (0.25 + 0.35 * rng.Value()), AccountMaker.MonthDays));
+        if (forged != days)
+            return forged;
+        return forged > AccountMaker.MonthDays ? forged - AccountMaker.MonthDays : forged + AccountMaker.MonthDays;
+    }
+
+    /// <summary><paramref name="value"/> rounded to the nearest multiple of <paramref name="step"/> (halves away from zero).</summary>
+    private static int RoundTo(double value, int step) => (int)Math.Round(value / step, MidpointRounding.AwayFromZero) * step;
+
+    /// <summary>The entries of <paramref name="values"/> other than <paramref name="own"/> (Values.Match), in order.</summary>
+    private static List<string> Others(IReadOnlyList<string> values, string own) =>
+        (values ?? new string[0]).Where(v => !string.IsNullOrWhiteSpace(v) && !Values.Match(v, own)).ToList();
+
+    /// <summary>Another of <paramref name="values"/> than <paramref name="own"/>: one Range draw over the others; null, with no draw, without one.</summary>
+    public static string OtherOf(IReadOnlyList<string> values, string own, IRandomSource rng)
+    {
+        List<string> others = Others(values, own);
+        return others.Count == 0 ? null : others[rng.Range(0, others.Count)];
+    }
 }

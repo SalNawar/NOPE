@@ -23,7 +23,8 @@ public static class Forgery
     /// True for a record category: a value the traveller's own record (the
     /// Citizen Account or the Displacement Registry entry) holds and proves,
     /// whatever the books: the birth date, the agency number, the destination,
-    /// the incident, and the account's status, transponder, class and debt.
+    /// the incident, the account's status, transponder, class and debt, and
+    /// the registered contract's employer, term and wage.
     /// </summary>
     public static bool IsRecordCategory(ClueCategory category)
     {
@@ -37,6 +38,9 @@ public static class Forgery
             case ClueCategory.TransponderId:
             case ClueCategory.TransponderClass:
             case ClueCategory.Debt:
+            case ClueCategory.Employer:
+            case ClueCategory.Term:
+            case ClueCategory.Wage:
                 return true;
             default:
                 return false;

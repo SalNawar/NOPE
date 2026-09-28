@@ -16,6 +16,14 @@ public class LieKindsTests
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.PoorTourist, true)]
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.Labourer, false)]
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.Displaced, false)]
+    [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.RichTourist, true)]
+    [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.PoorTourist, true)]
+    [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.Labourer, false)]
+    [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.Displaced, false)]
+    [TestCase(LieKind.ForgedContract, TravellerKind.Labourer, true)]
+    [TestCase(LieKind.ForgedContract, TravellerKind.RichTourist, false)]
+    [TestCase(LieKind.ForgedContract, TravellerKind.PoorTourist, false)]
+    [TestCase(LieKind.ForgedContract, TravellerKind.Displaced, false)]
     public void AppliesTo_TheCataloguesKinds(LieKind lie, TravellerKind kind, bool expected)
     {
         Assert.AreEqual(expected, LieKinds.AppliesTo(lie, kind));
@@ -24,11 +32,11 @@ public class LieKindsTests
     [Test]
     public void For_KeepsTheDaysOrder_DropsWhatDoesNotFit_AndRepeats()
     {
-        var day = new List<LieKind> { LieKind.DoctoredIdentity, LieKind.PoorPosingAsRich, LieKind.FalseOrigin, LieKind.DoctoredIdentity };
-        CollectionAssert.AreEqual(new[] { LieKind.DoctoredIdentity, LieKind.PoorPosingAsRich }, LieKinds.For(day, TravellerKind.RichTourist));
-        CollectionAssert.AreEqual(new[] { LieKind.DoctoredIdentity }, LieKinds.For(day, TravellerKind.PoorTourist));
+        var day = new List<LieKind> { LieKind.DoctoredIdentity, LieKind.PoorPosingAsRich, LieKind.FalseOrigin, LieKind.DoctoredIdentity, LieKind.ForgedContract, LieKind.DebtorPosingAsTourist };
+        CollectionAssert.AreEqual(new[] { LieKind.DoctoredIdentity, LieKind.PoorPosingAsRich, LieKind.DebtorPosingAsTourist }, LieKinds.For(day, TravellerKind.RichTourist));
+        CollectionAssert.AreEqual(new[] { LieKind.DoctoredIdentity, LieKind.DebtorPosingAsTourist }, LieKinds.For(day, TravellerKind.PoorTourist));
         CollectionAssert.AreEqual(new[] { LieKind.FalseOrigin }, LieKinds.For(day, TravellerKind.Displaced));
-        CollectionAssert.IsEmpty(LieKinds.For(day, TravellerKind.Labourer));
+        CollectionAssert.AreEqual(new[] { LieKind.ForgedContract }, LieKinds.For(day, TravellerKind.Labourer));
         CollectionAssert.IsEmpty(LieKinds.For(null, TravellerKind.Displaced));
     }
 
@@ -36,6 +44,9 @@ public class LieKindsTests
     public void TrueStatus_PoorPosingAsRich_HoldsAStandardAccount_EveryoneElseTheirKinds()
     {
         Assert.AreEqual(CitizenStatus.Standard, LieKinds.TrueStatus(LieKind.PoorPosingAsRich, CitizenStatus.Premium));
+        Assert.AreEqual(CitizenStatus.Eligible, LieKinds.TrueStatus(LieKind.DebtorPosingAsTourist, CitizenStatus.Premium), "a debtor posing as a rich tourist (L4)");
+        Assert.AreEqual(CitizenStatus.Eligible, LieKinds.TrueStatus(LieKind.DebtorPosingAsTourist, CitizenStatus.Standard), "a debtor posing as a poor tourist (L4)");
+        Assert.AreEqual(CitizenStatus.Eligible, LieKinds.TrueStatus(LieKind.ForgedContract, CitizenStatus.Eligible));
         Assert.AreEqual(CitizenStatus.Premium, LieKinds.TrueStatus(LieKind.DoctoredIdentity, CitizenStatus.Premium));
         Assert.AreEqual(CitizenStatus.Premium, LieKinds.TrueStatus(null, CitizenStatus.Premium));
         Assert.AreEqual(CitizenStatus.Eligible, LieKinds.TrueStatus(LieKind.FalseOrigin, CitizenStatus.Eligible));

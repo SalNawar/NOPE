@@ -79,12 +79,66 @@ public class RecordLiesTests
 
     private static IReadOnlyList<IReadOnlyList<DocumentField>> Docs(IReadOnlyList<RecordForm> forms) => forms.Select(f => f.Fields).ToList();
 
+    /// <summary>The era's employers (the labourer's own first) and today's other open places.</summary>
+    private static readonly string[] Employers = { "Tyburn Mills Consortium", "Ruhr Colliery Partners" };
+    private static readonly string[] OpenPlaces = { "Meiji Osaka (Industrial)", "Bismarck Berlin (Industrial)" };
+
+    private static RecordLieContext Context(CitizenAccount account, int yearMin = YearMin, int yearMax = YearMax, ISet<string> taken = null,
+                                            IReadOnlyList<TransponderModel> transponders = null, CitizenStatus? posed = null) => new RecordLieContext
+    {
+        CoverBirthDate = Cover,
+        BirthYearMin = yearMin,
+        BirthYearMax = yearMax,
+        Transponders = transponders ?? Transponders(),
+        TakenToday = taken ?? Taken(account),
+        PosedStatus = posed,
+        Employers = Employers,
+        OpenPlaces = OpenPlaces
+    };
+
     private static LiePlan Plan(LieKind kind, IRandomSource rng, CitizenAccount account = null, IReadOnlyList<RecordForm> forms = null,
-                                int yearMin = YearMin, int yearMax = YearMax, ISet<string> taken = null, IReadOnlyList<TransponderModel> transponders = null)
+                                int yearMin = YearMin, int yearMax = YearMax, ISet<string> taken = null, IReadOnlyList<TransponderModel> transponders = null,
+                                CitizenStatus? posed = null)
     {
         account = account ?? Standard();
-        return RecordLies.Plan(kind, forms ?? Forms(account), account, Cover, yearMin, yearMax, transponders ?? Transponders(), taken ?? Taken(account), rng);
+        return RecordLies.Plan(kind, forms ?? Forms(account), account, Context(account, yearMin, yearMax, taken, transponders, posed), rng);
     }
+
+    /// <summary>An Eligible citizen ("418-0937-52", 212,000 cr in debt, on an Economy Tick-Tock Basic).</summary>
+    private static CitizenAccount Eligible()
+    {
+        CitizenAccount a = Standard();
+        a.Status = CitizenStatus.Eligible;
+        a.Debt = 212_000;
+        return a;
+    }
+
+    /// <summary>A labourer's account: Eligible, with a registered contract (Tyburn Mills Consortium, 180 days, 420 cr a day).</summary>
+    private static CitizenAccount Labourer()
+    {
+        CitizenAccount a = Eligible();
+        a.Employer = Employers[0];
+        a.TermDays = 180;
+        a.Wage = 420;
+        return a;
+    }
+
+    private static List<DocumentField> ContractFields(CitizenAccount a) => new List<DocumentField>
+    {
+        F(ClueCategory.Name, Traveller),
+        F(ClueCategory.CitizenId, a.CitizenId),
+        F(ClueCategory.Employer, a.Employer),
+        F(ClueCategory.Destination, "Victorian Britain (Industrial)"),
+        F(ClueCategory.Term, AccountMaker.Term(a.TermDays)),
+        F(ClueCategory.Wage, AccountMaker.Credits(a.Wage))
+    };
+
+    /// <summary>The labour set, honest, for <paramref name="a"/>: TC-520 then TC-230.</summary>
+    private static List<RecordForm> LabourForms(CitizenAccount a) => new List<RecordForm>
+    {
+        new RecordForm(RecordLies.Contract, ContractFields(a)),
+        new RecordForm(RecordLies.Manifest, ManifestFields(a))
+    };
 
     /// <summary>Today's numbers: the account's own ID and serial (AccountMaker adds them) and a neighbour's.</summary>
     private static HashSet<string> Taken(CitizenAccount a) => new HashSet<string> { a.CitizenId, "TT-40718", "552-1804-33", "HP-00000" };
@@ -229,23 +283,107 @@ public class RecordLiesTests
     }
 
     // -----------------------------
+    // L4 a debtor posing as a tourist
+    // -----------------------------
+
+    [Test]
+    public void DebtorPosingAsTourist_PrintsThePosedStatusAndItsClass_WithNoDraw()
+    {
+        CitizenAccount account = Eligible();
+        var rng = new ScriptedRandom();
+        LiePlan plan = Plan(LieKind.DebtorPosingAsTourist, rng, account, posed: CitizenStatus.Premium);
+        Assert.IsTrue(rng.Done, "one variant, and the posed status draws nothing");
+        Assert.AreEqual(LieOutcome.Forger, plan.Outcome);
+        CollectionAssert.AreEqual(
+            new[] { (0, ClueCategory.AccountStatus, "Premium"), (1, ClueCategory.TransponderClass, "Premium") },
+            plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray());
+    }
+
+    [Test]
+    public void DebtorPosingAsTourist_WithoutAPosedStatus_OrPosingAsTheirOwnClass_CannotShow()
+    {
+        var rng = new ScriptedRandom();
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible()).Outcome, "no posed status");
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible(), posed: CitizenStatus.Standard).Outcome, "a Standard visa rides an Economy unit like the account's: the class cannot differ (the poor variant is phase 8's)");
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.DebtorPosingAsTourist, rng, Eligible(), posed: CitizenStatus.Eligible).Outcome, "posing as oneself");
+        Assert.IsTrue(rng.Done);
+    }
+
+    // -----------------------------
+    // L5 a forged contract
+    // -----------------------------
+
+    [Test]
+    public void ForgedContract_DrawsTheVariantThenTheValue_EachOnItsOwnBox()
+    {
+        CitizenAccount account = Labourer();
+        List<RecordForm> forms = LabourForms(account);
+
+        var wage = new ScriptedRandom(R(0), V(0f));
+        LiePlan plan = Plan(LieKind.ForgedContract, wage, account, forms);
+        Assert.IsTrue(wage.Done, "the variant among four, then the wage's one draw");
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.Wage, "630 cr") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), "420 x 1.5");
+
+        var term = new ScriptedRandom(R(1), V(1f));
+        plan = Plan(LieKind.ForgedContract, term, account, forms);
+        Assert.IsTrue(term.Done);
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.Term, "120 days") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), "180 x 0.6 = 108, rounded to whole months");
+
+        var employer = new ScriptedRandom(R(2), R(0));
+        plan = Plan(LieKind.ForgedContract, employer, account, forms);
+        Assert.IsTrue(employer.Done);
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.Employer, "Ruhr Colliery Partners") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), "another employer of the era");
+
+        var worksite = new ScriptedRandom(R(3), R(1));
+        plan = Plan(LieKind.ForgedContract, worksite, account, forms);
+        Assert.IsTrue(worksite.Done);
+        CollectionAssert.AreEqual(new[] { (0, ClueCategory.Destination, "Bismarck Berlin (Industrial)") }, plan.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), "another open place");
+
+        plan.ApplyTo(Docs(forms));
+        Assert.AreEqual("Bismarck Berlin (Industrial)", forms[0].Fields.Single(f => f.category == ClueCategory.Destination).value);
+        Assert.IsTrue(forms[0].Fields.Single(f => f.category == ClueCategory.Destination).isAnachronism);
+        CollectionAssert.IsEmpty(PaperChecks.Contradictions(Docs(forms)), "the manifest prints no worksite: the record proves it");
+    }
+
+    [Test]
+    public void ForgedContract_VariantsThatCannotShow_AreNeverDrawn()
+    {
+        CitizenAccount account = Labourer();
+        List<RecordForm> forms = LabourForms(account);
+        RecordLieContext alone = Context(account);
+        alone.Employers = new[] { account.Employer };
+        alone.OpenPlaces = new string[0];
+        var rng = new ScriptedRandom(R(1), V(0.5f));
+        LiePlan plan = RecordLies.Plan(LieKind.ForgedContract, forms, account, alone, rng);
+        Assert.IsTrue(rng.Done, "the variant among the wage and the term only");
+        Assert.AreEqual(ClueCategory.Term, plan.RecordTells.Single().Category);
+
+        var none = new ScriptedRandom();
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.ForgedContract, none, Eligible(), LabourForms(Eligible())).Outcome, "no contract registered: nothing to forge against");
+        Assert.AreEqual(LieOutcome.NoPossibleLie, Plan(LieKind.ForgedContract, none, account, Forms(account)).Outcome, "no contract printed");
+        Assert.IsTrue(none.Done);
+    }
+
+    // -----------------------------
     // Every forged field differs and is provable
     // -----------------------------
 
     [TestCase(LieKind.PoorPosingAsRich)]
     [TestCase(LieKind.DoctoredIdentity)]
+    [TestCase(LieKind.DebtorPosingAsTourist)]
+    [TestCase(LieKind.ForgedContract)]
     public void EveryForgedField_DiffersFromTheAccount_IsProvable_AndProvesAgainstTheRecord(LieKind kind)
     {
         for (int seed = 0; seed < 200; seed++)
         {
-            CitizenAccount account = Standard();
-            List<RecordForm> forms = Forms(account);
+            CitizenAccount account = kind == LieKind.ForgedContract ? Labourer() : kind == LieKind.DebtorPosingAsTourist ? Eligible() : Standard();
+            List<RecordForm> forms = kind == LieKind.ForgedContract ? LabourForms(account) : Forms(account);
             List<DocumentField> honest = forms.SelectMany(f => f.Fields).Select(f => new DocumentField { category = f.category, value = f.value }).ToList();
-            LiePlan plan = Plan(kind, new SeededRandom(seed), account, forms);
+            LiePlan plan = Plan(kind, new SeededRandom(seed), account, forms, posed: kind == LieKind.DebtorPosingAsTourist ? CitizenStatus.Premium : (CitizenStatus?)null);
             Assert.AreEqual(LieOutcome.Forger, plan.Outcome, $"seed {seed}");
             Assert.IsNotEmpty(plan.RecordTells, $"seed {seed}");
 
-            CitizenRecord record = AccountRecords.Record(Traveller, Cover, "New Kingdom Egypt (Ancient)", account, key => key);
+            CitizenRecord record = AccountRecords.Record(Traveller, Cover, kind == LieKind.ForgedContract ? "Victorian Britain (Industrial)" : "New Kingdom Egypt (Ancient)", account, key => key);
             plan.ApplyTo(Docs(forms));
             List<DocumentField> printed = forms.SelectMany(f => f.Fields).ToList();
             for (int i = 0; i < printed.Count; i++)
@@ -271,11 +409,11 @@ public class RecordLiesTests
     [Test]
     public void TheSameSeed_GivesTheSamePlan()
     {
-        foreach (LieKind kind in new[] { LieKind.PoorPosingAsRich, LieKind.DoctoredIdentity })
+        foreach (LieKind kind in new[] { LieKind.PoorPosingAsRich, LieKind.DoctoredIdentity, LieKind.ForgedContract })
         {
-            CitizenAccount a = Standard(), b = Standard();
-            LiePlan x = Plan(kind, new SeededRandom(11), a, taken: Taken(a));
-            LiePlan y = Plan(kind, new SeededRandom(11), b, taken: Taken(b));
+            CitizenAccount a = kind == LieKind.ForgedContract ? Labourer() : Standard(), b = kind == LieKind.ForgedContract ? Labourer() : Standard();
+            LiePlan x = Plan(kind, new SeededRandom(11), a, kind == LieKind.ForgedContract ? LabourForms(a) : null, taken: Taken(a));
+            LiePlan y = Plan(kind, new SeededRandom(11), b, kind == LieKind.ForgedContract ? LabourForms(b) : null, taken: Taken(b));
             CollectionAssert.AreEqual(x.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), y.RecordTells.Select(t => (t.Document, t.Category, t.Value)).ToArray(), kind.ToString());
         }
     }
@@ -285,7 +423,8 @@ public class RecordLiesTests
     {
         var rng = new ScriptedRandom();
         Assert.AreEqual(LieOutcome.Honest, Plan(LieKind.DoctoredIdentity, null).Outcome);
-        Assert.AreEqual(LieOutcome.Honest, RecordLies.Plan(LieKind.DoctoredIdentity, Forms(Standard()), null, Cover, YearMin, YearMax, Transponders(), Taken(Standard()), rng).Outcome);
+        Assert.AreEqual(LieOutcome.Honest, RecordLies.Plan(LieKind.DoctoredIdentity, Forms(Standard()), null, Context(Standard()), rng).Outcome);
+        Assert.AreEqual(LieOutcome.Honest, RecordLies.Plan(LieKind.DoctoredIdentity, Forms(Standard()), Standard(), null, rng).Outcome, "no context");
         LiePlan place = Plan(LieKind.FalseOrigin, rng);
         Assert.AreEqual(LieOutcome.Honest, place.Outcome);
         Assert.AreEqual(LieKind.FalseOrigin, place.Kind);
@@ -309,6 +448,51 @@ public class RecordLiesTests
         var premium = new ScriptedRandom();
         Assert.IsNull(RecordLies.FalseStatus(CitizenStatus.Premium, premium));
         Assert.IsTrue(premium.Done);
+    }
+
+    [Test]
+    public void FalseWage_IsOneAndAHalfToThreeTimes_RoundedToTen_NeverEqual()
+    {
+        Assert.AreEqual(630, RecordLies.FalseWage(420, new ScriptedRandom(V(0f))));
+        Assert.AreEqual(1260, RecordLies.FalseWage(420, new ScriptedRandom(V(1f))));
+        Assert.AreEqual(950, RecordLies.FalseWage(420, new ScriptedRandom(V(0.5f))), "420 x 2.25 = 945, rounded to 950");
+        Assert.AreEqual(20, RecordLies.FalseWage(10, new ScriptedRandom(V(0f))), "10 x 1.5 = 15 rounds to 20");
+        Assert.AreEqual(10, RecordLies.FalseWage(0, new ScriptedRandom(V(0f))), "a wage of 0 forges one step up rather than itself");
+        for (int seed = 0; seed < 200; seed++)
+        {
+            int forged = RecordLies.FalseWage(180, new SeededRandom(seed));
+            Assert.AreNotEqual(180, forged, $"seed {seed}");
+            Assert.AreEqual(0, forged % 10, $"seed {seed}");
+            Assert.That(forged, Is.InRange(270, 540), $"seed {seed}");
+        }
+    }
+
+    [Test]
+    public void FalseTerm_IsAQuarterToSixTenths_InWholeMonths_AtLeastOne_NeverEqual()
+    {
+        Assert.AreEqual(60, RecordLies.FalseTerm(180, new ScriptedRandom(V(0f))), "180 x 0.25 = 45, rounded to 60");
+        Assert.AreEqual(120, RecordLies.FalseTerm(180, new ScriptedRandom(V(1f))), "180 x 0.6 = 108, rounded to 120");
+        Assert.AreEqual(30, RecordLies.FalseTerm(90, new ScriptedRandom(V(0f))), "at least one month");
+        Assert.AreEqual(60, RecordLies.FalseTerm(30, new ScriptedRandom(V(1f))), "30 x 0.6 rounds to 30, the registered term: one month up when a month down would be none");
+        for (int seed = 0; seed < 200; seed++)
+        {
+            int forged = RecordLies.FalseTerm(720, new SeededRandom(seed));
+            Assert.AreNotEqual(720, forged, $"seed {seed}");
+            Assert.AreEqual(0, forged % AccountMaker.MonthDays, $"seed {seed}");
+            Assert.That(forged, Is.InRange(180, 450), $"seed {seed}");
+        }
+    }
+
+    [Test]
+    public void OtherOf_IsAnotherEntry_AfterOneDraw_OrNullWithoutOne()
+    {
+        var rng = new ScriptedRandom(R(0));
+        Assert.AreEqual("Ruhr Colliery Partners", RecordLies.OtherOf(Employers, "Tyburn Mills Consortium", rng));
+        Assert.IsTrue(rng.Done);
+        var none = new ScriptedRandom();
+        Assert.IsNull(RecordLies.OtherOf(new[] { "Tyburn Mills Consortium" }, "tyburn mills consortium", none), "the same value under Values.Match");
+        Assert.IsNull(RecordLies.OtherOf(null, "x", none));
+        Assert.IsTrue(none.Done);
     }
 
     [Test]

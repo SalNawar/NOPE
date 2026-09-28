@@ -7,7 +7,7 @@ using NUnit.Framework;
 /// </summary>
 public class SerializedEnumsTests
 {
-    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt.</summary>
+    /// <summary>ClueCategory: stored in templates, books, places, effects, the config and saves (FactEdit, CarryRecord); phase 3 appends CitizenId, Destination, Incident, DepartureDate and Expiry; phase 6 AccountStatus, TransponderId, TransponderClass and Debt; phase 9 Employer, Term and Wage.</summary>
     [Test]
     public void ClueCategory_KeepsItsSerializedInts()
     {
@@ -29,7 +29,10 @@ public class SerializedEnumsTests
         Assert.AreEqual(15, (int)ClueCategory.TransponderId);
         Assert.AreEqual(16, (int)ClueCategory.TransponderClass);
         Assert.AreEqual(17, (int)ClueCategory.Debt);
-        Assert.AreEqual(18, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(18, (int)ClueCategory.Employer);
+        Assert.AreEqual(19, (int)ClueCategory.Term);
+        Assert.AreEqual(20, (int)ClueCategory.Wage);
+        Assert.AreEqual(21, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
     }
 
     /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>
@@ -58,7 +61,23 @@ public class SerializedEnumsTests
         Assert.AreEqual(0, (int)LieKind.FalseOrigin);
         Assert.AreEqual(1, (int)LieKind.PoorPosingAsRich);
         Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
-        Assert.AreEqual(3, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(3, (int)LieKind.DebtorPosingAsTourist);
+        Assert.AreEqual(4, (int)LieKind.ForgedContract);
+        Assert.AreEqual(5, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>TravelRuleType: stored in the rule assets (TravelRuleSO.type; world_source.json rules[].type); phase 10 appends DressForDestination, phase 7 Procedure, phase 9 PaperSet and DebtStanding.</summary>
+    [Test]
+    public void TravelRuleType_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)TravelRuleType.EraForbidden);
+        Assert.AreEqual(1, (int)TravelRuleType.NationForbidden);
+        Assert.AreEqual(2, (int)TravelRuleType.NationEraForbidden);
+        Assert.AreEqual(3, (int)TravelRuleType.DressForDestination);
+        Assert.AreEqual(4, (int)TravelRuleType.Procedure);
+        Assert.AreEqual(5, (int)TravelRuleType.PaperSet);
+        Assert.AreEqual(6, (int)TravelRuleType.DebtStanding);
+        Assert.AreEqual(7, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
     }
 
     /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>

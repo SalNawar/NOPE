@@ -170,14 +170,22 @@ public static class _TimeDeskAuditStatic
                 InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
                 var factory = new CaseFactory(lib, lib.BuildToday(plan, world.history));
                 List<CaseInstance> cases = factory.GenerateDayCases(plan, world, Seeds.Day(seed, day), interview.AskableCategories, interview.AnswerTellCategories, true);
-                var violators = (Dictionary<int, NationEraProfileSO>)violatorsField.GetValue(factory);
+                // Phase 9: the slot map holds a planned fault (a closure's place, or a guaranteed procedure's rule) per slot.
+                var violators = new Dictionary<int, string>();
+                foreach (System.Collections.DictionaryEntry entry in (System.Collections.IDictionary)violatorsField.GetValue(factory))
+                {
+                    object fault = entry.Value;
+                    var place = fault.GetType().GetField("Place").GetValue(fault) as NationEraProfileSO;
+                    var rule = fault.GetType().GetField("Rule").GetValue(fault) as TravelRuleSO;
+                    violators[(int)entry.Key] = place != null ? place.id : rule != null ? "rule:" + rule.name : "?";
+                }
                 CitizenRegistry registry = CaseFactory.BuildRegistry(cases);
                 for (int i = 0; i < cases.Count; i++)
                 {
                     CaseInstance c = cases[i];
                     CitizenRecord record = registry.Find(c.visitorGivenName);
                     string rec = record != null ? string.Join("|", record.Groups.SelectMany(g => g.Rows).Select(r => r.Value)) : "none";
-                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null) + $" | record={rec}");
+                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out string v) ? v : null) + $" | record={rec}");
                 }
             }
         }
@@ -195,7 +203,7 @@ public static class _TimeDeskAuditStatic
         return world;
     }
 
-    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place named, each paper's serial after its name (redesign phase 4).</summary>
+    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place (or a guaranteed procedure's rule, phase 9) named, each paper's serial after its name (redesign phase 4).</summary>
     public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace)
     {
         List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();

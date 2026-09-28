@@ -20,6 +20,8 @@ public class AccountMakerTests
         validDaysMin = 3,
         validDaysMax = 365,
         tripsWithinDays = 1095,
+        frozenWithinDays = 30,
+        contract = new ContractRanges { termMin = 90, termMax = 720, wageMin = 180, wageMax = 520 },
         statuses = new List<StatusRanges>
         {
             new StatusRanges { status = CitizenStatus.Premium, debtMin = 0, debtMax = 0, tripsMin = 0, tripsMax = 3 },
@@ -35,13 +37,72 @@ public class AccountMakerTests
         new TransponderModel { id = "aurelian", transponderClass = TransponderClass.Premium, model = "Aurelian 9", prefix = "AU", weight = 1f }
     };
 
-    private static AccountRequest Request(CitizenStatus status, int expiringForms = 1) => new AccountRequest
+    private static AccountRequest Request(CitizenStatus status, int expiringForms = 1, bool contract = false) => new AccountRequest
     {
         Status = status,
         Lineages = new[] { "New Kingdom Egypt (Ancient)", "Mamluk Cairo (Medieval)" },
         TripPlaces = new[] { "Periclean Athens (Ancient)", "Republican Rome (Ancient)" },
-        ExpiringForms = expiringForms
+        ExpiringForms = expiringForms,
+        Contract = contract,
+        Employers = new[] { "Tyburn Mills Consortium", "Ruhr Colliery Partners" }
     };
+
+    /// <summary>A labourer's account (phase 9): the contract is drawn after the transponder, before the lineage: the employer, the term in whole months, the day wage in tens.</summary>
+    [Test]
+    public void Make_ALabourersContract_DrawsEmployerTermAndWage_AfterTheTransponder()
+    {
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), // Citizen ID
+            ScriptStep.Range(1000),                                             // debt: 40,000 + 10,000
+            ScriptStep.Value(0f), ScriptStep.Range(7),                          // the Economy model, its serial
+            ScriptStep.Range(1),                                                // the employer: the second
+            ScriptStep.Range(3),                                                // the term: 90 + 3 months
+            ScriptStep.Range(24),                                               // the wage: 180 + 240
+            ScriptStep.Range(0),                                                // lineage
+            ScriptStep.Range(0),                                                // no past trips
+            ScriptStep.Range(0));                                               // the manifest's expiring form
+        CitizenAccount account = AccountMaker.Make(Request(CitizenStatus.Eligible, contract: true), Ranges(), Transponders(), Today, new HashSet<string>(), rng);
+        Assert.IsTrue(rng.Done, "every draw in order");
+        Assert.AreEqual(50000, account.Debt);
+        Assert.AreEqual("Tick-Tock Basic · TT-00007", account.Transponder);
+        Assert.IsTrue(account.HasContract);
+        Assert.AreEqual("Ruhr Colliery Partners", account.Employer);
+        Assert.AreEqual(180, account.TermDays);
+        Assert.AreEqual(420, account.Wage);
+        Assert.AreEqual(AccountStanding.Good, account.Standing);
+        Assert.IsNull(account.FrozenSince);
+    }
+
+    [Test]
+    public void Make_WithoutAContract_OrWithoutEmployers_DrawsNothingForIt()
+    {
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000), ScriptStep.Value(0f), ScriptStep.Range(7),
+            ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        CitizenAccount tourist = AccountMaker.Make(Request(CitizenStatus.Eligible), Ranges(), Transponders(), Today, new HashSet<string>(), rng);
+        Assert.IsTrue(rng.Done, "an Eligible tourist (a debtor posing as one) registers no contract");
+        Assert.IsFalse(tourist.HasContract);
+        Assert.AreEqual(0, tourist.TermDays);
+        Assert.AreEqual(0, tourist.Wage);
+
+        AccountRequest none = Request(CitizenStatus.Eligible, contract: true);
+        none.Employers = new string[0];
+        var again = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000), ScriptStep.Value(0f), ScriptStep.Range(7),
+            ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        Assert.IsFalse(AccountMaker.Make(none, Ranges(), Transponders(), Today, new HashSet<string>(), again).HasContract);
+        Assert.IsTrue(again.Done);
+    }
+
+    [Test]
+    public void TermDays_IsInWholeMonths_WithinTheRange_OneDraw()
+    {
+        Assert.AreEqual(90, AccountMaker.TermDays(90, 720, new ScriptedRandom(ScriptStep.Range(0))));
+        Assert.AreEqual(120, AccountMaker.TermDays(90, 720, new ScriptedRandom(ScriptStep.Range(1))));
+        Assert.AreEqual(720, AccountMaker.TermDays(90, 720, new ScriptedRandom(ScriptStep.Range(99999999))), "clamped to the top");
+        Assert.AreEqual("180 days", AccountMaker.Term(180));
+        Assert.AreEqual("1080 days", AccountMaker.Term(1080), "no thousands separator: a term is a count of days");
+    }
 
     [TestCase(TravellerKind.RichTourist, CitizenStatus.Premium)]
     [TestCase(TravellerKind.PoorTourist, CitizenStatus.Standard)]
@@ -351,6 +412,32 @@ public class AccountMakerTests
         Assert.IsTrue(rows.Any(r => !r.IsEvidence && r.Label == "<records.row.trip>" && r.Value == "4 Mar 2150, Periclean Athens (Ancient), <records.trip.returned>"));
         Assert.AreEqual(3, rows.Count(r => r.Value == "<records.none>"), "waiver, proof of means and contract: none on file for a Premium account");
         Assert.AreEqual("<records.note.none>", rec.Groups[3].Rows.Single().Value);
+    }
+
+    /// <summary>A labourer's registered contract is three evidence rows under Forms on file (Employer, Term, Wage), and a Frozen standing prints its date (phase 9).</summary>
+    [Test]
+    public void Record_AContractIsThreeEvidenceRows_AndAFrozenStandingPrintsItsDate()
+    {
+        CitizenAccount a = Account();
+        a.Status = CitizenStatus.Eligible;
+        a.Employer = "Tyburn Mills Consortium";
+        a.TermDays = 180;
+        a.Wage = 420;
+        a.Standing = AccountStanding.Frozen;
+        a.FrozenSince = "2 Mar 2150";
+        CitizenRecord rec = Record(a);
+        var rows = rec.Groups.SelectMany(g => g.Rows).ToList();
+        string[] Evidence(ClueCategory c) => rows.Where(r => r.IsEvidence && r.Category == c).Select(r => r.Value).ToArray();
+
+        CollectionAssert.AreEqual(new[] { "Tyburn Mills Consortium" }, Evidence(ClueCategory.Employer));
+        CollectionAssert.AreEqual(new[] { "180 days" }, Evidence(ClueCategory.Term));
+        CollectionAssert.AreEqual(new[] { "420 cr" }, Evidence(ClueCategory.Wage));
+        Assert.AreEqual(11, rows.Count(r => r.IsEvidence), "the eight rows and the contract's three");
+        CollectionAssert.AreEqual(new[] { "<contract.row.employer>", "<contract.row.term>", "<contract.row.wage>" },
+                                  rec.Groups[1].Rows.Where(r => r.IsEvidence && r.Category != ClueCategory.TransponderId && r.Category != ClueCategory.TransponderClass).Select(r => r.Label).ToArray(),
+                                  "under Forms on file, after the transponder rows");
+        Assert.AreEqual(2, rows.Count(r => r.Value == "<records.none>"), "the waiver and the proof of means only");
+        Assert.IsTrue(rows.Any(r => !r.IsEvidence && r.Label == "<records.row.standing>" && r.Value == "<records.standing.frozen>"), "the frozen line is the UI string, formatted with the date");
     }
 
     [Test]

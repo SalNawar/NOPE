@@ -34,6 +34,51 @@ public enum TransponderClass
     Economy
 }
 
+/// <summary>
+/// A Citizen Account's standing (traveller types §4.1): Good, or Frozen for
+/// a debtor in default, who may not depart (TravelRuleType.DebtStanding).
+/// Runtime only (not serialized).
+/// </summary>
+public enum AccountStanding
+{
+    /// <summary>In good standing.</summary>
+    Good,
+
+    /// <summary>Frozen: in default since a date ("Frozen: default, 2 Mar 2150"); a directive fault.</summary>
+    Frozen
+}
+
+/// <summary>One employer of the Debt Relief programme (world_source.json agency.employers; traveller types §4.3): a labourer's contract names one of their worksite's era.</summary>
+[Serializable]
+public sealed class Employer
+{
+    /// <summary>The employer's id ("tyburn"), unique.</summary>
+    public string id;
+
+    /// <summary>The era it hires for (an era id, "industrial").</summary>
+    public string era;
+
+    /// <summary>Its printed name ("Tyburn Mills Consortium").</summary>
+    public string name;
+}
+
+/// <summary>The ranges a labourer's registered contract is drawn from (world_source.json agency.accounts.contract; traveller types §4.1: a term of 90-720 days, a day wage of 180-520 cr).</summary>
+[Serializable]
+public sealed class ContractRanges
+{
+    /// <summary>The shortest term, in days (a whole number of 30-day months).</summary>
+    public int termMin;
+
+    /// <summary>The longest term, in days.</summary>
+    public int termMax;
+
+    /// <summary>The lowest day wage, in credits.</summary>
+    public int wageMin;
+
+    /// <summary>The highest day wage, in credits.</summary>
+    public int wageMax;
+}
+
 /// <summary>One transponder model a citizen can travel on (world_source.json agency.transponders; a weighted list per class).</summary>
 [Serializable]
 public sealed class TransponderModel
@@ -95,8 +140,14 @@ public sealed class AccountRanges
     /// <summary>A past trip left 1 to this many days before today.</summary>
     public int tripsWithinDays;
 
+    /// <summary>A Frozen account went into default 1 to this many days before today (the debt-standing maker, CaseFactory.PlanViolation).</summary>
+    public int frozenWithinDays;
+
     /// <summary>Each status's ranges (one entry per status).</summary>
     public List<StatusRanges> statuses = new();
+
+    /// <summary>The ranges a labourer's registered contract is drawn from (agency.accounts.contract).</summary>
+    public ContractRanges contract = new ContractRanges();
 
     /// <summary>The ranges of <paramref name="status"/>, or null when none are authored.</summary>
     public StatusRanges For(CitizenStatus status) => statuses?.FirstOrDefault(s => s != null && s.status == status);
@@ -108,7 +159,9 @@ public sealed class AccountRanges
     /// <see cref="MaxDebt"/>; and, over <paramref name="transponders"/>, a
     /// model id used twice, a blank model or prefix, a printed name wider than
     /// a book row (FactTable.MaxValueLength, a form's box), a weight of 0 or
-    /// less, and a class some status travels on with no model. Empty when sound.
+    /// less, and a class some status travels on with no model; and a contract
+    /// range out of order, a term below one month (AccountMaker.MonthDays) or
+    /// a day wage below 1 cr. Empty when sound.
     /// </summary>
     public List<string> Problems(IReadOnlyList<TransponderModel> transponders)
     {
@@ -117,6 +170,17 @@ public sealed class AccountRanges
             problems.Add($"agency.accounts.validDaysMin {validDaysMin} and validDaysMax {validDaysMax}: an honest paper is valid from 0 <= validDaysMin <= validDaysMax days after today.");
         if (tripsWithinDays < 1)
             problems.Add($"agency.accounts.tripsWithinDays is {tripsWithinDays}: a past trip left at least 1 day before today.");
+        if (frozenWithinDays < 1)
+            problems.Add($"agency.accounts.frozenWithinDays is {frozenWithinDays}: a frozen account went into default at least 1 day before today.");
+        if (contract == null)
+            problems.Add("agency.accounts.contract is missing: the term and day wage ranges a labourer's contract is drawn from.");
+        else
+        {
+            if (contract.termMin < AccountMaker.MonthDays || contract.termMin > contract.termMax)
+                problems.Add($"agency.accounts.contract: the term range {contract.termMin}-{contract.termMax} must run from at least {AccountMaker.MonthDays} days upwards.");
+            if (contract.wageMin < 1 || contract.wageMin > contract.wageMax)
+                problems.Add($"agency.accounts.contract: the day wage range {contract.wageMin}-{contract.wageMax} must run from at least 1 cr upwards.");
+        }
 
         foreach (CitizenStatus status in (CitizenStatus[])Enum.GetValues(typeof(CitizenStatus)))
         {
@@ -201,6 +265,12 @@ public sealed class AccountRequest
 
     /// <summary>How many of the traveller's forms print a Valid Until (one honest date is drawn for each, in form order).</summary>
     public int ExpiringForms;
+
+    /// <summary>True for a labourer: a registered Debt Relief Labour Contract is drawn (an employer, a term and a day wage).</summary>
+    public bool Contract;
+
+    /// <summary>The employers the contract may name: those of the worksite's era, by printed name (agency.employers).</summary>
+    public IReadOnlyList<string> Employers;
 }
 
 /// <summary>
@@ -223,6 +293,24 @@ public sealed class CitizenAccount
 
     /// <summary>The transponder's class (the category TransponderClass prints its name).</summary>
     public TransponderClass TransponderClass;
+
+    /// <summary>The account's standing: Good, or Frozen for a debtor in default (the debt-standing maker sets it; TravelRuleType.DebtStanding reads it).</summary>
+    public AccountStanding Standing = AccountStanding.Good;
+
+    /// <summary>The date the account was frozen ("2 Mar 2150"; the Standing row prints it); null while Good.</summary>
+    public string FrozenSince;
+
+    /// <summary>The registered contract's employer (the category Employer); null without a contract.</summary>
+    public string Employer;
+
+    /// <summary>The registered contract's term in days (the category Term prints AccountMaker.Term); 0 without a contract.</summary>
+    public int TermDays;
+
+    /// <summary>The registered contract's day wage in credits (the category Wage prints AccountMaker.Credits); 0 without a contract.</summary>
+    public int Wage;
+
+    /// <summary>True when a Debt Relief Labour Contract is registered on the account.</summary>
+    public bool HasContract => Employer != null;
 
     /// <summary>The family's lineage: a past place (flavour, traveller types R4); null when none is authored.</summary>
     public string Lineage;
@@ -270,18 +358,25 @@ public static class AccountMaker
     public static TransponderClass ClassOf(CitizenStatus status) =>
         status == CitizenStatus.Premium ? TransponderClass.Premium : TransponderClass.Economy;
 
+    /// <summary>The days of a contract month: terms are drawn and printed in whole months (30 days).</summary>
+    public const int MonthDays = 30;
+
     /// <summary>
     /// A citizen's account, in the fixed draw order (§4.3): the Citizen ID
     /// (<see cref="CitizenId"/>, redrawn while taken today); the debt
     /// (<see cref="Amount"/>, one draw); the transponder model (one weighted
     /// draw among the models of the status's class; none without a model) and
-    /// its serial (<see cref="Serial"/>, redrawn while taken); the lineage (one
-    /// draw; none without lineages); the number of past trips (one draw), then
-    /// each trip's day (AgencyNumbers.DaysAgo) and place (one draw each); then
-    /// one honest Valid Until per expiring form (AgencyNumbers.DaysAhead). The
-    /// ID and the serial join <paramref name="takenToday"/>. Later phases add
-    /// their draws in their places (a poor tourist's proof of means after the
-    /// debt; the waiver after the transponder; a labourer's contract after it).
+    /// its serial (<see cref="Serial"/>, redrawn while taken); for a labourer
+    /// (AccountRequest.Contract) the registered contract: its employer (one
+    /// draw over the era's employers; none without one), its term
+    /// (<see cref="TermDays"/>, one draw) and its day wage (<see cref="Amount"/>,
+    /// one draw); the lineage (one draw; none without lineages); the number of
+    /// past trips (one draw), then each trip's day (AgencyNumbers.DaysAgo) and
+    /// place (one draw each); then one honest Valid Until per expiring form
+    /// (AgencyNumbers.DaysAhead). The ID and the serial join
+    /// <paramref name="takenToday"/>. Later phases add their draws in their
+    /// places (a poor tourist's proof of means after the debt; the waiver
+    /// after the transponder).
     /// </summary>
     public static CitizenAccount Make(AccountRequest request, AccountRanges ranges, IReadOnlyList<TransponderModel> transponders,
                                       DateTime today, ISet<string> takenToday, IRandomSource rng)
@@ -306,6 +401,15 @@ public static class AccountMaker
         TransponderModel model = WeightedRandom.Pick(models, t => t.weight, rng);
         if (model != null)
             account.Transponder = TransponderName(model.model, AgencyNumbers.TakeUnique(takenToday, () => Serial(model.prefix, rng)));
+
+        IReadOnlyList<string> employers = request.Employers ?? Array.Empty<string>();
+        if (request.Contract && employers.Count > 0)
+        {
+            ContractRanges contract = ranges.contract ?? new ContractRanges();
+            account.Employer = employers[rng.Range(0, employers.Count)];
+            account.TermDays = TermDays(contract.termMin, contract.termMax, rng);
+            account.Wage = Amount(contract.wageMin, contract.wageMax, rng);
+        }
 
         IReadOnlyList<string> lineages = request.Lineages ?? Array.Empty<string>();
         if (lineages.Count > 0)
@@ -348,21 +452,31 @@ public static class AccountMaker
     public static string Credits(int amount) => amount.ToString("N0", CultureInfo.InvariantCulture) + " cr";
 
     /// <summary>An amount from <paramref name="min"/> to <paramref name="max"/> in whole tens of credits: one draw, even for a fixed amount (so the draw order never depends on the range).</summary>
-    public static int Amount(int min, int max, IRandomSource rng)
+    public static int Amount(int min, int max, IRandomSource rng) => Steps(min, max, 10, rng);
+
+    /// <summary>A contract term from <paramref name="min"/> to <paramref name="max"/> days in whole months (<see cref="MonthDays"/>): one draw, even for a fixed term.</summary>
+    public static int TermDays(int min, int max, IRandomSource rng) => Steps(min, max, MonthDays, rng);
+
+    /// <summary>A value from <paramref name="min"/> up in steps of <paramref name="step"/>, never above <paramref name="max"/>: one Range draw over the steps that fit.</summary>
+    private static int Steps(int min, int max, int step, IRandomSource rng)
     {
         if (max < min)
             (min, max) = (max, min);
-        int steps = (max - min) / 10;
-        return min + 10 * rng.Range(0, steps + 1);
+        int steps = (max - min) / step;
+        return min + step * rng.Range(0, steps + 1);
     }
+
+    /// <summary>A contract term as papers and accounts print it (§3.7): "180 days".</summary>
+    public static string Term(int days) => days.ToString(CultureInfo.InvariantCulture) + " days";
 }
 
 /// <summary>
 /// A Citizen Account as record rows (traveller types R1, §4.1): the art's
 /// three groups (Records, Forms on file, Travel) and the note, found by the
 /// Citizen ID or the name. A row whose category is compared is evidence (a
-/// compare pick); the rest (standing, lineage, the forms not on file, the
-/// departure date, past trips, the note) is shown only. Labels and fixed
+/// compare pick: a labourer's registered contract is three, Employer, Term
+/// and Wage); the rest (standing, Good or Frozen with its date, lineage, the
+/// forms not on file, the departure date, past trips, the note) is shown only. Labels and fixed
 /// words come through <c>text</c> (UI string keys), values from the account.
 /// The clerk's own account is a record too, with no evidence row.
 /// </summary>
@@ -383,7 +497,9 @@ public static class AccountRecords
             new RecordRow(text("records.row.citizenId"), account.CitizenId, ClueCategory.CitizenId),
             new RecordRow(text("records.row.born"), born, ClueCategory.BirthDate),
             new RecordRow(text("records.row.status"), account.Status.ToString(), ClueCategory.AccountStatus),
-            new RecordRow(text("records.row.standing"), text("records.standing.good")),
+            new RecordRow(text("records.row.standing"), account.Standing == AccountStanding.Frozen
+                ? string.Format(CultureInfo.InvariantCulture, text("records.standing.frozen"), account.FrozenSince)
+                : text("records.standing.good")),
             new RecordRow(text("records.row.debt"), AccountMaker.Credits(account.Debt), ClueCategory.Debt),
             new RecordRow(text("records.row.lineage"), account.Lineage ?? none)
         };
@@ -393,9 +509,16 @@ public static class AccountRecords
             new RecordRow(text("records.row.transponder"), account.Transponder ?? none, ClueCategory.TransponderId),
             new RecordRow(text("records.row.transponderClass"), account.TransponderClass.ToString(), ClueCategory.TransponderClass),
             new RecordRow(text("records.row.waiver"), none),
-            new RecordRow(text("records.row.proof"), none),
-            new RecordRow(text("records.row.contract"), none)
+            new RecordRow(text("records.row.proof"), none)
         };
+        if (account.HasContract)
+        {
+            forms.Add(new RecordRow(text("contract.row.employer"), account.Employer, ClueCategory.Employer));
+            forms.Add(new RecordRow(text("contract.row.term"), AccountMaker.Term(account.TermDays), ClueCategory.Term));
+            forms.Add(new RecordRow(text("contract.row.wage"), AccountMaker.Credits(account.Wage), ClueCategory.Wage));
+        }
+        else
+            forms.Add(new RecordRow(text("records.row.contract"), none));
 
         var travel = new List<RecordRow>
         {
