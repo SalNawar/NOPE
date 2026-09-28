@@ -19,7 +19,7 @@ public sealed class AccountDay
     /// <summary>The shift's pay (ShiftLedger.TotalPay).</summary>
     public int wages;
 
-    /// <summary>The shift's citation penalties (ShiftLedger.TotalPenalties; phase 13 adds stranding fines).</summary>
+    /// <summary>The shift's citation penalties and stranding fines (ShiftLedger.TotalPenalties and strandingFines).</summary>
     public int fines;
 
     /// <summary>The Debt Relief instalment taken from the pay, or Account.Unknown.</summary>
@@ -206,8 +206,9 @@ public static class Account
 
     /// <summary>
     /// Writes the shift's part of <paramref name="day"/>'s row (a replayed
-    /// shift replaces it): the ledger's pay and penalties, the source's
-    /// instalment, wallet and debt; Home's part starts empty.
+    /// shift replaces it): the ledger's pay, its penalties and stranding fines
+    /// as one FINES cell, the source's instalment, wallet and debt; Home's part
+    /// starts empty.
     /// </summary>
     public static AccountDay RecordShift(List<AccountDay> days, int day, ShiftLedger ledger, IClerkAccountSource source, int cap)
     {
@@ -215,7 +216,7 @@ public static class Account
         if (row == null)
             return null;
         row.wages = ledger != null ? ledger.TotalPay : 0;
-        row.fines = ledger != null ? ledger.TotalPenalties : 0;
+        row.fines = ledger != null ? ledger.TotalPenalties + ledger.strandingFines : 0;
         row.debtRelief = source != null ? source.ShiftInstalment : Unknown;
         row.household = 0;
         row.purchases = 0;

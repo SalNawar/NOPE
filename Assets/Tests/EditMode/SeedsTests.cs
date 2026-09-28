@@ -93,7 +93,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.StrandingSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -123,6 +123,19 @@ public class SeedsTests
         Assert.AreEqual(0x46414C54, Seeds.FaultSalt, "\"FALT\"");
         Assert.AreEqual(-230985786, Seeds.ForDebtNews(12345));
         Assert.AreEqual(0x44454254, Seeds.DebtNewsSalt, "\"DEBT\"");
+        Assert.AreEqual(Seeds.Mix(daySeed, 0x53545244), Seeds.ForStrandings(daySeed));
+        Assert.AreEqual(0x53545244, Seeds.StrandingSalt, "\"STRD\"");
+    }
+
+    /// <summary>The stranding draws (redesign phase 13b) are the day's own stream, apart from the day's other streams and every traveller's.</summary>
+    [Test]
+    public void StrandingStream_IsTheDaysOwn_ApartFromEveryOtherStream()
+    {
+        int daySeed = Seeds.Day(12345, 2);
+        Assert.AreEqual(Seeds.ForStrandings(daySeed), Seeds.ForStrandings(daySeed));
+        Assert.AreNotEqual(Seeds.ForStrandings(daySeed), Seeds.ForStrandings(Seeds.Day(12345, 3)), "another day, another stream");
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "stranding"), Seeds.ForStrandings(daySeed));
+        CollectionAssert.DoesNotContain(new[] { Seeds.ForDebtNews(12345) }, Seeds.ForStrandings(daySeed));
     }
 
     /// <summary>The debt line's order (redesign phase 13) is the run's own stream, apart from the day's and every traveller's.</summary>

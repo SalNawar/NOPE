@@ -271,6 +271,14 @@ public sealed class DebugPanelController : MonoBehaviour
         }
         GUILayout.EndHorizontal();
 
+        bool forceStrandings = DevToolsState.ForceStrandings;
+        bool newForceStrandings = GUILayout.Toggle(forceStrandings, "Force strandings (every accepted Economy transponder fails at the shift's end)");
+        if (newForceStrandings != forceStrandings)
+        {
+            Debug.Log($"[DebugPanelController] Cheat: ForceStrandings set to {newForceStrandings}.");
+            DevToolsState.ForceStrandings = newForceStrandings;
+        }
+
         GUILayout.Space(6f);
         GUILayout.Label("Upgrades");
 

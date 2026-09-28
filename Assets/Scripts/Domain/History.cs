@@ -105,6 +105,9 @@ public sealed class HistoryState
 
     /// <summary>Costume errors accepted today, reported in the next morning's news (then cleared), in accept order.</summary>
     public List<PanicRecord> pendingPanics = new();
+
+    /// <summary>Travellers stranded at today's shift's end (Strandings.Roll), reported in the next morning's news (then cleared), in queue order; an old save loads none.</summary>
+    public List<StrandingRecord> pendingStrandings = new();
 }
 
 /// <summary>An accepted costume error (traveller types P5): the traveller would cause a panic where they were sent.</summary>

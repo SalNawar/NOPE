@@ -34,7 +34,13 @@ public sealed class AgencyContent
     /// <summary>The transponder models citizens travel on (agency.transponders: a weighted list per class).</summary>
     public List<TransponderModel> transponders = new List<TransponderModel>();
 
-    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), and the accounts' ranges and transponder models (AccountRanges.Problems). Empty when sound.</summary>
+    /// <summary>The chance an accepted traveller on an Economy transponder is stranded at the shift's end (agency.strandChance, 0.08; Strandings.Roll; the traveller-types spec's S1).</summary>
+    public float strandChance;
+
+    /// <summary>The clerk's fine, in cr, for a stranded traveller let through without a valid signed waiver (agency.strandFine, 150; Strandings.Fine; S3).</summary>
+    public int strandFine;
+
+    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, a stranding chance outside 0 to 1 or a fine below 0, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), and the accounts' ranges and transponder models (AccountRanges.Problems). Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -45,6 +51,10 @@ public sealed class AgencyContent
         string date = AgencyCalendar.FirstDateProblem(firstDate);
         if (date != null)
             problems.Add(date);
+        if (float.IsNaN(strandChance) || strandChance < 0f || strandChance > 1f)
+            problems.Add($"agency.strandChance is {strandChance}: the chance an Economy transponder strands its traveller, from 0 to 1.");
+        if (strandFine < 0)
+            problems.Add($"agency.strandFine is {strandFine}: the clerk's fine for a stranding without a signed waiver, 0 or more cr.");
         if (displaced == null)
         {
             problems.Add("agency.displaced is missing: the day ranges of a displaced person's file.");

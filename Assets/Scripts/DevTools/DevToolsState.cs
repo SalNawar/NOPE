@@ -4,7 +4,8 @@ using UnityEngine;
 /// Runtime-only developer cheat state (Phase 6). Never serialized into
 /// WorldState/SaveSystem — these are session-local overrides used by the
 /// debug panel to influence generation/scoring for testing (force the next
-/// legendary, force the timeline leader, force a costume error).
+/// legendary, force the timeline leader, force a costume error, force the
+/// strandings).
 /// </summary>
 public static class DevToolsState
 {
@@ -31,11 +32,21 @@ public static class DevToolsState
     public static CostumeError ForcedCostumeError;
 
     /// <summary>
+    /// While true, every accepted traveller on an Economy transponder is
+    /// stranded at the shift's end (ShiftStrandings: the chance reads 1), so a
+    /// stranding, its carry, its news line and its fine can be seen at will.
+    /// The draws still run on the day's stream.
+    /// </summary>
+    public static bool ForceStrandings;
+
+    /// <summary>
     /// Resets all dev cheat state. Called by RunManager.NewRun()/ContinueRun()
     /// so leftover toggles from a previous run don't bleed into a new one.
     /// </summary>
     public static void ResetAll()
     {
+        if (ForceStrandings)
+            Debug.Log("[DevToolsState] ResetAll: clearing ForceStrandings.");
         if (ForceLegendaryNextCase)
             Debug.Log("[DevToolsState] ResetAll: clearing ForceLegendaryNextCase.");
         if (ForcedLeaderId != null)
@@ -46,5 +57,6 @@ public static class DevToolsState
         ForceLegendaryNextCase = false;
         ForcedLeaderId = null;
         ForcedCostumeError = CostumeError.None;
+        ForceStrandings = false;
     }
 }
