@@ -28,8 +28,9 @@ using UnityEngine;
 /// speech, the destination's dress over their family country's looks, and a
 /// Citizen Account (AccountMaker) on their account stream, which their forms
 /// and their record print. Who lies is one roll on the lie stream
-/// (Lies.Roll, among the day's lies that fit the kind, LieKinds.For; K5:
-/// never a premade authored honest, a closure's violator or a traveller
+/// (Lies.Roll, among the day's lies that fit the kind, LieKinds.For; K5,
+/// FaultOrder: never a premade authored honest, a closure's violator, a
+/// traveller drawn from an honest kind entry, or one
 /// without papers): the displaced's false origin is the place lie above; a
 /// citizen's record lie (RecordLies: poor posing as rich, a doctored
 /// identity) forges fields of their papers that their own account and,
@@ -280,12 +281,14 @@ public sealed class CaseFactory
 
         // 4) Decide blueprint: forced > one weighted pick of the day's kinds
         //    (active-effect weight multipliers applied; a premade's slot
-        //    draws only the displaced, TravellerKinds.PickWeight).
-        CaseBlueprintSO blueprint =
-            forcedBlueprint != null ? forcedBlueprint :
+        //    draws only the displaced, TravellerKinds.PickWeight). A traveller
+        //    drawn from an honest entry rolls no fault (K5, FaultOrder).
+        KindWeight entry = forcedBlueprint != null ? null :
             WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null
                 ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, legendary != null) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
-                : 0f, _rng)?.blueprint;
+                : 0f, _rng);
+        CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
+        bool honest = entry != null && entry.honest;
 
         // A 2150 citizen (traveller types K2, K4) comes from the present.
         bool citizen = legendary == null && blueprint != null && TravellerKinds.IsCitizen(blueprint.Kind);
@@ -336,11 +339,11 @@ public sealed class CaseFactory
         // 4.6) The directive fault (traveller types P1): a closed destination, read against today's Directives.
         inst.directiveFault = plan.ClaimAllowed(nation, claimedEra) ? DirectiveFault.None : DirectiveFault.ClosedDestination;
 
-        // 4.7) The lie roll (K5: after the premade's authoring and the planned slot; before the account,
+        // 4.7) The lie roll (K5: after the premade's authoring, the planned slot and the honest entry; before the account,
         //      so a poor citizen posing as rich holds the Standard account their papers must be checked against).
         //      A costume error forced from the debug panel is a planned fault: it stands in for the roll.
-        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && place != null;
-        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary);
+        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && !honest && place != null;
+        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary, honest);
 
         // 4.8) The agency's file, on the account stream (the forms and the record print it):
         //      a displaced person's registry numbers, or a 2150 citizen's Citizen Account (LieKinds.TrueStatus: the truth).
@@ -372,14 +375,14 @@ public sealed class CaseFactory
         EraSO talkEra = place != null ? place.era : claimedEra;
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
-        (LookSource source, bool whole) costume = PlanCostume(inst, place, legendary, forcedCostume, plan, caseIndex1Based);
+        (LookSource source, bool whole) costume = PlanCostume(inst, place, legendary, forcedCostume, honest, plan, caseIndex1Based);
         inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
 
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
         string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -437,19 +440,21 @@ public sealed class CaseFactory
     /// <summary>
     /// Rolls the traveller's lie on their lie stream (Lies.Roll; traveller
     /// types K5, §6.2): at the liar chance, one of the day's lies that fit
-    /// the kind (LieKinds.For; a premade authored as a liar lies surely,
-    /// their false origin). Exempt travellers (honest premades, a closure's
-    /// violator, no papers: Lies.MayLie) draw nothing. Null: honest.
+    /// the kind (LieKinds.For). A premade's authoring decides instead: a
+    /// premade authored as a liar lies surely (their false origin), an honest
+    /// one never (Lies.MayLie). Exempt travellers (a closure's violator, an
+    /// honest kind entry: FaultOrder.MayRoll; no papers: Lies.MayLie) draw
+    /// nothing. Null: honest.
     /// </summary>
-    private LieKind? RollLie(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, LegendarySO legendary)
+    private LieKind? RollLie(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, LegendarySO legendary, bool honestEntry)
     {
-        bool honestPremade = legendary != null && legendary.truePlace == null;
         bool hasPapers = blueprint.DocumentTemplates != null && blueprint.DocumentTemplates.Any(t => t != null && t.fieldSpecs != null && t.fieldSpecs.Length > 0);
-        if (!Lies.MayLie(honestPremade, !inst.HasDirectiveFault, hasPapers))
+        if (legendary != null)
+            return Lies.MayLie(legendary.truePlace == null, !inst.HasDirectiveFault, hasPapers) ? Lies.Roll(1f, new[] { LieKind.FalseOrigin }, _lieRng) : null;
+        if (!FaultOrder.MayRoll(FaultRoll.Lie, false, inst.HasDirectiveFault, honestEntry, false) || !Lies.MayLie(false, true, hasPapers))
             return null;
 
-        IReadOnlyList<LieKind> lies = legendary != null ? new[] { LieKind.FalseOrigin } : LieKinds.For(plan.EnabledLies, inst.kind);
-        return Lies.Roll(legendary != null ? 1f : LiarChance(blueprint, state), lies, _lieRng);
+        return Lies.Roll(LiarChance(blueprint, state), LieKinds.For(plan.EnabledLies, inst.kind), _lieRng);
     }
 
     /// <summary>The traveller's papers as the lie plans rewrite them: each paper's fields, in case order.</summary>
@@ -549,7 +554,8 @@ public sealed class CaseFactory
 
     /// <summary>
     /// The costume roll (traveller types C2, K5), for a 2150 citizen with no
-    /// other fault (not a premade, a liar, a forger or a closure's violator) whose
+    /// other fault (FaultOrder.MayRoll: not a premade, a closure's violator, an
+    /// honest kind entry, a liar or a forger) whose
     /// garments can be looked at today; no draw otherwise. Its candidates:
     /// today's other places whose signature item can leak onto the claim
     /// (Looks.CanLeak) and whose Costume Guide row differs from the claim's
@@ -561,11 +567,11 @@ public sealed class CaseFactory
     /// here. Sets inst.costumeFault; returns the leak source and whether it is
     /// worn whole (the present's clothes), or no source.
     /// </summary>
-    private (LookSource source, bool whole) PlanCostume(CaseInstance inst, NationEraProfileSO place, LegendarySO legendary, bool forced,
+    private (LookSource source, bool whole) PlanCostume(CaseInstance inst, NationEraProfileSO place, LegendarySO legendary, bool forced, bool honestEntry,
                                                         DayPlanSO plan, int caseIndex1Based)
     {
-        if (legendary != null || place == null || inst.IsLiar || inst.IsForger || inst.HasDirectiveFault || !_appearanceReachable ||
-            inst.gender == TravellerGender.Unknown || (!forced && !CostumeErrors.MayErr(inst.kind)))
+        if (!FaultOrder.MayRoll(FaultRoll.Costume, legendary != null, inst.HasDirectiveFault, honestEntry, inst.IsLiar || inst.IsForger) ||
+            place == null || !_appearanceReachable || inst.gender == TravellerGender.Unknown || (!forced && !CostumeErrors.MayErr(inst.kind)))
             return (null, false);
 
         LookSource claim = SourceOf(place);

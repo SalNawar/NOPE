@@ -1470,8 +1470,9 @@ public static partial class WorldContentGenerator
 
     /// <summary>
     /// Refuses a day's lie that is no LieKind, listed twice, or that none of
-    /// the day's kinds can carry (LieKinds.AppliesTo): a lie nobody can tell
-    /// would be a content mistake that never shows.
+    /// the day's kinds can carry (LieKinds.AppliesTo; an honest entry carries
+    /// none, K5): a lie nobody can tell would be a content mistake that never
+    /// shows.
     /// </summary>
     private static void CheckLies(DayData d, List<string> errors)
     {
@@ -1485,9 +1486,9 @@ public static partial class WorldContentGenerator
             }
             if (!seen.Add(name))
                 errors.Add($"Day '{d.asset}' lists the lie '{name}' twice.");
-            bool fits = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind) && LieKinds.AppliesTo(lie, kind));
+            bool fits = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && !k.honest && ParseEnum(k.kind, out TravellerKind kind) && LieKinds.AppliesTo(lie, kind));
             if (!fits)
-                errors.Add($"Day '{d.asset}' enables the lie '{name}', which none of its kinds can carry.");
+                errors.Add($"Day '{d.asset}' enables the lie '{name}', which none of its kinds can carry (an honest entry carries none).");
         }
     }
 
