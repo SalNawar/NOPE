@@ -39,7 +39,10 @@ using UnityEngine;
 /// identity) forges fields of their papers that their own account and,
 /// where two papers disagree, each other disprove. A closed destination is
 /// the traveller's directive fault (DirectiveFault, read against the
-/// Directives, no evidence needed).
+/// Directives, no evidence needed), as is a departure dated another day or
+/// an expired paper (Directives.PaperDates; a guaranteed procedure's slot,
+/// PlanViolators, falsifies one date on the fault stream, and a guaranteed
+/// NoPresentGoods slot holds a smuggler).
 /// A 2150
 /// citizen with no other fault may wear a costume error (CostumeErrors, on
 /// their fault stream, Seeds.ForFaults): another place's item, the present's
@@ -113,8 +116,18 @@ public sealed class CaseFactory
     /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
     private readonly HashSet<ClueCategory> _bookCategories;
 
-    /// <summary>Guaranteed rule violators for the day being generated, by 1-based slot.</summary>
-    private Dictionary<int, NationEraProfileSO> _violators = new Dictionary<int, NationEraProfileSO>();
+    /// <summary>What a planned slot holds (traveller types P4): a closure's forbidden place, or a guaranteed procedure's fault.</summary>
+    private sealed class PlannedSlot
+    {
+        /// <summary>The place a closure's violator claims; null for a procedure's slot.</summary>
+        public NationEraProfileSO ClosedPlace;
+
+        /// <summary>The guaranteed procedure's rule type (NoPresentGoods: a smuggler; PaperDates: a falsified date); null for a closure's slot.</summary>
+        public TravelRuleType? Procedure;
+    }
+
+    /// <summary>The day's planned slots (a closure's violator, a guaranteed procedure's faulty traveller), by 1-based slot.</summary>
+    private Dictionary<int, PlannedSlot> _violators = new Dictionary<int, PlannedSlot>();
 
     /// <summary>
     /// Construct a factory over a content library and today's world: its
@@ -217,42 +230,69 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Places one violator of each active closure in the first half of the
-    /// queue (DayPlanSO.GuaranteeRuleViolators), never in a forced premade's
-    /// slot, drawn from the day's own violator stream so the travellers'
+    /// Places one violator of each active closure (DayPlanSO.GuaranteeRuleViolators)
+    /// and one faulty traveller of each guaranteed procedure
+    /// (DayPlanSO.GuaranteedRules, traveller types P4: NoPresentGoods a
+    /// smuggler, PaperDates a falsified date; TravelRuleSO.IsGuaranteeable) in
+    /// the first half of the queue, never in a forced premade's slot, drawn
+    /// from the day's own violator stream (the slots, then each closure's
+    /// place; a day with closures alone draws as before) so the travellers'
     /// streams are untouched. A closure that forbids none of today's places
-    /// cannot be tested and is skipped with a warning. A standing procedure
-    /// (dress for the destination) plans no violator here: its costume errors
-    /// come from the costume roll (the plan's phase 9 brings its first-day
-    /// guarantee with the directives' makers).
+    /// cannot be tested and is skipped with a warning, as is a guaranteed rule
+    /// with no maker. The dress rule plans nothing here: its costume errors
+    /// come from the costume roll.
     /// </summary>
-    private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed)
+    private Dictionary<int, PlannedSlot> PlanViolators(DayPlanSO plan, int total, int daySeed)
     {
-        var violators = new Dictionary<int, NationEraProfileSO>();
-        if (!plan.GuaranteeRuleViolators)
-            return violators;
+        var violators = new Dictionary<int, PlannedSlot>();
 
         var breakersPerRule = new List<List<NationEraProfileSO>>();
-        foreach (TravelRuleSO rule in plan.ActiveTravelRules)
+        if (plan.GuaranteeRuleViolators)
         {
-            if (rule == null || !rule.IsClosure)
-                continue;
-
-            List<NationEraProfileSO> breakers = _todays.Where(p => !rule.Allows(p.nation, p.era)).ToList();
-            if (breakers.Count == 0)
+            foreach (TravelRuleSO rule in plan.ActiveTravelRules)
             {
-                Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' forbids none of day {plan.DayNumber}'s places, so no traveller can break it.");
+                if (rule == null || !rule.IsClosure)
+                    continue;
+
+                List<NationEraProfileSO> breakers = _todays.Where(p => !rule.Allows(p.nation, p.era)).ToList();
+                if (breakers.Count == 0)
+                {
+                    Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' forbids none of day {plan.DayNumber}'s places, so no traveller can break it.");
+                    continue;
+                }
+
+                breakersPerRule.Add(breakers);
+            }
+        }
+
+        var procedures = new List<TravelRuleType>();
+        foreach (TravelRuleSO rule in plan.GuaranteedRules)
+        {
+            if (rule == null)
+                continue;
+            if (!TravelRuleSO.IsGuaranteeable(rule.type))
+            {
+                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} guarantees rule '{rule.name}' ({rule.type}), which has no maker, so no faulty traveller is planned for it. Check world_source.json days[].guarantee.");
                 continue;
             }
-
-            breakersPerRule.Add(breakers);
+            procedures.Add(rule.type);
         }
+
+        if (breakersPerRule.Count + procedures.Count == 0)
+            return violators;
 
         var premadeSlots = new HashSet<int>(plan.ForcedCases.Where(f => f != null && f.legendary != null).Select(f => f.caseIndex1Based));
         var rng = new SeededRandom(Seeds.ForViolators(daySeed));
-        int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count, rng, premadeSlots);
+        int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count + procedures.Count, rng, premadeSlots);
         for (int i = 0; i < slots.Length; i++)
-            violators[slots[i]] = breakersPerRule[i][rng.Range(0, breakersPerRule[i].Count)];
+        {
+            violators[slots[i]] = i < breakersPerRule.Count
+                ? new PlannedSlot { ClosedPlace = breakersPerRule[i][rng.Range(0, breakersPerRule[i].Count)] }
+                : new PlannedSlot { Procedure = procedures[i - breakersPerRule.Count] };
+        }
+
+        if (slots.Length < breakersPerRule.Count + procedures.Count)
+            Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the first half of the queue ({ViolatorSlots.Window(total)} slots, the forced premades' excluded) holds {slots.Length} of the {breakersPerRule.Count + procedures.Count} planned faulty travellers; the rest are dropped.");
 
         return violators;
     }
@@ -274,8 +314,10 @@ public sealed class CaseFactory
         // 2) A premade (forced here, or rolled from the day's pool on the premade stream).
         LegendarySO legendary = ResolvePremade(plan, state, caseIndex1Based, out bool forcedPremade);
 
-        // 2.5) A planned rule violator stands in this slot (never a premade's: see ResolvePremade).
-        _violators.TryGetValue(caseIndex1Based, out NationEraProfileSO violatorPlace);
+        // 2.5) A planned slot (never a premade's: see ResolvePremade): a closure's violator claims the closed place; a
+        //      guaranteed procedure's faulty traveller is a smuggler (NoPresentGoods) or has a date falsified (PaperDates).
+        _violators.TryGetValue(caseIndex1Based, out PlannedSlot planned);
+        NationEraProfileSO violatorPlace = planned?.ClosedPlace;
 
         // 3) Decide the claimed era (the traveller's stated home and destination).
         EraSO claimedEra = legendary != null ? legendary.trueEra
@@ -342,9 +384,12 @@ public sealed class CaseFactory
 
         // 4.7) The lie roll (K5: after the premade's authoring and the planned slot; before the account,
         //      so a poor citizen posing as rich holds the Standard account their papers must be checked against).
+        //      A planned procedure's slot draws nothing: its smuggler is planned, its date fault comes after the papers.
         //      A costume error forced from the debug panel is a planned fault: it stands in for the roll.
-        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && place != null;
-        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary);
+        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && place != null && planned == null;
+        LieKind? lieKind = planned?.Procedure != null ? (planned.Procedure == TravelRuleType.NoPresentGoods ? LieKind.Smuggling : (LieKind?)null)
+            : forcedCostume ? null
+            : RollLie(inst, plan, blueprint, state, legendary);
 
         // 4.8) The agency's file, on the account stream (the forms and the record print it):
         //      a displaced person's registry numbers, or a 2150 citizen's Citizen Account (LieKinds.TrueStatus: the truth).
@@ -373,6 +418,10 @@ public sealed class CaseFactory
             : lieKind == LieKind.Smuggling ? Smuggle(inst, fields, plan, caseIndex1Based)
             : Disguise(inst, fields, plan, caseIndex1Based, place, legendary, out trueHome);
         AddAnswers(inst, lie);
+
+        // 7.5) A guaranteed PaperDates fault (traveller types §5.4): one date of the honest papers falsified, on the fault stream.
+        if (planned?.Procedure == TravelRuleType.PaperDates)
+            FalsifyDate(inst, caseIndex1Based);
 
         // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
         EraSO talkEra = place != null ? place.era : claimedEra;
@@ -581,6 +630,42 @@ public sealed class CaseFactory
         }
 
         return lie;
+    }
+
+    /// <summary>
+    /// The PaperDates maker (traveller types §5.4; Directives), for a planned
+    /// slot: one Range draw on the fault stream picks the date (the departure,
+    /// or one of the expiring forms' Valid Until, Directives.PlanDateFault),
+    /// then one draw the false date (1-3 days off, or 1-30 days past); every
+    /// field of that date is rewritten (a departure is printed once per
+    /// traveller, the invariant of one value per category) and the traveller's
+    /// directive fault is what Directives.PaperDates reads back, so the
+    /// verdict and the desk agree. No calendar or nothing printed: honest,
+    /// with a warning.
+    /// </summary>
+    private void FalsifyDate(CaseInstance inst, int caseIndex1Based)
+    {
+        List<DocumentField> departures = inst.documents.SelectMany(d => d.fields).Where(f => f.category == ClueCategory.DepartureDate).ToList();
+        List<DocumentField> expiries = inst.documents.SelectMany(d => d.fields).Where(f => f.category == ClueCategory.Expiry).ToList();
+        PaperDatePlan dates = _today != null ? Directives.PlanDateFault(departures.Count > 0, expiries.Count, _faultRng) : new PaperDatePlan(PaperDateFault.None, -1);
+        if (dates.Fault == PaperDateFault.None)
+        {
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: planned a paper-dates fault, but the traveller's forms print no departure or Valid Until (or the agency calendar cannot count today), so they stay honest. Check the kind's templates and agency.firstDate.");
+            return;
+        }
+
+        if (dates.Fault == PaperDateFault.Departure)
+        {
+            string wrongDay = AgencyCalendar.Write(Directives.OffsetDeparture(_today.Value, _faultRng));
+            foreach (DocumentField field in departures)
+                field.value = wrongDay;
+        }
+        else
+        {
+            expiries[dates.ExpiryIndex].value = AgencyCalendar.Write(Directives.ExpiredValidUntil(_today.Value, _faultRng));
+        }
+
+        inst.directiveFault = Directives.PaperDates(departures.Select(f => f.value), expiries.Select(f => f.value), _today.Value);
     }
 
     /// <summary>

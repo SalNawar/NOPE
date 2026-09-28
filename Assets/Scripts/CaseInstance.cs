@@ -135,12 +135,14 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The traveller's directive fault (traveller types P1): what today's
-    /// Directives forbid in the claim, read against them with no evidence
-    /// needed (a closed destination); None when the Directives allow it.
+    /// Directives forbid in the claim or the papers, read against them and
+    /// the agency calendar with no evidence needed (a closed destination; a
+    /// departure dated another day or an expired paper, Directives.PaperDates);
+    /// None when the Directives allow them.
     /// </summary>
     public DirectiveFault directiveFault;
 
-    /// <summary>True when the Directives forbid the traveller's claim (a directive fault).</summary>
+    /// <summary>True when the Directives forbid the traveller's claim or papers (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
@@ -164,8 +166,9 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The correct decision (traveller types §5.2): accept only a traveller
-    /// with no fault; deny a deviation fault (a liar, a forger, a costume
-    /// error) or a directive fault (a closed destination).
+    /// with no fault; deny a deviation fault (a liar, a smuggler, a forger, a
+    /// costume error) or a directive fault (a closed destination, a wrong
+    /// departure date, an expired paper).
     /// </summary>
     public bool ShouldAccept => VerdictRules.ShouldAccept(HasDeviationFault, HasDirectiveFault);
 

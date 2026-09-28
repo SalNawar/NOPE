@@ -11571,6 +11571,18 @@
         "tier": "Full"
       },
       {
+        "key": "citation.acceptedWrong.wrongDate",
+        "text": "Approved a departure on the wrong date.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.expired",
+        "text": "Approved an expired paper.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "citation.deniedWrong",
         "text": "Denied a legitimate, permitted traveler.",
         "gloss": "None",

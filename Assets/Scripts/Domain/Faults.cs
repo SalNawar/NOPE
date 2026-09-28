@@ -2,8 +2,7 @@
 /// A traveller's directive fault (traveller types P1, §5.2): what the
 /// Directives forbid in the presented papers and the claim, read against
 /// them with no evidence needed. Runtime only (not serialized); later phases
-/// append the missing or wrong paper set, the frozen account, the wrong
-/// departure date and the expired paper.
+/// append the missing or wrong paper set and the frozen account.
 /// </summary>
 public enum DirectiveFault
 {
@@ -11,7 +10,13 @@ public enum DirectiveFault
     None,
 
     /// <summary>The claimed destination is closed today (a closure rule; today's guaranteed violators).</summary>
-    ClosedDestination
+    ClosedDestination,
+
+    /// <summary>The manifest's or the return order's departure is dated another day than today (the PaperDates directive, Directives.PaperDates).</summary>
+    WrongDepartureDate,
+
+    /// <summary>A paper's Valid Until has passed (the PaperDates directive).</summary>
+    ExpiredPaper
 }
 
 /// <summary>
@@ -35,9 +40,23 @@ public static class Faults
     /// <summary>A closed destination ("Approved a closed destination.").</summary>
     public const string Closed = "closed";
 
+    /// <summary>A departure dated another day ("Approved a departure on the wrong date.").</summary>
+    public const string WrongDate = "wrongDate";
+
+    /// <summary>An expired paper ("Approved an expired paper.").</summary>
+    public const string Expired = "expired";
+
     /// <summary>The reason of a directive fault; empty for none.</summary>
-    public static string Reason(DirectiveFault fault) =>
-        fault == DirectiveFault.ClosedDestination ? Closed : string.Empty;
+    public static string Reason(DirectiveFault fault)
+    {
+        switch (fault)
+        {
+            case DirectiveFault.ClosedDestination: return Closed;
+            case DirectiveFault.WrongDepartureDate: return WrongDate;
+            case DirectiveFault.ExpiredPaper: return Expired;
+            default: return string.Empty;
+        }
+    }
 
     /// <summary>
     /// A traveller's one fault reason: the directive fault's when there is
