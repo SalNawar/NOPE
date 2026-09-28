@@ -1,0 +1,387 @@
+// Redesign phase 23 (the balance pass): the headless 50-run simulation.
+//
+// Plays days 1-15 through the real glue with no scene: today's world and
+// interview, CaseFactory's cases, ShiftScoring's verdicts, the verdict
+// impacts and carries, the shift's strandings and the clerk's instalment,
+// Home's household costs and the family's conditions, the ending checks at
+// the moments the game checks them, and the nightly resolve. Two policies:
+// perfect play (accept iff ShouldAccept, every denial proven, the waiver
+// asked for), imperfect play (one wrong call a day: the first faulty
+// traveller let through on odd days, the first denial unproven on even days;
+// the waiver never asked for) and careless play (both wrong calls every day).
+//
+// Queued as a job (TimeDesk23Sim.Run); the report goes to SCRATCH/t6/p23.
+// Untracked in Assets/Editor; the pattern is kept as
+// tools/audit/unity/_TimeDesk23Sim.cs.txt beside the audit jobs.
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+
+public static class TimeDesk23Sim
+{
+    private const string Root = @"C:\Users\Saleh\AppData\Local\Temp\claude\E--unity-NOPE\06be6de7-86f0-489b-bc3c-afd3817f5196\scratchpad\t6\p23";
+    private const string LibraryPath = "Assets/Data/Content Library/ContentLibrary_Main.asset";
+    private const string ConfigPath = "Assets/Data/Config/GameConfig_Default.asset";
+    private const string RunConfigPath = "Assets/Resources/RunConfig.asset";
+    private const int Runs = 50;
+    private const int Days = 15;
+    private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
+    private static string _report;
+    private static int _fails;
+
+    private static void Report(string line) => File.AppendAllText(_report, line + "\n");
+
+    public static void Run()
+    {
+        Directory.CreateDirectory(Root);
+        _report = Path.Combine(Root, "p23_sim_report.txt");
+        File.WriteAllText(_report, "start " + DateTime.Now.ToString("s") + "\n");
+        _fails = 0;
+        LogType filter = Debug.unityLogger.filterLogType;
+        try
+        {
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            var lib = AssetDatabase.LoadAssetAtPath<ContentLibrarySO>(LibraryPath);
+            var config = AssetDatabase.LoadAssetAtPath<GameConfigSO>(ConfigPath);
+            var runConfig = AssetDatabase.LoadAssetAtPath<RunConfigSO>(RunConfigPath);
+            if (lib == null || config == null || runConfig == null)
+                throw new InvalidOperationException("library, config or run config not found");
+            Report($"knobs: startingMoney={runConfig.startingMoney} family={runConfig.startingFamilyMembers.Count} basePay={config.basePayPerCorrect} citations=[{string.Join(",", config.citationPenalties)}] free={config.freeWarningsPerDay} bankruptAt={config.bankruptcyMoneyThreshold} household={config.baseDailyExpense}+{config.expensePerFamilyMember}/member+{config.expensePerConditionPoint}/point worsen={config.conditionWorsenChance.ToString("0.##", Inv)}");
+            Report($"knobs: strandChance={lib.Agency.strandChance.ToString("0.###", Inv)} strandFine={lib.Agency.strandFine} garnishShare={lib.Agency.clerk.garnishShare.ToString("0.##", Inv)} startDebt={lib.Agency.clerk.startDebt}");
+            Report($"knobs: epilogues [{string.Join(", ", lib.Endings.Where(e => e != null && e.conditionType == EndingConditionType.AttrTotalAtLeast).Select(e => $"{e.id}>={e.threshold.ToString("0.#", Inv)}"))}]");
+            for (int d = 1; d <= 6; d++)
+            {
+                DayPlanSO plan = lib.GetDayPlan(d);
+                Report($"knobs: day {d} queue={plan.VisitorsCount} costumeErrorChance={plan.CostumeErrorChance.ToString("0.##", Inv)} {DayKnobs(plan)}");
+            }
+            foreach (CaseBlueprintSO bp in Enumerable.Range(1, 6).SelectMany(d => lib.GetDayPlan(d).PossibleBlueprints).Where(b => b != null).Distinct())
+                Report($"knobs: blueprint {bp.name} kind={bp.Kind} contradictionChance={bp.ContradictionChance.ToString("0.##", Inv)}");
+
+            Debug.unityLogger.filterLogType = LogType.Error;
+            Simulation(lib, config, runConfig);
+        }
+        catch (Exception e)
+        {
+            Report("FAILED " + e);
+            _fails++;
+        }
+        finally
+        {
+            Debug.unityLogger.filterLogType = filter;
+            DevToolsState.ResetAll();
+            try { EditorSceneManager.NewScene(NewSceneSetup.DefaultGameObjects, NewSceneMode.Single); } catch (Exception e) { Report("scene reset failed: " + e.Message); }
+        }
+        Report(_fails == 0 ? "done" : $"done with {_fails} failure(s)");
+    }
+
+    /// <summary>The per-day knobs the phase tunes, read by name so the job compiles before and after phases 8 and 9 add them.</summary>
+    private static string DayKnobs(DayPlanSO plan)
+    {
+        var parts = new List<string>();
+        foreach (string name in new[] { "ViolationChance", "Kinds", "EnabledLies" })
+        {
+            System.Reflection.PropertyInfo p = typeof(DayPlanSO).GetProperty(name);
+            if (p == null)
+                continue;
+            object v = p.GetValue(plan);
+            parts.Add(v is System.Collections.IEnumerable list && !(v is string)
+                ? $"{name}=[{string.Join(",", list.Cast<object>().Select(Describe))}]"
+                : $"{name}={Convert.ToString(v, Inv)}");
+        }
+        return string.Join(" ", parts);
+    }
+
+    private static string Describe(object o)
+    {
+        if (o == null)
+            return "null";
+        Type t = o.GetType();
+        return string.Join("/", t.GetFields(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+            .Select(f => $"{f.Name}:{(f.GetValue(o) is UnityEngine.Object u ? (u != null ? u.name : "null") : Convert.ToString(f.GetValue(o), Inv))}"));
+    }
+
+    private sealed class RunResult
+    {
+        public int Seed;
+        public string Ending = "";
+        public int EndingDay;
+        public float Art, Science, Democracy;
+        public readonly List<int> MoneyAtNight = new List<int>();
+        public readonly List<int> MoneyAfterShift = new List<int>();
+        public int MinMoney = int.MaxValue;
+        public int Stranded, Fines, Instalments, Penalties, Pay, Household, Unproven, Carries;
+        public int Cases, Faulty, Accepted, WrongCalls;
+        public string Dump = "";
+        public string Json = "";
+    }
+
+    private sealed class Census
+    {
+        public int Cases, Faulty, Liars, Forgers, Costume, Directive, Economy, Honest;
+        public readonly Dictionary<string, int> ByKind = new Dictionary<string, int>();
+        public readonly Dictionary<string, int> FaultyByKind = new Dictionary<string, int>();
+        public readonly Dictionary<string, int> Reasons = new Dictionary<string, int>();
+    }
+
+    private static void Simulation(ContentLibrarySO lib, GameConfigSO config, RunConfigSO runConfig)
+    {
+        var sb = new StringBuilder();
+        RunResult a = Play(lib, config, runConfig, 12345, 0, null);
+        RunResult b = Play(lib, config, runConfig, 12345, 0, null);
+        RunResult c = Play(lib, config, runConfig, 12345, 1, null);
+        RunResult d = Play(lib, config, runConfig, 12345, 1, null);
+        bool deterministic = a.Json == b.Json && a.Dump == b.Dump && c.Json == d.Json && c.Dump == d.Dump;
+        sb.AppendLine($"determinism (seed 12345, both policies, twice): {(deterministic ? "PASS" : "FAIL")}");
+        if (!deterministic)
+            _fails++;
+        File.WriteAllText(Path.Combine(Root, "p23_sim_seed12345_perfect.txt"), a.Dump);
+        File.WriteAllText(Path.Combine(Root, "p23_sim_seed12345_imperfect.txt"), c.Dump);
+
+        var census = new Dictionary<int, Census>();
+        foreach (int mistakes in new[] { 0, 1, 2 })
+        {
+            bool imperfect = mistakes > 0;
+            var results = new List<RunResult>();
+            for (int i = 1; i <= Runs; i++)
+                results.Add(Play(lib, config, runConfig, i * 7919, mistakes, imperfect ? null : census));
+            string policy = mistakes == 0 ? "perfect play" : mistakes == 1 ? "imperfect play (one wrong call a day, no waiver asked for)" : "careless play (two wrong calls a day, no waiver asked for)";
+            sb.AppendLine();
+            sb.AppendLine($"== {policy}, {Runs} runs ==");
+            sb.AppendLine($"endings: {string.Join(", ", results.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
+            List<RunResult> early = results.Where(r => r.EndingDay < Days).ToList();
+            sb.AppendLine($"runs ending before day {Days}: {early.Count}{(early.Count > 0 ? " (days " + string.Join(",", early.Select(r => r.EndingDay).OrderBy(x => x)) + ")" : "")}");
+            sb.AppendLine($"per run: cases {Mean(results.Select(r => r.Cases))}, faulty {Mean(results.Select(r => r.Faulty))}, accepted {Mean(results.Select(r => r.Accepted))}, wrong calls {Mean(results.Select(r => r.WrongCalls))}, unproven denials {Mean(results.Select(r => r.Unproven))}");
+            sb.AppendLine($"per run: pay {Mean(results.Select(r => r.Pay))}, penalties {Mean(results.Select(r => r.Penalties))}, instalments {Mean(results.Select(r => r.Instalments))}, household {Mean(results.Select(r => r.Household))}, strandings {Mean(results.Select(r => r.Stranded))} (fines {Mean(results.Select(r => r.Fines))} cr), carries {Mean(results.Select(r => r.Carries))}");
+            sb.AppendLine($"money: min over the run {Summary(results.Select(r => (float)r.MinMoney))}; runs ever below 0: {results.Count(r => r.MinMoney < 0)}; bankrupt: {results.Count(r => r.Ending == "bankrupt")}");
+            sb.AppendLine("money after each shift (mean/min over the runs still going): " + string.Join(" ", Enumerable.Range(0, Days).Select(n => results.Where(r => r.MoneyAfterShift.Count > n).Select(r => r.MoneyAfterShift[n]).ToList()).Where(l => l.Count > 0).Select((l, n) => $"d{n + 1}:{l.Average():0}/{l.Min()}")));
+            sb.AppendLine("money at each night's end (mean/min): " + string.Join(" ", Enumerable.Range(0, Days).Select(n => results.Where(r => r.MoneyAtNight.Count > n).Select(r => r.MoneyAtNight[n]).ToList()).Where(l => l.Count > 0).Select((l, n) => $"n{n + 1}:{l.Average():0}/{l.Min()}")));
+            List<RunResult> full = results.Where(r => r.EndingDay >= Days).ToList();
+            if (full.Count > 0)
+            {
+                sb.AppendLine($"day-{Days} Art {Pct(full.Select(r => r.Art))}");
+                sb.AppendLine($"day-{Days} Science {Pct(full.Select(r => r.Science))}");
+                sb.AppendLine($"day-{Days} Democracy {Pct(full.Select(r => r.Democracy))}");
+            }
+            if (!imperfect && full.Count > 0)
+            {
+                int art = P65(full.Select(r => r.Art)), sci = P65(full.Select(r => r.Science)), dem = P65(full.Select(r => r.Democracy));
+                sb.AppendLine($"65th percentiles (rounded): Art {art}, Science {sci}, Democracy {dem}");
+                string Hyp(RunResult r) => r.Democracy >= dem ? "democracy_triumphant" : r.Science >= sci ? "scientific_age" : r.Art >= art ? "artistic_golden_age" : "retirement";
+                sb.AppendLine($"endings with those thresholds: {string.Join(", ", full.GroupBy(Hyp).Select(g => $"{g.Key} x{g.Count()}"))}");
+            }
+        }
+
+        sb.AppendLine();
+        sb.AppendLine($"== the queue, days 1-{Days}, over the {Runs} perfect runs (a day counts only while the run lasted) ==");
+        foreach (KeyValuePair<int, Census> kv in census.OrderBy(kv => kv.Key))
+        {
+            Census x = kv.Value;
+            string Share(int n) => x.Cases > 0 ? (100f * n / x.Cases).ToString("0", Inv) + "%" : "-";
+            sb.AppendLine($"day {kv.Key}: cases {x.Cases} faulty {Share(x.Faulty)} (liars {Share(x.Liars)}, forgers {Share(x.Forgers)}, costume {Share(x.Costume)}, directive {Share(x.Directive)}) economy units {Share(x.Economy)}" +
+                          $" | kinds {string.Join(", ", x.ByKind.OrderBy(k => k.Key).Select(k => $"{k.Key} {k.Value} ({(x.FaultyByKind.TryGetValue(k.Key, out int f) ? 100f * f / k.Value : 0f).ToString("0", Inv)}% faulty)"))}" +
+                          $" | reasons {string.Join(", ", x.Reasons.OrderByDescending(k => k.Value).Select(k => $"'{k.Key}' {k.Value}"))}");
+        }
+        File.WriteAllText(Path.Combine(Root, "p23_sim_summary.txt"), sb.ToString());
+        Report(sb.ToString());
+    }
+
+    /// <summary>One run of days 1-15 through the real glue, no scene.</summary>
+    private static RunResult Play(ContentLibrarySO lib, GameConfigSO config, RunConfigSO runConfig, int seed, int mistakes, Dictionary<int, Census> census)
+    {
+        bool imperfect = mistakes > 0;
+        var r = new RunResult { Seed = seed };
+        var dump = new StringBuilder();
+        DevToolsState.ResetAll();
+        var world = new WorldState { day = 1, money = runConfig.startingMoney, timelineStability = runConfig.startingStability, runSeed = seed };
+        foreach (string name in runConfig.startingFamilyMembers)
+            if (!string.IsNullOrWhiteSpace(name))
+                world.family.members.Add(new FamilyMemberData { name = name, condition = 0 });
+        TimelineService.SeedDominance(world, lib, config);
+
+        for (int day = 1; day <= Days; day++)
+        {
+            DayPlanSO plan = lib.GetDayPlan(day);
+            var ledger = new ShiftLedger();
+            InterviewDay iv = TimelineService.BuildInterviewDay(lib, world, ledger);
+            TodaysWorld today = lib.BuildToday(plan, world.history);
+            List<CaseInstance> cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(seed, day), iv, true);
+            Census c = null;
+            if (census != null && !census.TryGetValue(day, out c))
+                census[day] = c = new Census();
+
+            bool letThroughToday = mistakes == 2 || (mistakes == 1 && day % 2 == 1);
+            bool unprovenToday = mistakes == 2 || (mistakes == 1 && day % 2 == 0);
+            bool mistakeTaken = false, unprovenTaken = false;
+            string ended = null;
+            for (int i = 0; i < cases.Count; i++)
+            {
+                CaseInstance inst = cases[i];
+                r.Cases++;
+                if (!inst.ShouldAccept)
+                    r.Faulty++;
+                if (c != null)
+                    Count(c, inst);
+
+                bool accept = inst.ShouldAccept;
+                if (letThroughToday && !accept && !mistakeTaken)
+                {
+                    mistakeTaken = true;
+                    accept = true;
+                }
+                int evidence = 1;
+                if (!accept && unprovenToday && !unprovenTaken && inst.HasDeviationFault)
+                {
+                    unprovenTaken = true;
+                    evidence = 0;
+                }
+                if (!imperfect)
+                    Waiver.AskFor(inst);
+                int carriesBefore = world.history.pendingCarries.Count;
+                CaseVerdict verdict = ShiftScoring.ResolveDecision(inst, accept, i + 1, world, config, lib, evidence);
+                ledger.verdicts.Add(verdict);
+                if (accept)
+                {
+                    r.Accepted++;
+                    TimelineService.ApplyVerdictImpacts(inst, inst.claimedEra, verdict.correct, world, lib);
+                    HistoryService.RecordCarry(world, inst, today.Facts, config);
+                }
+                r.Carries += world.history.pendingCarries.Count - carriesBefore;
+                if (!verdict.correct)
+                    r.WrongCalls++;
+                if (verdict.unprovenDenial)
+                    r.Unproven++;
+                dump.AppendLine($"d{day} #{i + 1} {inst.kind} '{inst.originLabel}' fault='{inst.FaultReason}' accept={accept} correct={verdict.correct} pay={verdict.payAwarded} penalty={verdict.moneyPenalty} money={world.money}");
+                EndingSO now = EndingService.Evaluate(world, lib, config, EndingMoment.Immediate);
+                if (now != null)
+                {
+                    ended = now.id;
+                    break;
+                }
+            }
+
+            if (ended == null)
+            {
+                ShiftStrandings.Resolve(world, ledger, cases, today, lib, config);
+                ClerkAccountSource.TakeInstalment(world, ledger, lib);
+                EndingSO now = EndingService.Evaluate(world, lib, config, EndingMoment.Immediate);
+                if (now != null)
+                    ended = now.id;
+                ClerkAccountSource.RecordShift(world, ledger, lib, config);
+            }
+            r.Pay += ledger.TotalPay;
+            r.Penalties += ledger.TotalPenalties;
+            r.Stranded += ledger.strandedCount;
+            r.Fines += ledger.strandingFines;
+            r.Instalments += ledger.debtInstalment;
+            r.MoneyAfterShift.Add(world.money);
+            r.MinMoney = Math.Min(r.MinMoney, world.money);
+            dump.AppendLine($"shift {day}: pay {ledger.TotalPay} penalties {ledger.TotalPenalties} stranded {ledger.strandedCount} fines {ledger.strandingFines} instalment {ledger.debtInstalment} money {world.money}{(ended != null ? " ENDING " + ended : "")}");
+            if (ended != null)
+            {
+                r.Ending = ended;
+                r.EndingDay = day;
+                break;
+            }
+
+            // Home: the household costs, the family's conditions, no shop, no care, no spins.
+            HomeEconomy.ExpenseReport expenses = HomeEconomy.ApplyDailyExpenses(world, config);
+            r.Household += expenses.total;
+            HomeEconomy.AdvanceFamilyConditions(world, config, Seeds.Day(seed, day));
+            ClerkAccountSource.RecordHome(world, expenses.total, 0, lib, config);
+            r.MoneyAtNight.Add(world.money);
+            r.MinMoney = Math.Min(r.MinMoney, world.money);
+
+            EndingSO ending = EndingService.Evaluate(world, lib, config, EndingMoment.DayBoundary);
+            if (ending != null)
+            {
+                r.Ending = ending.id;
+                r.EndingDay = day;
+                dump.AppendLine($"night {day}: ENDING {ending.id} money {world.money}");
+                break;
+            }
+            TimelineService.NightlyResolve(world, lib, config);
+            world.day++;
+            world.citationsToday = 0;
+            world.phase = RunPhase.Office;
+            dump.AppendLine($"night {day}: household {expenses.total} money {world.money} leader '{world.history.leaderId}' art {world.timeline.GetScore("attrTotal:art"):0.#} science {world.timeline.GetScore("attrTotal:science"):0.#} democracy {world.timeline.GetScore("attrTotal:democracy"):0.#}");
+        }
+        if (r.EndingDay == 0)
+        {
+            Report($"FAIL seed {seed}: no ending by the day-{Days} boundary");
+            _fails++;
+            r.EndingDay = Days;
+            r.Ending = "none";
+        }
+
+        r.Art = world.timeline.GetScore("attrTotal:art");
+        r.Science = world.timeline.GetScore("attrTotal:science");
+        r.Democracy = world.timeline.GetScore("attrTotal:democracy");
+        r.Json = JsonUtility.ToJson(world.history) + JsonUtility.ToJson(world.timeline) + world.money.ToString(Inv);
+        r.Dump = dump.ToString();
+        return r;
+    }
+
+    private static void Count(Census c, CaseInstance inst)
+    {
+        c.Cases++;
+        string kind = inst.kind.ToString();
+        c.ByKind[kind] = c.ByKind.TryGetValue(kind, out int n) ? n + 1 : 1;
+        if (inst.account != null && inst.account.TransponderClass == TransponderClass.Economy)
+            c.Economy++;
+        if (inst.ShouldAccept)
+        {
+            c.Honest++;
+            return;
+        }
+        c.Faulty++;
+        c.FaultyByKind[kind] = c.FaultyByKind.TryGetValue(kind, out int f) ? f + 1 : 1;
+        if (inst.IsLiar) c.Liars++;
+        if (inst.IsForger) c.Forgers++;
+        if (inst.costumeFault != CostumeError.None) c.Costume++;
+        if (inst.HasDirectiveFault) c.Directive++;
+        string reason = inst.FaultReason ?? "";
+        c.Reasons[reason] = c.Reasons.TryGetValue(reason, out int m) ? m + 1 : 1;
+    }
+
+    private static string Mean(IEnumerable<int> values)
+    {
+        List<int> v = values.ToList();
+        return v.Count == 0 ? "-" : v.Average().ToString("0.#", Inv);
+    }
+
+    private static string Summary(IEnumerable<float> values)
+    {
+        List<float> v = values.ToList();
+        return $"mean {v.Average().ToString("0.#", Inv)}, min {v.Min().ToString("0.#", Inv)}, max {v.Max().ToString("0.#", Inv)}";
+    }
+
+    private static string Pct(IEnumerable<float> values)
+    {
+        List<float> v = values.OrderBy(x => x).ToList();
+        double mean = v.Average();
+        double sd = Math.Sqrt(v.Sum(x => (x - mean) * (x - mean)) / v.Count);
+        return $"mean {mean.ToString("0.#", Inv)} sd {sd.ToString("0.#", Inv)} p50 {Q(v, 0.5f).ToString("0.#", Inv)} p65 {Q(v, 0.65f).ToString("0.#", Inv)} p80 {Q(v, 0.8f).ToString("0.#", Inv)}";
+    }
+
+    private static float Q(List<float> sorted, float q) => sorted[Math.Min(sorted.Count - 1, (int)Math.Floor(q * sorted.Count))];
+
+    /// <summary>The 65th percentile rounded to a whole number: the epilogue thresholds' rule (history-facts design R14).</summary>
+    private static int P65(IEnumerable<float> values) => (int)Math.Round(Q(values.OrderBy(x => x).ToList(), 0.65f), MidpointRounding.AwayFromZero);
+
+    /// <summary>
+    /// What perfect play does with the Stranding Waiver: asks for it and hands it
+    /// over, so the standing is what the traveller's papers give. Filled in once
+    /// phases 8 and 9 land the waiver form; until then the standing stays as
+    /// generated.
+    /// </summary>
+    private static class Waiver
+    {
+        public static void AskFor(CaseInstance inst) { }
+    }
+}
