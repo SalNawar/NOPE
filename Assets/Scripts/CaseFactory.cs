@@ -31,6 +31,10 @@ using UnityEngine;
 /// (Lies.Roll, among the day's lies that fit the kind, LieKinds.For; K5:
 /// never a premade authored honest, a closure's violator or a traveller
 /// without papers): the displaced's false origin is the place lie above; a
+/// smuggler (LieKind.Smuggling, from day 4) claims honestly but carries the
+/// present's currency or technology, planned by the same Lies.Plan with the
+/// present (TodaysWorld.Present) as the only candidate, so the manifest, the
+/// declaration or an answer gives 2150's value; a
 /// citizen's record lie (RecordLies: poor posing as rich, a doctored
 /// identity) forges fields of their papers that their own account and,
 /// where two papers disagree, each other disprove. A closed destination is
@@ -363,9 +367,11 @@ public sealed class CaseFactory
         // 7) Investigation layer: stated claim, structured fields, then the rolled lie planned and printed.
         inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
         List<DocumentField> fields = PopulateDocumentFields(inst);
+        NationEraProfileSO trueHome = null;
         LiePlan lie = lieKind == null ? null
-            : lieKind == LieKind.FalseOrigin ? Disguise(inst, fields, plan, caseIndex1Based, place, legendary)
-            : Forge(inst, lieKind.Value, caseIndex1Based);
+            : LieKinds.IsRecordLie(lieKind.Value) ? Forge(inst, lieKind.Value, caseIndex1Based)
+            : lieKind == LieKind.Smuggling ? Smuggle(inst, fields, plan, caseIndex1Based)
+            : Disguise(inst, fields, plan, caseIndex1Based, place, legendary, out trueHome);
         AddAnswers(inst, lie);
 
         // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
@@ -373,7 +379,7 @@ public sealed class CaseFactory
         inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
 
         (LookSource source, bool whole) costume = PlanCostume(inst, place, legendary, forcedCostume, plan, caseIndex1Based);
-        inst.look = ComposeLook(inst, place, lie, legendary, family, costume, caseIndex1Based);
+        inst.look = ComposeLook(inst, place, lie, trueHome, legendary, family, costume, caseIndex1Based);
 
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
@@ -465,10 +471,15 @@ public sealed class CaseFactory
     /// when Looks.CanLeak holds for the claim and the traveller's gender. A
     /// premade authored as a liar lies from their true place, through papers
     /// and answers only. Returns the plan, or null for a premade whose true
-    /// place is not in today's world (they stay honest).
+    /// place is not in today's world (they stay honest);
+    /// <paramref name="trueHome"/> is the liar's home (the look's dress leak),
+    /// null unless the lie could show.
     /// </summary>
-    private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary)
+    private LiePlan Disguise(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based, NationEraProfileSO place, LegendarySO legendary,
+                             out NationEraProfileSO trueHome)
     {
+        trueHome = null;
+
         // The homes the lie may come from: today's places, or a lying premade's own true place.
         List<NationEraProfileSO> homes = _todays;
         IReadOnlyList<TellChannel> channels = _channels;
@@ -510,8 +521,62 @@ public sealed class CaseFactory
         }
         else if (lie.Outcome == LieOutcome.Liar)
         {
-            inst.trueHome = homes[lie.HomeIndex];
-            inst.trueHomeLabel = PlaceLabel(inst.trueHome);
+            trueHome = homes[lie.HomeIndex];
+            inst.tellSource = new PlaceRef(trueHome.nation.id, trueHome.era.id);
+            inst.tellSourceLabel = PlaceLabel(trueHome);
+            inst.lie = LieKind.FalseOrigin;
+            lie.ApplyTo(Papers(inst));
+        }
+
+        return lie;
+    }
+
+    /// <summary>
+    /// Plans rolled smuggling and applies it (traveller types L1, L6;
+    /// Lies.Plan on the lie stream with the present as the only candidate and
+    /// Lies.SmuggledCategories as the only options): the traveller's claim is
+    /// honest, but every Currency or Technology field of a Papers tell reads
+    /// the present's value (the manifest's currency carried and declared
+    /// effects, a displaced person's coin of home and effects carried), or an
+    /// Answer tell speaks it to the trip's question; never dress. The tell
+    /// source is the present, whose Technology an accepted smuggler carries
+    /// into the destination (HistoryService.RecordCarry). Without a present, or
+    /// when neither category can show today, the traveller stays honest with a
+    /// warning.
+    /// </summary>
+    private LiePlan Smuggle(CaseInstance inst, List<DocumentField> fields, DayPlanSO plan, int caseIndex1Based)
+    {
+        if (_present == null)
+        {
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled smuggling, but today has no present (no 2150 row), so the traveller stays honest. Run Tools > TimeDesk > Generate World.");
+            return null;
+        }
+
+        var present = new[] { new HomeCandidate(_present.NationId, _present.EraId, _present.BirthYearMin, _present.BirthYearMax) };
+        LiePlan lie = Lies.Plan(
+            plan.TellCount,
+            inst.claimedNation != null ? inst.claimedNation.id : null,
+            inst.claimedEra != null ? inst.claimedEra.id : null,
+            inst.trueBirthDate,
+            present,
+            fields,
+            _answerTellCategories,
+            _channels,
+            _facts,
+            _bookCategories,
+            _lieRng,
+            Lies.SmuggledCategories,
+            LieKind.Smuggling);
+
+        if (lie.Outcome == LieOutcome.NoPossibleLie)
+        {
+            Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: rolled smuggling, but neither the currency nor the technology of '{_present.Label}' can show against '{inst.originLabel}' today (no paper prints them, no question asks them, or the values match), so the traveller stays honest. Check the present's facts and the day's channels.");
+        }
+        else if (lie.Outcome == LieOutcome.Liar)
+        {
+            inst.tellSource = new PlaceRef(_present.NationId, _present.EraId);
+            inst.tellSourceLabel = _facts.OriginLabel(_present.NationId, _present.EraId) ?? _present.Label;
+            inst.lie = LieKind.Smuggling;
             lie.ApplyTo(Papers(inst));
         }
 
@@ -541,6 +606,7 @@ public sealed class CaseFactory
         else if (lie.Outcome == LieOutcome.Forger)
         {
             inst.recordTells = lie.RecordTells;
+            inst.lie = kind;
             lie.ApplyTo(Papers(inst));
         }
 
@@ -649,7 +715,8 @@ public sealed class CaseFactory
     /// <summary>
     /// How the traveller looks: a premade's whole picture; otherwise the
     /// claimed place's layers (Looks.Compose on the look stream), with one
-    /// garment of the true home for a dress tell, or the costume error's
+    /// garment of the true home (<paramref name="trueHome"/>, a false
+    /// origin's) for a dress tell, or the costume error's
     /// source: its signature item, or its whole look for the present's
     /// clothes. A 2150 citizen wears the destination's dress (traveller types
     /// C1) with their family country's skin and hair weights
@@ -658,8 +725,8 @@ public sealed class CaseFactory
     /// minimal look and an unknown gender is drawn on the look stream, each
     /// with a warning.
     /// </summary>
-    private TravellerLook ComposeLook(CaseInstance inst, NationEraProfileSO place, LiePlan lie, LegendarySO legendary, NationEraProfileSO family,
-                                      (LookSource source, bool whole) costume, int caseIndex1Based)
+    private TravellerLook ComposeLook(CaseInstance inst, NationEraProfileSO place, LiePlan lie, NationEraProfileSO trueHome, LegendarySO legendary,
+                                      NationEraProfileSO family, (LookSource source, bool whole) costume, int caseIndex1Based)
     {
         if (legendary != null)
             return Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules);
@@ -673,8 +740,8 @@ public sealed class CaseFactory
         if (inst.gender == TravellerGender.Unknown)
             Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: '{inst.visitorGivenName}' has no known gender (not on the place's name lists); the look draws one. Check the place's names.");
 
-        LookSource leak = costume.source ?? (lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance && inst.trueHome != null
-            ? SourceOf(inst.trueHome)
+        LookSource leak = costume.source ?? (lie != null && lie.ChannelOf(Looks.EvidenceCategory) == TellChannel.Appearance && trueHome != null
+            ? SourceOf(trueHome)
             : null);
         int year = family != null && _present != null ? _present.Year : place.year;
         LookWeights weights = family != null ? family.looks : place.looks;

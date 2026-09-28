@@ -11565,6 +11565,12 @@
         "tier": "Full"
       },
       {
+        "key": "citation.acceptedWrong.smuggled",
+        "text": "Let 2150 goods leave 2150.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "citation.deniedWrong",
         "text": "Denied a legitimate, permitted traveler.",
         "gloss": "None",

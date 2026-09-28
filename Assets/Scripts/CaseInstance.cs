@@ -80,25 +80,32 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The era of the claimed place (the correct era on the legacy era-pick
-    /// path). A liar's real era is trueHome.era. Set even when the case has no
-    /// blueprint (audit R3-020 merged the duplicate `trueEra`).
+    /// path). A place liar's tells come from <see cref="tellSource"/>. Set
+    /// even when the case has no blueprint (audit R3-020 merged the
+    /// duplicate `trueEra`).
     /// </summary>
     public EraSO claimedEra;
 
     /// <summary>
-    /// Where the traveller really comes from: another of today's places for a
-    /// liar, null for an honest traveller (whose home is the claim).
+    /// Where a place liar's tells come from (traveller types H3): a false
+    /// origin's true home, another of today's places; a smuggler's present
+    /// (2150, which has no profile asset, so a place reference: its ids in
+    /// today's facts). Null for everyone else (an honest traveller's home is
+    /// the claim). An accepted liar carries this place's fact into the claim.
     /// </summary>
-    public NationEraProfileSO trueHome;
+    public PlaceRef? tellSource;
 
-    /// <summary>The true home's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
-    public string trueHomeLabel = string.Empty;
+    /// <summary>The tell source's label, from today's FactTable like <see cref="originLabel"/> (empty without one).</summary>
+    public string tellSourceLabel = string.Empty;
 
-    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells).</summary>
-    public bool IsLiar => trueHome != null;
+    /// <summary>The lie the traveller carries, once planned and printed (Lies.Roll's pick that could show); null for an honest traveller.</summary>
+    public LieKind? lie;
 
-    /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
-    public string HomeLabel => IsLiar ? trueHomeLabel : originLabel;
+    /// <summary>True when the traveller carries a place lie (a false origin, or smuggling): their papers, answers or dress leak another place's values.</summary>
+    public bool IsLiar => tellSource != null;
+
+    /// <summary>Where a place liar's tells come from, as a label; the claim's for everyone else (verdict and logs).</summary>
+    public string HomeLabel => IsLiar ? tellSourceLabel : originLabel;
 
     /// <summary>
     /// A 2150 citizen's costume error (traveller types C2): the wrong item
@@ -137,7 +144,7 @@ public sealed class CaseInstance
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
-    public string FaultReason => Faults.Reason(directiveFault, costumeFault, IsForger, IsLiar);
+    public string FaultReason => Faults.Reason(directiveFault, costumeFault, lie);
 
     /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
     public string claimLine;
