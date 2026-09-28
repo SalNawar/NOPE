@@ -36,6 +36,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a23d6b403075707429acad1c0d651b50, type: 2}
   - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
   guaranteeRuleViolators: 1
-  guaranteedRules: []
   forcedCases: []
   eventRules: []
