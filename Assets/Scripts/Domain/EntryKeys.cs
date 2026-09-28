@@ -34,7 +34,8 @@ public readonly struct EntryRef
 /// <summary>
 /// The keys of the Investigation app's items (the PC redesign section 4.2):
 /// a document ("doc:0"), a book ("bookof:Currency") and a record ("rec:{id}")
-/// as items, beside PickKeys' row keys (a field, a line, a book's row, a
+/// as items, a rule ("rule:1") and a deviation ("dev:Currency") as search
+/// results, beside PickKeys' row keys (a field, a line, a book's row, a
 /// record's row; PickKeys reads those back). TryRef says which tab a key's
 /// item lives in (and so its scope), for pins and recent items; where a key
 /// leads is SmartLinks.ForEntry. Pure.
@@ -44,6 +45,8 @@ public static class EntryKeys
     private const string DocumentPrefix = "doc:";
     private const string BookPrefix = "bookof:";
     private const string RecordCardPrefix = "rec:";
+    private const string RulePrefix = "rule:";
+    private const string DeviationPrefix = "dev:";
 
     /// <summary>Document <paramref name="document"/> of the case, as an item ("doc:0").</summary>
     public static string Document(int document) => DocumentPrefix + document.ToString(CultureInfo.InvariantCulture);
@@ -53,6 +56,12 @@ public static class EntryKeys
 
     /// <summary>A citizen record, as an item ("rec:552-1804-33"; the record's id: its number, else its name).</summary>
     public static string RecordCard(string recordId) => RecordCardPrefix + recordId;
+
+    /// <summary>Rule <paramref name="index"/> of the day's directives ("rule:1"; a search result's key).</summary>
+    public static string Rule(int index) => RulePrefix + index.ToString(CultureInfo.InvariantCulture);
+
+    /// <summary>The case's deviation of <paramref name="category"/> ("dev:Currency"; a search result's key).</summary>
+    public static string Deviation(ClueCategory category) => DeviationPrefix + category;
 
     /// <summary>Reads a document item's key.</summary>
     public static bool TryDocument(string key, out int document) => TryIndex(key, DocumentPrefix, out document);

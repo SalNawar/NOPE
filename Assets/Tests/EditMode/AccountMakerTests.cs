@@ -8,7 +8,8 @@ using NUnit.Framework;
 /// A 2150 citizen's account (traveller types R1-R3, §4.1, §4.3): drawn on
 /// the traveller's account stream in the fixed order, each status in its
 /// ranges, every number unique within the day; and the account as record
-/// rows in the art's three groups, found by Citizen ID or name.
+/// rows in the art's three groups, found by Citizen ID or name (the Records
+/// lookup: the search index scoped to Records, redesign phase 19).
 /// </summary>
 public class AccountMakerTests
 {
@@ -305,6 +306,15 @@ public class AccountMakerTests
         Departure = "14 Mar 2150"
     };
 
+    /// <summary>The Records lookup (the PC spec's SE6): the search index scoped to Records, its best hit (the rule's own tests: CaseIndexTests).</summary>
+    private static CitizenRecord Found(CitizenRegistry registry, string query)
+    {
+        var index = new CaseIndex();
+        index.SetDay(IndexEntries.Records(registry, "{0} · {1}"));
+        IReadOnlyList<ResultGroup> found = index.Search(SearchQuery.Parse(query), new[] { AppTab.Records }, 1, AppTab.Records);
+        return found.Count > 0 ? registry.Records[found[0].Hits[0].Entry.Item] : null;
+    }
+
     private static CitizenRecord Record(CitizenAccount account) =>
         AccountRecords.Record("Omar", "3 May 2101", "Periclean Athens (Ancient)", account, key => "<" + key + ">");
 
@@ -377,8 +387,8 @@ public class AccountMakerTests
         var registry = new CitizenRegistry();
         registry.Add(Record(Account()));
         registry.Add(clerk);
-        Assert.AreSame(clerk, registry.Find("773-2840-19"));
-        Assert.AreSame(clerk, registry.Find("theo marlow"));
+        Assert.AreSame(clerk, Found(registry, "773-2840-19"));
+        Assert.AreSame(clerk, Found(registry, "theo marlow"));
     }
 
     [Test]
@@ -393,8 +403,9 @@ public class AccountMakerTests
     {
         var registry = new CitizenRegistry();
         registry.Add(Record(Account()));
-        Assert.AreEqual("Omar", registry.Find("418-0937-52")?.FullName);
-        Assert.AreEqual("Omar", registry.Find(" omar ")?.FullName);
-        Assert.IsNull(registry.Find("418-0937-5"), "a number is found whole only");
+        Assert.AreEqual("Omar", Found(registry, "418-0937-52")?.FullName);
+        Assert.AreEqual("Omar", Found(registry, " omar ")?.FullName);
+        Assert.AreEqual("Omar", Found(registry, "418-0937-5")?.FullName, "one matcher with search: each part starts a part of the number");
+        Assert.IsNull(Found(registry, "937"), "never the middle of a number");
     }
 }
