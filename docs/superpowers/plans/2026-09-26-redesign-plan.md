@@ -437,6 +437,14 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **Audit absorbed:** R1-020, R3-015 (the unread `sent:*` counters, in the files it touches).
 - **Split seam:** smuggling and the carries first; then the dates and the trip questions.
 - **Depends on:** 10.
+- **Decisions taken while building (2026-09-29, Saleh to confirm):**
+  - `days[].guarantee` is a separate list of rule names (a day's guaranteed procedures), not a flag on each `rules` entry: it keeps `rules` a plain list (the sheet's `a|b` cell) and reads as "what is guaranteed today". Closures keep `guaranteeRuleViolators`.
+  - The PaperDates maker draws its variant and false date on the traveller's fault stream (`Seeds.ForFaults`) when the slot is planned, not on the violator stream: the papers are not built when the violator stream runs, and the fault stream holds nothing else for a planned slot (the costume roll is skipped, K5). Days with closures alone draw as before; day 4's closure violator moves because the slot pick now draws two more slots (the intended golden effect).
+  - `overrides[].kind` is not added: a kind-specific wording is a separate question with its own `kinds` (the trip questions), which is what the spec's own example needs; the era override stays.
+  - The ask entry is per kind through one extra string, `interview.tripAskLabel` ("Ask about the trip >"), the home label standing in when it is blank.
+  - Days 4-6 list rich tourists (weight 1 beside the displaced) with `Rule_LeisureDepartures`, L1 and L2, so the trip questions and smuggling citizens exist before phases 8, 9 and 12 set the final mix; the displaced keep their home questions on day 4 (their day-5 move is phase 12's).
+  - Smuggling applies to every kind from the day its `lies` entry lists it (day 4 on this branch, the displaced included: their coin of home or effects carried, or a home answer, reads 2150's value); the spec's "the displaced from day 5" is the day mix, phase 12.
+  - The trip questions' announcements are the questions' own (`announce`), one per question, in day 3's morning paper.
 
 ### Phase 12 — The displaced on day 5, the famous on day 6 (M)
 

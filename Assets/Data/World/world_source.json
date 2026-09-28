@@ -6608,6 +6608,16 @@
       "asset": "Rule_LeisureDepartures",
       "type": "Procedure",
       "description": "Leisure departures: a Leisure Visa and a Departure Manifest. Every paper must match the Citizen Account."
+    },
+    {
+      "asset": "Rule_NoPresentGoods",
+      "type": "NoPresentGoods",
+      "description": "No 2150 currency or technology leaves 2150."
+    },
+    {
+      "asset": "Rule_PaperDates",
+      "type": "PaperDates",
+      "description": "Depart only on the date on your manifest or return order, and never on an expired paper."
     }
   ],
   "days": [
@@ -6781,9 +6791,16 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "FalseOrigin",
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "Smuggling"
       ],
       "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 1
+        },
         {
           "kind": "Displaced",
           "weight": 1
@@ -6810,7 +6827,14 @@
       "countries": [],
       "rules": [
         "Rule_NoIndustrialBritain",
-        "Rule_DressForDestination"
+        "Rule_LeisureDepartures",
+        "Rule_DressForDestination",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
+      ],
+      "guarantee": [
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
       ],
       "premades": [
         "socrates",
@@ -6838,9 +6862,16 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "FalseOrigin",
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "Smuggling"
       ],
       "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 1
+        },
         {
           "kind": "Displaced",
           "weight": 1
@@ -6872,7 +6903,10 @@
       "rules": [
         "Rule_NoModernGermany",
         "Rule_NoAncientEgypt",
-        "Rule_DressForDestination"
+        "Rule_LeisureDepartures",
+        "Rule_DressForDestination",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
       ],
       "premades": [
         "socrates",
@@ -6900,9 +6934,16 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "FalseOrigin",
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "Smuggling"
       ],
       "kinds": [
+        {
+          "kind": "RichTourist",
+          "weight": 1
+        },
         {
           "kind": "Displaced",
           "weight": 1
@@ -6937,7 +6978,10 @@
       "countries": [],
       "rules": [
         "Rule_NoModernJapan",
-        "Rule_DressForDestination"
+        "Rule_LeisureDepartures",
+        "Rule_DressForDestination",
+        "Rule_NoPresentGoods",
+        "Rule_PaperDates"
       ],
       "premades": [
         "socrates",
@@ -6977,6 +7021,7 @@
     "requestPrompt": "Your {document}, please.",
     "requestReply": "Here you are.",
     "askLabel": "Ask about home >",
+    "tripAskLabel": "Ask about the trip >",
     "backLabel": "< Back",
     "smallTalkLabel": "Small talk",
     "smallTalkPrompt": "How is life back home?",
@@ -7002,6 +7047,9 @@
     {
       "id": "q_currency",
       "category": "Currency",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Currency",
       "prompt": "What money do you pay with at home?",
       "answer": "We pay in {value}.",
@@ -7019,6 +7067,9 @@
     {
       "id": "q_language",
       "category": "Language",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Language",
       "prompt": "What language do you speak at home?",
       "answer": "At home we speak {value}.",
@@ -7030,6 +7081,9 @@
     {
       "id": "q_device",
       "category": "Technology",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Device",
       "prompt": "What tool do you use every day?",
       "answer": "Every day I use {value}.",
@@ -7041,6 +7095,9 @@
     {
       "id": "q_capital",
       "category": "Geography",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Capital",
       "prompt": "What is the capital of your land?",
       "answer": "Our capital is {value}.",
@@ -7052,11 +7109,46 @@
     {
       "id": "q_ruler",
       "category": "Politics",
+      "kinds": [
+        "Displaced"
+      ],
       "label": "Ruler",
       "prompt": "Who rules your land?",
       "answer": "We are ruled by {value}.",
       "fromDay": 3,
       "announce": "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_trip_currency",
+      "category": "Currency",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "label": "Currency",
+      "prompt": "What will you pay with in {place}?",
+      "answer": "I've changed my money into {value}.",
+      "fromDay": 4,
+      "announce": "BUREAU NOTICE: from today, desk officers ask departing citizens what they will pay with. Check answers against the Currency Ledger: nothing from 2150 leaves 2150.",
+      "conditions": [],
+      "overrides": []
+    },
+    {
+      "id": "q_trip_device",
+      "category": "Technology",
+      "kinds": [
+        "RichTourist",
+        "PoorTourist",
+        "Labourer"
+      ],
+      "label": "Device",
+      "prompt": "What are you taking with you?",
+      "answer": "Just the approved kit: {value}.",
+      "fromDay": 4,
+      "announce": "BUREAU NOTICE: from today, desk officers ask departing citizens what they are taking with them. Check answers against the Index of Devices: nothing from 2150 leaves 2150.",
       "conditions": [],
       "overrides": []
     },
