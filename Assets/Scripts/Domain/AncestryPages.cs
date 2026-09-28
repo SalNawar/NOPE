@@ -115,7 +115,7 @@ public sealed class PersonCard
 /// The Lineage Archive (P spec IN5; traveller-types spec R4): person cards
 /// of the premades who are who they claim (an impostor gets no card of the
 /// real person unless one is authored, so no card contradicts the game) and
-/// of authored people, a name search with country and era filters, and a
+/// of authored people, a name search (TextMatch) with country and era filters, and a
 /// card per person (name, born, died, place linking to its Chronopedia
 /// article, note, relations linking to other cards). Generated travellers get
 /// no card: a card would either reveal a liar without proof or repeat the
@@ -157,16 +157,17 @@ public static class AncestryPages
     }
 
     /// <summary>
-    /// The cards whose name contains <paramref name="name"/> (trimmed, ignoring
-    /// case; blank = every name) and whose place is of the country and era
-    /// given (blank = any; a card whose place is unknown only matches no
-    /// filter), sorted by name.
+    /// The cards whose name <paramref name="name"/> finds (search's matcher,
+    /// TextMatch: each word starts a word of the name, "quoted phrases" as
+    /// written, any case and accent; blank = every name) and whose place is of
+    /// the country and era given (blank = any; a card whose place is unknown
+    /// only matches no filter), sorted by name.
     /// </summary>
     public static List<PersonCard> Search(IEnumerable<PersonCard> cards, string name, string nationId, string eraId, Func<string, PlaceInfo> placeById)
     {
-        string q = (name ?? string.Empty).Trim();
+        SearchQuery q = SearchQuery.Parse(name);
         return (cards ?? Enumerable.Empty<PersonCard>())
-               .Where(c => c != null && (q.Length == 0 || (c.Name ?? string.Empty).IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0))
+               .Where(c => c != null && TextMatch.MatchesText(q, c.Name))
                .Where(c =>
                {
                    if (string.IsNullOrWhiteSpace(nationId) && string.IsNullOrWhiteSpace(eraId))

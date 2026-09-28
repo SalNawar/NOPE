@@ -9,6 +9,8 @@ public class EntryKeysTests
         Assert.AreEqual("doc:2", EntryKeys.Document(2));
         Assert.AreEqual("bookof:Currency", EntryKeys.Book(ClueCategory.Currency));
         Assert.AreEqual("rec:552-1804-33", EntryKeys.RecordCard("552-1804-33"));
+        Assert.AreEqual("rule:1", EntryKeys.Rule(1));
+        Assert.AreEqual("dev:Currency", EntryKeys.Deviation(ClueCategory.Currency));
     }
 
     [Test]

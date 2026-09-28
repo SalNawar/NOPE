@@ -1,0 +1,304 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1240" viewBox="0 0 1800 1240">
+<defs><marker id="ochre" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#B87927" stroke-width="1.6"/></marker><marker id="plum" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#75506F" stroke-width="1.6"/></marker><marker id="coral" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8" fill="none" stroke="#B75348" stroke-width="1.6"/></marker></defs>
+<rect width="1800" height="1240" fill="#FAF7F0"/>
+<text x="55.00" y="47.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="700" text-anchor="start">
+<tspan x="55.00" dy="0">NOPE  /  HALL SPATIAL STUDY</tspan>
+</text>
+<text x="55.00" y="96.00" font-family="Arial, sans-serif" font-size="34" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="55.00" dy="0">The crown of a government megatower</tspan>
+</text>
+<text x="57.00" y="131.00" font-family="Arial, sans-serif" font-size="18" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="57.00" dy="0">Top view  /  monumental hall + a window-side player station  /  architectural proposal</tspan>
+</text>
+<text x="1735.00" y="49.00" font-family="Arial, sans-serif" font-size="24" fill="#302D33" font-weight="700" text-anchor="end">
+<tspan x="1735.00" dy="0">B01</tspan>
+</text>
+<line x1="55.00" y1="154.00" x2="1745.00" y2="154.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<rect x="215.00" y="285.00" width="600.00" height="800.00" fill="#F0EBE1" stroke="none" stroke-width="1.5" />
+<rect x="215.00" y="1085.00" width="600.00" height="50.00" fill="#E3DDD3" stroke="#D8D0C4" stroke-width="1.5" />
+<rect x="815.00" y="635.00" width="150.00" height="300.00" fill="#E8E0D4" stroke="#D8D0C4" stroke-width="1.5" />
+<line x1="215.00" y1="1085.00" x2="215.00" y2="285.00" stroke="#302D33" stroke-width="5"/>
+<line x1="215.00" y1="285.00" x2="815.00" y2="285.00" stroke="#302D33" stroke-width="5"/>
+<line x1="815.00" y1="1085.00" x2="815.00" y2="935.00" stroke="#302D33" stroke-width="5"/>
+<line x1="815.00" y1="635.00" x2="815.00" y2="285.00" stroke="#302D33" stroke-width="5"/>
+<line x1="215.00" y1="1085.00" x2="286.00" y2="1085.00" stroke="#302D33" stroke-width="3"/>
+<line x1="304.00" y1="1085.00" x2="396.00" y2="1085.00" stroke="#302D33" stroke-width="3"/>
+<line x1="414.00" y1="1085.00" x2="506.00" y2="1085.00" stroke="#302D33" stroke-width="3"/>
+<line x1="524.00" y1="1085.00" x2="616.00" y2="1085.00" stroke="#302D33" stroke-width="3"/>
+<line x1="634.00" y1="1085.00" x2="726.00" y2="1085.00" stroke="#302D33" stroke-width="3"/>
+<line x1="744.00" y1="1085.00" x2="815.00" y2="1085.00" stroke="#302D33" stroke-width="3"/>
+<line x1="215.00" y1="1085.00" x2="215.00" y2="285.00" stroke="#577285" stroke-width="3"/>
+<line x1="215.00" y1="285.00" x2="815.00" y2="285.00" stroke="#577285" stroke-width="3"/>
+<rect x="215.00" y="1019.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="215.00" y="899.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="215.00" y="779.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="215.00" y="659.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="215.00" y="539.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="215.00" y="419.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="215.00" y="299.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="335.00" y="285.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="455.00" y="285.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="575.00" y="285.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="695.00" y="285.00" width="16.00" height="16.00" fill="#302D33" stroke="#302D33" stroke-width="1.5" />
+<rect x="318.00" y="728.00" width="14.00" height="14.00" fill="#BDB3A5" stroke="#302D33" stroke-width="1.5" />
+<rect x="318.00" y="548.00" width="14.00" height="14.00" fill="#BDB3A5" stroke="#302D33" stroke-width="1.5" />
+<rect x="318.00" y="368.00" width="14.00" height="14.00" fill="#BDB3A5" stroke="#302D33" stroke-width="1.5" />
+<rect x="698.00" y="728.00" width="14.00" height="14.00" fill="#BDB3A5" stroke="#302D33" stroke-width="1.5" />
+<rect x="698.00" y="548.00" width="14.00" height="14.00" fill="#BDB3A5" stroke="#302D33" stroke-width="1.5" />
+<rect x="698.00" y="368.00" width="14.00" height="14.00" fill="#BDB3A5" stroke="#302D33" stroke-width="1.5" />
+<text x="515.00" y="264.00" font-family="Arial, sans-serif" font-size="14" fill="#577285" font-weight="700" text-anchor="middle">
+<tspan x="515.00" dy="0">FICTIONAL MEGACITY / REAR PANORAMA</tspan>
+</text>
+<text x="175" y="635" transform="rotate(-90 175 635)" font-family="Arial" font-size="15" font-weight="700" text-anchor="middle" fill="#577285">CONTINUOUS CITY-FACING WEST GLAZING</text>
+<text x="515.00" y="355.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="515.00" dy="0">MONUMENTAL PUBLIC VOLUME</tspan>
+</text>
+<text x="515.00" y="390.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="515.00" dy="0">Repeated structural bays; long views; sparse furnishings</tspan>
+</text>
+<rect x="481.75" y="677.25" width="66.50" height="15.50" fill="#CBD6DB" stroke="#302D33" stroke-width="2" />
+<line x1="485.30" y1="685.00" x2="544.70" y2="685.00" stroke="#577285" stroke-width="6"/>
+<text x="515.00" y="635.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="515.00" dy="0">PORTAL</tspan>
+</text>
+<text x="515.00" y="657.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="515.00" dy="0">Existing ~6 m scale</tspan>
+</text>
+<rect x="475.00" y="695.00" width="80.00" height="80.00" fill="#E7DEE7" stroke="none" stroke-width="1.5" />
+<text x="515.00" y="755.00" font-family="Arial, sans-serif" font-size="12" fill="#75506F" font-weight="700" text-anchor="middle">
+<tspan x="515.00" dy="0">CLEAR APPROACH</tspan>
+</text>
+<path d="M 264.13 978.05 L 310.90 1012.35 L 325.87 991.95 L 279.10 957.65 L 264.13 978.05" fill="#D7B790" stroke="#302D33" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="295.00" y="985.00" font-family="Arial, sans-serif" font-size="10" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="295.00" dy="0">PLAYER</tspan>
+</text>
+<circle cx="284.36" cy="999.52" r="3.00" fill="#FAF7F0" stroke="#302D33" stroke-width="1.4"/>
+<path d="M 373.38 966.17 L 427.37 987.38 L 436.62 963.83 L 382.63 942.62 L 373.38 966.17" fill="#D7B790" stroke="#302D33" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="405.00" y="965.00" font-family="Arial, sans-serif" font-size="10" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="405.00" dy="0">02</tspan>
+</text>
+<circle cx="398.42" cy="981.75" r="3.00" fill="#FAF7F0" stroke="#302D33" stroke-width="1.4"/>
+<path d="M 486.00 967.65 L 544.00 967.65 L 544.00 942.35 L 486.00 942.35 L 486.00 967.65" fill="#D7B790" stroke="#302D33" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="515.00" y="955.00" font-family="Arial, sans-serif" font-size="10" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="515.00" dy="0">03</tspan>
+</text>
+<circle cx="515.00" cy="973.00" r="3.00" fill="#FAF7F0" stroke="#302D33" stroke-width="1.4"/>
+<path d="M 602.63 987.38 L 656.62 966.17 L 647.37 942.62 L 593.38 963.83 L 602.63 987.38" fill="#D7B790" stroke="#302D33" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="625.00" y="965.00" font-family="Arial, sans-serif" font-size="10" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="625.00" dy="0">04</tspan>
+</text>
+<circle cx="631.58" cy="981.75" r="3.00" fill="#FAF7F0" stroke="#302D33" stroke-width="1.4"/>
+<path d="M 719.10 1012.35 L 765.87 978.05 L 750.90 957.65 L 704.13 991.95 L 719.10 1012.35" fill="#D7B790" stroke="#302D33" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="735.00" y="985.00" font-family="Arial, sans-serif" font-size="10" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="735.00" dy="0">05</tspan>
+</text>
+<circle cx="745.64" cy="999.52" r="3.00" fill="#FAF7F0" stroke="#302D33" stroke-width="1.4"/>
+<text x="565.00" y="1060.00" font-family="Arial, sans-serif" font-size="12" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="565.00" dy="0">FIVE STATIONS / SAME FRONT SERVICE LINE</tspan>
+</text>
+<text x="515.00" y="1115.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="515.00" dy="0">STAFF GALLERY  →  SECURED CONNECTION TO THE CORE</tspan>
+</text>
+<line x1="284.40" y1="999.50" x2="243.44" y2="641.84" stroke="#75506F" stroke-width="1" stroke-dasharray="5 5"/>
+<line x1="284.40" y1="999.50" x2="637.82" y2="931.01" stroke="#75506F" stroke-width="1" stroke-dasharray="5 5"/>
+<path d="M 284.40 999.50 L 515.00 685.00" fill="none" stroke="#75506F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
+<path d="M 284.40 999.50 L 215.00 835.00" fill="none" stroke="#577285" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="284.40" cy="999.50" r="4.00" fill="#75506F" stroke="#75506F" stroke-width="1.4"/>
+<line x1="284.40" y1="999.50" x2="83.96" y2="908.82" stroke="#577285" stroke-width="1" stroke-dasharray="4 5"/>
+<line x1="284.40" y1="999.50" x2="359.31" y2="792.65" stroke="#577285" stroke-width="1" stroke-dasharray="4 5"/>
+<circle cx="284.40" cy="999.50" r="4.00" fill="#75506F" stroke="#75506F" stroke-width="1.4"/>
+<text x="200.00" y="865.00" font-family="Arial, sans-serif" font-size="12" fill="#577285" font-weight="700" text-anchor="middle">
+<tspan x="200.00" dy="0">LEFT LOOK</tspan>
+</text>
+<text x="265.00" y="1167.00" font-family="Arial, sans-serif" font-size="13" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="265.00" dy="0">Player sits at the window end; other stations extend to the right.</tspan>
+</text>
+<rect x="255.00" y="807.00" width="112.00" height="8.00" fill="#DDC7B9" stroke="#302D33" stroke-width="1.5" />
+<line x1="255.00" y1="815.00" x2="255.00" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="260.60" y1="815.00" x2="260.60" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="266.20" y1="815.00" x2="266.20" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="271.80" y1="815.00" x2="271.80" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="277.40" y1="815.00" x2="277.40" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="283.00" y1="815.00" x2="283.00" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="288.60" y1="815.00" x2="288.60" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="294.20" y1="815.00" x2="294.20" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="299.80" y1="815.00" x2="299.80" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="305.40" y1="815.00" x2="305.40" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="311.00" y1="815.00" x2="311.00" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="316.60" y1="815.00" x2="316.60" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="322.20" y1="815.00" x2="322.20" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="327.80" y1="815.00" x2="327.80" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="333.40" y1="815.00" x2="333.40" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="339.00" y1="815.00" x2="339.00" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="344.60" y1="815.00" x2="344.60" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="350.20" y1="815.00" x2="350.20" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="355.80" y1="815.00" x2="355.80" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="361.40" y1="815.00" x2="361.40" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<line x1="367.00" y1="815.00" x2="367.00" y2="807.00" stroke="#302D33" stroke-width="0.55"/>
+<rect x="255.00" y="815.00" width="112.00" height="18.00" fill="none" stroke="#726B70" stroke-width="0.8" stroke-dasharray="4 4"/>
+<text x="311.00" y="785.00" font-family="Arial, sans-serif" font-size="12" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="311.00" dy="0">LUGGAGE LOCKERS</tspan>
+</text>
+<rect x="395.00" y="867.00" width="70.00" height="8.00" fill="#D3C1D0" stroke="#302D33" stroke-width="1.5" />
+<line x1="405.00" y1="875.00" x2="405.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="415.00" y1="875.00" x2="415.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="425.00" y1="875.00" x2="425.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="435.00" y1="875.00" x2="435.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="445.00" y1="875.00" x2="445.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="455.00" y1="875.00" x2="455.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<rect x="395.00" y="837.00" width="70.00" height="8.00" fill="#D3C1D0" stroke="#302D33" stroke-width="1.5" />
+<line x1="405.00" y1="845.00" x2="405.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="415.00" y1="845.00" x2="415.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="425.00" y1="845.00" x2="425.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="435.00" y1="845.00" x2="435.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="445.00" y1="845.00" x2="445.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="455.00" y1="845.00" x2="455.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<rect x="565.00" y="867.00" width="70.00" height="8.00" fill="#D3C1D0" stroke="#302D33" stroke-width="1.5" />
+<line x1="575.00" y1="875.00" x2="575.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="585.00" y1="875.00" x2="585.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="595.00" y1="875.00" x2="595.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="605.00" y1="875.00" x2="605.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="615.00" y1="875.00" x2="615.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="625.00" y1="875.00" x2="625.00" y2="867.00" stroke="#302D33" stroke-width="0.6"/>
+<rect x="565.00" y="837.00" width="70.00" height="8.00" fill="#D3C1D0" stroke="#302D33" stroke-width="1.5" />
+<line x1="575.00" y1="845.00" x2="575.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="585.00" y1="845.00" x2="585.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="595.00" y1="845.00" x2="595.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="605.00" y1="845.00" x2="605.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="615.00" y1="845.00" x2="615.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<line x1="625.00" y1="845.00" x2="625.00" y2="837.00" stroke="#302D33" stroke-width="0.6"/>
+<text x="515.00" y="810.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="515.00" dy="0">COMMON WAITING / CALL AREA</tspan>
+</text>
+<rect x="835.00" y="675.00" width="35.00" height="40.00" fill="#D7CDBD" stroke="#302D33" stroke-width="1.5" />
+<text x="852.50" y="697.00" font-family="Arial, sans-serif" font-size="9" fill="#302D33" font-weight="400" text-anchor="middle">
+<tspan x="852.50" dy="0">LIFT</tspan>
+</text>
+<rect x="885.00" y="675.00" width="35.00" height="40.00" fill="#D7CDBD" stroke="#302D33" stroke-width="1.5" />
+<text x="902.50" y="697.00" font-family="Arial, sans-serif" font-size="9" fill="#302D33" font-weight="400" text-anchor="middle">
+<tspan x="902.50" dy="0">LIFT</tspan>
+</text>
+<rect x="920.00" y="845.00" width="35.00" height="70.00" fill="none" stroke="#302D33" stroke-width="1.5" />
+<line x1="920.00" y1="915.00" x2="955.00" y2="915.00" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="908.50" x2="955.00" y2="908.50" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="902.00" x2="955.00" y2="902.00" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="895.50" x2="955.00" y2="895.50" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="889.00" x2="955.00" y2="889.00" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="882.50" x2="955.00" y2="882.50" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="876.00" x2="955.00" y2="876.00" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="869.50" x2="955.00" y2="869.50" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="863.00" x2="955.00" y2="863.00" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="856.50" x2="955.00" y2="856.50" stroke="#302D33" stroke-width="0.7"/>
+<line x1="920.00" y1="850.00" x2="955.00" y2="850.00" stroke="#302D33" stroke-width="0.7"/>
+<text x="937.00" y="930.00" font-family="Arial, sans-serif" font-size="10" fill="#302D33" font-weight="400" text-anchor="middle">
+<tspan x="937.00" dy="0">STAIR</tspan>
+</text>
+<path d="M 885.00 745.00 L 815.00 745.00 L 765.00 795.00 L 715.00 915.00 L 515.00 915.00" fill="none" stroke="#B87927" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ochre)"/>
+<path d="M 515.00 915.00 L 335.00 915.00 L 305.00 955.00" fill="none" stroke="#B87927" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#ochre)"/>
+<path d="M 325.00 955.00 L 365.00 935.00 L 485.00 915.00 L 485.00 795.00 L 515.00 715.00" fill="none" stroke="#75506F" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" marker-end="url(#plum)"/>
+<text x="890.00" y="610.00" font-family="Arial, sans-serif" font-size="16" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="890.00" dy="0">TOWER CORE</tspan>
+</text>
+<text x="890.00" y="640.00" font-family="Arial, sans-serif" font-size="11" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="890.00" dy="0">Public arrival / secure staff routes</tspan>
+</text>
+<text x="889.00" y="765.00" font-family="Arial, sans-serif" font-size="13" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="889.00" dy="0">DEPARTMENT</tspan>
+<tspan x="889.00" dy="17.55">CORRIDOR</tspan>
+</text>
+<text x="889.00" y="815.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="889.00" dy="0">MEDBAY</tspan>
+<tspan x="889.00" dy="16.200000000000003">JAIL</tspan>
+<tspan x="889.00" dy="16.200000000000003">C-SUITES</tspan>
+</text>
+<rect x="815.00" y="935.00" width="50.00" height="200.00" fill="#E3DDD3" stroke="#D8D0C4" stroke-width="1.5" />
+<text x="855.00" y="1095.00" font-family="Arial, sans-serif" font-size="10" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="855.00" dy="0">STAFF</tspan>
+</text>
+<rect x="775.00" y="485.00" width="20.00" height="20.00" fill="#D7CDBD" stroke="#302D33" stroke-width="1.5" />
+<circle cx="785.00" cy="495.00" r="15.00" fill="#FAF7F0" stroke="#302D33" stroke-width="2"/>
+<text x="785.00" y="500.00" font-family="Arial, sans-serif" font-size="14" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="785.00" dy="0">P</tspan>
+</text>
+<rect x="745.00" y="565.00" width="20.00" height="20.00" fill="#D7CDBD" stroke="#302D33" stroke-width="1.5" />
+<circle cx="755.00" cy="575.00" r="15.00" fill="#FAF7F0" stroke="#302D33" stroke-width="2"/>
+<text x="755.00" y="580.00" font-family="Arial, sans-serif" font-size="14" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="755.00" dy="0">A</tspan>
+</text>
+<rect x="265.00" y="565.00" width="20.00" height="20.00" fill="#D7CDBD" stroke="#302D33" stroke-width="1.5" />
+<circle cx="275.00" cy="575.00" r="15.00" fill="#FAF7F0" stroke="#302D33" stroke-width="2"/>
+<text x="275.00" y="580.00" font-family="Arial, sans-serif" font-size="14" fill="#302D33" font-weight="700" text-anchor="middle">
+<tspan x="275.00" dy="0">B</tspan>
+</text>
+<text x="515.00" y="505.00" font-family="Arial, sans-serif" font-size="12" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="515.00" dy="0">ONE PAINTING + TWO ARTIFACT DISPLAY BAYS</tspan>
+</text>
+<line x1="215.00" y1="215.00" x2="815.00" y2="215.00" stroke="#726B70" stroke-width="0.9"/>
+<line x1="211.00" y1="220.00" x2="219.00" y2="210.00" stroke="#726B70" stroke-width="1"/>
+<line x1="811.00" y1="220.00" x2="819.00" y2="210.00" stroke="#726B70" stroke-width="1"/>
+<text x="515.00" y="206.00" font-family="Arial, sans-serif" font-size="15" fill="#726B70" font-weight="400" text-anchor="middle">
+<tspan x="515.00" dy="0">60 m proposed hall width</tspan>
+</text>
+<line x1="140.00" y1="1085.00" x2="140.00" y2="285.00" stroke="#726B70" stroke-width="0.9"/>
+<line x1="135.00" y1="1089.00" x2="145.00" y2="1081.00" stroke="#726B70" stroke-width="1"/>
+<line x1="135.00" y1="289.00" x2="145.00" y2="281.00" stroke="#726B70" stroke-width="1"/>
+<text x="130" y="685.0" transform="rotate(-90 130 685.0)" font-family="Arial" font-size="15" text-anchor="middle" fill="#726B70">80 m proposed hall depth</text>
+<text x="1080.00" y="227.00" font-family="Arial, sans-serif" font-size="21" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">CONFIRMED DIRECTION</tspan>
+</text>
+<text x="1080.00" y="262.00" font-family="Arial, sans-serif" font-size="19" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1080.00" dy="0">A massive, grand government hall at the top</tspan>
+<tspan x="1080.00" dy="25.650000000000002">of a megatower overlooking a fictional city.</tspan>
+<tspan x="1080.00" dy="25.650000000000002">The player can turn left to look outside.</tspan>
+</text>
+<text x="1080.00" y="377.00" font-family="Arial, sans-serif" font-size="17" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">01  MONUMENTAL STRUCTURE / HUMAN SCALE</tspan>
+</text>
+<text x="1080.00" y="406.00" font-family="Arial, sans-serif" font-size="17" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1080.00" dy="0">Study a 60 × 80 m hall, about 24 m high.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">Keep furniture, luggage and people believable.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">Grandeur comes from the structural span.</tspan>
+</text>
+<text x="1080.00" y="516.00" font-family="Arial, sans-serif" font-size="17" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">02  PUT THE PLAYER NEAR THE GLASS</tspan>
+</text>
+<text x="1080.00" y="545.00" font-family="Arial, sans-serif" font-size="17" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1080.00" dy="0">The player is at the window end of the line.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">Five stations are a proposal, not a fixed count.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">No neighbouring desk stands between player and city.</tspan>
+</text>
+<text x="1080.00" y="655.00" font-family="Arial, sans-serif" font-size="17" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">03  TWO DELIBERATE VIEWS</tspan>
+</text>
+<text x="1080.00" y="684.00" font-family="Arial, sans-serif" font-size="17" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1080.00" dy="0">Forward: traveller, portal and the depth of the hall.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">About 60° left: oblique window view and city below.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">Camera cones here are illustrative, not control settings.</tspan>
+</text>
+<text x="1080.00" y="794.00" font-family="Arial, sans-serif" font-size="17" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">04  MOVE THE BUILDING CORE TO THE RIGHT</tspan>
+</text>
+<text x="1080.00" y="823.00" font-family="Arial, sans-serif" font-size="17" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1080.00" dy="0">Public lifts arrive from lower floors.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">A recessed corridor continues toward departments.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">The left facade remains available for the panorama.</tspan>
+</text>
+<text x="1080.00" y="933.00" font-family="Arial, sans-serif" font-size="17" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">05  GRANDEUR WITH INSTITUTIONAL NEGLECT</tspan>
+</text>
+<text x="1080.00" y="962.00" font-family="Arial, sans-serif" font-size="17" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="1080.00" dy="0">Maintain the monumental structure and fine materials.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">Wear appears at handles, seats, labels and display cases.</tspan>
+<tspan x="1080.00" dy="22.950000000000003">Use one painting and a few world artifacts, properly held.</tspan>
+</text>
+<text x="1080.00" y="1096.00" font-family="Arial, sans-serif" font-size="15" fill="#302D33" font-weight="700" text-anchor="start">
+<tspan x="1080.00" dy="0">Unchanged in Unity: floor, PC, desk, portal, camera and gameplay.</tspan>
+</text>
+<line x1="55.00" y1="1172.00" x2="1745.00" y2="1172.00" stroke="#D8D0C4" stroke-width="1.5"/>
+<text x="55.00" y="1200.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="start">
+<tspan x="55.00" dy="0">Revision B replaces the low-floor / 28 × 30 m proposal. Dimensions, station count and poses remain blockout candidates.</tspan>
+</text>
+<text x="1745.00" y="1200.00" font-family="Arial, sans-serif" font-size="14" fill="#726B70" font-weight="400" text-anchor="end">
+<tspan x="1745.00" dy="0">26 SEP 2026  /  REV B  /  PROPOSAL</tspan>
+</text>
+</svg>

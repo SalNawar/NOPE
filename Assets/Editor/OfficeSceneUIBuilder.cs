@@ -94,8 +94,8 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The gameplay layer's scene name (RunConfig.officeGameplaySceneName).</summary>
     private const string GameplaySceneName = "OfficeGameplay";
 
-    /// <summary>The art office the gameplay layer loads on (the art side's scene; the builder never opens it).</summary>
-    private const string ArtScenePath = "Assets/Scenes/OfficeScene.unity";
+    /// <summary>The art office the gameplay layer loads on (the art side's scene RunConfig.officeSceneName names, ArtOfficeScene; the builder never opens it).</summary>
+    private static string ArtScenePath => ArtOfficeScene.Path;
 
     /// <summary>The title scene, which a player build boots (first in the build list).</summary>
     private const string TitleScenePath = "Assets/Scenes/TitleScene.unity";
@@ -128,6 +128,7 @@ public static partial class OfficeSceneUIBuilder
 
         EnsureLayer(OfficeLayers.Interactable);
         EnsureLayer(OfficeLayers.PcDesktop);
+        EnsureSortingLayer(OfficeLayers.SortingLayer);
         Scene scene = File.Exists(GameplayScenePath)
             ? EditorSceneManager.OpenScene(GameplayScenePath, OpenSceneMode.Single)
             : EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);

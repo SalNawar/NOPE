@@ -12,8 +12,8 @@ using UnityEngine.UI;
 /// a chord and resolves it through the one table, ShortcutMap, in the
 /// desktop's context (the focused window, a text field, an open menu, the
 /// app's focus ring), then runs the command: Escape runs the one chain
-/// (DesktopEscapeRule: a context menu, the shortcut card, the search field's
-/// text, a focused field, the Start menu, a drag) and stamps the frame when
+/// (DesktopEscapeRule: a context menu, the shortcut card, the search results,
+/// the search field's text, a focused field, the Start menu, a drag) and stamps the frame when
 /// it takes the press, so the PC frame's Escape (OfficeViewController) skips
 /// it; F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
@@ -187,7 +187,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
         var state = new DesktopEscapeState(
             contextMenu != null && contextMenu.IsOpen,
             CardOpen,
-            false, // The search results panel comes with search (redesign phase 19).
+            app != null && app.ResultsOpen,
             app != null && app.IsSearchField(field),
             app != null && app.SearchHasText,
             field != null,
@@ -208,6 +208,10 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 break;
             case DesktopEscape.CloseCard:
                 card.Close();
+                _refocus = field;
+                break;
+            case DesktopEscape.CloseResults:
+                app.CloseResults();
                 _refocus = field;
                 break;
             case DesktopEscape.ClearSearch:

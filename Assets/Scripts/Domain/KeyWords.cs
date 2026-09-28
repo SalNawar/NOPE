@@ -10,7 +10,8 @@ using System.Text;
 /// formatted from a template and its slot fills; the spans that stay English
 /// when it shows untranslated are the fill of each listed slot, each
 /// whole-word match of a listed word (case- and accent-insensitive, anywhere
-/// in the line) and, when asked, each run of digits. Data only
+/// in the line, folded as search folds: TextMatch.Fold) and, when asked, each
+/// run of digits. Data only
 /// (world_source.json translation.keyWords), so tuning edits two lists.
 /// </summary>
 public static class KeyWords
@@ -31,10 +32,11 @@ public static class KeyWords
             return spans;
 
         string text = Fill(template, fills, rule, spans);
-        string folded = Fold(text);
+        var map = new List<int>();
+        string folded = TextMatch.Fold(text, map);
         foreach (string word in rule.words ?? new List<string>())
             if (!string.IsNullOrWhiteSpace(word))
-                AddWholeWords(folded, Fold(word), spans);
+                AddWholeWords(text, folded, map, TextMatch.Fold(word, null), spans);
         if (rule.digits)
             AddDigitRuns(text, spans);
         return Merge(spans);
@@ -64,7 +66,7 @@ public static class KeyWords
         {
             if (string.IsNullOrWhiteSpace(word))
                 problems.Add("translation.keyWords.words: a word is blank.");
-            else if (!seen.Add(Fold(word)))
+            else if (!seen.Add(TextMatch.Fold(word, null)))
                 problems.Add($"translation.keyWords.words: '{word}' is listed twice (matching ignores case and accents).");
         }
         return problems;
@@ -101,14 +103,19 @@ public static class KeyWords
         return sb.ToString();
     }
 
-    /// <summary>Adds each whole-word match of <paramref name="word"/> (both folded) in <paramref name="text"/>.</summary>
-    private static void AddWholeWords(string text, string word, List<(int start, int length)> spans)
+    /// <summary>Adds each whole-word match of <paramref name="word"/> (folded) in <paramref name="folded"/> (<paramref name="text"/> folded, <paramref name="map"/> its map back), as a span of the text.</summary>
+    private static void AddWholeWords(string text, string folded, List<int> map, string word, List<(int start, int length)> spans)
     {
-        for (int at = text.IndexOf(word, StringComparison.Ordinal); at >= 0; at = text.IndexOf(word, at + 1, StringComparison.Ordinal))
+        if (word.Length == 0)
+            return;
+        for (int at = folded.IndexOf(word, StringComparison.Ordinal); at >= 0; at = folded.IndexOf(word, at + 1, StringComparison.Ordinal))
         {
             int end = at + word.Length;
-            if ((at == 0 || !char.IsLetterOrDigit(text[at - 1])) && (end == text.Length || !char.IsLetterOrDigit(text[end])))
-                spans.Add((at, word.Length));
+            if ((at == 0 || !char.IsLetterOrDigit(folded[at - 1])) && (end == folded.Length || !char.IsLetterOrDigit(folded[end])))
+            {
+                int from = map[at];
+                spans.Add((from, (end < map.Count ? map[end] : text.Length) - from));
+            }
         }
     }
 
@@ -145,28 +152,5 @@ public static class KeyWords
             }
         }
         return merged;
-    }
-
-    /// <summary>
-    /// The text in lower case without accents, one character per character (so
-    /// positions carry over): each character's first letter in canonical
-    /// decomposition ("é" to "e", "Ö" to "o"); letters without one ("ß", "ø")
-    /// stay as they are.
-    /// </summary>
-    private static string Fold(string text)
-    {
-        var sb = new StringBuilder(text.Length);
-        foreach (char c in text)
-        {
-            char folded = c;
-            if (c > '\u007f')
-            {
-                string decomposed = c.ToString().Normalize(NormalizationForm.FormD);
-                if (decomposed.Length > 0)
-                    folded = decomposed[0];
-            }
-            sb.Append(char.ToLowerInvariant(folded));
-        }
-        return sb.ToString();
     }
 }

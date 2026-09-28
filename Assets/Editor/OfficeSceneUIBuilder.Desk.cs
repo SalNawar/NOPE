@@ -202,11 +202,50 @@ public static partial class OfficeSceneUIBuilder
     }
 
     /// <summary>
+    /// Makes sure the project has a sorting layer named <paramref name="name"/>,
+    /// listed after every existing one (so it draws over Default). Its id is a
+    /// stable hash of the name, as the tag manager wants a unique non-zero one.
+    /// </summary>
+    private static void EnsureSortingLayer(string name)
+    {
+        if (SortingLayer.layers.Any(l => l.name == name))
+            return;
+
+        int id = 17;
+        foreach (char c in name)
+            id = unchecked(id * 31 + c);
+        if (id == 0)
+            id = 1;
+
+        var tags = new SerializedObject(AssetDatabase.LoadAllAssetsAtPath("ProjectSettings/TagManager.asset")[0]);
+        SerializedProperty layers = tags.FindProperty("m_SortingLayers");
+        int index = layers.arraySize;
+        layers.InsertArrayElementAtIndex(index);
+        SerializedProperty layer = layers.GetArrayElementAtIndex(index);
+        layer.FindPropertyRelative("name").stringValue = name;
+        layer.FindPropertyRelative("uniqueID").intValue = id;
+        layer.FindPropertyRelative("locked").boolValue = false;
+        tags.ApplyModifiedProperties();
+        if (!SortingLayer.layers.Any(l => l.name == name))
+            Debug.LogError($"[TimeDesk] The sorting layer '{name}' could not be added to ProjectSettings/TagManager.asset; the traveller and the desk notes will draw behind the art's sprites.");
+    }
+
+    /// <summary>The gameplay sorting layer's id (Default's, with an error, when the project lacks it).</summary>
+    private static int GameplaySortingLayerId()
+    {
+        int id = SortingLayer.NameToID(OfficeLayers.SortingLayer);
+        if (id == 0)
+            Debug.LogError($"[TimeDesk] No sorting layer '{OfficeLayers.SortingLayer}': the traveller and the desk notes stay on Default, behind the art's sprites.");
+        return id;
+    }
+
+    /// <summary>
     /// Keeps the build list in boot order (BuildScenes.Order, audit R3-001): the
-    /// title first (a player build boots it), then the art office, the gameplay
-    /// layer (whose load the art office brings) and Home, each enabled; every
-    /// other listed scene stays after them, disabled (the legacy Test_DayLoop).
-    /// Written only when it changes.
+    /// title first (a player build boots it), then the art office the knob names
+    /// (RunConfig.officeSceneName), the gameplay layer (whose load the art office
+    /// brings) and Home, each enabled; every other listed scene stays after them,
+    /// disabled (the other art office, the legacy Test_DayLoop). Written only when
+    /// it changes.
     /// </summary>
     private static void EnsureBuildSettings()
     {
@@ -940,12 +979,14 @@ public static partial class OfficeSceneUIBuilder
         tmp.color = NoteInk;
         tmp.fontStyle = FontStyles.Bold;
         tmp.fontSharedMaterial = NoteMaterial(tmp.font);
+        tmp.sortingLayerID = GameplaySortingLayerId();
         if (backing)
         {
             PrimitivePart(go.transform, "Backing", PrimitiveType.Quad, new Vector3(0f, 0f, 0.002f), Vector3.one, NoteBackingMaterial());
             MeshRenderer plate = go.transform.Find("Backing").GetComponent<MeshRenderer>();
             plate.shadowCastingMode = ShadowCastingMode.Off;
             plate.receiveShadows = false;
+            plate.sortingLayerID = tmp.sortingLayerID;
             NoteBacking fit = go.AddComponent<NoteBacking>();
             var so = new SerializedObject(fit);
             SetRef(so, "text", tmp);
@@ -1018,6 +1059,7 @@ public static partial class OfficeSceneUIBuilder
         DestroyChildIfPresent(traveller, "Figure");
         Transform figure = EnsureChild(traveller, "Figure");
         SortingGroup group = figure.gameObject.AddComponent<SortingGroup>();
+        group.sortingLayerID = GameplaySortingLayerId();
         group.sortingOrder = 0;
         LookSpriteStack stack = figure.gameObject.AddComponent<LookSpriteStack>();
         WireLayers(stack, figure, 0, false);

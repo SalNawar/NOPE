@@ -10,8 +10,9 @@ using UnityEngine.UI;
 /// the window layer ("Investigation"; the restored size from DesktopConfigSO,
 /// maximised on its first open) with its case header (the claim, the
 /// counters, the PC's Accept and Deny with their fixed glyphs), its toolbar
-/// (Back, Forward and Split live; the search field and Keys the keys'
-/// (OfficeSceneUIBuilder.Keys); Steps the steps' (OfficeSceneUIBuilder.Steps)),
+/// (Back, Forward and Split live; the search field search's, its SearchBox and
+/// results panel (OfficeSceneUIBuilder.Search), and the keys', its chip; Keys
+/// the keys' (OfficeSceneUIBuilder.Keys); Steps the steps' (OfficeSceneUIBuilder.Steps)),
 /// its sidebar (the steps checklist at its top: OfficeSceneUIBuilder.Steps;
 /// Pinned and Recent: the keys' partial fills them) and two panes side by
 /// side (AppPane, built by OfficeSceneUIBuilder.Panes from the parts here:
@@ -176,6 +177,7 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
         WireStepsPanel(parts.Steps, parts, toolbar.Steps, toast, config);
+        BuildAppSearch(parts.App, win, top + AppHeaderHeight + AppToolbarHeight, config);
         return parts;
     }
 
@@ -206,7 +208,7 @@ public static partial class OfficeSceneUIBuilder
         public Button Steps;
     }
 
-    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field and Keys are the keys' (BuildAppKeys); Steps the steps' (WireStepsPanel).</summary>
+    /// <summary>The toolbar (AP2): Back, Forward and Split (with its hover hint above it, over the case header) live; the search field is search's (BuildAppSearch) and the keys' (BuildAppKeys), Keys the keys'; Steps the steps' (WireStepsPanel).</summary>
     private static AppToolbar BuildAppToolbar(Transform win, float top)
     {
         Transform bar = Panel(win, "Toolbar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(top + AppToolbarHeight / 2f)),

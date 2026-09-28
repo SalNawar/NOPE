@@ -1,0 +1,37 @@
+{
+  "confirmed": [
+    "Grand train-terminal structure at tower crown",
+    "Teleporters serve numbered platforms",
+    "Multiple platforms / floors",
+    "Straight private desk; no visible other desks or coworkers",
+    "Left window pan",
+    "Building entry -> desk check -> platform departure"
+  ],
+  "proposal": {
+    "width": 60,
+    "depth": 81,
+    "roof_relative_to_inspection": 24,
+    "lower_platform_level": -6,
+    "inspection_level": 0,
+    "upper_platform_level": 6,
+    "platform_count": 4
+  },
+  "desk_yaw_degrees": 0,
+  "study_left_pan_degrees": 60,
+  "source_camera_height_over_inspection_floor": 2.16,
+  "portal01_foot_ray_height_at_concourse_edge_metres": 0.263,
+  "portal01_foot_ray_clears_floor_edge": true,
+  "opaque_guard_would_hide_lower_portal_foot": true,
+  "left_pan_ray_hits_booth_window_at_z": 0.267,
+  "left_booth_clear_window_z_range": [
+    -3,
+    3
+  ],
+  "deferred": [
+    "Full scene occlusion through the pan, including existing PC/corkboards",
+    "Detailed stairs/lift/boarding gate geometry and accessible circulation",
+    "Crowd placement after platform blockout",
+    "Camera and interaction hooks remain with Claude",
+    "Original floor near the desk retained; no current floor mesh is edited"
+  ]
+}
