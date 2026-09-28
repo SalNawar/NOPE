@@ -21,5 +21,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a0c52deabac6496599f2d4b3146ff8bc, type: 2}
   - {fileID: 11400000, guid: 0f6b58fc60d141e38428a1fabfc9224f, type: 2}
   contradictionChance: 0.5
-  archetypePool: []
+  archetypePool:
+  - {fileID: 11400000, guid: e6ef127f9005671448fd097ca713fe99, type: 2}
+  - {fileID: 11400000, guid: da6406242904ea74293e5fd7cef8ff53, type: 2}
+  - {fileID: 11400000, guid: 4ecaec54e9ac6c64588519617bd49e3b, type: 2}
+  - {fileID: 11400000, guid: 322dd872b153b1442b6dc557666a1b31, type: 2}
+  - {fileID: 11400000, guid: 49896eb7768f7d7478adbfbaf25102e7, type: 2}
+  - {fileID: 11400000, guid: da73973847718a44bae58351b1e5ec41, type: 2}
   authoredImpacts: []

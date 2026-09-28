@@ -15,5 +15,6 @@ MonoBehaviour:
   type: 4
   era: {fileID: 0}
   nation: {fileID: 0}
-  description: 'Leisure departures: a Leisure Visa and a Departure Manifest. Every
-    paper must match the Citizen Account.'
+  description: 'Leisure departures: a Leisure Visa and a Departure Manifest; a Standard
+    visa also needs a signed Stranding Waiver and a proof of means. Every paper must
+    match the Citizen Account.'
