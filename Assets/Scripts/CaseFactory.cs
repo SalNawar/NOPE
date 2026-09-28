@@ -52,7 +52,7 @@ public sealed class CaseFactory
     /// <summary>Today's visitor names (unique per generated day; see NameRoster).</summary>
     private NameRoster _roster = new NameRoster();
 
-    /// <summary>Today's places (eras x allowed nations, at most one Future place), in book order (TodaysWorld).</summary>
+    /// <summary>Today's places, the destinations (eras x allowed nations, never the Future), in book order (TodaysWorld).</summary>
     private readonly List<NationEraProfileSO> _todays;
 
     /// <summary>The present (TodaysWorld.Present): a 2150 citizen's birth years and the year their age is counted from; null when the content has none.</summary>
@@ -933,8 +933,9 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Picks the claimed era by the DayPlan weights; an era with no place
-    /// today (the Future without a leader) is never drawn. With no weights (or
-    /// bad data), picks uniformly among the eras that have a place today.
+    /// today (the Future, never a destination) is never drawn. With no
+    /// weights (or bad data), picks uniformly among the eras that have a
+    /// place today.
     /// </summary>
     private EraSO PickEraFromPlan(DayPlanSO plan)
     {

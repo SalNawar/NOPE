@@ -34,6 +34,13 @@ public class HistoryTests
     }
 
     [Test]
+    public void IsDestination_EveryPastPlace_NeverTheFuture()
+    {
+        Assert.IsTrue(History.IsDestination(false));
+        Assert.IsFalse(History.IsDestination(true), "the Future is the present, never a destination (H2)");
+    }
+
+    [Test]
     public void Resolve_NewestEditOfThePlaceAndCategoryWins()
     {
         var h = new HistoryState();

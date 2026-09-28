@@ -272,11 +272,16 @@ public static partial class WorldContentGenerator
                 errors.Add($"Rule '{r.asset}' is a standing procedure ({r.type}): it needs its directive line (\"description\") and names no country or era.");
         }
 
+        var futureIds = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
         foreach (DayData d in src.days)
         {
             foreach (EraWeightData w in d.eras ?? Array.Empty<EraWeightData>())
+            {
                 if (!eraIds.Contains(w.era))
                     errors.Add($"Day '{d.asset}' weights unknown era '{w.era}'.");
+                else if (futureIds.Contains(w.era) && w.weight > 0f)
+                    errors.Add($"Day '{d.asset}' weights the Future era '{w.era}': the Future is the present, never a destination (traveller types H2).");
+            }
             foreach (string c in d.countries ?? Array.Empty<string>())
                 if (!countryIds.Contains(c))
                     errors.Add($"Day '{d.asset}' allows unknown country '{c}'.");
