@@ -82,14 +82,14 @@ public class AgencyCalendarTests
     [Test]
     public void AgencyContent_Problems_NoneWhenComplete()
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models() };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs() };
         CollectionAssert.IsEmpty(agency.Problems());
     }
 
     [Test]
     public void AgencyContent_Problems_OnePerBlankOrBadField()
     {
-        var agency = new AgencyContent { name = " ", programme = null, firstDate = "soon", displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models() };
+        var agency = new AgencyContent { name = " ", programme = null, firstDate = "soon", displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs() };
         var problems = agency.Problems();
         Assert.AreEqual(3, problems.Count, string.Join(" | ", problems));
         StringAssert.Contains("agency.name", problems[0]);
@@ -101,7 +101,7 @@ public class AgencyCalendarTests
     [Test]
     public void AgencyContent_Problems_TheDisplacedRanges()
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(0, 5, 3), accounts = Accounts(), transponders = Models() };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(0, 5, 3), accounts = Accounts(), transponders = Models(), proofs = Proofs() };
         var problems = agency.Problems();
         Assert.AreEqual(2, problems.Count, string.Join(" | ", problems));
         StringAssert.Contains("agency.displaced.foundWithinDays", problems[0]);
@@ -119,18 +119,35 @@ public class AgencyCalendarTests
     [Test]
     public void AgencyContent_Problems_TheAccounts()
     {
-        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models() };
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs() };
         agency.transponders.RemoveAt(1);
         StringAssert.Contains("no Economy model", string.Join(" | ", agency.Problems()), "AccountRanges.Problems over the block's models");
         agency.accounts = null;
         StringAssert.Contains("agency.accounts", string.Join(" | ", agency.Problems()), "a missing block");
     }
 
+    /// <summary>Phase 8: the proofs of means (agency.proofs) are the block's too.</summary>
+    [Test]
+    public void AgencyContent_Problems_TheProofs()
+    {
+        var agency = new AgencyContent { name = "TEMPORAL CUSTOMS", programme = "Debt Relief Departures", firstDate = First, displaced = Ranges(30, 3, 365), accounts = Accounts(), transponders = Models(), proofs = Proofs() };
+        agency.proofs.Clear();
+        StringAssert.Contains("agency.proofs", string.Join(" | ", agency.Problems()), "AccountRanges.Problems over the block's proofs");
+    }
+
+    /// <summary>The proofs of means (phase 8): one amount proof and one number proof.</summary>
+    private static System.Collections.Generic.List<ProofOfMeans> Proofs() => new System.Collections.Generic.List<ProofOfMeans>
+    {
+        new ProofOfMeans { form = "TC-415", category = ClueCategory.Credit, weight = 1f, amountMin = 4000, amountMax = 12000 },
+        new ProofOfMeans { form = "TC-417", category = ClueCategory.PolicyNo, weight = 1f, prefix = "TI" }
+    };
+
     private static AccountRanges Accounts() => new AccountRanges
     {
         validDaysMin = 3,
         validDaysMax = 365,
         tripsWithinDays = 1095,
+        waiverPrefix = "SW",
         statuses = new System.Collections.Generic.List<StatusRanges>
         {
             new StatusRanges { status = CitizenStatus.Premium, tripsMax = 3 },

@@ -1048,6 +1048,7 @@
       "validDaysMin": 3,
       "validDaysMax": 365,
       "tripsWithinDays": 1095,
+      "waiverPrefix": "SW",
       "statuses": [
         {
           "status": "Premium",
@@ -1114,6 +1115,32 @@
         "model": "Driftbox 3",
         "prefix": "DB",
         "weight": 1
+      }
+    ],
+    "proofs": [
+      {
+        "form": "TC-415",
+        "category": "Credit",
+        "weight": 1,
+        "amountMin": 4000,
+        "amountMax": 12000,
+        "prefix": ""
+      },
+      {
+        "form": "TC-416",
+        "category": "Funds",
+        "weight": 1,
+        "amountMin": 3000,
+        "amountMax": 15000,
+        "prefix": ""
+      },
+      {
+        "form": "TC-417",
+        "category": "PolicyNo",
+        "weight": 1,
+        "amountMin": 0,
+        "amountMax": 0,
+        "prefix": "TI"
       }
     ]
   },
@@ -11747,6 +11774,36 @@
       {
         "key": "category.Debt",
         "text": "DEBT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.WaiverNo",
+        "text": "WAIVER NO.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Credit",
+        "text": "CREDIT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Funds",
+        "text": "FUNDS",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.PolicyNo",
+        "text": "POLICY NO.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "category.Signature",
+        "text": "SIGNATURE",
         "gloss": "None",
         "tier": "Full"
       }

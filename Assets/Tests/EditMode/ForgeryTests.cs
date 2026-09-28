@@ -138,6 +138,10 @@ public class ForgeryTests
     [TestCase(ClueCategory.TransponderId)]
     [TestCase(ClueCategory.TransponderClass)]
     [TestCase(ClueCategory.Debt)]
+    [TestCase(ClueCategory.WaiverNo)]
+    [TestCase(ClueCategory.Credit)]
+    [TestCase(ClueCategory.Funds)]
+    [TestCase(ClueCategory.PolicyNo)]
     public void IsProvableCategory_ARecordCategory_IsAlways_TheRecordProvesIt(ClueCategory category)
     {
         Assert.IsTrue(Forgery.IsRecordCategory(category));
@@ -148,6 +152,7 @@ public class ForgeryTests
     /// <summary>A directive-only category (read against the calendar) is never a tell, even with a book for it.</summary>
     [TestCase(ClueCategory.DepartureDate)]
     [TestCase(ClueCategory.Expiry)]
+    [TestCase(ClueCategory.Signature)]
     public void IsProvableCategory_ADirectiveOnlyCategory_IsNever_EvenWithEveryBook(ClueCategory category)
     {
         Assert.IsTrue(Forgery.IsDirectiveOnly(category));

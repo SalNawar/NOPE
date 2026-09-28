@@ -34,7 +34,10 @@ public sealed class AgencyContent
     /// <summary>The transponder models citizens travel on (agency.transponders: a weighted list per class).</summary>
     public List<TransponderModel> transponders = new List<TransponderModel>();
 
-    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), and the accounts' ranges and transponder models (AccountRanges.Problems). Empty when sound.</summary>
+    /// <summary>The proofs of means a Standard account may hold (agency.proofs: a weighted list, one per proof form; phase 8).</summary>
+    public List<ProofOfMeans> proofs = new List<ProofOfMeans>();
+
+    /// <summary>What Generate World and the validator refuse: a blank name or programme, a first date AgencyCalendar cannot count from, displaced ranges AgencyNumbers cannot draw from (found at least 1 day ago; valid from at least today, the least no more than the most), and the accounts' ranges, transponder models and proofs of means (AccountRanges.Problems). Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
@@ -57,7 +60,7 @@ public sealed class AgencyContent
         if (accounts == null)
             problems.Add("agency.accounts is missing: the ranges a 2150 citizen's account is drawn from.");
         else
-            problems.AddRange(accounts.Problems(transponders));
+            problems.AddRange(accounts.Problems(transponders, proofs));
         return problems;
     }
 }

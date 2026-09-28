@@ -29,7 +29,12 @@ public class SerializedEnumsTests
         Assert.AreEqual(15, (int)ClueCategory.TransponderId);
         Assert.AreEqual(16, (int)ClueCategory.TransponderClass);
         Assert.AreEqual(17, (int)ClueCategory.Debt);
-        Assert.AreEqual(18, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
+        Assert.AreEqual(18, (int)ClueCategory.WaiverNo);
+        Assert.AreEqual(19, (int)ClueCategory.Credit);
+        Assert.AreEqual(20, (int)ClueCategory.Funds);
+        Assert.AreEqual(21, (int)ClueCategory.PolicyNo);
+        Assert.AreEqual(22, (int)ClueCategory.Signature);
+        Assert.AreEqual(23, System.Enum.GetValues(typeof(ClueCategory)).Length, "a new member is appended here too");
     }
 
     /// <summary>CitizenStatus: stored in the content library's account ranges (agency.accounts.statuses).</summary>

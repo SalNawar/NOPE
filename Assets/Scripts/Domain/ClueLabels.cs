@@ -2,8 +2,9 @@
 /// The one source of the category words the player reads in reports (the
 /// Deviation Report, the compare bar's notes and interview answer rows): a
 /// key per category into the UI string tables, whose English words are
-/// CAPITAL, RULER, DEVICE, BIRTH DATE, CITIZEN ID, DEPARTURE, VALID UNTIL and
-/// each other category's upper-case name.
+/// CAPITAL, RULER, DEVICE, BIRTH DATE, CITIZEN ID, DEPARTURE, VALID UNTIL,
+/// VISA CLASS, WAIVER NO., POLICY NO. and each other category's upper-case
+/// name.
 /// </summary>
 public static class ClueLabels
 {

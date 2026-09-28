@@ -10,15 +10,16 @@ using UnityEditor;
 /// own account, "agency.clerk", phase 25: ClerkContent.Problems, which the
 /// Citizen Account app shows, and from phase 13 the clerk's debt, its share
 /// of pay and the clerk's own Debt Relief Labour Contract; the accounts'
-/// ranges and the transponder models, phase 6) is checked
+/// ranges and the transponder models, phase 6; the waiver prefix and the
+/// proofs of means, phase 8) is checked
 /// (AgencyContent.Problems) and written into the content library, where the
 /// desk calendar, the Records app, the Citizen Account app and case
 /// generation read it.
 /// </summary>
 public static partial class WorldContentGenerator
 {
-    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; }
+    /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models; phase 8 the proofs of means, "proofs").</summary>
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public ProofData[] proofs; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData
@@ -27,8 +28,11 @@ public static partial class WorldContentGenerator
         public int startDebt; public float garnishShare; public string reliefEmployer; public string reliefWorksite; public int reliefWage;
     }
 
-    /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name).</summary>
-    [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public StatusData[] statuses; }
+    /// <summary>The accounts' ranges as authored ("agency.accounts"; statuses by name; the waiver prefix, phase 8).</summary>
+    [Serializable] private sealed class AccountsData { public int validDaysMin; public int validDaysMax; public int tripsWithinDays; public string waiverPrefix; public StatusData[] statuses; }
+
+    /// <summary>One proof of means as authored ("agency.proofs"; the category by name).</summary>
+    [Serializable] private sealed class ProofData { public string form; public string category; public float weight; public int amountMin; public int amountMax; public string prefix; }
 
     /// <summary>One status's ranges as authored ("agency.accounts.statuses"; the status by name).</summary>
     [Serializable] private sealed class StatusData { public string status; public int debtMin; public int debtMax; public int tripsMin; public int tripsMax; }
@@ -50,6 +54,7 @@ public static partial class WorldContentGenerator
                 validDaysMin = a.accounts.validDaysMin,
                 validDaysMax = a.accounts.validDaysMax,
                 tripsWithinDays = a.accounts.tripsWithinDays,
+                waiverPrefix = a.accounts.waiverPrefix ?? string.Empty,
                 statuses = (a.accounts.statuses ?? Array.Empty<StatusData>())
                     .Select(s => new StatusRanges
                     {
@@ -69,6 +74,17 @@ public static partial class WorldContentGenerator
                     model = t.model,
                     prefix = t.prefix,
                     weight = t.weight
+                })
+                .ToList(),
+            proofs = (a.proofs ?? Array.Empty<ProofData>())
+                .Select(p => new ProofOfMeans
+                {
+                    form = p.form,
+                    category = ParseEnum(p.category, out ClueCategory category) ? category : default,
+                    weight = p.weight,
+                    amountMin = p.amountMin,
+                    amountMax = p.amountMax,
+                    prefix = p.prefix ?? string.Empty
                 })
                 .ToList()
         };
@@ -100,6 +116,9 @@ public static partial class WorldContentGenerator
         foreach (TransponderData t in src.agency.transponders ?? Array.Empty<TransponderData>())
             if (!ParseEnum(t.transponderClass, out TransponderClass _))
                 errors.Add($"agency.transponders '{t.id}': '{t.transponderClass}' is not a transponder class ({string.Join(", ", Enum.GetNames(typeof(TransponderClass)))}).");
+        foreach (ProofData p in src.agency.proofs ?? Array.Empty<ProofData>())
+            if (!ParseEnum(p.category, out ClueCategory _))
+                errors.Add($"agency.proofs '{p.form}': '{p.category}' is not a category (Credit, Funds or PolicyNo).");
     }
 
     /// <summary>Writes the agency block into the content library.</summary>

@@ -664,6 +664,11 @@ public class DiscrepancyLogTests
     [TestCase(ClueCategory.TransponderId, "category.TransponderId")]
     [TestCase(ClueCategory.TransponderClass, "category.TransponderClass")]
     [TestCase(ClueCategory.Debt, "category.Debt")]
+    [TestCase(ClueCategory.WaiverNo, "category.WaiverNo")]
+    [TestCase(ClueCategory.Credit, "category.Credit")]
+    [TestCase(ClueCategory.Funds, "category.Funds")]
+    [TestCase(ClueCategory.PolicyNo, "category.PolicyNo")]
+    [TestCase(ClueCategory.Signature, "category.Signature")]
     public void ClueLabels_Key_OneKeyPerCategory(ClueCategory category, string expected)
     {
         Assert.AreEqual(expected, ClueLabels.Key(category));

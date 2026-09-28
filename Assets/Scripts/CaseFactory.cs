@@ -348,7 +348,7 @@ public sealed class CaseFactory
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
         else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
             inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint), _lib.Agency.accounts, _lib.Agency.transponders,
-                                             _today.Value, _agencyNumbers, _accountRng);
+                                             _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
 
         // 5) Merge authored timeline impacts (blueprint + legendary).
         if (blueprint.AuthoredImpacts != null)
@@ -357,7 +357,7 @@ public sealed class CaseFactory
         if (legendary != null && legendary.authoredImpacts != null)
             inst.authoredImpacts.AddRange(legendary.authoredImpacts);
 
-        // 6) Build the documents (their fields are filled below).
+        // 6) Build the documents the traveller carries (their fields are filled below).
         BuildDocuments(inst, blueprint);
 
         // 7) Investigation layer: stated claim, structured fields, then the rolled lie planned and printed.
@@ -725,8 +725,10 @@ public sealed class CaseFactory
     /// a warning) when content is missing; also each spoken answer's cover
     /// value (AddAnswers). A 2150 citizen's account values come from their
     /// Citizen Account (the ID, the status, the transponder and its class,
-    /// the debt, and the Valid Until of their <paramref name="expiryIndex"/>th
-    /// expiring form). A liar's Papers tells overwrite the printed values
+    /// the debt, the waiver number, the proof of means the account holds,
+    /// and the Valid Until of their <paramref name="expiryIndex"/>th
+    /// expiring form); a waiver's signature is the traveller's own hand (their
+    /// given name). A liar's Papers tells overwrite the printed values
     /// afterwards (Disguise); an Answer tell replaces only the spoken value
     /// (Interview.Answer).
     /// </summary>
@@ -747,6 +749,12 @@ public sealed class CaseFactory
             case ClueCategory.TransponderId: return AgencyValue(account?.Transponder, category);
             case ClueCategory.TransponderClass: return AgencyValue(account?.TransponderClass.ToString(), category);
             case ClueCategory.Debt: return AgencyValue(account != null ? AccountMaker.Credits(account.Debt) : null, category);
+            case ClueCategory.WaiverNo: return AgencyValue(account?.WaiverNo, category);
+            case ClueCategory.Credit:
+            case ClueCategory.Funds:
+            case ClueCategory.PolicyNo:
+                return AgencyValue(account != null && account.ProofForm != null && account.ProofCategory == category ? account.ProofValue : null, category);
+            case ClueCategory.Signature: return inst.visitorGivenName;
         }
 
         string value = _facts.Get(inst.claimedNation != null ? inst.claimedNation.id : null,
@@ -857,8 +865,9 @@ public sealed class CaseFactory
     /// <summary>
     /// What the account maker needs for a citizen of <paramref name="status"/>
     /// (explicit inputs, audit R3-025): their family country's past places as
-    /// lineages (in era order), every past place for their trips, and how many
-    /// of their blueprint's forms print a Valid Until.
+    /// lineages (in era order), every past place for their trips, and their
+    /// blueprint's forms (number, request group, whether it prints a Valid
+    /// Until), of which the account decides the carried ones.
     /// </summary>
     private AccountRequest AccountRequestFor(CitizenStatus status, NationEraProfileSO family, CaseBlueprintSO blueprint) => new AccountRequest
     {
@@ -870,7 +879,8 @@ public sealed class CaseFactory
                            .ToList()
             : new List<string>(),
         TripPlaces = _pastPlaces,
-        ExpiringForms = (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Count(t => t != null && Expires(t))
+        Forms = (blueprint.DocumentTemplates ?? System.Array.Empty<DocumentTemplateSO>()).Where(t => t != null)
+            .Select(t => new FormEntry(t.formNumber, t.askGroup, Expires(t))).ToList()
     };
 
     /// <summary>True when the form prints a Valid Until (an Expiry field).</summary>
@@ -1022,8 +1032,10 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Creates the traveller's runtime documents from the blueprint's
-    /// templates, in paper order (null templates skipped); their fields are
-    /// filled next (PopulateDocumentFields).
+    /// templates the traveller carries (AccountMaker.Carries: every form
+    /// outside a request group, and of the proof group the one form their
+    /// account holds), in paper order (null templates skipped); their fields
+    /// are filled next (PopulateDocumentFields).
     /// </summary>
     private static void BuildDocuments(CaseInstance inst, CaseBlueprintSO blueprint)
     {
@@ -1031,7 +1043,7 @@ public sealed class CaseFactory
             return;
 
         foreach (DocumentTemplateSO dt in blueprint.DocumentTemplates)
-            if (dt != null)
+            if (dt != null && AccountMaker.Carries(dt.askGroup, dt.formNumber, inst.account))
                 inst.documents.Add(new DocumentInstance { template = dt });
     }
 }
