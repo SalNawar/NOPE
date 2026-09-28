@@ -275,6 +275,10 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// <summary>Public read-only access to day plans.</summary>
     public IReadOnlyList<DayPlanSO> DayPlans => dayPlans ?? System.Array.Empty<DayPlanSO>();
 
+    /// <summary>The first day a rule stands on (Directives.FirstDay over the plans listing it; a standing procedure's guaranteed traveller comes that day), 0 when no plan lists it.</summary>
+    public int FirstDayOf(TravelRuleSO rule) =>
+        Directives.FirstDay(DayPlans.Where(p => p != null && p.ActiveTravelRules.Contains(rule)).Select(p => p.DayNumber));
+
     /// <summary>Public read-only access to eras.</summary>
     public IReadOnlyList<EraSO> Eras => eras;
 

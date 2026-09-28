@@ -109,8 +109,11 @@ public sealed class CaseFactory
     /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
     private readonly HashSet<ClueCategory> _bookCategories;
 
-    /// <summary>Guaranteed rule violators for the day being generated, by 1-based slot.</summary>
+    /// <summary>Guaranteed rule violators for the day being generated (a closure's: the place they are bound for), by 1-based slot.</summary>
     private Dictionary<int, NationEraProfileSO> _violators = new Dictionary<int, NationEraProfileSO>();
+
+    /// <summary>Guaranteed liars for the day being generated (the displaced's return home on its first day: the place lie they tell), by 1-based slot.</summary>
+    private Dictionary<int, LieKind> _plannedLiars = new Dictionary<int, LieKind>();
 
     /// <summary>
     /// Construct a factory over a content library and today's world: its
@@ -188,9 +191,9 @@ public sealed class CaseFactory
         if (_todays.Count == 0)
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
 
-        _violators = PlanViolators(plan, total, daySeed);
+        _violators = PlanViolators(plan, total, daySeed, out _plannedLiars);
 
-        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s); guaranteed violators in slot(s) [{string.Join(", ", _violators.Keys)}].");
+        Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s); guaranteed violators in slot(s) [{string.Join(", ", _violators.Keys)}], guaranteed liars in slot(s) [{string.Join(", ", _plannedLiars.Select(l => $"{l.Key}:{l.Value}"))}].");
 
         for (int i = 0; i < total; i++)
         {
@@ -213,42 +216,68 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// Places one violator of each active closure in the first half of the
-    /// queue (DayPlanSO.GuaranteeRuleViolators), never in a forced premade's
-    /// slot, drawn from the day's own violator stream so the travellers'
-    /// streams are untouched. A closure that forbids none of today's places
-    /// cannot be tested and is skipped with a warning. A standing procedure
-    /// (dress for the destination) plans no violator here: its costume errors
-    /// come from the costume roll (the plan's phase 9 brings its first-day
-    /// guarantee with the directives' makers).
+    /// Places one faulty traveller per guaranteeing rule (Directives.Guarantees:
+    /// each active closure, and the displaced's return home on its first day)
+    /// in the first half of the queue (DayPlanSO.GuaranteeRuleViolators),
+    /// never in a forced premade's slot, drawn from the day's own violator
+    /// stream (the slots, then each rule's maker in plan order) so the
+    /// travellers' streams are untouched. A closure's maker draws a place it
+    /// forbids; the return home's draws the place lie (Lies.Roll among the
+    /// day's place lies the displaced may carry, at a chance of 1) that the
+    /// slot's displaced traveller then tells without a roll of their own
+    /// (<paramref name="liars"/>). A closure that forbids none of today's
+    /// places, or a return home with no place lie enabled, cannot be tested
+    /// and is skipped with a warning. The dress rule plans nothing here: its
+    /// costume errors come from the costume roll.
     /// </summary>
-    private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed)
+    private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed, out Dictionary<int, LieKind> liars)
     {
         var violators = new Dictionary<int, NationEraProfileSO>();
+        liars = new Dictionary<int, LieKind>();
         if (!plan.GuaranteeRuleViolators)
             return violators;
 
+        List<LieKind> placeLies = LieKinds.For(plan.EnabledLies, TravellerKind.Displaced).Where(LieKinds.IsPlaceLie).ToList();
+
+        // Each guaranteeing rule's breakers: the places a closure forbids, or null for the return home (its maker draws a lie).
         var breakersPerRule = new List<List<NationEraProfileSO>>();
         foreach (TravelRuleSO rule in plan.ActiveTravelRules)
         {
-            if (rule == null || !rule.IsClosure)
+            if (rule == null || !Directives.Guarantees(rule.type, plan.DayNumber, _lib.FirstDayOf(rule)))
                 continue;
 
-            List<NationEraProfileSO> breakers = _todays.Where(p => !rule.Allows(p.nation, p.era)).ToList();
-            if (breakers.Count == 0)
+            if (rule.IsClosure)
             {
-                Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' forbids none of day {plan.DayNumber}'s places, so no traveller can break it.");
-                continue;
-            }
+                List<NationEraProfileSO> breakers = _todays.Where(p => !rule.Allows(p.nation, p.era)).ToList();
+                if (breakers.Count == 0)
+                {
+                    Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' forbids none of day {plan.DayNumber}'s places, so no traveller can break it.");
+                    continue;
+                }
 
-            breakersPerRule.Add(breakers);
+                breakersPerRule.Add(breakers);
+            }
+            else if (placeLies.Count == 0 || !plan.Kinds.Any(k => k != null && k.blueprint != null && k.blueprint.Kind == TravellerKind.Displaced && k.weight > 0f))
+            {
+                Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' guarantees a liar on day {plan.DayNumber}, but the day enables no place lie for the displaced (or weights no displaced kind), so none can be planned. Check world_source.json days[].lies and days[].kinds.");
+            }
+            else
+            {
+                breakersPerRule.Add(null);
+            }
         }
 
         var premadeSlots = new HashSet<int>(plan.ForcedCases.Where(f => f != null && f.legendary != null).Select(f => f.caseIndex1Based));
         var rng = new SeededRandom(Seeds.ForViolators(daySeed));
         int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count, rng, premadeSlots);
         for (int i = 0; i < slots.Length; i++)
-            violators[slots[i]] = breakersPerRule[i][rng.Range(0, breakersPerRule[i].Count)];
+        {
+            List<NationEraProfileSO> breakers = breakersPerRule[i];
+            if (breakers != null)
+                violators[slots[i]] = breakers[rng.Range(0, breakers.Count)];
+            else
+                liars[slots[i]] = Lies.Roll(1f, placeLies, rng).Value;
+        }
 
         return violators;
     }
@@ -279,12 +308,13 @@ public sealed class CaseFactory
             : PickEraFromPlan(plan);
 
         // 4) Decide blueprint: forced > one weighted pick of the day's kinds
-        //    (active-effect weight multipliers applied; a premade's slot
-        //    draws only the displaced, TravellerKinds.PickWeight).
+        //    (active-effect weight multipliers applied; a premade's slot and a
+        //    planned liar's slot draw only the displaced, TravellerKinds.PickWeight).
+        bool displacedOnly = legendary != null || _plannedLiars.ContainsKey(caseIndex1Based);
         CaseBlueprintSO blueprint =
             forcedBlueprint != null ? forcedBlueprint :
             WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null
-                ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, legendary != null) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
+                ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, displacedOnly) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
                 : 0f, _rng)?.blueprint;
 
         // A 2150 citizen (traveller types K2, K4) comes from the present.
@@ -339,8 +369,8 @@ public sealed class CaseFactory
         // 4.7) The lie roll (K5: after the premade's authoring and the planned slot; before the account,
         //      so a poor citizen posing as rich holds the Standard account their papers must be checked against).
         //      A costume error forced from the debug panel is a planned fault: it stands in for the roll.
-        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && place != null;
-        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary);
+        bool forcedCostume = DevToolsState.ForcedCostumeError != CostumeError.None && legendary == null && !inst.HasDirectiveFault && place != null && !_plannedLiars.ContainsKey(caseIndex1Based);
+        LieKind? lieKind = forcedCostume ? null : RollLie(inst, plan, blueprint, state, legendary, caseIndex1Based);
 
         // 4.8) The agency's file, on the account stream (the forms and the record print it):
         //      a displaced person's registry numbers, or a 2150 citizen's Citizen Account (LieKinds.TrueStatus: the truth).
@@ -438,11 +468,16 @@ public sealed class CaseFactory
     /// Rolls the traveller's lie on their lie stream (Lies.Roll; traveller
     /// types K5, §6.2): at the liar chance, one of the day's lies that fit
     /// the kind (LieKinds.For; a premade authored as a liar lies surely,
-    /// their false origin). Exempt travellers (honest premades, a closure's
-    /// violator, no papers: Lies.MayLie) draw nothing. Null: honest.
+    /// their false origin). A planned liar's slot (PlanViolators: the
+    /// displaced's return home on its first day) tells its planned lie with
+    /// no draw. Exempt travellers (honest premades, a closure's violator, no
+    /// papers: Lies.MayLie) draw nothing. Null: honest.
     /// </summary>
-    private LieKind? RollLie(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, LegendarySO legendary)
+    private LieKind? RollLie(CaseInstance inst, DayPlanSO plan, CaseBlueprintSO blueprint, WorldState state, LegendarySO legendary, int caseIndex1Based)
     {
+        if (_plannedLiars.TryGetValue(caseIndex1Based, out LieKind planned))
+            return planned;
+
         bool honestPremade = legendary != null && legendary.truePlace == null;
         bool hasPapers = blueprint.DocumentTemplates != null && blueprint.DocumentTemplates.Any(t => t != null && t.fieldSpecs != null && t.fieldSpecs.Length > 0);
         if (!Lies.MayLie(honestPremade, !inst.HasDirectiveFault, hasPapers))
@@ -1004,7 +1039,8 @@ public sealed class CaseFactory
     /// The slot's premade (Premades.SlotSource): the forced premade when not
     /// met yet this run (<paramref name="forced"/> true); none when the forced
     /// one was met (an ordinary traveller stands there) or the slot is a
-    /// planned violator's; otherwise a roll from the day's pool.
+    /// planned violator's or planned liar's; otherwise a roll from the day's
+    /// pool.
     /// </summary>
     private LegendarySO ResolvePremade(DayPlanSO plan, WorldState state, int caseIndex1Based, out bool forced)
     {
@@ -1012,7 +1048,7 @@ public sealed class CaseFactory
         bool forcedHere = plan.TryGetForcedPremade(caseIndex1Based, out LegendarySO forcedPremade);
         bool forcedMet = forcedHere && IsMet(state, forcedPremade);
 
-        switch (Premades.SlotSource(forcedHere, forcedMet, _violators.ContainsKey(caseIndex1Based)))
+        switch (Premades.SlotSource(forcedHere, forcedMet, _violators.ContainsKey(caseIndex1Based) || _plannedLiars.ContainsKey(caseIndex1Based)))
         {
             case PremadeSlot.Forced:
                 forced = true;

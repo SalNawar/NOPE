@@ -989,7 +989,7 @@ public static partial class ContentLibraryValidator
                     issues++;
                 }
 
-                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && r.IsClosure) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
+                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && Directives.Guarantees(r.type, plan.DayNumber, lib.FirstDayOf(r))) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
                 {
                     Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.", plan);
                     issues++;
