@@ -1097,9 +1097,9 @@ public sealed class CaseFactory
         return pick < 0 ? null : rollable[pick];
     }
 
-    /// <summary>True when the premade was presented earlier this run (FlagKeys.PremadeMet).</summary>
+    /// <summary>True when the premade was presented earlier this run (WorldState.HasMetPremade).</summary>
     private static bool IsMet(WorldState state, LegendarySO premade) =>
-        state != null && premade != null && state.HasFlag(FlagKeys.PremadeMet(premade.id));
+        state != null && premade != null && state.HasMetPremade(premade.id);
 
     /// <summary>
     /// Creates the traveller's runtime documents from the blueprint's

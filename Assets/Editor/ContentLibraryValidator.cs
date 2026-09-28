@@ -1079,17 +1079,10 @@ public static partial class ContentLibraryValidator
             Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
         int issues = problems.Count;
 
-        List<int> days = lib.DayPlans
-            .Where(p => p != null)
-            .Select(p => p.DayNumber)
-            .Distinct()
-            .OrderBy(d => d)
-            .ToList();
-
-        for (int i = 1; i < days.Count; i++)
+        foreach (string gap in DayPlans.Gaps(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber)))
         {
-            if (days[i] != days[i - 1] + 1)
-                Debug.LogWarning($"[ContentLibraryValidator] DayPlans gap in '{lib.name}': day {days[i - 1]} is followed by day {days[i]} (day(s) {days[i - 1] + 1}..{days[i] - 1} have no plan).");
+            Debug.LogWarning($"[ContentLibraryValidator] {gap} ('{lib.name}')", lib);
+            issues++;
         }
 
         return issues;

@@ -117,6 +117,9 @@ public sealed class WorldState
     public bool HasFlag(string flag) =>
         !string.IsNullOrEmpty(flag) && flags.Contains(flag);
 
+    /// <summary>True when the premade with this id was presented earlier this run (the FlagKeys.PremadeMet flag; a forced premade already met leaves an ordinary traveller in their slot).</summary>
+    public bool HasMetPremade(string premadeId) => HasFlag(FlagKeys.PremadeMet(premadeId));
+
     /// <summary>Sets a flag (no duplicates).</summary>
     public void SetFlag(string flag)
     {
