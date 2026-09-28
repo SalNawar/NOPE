@@ -94,18 +94,12 @@ public sealed class DayPlanSO : ScriptableObject
     [SerializeField] private TravelRuleSO[] activeTravelRules;
 
     /// <summary>
-    /// Each active closure sends at least one violator, placed in the first
-    /// half of the queue, so the day's directives are always tested.
+    /// Each guaranteeing rule (Directives.Guarantees: every active closure;
+    /// a procedure on its first day) sends at least one faulty traveller,
+    /// placed in the first half of the queue, so the day's directives are
+    /// always tested.
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
-
-    /// <summary>
-    /// The standing procedures guaranteed one faulty traveller today, in the
-    /// first half of the queue beside the closures' violators (traveller
-    /// types P4: each procedure on its first day; Directives.CanGuarantee).
-    /// Written by Generate World from world_source.json days[].guarantee.
-    /// </summary>
-    [SerializeField] private TravelRuleSO[] guaranteedRules;
 
     /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
@@ -160,13 +154,10 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Chance per honest traveller of breaking one of today's rolled procedures.</summary>
     public float ViolationChance => violationChance;
 
-    /// <summary>The standing procedures guaranteed a faulty traveller today (set entries only, in authored order).</summary>
-    public IReadOnlyList<TravelRuleSO> GuaranteedRules => guaranteedRules ?? Array.Empty<TravelRuleSO>();
-
     /// <summary>Public read-only travel rules active this day.</summary>
     public IReadOnlyList<TravelRuleSO> ActiveTravelRules => activeTravelRules ?? System.Array.Empty<TravelRuleSO>();
 
-    /// <summary>Whether each active closure is guaranteed a violator in the first half of the queue.</summary>
+    /// <summary>Whether each guaranteeing rule is guaranteed a faulty traveller in the first half of the queue.</summary>
     public bool GuaranteeRuleViolators => guaranteeRuleViolators;
 
     /// <summary>Every forced case's blueprint (set slots only, in authored order); the content validator counts their documents.</summary>

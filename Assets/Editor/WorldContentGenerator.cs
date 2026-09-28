@@ -274,11 +274,16 @@ public static partial class WorldContentGenerator
                 errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description)));
         }
 
+        var futureIds = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
         foreach (DayData d in src.days)
         {
             foreach (EraWeightData w in d.eras ?? Array.Empty<EraWeightData>())
+            {
                 if (!eraIds.Contains(w.era))
                     errors.Add($"Day '{d.asset}' weights unknown era '{w.era}'.");
+                else if (futureIds.Contains(w.era) && w.weight > 0f)
+                    errors.Add($"Day '{d.asset}' weights the Future era '{w.era}': the Future is the present, never a destination (traveller types H2).");
+            }
             foreach (string c in d.countries ?? Array.Empty<string>())
                 if (!countryIds.Contains(c))
                     errors.Add($"Day '{d.asset}' allows unknown country '{c}'.");
@@ -293,6 +298,7 @@ public static partial class WorldContentGenerator
                 errors.Add($"Day '{d.asset}' needs \"violationChance\" in 0..1.");
             CheckLies(d, errors);
             CheckDirectives(src, d, authored, errors);
+            CheckReturnHome(d, src.rules, errors);
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
@@ -1481,10 +1487,10 @@ public static partial class WorldContentGenerator
     /// <summary>
     /// Refuses a day's Directives the Domain rule refuses (Directives.DayProblems,
     /// the validator's rule too): a paper set or debt standing none of the
-    /// day's kinds can break, and a guaranteed rule that is not active, cannot
-    /// be guaranteed, is listed twice or that no kind can break. The kinds
-    /// are the day's with a positive weight, each with its blueprint's form
-    /// numbers. A guarantee naming an unknown rule is reported here.
+    /// day's kinds can break, and a procedure guaranteed a breaker today (its
+    /// first day, Directives.Guarantees over the days listing it) that no
+    /// kind can break. The kinds are the day's with a positive weight, each
+    /// with its blueprint's form numbers.
     /// </summary>
     private static void CheckDirectives(WorldSource src, DayData d, Authored authored, List<string> errors)
     {
@@ -1492,17 +1498,14 @@ public static partial class WorldContentGenerator
         var active = new List<Directives.RuleEntry>();
         foreach (string name in d.rules ?? Array.Empty<string>())
             if (byAsset.TryGetValue(name ?? string.Empty, out RuleData r) && ParseEnum(r.type, out TravelRuleType type))
-                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r)));
-        foreach (string name in d.guarantee ?? Array.Empty<string>())
-            if (!byAsset.ContainsKey(name ?? string.Empty))
-                errors.Add($"Day '{d.asset}' guarantees unknown rule '{name}'.");
+                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r), Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day))));
 
         var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)>();
         foreach (KindWeightData k in d.kinds ?? Array.Empty<KindWeightData>())
             if (k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind))
                 kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? FormNumbers(b) : new string[0]));
 
-        errors.AddRange(Directives.DayProblems(d.asset, active, kinds, d.guarantee));
+        errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds));
     }
 
     /// <summary>The form numbers of a blueprint's templates (null templates skipped).</summary>
@@ -1533,9 +1536,28 @@ public static partial class WorldContentGenerator
     }
 
     /// <summary>
+    /// Refuses a day that lists the displaced's return home (a ReturnHome
+    /// rule) without a displaced kind and a place lie they can carry
+    /// (LieKinds.IsPlaceLie): the rule's guaranteed liar (Directives.Guarantees)
+    /// could not be made, and its line would name a fault nobody has.
+    /// </summary>
+    private static void CheckReturnHome(DayData d, RuleData[] rules, List<string> errors)
+    {
+        bool returnHome = (d.rules ?? Array.Empty<string>())
+            .Any(id => (rules ?? Array.Empty<RuleData>()).Any(r => r != null && r.asset == id && ParseEnum(r.type, out TravelRuleType type) && type == TravelRuleType.ReturnHome));
+        if (!returnHome)
+            return;
+
+        bool displaced = (d.kinds ?? Array.Empty<KindWeightData>()).Any(k => k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind) && kind == TravellerKind.Displaced);
+        bool placeLie = (d.lies ?? Array.Empty<string>()).Any(name => ParseEnum(name, out LieKind lie) && LieKinds.IsPlaceLie(lie));
+        if (!displaced || !placeLie)
+            errors.Add($"Day '{d.asset}' lists the displaced's return home (a ReturnHome rule) but {(displaced ? "enables no place lie (FalseOrigin, FakeDisplaced)" : "weights no Displaced kind")}, so no traveller could break it.");
+    }
+
+    /// <summary>
     /// Writes the day's queue, tell count, tell channels, lies, eras, countries,
-    /// rules, the guaranteed rules and violation chance, the premade pool and
-    /// chance, and the forced slots (premade, blueprint or both; authoritative).
+    /// rules, the violation chance, the premade pool and chance, and the
+    /// forced slots (premade, blueprint or both; authoritative).
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, Authored authored, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules,
@@ -1563,7 +1585,6 @@ public static partial class WorldContentGenerator
         so.FindProperty("violationChance").floatValue = d.violationChance;
         SerializedArrays.Set(so, "allowedNations", (d.countries ?? Array.Empty<string>()).Select(c => (Object)nations[c]).ToArray());
         SerializedArrays.Set(so, "activeTravelRules", (d.rules ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
-        SerializedArrays.Set(so, "guaranteedRules", (d.guarantee ?? Array.Empty<string>()).Select(r => (Object)rules[r]).ToArray());
 
         ForcedData[] forcedData = d.forced ?? Array.Empty<ForcedData>();
         SerializedProperty forced = so.FindProperty("forcedCases");
@@ -2070,8 +2091,6 @@ public static partial class WorldContentGenerator
         public float costumeErrorChance;
         /// <summary>Chance per honest traveller of breaking a rolled procedure (0..1; traveller types P4).</summary>
         public float violationChance;
-        /// <summary>The standing procedures guaranteed a faulty traveller today (rule asset names among "rules"; each on its first day).</summary>
-        public string[] guarantee;
     }
 
     /// <summary>The interview's wording and spoken requests (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>

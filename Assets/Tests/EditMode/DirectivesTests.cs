@@ -3,9 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
-/// The Directives' rules (traveller types P3, P4, §5.3-5.4; redesign phase
-/// 9): each type's decision table over CaseFacts, the fault a broken rule
-/// is, the paper-set maker's variants and pick, the violation roll, and the
+/// The Directives' rules (traveller types P3, P4, §5.3-5.4; redesign phases
+/// 9 and 12): the closure types, a rule's first day and the guarantee table;
+/// each type's decision table over CaseFacts, the fault a broken rule is,
+/// the paper-set maker's variants and pick, the violation roll, and the
 /// content checks Generate World and the validator share.
 /// </summary>
 public class DirectivesTests
@@ -16,6 +17,11 @@ public class DirectivesTests
     private static readonly string[] RichSet = { Directives.Visa, Directives.Manifest };
     private static readonly string[] PoorSet = { Directives.Visa, Directives.Manifest, Directives.Waiver, "TC-416" };
     private static readonly string[] LabourSet = { Directives.Contract, Directives.Manifest, Directives.Waiver };
+    private static readonly string[] DisplacedSet = { "TC-610", "TC-620", "TC-630" };
+
+    /// <summary>Each kind's honest set of forms.</summary>
+    private static string[] SetOf(TravellerKind kind) =>
+        kind == TravellerKind.RichTourist ? RichSet : kind == TravellerKind.PoorTourist ? PoorSet : kind == TravellerKind.Labourer ? LabourSet : DisplacedSet;
 
     /// <summary>An honest traveller's facts: every form of the set carried, the classes of the kind, the waiver signed, the account Good, the destination open.</summary>
     private static CaseFacts Honest(TravellerKind kind, params string[] forms) => new CaseFacts
@@ -30,7 +36,7 @@ public class DirectivesTests
     };
 
     // -----------------------------
-    // The types
+    // The types, the first day and the guarantees
     // -----------------------------
 
     [TestCase(TravelRuleType.EraForbidden, true)]
@@ -38,18 +44,45 @@ public class DirectivesTests
     [TestCase(TravelRuleType.NationEraForbidden, true)]
     [TestCase(TravelRuleType.DressForDestination, false)]
     [TestCase(TravelRuleType.Procedure, false)]
+    [TestCase(TravelRuleType.ReturnHome, false)]
     [TestCase(TravelRuleType.PaperSet, false)]
     [TestCase(TravelRuleType.DebtStanding, false)]
-    public void IsClosure_TheFirstThreeTypes(TravelRuleType type, bool closure)
+    public void IsClosure_TheThreeForbiddenTypes(TravelRuleType type, bool expected)
     {
-        Assert.AreEqual(closure, Directives.IsClosure(type));
+        Assert.AreEqual(expected, Directives.IsClosure(type));
     }
 
     [Test]
-    public void CanGuarantee_ThePaperSetTheDebtStandingAndDress_IsRolled_ThePaperSetAndTheDebtStanding()
+    public void FirstDay_TheSmallestDayListed_ZeroForNone()
     {
-        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding, TravelRuleType.DressForDestination },
-                                       System.Enum.GetValues(typeof(TravelRuleType)).Cast<TravelRuleType>().Where(Directives.CanGuarantee).ToList());
+        Assert.AreEqual(0, Directives.FirstDay(null));
+        Assert.AreEqual(0, Directives.FirstDay(new int[0]));
+        Assert.AreEqual(5, Directives.FirstDay(new[] { 5, 6 }));
+        Assert.AreEqual(5, Directives.FirstDay(new[] { 6, 5, 7 }), "unordered plans");
+    }
+
+    /// <summary>P4: a closure guarantees a violator every day; the return home, the paper set, the debt standing and dress guarantee a breaker on their first day only; a procedure line never.</summary>
+    [TestCase(TravelRuleType.EraForbidden, 3, 2, true)]
+    [TestCase(TravelRuleType.NationForbidden, 2, 2, true)]
+    [TestCase(TravelRuleType.NationEraForbidden, 6, 2, true)]
+    [TestCase(TravelRuleType.ReturnHome, 5, 5, true)]
+    [TestCase(TravelRuleType.ReturnHome, 6, 5, false)]
+    [TestCase(TravelRuleType.ReturnHome, 5, 0, false, Description = "a rule no plan lists guarantees nothing")]
+    [TestCase(TravelRuleType.PaperSet, 2, 2, true)]
+    [TestCase(TravelRuleType.PaperSet, 3, 2, false)]
+    [TestCase(TravelRuleType.DebtStanding, 3, 3, true)]
+    [TestCase(TravelRuleType.DebtStanding, 4, 3, false)]
+    [TestCase(TravelRuleType.DressForDestination, 2, 2, true)]
+    [TestCase(TravelRuleType.DressForDestination, 3, 2, false)]
+    [TestCase(TravelRuleType.Procedure, 1, 1, false)]
+    public void Guarantees_ClosuresEveryDay_ProceduresOnTheirFirstDay(TravelRuleType type, int today, int firstDay, bool expected)
+    {
+        Assert.AreEqual(expected, Directives.Guarantees(type, today, firstDay));
+    }
+
+    [Test]
+    public void IsRolled_ThePaperSetAndTheDebtStanding()
+    {
         CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding },
                                        System.Enum.GetValues(typeof(TravelRuleType)).Cast<TravelRuleType>().Where(Directives.IsRolled).ToList());
     }
@@ -60,6 +93,7 @@ public class DirectivesTests
     [TestCase(TravelRuleType.PaperSet, DirectiveFault.IncompletePapers)]
     [TestCase(TravelRuleType.DebtStanding, DirectiveFault.FrozenAccount)]
     [TestCase(TravelRuleType.DressForDestination, DirectiveFault.None)]
+    [TestCase(TravelRuleType.ReturnHome, DirectiveFault.None)]
     [TestCase(TravelRuleType.Procedure, DirectiveFault.None)]
     public void FaultOf_EachType(TravelRuleType type, DirectiveFault fault)
     {
@@ -91,10 +125,6 @@ public class DirectivesTests
         foreach (TravelRuleType type in (TravelRuleType[])System.Enum.GetValues(typeof(TravelRuleType)))
             Assert.IsFalse(Directives.Breaks(type, facts), $"{kind} breaks {type}");
     }
-
-    /// <summary>Each kind's honest set of forms.</summary>
-    private static string[] SetOf(TravellerKind kind) =>
-        kind == TravellerKind.RichTourist ? RichSet : kind == TravellerKind.PoorTourist ? PoorSet : kind == TravellerKind.Labourer ? LabourSet : new[] { "TC-610", "TC-620", "TC-630" };
 
     [Test]
     public void AClosure_BreaksOnAClosedDestination_ForEveryKind()
@@ -167,7 +197,7 @@ public class DirectivesTests
         facts.WaiverSigned = false;
         Assert.IsTrue(Directives.Breaks(TravelRuleType.PaperSet, facts), "an unsigned or missing waiver");
 
-        CaseFacts displaced = Honest(TravellerKind.Displaced, "TC-610");
+        CaseFacts displaced = Honest(TravellerKind.Displaced, DisplacedSet);
         displaced.WaiverSigned = false;
         Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, displaced), "the displaced have no paper set to read");
     }
@@ -184,13 +214,14 @@ public class DirectivesTests
     }
 
     [Test]
-    public void DressAndAProcedureLine_NeverBreakHere_AndNullFactsBreakNothing()
+    public void DressTheReturnHomeAndAProcedureLine_NeverBreakHere_AndNullFactsBreakNothing()
     {
         CaseFacts facts = Honest(TravellerKind.RichTourist, RichSet);
         facts.ClosedDestination = true;
         facts.Frozen = true;
         facts.WaiverSigned = false;
         Assert.IsFalse(Directives.Breaks(TravelRuleType.DressForDestination, facts), "a costume error is a deviation fault, proven against the Costume Guide");
+        Assert.IsFalse(Directives.Breaks(TravelRuleType.ReturnHome, facts), "a false origin is a deviation fault, proven against the books");
         Assert.IsFalse(Directives.Breaks(TravelRuleType.Procedure, facts));
         Assert.IsFalse(Directives.Breaks(TravelRuleType.PaperSet, null));
     }
@@ -216,7 +247,7 @@ public class DirectivesTests
         unsigned.Frozen = true;
         Assert.AreEqual(DirectiveFault.IncompletePapers, Directives.Fault(rules, unsigned), "the first rule broken, in the day's order");
 
-        CaseFacts closed = Honest(TravellerKind.Displaced, "TC-610");
+        CaseFacts closed = Honest(TravellerKind.Displaced, DisplacedSet);
         closed.ClosedDestination = true;
         Assert.AreEqual(DirectiveFault.ClosedDestination, Directives.Fault(rules, closed));
 
@@ -235,7 +266,7 @@ public class DirectivesTests
         CollectionAssert.AreEqual(new[] { PaperSetBreak.EconomyManifest }, Directives.PaperSetBreaks(TravellerKind.RichTourist, RichSet));
         CollectionAssert.AreEqual(new[] { PaperSetBreak.WaiverMissing, PaperSetBreak.WaiverUnsigned, PaperSetBreak.ProofMissing }, Directives.PaperSetBreaks(TravellerKind.PoorTourist, PoorSet));
         CollectionAssert.AreEqual(new[] { PaperSetBreak.WaiverMissing, PaperSetBreak.WaiverUnsigned }, Directives.PaperSetBreaks(TravellerKind.Labourer, LabourSet));
-        CollectionAssert.IsEmpty(Directives.PaperSetBreaks(TravellerKind.Displaced, new[] { "TC-610", "TC-620", "TC-630" }));
+        CollectionAssert.IsEmpty(Directives.PaperSetBreaks(TravellerKind.Displaced, DisplacedSet));
     }
 
     [Test]
@@ -259,21 +290,22 @@ public class DirectivesTests
         Assert.IsTrue(two.Done);
 
         var none = new ScriptedRandom();
-        Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.Displaced, new[] { "TC-610" }, none));
+        Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.Displaced, DisplacedSet, none));
         Assert.IsTrue(none.Done);
         Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.RichTourist, RichSet, null));
     }
 
     [Test]
-    public void CanBreak_ThePaperSetWithAVariant_TheDebtStandingAndDressForCitizens_NeverAClosureOrALine()
+    public void CanBreak_ThePaperSetWithAVariant_TheDebtStandingAndDressForCitizens_NeverAClosureTheReturnHomeOrALine()
     {
         Assert.IsTrue(Directives.CanBreak(TravelRuleType.PaperSet, TravellerKind.RichTourist, RichSet));
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.PaperSet, TravellerKind.Labourer, new[] { Directives.Contract, Directives.Manifest }));
         Assert.IsTrue(Directives.CanBreak(TravelRuleType.DebtStanding, TravellerKind.Labourer, LabourSet));
-        Assert.IsFalse(Directives.CanBreak(TravelRuleType.DebtStanding, TravellerKind.Displaced, new[] { "TC-610" }));
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.DebtStanding, TravellerKind.Displaced, DisplacedSet));
         Assert.IsTrue(Directives.CanBreak(TravelRuleType.DressForDestination, TravellerKind.PoorTourist, PoorSet));
-        Assert.IsFalse(Directives.CanBreak(TravelRuleType.DressForDestination, TravellerKind.Displaced, new[] { "TC-610" }));
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.DressForDestination, TravellerKind.Displaced, DisplacedSet));
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.NationEraForbidden, TravellerKind.RichTourist, RichSet), "a closure's violator is made by place, not here");
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.ReturnHome, TravellerKind.Displaced, DisplacedSet), "the return home's liar is made by the lie roll");
         Assert.IsFalse(Directives.CanBreak(TravelRuleType.Procedure, TravellerKind.RichTourist, RichSet));
     }
 
@@ -318,7 +350,7 @@ public class DirectivesTests
     // The content checks (Generate World and the validator share them)
     // -----------------------------
 
-    private static Directives.RuleEntry Rule(string asset, TravelRuleType type, params TravellerKind[] kinds) => new Directives.RuleEntry(asset, type, kinds);
+    private static Directives.RuleEntry Rule(string asset, TravelRuleType type, int firstDay, params TravellerKind[] kinds) => new Directives.RuleEntry(asset, type, kinds, firstDay);
 
     private static readonly TravellerKind[] Tourists = { TravellerKind.RichTourist, TravellerKind.PoorTourist };
     private static readonly TravellerKind[] Citizens = { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer };
@@ -330,6 +362,7 @@ public class DirectivesTests
         CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_NoAncientEgypt", TravelRuleType.NationEraForbidden, new TravellerKind[0], true, false), "a closure's line is generated when blank");
         CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_DressForDestination", TravelRuleType.DressForDestination, null, false, true));
         CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_LeisureDepartures", TravelRuleType.Procedure, null, false, true));
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_ReturnHome", TravelRuleType.ReturnHome, null, false, true));
         CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_TouristPaperSet", TravelRuleType.PaperSet, Tourists, false, true));
         CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_DebtStanding", TravelRuleType.DebtStanding, Citizens, false, true));
     }
@@ -350,51 +383,44 @@ public class DirectivesTests
     private static List<(TravellerKind kind, IReadOnlyCollection<string> forms)> Day3Kinds() => new List<(TravellerKind, IReadOnlyCollection<string>)>
     {
         (TravellerKind.RichTourist, RichSet),
-        (TravellerKind.Labourer, new[] { Directives.Contract, Directives.Manifest }),
-        (TravellerKind.Displaced, new[] { "TC-610", "TC-620", "TC-630" })
+        (TravellerKind.Labourer, new[] { Directives.Contract, Directives.Manifest })
     };
+
+    private static readonly List<(TravellerKind kind, IReadOnlyCollection<string> forms)> DisplacedOnly = new List<(TravellerKind, IReadOnlyCollection<string>)> { (TravellerKind.Displaced, DisplacedSet) };
 
     [Test]
     public void DayProblems_NoneForASoundDay()
     {
         var active = new List<Directives.RuleEntry>
         {
-            Rule("Rule_NoMedievalChina", TravelRuleType.NationEraForbidden),
-            Rule("Rule_DressForDestination", TravelRuleType.DressForDestination),
-            Rule("Rule_LeisureDepartures", TravelRuleType.Procedure),
-            Rule("Rule_TouristPaperSet", TravelRuleType.PaperSet, Tourists),
-            Rule("Rule_DebtStanding", TravelRuleType.DebtStanding, Citizens)
+            Rule("Rule_NoMedievalChina", TravelRuleType.NationEraForbidden, 3),
+            Rule("Rule_DressForDestination", TravelRuleType.DressForDestination, 2),
+            Rule("Rule_LeisureDepartures", TravelRuleType.Procedure, 1),
+            Rule("Rule_TouristPaperSet", TravelRuleType.PaperSet, 2, Tourists),
+            Rule("Rule_DebtStanding", TravelRuleType.DebtStanding, 3, Citizens)
         };
-        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day3", active, Day3Kinds(), new[] { "Rule_DebtStanding", "Rule_TouristPaperSet", "Rule_DressForDestination" }));
-        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day3", active, Day3Kinds(), null));
-        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day1", null, null, null));
+        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day3", 3, active, Day3Kinds()));
+        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day1", 1, null, null));
+        var day5 = new List<Directives.RuleEntry> { Rule("Rule_ReturnHome", TravelRuleType.ReturnHome, 5), Rule("Rule_DressForDestination", TravelRuleType.DressForDestination, 2) };
+        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day5", 5, day5, DisplacedOnly), "the return home's liar is the day's displaced (its own check); dress past its first day plans nobody");
     }
 
     [Test]
-    public void DayProblems_ARolledRuleNoKindCanBreak_AndEachBrokenGuarantee()
+    public void DayProblems_ARolledRuleNoKindCanBreak_AndAFirstDayGuaranteeNoKindCanBe()
     {
         var active = new List<Directives.RuleEntry>
         {
-            Rule("Rule_NoMedievalChina", TravelRuleType.NationEraForbidden),
-            Rule("Rule_LeisureDepartures", TravelRuleType.Procedure),
-            Rule("Rule_LabourPaperSet", TravelRuleType.PaperSet, TravellerKind.Labourer),
-            Rule("Rule_DebtStanding", TravelRuleType.DebtStanding, Citizens)
+            Rule("Rule_LabourPaperSet", TravelRuleType.PaperSet, 3, TravellerKind.Labourer),
+            Rule("Rule_DebtStanding", TravelRuleType.DebtStanding, 3, Citizens),
+            Rule("Rule_DressForDestination", TravelRuleType.DressForDestination, 5)
         };
-        List<string> problems = Directives.DayProblems("D", active, Day3Kinds(), new[] { "Rule_NoMedievalChina", "Rule_LeisureDepartures", "Rule_LabourPaperSet", "Rule_Unlisted", "Rule_DebtStanding", "Rule_DebtStanding" });
-        Assert.AreEqual(6, problems.Count, string.Join("\n", problems));
+        List<string> problems = Directives.DayProblems("D", 5, active, DisplacedOnly);
+        Assert.AreEqual(3, problems.Count, string.Join("\n", problems));
         StringAssert.Contains("'Rule_LabourPaperSet' (PaperSet), which none of its kinds can break", problems[0]);
-        StringAssert.Contains("'Rule_NoMedievalChina' (NationEraForbidden); a closure is always guaranteed", problems[1]);
-        StringAssert.Contains("'Rule_LeisureDepartures' (Procedure)", problems[2]);
-        StringAssert.Contains("guarantees the rule 'Rule_LabourPaperSet' (PaperSet), which none of its kinds can break", problems[3]);
-        StringAssert.Contains("'Rule_Unlisted', which is not among its rules", problems[4]);
-        StringAssert.Contains("'Rule_DebtStanding' twice", problems[5]);
-    }
+        StringAssert.Contains("'Rule_DebtStanding' (DebtStanding), which none of its kinds can break", problems[1]);
+        StringAssert.Contains("first day of the rule 'Rule_DressForDestination'", problems[2]);
 
-    [Test]
-    public void DayProblems_ADebtStandingWithOnlyTheDisplaced_CannotBeBroken()
-    {
-        var active = new List<Directives.RuleEntry> { Rule("Rule_DebtStanding", TravelRuleType.DebtStanding, Citizens) };
-        var displacedOnly = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.Displaced, new[] { "TC-610" }) };
-        StringAssert.Contains("none of its kinds can break", Directives.DayProblems("D", active, displacedOnly, null).Single());
+        StringAssert.Contains("'Rule_LabourPaperSet' (PaperSet), which none of its kinds can break",
+                              Directives.DayProblems("D", 3, new List<Directives.RuleEntry> { active[0] }, Day3Kinds()).Single(), "a labourer without a waiver has no paper-set variant to break");
     }
 }

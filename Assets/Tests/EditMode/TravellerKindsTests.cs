@@ -24,9 +24,9 @@ public class TravellerKindsTests
     }
 
     [Test]
-    public void PickWeight_APremadeIsAlwaysDisplaced()
+    public void PickWeight_ADisplacedSlot_DrawsOnlyTheDisplaced()
     {
-        Assert.AreEqual(0f, TravellerKinds.PickWeight(TravellerKind.RichTourist, 5f, true), "the famous are displaced premades (K1)");
+        Assert.AreEqual(0f, TravellerKinds.PickWeight(TravellerKind.RichTourist, 5f, true), "the famous are displaced premades (K1); a return-home liar is displaced");
         Assert.AreEqual(0f, TravellerKinds.PickWeight(TravellerKind.Labourer, 5f, true));
         Assert.AreEqual(3f, TravellerKinds.PickWeight(TravellerKind.Displaced, 3f, true));
     }

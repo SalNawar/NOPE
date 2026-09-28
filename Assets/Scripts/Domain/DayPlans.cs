@@ -83,4 +83,38 @@ public static class DayPlans
         }
         return problems;
     }
+
+    /// <summary>
+    /// One message per hole in the day sequence (audit R6-022): the plans
+    /// not starting at day 1 (RunConfig.startingDay is 1, so the run would
+    /// open on a day with no plan of its own), and each gap between two
+    /// planned days (the days between reuse the earlier plan, Pick, which is
+    /// rarely meant). Days below 1 are Problems' (ignored here); repeats are
+    /// no gap. A null or empty list has none.
+    /// </summary>
+    public static List<string> Gaps(IEnumerable<int> dayNumbers)
+    {
+        var gaps = new List<string>();
+        if (dayNumbers == null)
+            return gaps;
+
+        var days = new SortedSet<int>();
+        foreach (int day in dayNumbers)
+            if (day >= 1)
+                days.Add(day);
+        if (days.Count == 0)
+            return gaps;
+
+        int previous = 0;
+        foreach (int day in days)
+        {
+            if (previous == 0 && day != 1)
+                gaps.Add($"Day plans start at day {day}, not day 1 (RunConfig.startingDay): day(s) 1..{day - 1} have no plan.");
+            else if (previous > 0 && day != previous + 1)
+                gaps.Add($"DayPlans gap: day {previous} is followed by day {day} (day(s) {previous + 1}..{day - 1} have no plan).");
+            previous = day;
+        }
+
+        return gaps;
+    }
 }

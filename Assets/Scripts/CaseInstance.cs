@@ -80,22 +80,29 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The era of the claimed place (the correct era on the legacy era-pick
-    /// path). A liar's real era is trueHome.era. Set even when the case has no
-    /// blueprint (audit R3-020 merged the duplicate `trueEra`).
+    /// path). A liar's real era is tellSourceEraId. Set even when the case
+    /// has no blueprint (audit R3-020 merged the duplicate `trueEra`).
     /// </summary>
     public EraSO claimedEra;
 
     /// <summary>
-    /// Where the traveller really comes from: another of today's places for a
-    /// liar, null for an honest traveller (whose home is the claim).
+    /// Where a liar's tells really come from, the tell source (traveller
+    /// types H3): the nation id of another of today's places (a false
+    /// origin, L7) or of the present (a fake displaced person, L8); null for
+    /// an honest traveller (whose home is the claim). Ids rather than a
+    /// profile: the present is no NationEraProfileSO, and a carry reads the
+    /// ids against today's facts (HistoryService.RecordCarry).
     /// </summary>
-    public NationEraProfileSO trueHome;
+    public string tellSourceNationId;
 
-    /// <summary>The true home's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
+    /// <summary>The era id of the tell source (the present's era for a fake displaced person); null for an honest traveller.</summary>
+    public string tellSourceEraId;
+
+    /// <summary>The tell source's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
     public string trueHomeLabel = string.Empty;
 
-    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells).</summary>
-    public bool IsLiar => trueHome != null;
+    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells of the tell source).</summary>
+    public bool IsLiar => !string.IsNullOrEmpty(tellSourceEraId);
 
     /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
     public string HomeLabel => IsLiar ? trueHomeLabel : originLabel;

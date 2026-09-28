@@ -2,57 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 /// <summary>
-/// What a travel rule forbids: a closure (the first three) or a standing
-/// procedure (traveller types P3). Serialized in the rule assets
-/// (TravelRuleSO.type): append only (SerializedEnumsTests pins every value).
-/// </summary>
-public enum TravelRuleType
-{
-    /// <summary>No travel to a specific era today.</summary>
-    EraForbidden,
-
-    /// <summary>No travel to a specific nation today.</summary>
-    NationForbidden,
-
-    /// <summary>No travel to a specific nation+era combination today.</summary>
-    NationEraForbidden,
-
-    /// <summary>
-    /// A standing procedure (traveller types P3, P5): a traveller must be
-    /// dressed for their destination, or they would cause a panic there. It
-    /// closes no destination; a 2150 citizen's costume error breaks it, a
-    /// deviation fault proven against the Costume Guide (CostumeErrors).
-    /// </summary>
-    DressForDestination,
-
-    /// <summary>
-    /// A procedure line with no predicate (traveller types §5.3): what the
-    /// desk checks for a kind ("Leisure departures: a Leisure Visa and a
-    /// Departure Manifest. Every paper must match the Citizen Account."). It
-    /// closes no destination and plans no violator; the liars break it (L1,
-    /// L2: record lies proven against the account, RecordLies).
-    /// </summary>
-    Procedure,
-
-    /// <summary>
-    /// The paper set of a kind (traveller types §5.3, phase 9): a Premium visa
-    /// travels on a Premium transponder; a Standard visa needs an Economy
-    /// transponder, a signed Stranding Waiver and a proof of means; a Debt
-    /// Relief departure needs a Labour Contract, an Economy transponder and a
-    /// signed waiver. Broken by a missing or unsigned form or the wrong
-    /// transponder class, read from the papers (DirectiveFault.IncompletePapers).
-    /// </summary>
-    PaperSet,
-
-    /// <summary>
-    /// The debt standing (traveller types §5.3, phase 9): a Frozen account may
-    /// not depart, read from the Citizen Account's Standing row
-    /// (DirectiveFault.FrozenAccount).
-    /// </summary>
-    DebtStanding
-}
-
-/// <summary>
 /// One way a traveller's paper set can be wrong (traveller types §5.4, the
 /// PaperSet maker's variants): what the maker leaves out, leaves unsigned or
 /// swaps. Runtime only (not serialized).
@@ -131,11 +80,13 @@ public sealed class CaseFacts
 
 /// <summary>
 /// The Directives' rules (traveller types P3, P4, §5.3-5.4): which rule types
-/// are closures and which procedures plan a guaranteed faulty traveller;
-/// each type's predicate over CaseFacts (Breaks); the fault a broken rule
-/// is; the paper-set maker's variants and their pick; the violation roll;
-/// and the content checks Generate World and the validator share (R6-006).
-/// Pure, so every decision table is tested headless.
+/// are closures, a rule's first day and which rules guarantee a faulty
+/// traveller in the first half of the queue (CaseFactory.PlanViolators asks
+/// each such rule's maker for its slot); each type's predicate over CaseFacts
+/// (Breaks) and the fault a broken rule is; the paper-set maker's variants
+/// and their pick; the violation roll; and the content checks Generate World
+/// and the validator share (R6-006). Pure, so every decision table is
+/// tested headless.
 /// </summary>
 public static class Directives
 {
@@ -157,21 +108,43 @@ public static class Directives
     /// <summary>What an unsigned waiver's signature box reads (the paper-set maker writes it; the facts read it).</summary>
     public const string Unsigned = "UNSIGNED";
 
-    /// <summary>True for a closure (a forbidden era, nation or place): it forbids destinations, and each active one gets a planned violator.</summary>
+    /// <summary>True for the closure types (a forbidden era, nation or place), which forbid destinations; false for a standing procedure.</summary>
     public static bool IsClosure(TravelRuleType type) =>
         type == TravelRuleType.EraForbidden || type == TravelRuleType.NationForbidden || type == TravelRuleType.NationEraForbidden;
 
     /// <summary>
-    /// True for a procedure that can plan a guaranteed faulty traveller on
-    /// its first day (traveller types P4): the paper set (its maker's
-    /// variants), the debt standing (a frozen account) and dress for the
-    /// destination (a costume error). A closure is always guaranteed; a
-    /// procedure line has no predicate and nothing to plan.
+    /// A rule's first day: the smallest of <paramref name="daysListed"/>
+    /// (the day numbers of the plans that list it); 0 when no plan lists it
+    /// (a null list counts as empty).
     /// </summary>
-    public static bool CanGuarantee(TravelRuleType type) =>
-        type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.DressForDestination;
+    public static int FirstDay(IEnumerable<int> daysListed)
+    {
+        int first = 0;
+        if (daysListed == null)
+            return first;
 
-    /// <summary>True for a procedure the violation roll may break on a later day (traveller types P4): the paper set and the debt standing (dress has its own roll, the costume roll).</summary>
+        foreach (int day in daysListed)
+            if (first == 0 || day < first)
+                first = day;
+
+        return first;
+    }
+
+    /// <summary>
+    /// Whether an active rule plans a guaranteed faulty traveller in the
+    /// first half of today's queue (P4): a closure every day it is active
+    /// (a traveller bound for a place it forbids); on its first day the
+    /// displaced's return home (a false-origin liar, L7 or L8, on the day the
+    /// rule is announced), the paper set (a breaker made by
+    /// <see cref="PickPaperSetBreak"/>), the debt standing (a frozen debtor)
+    /// and dress for the destination (a costume error); never a procedure
+    /// line.
+    /// </summary>
+    public static bool Guarantees(TravelRuleType type, int today, int firstDay) =>
+        IsClosure(type) || (today == firstDay && (type == TravelRuleType.ReturnHome || type == TravelRuleType.PaperSet ||
+                                                  type == TravelRuleType.DebtStanding || type == TravelRuleType.DressForDestination));
+
+    /// <summary>True for a procedure the violation roll may break on a later day (traveller types P4): the paper set and the debt standing (dress has its own roll, the costume roll; the return home is broken by the lie roll).</summary>
     public static bool IsRolled(TravelRuleType type) =>
         type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding;
 
@@ -198,9 +171,10 @@ public static class Directives
     /// manifest or lacks a signed waiver or a proof of means, and for a
     /// labourer without a contract, a signed waiver or on a Premium manifest
     /// (a form not carried states nothing about its class); the debt
-    /// standing breaks on a Frozen account; the dress rule and a procedure
-    /// line never break here (a costume error is a deviation fault; a line
-    /// has no predicate). The displaced break no paper set.
+    /// standing breaks on a Frozen account; the dress rule, the return home
+    /// and a procedure line never break here (a costume error and a false
+    /// origin are deviation faults; a line has no predicate). The displaced
+    /// break no paper set.
     /// </summary>
     public static bool Breaks(TravelRuleType type, CaseFacts facts)
     {
@@ -316,7 +290,8 @@ public static class Directives
     /// <paramref name="forms"/> can break a rule of <paramref name="type"/>
     /// through its maker (§5.4): the paper set when a variant can show, the
     /// debt standing for a 2150 citizen (a frozen account), dress for a 2150
-    /// citizen (a costume error). Never a closure or a procedure line here.
+    /// citizen (a costume error). Never a closure, the return home (the lie
+    /// roll's) or a procedure line here.
     /// </summary>
     public static bool CanBreak(TravelRuleType type, TravellerKind kind, IReadOnlyCollection<string> forms)
     {
@@ -351,7 +326,7 @@ public static class Directives
         return breakable == 1 ? 0 : rng.Range(0, breakable);
     }
 
-    /// <summary>A rule as the content checks see it: its asset name, type and kinds, and whether its closure or line is authored.</summary>
+    /// <summary>A rule as the content checks see it: its asset name, type, kinds and first day (Directives.FirstDay over the days listing it).</summary>
     public readonly struct RuleEntry
     {
         /// <summary>The rule asset's name.</summary>
@@ -363,12 +338,16 @@ public static class Directives
         /// <summary>The kinds it applies to (empty: every kind).</summary>
         public readonly IReadOnlyList<TravellerKind> Kinds;
 
+        /// <summary>The first day a plan lists it (0: none).</summary>
+        public readonly int FirstDay;
+
         /// <summary>Creates an entry.</summary>
-        public RuleEntry(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds)
+        public RuleEntry(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds, int firstDay)
         {
             Asset = asset;
             Type = type;
             Kinds = kinds ?? new TravellerKind[0];
+            FirstDay = firstDay;
         }
     }
 
@@ -401,17 +380,16 @@ public static class Directives
 
     /// <summary>
     /// What Generate World and the validator refuse of one day's Directives
-    /// (R6-006): a paper set or debt standing active today that no kind of
-    /// the day (<paramref name="kinds"/>, those with a positive weight, each
-    /// with its blueprint's form numbers) can break through its maker
-    /// (<see cref="CanBreak"/>), so nobody could ever test it; a guaranteed
-    /// rule (<paramref name="guarantee"/>) that is not active today, is not a
-    /// rule of <see cref="CanGuarantee"/>'s types (a closure is always
-    /// guaranteed; a line plans nothing), is listed twice, or that no kind of
-    /// the day can break. Empty when sound.
+    /// (R6-006): a paper set or debt standing active on day <paramref name="today"/>
+    /// that no kind of the day (<paramref name="kinds"/>, those with a
+    /// positive weight, each with its blueprint's form numbers) can break
+    /// through its maker (<see cref="CanBreak"/>), so nobody could ever test
+    /// it; and a procedure guaranteed a breaker today (<see cref="Guarantees"/>,
+    /// its first day) that no kind of the day can break, so its guarantee
+    /// would plan nobody (the return home has its own check, the day's
+    /// displaced and place lies). Empty when sound.
     /// </summary>
-    public static List<string> DayProblems(string day, IReadOnlyList<RuleEntry> active, IReadOnlyList<(TravellerKind kind, IReadOnlyCollection<string> forms)> kinds,
-                                           IReadOnlyList<string> guarantee)
+    public static List<string> DayProblems(string day, int today, IReadOnlyList<RuleEntry> active, IReadOnlyList<(TravellerKind kind, IReadOnlyCollection<string> forms)> kinds)
     {
         var problems = new List<string>();
         active = active ?? new RuleEntry[0];
@@ -421,27 +399,11 @@ public static class Directives
             kinds.Any(k => new Directive(rule.Type, rule.Kinds).AppliesTo(k.kind) && CanBreak(rule.Type, k.kind, k.forms));
 
         foreach (RuleEntry rule in active)
+        {
             if (IsRolled(rule.Type) && !Breakable(rule))
                 problems.Add($"Day '{day}' lists the rule '{rule.Asset}' ({rule.Type}), which none of its kinds can break: no traveller could ever test it.");
-
-        var seen = new HashSet<string>();
-        foreach (string name in guarantee ?? new string[0])
-        {
-            if (!seen.Add(name))
-            {
-                problems.Add($"Day '{day}' guarantees the rule '{name}' twice.");
-                continue;
-            }
-            RuleEntry rule = active.FirstOrDefault(r => r.Asset == name);
-            if (rule.Asset == null)
-            {
-                problems.Add($"Day '{day}' guarantees the rule '{name}', which is not among its rules.");
-                continue;
-            }
-            if (!CanGuarantee(rule.Type))
-                problems.Add($"Day '{day}' guarantees the rule '{name}' ({rule.Type}); a closure is always guaranteed and a procedure line plans nothing: only a paper set, a debt standing or dress for the destination can be guaranteed.");
-            else if (!Breakable(rule))
-                problems.Add($"Day '{day}' guarantees the rule '{name}' ({rule.Type}), which none of its kinds can break.");
+            else if (rule.Type == TravelRuleType.DressForDestination && Guarantees(rule.Type, today, rule.FirstDay) && !Breakable(rule))
+                problems.Add($"Day '{day}' is the first day of the rule '{rule.Asset}' ({rule.Type}), which guarantees a breaker none of its kinds can be: list a 2150 citizen kind.");
         }
 
         return problems;

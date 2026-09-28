@@ -2,15 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// A daily travel restriction announced in the morning briefing. The player
-/// must DENY an otherwise-valid traveler whose claimed destination violates an
-/// active closure (a directive fault, DirectiveFault.ClosedDestination), or
-/// whose papers or account break a standing procedure with a predicate (the
-/// paper set, the debt standing: Directives.Breaks). A standing procedure
-/// without one (dress for the destination, a kind's procedure line) closes no
-/// destination: its line tells the player what to check. Rules are listed on
-/// a DayPlan and evaluated per case (TravelRuleType lives in Domain,
-/// Directives.cs, so the predicates are tested headless).
+/// A daily travel restriction announced in the morning briefing (its type,
+/// TravelRuleType, is Domain's). The player must DENY an otherwise-valid
+/// traveler whose claimed destination violates an active closure (a
+/// directive fault, DirectiveFault.ClosedDestination), or whose papers or
+/// account break a standing procedure with a predicate (the paper set, the
+/// debt standing: Directives.Breaks). A standing procedure without one
+/// (dress for the destination, a kind's procedure line, the displaced's
+/// return home) closes no destination: its line tells the player what to
+/// check. Rules are listed on a DayPlan and evaluated per case.
 /// </summary>
 [CreateAssetMenu(fileName = "Rule_", menuName = "TimeDesk/Travel Rule", order = 6)]
 public sealed class TravelRuleSO : ScriptableObject

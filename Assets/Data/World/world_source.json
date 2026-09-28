@@ -1228,7 +1228,7 @@
     },
     {
       "id": "future",
-      "displayName": "Future",
+      "displayName": "2150",
       "order": 5,
       "future": true,
       "smallTalk": [
@@ -6673,6 +6673,16 @@
       "description": "Leisure departures: a Leisure Visa and a Departure Manifest. Every paper must match the Citizen Account."
     },
     {
+      "asset": "Rule_DisplacedReturns",
+      "type": "Procedure",
+      "description": "Displaced returns: a Displacement Certificate, an Intake Declaration and a Return Order. Every paper must match the Displacement Registry."
+    },
+    {
+      "asset": "Rule_ReturnHome",
+      "type": "ReturnHome",
+      "description": "The displaced return only to their own time: their declaration must match their origin."
+    },
+    {
       "asset": "Rule_TouristPaperSet",
       "type": "PaperSet",
       "description": "A Premium visa travels on a Premium transponder. A Standard visa needs an Economy transponder, a signed Stranding Waiver and a proof of means: a Holiday Credit Agreement, a Proof of Funds or Travel Insurance.",
@@ -6711,16 +6721,11 @@
       ],
       "lies": [
         "PoorPosingAsRich",
-        "DoctoredIdentity",
-        "FalseOrigin"
+        "DoctoredIdentity"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
-          "weight": 1
-        },
-        {
-          "kind": "Displaced",
           "weight": 1
         }
       ],
@@ -6739,16 +6744,9 @@
       "rules": [
         "Rule_LeisureDepartures"
       ],
-      "guarantee": [],
       "premades": [],
-      "forced": [
-        {
-          "slot": 3,
-          "premade": "senenmut",
-          "blueprint": ""
-        }
-      ],
-      "premadeChance": 0.05,
+      "forced": [],
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.0,
       "violationChance": 0.0
     },
@@ -6763,17 +6761,12 @@
       ],
       "lies": [
         "PoorPosingAsRich",
-        "DoctoredIdentity",
-        "FalseOrigin"
+        "DoctoredIdentity"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
           "weight": 3
-        },
-        {
-          "kind": "Displaced",
-          "weight": 2
         }
       ],
       "eras": [
@@ -6800,24 +6793,9 @@
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet"
       ],
-      "guarantee": [
-        "Rule_TouristPaperSet",
-        "Rule_DressForDestination"
-      ],
-      "premades": [
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi"
-      ],
-      "forced": [
-        {
-          "slot": 6,
-          "premade": "socrates",
-          "blueprint": ""
-        }
-      ],
-      "premadeChance": 0.05,
+      "premades": [],
+      "forced": [],
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1,
       "violationChance": 0.1
     },
@@ -6835,8 +6813,7 @@
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "DebtorPosingAsTourist",
-        "ForgedContract",
-        "FalseOrigin"
+        "ForgedContract"
       ],
       "kinds": [
         {
@@ -6845,10 +6822,6 @@
         },
         {
           "kind": "Labourer",
-          "weight": 2
-        },
-        {
-          "kind": "Displaced",
           "weight": 2
         }
       ],
@@ -6875,22 +6848,9 @@
         "Rule_TouristPaperSet",
         "Rule_DebtStanding"
       ],
-      "guarantee": [
-        "Rule_DebtStanding"
-      ],
-      "premades": [
-        "socrates",
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi",
-        "gutenberg",
-        "leonardo",
-        "lanyer",
-        "gallerani"
-      ],
+      "premades": [],
       "forced": [],
-      "premadeChance": 0.05,
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1,
       "violationChance": 0.1
     },
@@ -6908,8 +6868,7 @@
         "PoorPosingAsRich",
         "DoctoredIdentity",
         "DebtorPosingAsTourist",
-        "ForgedContract",
-        "FalseOrigin"
+        "ForgedContract"
       ],
       "kinds": [
         {
@@ -6918,10 +6877,6 @@
         },
         {
           "kind": "Labourer",
-          "weight": 2
-        },
-        {
-          "kind": "Displaced",
           "weight": 2
         }
       ],
@@ -6951,20 +6906,9 @@
         "Rule_TouristPaperSet",
         "Rule_DebtStanding"
       ],
-      "guarantee": [],
-      "premades": [
-        "socrates",
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi",
-        "gutenberg",
-        "leonardo",
-        "lanyer",
-        "gallerani"
-      ],
+      "premades": [],
       "forced": [],
-      "premadeChance": 0.05,
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1,
       "violationChance": 0.1
     },
@@ -6983,7 +6927,8 @@
         "DoctoredIdentity",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "FalseOrigin"
+        "FalseOrigin",
+        "FakeDisplaced"
       ],
       "kinds": [
         {
@@ -7028,22 +6973,13 @@
         "Rule_DressForDestination",
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet",
-        "Rule_DebtStanding"
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome"
       ],
-      "guarantee": [],
-      "premades": [
-        "socrates",
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi",
-        "gutenberg",
-        "leonardo",
-        "lanyer",
-        "gallerani"
-      ],
+      "premades": [],
       "forced": [],
-      "premadeChance": 0.05,
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1,
       "violationChance": 0.1
     },
@@ -7062,7 +6998,8 @@
         "DoctoredIdentity",
         "DebtorPosingAsTourist",
         "ForgedContract",
-        "FalseOrigin"
+        "FalseOrigin",
+        "FakeDisplaced"
       ],
       "kinds": [
         {
@@ -7098,10 +7035,6 @@
         {
           "era": "modern",
           "weight": 1
-        },
-        {
-          "era": "future",
-          "weight": 1
         }
       ],
       "countries": [],
@@ -7110,11 +7043,11 @@
         "Rule_DressForDestination",
         "Rule_LeisureDepartures",
         "Rule_TouristPaperSet",
-        "Rule_DebtStanding"
+        "Rule_DebtStanding",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome"
       ],
-      "guarantee": [],
       "premades": [
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -7124,7 +7057,18 @@
         "lanyer",
         "gallerani"
       ],
-      "forced": [],
+      "forced": [
+        {
+          "slot": 8,
+          "premade": "senenmut",
+          "blueprint": ""
+        },
+        {
+          "slot": 11,
+          "premade": "socrates",
+          "blueprint": ""
+        }
+      ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.1,
       "violationChance": 0.1
@@ -7223,7 +7167,7 @@
       "label": "Capital",
       "prompt": "What is the capital of your land?",
       "answer": "Our capital is {value}.",
-      "fromDay": 2,
+      "fromDay": 5,
       "announce": "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
       "conditions": [],
       "overrides": []
@@ -7234,7 +7178,7 @@
       "label": "Ruler",
       "prompt": "Who rules your land?",
       "answer": "We are ruled by {value}.",
-      "fromDay": 3,
+      "fromDay": 5,
       "announce": "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
       "conditions": [],
       "overrides": []
@@ -12780,8 +12724,8 @@
     ]
   },
   "translation": {
-    "fromDay": 2,
-    "announce": "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
+    "fromDay": 5,
+    "announce": "Budget cuts close the interpreter pool. From tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words; Speech translators are sold at Home tonight. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
       "letterInterval": 0.04,

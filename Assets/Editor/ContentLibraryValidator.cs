@@ -388,7 +388,7 @@ public static partial class ContentLibraryValidator
             if (plan == null)
                 continue;
 
-            List<NationEraProfileSO> today = lib.TodaysProfiles(plan, null);
+            List<NationEraProfileSO> today = lib.TodaysProfiles(plan);
             foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
             {
                 if (w.era == null || w.weight <= 0f || (w.era.smallTalk != null && w.era.smallTalk.Count > 0) || warned.Contains(w.era))
@@ -901,12 +901,10 @@ public static partial class ContentLibraryValidator
 
     /// <summary>
     /// Reports day plans whose weighted eras have no place today (eras x allowed
-    /// nations; checked once per possible Future: with no leader, where the
-    /// Future era is exempt, and once per nation with a Future place), a Future
-    /// day that does not allow every nation with a Future place, a nation+era
-    /// rule naming the Future (it would forbid nothing on most days), rules no
-    /// place of the day can break, premades (pooled or forced) whose claim or
-    /// true place is outside the day's world, forced slots beyond the queue, a
+    /// nations), a day weighting the Future era (never a destination, traveller
+    /// types H2) or a rule naming it (it would forbid nothing), rules no place
+    /// of the day can break, premades (pooled or forced) whose claim or true
+    /// place is outside the day's world, forced slots beyond the queue, a
     /// premade forced twice, a forced premade in the first half of a day with
     /// rules (a warning: it takes a slot a guaranteed violator could need), and
     /// a day allowing dress tells without a Costume Guide.
@@ -915,64 +913,45 @@ public static partial class ContentLibraryValidator
     {
         int issues = 0;
         EraSO future = lib.FutureEra;
-        List<NationSO> futureNations = future == null ? new List<NationSO>()
-            : lib.Nations.Where(n => n != null && lib.GetProfile(n, future) != null).ToList();
 
         foreach (DayPlanSO plan in lib.DayPlans)
         {
             if (plan == null)
                 continue;
 
-            bool futureDay = future != null && plan.EraWeights != null && plan.EraWeights.Any(w => w.era == future && w.weight > 0f);
-            var leaders = new List<string> { null };
-            if (futureDay)
-                leaders.AddRange(futureNations.Select(n => n.id));
-
-            bool empty = false;
-            foreach (string leader in leaders)
+            List<NationEraProfileSO> today = lib.TodaysProfiles(plan);
+            if (today.Count == 0)
             {
-                List<NationEraProfileSO> world = lib.TodaysProfiles(plan, leader);
-                string when = futureDay ? (leader == null ? " with no leader" : $" with '{leader}' leading") : string.Empty;
-                if (world.Count == 0)
-                {
-                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' has no places{when} (its eras x allowed nations match no place).", plan);
-                    issues++;
-                    empty = true;
-                    continue;
-                }
-
-                foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
-                {
-                    if (w.era != null && w.weight > 0f && !(leader == null && w.era == future) && world.All(p => p.era != w.era))
-                    {
-                        Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights era '{w.era.id}' but none of its allowed nations has a place there{when}.", plan);
-                        issues++;
-                    }
-                }
+                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' has no places (its eras x allowed nations match no place).", plan);
+                issues++;
+                continue;
             }
 
-            if (futureDay)
+            foreach (EraWeight w in plan.EraWeights ?? Array.Empty<EraWeight>())
             {
-                foreach (NationSO n in futureNations.Where(n => !plan.AllowsNation(n)))
+                if (w.era == null || w.weight <= 0f)
+                    continue;
+
+                if (w.era == future)
                 {
-                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights the Future but does not allow '{n.id}', so a {n.id} lead would open no Future that day.", plan);
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights the Future era: the Future is the present, never a destination (traveller types H2), so the weight draws nobody.", plan);
+                    issues++;
+                }
+                else if (today.All(p => p.era != w.era))
+                {
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' weights era '{w.era.id}' but none of its allowed nations has a place there.", plan);
                     issues++;
                 }
             }
 
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
             {
-                if (rule != null && future != null && rule.type == TravelRuleType.NationEraForbidden && rule.era == future)
+                if (rule != null && future != null && rule.era == future)
                 {
-                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' uses rule '{rule.name}', a nation+era rule on the Future: that place is in the world only while its nation leads, so the rule would usually forbid nothing.", plan);
+                    Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' uses rule '{rule.name}', which names the Future era: the Future is never a destination, so the rule forbids nothing.", plan);
                     issues++;
                 }
             }
-
-            if (empty)
-                continue;
-
-            List<NationEraProfileSO> today = lib.TodaysProfiles(plan, null);
 
             foreach (TravelRuleSO rule in plan.ActiveTravelRules)
             {
@@ -991,18 +970,13 @@ public static partial class ContentLibraryValidator
                     Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", rule);
                     issues++;
                 }
-            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds)).ToList();
+            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds, lib.FirstDayOf(r))).ToList();
             var kinds = plan.Kinds.Where(k => k != null && k.blueprint != null && k.weight > 0f)
                 .Select(k => (k.blueprint.Kind, (IReadOnlyCollection<string>)(k.blueprint.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList()))
                 .ToList();
-            foreach (string problem in Directives.DayProblems(plan.name, active, kinds, plan.GuaranteedRules.Where(r => r != null).Select(r => r.name).ToList()))
+            foreach (string problem in Directives.DayProblems(plan.name, plan.DayNumber, active, kinds))
             {
                 Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plan);
-                issues++;
-            }
-            foreach (TravelRuleSO rule in plan.GuaranteedRules.Where(r => r != null && !plan.ActiveTravelRules.Contains(r)))
-            {
-                Debug.LogError($"[ContentLibraryValidator] Day plan '{plan.name}' guarantees rule '{rule.name}', which is not among its active rules (run Tools > TimeDesk > Generate World).", plan);
                 issues++;
             }
 
@@ -1033,7 +1007,7 @@ public static partial class ContentLibraryValidator
                     issues++;
                 }
 
-                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && r.IsClosure) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
+                if (plan.GuaranteeRuleViolators && plan.ActiveTravelRules.Any(r => r != null && Directives.Guarantees(r.type, plan.DayNumber, lib.FirstDayOf(r))) && slot.caseIndex1Based <= ViolatorSlots.Window(plan.VisitorsCount))
                 {
                     Debug.LogWarning($"[ContentLibraryValidator] Day plan '{plan.name}' forces premade '{slot.legendary.displayName}' into slot {slot.caseIndex1Based}, in the first half of a day with rules: it takes a slot a guaranteed violator could need; with every first-half slot taken a violator is dropped.", plan);
                     issues++;
@@ -1123,17 +1097,10 @@ public static partial class ContentLibraryValidator
             Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
         int issues = problems.Count;
 
-        List<int> days = lib.DayPlans
-            .Where(p => p != null)
-            .Select(p => p.DayNumber)
-            .Distinct()
-            .OrderBy(d => d)
-            .ToList();
-
-        for (int i = 1; i < days.Count; i++)
+        foreach (string gap in DayPlans.Gaps(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber)))
         {
-            if (days[i] != days[i - 1] + 1)
-                Debug.LogWarning($"[ContentLibraryValidator] DayPlans gap in '{lib.name}': day {days[i - 1]} is followed by day {days[i]} (day(s) {days[i - 1] + 1}..{days[i] - 1} have no plan).");
+            Debug.LogWarning($"[ContentLibraryValidator] {gap} ('{lib.name}')", lib);
+            issues++;
         }
 
         return issues;

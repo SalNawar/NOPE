@@ -32,12 +32,9 @@ MonoBehaviour:
     weight: 1
   - era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
     weight: 1
-  - era: {fileID: 11400000, guid: 2952e6047d4a01f4fa1a68d975eb0cfb, type: 2}
-    weight: 1
   allowedNations: []
   legendaryBaseChance: 0.05
   availableLegendaries:
-  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
   - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
   - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
@@ -49,7 +46,7 @@ MonoBehaviour:
   tellCount: 1
   tellChannels: 000000000100000002000000
   costumeErrorChance: 0.1
-  lieKinds: 0100000002000000030000000400000000000000
+  lieKinds: 010000000200000004000000050000000000000003000000
   violationChance: 0.1
   activeTravelRules:
   - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
@@ -57,7 +54,14 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
   - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
   - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
+  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
   guaranteeRuleViolators: 1
-  guaranteedRules: []
-  forcedCases: []
+  forcedCases:
+  - caseIndex1Based: 8
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+  - caseIndex1Based: 11
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
   eventRules: []

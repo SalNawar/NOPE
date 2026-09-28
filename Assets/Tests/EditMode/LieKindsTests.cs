@@ -16,6 +16,10 @@ public class LieKindsTests
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.PoorTourist, true)]
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.Labourer, false)]
     [TestCase(LieKind.DoctoredIdentity, TravellerKind.Displaced, false)]
+    [TestCase(LieKind.FakeDisplaced, TravellerKind.Displaced, true)]
+    [TestCase(LieKind.FakeDisplaced, TravellerKind.RichTourist, false)]
+    [TestCase(LieKind.FakeDisplaced, TravellerKind.PoorTourist, false)]
+    [TestCase(LieKind.FakeDisplaced, TravellerKind.Labourer, false)]
     [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.RichTourist, true)]
     [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.PoorTourist, true)]
     [TestCase(LieKind.DebtorPosingAsTourist, TravellerKind.Labourer, false)]
@@ -53,9 +57,13 @@ public class LieKindsTests
     }
 
     [Test]
-    public void OnlyTheFalseOrigin_IsAPlaceLie()
+    public void ThePlaceLies_AreTheFalseOriginAndTheFakeDisplaced_EveryOtherLieIsARecordLie()
     {
         foreach (LieKind lie in (LieKind[])System.Enum.GetValues(typeof(LieKind)))
-            Assert.AreEqual(lie != LieKind.FalseOrigin, LieKinds.IsRecordLie(lie), lie.ToString());
+        {
+            bool place = lie == LieKind.FalseOrigin || lie == LieKind.FakeDisplaced;
+            Assert.AreEqual(place, LieKinds.IsPlaceLie(lie), lie.ToString());
+            Assert.AreEqual(!place, LieKinds.IsRecordLie(lie), lie.ToString());
+        }
     }
 }
