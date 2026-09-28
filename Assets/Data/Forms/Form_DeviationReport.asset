@@ -1,0 +1,86 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5883a81534f4323a4019a102a0712d4, type: 3}
+  m_Name: Form_DeviationReport
+  m_EditorClassIdentifier: Assembly-CSharp::FormSpecSO
+  form:
+    formNumber: 'TC-930'
+    title: 'Deviation Report'
+    fixedPage: 0
+    landscape: 0
+    blocks:
+    - kind: 0
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 6
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 'caseLine'
+    - kind: 5
+      text: 
+      cells: []
+      columns:
+      - 'No.'
+      - 'Category'
+      - 'Statement'
+      - 'Contradicted by'
+      - 'Proof'
+      shares:
+      - 0.07
+      - 0.15
+      - 0.3
+      - 0.3
+      - 0.18
+      options: []
+      field: -1
+      slot: 'rows'
+    - kind: 6
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 'tail'
+    - kind: 7
+      text: 'Desk officer'
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 'signature'
+    - kind: 11
+      text: 
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 
+    - kind: 10
+      text: 'A deviation is documented once per category. Denial on documented deviations is justified under the Temporal Customs Act of 2139.'
+      cells: []
+      columns: []
+      shares: []
+      options: []
+      field: -1
+      slot: 

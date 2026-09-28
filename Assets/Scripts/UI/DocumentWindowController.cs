@@ -10,9 +10,9 @@ using UnityEngine.UI;
 /// name, the strip ("SCANNED 10:42 · DESK SCANNER 1", the shift clock's time
 /// when the copy arrived; after an analysis pass "ANALYSED 10:44 · 1
 /// CONTRADICTION MARKED" or "... THE SCANNED PAPERS AGREE", the form
-/// style's words), and the paper's form drawn by a FormView from the
-/// same DocumentForm the desk paper prints, so the copy is the paper: its
-/// pages stacked in a scroll. A
+/// style's words), and the paper's form drawn by a FormView in its scroll
+/// (FormPage) from the same DocumentForm the desk paper prints, so the copy
+/// is the paper: its pages stacked in the scroll. A
 /// click on a box picks the field for the compare (EvidencePicks.ForField,
 /// the same pick as the held paper's box), the box under the pointer tints,
 /// and a box lights while its field's key is picked, in every pane (phase
@@ -21,8 +21,8 @@ using UnityEngine.UI;
 /// through the pane the copy is in (LK2); RevealField scrolls a field's box
 /// to the middle and outlines it. Every value shows in English, as filled
 /// (TR1). Each pickable box is marked with its field's key for the keys, the
-/// copy and the pins (AppRow: the field's label and value), in the form's
-/// reading order.
+/// copy and the pins (AppRow: the field's label and value, its link for
+/// Enter), in the form's reading order.
 /// </summary>
 public sealed class DocumentWindowController : MonoBehaviour
 {
@@ -32,11 +32,8 @@ public sealed class DocumentWindowController : MonoBehaviour
     /// <summary>The strip on the backing above the copy.</summary>
     [SerializeField] private TMP_Text scanStrip;
 
-    /// <summary>The scroll the copy's pages stack in.</summary>
-    [SerializeField] private ScrollRect scroll;
-
-    /// <summary>The copy: the paper's form.</summary>
-    [SerializeField] private FormView form;
+    /// <summary>The copy: the paper's form in its scroll.</summary>
+    [SerializeField] private FormPage page;
 
     /// <summary>Today's shift clock (the strip's time).</summary>
     [SerializeField] private ShiftClockDriver clock;
@@ -51,20 +48,25 @@ public sealed class DocumentWindowController : MonoBehaviour
     /// <summary>The case's claim (the place facts' links).</summary>
     private CaseClaim _claim;
 
+    /// <summary>The copy's form (null without a page).</summary>
+    private FormView Form => page != null ? page.Form : null;
+
     private void Awake()
     {
-        if (form == null)
+        if (Form == null)
             return;
-        form.SlotClicked += Pick;
-        form.LinkClicked += Follow;
+        Form.SlotClicked += Pick;
+        Form.LinkClicked += Follow;
+        page.Redrawn += MarkBoxes;
     }
 
     private void OnDestroy()
     {
-        if (form == null)
+        if (Form == null)
             return;
-        form.SlotClicked -= Pick;
-        form.LinkClicked -= Follow;
+        Form.SlotClicked -= Pick;
+        Form.LinkClicked -= Follow;
+        page.Redrawn -= MarkBoxes;
     }
 
     /// <summary>
@@ -84,29 +86,27 @@ public sealed class DocumentWindowController : MonoBehaviour
         if (titleText != null)
             titleText.text = doc != null ? doc.DisplayName : UiText.Get("document.untitled");
 
-        if (form != null && paper != null)
+        if (Form != null && paper != null)
         {
-            form.Bind(compare, slot => Field(slot) != null ? PickKeys.Field(_index, slot.Field) : null);
-            form.Show(paper.Spec, paper.Data, slot => Field(slot) != null, linkHint: LinkHint);
-            form.ShowPhoto(paper.Data.HasPhoto ? look : null, art);
+            Form.Bind(compare, slot => Field(slot) != null ? PickKeys.Field(_index, slot.Field) : null);
+            page.Show(paper.Spec, paper.Data, slot => Field(slot) != null, LinkHint);
+            Form.ShowPhoto(paper.Data.HasPhoto ? look : null, art);
             MarkBoxes();
         }
-        if (scroll != null)
-            scroll.verticalNormalizedPosition = 1f;
     }
 
     /// <summary>The copy arrived on the PC (its scan finished): the strip reads the shift clock's time now.</summary>
-    public void MarkScanned() => Strip(form != null && form.Style != null ? form.Style.scanStrip : null);
+    public void MarkScanned() => Strip(Form != null && Form.Style != null ? Form.Style.scanStrip : null);
 
     /// <summary>An analysis pass ended on this paper (the Analysis Scanner): the strip reads the time and whether a contradicting pair was marked (<paramref name="contradiction"/>), in the form style's words.</summary>
     public void MarkAnalysed(bool contradiction) =>
-        Strip(form != null && form.Style != null ? (contradiction ? form.Style.analysedStrip : form.Style.analysedCleanStrip) : null);
+        Strip(Form != null && Form.Style != null ? (contradiction ? Form.Style.analysedStrip : Form.Style.analysedCleanStrip) : null);
 
     /// <summary>The analysis marks on this copy: the dashed outline on each of <paramref name="fields"/>' boxes (FormView.SetMarks).</summary>
     public void SetMarks(IReadOnlyList<int> fields)
     {
-        if (form != null)
-            form.SetMarks(fields);
+        if (Form != null)
+            Form.SetMarks(fields);
     }
 
     /// <summary>Writes the strip from <paramref name="template"/> ({0}: the shift clock's time now, "--:--" without a clock); nothing without a strip or a template.</summary>
@@ -126,29 +126,26 @@ public sealed class DocumentWindowController : MonoBehaviour
     public void RevealField(string fieldKey)
     {
         int slot = -1;
-        PlacedForm placed = form != null ? form.Placed : null;
+        PlacedForm placed = page != null ? page.Placed : null;
         if (placed != null && PickKeys.TryField(fieldKey, out int document, out int field) && document == _index)
             for (int s = 0; s < placed.Slots.Count && slot < 0; s++)
                 if (placed.Slots[s].Field == field)
                     slot = s;
-        if (form != null)
-            form.MarkFound(slot);
-        if (slot < 0 || scroll == null || scroll.viewport == null)
-            return;
-
-        FaceRect box = placed.Slots[slot].Hit;
-        scroll.verticalNormalizedPosition = AppPanes.ScrollToMiddle(placed.Height, scroll.viewport.rect.height, box.YMin, box.Height);
+        if (page != null)
+            page.Reveal(slot);
     }
 
-    /// <summary>Marks each pickable box with its field's pick key and label (AppRow), as the box's click picks it.</summary>
+    /// <summary>Marks each pickable box with its field's pick key, label and link (AppRow), as the box's click picks it; again after every redraw (a copy is bound while still inactive, before Awake listens).</summary>
     private void MarkBoxes()
     {
-        form.ArmedSlots(_armed);
+        if (Form == null || _doc == null)
+            return;
+        Form.ArmedSlots(_armed);
         foreach ((FormSlot slot, Button button) in _armed)
         {
             DocumentField field = _doc.fields[slot.Field];
             ComparePick pick = EvidencePicks.ForField(_index, new DocumentRow(slot.Field, field), _doc.DisplayName);
-            AppRow.Mark(button.gameObject, AppTab.Documents, pick.Key, pick.Label, field.label, field.value, button);
+            AppRow.Mark(button.gameObject, AppTab.Documents, pick.Key, pick.Label, field.label, field.value, button).SetLink(Link(slot));
         }
     }
 

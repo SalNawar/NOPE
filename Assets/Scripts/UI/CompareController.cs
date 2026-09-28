@@ -61,6 +61,12 @@ public sealed class CompareController : MonoBehaviour
     /// <summary>The theme's tint of a picked value (keyed rows read it when they light).</summary>
     public Color HighlightColor => highlightColor;
 
+    /// <summary>The first side as picked (default before a pick; the Deviation Report keeps a proved pair's sides).</summary>
+    public ComparePick SideA => _pair.A;
+
+    /// <summary>The second side as picked (default until a pair).</summary>
+    public ComparePick SideB => _pair.B;
+
     private void Awake()
     {
         if (officeBar != null)

@@ -10,11 +10,10 @@ using UnityEngine.UI;
 /// six tabs of OfficeSceneUIBuilder.App's BuildTab, each with its glyph for a
 /// narrow strip, a tooltip naming it and the handle that drags it or opens
 /// its menu), its chip row (BuildChipTemplate), its content with a view per
-/// tab and the no-case state, and its 3 u accent frame; the rows' parts that light by key, carry
-/// the found mark and, for a statement, the ↗ (DecorateAppRow); the ↗ itself
-/// (a drawn glyph in the link ink, 28 u, with its hover hint) and the found
-/// outline, which the forms' FormView clones too; and the small hover hints of
-/// the toolbar and the tabs. Rebuilt fresh with the app (its one convergence
+/// tab and the no-case state, and its 3 u accent frame; the ↗ (a drawn glyph
+/// in the link ink, 28 u, with its hover hint) and the found outline, which
+/// the forms' FormView clones; and the small hover hints of the toolbar and
+/// the tabs. Rebuilt fresh with the app (its one convergence
 /// policy, audit R6-008); every reference is checked (Wire, audit R6-004).
 /// Part of <see cref="OfficeSceneUIBuilder"/>; BuildInvestigationApp calls it.
 /// </summary>
@@ -49,15 +48,15 @@ public static partial class OfficeSceneUIBuilder
         { AppTab.Rules, "app.tabGlyph.rules" },
     };
 
-    /// <summary>One pane's views, for the façade (each tab's page component).</summary>
+    /// <summary>One pane's views, for the façade (each tab's view).</summary>
     private struct PaneViews
     {
         public DocumentsView Documents;
-        public CitizenRecordsWindowController Records;
+        public RecordsView Records;
         public ReferenceView Reference;
-        public TranscriptWindowController Transcript;
-        public TMP_Text ReportText;
-        public TMP_Text RulesText;
+        public TranscriptView Transcript;
+        public ReportView Report;
+        public RulesView Rules;
     }
 
     /// <summary>
@@ -122,11 +121,11 @@ public static partial class OfficeSceneUIBuilder
         views = new PaneViews
         {
             Documents = BuildDocumentsView(content, out AppView documents),
-            Records = BuildRecordsView(content, compare, out AppView records),
+            Records = BuildRecordsView(content, compare),
             Reference = BuildReferenceView(content),
-            Transcript = BuildTranscriptView(content, out AppView transcript),
-            ReportText = BuildTextView<ReportView>(content, "ReportView", "scanner.idle", out AppView report),
-            RulesText = BuildTextView<RulesView>(content, "RulesView", "directives.none", out AppView rules),
+            Transcript = BuildTranscriptView(content),
+            Report = BuildReportView(content),
+            Rules = BuildRulesView(content),
         };
 
         Transform noCase = Panel(content, "NoCase", new Vector2(0.03f, 0.38f), new Vector2(0.97f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
@@ -147,7 +146,7 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(so, "tabLabels", tabLabels);
         SerializedArrays.Set(so, "tabGlyphs", tabGlyphs);
         Wire(so, "tabStrip", strip);
-        SerializedArrays.Set(so, "views", new Object[] { documents, records, views.Reference, transcript, report, rules });
+        SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules });
         Wire(so, "chipStrip", header);
         Wire(so, "chipTemplate", chip);
         Wire(so, "noCase", noCase.gameObject);
@@ -229,42 +228,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>One bar of a frame (no raycast).</summary>
     private static void FrameBar(Transform frame, string name, Vector2 aMin, Vector2 aMax, Vector2 pos, Vector2 size, Color colour, ThemeRoleId role) =>
         Panel(frame, name, aMin, aMax, pos, size, colour, role).GetComponent<Image>().raycastTarget = false;
-
-    /// <summary>
-    /// A list's row template as an app row (AppRow, CM3): its background is
-    /// the pick fill, lit by key; the found mark (an accent outline, hidden);
-    /// with <paramref name="withLink"/> (a statement's row) the ↗ at its right
-    /// end, hidden until a row has a link, and the row's texts keep clear of it.
-    /// </summary>
-    private static void DecorateAppRow(GameObject row, bool withLink)
-    {
-        Transform found = BuildFrame(row.transform, "Found", FoundFrameWidth, AccentInk, ThemeRoleId.FocusRing);
-        found.gameObject.SetActive(false);
-
-        Button link = null;
-        TMP_Text hint = null;
-        if (withLink)
-        {
-            link = BuildLinkButton(row.transform, "Link", ThemeRoleId.DiegeticRow, out hint);
-            var rt = (RectTransform)link.transform;
-            rt.anchorMin = rt.anchorMax = new Vector2(1f, 0.5f);
-            rt.pivot = new Vector2(1f, 0.5f);
-            rt.anchoredPosition = new Vector2(-2f, 0f);
-            GetOrAdd<LayoutElement>(link.gameObject).ignoreLayout = true;
-            link.gameObject.SetActive(false);
-            HorizontalLayoutGroup layout = row.GetComponent<HorizontalLayoutGroup>();
-            if (layout != null)
-                layout.padding = new RectOffset(layout.padding.left, Mathf.RoundToInt(LinkSize + 4f), layout.padding.top, layout.padding.bottom);
-        }
-
-        AppRow appRow = GetOrAdd<AppRow>(row);
-        var so = new SerializedObject(appRow);
-        Wire(so, "fill", row.GetComponent<Image>());
-        Wire(so, "link", link);
-        Wire(so, "linkHint", hint);
-        Wire(so, "found", found.gameObject);
-        so.ApplyModifiedProperties();
-    }
 
     /// <summary>
     /// The ↗ (LK2): a clear 28 u button (role <paramref name="role"/>) holding
