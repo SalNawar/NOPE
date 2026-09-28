@@ -464,6 +464,14 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **FEATURES:** 54 and 131 (the Future is the present), 58, 60 (premades on day 6), 66, 86 (from day 5), 155.
 - **Audit absorbed:** R3-037, R6-022.
 - **Depends on:** 11.
+- **Decisions taken while building (2026-09-29, for Saleh to confirm):**
+  - The day mix without phases 8 and 9: days 1-4 draw rich tourists only (1, 3, 2, 2), days 5-6 rich 2 and displaced 2; the poor and labourer entries come with their phases. Days 1-4 enable L1 and L2 only (the displaced's lies need the displaced); days 5-6 add L7 and L8.
+  - The displaced get two lines on day 5, as §5.3 reads: a procedure line (`Rule_DisplacedReturns`: the three papers, every paper matching the Displacement Registry) and the return-home directive (`Rule_ReturnHome`), both listed on days 5 and 6.
+  - The return home's first-day guarantee (P4) is one planned liar in the first half, drawn on the violator stream: the slot draws only the displaced (no new draw) and tells the drawn place lie (L7 or L8) without a roll. `TravelRuleType` moved to Domain (same ints) so `Directives` can decide it headless.
+  - The "home questions" moved to day 5 are Capital and Ruler (the three fact questions stay from day 1; phase 11 owns the trip questions).
+  - The translation notice fires two nights before `fromDay` (`Translation.NoticeNight`), so day 4's paper says "from tomorrow"; a `fromDay` of 2 is refused (no night before day 1's paper).
+  - The Future era's display name is "2150", so the present's row reads "Temporal Customs Zone (2150)"; a Future place stays in the Internet's world (`History.InWorld`) but is never a destination (`History.IsDestination`).
+  - Days 1-5 pool no premades and their `premadeChance` is 0; day 6 pools the other eight at 5%.
 
 ### Phase 13 — Strandings and the clerk's debt (M)
 
@@ -492,6 +500,12 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **FEATURES:** 12 (the bankrupt ending is the clerk's Debt Relief departure), 124 (ledger lines), 23 (news lines), 132 (strandings carry), 9 (the additive save field).
 - **Audit absorbed:** R2-007, R2-011 and R3-016 (the trace logs in the files it touches), R3-018, R3-023, R2-010 and R3-021 (the stability range and rule numbers as named knobs where touched), R3-005, R3-031, R6-016 (the Title builder's scene check).
 - **Depends on:** 12.
+- **As built, the strandings half (13b; 2026-09-29, branch `redesign/p13b-strandings` from main `942d5f9`, the anime hall; phases 8 and 9 not yet on main):**
+  - Domain `Strandings`: `Roll` takes the accepted travellers' real classes (the account's `TransponderClass`, null for the displaced) and draws once per Economy traveller in queue order on `Seeds.ForStrandings(daySeed)` ("STRD"; the day's own stream), stranded under `agency.strandChance` (0.08); every Economy traveller draws whatever the chance, so tuning never shifts a later draw. `Fined(waiver)` is anything but `WaiverStanding.Signed`; `Fine` is `agency.strandFine` (150). `Lines` fills `news.stranded` ({name}, {place}).
+  - **The waiver seam** (S3, for phases 8 and 9): the Domain enum `WaiverStanding` (None, Unsigned, Unregistered, Signed; append only) on `CaseInstance.waiverStanding`, read at the shift's end; `Strandings.Standing(handedOver, signature, waiverNo, registeredNo)` is the decision table the desk calls when the TC-310 is handed over and read (a blank or "UNSIGNED" signature row is Unsigned; a number the account never registered, or an account with none, is Unregistered). Until the paper sets land every traveller stands at None, so every stranding is fined.
+  - `ShiftStrandings.Resolve` runs in `GameManager.HandleDayCompleted` before the clerk's instalment (so the end-of-shift save holds it and Continue never rolls twice): the fine leaves the wallet at once, the ledger takes `strandedCount` and `strandingFines` (its net line and the statement's FINES cell, with the citation penalties), the run's `stranded` counter grows, and the ending check runs after it. A stranded traveller's carry is `HistoryService.RecordStranding`: `Carries.Make` from the present's row of today's facts (the neutral present or the leader's Future place) into the destination, promoted that night as a liar's is; `PromoteCarries` adds the present's row to the world facts so the latched edit's source reads the present's label, not its ids. `HistoryState.pendingStrandings` (additive; save version 2) feeds `ReportStrandings` at night, after the panics and before the debt line.
+  - The shift report's lines are `results.stranded` and `results.strandingFine`; the debug panel's "Force strandings" toggle (`DevToolsState.ForceStrandings`) makes every accepted Economy unit fail. `agency.strandChance`, `agency.strandFine` and `news.stranded` are content (the sheet map's `agency` columns and the `news` block, a Single now, with `newsDebt` its child).
+  - Left for the phases that bring the kinds: the ledger's "Leisure departures: n" and "Debt Relief departures: n" lines and the paper's "n citizens left on Debt Relief yesterday" count (phase 9's labourers), and wiring `waiverStanding` from the handed-over TC-310 (phase 8's waiver, phase 9's L3 fake waiver).
 
 ### Phase 14 — Windows and the compare dock (M)
 

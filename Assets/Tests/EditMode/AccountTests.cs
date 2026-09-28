@@ -47,6 +47,19 @@ public class AccountTests
         Assert.AreEqual(Account.Unknown, row.owed, "no debt source before phase 13");
     }
 
+    /// <summary>Redesign phase 13b: the FINES cell is the citation penalties and the stranding fines together.</summary>
+    [Test]
+    public void RecordShift_FinesAreThePenaltiesAndTheStrandingFines()
+    {
+        var days = new List<AccountDay>();
+        ShiftLedger ledger = Ledger(100, 20);
+        ledger.strandingFines = 150;
+
+        AccountDay row = Account.RecordShift(days, 1, ledger, new Source(), 60);
+
+        Assert.AreEqual(170, row.fines);
+    }
+
     [Test]
     public void RecordShift_AReplayedShiftReplacesTheDay()
     {

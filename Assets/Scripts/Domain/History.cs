@@ -105,6 +105,9 @@ public sealed class HistoryState
 
     /// <summary>Costume errors accepted today, reported in the next morning's news (then cleared), in accept order.</summary>
     public List<PanicRecord> pendingPanics = new();
+
+    /// <summary>Travellers stranded at today's shift's end (Strandings.Roll), reported in the next morning's news (then cleared), in queue order; an old save loads none.</summary>
+    public List<StrandingRecord> pendingStrandings = new();
 }
 
 /// <summary>An accepted costume error (traveller types P5): the traveller would cause a panic where they were sent.</summary>
@@ -166,12 +169,23 @@ public static class History
         history != null && !string.IsNullOrWhiteSpace(history.leaderId) ? history.leaderId : null;
 
     /// <summary>
-    /// Whether a place the day plan allows is in today's world: every place
-    /// outside the Future; a Future place only for <paramref name="futureNationId"/>
-    /// (at most one Future place, the leader's; none for null).
+    /// Whether a place the day plan allows is in today's world (the Internet's
+    /// pages): every place outside the Future; a Future place only for
+    /// <paramref name="futureNationId"/> (at most one Future place, the
+    /// leader's; none for null). Being in the world is not being a
+    /// destination: see <see cref="IsDestination"/>.
     /// </summary>
     public static bool InWorld(bool isFutureEra, string nationId, string futureNationId) =>
         !isFutureEra || (!string.IsNullOrEmpty(futureNationId) && string.Equals(nationId, futureNationId, StringComparison.Ordinal));
+
+    /// <summary>
+    /// Whether a place the day plan allows may be a destination today
+    /// (traveller types H2): every place outside the Future, and never a
+    /// Future place, whoever leads. The Future is the present, where 2150
+    /// citizens come from (Present.Choose), and nobody travels to it; a day
+    /// plan that weights the Future era draws no traveller from it.
+    /// </summary>
+    public static bool IsDestination(bool isFutureEra) => !isFutureEra;
 
     /// <summary>
     /// A place's fact with history applied: the newest latched edit of that

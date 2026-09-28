@@ -153,6 +153,7 @@ public static class TimelineService
         EvaluateTriggers(world, lib, tomorrow, news);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
+        HistoryService.ReportStrandings(world, lib, news);
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news);
@@ -175,11 +176,11 @@ public static class TimelineService
 
     /// <summary>
     /// Tomorrow's places as the dominance news filter reads them (the plan
-    /// tomorrow uses, without a Future place: Future places are never ranked);
-    /// empty when there is no plan.
+    /// tomorrow uses; Future places are never destinations nor ranked); empty
+    /// when there is no plan.
     /// </summary>
     private static HashSet<NationEraProfileSO> TomorrowPlaces(WorldState world, ContentLibrarySO lib) =>
-        new HashSet<NationEraProfileSO>(lib.TodaysProfiles(lib.GetDayPlan(world.day + 1), null));
+        new HashSet<NationEraProfileSO>(lib.TodaysProfiles(lib.GetDayPlan(world.day + 1)));
 
     /// <summary>
     /// Recomputes dominant/supporting attributes per authored profile (places

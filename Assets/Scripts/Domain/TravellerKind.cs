@@ -35,9 +35,11 @@ public static class TravellerKinds
     /// <summary>
     /// A blueprint's weight in the day's kind pick (DayPlanSO kinds, one
     /// weighted draw on the case stream): the day's weight, never below 0,
-    /// and 0 for every kind but the displaced in a premade's slot (the famous
-    /// are displaced premades, K1).
+    /// and 0 for every kind but the displaced in a slot that is theirs
+    /// (<paramref name="displacedOnly"/>: a premade's, since the famous are
+    /// displaced premades, K1; or the planned liar's of the displaced's
+    /// return home, Directives.Guarantees), so the pick stays one draw.
     /// </summary>
-    public static float PickWeight(TravellerKind kind, float dayWeight, bool premade) =>
-        premade && kind != TravellerKind.Displaced ? 0f : Math.Max(0f, dayWeight);
+    public static float PickWeight(TravellerKind kind, float dayWeight, bool displacedOnly) =>
+        displacedOnly && kind != TravellerKind.Displaced ? 0f : Math.Max(0f, dayWeight);
 }

@@ -56,6 +56,24 @@ public class ShiftLedgerTests
         Assert.AreEqual(0, ledger.UnprovenDenialCount);
         Assert.AreEqual(0, ledger.debtInstalment);
         Assert.AreEqual(Account.Unknown, ledger.debtOwed, "no debt known before the shift's end");
+        Assert.AreEqual(0, ledger.strandedCount);
+        Assert.AreEqual(0, ledger.strandingFines);
+    }
+
+    /// <summary>Redesign phase 13b: a stranding fine (Strandings.Fine) leaves the wallet at the shift's end, so the net line carries it.</summary>
+    [Test]
+    public void NetMoney_TakesTheStrandingFinesToo()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(Verdict(true, pay: 220));
+        ledger.verdicts.Add(Verdict(false, penalty: 15));
+        ledger.debtInstalment = 55;
+        ledger.strandedCount = 2;
+        ledger.strandingFines = 150;
+
+        Assert.AreEqual(220, ledger.TotalPay, "the pay stays the whole pay");
+        Assert.AreEqual(15, ledger.TotalPenalties, "the citation penalties stay apart from the fines");
+        Assert.AreEqual(0, ledger.NetMoney, "the wallet's change: 220 - 15 - 150 - 55");
     }
 
     [Test]

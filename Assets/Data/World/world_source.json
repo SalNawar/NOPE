@@ -1115,7 +1115,9 @@
         "prefix": "DB",
         "weight": 1
       }
-    ]
+    ],
+    "strandChance": 0.08,
+    "strandFine": 150
   },
   "eras": [
     {
@@ -1165,7 +1167,7 @@
     },
     {
       "id": "future",
-      "displayName": "Future",
+      "displayName": "2150",
       "order": 5,
       "future": true,
       "smallTalk": [
@@ -6608,6 +6610,16 @@
       "asset": "Rule_LeisureDepartures",
       "type": "Procedure",
       "description": "Leisure departures: a Leisure Visa and a Departure Manifest. Every paper must match the Citizen Account."
+    },
+    {
+      "asset": "Rule_DisplacedReturns",
+      "type": "Procedure",
+      "description": "Displaced returns: a Displacement Certificate, an Intake Declaration and a Return Order. Every paper must match the Displacement Registry."
+    },
+    {
+      "asset": "Rule_ReturnHome",
+      "type": "ReturnHome",
+      "description": "The displaced return only to their own time: their declaration must match their origin."
     }
   ],
   "days": [
@@ -6621,16 +6633,11 @@
       ],
       "lies": [
         "PoorPosingAsRich",
-        "DoctoredIdentity",
-        "FalseOrigin"
+        "DoctoredIdentity"
       ],
       "kinds": [
         {
           "kind": "RichTourist",
-          "weight": 1
-        },
-        {
-          "kind": "Displaced",
           "weight": 1
         }
       ],
@@ -6650,14 +6657,8 @@
         "Rule_LeisureDepartures"
       ],
       "premades": [],
-      "forced": [
-        {
-          "slot": 3,
-          "premade": "senenmut",
-          "blueprint": ""
-        }
-      ],
-      "premadeChance": 0.05,
+      "forced": [],
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.0
     },
     {
@@ -6670,12 +6671,13 @@
         "Answer"
       ],
       "lies": [
-        "FalseOrigin"
+        "PoorPosingAsRich",
+        "DoctoredIdentity"
       ],
       "kinds": [
         {
-          "kind": "Displaced",
-          "weight": 1
+          "kind": "RichTourist",
+          "weight": 3
         }
       ],
       "eras": [
@@ -6700,20 +6702,9 @@
         "Rule_NoAncientEgypt",
         "Rule_DressForDestination"
       ],
-      "premades": [
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi"
-      ],
-      "forced": [
-        {
-          "slot": 6,
-          "premade": "socrates",
-          "blueprint": ""
-        }
-      ],
-      "premadeChance": 0.05,
+      "premades": [],
+      "forced": [],
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1
     },
     {
@@ -6727,12 +6718,13 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "PoorPosingAsRich",
+        "DoctoredIdentity"
       ],
       "kinds": [
         {
-          "kind": "Displaced",
-          "weight": 1
+          "kind": "RichTourist",
+          "weight": 2
         }
       ],
       "eras": [
@@ -6755,19 +6747,9 @@
         "Rule_NoEarlyModernJapan",
         "Rule_DressForDestination"
       ],
-      "premades": [
-        "socrates",
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi",
-        "gutenberg",
-        "leonardo",
-        "lanyer",
-        "gallerani"
-      ],
+      "premades": [],
       "forced": [],
-      "premadeChance": 0.05,
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1
     },
     {
@@ -6781,12 +6763,13 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "PoorPosingAsRich",
+        "DoctoredIdentity"
       ],
       "kinds": [
         {
-          "kind": "Displaced",
-          "weight": 1
+          "kind": "RichTourist",
+          "weight": 2
         }
       ],
       "eras": [
@@ -6812,19 +6795,9 @@
         "Rule_NoIndustrialBritain",
         "Rule_DressForDestination"
       ],
-      "premades": [
-        "socrates",
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi",
-        "gutenberg",
-        "leonardo",
-        "lanyer",
-        "gallerani"
-      ],
+      "premades": [],
       "forced": [],
-      "premadeChance": 0.05,
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1
     },
     {
@@ -6838,12 +6811,19 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FalseOrigin",
+        "FakeDisplaced"
       ],
       "kinds": [
         {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
           "kind": "Displaced",
-          "weight": 1
+          "weight": 2
         }
       ],
       "eras": [
@@ -6872,21 +6852,13 @@
       "rules": [
         "Rule_NoModernGermany",
         "Rule_NoAncientEgypt",
-        "Rule_DressForDestination"
+        "Rule_DressForDestination",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome"
       ],
-      "premades": [
-        "socrates",
-        "aspasia",
-        "banzhao",
-        "arib",
-        "khwarizmi",
-        "gutenberg",
-        "leonardo",
-        "lanyer",
-        "gallerani"
-      ],
+      "premades": [],
       "forced": [],
-      "premadeChance": 0.05,
+      "premadeChance": 0.0,
       "costumeErrorChance": 0.1
     },
     {
@@ -6900,12 +6872,19 @@
         "Appearance"
       ],
       "lies": [
-        "FalseOrigin"
+        "PoorPosingAsRich",
+        "DoctoredIdentity",
+        "FalseOrigin",
+        "FakeDisplaced"
       ],
       "kinds": [
         {
+          "kind": "RichTourist",
+          "weight": 2
+        },
+        {
           "kind": "Displaced",
-          "weight": 1
+          "weight": 2
         }
       ],
       "eras": [
@@ -6928,19 +6907,16 @@
         {
           "era": "modern",
           "weight": 1
-        },
-        {
-          "era": "future",
-          "weight": 1
         }
       ],
       "countries": [],
       "rules": [
         "Rule_NoModernJapan",
-        "Rule_DressForDestination"
+        "Rule_DressForDestination",
+        "Rule_DisplacedReturns",
+        "Rule_ReturnHome"
       ],
       "premades": [
-        "socrates",
         "aspasia",
         "banzhao",
         "arib",
@@ -6950,7 +6926,18 @@
         "lanyer",
         "gallerani"
       ],
-      "forced": [],
+      "forced": [
+        {
+          "slot": 8,
+          "premade": "senenmut",
+          "blueprint": ""
+        },
+        {
+          "slot": 11,
+          "premade": "socrates",
+          "blueprint": ""
+        }
+      ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.1
     }
@@ -7044,7 +7031,7 @@
       "label": "Capital",
       "prompt": "What is the capital of your land?",
       "answer": "Our capital is {value}.",
-      "fromDay": 2,
+      "fromDay": 5,
       "announce": "BUREAU NOTICE: desk officers may now ask travellers for their capital. Check answers against the Capitals Gazetteer.",
       "conditions": [],
       "overrides": []
@@ -7055,7 +7042,7 @@
       "label": "Ruler",
       "prompt": "Who rules your land?",
       "answer": "We are ruled by {value}.",
-      "fromDay": 3,
+      "fromDay": 5,
       "announce": "BUREAU NOTICE: desk officers may now ask travellers who rules them. Check answers against Rulers & Regents.",
       "conditions": [],
       "overrides": []
@@ -7579,6 +7566,7 @@
     ]
   },
   "news": {
+    "stranded": "Stranded: {name}, lost in {place} when an Economy transponder failed.",
     "debt": [
       "Debt Relief Departures reach a record high.",
       "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
@@ -11157,6 +11145,18 @@
         "tier": "Full"
       },
       {
+        "key": "results.stranded",
+        "text": "Stranded in transit: {0}   (an Economy transponder failed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.strandingFine",
+        "text": "Stranding fine: -{0}   (let through without a signed waiver)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "scanner.idle",
         "text": "No deviations documented.\n\nCompare a document field, a traveller's answer or a garment they wear against the claimed place's reference entry, the entry it really belongs to, or the Citizen Record to log evidence.",
         "gloss": "None",
@@ -12613,8 +12613,8 @@
     ]
   },
   "translation": {
-    "fromDay": 2,
-    "announce": "Budget cuts close the interpreter pool. From today, foreign speech reaches the desk untranslated but for its key words; translators are sold at Home. Papers are still filled in English.",
+    "fromDay": 5,
+    "announce": "Budget cuts close the interpreter pool. From tomorrow, the displaced reach the desk speaking their own tongues, untranslated but for their key words; Speech translators are sold at Home tonight. Papers are still filled in English.",
     "flip": {
       "startDelay": 0.3,
       "letterInterval": 0.04,

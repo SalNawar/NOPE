@@ -80,22 +80,29 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The era of the claimed place (the correct era on the legacy era-pick
-    /// path). A liar's real era is trueHome.era. Set even when the case has no
-    /// blueprint (audit R3-020 merged the duplicate `trueEra`).
+    /// path). A liar's real era is tellSourceEraId. Set even when the case
+    /// has no blueprint (audit R3-020 merged the duplicate `trueEra`).
     /// </summary>
     public EraSO claimedEra;
 
     /// <summary>
-    /// Where the traveller really comes from: another of today's places for a
-    /// liar, null for an honest traveller (whose home is the claim).
+    /// Where a liar's tells really come from, the tell source (traveller
+    /// types H3): the nation id of another of today's places (a false
+    /// origin, L7) or of the present (a fake displaced person, L8); null for
+    /// an honest traveller (whose home is the claim). Ids rather than a
+    /// profile: the present is no NationEraProfileSO, and a carry reads the
+    /// ids against today's facts (HistoryService.RecordCarry).
     /// </summary>
-    public NationEraProfileSO trueHome;
+    public string tellSourceNationId;
 
-    /// <summary>The true home's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
+    /// <summary>The era id of the tell source (the present's era for a fake displaced person); null for an honest traveller.</summary>
+    public string tellSourceEraId;
+
+    /// <summary>The tell source's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
     public string trueHomeLabel = string.Empty;
 
-    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells).</summary>
-    public bool IsLiar => trueHome != null;
+    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells of the tell source).</summary>
+    public bool IsLiar => !string.IsNullOrEmpty(tellSourceEraId);
 
     /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
     public string HomeLabel => IsLiar ? trueHomeLabel : originLabel;
@@ -132,6 +139,15 @@ public sealed class CaseInstance
     /// needed (a closed destination); None when the Directives allow it.
     /// </summary>
     public DirectiveFault directiveFault;
+
+    /// <summary>
+    /// What the desk saw of the traveller's Stranding Waiver (TC-310;
+    /// Strandings.Standing), read when the shift ends: a stranded traveller
+    /// let through at anything but Signed costs the clerk the fine (traveller
+    /// types S3; ShiftStrandings). None until the waiver form is handed over
+    /// and read (the seam for the paper sets: the plan's phases 8 and 9).
+    /// </summary>
+    public WaiverStanding waiverStanding;
 
     /// <summary>True when the Directives forbid the traveller's claim (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;

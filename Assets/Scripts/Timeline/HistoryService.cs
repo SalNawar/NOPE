@@ -3,10 +3,12 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// History glue: records liar carries and costume-error panics at accept, and
-/// at night latches the timeline leader, promotes carries and reports panics. Every decision is a Domain call
-/// (Influence, ScoreRanking, NationLeader, Carries, History); this class reads
-/// the content, writes WorldState.history, fills the news and logs.
+/// History glue: records liar carries and costume-error panics at accept and
+/// strandings at the shift's end, and at night latches the timeline leader,
+/// promotes carries and reports panics and strandings. Every decision is a
+/// Domain call (Influence, ScoreRanking, NationLeader, Carries, History,
+/// Strandings); this class reads the content, writes WorldState.history,
+/// fills the news and logs.
 /// </summary>
 public static class HistoryService
 {
@@ -14,20 +16,21 @@ public static class HistoryService
     private const string LeaderSourcePrefix = "history:leader";
 
     /// <summary>
-    /// At accept: an accepted liar's true home's fact (GameConfigSO.carryCategory)
-    /// heads for the claimed place, read from today's facts (Carries.Make).
-    /// Honest travellers and violators carry nothing.
+    /// At accept: an accepted liar's tell source's fact (GameConfigSO.carryCategory;
+    /// another place's, or the present's for a fake displaced person: a
+    /// carry from the present, traveller types H3) heads for the claimed
+    /// place, read by the source's ids from today's facts (Carries.Make, which
+    /// hold the present's row). Honest travellers and violators carry nothing.
     /// </summary>
     public static void RecordCarry(WorldState world, CaseInstance inst, FactTable today, GameConfigSO config)
     {
         if (world == null || inst == null || !inst.IsLiar || config == null)
             return;
 
-        NationEraProfileSO home = inst.trueHome;
-        if (inst.claimedNation == null || inst.claimedEra == null || home.nation == null || home.era == null)
+        if (inst.claimedNation == null || inst.claimedEra == null)
             return;
 
-        CarryRecord record = Carries.Make(home.nation.id, home.era.id, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
+        CarryRecord record = Carries.Make(inst.tellSourceNationId, inst.tellSourceEraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
         if (record == null)
             return;
 
@@ -48,6 +51,56 @@ public static class HistoryService
         world.history.pendingPanics ??= new List<PanicRecord>();
         world.history.pendingPanics.Add(new PanicRecord { placeLabel = inst.originLabel, item = inst.CostumeItem, day = world.day });
         Debug.Log($"[HistoryService] Panic recorded: '{inst.CostumeItem}' ({inst.costumeFault}) worn to {inst.originLabel}.");
+    }
+
+    /// <summary>
+    /// At the shift's end: a stranded traveller (traveller types S2) carries
+    /// the present's fact (GameConfigSO.carryCategory) into the destination
+    /// through the carries, as a liar does (Carries.Make from the present's
+    /// row of today's facts), and is kept for the next morning's news
+    /// (ReportStrandings). Without a present or a config only the news is
+    /// recorded.
+    /// </summary>
+    public static void RecordStranding(WorldState world, CaseInstance inst, TodaysWorld today, GameConfigSO config)
+    {
+        if (world == null || inst == null)
+            return;
+
+        world.history.pendingStrandings ??= new List<StrandingRecord>();
+        world.history.pendingStrandings.Add(new StrandingRecord { travellerName = inst.visitorDisplayName, placeLabel = inst.originLabel, day = world.day });
+
+        PresentPlace present = today?.Present;
+        if (present == null || config == null || inst.claimedNation == null || inst.claimedEra == null)
+        {
+            Debug.LogWarning($"[HistoryService] Stranding of '{inst.visitorDisplayName}' recorded for the news, but no present, config or claim to carry from: nothing reaches {inst.originLabel}.");
+            return;
+        }
+
+        CarryRecord record = Carries.Make(present.NationId, present.EraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today.Facts, world.day);
+        if (record == null)
+            return;
+
+        world.history.pendingCarries.Add(record);
+        Debug.Log($"[HistoryService] Stranding carry recorded: '{record.value}' ({record.category}) from {present.Label} to {inst.originLabel}.");
+    }
+
+    /// <summary>
+    /// At night: one news line per traveller stranded today (Strandings.Lines
+    /// over news.stranded), then the record is cleared. A blank line warns and
+    /// reports nothing.
+    /// </summary>
+    public static void ReportStrandings(WorldState world, ContentLibrarySO lib, List<string> news)
+    {
+        List<StrandingRecord> strandings = world.history.pendingStrandings;
+        if (strandings == null || strandings.Count == 0)
+            return;
+
+        List<string> lines = Strandings.Lines(lib.News.stranded, strandings);
+        if (lines.Count == 0)
+            Debug.LogWarning("[HistoryService] Strandings were recorded but the content library has no stranding line. Run Tools > TimeDesk > Generate World.");
+        news.AddRange(lines);
+        Debug.Log($"[HistoryService] {strandings.Count} stranding(s) reported: {string.Join("; ", strandings.Select(s => $"'{s.travellerName}' in {s.placeLabel}"))}.");
+        strandings.Clear();
     }
 
     /// <summary>
@@ -137,9 +190,11 @@ public static class HistoryService
     /// <summary>
     /// At night (after the triggers): warns about a history rule edit latched
     /// tonight that shares a value with another place, promotes the due carries
-    /// (Carries.Promote over every place's facts, history applied) and
-    /// announces them while the history news cap allows (History.NewsSlots;
-    /// the rest are logged). With no config nothing is promoted.
+    /// (Carries.Promote over every place's facts, history applied, the
+    /// present's row among them so a stranding's carry names the present as
+    /// its source) and announces them while the history news cap allows
+    /// (History.NewsSlots; the rest are logged). With no config nothing is
+    /// promoted.
     /// </summary>
     public static void PromoteCarries(WorldState world, ContentLibrarySO lib, GameConfigSO config, int tomorrow, List<string> news, int historyLinesSoFar)
     {
@@ -147,6 +202,7 @@ public static class HistoryService
             return;
 
         FactTable worldFacts = lib.BuildWorldFacts(world.history);
+        global::Present.AddRow(worldFacts, lib.BuildPresent(world.history));
         foreach (FactEdit edit in world.history.factEdits.Where(e => e != null && e.sinceDay == tomorrow && e.cause == EditCause.Rule))
             if (worldFacts.TryFindOtherPlaceWith(edit.category, edit.nationId, edit.eraId, edit.value, out FactRow other))
                 Debug.LogWarning($"[HistoryService] History rule '{edit.source}' gives {worldFacts.OriginLabel(edit.nationId, edit.eraId)} the {edit.category} value '{edit.value}', which {other.OriginLabel} already has, so neither can leak a {edit.category} tell while both are in the world. Give the rule a distinct value (Tools > TimeDesk > Validate Content Library).");
