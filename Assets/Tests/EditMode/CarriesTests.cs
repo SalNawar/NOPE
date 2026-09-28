@@ -40,6 +40,19 @@ public class CarriesTests
     }
 
     [Test]
+    public void Make_FromThePresent_CarriesItsTechnologyIntoTheClaim()
+    {
+        // The present's row (Present.AddRow, last in today's table) is a carry source like any place: a smuggler's 2150 goods land in the past (traveller types H3).
+        FactTable w = World();
+        w.Add("neutral", "future", "Temporal Customs Zone (Future)", ClueCategory.Technology, "Wrist comm");
+        CarryRecord r = Carries.Make("neutral", "future", "greece", "ancient", ClueCategory.Technology, w, 4);
+        Assert.NotNull(r);
+        Assert.AreEqual(("neutral", "future", "greece", "ancient"), (r.fromNationId, r.fromEraId, r.toNationId, r.toEraId));
+        Assert.AreEqual("Wrist comm", r.value);
+        Assert.AreEqual(4, r.day);
+    }
+
+    [Test]
     public void Make_NullWhenNothingWouldCarry()
     {
         FactTable w = World();

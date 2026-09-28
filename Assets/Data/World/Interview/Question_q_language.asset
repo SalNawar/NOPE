@@ -23,4 +23,5 @@ MonoBehaviour:
       id: q_language.answer
       text: At home we speak {value}.
     overrides: []
+    kinds: 03000000
   conditions: []

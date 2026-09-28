@@ -171,7 +171,7 @@ public static partial class ContentLibraryValidator
             ("deskName", lines.deskName), ("opener", lines.opener?.text), ("openerLegendary", lines.openerLegendary?.text),
             ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
             ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("papersLabel", lines.papersLabel), ("requestPrompt", lines.requestPrompt?.text),
-            ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("backLabel", lines.backLabel),
+            ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("tripAskLabel", lines.tripAskLabel), ("backLabel", lines.backLabel),
             ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text), ("lookLabel", lines.lookLabel)
         };
         foreach ((string field, string text) in wording)
@@ -197,7 +197,9 @@ public static partial class ContentLibraryValidator
         }
 
         HashSet<ClueCategory> books = lib.ReferenceBookCategories();
-        var asked = new HashSet<ClueCategory>();
+        List<InterviewQuestion> questions = lib.Questions.Where(q => q != null && q.question != null).Select(q => q.question).ToList();
+        foreach (string problem in InterviewQuestions.Problems(questions))
+            Error(problem, lib);
         foreach (QuestionSO q in lib.Questions)
         {
             if (q == null || q.question == null)
@@ -208,8 +210,6 @@ public static partial class ContentLibraryValidator
                 Error($"Question '{question.id}' asks about {question.category}: answers in this category can never be proven (no reference book covers it, and it is not a birth date).", q);
             if (question.category == Looks.EvidenceCategory)
                 Error($"Question '{question.id}' asks about Culture; dress is looked at on the traveller wheel, never asked.", q);
-            if (!asked.Add(question.category))
-                Error($"Question '{question.id}' asks about {question.category} again (one question per category).", q);
             if (!Interview.HoldsToken(question.answer?.text, Interview.ValueToken))
                 Error($"Question '{question.id}': its answer template must hold {{value}}.", q);
             foreach (WordingOverride o in question.overrides ?? new List<WordingOverride>())
@@ -267,7 +267,7 @@ public static partial class ContentLibraryValidator
         foreach (string problem in FormRequests.ReplyProblems(lines.missingFormReplies, forms, kindForms))
             Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
 
-        foreach (string problem in DialogChecks.MenuProblems(lib.Questions.Count(q => q != null), smallTalk, MaxRequests(kindForms),
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(questions), smallTalk, MaxRequests(kindForms),
                                                              (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
                                                              lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
             Error(problem, lib);

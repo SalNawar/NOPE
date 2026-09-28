@@ -23,6 +23,7 @@ MonoBehaviour:
       id: q_born.answer
       text: I was born on {value}.
     overrides: []
+    kinds: 
   conditions:
   - type: 10
     key: interview_protocols

@@ -20,6 +20,31 @@ public class InterviewDayTests
     private static Gated<InterviewQuestion> Question(string id, ClueCategory category, params GateCondition[] conditions) =>
         new Gated<InterviewQuestion>(new InterviewQuestion { id = id, category = category, label = id }, conditions);
 
+    /// <summary>A question the desk asks of <paramref name="kinds"/> only (world_source.json questions[].kinds).</summary>
+    private static Gated<InterviewQuestion> KindQuestion(string id, ClueCategory category, TravellerKind[] kinds, params GateCondition[] conditions)
+    {
+        Gated<InterviewQuestion> q = Question(id, category, conditions);
+        q.Item.kinds.AddRange(kinds);
+        return q;
+    }
+
+    private static readonly TravellerKind[] Citizens = { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer };
+    private static readonly TravellerKind[] Displaced = { TravellerKind.Displaced };
+
+    /// <summary>Day 4's questions (traveller types I1): the home questions the displaced's, the trip questions (Currency, Technology, from day 4) the citizens', the birth date everyone's.</summary>
+    private static List<Gated<InterviewQuestion>> KindQuestions() => new List<Gated<InterviewQuestion>>
+    {
+        KindQuestion("q_currency", ClueCategory.Currency, Displaced),
+        KindQuestion("q_device", ClueCategory.Technology, Displaced),
+        KindQuestion("q_capital", ClueCategory.Geography, Displaced, Day(2)),
+        Question("q_born", ClueCategory.BirthDate, new GateCondition(TriggerConditionType.UpgradeOwned, "interview_protocols", 0f)),
+        KindQuestion("q_trip_currency", ClueCategory.Currency, Citizens, Day(4)),
+        KindQuestion("q_trip_device", ClueCategory.Technology, Citizens, Day(4))
+    };
+
+    private static InterviewDay KindDay(GateSnapshot snapshot) =>
+        new InterviewDay(new InterviewLines { menuCapacity = 8 }, KindQuestions(), null, snapshot, new ShiftLedger(), null);
+
     private static List<Gated<InterviewQuestion>> Questions() => new List<Gated<InterviewQuestion>>
     {
         Question("q_currency", ClueCategory.Currency),
@@ -81,6 +106,70 @@ public class InterviewDayTests
                                   "upgrade- and flag-gated questions are hint-only");
 
         CollectionAssert.AreEqual(DayOf(Snap(3)).AnswerTellCategories, day.AnswerTellCategories, "a purchase or a flag never changes the tell categories");
+    }
+
+    [Test]
+    public void QuestionsFor_AreTheKindsAskableQuestions_InLibraryOrder_TheTripQuestionsFromDay4()
+    {
+        InterviewDay day3 = KindDay(Snap(3, upgrades: new[] { "interview_protocols" }));
+        CollectionAssert.AreEqual(new[] { "q_currency", "q_device", "q_capital", "q_born" }, day3.QuestionsFor(TravellerKind.Displaced).Select(q => q.id).ToArray());
+        CollectionAssert.AreEqual(new[] { "q_born" }, day3.QuestionsFor(TravellerKind.RichTourist).Select(q => q.id).ToArray(), "a citizen is never asked about home");
+        CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate }, day3.AskableCategoriesFor(TravellerKind.Labourer));
+
+        InterviewDay day4 = KindDay(Snap(4));
+        CollectionAssert.AreEqual(new[] { "q_trip_currency", "q_trip_device" }, day4.QuestionsFor(TravellerKind.PoorTourist).Select(q => q.id).ToArray());
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology }, day4.AskableCategoriesFor(TravellerKind.RichTourist));
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography }, day4.AskableCategoriesFor(TravellerKind.Displaced));
+        CollectionAssert.AreEqual(new[] { "q_currency", "q_device", "q_capital", "q_trip_currency", "q_trip_device" }, day4.Questions.Select(q => q.id).ToArray(), "every kind's, in library order");
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Currency, ClueCategory.Technology }, day4.AskableCategories);
+    }
+
+    [Test]
+    public void AnswerTellCategoriesFor_AreTheKindsDayGatedQuestions()
+    {
+        InterviewDay day4 = KindDay(Snap(4, upgrades: new[] { "interview_protocols" }));
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology }, day4.AnswerTellCategoriesFor(TravellerKind.Labourer), "the trip questions may carry a smuggler's spoken tell");
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography }, day4.AnswerTellCategoriesFor(TravellerKind.Displaced));
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.BirthDate, ClueCategory.Currency, ClueCategory.Technology }, day4.AskableCategories);
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency, ClueCategory.Technology, ClueCategory.Geography, ClueCategory.Currency, ClueCategory.Technology }, day4.AnswerTellCategories, "the upgrade-gated birth date is hint-only for everyone");
+        CollectionAssert.IsEmpty(KindDay(Snap(3)).AnswerTellCategoriesFor(TravellerKind.RichTourist), "before day 4 a citizen has no question that could carry a tell");
+    }
+
+    [Test]
+    public void AQuestionNamingNoKind_IsEveryKinds()
+    {
+        InterviewDay day = DayOf(Snap(3));
+        foreach (TravellerKind kind in (TravellerKind[])System.Enum.GetValues(typeof(TravellerKind)))
+        {
+            CollectionAssert.AreEqual(day.Questions, day.QuestionsFor(kind), kind.ToString());
+            CollectionAssert.AreEqual(day.AskableCategories, day.AskableCategoriesFor(kind), kind.ToString());
+            CollectionAssert.AreEqual(day.AnswerTellCategories, day.AnswerTellCategoriesFor(kind), kind.ToString());
+        }
+    }
+
+    [Test]
+    public void InterviewQuestions_OneQuestionPerCategoryPerKind()
+    {
+        List<InterviewQuestion> sound = KindQuestions().Select(q => q.Item).ToList();
+        CollectionAssert.IsEmpty(InterviewQuestions.Problems(sound), "the home and trip questions share categories across disjoint kinds");
+        Assert.AreEqual(4, InterviewQuestions.MostForOneKind(sound), "the displaced's four");
+
+        // A trip question asking every kind collides with the home question of the displaced, and only there.
+        sound[4].kinds.Clear();
+        List<string> problems = InterviewQuestions.Problems(sound);
+        Assert.AreEqual(1, problems.Count, string.Join(" | ", problems));
+        Assert.AreEqual("Question 'q_trip_currency' asks about Currency for Displaced, as 'q_currency' does (one question per category per kind).", problems[0]);
+        Assert.AreEqual(5, InterviewQuestions.MostForOneKind(sound), "the displaced are now asked five");
+
+        // Two questions naming no kind: reported once per kind, in enum order.
+        List<InterviewQuestion> twice = new[] { Question("a", ClueCategory.Politics).Item, Question("b", ClueCategory.Politics).Item }.ToList();
+        problems = InterviewQuestions.Problems(twice);
+        Assert.AreEqual(4, problems.Count, string.Join(" | ", problems));
+        StringAssert.StartsWith("Question 'b' asks about Politics for RichTourist, as 'a' does", problems[0]);
+
+        CollectionAssert.IsEmpty(InterviewQuestions.Problems(null));
+        Assert.AreEqual(0, InterviewQuestions.MostForOneKind(null));
+        CollectionAssert.IsEmpty(InterviewQuestions.Problems(new List<InterviewQuestion> { null }));
     }
 
     [Test]

@@ -189,6 +189,12 @@ public sealed class InterviewQuestion
     /// <summary>Wording per claimed era (only the sentence changes, never the value).</summary>
     public List<WordingOverride> overrides = new();
 
+    /// <summary>The kinds of traveller the desk asks it of (world_source.json questions[].kinds; traveller types I1: the trip questions the 2150 citizens', the home questions the displaced's); empty: every kind.</summary>
+    public List<TravellerKind> kinds = new();
+
+    /// <summary>True when the desk asks this question of a traveller of <paramref name="kind"/>: one of its kinds, or every kind when it names none.</summary>
+    public bool AsksOf(TravellerKind kind) => kinds == null || kinds.Count == 0 || kinds.Contains(kind);
+
     /// <summary>The question as asked of a traveller claiming <paramref name="eraId"/>: that era's override, else the default.</summary>
     public LineText PromptFor(string eraId)
     {
@@ -266,8 +272,11 @@ public sealed class InterviewLines
     /// <summary>The traveller's reply as they hand the document over.</summary>
     public LineText requestReply = new();
 
-    /// <summary>Hub entry that opens the questions sub-menu.</summary>
+    /// <summary>Hub entry that opens the questions sub-menu for the displaced ("Ask about home >"; Interview.AskLabel).</summary>
     public string askLabel;
+
+    /// <summary>Hub entry that opens the questions sub-menu for a 2150 citizen ("Ask about the trip >"; traveller types §8), who is asked about the trip, never about home.</summary>
+    public string tripAskLabel;
 
     /// <summary>The ask menu's way back to the hub (always its first entry).</summary>
     public string backLabel;

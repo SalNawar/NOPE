@@ -88,23 +88,27 @@ public sealed class CaseInstance
     /// <summary>
     /// Where a liar's tells really come from, the tell source (traveller
     /// types H3): the nation id of another of today's places (a false
-    /// origin, L7) or of the present (a fake displaced person, L8); null for
-    /// an honest traveller (whose home is the claim). Ids rather than a
-    /// profile: the present is no NationEraProfileSO, and a carry reads the
-    /// ids against today's facts (HistoryService.RecordCarry).
+    /// origin, L7) or of the present (a fake displaced person, L8; a
+    /// smuggler, L6); null for an honest traveller (whose home is the
+    /// claim). Ids rather than a profile: the present is no
+    /// NationEraProfileSO, and a carry reads the ids against today's facts
+    /// (HistoryService.RecordCarry).
     /// </summary>
     public string tellSourceNationId;
 
-    /// <summary>The era id of the tell source (the present's era for a fake displaced person); null for an honest traveller.</summary>
+    /// <summary>The era id of the tell source (the present's era for a fake displaced person or a smuggler); null for an honest traveller.</summary>
     public string tellSourceEraId;
 
     /// <summary>The tell source's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
     public string trueHomeLabel = string.Empty;
 
-    /// <summary>True when the traveller lied about their home (their papers, answers or dress leak tells of the tell source).</summary>
+    /// <summary>The lie the traveller carries, once planned and printed (Lies.Roll's pick that could show); null for an honest traveller.</summary>
+    public LieKind? lie;
+
+    /// <summary>True when the traveller carries a place lie (a false origin, a fake displaced person, smuggling): their papers, answers or dress leak the tell source's values.</summary>
     public bool IsLiar => !string.IsNullOrEmpty(tellSourceEraId);
 
-    /// <summary>Where the traveller really comes from, as a label (verdict and logs).</summary>
+    /// <summary>Where a place liar's tells come from, as a label; the claim's for everyone else (verdict and logs).</summary>
     public string HomeLabel => IsLiar ? trueHomeLabel : originLabel;
 
     /// <summary>
@@ -135,8 +139,10 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The traveller's directive fault (traveller types P1): what today's
-    /// Directives forbid in the claim, read against them with no evidence
-    /// needed (a closed destination); None when the Directives allow it.
+    /// Directives forbid in the claim or the papers, read against them and
+    /// the agency calendar with no evidence needed (a closed destination; a
+    /// departure dated another day or an expired paper, Directives.PaperDates);
+    /// None when the Directives allow them.
     /// </summary>
     public DirectiveFault directiveFault;
 
@@ -150,11 +156,11 @@ public sealed class CaseInstance
     /// </summary>
     public WaiverStanding waiverStanding;
 
-    /// <summary>True when the Directives forbid the traveller's claim (a directive fault).</summary>
+    /// <summary>True when the Directives forbid the traveller's claim or papers (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
-    public string FaultReason => Faults.Reason(directiveFault, costumeFault, IsForger, IsLiar);
+    public string FaultReason => Faults.Reason(directiveFault, costumeFault, lie);
 
     /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
     public string claimLine;
@@ -174,8 +180,9 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The correct decision (traveller types §5.2): accept only a traveller
-    /// with no fault; deny a deviation fault (a liar, a forger, a costume
-    /// error) or a directive fault (a closed destination).
+    /// with no fault; deny a deviation fault (a liar, a smuggler, a forger, a
+    /// costume error) or a directive fault (a closed destination, a wrong
+    /// departure date, an expired paper).
     /// </summary>
     public bool ShouldAccept => VerdictRules.ShouldAccept(HasDeviationFault, HasDirectiveFault);
 

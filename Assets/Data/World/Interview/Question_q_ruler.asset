@@ -23,6 +23,7 @@ MonoBehaviour:
       id: q_ruler.answer
       text: We are ruled by {value}.
     overrides: []
+    kinds: 03000000
   conditions:
   - type: 8
     key: 

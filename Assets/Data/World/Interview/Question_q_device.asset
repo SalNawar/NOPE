@@ -23,4 +23,5 @@ MonoBehaviour:
       id: q_device.answer
       text: Every day I use {value}.
     overrides: []
+    kinds: 03000000
   conditions: []

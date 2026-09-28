@@ -24,6 +24,7 @@ public class InterviewScriptTests
         requestPrompt = new LineText("interview.requestPrompt", "Your {document}, please."),
         requestReply = new LineText("interview.requestReply", "Here you are."),
         askLabel = "Ask about home >",
+        tripAskLabel = "Ask about the trip >",
         lookLabel = "Look >",
         backLabel = "< Back",
         smallTalkLabel = "Small talk",
@@ -181,6 +182,32 @@ public class InterviewScriptTests
     private static DialogGraph Build(InterviewCase c = null, IReadOnlyList<InterviewQuestion> questions = null, IReadOnlyList<AuthoredDialog> dialogs = null,
                                      InterviewLines lines = null) =>
         InterviewScript.Build(lines ?? Lines(), questions ?? Questions(), dialogs ?? new[] { Rumour() }, c ?? Case());
+
+    [Test]
+    public void TheAskEntry_IsTheKinds_ATripForACitizen_HomeForTheDisplaced()
+    {
+        Assert.AreEqual("Ask about home >", Build().Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label);
+
+        InterviewCase tourist = Case();
+        tourist.kind = TravellerKind.RichTourist;
+        Assert.AreEqual("Ask about the trip >", Build(tourist).Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label);
+
+        InterviewLines noTripLabel = Lines();
+        noTripLabel.tripAskLabel = null;
+        Assert.AreEqual("Ask about home >", Build(tourist, lines: noTripLabel).Node(InterviewScript.HubNodeId).Choices.First(x => x.Id == "ask").Label, "the home label stands in");
+    }
+
+    [Test]
+    public void APromptWithThePlaceToken_NamesTheClaimedPlace()
+    {
+        InterviewQuestion trip = Question("q_trip_currency", ClueCategory.Currency, "Currency", "I've changed my money into {value}.");
+        trip.prompt = new LineText("q_trip_currency.prompt", "What will you pay with in {place}?");
+        DialogChoice choice = Build(questions: new[] { trip }).Node(InterviewScript.AskNodeId).Choices[1];
+        Assert.AreEqual("What will you pay with in New Kingdom Egypt (Ancient)?", choice.Lines[0].Text);
+        Assert.AreEqual(DialogSpeaker.Desk, choice.Lines[0].Speaker);
+        Assert.AreEqual("I've changed my money into Deben.", choice.Lines[1].Text);
+        Assert.AreEqual("About Capital?", Build().Node(InterviewScript.AskNodeId).Choices[2].Lines[0].Text, "a prompt without the token is as it is");
+    }
 
     private static string[] Ids(IEnumerable<DialogChoice> choices) => choices.Select(c => c.Id).ToArray();
 

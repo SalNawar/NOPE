@@ -144,7 +144,8 @@ public sealed class InterviewPresenter
     /// Starts the traveller's interview: the wheel takes the case's translation;
     /// the hub has a request per form or group the kind may be asked for, "Look >"
     /// (the traveller's garments) when garments can be compared, and, when the
-    /// interview is reachable, today's questions, small talk and offered
+    /// interview is reachable, today's questions of the traveller's kind (the
+    /// trip's for a 2150 citizen, home's for the displaced), small talk and offered
     /// dialogs (a premade's own dialog only while they are at the desk; without
     /// a wired transcript nothing spoken could be read, so only the requests
     /// and the look remain). The transcript starts with the opener and the
@@ -165,11 +166,12 @@ public sealed class InterviewPresenter
             return;
         }
 
-        _questionCategories = interviewReachable ? _day.AskableCategories : Array.Empty<ClueCategory>();
+        TravellerKind kind = inst != null ? inst.kind : default;
+        _questionCategories = interviewReachable ? _day.AskableCategoriesFor(kind) : Array.Empty<ClueCategory>();
         InterviewCase interviewCase = CaseFor(inst, documents, interviewReachable, appearanceReachable);
         string premadeDialog = inst != null && inst.legendarySource != null ? inst.legendarySource.dialogId : null;
         DialogGraph graph = InterviewScript.Build(_day.Lines,
-            interviewReachable ? _day.Questions : Array.Empty<InterviewQuestion>(),
+            interviewReachable ? _day.QuestionsFor(kind) : Array.Empty<InterviewQuestion>(),
             interviewReachable ? _day.OfferedDialogs(premadeDialog) : Array.Empty<AuthoredDialog>(),
             interviewCase);
         _runner = new DialogRunner(graph, InterviewScript.Opening(_day.Lines, interviewCase));

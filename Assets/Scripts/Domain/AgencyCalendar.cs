@@ -90,7 +90,7 @@ public static class AgencyCalendar
     public static bool TryToday(string firstDate, int day, out DateTime today)
     {
         today = default;
-        if (day < 1 || !TryDate(firstDate, out DateTime first))
+        if (day < 1 || !TryRead(firstDate, out DateTime first))
             return false;
 
         try
@@ -109,12 +109,12 @@ public static class AgencyCalendar
 
     /// <summary>Null when <paramref name="firstDate"/> is a readable calendar day of the common era (BirthDates' format), else the problem.</summary>
     public static string FirstDateProblem(string firstDate) =>
-        TryDate(firstDate, out _)
+        TryRead(firstDate, out _)
             ? null
             : $"agency.firstDate '{firstDate}' is not a calendar day written as BirthDates writes dates (\"14 Mar 2150\", a year of the common era).";
 
-    /// <summary>Reads a date written by BirthDates.Format that is a real calendar day of the common era.</summary>
-    private static bool TryDate(string text, out DateTime date)
+    /// <summary>Reads a date as the papers print it (<see cref="Write"/>, BirthDates.Format): a real calendar day of the common era; false for anything else (a placeholder, a BCE year, null).</summary>
+    public static bool TryRead(string text, out DateTime date)
     {
         date = default;
         if (!BirthDates.TryParse(text, out int day, out int month, out int year) || year < 1 || year > 9999)

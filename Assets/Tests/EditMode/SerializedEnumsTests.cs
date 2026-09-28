@@ -64,10 +64,11 @@ public class SerializedEnumsTests
         Assert.AreEqual(1, (int)LieKind.PoorPosingAsRich);
         Assert.AreEqual(2, (int)LieKind.DoctoredIdentity);
         Assert.AreEqual(3, (int)LieKind.FakeDisplaced);
-        Assert.AreEqual(4, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
+        Assert.AreEqual(4, (int)LieKind.Smuggling);
+        Assert.AreEqual(5, System.Enum.GetValues(typeof(LieKind)).Length, "a new member is appended here too");
     }
 
-    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 12 appends ReturnHome.</summary>
+    /// <summary>TravelRuleType: stored in TravelRuleSO.type (world_source.json rules[].type); phase 12 appends ReturnHome, phase 11 NoPresentGoods and PaperDates.</summary>
     [Test]
     public void TravelRuleType_KeepsItsSerializedInts()
     {
@@ -77,7 +78,9 @@ public class SerializedEnumsTests
         Assert.AreEqual(3, (int)TravelRuleType.DressForDestination);
         Assert.AreEqual(4, (int)TravelRuleType.Procedure);
         Assert.AreEqual(5, (int)TravelRuleType.ReturnHome);
-        Assert.AreEqual(6, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
+        Assert.AreEqual(6, (int)TravelRuleType.NoPresentGoods);
+        Assert.AreEqual(7, (int)TravelRuleType.PaperDates);
+        Assert.AreEqual(8, System.Enum.GetValues(typeof(TravelRuleType)).Length, "a new member is appended here too");
     }
 
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>

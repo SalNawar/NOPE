@@ -40,11 +40,12 @@ public sealed class InterviewCase
 /// <summary>
 /// Builds a traveller's interview graph: the hub (a document request, or
 /// "Request papers >" for two or more, the spoken requests, "Ask about home
-/// >", "Look >", today's narrative dialogs), the papers menu ("&lt; Back"
+/// >" or a citizen's "Ask about the trip >" (Interview.AskLabel), "Look >",
+/// today's narrative dialogs), the papers menu ("&lt; Back"
 /// first, then one request per form or request group the desk may ask the
 /// kind for, FormRequests.Build: a carried paper is handed over, a missing
 /// one answered with the kind's line), the ask menu ("&lt; Back" first,
-/// then the questions and small talk), the look menu ("&lt; Back" first, then
+/// then the kind's questions and small talk), the look menu ("&lt; Back" first, then
 /// one choice per visible garment) and every authored dialog's nodes. Every traveller line carries its key-word spans
 /// (KeyWords.Spans over its template and fills, InterviewCase.keyWords): the
 /// parts that stay English when it shows untranslated. Pure, so every menu
@@ -96,11 +97,11 @@ public static class InterviewScript
         return lines;
     }
 
-    /// <summary>The desk asking <paramref name="q"/> of a traveller claiming <paramref name="eraId"/>.</summary>
-    public static DialogLine PromptLine(InterviewQuestion q, string eraId)
+    /// <summary>The desk asking <paramref name="q"/> of a traveller claiming <paramref name="eraId"/>, the claimed place's label filling {place} (a trip question: "What will you pay with in {place}?").</summary>
+    public static DialogLine PromptLine(InterviewQuestion q, string eraId, string placeLabel = null)
     {
         LineText prompt = q.PromptFor(eraId);
-        return new DialogLine(prompt.id, DialogSpeaker.Desk, prompt.text);
+        return new DialogLine(prompt.id, DialogSpeaker.Desk, Interview.Fill(prompt.text, Interview.PlaceToken, placeLabel));
     }
 
     /// <summary>The traveller's answer line: the (era's) template with the canonical value, carrying the answer's fact and its key-word spans under <paramref name="keyWords"/> (null: none).</summary>
@@ -217,7 +218,7 @@ public static class InterviewScript
                 {
                     Id = $"q:{q.id}",
                     Label = q.label,
-                    Lines = { PromptLine(q, eraId), AnswerLine(q, eraId, a, keyWords) },
+                    Lines = { PromptLine(q, eraId, c != null ? c.claimPlace : null), AnswerLine(q, eraId, a, keyWords) },
                     OneShot = true,
                     Kind = DialogChoiceKind.Question
                 });
@@ -241,7 +242,7 @@ public static class InterviewScript
         }
 
         if (ask.Choices.Count > 1)
-            hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId, Kind = DialogChoiceKind.Question });
+            hub.Choices.Add(new DialogChoice { Id = "ask", Label = Interview.AskLabel(lines, c != null ? c.kind : default), Next = AskNodeId, Kind = DialogChoiceKind.Question });
 
         var look = new DialogNode { Id = LookNodeId };
         look.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
