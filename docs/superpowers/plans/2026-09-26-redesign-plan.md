@@ -438,7 +438,7 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **Split seam:** smuggling and the carries first; then the dates and the trip questions.
 - **Depends on:** 10.
 - **Decisions taken while building (2026-09-29, Saleh to confirm):**
-  - `days[].guarantee` is a separate list of rule names (a day's guaranteed procedures), not a flag on each `rules` entry: it keeps `rules` a plain list (the sheet's `a|b` cell) and reads as "what is guaranteed today". Closures keep `guaranteeRuleViolators`.
+  - No `days[].guarantee` list: a procedure with a maker (`Directives.HasMaker`: ReturnHome, NoPresentGoods, PaperDates) is guaranteed on the first day the plans list it (`Directives.Guarantees`, `ContentLibrarySO.FirstDayOf`, phase 12's mechanism), so a day's rules list alone says what is guaranteed; closures keep `guaranteeRuleViolators`.
   - The PaperDates maker draws its variant and false date on the traveller's fault stream (`Seeds.ForFaults`) when the slot is planned, not on the violator stream: the papers are not built when the violator stream runs, and the fault stream holds nothing else for a planned slot (the costume roll is skipped, K5). Days with closures alone draw as before; day 4's closure violator moves because the slot pick now draws two more slots (the intended golden effect).
   - `overrides[].kind` is not added: a kind-specific wording is a separate question with its own `kinds` (the trip questions), which is what the spec's own example needs; the era override stays.
   - The ask entry is per kind through one extra string, `interview.tripAskLabel` ("Ask about the trip >"), the home label standing in when it is blank.
@@ -472,6 +472,14 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **FEATURES:** 54 and 131 (the Future is the present), 58, 60 (premades on day 6), 66, 86 (from day 5), 155.
 - **Audit absorbed:** R3-037, R6-022.
 - **Depends on:** 11.
+- **Decisions taken while building (2026-09-29, for Saleh to confirm):**
+  - The day mix without phases 8 and 9: days 1-4 draw rich tourists only (1, 3, 2, 2), days 5-6 rich 2 and displaced 2; the poor and labourer entries come with their phases. Days 1-4 enable L1 and L2 only (the displaced's lies need the displaced); days 5-6 add L7 and L8.
+  - The displaced get two lines on day 5, as §5.3 reads: a procedure line (`Rule_DisplacedReturns`: the three papers, every paper matching the Displacement Registry) and the return-home directive (`Rule_ReturnHome`), both listed on days 5 and 6.
+  - The return home's first-day guarantee (P4) is one planned liar in the first half, drawn on the violator stream: the slot draws only the displaced (no new draw) and tells the drawn place lie (L7 or L8) without a roll. `TravelRuleType` moved to Domain (same ints) so `Directives` can decide it headless.
+  - The "home questions" moved to day 5 are Capital and Ruler (the three fact questions stay from day 1; phase 11 owns the trip questions).
+  - The translation notice fires two nights before `fromDay` (`Translation.NoticeNight`), so day 4's paper says "from tomorrow"; a `fromDay` of 2 is refused (no night before day 1's paper).
+  - The Future era's display name is "2150", so the present's row reads "Temporal Customs Zone (2150)"; a Future place stays in the Internet's world (`History.InWorld`) but is never a destination (`History.IsDestination`).
+  - Days 1-5 pool no premades and their `premadeChance` is 0; day 6 pools the other eight at 5%.
 
 ### Phase 13 — Strandings and the clerk's debt (M)
 

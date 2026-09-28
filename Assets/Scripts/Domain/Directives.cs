@@ -32,15 +32,16 @@ public readonly struct PaperDatePlan
 }
 
 /// <summary>
-/// The standing procedures' predicates and makers (traveller types P3, F7,
-/// §5.3-5.4): what a directive forbids in the presented papers, read against
-/// them and the agency calendar with no evidence needed. PaperDates (from day
-/// 4): depart only on the date on the manifest or the return order, and never
-/// on an expired paper; its faulty traveller is made by falsifying one date.
-/// NoPresentGoods (from day 4) has no predicate: a smuggler breaks it, a
-/// deviation fault (LieKind.Smuggling) proven against the books. The closures
-/// stay TravelRuleSO.Allows, the dress rule CostumeErrors. Pure and seeded,
-/// so every table and draw is tested headless.
+/// The Directives' rules over the rule types (traveller types P3, P4, §5.3):
+/// which types close destinations, which day a rule first stands on, and
+/// which rules guarantee a faulty traveller in the first half of the queue
+/// (CaseFactory.PlanViolators asks each such rule's maker for its slot); and
+/// the PaperDates procedure's predicate and makers (F7, §5.4): depart only on
+/// the date on the manifest or the return order, never on an expired paper,
+/// read against the agency calendar; its faulty traveller has one date
+/// falsified. NoPresentGoods has no predicate: a smuggler breaks it, a
+/// deviation fault (LieKind.Smuggling). Pure, so the decision tables and the
+/// draws are tested headless.
 /// </summary>
 public static class Directives
 {
@@ -49,6 +50,44 @@ public static class Directives
 
     /// <summary>How many days ago, at most, a falsified Valid Until passed (1 to 30 days before today, §5.4).</summary>
     public const int ExpiredMaxDays = 30;
+
+    /// <summary>True for the closure types (a forbidden era, nation or place), which forbid destinations; false for a standing procedure.</summary>
+    public static bool IsClosure(TravelRuleType type) =>
+        type == TravelRuleType.EraForbidden || type == TravelRuleType.NationForbidden || type == TravelRuleType.NationEraForbidden;
+
+    /// <summary>
+    /// A rule's first day: the smallest of <paramref name="daysListed"/>
+    /// (the day numbers of the plans that list it); 0 when no plan lists it
+    /// (a null list counts as empty).
+    /// </summary>
+    public static int FirstDay(IEnumerable<int> daysListed)
+    {
+        int first = 0;
+        if (daysListed == null)
+            return first;
+
+        foreach (int day in daysListed)
+            if (first == 0 || day < first)
+                first = day;
+
+        return first;
+    }
+
+    /// <summary>
+    /// Whether an active rule plans a guaranteed faulty traveller in the
+    /// first half of today's queue (P4): a closure every day it is active
+    /// (a traveller bound for a place it forbids); the displaced's return
+    /// home (a false-origin liar, L7 or L8), no 2150 goods (a smuggler, L6)
+    /// and the papers' dates (a falsified date) each on its first day, the
+    /// day the rule is announced; never a procedure line or the dress rule
+    /// (its costume errors come from the costume roll).
+    /// </summary>
+    public static bool Guarantees(TravelRuleType type, int today, int firstDay) =>
+        IsClosure(type) || (HasMaker(type) && today == firstDay);
+
+    /// <summary>True for the procedures with a maker, guaranteed one faulty traveller on their first day: the return home, no 2150 goods and the papers' dates.</summary>
+    public static bool HasMaker(TravelRuleType type) =>
+        type == TravelRuleType.ReturnHome || type == TravelRuleType.NoPresentGoods || type == TravelRuleType.PaperDates;
 
     /// <summary>
     /// The PaperDates directive (F7): the first fault it finds, in this

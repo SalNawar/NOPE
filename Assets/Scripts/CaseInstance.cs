@@ -80,32 +80,36 @@ public sealed class CaseInstance
 
     /// <summary>
     /// The era of the claimed place (the correct era on the legacy era-pick
-    /// path). A place liar's tells come from <see cref="tellSource"/>. Set
-    /// even when the case has no blueprint (audit R3-020 merged the
-    /// duplicate `trueEra`).
+    /// path). A liar's real era is tellSourceEraId. Set even when the case
+    /// has no blueprint (audit R3-020 merged the duplicate `trueEra`).
     /// </summary>
     public EraSO claimedEra;
 
     /// <summary>
-    /// Where a place liar's tells come from (traveller types H3): a false
-    /// origin's true home, another of today's places; a smuggler's present
-    /// (2150, which has no profile asset, so a place reference: its ids in
-    /// today's facts). Null for everyone else (an honest traveller's home is
-    /// the claim). An accepted liar carries this place's fact into the claim.
+    /// Where a liar's tells really come from, the tell source (traveller
+    /// types H3): the nation id of another of today's places (a false
+    /// origin, L7) or of the present (a fake displaced person, L8; a
+    /// smuggler, L6); null for an honest traveller (whose home is the
+    /// claim). Ids rather than a profile: the present is no
+    /// NationEraProfileSO, and a carry reads the ids against today's facts
+    /// (HistoryService.RecordCarry).
     /// </summary>
-    public PlaceRef? tellSource;
+    public string tellSourceNationId;
 
-    /// <summary>The tell source's label, from today's FactTable like <see cref="originLabel"/> (empty without one).</summary>
-    public string tellSourceLabel = string.Empty;
+    /// <summary>The era id of the tell source (the present's era for a fake displaced person or a smuggler); null for an honest traveller.</summary>
+    public string tellSourceEraId;
+
+    /// <summary>The tell source's label, from today's FactTable like <see cref="originLabel"/> (empty for an honest traveller).</summary>
+    public string trueHomeLabel = string.Empty;
 
     /// <summary>The lie the traveller carries, once planned and printed (Lies.Roll's pick that could show); null for an honest traveller.</summary>
     public LieKind? lie;
 
-    /// <summary>True when the traveller carries a place lie (a false origin, or smuggling): their papers, answers or dress leak another place's values.</summary>
-    public bool IsLiar => tellSource != null;
+    /// <summary>True when the traveller carries a place lie (a false origin, a fake displaced person, smuggling): their papers, answers or dress leak the tell source's values.</summary>
+    public bool IsLiar => !string.IsNullOrEmpty(tellSourceEraId);
 
     /// <summary>Where a place liar's tells come from, as a label; the claim's for everyone else (verdict and logs).</summary>
-    public string HomeLabel => IsLiar ? tellSourceLabel : originLabel;
+    public string HomeLabel => IsLiar ? trueHomeLabel : originLabel;
 
     /// <summary>
     /// A 2150 citizen's costume error (traveller types C2): the wrong item

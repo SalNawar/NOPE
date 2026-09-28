@@ -1654,7 +1654,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7e9502c7ac4b26848bf53f9db563cc89, type: 2}
   translation:
     rules:
-      fromDay: 2
+      fromDay: 5
       tongues:
       - id: english
         displayName: English

@@ -120,14 +120,14 @@ public sealed class ContentLibrarySO : ScriptableObject
     public IReadOnlyList<ReferenceBookSO> ReferenceBooks => referenceBooks ?? System.Array.Empty<ReferenceBookSO>();
 
     /// <summary>
-    /// Today's places: profiles whose era the plan includes and whose nation it
-    /// allows, and at most one Future place: <paramref name="futureNationId"/>'s
-    /// (History.FutureNation, History.InWorld; none for null). Ordered by
+    /// Today's places, the destinations: profiles whose era the plan includes
+    /// and whose nation it allows, never a Future place (History.IsDestination,
+    /// traveller types H2: the Future is the present, BuildPresent). Ordered by
     /// country (library nation order) then era (chronological). Places missing
     /// a nation/era (or their ids) are skipped with a warning (the validator
     /// reports them as errors).
     /// </summary>
-    public List<NationEraProfileSO> TodaysProfiles(DayPlanSO plan, string futureNationId)
+    public List<NationEraProfileSO> TodaysProfiles(DayPlanSO plan)
     {
         var result = new List<NationEraProfileSO>();
 
@@ -145,7 +145,7 @@ public sealed class ContentLibrarySO : ScriptableObject
                 continue;
             }
 
-            if (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation) || !History.InWorld(p.era.isFuture, p.nation.id, futureNationId))
+            if (!plan.IncludesEra(p.era) || !plan.AllowsNation(p.nation) || !History.IsDestination(p.era.isFuture))
                 continue;
 
             result.Add(p);
@@ -160,15 +160,16 @@ public sealed class ContentLibrarySO : ScriptableObject
     }
 
     /// <summary>
-    /// Today's world, built once per day: today's places (with the Future
-    /// place of the history's leader, if any) and their facts with history
-    /// applied, in book order, then the present's row (Present.AddRow, so
-    /// every book lists it from day 1), so case generation and the reference
-    /// books share one list and one table; and the present itself.
+    /// Today's world, built once per day: today's places (the destinations,
+    /// never the Future) and their facts with history applied, in book order,
+    /// then the present's row (the leader's Future place or the neutral
+    /// present; Present.AddRow, so every book lists it from day 1), so case
+    /// generation and the reference books share one list and one table; and
+    /// the present itself.
     /// </summary>
     public TodaysWorld BuildToday(DayPlanSO plan, HistoryState history)
     {
-        List<NationEraProfileSO> places = TodaysProfiles(plan, History.FutureNation(history));
+        List<NationEraProfileSO> places = TodaysProfiles(plan);
         var table = new FactTable();
         FillFacts(table, places, history);
         PresentPlace now = BuildPresent(history);
@@ -274,6 +275,10 @@ public sealed class ContentLibrarySO : ScriptableObject
 
     /// <summary>Public read-only access to day plans.</summary>
     public IReadOnlyList<DayPlanSO> DayPlans => dayPlans ?? System.Array.Empty<DayPlanSO>();
+
+    /// <summary>The first day a rule stands on (Directives.FirstDay over the plans listing it; a standing procedure's guaranteed traveller comes that day), 0 when no plan lists it.</summary>
+    public int FirstDayOf(TravelRuleSO rule) =>
+        Directives.FirstDay(DayPlans.Where(p => p != null && p.ActiveTravelRules.Contains(rule)).Select(p => p.DayNumber));
 
     /// <summary>Public read-only access to eras.</summary>
     public IReadOnlyList<EraSO> Eras => eras;

@@ -258,8 +258,10 @@ public static class Lies
     }
 
     /// <summary>
-    /// Plans a rolled place lie (a false origin). A (category, channel) option
-    /// of another of today's places is open when <paramref name="channels"/>
+    /// Plans a rolled place lie: a false origin among <paramref name="todays"/>
+    /// (L7), or, with the present as the one candidate, the fake displaced
+    /// (L8; <paramref name="kind"/> names which, and the plan carries it). A
+    /// (category, channel) option of a candidate place is open when <paramref name="channels"/>
     /// allows the channel and Forgery.IsProvableTell holds: Papers for a
     /// category the papers print (first-appearance order), then Answer for
     /// one of <paramref name="answerTellCategories"/> (today's question
@@ -285,7 +287,7 @@ public static class Lies
                                IReadOnlyList<HomeCandidate> todays, IReadOnlyList<DocumentField> papers,
                                IReadOnlyList<ClueCategory> answerTellCategories, IReadOnlyList<TellChannel> channels,
                                FactTable facts, ICollection<ClueCategory> bookCategories, IRandomSource rng,
-                               ICollection<ClueCategory> filter = null, LieKind kind = LieKind.FalseOrigin)
+                               LieKind kind = LieKind.FalseOrigin, ICollection<ClueCategory> filter = null)
     {
         if (rng == null)
             return LiePlan.Without(LieOutcome.Honest, kind);

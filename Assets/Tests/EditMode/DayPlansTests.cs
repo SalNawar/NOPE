@@ -29,6 +29,25 @@ public class DayPlansTests
         Assert.AreEqual(-1, DayPlans.Pick(null, 3));
     }
 
+    /// <summary>Audit R6-022: a missing first day and each gap are reported (and so counted by the validator); repeats and days below 1 are not gaps.</summary>
+    [Test]
+    public void Gaps_AMissingFirstDay_AndEachHole()
+    {
+        CollectionAssert.IsEmpty(DayPlans.Gaps(null));
+        CollectionAssert.IsEmpty(DayPlans.Gaps(new int[0]));
+        CollectionAssert.IsEmpty(DayPlans.Gaps(new[] { 1, 2, 3, 4, 5, 6 }));
+        CollectionAssert.IsEmpty(DayPlans.Gaps(new[] { 3, 1, 2, 2, 0 }), "unordered, a repeat and a day below 1 (Problems' business)");
+
+        List<string> gaps = DayPlans.Gaps(new[] { 1, 2, 4, 7 });
+        Assert.AreEqual(2, gaps.Count, string.Join(" | ", gaps));
+        StringAssert.Contains("day 2 is followed by day 4 (day(s) 3..3", gaps[0]);
+        StringAssert.Contains("day 4 is followed by day 7 (day(s) 5..6", gaps[1]);
+
+        gaps = DayPlans.Gaps(new[] { 2, 3 });
+        Assert.AreEqual(1, gaps.Count, string.Join(" | ", gaps));
+        StringAssert.Contains("start at day 2, not day 1", gaps[0]);
+    }
+
     [Test]
     public void Problems_TheShippedDays_HaveNone()
     {

@@ -91,16 +91,6 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
 
-    /// <summary>
-    /// The standing procedures that get one guaranteed faulty traveller in
-    /// the first half of the queue today (traveller types P4: each on its
-    /// first day; TravelRuleSO.IsGuaranteeable: a smuggler for NoPresentGoods,
-    /// a falsified date for PaperDates). Written by Tools > TimeDesk > Generate
-    /// World from world_source.json days[].guarantee; each is also among the
-    /// day's active rules.
-    /// </summary>
-    [SerializeField] private TravelRuleSO[] guaranteedRules;
-
     /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
@@ -156,9 +146,6 @@ public sealed class DayPlanSO : ScriptableObject
 
     /// <summary>Whether each active rule is guaranteed a violator in the first half of the queue.</summary>
     public bool GuaranteeRuleViolators => guaranteeRuleViolators;
-
-    /// <summary>The standing procedures guaranteed a faulty traveller today, in authored order (empty when unset).</summary>
-    public IReadOnlyList<TravelRuleSO> GuaranteedRules => guaranteedRules ?? Array.Empty<TravelRuleSO>();
 
     /// <summary>Every forced case's blueprint (set slots only, in authored order); the content validator counts their documents.</summary>
     public IEnumerable<CaseBlueprintSO> ForcedBlueprints

@@ -2,10 +2,12 @@ using System;
 using NUnit.Framework;
 
 /// <summary>
-/// The PaperDates directive (traveller types F7, P3, §5.3-5.4): a departure
-/// dated another day, an expired Valid Until, in that order; unreadable dates
-/// skipped; and its maker's draws (the variant, the offsets). Today is 17 Mar
-/// 2150, day 4 of the agency calendar.
+/// The Directives' rules over the rule types: closures, a rule's first day,
+/// and which rules guarantee a faulty traveller today; and the PaperDates
+/// directive (traveller types F7, P3, §5.3-5.4): a departure dated another
+/// day, an expired Valid Until, in that order; unreadable dates skipped; and
+/// its maker's draws (the variant, the offsets). Today is 17 Mar 2150, day 4
+/// of the agency calendar.
 /// </summary>
 public class DirectivesTests
 {
@@ -15,6 +17,47 @@ public class DirectivesTests
 
     private static ScriptedRandom Script(params ScriptStep[] steps) => new ScriptedRandom(steps);
     private static ScriptStep R(int offset) => ScriptStep.Range(offset);
+
+    [TestCase(TravelRuleType.EraForbidden, true)]
+    [TestCase(TravelRuleType.NationForbidden, true)]
+    [TestCase(TravelRuleType.NationEraForbidden, true)]
+    [TestCase(TravelRuleType.DressForDestination, false)]
+    [TestCase(TravelRuleType.Procedure, false)]
+    [TestCase(TravelRuleType.ReturnHome, false)]
+    [TestCase(TravelRuleType.NoPresentGoods, false)]
+    [TestCase(TravelRuleType.PaperDates, false)]
+    public void IsClosure_TheThreeForbiddenTypes(TravelRuleType type, bool expected)
+    {
+        Assert.AreEqual(expected, Directives.IsClosure(type));
+    }
+
+    [Test]
+    public void FirstDay_TheSmallestDayListed_ZeroForNone()
+    {
+        Assert.AreEqual(0, Directives.FirstDay(null));
+        Assert.AreEqual(0, Directives.FirstDay(new int[0]));
+        Assert.AreEqual(5, Directives.FirstDay(new[] { 5, 6 }));
+        Assert.AreEqual(5, Directives.FirstDay(new[] { 6, 5, 7 }), "unordered plans");
+    }
+
+    /// <summary>P4: a closure guarantees a violator every day; the displaced's return home, no 2150 goods and the papers' dates guarantee a faulty traveller on their first day only; a procedure line and the dress rule never.</summary>
+    [TestCase(TravelRuleType.EraForbidden, 3, 2, true)]
+    [TestCase(TravelRuleType.NationForbidden, 2, 2, true)]
+    [TestCase(TravelRuleType.NationEraForbidden, 6, 2, true)]
+    [TestCase(TravelRuleType.ReturnHome, 5, 5, true)]
+    [TestCase(TravelRuleType.ReturnHome, 6, 5, false)]
+    [TestCase(TravelRuleType.ReturnHome, 5, 0, false, Description = "a rule no plan lists guarantees nothing")]
+    [TestCase(TravelRuleType.NoPresentGoods, 4, 4, true)]
+    [TestCase(TravelRuleType.NoPresentGoods, 5, 4, false)]
+    [TestCase(TravelRuleType.PaperDates, 4, 4, true)]
+    [TestCase(TravelRuleType.PaperDates, 6, 4, false)]
+    [TestCase(TravelRuleType.PaperDates, 4, 0, false)]
+    [TestCase(TravelRuleType.DressForDestination, 2, 2, false)]
+    [TestCase(TravelRuleType.Procedure, 1, 1, false)]
+    public void Guarantees_ClosuresEveryDay_TheProceduresWithAMakerOnTheirFirstDay(TravelRuleType type, int today, int firstDay, bool expected)
+    {
+        Assert.AreEqual(expected, Directives.Guarantees(type, today, firstDay));
+    }
 
     [Test]
     public void PaperDates_HonestPapers_DepartTodayAndHaveNotExpired()

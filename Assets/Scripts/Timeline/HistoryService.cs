@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// History glue: records place liars' carries (from a false origin's true home or a smuggler's present) and costume-error panics at accept, and
+/// History glue: records liar carries and costume-error panics at accept, and
 /// at night latches the timeline leader, promotes carries and reports panics. Every decision is a Domain call
 /// (Influence, ScoreRanking, NationLeader, Carries, History); this class reads
 /// the content, writes WorldState.history, fills the news and logs.
@@ -14,22 +14,21 @@ public static class HistoryService
     private const string LeaderSourcePrefix = "history:leader";
 
     /// <summary>
-    /// At accept: an accepted place liar's tell source's fact
-    /// (GameConfigSO.carryCategory; traveller types H3: a false origin's true
-    /// home, or a smuggler's present, whose row today's facts hold) heads for
-    /// the claimed place (Carries.Make). Honest travellers, record liars,
-    /// costume errors and violators carry nothing.
+    /// At accept: an accepted liar's tell source's fact (GameConfigSO.carryCategory;
+    /// another place's, or the present's for a fake displaced person: a
+    /// carry from the present, traveller types H3) heads for the claimed
+    /// place, read by the source's ids from today's facts (Carries.Make, which
+    /// hold the present's row). Honest travellers and violators carry nothing.
     /// </summary>
     public static void RecordCarry(WorldState world, CaseInstance inst, FactTable today, GameConfigSO config)
     {
         if (world == null || inst == null || !inst.IsLiar || config == null)
             return;
 
-        PlaceRef source = inst.tellSource.Value;
         if (inst.claimedNation == null || inst.claimedEra == null)
             return;
 
-        CarryRecord record = Carries.Make(source.NationId, source.EraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
+        CarryRecord record = Carries.Make(inst.tellSourceNationId, inst.tellSourceEraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today, world.day);
         if (record == null)
             return;
 

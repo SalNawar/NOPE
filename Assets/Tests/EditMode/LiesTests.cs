@@ -94,6 +94,62 @@ public class LiesTests
     /// <summary>The lies enabled for a displaced traveller today: the false origin alone.</summary>
     private static readonly LieKind[] OneLie = { LieKind.FalseOrigin };
 
+    /// <summary>The present as a candidate home (L8, the fake displaced): the neutral present's ids and its citizens' birth years; its dress never leaks.</summary>
+    private static readonly HomeCandidate Present2150 = new HomeCandidate(Present.NeutralNationId, "future", 2080, 2132);
+
+    /// <summary>Today's facts with the present's row last (Present.AddRow), as every book lists it.</summary>
+    private static FactTable FactsWithPresent()
+    {
+        FactTable t = Facts();
+        Add(t, Present2150, "Temporal Customs Zone (2150)", "Credits", "Agency Standard English", "Wrist comm");
+        return t;
+    }
+
+    /// <summary>
+    /// The fake displaced (L8): the same plan with the present as its one
+    /// candidate, so the pick is one Range over that candidate, the tells
+    /// carry the present's values and the plan keeps the lie's kind (the
+    /// eligible tells are BirthDate, Currency, Language and Technology in
+    /// paper order: Range(1) is Currency).
+    /// </summary>
+    [Test]
+    public void Plan_TheFakeDisplaced_ComesFromThePresent_AndKeepsItsKind()
+    {
+        var rng = new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(1));
+        List<DocumentField> papers = Papers();
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Present2150 }, papers, None, PapersOnly, FactsWithPresent(), Books, rng, LieKind.FakeDisplaced);
+
+        Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
+        Assert.AreEqual(LieKind.FakeDisplaced, plan.Kind);
+        Assert.AreEqual(0, plan.HomeIndex, "the present is the one candidate");
+        CollectionAssert.AreEqual(new[] { ClueCategory.Currency }, plan.Tells);
+        Assert.AreEqual("Credits", plan.TellValue(ClueCategory.Currency), "the present's value");
+        Assert.IsTrue(rng.Done);
+
+        plan.ApplyTo(Docs(papers));
+        Assert.IsTrue(papers.Where(f => f.category == ClueCategory.Currency).All(f => f.value == "Credits" && f.isAnachronism), "every Currency field names 2150's money");
+    }
+
+    /// <summary>A fake displaced person's birth-year tell is a 2150 year (BirthDates.PickOtherYear over the present's years).</summary>
+    [Test]
+    public void Plan_TheFakeDisplaced_BirthYearTell_IsAPresentYear()
+    {
+        var rng = new ScriptedRandom(ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        LiePlan plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Present2150 }, Papers(), None, PapersOnly, FactsWithPresent(), Books, rng, LieKind.FakeDisplaced);
+
+        Assert.AreEqual(LieKind.FakeDisplaced, plan.Kind);
+        CollectionAssert.AreEqual(new[] { ClueCategory.BirthDate }, plan.Tells);
+        StringAssert.EndsWith(" 2080", plan.TellValue(ClueCategory.BirthDate), "the first present year, the day and month kept");
+    }
+
+    /// <summary>Without the kind the plan is the false origin, as every caller before L8 had it.</summary>
+    [Test]
+    public void Plan_WithoutAKind_IsTheFalseOrigin()
+    {
+        Assert.AreEqual(LieKind.FalseOrigin, Plan(new SeededRandom(1)).Kind);
+        Assert.AreEqual(LieKind.FalseOrigin, Plan(null).Kind);
+    }
+
     private static ScriptedRandom Script(params ScriptStep[] steps) => new ScriptedRandom(steps);
     private static ScriptStep V(float roll) => ScriptStep.Value(roll);
     private static ScriptStep R(int offset) => ScriptStep.Range(offset);
@@ -103,24 +159,24 @@ public class LiesTests
     // -----------------------------
 
     /// <summary>The present (traveller types H1) as a home candidate: the neutral present's ids and its citizens' birth years.</summary>
-    private static readonly HomeCandidate Present = new HomeCandidate("neutral", "future", 2080, 2132);
+    private static readonly HomeCandidate PresentHome = new HomeCandidate("neutral", "future", 2080, 2132);
 
     /// <summary>The present's label, as its row in every book prints it.</summary>
     private const string PresentLabel = "Temporal Customs Zone (Future)";
 
-    /// <summary>Facts() with the present's row last (Present.AddRow): Credits, Agency Standard English, Wrist comm.</summary>
-    private static FactTable FactsWithPresent()
+    /// <summary>Facts() with the present's row last (Present.AddRow), for the smuggler tests: Credits, Agency Standard English, Wrist comm.</summary>
+    private static FactTable FactsWithPresentHome()
     {
         FactTable t = Facts();
-        Add(t, Present, PresentLabel, "Credits", "Agency Standard English", "Wrist comm");
+        Add(t, PresentHome, PresentLabel, "Credits", "Agency Standard English", "Wrist comm");
         return t;
     }
 
     /// <summary>A smuggler's plan: Egypt's honest claim, the present as the only candidate, Currency and Technology only.</summary>
     private static LiePlan Smuggle(IRandomSource rng, IReadOnlyList<TellChannel> channels, IReadOnlyList<ClueCategory> asked, int tellCount = 1,
                                    List<DocumentField> papers = null, FactTable facts = null, IReadOnlyList<HomeCandidate> candidates = null) =>
-        Lies.Plan(tellCount, "egypt", "ancient", Cover, candidates ?? new[] { Present }, papers ?? Papers(), asked, channels,
-                  facts ?? FactsWithPresent(), Books, rng, Lies.SmuggledCategories, LieKind.Smuggling);
+        Lies.Plan(tellCount, "egypt", "ancient", Cover, candidates ?? new[] { PresentHome }, papers ?? Papers(), asked, channels,
+                  facts ?? FactsWithPresentHome(), Books, rng, LieKind.Smuggling, Lies.SmuggledCategories);
 
     [Test]
     public void Smuggling_ThePresentIsTheOnlyCandidate_AndOnlyTheSmuggledCategoriesAreOptions()
@@ -165,17 +221,17 @@ public class LiesTests
     public void Smuggling_NeverLeaksInDress_AndNeverFromAnotherPlace()
     {
         var leakable = new HomeCandidate("neutral", "future", 2080, 2132, appearanceLeakable: true);
-        FactTable facts = FactsWithPresent();
+        FactTable facts = FactsWithPresentHome();
         facts.Add("neutral", "future", PresentLabel, ClueCategory.Culture, "tech jacket");
         facts.Add("egypt", "ancient", "New Kingdom Egypt (Ancient)", ClueCategory.Culture, "pleated kilt");
         var books = new HashSet<ClueCategory>(Books) { ClueCategory.Culture };
         LiePlan plan = Lies.Plan(9, "egypt", "ancient", Cover, new[] { leakable }, Papers(), None, new[] { TellChannel.Papers, TellChannel.Appearance },
-                                 facts, books, Script(R(0), R(0), R(0)), Lies.SmuggledCategories, LieKind.Smuggling);
+                                 facts, books, Script(R(0), R(0), R(0)), LieKind.Smuggling, Lies.SmuggledCategories);
         Assert.AreEqual(LieOutcome.Liar, plan.Outcome);
         CollectionAssert.AreEquivalent(new[] { ClueCategory.Currency, ClueCategory.Technology }, plan.Tells, "no dress option: the filter has no Culture");
 
         // Given every candidate of the day, the filter still never picks a place whose Currency and Technology equal the claim's.
-        plan = Smuggle(Script(R(0), R(0)), PapersOnly, None, candidates: new[] { Twin, Present });
+        plan = Smuggle(Script(R(0), R(0)), PapersOnly, None, candidates: new[] { Twin, PresentHome });
         Assert.AreEqual(1, plan.HomeIndex, "the twin has no differing smuggled category; the present is the one candidate");
     }
 
@@ -189,7 +245,7 @@ public class LiesTests
         plan = Smuggle(Script(), PapersOnly, None, facts: Facts());
         Assert.AreEqual(LieOutcome.NoPossibleLie, plan.Outcome, "the present has no row today");
 
-        plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { Present }, Papers(), None, PapersOnly, FactsWithPresent(), Books, null, Lies.SmuggledCategories, LieKind.Smuggling);
+        plan = Lies.Plan(1, "egypt", "ancient", Cover, new[] { PresentHome }, Papers(), None, PapersOnly, FactsWithPresentHome(), Books, null, LieKind.Smuggling, Lies.SmuggledCategories);
         Assert.AreEqual(LieOutcome.Honest, plan.Outcome, "no stream: honest, no draw");
         Assert.AreEqual(LieKind.Smuggling, plan.Kind);
     }
@@ -197,7 +253,7 @@ public class LiesTests
     [Test]
     public void ASmuggledTell_ProvesAgainstTheClaimsRow_AndNamesThePresent()
     {
-        FactTable facts = FactsWithPresent();
+        FactTable facts = FactsWithPresentHome();
         List<DocumentField> papers = Papers();
         Smuggle(Script(R(0), R(0), R(0)), PapersOnly, None, tellCount: 9, papers: papers, facts: facts).ApplyTo(Docs(papers));
 
