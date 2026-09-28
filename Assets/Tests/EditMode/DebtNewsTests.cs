@@ -51,14 +51,46 @@ public class DebtNewsTests
         Assert.AreEqual("only", DebtNews.Line(new[] { "only" }, 12345, 9));
     }
 
+    private const string Stranded = "Stranded: {name}, lost in {place} when an Economy transponder failed.";
+    private const string Count = "{count} citizens left on Debt Relief yesterday.";
+
+    /// <summary>Phase 9 (§10): the paper counts yesterday's Debt Relief departures, and says nothing for none.</summary>
+    [Test]
+    public void YesterdayLine_FillsTheCount_AndIsNullForNoneOrABlankTemplate()
+    {
+        Assert.AreEqual("43 citizens left on Debt Relief yesterday.", DebtNews.YesterdayLine(Count, 43));
+        Assert.AreEqual("1 citizens left on Debt Relief yesterday.", DebtNews.YesterdayLine(Count, 1));
+        Assert.IsNull(DebtNews.YesterdayLine(Count, 0));
+        Assert.IsNull(DebtNews.YesterdayLine(Count, -3));
+        Assert.IsNull(DebtNews.YesterdayLine(" ", 5));
+        Assert.IsNull(DebtNews.YesterdayLine(null, 5));
+    }
+
+    [Test]
+    public void NewsContentProblems_TheCountLineHoldsItsToken()
+    {
+        StringAssert.Contains("news.debtReliefCount", new NewsContent { debt = Pool.ToList(), stranded = Stranded }.Problems().Single(), "a blank line");
+        StringAssert.Contains("{count}", new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = "Citizens left on Debt Relief yesterday." }.Problems().Single(), "no count");
+        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count }.Problems());
+    }
+
     [Test]
     public void NewsContentProblems_RefuseABlankLine()
     {
-        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList() }.Problems());
-        CollectionAssert.IsEmpty(new NewsContent().Problems(), "an empty pool prints no debt line");
+        CollectionAssert.IsEmpty(new NewsContent { debt = Pool.ToList(), stranded = Stranded, debtReliefCount = Count }.Problems());
+        CollectionAssert.IsEmpty(new NewsContent { stranded = Stranded, debtReliefCount = Count }.Problems(), "an empty pool prints no debt line");
 
-        List<string> problems = new NewsContent { debt = new List<string> { "A line.", " " } }.Problems();
+        List<string> problems = new NewsContent { debt = new List<string> { "A line.", " " }, stranded = Stranded, debtReliefCount = Count }.Problems();
         Assert.AreEqual(1, problems.Count);
         StringAssert.Contains("news.debt", problems[0]);
+    }
+
+    /// <summary>Redesign phase 13b: the stranding line (Strandings.Lines) names the traveller and the place, so it must hold both tokens.</summary>
+    [Test]
+    public void NewsContentProblems_TheStrandingLineHoldsItsTokens()
+    {
+        StringAssert.Contains("news.stranded", new NewsContent { debt = Pool.ToList(), debtReliefCount = Count }.Problems().Single(), "a blank line");
+        StringAssert.Contains("{place}", new NewsContent { debt = Pool.ToList(), stranded = "Stranded: {name}.", debtReliefCount = Count }.Problems().Single(), "no place");
+        StringAssert.Contains("{name}", new NewsContent { debt = Pool.ToList(), stranded = "Lost in {place}.", debtReliefCount = Count }.Problems().Single(), "no name");
     }
 }

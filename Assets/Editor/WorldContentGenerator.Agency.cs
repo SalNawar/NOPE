@@ -18,7 +18,7 @@ using UnityEditor;
 public static partial class WorldContentGenerator
 {
     /// <summary>The agency block as authored ("agency"; phase 3 adds the displaced's day ranges, "displaced"; phase 25 the clerk's own account, "clerk"; phase 6 the accounts' ranges and the transponder models).</summary>
-    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public Employer[] employers; }
+    [Serializable] private sealed class AgencyData { public string name; public string programme; public string firstDate; public DisplacementRanges displaced; public ClerkData clerk; public AccountsData accounts; public TransponderData[] transponders; public float strandChance; public int strandFine; public Employer[] employers; }
 
     /// <summary>The clerk's own account as authored ("agency.clerk").</summary>
     [Serializable] private sealed class ClerkData
@@ -73,6 +73,8 @@ public static partial class WorldContentGenerator
                     weight = t.weight
                 })
                 .ToList(),
+            strandChance = a.strandChance,
+            strandFine = a.strandFine,
             employers = (a.employers ?? Array.Empty<Employer>()).Where(e => e != null).ToList()
         };
 

@@ -1364,6 +1364,14 @@ MonoBehaviour:
     text: 'Correct: {0}   Wrong: {1}'
     gloss: 0
     tier: 0
+  - key: results.leisureDepartures
+    text: 'Leisure departures: {0}'
+    gloss: 0
+    tier: 0
+  - key: results.debtReliefDepartures
+    text: 'Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)'
+    gloss: 0
+    tier: 0
   - key: results.pay
     text: 'Pay earned: +{0}'
     gloss: 0
@@ -1390,6 +1398,14 @@ MonoBehaviour:
     tier: 0
   - key: results.unproven
     text: 'Undocumented denials: {0} (log a deviation before denying)'
+    gloss: 0
+    tier: 0
+  - key: results.stranded
+    text: 'Stranded in transit: {0}   (an Economy transponder failed)'
+    gloss: 0
+    tier: 0
+  - key: results.strandingFine
+    text: 'Stranding fine: -{0}   (let through without a signed waiver)'
     gloss: 0
     tier: 0
   - key: scanner.idle
@@ -1623,10 +1639,6 @@ MonoBehaviour:
     text: Good
     gloss: 0
     tier: 0
-  - key: records.standing.frozen
-    text: 'Frozen: default, {0}'
-    gloss: 0
-    tier: 0
   - key: records.none
     text: None on file
     gloss: 0
@@ -1674,14 +1686,6 @@ MonoBehaviour:
     tier: 0
   - key: citation.acceptedWrong.closed
     text: Approved a closed destination.
-    gloss: 0
-    tier: 0
-  - key: citation.acceptedWrong.incomplete
-    text: Approved incomplete paperwork.
-    gloss: 0
-    tier: 0
-  - key: citation.acceptedWrong.frozen
-    text: Approved a frozen account.
     gloss: 0
     tier: 0
   - key: citation.deniedWrong
@@ -1882,6 +1886,18 @@ MonoBehaviour:
     tier: 0
   - key: category.Debt
     text: DEBT
+    gloss: 0
+    tier: 0
+  - key: records.standing.frozen
+    text: 'Frozen: default, {0}'
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.incomplete
+    text: Approved incomplete paperwork.
+    gloss: 0
+    tier: 0
+  - key: citation.acceptedWrong.frozen
+    text: Approved a frozen account.
     gloss: 0
     tier: 0
   - key: category.Employer

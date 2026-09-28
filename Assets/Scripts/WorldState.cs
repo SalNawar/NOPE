@@ -38,6 +38,9 @@ public sealed class WorldState
     /// <summary>What the Debt Relief instalments have paid off the clerk's own debt so far, in cr (redesign phase 13; ClerkAccountSource.TakeInstalment at each shift's end). Stored as paid, not owed, so an older save loads as "nothing paid yet" (additive).</summary>
     public int clerkDebtPaid;
 
+    /// <summary>The Debt Relief departures the last shift approved (ShiftLedger.DebtReliefDepartures, written at the shift's end): the next morning's paper counts them (news.debtReliefCount; DebtNews.YesterdayLine). Additive: an older save loads 0 and prints no count.</summary>
+    public int debtReliefYesterday;
+
     // -----------------------------
     // Run outcome (Phase 5)
     // -----------------------------

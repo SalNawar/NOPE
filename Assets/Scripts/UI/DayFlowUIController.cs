@@ -130,11 +130,19 @@ public sealed class DayFlowUIController : MonoBehaviour
             var sb = new System.Text.StringBuilder();
             sb.AppendLine(UiText.Format("results.processed", ledger.verdicts.Count));
             sb.AppendLine(UiText.Format("results.correctWrong", ledger.CorrectCount, ledger.WrongCount));
+            sb.AppendLine(UiText.Format("results.leisureDepartures", ledger.LeisureDepartures));
+            sb.AppendLine(UiText.Format("results.debtReliefDepartures", ledger.DebtReliefDepartures, ledger.DebtPutToWork, UiText.Currency(UiText.WalletForm.Short)));
             sb.AppendLine();
             sb.AppendLine(UiText.Format("results.pay", ledger.TotalPay));
 
             if (ledger.TotalPenalties > 0)
                 sb.AppendLine(UiText.Format("results.penalties", ledger.TotalPenalties));
+
+            if (ledger.strandedCount > 0)
+                sb.AppendLine(UiText.Format("results.stranded", ledger.strandedCount));
+
+            if (ledger.strandingFines > 0)
+                sb.AppendLine(UiText.Format("results.strandingFine", ledger.strandingFines));
 
             if (ledger.debtOwed != Account.Unknown)
                 sb.AppendLine(UiText.Format("results.debtRelief", ledger.debtInstalment, ledger.debtOwed, UiText.Currency(UiText.WalletForm.Short)));

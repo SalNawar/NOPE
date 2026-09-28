@@ -42,8 +42,53 @@ public sealed class ShiftLedger
     /// <summary>The clerk's debt still owed after this shift's instalment (Account.Unknown until the shift's end, or when no source gives the debt).</summary>
     public int debtOwed = Account.Unknown;
 
-    /// <summary>Net money change for the shift: the pay less the citation penalties and the Debt Relief instalment.</summary>
-    public int NetMoney => TotalPay - TotalPenalties - debtInstalment;
+    /// <summary>How many of this shift's accepted travellers were stranded at its end (Strandings.Roll; the traveller-types spec's S1).</summary>
+    public int strandedCount;
+
+    /// <summary>The stranding fines taken from the wallet at the shift's end (Strandings.Fine, one per stranded traveller let through without a valid signed waiver; S3).</summary>
+    public int strandingFines;
+
+    /// <summary>Net money change for the shift: the pay less the citation penalties, the stranding fines and the Debt Relief instalment.</summary>
+    public int NetMoney => TotalPay - TotalPenalties - strandingFines - debtInstalment;
+
+    /// <summary>The leisure departures the shift approved (traveller types §10): accepted rich and poor tourists.</summary>
+    public int LeisureDepartures
+    {
+        get
+        {
+            int n = 0;
+            foreach (CaseVerdict v in verdicts)
+                if (v.accepted && (v.kind == TravellerKind.RichTourist || v.kind == TravellerKind.PoorTourist))
+                    n++;
+            return n;
+        }
+    }
+
+    /// <summary>The Debt Relief departures the shift approved (§10): accepted labourers.</summary>
+    public int DebtReliefDepartures
+    {
+        get
+        {
+            int n = 0;
+            foreach (CaseVerdict v in verdicts)
+                if (v.accepted && v.kind == TravellerKind.Labourer)
+                    n++;
+            return n;
+        }
+    }
+
+    /// <summary>The debt put to work by the shift's Debt Relief departures, in cr (§10): the accepted labourers' debts summed.</summary>
+    public int DebtPutToWork
+    {
+        get
+        {
+            int sum = 0;
+            foreach (CaseVerdict v in verdicts)
+                if (v.accepted && v.kind == TravellerKind.Labourer)
+                    sum += v.debt;
+            return sum;
+        }
+    }
 
     /// <summary>Number of correct sends.</summary>
     public int CorrectCount
@@ -144,6 +189,12 @@ public sealed class CaseVerdict
 
     /// <summary>True if the player accepted (approved travel); false = denied.</summary>
     public bool accepted;
+
+    /// <summary>The traveller's kind (the ledger's departure lines count leisure and Debt Relief departures by it; traveller types §10).</summary>
+    public TravellerKind kind;
+
+    /// <summary>What the traveller owed, in cr (the account's debt; 0 for the displaced): the ledger's "debt put to work" sums accepted labourers'.</summary>
+    public int debt;
 
     /// <summary>True if accepting was the correct call (no fault of either kind, VerdictRules).</summary>
     public bool shouldAccept;

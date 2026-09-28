@@ -1127,6 +1127,8 @@
         "weight": 1
       }
     ],
+    "strandChance": 0.08,
+    "strandFine": 150,
     "employers": [
       {
         "id": "nile_quarry",
@@ -7702,6 +7704,8 @@
     ]
   },
   "news": {
+    "stranded": "Stranded: {name}, lost in {place} when an Economy transponder failed.",
+    "debtReliefCount": "{count} citizens left on Debt Relief yesterday.",
     "debt": [
       "Debt Relief Departures reach a record high.",
       "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
@@ -11238,6 +11242,18 @@
         "tier": "Full"
       },
       {
+        "key": "results.leisureDepartures",
+        "text": "Leisure departures: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.debtReliefDepartures",
+        "text": "Debt Relief departures: {0}   ({1:N0} {2} of debt put to work)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "results.pay",
         "text": "Pay earned: +{0}",
         "gloss": "None",
@@ -11276,6 +11292,18 @@
       {
         "key": "results.unproven",
         "text": "Undocumented denials: {0} (log a deviation before denying)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.stranded",
+        "text": "Stranded in transit: {0}   (an Economy transponder failed)",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "results.strandingFine",
+        "text": "Stranding fine: -{0}   (let through without a signed waiver)",
         "gloss": "None",
         "tier": "Full"
       },
@@ -11616,12 +11644,6 @@
         "tier": "Full"
       },
       {
-        "key": "records.standing.frozen",
-        "text": "Frozen: default, {0}",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "records.none",
         "text": "None on file",
         "gloss": "None",
@@ -11690,18 +11712,6 @@
       {
         "key": "citation.acceptedWrong.closed",
         "text": "Approved a closed destination.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "citation.acceptedWrong.incomplete",
-        "text": "Approved incomplete paperwork.",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
-        "key": "citation.acceptedWrong.frozen",
-        "text": "Approved a frozen account.",
         "gloss": "None",
         "tier": "Full"
       },
@@ -11990,6 +12000,24 @@
       {
         "key": "category.Debt",
         "text": "DEBT",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "records.standing.frozen",
+        "text": "Frozen: default, {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.incomplete",
+        "text": "Approved incomplete paperwork.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "citation.acceptedWrong.frozen",
+        "text": "Approved a frozen account.",
         "gloss": "None",
         "tier": "Full"
       },

@@ -5,6 +5,29 @@ public class ShiftLedgerTests
     private static CaseVerdict Verdict(bool correct, int pay = 0, int penalty = 0, float stability = 0f, bool unproven = false) =>
         new CaseVerdict { correct = correct, payAwarded = pay, moneyPenalty = penalty, stabilityDelta = stability, unprovenDenial = unproven };
 
+    private static CaseVerdict Departure(TravellerKind kind, bool accepted, int debt = 0) =>
+        new CaseVerdict { kind = kind, accepted = accepted, debt = debt, correct = true };
+
+    /// <summary>The departure lines (traveller types §10; phase 9): accepted tourists are leisure departures, accepted labourers Debt Relief departures whose debts are put to work; denials and the displaced count for neither.</summary>
+    [Test]
+    public void Departures_CountTheAcceptedTouristsAndLabourers_AndSumTheLabourersDebt()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(Departure(TravellerKind.RichTourist, true));
+        ledger.verdicts.Add(Departure(TravellerKind.PoorTourist, true, debt: 12_000));
+        ledger.verdicts.Add(Departure(TravellerKind.RichTourist, false));
+        ledger.verdicts.Add(Departure(TravellerKind.Labourer, true, debt: 212_000));
+        ledger.verdicts.Add(Departure(TravellerKind.Labourer, true, debt: 40_000));
+        ledger.verdicts.Add(Departure(TravellerKind.Labourer, false, debt: 90_000));
+        ledger.verdicts.Add(Departure(TravellerKind.Displaced, true));
+
+        Assert.AreEqual(2, ledger.LeisureDepartures);
+        Assert.AreEqual(2, ledger.DebtReliefDepartures);
+        Assert.AreEqual(252_000, ledger.DebtPutToWork, "the accepted labourers' debts; a tourist's debt is not put to work");
+        Assert.AreEqual(0, new ShiftLedger().LeisureDepartures);
+        Assert.AreEqual(0, new ShiftLedger().DebtPutToWork);
+    }
+
     [Test]
     public void Totals_SumAcrossVerdicts()
     {
@@ -56,6 +79,24 @@ public class ShiftLedgerTests
         Assert.AreEqual(0, ledger.UnprovenDenialCount);
         Assert.AreEqual(0, ledger.debtInstalment);
         Assert.AreEqual(Account.Unknown, ledger.debtOwed, "no debt known before the shift's end");
+        Assert.AreEqual(0, ledger.strandedCount);
+        Assert.AreEqual(0, ledger.strandingFines);
+    }
+
+    /// <summary>Redesign phase 13b: a stranding fine (Strandings.Fine) leaves the wallet at the shift's end, so the net line carries it.</summary>
+    [Test]
+    public void NetMoney_TakesTheStrandingFinesToo()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(Verdict(true, pay: 220));
+        ledger.verdicts.Add(Verdict(false, penalty: 15));
+        ledger.debtInstalment = 55;
+        ledger.strandedCount = 2;
+        ledger.strandingFines = 150;
+
+        Assert.AreEqual(220, ledger.TotalPay, "the pay stays the whole pay");
+        Assert.AreEqual(15, ledger.TotalPenalties, "the citation penalties stay apart from the fines");
+        Assert.AreEqual(0, ledger.NetMoney, "the wallet's change: 220 - 15 - 150 - 55");
     }
 
     [Test]

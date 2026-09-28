@@ -4,8 +4,8 @@ using System.Collections.Generic;
 /// <summary>
 /// The morning paper's debt-theme lines as authored (world_source.json
 /// "news"; the traveller-types spec's §10, T1; redesign phase 13), written by
-/// Generate World into the content library. The strandings' line
-/// ("news.stranded") joins this block with the strandings.
+/// Generate World into the content library: the debt lines and the
+/// strandings' line ("news.stranded"; Strandings.Lines).
 /// </summary>
 [Serializable]
 public sealed class NewsContent
@@ -13,10 +13,24 @@ public sealed class NewsContent
     /// <summary>The debt-economy lines, one of which each morning's paper carries ("news.debt"; DebtNews.Line). Empty prints none.</summary>
     public List<string> debt = new();
 
-    /// <summary>What Generate World and the validator refuse: a blank debt line. Empty when sound.</summary>
+    /// <summary>The line the morning paper prints per traveller stranded the day before ("news.stranded"; tokens {name} and {place}; Strandings.Lines).</summary>
+    public string stranded = string.Empty;
+
+    /// <summary>The line the morning paper prints when the last shift approved Debt Relief departures ("news.debtReliefCount"; the token {count}; DebtNews.YesterdayLine).</summary>
+    public string debtReliefCount = string.Empty;
+
+    /// <summary>What Generate World and the validator refuse: a blank debt line, a stranding line that is blank or lacks {name} or {place}, or a Debt Relief count line that is blank or lacks {count}. Empty when sound.</summary>
     public List<string> Problems()
     {
         var problems = new List<string>();
+        if (string.IsNullOrWhiteSpace(stranded))
+            problems.Add("news.stranded is blank: the line the morning paper prints for each stranded traveller, with {name} and {place}.");
+        else if (!Interview.HoldsToken(stranded, Interview.NameToken) || !Interview.HoldsToken(stranded, Interview.PlaceToken))
+            problems.Add("news.stranded must hold {name} and {place}: the stranded traveller and where they are lost.");
+        if (string.IsNullOrWhiteSpace(debtReliefCount))
+            problems.Add("news.debtReliefCount is blank: the line the morning paper prints for yesterday's Debt Relief departures, with {count}.");
+        else if (!Interview.HoldsToken(debtReliefCount, DebtNews.CountToken))
+            problems.Add("news.debtReliefCount must hold {count}: how many citizens left on Debt Relief yesterday.");
         if (debt == null)
             return problems;
         for (int i = 0; i < debt.Count; i++)
@@ -35,6 +49,18 @@ public sealed class NewsContent
 /// </summary>
 public static class DebtNews
 {
+    /// <summary>The token of the count line ("{count}").</summary>
+    public const string CountToken = "count";
+
+    /// <summary>
+    /// The paper's count of yesterday's Debt Relief departures (§10: "43
+    /// citizens left on Debt Relief yesterday."): <paramref name="template"/>
+    /// (news.debtReliefCount) with {count} filled; null for a count of 0 or
+    /// less (nothing to report) or a blank template.
+    /// </summary>
+    public static string YesterdayLine(string template, int count) =>
+        count <= 0 || string.IsNullOrWhiteSpace(template) ? null : Interview.Fill(template, CountToken, count.ToString(System.Globalization.CultureInfo.InvariantCulture));
+
     /// <summary>The debt line of <paramref name="day"/>'s paper in run <paramref name="runSeed"/>, or null when the pool is empty.</summary>
     public static string Line(IReadOnlyList<string> pool, int runSeed, int day)
     {

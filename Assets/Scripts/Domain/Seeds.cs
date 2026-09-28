@@ -150,4 +150,15 @@ public static class Seeds
     /// placing an event never shifts who travels.
     /// </summary>
     public static int ForEvents(int daySeed) => Mix(daySeed, EventSalt);
+    /// <summary>Salt for the day's stranding stream ("STRD").</summary>
+    public const int StrandingSalt = 0x53545244;
+
+    /// <summary>
+    /// Seed for the day's stranding draws (traveller types S1 and §6.4;
+    /// Strandings.Roll at the shift's end): one draw per accepted Economy
+    /// traveller, in queue order. The day's own stream, apart from every
+    /// traveller's, so a stranding never shifts who travels, who lies or what
+    /// they carry.
+    /// </summary>
+    public static int ForStrandings(int daySeed) => Mix(daySeed, StrandingSalt);
 }
