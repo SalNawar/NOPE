@@ -74,6 +74,17 @@ public class HistoryTests
         Assert.AreEqual(expected, History.IsRevised(h, "egypt", "ancient", ClueCategory.Currency, "Deben"));
     }
 
+    [TestCase("Sterling", "Deben", true)]
+    [TestCase("Deben", "Deben", false)]
+    [TestCase("  deben ", "Deben", false, Description = "case and surrounding spaces do not count (Values.Match)")]
+    public void IsRevised_OfAResolvedValue_IsTheSameRule(string resolved, string baseValue, bool expected)
+    {
+        Assert.AreEqual(expected, History.IsRevised(resolved, baseValue));
+        var h = new HistoryState();
+        h.factEdits.Add(Edit("egypt", "ancient", ClueCategory.Currency, resolved));
+        Assert.AreEqual(expected, History.IsRevised(h, "egypt", "ancient", ClueCategory.Currency, baseValue), "the state overload resolves then reads the same rule");
+    }
+
     [Test]
     public void IsRevised_FollowsTheNewestEdit()
     {

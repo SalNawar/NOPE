@@ -247,8 +247,9 @@ public sealed class ContentLibrarySO : ScriptableObject
             {
                 if (f == null)
                     continue;
-                table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, History.Resolve(history, p.nation.id, p.era.id, f.category, f.value));
-                if (History.IsRevised(history, p.nation.id, p.era.id, f.category, f.value))
+                string value = History.Resolve(history, p.nation.id, p.era.id, f.category, f.value);
+                table.Add(p.nation.id, p.era.id, p.OriginLabel, f.category, value);
+                if (History.IsRevised(value, f.value))
                     table.MarkChanged(p.nation.id, p.era.id, f.category);
             }
         }

@@ -64,10 +64,6 @@ public static class ShiftScoring
         else
             ApplyWrongDecision(verdict, world, config);
 
-        // Track sends only when the traveler is actually dispatched (accepted).
-        if (accepted && inst != null && inst.claimedEra != null && !string.IsNullOrEmpty(inst.claimedEra.id))
-            world.AddCounter($"sent:era:{inst.claimedEra.id}", 1);
-
         world.timelineStability = Mathf.Clamp(world.timelineStability, 0f, 100f);
         verdict.firedNow = world.timelineStability <= config.firedAtStability;
 

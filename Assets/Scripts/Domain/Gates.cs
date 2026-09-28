@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// </summary>
 public enum TriggerConditionType
 {
-    /// <summary>WorldState counter >= threshold. key = counter key (e.g., "sent:tag:greek-warrior:greece480").</summary>
+    /// <summary>WorldState counter >= threshold. key = counter key (a counter some effect or rule writes; nothing counts sends any more, audit R3-015).</summary>
     CounterAtLeast,
 
     /// <summary>Flag is set. key = flag name.</summary>
