@@ -189,9 +189,11 @@ public static class HistoryService
     /// <summary>
     /// At night (after the triggers): warns about a history rule edit latched
     /// tonight that shares a value with another place, promotes the due carries
-    /// (Carries.Promote over every place's facts, history applied) and
-    /// announces them while the history news cap allows (History.NewsSlots;
-    /// the rest are logged). With no config nothing is promoted.
+    /// (Carries.Promote over every place's facts, history applied, the
+    /// present's row among them so a stranding's carry names the present as
+    /// its source) and announces them while the history news cap allows
+    /// (History.NewsSlots; the rest are logged). With no config nothing is
+    /// promoted.
     /// </summary>
     public static void PromoteCarries(WorldState world, ContentLibrarySO lib, GameConfigSO config, int tomorrow, List<string> news, int historyLinesSoFar)
     {
@@ -199,6 +201,7 @@ public static class HistoryService
             return;
 
         FactTable worldFacts = lib.BuildWorldFacts(world.history);
+        global::Present.AddRow(worldFacts, lib.BuildPresent(world.history));
         foreach (FactEdit edit in world.history.factEdits.Where(e => e != null && e.sinceDay == tomorrow && e.cause == EditCause.Rule))
             if (worldFacts.TryFindOtherPlaceWith(edit.category, edit.nationId, edit.eraId, edit.value, out FactRow other))
                 Debug.LogWarning($"[HistoryService] History rule '{edit.source}' gives {worldFacts.OriginLabel(edit.nationId, edit.eraId)} the {edit.category} value '{edit.value}', which {other.OriginLabel} already has, so neither can leak a {edit.category} tell while both are in the world. Give the rule a distinct value (Tools > TimeDesk > Validate Content Library).");
