@@ -1035,19 +1035,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>Where generated placeholder cursors live (never mistaken for final art).</summary>
     private const string PlaceholderCursorFolder = "Assets/Art/Generated/Cursors";
 
-    /// <summary>Placeholder arrow outline, in top-left pixel coordinates of a 32x32 cursor.</summary>
-    private static readonly (float x, float y)[] ArrowCursorShape =
-    {
-        (0, 0), (0, 22), (5, 17), (9, 26), (12, 25), (8, 16), (15, 16),
-    };
-
-    /// <summary>Placeholder pointing hand (fingertip at 12,1), top-left pixel coordinates.</summary>
-    private static readonly (float x, float y)[] HandCursorShape =
-    {
-        (10, 1), (13, 1), (14, 2), (14, 12), (21, 13), (23, 15), (23, 25), (19, 30),
-        (10, 30), (6, 24), (5, 18), (7, 17), (10, 19),
-    };
-
     /// <summary>
     /// Ensures the interaction-feedback settings (cursor art by file name when
     /// present, placeholders otherwise, with click points derived from the art;
@@ -1069,7 +1056,7 @@ public static partial class OfficeSceneUIBuilder
         // Whenever a cursor texture is replaced, its click point is re-derived from the image.
         if (settings.arrowCursor == null || IsPlaceholderCursor(settings.arrowCursor))
         {
-            Texture2D arrow = EnsureCursorTexture("cursor_arrow", ArrowCursorShape);
+            Texture2D arrow = EnsureCursorTexture("cursor_arrow", PlaceholderCursors.Arrow);
             if (arrow != settings.arrowCursor)
             {
                 settings.arrowCursor = arrow;
@@ -1078,7 +1065,7 @@ public static partial class OfficeSceneUIBuilder
         }
         if (settings.handCursor == null || IsPlaceholderCursor(settings.handCursor))
         {
-            Texture2D hand = EnsureCursorTexture("cursor_hand", HandCursorShape);
+            Texture2D hand = EnsureCursorTexture("cursor_hand", PlaceholderCursors.Hand);
             if (hand != settings.handCursor)
             {
                 settings.handCursor = hand;
