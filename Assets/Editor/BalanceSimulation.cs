@@ -33,13 +33,16 @@ public static class BalanceSimulation
     public const int ExampleSeed = 12345;
 
     /// <summary>
-    /// The travellers a careful clerk gets through in a shift before the clock
-    /// closes (an estimate: 8 real minutes at about 45 s a traveller). Every
-    /// style is played twice, on the whole queue and at this pace (the rest of
-    /// the queue goes home, as when the shift clock closes); the epilogue
-    /// thresholds are read from perfect play at this pace.
+    /// The pace when BalanceSimSettings.asset is missing: the travellers a
+    /// careful clerk gets through in a shift before the clock closes (8 real
+    /// minutes at about 45 s a traveller). The knob itself is
+    /// BalanceSimSettingsSO.travellersPerShift (days 7-15 X3, Q11), which Saleh
+    /// edits in the Inspector.
     /// </summary>
     public const int ShiftPace = 10;
+
+    /// <summary>The pace this run plays at (BalanceSimSettingsSO.travellersPerShift, read at Run; <see cref="ShiftPace"/> without the asset).</summary>
+    private static int _pace = ShiftPace;
 
     /// <summary>The folder the summary and the example dumps go to (project-relative; Logs/ is not in git).</summary>
     public const string ReportFolder = "Logs/Balance";
@@ -50,7 +53,7 @@ public static class BalanceSimulation
     private const int SeedStep = 7919;
     private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
     private static readonly PlayStyle[] Styles = { PlayStyle.Perfect, PlayStyle.Imperfect, PlayStyle.Careless };
-    private static readonly int[] Paces = { 0, ShiftPace };
+    private static int[] Paces => _pace > 0 ? new[] { 0, _pace } : new[] { 0 };
 
     /// <summary>Runs the simulation with today's knobs and shows the summary's file (refused in play mode).</summary>
     [MenuItem("Tools/TimeDesk/Balance/Run 50-Run Simulation")]
@@ -84,6 +87,9 @@ public static class BalanceSimulation
             Debug.LogError("[Balance] Resources/RunConfig.asset, its content library or its game config is missing.");
             return null;
         }
+
+        var settings = AssetDatabase.LoadAssetAtPath<BalanceSimSettingsSO>(BalanceSimSettingsSO.AssetPath);
+        _pace = settings != null ? settings.travellersPerShift : ShiftPace;
 
         string dir = Path.IsPathRooted(folder) ? folder : Path.Combine(Directory.GetCurrentDirectory(), folder);
         Directory.CreateDirectory(dir);
@@ -188,10 +194,11 @@ public static class BalanceSimulation
             policy.StartDay(day);
 
             string ended = null;
-            int seen = pace > 0 ? Math.Min(pace, cases.Count) : cases.Count;
-            for (int i = 0; i < seen && ended == null; i++)
+            for (int i = 0; i < cases.Count && PlayPolicy.Reaches(i + 1, pace) && ended == null; i++)
             {
                 CaseInstance inst = cases[i];
+                // The traveller comes to the desk: a once-per-run premade is met (days 7-15 X1, the game's own step).
+                DayCycle.Present(world, inst);
                 PlayDecision decision = policy.Decide(inst.ShouldAccept, inst.HasDeviationFault);
                 int carries = world.history.pendingCarries.Count;
                 CaseVerdict verdict = DayCycle.Decide(inst, decision.Accept, i + 1, decision.Documented ? 1 : 0, world, today, ledger, lib, config);
@@ -292,7 +299,7 @@ public static class BalanceSimulation
     private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no shop, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({ShiftPace} travellers a shift, BalanceSimulation.ShiftPace: the rest go home when the clock closes).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no shop, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
@@ -371,7 +378,7 @@ public static class BalanceSimulation
         }
         if (style != PlayStyle.Perfect)
             return;
-        sb.AppendLine($"{(pace == ShiftPace ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == ShiftPace ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
+        sb.AppendLine($"{(pace == _pace && pace > 0 ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == _pace && pace > 0 ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
         sb.AppendLine($"endings with those thresholds: {string.Join(", ", full.GroupBy(r => Hypothetical(r.World, lib, config, proposed)).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
     }
 
