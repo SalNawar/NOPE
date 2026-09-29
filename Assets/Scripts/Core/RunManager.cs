@@ -35,6 +35,8 @@ public sealed class RunManager : MonoBehaviour
         if (Instance != null)
             return Instance;
 
+        Debug.Log("[RunManager] >>> Entering GetOrCreate (no instance yet, bootstrapping).");
+
         var config = Resources.Load<RunConfigSO>(ConfigResourcePath);
 
         if (config == null)
@@ -61,6 +63,8 @@ public sealed class RunManager : MonoBehaviour
         if (!mgr.ContinueRun())
             mgr.NewRun();
 
+        Debug.Log($"[RunManager] <<< Exiting GetOrCreate (day {mgr.World?.day}, money={mgr.World?.money}, stability={mgr.World?.timelineStability:0.#}).");
+
         return mgr;
     }
 
@@ -80,6 +84,8 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void NewRun()
     {
+        Debug.Log("[RunManager] >>> Entering NewRun.");
+
         DevToolsState.ResetAll();
         SaveSystem.Delete();
 
@@ -115,9 +121,15 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public bool ContinueRun()
     {
+        Debug.Log("[RunManager] >>> Entering ContinueRun.");
+
         WorldState loaded = SaveSystem.Load();
+
         if (loaded == null)
+        {
+            Debug.Log("[RunManager] <<< Exiting ContinueRun — no save found.");
             return false;
+        }
 
         World = loaded;
         DevToolsState.ResetAll();
@@ -133,6 +145,8 @@ public sealed class RunManager : MonoBehaviour
     /// <summary>Writes the current world state to disk.</summary>
     public void SaveNow()
     {
+        Debug.Log("[RunManager] >>> Entering SaveNow.");
+
         if (World == null)
         {
             Debug.LogError("RunManager.SaveNow called with no active run.");
@@ -186,16 +200,19 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void Sleep()
     {
+        Debug.Log($"[RunManager] >>> Entering Sleep (day {World.day}, money={World.money}, stability={World.timelineStability:0.#}).");
+
         EndingSO ending = EndingService.Evaluate(World, Library, Config != null ? Config.gameConfig : null, EndingMoment.DayBoundary);
         if (ending != null)
         {
-            Debug.Log($"[RunManager] Day {World.day} ends the run: '{ending.id}' ({ending.displayName}).");
+            Debug.Log($"[RunManager] <<< Exiting Sleep (ending '{ending.id}' ({ending.displayName}); saving and loading the title scene).");
             World.endingId = ending.id;
             SaveNow();
             LoadTitleScene();
             return;
         }
 
+        Debug.Log("[RunManager] <<< Exiting Sleep (no ending, advancing to the next day).");
         AdvanceToNextDay();
     }
 
@@ -207,6 +224,8 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     private void AdvanceToNextDay()
     {
+        Debug.Log($"[RunManager] >>> Entering AdvanceToNextDay (day {World.day} -> {World.day + 1}).");
+
         // Nightly resolve runs BEFORE day++ so trigger conditions read "today".
         TimelineService.NightlyResolve(World, Library, Config != null ? Config.gameConfig : null);
 
@@ -214,7 +233,7 @@ public sealed class RunManager : MonoBehaviour
         World.citationsToday = 0;
         World.phase = RunPhase.Office;
 
-        Debug.Log($"[RunManager] Day {World.day} begins: money={World.money}, stability={World.timelineStability:0.#}.");
+        Debug.Log($"[RunManager] <<< Exiting AdvanceToNextDay (now day {World.day}, money={World.money}, stability={World.timelineStability:0.#}; saving and loading Office).");
 
         SaveNow();
         LoadOfficeScene();
@@ -227,6 +246,8 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void ResetTomorrowModifiers()
     {
+        Debug.Log("[RunManager] ResetTomorrowModifiers (legendaryChanceBonus, forgeryChanceModifier reset to 0; payRateMultiplier reset to 1).");
+
         World.legendaryChanceBonus = 0f;
         World.forgeryChanceModifier = 0f;
         World.payRateMultiplier = 1f;
@@ -265,8 +286,12 @@ public sealed class RunManager : MonoBehaviour
     /// </summary>
     public void GoHomeOrAdvance()
     {
+        Debug.Log($"[RunManager] >>> Entering GoHomeOrAdvance (day {World.day}).");
+
         if (Application.CanStreamedLevelBeLoaded(Config.homeSceneName))
         {
+            Debug.Log($"[RunManager] <<< Exiting GoHomeOrAdvance (going to Home scene '{Config.homeSceneName}').");
+
             SaveNow();
             LoadHomeScene();
         }
