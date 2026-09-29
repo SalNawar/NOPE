@@ -239,7 +239,7 @@ public sealed class InterviewLines
     /// <summary>The desk's opener for a legendary ({name}).</summary>
     public LineText openerLegendary = new();
 
-    /// <summary>The traveller's claim per kind ({place}; traveller types §8: the displaced "Please. Send me home to {place}."); also the banner and the shift summary.</summary>
+    /// <summary>The traveller's claim per kind ({place}; traveller types §8: the displaced "Please. Send me home to {place}."): the spoken claim's default when their voice has no row (Voices.Claim).</summary>
     public List<KindLine> claims = new();
 
     /// <summary>Honorific for a traveller recorded as male ("sir").</summary>
@@ -289,6 +289,15 @@ public sealed class InterviewLines
 
     /// <summary>The most choices the traveller wheel shows at once (content never offers more).</summary>
     public int menuCapacity;
+
+    /// <summary>How small talk picks its source: the personality's lines, the home's, the kind's (interview.smallTalkWeights; the personalities spec's V5).</summary>
+    public SmallTalkWeights smallTalkWeights = new SmallTalkWeights();
+
+    /// <summary>The kinds' small talk (interview.kindSmallTalk: rows naming kinds and optionally an era, no voice), one of small talk's three sources.</summary>
+    public List<VoiceLine> kindSmallTalk = new List<VoiceLine>();
+
+    /// <summary>The personalities' and premades' own lines, one list per slot (interview.voices); a voice with no matching row says the defaults above (Voices).</summary>
+    public VoiceBook voices = new VoiceBook();
 }
 
 /// <summary>
