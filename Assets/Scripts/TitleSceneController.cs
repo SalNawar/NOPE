@@ -21,7 +21,12 @@ public sealed class TitleSceneController : MonoBehaviour
     /// <summary>UI controller for the title panels (optional).</summary>
     [SerializeField] private TitleUIController titleUI;
 
-    /// <summary>Acquires the run and shows the appropriate panel.</summary>
+    /// <summary>
+    /// Acquires the run and shows the appropriate panel: an ended run's ending
+    /// (never continued: without the ending panel the title offers New Run
+    /// only, and without any title UI a new run starts; audit R3-005), else
+    /// the title with Continue when a save can be continued.
+    /// </summary>
     private void Start()
     {
         RunManager run = RunManager.GetOrCreate();
@@ -33,8 +38,9 @@ public sealed class TitleSceneController : MonoBehaviour
         }
 
         WorldState world = run.World;
+        bool ended = !string.IsNullOrEmpty(world.endingId);
 
-        if (!string.IsNullOrEmpty(world.endingId) && titleUI != null && titleUI.HasEndingPanel)
+        if (ended && titleUI != null && titleUI.HasEndingPanel)
         {
             EndingSO ending = run.Library != null ? run.Library.GetEndingById(world.endingId) : null;
             titleUI.ShowEnding(ending, HandleNewRun);
@@ -42,10 +48,19 @@ public sealed class TitleSceneController : MonoBehaviour
             return;
         }
 
+        if (ended)
+            Debug.LogWarning($"[TitleSceneController] The run ended ('{world.endingId}') but no ending panel is wired: it cannot be continued. Run Tools > TimeDesk > Build Title UI (Panels + Wiring) in the title scene.");
+
         if (titleUI != null && titleUI.HasTitlePanel)
         {
-            bool hasSave = SaveSystem.HasSave();
+            bool hasSave = !ended && SaveSystem.HasSave();
             titleUI.ShowTitle(hasSave, HandleContinue, HandleNewRun);
+            return;
+        }
+
+        if (ended)
+        {
+            HandleNewRun();
             return;
         }
 
