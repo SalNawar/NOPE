@@ -1,6 +1,6 @@
 # The audit backlog's status (2026-09-29)
 
-Where each of the 164 findings of the Phase 1 code audit (`SCRATCH/audit/backlog.json`, triaged 2026-09-26; the plan: `docs/superpowers/plans/2026-09-25-code-audit-overhaul-plan.md`, mapped to the redesign phases in `docs/superpowers/plans/2026-09-26-redesign-plan.md` §3) stands on branch `overhaul/leftovers`: main `6d0c5d0` (phase 9 and the fix branch) with this track's fixes, Saleh's answers of 2026-09-29 included.
+Where each of the 164 findings of the Phase 1 code audit (`SCRATCH/audit/backlog.json`, triaged 2026-09-26; the plan: `docs/superpowers/plans/2026-09-25-code-audit-overhaul-plan.md`, mapped to the redesign phases in `docs/superpowers/plans/2026-09-26-redesign-plan.md` §3) stands on branch `overhaul/leftovers`: main `164a15b` (phase 23) with this track's fixes, Saleh's answers of 2026-09-29 included.
 
 ## How it was decided
 
@@ -13,11 +13,11 @@ Where each of the 164 findings of the Phase 1 code audit (`SCRATCH/audit/backlog
 
 | Status | high | medium | low | total |
 |---|---|---|---|---|
-| DONE | 2 | 9 | 74 | 85 |
+| DONE | 2 | 9 | 75 | 86 |
 | MAPPED | 0 | 0 | 3 | 3 |
 | OBSOLETE | 0 | 0 | 4 | 4 |
 | KEPT | 0 | 0 | 1 | 1 |
-| DEFERRED | 0 | 11 | 30 | 41 |
+| DEFERRED | 0 | 11 | 29 | 40 |
 | OPEN | 0 | 0 | 30 | 30 |
 | total | 2 | 20 | 142 | 164 |
 
@@ -32,7 +32,6 @@ Fixed on this branch: 40 findings (31 whole, 9 in part): R1-002, R1-005, R1-006,
 ## DEFERRED for Saleh (behaviour or ownership)
 
 - R5-013 (low): The `_Recovery` scenes are gone (R6-024); `CinemachineCameraRig` is still on the art office's OfficeRoot: the art side's scene.
-- R6-019 (low): Saleh had the `testables` entry dropped, but the UnitySkills package writes it back on every editor load (`PackageManagerHelper.EnsureTestable`, an `[InitializeOnLoadMethod]` with no opt-out), so the drop was reverted. Options for Saleh: run the suite filtered to the project's test assembly (`TimeDeskEditMode`: 2392 tests, 0 failures today), pin or fork the package, or remove it.
 
 ## Every finding
 
@@ -196,7 +195,7 @@ Fixed on this branch: 40 findings (31 whole, 9 in part): R1-002, R1-005, R1-006,
 | R6-016 | low | DEFERRED | - | `Assets/Editor/TitleSceneBuilder.cs` | The Title and Home builders write into whatever scene is open, with no scene or dirty-state check, unlike Build Office UI. They are also create-only,… | Making the Title and Home builders open their own scene changes how the audit static job (tools/audit, which epic/pass-1 is editing) rebuilds them into scratch scenes. |
 | R6-017 | low | KEPT | - | `Assets/Editor/CharacterArtImporter.cs` | Every character texture is imported with Read/Write enabled, which keeps a CPU copy of it in memory and roughly doubles its footprint. Nothing reads… | Saleh chose to leave the character layers readable. |
 | R6-018 | low | DONE | 1a0d743 | `Packages/manifest.json` | Eleven packages are unused; reference searches prove it: com.unity.2d.animation, com.unity.2d.aseprite, com.unity.2d.psdimporter, com.unity.2d.sprite… | 11 unused packages removed. |
-| R6-019 | low | DEFERRED | 900e000, reverted by dffffdc | `Packages/manifest.json` | "testables" pulls the third-party UnitySkills test assembly into the project's Test Runner; this is the 'known third-party UnitySkills failure' the p… | Saleh had the `testables` entry dropped, but the UnitySkills package writes it back on every editor load (`PackageManagerHelper.EnsureTestable`, an `[InitializeOnLoadMethod]` with no opt-out), so the drop was reverted. Options for Saleh: run the suite filtered to the project's test assembly (`TimeDeskEditMode`: 2392 tests, 0 failures today), pin or fork the package, or remove it. |
+| R6-019 | low | DONE | 900e000, reverted by dffffdc; the rule of 2026-09-29 | `Packages/manifest.json` | "testables" pulls the third-party UnitySkills test assembly into the project's Test Runner; this is the 'known third-party UnitySkills failure' the p… | Saleh chose "run only our tests": the UnitySkills package writes its `testables` entry back on every editor load (`PackageManagerHelper.EnsureTestable`, no opt-out), so the manifest keeps it and every EditMode run is filtered to the game's own assembly instead (the common brief's item 6, `Filter.assemblyNames = { "TimeDeskEditMode" }`): 2395 passed, 0 failed on this branch today. |
 | R6-020 | low | DONE | 6bf10b0 | `Assets/Scripts/Domain/TimeDesk.Domain.asmdef` | The Domain assembly allows engine references for the sake of one attribute. It could be engine-free like Visuals, which would enforce its purity at c… | `noEngineReferences: true`. |
 | R6-021 | low | DONE | 5b2aa3a | `Assets/Editor/OfficeSceneUIBuilder.cs` | Three content-versus-desk checks run only in Build Office UI, not in Generate World or Validate Content Library, so a content change can break the of… | The validator checks the desk fit. |
 | R6-022 | low | DONE | 95ec7a2 | `Assets/Editor/ContentLibraryValidator.cs` | The day-sequence check logs gaps without counting them, so Validate can end with 'no issues found' after a gap warning. It also never reports a missi… | Day gaps and a missing first day are reported. |
