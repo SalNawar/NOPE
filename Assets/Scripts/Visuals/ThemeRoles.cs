@@ -34,7 +34,7 @@ public enum ThemeRoleId
     /// <summary>A title bar's gloss.</summary>
     TitleGloss,
 
-    /// <summary>A default button (window controls, Prev/Next, Acknowledge, the Settings choices).</summary>
+    /// <summary>A default button (window controls, the shop's Next, Acknowledge, the Settings choices).</summary>
     Button,
 
     /// <summary>A window's close button.</summary>

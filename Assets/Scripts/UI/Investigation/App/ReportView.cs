@@ -5,9 +5,9 @@ using UnityEngine;
 /// The Investigation app's Report tab (the PC redesign AP5, FO9, §2.8, CM5):
 /// the case's Deviation Report (Form_DeviationReport, TC-930, on a FormPage
 /// at the pane's width): the case line (the day's date and the claim
-/// banner's text), a table
-/// row per documented deviation (NO., CATEGORY, STATEMENT, CONTRADICTED BY,
-/// PROOF: ReportPage), each side's cell with a ↗ back to where it was
+/// banner's text), per documented deviation a heading band (its number,
+/// category and proof) over a row of its two sides (STATEMENT, CONTRADICTED
+/// BY: ReportPage), each side's cell with a ↗ back to where it was
 /// picked (SmartLinks.ForKey through the app: a paper's field, a transcript
 /// line, a book row, a record row; a held paper links nowhere), the tail
 /// (nothing documented yet, or the count), the desk officer's sign-off (the
@@ -79,7 +79,8 @@ public sealed class ReportView : AppView
 
     /// <summary>The entry a row's slot shows, or null.</summary>
     private ReportEntry EntryOf(FormSlot slot) =>
-        slot.Source == ReportPage.RowsSlot && slot.Row >= 0 && slot.Row < _entries.Count ? _entries[slot.Row] : null;
+        slot.Source == ReportPage.RowsSlot && ReportPage.EntryOfRow(slot.Row) >= 0 && ReportPage.EntryOfRow(slot.Row) < _entries.Count
+            ? _entries[ReportPage.EntryOfRow(slot.Row)] : null;
 
     /// <summary>Where a side's cell links (the pick's place in the app), None when it has none.</summary>
     private LinkTarget Link(FormSlot slot, int cell)

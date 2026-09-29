@@ -231,9 +231,11 @@ public sealed class ReportEntry
 
 /// <summary>
 /// The Deviation Report (TC-930, the PC redesign FO9, §2.8) as the Report tab
-/// fills it: a table row per documented deviation (NO., CATEGORY, STATEMENT,
-/// CONTRADICTED BY, PROOF), each of its two sides a cell that links back to
-/// where it was picked. Pure.
+/// fills it: per documented deviation a heading across the table (its
+/// number, category and proof) over a row of its two sides (STATEMENT,
+/// CONTRADICTED BY), each side a cell that links back to where it was
+/// picked; two wide columns read in a split pane where five narrow ones
+/// broke their words. Pure.
 /// </summary>
 public static class ReportPage
 {
@@ -250,12 +252,18 @@ public static class ReportPage
     public const string SignatureSlot = "signature";
 
     /// <summary>The table's STATEMENT column (its cell links to the statement's pick).</summary>
-    public const int StatementCell = 2;
+    public const int StatementCell = 0;
 
     /// <summary>The table's CONTRADICTED BY column (its cell links to the truth's pick).</summary>
-    public const int TruthCell = 3;
+    public const int TruthCell = 1;
 
-    /// <summary>The rows: each entry numbered from 1, its category (<paramref name="category"/> words it), "label: value" for each side (the pick's label and the text the dock showed), and the proof's word (<paramref name="proof"/>).</summary>
+    /// <summary>
+    /// The rows: per entry a heading (one cell: its number from 1, its
+    /// category as <paramref name="category"/> words it and its proof's word,
+    /// <paramref name="proof"/>: "1  VISA CLASS · Agency records"), then its
+    /// sides, "label: value" each (the pick's label and the text the dock
+    /// showed).
+    /// </summary>
     public static List<string[]> Rows(IReadOnlyList<ReportEntry> entries, Func<ClueCategory, string> category, Func<DiscrepancyProof, string> proof)
     {
         var rows = new List<string[]>();
@@ -265,17 +273,16 @@ public static class ReportPage
         {
             ReportEntry e = entries[i];
             Discrepancy d = e.Deviation;
-            rows.Add(new[]
-            {
-                (i + 1).ToString(CultureInfo.InvariantCulture),
-                category != null && d != null ? category(d.category) ?? string.Empty : string.Empty,
-                Side(e.Statement.Label, e.Statement.Shown),
-                Side(e.Truth.Label, e.Truth.Shown),
-                proof != null && d != null ? proof(d.provedBy) ?? string.Empty : string.Empty
-            });
+            string what = category != null && d != null ? category(d.category) ?? string.Empty : string.Empty;
+            string how = proof != null && d != null ? proof(d.provedBy) ?? string.Empty : string.Empty;
+            rows.Add(new[] { (i + 1).ToString(CultureInfo.InvariantCulture) + "  " + what + (how.Length > 0 ? " · " + how : string.Empty) });
+            rows.Add(new[] { Side(e.Statement.Label, e.Statement.Shown), Side(e.Truth.Label, e.Truth.Shown) });
         }
         return rows;
     }
+
+    /// <summary>The entry whose sides table row <paramref name="row"/> holds (Rows' order), or -1 for a heading.</summary>
+    public static int EntryOfRow(int row) => row > 0 && row % 2 == 1 ? row / 2 : -1;
 
     /// <summary>The pick key a row's cell links to: the statement's in the STATEMENT column, the truth's in CONTRADICTED BY; null elsewhere.</summary>
     public static string LinkKey(ReportEntry entry, int cell)

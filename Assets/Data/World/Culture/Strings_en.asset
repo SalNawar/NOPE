@@ -1429,8 +1429,8 @@ MonoBehaviour:
     text: Papers disagree
     gloss: 0
     tier: 0
-  - key: form.report.officer
-    text: Desk officer, day {0}
+  - key: form.report.caseLine
+    text: "{0} \xB7 {1}"
     gloss: 0
     tier: 0
   - key: form.interview.head

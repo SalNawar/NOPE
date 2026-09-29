@@ -38,17 +38,11 @@ MonoBehaviour:
       text: 
       cells: []
       columns:
-      - 'No.'
-      - 'Category'
       - 'Statement'
       - 'Contradicted by'
-      - 'Proof'
       shares:
-      - 0.08
-      - 0.17
-      - 0.28
-      - 0.28
-      - 0.19
+      - 0.5
+      - 0.5
       options: []
       field: -1
       slot: 'rows'

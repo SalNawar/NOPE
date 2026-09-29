@@ -163,15 +163,21 @@ public class AppPagesTests
     }
 
     [Test]
-    public void Report_Rows_NumberCategoryTheTwoSidesAndTheProof_AndTheSidesCellsLinkToTheirPicks()
+    public void Report_Rows_AHeadingPerDeviation_OverItsTwoSides_AndTheSidesCellsLinkToTheirPicks()
     {
-        var entries = new List<ReportEntry> { ReportEntry.From(RecordProof(), VisaClass, Account) };
+        var entries = new List<ReportEntry> { ReportEntry.From(RecordProof(), VisaClass, Account), ReportEntry.From(RecordProof(), Manifest, Account) };
         List<string[]> rows = ReportPage.Rows(entries, c => c.ToString().ToUpperInvariant(), p => p == DiscrepancyProof.RecordMismatch ? "Agency records" : "?");
-        Assert.AreEqual(1, rows.Count);
-        CollectionAssert.AreEqual(new[] { "1", "TRANSPONDERCLASS", "Leisure Departure Visa · Visa Class: Premium", "Records · Class: Standard", "Agency records" }, rows[0]);
+        Assert.AreEqual(4, rows.Count, "a heading and a row of the two sides per deviation");
+        CollectionAssert.AreEqual(new[] { "1  TRANSPONDERCLASS · Agency records" }, rows[0], "the heading: the number, the category and the proof, one cell across");
+        CollectionAssert.AreEqual(new[] { "Leisure Departure Visa · Visa Class: Premium", "Records · Class: Standard" }, rows[1], "the sides: the statement, then what contradicts it");
+        Assert.AreEqual("2  TRANSPONDERCLASS · Agency records", rows[2][0]);
+        Assert.AreEqual(-1, ReportPage.EntryOfRow(0), "a heading is no entry's row");
+        Assert.AreEqual(0, ReportPage.EntryOfRow(1));
+        Assert.AreEqual(1, ReportPage.EntryOfRow(3));
+        Assert.AreEqual(-1, ReportPage.EntryOfRow(-1));
         Assert.AreEqual(VisaClass.Key, ReportPage.LinkKey(entries[0], ReportPage.StatementCell));
         Assert.AreEqual(Account.Key, ReportPage.LinkKey(entries[0], ReportPage.TruthCell));
-        Assert.IsNull(ReportPage.LinkKey(entries[0], 0), "the number links nowhere");
+        Assert.IsNull(ReportPage.LinkKey(entries[0], 2), "no third cell");
         Assert.IsNull(ReportPage.LinkKey(null, ReportPage.StatementCell));
         Assert.AreEqual(0, ReportPage.Rows(null, null, null).Count);
     }
@@ -183,7 +189,8 @@ public class AppPagesTests
         var answer = Pick("line:4", "Traveller · CURRENCY", CompareEvidence.ForAnswer(ClueCategory.Currency, "Florin", true));
         var book = Pick("book:Currency:italy:medieval", "Currency Ledger: Florence (Medieval)", CompareEvidence.ForReferenceEntry(ClueCategory.Currency, "Florin", "italy", "medieval", "Florence (Medieval)"));
         List<string[]> rows = ReportPage.Rows(new[] { ReportEntry.From(foreign, book, answer) }, c => c.ToString(), p => p.ToString());
-        CollectionAssert.AreEqual(new[] { "1", "Currency", "Traveller · CURRENCY: Florin", "Currency Ledger: Florence (Medieval): Florin", "ForeignOrigin" }, rows[0], "each side shows what the dock showed");
+        CollectionAssert.AreEqual(new[] { "1  Currency · ForeignOrigin" }, rows[0]);
+        CollectionAssert.AreEqual(new[] { "Traveller · CURRENCY: Florin", "Currency Ledger: Florence (Medieval): Florin" }, rows[1], "each side shows what the dock showed");
     }
 
     // ---------------- The Directive Memo ----------------

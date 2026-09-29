@@ -24,10 +24,10 @@ public readonly struct AppChip
 /// shows and hides the view with its tab, lays the view's chips out in its
 /// header, forwards a chip's click, sends the view where a link, Back or a
 /// jump goes (Reveal) and records where the view is (Spot) in its history.
-/// Each pane has its own views. Today's views host the desk's existing lists
-/// and texts; the forms engine's views (FormView, phase 5) implement the same
-/// interface, so moving a tab onto forms replaces that tab's view component
-/// and nothing in the pane, the app or the presenters.
+/// Each pane has its own views; each draws its page as a form in a scroll
+/// (FormPage: the scanned copy, the Record Extract, a register, the
+/// Interview Record, the Deviation Report, the Directive Memo), so the pane,
+/// the app and the presenters never see how a view draws.
 /// </summary>
 public interface IAppView
 {
@@ -57,8 +57,8 @@ public interface IAppView
 
     /// <summary>
     /// Goes where <paramref name="target"/> says (its tab is this view's): its
-    /// item (-1: keep the one shown), then its row (a pick key: the page
-    /// turned and a filter lifted until the row shows, the row marked found;
+    /// item (-1: keep the one shown), then its row (a pick key: a filter
+    /// lifted until the row shows, the row outlined and scrolled to the middle;
     /// null: nothing marked) or, in Records, its lookup and the found record's
     /// row of its category. A link, Back, Forward and a jump (a pin, a recent
     /// item) all come here; nothing is ever picked. True when the target is

@@ -14,7 +14,7 @@ using UnityEngine;
 /// are ComparePair's (each side's CompareEvidence.MatchValue: a garment shows
 /// its item but matches on its place's Culture value). A PC row lights by its
 /// key (the PC redesign CM3: IsPicked and PicksChanged, so a value shown in
-/// both panes lights in both and stays lit after a page flip); a desk row and
+/// both panes lights in both and stays lit after a redraw); a desk row and
 /// the bubble light through the ICompareHighlight they pass. The pair is
 /// drawn twice: in the PC's compare dock as side A, the verdict and side B
 /// (CompareDock: DK9, CM2) and on the office strip as one line (optional).
