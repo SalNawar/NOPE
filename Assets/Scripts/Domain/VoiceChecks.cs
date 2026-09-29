@@ -66,6 +66,18 @@ public sealed class VoiceCheckInput
 
     /// <summary>Each day's slip chance (days[].slipChance), by day number.</summary>
     public IReadOnlyList<(int day, float chance)> SlipChances = Array.Empty<(int, float)>();
+
+    /// <summary>
+    /// The premades whose lines must cover every slot they can reach (the
+    /// personalities spec's PS3, §4.5), with the intents they can stand with
+    /// (Lying for a premade with a true place or an appearance that tells an
+    /// authored lie; Honest for any other appearance). A premade not listed is
+    /// not checked.
+    /// </summary>
+    public IReadOnlyDictionary<string, IReadOnlyCollection<ReactionIntent>> PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>>();
+
+    /// <summary>The premades who are displaced (they refuse the manifest, the waiver and the proof of means in their own words).</summary>
+    public IReadOnlyCollection<string> DisplacedPremades = Array.Empty<string>();
 }
 
 /// <summary>What the voice lines' rules found: errors (Generate World writes nothing, the validator fails), warnings and info lines (each personality's coverage).</summary>
@@ -168,6 +180,8 @@ public static class VoiceChecks
             if (!(chance >= 0f && chance <= 1f))
                 result.Errors.Add($"days: day {day}'s slipChance is {chance.ToString("0.###", CultureInfo.InvariantCulture)}; it must be within 0 and 1.");
 
+        CheckPremades(book, input, result);
+
         List<VoiceLine> kindTalk = input.KindSmallTalk ?? new List<VoiceLine>();
         var talked = new HashSet<TravellerKind>();
         for (int i = 0; i < kindTalk.Count; i++)
@@ -252,6 +266,46 @@ public static class VoiceChecks
                     result.Warnings.Add($"{owner} repeats row {j + 1} in every column.");
                     break;
                 }
+        }
+    }
+
+    /// <summary>
+    /// Every listed premade speaks its own line in every slot it can reach
+    /// (PS3, §4.5): a claim, a hand-over, each spoken request, each question,
+    /// small talk, a displaced premade's Honest refusals of the manifest, the
+    /// waiver and the proof of means (those some menu offers), the Accepted and
+    /// Denied reactions of each intent it can stand with; a slip only for a
+    /// premade that lies.
+    /// </summary>
+    private static void CheckPremades(VoiceBook book, VoiceCheckInput input, VoiceCheckResult result)
+    {
+        foreach (KeyValuePair<string, IReadOnlyCollection<ReactionIntent>> premade in input.PremadeIntents ?? new Dictionary<string, IReadOnlyCollection<ReactionIntent>>())
+        {
+            string id = premade.Key;
+            var missing = new List<string>();
+            bool Has(List<VoiceLine> rows, Func<VoiceLine, bool> match) =>
+                (rows ?? new List<VoiceLine>()).Exists(r => r != null && r.premade == id && r.line != null && !string.IsNullOrWhiteSpace(r.line.text) && match(r));
+
+            if (!Has(book.claims, _ => true)) missing.Add("the claim");
+            if (!Has(book.handOver, _ => true)) missing.Add("the hand-over");
+            foreach (string spoken in input.SpokenRequests ?? Array.Empty<string>())
+                if (!Has(book.spoken, r => r.key == spoken)) missing.Add($"the spoken request '{spoken}'");
+            foreach (string question in input.Questions ?? Array.Empty<string>())
+                if (!Has(book.answers, r => r.key == question)) missing.Add($"the answer to '{question}'");
+            if (!Has(book.smallTalk, _ => true)) missing.Add("small talk");
+            if (Contains(input.DisplacedPremades, id))
+                foreach (string request in new[] { "TC-230", "TC-310", "proof" })
+                    if (Contains(input.Requests, request) && !Has(book.missingForms, r => r.key == request && r.variant == MissingFormVariant.Honest))
+                        missing.Add($"the refusal of '{request}'");
+            ICollection<ReactionIntent> intents = new List<ReactionIntent>(premade.Value ?? Array.Empty<ReactionIntent>());
+            foreach (ReactionIntent intent in intents)
+                foreach (ReactionVerdict verdict in new[] { ReactionVerdict.Accepted, ReactionVerdict.Denied })
+                    if (!Has(book.reactions, r => r.verdict == verdict && r.intent == intent && string.IsNullOrWhiteSpace(r.reason)))
+                        missing.Add($"the {verdict} · {intent} reaction");
+            if (missing.Count > 0)
+                result.Errors.Add($"The premade '{id}' has no line of its own for {string.Join(", ", missing)}; a premade speaks only its own lines (the personalities spec's PS3).");
+            if (!intents.Contains(ReactionIntent.Lying) && Has(book.slips, _ => true))
+                result.Errors.Add($"The premade '{id}' never lies, so it never slips; its slip row is never said.");
         }
     }
 

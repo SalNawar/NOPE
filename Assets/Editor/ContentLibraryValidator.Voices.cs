@@ -12,6 +12,28 @@ using UnityEngine;
 /// </summary>
 public static partial class ContentLibraryValidator
 {
+    /// <summary>Each premade's intents from the day plans (the generator's rule): Lying for a true place or a forced appearance with an authored lie, Honest otherwise.</summary>
+    private static Dictionary<string, IReadOnlyCollection<ReactionIntent>> PremadeIntents(ContentLibrarySO lib)
+    {
+        var intents = new Dictionary<string, HashSet<ReactionIntent>>();
+        void Add(LegendarySO premade, bool lie)
+        {
+            if (premade == null || string.IsNullOrEmpty(premade.id))
+                return;
+            if (!intents.TryGetValue(premade.id, out HashSet<ReactionIntent> set))
+                intents[premade.id] = set = new HashSet<ReactionIntent>();
+            set.Add(lie || premade.truePlace != null ? ReactionIntent.Lying : ReactionIntent.Honest);
+        }
+        foreach (DayPlanSO plan in lib.DayPlans.Where(p => p != null))
+        {
+            foreach (LegendarySO premade in plan.AvailableLegendaries ?? new LegendarySO[0])
+                Add(premade, false);
+            foreach (ForcedCaseSlot slot in plan.ForcedCases.Where(s => s != null))
+                Add(slot.legendary, slot.hasLie);
+        }
+        return intents.ToDictionary(kv => kv.Key, kv => (IReadOnlyCollection<ReactionIntent>)kv.Value.OrderBy(i => i).ToList());
+    }
+
     /// <summary>Reports each problem of the cast and the voice lines; logs the warnings and the coverage; returns how many issues.</summary>
     private static int CheckVoices(ContentLibrarySO lib)
     {
@@ -44,7 +66,9 @@ public static partial class ContentLibraryValidator
             Employers = lib.Agency.employers.Where(e => e != null).Select(e => e.name).ToList(),
             DefaultReactions = lines.reactions ?? new List<VoiceLine>(),
             DefaultSlips = lines.slips ?? new List<VoiceLine>(),
-            SlipChances = lib.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, p.SlipChance)).ToList()
+            SlipChances = lib.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, p.SlipChance)).ToList(),
+            PremadeIntents = PremadeIntents(lib),
+            DisplacedPremades = lib.Legendaries.Where(l => l != null && l.kind == TravellerKind.Displaced).Select(l => l.id).ToList()
         };
         VoiceCheckResult result = VoiceChecks.Problems(input);
         foreach (string error in result.Errors)

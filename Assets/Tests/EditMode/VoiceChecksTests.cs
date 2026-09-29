@@ -398,4 +398,60 @@ public class VoiceChecksTests
         StringAssert.Contains("day 5's slipChance is -0.1", errors);
         StringAssert.DoesNotContain("day 1's", errors);
     }
+
+    // ---- The premades (PS3, §4.5) ----
+
+    /// <summary>Senenmut, honest and displaced, with every slot he can reach (the input's two questions, two spoken requests, three refusals).</summary>
+    private static VoiceCheckInput WithSenenmut()
+    {
+        VoiceCheckInput input = Input();
+        VoiceLine P(string text, string key = null, MissingFormVariant variant = MissingFormVariant.Honest) => Row(text, null, "senenmut", key: key, variant: variant);
+        input.Voices.claims.Add(P("Home to {place}. The temple will not finish itself."));
+        input.Voices.handOver.Add(P("Here. Mind the corners; it is my only copy."));
+        input.Voices.spoken.Add(P("Closer. As to a good plan.", "step_closer"));
+        input.Voices.spoken.Add(P("I have addressed quarries louder than this.", "speak_up"));
+        input.Voices.answers.Add(P("{value}, by weight.", "q_currency"));
+        input.Voices.answers.Add(P("{value}. Every overseer has one.", "q_device"));
+        input.Voices.smallTalk.Add(P("Your hall has fine columns. Too thin, but fine."));
+        foreach (string request in new[] { "TC-230", "TC-310", "proof" })
+            input.Voices.missingForms.Add(P($"No {request}. The sky did not ask.", request));
+        input.Voices.reactions.Add(Reaction("May your granaries overflow.", null, ReactionVerdict.Accepted, ReactionIntent.Honest, premade: "senenmut"));
+        input.Voices.reactions.Add(Reaction("The Pharaoh will hear of this.", null, ReactionVerdict.Denied, ReactionIntent.Honest, premade: "senenmut"));
+        input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Honest } };
+        input.DisplacedPremades = new[] { "senenmut" };
+        return input;
+    }
+
+    [Test]
+    public void Premades_EverySlotCovered()
+    {
+        Assert.AreEqual(string.Empty, Errors(WithSenenmut()));
+
+        VoiceCheckInput input = WithSenenmut();
+        input.Voices.answers.RemoveAll(r => r.premade == "senenmut" && r.key == "q_device");
+        input.Voices.missingForms.RemoveAll(r => r.premade == "senenmut" && r.key == "proof");
+        input.Voices.reactions.RemoveAll(r => r.premade == "senenmut" && r.verdict == ReactionVerdict.Denied);
+        string errors = Errors(input);
+        StringAssert.Contains("The premade 'senenmut' has no line of its own for", errors);
+        StringAssert.Contains("the answer to 'q_device'", errors);
+        StringAssert.Contains("the refusal of 'proof'", errors);
+        StringAssert.Contains("the Denied · Honest reaction", errors);
+
+        input = WithSenenmut();
+        input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Honest, ReactionIntent.Lying } };
+        StringAssert.Contains("the Accepted · Lying reaction, the Denied · Lying reaction", Errors(input), "a premade who can lie reacts as a liar too");
+    }
+
+    [Test]
+    public void Premades_ASlipOnlyForALiar()
+    {
+        VoiceCheckInput input = WithSenenmut();
+        input.Voices.slips.Add(Row("I know nothing of forgery.", null, "senenmut"));
+        StringAssert.Contains("The premade 'senenmut' never lies, so it never slips", Errors(input));
+
+        input.PremadeIntents = new Dictionary<string, IReadOnlyCollection<ReactionIntent>> { ["senenmut"] = new[] { ReactionIntent.Lying } };
+        input.Voices.reactions.Add(Reaction("Worth it.", null, ReactionVerdict.Accepted, ReactionIntent.Lying, premade: "senenmut"));
+        input.Voices.reactions.Add(Reaction("Caught.", null, ReactionVerdict.Denied, ReactionIntent.Lying, premade: "senenmut"));
+        StringAssert.DoesNotContain("senenmut", Errors(input));
+    }
 }

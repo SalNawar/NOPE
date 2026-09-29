@@ -105,7 +105,9 @@ public static partial class WorldContentGenerator
             Employers = (src.agency?.employers ?? Array.Empty<Employer>()).Where(e => e != null).Select(e => e.name).ToList(),
             DefaultReactions = built.reactions,
             DefaultSlips = built.slips,
-            SlipChances = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).Select(d => (d.day, d.slipChance)).ToList()
+            SlipChances = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).Select(d => (d.day, d.slipChance)).ToList(),
+            PremadeIntents = PremadeIntents(src),
+            DisplacedPremades = (src.premades ?? Array.Empty<PremadeData>()).Where(m => m != null && (string.IsNullOrEmpty(m.kind) || m.kind == "None" || m.kind == nameof(TravellerKind.Displaced))).Select(m => m.id).ToList()
         };
         VoiceCheckResult result = VoiceChecks.Problems(input);
         errors.AddRange(result.Errors);
@@ -113,6 +115,35 @@ public static partial class WorldContentGenerator
             Debug.LogWarning($"[WorldContentGenerator] {warning}");
         foreach (string info in result.Info)
             Debug.Log($"[WorldContentGenerator] {info}");
+    }
+
+    /// <summary>
+    /// Each premade's intents (VoiceCheckInput.PremadeIntents): Lying for one
+    /// with a true place (every appearance lies) or a forced appearance that
+    /// tells an authored lie; Honest for a pooled appearance or a forced one
+    /// without a lie. A premade no day brings is left out.
+    /// </summary>
+    private static Dictionary<string, IReadOnlyCollection<ReactionIntent>> PremadeIntents(WorldSource src)
+    {
+        var intents = new Dictionary<string, HashSet<ReactionIntent>>();
+        var liars = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => m != null && !string.IsNullOrEmpty(m.truePlace)).Select(m => m.id));
+        void Add(string id, bool lie)
+        {
+            if (string.IsNullOrEmpty(id))
+                return;
+            if (!intents.TryGetValue(id, out HashSet<ReactionIntent> set))
+                intents[id] = set = new HashSet<ReactionIntent>();
+            set.Add(lie || liars.Contains(id) ? ReactionIntent.Lying : ReactionIntent.Honest);
+        }
+        foreach (DayData d in (src.days ?? Array.Empty<DayData>()).Where(d => d != null))
+        {
+            foreach (string id in d.premades ?? Array.Empty<string>())
+                Add(id, false);
+            foreach (ForcedData f in d.forced ?? Array.Empty<ForcedData>())
+                if (f != null)
+                    Add(f.premade, !string.IsNullOrEmpty(f.lie));
+        }
+        return intents.ToDictionary(kv => kv.Key, kv => (IReadOnlyCollection<ReactionIntent>)kv.Value.OrderBy(i => i).ToList());
     }
 
     /// <summary>The cast as the library holds it (null rows kept, so the rules report them).</summary>
