@@ -2,12 +2,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Drives the Home phase (Phase 4): on scene load, bills today's living
-/// expenses and rolls family condition drift, then walks the player through
-/// Expenses -> Shop -> Slot Machine -> Sleep. The shop lists only the Home
-/// upgrades (UpgradeSO.venue Home: household improvements; the office's
-/// moved to the PC's Orders app, Saleh 2026-09-29) and is skipped while none
-/// is stocked. Sleep hands off to RunManager.Sleep() (day-boundary endings,
+/// Drives the Home phase (Phase 4): on scene load, the night's break-in, the
+/// bill and the family's night (DayCycle.OpenHome), then walks the player
+/// through Expenses -> House -> Slot Machine -> Sleep. The House shows only
+/// the Home upgrades (UpgradeSO.venue Home: the house upgrades' tree; the
+/// office's moved to the PC's Orders app, Saleh 2026-09-29) and is skipped
+/// while none is stocked; with the radio owned the sleep panel plays the
+/// night's radio line (ContentLibrarySO.Home). Sleep hands off to RunManager.Sleep() (day-boundary endings,
 /// else nightly resolve, day++ and the Orders app's deliveries, back to Office).
 /// All HomeUIController panels are optional; unwired panels are skipped.
 /// </summary>
@@ -122,7 +123,7 @@ public sealed class HomeManager : MonoBehaviour
         }
     }
 
-    /// <summary>Step 2: Home's upgrade shop (the Home upgrades only), skipped while Home stocks none.</summary>
+    /// <summary>Step 2: the House (the Home upgrades' tree), skipped while Home stocks none.</summary>
     private void ShowShop()
     {
         Debug.Log("[HomeManager] >>> Entering ShowShop.");
@@ -138,36 +139,19 @@ public sealed class HomeManager : MonoBehaviour
         }
     }
 
-    /// <summary>Purchases a Home upgrade (if affordable at its discounted price, HomeEconomy.UpgradeCost, and not already owned): owned at once, its unlock effect from tonight; then refreshes the shop.</summary>
+    /// <summary>Buys a Home upgrade when it is buyable (HomeEconomy.BuyHouseUpgrade: its prerequisites owned, the wallet covering its price): owned at once, its effects from the next night; then refreshes the House.</summary>
     private void HandleBuyUpgrade(UpgradeSO upgrade)
     {
         Debug.Log($"[HomeManager] >>> Entering HandleBuyUpgrade (upgrade='{upgrade?.displayName}').");
 
-        if (upgrade == null || upgrade.venue != UpgradeVenue.Home || _world.HasUpgrade(upgrade.id))
+        int cost = HomeEconomy.BuyHouseUpgrade(_world, _lib, upgrade);
+        if (cost < 0)
         {
-            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — null, not a Home upgrade, or already owned.");
+            Debug.Log("[HomeManager] <<< Exiting HandleBuyUpgrade — not a buyable Home upgrade (owned, locked or too dear).");
             return;
         }
 
-        int cost = HomeEconomy.UpgradeCost(_world, _lib, upgrade, out float discountPercent);
-
-        if (_world.money < cost)
-        {
-            Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade — not enough money ({_world.money} < {cost}).");
-            return;
-        }
-
-        _world.money -= cost;
-        _world.UnlockUpgrade(upgrade.id);
         _purchases += cost;
-
-        if (upgrade.unlockEffect != null)
-        {
-            TimelineService.ActivateEffect(
-                _world, upgrade.unlockEffect, $"Upgrade: {upgrade.displayName}",
-                _world.day, upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);
-        }
-
         RefreshHud();
         RecordStatement();
 
@@ -175,7 +159,7 @@ public sealed class HomeManager : MonoBehaviour
         if (homeUI != null && homeUI.HasShopPanel)
             homeUI.ShowShop(_world, _lib, HomeUpgrades(), HandleBuyUpgrade, ShowSlot);
 
-        Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost} [discount={discountPercent:0.#}%], money={_world.money}).");
+        Debug.Log($"[HomeManager] <<< Exiting HandleBuyUpgrade (bought '{upgrade.displayName}' for {cost}, money={_world.money}).");
     }
 
     /// <summary>Step 3: slot machine.</summary>
@@ -272,12 +256,19 @@ public sealed class HomeManager : MonoBehaviour
         RefreshHud();
 
         if (homeUI != null && homeUI.HasSleepPanel)
-            homeUI.ShowSleep(_world, HandleSleep);
+            homeUI.ShowSleep(_world, RadioLine(), HandleSleep);
         else
         {
             Debug.Log("[HomeManager] ShowSleep: no sleep panel, sleeping immediately.");
             HandleSleep();
         }
+    }
+
+    /// <summary>Tonight's radio line when the house owns the radio (ContentLibrarySO.Home: HomeContent.RadioLine by the day), else "".</summary>
+    private string RadioLine()
+    {
+        HomeContent home = _lib != null ? _lib.Home : null;
+        return home != null && _world.HasUpgrade(home.radioUpgrade) ? home.RadioLine(_world.day) : string.Empty;
     }
 
     /// <summary>

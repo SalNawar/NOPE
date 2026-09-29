@@ -196,6 +196,29 @@ public static class HomeEconomy
     }
 
     /// <summary>
+    /// Buys a house upgrade (the Home upgrades spec HU5): only a Home upgrade
+    /// whose state is buyable (OrderBook.StateOf: not owned, every
+    /// prerequisite owned, the wallet covering its price). The price leaves
+    /// the wallet, the upgrade is owned at once and its unlock effect starts
+    /// today (TimelineService.ActivateEffect), so tonight's bill, settled when
+    /// Home opened, is untouched and the next night reads it. Returns the
+    /// price paid, or -1 when refused. The House and the balance simulation's
+    /// buyer both buy through here.
+    /// </summary>
+    public static int BuyHouseUpgrade(WorldState world, ContentLibrarySO lib, UpgradeSO upgrade)
+    {
+        if (world == null || upgrade == null || upgrade.venue != UpgradeVenue.Home || OrderBook.StateOf(world, lib, upgrade) != OrderState.Orderable)
+            return -1;
+
+        int price = OrderBook.Price(world, lib, upgrade);
+        world.money -= price;
+        world.UnlockUpgrade(upgrade.id);
+        if (upgrade.unlockEffect != null)
+            TimelineService.ActivateEffect(world, upgrade.unlockEffect, $"Upgrade: {upgrade.displayName}", world.day, upgrade.unlockEffect.defaultDurationDays, applyInstantOps: true);
+        return price;
+    }
+
+    /// <summary>
     /// What <paramref name="upgrade"/> costs tonight: its listed cost with the
     /// active shop discount off (TimelineEffects.GetShopDiscountPercent, none
     /// without a library) through ShopPrices.Discounted; the one place the
