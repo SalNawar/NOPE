@@ -16,7 +16,7 @@ MonoBehaviour:
   displayName: Wall Insulation
   description: Recycled padding from decommissioned transponder crates. Warmer, faintly
     humming.
-  cost: 150
+  cost: 290
   unlockEffect: {fileID: 11400000, guid: 46ae5286ef3d5454687283b6efcdb953, type: 2}
   venue: 1
   branch: 5

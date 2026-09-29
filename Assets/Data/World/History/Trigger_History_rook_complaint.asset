@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Generated from world_source.json history.rules.
   oneShot: 1
   newsLineOnFire: 'COMPLAINT: a labourer refused at Desk 3 says the clerk pocketed
-    his 50 cr first. The Directorate has opened a file.'
+    his 200 cr first. The Directorate has opened a file.'
   section: 1
   conditions:
   - type: 1

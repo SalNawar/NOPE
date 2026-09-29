@@ -13287,13 +13287,13 @@
             {
               "id": "dlg_rook.read.1",
               "speaker": "Traveller",
-              "text": "Of course. And for a clerk who reads quickly, there's 50 cr in it. Between friends."
+              "text": "Of course. And for a clerk who reads quickly, there's 200 cr in it. Between friends."
             }
           ],
           "choices": [
             {
               "id": "take",
-              "label": "Take the 50 cr.",
+              "label": "Take the 200 cr.",
               "lines": [
                 {
                   "id": "dlg_rook.read.take.1",
@@ -13311,7 +13311,7 @@
                 {
                   "id": "dlg_rook.read.refuse.1",
                   "speaker": "Traveller",
-                  "text": "Suit yourself. It was a very quick 50."
+                  "text": "Suit yourself. It was a very quick 200."
                 }
               ],
               "next": "",
@@ -14282,7 +14282,7 @@
       {
         "id": "rook_complaint",
         "name": "Rook's complaint",
-        "news": "COMPLAINT: a labourer refused at Desk 3 says the clerk pocketed his 50 cr first. The Directorate has opened a file.",
+        "news": "COMPLAINT: a labourer refused at Desk 3 says the clerk pocketed his 200 cr first. The Directorate has opened a file.",
         "conditions": [
           {
             "type": "FlagSet",
@@ -14397,8 +14397,8 @@
       },
       {
         "id": "audit_rook",
-        "name": "The audit finds the fifty",
-        "news": "AUDIT: a forged Labour Contract passed Desk 3 on day 11, with 50 cr beside it. It goes on file.",
+        "name": "The audit finds the two hundred",
+        "news": "AUDIT: a forged Labour Contract passed Desk 3 on day 11, with 200 cr beside it. It goes on file.",
         "conditions": [
           {
             "type": "FlagSet",
@@ -20313,7 +20313,7 @@
         "id": "house_hen_share",
         "name": "Hen Share",
         "category": "Food",
-        "cost": 160,
+        "cost": 190,
         "upkeep": 5,
         "requires": [
           "house_veg_box"
@@ -20347,7 +20347,7 @@
         "id": "house_insulation",
         "name": "Wall Insulation",
         "category": "Housing",
-        "cost": 150,
+        "cost": 290,
         "upkeep": 0,
         "requires": [
           "house_draught_seals"
@@ -20365,7 +20365,7 @@
         "id": "house_floor_up",
         "name": "One Floor Up",
         "category": "Housing",
-        "cost": 220,
+        "cost": 170,
         "upkeep": 0,
         "requires": [
           "house_insulation"
@@ -20469,7 +20469,7 @@
         "id": "house_water_purifier",
         "name": "Water Purifier",
         "category": "Health",
-        "cost": 150,
+        "cost": 230,
         "upkeep": 0,
         "requires": [
           "house_air_filter"
@@ -20503,7 +20503,7 @@
         "id": "house_clinic",
         "name": "Clinic Pass",
         "category": "Health",
-        "cost": 200,
+        "cost": 220,
         "upkeep": 4,
         "requires": [
           "house_medicine_cabinet"
