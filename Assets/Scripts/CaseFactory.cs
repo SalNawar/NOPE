@@ -367,15 +367,17 @@ public sealed class CaseFactory
             : PickEraFromPlan(plan);
 
         // 4) Decide blueprint: forced > one weighted pick of the day's kinds
-        //    (active-effect weight multipliers applied; a premade's slot and a
-        //    planned liar's slot draw only the displaced, TravellerKinds.PickWeight;
+        //    (active-effect weight multipliers applied; a premade's slot draws only
+        //    the premade's kind and a planned liar's slot only the displaced, TravellerKinds.PickWeight;
         //    a planned procedure's slot only the kinds its rule reads and its maker
         //    can break, never an honest entry). A traveller drawn from an honest
         //    entry rolls no fault (K5, FaultOrder).
-        bool displacedOnly = legendary != null || (_plannedLiars.TryGetValue(caseIndex1Based, out LieKind plannedLie) && plannedLie != LieKind.Smuggling);
+        TravellerKind? onlyKind = legendary != null ? legendary.kind
+            : _plannedLiars.TryGetValue(caseIndex1Based, out LieKind plannedLie) && plannedLie != LieKind.Smuggling ? TravellerKind.Displaced
+            : (TravellerKind?)null;
         KindWeight entry = forcedBlueprint != null ? null :
             WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null && (plannedRule == null || (!k.honest && CanBreak(plannedRule, k.blueprint)))
-                ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, displacedOnly) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
+                ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, onlyKind) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
                 : 0f, _rng);
         CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
         bool honest = entry != null && entry.honest;
