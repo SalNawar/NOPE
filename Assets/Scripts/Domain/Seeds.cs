@@ -66,9 +66,11 @@ public static class Seeds
     public static int ForLies(int caseSeed) => Mix(caseSeed, LieSalt);
 
     /// <summary>
-    /// Seed for one traveller's dialog variant picks (small talk), apart from
-    /// the case and lie streams so content never changes who travellers are
-    /// or who lies.
+    /// One traveller's dialog seed: every line pick is a value of it and the
+    /// slot's key (Voices.Pick, OfKey; the personalities spec's V4), never a
+    /// draw, apart from the case and lie streams so content never changes who
+    /// travellers are or who lies, and adding a line to one slot never moves
+    /// another's pick.
     /// </summary>
     public static int ForDialog(int caseSeed) => Mix(caseSeed, DialogSalt);
 
@@ -190,4 +192,35 @@ public static class Seeds
     /// they carry.
     /// </summary>
     public static int ForStrandings(int daySeed) => Mix(daySeed, StrandingSalt);
+
+    /// <summary>Salt for a traveller's personality stream ("PRSN").</summary>
+    public const int PersonalitySalt = 0x5052534E;
+
+    /// <summary>
+    /// Seed for one generated traveller's personality (the personalities spec's
+    /// PS2: one weighted draw over the cast, Personalities.Pick; a premade
+    /// draws nothing). Its own stream, which nothing else draws on and whose
+    /// draw reads nothing else, so the personality is independent of the kind,
+    /// every lie and every fault, and moves no other draw (T1).
+    /// </summary>
+    public static int ForPersonality(int caseSeed) => Mix(caseSeed, PersonalitySalt);
+
+    /// <summary>Where <see cref="OfKey"/> starts ("KEYS"): the value of an empty key.</summary>
+    public const int KeyStart = 0x4B455953;
+
+    /// <summary>
+    /// A slot key's value ("claim", "answer:q_currency"; VoiceKeys): <see cref="Mix"/>
+    /// folded over the key's characters from <see cref="KeyStart"/>, the same in
+    /// every runtime (string.GetHashCode is not). A line's pick is a value of
+    /// the dialog seed and this (the personalities spec's V4), never a draw, so
+    /// a line added to one slot never moves another slot's pick.
+    /// </summary>
+    public static int OfKey(string key)
+    {
+        int value = KeyStart;
+        if (key != null)
+            foreach (char c in key)
+                value = Mix(value, c);
+        return value;
+    }
 }

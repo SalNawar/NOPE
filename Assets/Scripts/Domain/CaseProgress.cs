@@ -166,6 +166,22 @@ public sealed class CaseProgress
     /// <summary>True when paper <paramref name="paper"/> was read.</summary>
     public bool HasRead(int paper) => paper >= 0 && paper < _read.Length && _read[paper];
 
+    /// <summary>
+    /// True once a paper handed over on arrival (not on request) has been read:
+    /// the papers' first word on the traveller's kind, when the steps checklist
+    /// switches from the default set to the kind's (CaseSteps.SetName).
+    /// </summary>
+    public bool ArrivalRead
+    {
+        get
+        {
+            for (int i = 0; i < _papers.Count; i++)
+                if (!_papers[i].OnRequest && _read[i])
+                    return true;
+            return false;
+        }
+    }
+
     /// <summary>True when a paper of form <paramref name="kind"/> was asked for.</summary>
     public bool WasRequested(string kind) => kind != null && _requested.Contains(kind);
 

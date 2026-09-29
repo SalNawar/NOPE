@@ -5,7 +5,7 @@ using UnityEngine;
 /// WorldState/SaveSystem — these are session-local overrides used by the
 /// debug panel to influence generation/scoring for testing (force the next
 /// legendary, force the timeline leader, force a costume error, force the
-/// strandings).
+/// strandings, force a personality).
 /// </summary>
 public static class DevToolsState
 {
@@ -40,6 +40,15 @@ public static class DevToolsState
     public static bool ForceStrandings;
 
     /// <summary>
+    /// While set (a Personality.id), every generated traveller who is not a
+    /// premade speaks as this personality: CaseFactory draws the personality
+    /// as ever (no stream moves) and this overrides it (the personalities
+    /// spec's PS4: for testing, never saved). Cases are generated at the
+    /// day's start, so it applies from the next generation. Null = no force.
+    /// </summary>
+    public static string ForcedPersonality;
+
+    /// <summary>
     /// Resets all dev cheat state. Called by RunManager.NewRun()/ContinueRun()
     /// so leftover toggles from a previous run don't bleed into a new one.
     /// </summary>
@@ -53,10 +62,13 @@ public static class DevToolsState
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedLeaderId '{ForcedLeaderId}'.");
         if (ForcedCostumeError != CostumeError.None)
             Debug.Log($"[DevToolsState] ResetAll: clearing ForcedCostumeError '{ForcedCostumeError}'.");
+        if (ForcedPersonality != null)
+            Debug.Log($"[DevToolsState] ResetAll: clearing ForcedPersonality '{ForcedPersonality}'.");
 
         ForceLegendaryNextCase = false;
         ForcedLeaderId = null;
         ForcedCostumeError = CostumeError.None;
         ForceStrandings = false;
+        ForcedPersonality = null;
     }
 }

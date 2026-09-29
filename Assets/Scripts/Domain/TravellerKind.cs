@@ -4,7 +4,7 @@ using System;
 /// The four kinds of traveller of the debt dystopia (traveller types, K1):
 /// each kind has one blueprint (CaseBlueprintSO.kind), its own papers and
 /// its own claim line. The famous displaced are Displaced premades.
-/// Serialized in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy: append
+/// Serialized in CaseBlueprintSO.kind and the questions' WordingOverride.kinds: append
 /// only (SerializedEnumsTests pins every value).
 /// </summary>
 public enum TravellerKind

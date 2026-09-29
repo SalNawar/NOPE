@@ -8,8 +8,10 @@ using UnityEngine.UI;
 /// The Investigation app (the PC redesign AP1-AP4, AP8, AP9, LK2, WN5, DK2):
 /// one desktop window, "Investigation" (· the traveller's name while one is at
 /// the desk), that fills the desktop the first time it opens. Its case header
-/// holds the claim, the counters ("Papers 2 of 3 received · 1 scanned ·
-/// Deviations 1") and the PC's Accept and Deny (the façade wires them); its
+/// holds the counters ("Papers 2 of 3 received · 1 scanned · Deviations 1";
+/// "Waiting for the next traveller" between travellers) and the PC's Accept
+/// and Deny (the façade wires them); it prints no claim, which the traveller
+/// only says (the personalities spec's B1-B3); its
 /// toolbar holds Back and Forward (the active pane's history), the search
 /// field, Steps (it shows or hides the sidebar's steps checklist, StepsPanel,
 /// phase 21), Split (two panes side by side, saved per player, possible only
@@ -54,10 +56,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
     [SerializeField] private RectTransform sidebar;
 
     [Header("Case header")]
-    /// <summary>The claim (the claim banner's text, which the office claim tag also shows).</summary>
-    [SerializeField] private TMP_Text claimText;
-
-    /// <summary>The counters: papers received and scanned, deviations logged.</summary>
+    /// <summary>The counters: papers received and scanned, deviations logged; between travellers the idle line (the header's full height: it prints no claim).</summary>
     [SerializeField] private TMP_Text countersText;
 
     [Header("Toolbar")]
@@ -162,15 +161,13 @@ public sealed partial class InvestigationApp : MonoBehaviour
             Layout();
     }
 
-    /// <summary>A traveller is presented: the title, the claim, the left pane on Documents, the histories without the last traveller, the badges and the icon's dot cleared, the toast gone, search's case layer empty.</summary>
-    public void BeginCase(string claim, string travellerName)
+    /// <summary>A traveller is presented: the title (who stands at the desk, never what they ask for), the left pane on Documents, the histories without the last traveller, the badges and the icon's dot cleared, the toast gone, search's case layer empty.</summary>
+    public void BeginCase(string travellerName)
     {
         Init();
         ResetSearchCase();
         if (window != null)
             window.SetTitle(UiText.Format("app.titleCase", travellerName));
-        if (claimText != null)
-            claimText.text = claim;
         _badges.Clear();
         foreach (AppPane pane in Panes())
         {
@@ -187,7 +184,7 @@ public sealed partial class InvestigationApp : MonoBehaviour
         KeysBeginCase(travellerName);
     }
 
-    /// <summary>The decision: the case sources show the no-case state; the header waits for the next traveller; search forgets the case.</summary>
+    /// <summary>The decision: the case sources show the no-case state; the header's counters wait for the next traveller; search forgets the case.</summary>
     public void EndCase()
     {
         Init();
@@ -195,10 +192,8 @@ public sealed partial class InvestigationApp : MonoBehaviour
         ResetSearchCase();
         if (window != null)
             window.SetTitle(UiText.Get("app.title"));
-        if (claimText != null)
-            claimText.text = UiText.Get("idle.waiting");
         if (countersText != null)
-            countersText.text = string.Empty;
+            countersText.text = UiText.Get("idle.waiting");
         foreach (AppPane pane in Panes())
             pane.SetCase(false);
         if (toast != null)

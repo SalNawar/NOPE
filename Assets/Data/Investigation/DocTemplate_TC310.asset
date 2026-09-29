@@ -29,7 +29,6 @@ MonoBehaviour:
     label: Signature
   handOver: 0
   showsPhoto: 0
-  askableBy: 000000000100000002000000
   askGroup: 
   form:
     formNumber: 

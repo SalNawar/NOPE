@@ -177,7 +177,7 @@ public static class _TimeDeskAuditStatic
                     CaseInstance c = cases[i];
                     CitizenRecord record = registry.Find(c.visitorGivenName);
                     string rec = record != null ? string.Join("|", record.Groups.SelectMany(g => g.Rows).Select(r => r.Value)) : "none";
-                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null) + $" | record={rec}");
+                    lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null, lib.Interview) + $" | record={rec}");
                 }
             }
         }
@@ -195,8 +195,8 @@ public static class _TimeDeskAuditStatic
         return world;
     }
 
-    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place (or a guaranteed procedure's rule, phase 9) named, each paper's serial after its name (redesign phase 4).</summary>
-    public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace)
+    /// <summary>Piece 10's dump line (the same format as SCRATCH/p10_after_cases.txt), the violator's place (or a guaranteed procedure's rule, phase 9) named, each paper's serial after its name (redesign phase 4); claimLine is the spoken claim in the traveller's voice (<paramref name="wording"/>'s rows; the personalities spec's B3: no case field holds it), personality= the drawn personality (none for a premade).</summary>
+    public static string CaseLine(int seed, int day, string leader, int slot, CaseInstance c, string violatorPlace, InterviewLines wording)
     {
         List<DocumentField> fields = c.documents.SelectMany(d => d.fields).ToList();
         IEnumerable<string> tells = fields.Where(f => f.isAnachronism).Select(f => $"{f.category}/Papers").Distinct()
@@ -209,7 +209,7 @@ public static class _TimeDeskAuditStatic
         string recordTells = string.Join(",", c.recordTells.Select(t => $"{t.Category}@{t.Document}"));
         return $"seed={seed} day={day} leader={leader} slot={slot} claim='{c.originLabel}' name='{c.visitorGivenName}' born='{c.trueBirthDate}' role='{(c.archetype != null ? c.archetype.displayName : "")}' directive={c.directiveFault} violator={(violatorPlace ?? "no")}" +
                $" | liar={c.IsLiar} home='{c.HomeLabel}' tells=[{string.Join(",", tells)}] recordTells=[{recordTells}] fault='{c.FaultReason}' | papers={papers} | answers={answers}" +
-               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} intro='{c.introLine}' claimLine='{c.claimLine}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
+               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} personality={(string.IsNullOrEmpty(c.personality) ? "none" : c.personality)} intro='{c.introLine}' claimLine='{InterviewScript.Claim(wording, new InterviewCase { kind = c.kind, claimPlace = c.originLabel, claimedEraId = c.claimedEra != null ? c.claimedEra.id : null, voice = c.Voice })}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
     }
 
     // =====================================================================

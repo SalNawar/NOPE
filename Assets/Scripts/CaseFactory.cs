@@ -84,8 +84,11 @@ public sealed class CaseFactory
     /// <summary>The current traveller's lie stream (Seeds.ForLies), apart from <see cref="_rng"/> so lie tuning never changes who travellers are.</summary>
     private IRandomSource _lieRng = new SeededRandom(0);
 
-    /// <summary>The current traveller's dialog stream (Seeds.ForDialog): the small-talk pick, apart from the case and lie streams.</summary>
-    private IRandomSource _dialogRng = new SeededRandom(0);
+    /// <summary>The current traveller's dialog seed (Seeds.ForDialog): a value every line pick reads (Voices.Pick), never a stream.</summary>
+    private int _dialogSeed;
+
+    /// <summary>The current traveller's personality stream (Seeds.ForPersonality): one draw for a generated traveller, which reads nothing else.</summary>
+    private IRandomSource _personalityRng = new SeededRandom(0);
 
     /// <summary>The current traveller's look stream (Seeds.ForLooks): gender when unknown, skin, face, hair colour.</summary>
     private IRandomSource _looksRng = new SeededRandom(0);
@@ -117,13 +120,13 @@ public sealed class CaseFactory
     /// <summary>Today's tell channels: the plan's, minus Appearance where no garment can be looked at.</summary>
     private IReadOnlyList<TellChannel> _channels = System.Array.Empty<TellChannel>();
 
-    /// <summary>Today's interview (the questions per kind of traveller); null where nothing spoken can be read.</summary>
+    /// <summary>Today's interview (the same questions for every traveller); null where nothing spoken can be read.</summary>
     private InterviewDay _interview;
 
-    /// <summary>The current traveller's askable question categories, their kind's; they answer each (InterviewDay.AskableCategoriesFor).</summary>
+    /// <summary>Today's askable question categories; every traveller answers each (InterviewDay.AskableCategories).</summary>
     private IReadOnlyList<ClueCategory> _askable = System.Array.Empty<ClueCategory>();
 
-    /// <summary>The current traveller's question categories that may carry an Answer tell (their kind's day-gated questions; InterviewDay.AnswerTellCategoriesFor).</summary>
+    /// <summary>Today's question categories that may carry an Answer tell (the day-gated questions; InterviewDay.AnswerTellCategories).</summary>
     private IReadOnlyList<ClueCategory> _answerTellCategories = System.Array.Empty<ClueCategory>();
 
     /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
@@ -170,10 +173,11 @@ public sealed class CaseFactory
     /// blueprint overrides the day's pick and its premade stands. Each slot
     /// draws from its own streams (Seeds.ForCase and its salted streams), so
     /// one traveller's draws never shift the next one's. Every traveller
-    /// answers each of their kind's askable questions
-    /// (<paramref name="interview"/>, InterviewDay.AskableCategoriesFor); only
-    /// their kind's day-gated ones (InterviewDay.AnswerTellCategoriesFor) may
-    /// carry a spoken tell; a null interview asks nothing (nothing spoken can
+    /// answers each of today's askable questions
+    /// (<paramref name="interview"/>, InterviewDay.AskableCategories: the same
+    /// for everyone); only the day-gated ones (InterviewDay.AnswerTellCategories)
+    /// may carry a spoken tell (a smuggler's only among Currency and Technology,
+    /// Lies.SmuggledCategories); a null interview asks nothing (nothing spoken can
     /// be read). A dress tell needs <paramref name="appearanceReachable"/>
     /// (a garment can be looked at and compared).
     /// </summary>
@@ -198,7 +202,7 @@ public sealed class CaseFactory
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library's interview opener or legendary opener is blank, so a transcript may start with the claim. Run Tools > TimeDesk > Generate World.");
         foreach (TravellerKind kind in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints).Where(b => b != null).Select(b => b.Kind).Distinct())
             if (string.IsNullOrWhiteSpace(Interview.ClaimLine(wording, kind)?.text))
-                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so their banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
+                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so they say the bare place label as their claim. Run Tools > TimeDesk > Generate World.");
 
         _channels = appearanceReachable ? plan.TellChannels : plan.TellChannels.Where(c => c != TellChannel.Appearance).ToList();
         _appearanceReachable = appearanceReachable;
@@ -237,7 +241,8 @@ public sealed class CaseFactory
             int caseSeed = Seeds.ForCase(daySeed, caseIndex1Based);
             _rng = new SeededRandom(caseSeed);
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
-            _dialogRng = new SeededRandom(Seeds.ForDialog(caseSeed));
+            _dialogSeed = Seeds.ForDialog(caseSeed);
+            _personalityRng = new SeededRandom(Seeds.ForPersonality(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
@@ -447,6 +452,16 @@ public sealed class CaseFactory
             introLine = intro
         };
 
+        // 4.55) The voice (the personalities spec's PS2-PS5): a generated traveller's personality is one draw on its own stream,
+        //       which reads nothing else (never the kind, a lie or a fault); a premade draws nothing and speaks its own lines. The
+        //       debug panel's force overrides after the draw, so no stream moves.
+        inst.dialogSeed = _dialogSeed;
+        if (legendary == null)
+        {
+            Personality drawn = Personalities.Pick(_lib.Personalities, _personalityRng);
+            inst.personality = !string.IsNullOrEmpty(DevToolsState.ForcedPersonality) ? DevToolsState.ForcedPersonality : drawn != null ? drawn.id : string.Empty;
+        }
+
         if (blueprint == null)
         {
             Debug.LogError($"CaseFactory generated a case with a null blueprint (Day {plan.DayNumber}, slot {caseIndex1Based}). Check DayPlanSO.possibleBlueprints / forcedCases.");
@@ -454,8 +469,8 @@ public sealed class CaseFactory
         }
 
         inst.kind = blueprint.Kind;
-        _askable = _interview != null ? _interview.AskableCategoriesFor(inst.kind) : System.Array.Empty<ClueCategory>();
-        _answerTellCategories = _interview != null ? _interview.AnswerTellCategoriesFor(inst.kind) : System.Array.Empty<ClueCategory>();
+        _askable = _interview != null ? _interview.AskableCategories : System.Array.Empty<ClueCategory>();
+        _answerTellCategories = _interview != null ? _interview.AnswerTellCategories : System.Array.Empty<ClueCategory>();
 
         // 4.6) The directive fault (traveller types P1): a closed destination, read against today's Directives.
         inst.directiveFault = plan.ClaimAllowed(nation, claimedEra, inst.kind) ? DirectiveFault.None : DirectiveFault.ClosedDestination;
@@ -501,9 +516,8 @@ public sealed class CaseFactory
         // 6) Build the documents the traveller carries (their fields are filled below).
         BuildDocuments(inst, blueprint);
 
-        // 7) Investigation layer: stated claim, structured fields, then the rolled lie planned and printed,
-        //    or the paper side of a broken directive (a form left out or unsigned, a date falsified).
-        inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
+        // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
+        //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = lieKind == null ? null
             : !LieKinds.IsPlaceLie(lieKind.Value) ? Forge(inst, lieKind.Value, plan, place, caseIndex1Based)
@@ -514,9 +528,14 @@ public sealed class CaseFactory
             FalsifyDate(inst, caseIndex1Based, authoredPlan.DateFault);
         AddAnswers(inst, lie);
 
-        // Small talk: the claimed place's lines, else its era's (glue: only resolves the two lists).
+        // Small talk (the personalities spec's V5): the personality's, the home's (a displaced person's claimed place, else its
+        // era; a 2150 citizen's present, else the Future era) or the kind's lines, by the weights, as values of the dialog seed
+        // (glue: only resolves the lists).
         EraSO talkEra = place != null ? place.era : claimedEra;
-        inst.smallTalk = Interview.PickSmallTalk(place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null, _dialogRng);
+        NationEraProfileSO present = _present != null ? _lib.Profiles.FirstOrDefault(p => p != null && p.nation != null && p.era != null && p.nation.id == _present.NationId && p.era.id == _present.EraId) : null;
+        inst.smallTalk = Voices.SmallTalk(_lib.Interview, inst.Voice, new VoiceContext(inst.kind, claimedEra != null ? claimedEra.id : null),
+                                          Voices.Home(inst.kind, place != null ? place.smallTalk : null, talkEra != null ? talkEra.smallTalk : null,
+                                                      present != null ? present.smallTalk : null, _lib.FutureEra != null ? _lib.FutureEra.smallTalk : null));
 
         bool plannedDress = plannedRule != null && plannedRule.type == TravelRuleType.DressForDestination;
         (LookSource source, bool whole) costume = broken != null ? (null, false) : PlanCostume(inst, place, legendary, forcedCostume, honest, plannedDress, authoredFault, plan, caseIndex1Based);
@@ -531,7 +550,7 @@ public sealed class CaseFactory
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
         string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }
@@ -1178,7 +1197,7 @@ public sealed class CaseFactory
     };
 
     /// <summary>
-    /// The traveller's answer to each of their kind's askable questions, in
+    /// The traveller's answer to each of today's askable questions, in
     /// question order: the cover value ResolveFieldValue gives the papers (the
     /// registered birth date, the claim's fact or its placeholder), or an
     /// Answer tell's true-home value (Interview.Answer). Reads the claim, never

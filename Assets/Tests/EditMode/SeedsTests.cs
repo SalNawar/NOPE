@@ -54,6 +54,7 @@ public class SeedsTests
         { "account", Seeds.ForAccount },
         { "forms", Seeds.ForForms },
         { "faults", Seeds.ForFaults },
+        { "personality", Seeds.ForPersonality },
     };
 
     [TestCase("lie")]
@@ -63,6 +64,7 @@ public class SeedsTests
     [TestCase("account")]
     [TestCase("forms")]
     [TestCase("faults")]
+    [TestCase("personality")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -104,7 +106,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PremadeLookSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -157,6 +159,47 @@ public class SeedsTests
         int caseSeed = Seeds.ForCase(Seeds.Day(12345, 7), 5);
         CollectionAssert.AreNotEqual(TenDraws(Seeds.ForLooks(caseSeed)), TenDraws(Seeds.ForPremadeLook("pell")), "apart from the slot's own look stream");
         Assert.AreEqual(Seeds.ForPremadeLook(null), Seeds.ForPremadeLook(string.Empty), "a missing id reads blank");
+    }
+
+    /// <summary>The personality stream's salt is "PRSN" (the personalities spec's PS2).</summary>
+    [Test]
+    public void PersonalitySalt_IsPinned()
+    {
+        Assert.AreEqual(0x5052534E, Seeds.PersonalitySalt, "\"PRSN\"");
+    }
+
+    /// <summary>The personality draw's seed of sample case seeds (run 12345, day 3, slot 1 among them): pinned, so a changed salt fails here.</summary>
+    [Test]
+    public void ForPersonality_IsPinnedForSampleSeeds()
+    {
+        Assert.AreEqual(-45739289, Seeds.ForPersonality(Seeds.ForCase(Seeds.Day(12345, 3), 1)));
+        Assert.AreEqual(-666199600, Seeds.ForPersonality(1));
+        Assert.AreEqual(443472842, Seeds.ForPersonality(12345));
+    }
+
+    /// <summary>A slot key's value (the personalities spec's V4: a line's pick is a value of the dialog seed and the key): Seeds.Mix folded over the key's characters, the same in every runtime.</summary>
+    [Test]
+    public void OfKey_IsPinned()
+    {
+        Assert.AreEqual(24390979, Seeds.OfKey("claim"));
+        Assert.AreEqual(1046563660, Seeds.OfKey("smalltalk"));
+        Assert.AreEqual(-1783325148, Seeds.OfKey("answer:q_currency"));
+    }
+
+    [Test]
+    public void OfKey_DiffersPerKey()
+    {
+        string[] keys = { "claim", "smalltalk", "smalltalk:source", "answer:q_currency", "answer:q_device", "missing:TC-310:Honest", "missing:TC-310:Missing", "spoken:step_closer", "handover:TC-230" };
+        CollectionAssert.AllItemsAreUnique(keys.Select(Seeds.OfKey).ToList());
+        Assert.AreEqual(Seeds.OfKey("claim"), Seeds.OfKey("claim"));
+    }
+
+    [Test]
+    public void OfKey_OfEmptyIsItsStart()
+    {
+        Assert.AreEqual(Seeds.KeyStart, Seeds.OfKey(string.Empty));
+        Assert.AreEqual(Seeds.KeyStart, Seeds.OfKey(null), "no key: the start");
+        Assert.AreEqual(0x4B455953, Seeds.KeyStart, "\"KEYS\"");
     }
 
     /// <summary>The stranding draws (redesign phase 13b) are the day's own stream, apart from the day's other streams and every traveller's.</summary>

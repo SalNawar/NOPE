@@ -107,6 +107,7 @@ public static partial class ContentLibraryValidator
         // --- Interview (wording, questions, dialogs, menus), upgrade ids, tell channels, small talk ---
         issues += CheckInterview(lib);
         issues += CheckKinds(lib);
+        issues += CheckVoices(lib);
         issues += CheckDeskFit(lib);
         issues += CheckUpgradeIds(lib);
         issues += CheckTellChannels(lib);
@@ -173,7 +174,7 @@ public static partial class ContentLibraryValidator
             ("deskName", lines.deskName), ("opener", lines.opener?.text), ("openerLegendary", lines.openerLegendary?.text),
             ("honorificMale", lines.honorificMale), ("honorificFemale", lines.honorificFemale),
             ("honorificUnknown", lines.honorificUnknown), ("requestLabel", lines.requestLabel), ("papersLabel", lines.papersLabel), ("requestPrompt", lines.requestPrompt?.text),
-            ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("tripAskLabel", lines.tripAskLabel), ("backLabel", lines.backLabel),
+            ("requestReply", lines.requestReply?.text), ("askLabel", lines.askLabel), ("backLabel", lines.backLabel),
             ("smallTalkLabel", lines.smallTalkLabel), ("smallTalkPrompt", lines.smallTalkPrompt?.text), ("lookLabel", lines.lookLabel)
         };
         foreach ((string field, string text) in wording)
@@ -263,13 +264,13 @@ public static partial class ContentLibraryValidator
                          lib.Profiles.Any(p => p != null && p.smallTalk != null && p.smallTalk.Count > 0);
         var premadeDialogs = new HashSet<string>(TimelineService.PremadeDialogIds(lib));
         int bound = lib.Dialogs.Count(d => d != null && d.dialog != null && premadeDialogs.Contains(d.dialog.id));
-        List<KindForms> kindForms = KindForms(lib, out List<AskableForm> forms);
+        List<KindForms> kindForms = KindForms(lib, out List<AskableForm> forms, out int maxRequests);
         foreach (string problem in FormRequests.GroupProblems(forms, lines.askGroups))
             Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
         foreach (string problem in FormRequests.ReplyProblems(lines.missingFormReplies, forms, kindForms))
             Error($"{problem} (run Tools > TimeDesk > Generate World)", lib);
 
-        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(questions), smallTalk, MaxRequests(kindForms),
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(questions), smallTalk, maxRequests,
                                                              (lines.requests ?? new List<InterviewRequest>()).Count(r => r != null),
                                                              lib.Dialogs.Count(d => d != null) - bound, bound, lines.menuCapacity))
             Error(problem, lib);
@@ -277,26 +278,42 @@ public static partial class ContentLibraryValidator
         return issues;
     }
 
-    /// <summary>The most request entries one kind may be asked for (a form outside a group or a request group each one, FormRequests.Count): the papers menu's size.</summary>
-    public static int MaxRequests(IReadOnlyList<KindForms> kinds) =>
-        kinds.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max();
-
-    /// <summary>The library's agency forms as the interview's requests see them (TimelineService.AgencyForms) and each kind's askable and carried forms (FormRequests' rules; the generator computes the same from its source).</summary>
-    public static List<KindForms> KindForms(ContentLibrarySO lib, out List<AskableForm> forms)
+    /// <summary>
+    /// Each kind in play on each day of the library's plans (the plan's kinds'
+    /// and forced blueprints) with that day's papers menu, the same for every
+    /// traveller (FormRequests.MetSoFar over TimelineService.DayForms, as
+    /// TimelineService.AgencyForms gives the office), and its blueprints'
+    /// carried forms: FormRequests.ReplyProblems' input (the generator
+    /// computes the same from its source). <paramref name="forms"/> is every
+    /// form of the days; <paramref name="maxRequests"/> the most request
+    /// entries any day's menu holds (FormRequests.Count), the papers menu's size.
+    /// </summary>
+    public static List<KindForms> KindForms(ContentLibrarySO lib, out List<AskableForm> forms, out int maxRequests)
     {
-        List<AskableForm> all = forms = TimelineService.AgencyForms(lib);
-        var byNumber = all.GroupBy(f => f.FormNumber ?? string.Empty).ToDictionary(g => g.Key, g => g.First());
-        return TravellerBlueprints(lib).Where(b => b != null).Distinct()
-            .GroupBy(b => b.Kind)
-            .Select(g => new KindForms
-            {
-                Kind = g.Key,
-                Askable = FormRequests.For(g.Key, all),
-                Carried = g.SelectMany(b => b.DocumentTemplates ?? new DocumentTemplateSO[0]).Where(t => t != null)
-                           .Select(t => byNumber.TryGetValue(t.formNumber ?? string.Empty, out AskableForm f) ? f : new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy))
-                           .ToList()
-            })
-            .ToList();
+        int lastDay = lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber).DefaultIfEmpty(0).Max();
+        List<IReadOnlyList<AskableForm>> days = TimelineService.DayForms(lib, lastDay);
+        forms = days.SelectMany(d => d).Distinct().ToList();
+        var byNumber = forms.GroupBy(f => f.FormNumber ?? string.Empty).ToDictionary(g => g.Key, g => g.First());
+        var kinds = new List<KindForms>();
+        maxRequests = 0;
+        for (int day = 1; day <= lastDay; day++)
+        {
+            List<AskableForm> menu = FormRequests.MetSoFar(days, day);
+            maxRequests = Math.Max(maxRequests, FormRequests.Count(menu));
+            DayPlanSO plan = lib.GetDayPlan(day);
+            if (plan == null)
+                continue;
+            foreach (IGrouping<TravellerKind, CaseBlueprintSO> g in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints).Where(b => b != null).Distinct().GroupBy(b => b.Kind))
+                kinds.Add(new KindForms
+                {
+                    Kind = g.Key,
+                    Askable = menu,
+                    Carried = g.SelectMany(b => b.DocumentTemplates ?? new DocumentTemplateSO[0]).Where(t => t != null)
+                               .Select(t => byNumber.TryGetValue(t.formNumber ?? string.Empty, out AskableForm f) ? f : new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver)))
+                               .ToList()
+                });
+        }
+        return kinds;
     }
 
     /// <summary>

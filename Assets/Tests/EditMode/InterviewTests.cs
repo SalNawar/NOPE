@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
@@ -149,44 +151,128 @@ public class InterviewTests
         Assert.AreEqual(string.Empty, Interview.Opener(null, TravellerGender.Male, null, null));
     }
 
+    /// <summary>A traveller of <paramref name="kind"/> claiming Babylonia (Ancient), with no voice.</summary>
+    private static InterviewCase ClaimCase(TravellerKind kind) => new InterviewCase { kind = kind, claimPlace = "Babylonia (Ancient)", claimedEraId = "ancient" };
+
     [Test]
     public void Claim_FillsTheKindsLine_OrGivesTheBareLabelWhenTheKindHasNone()
     {
-        Assert.AreEqual("Please. Send me home to Babylonia (Ancient).", Interview.Claim(Lines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
-        Assert.AreEqual("One leisure departure to Babylonia (Ancient), please.", Interview.Claim(Lines(), TravellerKind.RichTourist, "Babylonia (Ancient)"), "each kind its own line");
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(Lines(), TravellerKind.Labourer, "Babylonia (Ancient)"), "no line for the kind");
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(new InterviewLines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(null, TravellerKind.Displaced, "Babylonia (Ancient)"));
+        Assert.AreEqual("Please. Send me home to Babylonia (Ancient).", InterviewScript.Claim(Lines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("One leisure departure to Babylonia (Ancient), please.", InterviewScript.Claim(Lines(), ClaimCase(TravellerKind.RichTourist)), "each kind its own line");
+        Assert.AreEqual("Babylonia (Ancient)", InterviewScript.Claim(Lines(), ClaimCase(TravellerKind.Labourer)), "no line for the kind");
+        Assert.AreEqual("Babylonia (Ancient)", InterviewScript.Claim(new InterviewLines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("Babylonia (Ancient)", InterviewScript.Claim(null, ClaimCase(TravellerKind.Displaced)));
+    }
+
+    // ---- The answer by kind and era (the personalities spec's W3, V3: one question per category, asked of everyone) ----
+
+    /// <summary>The currency question as everyone is asked it: the desk's prompt, a 2150 citizen's default answer, and <paramref name="overrides"/>.</summary>
+    private static InterviewQuestion Currency(params WordingOverride[] overrides)
+    {
+        var q = new InterviewQuestion
+        {
+            id = "q_currency",
+            category = ClueCategory.Currency,
+            label = "Currency",
+            prompt = new LineText("q_currency.prompt", "What will you pay with in {place}?"),
+            answer = new LineText("q_currency.answer", "I've changed my money into {value}.")
+        };
+        q.overrides.AddRange(overrides);
+        return q;
+    }
+
+    /// <summary>An answer override for <paramref name="kinds"/> (none: any) and <paramref name="era"/> (blank: any).</summary>
+    private static WordingOverride Override(string id, string text, string era, params TravellerKind[] kinds) =>
+        new WordingOverride { eraId = era, kinds = kinds.ToList(), answer = new LineText(id, text) };
+
+    [Test]
+    public void AnswerFor_KindsOverrideBeatsEraOverride()
+    {
+        InterviewQuestion q = Currency(Override("era", "We trade with {value}.", "ancient"), Override("kinds", "We pay in {value}.", null, TravellerKind.Displaced));
+
+        Assert.AreEqual("kinds", q.AnswerFor("ancient", TravellerKind.Displaced).id, "named kinds (2) beat a named era (1), whatever the order");
+        Assert.AreEqual("era", q.AnswerFor("ancient", TravellerKind.RichTourist).id, "for another kind only the era's matches");
     }
 
     [Test]
-    public void AskLabel_TheTripForACitizen_HomeForTheDisplaced_HomeWhenTheTripLabelIsBlank()
+    public void AnswerFor_KindsAndEraBeatKindsAlone()
     {
-        var lines = new InterviewLines { askLabel = "Ask about home >", tripAskLabel = "Ask about the trip >" };
-        Assert.AreEqual("Ask about the trip >", Interview.AskLabel(lines, TravellerKind.RichTourist));
-        Assert.AreEqual("Ask about the trip >", Interview.AskLabel(lines, TravellerKind.PoorTourist));
-        Assert.AreEqual("Ask about the trip >", Interview.AskLabel(lines, TravellerKind.Labourer));
-        Assert.AreEqual("Ask about home >", Interview.AskLabel(lines, TravellerKind.Displaced));
+        InterviewQuestion q = Currency(Override("displaced", "We pay in {value}.", null, TravellerKind.Displaced),
+                                       Override("displaced.ancient", "We trade with {value}.", "ancient", TravellerKind.Displaced));
 
-        lines.tripAskLabel = " ";
-        Assert.AreEqual("Ask about home >", Interview.AskLabel(lines, TravellerKind.Labourer));
-        Assert.AreEqual(string.Empty, Interview.AskLabel(null, TravellerKind.Displaced));
-        Assert.AreEqual(string.Empty, Interview.AskLabel(new InterviewLines(), TravellerKind.Displaced));
+        Assert.AreEqual("displaced.ancient", q.AnswerFor("ancient", TravellerKind.Displaced).id, "3 beats 2, listed second or not");
+        Assert.AreEqual("displaced", q.AnswerFor("medieval", TravellerKind.Displaced).id);
+        Assert.AreEqual("q_currency.answer", q.AnswerFor("ancient", TravellerKind.PoorTourist).id, "a citizen bound for the ancient era says the default");
+    }
+
+    [Test]
+    public void AnswerFor_ATieKeepsTheFirstListed()
+    {
+        InterviewQuestion q = Currency(Override("first", "First {value}.", null, TravellerKind.Displaced, TravellerKind.Labourer),
+                                       Override("second", "Second {value}.", null, TravellerKind.Displaced));
+
+        Assert.AreEqual("first", q.AnswerFor("ancient", TravellerKind.Displaced).id);
+    }
+
+    [Test]
+    public void AnswerFor_AnOverrideOfAnotherKindNeverApplies()
+    {
+        InterviewQuestion q = Currency(Override("displaced", "We pay in {value}.", null, TravellerKind.Displaced),
+                                       Override("rich.medieval", "Florins, naturally: {value}.", "medieval", TravellerKind.RichTourist));
+
+        foreach (TravellerKind kind in new[] { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer })
+            Assert.AreEqual("q_currency.answer", q.AnswerFor("ancient", kind).id, kind.ToString());
+        Assert.AreEqual("q_currency.answer", q.AnswerFor("medieval", TravellerKind.PoorTourist).id, "the rich tourist's medieval line is not the poor tourist's");
+        Assert.AreEqual("rich.medieval", q.AnswerFor("medieval", TravellerKind.RichTourist).id);
+    }
+
+    [Test]
+    public void AnswerFor_NoOverrideGivesTheDefault()
+    {
+        Assert.AreEqual("q_currency.answer", Currency().AnswerFor("ancient", TravellerKind.Displaced).id);
+        Assert.AreEqual("q_currency.answer", Currency(null, Override("medieval", "M {value}.", "medieval")).AnswerFor(null, TravellerKind.RichTourist).id,
+                        "a null override is skipped; an era override never matches a traveller with no claimed era");
+
+        InterviewQuestion none = Currency();
+        none.overrides = null;
+        Assert.AreEqual("q_currency.answer", none.AnswerFor("ancient", TravellerKind.Displaced).id);
+    }
+
+    [Test]
+    public void Prompt_IsTheQuestionsOwnForEveryKindAndEra()
+    {
+        InterviewQuestion q = Currency(Override("displaced", "We pay in {value}.", null, TravellerKind.Displaced),
+                                       Override("displaced.ancient", "We trade with {value}.", "ancient", TravellerKind.Displaced));
+        var lines = new InterviewLines { backLabel = "< Back", askLabel = "Ask about the trip >" };
+
+        foreach (TravellerKind kind in (TravellerKind[])Enum.GetValues(typeof(TravellerKind)))
+            foreach (string era in new[] { "ancient", "medieval", null })
+            {
+                var c = new InterviewCase
+                {
+                    kind = kind,
+                    claimPlace = "Periclean Athens (Ancient)",
+                    claimedEraId = era,
+                    answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "Silver drachma" } }
+                };
+                DialogLine prompt = InterviewScript.Build(lines, new[] { q }, null, c).Node(InterviewScript.AskNodeId).Choices.First(x => x.Id == "q:q_currency").Lines[0];
+                Assert.AreEqual(("q_currency.prompt", DialogSpeaker.Desk, "What will you pay with in Periclean Athens (Ancient)?"), (prompt.Id, prompt.Speaker, prompt.Text), $"{kind} / {era ?? "no era"}");
+            }
     }
 
     [Test]
     public void ClaimTemplate_IsTheKindsAuthoredClaim_OrThePlaceAloneWhenBlank()
     {
-        Assert.AreEqual("Please. Send me home to {place}.", Interview.ClaimTemplate(Lines(), TravellerKind.Displaced));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(Lines(), TravellerKind.PoorTourist));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(new InterviewLines(), TravellerKind.Displaced));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(null, TravellerKind.Displaced));
+        Assert.AreEqual("Please. Send me home to {place}.", InterviewScript.ClaimTemplate(Lines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(Lines(), ClaimCase(TravellerKind.PoorTourist)));
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(new InterviewLines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(null, ClaimCase(TravellerKind.Displaced)));
 
         InterviewLines blank = Lines();
         blank.claims[1].line.text = " ";
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(blank, TravellerKind.Displaced), "a blank line counts as none");
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(blank, ClaimCase(TravellerKind.Displaced)), "a blank line counts as none");
         blank.claims.Insert(0, null);
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(blank, TravellerKind.Displaced), "a null entry is skipped");
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(blank, ClaimCase(TravellerKind.Displaced)), "a null entry is skipped");
     }
 
     [Test]
@@ -216,42 +302,6 @@ public class InterviewTests
         StringAssert.Contains("PoorTourist is blank", problems);
         StringAssert.Contains("an entry is empty", problems);
         CollectionAssert.IsNotEmpty(Interview.ClaimProblems(null, new[] { TravellerKind.Displaced }), "no lines at all");
-    }
-
-    // -----------------------------
-    // Small talk
-    // -----------------------------
-
-    private static readonly LineText[] PlaceLines = { new LineText("egypt_ancient.smalltalk.1", "The Nile rose."), new LineText("egypt_ancient.smalltalk.2", "The fields are black.") };
-    private static readonly LineText[] EraLines = { new LineText("ancient.smalltalk.1", "The harvest was good.") };
-
-    [Test]
-    public void PickSmallTalk_ThePlacesLinesWin_OneDraw()
-    {
-        var rng = new ScriptedRandom(ScriptStep.Range(1));
-        Assert.AreEqual("egypt_ancient.smalltalk.2", Interview.PickSmallTalk(PlaceLines, EraLines, rng).id);
-        Assert.IsTrue(rng.Done);
-    }
-
-    [Test]
-    public void PickSmallTalk_TheErasLines_WhenThePlaceHasNone()
-    {
-        var rng = new ScriptedRandom(ScriptStep.Range(0));
-        Assert.AreEqual("ancient.smalltalk.1", Interview.PickSmallTalk(new LineText[0], EraLines, rng).id);
-        Assert.IsTrue(rng.Done);
-
-        var fromNull = new ScriptedRandom(ScriptStep.Range(0));
-        Assert.AreEqual("ancient.smalltalk.1", Interview.PickSmallTalk(null, EraLines, fromNull).id);
-        Assert.IsTrue(fromNull.Done);
-    }
-
-    [Test]
-    public void PickSmallTalk_NoLines_IsNull_WithNoDraw()
-    {
-        var rng = new ScriptedRandom();
-        Assert.IsNull(Interview.PickSmallTalk(new LineText[0], null, rng));
-        Assert.AreEqual(0, rng.Draws);
-        Assert.IsNull(Interview.PickSmallTalk(PlaceLines, EraLines, null), "no stream, no pick");
     }
 
     // -----------------------------

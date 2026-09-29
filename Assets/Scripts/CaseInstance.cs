@@ -164,14 +164,20 @@ public sealed class CaseInstance
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
     public string FaultReason => Faults.Reason(directiveFault, costumeFault, lie);
 
-    /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
-    public string claimLine;
-
     /// <summary>The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers).</summary>
     public readonly List<InterviewAnswer> answers = new();
 
-    /// <summary>What the traveller says when asked small talk (their claimed place's or era's flavour; null when none is authored).</summary>
+    /// <summary>What the traveller says when asked small talk (Voices.SmallTalk: their personality's, their home's or their kind's line; null when none is authored).</summary>
     public LineText smallTalk;
+
+    /// <summary>The traveller's personality (Personality.id), drawn at generation on its own stream (Seeds.ForPersonality); blank for a premade, who speaks its own lines, and for an empty cast. Never printed (the personalities spec's PS4).</summary>
+    public string personality = string.Empty;
+
+    /// <summary>The traveller's dialog seed (Seeds.ForDialog): every line pick is a value of it and the slot's key (Voices.Pick), never a draw.</summary>
+    public int dialogSeed;
+
+    /// <summary>Who speaks: the traveller's personality, or the premade they are, and their dialog seed (every reply is resolved in it, Voices).</summary>
+    public Voice Voice => new Voice(personality, legendarySource != null ? legendarySource.id : null, dialogSeed);
 
     /// <summary>
     /// How the traveller looks (layers and garments; a premade: one whole

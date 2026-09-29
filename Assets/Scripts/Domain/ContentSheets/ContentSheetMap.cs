@@ -95,6 +95,7 @@ public static class ContentSheetMap
                 List("kinds").Omit().Note("a paper set's, debt standing's or recall's kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind"),
                 Text("transponder").Omit().Ref("agencyTransponders").Note("the model a recall (TransponderRecall) grounds; blank for every other rule")).Note("travel rules a day can switch on: closures and standing procedures"),
             Days(),
+            PersonalitiesSheet(),
             Interview(),
             Questions(),
             Dialogs(),
@@ -252,8 +253,7 @@ public static class ContentSheetMap
                 Text("label").Note("the papers menu's one entry for the group")).Note("request groups: several forms as one request"),
             Text("requestPrompt"),
             Text("requestReply"),
-            Text("askLabel").Note("the ask entry for the displaced"),
-            Text("tripAskLabel").Note("the ask entry for a 2150 citizen, who is asked about the trip"),
+            Text("askLabel").Note("the ask entry, the same for every traveller"),
             Text("backLabel"),
             Text("smallTalkLabel"),
             Text("smallTalkPrompt"),
@@ -269,13 +269,54 @@ public static class ContentSheetMap
                 Text("text")).Note("what a kind says when asked for a request they carry no form of"),
             Int("menuCapacity"),
             Int("maxLineChars"),
-            Text("lookLabel")).Note("the interview's wording");
+            Text("lookLabel"),
+            Num("smallTalkWeights.personality").Note("small talk's sources are picked by weight: the personality's own lines"),
+            Num("smallTalkWeights.home").Note("the home's lines (a displaced person's claimed place, else its era; a 2150 citizen's present, else the Future era)"),
+            Num("smallTalkWeights.kind").Note("the kind's lines (kindSmallTalk)"),
+            Rows("kindSmallTalk", "kindSmallTalk",
+                List("kinds").Note("the kinds that say it (RichTourist, PoorTourist, Labourer, Displaced)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text")).Note("the kinds' small talk: one of small talk's three sources"),
+            VoiceSheet("voiceClaims", "voices.claims", "the claim in a voice ({place} required)"),
+            VoiceSheet("voiceHandOver", "voices.handOver", "the reply as a paper is handed over ({document}, {place})",
+                Text("request").Omit().Note("the request it is for (a form number or a group id; blank: any)")),
+            VoiceSheet("voiceMissingForms", "voices.missingForms", "a refusal in character of a form the traveller does not carry ({document}, {place})",
+                Text("request").Required().Note("a form number (TC-310) or a request group's id (proof)"),
+                Text("variant").OneOf("Honest", "Missing").Note("Honest: the kind never needs it; Missing: they should have it")),
+            VoiceSheet("voiceSpoken", "voices.spoken", "the reply to a spoken request ({place})",
+                Text("request").Required().Ref("interviewRequests")),
+            VoiceSheet("voiceAnswers", "voices.answers", "an answer in a voice ({value} required, {place})",
+                Text("question").Required().Ref("questions")),
+            VoiceSheet("voiceSmallTalk", "voices.smallTalk", "a personality's or a premade's small talk ({place}; a premade's is its only source)")).Note("the interview's wording");
+
+    /// <summary>The cast (world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
+    private static SheetSpec PersonalitiesSheet() =>
+        Rows("personalities", "personalities", Key("id", "personality"),
+            Text("id").Required(),
+            Text("name"),
+            Num("weight").Note("its weight in the draw, the same for every kind (0 benches it)"),
+            Text("note").Note("for authors: the tone in one line (never shown in the game)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
+
+    /// <summary>One voice slot's sheet (interview.voices.{list}; the personalities spec's §9.1): the voice (a personality or a premade, exactly one), the slot's keys, the kinds and era it is for, the line.</summary>
+    private static SheetSpec VoiceSheet(string sheet, string path, string note, params ColumnSpec[] keys) =>
+        Rows(sheet, path,
+            new[]
+            {
+                Text("personality").Omit().Ref("personalities").Note("the personality that says it (or a premade)"),
+                Text("premade").Omit().Ref("premades").Note("the premade that says it (or a personality)")
+            }
+            .Concat(keys)
+            .Concat(new[]
+            {
+                List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text")
+            }).Cast<SheetField>().ToArray()).Note(note);
 
     private static SheetSpec Questions() =>
         Rows("questions", "questions", Key("id", "question"),
             Text("id").Required(),
             Text("category"),
-            List("kinds").Omit().Note("the traveller kinds the desk asks it of (RichTourist, PoorTourist, Labourer, Displaced); blank: every kind; one question per category per kind"),
             Text("label"),
             Text("prompt"),
             Text("answer"),
@@ -283,9 +324,9 @@ public static class ContentSheetMap
             Text("announce"),
             GateConditions("questionConditions"),
             Rows("questionOverrides", "overrides",
-                Text("era").Ref("eras"),
-                Text("prompt"),
-                Text("answer")).Note("the wording in one era"));
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                List("kinds").Omit().Note("the traveller kinds (RichTourist, PoorTourist, Labourer, Displaced); blank: any"),
+                Text("answer")).Note("the answer for some kinds, an era or both (the most specific wins: kinds 2, era 1); every traveller is asked the question's own prompt")).Note("one question per category, asked of every traveller in the same words");
 
     private static SheetSpec Dialogs() =>
         Rows("dialogs", "dialogs", Key("id", "dialog"),

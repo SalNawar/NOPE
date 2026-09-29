@@ -151,6 +151,7 @@ public static partial class WorldContentGenerator
                     historyTriggers, historyEffects, leaderEffects, premades, BuildLookRules(src.looks), culture.ui, neutralTheme, themes, stringTables,
                     translators, notices, BuildTranslation(src.translation));
         WireAgency(authored.library, src.agency);
+        WireCast(authored.library, src.personalities);
         WirePresent(authored.library, src);
         WireNews(authored.library, src.news);
         WritePc(authored.library, pc);
@@ -468,7 +469,7 @@ public static partial class WorldContentGenerator
             ("deskName", iv.deskName), ("opener", iv.opener), ("openerLegendary", iv.openerLegendary),
             ("honorificMale", iv.honorificMale), ("honorificFemale", iv.honorificFemale), ("honorificUnknown", iv.honorificUnknown),
             ("requestLabel", iv.requestLabel), ("papersLabel", iv.papersLabel), ("requestPrompt", iv.requestPrompt), ("requestReply", iv.requestReply),
-            ("askLabel", iv.askLabel), ("tripAskLabel", iv.tripAskLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel),
+            ("askLabel", iv.askLabel), ("backLabel", iv.backLabel), ("smallTalkLabel", iv.smallTalkLabel),
             ("smallTalkPrompt", iv.smallTalkPrompt), ("lookLabel", iv.lookLabel)
         };
         foreach ((string field, string text) in wording)
@@ -534,7 +535,7 @@ public static partial class WorldContentGenerator
             Ascii(MissingReplyLineId(r.kind, r.request, r.variant), r.text);
             Id(MissingReplyLineId(r.kind, r.request, r.variant), $"missing-form reply {r.kind} / '{r.request}' / {r.variant}");
         }
-        List<KindForms> kindForms = KindForms(authored, out List<AskableForm> agencyForms);
+        List<KindForms> kindForms = KindForms(src, authored, out List<AskableForm> agencyForms);
         errors.AddRange(FormRequests.GroupProblems(agencyForms, BuildLines(iv).askGroups));
         errors.AddRange(FormRequests.ReplyProblems(BuildReplies(replies), agencyForms, kindForms));
 
@@ -558,22 +559,7 @@ public static partial class WorldContentGenerator
             else if (!Forgery.IsProvableCategory(category, bookCategories))
                 errors.Add($"{owner} asks about {category}, which no reference book (or, for a birth date, the Citizen Record) can prove.");
 
-            // The kinds it is asked of (traveller types I1): known, none twice; blank asks every kind.
-            bool kindsSound = true;
-            var seenKinds = new HashSet<string>();
-            foreach (string name in q.kinds ?? Array.Empty<string>())
-            {
-                if (!ParseEnum(name, out TravellerKind _))
-                {
-                    errors.Add($"{owner} names '{name}' in \"kinds\", which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
-                    kindsSound = false;
-                }
-                else if (!seenKinds.Add(name))
-                {
-                    errors.Add($"{owner} names the kind {name} twice.");
-                }
-            }
-            if (categorySound && kindsSound)
+            if (categorySound)
                 built.Add(BuildQuestion(q));
 
             if (string.IsNullOrWhiteSpace(q.label))
@@ -600,22 +586,30 @@ public static partial class WorldContentGenerator
             Id(QuestionLineId(q.id, PromptPart), $"question '{q.id}'");
             Id(QuestionLineId(q.id, AnswerPart), $"question '{q.id}'");
 
+            // The answer overrides (the personalities spec's W3): each names kinds, an era or both (known, a kind once), no two alike; only the answer.
             var overridden = new HashSet<string>();
-            foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
+            OverrideData[] overrides = q.overrides ?? Array.Empty<OverrideData>();
+            for (int n = 0; n < overrides.Length; n++)
             {
-                string oOwner = $"{owner} override '{o.era}'";
-                if (!eraIds.Contains(o.era ?? string.Empty))
-                    errors.Add($"{oOwner} names an unknown era.");
-                else if (!overridden.Add(o.era))
-                    errors.Add($"{owner} overrides era '{o.era}' twice.");
-                if (string.IsNullOrWhiteSpace(o.prompt))
-                    errors.Add($"{oOwner} has a blank prompt.");
+                OverrideData o = overrides[n];
+                string oOwner = $"{owner} override {n + 1}";
+                string[] oKinds = o.kinds ?? Array.Empty<string>();
+                bool namesEra = !string.IsNullOrWhiteSpace(o.era);
+                if (namesEra && !eraIds.Contains(o.era))
+                    errors.Add($"{oOwner} names an unknown era '{o.era}'.");
+                if (!namesEra && oKinds.Length == 0)
+                    errors.Add($"{oOwner} names neither kinds nor an era, so it would replace the answer for everyone; edit the answer instead.");
+                foreach (string name in oKinds)
+                    if (!ParseEnum(name, out TravellerKind _))
+                        errors.Add($"{oOwner} names '{name}' in \"kinds\", which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
+                if (oKinds.Distinct().Count() != oKinds.Length)
+                    errors.Add($"{oOwner} names a kind twice.");
+                if (!overridden.Add(string.Join("+", oKinds.OrderBy(k => k, StringComparer.Ordinal)) + "|" + (namesEra ? o.era : string.Empty)))
+                    errors.Add($"{oOwner} names the same kinds and era as an earlier override.");
                 if (!Interview.HoldsToken(o.answer, Interview.ValueToken))
                     errors.Add($"{oOwner}: its answer must hold {Interview.Placeholder(Interview.ValueToken)}.");
-                Ascii(OverrideLineId(q.id, o.era, PromptPart), o.prompt);
-                Ascii(OverrideLineId(q.id, o.era, AnswerPart), o.answer);
-                Id(OverrideLineId(q.id, o.era, PromptPart), $"question '{q.id}' override '{o.era}'");
-                Id(OverrideLineId(q.id, o.era, AnswerPart), $"question '{q.id}' override '{o.era}'");
+                Ascii(OverrideLineId(q.id, n), o.answer);
+                Id(OverrideLineId(q.id, n), $"question '{q.id}' override {n + 1}");
             }
         }
 
@@ -709,9 +703,12 @@ public static partial class WorldContentGenerator
         // A premade's dialog and a forced slot's (days 7-15 B7) are offered only while that appearance stands at the desk (TimelineService.PremadeDialogIds).
         var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog)
             .Concat(src.days.SelectMany(day => day.forced ?? Array.Empty<ForcedData>()).Where(f => !string.IsNullOrEmpty(f.dialog)).Select(f => f.dialog)));
-        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
+        foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.Count(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
+
+        // --- The cast and the voices (the personalities spec's §9.2) ---
+        CheckVoices(src, authored, kindForms, errors, Id, Ascii);
 
         // --- Line length: every line the transcript can show fits two lines of a row ---
         int max = iv.maxLineChars;
@@ -752,11 +749,9 @@ public static partial class WorldContentGenerator
             int longestValue = ParseEnum(q.category, out ClueCategory category) ? LongestValue(src, category) : 0;
             Fits(QuestionLineId(q.id, PromptPart), q.prompt, Interview.PlaceToken, longestPlace);
             Fits(QuestionLineId(q.id, AnswerPart), q.answer, Interview.ValueToken, longestValue);
-            foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
-            {
-                Fits(OverrideLineId(q.id, o.era, PromptPart), o.prompt, Interview.PlaceToken, longestPlace);
-                Fits(OverrideLineId(q.id, o.era, AnswerPart), o.answer, Interview.ValueToken, longestValue);
-            }
+            OverrideData[] overrides = q.overrides ?? Array.Empty<OverrideData>();
+            for (int n = 0; n < overrides.Length; n++)
+                Fits(OverrideLineId(q.id, n), overrides[n].answer, Interview.ValueToken, longestValue);
         }
 
         foreach (DialogData d in dialogs)
@@ -1837,8 +1832,8 @@ public static partial class WorldContentGenerator
     /// <summary>The id of a question's line, "{questionId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
     private static string QuestionLineId(string questionId, string part) => $"{questionId}.{part}";
 
-    /// <summary>The id of an era override's line, "{questionId}.{eraId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
-    private static string OverrideLineId(string questionId, string eraId, string part) => $"{questionId}.{eraId}.{part}";
+    /// <summary>The id of a question's <paramref name="index"/>th (0-based) answer override's line, "{questionId}.overrides.{n}.answer" (n from 1): BuildQuestion writes it, CheckInterview checks it.</summary>
+    private static string OverrideLineId(string questionId, int index) => $"{questionId}.overrides.{index + 1}.{AnswerPart}";
 
     /// <summary>A place's id, "{country}_{era}": the profile's id, its asset name and its small-talk lines' owner id.</summary>
     private static string PlaceId(PlaceData p) => $"{p.country}_{p.era}";
@@ -1860,7 +1855,6 @@ public static partial class WorldContentGenerator
         requestPrompt = new LineText(InterviewLineId("requestPrompt"), i.requestPrompt),
         requestReply = new LineText(InterviewLineId("requestReply"), i.requestReply),
         askLabel = i.askLabel,
-        tripAskLabel = i.tripAskLabel,
         backLabel = i.backLabel,
         smallTalkLabel = i.smallTalkLabel,
         lookLabel = i.lookLabel,
@@ -1872,7 +1866,10 @@ public static partial class WorldContentGenerator
             prompt = new LineText(RequestLineId(r.id, PromptPart), r.prompt),
             reply = new LineText(RequestLineId(r.id, ReplyPart), r.reply)
         }).ToList(),
-        menuCapacity = i.menuCapacity
+        menuCapacity = i.menuCapacity,
+        smallTalkWeights = BuildWeights(i.smallTalkWeights),
+        kindSmallTalk = BuildKindTalk(i.kindSmallTalk),
+        voices = BuildVoices(i.voices)
     };
 
     /// <summary>The id of a missing-form reply's line, "interview.missingFormReplies.{kind}.{request}.{variant}": BuildReplies writes it, CheckInterview checks it.</summary>
@@ -1888,45 +1885,73 @@ public static partial class WorldContentGenerator
             .Where(r => r != null)
             .ToList();
 
-    /// <summary>The day plans' forms as the interview's requests see them (every wired or forced blueprint's templates, each once), and each kind's askable and carried forms (FormRequests' rules).</summary>
-    private static List<KindForms> KindForms(Authored authored, out List<AskableForm> forms)
+    /// <summary>
+    /// The papers menus as the source's days build them (the personalities
+    /// spec's W4): each day's forms (its kinds' and its forced blueprints'
+    /// templates, each once; a day without its own entry the latest earlier
+    /// one's), the menu of the days so far (FormRequests.MetSoFar, as
+    /// TimelineService.AgencyForms builds it from the plans), and each kind in
+    /// play that day with that menu and its blueprints' carried forms
+    /// (FormRequests.ReplyProblems' input). <paramref name="forms"/> is every
+    /// wired or forced blueprint's form, each once.
+    /// </summary>
+    private static List<KindForms> KindForms(WorldSource src, Authored authored, out List<AskableForm> forms)
     {
         var byTemplate = new Dictionary<DocumentTemplateSO, AskableForm>();
-        forms = new List<AskableForm>();
-        foreach (DocumentTemplateSO t in DocumentTemplates(authored))
+        AskableForm FormOf(DocumentTemplateSO t)
         {
-            if (byTemplate.ContainsKey(t))
-                continue;
-            var form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? Array.Empty<TravellerKind>());
-            byTemplate[t] = form;
-            forms.Add(form);
+            if (!byTemplate.TryGetValue(t, out AskableForm form))
+                byTemplate[t] = form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver));
+            return form;
         }
-        List<AskableForm> all = forms;
-        return Blueprints(authored)
-            .GroupBy(b => b.Kind)
-            .Select(g => new KindForms
-            {
-                Kind = g.Key,
-                Askable = FormRequests.For(g.Key, all),
-                Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => byTemplate[t]).ToList()
-            })
-            .ToList();
+
+        forms = DocumentTemplates(authored).Select(FormOf).Distinct().ToList();
+        DayData[] sorted = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).OrderBy(d => d.day).ToArray();
+        int lastDay = sorted.Select(d => d.day).DefaultIfEmpty(0).Max();
+        var dayForms = new List<IReadOnlyList<AskableForm>>();
+        var dayBlueprints = new List<List<CaseBlueprintSO>>();
+        for (int n = 1; n <= lastDay; n++)
+        {
+            DayData d = sorted.LastOrDefault(x => x.day <= n);
+            var blueprints = new List<CaseBlueprintSO>();
+            foreach (KindWeightData k in d?.kinds ?? Array.Empty<KindWeightData>())
+                if (k != null && ParseEnum(k.kind, out TravellerKind kind) && authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) && b != null && !blueprints.Contains(b))
+                    blueprints.Add(b);
+            foreach (ForcedData f in d?.forced ?? Array.Empty<ForcedData>())
+                if (f != null && !string.IsNullOrEmpty(f.blueprint) && authored.forcedBlueprints.TryGetValue(f.blueprint, out CaseBlueprintSO b) && b != null && !blueprints.Contains(b))
+                    blueprints.Add(b);
+            dayBlueprints.Add(blueprints);
+            dayForms.Add(blueprints.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(FormOf).Distinct().ToList());
+        }
+
+        var kinds = new List<KindForms>();
+        for (int n = 1; n <= lastDay; n++)
+        {
+            List<AskableForm> menu = FormRequests.MetSoFar(dayForms, n);
+            foreach (IGrouping<TravellerKind, CaseBlueprintSO> g in dayBlueprints[n - 1].GroupBy(b => b.Kind))
+                kinds.Add(new KindForms
+                {
+                    Kind = g.Key,
+                    Askable = menu,
+                    Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(FormOf).ToList()
+                });
+        }
+        return kinds;
     }
 
-    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.{era}.answer", ...) and the kinds it is asked of (CheckInterview parsed them first).</summary>
+    /// <summary>A question with generated line ids ("{id}.prompt", "{id}.answer", "{id}.overrides.{n}.answer"), asked of every traveller (CheckInterview parsed its category first).</summary>
     private static InterviewQuestion BuildQuestion(QuestionData q) => new InterviewQuestion
     {
         id = q.id,
         category = (ClueCategory)Enum.Parse(typeof(ClueCategory), q.category),
-        kinds = (q.kinds ?? Array.Empty<string>()).Select(k => (TravellerKind)Enum.Parse(typeof(TravellerKind), k)).ToList(),
         label = q.label,
         prompt = new LineText(QuestionLineId(q.id, PromptPart), q.prompt),
         answer = new LineText(QuestionLineId(q.id, AnswerPart), q.answer),
-        overrides = (q.overrides ?? Array.Empty<OverrideData>()).Select(o => new WordingOverride
+        overrides = (q.overrides ?? Array.Empty<OverrideData>()).Select((o, n) => new WordingOverride
         {
-            eraId = o.era,
-            prompt = new LineText(OverrideLineId(q.id, o.era, PromptPart), o.prompt),
-            answer = new LineText(OverrideLineId(q.id, o.era, AnswerPart), o.answer)
+            eraId = o.era ?? string.Empty,
+            kinds = (o.kinds ?? Array.Empty<string>()).Where(k => ParseEnum(k, out TravellerKind _)).Select(k => (TravellerKind)Enum.Parse(typeof(TravellerKind), k)).ToList(),
+            answer = new LineText(OverrideLineId(q.id, n), o.answer)
         }).ToList()
     };
 
@@ -2188,6 +2213,7 @@ public static partial class WorldContentGenerator
         public PresentData present;
         public RuleData[] rules;
         public DayData[] days;
+        public PersonalityData[] personalities;
         public InterviewData interview;
         public QuestionData[] questions;
         public DialogData[] dialogs;
@@ -2372,9 +2398,8 @@ public static partial class WorldContentGenerator
         public AskGroupData[] askGroups;
         public string requestPrompt;
         public string requestReply;
+        /// <summary>The ask entry, every traveller's ("Ask about the trip >").</summary>
         public string askLabel;
-        /// <summary>The ask entry for a 2150 citizen ("Ask about the trip >").</summary>
-        public string tripAskLabel;
         public string backLabel;
         public string smallTalkLabel;
         public string smallTalkPrompt;
@@ -2384,6 +2409,12 @@ public static partial class WorldContentGenerator
         public MissingReplyData[] missingFormReplies;
         public int menuCapacity;
         public int maxLineChars;
+        /// <summary>How small talk picks its source (the personalities spec's V5).</summary>
+        public SmallTalkWeightsData smallTalkWeights;
+        /// <summary>The kinds' small talk, one of its three sources.</summary>
+        public KindTalkData[] kindSmallTalk;
+        /// <summary>The personalities' and premades' own lines, one list per slot.</summary>
+        public VoicesData voices;
     }
 
     /// <summary>A spoken request: the hub entry, the desk's prompt and the traveller's reply (line ids are generated from the id).</summary>
@@ -2395,12 +2426,11 @@ public static partial class WorldContentGenerator
     /// <summary>A missing-form reply (interview.missingFormReplies): the kind and variant by name, the request a form number or a group id.</summary>
     [Serializable] private sealed class MissingReplyData { public string kind; public string request; public string variant; public string text; }
 
-    /// <summary>A question; fromDay is required (0 = missing), announce is required exactly when the question is gated; kinds names the traveller kinds it is asked of (blank: every kind).</summary>
+    /// <summary>A question, asked of every traveller (the personalities spec's W3); fromDay is required (0 = missing), announce is required exactly when the question is gated; overrides change the answer by kinds and era.</summary>
     [Serializable] private sealed class QuestionData
     {
         public string id;
         public string category;
-        public string[] kinds;
         public string label;
         public string prompt;
         public string answer;
@@ -2410,7 +2440,8 @@ public static partial class WorldContentGenerator
         public OverrideData[] overrides;
     }
 
-    [Serializable] private sealed class OverrideData { public string era; public string prompt; public string answer; }
+    /// <summary>A question's answer override: the kinds (names; none: any) and the era (blank: any) it is for, and the answer ({value}).</summary>
+    [Serializable] private sealed class OverrideData { public string era; public string[] kinds; public string answer; }
 
     /// <summary>A gate condition; place ("{country}_{era}"), attribute and nation are ids the generator resolves.</summary>
     [Serializable] private sealed class ConditionData { public string type; public string key; public float threshold; public string place; public string attribute; public string nation; }

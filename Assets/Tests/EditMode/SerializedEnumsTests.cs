@@ -128,7 +128,7 @@ public class SerializedEnumsTests
         Assert.AreEqual(2, System.Enum.GetValues(typeof(MissingFormVariant)).Length, "a new member is appended here too");
     }
 
-    /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and DocumentTemplateSO.askableBy.</summary>
+    /// <summary>TravellerKind: stored in CaseBlueprintSO.kind and the questions' WordingOverride.kinds.</summary>
     [Test]
     public void TravellerKind_KeepsItsSerializedInts()
     {

@@ -120,11 +120,11 @@ public sealed class EvidencePresenter
         _logged();
     }
 
-    /// <summary>Draws the Deviation Report from the log, in every pane: the case line (the claim banner's text), the entries, the agency block and the day.</summary>
+    /// <summary>Draws the Deviation Report from the log, in every pane: the case line (the traveller's name and role, as the app's title: no claim is printed, the personalities spec's B1), the entries, the agency block and the day.</summary>
     private void RefreshReport()
     {
         CaseInstance current = _currentCase();
-        string caseLine = current != null ? UiText.Format("claim.banner", current.visitorDisplayName, current.claimLine) : string.Empty;
+        string caseLine = current != null ? current.visitorDisplayName : string.Empty;
         foreach (ReportView view in _reports)
             if (view != null)
                 view.Show(_entries, caseLine, _agency(), _day());
