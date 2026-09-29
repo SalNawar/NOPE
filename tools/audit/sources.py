@@ -2,7 +2,7 @@
 
 Source set = git-tracked `*.cs` files under Assets/Scripts, Assets/Editor and
 Assets/Tests, minus:
-  * Assets/Editor/OfficeArt/**  (another team's art tooling)
+  * Assets/Editor/OfficeArt/** and Assets/Editor/TerminalArt/**  (the art side's tooling)
   * local automation files named `_TimeDesk*` / `_ClaudeJob*` (normally untracked)
 Third-party code (Assets/80s_Office, Packages, TextMesh Pro, art packs) lives
 outside those folders, so it never enters the set.
@@ -32,7 +32,7 @@ from pathlib import Path
 TOOL_VERSION = "audit-static 1.0"
 
 INCLUDE_ROOTS = ("Assets/Scripts/", "Assets/Editor/", "Assets/Tests/")
-EXCLUDE_PREFIXES = ("Assets/Editor/OfficeArt/",)
+EXCLUDE_PREFIXES = ("Assets/Editor/OfficeArt/", "Assets/Editor/TerminalArt/")
 EXCLUDE_NAME_PREFIXES = ("_TimeDesk", "_ClaudeJob")
 LIGHT_TOUCH = {
     "Assets/Scripts/Office/OfficeHallCrowdPalette.cs",

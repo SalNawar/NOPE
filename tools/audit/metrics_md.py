@@ -23,7 +23,7 @@ def render(d: dict) -> str:
     th = d["thresholds"]
     L = [f"# Static baseline metrics ({d['commit'][:10]})", "",
          f"Tool: {d['tool']}; commit {d['commit']}. Source set: tracked C# under Assets/Scripts, "
-         f"Assets/Editor, Assets/Tests (Assets/Editor/OfficeArt excluded). Analyzer results "
+         f"Assets/Editor, Assets/Tests (the art side's Assets/Editor/OfficeArt and Assets/Editor/TerminalArt excluded). Analyzer results "
          f"{'included' if d['analyzer_available'] else 'NOT available'}.", "",
          "## Headline", ""]
     dup = d["duplication"]["summary"]
