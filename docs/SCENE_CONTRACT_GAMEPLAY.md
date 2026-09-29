@@ -65,9 +65,19 @@ The anime hall's are in the next section.
 
 **For the art side:** `Tools > TimeDesk > Add Gameplay Anchors (art office)`,
 run with the knob's art scene open, adds an empty `GameplayAnchors/Anchor_{id}` at
-the current default pose for every place still on a default (today: `Scanner`,
-`Traveller`, `HandOver`). Move them where the art wants them and save.
-The gameplay side does not run this tool on the art scene.
+the current default pose for every place still on a default (the room today:
+`Scanner`, `Traveller`, `HandOver`). Move them where the art wants them and save.
+The gameplay side does not run this tool on the art scene (the one exception is
+the hall's, below).
+
+**For the anime hall:** `Tools > TimeDesk > Add Anime Hall Hooks (art office)`
+(`AnimeHallHooks`), run with the hall open as the knob's art office, adds what
+the hall lacked for the game to be whole (the list at the end of the next
+section), leaves alone whatever it already has (a second run changes nothing)
+and marks the scene dirty for saving. The gameplay side ran it once, with
+Saleh's OK (2026-09-29). Reinstalling the hall's art
+(`AnimeHallLayerInstaller`) rebuilds the scene without these hooks: run it again
+afterwards.
 
 ## The anime hall (`AnimeHall.unity`, art c75e1fe)
 
@@ -88,29 +98,24 @@ it; a click box, its hover outline and its reaction cover that part):
 | `Intercom` | `Clean_Phone__DeskClean_PhoneBody` | |
 | `Stamp`, `Till`, `StabilityMonitor`, `Calendar`, `Clock` | `Clean_Stamp__DeskClean_Wood`, `Clean_Till__DeskClean_Green`, `Office_Stability__Plastic_WarmGrey`, `Office_Calendar__Office_TealDark`, `Office_Clock__Plastic_WarmGrey` | |
 | `Calculator`, `PenPot`, `Stapler` | `Clean_Calculator__DeskClean_Case`, `Clean_PenPot__DeskClean_ABS`, `Clean_Stapler__DeskClean_Case` | |
-| `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | found, **but they are empty meshes without a TextMeshPro component**, so the game shows its fallback HUD and the boards keep the static `Preview display — 09:00 / 01 / 100% / NEXT` TextMeshes |
-| `Scanner`, `Traveller`, `HandOver` | **default** poses | the same desk layout as the room, so the room's defaults hold |
-| `OfficeCamera` | `Anime hall player preview` | untagged, depth 100, culled to layer 29, no AudioListener, no Cinemachine brain: the binder orders the PC frame's camera after it and the clone's before it, and adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
-| `OfficeVCam` | **missing** | the desk view stays off (a warning at load) |
+| `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `GameplayAnchors/DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | world-space TextMeshPro texts on the boards' display faces (the calendar's paper, the stability monitor's and the clock's glass, the till's display, the NEXT sign's glass), where the static `Preview display — 01 / 100% / 09:00 / NEXT` TextMeshes stood (deleted): dark ink (the art's `211F26`) on the calendar's paper, light digits (its `FFF2D9` ivory) on the dark glasses. `GameplayAnchors` is the scene's **first root**, so these are found before the preserved desk's empty meshes of the same names (copies of the room's texts without their TextMeshPro component), which stay; deleting those would drop the reliance on root order |
+| `Scanner`, `Traveller`, `HandOver` | `GameplayAnchors/Anchor_Scanner`, `Anchor_Traveller`, `Anchor_HandOver` | at the room's defaults (the same desk layout), for the art side to move |
+| `OfficeCamera` | `Anime hall player preview` | tagged `MainCamera`, with a `CinemachineBrain` (so it follows `OfficeVCam`: move that to move the view), depth 100, culled to layer 29, no AudioListener: the binder orders the PC frame's camera after it and the clone's before it, and adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
+| `OfficeVCam` | `Cameras/OfficeVCam` | a CinemachineCamera at the camera's pose, its lens copied (55°, 0.05 to 400 m), as the room's: the desk view works |
 
-What the hall must carry for the game to be whole (the art side, in
-`AnimeHall.unity`; nothing else reads these names):
+What the hall carries for the game to be whole since 2026-09-29 (`Add Anime
+Hall Hooks`; nothing else reads these names): the five readouts above, the
+four static previews gone; `Cameras/OfficeVCam` and the brain on the player
+camera, tagged `MainCamera`, for the desk view; `Anchor_Scanner`,
+`Anchor_Traveller`, `Anchor_HandOver` (a scanner model under `Anchor_Scanner`
+hides the placeholder); and the daylight's culling mask includes Default and
+Interactable, so the papers on the desk are lit by it (and dim with it in the
+evening).
 
-- the readouts as **TextMeshPro** texts named `DayNumber`, `StabilityPercent`,
-  `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` (then delete the four
-  `Preview display — …` TextMeshes, which would show stale values under them);
-- a Cinemachine camera named `OfficeVCam` under a `Cameras` root (or
-  `Anchor_OfficeVCam`) with a `CinemachineBrain` on the player camera, for the
-  desk view;
-- `Anchor_Scanner`, `Anchor_Traveller`, `Anchor_HandOver` (`Add Gameplay
-  Anchors`) where the hall wants them; a scanner model under `Anchor_Scanner`
-  hides the placeholder;
-- optional: group each prop's parts under one parent (`Retro CRT` with the
-  glass among its children, `Clerk hotline`, `Blender_Stamp`, …) or put an
-  `Anchor_{id}` over it, so the whole prop takes the click, the outline and the
-  reaction instead of one part; the daylight's culling mask may include
-  Default and Interactable so the papers and the traveller are lit by it;
-  the camera may be tagged `MainCamera`.
+Still optional for the art side: group each prop's parts under one parent
+(`Retro CRT` with the glass among its children, `Clerk hotline`,
+`Blender_Stamp`, …) or put an `Anchor_{id}` over it, so the whole prop takes the
+click, the outline and the reaction instead of one part.
 
 ## Hooks the gameplay layer offers the art side
 
