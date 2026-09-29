@@ -55,9 +55,9 @@ public static class HomeSceneBuilder
             Vector2.zero, new Vector2(760f, 600f), withBackground: true, bgColor: new Color(0.1f, 0.12f, 0.2f, 0.97f));
 
         TMP_Text expensesTitle = FindOrCreateText(expenses, "TitleText", "Day 1 — Home", 34,
-            TextAlignmentOptions.Center, new Vector2(0.05f, 0.9f), new Vector2(0.95f, 0.98f));
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.955f));
         TMP_Text expensesBody = FindOrCreateText(expenses, "BodyText", "...", 22,
-            TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.88f));
+            TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.86f));
         Transform familyRows = FindOrCreateRowsContainer(expenses, "FamilyRows",
             new Vector2(0.06f, 0.14f), new Vector2(0.94f, 0.42f));
         Button expensesContinue = FindOrCreateButton(expenses, "ContinueButton", "Continue to the House",
@@ -190,8 +190,8 @@ public static class HomeSceneBuilder
     private static void LayOutExpenses(Transform panel, TMP_Text title, TMP_Text body, Transform rows, Button next)
     {
         ((RectTransform)panel).sizeDelta = ExpensesPanelSize;
-        Stretch(title.rectTransform, new Vector2(0.05f, 0.9f), new Vector2(0.95f, 0.98f));
-        Stretch(body.rectTransform, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.88f));
+        Stretch(title.rectTransform, new Vector2(0.05f, 0.875f), new Vector2(0.95f, 0.955f));
+        Stretch(body.rectTransform, new Vector2(0.06f, 0.44f), new Vector2(0.94f, 0.86f));
         Stretch((RectTransform)rows, new Vector2(0.06f, 0.14f), new Vector2(0.94f, 0.42f));
         Stretch((RectTransform)next.transform, new Vector2(0.33f, 0.03f), new Vector2(0.67f, 0.11f));
     }
@@ -267,10 +267,14 @@ public static class HomeSceneBuilder
     /// <summary>The HUD's strip: dark and mostly opaque, so the white day, wallet and stability read over any part of the room's art.</summary>
     private static readonly Color HudBackingColour = new Color(0.06f, 0.07f, 0.1f, 0.72f);
 
+    /// <summary>The HUD's own height (reference px), re-applied: its texts stretch over it, so the wallet line, which shrinks to fit (UiText.FitLabel), keeps its 28 px instead of shrinking to its floor in a HUD of no height.</summary>
+    private const float HudHeight = 50f;
+
     /// <summary>
     /// The HUD's backing strip, drawn first under the HUD (full width,
     /// <see cref="HudBackingHeight"/> tall, centred on its texts; no raycasts):
-    /// created once, its place and colour re-applied on every build.
+    /// created once, its place and colour re-applied on every build, with the
+    /// HUD's own height (<see cref="HudHeight"/>).
     /// </summary>
     private static void EnsureHudBacking(Transform hud)
     {
@@ -282,6 +286,7 @@ public static class HomeSceneBuilder
             Undo.RegisterCreatedObjectUndo(go, "Create HUD Backing");
         }
         go.transform.SetAsFirstSibling();
+        ((RectTransform)hud).sizeDelta = new Vector2(0f, HudHeight);
 
         var rt = (RectTransform)go.transform;
         rt.anchorMin = new Vector2(0f, 0.5f);
