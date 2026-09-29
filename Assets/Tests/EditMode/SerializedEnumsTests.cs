@@ -131,6 +131,15 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, System.Enum.GetValues(typeof(StrandingFate)).Length, "a new member is appended here too");
     }
 
+    /// <summary>FactorAnswer: stored in the content library's world block (world_source.json world.factors[].answer; the endings spec E0).</summary>
+    [Test]
+    public void FactorAnswer_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)FactorAnswer.AsFound);
+        Assert.AreEqual(1, (int)FactorAnswer.Leader);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(FactorAnswer)).Length, "a new member is appended here too");
+    }
+
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
     [Test]
     public void MissingFormVariant_KeepsItsSerializedInts()

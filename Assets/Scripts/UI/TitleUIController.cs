@@ -9,9 +9,12 @@ using UnityEngine.UI;
 /// UI for the title scene added in Alpha Phase 5: a title panel (Continue /
 /// New Run) and an ending panel (shown instead, when WorldState.endingId is
 /// set, displaying the reached EndingSO and offering New Run; on the Debt
-/// Relief ending, the clerk's own papers beside it, redesign phase 13). Both
-/// panels are optional; if unwired, TitleSceneController degrades to loading
-/// the office scene directly so the run stays playable.
+/// Relief ending, the clerk's own papers beside it, redesign phase 13). The
+/// world panel (the endings spec E0) lists the world's outcomes over the END
+/// OF DEMO card: on the run's last day instead of the ending panel, and after
+/// a failure behind the ending panel's "The world you leave behind" button.
+/// The panels are optional; if unwired, TitleSceneController degrades to
+/// loading the office scene directly so the run stays playable.
 /// </summary>
 public sealed class TitleUIController : MonoBehaviour
 {
@@ -44,6 +47,25 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>Clears the ended run and starts a new one.</summary>
     [SerializeField] private Button endingNewRunButton;
 
+    /// <summary>Opens the world panel as "the world you leave behind" (a failure's ending; hidden without it).</summary>
+    [SerializeField] private Button endingWorldButton;
+
+    [Header("World Panel: the world's outcomes and END OF DEMO (the endings spec E0)")]
+    /// <summary>Root panel of the world's outcomes: the run's last day, or a failure's "world you leave behind".</summary>
+    [SerializeField] private GameObject worldPanel;
+
+    /// <summary>The page's heading: the last day's ending's name, or "The world you leave behind".</summary>
+    [SerializeField] private TMP_Text worldTitleText;
+
+    /// <summary>The world's outcomes, one factor a line (its question, then its answer in bold).</summary>
+    [SerializeField] private TMP_Text worldOutcomesText;
+
+    /// <summary>The END OF DEMO card, set apart under the outcomes (EndingSO.closingCard of the run's last day); hidden when blank.</summary>
+    [SerializeField] private TMP_Text worldCardText;
+
+    /// <summary>Clears the ended run and starts a new one.</summary>
+    [SerializeField] private Button worldNewRunButton;
+
     [Header("Ending Panel: the clerk's papers (redesign phase 13)")]
     /// <summary>The Debt Relief ending's papers, beside the ending panel: the clerk's own Labour Contract and account (hidden for every other ending).</summary>
     [SerializeField] private GameObject clerkPapers;
@@ -60,6 +82,9 @@ public sealed class TitleUIController : MonoBehaviour
     /// <summary>True if the ending panel is wired.</summary>
     public bool HasEndingPanel => endingPanel != null;
 
+    /// <summary>True if the world panel is wired.</summary>
+    public bool HasWorldPanel => worldPanel != null;
+
     /// <summary>
     /// Hides both panels until a Show* call activates one. The panels are
     /// optional, so each is tested with Unity's == (audit R4-010): an
@@ -70,6 +95,7 @@ public sealed class TitleUIController : MonoBehaviour
     {
         if (titlePanel != null) titlePanel.SetActive(false);
         if (endingPanel != null) endingPanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
         if (endingPicture != null) endingPicture.gameObject.SetActive(false);
     }
 
@@ -83,6 +109,7 @@ public sealed class TitleUIController : MonoBehaviour
             return;
 
         if (endingPanel != null) endingPanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
         titlePanel.SetActive(true);
 
         if (titleText != null)
@@ -108,14 +135,16 @@ public sealed class TitleUIController : MonoBehaviour
     /// Shows the ending panel for the reached EndingSO (may be null if the id
     /// has no matching content yet — falls back to a generic message): its
     /// title, its body and, set apart under it, its closing card when it has
-    /// one (the END OF DEMO card).
+    /// one; its world button, labelled <paramref name="worldLabel"/>, runs
+    /// <paramref name="onWorld"/> (hidden when null: "The world you leave behind").
     /// </summary>
-    public void ShowEnding(EndingSO ending, Action onNewRun)
+    public void ShowEnding(EndingSO ending, Action onNewRun, string worldLabel = null, Action onWorld = null)
     {
         if (endingPanel == null)
             return;
 
         if (titlePanel != null) titlePanel.SetActive(false);
+        if (worldPanel != null) worldPanel.SetActive(false);
         endingPanel.SetActive(true);
 
         if (endingTitleText != null)
@@ -135,11 +164,68 @@ public sealed class TitleUIController : MonoBehaviour
             endingPicture.gameObject.SetActive(picture != null);
         }
 
-        if (endingNewRunButton != null)
+        Wire(endingNewRunButton, onNewRun);
+        if (endingWorldButton != null)
         {
-            endingNewRunButton.onClick.RemoveAllListeners();
-            endingNewRunButton.onClick.AddListener(() => onNewRun?.Invoke());
+            endingWorldButton.gameObject.SetActive(onWorld != null);
+            Wire(endingWorldButton, onWorld);
+            TMP_Text label = endingWorldButton.GetComponentInChildren<TMP_Text>(true);
+            if (label != null && !string.IsNullOrEmpty(worldLabel))
+                label.text = worldLabel;
         }
+    }
+
+    /// <summary>
+    /// Shows the world panel: <paramref name="heading"/>, the world's outcomes
+    /// (WorldFactors.Lines: each question, then its answer in bold; never a
+    /// score or a rank), and <paramref name="card"/> set apart under them (the
+    /// END OF DEMO card; hidden when blank), over the title's background.
+    /// </summary>
+    public void ShowWorld(string heading, IReadOnlyList<OutcomeLine> outcomes, string card, Action onNewRun)
+    {
+        if (worldPanel == null)
+            return;
+
+        if (titlePanel != null) titlePanel.SetActive(false);
+        if (endingPanel != null) endingPanel.SetActive(false);
+        if (endingPicture != null) endingPicture.gameObject.SetActive(false);
+        worldPanel.SetActive(true);
+
+        if (worldTitleText != null)
+            worldTitleText.text = heading ?? string.Empty;
+
+        if (worldOutcomesText != null)
+            worldOutcomesText.text = Outcomes(outcomes);
+
+        if (worldCardText != null)
+        {
+            worldCardText.text = card ?? string.Empty;
+            worldCardText.gameObject.SetActive(!string.IsNullOrWhiteSpace(card));
+        }
+
+        Wire(worldNewRunButton, onNewRun);
+    }
+
+    /// <summary>Points a button at <paramref name="action"/> alone.</summary>
+    private static void Wire(Button button, Action action)
+    {
+        if (button == null)
+            return;
+        button.onClick.RemoveAllListeners();
+        button.onClick.AddListener(() => action?.Invoke());
+    }
+
+    /// <summary>The outcomes' text: each factor's question, then its answer in bold on the next line, a blank line between factors.</summary>
+    private static string Outcomes(IReadOnlyList<OutcomeLine> outcomes)
+    {
+        var sb = new StringBuilder();
+        foreach (OutcomeLine line in outcomes ?? Array.Empty<OutcomeLine>())
+        {
+            if (sb.Length > 0)
+                sb.AppendLine().AppendLine();
+            sb.Append(line.Question).AppendLine().Append("<b>").Append(line.Answer).Append("</b>");
+        }
+        return sb.ToString();
     }
 
     /// <summary>

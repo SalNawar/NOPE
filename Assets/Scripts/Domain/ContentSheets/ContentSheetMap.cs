@@ -131,7 +131,12 @@ public static class ContentSheetMap
             Pc(),
             Ui(),
             Translation(),
-            Home());
+            Home(),
+            Rows("worldFactors", "world.factors", Key("id"),
+                Text("id").Required().Note("the factor's id (the endings spec's outcomes name their factor by it)"),
+                Text("question").Note("the question the end of the demo answers about 2150"),
+                Text("answer").OneOf("AsFound", "Leader").Note("AsFound: the foundAs text; Leader: the leading nation's name (foundAs while none leads)"),
+                Text("foundAs").Note("the answer as the run found 2150")).Note("the world's outcomes listed under END OF DEMO, in this order"));
 
     private static SheetSpec Looks() =>
         Single("looks", "looks",
