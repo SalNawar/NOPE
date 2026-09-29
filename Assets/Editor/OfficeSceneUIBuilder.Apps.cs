@@ -276,7 +276,7 @@ public static partial class OfficeSceneUIBuilder
             SetAnchors(size.transform, aMin, aMax);
             TMP_Text sizeLabel = size.transform.Find("Label").GetComponent<TMP_Text>();
             sizeLabel.text = UiText.Format("settings.textSize", config.zoomLevels[i]);
-            Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
+            SceneUiKit.Tag(sizeLabel, ThemeRoleId.Button, ThemePart.Ink, null, FontStyles.Normal, ThemeTextKind.Button);
             textSizes.Add(size);
         }
         BuildSettingsSteps(win);
@@ -321,7 +321,7 @@ public static partial class OfficeSceneUIBuilder
         text.fontSize = 20f;
         text.fontStyle = FontStyles.Bold;
         text.alignment = TextAlignmentOptions.BottomLeft;
-        Tag(text, ThemeRoleId.WindowBody, ThemePart.Ink, key, FontStyles.Bold, ThemeTextKind.Heading);
+        SceneUiKit.Tag(text, ThemeRoleId.WindowBody, ThemePart.Ink, key, FontStyles.Bold, ThemeTextKind.Heading);
     }
 
     // -----------------------------

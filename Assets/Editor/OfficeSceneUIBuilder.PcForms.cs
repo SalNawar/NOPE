@@ -115,7 +115,7 @@ public static partial class OfficeSceneUIBuilder
         SetAnchors(go.transform, Vector2.zero, Vector2.one);
         FormStrokes strokes = go.AddComponent<FormStrokes>();
         strokes.raycastTarget = false;
-        Tag(strokes, ThemeRoleId.DiegeticForm, ThemePart.Fill);
+        SceneUiKit.Tag(strokes, ThemeRoleId.DiegeticForm, ThemePart.Fill);
         return strokes;
     }
 

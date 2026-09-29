@@ -123,7 +123,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(glyph.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(4f, -height / 2f + 2f), new Vector2(height, height / 2f - 2f));
         glyph.preserveAspect = true;
         glyph.raycastTarget = false;
-        Tag(glyph, ThemeRoleId.Sidebar, ThemePart.Ink);
+        SceneUiKit.Tag(glyph, ThemeRoleId.Sidebar, ThemePart.Ink);
         TMP_Text label = Text(band, "Label", "", 22, TextAlignmentOptions.MidlineLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.Sidebar, style: FontStyles.Bold,
                               kind: ThemeTextKind.Heading);
         PlaceRect(label.transform, Vector2.zero, Vector2.one, new Vector2(height + 12f, 0f), new Vector2(-8f, 0f));
@@ -145,7 +145,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(glyph.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(10f, -24f), new Vector2(58f, 24f));
         glyph.preserveAspect = true;
         glyph.raycastTarget = false;
-        Tag(glyph, ThemeRoleId.InputField, ThemePart.Ink);
+        SceneUiKit.Tag(glyph, ThemeRoleId.InputField, ThemePart.Ink);
 
         TMP_Text name = Text(node.transform, "Name", "", 22, TextAlignmentOptions.TopLeft, Vector2.zero, Vector2.one, Ink, ThemeRoleId.InputField, style: FontStyles.Bold);
         PlaceRect(name.transform, new Vector2(0f, 1f), Vector2.one, new Vector2(66f, -52f), new Vector2(-34f, -5f));
@@ -171,7 +171,7 @@ public static partial class OfficeSceneUIBuilder
         PlaceRect(badge.transform, Vector2.one, Vector2.one, new Vector2(-32f, -32f), new Vector2(-6f, -6f));
         badge.preserveAspect = true;
         badge.raycastTarget = false;
-        Tag(badge, ThemeRoleId.InputField, ThemePart.Ink);
+        SceneUiKit.Tag(badge, ThemeRoleId.InputField, ThemePart.Ink);
         badge.gameObject.SetActive(false);
 
         Transform selected = BuildFrame(node.transform, "Selected", 3f, AccentInk, ThemeRoleId.FocusRing);

@@ -285,7 +285,7 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<LayoutElement>(look.gameObject).ignoreLayout = true;
         Transform bar = Panel(look, "TopBar", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -AppTabBarHeight / 2f), new Vector2(0f, AppTabBarHeight), Ink);
         Image barImage = bar.GetComponent<Image>();
-        Tag(barImage, ThemeRoleId.TabActive, ThemePart.Ink);
+        SceneUiKit.Tag(barImage, ThemeRoleId.TabActive, ThemePart.Ink);
         barImage.raycastTarget = false;
         TMP_Text activeLabel = Text(look, "Label", null, Mathf.RoundToInt(config.tabLabelSize), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink,
                                     ThemeRoleId.TabActive, AppTabKeys[tab], FontStyles.Normal, ThemeTextKind.Button, true);

@@ -157,7 +157,7 @@ public static partial class OfficeSceneUIBuilder
         Image glyphImage = glyph.GetComponent<Image>();
         glyphImage.raycastTarget = false;
         glyphImage.preserveAspect = true;
-        Tag(glyphImage, ThemeRoleId.DesktopIcon, ThemePart.Ink);
+        SceneUiKit.Tag(glyphImage, ThemeRoleId.DesktopIcon, ThemePart.Ink);
 
         float labelHeight = config.iconCellSize.y - glyphSize - 6f;
         Transform labelPlate = Panel(cell, "LabelPlate", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, labelHeight / 2f), new Vector2(0f, labelHeight),
