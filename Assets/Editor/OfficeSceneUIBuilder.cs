@@ -384,6 +384,7 @@ public static partial class OfficeSceneUIBuilder
         CheckThemeTags(canvas, officeCanvas);
         CheckLabelKeysAndRoles(library, canvas, officeCanvas);
         CheckContrast(library, canvas, officeCanvas);
+        CheckInvestigationWiring(invest);
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, GameplayScenePath);
         EnsureBuildSettings();
@@ -640,6 +641,30 @@ public static partial class OfficeSceneUIBuilder
                 themes.Add(theme);
         UiContrastCheck.Check(desktop, FrameGlass.height / DesktopSize.y, themes, library.CultureUi);
         UiContrastCheck.Check(overlay, 1f, themes, library.CultureUi);
+    }
+
+    /// <summary>
+    /// Logs an error for every part of the investigation desk the build left
+    /// unreachable (InvestigationWiring, evaluated on the built references): a
+    /// partly wired desk silently changes every traveller of the day (no spoken
+    /// or dress tells, no evidence gate, papers straight to the PC), and at run
+    /// time only a warning said so (audit R4-022).
+    /// </summary>
+    private static void CheckInvestigationWiring(InvestigationUIController invest)
+    {
+        InvestigationWiring wiring = invest.Wiring;
+        if (!wiring.Wired)
+            Debug.LogError("[TimeDesk] The investigation desk has no Investigation app (its Documents page, the app, Accept or Deny is unwired): no case can show. Check BuildInvestigationApp.", invest);
+        if (!wiring.EvidenceSystemActive)
+            Debug.LogError("[TimeDesk] The investigation desk's evidence system is off (the app or the compare is unwired): denials would not be gated on evidence.", invest);
+        if (!wiring.InterviewReachable)
+            Debug.LogError("[TimeDesk] A traveller's answers cannot be read (the wheel's ring, the transcript or the app's Transcript tab is unwired): no spoken tell would be generated.", invest);
+        if (!wiring.AppearanceReachable)
+            Debug.LogError("[TimeDesk] A traveller's garments cannot be compared (the wheel's ring or the compare is unwired): no dress tell would be generated.", invest);
+        if (!wiring.DeskReachable)
+            Debug.LogError("[TimeDesk] The desk is not wired whole (its surface, scanner, paper template, paper root, hand-over point or config): papers would go straight to the PC.", invest);
+        if (wiring.RecordsMissing)
+            Debug.LogError("[TimeDesk] The app's Records tab is unwired: birth-date tells could not be proven.", invest);
     }
 
     /// <summary>A transform's scene path.</summary>
