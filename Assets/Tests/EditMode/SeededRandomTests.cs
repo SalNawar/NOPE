@@ -40,6 +40,21 @@ public class SeededRandomTests
         Assert.AreEqual(min, new SeededRandom(1).Range(min, max));
     }
 
+    // The sequences today's SplitMix64 produces, written out (audit R1-002): a changed constant, reduction or
+    // seed conversion reshuffles every run's travellers, and these fail first. Value() is the top 24 bits over
+    // 2^24, so each expected value is exact.
+    [TestCase(0, new[] { 607535, 355700, 545679, 542444, 94747, 162090, 306913, 346940 }, new[] { 14819496, 7239838, 443485, 16288696 })]
+    [TestCase(42, new[] { 275413, 892291, 763858, 255764, 963250, 989062, 624925, 775908 }, new[] { 12441394, 2682851, 4674151, 5774561 })]
+    [TestCase(-1, new[] { 79680, 663860, 43187, 713102, 58122, 657396, 238135, 942972 }, new[] { 7582011, 6365251, 15616713, 1242350 })]
+    [TestCase(int.MinValue, new[] { 717868, 741979, 818326, 658031, 826542, 49135, 569326, 536262 }, new[] { 2443580, 16286811, 14861148, 5199585 })]
+    public void Sequence_IsPinned(int seed, int[] ranges, int[] valueTop24Bits)
+    {
+        CollectionAssert.AreEqual(ranges, Draw(new SeededRandom(seed), ranges.Length), "Range(0, 1000000)");
+        var rng = new SeededRandom(seed);
+        foreach (int bits in valueTop24Bits)
+            Assert.AreEqual(bits / 16777216f, rng.Value(), "Value()");
+    }
+
     [Test]
     public void Value_IsInTheHalfOpenUnitInterval()
     {
