@@ -131,3 +131,7 @@ MonoBehaviour:
     text: "\u2014 ZEITLINIEN-NACHRICHTEN \u2014"
     gloss: 0
     tier: 0
+  - key: icon.portals
+    text: Portale
+    gloss: 0
+    tier: 0

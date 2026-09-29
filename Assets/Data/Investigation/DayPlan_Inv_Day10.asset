@@ -120,3 +120,12 @@ MonoBehaviour:
       profile: {fileID: 0}
       nation: {fileID: 0}
   eventRules: []
+  directorateRoutes:
+  - portal: 1
+    place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
+  - portal: 2
+    place: {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}
+  - portal: 4
+    place: {fileID: 11400000, guid: d0a42dcb62ff2374a960973f76427f5b, type: 2}
+  - portal: 5
+    place: {fileID: 11400000, guid: 9383f580936f3af4fb17af0d5c75ca48, type: 2}

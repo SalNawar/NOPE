@@ -54,3 +54,12 @@ MonoBehaviour:
   guaranteeRuleViolators: 1
   forcedCases: []
   eventRules: []
+  directorateRoutes:
+  - portal: 1
+    place: {fileID: 11400000, guid: bb191997bafbd4e499d98487cf7059ab, type: 2}
+  - portal: 2
+    place: {fileID: 11400000, guid: 0f4b98a0c149f6c438b6ff24cae43f67, type: 2}
+  - portal: 4
+    place: {fileID: 11400000, guid: ace2f3be1c3e53a49b377927b343ed15, type: 2}
+  - portal: 5
+    place: {fileID: 11400000, guid: aeb06a5ef6d0fa6408695d2cdf41b891, type: 2}

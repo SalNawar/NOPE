@@ -135,3 +135,7 @@ MonoBehaviour:
       \u2014"
     gloss: 0
     tier: 0
+  - key: icon.portals
+    text: "\u0627\u0644\u0628\u0648\u0627\u0628\u0627\u062A"
+    gloss: 0
+    tier: 0

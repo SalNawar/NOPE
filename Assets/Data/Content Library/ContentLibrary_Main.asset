@@ -12571,6 +12571,32 @@ MonoBehaviour:
     - id: showa_shipyard
       era: modern
       name: Showa Shipyard Group
+    portals:
+    - number: 1
+      name: Front
+      role: 0
+      fromDay: 1
+      repair: 
+    - number: 2
+      name: Rear left
+      role: 0
+      fromDay: 0
+      repair: repair_portal_02
+    - number: 3
+      name: Rear right
+      role: 1
+      fromDay: 0
+      repair: repair_return_gate
+    - number: 4
+      name: Upper left
+      role: 0
+      fromDay: 0
+      repair: repair_portal_04
+    - number: 5
+      name: Upper right
+      role: 0
+      fromDay: 0
+      repair: repair_portal_05
   news:
     debt:
     - Debt Relief Departures reach a record high.

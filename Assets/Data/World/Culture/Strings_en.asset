@@ -2101,3 +2101,100 @@ MonoBehaviour:
     text: SIGNATURE
     gloss: 0
     tier: 0
+  - key: icon.portals
+    text: Portals
+    gloss: 0
+    tier: 1
+  - key: window.portals
+    text: Portals
+    gloss: 0
+    tier: 0
+  - key: board.returnGate
+    text: RETURN GATE
+    gloss: 0
+    tier: 0
+  - key: board.closed
+    text: CLOSED
+    gloss: 0
+    tier: 0
+  - key: board.maintenance
+    text: UNDER MAINTENANCE
+    gloss: 0
+    tier: 0
+  - key: board.noRoute
+    text: NO ROUTE
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.title
+    text: DEPARTURE BOARD
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.route
+    text: '{0} {1}: {2}, {3}'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.closed
+    text: '{0} {1}: {2}, {3}: CLOSED today'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGate
+    text: '{0} {1}: Return Gate'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.returnGateMaintenance
+    text: '{0} {1}: Return Gate, under maintenance'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.maintenance
+    text: '{0} {1}: under maintenance'
+    gloss: 0
+    tier: 0
+  - key: board.tooltip.noRoute
+    text: '{0} {1}: no route today'
+    gloss: 0
+    tier: 0
+  - key: portals.date
+    text: Routes for {0}
+    gloss: 0
+    tier: 0
+  - key: portals.returnGate
+    text: Return Gate
+    gloss: 0
+    tier: 0
+  - key: portals.none
+    text: "\u2013"
+    gloss: 0
+    tier: 0
+  - key: portals.state.inService
+    text: In service
+    gloss: 0
+    tier: 0
+  - key: portals.state.noRoute
+    text: "In service \xB7 no route today"
+    gloss: 0
+    tier: 0
+  - key: portals.state.closed
+    text: 'CLOSED today: {0}'
+    gloss: 0
+    tier: 0
+  - key: portals.state.underMaintenance
+    text: Under maintenance
+    gloss: 0
+    tier: 0
+  - key: portals.state.maintenance
+    text: "Under maintenance \xB7 repair it in Orders ({0})"
+    gloss: 0
+    tier: 0
+  - key: portals.state.locked
+    text: "Under maintenance \xB7 locked: repair {0} first"
+    gloss: 0
+    tier: 0
+  - key: portals.state.transit
+    text: "Under maintenance \xB7 repair in transit, in service tomorrow"
+    gloss: 0
+    tier: 0
+  - key: portals.footer
+    text: Routes are set by the Directorate. Until the Return Gate is repaired, the
+      displaced leave through Portal {0}.
+    gloss: 0
+    tier: 0

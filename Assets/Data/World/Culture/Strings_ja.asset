@@ -131,3 +131,7 @@ MonoBehaviour:
     text: "\u2014 \u6642\u9593\u7DDA\u30CB\u30E5\u30FC\u30B9 \u2014"
     gloss: 0
     tier: 0
+  - key: icon.portals
+    text: "\u30DD\u30FC\u30BF\u30EB"
+    gloss: 0
+    tier: 0

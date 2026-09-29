@@ -89,3 +89,12 @@ MonoBehaviour:
     introLine: 
     conditions: []
   eventRules: []
+  directorateRoutes:
+  - portal: 1
+    place: {fileID: 11400000, guid: 417d7ffdedfb58c4f9ac1576309b7d8f, type: 2}
+  - portal: 2
+    place: {fileID: 11400000, guid: 0f4b98a0c149f6c438b6ff24cae43f67, type: 2}
+  - portal: 4
+    place: {fileID: 11400000, guid: 2c519605fba5bc041a47b830c9b120fb, type: 2}
+  - portal: 5
+    place: {fileID: 11400000, guid: d0a42dcb62ff2374a960973f76427f5b, type: 2}
