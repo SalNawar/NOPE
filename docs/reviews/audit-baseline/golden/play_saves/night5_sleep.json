@@ -3,7 +3,7 @@
     "world": {
         "day": 6,
         "runSeed": 12345,
-        "money": 6,
+        "money": 15,
         "stabilityHundredths": 9036,
         "totalCitations": 4,
         "citationsToday": 0,
@@ -323,6 +323,7 @@
         "tomorrow": {
             "briefingLines": [],
             "newsLines": [
+                "SHARE AND SHARE ALIKE: everything in 2150 goes into common stores. The first swap market opens in the transit hall.",
                 "12,000 accounts frozen in default.",
                 "Citizens who left on Debt Relief yesterday: 1."
             ],
@@ -389,6 +390,103 @@
             "pendingPanics": [],
             "pendingStrandings": []
         },
+        "pulls": [
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 7.5
+            },
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "amount": 1.1999999284744263
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "amount": 1.1999999284744263
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "amount": 1.1999999284744263
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "amount": 3.0
+            },
+            {
+                "factor": "money",
+                "outcome": "commons",
+                "amount": 10.0
+            },
+            {
+                "factor": "future",
+                "outcome": "space_age",
+                "amount": 4.0
+            },
+            {
+                "factor": "government",
+                "outcome": "technocracy",
+                "amount": 2.0
+            },
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "amount": 9.0
+            },
+            {
+                "factor": "future",
+                "outcome": "naturalism",
+                "amount": 6.0
+            },
+            {
+                "factor": "government",
+                "outcome": "fascism",
+                "amount": 6.0
+            },
+            {
+                "factor": "government",
+                "outcome": "monarchy",
+                "amount": 6.0
+            },
+            {
+                "factor": "government",
+                "outcome": "communism",
+                "amount": 3.0
+            },
+            {
+                "factor": "government",
+                "outcome": "corporate_board",
+                "amount": 1.5
+            },
+            {
+                "factor": "money",
+                "outcome": "banking_houses",
+                "amount": 2.5
+            }
+        ],
+        "leads": [
+            {
+                "factor": "government",
+                "outcome": "theocracy",
+                "split": "",
+                "sinceDay": 5
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "split": "",
+                "sinceDay": 0
+            },
+            {
+                "factor": "money",
+                "outcome": "commons",
+                "split": "",
+                "sinceDay": 6
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
@@ -441,6 +539,7 @@
                     "BUREAU NOTICE: desk officers may now ask every traveller which city they are headed for. Check answers against the Capitals Gazetteer.",
                     "BUREAU NOTICE: desk officers may now ask every traveller who rules where they are going. Check answers against Rulers & Regents.",
                     "BUREAU NOTICE: with Interview Protocols, desk officers may now ask travellers when they were born. Check answers against Citizen Records.",
+                    "BY SACRED ORDER: 2150's temple councils take up the Directorate's duties. The stamps are blessed each morning.",
                     "CLEAR YOUR DEBT: 180 days in the Victorian mills.",
                     "Citizens who left on Debt Relief yesterday: 5."
                 ],
@@ -485,9 +584,9 @@
                 "wages": 110,
                 "fines": 0,
                 "debtRelief": 27,
-                "household": 69,
+                "household": 60,
                 "purchases": 0,
-                "balance": -32,
+                "balance": -23,
                 "owed": 125337
             },
             {
@@ -497,7 +596,7 @@
                 "debtRelief": 32,
                 "household": 60,
                 "purchases": 0,
-                "balance": 6,
+                "balance": 15,
                 "owed": 125305
             }
         ],

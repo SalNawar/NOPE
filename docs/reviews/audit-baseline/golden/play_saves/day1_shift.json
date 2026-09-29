@@ -201,6 +201,34 @@
             "pendingPanics": [],
             "pendingStrandings": []
         },
+        "pulls": [
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 5.0
+            },
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "amount": 0.15000000596046449
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "amount": 0.15000000596046449
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "amount": 0.15000000596046449
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "amount": 1.5
+            }
+        ],
+        "leads": [],
         "newsArchive": [
             {
                 "day": 1,

@@ -52,14 +52,28 @@ Canvas/HUD/DayText active=True layer=0 tag=Untagged components=[RectTransform,Ca
 Canvas/HUD/DayText transform pos=(-768.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/HUD/DayText rect min=(0.0,0.0) max=(0.2,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/HUD/DayText text='Day 1' size=28 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Left wrap=Normal raycast=True
-Canvas/HUD/MoneyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/HUD/MoneyText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI,ThemeTag]
 Canvas/HUD/MoneyText transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/HUD/MoneyText rect min=(0.4,0.0) max=(0.6,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/HUD/MoneyText text='Credits: 0' size=28 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Center wrap=Normal raycast=True
-Canvas/HUD/StabilityText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI]
+Canvas/HUD/MoneyText ThemeTag enabled=True
+Canvas/HUD/MoneyText ThemeTag.role=5
+Canvas/HUD/MoneyText ThemeTag.part=1
+Canvas/HUD/MoneyText ThemeTag.labelKey=''
+Canvas/HUD/MoneyText ThemeTag.baseStyle=0
+Canvas/HUD/MoneyText ThemeTag.textKind=0
+Canvas/HUD/MoneyText ThemeTag.shrinkToFit=True
+Canvas/HUD/StabilityText active=True layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,TextMeshProUGUI,ThemeTag]
 Canvas/HUD/StabilityText transform pos=(768.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/HUD/StabilityText rect min=(0.8,0.0) max=(1.0,1.0) pivot=(0.5,0.5) pos=(0.0,0.0) size=(0.0,0.0)
 Canvas/HUD/StabilityText text='Stability: 100%' size=28 auto=False min=18 max=72 color=#FFFFFFFF font=Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset:LiberationSans SDF align=Right wrap=Normal raycast=True
+Canvas/HUD/StabilityText ThemeTag enabled=True
+Canvas/HUD/StabilityText ThemeTag.role=5
+Canvas/HUD/StabilityText ThemeTag.part=1
+Canvas/HUD/StabilityText ThemeTag.labelKey=''
+Canvas/HUD/StabilityText ThemeTag.baseStyle=0
+Canvas/HUD/StabilityText ThemeTag.textKind=0
+Canvas/HUD/StabilityText ThemeTag.shrinkToFit=True
 Canvas/ExpensesPanel active=False layer=0 tag=Untagged components=[RectTransform,CanvasRenderer,Image]
 Canvas/ExpensesPanel transform pos=(0.000,0.000,0.000) rot=(0.000,0.000,0.000) scale=(1.000,1.000,1.000)
 Canvas/ExpensesPanel rect min=(0.5,0.5) max=(0.5,0.5) pivot=(0.5,0.5) pos=(0.0,0.0) size=(900.0,780.0)

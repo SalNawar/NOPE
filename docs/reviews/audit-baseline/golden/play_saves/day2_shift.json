@@ -294,6 +294,63 @@
                 }
             ]
         },
+        "pulls": [
+            {
+                "factor": "money",
+                "outcome": "jubilee",
+                "amount": 5.0
+            },
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "amount": 0.3500000238418579
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "amount": 0.3500000238418579
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "amount": 0.3500000238418579
+            },
+            {
+                "factor": "government",
+                "outcome": "democracy",
+                "amount": 1.5
+            },
+            {
+                "factor": "money",
+                "outcome": "commons",
+                "amount": 2.5
+            },
+            {
+                "factor": "future",
+                "outcome": "space_age",
+                "amount": 2.0
+            }
+        ],
+        "leads": [
+            {
+                "factor": "government",
+                "outcome": "directorate",
+                "split": "",
+                "sinceDay": 0
+            },
+            {
+                "factor": "future",
+                "outcome": "credit_age",
+                "split": "",
+                "sinceDay": 0
+            },
+            {
+                "factor": "money",
+                "outcome": "debt",
+                "split": "",
+                "sinceDay": 0
+            }
+        ],
         "newsArchive": [
             {
                 "day": 1,
