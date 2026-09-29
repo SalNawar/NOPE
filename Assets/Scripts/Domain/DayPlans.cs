@@ -87,7 +87,7 @@ public static class DayPlans
     /// <summary>
     /// The unplanned tail (days 7-15 V1): one warning when the days after the
     /// latest planned one, up to <paramref name="lastDay"/> (the run's last
-    /// day, the Retirement milestone's DayAtLeast threshold), have no plan of
+    /// day, the last-day ending's DayAtLeast threshold), have no plan of
     /// their own and would replay the latest's (Pick). None with every day
     /// planned, with no milestone (0), or with no plan at all (Gaps names
     /// that).
@@ -100,7 +100,7 @@ public static class DayPlans
             if (day >= 1 && day <= lastDay && day > latest)
                 latest = day;
         if (latest > 0 && latest < lastDay)
-            warnings.Add($"Days {latest + 1}..{lastDay} have no plan of their own and replay day {latest}'s (the run ends after day {lastDay}, the Retirement milestone). Author their days[] or move the milestone.");
+            warnings.Add($"Days {latest + 1}..{lastDay} have no plan of their own and replay day {latest}'s (the run ends after day {lastDay}, the last-day ending). Author their days[] or move the last day.");
         return warnings;
     }
 

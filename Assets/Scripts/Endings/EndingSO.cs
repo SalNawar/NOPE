@@ -2,11 +2,13 @@
 using UnityEngine;
 
 /// <summary>
-/// A possible run outcome ("fired", "bankrupt", "you survived to retirement",
-/// an attribute epilogue). EndingService.Evaluate checks every EndingSO in the
-/// content library each time an ending check runs; EndingRules.Select picks:
-/// failures at any check, and at the day boundary the milestone (Retirement),
-/// which an attribute ending whose total is reached replaces as its epilogue.
+/// A possible run outcome: a failure ("fired", "bankrupt") or the run's last
+/// day, the neutral "world you made" ending, whose screen summarises the world
+/// the run left (WorldSummary) and closes on the END OF DEMO card.
+/// EndingService.Evaluate checks every EndingSO in the content library each
+/// time an ending check runs; EndingRules.Select picks: failures at any check,
+/// and at the day boundary the last day. The attribute epilogues are retired
+/// (EndingRules.IsRetired; Saleh 2026-09-29: "we dont make judgements").
 /// </summary>
 [CreateAssetMenu(fileName = "Ending_", menuName = "TimeDesk/Endings/Ending", order = 30)]
 public sealed class EndingSO : ScriptableObject
@@ -21,7 +23,7 @@ public sealed class EndingSO : ScriptableObject
     [TextArea]
     public string bodyText;
 
-    /// <summary>A closing card shown under the body, set apart (blank: none): the day-15 ending's END OF DEMO card (Saleh's Q7, days 7-15 E3).</summary>
+    /// <summary>A closing card shown under the body, set apart (blank: none): the day-15 ending's END OF DEMO card (Saleh's Q7, days 7-15 E3), always under the world summary.</summary>
     [TextArea]
     public string closingCard;
 
@@ -31,10 +33,7 @@ public sealed class EndingSO : ScriptableObject
     /// <summary>Which condition this ending checks for.</summary>
     public EndingConditionType conditionType;
 
-    /// <summary>Target attribute (AttrTotalAtLeast only).</summary>
-    public AttributeSO attribute;
-
-    /// <summary>Numeric threshold (AttrTotalAtLeast / DayAtLeast).</summary>
+    /// <summary>Numeric threshold (DayAtLeast: the run's last day).</summary>
     public float threshold;
 
     /// <summary>

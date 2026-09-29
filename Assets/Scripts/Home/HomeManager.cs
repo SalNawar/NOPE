@@ -273,7 +273,7 @@ public sealed class HomeManager : MonoBehaviour
 
     /// <summary>
     /// Ends the day through RunManager.Sleep: the day-boundary ending check
-    /// (failures, Retirement, the attribute epilogues), else the nightly
+    /// (failures and the run's last day), else the nightly
     /// resolve, day++, save, back to Office.
     /// </summary>
     private void HandleSleep()

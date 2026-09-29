@@ -1,9 +1,10 @@
 using NUnit.Framework;
 
 /// <summary>
-/// Which ending a check picks: failures any time; the Retirement milestone and
-/// the attribute epilogues only at the day boundary, where a reached epilogue
-/// replaces the milestone.
+/// Which ending a check picks: failures any time; the run's last day (the
+/// neutral "world you made" ending) only at the day boundary. The attribute
+/// epilogues are retired (2026-09-29): their condition keeps its number and is
+/// never met.
 /// </summary>
 public class EndingRulesTests
 {
@@ -12,7 +13,7 @@ public class EndingRulesTests
     [TestCase(EndingConditionType.Fired, EndingKind.Failure)]
     [TestCase(EndingConditionType.Bankrupt, EndingKind.Failure)]
     [TestCase(EndingConditionType.DayAtLeast, EndingKind.Milestone)]
-    [TestCase(EndingConditionType.AttrTotalAtLeast, EndingKind.Epilogue)]
+    [TestCase(EndingConditionType.AttrTotalAtLeast, EndingKind.Failure, Description = "retired: never met, so its kind never counts")]
     [TestCase((EndingConditionType)99, EndingKind.Failure)]
     public void KindOf(EndingConditionType type, EndingKind expected)
     {
@@ -29,29 +30,41 @@ public class EndingRulesTests
     }
 
     [Test]
-    public void Immediate_OnlyFailuresCount()
+    public void OnlyTheAttributeEpilogues_AreRetired()
     {
-        var candidates = new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Epilogue, 50, true), C(EndingKind.Failure, 1, true), C(EndingKind.Failure, 5, true) };
-        Assert.AreEqual(3, EndingRules.Select(candidates, EndingMoment.Immediate), "the highest-priority failure");
-        Assert.AreEqual(-1, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Epilogue, 50, true) }, EndingMoment.Immediate));
+        Assert.IsTrue(EndingRules.IsRetired(EndingConditionType.AttrTotalAtLeast));
+        Assert.IsFalse(EndingRules.IsRetired(EndingConditionType.Fired));
+        Assert.IsFalse(EndingRules.IsRetired(EndingConditionType.Bankrupt));
+        Assert.IsFalse(EndingRules.IsRetired(EndingConditionType.DayAtLeast));
     }
 
     [Test]
-    public void DayBoundary_MilestonesAndTheirEpilogues()
+    public void EndingKind_HasNoEpilogue()
     {
-        Assert.AreEqual(0, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true) }, EndingMoment.DayBoundary), "a milestone alone");
-        Assert.AreEqual(-1, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, false), C(EndingKind.Epilogue, 50, true) }, EndingMoment.DayBoundary),
-                        "an epilogue without a met milestone is ignored");
-        Assert.AreEqual(1, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Epilogue, 50, true) }, EndingMoment.DayBoundary),
-                        "an epilogue replaces the milestone");
-        Assert.AreEqual(2, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Epilogue, 50, true), C(EndingKind.Failure, 100, true) }, EndingMoment.DayBoundary),
-                        "a failure beats an epilogue");
+        CollectionAssert.AreEqual(new[] { "Failure", "Milestone" }, System.Enum.GetNames(typeof(EndingKind)), "no ending ranks the world the run made");
+    }
+
+    [Test]
+    public void Immediate_OnlyFailuresCount()
+    {
+        var candidates = new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Failure, 1, true), C(EndingKind.Failure, 5, true) };
+        Assert.AreEqual(2, EndingRules.Select(candidates, EndingMoment.Immediate), "the highest-priority failure");
+        Assert.AreEqual(-1, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true) }, EndingMoment.Immediate));
+    }
+
+    [Test]
+    public void DayBoundary_TheLastDayAndFailures()
+    {
+        Assert.AreEqual(0, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true) }, EndingMoment.DayBoundary), "the last day alone");
+        Assert.AreEqual(-1, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, false) }, EndingMoment.DayBoundary), "before the last day, nothing");
+        Assert.AreEqual(1, EndingRules.Select(new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Failure, 100, true) }, EndingMoment.DayBoundary),
+                        "a failure beats the last day");
     }
 
     [Test]
     public void EqualPriorities_PickTheLowestIndex()
     {
-        var candidates = new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Epilogue, 50, true), C(EndingKind.Epilogue, 50, true) };
+        var candidates = new[] { C(EndingKind.Milestone, 10, true), C(EndingKind.Failure, 50, true), C(EndingKind.Failure, 50, true) };
         Assert.AreEqual(1, EndingRules.Select(candidates, EndingMoment.DayBoundary));
     }
 
@@ -71,7 +84,7 @@ public class EndingRulesTests
     [TestCase(-3f, true)]
     public void Met_Fired_AtOrBelowTheFiringLine(float stability, bool expected)
     {
-        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.Fired, 0f, null, Now(stability: stability)));
+        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.Fired, 0f, Now(stability: stability)));
         Assert.AreEqual(expected, EndingRules.IsFired(stability, 0f));
     }
 
@@ -80,47 +93,40 @@ public class EndingRulesTests
     [TestCase(-250, true)]
     public void Met_Bankrupt_AtOrBelowTheBankruptcyLine(int money, bool expected)
     {
-        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.Bankrupt, 0f, null, Now(money: money)));
+        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.Bankrupt, 0f, Now(money: money)));
     }
 
-    [TestCase(40.9f, false)]
-    [TestCase(41f, true, Description = "reaching the threshold counts")]
-    [TestCase(55f, true)]
-    public void Met_AttrTotalAtLeast_ReachesTheThreshold(float total, bool expected)
+    [TestCase(0f)]
+    [TestCase(41f)]
+    public void Met_AttrTotalAtLeast_IsRetired_NeverMet(float threshold)
     {
-        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.AttrTotalAtLeast, 41f, total, Now()));
-    }
-
-    [Test]
-    public void Met_AttrTotalAtLeast_WithoutAnAttribute_IsNeverMet()
-    {
-        Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, 0f, null, Now()));
+        Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, threshold, Now()));
+        Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, threshold, Now(day: 15)), "not even on the last day");
     }
 
     [TestCase(14, false)]
-    [TestCase(15, true, Description = "day 15 is Retirement's day")]
+    [TestCase(15, true, Description = "day 15 is the last day")]
     [TestCase(16, true)]
     public void Met_DayAtLeast_ReachesTheDay(int day, bool expected)
     {
-        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.DayAtLeast, 15f, null, Now(day: day)));
+        Assert.AreEqual(expected, EndingRules.Met(EndingConditionType.DayAtLeast, 15f, Now(day: day)));
     }
 
     [Test]
     public void Met_ReadsOnlyItsOwnNumbers()
     {
         var broke = new EndingCheck(0f, -500, 99, firedAtStability: 0f, bankruptAtMoney: -100);
-        Assert.IsTrue(EndingRules.Met(EndingConditionType.Fired, 0f, null, broke));
-        Assert.IsTrue(EndingRules.Met(EndingConditionType.Bankrupt, 0f, null, broke));
-        Assert.IsFalse(EndingRules.Met(EndingConditionType.AttrTotalAtLeast, 41f, 0f, broke), "the attribute total alone decides");
-        Assert.IsFalse(EndingRules.Met(EndingConditionType.DayAtLeast, 100f, null, broke), "the day alone decides");
-        Assert.IsFalse(EndingRules.Met((EndingConditionType)99, 0f, 1000f, broke), "an unknown type is never met");
+        Assert.IsTrue(EndingRules.Met(EndingConditionType.Fired, 0f, broke));
+        Assert.IsTrue(EndingRules.Met(EndingConditionType.Bankrupt, 0f, broke));
+        Assert.IsFalse(EndingRules.Met(EndingConditionType.DayAtLeast, 100f, broke), "the day alone decides");
+        Assert.IsFalse(EndingRules.Met((EndingConditionType)99, 0f, broke), "an unknown type is never met");
     }
 
     [Test]
     public void Met_UsesTheConfiguredLines()
     {
         var check = new EndingCheck(20f, -40, 1, firedAtStability: 25f, bankruptAtMoney: -50);
-        Assert.IsTrue(EndingRules.Met(EndingConditionType.Fired, 0f, null, check), "20 <= 25");
-        Assert.IsFalse(EndingRules.Met(EndingConditionType.Bankrupt, 0f, null, check), "-40 > -50");
+        Assert.IsTrue(EndingRules.Met(EndingConditionType.Fired, 0f, check), "20 <= 25");
+        Assert.IsFalse(EndingRules.Met(EndingConditionType.Bankrupt, 0f, check), "-40 > -50");
     }
 }

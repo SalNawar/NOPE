@@ -15,7 +15,9 @@ using static SceneUiKit;
 /// art slots (redesign phase 27): the three buttons take the text-free Title
 /// face with their labels on when it exists (else their hand-wired sprites,
 /// labels off), and the ending's picture shows full screen behind the ending
-/// panel (EndingSO.picture).
+/// panel (EndingSO.picture). The world panel (the endings spec E0) lists the
+/// world's outcomes over the END OF DEMO card and New Run; the ending panel's
+/// world button opens it after a failure ("The world you leave behind").
 /// </summary>
 public static class TitleSceneBuilder
 {
@@ -54,6 +56,22 @@ public static class TitleSceneBuilder
             TextAlignmentOptions.TopLeft, new Vector2(0.06f, 0.3f), new Vector2(0.94f, 0.8f));
         Button endingNewRunButton = FindOrCreateButton(ending, "NewRunButton", "New Run",
             new Vector2(0.3f, 0.06f), new Vector2(0.7f, 0.2f));
+        Button endingWorldButton = FindOrCreateButton(ending, "WorldButton", "The world you leave behind",
+            new Vector2(0.2f, 0.215f), new Vector2(0.8f, 0.3f));
+
+        // --- The world panel (the endings spec E0): the world's outcomes, the END OF DEMO card, New Run ---
+        Transform world = FindOrCreatePanel(uiRoot, "WorldPanel", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
+            Vector2.zero, new Vector2(900f, 760f), withBackground: true, bgColor: new Color(0.08f, 0.09f, 0.14f, 0.97f));
+        TMP_Text worldTitleText = FindOrCreateText(world, "WorldTitleText", "The World You Made", 40,
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.86f), new Vector2(0.95f, 0.97f));
+        TMP_Text worldOutcomesText = FindOrCreateText(world, "WorldOutcomesText", "...", 28,
+            TextAlignmentOptions.Top, new Vector2(0.08f, 0.33f), new Vector2(0.92f, 0.84f));
+        TMP_Text worldCardText = FindOrCreateText(world, "WorldCardText", "END OF DEMO", 28,
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.17f), new Vector2(0.95f, 0.31f));
+        Button worldNewRunButton = FindOrCreateButton(world, "NewRunButton", "New Run",
+            new Vector2(0.3f, 0.04f), new Vector2(0.7f, 0.14f));
+        worldOutcomesText.textWrappingMode = TextWrappingModes.Normal;
+        MatchFace(worldNewRunButton, endingNewRunButton);
 
         // --- The Debt Relief ending's papers (redesign phase 13): the clerk's Labour Contract left of the panel, the account right ---
         Transform papers = FindOrCreatePanel(ending, "ClerkPapers", new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f),
@@ -81,12 +99,18 @@ public static class TitleSceneBuilder
         soUi.FindProperty("endingTitleText").objectReferenceValue = endingTitleText;
         soUi.FindProperty("endingBodyText").objectReferenceValue = endingBodyText;
         soUi.FindProperty("endingNewRunButton").objectReferenceValue = endingNewRunButton;
+        soUi.FindProperty("endingWorldButton").objectReferenceValue = endingWorldButton;
+        soUi.FindProperty("worldPanel").objectReferenceValue = world.gameObject;
+        soUi.FindProperty("worldTitleText").objectReferenceValue = worldTitleText;
+        soUi.FindProperty("worldOutcomesText").objectReferenceValue = worldOutcomesText;
+        soUi.FindProperty("worldCardText").objectReferenceValue = worldCardText;
+        soUi.FindProperty("worldNewRunButton").objectReferenceValue = worldNewRunButton;
         soUi.FindProperty("clerkPapers").objectReferenceValue = papers.gameObject;
         soUi.FindProperty("clerkContractText").objectReferenceValue = contractText;
         soUi.FindProperty("clerkAccountText").objectReferenceValue = accountText;
         soUi.ApplyModifiedProperties();
 
-        BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton);
+        BuildArtSlots(titleUI, ending, continueButton, newRunButton, endingNewRunButton, endingWorldButton, worldNewRunButton);
 
         // --- Wire TitleSceneController ---
         var soController = new SerializedObject(titleController);
@@ -101,10 +125,42 @@ public static class TitleSceneBuilder
         // Panels start hidden (TitleUIController.Awake also enforces this; ShowClerkPapers shows the papers).
         title.gameObject.SetActive(false);
         ending.gameObject.SetActive(false);
+        world.gameObject.SetActive(false);
         papers.gameObject.SetActive(false);
 
         EditorSceneManager.MarkSceneDirty(titleUI.gameObject.scene);
         Debug.Log("[TimeDesk] Title UI built and wired. Save the scene.");
+    }
+
+    /// <summary>
+    /// Gives <paramref name="button"/> <paramref name="model"/>'s hand-wired
+    /// face (its sprite, colour, transition and hover sprites, and its label
+    /// off when the face prints it), re-applied on every build, so the world
+    /// page's New Run looks like the ending panel's. Nothing when the model
+    /// has no sprite.
+    /// </summary>
+    private static void MatchFace(Button button, Button model)
+    {
+        Image image = button.GetComponent<Image>(), face = model.GetComponent<Image>();
+        if (image == null || face == null || face.sprite == null)
+            return;
+        Undo.RecordObject(image, "Match the New Run face");
+        Undo.RecordObject(button, "Match the New Run face");
+        image.sprite = face.sprite;
+        image.type = face.type;
+        image.color = face.color;
+        button.transition = model.transition;
+        button.spriteState = model.spriteState;
+        button.colors = model.colors;
+        Transform label = button.transform.Find("Label"), modelLabel = model.transform.Find("Label");
+        TMP_Text text = label != null ? label.GetComponent<TMP_Text>() : null, modelText = modelLabel != null ? modelLabel.GetComponent<TMP_Text>() : null;
+        if (text != null && modelText != null)
+        {
+            Undo.RecordObject(text, "Match the New Run face");
+            text.enabled = modelText.enabled;
+        }
+        EditorUtility.SetDirty(image);
+        EditorUtility.SetDirty(button);
     }
 
     /// <summary>

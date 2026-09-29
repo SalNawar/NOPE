@@ -17,8 +17,8 @@ using UnityEngine;
 /// config, the game config, the blueprints and endings in the Inspector; the
 /// day mixes and the agency's chances through the content spreadsheet) and
 /// writes a summary (Logs/Balance/balance_summary.txt): each knob's value and
-/// where it is edited, the endings, the money, the epilogue thresholds the
-/// 50 perfect runs propose, the queue's faults by day and kind, and the
+/// where it is edited, the endings, the money, the world the runs leave
+/// (the outcomes under END OF DEMO, a distribution, never a target), the queue's faults by day and kind, and the
 /// authored travellers (forced slots, premades, dialogs) apart from the random draws;
 /// and the House's shoppers (the cheapest-first buyer and the climber, each
 /// refusing and taking the bribes; Saleh's Q6 of the Home upgrades spec).
@@ -28,7 +28,7 @@ public static class BalanceSimulation
     /// <summary>Runs per play style.</summary>
     public const int Runs = 50;
 
-    /// <summary>Days per run: the run's last day (Retirement and the epilogues are checked at its night).</summary>
+    /// <summary>Days per run: the run's last day (the "world you made" ending is checked at its night).</summary>
     public const int Days = 15;
 
     /// <summary>The run seed whose every decision is dumped per style, and whose runs are played twice to prove the simulation deterministic.</summary>
@@ -444,10 +444,9 @@ public static class BalanceSimulation
         sb.AppendLine();
         Knobs(sb, run, lib, config);
 
-        List<EndingSO> epilogues = lib.Endings.Where(e => e != null && e.conditionType == EndingConditionType.AttrTotalAtLeast && e.attribute != null).ToList();
         foreach (int pace in Paces)
             foreach (PlayStyle style in Styles)
-                Style(sb, style, pace, results[(style, pace)], lib, config, epilogues);
+                Style(sb, style, pace, results[(style, pace)], lib, config);
 
         Queue(sb, results[(PlayStyle.Perfect, 0)]);
         Authored(sb, results[(PlayStyle.Perfect, 0)]);
@@ -502,7 +501,7 @@ public static class BalanceSimulation
 
     private static string PaceLabel(int pace) => pace > 0 ? $"{pace} a shift" : "whole queue";
 
-    private static void Style(StringBuilder sb, PlayStyle style, int pace, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config, List<EndingSO> epilogues)
+    private static void Style(StringBuilder sb, PlayStyle style, int pace, List<RunResult> runs, ContentLibrarySO lib, GameConfigSO config)
     {
         sb.AppendLine();
         sb.AppendLine($"== {style} play, {PaceLabel(pace)}, {runs.Count} runs ==");
@@ -520,35 +519,27 @@ public static class BalanceSimulation
             .TakeWhile(l => l.Count > 0)
             .Select((l, n) => $"d{n + 1}:{BalanceStats.Mean(l).ToString("0.00", Inv)}/{l.Min().ToString("0.00", Inv)}")));
 
-        List<RunResult> full = runs.Where(r => r.EndingDay >= Days).ToList();
-        if (full.Count == 0 || epilogues.Count == 0)
-            return;
-        var proposed = new Dictionary<EndingSO, float>();
-        foreach (EndingSO e in epilogues)
-        {
-            List<float> totals = full.Select(r => Total(r.World, e)).ToList();
-            proposed[e] = BalanceStats.EpilogueThreshold(totals);
-            sb.AppendLine($"day-{Days} {e.attribute.name} total ({e.id}, threshold now {F(e.threshold)}): mean {F(BalanceStats.Mean(totals))} sd {F(BalanceStats.StandardDeviation(totals))} p50 {F(BalanceStats.Quantile(totals, 0.5f))} p65 {F(BalanceStats.Quantile(totals, BalanceStats.EpilogueQuantile))} p80 {F(BalanceStats.Quantile(totals, 0.8f))}");
-        }
-        if (style != PlayStyle.Perfect)
-            return;
-        sb.AppendLine($"{(pace == _pace && pace > 0 ? "proposed epilogue thresholds" : "for comparison, whole-queue thresholds")} (the {F(BalanceStats.EpilogueQuantile * 100f)}th percentile of perfect play{(pace == _pace && pace > 0 ? " at the shift clock's pace" : "")}, rounded): {string.Join(", ", proposed.Select(kv => $"{kv.Key.id} {F(kv.Value)}"))}");
-        sb.AppendLine($"endings with those thresholds: {string.Join(", ", full.GroupBy(r => Hypothetical(r.World, lib, config, proposed)).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}");
+        World(sb, runs, lib);
     }
 
-    /// <summary>The run's attribute total an epilogue reads.</summary>
-    private static float Total(WorldState world, EndingSO epilogue) => world.timeline.GetScore(TimelineKeys.GlobalAttr(epilogue.attribute));
-
-    /// <summary>The ending a finished run would reach with <paramref name="proposed"/> thresholds (EndingRules.Met and Select, the game's own rule).</summary>
-    private static string Hypothetical(WorldState world, ContentLibrarySO lib, GameConfigSO config, Dictionary<EndingSO, float> proposed)
+    /// <summary>
+    /// The world each run leaves (the endings spec E0: the outcomes listed
+    /// under END OF DEMO, on the last day and after a failure alike;
+    /// ContentLibrarySO.WorldOutcomes, the Title's own reading), as a
+    /// distribution per factor, never against a target (Saleh 2026-09-29:
+    /// "we dont make judgements").
+    /// </summary>
+    private static void World(StringBuilder sb, List<RunResult> runs, ContentLibrarySO lib)
     {
-        var now = new EndingCheck(world.timelineStability, world.money, world.day, config.firedAtStability, config.bankruptcyMoneyThreshold);
-        List<EndingSO> endings = lib.Endings.Where(e => e != null).ToList();
-        var candidates = endings.Select(e => new EndingCandidate(EndingRules.KindOf(e.conditionType), e.priority,
-            EndingRules.Met(e.conditionType, proposed.TryGetValue(e, out float t) ? t : e.threshold,
-                e.conditionType == EndingConditionType.AttrTotalAtLeast && e.attribute != null ? Total(world, e) : (float?)null, now))).ToList();
-        int winner = EndingRules.Select(candidates, EndingMoment.DayBoundary);
-        return winner >= 0 ? endings[winner].id : "none";
+        if (runs.Count == 0)
+            return;
+        List<List<OutcomeLine>> worlds = runs.Select(r => lib.WorldOutcomes(r.World.history)).ToList();
+        sb.AppendLine($"the world the runs leave ({runs.Count} runs, the outcomes under END OF DEMO; a distribution, not a target):");
+        foreach (OutcomeLine factor in worlds[0])
+        {
+            IEnumerable<string> answers = worlds.Select(w => w.FirstOrDefault(l => l.FactorId == factor.FactorId).Answer ?? "none");
+            sb.AppendLine($"  {factor.Question} " + string.Join(", ", answers.GroupBy(a => a).OrderByDescending(g => g.Count()).ThenBy(g => g.Key, StringComparer.Ordinal).Select(g => $"{g.Key} x{g.Count()}")));
+        }
     }
 
     /// <summary>The random draws of the perfect runs by day: how many, how many faulty and why, by kind.</summary>

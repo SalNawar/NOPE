@@ -17351,6 +17351,12 @@
         "tier": "Full"
       },
       {
+        "key": "ending.world.leftBehind",
+        "text": "The world you leave behind",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "settings.language",
         "text": "UI language",
         "gloss": "None",
@@ -20604,6 +20610,34 @@
         "breakInChance": 0,
         "breakInShare": 0,
         "blurb": "The family at the seaside in 2139, before the sea was privatised."
+      }
+    ]
+  },
+  "world": {
+    "factors": [
+      {
+        "id": "government",
+        "question": "Who runs 2150?",
+        "answer": "AsFound",
+        "foundAs": "The Directorate"
+      },
+      {
+        "id": "future",
+        "question": "What does 2150 run on?",
+        "answer": "AsFound",
+        "foundAs": "The Credit Age"
+      },
+      {
+        "id": "money",
+        "question": "How does 2150 pay its way?",
+        "answer": "AsFound",
+        "foundAs": "The Debt"
+      },
+      {
+        "id": "culture",
+        "question": "Whose culture leads?",
+        "answer": "Leader",
+        "foundAs": "None: the neutral Temporal Customs Zone"
       }
     ]
   }
