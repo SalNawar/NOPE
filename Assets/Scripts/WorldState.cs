@@ -80,8 +80,14 @@ public sealed class WorldState
     // Unlocks, flags, counters
     // -----------------------------
 
-    /// <summary>Unlocked upgrade IDs for gating clue generation, interview questions and shop state.</summary>
+    /// <summary>Unlocked upgrade IDs (owned: delivered by the Orders app, bought at Home, or unlocked by an effect), in unlock order, for gating clue generation, interview questions and the Orders tree.</summary>
     public List<string> unlockedUpgradeIds = new();
+
+    /// <summary>The Orders app's log (Saleh 2026-09-29): every order placed and not cancelled, pending until delivered at the start of the day after it was placed, then kept (Orders; the delivery memo, the nodes' "Delivered day N"). Additive: an older save loads it empty and keeps every upgrade it owns.</summary>
+    public List<OrderEntry> orders = new();
+
+    /// <summary>Each install slot's installed upgrade and tomorrow's swap (Installs; Saleh 2026-09-29: one upgraded scanner at a time). Additive: an older save loads none, and a slot's last owned upgrade counts as installed.</summary>
+    public List<InstallEntry> installs = new();
 
     /// <summary>Arbitrary boolean story/consequence flags (e.g., "Tyrant_Rises").</summary>
     public List<string> flags = new();

@@ -61,8 +61,14 @@ public static class ArtSlots
     /// <summary>A desktop icon's glyph by its app id (DesktopAppIds).</summary>
     public static string DesktopIcon(string appId) => "Desktop/icon_" + Key(appId);
 
-    /// <summary>An upgrade's icon in its Home shop row, by the upgrade's id.</summary>
+    /// <summary>A Home upgrade's icon in Home's list, by the upgrade's id (the office's upgrades moved to the Orders app: <see cref="OrderIcon"/>).</summary>
     public static string UpgradeIcon(string upgradeId) => "Home/upgrade_" + Key(upgradeId);
+
+    /// <summary>An Orders node's icon (the upgrade tree, Saleh 2026-09-29), by the upgrade's id; without it the node draws its band's glyph.</summary>
+    public static string OrderIcon(string upgradeId) => "Orders/upgrade_" + Key(upgradeId);
+
+    /// <summary>An Orders band's glyph by its branch (Orders/branch_desk, _interview, _portals, _contacts); without it the band draws the code-drawn one.</summary>
+    public static string OrderBranch(UpgradeBranch branch) => "Orders/branch_" + Key(branch.ToString());
 
     /// <summary>A reference book's cover by the category it lists (the asset list's book ids: the Geography book is the capitals', the Politics book the rulers').</summary>
     public static string BookCover(ClueCategory category) => "Investigation/refbook_cover_" + BookId(category);

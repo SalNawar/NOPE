@@ -4,11 +4,13 @@ using NUnit.Framework;
 
 /// <summary>
 /// The Orders app's upgrade tree (Saleh 2026-09-29: a real tree with
-/// prerequisites, drawn; the portals spec v3 OR2, OR3, §6): one band per
-/// branch in branch order, a node's tier the longest prerequisite chain
-/// inside its band, a tier's nodes stacked by cost then id, the links from a
-/// prerequisite to its dependant (across bands too), a node unlocked once
-/// every prerequisite is owned, and the catalogue's checks.
+/// prerequisites on everything but each branch's root, drawn; the portals
+/// spec v3 OR2, OR3, §6): one band per branch in branch order, a node's tier
+/// the longest prerequisite chain inside its band, a tier's nodes stacked
+/// under their prerequisite by cost then id (a chain keeps its row), the
+/// links from a prerequisite to its dependant (across bands too), a node
+/// unlocked once every prerequisite is owned, the orders a chain takes, and
+/// the catalogue's checks.
 /// </summary>
 public class UpgradeTreeTests
 {
@@ -17,7 +19,7 @@ public class UpgradeTreeTests
 
     private static TreeCell Cell(TreeLayout layout, string id) => layout.Cells.Single(c => c.Id == id);
 
-    /// <summary>The first cut (§6.1).</summary>
+    /// <summary>The catalogue (Saleh 2026-09-29, "prerequisites on everything": each branch one root, every other node in a chain).</summary>
     private static readonly TreeNode[] Catalogue =
     {
         Node("scanner_autofeed", 200, UpgradeBranch.Desk),
@@ -25,13 +27,13 @@ public class UpgradeTreeTests
         Node("interview_protocols", 120, UpgradeBranch.Interview),
         Node("diplo_contacts", 350, UpgradeBranch.Contacts),
         Node("repair_portal_02", 150, UpgradeBranch.Portals),
-        Node("repair_return_gate", 200, UpgradeBranch.Portals),
+        Node("repair_return_gate", 200, UpgradeBranch.Portals, "repair_portal_02"),
         Node("repair_portal_04", 250, UpgradeBranch.Portals, "repair_portal_02"),
         Node("repair_portal_05", 350, UpgradeBranch.Portals, "repair_portal_04"),
-        Node("tr_near_east_spoken", 80, UpgradeBranch.Interview),
-        Node("tr_mediterranean_spoken", 80, UpgradeBranch.Interview),
-        Node("tr_east_asia_spoken", 80, UpgradeBranch.Interview),
-        Node("tr_north_europe_spoken", 80, UpgradeBranch.Interview),
+        Node("tr_near_east_spoken", 80, UpgradeBranch.Interview, "interview_protocols"),
+        Node("tr_mediterranean_spoken", 80, UpgradeBranch.Interview, "interview_protocols"),
+        Node("tr_east_asia_spoken", 80, UpgradeBranch.Interview, "interview_protocols"),
+        Node("tr_north_europe_spoken", 80, UpgradeBranch.Interview, "interview_protocols"),
     };
 
     [Test]
@@ -41,7 +43,7 @@ public class UpgradeTreeTests
 
         CollectionAssert.AreEqual(new[] { UpgradeBranch.Desk, UpgradeBranch.Interview, UpgradeBranch.Portals, UpgradeBranch.Contacts },
                                   layout.Bands.Select(b => b.Branch).ToArray());
-        CollectionAssert.AreEqual(new[] { 1, 5, 2, 1 }, layout.Bands.Select(b => b.Slots).ToArray(), "a band is as tall as its tallest tier");
+        CollectionAssert.AreEqual(new[] { 1, 4, 2, 1 }, layout.Bands.Select(b => b.Slots).ToArray(), "a band is as tall as its tallest tier");
         Assert.AreEqual(3, layout.Tiers, "the portal chain 02, 04, 05");
         Assert.AreEqual(2, Cell(layout, "repair_portal_02").Band);
     }
@@ -65,7 +67,8 @@ public class UpgradeTreeTests
         Assert.AreEqual(0, Cell(layout, "repair_portal_02").Tier);
         Assert.AreEqual(1, Cell(layout, "repair_portal_04").Tier);
         Assert.AreEqual(2, Cell(layout, "repair_portal_05").Tier);
-        Assert.AreEqual(0, Cell(layout, "repair_return_gate").Tier);
+        Assert.AreEqual(1, Cell(layout, "repair_return_gate").Tier);
+        Assert.AreEqual(1, Cell(layout, "tr_near_east_spoken").Tier);
 
         TreeLayout two = UpgradeTree.Layout(new[]
         {
@@ -80,11 +83,20 @@ public class UpgradeTreeTests
     {
         TreeLayout layout = UpgradeTree.Layout(Catalogue);
 
-        string[] interview = layout.Cells.Where(c => c.Branch == UpgradeBranch.Interview).OrderBy(c => c.Slot).Select(c => c.Id).ToArray();
-        CollectionAssert.AreEqual(new[] { "tr_east_asia_spoken", "tr_mediterranean_spoken", "tr_near_east_spoken", "tr_north_europe_spoken", "interview_protocols" }, interview);
-        Assert.AreEqual(0, Cell(layout, "repair_portal_02").Slot, "150 cr before the Return Gate's 200");
-        Assert.AreEqual(1, Cell(layout, "repair_return_gate").Slot);
-        Assert.AreEqual(0, Cell(layout, "repair_portal_05").Slot, "each tier stacks from the band's top");
+        string[] translators = layout.Cells.Where(c => c.Tier == 1 && c.Branch == UpgradeBranch.Interview).OrderBy(c => c.Slot).Select(c => c.Id).ToArray();
+        CollectionAssert.AreEqual(new[] { "tr_east_asia_spoken", "tr_mediterranean_spoken", "tr_near_east_spoken", "tr_north_europe_spoken" }, translators, "same cost: by id");
+        CollectionAssert.AreEqual(new[] { 0, 1, 2, 3 }, layout.Cells.Where(c => c.Tier == 1 && c.Branch == UpgradeBranch.Interview).Select(c => c.Slot).OrderBy(s => s).ToArray());
+        Assert.AreEqual(0, Cell(layout, "repair_return_gate").Slot, "200 cr before Portal 04's 250");
+        Assert.AreEqual(1, Cell(layout, "repair_portal_04").Slot);
+    }
+
+    [Test]
+    public void Layout_AChainKeepsItsRow()
+    {
+        TreeLayout layout = UpgradeTree.Layout(Catalogue);
+
+        Assert.AreEqual(Cell(layout, "repair_portal_04").Slot, Cell(layout, "repair_portal_05").Slot, "05 beside the 04 it needs, not at the band's top");
+        Assert.AreEqual(Cell(layout, "scanner_autofeed").Slot, Cell(layout, "adv_scanner").Slot);
     }
 
     [Test]
@@ -102,8 +114,10 @@ public class UpgradeTreeTests
     {
         TreeLayout layout = UpgradeTree.Layout(Catalogue);
 
-        CollectionAssert.AreEquivalent(new[] { "scanner_autofeed>adv_scanner", "repair_portal_02>repair_portal_04", "repair_portal_04>repair_portal_05" },
-                                       layout.Links.Select(l => l.From + ">" + l.To).ToArray());
+        Assert.AreEqual(8, layout.Links.Count);
+        Assert.AreEqual(4, layout.Links.Count(l => l.From == "interview_protocols"), "the four translators");
+        CollectionAssert.IsSubsetOf(new[] { "scanner_autofeed>adv_scanner", "repair_portal_02>repair_return_gate", "repair_portal_02>repair_portal_04", "repair_portal_04>repair_portal_05" },
+                                    layout.Links.Select(l => l.From + ">" + l.To).ToArray());
     }
 
     [Test]
@@ -154,6 +168,17 @@ public class UpgradeTreeTests
 
         Assert.AreEqual(OrderState.InTransit, Orders.StateOf("scanner_autofeed", false, true, log, 0, 200));
         Assert.IsFalse(UpgradeTree.Unlocked(Catalogue[1], owned.Contains), "the dependant waits for the delivery");
+    }
+
+    [Test]
+    public void ChainLength_IsTheOrdersFromNothingOwned_OneADay()
+    {
+        Assert.AreEqual(1, UpgradeTree.ChainLength("scanner_autofeed", Catalogue));
+        Assert.AreEqual(2, UpgradeTree.ChainLength("adv_scanner", Catalogue));
+        Assert.AreEqual(3, UpgradeTree.ChainLength("repair_portal_05", Catalogue));
+        Assert.AreEqual(0, UpgradeTree.ChainLength("ghost", Catalogue));
+        TreeNode[] loop = { Node("a", 10, UpgradeBranch.Desk, "b"), Node("b", 10, UpgradeBranch.Desk, "a") };
+        Assert.AreEqual(2, UpgradeTree.ChainLength("a", loop), "a cycle's back edge counts as nothing");
     }
 
     [Test]

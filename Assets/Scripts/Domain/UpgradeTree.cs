@@ -80,7 +80,7 @@ public readonly struct TreeCell
     /// <summary>Its tier: the length of its longest prerequisite chain inside its band (0 at the left).</summary>
     public readonly int Tier;
 
-    /// <summary>Its row in its band: the tier's nodes stack by cost, then id.</summary>
+    /// <summary>Its row in its band: under the prerequisite that sets its tier, siblings by cost, then id.</summary>
     public readonly int Slot;
 
     /// <summary>A cell.</summary>
@@ -158,8 +158,9 @@ public sealed class TreeLayout
 /// prerequisites, drawn visually"; the portals spec v3 OR2, OR3, §6.2):
 /// where each node sits (<see cref="Layout"/>: one band per branch in
 /// branch order, a node's tier the longest prerequisite chain inside its
-/// band, a tier's nodes stacked by cost then id, a link from each
-/// prerequisite to its dependant), whether a node can be ordered yet
+/// band, a tier's nodes stacked under the prerequisite that sets their tier,
+/// by cost then id, so a chain keeps its row; a link from each prerequisite
+/// to its dependant), whether a node can be ordered yet
 /// (<see cref="Unlocked"/>: every prerequisite owned, so one in transit does
 /// not count until it arrives), and what Generate World and the validator
 /// refuse (<see cref="Problems"/>). Every price and prerequisite is data (the
@@ -192,18 +193,32 @@ public static class UpgradeTree
             if (members.Count == 0)
                 continue;
 
-            members.Sort((a, b) => a.Cost != b.Cost ? a.Cost.CompareTo(b.Cost) : string.CompareOrdinal(a.Id, b.Id));
-            var used = new Dictionary<int, int>();
-            int height = 0;
+            // Tier by tier, left to right, so each node's prerequisites have their slots: a node stacks under the
+            // prerequisite that sets its tier (its anchor), siblings by cost then id, each in the first free slot
+            // at or below its anchor's, so a chain keeps its row.
+            int height = 0, bandTiers = 0;
             foreach (TreeNode n in members)
+                bandTiers = Math.Max(bandTiers, tiers[n.Id] + 1);
+            var slotOf = new Dictionary<string, int>(StringComparer.Ordinal);
+            for (int tier = 0; tier < bandTiers; tier++)
             {
-                int tier = tiers[n.Id];
-                used.TryGetValue(tier, out int slot);
-                used[tier] = slot + 1;
-                height = Math.Max(height, slot + 1);
-                widest = Math.Max(widest, tier + 1);
-                cellOf[n.Id] = new TreeCell(n.Id, branch, bands.Count, tier, slot);
+                var column = members.FindAll(n => tiers[n.Id] == tier);
+                var anchor = new Dictionary<string, int>(StringComparer.Ordinal);
+                foreach (TreeNode n in column)
+                    anchor[n.Id] = Anchor(n, byId, tiers, slotOf);
+                column.Sort((a, b) => anchor[a.Id] != anchor[b.Id] ? anchor[a.Id].CompareTo(anchor[b.Id])
+                                    : a.Cost != b.Cost ? a.Cost.CompareTo(b.Cost) : string.CompareOrdinal(a.Id, b.Id));
+                int free = 0;
+                foreach (TreeNode n in column)
+                {
+                    int slot = Math.Max(free, anchor[n.Id]);
+                    free = slot + 1;
+                    slotOf[n.Id] = slot;
+                    height = Math.Max(height, slot + 1);
+                    cellOf[n.Id] = new TreeCell(n.Id, branch, bands.Count, tier, slot);
+                }
             }
+            widest = Math.Max(widest, bandTiers);
             bands.Add(new TreeBand(branch, height));
         }
 
@@ -217,6 +232,22 @@ public static class UpgradeTree
                     links.Add(new TreeLink(need, n.Id));
         }
         return new TreeLayout(cells, bands, links, widest);
+    }
+
+    /// <summary>
+    /// How many orders it takes to own <paramref name="id"/> from nothing
+    /// owned, one a day (each arrives the day after it is placed): 1 for a
+    /// root, 1 + the longest chain of its prerequisites otherwise; 0 for an
+    /// unknown id (a cycle's back edge counts as nothing). The translation
+    /// notice runs this many days ahead (Translation.NoticeNight).
+    /// </summary>
+    public static int ChainLength(string id, IReadOnlyList<TreeNode> nodes)
+    {
+        var byId = new Dictionary<string, TreeNode>(StringComparer.Ordinal);
+        foreach (TreeNode n in nodes ?? Array.Empty<TreeNode>())
+            if (n.Id.Length > 0 && !byId.ContainsKey(n.Id))
+                byId.Add(n.Id, n);
+        return Chain(id ?? string.Empty, byId, new HashSet<string>(StringComparer.Ordinal));
     }
 
     /// <summary>True when every prerequisite of <paramref name="node"/> is owned (a prerequisite in transit is not).</summary>
@@ -291,6 +322,25 @@ public static class UpgradeTree
         return problems;
     }
 
+    /// <summary>The slot a node stacks under: that of its in-band prerequisite with the highest tier (the lowest slot among equals), 0 for a band's root.</summary>
+    private static int Anchor(TreeNode node, Dictionary<string, TreeNode> byId, Dictionary<string, int> tiers, Dictionary<string, int> slotOf)
+    {
+        int bestTier = -1, anchor = 0;
+        foreach (string need in node.Requires)
+        {
+            if (need == node.Id || !byId.TryGetValue(need ?? string.Empty, out TreeNode required) || required.Branch != node.Branch ||
+                !slotOf.TryGetValue(need, out int slot))
+                continue;
+            int tier = tiers[need];
+            if (tier > bestTier || (tier == bestTier && slot < anchor))
+            {
+                bestTier = tier;
+                anchor = slot;
+            }
+        }
+        return anchor;
+    }
+
     /// <summary>A node's tier: 0 without a prerequisite in its band, else one past its deepest one there (memoised; a cycle's back edge counts as nothing).</summary>
     private static int TierOf(TreeNode node, Dictionary<string, TreeNode> byId, Dictionary<string, int> tiers, HashSet<string> visiting)
     {
@@ -307,6 +357,19 @@ public static class UpgradeTree
         visiting.Remove(node.Id);
         tiers[node.Id] = tier;
         return tier;
+    }
+
+    /// <summary>The orders to own <paramref name="id"/> (ChainLength), with the ids on the current path in <paramref name="visiting"/>.</summary>
+    private static int Chain(string id, Dictionary<string, TreeNode> byId, HashSet<string> visiting)
+    {
+        if (!byId.TryGetValue(id, out TreeNode node) || !visiting.Add(id))
+            return 0;
+        int longest = 0;
+        foreach (string need in node.Requires)
+            if (need != id)
+                longest = Math.Max(longest, Chain(need ?? string.Empty, byId, visiting));
+        visiting.Remove(id);
+        return longest + 1;
     }
 
     /// <summary>The first cycle of prerequisites reached from <paramref name="id"/> (its ids, back to the first), or null; <paramref name="done"/> holds the ids already cleared.</summary>

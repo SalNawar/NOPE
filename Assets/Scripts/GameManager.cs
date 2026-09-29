@@ -212,7 +212,7 @@ public sealed class GameManager : MonoBehaviour
 
         // The booth's day (its day-1 notes; the scanner upgrades fixed at day start, like the translation) and phase: the briefing comes first.
         if (booth != null)
-            booth.BeginDay(_worldState.day, TimelineService.BuildScannerDay(_worldState));
+            booth.BeginDay(_worldState.day, TimelineService.BuildScannerDay(_worldState, contentLibrary));
 
         Debug.Log($"[GameManager] Day {_worldState.day} starting: seed={seed}, money={_worldState.money}, stability={_worldState.timelineStability:0.00}, cases={_dayCases.Count}, places={_today.Places.Count}, leader='{_worldState.history.leaderId}'.");
 

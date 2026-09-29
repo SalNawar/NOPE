@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 /// <summary>What a scan does (the PC redesign SC4). Not serialized.</summary>
 public enum ScanPass
 {
@@ -12,13 +14,15 @@ public enum ScanPass
 }
 
 /// <summary>
-/// The day's scanner upgrades (the PC redesign SC1, SC2), read from the
-/// day-start snapshot like every upgrade: a scanner bought tonight is in force
-/// from the next office day. The Auto-Feed changes how a paper reaches the
+/// The day's scanner upgrade (the PC redesign SC1; Saleh 2026-09-29: "you can
+/// only have one type of upgraded scanner installed at a time"), read at the
+/// day's start from the upgrades in force (Installs.InForce: the scanners
+/// share one install slot, so only the installed one counts, and the desk
+/// shows only its part). The Auto-Feed changes how a paper reaches the
 /// scanner (a handed-over paper scans itself: DeskPapers' queue); the Analysis
 /// changes what a scan by hand does (an analysis pass: PaperAnalysis), once per
 /// document (PassFor; Saleh 2026-09-29: "it only works once per document").
-/// They are neither tiers nor exclusive: each is its own flag, and they combine.
+/// Each is its own flag; with one installed at a time, at most one is set.
 /// </summary>
 public readonly struct ScannerDay
 {
@@ -51,7 +55,15 @@ public readonly struct ScannerDay
     public ScanPass PassFor(bool byHand, bool analysedBefore) =>
         !byHand || !Analysis ? ScanPass.Plain : analysedBefore ? ScanPass.AlreadyAnalysed : ScanPass.Analysis;
 
-    /// <summary>The upgrades <paramref name="dayStart"/> owns (WorldState.HasUpgrade, never the retired 'upgrade:x' flag); none without a snapshot.</summary>
-    public static ScannerDay From(GateSnapshot dayStart) =>
-        dayStart == null ? default : new ScannerDay(dayStart.HasUpgrade(AutoFeedUpgradeId), dayStart.HasUpgrade(AnalysisUpgradeId));
+    /// <summary>The scanners among the upgrades in force at the day's start (<paramref name="inForce"/>: owned upgrade ids, never the retired 'upgrade:x' flag); none without them.</summary>
+    public static ScannerDay From(IEnumerable<string> inForce)
+    {
+        bool autoFeed = false, analysis = false;
+        foreach (string id in inForce ?? System.Array.Empty<string>())
+        {
+            autoFeed |= id == AutoFeedUpgradeId;
+            analysis |= id == AnalysisUpgradeId;
+        }
+        return new ScannerDay(autoFeed, analysis);
+    }
 }

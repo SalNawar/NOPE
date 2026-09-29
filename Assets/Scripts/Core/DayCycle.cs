@@ -4,7 +4,8 @@ using UnityEngine;
 /// <summary>
 /// The run's day steps that need no scene (redesign phase 23): a new run's
 /// world, one decision at the desk, the shift's close, Home's bills and the
-/// night. RunManager, GameManager and HomeManager run them between their UI
+/// night (with the Orders app's deliveries at the next day's start).
+/// RunManager, GameManager and HomeManager run them between their UI
 /// and their saves; the balance simulation (BalanceSimulation, Tools >
 /// TimeDesk > Balance) runs the same steps headless, so what it measures is
 /// the game's own flow, never a copy of it.
@@ -99,7 +100,10 @@ public static class DayCycle
     /// <summary>
     /// The night after Sleep found no ending: the nightly timeline resolve
     /// (before the day turns, so triggers read today), then the next morning
-    /// at the office with no citations yet.
+    /// at the office with no citations yet, and the Orders app's deliveries
+    /// (OrderBook.Deliver: the chosen scanner goes in, every order placed
+    /// before today arrives, owned with its unlock effect from today), so
+    /// the office's day-start snapshot counts them.
     /// </summary>
     public static void AdvanceNight(WorldState world, ContentLibrarySO lib, GameConfigSO config)
     {
@@ -108,6 +112,7 @@ public static class DayCycle
         world.day++;
         world.citationsToday = 0;
         world.phase = RunPhase.Office;
+        OrderBook.Deliver(world, lib);
     }
 
     /// <summary>

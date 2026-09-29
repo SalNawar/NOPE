@@ -65,10 +65,27 @@ public class ArtSlotsTests
         foreach (string id in DesktopAppIds.DefaultOrder)
             Assert.IsTrue(slots.Add(ArtSlots.DesktopIcon(id)), id);
         Assert.AreEqual(6, slots.Count);
+        Assert.AreEqual("Desktop/icon_orders", ArtSlots.DesktopIcon(DesktopAppIds.Orders));
     }
 
-    [TestCase("adv_scanner", "Home/upgrade_adv_scanner")]
-    [TestCase("tr_near_east_spoken", "Home/upgrade_tr_near_east_spoken")]
+    [TestCase("adv_scanner", "Orders/upgrade_adv_scanner")]
+    [TestCase("repair_portal_02", "Orders/upgrade_repair_portal_02")]
+    public void OrderIcon(string id, string expected)
+    {
+        Assert.AreEqual(expected, ArtSlots.OrderIcon(id));
+    }
+
+    [TestCase(UpgradeBranch.Desk, "Orders/branch_desk")]
+    [TestCase(UpgradeBranch.Interview, "Orders/branch_interview")]
+    [TestCase(UpgradeBranch.Portals, "Orders/branch_portals")]
+    [TestCase(UpgradeBranch.Contacts, "Orders/branch_contacts")]
+    public void OrderBranch(UpgradeBranch branch, string expected)
+    {
+        Assert.AreEqual(expected, ArtSlots.OrderBranch(branch));
+    }
+
+    [TestCase("house_air_filter", "Home/upgrade_house_air_filter")]
+    [TestCase("House Water Purifier", "Home/upgrade_house_water_purifier")]
     public void UpgradeIcon(string id, string expected)
     {
         Assert.AreEqual(expected, ArtSlots.UpgradeIcon(id));

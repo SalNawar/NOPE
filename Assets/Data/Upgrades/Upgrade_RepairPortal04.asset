@@ -10,16 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 633ce1469e2ac064aa273d138f70aebc, type: 3}
-  m_Name: Upgrade_AdvancedScanner
+  m_Name: Upgrade_RepairPortal04
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
-  id: adv_scanner
-  displayName: Analysis Scanner
-  description: A scan by hand takes longer and marks one contradiction between the
-    scanned papers on the PC, from the next shift.
-  cost: 300
+  id: repair_portal_04
+  displayName: Portal 04 repair
+  description: "Repairs the upper-left ring on the gallery, Portal 04, fed from Portal 02's bus. In service from the day it arrives."
+  cost: 250
   unlockEffect: {fileID: 0}
   venue: 0
-  branch: 0
+  branch: 2
   requires:
-  - scanner_autofeed
-  installSlot: scanner
+  - repair_portal_02
+  installSlot: 

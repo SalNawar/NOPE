@@ -8,9 +8,11 @@ using UnityEngine;
 /// Generate World's translation part (piece 9; speech only since the
 /// redesign's phase 1: papers are always English): checks world_source.json
 /// "translation" and every place's tongue, writes one Speech translator
-/// upgrade per pack and the one-shot notice trigger into the owned
-/// Assets/Data/World/Translation (piece 9's Papers translators are no longer
-/// listed, so the folder's pruning moves them to the trash), and the
+/// upgrade per pack (an Orders node in the Interview band, its prerequisites
+/// from the pack's "requires": Saleh 2026-09-29) and the one-shot notice
+/// trigger (as many days ahead as the translator's chain of orders) into the
+/// owned Assets/Data/World/Translation (piece 9's Papers translators are no
+/// longer listed, so the folder's pruning moves them to the trash), and the
 /// library's TranslationSettings.
 /// </summary>
 public static partial class WorldContentGenerator
@@ -29,8 +31,11 @@ public static partial class WorldContentGenerator
     /// shared rules (TranslationSettings.Problems: tongues, packs, scripts,
     /// tables, the fallback cipher, the flip knobs, every place's tongue),
     /// costs of at least 0, no generated upgrade id equal to a hand-authored
-    /// one, an ASCII notice when translation starts after day 1, and the UI
-    /// strings it reads.
+    /// one, the Orders tree with the translators in it (UpgradeTree.Problems:
+    /// a pack's requires must name an Orders upgrade, no cycle), an ASCII
+    /// notice when translation starts after day 1 with room before fromDay for
+    /// the translator's chain of orders (Translation.NoticeProblem), and the
+    /// UI strings it reads.
     /// </summary>
     private static void CheckTranslation(WorldSource src, Authored authored, List<string> errors)
     {
@@ -54,8 +59,15 @@ public static partial class WorldContentGenerator
                 if (generated.Contains(u.id))
                     errors.Add($"Upgrade '{AssetDatabase.GetAssetPath(u)}' has the id '{u.id}', which Generate World writes for a translator.");
 
+        List<TreeNode> catalogue = CatalogueNodes(authored, t);
+        foreach (string problem in UpgradeTree.Problems(catalogue))
+            errors.Add("The Orders tree with the translation.packs translators: " + problem);
+        string timing = Translation.NoticeProblem(t.fromDay, TranslatorOrders(catalogue, t));
+        if (timing != null)
+            errors.Add(timing);
+
         if (t.fromDay > 1 && (string.IsNullOrWhiteSpace(t.announce) || !IsAscii(t.announce)))
-            errors.Add("translation.announce must be non-blank ASCII (the morning paper of the day before announces foreign speech).");
+            errors.Add("translation.announce must be non-blank ASCII (the morning paper announces foreign speech, as many days ahead as the translator's chain of orders).");
 
         var keys = new HashSet<string>((src.ui?.strings ?? Array.Empty<StringData>()).Where(s => s != null).Select(s => s.key));
         foreach (string key in TranslationKeys)
@@ -87,7 +99,9 @@ public static partial class WorldContentGenerator
     /// <summary>
     /// Writes Translation/Upgrade_Tr_{Pack}_Speech.asset: the pack's Speech
     /// translator (id Translation.UpgradeId, "{Pack} Translator: Speech", a
-    /// description naming its tongues, the pack's cost, no unlock effect).
+    /// description naming its tongues, the pack's cost, no unlock effect),
+    /// sold in the Orders app in the Interview band, after the pack's
+    /// "requires" (Saleh 2026-09-29: Interview Protocols), with no install slot.
     /// </summary>
     private static UpgradeSO MakeTranslator(PackData pack, TranslationData t, HashSet<string> written)
     {
@@ -98,19 +112,42 @@ public static partial class WorldContentGenerator
         so.description = $"Translates {tongues} in speech.";
         so.cost = pack.spokenCost;
         so.unlockEffect = null;
+        so.venue = UpgradeVenue.Orders;
+        so.branch = UpgradeBranch.Interview;
+        so.requires = pack.requires ?? Array.Empty<string>();
+        so.installSlot = string.Empty;
         EditorUtility.SetDirty(so);
         return so;
     }
 
+    /// <summary>The catalogue as the tree reads it once this run writes the translators: the library's hand-authored upgrades, then one Orders node per pack (Interview, its cost and requires).</summary>
+    private static List<TreeNode> CatalogueNodes(Authored authored, TranslationData t)
+    {
+        var nodes = new List<TreeNode>();
+        if (authored.library != null)
+            foreach (UpgradeSO u in HandAuthored(new SerializedObject(authored.library), "upgrades").OfType<UpgradeSO>())
+                nodes.Add(u.Node);
+        foreach (PackData p in t.packs ?? Array.Empty<PackData>())
+            if (p != null)
+                nodes.Add(new TreeNode(Translation.UpgradeId(p.id), UpgradeVenue.Orders, UpgradeBranch.Interview, p.spokenCost, p.requires));
+        return nodes;
+    }
+
+    /// <summary>The orders a Speech translator takes from nothing owned, one a day (the longest of the packs' chains, UpgradeTree.ChainLength; at least 1): the notice runs that many days ahead.</summary>
+    private static int TranslatorOrders(IReadOnlyList<TreeNode> catalogue, TranslationData t) =>
+        Math.Max(1, (t.packs ?? Array.Empty<PackData>()).Where(p => p != null).Select(p => UpgradeTree.ChainLength(Translation.UpgradeId(p.id), catalogue)).DefaultIfEmpty(1).Max());
+
     /// <summary>
     /// Writes Translation/Trigger_TranslationNotice.asset when foreign speech
     /// starts after day 1: a one-shot trigger whose news line is the notice,
-    /// firing two nights before fromDay (DayAtLeast Translation.NoticeNight),
-    /// so the paper of the day before carries it ("from tomorrow", traveller
-    /// types I3) and a Speech translator bought that night is in force. None
-    /// when fromDay is 1.
+    /// firing so that the paper <paramref name="orders"/> days before fromDay
+    /// carries it (DayAtLeast Translation.NoticeNight: one day per order in
+    /// the translator's chain; with Interview Protocols first, day 3's paper
+    /// for speech from day 5), so a clerk who reads it and orders the chain
+    /// one link a day has a translator in force when foreign speech reaches
+    /// the desk (traveller types I3). None when fromDay is 1.
     /// </summary>
-    private static TimelineTriggerSO[] MakeTranslationNotice(TranslationData t, HashSet<string> written)
+    private static TimelineTriggerSO[] MakeTranslationNotice(TranslationData t, int orders, HashSet<string> written)
     {
         if (t.fromDay <= 1)
             return Array.Empty<TimelineTriggerSO>();
@@ -121,7 +158,7 @@ public static partial class WorldContentGenerator
         trigger.description = "Generated by Generate World: announces in the morning paper the first day foreign speech reaches the desk untranslated.";
         trigger.oneShot = true;
         trigger.newsLineOnFire = t.announce;
-        trigger.conditions = DayGate(t.fromDay, Translation.NoticeNight(t.fromDay)).ToList();
+        trigger.conditions = DayGate(t.fromDay, Translation.NoticeNight(t.fromDay, orders)).ToList();
         trigger.outcomes = new List<TriggerOutcome>();
         EditorUtility.SetDirty(trigger);
         return new[] { trigger };
@@ -156,5 +193,5 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class ScriptData { public string id; public bool rightToLeft; public FontData[] fonts; }
 
     /// <summary>A translator pack and the price of its Speech translator.</summary>
-    [Serializable] private sealed class PackData { public string id; public string displayName; public int spokenCost; }
+    [Serializable] private sealed class PackData { public string id; public string displayName; public int spokenCost; public string[] requires; }
 }
