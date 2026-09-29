@@ -174,6 +174,9 @@ public static class BalanceSimulation
         public int MinMoney = int.MaxValue;
         public int Cases, Faulty, Accepted, Wrong, Unproven, Pay, Penalties, Instalments, Household, Stranded, Carries;
 
+        /// <summary>The stranding fines the failure reports charged (the endings and strandings spec §7; Saleh's Q10 = D), in cr.</summary>
+        public int StrandingFines;
+
         /// <summary>Home's figures (the Home upgrades spec §9): the house's upkeep paid, the break-ins and what they took, the care paid and the house upgrades' prices paid.</summary>
         public int Upkeep, BreakIns, BreakInLoss, Care, HousePurchases;
 
@@ -246,12 +249,13 @@ public static class BalanceSimulation
             r.Penalties += ledger.TotalPenalties;
             r.Instalments += ledger.debtInstalment;
             r.Stranded += ledger.strandedCount;
+            r.StrandingFines += ledger.strandingFines;
             r.StrandedByDay.Add(ledger.strandedCount);
             r.CarriesByDay.Add(r.Carries - carriesBefore);
             r.MoneyAfterShift.Add(world.money);
             r.StabilityAfterShift.Add(world.timelineStability);
             r.MinMoney = Math.Min(r.MinMoney, world.money);
-            r.Dump.AppendLine($"shift {day}: pay {ledger.TotalPay} penalties {ledger.TotalPenalties} stranded {ledger.strandedCount} instalment {ledger.debtInstalment} money {world.money}{(ended != null ? " ENDING " + ended : "")}");
+            r.Dump.AppendLine($"shift {day}: pay {ledger.TotalPay} penalties {ledger.TotalPenalties} stranded {ledger.strandedCount} stranding fines {ledger.strandingFines} instalment {ledger.debtInstalment} money {world.money}{(ended != null ? " ENDING " + ended : "")}");
             if (ended != null)
             {
                 End(r, ended, day);
@@ -418,6 +422,7 @@ public static class BalanceSimulation
         sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve}, careThreshold {_careThreshold} (the House buyer)");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home): conditionCareCost {config.conditionCareCost}, maxFamilyCondition {config.maxFamilyCondition}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, " +
                       $"breakInFromDay {config.breakInFromDay}, breakInChance {F(config.breakInChance)}, breakInShare {F(config.breakInShare)}, breakInMaxLoss {config.breakInMaxLoss}");
+        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (strandings): strandingFine {config.strandingFine} (Saleh's Q10 = D), strandingFateTilt {F(config.strandingFateTilt)}, waiverSignMinutes {F(config.waiverSignMinutes)} (the simulation never uses the pad)");
         EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
         if (bribe != null)
             sb.AppendLine($"  {AssetDatabase.GetAssetPath(bribe)}: AddMoney {F(bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam))} (the bribe's amount, days 7-15 X6)");
@@ -431,6 +436,8 @@ public static class BalanceSimulation
 
         AgencyContent agency = lib.Agency;
         sb.AppendLine("In the content spreadsheet (Tools > TimeDesk > Export Content Spreadsheet, edit, then Import Content Spreadsheet, which runs Generate World):");
+        sb.AppendLine($"  agency.strandingFates (waivered/unwaivered weights): {string.Join(", ", agency.strandingFates.Where(f => f != null).Select(f => $"{f.fate} {F(f.weightWaivered)}/{F(f.weightUnwaivered)}{(f.stability > 0f ? $" stability {F(f.stability)}%" : "")}"))}; " +
+                      $"personalities (waiverRefusal, strandingFate): {string.Join(", ", lib.Personalities.Where(p => p != null).Select(p => $"{p.id} {F(p.waiverRefusal)}{(string.IsNullOrEmpty(p.strandingFate) ? "" : " " + p.strandingFate)}"))}");
         sb.AppendLine($"  agency: strandChance {F(agency.strandChance)}; clerk.garnishShare {F(agency.clerk != null ? agency.clerk.garnishShare : 0f)}, clerk.startDebt {(agency.clerk != null ? agency.clerk.startDebt : 0)}; " +
                       $"proofs [{string.Join(", ", agency.proofs.Select(p => $"{p.form} {F(p.weight)}"))}]; transponders [{string.Join(", ", agency.transponders.Select(t => $"{t.id} {t.transponderClass} {F(t.weight)}"))}]");
         foreach (DayPlanSO p in plans)
@@ -452,7 +459,8 @@ public static class BalanceSimulation
         List<RunResult> early = runs.Where(r => r.EndingDay < Days).ToList();
         sb.AppendLine($"runs ending before day {Days}'s night: {early.Count}{(early.Count > 0 ? $" ({string.Join(", ", early.GroupBy(r => r.Ending).Select(g => $"{g.Key} on days {string.Join(",", g.Select(r => r.EndingDay).OrderBy(d => d))}"))})" : "")}");
         sb.AppendLine($"per run: travellers {M(runs, r => r.Cases)}, faulty {M(runs, r => r.Faulty)}, accepted {M(runs, r => r.Accepted)}, wrong calls {M(runs, r => r.Wrong)} (unproven denials {M(runs, r => r.Unproven)}), strandings {M(runs, r => r.Stranded)}, carries {M(runs, r => r.Carries)}");
-        sb.AppendLine($"per run, cr: pay {M(runs, r => r.Pay)}, wrong-decision penalties {M(runs, r => r.Penalties)}, Debt Relief instalments {M(runs, r => r.Instalments)}, household {M(runs, r => r.Household)}");
+        sb.AppendLine($"per run, cr: pay {M(runs, r => r.Pay)}, wrong-decision penalties {M(runs, r => r.Penalties)}, stranding fines {M(runs, r => r.StrandingFines)}, Debt Relief instalments {M(runs, r => r.Instalments)}, household {M(runs, r => r.Household)}");
+        Fates(sb, runs);
         sb.AppendLine($"wallet: lowest in a run mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))}, min {runs.Min(r => r.MinMoney)}; runs ever below 0: {runs.Count(r => r.MinMoney < 0)}; at or below the bankruptcy line ({config.bankruptcyMoneyThreshold}): {runs.Count(r => r.MinMoney <= config.bankruptcyMoneyThreshold)}");
         sb.AppendLine("wallet after each shift, mean/min over the runs still going: " + Curve(runs, r => r.MoneyAfterShift, "d"));
         sb.AppendLine("wallet after each night's bills, mean/min: " + Curve(runs, r => r.MoneyAtNight, "n"));
@@ -463,6 +471,20 @@ public static class BalanceSimulation
             .Select((l, n) => $"d{n + 1}:{BalanceStats.Mean(l).ToString("0.00", Inv)}/{l.Min().ToString("0.00", Inv)}")));
 
         World(sb, runs, lib);
+    }
+
+    /// <summary>
+    /// The strandings' fates over the runs (the endings and strandings spec
+    /// §6, §10: never shown to the player): how many met each fate, how many
+    /// had a valid signed waiver on file, and the fines the unwaivered cost,
+    /// from each run's stranding log.
+    /// </summary>
+    private static void Fates(StringBuilder sb, List<RunResult> runs)
+    {
+        List<StrandingRecord> all = runs.SelectMany(r => r.World.history.strandingLog ?? new List<StrandingRecord>()).Where(s => s != null).ToList();
+        sb.AppendLine($"strandings over the runs: {all.Count} ({all.Count(s => s.waivered)} with a valid signed waiver on file, {all.Count(s => !s.waivered)} without); by fate: " +
+                      string.Join(", ", ((StrandingFate[])Enum.GetValues(typeof(StrandingFate))).Select(f => $"{f} {all.Count(s => s.fate == f)} ({all.Count(s => s.fate == f && s.waivered)} waivered)")) +
+                      $"; stranding fines {all.Sum(s => s.fine)} cr over {all.Count(s => s.fine > 0)} stranding(s), per run {M(runs, r => r.StrandingFines)} cr");
     }
 
     /// <summary>
