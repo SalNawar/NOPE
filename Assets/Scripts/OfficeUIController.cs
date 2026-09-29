@@ -128,8 +128,6 @@ public sealed class OfficeUIController : MonoBehaviour
         if (citationPanel != null)
             citationPanel.SetActive(false);
 
-        Action cb = _onCitationDismissed;
-        _onCitationDismissed = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onCitationDismissed);
     }
 }

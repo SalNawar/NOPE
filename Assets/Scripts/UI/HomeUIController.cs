@@ -252,9 +252,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (expensesPanel != null)
             expensesPanel.SetActive(false);
 
-        Action cb = _onExpensesContinue;
-        _onExpensesContinue = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onExpensesContinue);
     }
 
     // =========================================================
@@ -355,9 +353,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (shopPanel != null)
             shopPanel.SetActive(false);
 
-        Action cb = _onShopContinue;
-        _onShopContinue = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onShopContinue);
     }
 
     // =========================================================
@@ -409,9 +405,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (slotPanel != null)
             slotPanel.SetActive(false);
 
-        Action cb = _onSlotContinue;
-        _onSlotContinue = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onSlotContinue);
     }
 
     // =========================================================
@@ -447,9 +441,7 @@ public sealed class HomeUIController : MonoBehaviour
         if (sleepPanel != null)
             sleepPanel.SetActive(false);
 
-        Action cb = _onSleep;
-        _onSleep = null;
-        cb?.Invoke();
+        OneShot.Fire(ref _onSleep);
     }
 
     // =========================================================
