@@ -48,10 +48,10 @@ public enum PortalState
 /// <summary>How a ring looks today (the portals spec v3 VX1-VX5; runtime only).</summary>
 public enum PortalLook
 {
-    /// <summary>Under maintenance: the ring dimmed, nothing inside.</summary>
+    /// <summary>Under maintenance: a closed portal, nothing inside the ring (the hall leaves the ring's layer as the art drew it: the layer carries the wall around the frame, so a tint would grey that whole disc).</summary>
     Dimmed,
 
-    /// <summary>In service with no open route (CLOSED today, or no route): the ring at its own colour, nothing inside.</summary>
+    /// <summary>In service with no open route (CLOSED today, or no route): a closed portal, nothing inside the ring.</summary>
     Empty,
 
     /// <summary>A departure portal in service on an open route: the glow inside the ring.</summary>
@@ -117,7 +117,7 @@ public readonly struct PortalRoute
     /// <summary>True when a closure forbids its route today.</summary>
     public bool Closed => Closure != null;
 
-    /// <summary>How its ring looks (VX1-VX5): dimmed under maintenance, the Return Gate's spiral, the glow on an open route, else empty.</summary>
+    /// <summary>How its ring looks (VX1-VX5): Dimmed under maintenance (nothing inside), the Return Gate's spiral, the glow on an open route, else empty.</summary>
     public PortalLook Look =>
         State == PortalState.UnderMaintenance ? PortalLook.Dimmed
         : Role == PortalRole.Returns ? PortalLook.ReturnGate

@@ -6,7 +6,10 @@ using UnityEngine;
 /// the glow of an open departure portal (tinted, slowly turning, still with
 /// reduced motion), the Return Gate's spiral, or nothing (CLOSED, under
 /// maintenance); a departure flares it (<see cref="Pulse"/>: up and down over
-/// the config's seconds, one step with reduced motion). It draws on the art's
+/// the config's seconds, one step with reduced motion). The motion preference
+/// is read when it is shown and at each flare, never per frame, so a frame
+/// allocates nothing (a Settings change reaches it at the next departure or
+/// day). It draws on the art's
 /// sorting layer (Default) at its ring's secure-bay order less one, so the
 /// bay's front fence and panels, the metal ring and the painted glass draw
 /// over it, and it follows its ring's opaque rect each frame if the art pans.
@@ -26,6 +29,7 @@ public sealed class PortalEffect : MonoBehaviour
     private float _pulseSeconds = 1f;
     private float _pulseAge = -1f;
     private float _angle;
+    private bool _reduced;
 
     /// <summary>
     /// Puts the effect inside a ring: <paramref name="ringRect"/> (the ring's
@@ -58,6 +62,7 @@ public sealed class PortalEffect : MonoBehaviour
         _pulseScale = pulseScale;
         _pulseSeconds = Mathf.Max(0.05f, pulseSeconds);
         _pulseAge = -1f;
+        _reduced = MotionPreference.Reduced;
         if (glow == null)
             return;
         glow.sprite = sprite;
@@ -71,8 +76,10 @@ public sealed class PortalEffect : MonoBehaviour
     /// <summary>A traveller left through this ring: the effect flares (nothing when it shows nothing).</summary>
     public void Pulse()
     {
-        if (Showing)
-            _pulseAge = 0f;
+        if (!Showing)
+            return;
+        _reduced = MotionPreference.Reduced;
+        _pulseAge = 0f;
     }
 
     private void LateUpdate()
@@ -80,7 +87,7 @@ public sealed class PortalEffect : MonoBehaviour
         if (!Showing)
             return;
 
-        if (!MotionPreference.Reduced)
+        if (!_reduced)
             _angle = Mathf.Repeat(_angle + _spinDegrees * Time.deltaTime, 360f);
 
         float flare = 0f;
@@ -88,7 +95,7 @@ public sealed class PortalEffect : MonoBehaviour
         {
             _pulseAge += Time.deltaTime;
             float progress = _pulseAge / _pulseSeconds;
-            flare = PortalGlowPlaceholder.Pulse(progress, MotionPreference.Reduced);
+            flare = PortalGlowPlaceholder.Pulse(progress, _reduced);
             if (progress >= 1f)
                 _pulseAge = -1f;
         }
