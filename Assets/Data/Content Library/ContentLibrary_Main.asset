@@ -12834,7 +12834,7 @@ MonoBehaviour:
     roles:
     - archetype: scientist
       factor: future
-      pull: 2
+      pull: 3
     - archetype: diplomat
       factor: government
       pull: 2
@@ -12843,7 +12843,7 @@ MonoBehaviour:
       pull: 2
     - archetype: merchant
       factor: money
-      pull: 2
+      pull: 3
   news:
     debt:
     - Debt Relief Departures reach a record high.

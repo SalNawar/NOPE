@@ -18,7 +18,7 @@ MonoBehaviour:
   ops:
   - type: 26
     stringParam: government/directorate
-    floatParam: 2
+    floatParam: 1
     attribute: {fileID: 0}
     nation: {fileID: 0}
     profile: {fileID: 0}
