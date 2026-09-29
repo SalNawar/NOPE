@@ -16,3 +16,4 @@ MonoBehaviour:
   era: {fileID: 0}
   nation: {fileID: 0}
   description: No 2150 currency or technology leaves 2150.
+  kinds: 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b665400328840749af7b71736f3560a, type: 3}
   m_Name: Rule_TouristPaperSet
   m_EditorClassIdentifier: Assembly-CSharp::TravelRuleSO
-  type: 6
+  type: 8
   era: {fileID: 0}
   nation: {fileID: 0}
   description: 'A Premium visa travels on a Premium transponder. A Standard visa
