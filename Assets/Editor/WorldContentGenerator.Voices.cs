@@ -30,31 +30,47 @@ public static partial class WorldContentGenerator
         InterviewData iv = src.interview;
         errors.AddRange(Personalities.Problems(BuildCast(src.personalities)));
 
-        void Names(string owner, string[] kinds, string variant)
+        void Names(string owner, string[] kinds, string variant, VoiceRowData row = null, bool reaction = false)
         {
             foreach (string kind in kinds ?? Array.Empty<string>())
                 if (!ParseEnum(kind, out TravellerKind _))
                     errors.Add($"{owner} names '{kind}' in \"kinds\", which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
             if (!string.IsNullOrEmpty(variant) && !ParseEnum(variant, out MissingFormVariant _))
                 errors.Add($"{owner} names the variant '{variant}' ({string.Join(", ", Enum.GetNames(typeof(MissingFormVariant)))}).");
+            if (reaction && row != null)
+            {
+                if (!ParseEnum(row.verdict, out ReactionVerdict _))
+                    errors.Add($"{owner} needs a \"verdict\" ({string.Join(", ", Enum.GetNames(typeof(ReactionVerdict)))}), not '{row.verdict}'.");
+                if (!ParseEnum(row.intent, out ReactionIntent _))
+                    errors.Add($"{owner} needs an \"intent\" ({string.Join(", ", Enum.GetNames(typeof(ReactionIntent)))}), not '{row.intent}'.");
+            }
         }
 
         VoicesData voices = iv.voices ?? new VoicesData();
         foreach ((string list, VoiceRowData[] rows) in VoiceLists(voices))
             for (int i = 0; i < rows.Length; i++)
                 if (rows[i] != null)
-                    Names($"interview.voices.{list} row {i + 1}", rows[i].kinds, rows[i].variant);
+                    Names($"interview.voices.{list} row {i + 1}", rows[i].kinds, rows[i].variant, rows[i], list == "reactions");
+        foreach ((string list, VoiceRowData[] rows) in new[] { ("reactions", iv.reactions ?? Array.Empty<VoiceRowData>()), ("slips", iv.slips ?? Array.Empty<VoiceRowData>()) })
+            for (int i = 0; i < rows.Length; i++)
+                if (rows[i] != null)
+                    Names($"interview.{list} row {i + 1}", rows[i].kinds, null, rows[i], list == "reactions");
         KindTalkData[] kindTalk = iv.kindSmallTalk ?? Array.Empty<KindTalkData>();
         for (int i = 0; i < kindTalk.Length; i++)
             if (kindTalk[i] != null)
                 Names($"interview.kindSmallTalk row {i + 1}", kindTalk[i].kinds, null);
 
         InterviewLines built = BuildLines(iv);
-        foreach ((string list, List<VoiceLine> rows) in BookLists(built.voices))
+        foreach ((string list, List<VoiceLine> rows) in BookLists(built.voices).Concat(new[] { ("default reactions", built.reactions), ("default slips", built.slips) }))
             foreach (VoiceLine row in rows.Where(r => r != null))
             {
-                id(row.line.id, $"the {list} voice row of '{VoiceOf(row)}'");
+                id(row.line.id, $"the {list} row of '{VoiceOf(row)}'");
                 ascii(row.line.id, row.line.text);
+                if (!string.IsNullOrEmpty(row.then?.text))
+                {
+                    id(row.then.id, $"the {list} row of '{VoiceOf(row)}' (then)");
+                    ascii(row.then.id, row.then.text);
+                }
             }
         foreach (VoiceLine row in built.kindSmallTalk.Where(r => r != null))
         {
@@ -86,7 +102,10 @@ public static partial class WorldContentGenerator
                             .Select(f => f.value).Concat((src.history?.rules ?? Array.Empty<HistoryRuleData>()).SelectMany(r => r.edits ?? Array.Empty<EditData>()).Select(e => e.value))
                             .Where(v => !string.IsNullOrWhiteSpace(v)).Distinct().ToList(),
             TransponderModels = (src.agency?.transponders ?? Array.Empty<TransponderData>()).Select(t => t.model).ToList(),
-            Employers = (src.agency?.employers ?? Array.Empty<Employer>()).Where(e => e != null).Select(e => e.name).ToList()
+            Employers = (src.agency?.employers ?? Array.Empty<Employer>()).Where(e => e != null).Select(e => e.name).ToList(),
+            DefaultReactions = built.reactions,
+            DefaultSlips = built.slips,
+            SlipChances = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).Select(d => (d.day, d.slipChance)).ToList()
         };
         VoiceCheckResult result = VoiceChecks.Problems(input);
         errors.AddRange(result.Errors);
@@ -130,11 +149,18 @@ public static partial class WorldContentGenerator
             missingForms = VoiceRows("missingForms", v.missingForms, r => r.request),
             spoken = VoiceRows("spoken", v.spoken, r => r.request),
             answers = VoiceRows("answers", v.answers, r => r.question),
-            smallTalk = VoiceRows("smallTalk", v.smallTalk, r => null)
+            smallTalk = VoiceRows("smallTalk", v.smallTalk, r => null),
+            reactions = VoiceRows("reactions", v.reactions, r => null),
+            slips = VoiceRows("slips", v.slips, r => null)
         };
     }
 
-    private static List<VoiceLine> VoiceRows(string list, VoiceRowData[] rows, Func<VoiceRowData, string> key)
+    /// <summary>
+    /// One list's rows with generated line ids: a voice's "interview.voices.{list}.{voice}.{n}" (n per list and voice), or,
+    /// with <paramref name="defaults"/> (interview.reactions, interview.slips), "interview.{defaults}.{n}"; a reaction's then
+    /// line "{id}.then".
+    /// </summary>
+    private static List<VoiceLine> VoiceRows(string list, VoiceRowData[] rows, Func<VoiceRowData, string> key, string defaults = null)
     {
         var built = new List<VoiceLine>();
         var counts = new Dictionary<string, int>();
@@ -155,11 +181,19 @@ public static partial class WorldContentGenerator
                 era = r.era ?? string.Empty,
                 key = key(r) ?? string.Empty,
                 variant = ParseEnum(r.variant, out MissingFormVariant variant) ? variant : MissingFormVariant.Honest,
-                line = new LineText(InterviewLineId($"voices.{list}.{voice}.{counts[voice]}"), r.text)
+                verdict = ParseEnum(r.verdict, out ReactionVerdict verdict) ? verdict : ReactionVerdict.Accepted,
+                intent = ParseEnum(r.intent, out ReactionIntent intent) ? intent : ReactionIntent.Honest,
+                reason = r.reason ?? string.Empty,
+                lie = r.lie ?? string.Empty,
+                line = new LineText(LineIdOf(list, voice, counts[voice], defaults, built.Count + 1), r.text),
+                then = string.IsNullOrEmpty(r.then) ? new LineText() : new LineText(LineIdOf(list, voice, counts[voice], defaults, built.Count + 1) + ".then", r.then)
             });
         }
         return built;
     }
+
+    private static string LineIdOf(string list, string voice, int n, string defaults, int index) =>
+        defaults != null ? InterviewLineId($"{defaults}.{index}") : InterviewLineId($"voices.{list}.{voice}.{n}");
 
     /// <summary>The kinds' small talk with generated line ids ("interview.kindSmallTalk.{n}").</summary>
     private static List<VoiceLine> BuildKindTalk(KindTalkData[] rows) =>
@@ -188,6 +222,8 @@ public static partial class WorldContentGenerator
         yield return ("spoken", v.spoken ?? Array.Empty<VoiceRowData>());
         yield return ("answers", v.answers ?? Array.Empty<VoiceRowData>());
         yield return ("smallTalk", v.smallTalk ?? Array.Empty<VoiceRowData>());
+        yield return ("reactions", v.reactions ?? Array.Empty<VoiceRowData>());
+        yield return ("slips", v.slips ?? Array.Empty<VoiceRowData>());
     }
 
     private static IEnumerable<(string list, List<VoiceLine> rows)> BookLists(VoiceBook b)
@@ -198,6 +234,8 @@ public static partial class WorldContentGenerator
         yield return ("spoken", b.spoken);
         yield return ("answers", b.answers);
         yield return ("smallTalk", b.smallTalk);
+        yield return ("reactions", b.reactions);
+        yield return ("slips", b.slips);
     }
 
     // -----------------------------
@@ -221,9 +259,14 @@ public static partial class WorldContentGenerator
         public string request;
         public string question;
         public string variant;
+        public string verdict;
+        public string intent;
+        public string reason;
+        public string lie;
         public string[] kinds;
         public string era;
         public string text;
+        public string then;
     }
 
     /// <summary>interview.voices: one list per slot.</summary>
@@ -235,5 +278,7 @@ public static partial class WorldContentGenerator
         public VoiceRowData[] spoken;
         public VoiceRowData[] answers;
         public VoiceRowData[] smallTalk;
+        public VoiceRowData[] reactions;
+        public VoiceRowData[] slips;
     }
 }

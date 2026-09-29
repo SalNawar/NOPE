@@ -6841,6 +6841,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
       "violationChance": 0.0
     },
     {
@@ -6896,6 +6897,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -6958,6 +6960,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7026,6 +7029,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7107,6 +7111,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7207,6 +7212,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7317,6 +7323,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7425,6 +7432,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7534,6 +7542,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05
     },
     {
@@ -7673,6 +7682,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.06
     },
     {
@@ -7782,6 +7792,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.06
     },
     {
@@ -7892,6 +7903,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.06
     },
     {
@@ -8003,6 +8015,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.08
     },
     {
@@ -8126,6 +8139,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.08
     },
     {
@@ -8265,6 +8279,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.08
     }
   ],
@@ -8732,8 +8747,362 @@
           "premade": "gutenberg",
           "text": "My business in Strasbourg is private. It involves letters. Movable ones."
         }
+      ],
+      "reactions": [
+        {
+          "personality": "chatty",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you! I'll bring you something back.",
+          "then": "Not a plague. Something nice."
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Oh, lovely! I knew we'd get on.",
+          "then": "I'll tell everyone how thorough you were."
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? But I told you everything!",
+          "then": "My whole life story, and for what?"
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Fair enough. You're good at this.",
+          "then": "Don't tell my cousin."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Good.",
+          "then": "Finally."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Right.",
+          "then": "Moving on."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Unbelievable.",
+          "then": "And I paid for the queue."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Fine.",
+          "then": "Worth the queue fee to try."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Oh, thank goodness.",
+          "then": "Now I can worry about the actual trip."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Really? Oh. Oh good.",
+          "then": "I'm going to go before you change your mind."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? What did I do? What did I do?",
+          "then": "Is it on my record now? It's on my record."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "I knew it. I knew you'd know.",
+          "then": "I'm so sorry. Is sorry allowed?"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Approved! Best day ever!",
+          "then": "Just like the brochure said!"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Approved! See? Positive thinking works!",
+          "then": "Tell your friends!"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied! That's fine!",
+          "then": "Every no is a yes I haven't paid for yet!"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Caught! Ha! Fair's fair!",
+          "then": "I'll try again tomorrow! Fresh start!"
+        },
+        {
+          "personality": "grand",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Naturally.",
+          "then": "Do carry on with the peasants."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "As it should be.",
+          "then": "I shall mention you to someone important."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "You'll hear from my lawyer.",
+          "then": "Well, my lawyer's lawyer. We share one."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "How very dull of you.",
+          "then": "I shall be back with a better story."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Stamped at a slight angle.",
+          "then": "I'll allow it. This once."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Correct procedure. Well done.",
+          "then": "Most clerks miss the second stamp."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "On what grounds? Cite the regulation.",
+          "then": "I'll be filing a complaint. In triplicate."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Hm. Good catch.",
+          "then": "I missed that section too."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Approved. Great.",
+          "then": "Now the hard part: everything else."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Oh. Approved.",
+          "then": "First time for everything."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Of course.",
+          "then": "Of course it is."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Figures.",
+          "then": "Same time tomorrow, then."
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "closed",
+          "text": "Closed? How exciting!",
+          "then": "Like a secret!"
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "panic",
+          "text": "What's wrong with my outfit?",
+          "then": "Is it the hat? It's the hat, isn't it."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "reason": "smuggled",
+          "text": "Fine. Keep it.",
+          "then": "I have three more at home."
+        }
+      ],
+      "slips": [
+        {
+          "personality": "chatty",
+          "lie": "Smuggling",
+          "text": "Nothing in the bag but socks! Lots of socks. Don't open the socks."
+        },
+        {
+          "personality": "chatty",
+          "text": "I've practised this bit. I mean, I haven't. Why would I?"
+        },
+        {
+          "personality": "curt",
+          "text": "Everything's in order. Don't check."
+        },
+        {
+          "personality": "curt",
+          "lie": "PoorPosingAsRich",
+          "text": "Premium. Obviously. Next question."
+        },
+        {
+          "personality": "anxious",
+          "text": "Is it normal to sweat this much when everything is completely legal?"
+        },
+        {
+          "personality": "anxious",
+          "lie": "DoctoredIdentity",
+          "text": "My birthday? It's... the one on the visa. Obviously."
+        },
+        {
+          "personality": "sunny",
+          "lie": "PoorPosingAsRich",
+          "text": "Premium, like the advert! Well, like the advert for the credit card."
+        },
+        {
+          "personality": "sunny",
+          "text": "I'm not nervous! This is just my happy face. It's stuck."
+        },
+        {
+          "personality": "grand",
+          "lie": "PoorPosingAsRich",
+          "text": "Premium, naturally. I simply enjoy queueing with ordinary people."
+        },
+        {
+          "personality": "grand",
+          "text": "I have nothing to declare. Except my genius. And perhaps a trifle."
+        },
+        {
+          "personality": "stickler",
+          "lie": "DoctoredIdentity",
+          "text": "Every detail on that visa is correct. I corrected them myself."
+        },
+        {
+          "personality": "stickler",
+          "text": "I have read the penalties section. Purely out of interest."
+        },
+        {
+          "personality": "glum",
+          "text": "If this goes wrong, tell my creditors I tried."
+        },
+        {
+          "personality": "glum",
+          "lie": "Smuggling",
+          "text": "My luggage is exactly as boring as it looks. Please don't look."
+        },
+        {
+          "premade": "socrates",
+          "text": "I know that I know nothing. Especially about where I was born."
+        }
       ]
-    }
+    },
+    "reactions": [
+      {
+        "verdict": "Accepted",
+        "intent": "Honest",
+        "text": "Thank you!"
+      },
+      {
+        "verdict": "Accepted",
+        "intent": "Honest",
+        "kinds": [
+          "Displaced"
+        ],
+        "text": "Thank you. Home, at last."
+      },
+      {
+        "verdict": "Denied",
+        "intent": "Honest",
+        "text": "But... I did everything right."
+      },
+      {
+        "verdict": "Denied",
+        "intent": "Honest",
+        "kinds": [
+          "Displaced"
+        ],
+        "text": "Then how do I get home?"
+      },
+      {
+        "verdict": "Accepted",
+        "intent": "Lying",
+        "text": "Thank you. Thank you very much."
+      },
+      {
+        "verdict": "Denied",
+        "intent": "Lying",
+        "text": "Worth a try."
+      }
+    ],
+    "slips": [
+      {
+        "text": "Nothing to see here. I mean, everything to see. It's all fine."
+      },
+      {
+        "lie": "Smuggling",
+        "text": "Nothing from home in my luggage. Home meaning here. Obviously."
+      },
+      {
+        "lie": "PoorPosingAsRich",
+        "text": "Premium, yes. We Premiums always... what is it we always do?"
+      },
+      {
+        "lie": "DoctoredIdentity",
+        "text": "My details? It's all on the visa. That visa. The one you're holding."
+      },
+      {
+        "lie": "FalseOrigin",
+        "text": "Home. Yes. {place}. I say it every morning so I don't forget."
+      },
+      {
+        "lie": "FakeDisplaced",
+        "text": "The sky opened and took me from the past. The very old past. Ancient-ish."
+      }
+    ]
   },
   "questions": [
     {

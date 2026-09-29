@@ -209,7 +209,7 @@ public static class _TimeDeskAuditStatic
         string recordTells = string.Join(",", c.recordTells.Select(t => $"{t.Category}@{t.Document}"));
         return $"seed={seed} day={day} leader={leader} slot={slot} claim='{c.originLabel}' name='{c.visitorGivenName}' born='{c.trueBirthDate}' role='{(c.archetype != null ? c.archetype.displayName : "")}' directive={c.directiveFault} violator={(violatorPlace ?? "no")}" +
                $" | liar={c.IsLiar} home='{c.HomeLabel}' tells=[{string.Join(",", tells)}] recordTells=[{recordTells}] fault='{c.FaultReason}' | papers={papers} | answers={answers}" +
-               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} personality={(string.IsNullOrEmpty(c.personality) ? "none" : c.personality)} intro='{c.introLine}' claimLine='{InterviewScript.Claim(wording, new InterviewCase { kind = c.kind, claimPlace = c.originLabel, claimedEraId = c.claimedEra != null ? c.claimedEra.id : null, voice = c.Voice })}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
+               $" | premade={(c.legendarySource != null ? c.legendarySource.id : "none")} gender={c.gender} personality={(string.IsNullOrEmpty(c.personality) ? "none" : c.personality)} slip={(c.slip != null ? c.slip.id : "-")} intro='{c.introLine}' claimLine='{InterviewScript.Claim(wording, new InterviewCase { kind = c.kind, claimPlace = c.originLabel, claimedEraId = c.claimedEra != null ? c.claimedEra.id : null, voice = c.Voice })}' smalltalk='{c.smallTalk?.id}' look={look} garments={garments} | tongue={c.tongueId}";
     }
 
     // =====================================================================

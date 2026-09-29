@@ -41,7 +41,10 @@ public static partial class ContentLibraryValidator
             KindsInPlay = kindForms.Select(k => k.Kind).Distinct().ToList(),
             FactValues = lib.Profiles.Where(p => p != null).SelectMany(p => p.facts).Where(f => f != null && !string.IsNullOrWhiteSpace(f.value)).Select(f => f.value).Distinct().ToList(),
             TransponderModels = lib.Agency.transponders.Where(t => t != null).Select(t => t.model).ToList(),
-            Employers = lib.Agency.employers.Where(e => e != null).Select(e => e.name).ToList()
+            Employers = lib.Agency.employers.Where(e => e != null).Select(e => e.name).ToList(),
+            DefaultReactions = lines.reactions ?? new List<VoiceLine>(),
+            DefaultSlips = lines.slips ?? new List<VoiceLine>(),
+            SlipChances = lib.DayPlans.Where(p => p != null).Select(p => (p.DayNumber, p.SlipChance)).ToList()
         };
         VoiceCheckResult result = VoiceChecks.Problems(input);
         foreach (string error in result.Errors)

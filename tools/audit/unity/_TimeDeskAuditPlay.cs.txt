@@ -352,6 +352,9 @@ public static class _TimeDeskAuditPlay
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
         CaseVerdict v = o.Game.Ledger.verdicts.Last();
         Line($"   verdict: {JsonUtility.ToJson(v)}");
+        var reacted = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
+        foreach (DialogLine l in reacted.Transcript.Skip(Math.Max(0, reacted.Transcript.Count - 2)).Where(l => l.Id != null && l.Id.Contains("reactions")))
+            Line($"   reaction: [{l.Id}] {l.Text}");
         WorldState w = RunManager.Instance.World;
         Line($"   world: money={w.money} stability={F(w.timelineStability)} citationsToday={w.citationsToday} ending='{w.endingId}'");
         yield return Frames(2);

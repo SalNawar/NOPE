@@ -233,6 +233,7 @@ public static class ContentSheetMap
                 GateConditions("dayForcedConditions").OmitEmpty().Note("when the appearance stands (all must pass at the day's start; none: always)")).Note("forced slots: a premade, a blueprint or both, and a beat's fault, voice and conditions"),
             Float("premadeChance"),
             Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"),
+            Float("slipChance").Note("chance per generated liar of a slip after small talk (the personalities spec's T9; 0 never)"),
             Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"));
 
     private static SheetSpec Interview() =>
@@ -287,7 +288,30 @@ public static class ContentSheetMap
                 Text("request").Required().Ref("interviewRequests")),
             VoiceSheet("voiceAnswers", "voices.answers", "an answer in a voice ({value} required, {place})",
                 Text("question").Required().Ref("questions")),
-            VoiceSheet("voiceSmallTalk", "voices.smallTalk", "a personality's or a premade's small talk ({place}; a premade's is its only source)")).Note("the interview's wording");
+            VoiceSheet("voiceSmallTalk", "voices.smallTalk", "a personality's or a premade's small talk ({place}; a premade's is its only source)"),
+            Rows("interviewReactions", "reactions",
+                Text("verdict").OneOf("Accepted", "Denied"),
+                Text("intent").OneOf("Honest", "Lying").Note("Lying: a place lie, smuggling or a record lie; Honest otherwise (a directive fault or a costume error included)"),
+                Text("reason").Omit().Note("a fault reason (forged, disguised, smuggled, closed, wrongDate, expired, incomplete, frozen, panic; blank: any)"),
+                List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text"),
+                Text("then").Omit().Note("an optional second line")).Note("the default reactions to the stamp: the four verdict x intent rows with a blank reason, kinds and era are required"),
+            Rows("interviewSlips", "slips",
+                Text("lie").Omit().Note("a lie kind (FalseOrigin, PoorPosingAsRich, DoctoredIdentity, FakeDisplaced, Smuggling...; blank: any)"),
+                List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                Text("text")).Note("the default slips a liar says after small talk (one with a blank lie is required; never a checkable value)"),
+            VoiceSheet("voiceReactions", "voices.reactions", "a reaction to the stamp in a voice ({place} in both lines)",
+                new ColumnSpec[]
+                {
+                    Text("verdict").OneOf("Accepted", "Denied"),
+                    Text("intent").OneOf("Honest", "Lying"),
+                    Text("reason").Omit().Note("a fault reason (blank: any)")
+                },
+                Text("then").Omit().Note("an optional second line")),
+            VoiceSheet("voiceSlips", "voices.slips", "a liar's slip in a voice ({place}; never a checkable value)",
+                Text("lie").Omit().Note("a lie kind (blank: any)"))).Note("the interview's wording");
 
     /// <summary>The cast (world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
     private static SheetSpec PersonalitiesSheet() =>
@@ -299,6 +323,10 @@ public static class ContentSheetMap
 
     /// <summary>One voice slot's sheet (interview.voices.{list}; the personalities spec's §9.1): the voice (a personality or a premade, exactly one), the slot's keys, the kinds and era it is for, the line.</summary>
     private static SheetSpec VoiceSheet(string sheet, string path, string note, params ColumnSpec[] keys) =>
+        VoiceSheet(sheet, path, note, keys, null);
+
+    /// <summary>A voice slot's sheet with <paramref name="tail"/> after the text (a reaction's then line).</summary>
+    private static SheetSpec VoiceSheet(string sheet, string path, string note, ColumnSpec[] keys, ColumnSpec tail) =>
         Rows(sheet, path,
             new[]
             {
@@ -311,7 +339,8 @@ public static class ContentSheetMap
                 List("kinds").Omit().Note("the kinds it is for (blank: any)"),
                 Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
                 Text("text")
-            }).Cast<SheetField>().ToArray()).Note(note);
+            })
+            .Concat(tail != null ? new[] { tail } : new ColumnSpec[0]).Cast<SheetField>().ToArray()).Note(note);
 
     private static SheetSpec Questions() =>
         Rows("questions", "questions", Key("id", "question"),
