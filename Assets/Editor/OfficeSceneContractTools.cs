@@ -21,8 +21,8 @@ public static class OfficeSceneContractTools
     /// <summary>The art office the knob names (RunConfig.officeSceneName).</summary>
     private static string ArtScenePath => ArtOfficeScene.Path;
 
-    /// <summary>The contract asset.</summary>
-    private const string ContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
+    /// <summary>The contract asset (Build Office UI creates it).</summary>
+    public const string ContractPath = "Assets/Data/Config/OfficeSceneContract.asset";
 
     /// <summary>Opens the art office the knob names (when it is not open and nothing is unsaved) and logs how every anchor resolves.</summary>
     [MenuItem("Tools/TimeDesk/Check Office Scene Contract")]
