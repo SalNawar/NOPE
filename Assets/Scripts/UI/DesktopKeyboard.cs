@@ -18,7 +18,8 @@ using UnityEngine.UI;
 /// it; F1 (and the app's Keys button) shows or hides the shortcut card; the
 /// icons take the arrows and Enter while no window has the focus; Ctrl+V
 /// with Notes focused adds the clip as a clipping; with Orders focused the
-/// arrows walk its tree and Enter acts on the selected node; everything else goes to
+/// arrows walk its tree, Enter acts on the selected node and Ctrl+=, Ctrl+-
+/// and Ctrl+0 zoom the tree; everything else goes to
 /// the Investigation app. A text field that sees the same Escape (TMP's own
 /// cancel) keeps its text and, unless the press was for it, its focus. A
 /// press of a mouse button hands the pointer back (the app's focus ring
@@ -64,7 +65,7 @@ public sealed class DesktopKeyboard : MonoBehaviour
     /// <summary>The Notes app (Ctrl+V with it focused adds the clip as a clipping).</summary>
     [SerializeField] private NotesWindow notes;
 
-    /// <summary>The Orders app (the arrows and Enter with it focused).</summary>
+    /// <summary>The Orders app (the arrows, Enter and the zoom chords with it focused).</summary>
     [SerializeField] private OrdersWindow orders;
 
     /// <summary>The shortcut card (F1, the app's Keys button, Settings' Show shortcuts).</summary>
@@ -148,11 +149,11 @@ public sealed class DesktopKeyboard : MonoBehaviour
             resultsShown: appFocused && app.ResultsListed,
             ordersFocused: orders != null && focused != null && focused == orders.Window);
         if (ShortcutMap.Resolve(chord, context, out AppCommand command))
-            Run(command, field);
+            Run(command, field, context.OrdersFocused);
     }
 
-    /// <summary>Runs a resolved command: the desktop's own ones here, the rest in the app.</summary>
-    private void Run(AppCommand command, TMP_InputField field)
+    /// <summary>Runs a resolved command: the desktop's own ones here (the zoom chords in the Orders tree while <paramref name="ordersFocused"/>), the rest in the app.</summary>
+    private void Run(AppCommand command, TMP_InputField field, bool ordersFocused)
     {
         switch (command)
         {
@@ -194,6 +195,15 @@ public sealed class DesktopKeyboard : MonoBehaviour
                 break;
             case AppCommand.NodeAct:
                 orders.Act();
+                break;
+            case AppCommand.ZoomIn when ordersFocused:
+                orders.Zoom(1);
+                break;
+            case AppCommand.ZoomOut when ordersFocused:
+                orders.Zoom(-1);
+                break;
+            case AppCommand.ZoomReset when ordersFocused:
+                orders.Zoom(0);
                 break;
             default:
                 if (app != null)

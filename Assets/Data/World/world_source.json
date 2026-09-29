@@ -16187,6 +16187,24 @@
         "tier": "Full"
       },
       {
+        "key": "app.orders.zoom",
+        "text": "{0} %",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.zoomOut",
+        "text": "−",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "app.orders.zoomIn",
+        "text": "+",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "app.orders.branch.desk",
         "text": "Desk equipment",
         "gloss": "None",
@@ -17622,7 +17640,7 @@
       },
       {
         "key": "keys.zoom",
-        "text": "Zoom the panes in, out, or back to Settings' Text size",
+        "text": "Zoom the panes in, out, or back to Settings' Text size (the Orders tree: in, out, or back to 100 %)",
         "gloss": "None",
         "tier": "Full"
       },

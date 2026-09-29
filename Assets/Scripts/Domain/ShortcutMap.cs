@@ -55,11 +55,11 @@ public enum AppCommand
     Paste,
     /// <summary>Ctrl+P: pins or unpins the focused row, or the pane's item.</summary>
     Pin,
-    /// <summary>Ctrl+=: zoom in.</summary>
+    /// <summary>Ctrl+=: zoom in (the app's panes, or the Orders tree while it has the focus).</summary>
     ZoomIn,
     /// <summary>Ctrl+-: zoom out.</summary>
     ZoomOut,
-    /// <summary>Ctrl+0: zoom back to the Settings default.</summary>
+    /// <summary>Ctrl+0: zoom back to the Settings default (the Orders tree: back to 100 %).</summary>
     ZoomReset,
     /// <summary>F1: shows or hides the shortcut card.</summary>
     Help,
@@ -287,7 +287,9 @@ public sealed class ShortcutCardRow
 /// one, Ctrl+Enter in the other pane). The icons take the arrows and Enter
 /// while no window has the focus; the app's chords need the app focused, its
 /// row keys a focused list, ← → the focused tab strip; Ctrl+V adds a
-/// clipping with Notes focused. Card is the F1 card: every command once.
+/// clipping with Notes focused; with Orders focused the arrows walk its
+/// tree, Enter acts, and the zoom chords (Ctrl+=, Ctrl+-, Ctrl+0) zoom the
+/// tree instead of the panes. Card is the F1 card: every command once.
 /// DesktopKeyboard polls the keys and runs what this returns. Pure.
 /// </summary>
 public static class ShortcutMap
@@ -367,6 +369,8 @@ public static class ShortcutMap
             return Is(AppCommand.Paste, out command);
         if (c.OrdersFocused && plain && Tree(k.Key, out command))
             return true;
+        if (c.OrdersFocused && ctrl && Zoom(k.Key, out command))
+            return true;
         if (!c.AppFocused)
             return None(out command);
         if (c.SearchFocused && c.ResultsShown && plain && k.Key == ShortcutKey.Down)
@@ -434,6 +438,15 @@ public static class ShortcutMap
             case ShortcutKey.Backslash: return Is(AppCommand.ToggleSplit, out command);
             case ShortcutKey.B: return Is(AppCommand.ToggleSidebar, out command);
             case ShortcutKey.P: return Is(AppCommand.Pin, out command);
+            default: return Zoom(key, out command);
+        }
+    }
+
+    /// <summary>The zoom chords (with Ctrl): in, out, back (the app's panes, or the Orders tree while it has the focus).</summary>
+    private static bool Zoom(ShortcutKey key, out AppCommand command)
+    {
+        switch (key)
+        {
             case ShortcutKey.Equals: return Is(AppCommand.ZoomIn, out command);
             case ShortcutKey.Minus: return Is(AppCommand.ZoomOut, out command);
             case ShortcutKey.Digit0: return Is(AppCommand.ZoomReset, out command);
