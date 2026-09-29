@@ -30,12 +30,15 @@ using UnityEngine.UI;
 /// (the PC redesign CM3: Bind; CompareController.IsPicked and PicksChanged),
 /// so a value shown in both panes lights in both and a redrawn form is lit
 /// again. A slot with a smart link gets a ↗ at its box's top right (LK2: a
-/// click raises LinkClicked; the link never picks); a table row's cells can
-/// each carry one (the Deviation Report's two sides: CellLinkClicked), at
-/// the cell's top right; and MarkFound outlines the box a link went to. A
-/// view that writes a printed text otherwise (a transcript line in its
-/// tongue's script, TextFlip.Write) finds a slot's texts with TextsOf; the
-/// next Show gives every text the template's font back. The Analysis Scanner's marks (SetMarks: a dashed
+/// click raises LinkClicked; the link never picks), and a form whose slots
+/// link leaves the ↗'s room at the right of its tables' last column
+/// (FormLayout's row link room), so a row's ↗ sits after its text; a table
+/// row's cells can each carry one (the Deviation Report's two sides:
+/// CellLinkClicked), at the cell's top right; and MarkFound outlines the box
+/// a link went to. A text the owner's script function gives a font (a
+/// transcript line in its tongue's script) is measured and printed in that
+/// font (TmpFormText.ScriptOf), so its box is as tall as its glyphs draw;
+/// every other text is in the template's font. The Analysis Scanner's marks (SetMarks: a dashed
 /// outline in the style's analysis colour on a field's box, FormPaint.MarkQuads)
 /// draw over the lines. The view sets its own height to the form's, so a
 /// scroll rect can hold it. Its parts are the builder's, tagged DiegeticForm
@@ -80,7 +83,7 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>The found mark: an outline placed over the box a link went to (inactive otherwise).</summary>
     [SerializeField] private RectTransform found;
 
-    /// <summary>The ↗'s side: its hit box, at the box's top right corner.</summary>
+    /// <summary>The ↗'s side: its hit box, at the box's top right corner, and the room a linked table row's last column leaves it.</summary>
     [SerializeField, Min(1f)] private float linkSize = 28f;
 
     /// <summary>Where the texts are cloned (spans the form).</summary>
@@ -108,9 +111,6 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     }
 
     private readonly List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
-
-    /// <summary>The slot each pooled text prints for (TextsOf), by the text's index.</summary>
-    private readonly List<int> _textSlots = new List<int>();
     private readonly List<SlotPart> _parts = new List<SlotPart>();
     private readonly List<LinkPart> _links = new List<LinkPart>();
 
@@ -141,21 +141,6 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
 
     /// <summary>The forms' style the view prints in.</summary>
     public FormStyleSO Style => style;
-
-    /// <summary>The font every printed text starts in (the text template's; a foreign line's script replaces it until the next Show).</summary>
-    public TMP_FontAsset Font => textTemplate != null ? textTemplate.font : null;
-
-    /// <summary>The material of that font on this form (the paper's ink).</summary>
-    public Material FontMaterial => textTemplate != null ? textTemplate.fontSharedMaterial : null;
-
-    /// <summary>Fills <paramref name="into"/> with the shown texts printed for slot <paramref name="slot"/> (a table row's cells in column order), none for a slot without texts.</summary>
-    public void TextsOf(int slot, List<TextMeshProUGUI> into)
-    {
-        into.Clear();
-        for (int i = 0; i < _textSlots.Count; i++)
-            if (_textSlots[i] == slot && _texts[i].gameObject.activeSelf)
-                into.Add(_texts[i]);
-    }
 
     /// <summary>Fills <paramref name="into"/> with the shown form's pickable slots and their buttons, in slot order (the reading order: the keys' rows, AppRow).</summary>
     public void ArmedSlots(List<(FormSlot slot, Button button)> into)
@@ -198,11 +183,14 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// slots <paramref name="linkHint"/> gives a hint get a ↗ with that hint,
     /// and the cells of a table row <paramref name="cellLinkHint"/> gives a
     /// hint (the slot and the cell's index) get one each at the cell's top
-    /// right. The found mark clears. Returns the placed form (null without a
-    /// style or text template).
+    /// right; with <paramref name="linkHint"/> the tables' last column leaves
+    /// the ↗'s room. A text <paramref name="scriptOf"/> gives a font (a
+    /// transcript line in its tongue's script) is measured and printed in it.
+    /// The found mark clears. Returns the placed form (null without a style or
+    /// text template).
     /// </summary>
     public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, float width = 0f, Func<FormSlot, string> linkHint = null,
-                           Func<FormSlot, int, string> cellLinkHint = null)
+                           Func<FormSlot, int, string> cellLinkHint = null, Func<string, TMP_FontAsset> scriptOf = null)
     {
         _hovered = null;
         _form = null;
@@ -214,7 +202,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (width > 0f)
             rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
         _measure ??= new TmpFormText(MeasureText());
-        _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure);
+        _measure.ScriptOf = scriptOf;
+        _form = FormLayout.Layout(spec, data, rt.rect.width, style.metrics, _measure, linkHint != null ? linkSize : 0f);
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _form.Height);
         ShowArt(spec != null && spec.fixedPage && data != null ? data.FormNumber : null);
 
@@ -404,24 +393,15 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         return _measureText;
     }
 
-    /// <summary>Prints text item <paramref name="index"/>: a pooled clone of the template in its role's style and ink (the template's font again, whatever a foreign line set), over its rectangle.</summary>
+    /// <summary>Prints text item <paramref name="index"/>: a pooled clone of the template in its role's style and ink, in the font it was measured in (its script's, else the template's again, whatever the clone printed before), over its rectangle.</summary>
     private void Print(int index, FormItem item)
     {
         if (index >= _texts.Count)
-        {
-            TextMeshProUGUI clone = Instantiate(textTemplate, textsRoot != null ? textsRoot : textTemplate.transform.parent);
-            _texts.Add(clone);
-            _textSlots.Add(-1);
-        }
+            _texts.Add(Instantiate(textTemplate, textsRoot != null ? textsRoot : textTemplate.transform.parent));
         TextMeshProUGUI text = _texts[index];
-        _textSlots[index] = item.Slot;
         text.gameObject.SetActive(true);
         text.name = item.Role.ToString();
-        if (text.font != textTemplate.font)
-        {
-            text.font = textTemplate.font;
-            text.fontSharedMaterial = textTemplate.fontSharedMaterial;
-        }
+        _measure.SetFont(text, item.Text);
         TmpFormText.Style(text, item.Role, item.Size);
         text.text = item.Text;
         text.color = style.Ink(item.Role);

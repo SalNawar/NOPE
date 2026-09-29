@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,6 +33,7 @@ public sealed class FormPage : MonoBehaviour
     private Func<FormSlot, bool> _pickable;
     private Func<FormSlot, string> _linkHint;
     private Func<FormSlot, int, string> _cellLinkHint;
+    private Func<string, TMP_FontAsset> _scriptOf;
     private float _drawnWidth = -1f;
 
     /// <summary>Raised after the form was drawn again for a new width (its slots' buttons are new: a view marks its rows again).</summary>
@@ -63,16 +65,19 @@ public sealed class FormPage : MonoBehaviour
     /// Draws <paramref name="spec"/> with <paramref name="data"/> (FormView.Show:
     /// the slots <paramref name="pickable"/> accepts get a button, the slots
     /// <paramref name="linkHint"/> hints a ↗, a table row's cells
-    /// <paramref name="cellLinkHint"/> hints a ↗ each), scrolled to the top.
-    /// Returns the placed form (null without a form).
+    /// <paramref name="cellLinkHint"/> hints a ↗ each, a text
+    /// <paramref name="scriptOf"/> gives a font is measured and printed in
+    /// it), scrolled to the top. Returns the placed form (null without a form).
     /// </summary>
-    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, Func<FormSlot, string> linkHint = null, Func<FormSlot, int, string> cellLinkHint = null)
+    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, Func<FormSlot, string> linkHint = null, Func<FormSlot, int, string> cellLinkHint = null,
+                           Func<string, TMP_FontAsset> scriptOf = null)
     {
         _spec = spec;
         _data = data;
         _pickable = pickable;
         _linkHint = linkHint;
         _cellLinkHint = cellLinkHint;
+        _scriptOf = scriptOf;
         PlacedForm placed = Draw();
         ScrollToTop();
         return placed;
@@ -155,7 +160,7 @@ public sealed class FormPage : MonoBehaviour
         if (form == null)
             return null;
         float width = Width;
-        PlacedForm placed = form.Show(_spec, _data, _pickable, width, _linkHint, _cellLinkHint);
+        PlacedForm placed = form.Show(_spec, _data, _pickable, width, _linkHint, _cellLinkHint, _scriptOf);
         _drawnWidth = width;
         Redrawn?.Invoke();
         return placed;
