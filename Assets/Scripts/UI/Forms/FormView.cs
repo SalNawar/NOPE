@@ -30,8 +30,12 @@ using UnityEngine.UI;
 /// (the PC redesign CM3: Bind; CompareController.IsPicked and PicksChanged),
 /// so a value shown in both panes lights in both and a redrawn form is lit
 /// again. A slot with a smart link gets a ↗ at its box's top right (LK2: a
-/// click raises LinkClicked; the link never picks), and MarkFound outlines
-/// the box a link went to. The Analysis Scanner's marks (SetMarks: a dashed
+/// click raises LinkClicked; the link never picks); a table row's cells can
+/// each carry one (the Deviation Report's two sides: CellLinkClicked), at
+/// the cell's top right; and MarkFound outlines the box a link went to. A
+/// view that writes a printed text otherwise (a transcript line in its
+/// tongue's script, TextFlip.Write) finds a slot's texts with TextsOf; the
+/// next Show gives every text the template's font back. The Analysis Scanner's marks (SetMarks: a dashed
 /// outline in the style's analysis colour on a field's box, FormPaint.MarkQuads)
 /// draw over the lines. The view sets its own height to the form's, so a
 /// scroll rect can hold it. Its parts are the builder's, tagged DiegeticForm
@@ -94,15 +98,19 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         public bool Picked;
     }
 
-    /// <summary>One pooled ↗: which slot it follows, and its hover hint's text.</summary>
+    /// <summary>One pooled ↗: which slot it follows, which of its cells (-1: the whole box), and its hover hint's text.</summary>
     private sealed class LinkPart
     {
         public Button Button;
         public TMP_Text Hint;
         public int Slot;
+        public int Cell;
     }
 
     private readonly List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
+
+    /// <summary>The slot each pooled text prints for (TextsOf), by the text's index.</summary>
+    private readonly List<int> _textSlots = new List<int>();
     private readonly List<SlotPart> _parts = new List<SlotPart>();
     private readonly List<LinkPart> _links = new List<LinkPart>();
 
@@ -125,11 +133,29 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// <summary>Raised when a slot's ↗ is clicked.</summary>
     public event Action<FormSlot> LinkClicked;
 
+    /// <summary>Raised when a ↗ on one cell of a table row's slot is clicked: the slot and the cell's index in its row.</summary>
+    public event Action<FormSlot, int> CellLinkClicked;
+
     /// <summary>The form as last placed (null before the first Show).</summary>
     public PlacedForm Placed => _form;
 
     /// <summary>The forms' style the view prints in.</summary>
     public FormStyleSO Style => style;
+
+    /// <summary>The font every printed text starts in (the text template's; a foreign line's script replaces it until the next Show).</summary>
+    public TMP_FontAsset Font => textTemplate != null ? textTemplate.font : null;
+
+    /// <summary>The material of that font on this form (the paper's ink).</summary>
+    public Material FontMaterial => textTemplate != null ? textTemplate.fontSharedMaterial : null;
+
+    /// <summary>Fills <paramref name="into"/> with the shown texts printed for slot <paramref name="slot"/> (a table row's cells in column order), none for a slot without texts.</summary>
+    public void TextsOf(int slot, List<TextMeshProUGUI> into)
+    {
+        into.Clear();
+        for (int i = 0; i < _textSlots.Count; i++)
+            if (_textSlots[i] == slot && _texts[i].gameObject.activeSelf)
+                into.Add(_texts[i]);
+    }
 
     /// <summary>Fills <paramref name="into"/> with the shown form's pickable slots and their buttons, in slot order (the reading order: the keys' rows, AppRow).</summary>
     public void ArmedSlots(List<(FormSlot slot, Button button)> into)
@@ -169,11 +195,14 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
     /// and Show again when the pane's width changes (a maximise). The slots
     /// <paramref name="pickable"/> accepts (every slot when null) get a button
     /// and tint under the pointer, lit while their key is picked (Bind); the
-    /// slots <paramref name="linkHint"/> gives a hint get a ↗ with that hint.
-    /// The found mark clears. Returns the placed form (null without a style or
-    /// text template).
+    /// slots <paramref name="linkHint"/> gives a hint get a ↗ with that hint,
+    /// and the cells of a table row <paramref name="cellLinkHint"/> gives a
+    /// hint (the slot and the cell's index) get one each at the cell's top
+    /// right. The found mark clears. Returns the placed form (null without a
+    /// style or text template).
     /// </summary>
-    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, float width = 0f, Func<FormSlot, string> linkHint = null)
+    public PlacedForm Show(FormSpec spec, FormData data, Func<FormSlot, bool> pickable = null, float width = 0f, Func<FormSlot, string> linkHint = null,
+                           Func<FormSlot, int, string> cellLinkHint = null)
     {
         _hovered = null;
         _form = null;
@@ -224,11 +253,24 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         int parts = 0, links = 0;
         for (int s = 0; s < _form.Slots.Count; s++)
         {
-            if (pickable == null || pickable(_form.Slots[s]))
+            FormSlot slot = _form.Slots[s];
+            if (pickable == null || pickable(slot))
                 Arm(parts++, s);
-            string hint = linkHint != null ? linkHint(_form.Slots[s]) : null;
+            string hint = linkHint != null ? linkHint(slot) : null;
             if (hint != null)
-                ArmLink(links++, s, hint);
+                ArmLink(links++, s, -1, hint, slot.Hit);
+            if (cellLinkHint == null || slot.Row < 0)
+                continue;
+            int cell = 0;
+            foreach (FormItem item in _form.Items)
+            {
+                if (item.Kind != FormItemKind.Text || item.Slot != s || item.Role != FormTextRole.Cell)
+                    continue;
+                string cellHint = cellLinkHint(slot, cell);
+                if (cellHint != null)
+                    ArmLink(links++, s, cell, cellHint, item.Rect);
+                cell++;
+            }
         }
         for (int i = parts; i < _parts.Count; i++)
             _parts[i].Button.gameObject.SetActive(false);
@@ -362,17 +404,24 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         return _measureText;
     }
 
-    /// <summary>Prints text item <paramref name="index"/>: a pooled clone of the template in its role's style and ink, over its rectangle.</summary>
+    /// <summary>Prints text item <paramref name="index"/>: a pooled clone of the template in its role's style and ink (the template's font again, whatever a foreign line set), over its rectangle.</summary>
     private void Print(int index, FormItem item)
     {
         if (index >= _texts.Count)
         {
             TextMeshProUGUI clone = Instantiate(textTemplate, textsRoot != null ? textsRoot : textTemplate.transform.parent);
             _texts.Add(clone);
+            _textSlots.Add(-1);
         }
         TextMeshProUGUI text = _texts[index];
+        _textSlots[index] = item.Slot;
         text.gameObject.SetActive(true);
         text.name = item.Role.ToString();
+        if (text.font != textTemplate.font)
+        {
+            text.font = textTemplate.font;
+            text.fontSharedMaterial = textTemplate.fontSharedMaterial;
+        }
         TmpFormText.Style(text, item.Role, item.Size);
         text.text = item.Text;
         text.color = style.Ink(item.Role);
@@ -408,8 +457,8 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             SlotClicked?.Invoke(_form.Slots[part.Slot]);
     }
 
-    /// <summary>Arms pooled ↗ <paramref name="index"/> at slot <paramref name="slot"/>'s box's top right, with its hover hint.</summary>
-    private void ArmLink(int index, int slot, string hint)
+    /// <summary>Arms pooled ↗ <paramref name="index"/> at the top right of <paramref name="box"/> (slot <paramref name="slot"/>'s box, or one of its cells: <paramref name="cell"/>, -1 for the box), with its hover hint.</summary>
+    private void ArmLink(int index, int slot, int cell, string hint, FaceRect box)
     {
         if (linkTemplate == null)
             return;
@@ -422,20 +471,24 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         }
         LinkPart p = _links[index];
         p.Slot = slot;
-        p.Button.name = $"Link_{slot}";
+        p.Cell = cell;
+        p.Button.name = cell < 0 ? $"Link_{slot}" : $"Link_{slot}_{cell}";
         if (p.Hint != null)
             p.Hint.text = hint;
-        FaceRect box = _form.Slots[slot].Hit;
         float side = Mathf.Min(linkSize, box.Width, box.Height);
         Place((RectTransform)p.Button.transform, new FaceRect(box.XMax - side, box.YMin, box.XMax, box.YMin + side));
         p.Button.transform.SetAsLastSibling();
         p.Button.gameObject.SetActive(true);
     }
 
-    /// <summary>A ↗ was clicked: LinkClicked with its slot.</summary>
+    /// <summary>A ↗ was clicked: LinkClicked with its slot (CellLinkClicked with the slot and the cell for a cell's).</summary>
     private void FollowLink(LinkPart part)
     {
-        if (_form != null && part.Slot >= 0 && part.Slot < _form.Slots.Count)
+        if (_form == null || part.Slot < 0 || part.Slot >= _form.Slots.Count)
+            return;
+        if (part.Cell >= 0)
+            CellLinkClicked?.Invoke(_form.Slots[part.Slot], part.Cell);
+        else
             LinkClicked?.Invoke(_form.Slots[part.Slot]);
     }
 

@@ -84,7 +84,7 @@ public sealed partial class InvestigationApp
     private readonly AppClipboard _clipboard = new AppClipboard();
     private readonly List<RectTransform> _targets = new List<RectTransform>();
     private readonly List<AppRow> _rowScratch = new List<AppRow>();
-    private readonly List<IPagedRows> _pagesScratch = new List<IPagedRows>();
+    private readonly List<FormPage> _pagesScratch = new List<FormPage>();
     private readonly Dictionary<AppTab, string> _opened = new Dictionary<AppTab, string>();
     private PinBoard _pins = new PinBoard(1);
     private RecentList _recent = new RecentList(1);
@@ -463,14 +463,11 @@ public sealed partial class InvestigationApp
             SetRegion(_region, _region == AppRegion.TabStrip ? -1 : 0, true);
     }
 
-    /// <summary>The ring moves by <paramref name="delta"/> items; past a content page's end it turns the page.</summary>
+    /// <summary>The ring moves by <paramref name="delta"/> items (the rows scroll into view as it goes).</summary>
     private void MoveItem(int delta)
     {
         Collect();
-        int next = _item + delta;
-        if (IsContent(_region) && (next < 0 || next >= _targets.Count) && TurnPage(delta))
-            return;
-        _item = Mathf.Clamp(next, 0, Mathf.Max(0, _targets.Count - 1));
+        _item = Mathf.Clamp(_item + delta, 0, Mathf.Max(0, _targets.Count - 1));
         ShowRing();
     }
 
@@ -482,19 +479,17 @@ public sealed partial class InvestigationApp
         ShowRing();
     }
 
-    /// <summary>PgUp (-1) or PgDn (1) in the content: the view's page turned, the ring on its first (or, going back, last) row; false when there is no page that way.</summary>
+    /// <summary>PgUp (-1) or PgDn (1) in the content: the view's shown page scrolls by a viewport (FormPage.PageBy; the ring stays on its row); false when the page is at that end.</summary>
     private bool TurnPage(int direction)
     {
         AppPane pane = ContentPane();
         if (pane == null || !(pane.View(pane.ActiveTab) is Component view))
             return false;
         view.GetComponentsInChildren(false, _pagesScratch);
-        if (_pagesScratch.Count == 0 || !_pagesScratch[0].TurnPage(direction))
-            return false;
-        Collect();
-        _item = direction > 0 ? 0 : Mathf.Max(0, _targets.Count - 1);
-        ShowRing();
-        return true;
+        foreach (FormPage page in _pagesScratch)
+            if (page.gameObject.activeInHierarchy)
+                return page.PageBy(direction);
+        return false;
     }
 
     /// <summary>Enter: presses the focused item (a chip, the pin button, a pin or recent item, the dock's clear, Accept or Deny) or follows the focused row's smart link in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>

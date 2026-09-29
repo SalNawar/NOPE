@@ -483,6 +483,22 @@ MonoBehaviour:
     text: Open the Rules
     gloss: 0
     tier: 0
+  - key: app.link.pick
+    text: 'Open where it was picked: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.link.place
+    text: 'Open the Reference: {0}'
+    gloss: 0
+    tier: 0
+  - key: app.transcript.answersOnly
+    text: Answers only
+    gloss: 0
+    tier: 0
+  - key: app.transcript.newLine
+    text: "New line \u25BC"
+    gloss: 0
+    tier: 0
   - key: compare.dockSide
     text: '{0}:  {1}'
     gloss: 0
@@ -499,10 +515,6 @@ MonoBehaviour:
     text: "ALREADY DOCUMENTED \xB7 Report"
     gloss: 0
     tier: 0
-  - key: book.claimedLabel
-    text: '{0} (claimed)'
-    gloss: 0
-    tier: 0
   - key: window.minimize
     text: _
     gloss: 0
@@ -513,18 +525,6 @@ MonoBehaviour:
     tier: 0
   - key: window.close
     text: X
-    gloss: 0
-    tier: 0
-  - key: window.prev
-    text: <
-    gloss: 0
-    tier: 0
-  - key: window.next
-    text: '>'
-    gloss: 0
-    tier: 0
-  - key: window.page
-    text: Page {0}/{1}
     gloss: 0
     tier: 0
   - key: window.internet
@@ -1413,12 +1413,40 @@ MonoBehaviour:
     text: '{0} deviation(s) documented. Denial is justified.'
     gloss: 0
     tier: 0
-  - key: directives.none
-    text: 'Directives: all destinations cleared today.'
+  - key: report.proof.claimMismatch
+    text: Mismatch
     gloss: 0
     tier: 0
-  - key: directives.header
-    text: 'Directives (deny violators):'
+  - key: report.proof.foreignOrigin
+    text: Belongs elsewhere
+    gloss: 0
+    tier: 0
+  - key: report.proof.recordMismatch
+    text: Agency records
+    gloss: 0
+    tier: 0
+  - key: report.proof.crossMismatch
+    text: Papers disagree
+    gloss: 0
+    tier: 0
+  - key: form.report.caseLine
+    text: "{0} \xB7 {1}"
+    gloss: 0
+    tier: 0
+  - key: form.interview.head
+    text: "{0} \xB7 Desk officer: {1} \xB7 {2}"
+    gloss: 0
+    tier: 0
+  - key: form.interview.answerMark
+    text: "\u25BA"
+    gloss: 0
+    tier: 0
+  - key: rules.memo.to
+    text: All desk officers
+    gloss: 0
+    tier: 0
+  - key: directives.none
+    text: 'Directives: all destinations cleared today.'
     gloss: 0
     tier: 0
   - key: claim.banner
@@ -1443,8 +1471,16 @@ MonoBehaviour:
     text: '{0}: {1}'
     gloss: 0
     tier: 0
-  - key: book.revisedLabel
-    text: '{0}  [revised]'
+  - key: book.claimedNote
+    text: Claimed
+    gloss: 0
+    tier: 0
+  - key: book.revisedNote
+    text: Revised
+    gloss: 0
+    tier: 0
+  - key: book.edition
+    text: Edition of day {0}
     gloss: 0
     tier: 0
   - key: compare.deviationLogged
@@ -1509,10 +1545,6 @@ MonoBehaviour:
     tier: 0
   - key: records.onFile
     text: "Query \"{0}\" \xB7 1 record on file \xB7 {1}"
-    gloss: 0
-    tier: 0
-  - key: records.agency
-    text: "{0} \xB7 {1}"
     gloss: 0
     tier: 0
   - key: records.group.registry

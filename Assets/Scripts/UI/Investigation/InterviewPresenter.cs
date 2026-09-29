@@ -26,7 +26,7 @@ using Object = UnityEngine.Object;
 public sealed class InterviewPresenter
 {
     private readonly InteractionPanelController _ring;
-    private readonly IReadOnlyList<TranscriptWindowController> _transcripts;
+    private readonly IReadOnlyList<TranscriptView> _transcripts;
     private readonly Action _spoke;
     private readonly TravellerWheel _wheel;
     private readonly CompareController _compare;
@@ -77,13 +77,13 @@ public sealed class InterviewPresenter
     /// current case, the object the logs name and search's index (null:
     /// nothing indexed).
     /// </summary>
-    public InterviewPresenter(InteractionPanelController ring, IReadOnlyList<TranscriptWindowController> transcripts, Action spoke,
+    public InterviewPresenter(InteractionPanelController ring, IReadOnlyList<TranscriptView> transcripts, Action spoke,
                               TravellerWheel wheel, CompareController compare, Action<int> handOver, Func<CaseInstance> currentCase, Object context,
                               CaseIndex index)
     {
         _index = index;
         _ring = ring;
-        _transcripts = transcripts ?? Array.Empty<TranscriptWindowController>();
+        _transcripts = transcripts ?? Array.Empty<TranscriptView>();
         _spoke = spoke ?? throw new ArgumentNullException(nameof(spoke));
         _wheel = wheel;
         _compare = compare;
@@ -149,9 +149,11 @@ public sealed class InterviewPresenter
     /// dialogs (a premade's own dialog only while they are at the desk; without
     /// a wired transcript nothing spoken could be read, so only the requests
     /// and the look remain). The transcript starts with the opener and the
-    /// claim, and the traveller says the claim in the wheel's bubble.
+    /// claim (its record headed with <paramref name="agency"/>'s block and
+    /// today's <paramref name="day"/>), and the traveller says the claim in
+    /// the wheel's bubble.
     /// </summary>
-    public void Start(CaseInstance inst, IReadOnlyList<CaseDocument> documents, bool interviewReachable, bool appearanceReachable)
+    public void Start(CaseInstance inst, IReadOnlyList<CaseDocument> documents, bool interviewReachable, bool appearanceReachable, AgencyContent agency, int day)
     {
         if (_wheel != null)
             _wheel.SetTranslation(_caseTranslation);
@@ -178,9 +180,10 @@ public sealed class InterviewPresenter
 
         CaseClaim claim = AppLinks.Claim(inst);
         string lookup = SmartLinks.CaseLookup(Fields(documents), inst != null ? inst.visitorGivenName : null);
-        foreach (TranscriptWindowController transcript in _transcripts)
+        foreach (TranscriptView transcript in _transcripts)
             if (transcript != null)
-                transcript.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, _compare, _caseTranslation, claim, lookup);
+                transcript.Bind(_runner.Transcript, _day.Lines.deskName, inst != null ? inst.visitorGivenName : string.Empty, _compare, _caseTranslation, claim, lookup,
+                                agency, day);
         IndexLines(0);
 
         RefreshChoices();
@@ -280,7 +283,7 @@ public sealed class InterviewPresenter
         if (choice == null)
             return;
 
-        foreach (TranscriptWindowController transcript in _transcripts)
+        foreach (TranscriptView transcript in _transcripts)
             if (transcript != null)
                 transcript.Refresh();
         IndexLines(before);
