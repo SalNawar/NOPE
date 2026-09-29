@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -12,7 +13,10 @@ using UnityEngine;
 /// on the Interactable layer over the display, whose reaction's tooltip lists
 /// the same portals in UI text with each ring's name (PortalText). The rows
 /// and the tooltip read the shift's day-start PortalDay (GameManager.Portals),
-/// the one the rings and the Portals app read. The office binder binds it to
+/// the one the rings and the Portals app read. Nothing is built per frame:
+/// the rows are rewritten into one reused buffer when the day's portals
+/// change, and the tooltip's text is built when it is first shown after a
+/// change. The office binder binds it to
 /// the DepartureBoard anchor (an Anchor_DepartureBoard marker over the
 /// display, else the display layer's opaque rect); without one (the 3D room)
 /// it stays hidden.
@@ -47,7 +51,10 @@ public sealed class DepartureBoardView : MonoBehaviour
     private Rect _rect;
     private Bounds _fitted;
     private PortalDay _shown;
-    private string _tooltip = string.Empty;
+    private string _tooltip;
+    private readonly StringBuilder _text = new StringBuilder();
+    private Func<PlaceRef, string> _eraName;
+    private Func<PlaceRef, string> _placeName;
 
     /// <summary>Binds the board to the display: <paramref name="rect"/> in <paramref name="frame"/>'s space (OfficeAnchors.TryLocalRect); the click box outlines <paramref name="outline"/> on hover.</summary>
     public void Bind(Transform frame, Rect rect, Renderer[] outline)
@@ -56,11 +63,14 @@ public sealed class DepartureBoardView : MonoBehaviour
         _rect = rect;
         _fitted = default;
         _shown = null;
+        _tooltip = null;
+        _eraName = p => PortalsWindow.EraName(Library, p);
+        _placeName = p => PortalsWindow.PlaceName(Library, p);
         if (box != null && box.TryGetComponent(out Clickable click))
             click.SetOutline(outline);
         if (reaction != null)
         {
-            reaction.SetReadout(() => _tooltip);
+            reaction.SetReadout(() => _tooltip ??= Tooltip());
             reaction.SetTooltipPoint(tooltipPoint);
         }
         gameObject.SetActive(true);
@@ -83,28 +93,33 @@ public sealed class DepartureBoardView : MonoBehaviour
         Fit(display);
     }
 
-    /// <summary>The rows and the tooltip's text from <paramref name="day"/>.</summary>
+    /// <summary>The run's content library (the places' era and place names), or none outside a run.</summary>
+    private static ContentLibrarySO Library => RunManager.HasInstance ? RunManager.Instance.Library : null;
+
+    /// <summary>The rows from <paramref name="day"/>, rewritten into the reused buffer; the tooltip is rebuilt when next shown.</summary>
     private void Write(PortalDay day)
     {
         _shown = day;
-        ContentLibrarySO library = RunManager.HasInstance ? RunManager.Instance.Library : null;
+        _tooltip = null;
         string state = ColorUtility.ToHtmlStringRGBA(config.hallBoardStateInk);
-        var text = new StringBuilder();
-        foreach (BoardRow row in PortalText.BoardRows(day, p => PortalsWindow.EraName(library, p), p => PortalsWindow.PlaceName(library, p), UiText.Get))
+        _text.Clear();
+        foreach (BoardRow row in PortalText.BoardRows(day, _eraName, _placeName, UiText.Get))
         {
-            if (text.Length > 0)
-                text.Append('\n');
-            text.Append(row.Text);
+            if (_text.Length > 0)
+                _text.Append('\n');
+            _text.Append(row.Text);
             if (row.State != null)
-                text.Append("  <color=#").Append(state).Append('>').Append(row.State).Append("</color>");
+                _text.Append("  <color=#").Append(state).Append('>').Append(row.State).Append("</color>");
         }
         if (rows != null)
         {
             rows.color = config.hallBoardInk;
-            rows.text = text.ToString();
+            rows.SetText(_text);
         }
-        _tooltip = string.Join("\n", PortalText.TooltipLines(day, p => PortalsWindow.EraName(library, p), p => PortalsWindow.PlaceName(library, p), UiText.Get));
     }
+
+    /// <summary>The tooltip's text for the day shown: its title, then each portal with its ring.</summary>
+    private string Tooltip() => string.Join("\n", PortalText.TooltipLines(_shown ?? PortalDay.None, _eraName, _placeName, UiText.Get));
 
     /// <summary>The rows inside the display (inset), the click box over it and the tooltip point at its bottom.</summary>
     private void Fit(Bounds display)

@@ -151,11 +151,12 @@ ink its art authored. Pan is left to the art.
 
 The gameplay layer also drives **the portal rings** (the portals spec v3
 VX1-VX7): at load the binder adds an `AnimeHallPortalLink` beside the shift
-link; at the day's start it tints each metal ring through `SetLayerTint` (its
-own colour times `DeskConfigSO.hallPortalIdleTint` under maintenance, its own
-colour otherwise) and draws a `PortalEffect` inside each ring (the glow of an
-open departure portal, the Return Gate's amber spiral, or nothing for a CLOSED
-portal or one under maintenance; a departure flares it). The effects are the one
+link; at the day's start it draws a `PortalEffect` inside each ring (the glow
+of an open departure portal, the Return Gate's amber spiral, or nothing for a
+closed portal: CLOSED or under maintenance; a departure flares it). It never
+tints a ring (the art's `SetLayerTint` is not used): each ring's registered
+layer also carries the wall, pillar and bay pixels around and below its frame,
+so a tint greys that whole disc; every ring keeps the art's colour. The effects are the one
 gameplay drawing on the art's **Default** sorting layer: sorting order = the
 ring's secure-bay order − 1 (read from the bay's renderer, `FindLayer`), so they
 draw under the bay's front fence and panels, the metal ring (the gate frame) and
