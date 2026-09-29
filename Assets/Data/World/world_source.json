@@ -11550,12 +11550,6 @@
         "tier": "Full"
       },
       {
-        "key": "claim.banner",
-        "text": "{0}\n\"{1}\"",
-        "gloss": "None",
-        "tier": "Full"
-      },
-      {
         "key": "document.untitled",
         "text": "Document",
         "gloss": "None",

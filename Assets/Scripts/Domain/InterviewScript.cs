@@ -9,7 +9,7 @@ public sealed class InterviewCase
     /// <summary>The traveller's kind (CaseInstance.kind): the claim is said in its words.</summary>
     public TravellerKind kind;
 
-    /// <summary>The claimed place's label, the claim's {place} (CaseInstance.originLabel; the claim is filled as the banner's CaseInstance.claimLine is).</summary>
+    /// <summary>The claimed place's label, the claim's {place} (CaseInstance.originLabel; the claim is only spoken, never printed: the personalities spec's B3).</summary>
     public string claimPlace;
 
     /// <summary>What of the traveller's lines stays English when they show untranslated (translation.keyWords); null keeps nothing.</summary>

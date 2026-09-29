@@ -155,9 +155,6 @@ public sealed class CaseInstance
     /// <summary>The traveller's one fault reason (Faults.Reason): a wrong accept's citation key suffix; empty with no fault.</summary>
     public string FaultReason => Faults.Reason(directiveFault, costumeFault, lie);
 
-    /// <summary>The traveller's claim sentence (their kind's interview.claims line with the claimed place's label); the banner, the shift summary and the transcript's second line.</summary>
-    public string claimLine;
-
     /// <summary>The traveller's answer to each question askable today, in question order (computed at generation from the same values as the papers).</summary>
     public readonly List<InterviewAnswer> answers = new();
 

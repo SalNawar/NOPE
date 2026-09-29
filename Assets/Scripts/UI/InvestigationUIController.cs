@@ -7,8 +7,9 @@ using UnityEngine.UI;
 /// <summary>
 /// The office investigation's façade (the PC redesign RF1, audit R4-001): the
 /// one component GameManager talks to, with the scene's references. It
-/// presents each case in the Investigation app (InvestigationApp: the claim
-/// in its case header, the counters, two panes of the six tabs; every tab
+/// presents each case in the Investigation app (InvestigationApp: the
+/// counters in its case header, never the claim, which the traveller only
+/// says; two panes of the six tabs; every tab
 /// has one view per pane and the presenters fill them all) and offers the binary
 /// Accept/Deny (the app header's buttons and the desk's stamp tray, wired
 /// once); the work is its presenters': CaseDocumentsPresenter (the papers,
@@ -79,7 +80,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// <summary>The physical papers and the scanner (optional: without it documents reach the PC when handed over).</summary>
     [SerializeField] private DeskController desk;
 
-    /// <summary>The office case HUD (piece 10; optional): the claim tag shows the claim banner's text in the office.</summary>
+    /// <summary>The office case HUD (piece 10; optional): the office compare strip's host (it prints no claim).</summary>
     [SerializeField] private OfficeCaseHud hud;
 
     /// <summary>The stamp tray (piece 10; optional): its Accept and Deny decide the case like the PC's buttons.</summary>
@@ -303,7 +304,7 @@ public sealed class InvestigationUIController : MonoBehaviour
             ShowRich(inst, lib);
     }
 
-    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state, the steps go and the office's claim tag empties. No window closes.</summary>
+    /// <summary>Between cases: the compare dock hides, the desktop shows its idle line, the app's case tabs show the no-case state and the steps go. No window closes.</summary>
     public void Hide()
     {
         ShowCaseLayers(false);
@@ -311,8 +312,6 @@ public sealed class InvestigationUIController : MonoBehaviour
             app.EndCase();
         if (stepsPanel != null)
             stepsPanel.EndCase();
-        if (hud != null)
-            hud.SetClaim(string.Empty);
     }
 
     /// <summary>Shows the compare dock and Accept and Deny (a traveller is at the desk), or hides the dock, turns the buttons off and shows the desktop's idle line.</summary>
@@ -325,8 +324,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// A case on the desk: the claim in the app's header and the office's tag
-    /// (one text), the app on Documents with its badges cleared, today's
+    /// A case on the desk: the app's title names the traveller (no claim is
+    /// printed anywhere: the traveller says it, the personalities spec's B1),
+    /// the app on Documents with its badges cleared, today's
     /// directives, the papers presented, the interview started, the reference
     /// books built the first time and turned to the claim, the steps listed
     /// (the default set until the arrival paper is read, then the kind's; the
@@ -337,10 +337,7 @@ public sealed class InvestigationUIController : MonoBehaviour
     {
         ShowCaseLayers(true);
 
-        string claim = inst != null ? UiText.Format("claim.banner", inst.visitorDisplayName, inst.claimLine) : string.Empty;
-        app.BeginCase(claim, inst != null ? inst.visitorDisplayName : string.Empty);
-        if (hud != null)
-            hud.SetClaim(claim);
+        app.BeginCase(inst != null ? inst.visitorDisplayName : string.Empty);
 
         _reference.ShowDirectives();
         _interview.BeginCase(inst);

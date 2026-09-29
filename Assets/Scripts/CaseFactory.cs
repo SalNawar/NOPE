@@ -187,7 +187,7 @@ public sealed class CaseFactory
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library's interview opener or legendary opener is blank, so a transcript may start with the claim. Run Tools > TimeDesk > Generate World.");
         foreach (TravellerKind kind in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints).Where(b => b != null).Select(b => b.Kind).Distinct())
             if (string.IsNullOrWhiteSpace(Interview.ClaimLine(wording, kind)?.text))
-                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so their banner shows the bare place label. Run Tools > TimeDesk > Generate World.");
+                Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber}: the content library has no claim line for {kind} travellers, so they say the bare place label as their claim. Run Tools > TimeDesk > Generate World.");
 
         _channels = appearanceReachable ? plan.TellChannels : plan.TellChannels.Where(c => c != TellChannel.Appearance).ToList();
         _appearanceReachable = appearanceReachable;
@@ -456,9 +456,8 @@ public sealed class CaseFactory
         // 6) Build the documents the traveller carries (their fields are filled below).
         BuildDocuments(inst, blueprint);
 
-        // 7) Investigation layer: stated claim, structured fields, then the rolled lie planned and printed,
-        //    or the paper side of a broken directive (a form left out or unsigned, a date falsified).
-        inst.claimLine = Interview.Claim(_lib.Interview, inst.kind, originLabel);
+        // 7) Investigation layer: structured fields (the claim is only spoken: InterviewScript.Opening), then the rolled
+        //    lie planned and printed, or the paper side of a broken directive (a form left out or unsigned, a date falsified).
         List<DocumentField> fields = PopulateDocumentFields(inst);
         LiePlan lie = lieKind == null ? null
             : !LieKinds.IsPlaceLie(lieKind.Value) ? Forge(inst, lieKind.Value, plan, place, caseIndex1Based)

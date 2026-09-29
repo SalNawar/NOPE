@@ -196,9 +196,6 @@ public sealed class CaseVerdict
     /// <summary>True if accepting was the correct call (no fault of either kind, VerdictRules).</summary>
     public bool shouldAccept;
 
-    /// <summary>The visitor's stated travel claim, for the report.</summary>
-    public string claimSummary = string.Empty;
-
     /// <summary>Discrepancies documented in the scanner when the decision was made.</summary>
     public int evidenceCount;
 
