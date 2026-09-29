@@ -15,7 +15,7 @@ public sealed class InterviewCase
     /// <summary>What of the traveller's lines stays English when they show untranslated (translation.keyWords); null keeps nothing.</summary>
     public KeyWordRule keyWords;
 
-    /// <summary>The claimed era's id: picks each question's wording override.</summary>
+    /// <summary>The claimed era's id: with the kind, picks each question's answer override.</summary>
     public string claimedEraId;
 
     /// <summary>The traveller's documents in paper order; only those handed over on request get a hub request.</summary>
@@ -97,17 +97,17 @@ public static class InterviewScript
         return lines;
     }
 
-    /// <summary>The desk asking <paramref name="q"/> of a traveller claiming <paramref name="eraId"/>, the claimed place's label filling {place} (a trip question: "What will you pay with in {place}?").</summary>
-    public static DialogLine PromptLine(InterviewQuestion q, string eraId, string placeLabel = null)
+    /// <summary>The desk asking <paramref name="q"/>, in the question's own words for every traveller (the personalities spec's W3), the claimed place's label filling {place} ("What will you pay with in {place}?").</summary>
+    public static DialogLine PromptLine(InterviewQuestion q, string placeLabel = null)
     {
-        LineText prompt = q.PromptFor(eraId);
+        LineText prompt = q.prompt ?? new LineText();
         return new DialogLine(prompt.id, DialogSpeaker.Desk, Interview.Fill(prompt.text, Interview.PlaceToken, placeLabel));
     }
 
-    /// <summary>The traveller's answer line: the (era's) template with the canonical value, carrying the answer's fact and its key-word spans under <paramref name="keyWords"/> (null: none).</summary>
-    public static DialogLine AnswerLine(InterviewQuestion q, string eraId, InterviewAnswer a, KeyWordRule keyWords = null)
+    /// <summary>The traveller's answer line: the template for their <paramref name="kind"/> and claimed <paramref name="eraId"/> (InterviewQuestion.AnswerFor) with the canonical value, carrying the answer's fact and its key-word spans under <paramref name="keyWords"/> (null: none).</summary>
+    public static DialogLine AnswerLine(InterviewQuestion q, string eraId, TravellerKind kind, InterviewAnswer a, KeyWordRule keyWords = null)
     {
-        LineText answer = q.AnswerFor(eraId);
+        LineText answer = q.AnswerFor(eraId, kind);
         string value = a != null ? a.value : null;
         var fills = new Dictionary<string, string> { { Interview.ValueToken, value } };
         return DialogLine.Answer(answer.id, Interview.Fill(answer.text, Interview.ValueToken, value), a, KeyWords.Spans(answer.text, fills, keyWords));
@@ -218,7 +218,7 @@ public static class InterviewScript
                 {
                     Id = $"q:{q.id}",
                     Label = q.label,
-                    Lines = { PromptLine(q, eraId, c != null ? c.claimPlace : null), AnswerLine(q, eraId, a, keyWords) },
+                    Lines = { PromptLine(q, c != null ? c.claimPlace : null), AnswerLine(q, eraId, c != null ? c.kind : default, a, keyWords) },
                     OneShot = true,
                     Kind = DialogChoiceKind.Question
                 });

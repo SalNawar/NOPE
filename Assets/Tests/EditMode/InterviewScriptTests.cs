@@ -46,8 +46,8 @@ public class InterviewScriptTests
         currency.overrides.Add(new WordingOverride
         {
             eraId = "ancient",
-            prompt = new LineText("q_currency.ancient.prompt", "What do you trade with at home?"),
-            answer = new LineText("q_currency.ancient.answer", "We trade with {value}.")
+            kinds = { TravellerKind.Displaced },
+            answer = new LineText("q_currency.overrides.1.answer", "We trade with {value}.")
         });
 
         return new List<InterviewQuestion>
@@ -492,13 +492,13 @@ public class InterviewScriptTests
     }
 
     [Test]
-    public void AnswerLines_CarryTheFact_AndTheClaimedErasWordingWins()
+    public void AnswerLines_CarryTheFact_AndTheKindsAndErasWordingWins()
     {
         DialogNode ask = Build().Node(InterviewScript.AskNodeId);
 
         DialogChoice currency = ask.Choices[1];
-        CollectionAssert.AreEqual(new[] { "q_currency.ancient.prompt", "q_currency.ancient.answer" }, LineIds(currency.Lines));
-        Assert.AreEqual("What do you trade with at home?", currency.Lines[0].Text);
+        CollectionAssert.AreEqual(new[] { "q_currency.prompt", "q_currency.overrides.1.answer" }, LineIds(currency.Lines), "the desk's words are the question's own; the answer the override's");
+        Assert.AreEqual("About Currency?", currency.Lines[0].Text);
         Assert.AreEqual(DialogSpeaker.Desk, currency.Lines[0].Speaker);
         Assert.AreEqual("We trade with Deben.", currency.Lines[1].Text);
         Assert.IsTrue(currency.Lines[1].IsAnswer);
@@ -515,6 +515,10 @@ public class InterviewScriptTests
         InterviewCase medieval = Case();
         medieval.claimedEraId = "medieval";
         Assert.AreEqual("We pay in Deben.", Build(medieval).Node(InterviewScript.AskNodeId).Choices[1].Lines[1].Text, "no override for this era");
+
+        InterviewCase tourist = Case();
+        tourist.kind = TravellerKind.RichTourist;
+        Assert.AreEqual("We pay in Deben.", Build(tourist).Node(InterviewScript.AskNodeId).Choices[1].Lines[1].Text, "the displaced's override is not a tourist's");
     }
 
     [Test]

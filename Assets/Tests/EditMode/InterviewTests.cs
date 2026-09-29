@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 /// <summary>
@@ -140,6 +142,102 @@ public class InterviewTests
         Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(Lines(), TravellerKind.Labourer, "Babylonia (Ancient)"), "no line for the kind");
         Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(new InterviewLines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
         Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(null, TravellerKind.Displaced, "Babylonia (Ancient)"));
+    }
+
+    // ---- The answer by kind and era (the personalities spec's W3, V3: one question per category, asked of everyone) ----
+
+    /// <summary>The currency question as everyone is asked it: the desk's prompt, a 2150 citizen's default answer, and <paramref name="overrides"/>.</summary>
+    private static InterviewQuestion Currency(params WordingOverride[] overrides)
+    {
+        var q = new InterviewQuestion
+        {
+            id = "q_currency",
+            category = ClueCategory.Currency,
+            label = "Currency",
+            prompt = new LineText("q_currency.prompt", "What will you pay with in {place}?"),
+            answer = new LineText("q_currency.answer", "I've changed my money into {value}.")
+        };
+        q.overrides.AddRange(overrides);
+        return q;
+    }
+
+    /// <summary>An answer override for <paramref name="kinds"/> (none: any) and <paramref name="era"/> (blank: any).</summary>
+    private static WordingOverride Override(string id, string text, string era, params TravellerKind[] kinds) =>
+        new WordingOverride { eraId = era, kinds = kinds.ToList(), answer = new LineText(id, text) };
+
+    [Test]
+    public void AnswerFor_KindsOverrideBeatsEraOverride()
+    {
+        InterviewQuestion q = Currency(Override("era", "We trade with {value}.", "ancient"), Override("kinds", "We pay in {value}.", null, TravellerKind.Displaced));
+
+        Assert.AreEqual("kinds", q.AnswerFor("ancient", TravellerKind.Displaced).id, "named kinds (2) beat a named era (1), whatever the order");
+        Assert.AreEqual("era", q.AnswerFor("ancient", TravellerKind.RichTourist).id, "for another kind only the era's matches");
+    }
+
+    [Test]
+    public void AnswerFor_KindsAndEraBeatKindsAlone()
+    {
+        InterviewQuestion q = Currency(Override("displaced", "We pay in {value}.", null, TravellerKind.Displaced),
+                                       Override("displaced.ancient", "We trade with {value}.", "ancient", TravellerKind.Displaced));
+
+        Assert.AreEqual("displaced.ancient", q.AnswerFor("ancient", TravellerKind.Displaced).id, "3 beats 2, listed second or not");
+        Assert.AreEqual("displaced", q.AnswerFor("medieval", TravellerKind.Displaced).id);
+        Assert.AreEqual("q_currency.answer", q.AnswerFor("ancient", TravellerKind.PoorTourist).id, "a citizen bound for the ancient era says the default");
+    }
+
+    [Test]
+    public void AnswerFor_ATieKeepsTheFirstListed()
+    {
+        InterviewQuestion q = Currency(Override("first", "First {value}.", null, TravellerKind.Displaced, TravellerKind.Labourer),
+                                       Override("second", "Second {value}.", null, TravellerKind.Displaced));
+
+        Assert.AreEqual("first", q.AnswerFor("ancient", TravellerKind.Displaced).id);
+    }
+
+    [Test]
+    public void AnswerFor_AnOverrideOfAnotherKindNeverApplies()
+    {
+        InterviewQuestion q = Currency(Override("displaced", "We pay in {value}.", null, TravellerKind.Displaced),
+                                       Override("rich.medieval", "Florins, naturally: {value}.", "medieval", TravellerKind.RichTourist));
+
+        foreach (TravellerKind kind in new[] { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer })
+            Assert.AreEqual("q_currency.answer", q.AnswerFor("ancient", kind).id, kind.ToString());
+        Assert.AreEqual("q_currency.answer", q.AnswerFor("medieval", TravellerKind.PoorTourist).id, "the rich tourist's medieval line is not the poor tourist's");
+        Assert.AreEqual("rich.medieval", q.AnswerFor("medieval", TravellerKind.RichTourist).id);
+    }
+
+    [Test]
+    public void AnswerFor_NoOverrideGivesTheDefault()
+    {
+        Assert.AreEqual("q_currency.answer", Currency().AnswerFor("ancient", TravellerKind.Displaced).id);
+        Assert.AreEqual("q_currency.answer", Currency(null, Override("medieval", "M {value}.", "medieval")).AnswerFor(null, TravellerKind.RichTourist).id,
+                        "a null override is skipped; an era override never matches a traveller with no claimed era");
+
+        InterviewQuestion none = Currency();
+        none.overrides = null;
+        Assert.AreEqual("q_currency.answer", none.AnswerFor("ancient", TravellerKind.Displaced).id);
+    }
+
+    [Test]
+    public void Prompt_IsTheQuestionsOwnForEveryKindAndEra()
+    {
+        InterviewQuestion q = Currency(Override("displaced", "We pay in {value}.", null, TravellerKind.Displaced),
+                                       Override("displaced.ancient", "We trade with {value}.", "ancient", TravellerKind.Displaced));
+        var lines = new InterviewLines { backLabel = "< Back", askLabel = "Ask about the trip >" };
+
+        foreach (TravellerKind kind in (TravellerKind[])Enum.GetValues(typeof(TravellerKind)))
+            foreach (string era in new[] { "ancient", "medieval", null })
+            {
+                var c = new InterviewCase
+                {
+                    kind = kind,
+                    claimPlace = "Periclean Athens (Ancient)",
+                    claimedEraId = era,
+                    answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "Silver drachma" } }
+                };
+                DialogLine prompt = InterviewScript.Build(lines, new[] { q }, null, c).Node(InterviewScript.AskNodeId).Choices.First(x => x.Id == "q:q_currency").Lines[0];
+                Assert.AreEqual(("q_currency.prompt", DialogSpeaker.Desk, "What will you pay with in Periclean Athens (Ancient)?"), (prompt.Id, prompt.Speaker, prompt.Text), $"{kind} / {era ?? "no era"}");
+            }
     }
 
     [Test]

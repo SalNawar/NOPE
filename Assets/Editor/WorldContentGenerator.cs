@@ -588,22 +588,30 @@ public static partial class WorldContentGenerator
             Id(QuestionLineId(q.id, PromptPart), $"question '{q.id}'");
             Id(QuestionLineId(q.id, AnswerPart), $"question '{q.id}'");
 
+            // The answer overrides (the personalities spec's W3): each names kinds, an era or both (known, a kind once), no two alike; only the answer.
             var overridden = new HashSet<string>();
-            foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
+            OverrideData[] overrides = q.overrides ?? Array.Empty<OverrideData>();
+            for (int n = 0; n < overrides.Length; n++)
             {
-                string oOwner = $"{owner} override '{o.era}'";
-                if (!eraIds.Contains(o.era ?? string.Empty))
-                    errors.Add($"{oOwner} names an unknown era.");
-                else if (!overridden.Add(o.era))
-                    errors.Add($"{owner} overrides era '{o.era}' twice.");
-                if (string.IsNullOrWhiteSpace(o.prompt))
-                    errors.Add($"{oOwner} has a blank prompt.");
+                OverrideData o = overrides[n];
+                string oOwner = $"{owner} override {n + 1}";
+                string[] oKinds = o.kinds ?? Array.Empty<string>();
+                bool namesEra = !string.IsNullOrWhiteSpace(o.era);
+                if (namesEra && !eraIds.Contains(o.era))
+                    errors.Add($"{oOwner} names an unknown era '{o.era}'.");
+                if (!namesEra && oKinds.Length == 0)
+                    errors.Add($"{oOwner} names neither kinds nor an era, so it would replace the answer for everyone; edit the answer instead.");
+                foreach (string name in oKinds)
+                    if (!ParseEnum(name, out TravellerKind _))
+                        errors.Add($"{oOwner} names '{name}' in \"kinds\", which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
+                if (oKinds.Distinct().Count() != oKinds.Length)
+                    errors.Add($"{oOwner} names a kind twice.");
+                if (!overridden.Add(string.Join("+", oKinds.OrderBy(k => k, StringComparer.Ordinal)) + "|" + (namesEra ? o.era : string.Empty)))
+                    errors.Add($"{oOwner} names the same kinds and era as an earlier override.");
                 if (!Interview.HoldsToken(o.answer, Interview.ValueToken))
                     errors.Add($"{oOwner}: its answer must hold {Interview.Placeholder(Interview.ValueToken)}.");
-                Ascii(OverrideLineId(q.id, o.era, PromptPart), o.prompt);
-                Ascii(OverrideLineId(q.id, o.era, AnswerPart), o.answer);
-                Id(OverrideLineId(q.id, o.era, PromptPart), $"question '{q.id}' override '{o.era}'");
-                Id(OverrideLineId(q.id, o.era, AnswerPart), $"question '{q.id}' override '{o.era}'");
+                Ascii(OverrideLineId(q.id, n), o.answer);
+                Id(OverrideLineId(q.id, n), $"question '{q.id}' override {n + 1}");
             }
         }
 
@@ -738,11 +746,9 @@ public static partial class WorldContentGenerator
             int longestValue = ParseEnum(q.category, out ClueCategory category) ? LongestValue(src, category) : 0;
             Fits(QuestionLineId(q.id, PromptPart), q.prompt, Interview.PlaceToken, longestPlace);
             Fits(QuestionLineId(q.id, AnswerPart), q.answer, Interview.ValueToken, longestValue);
-            foreach (OverrideData o in q.overrides ?? Array.Empty<OverrideData>())
-            {
-                Fits(OverrideLineId(q.id, o.era, PromptPart), o.prompt, Interview.PlaceToken, longestPlace);
-                Fits(OverrideLineId(q.id, o.era, AnswerPart), o.answer, Interview.ValueToken, longestValue);
-            }
+            OverrideData[] overrides = q.overrides ?? Array.Empty<OverrideData>();
+            for (int n = 0; n < overrides.Length; n++)
+                Fits(OverrideLineId(q.id, n), overrides[n].answer, Interview.ValueToken, longestValue);
         }
 
         foreach (DialogData d in dialogs)
@@ -1685,8 +1691,8 @@ public static partial class WorldContentGenerator
     /// <summary>The id of a question's line, "{questionId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
     private static string QuestionLineId(string questionId, string part) => $"{questionId}.{part}";
 
-    /// <summary>The id of an era override's line, "{questionId}.{eraId}.{part}": BuildQuestion writes it, CheckInterview checks it.</summary>
-    private static string OverrideLineId(string questionId, string eraId, string part) => $"{questionId}.{eraId}.{part}";
+    /// <summary>The id of a question's <paramref name="index"/>th (0-based) answer override's line, "{questionId}.overrides.{n}.answer" (n from 1): BuildQuestion writes it, CheckInterview checks it.</summary>
+    private static string OverrideLineId(string questionId, int index) => $"{questionId}.overrides.{index + 1}.{AnswerPart}";
 
     /// <summary>A place's id, "{country}_{era}": the profile's id, its asset name and its small-talk lines' owner id.</summary>
     private static string PlaceId(PlaceData p) => $"{p.country}_{p.era}";
@@ -1770,11 +1776,11 @@ public static partial class WorldContentGenerator
         label = q.label,
         prompt = new LineText(QuestionLineId(q.id, PromptPart), q.prompt),
         answer = new LineText(QuestionLineId(q.id, AnswerPart), q.answer),
-        overrides = (q.overrides ?? Array.Empty<OverrideData>()).Select(o => new WordingOverride
+        overrides = (q.overrides ?? Array.Empty<OverrideData>()).Select((o, n) => new WordingOverride
         {
-            eraId = o.era,
-            prompt = new LineText(OverrideLineId(q.id, o.era, PromptPart), o.prompt),
-            answer = new LineText(OverrideLineId(q.id, o.era, AnswerPart), o.answer)
+            eraId = o.era ?? string.Empty,
+            kinds = (o.kinds ?? Array.Empty<string>()).Where(k => ParseEnum(k, out TravellerKind _)).Select(k => (TravellerKind)Enum.Parse(typeof(TravellerKind), k)).ToList(),
+            answer = new LineText(OverrideLineId(q.id, n), o.answer)
         }).ToList()
     };
 
@@ -2242,7 +2248,8 @@ public static partial class WorldContentGenerator
         public OverrideData[] overrides;
     }
 
-    [Serializable] private sealed class OverrideData { public string era; public string prompt; public string answer; }
+    /// <summary>A question's answer override: the kinds (names; none: any) and the era (blank: any) it is for, and the answer ({value}).</summary>
+    [Serializable] private sealed class OverrideData { public string era; public string[] kinds; public string answer; }
 
     /// <summary>A gate condition; place ("{country}_{era}"), attribute and nation are ids the generator resolves.</summary>
     [Serializable] private sealed class ConditionData { public string type; public string key; public float threshold; public string place; public string attribute; public string nation; }

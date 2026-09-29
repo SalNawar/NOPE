@@ -153,21 +153,26 @@ public sealed class MissingFormReply
     public LineText line = new();
 }
 
-/// <summary>Per-era wording of a question: chosen by the traveller's claimed era.</summary>
+/// <summary>
+/// A question's answer for some kinds of traveller, a claimed era, or both
+/// (world_source.json questions[].overrides; the personalities spec's W3):
+/// only the traveller's sentence changes, never the desk's words or the value.
+/// The most specific override wins (ContextMatch: named kinds 2, a named era 1).
+/// </summary>
 [Serializable]
 public sealed class WordingOverride
 {
-    /// <summary>The claimed era this wording is for (EraSO.id).</summary>
+    /// <summary>The claimed era this answer is for (EraSO.id); blank: any era.</summary>
     public string eraId;
 
-    /// <summary>The desk's question.</summary>
-    public LineText prompt = new();
+    /// <summary>The kinds of traveller this answer is for; empty: any kind. Serialized TravellerKind values (append only).</summary>
+    public List<TravellerKind> kinds = new();
 
     /// <summary>The traveller's answer template ({value}).</summary>
     public LineText answer = new();
 }
 
-/// <summary>One interview question: a fact category, its menu label and wording.</summary>
+/// <summary>One interview question: a fact category, its menu label and wording; asked of every traveller in the same words (the personalities spec's W3), the answer's sentence by kind and era.</summary>
 [Serializable]
 public sealed class InterviewQuestion
 {
@@ -180,13 +185,13 @@ public sealed class InterviewQuestion
     /// <summary>The ask-menu entry ("Capital").</summary>
     public string label;
 
-    /// <summary>The desk's question.</summary>
+    /// <summary>The desk's question, the same for every traveller ({place}: the claimed place's label).</summary>
     public LineText prompt = new();
 
-    /// <summary>The traveller's answer template; {value} is the canonical fact value.</summary>
+    /// <summary>The traveller's default answer template (a 2150 citizen's); {value} is the canonical fact value.</summary>
     public LineText answer = new();
 
-    /// <summary>Wording per claimed era (only the sentence changes, never the value).</summary>
+    /// <summary>The answer per kinds and claimed era (only the sentence changes, never the value).</summary>
     public List<WordingOverride> overrides = new();
 
     /// <summary>The kinds of traveller the desk asks it of (world_source.json questions[].kinds; traveller types I1: the trip questions the 2150 citizens', the home questions the displaced's); empty: every kind.</summary>
@@ -195,31 +200,29 @@ public sealed class InterviewQuestion
     /// <summary>True when the desk asks this question of a traveller of <paramref name="kind"/>: one of its kinds, or every kind when it names none.</summary>
     public bool AsksOf(TravellerKind kind) => kinds == null || kinds.Count == 0 || kinds.Contains(kind);
 
-    /// <summary>The question as asked of a traveller claiming <paramref name="eraId"/>: that era's override, else the default.</summary>
-    public LineText PromptFor(string eraId)
+    /// <summary>
+    /// The answer template of a traveller of <paramref name="kind"/> claiming
+    /// <paramref name="eraId"/>: the best-scoring override (ContextMatch:
+    /// named kinds 2, a named era 1, summed; a tie keeps the first listed; an
+    /// override of another kind or era never applies), else the default.
+    /// </summary>
+    public LineText AnswerFor(string eraId, TravellerKind kind)
     {
-        WordingOverride o = OverrideFor(eraId);
-        return o != null ? o.prompt : prompt;
-    }
+        LineText best = answer;
+        int bestScore = ContextMatch.NoMatch;
+        foreach (WordingOverride o in overrides ?? new List<WordingOverride>())
+        {
+            if (o == null)
+                continue;
+            int score = ContextMatch.Score(o.kinds, o.eraId, kind, eraId);
+            if (score > bestScore)
+            {
+                bestScore = score;
+                best = o.answer;
+            }
+        }
 
-    /// <summary>The answer template for a traveller claiming <paramref name="eraId"/>: that era's override, else the default.</summary>
-    public LineText AnswerFor(string eraId)
-    {
-        WordingOverride o = OverrideFor(eraId);
-        return o != null ? o.answer : answer;
-    }
-
-    /// <summary>The override for an era, or null.</summary>
-    private WordingOverride OverrideFor(string eraId)
-    {
-        if (string.IsNullOrEmpty(eraId) || overrides == null)
-            return null;
-
-        foreach (WordingOverride o in overrides)
-            if (o != null && o.eraId == eraId)
-                return o;
-
-        return null;
+        return best;
     }
 }
 
