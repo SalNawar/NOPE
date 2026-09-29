@@ -117,6 +117,12 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>A link's thickness in the tree.</summary>
     [Min(1f)] public float ordersLinkWidth = 3f;
 
+    /// <summary>The Orders tree's zoom levels in percent (Saleh 2026-09-29: "zoom drag and scroll"): Ctrl+wheel, the - and + buttons, Ctrl+= and Ctrl+- step through them, Ctrl+0 goes back to 100 %; a level that would draw a node's smallest text under <see cref="ordersTextFloor"/> is left out (TreeZoom.ReadableLevels).</summary>
+    public int[] ordersZoomLevels = { 100, 125, 150, 175, 200 };
+
+    /// <summary>The smallest a text of the Orders tree may be drawn at, in desktop units (16 u: 12.4 px at 1080p, 8.3 px at 720p, a node's state line at its floor at 100 %). The zoom never goes out past the level that keeps the node's smallest text at it, so with today's node texts it never goes under 100 %.</summary>
+    [Min(1f)] public float ordersTextFloor = 16f;
+
     [Header("The Investigation app (redesign phase 16)")]
     /// <summary>The app window's restored size (it opens maximised; P spec WN4).</summary>
     public Vector2 investigationWindowSize = new Vector2(1120f, 820f);
