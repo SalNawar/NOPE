@@ -76,6 +76,7 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckHome(src, authored, errors);
+        errors.AddRange(BuildWorld(src.world, errors).Problems());
         CheckAgency(src, errors);
         CheckPortals(src, authored, errors);
         CheckDayKinds(src, authored, errors);
@@ -160,6 +161,7 @@ public static partial class WorldContentGenerator
         WirePresent(authored.library, src);
         WireNews(authored.library, src.news);
         WireHome(authored.library, src.home);
+        WireWorld(authored.library, BuildWorld(src.world, null));
         WritePc(authored.library, pc);
 
         int pruned = PruneOwnedFolders(written);
@@ -2241,6 +2243,7 @@ public static partial class WorldContentGenerator
         public NewsData news;
         public PcData pc;
         public HomeData home;
+        public WorldData world;
     }
 
     /// <summary>The shared look knobs: face bands, grey age, the premade garment label, confusable place pairs.</summary>

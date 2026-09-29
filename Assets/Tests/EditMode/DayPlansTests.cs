@@ -33,7 +33,7 @@ public class DayPlansTests
         Assert.AreEqual(14, DayPlans.Pick(days, 16), "a day past 15 replays day 15");
     }
 
-    /// <summary>Days 7-15 V1: every day up to the run's last (the Retirement milestone) has a plan of its own; a missing tail is named with the plan it would replay.</summary>
+    /// <summary>Days 7-15 V1: every day up to the run's last (the last-day ending's day) has a plan of its own; a missing tail is named with the plan it would replay.</summary>
     [Test]
     public void Problems_WarnsAboutADayUpToTheMilestoneWithoutAPlan()
     {

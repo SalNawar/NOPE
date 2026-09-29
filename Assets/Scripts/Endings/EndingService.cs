@@ -4,8 +4,8 @@ using UnityEngine;
 /// <summary>
 /// Evaluates EndingSO conditions against the current WorldState: failures
 /// after every verdict and at the end of a shift that applied dialog
-/// consequences (GameManager, EndingMoment.Immediate); failures, the
-/// Retirement milestone and the attribute epilogues at the day boundary
+/// consequences (GameManager, EndingMoment.Immediate); failures and the run's
+/// last day (the neutral "world you made" ending) at the day boundary
 /// (RunManager.Sleep, EndingMoment.DayBoundary). Whether a condition holds is
 /// the Domain rule EndingRules.Met, which one wins EndingRules.Select.
 /// </summary>
@@ -36,7 +36,7 @@ public static class EndingService
                 continue;
 
             endings.Add(ending);
-            candidates.Add(new EndingCandidate(EndingRules.KindOf(ending.conditionType), ending.priority, Matches(ending, world, now)));
+            candidates.Add(new EndingCandidate(EndingRules.KindOf(ending.conditionType), ending.priority, EndingRules.Met(ending.conditionType, ending.threshold, now)));
         }
 
         int winner = EndingRules.Select(candidates, moment);
@@ -46,14 +46,5 @@ public static class EndingService
             Debug.Log($"[EndingService] {moment}: the run ends with '{best.id}' ({best.displayName}), priority {best.priority}.");
 
         return best;
-    }
-
-    /// <summary>Whether the ending's condition holds now (EndingRules.Met; an attribute ending reads its attribute's global total).</summary>
-    private static bool Matches(EndingSO ending, WorldState world, EndingCheck now)
-    {
-        float? attributeTotal = ending.conditionType == EndingConditionType.AttrTotalAtLeast && ending.attribute != null
-            ? world.timeline.GetScore(TimelineKeys.GlobalAttr(ending.attribute))
-            : (float?)null;
-        return EndingRules.Met(ending.conditionType, ending.threshold, attributeTotal, now);
     }
 }

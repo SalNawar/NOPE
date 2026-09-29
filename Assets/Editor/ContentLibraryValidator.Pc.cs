@@ -10,8 +10,8 @@ public static partial class ContentLibraryValidator
     /// Reports the pc block's content problems (StepSets.Problems against the
     /// reading UI string table and the forms of the blueprints travellers come
     /// from, Sites.Problems, AncestryPages.Problems against the library's
-    /// premades, places and traveller names) and every Sites.WordKeys key
-    /// missing from the reading UI string table; warns (no issue) about a
+    /// premades, places and traveller names) and every Sites.WordKeys key and
+    /// WorldFactors.LeftBehindKey missing from the reading UI string table; warns (no issue) about a
     /// data-only step set whose kind a blueprint now makes, so its mark goes
     /// and its forms and categories are checked. Returns the issue count.
     /// </summary>
@@ -45,6 +45,8 @@ public static partial class ContentLibraryValidator
 
         foreach (string key in Sites.WordKeys.Where(k => !keys.Contains(k)))
             Error($"the reading UI string table has no '{key}', which the Internet's pages write with");
+        if (!keys.Contains(WorldFactors.LeftBehindKey))
+            Error($"the reading UI string table has no '{WorldFactors.LeftBehindKey}', which a failure ending's world page is headed with");
         return issues;
     }
 }
