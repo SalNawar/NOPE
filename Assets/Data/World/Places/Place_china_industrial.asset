@@ -162,3 +162,10 @@ MonoBehaviour:
     baseScore: 3
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: corporate_board
+  - factor: future
+    outcome: anarchy
+  - factor: money
+    outcome: company_towns

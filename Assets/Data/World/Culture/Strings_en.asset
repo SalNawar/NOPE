@@ -830,6 +830,10 @@ MonoBehaviour:
     text: No power holds the Future. The present is unsettled until one rises.
     gloss: 0
     tier: 0
+  - key: site.history.today
+    text: 2150 today
+    gloss: 0
+    tier: 0
   - key: site.history.whyCarry
     text: Carried from {0}
     gloss: 0

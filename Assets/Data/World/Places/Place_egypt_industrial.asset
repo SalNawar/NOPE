@@ -164,3 +164,8 @@ MonoBehaviour:
     baseScore: 4
     dominantEffect: {fileID: 0}
     supportingEffect: {fileID: 0}
+  leanings:
+  - factor: government
+    outcome: monarchy
+  - factor: money
+    outcome: company_towns

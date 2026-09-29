@@ -30,3 +30,4 @@ MonoBehaviour:
   citizenId: 512-6048-33
   debt: 0
   employer: 
+  pulls: []

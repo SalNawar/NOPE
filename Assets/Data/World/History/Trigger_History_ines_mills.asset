@@ -26,4 +26,6 @@ MonoBehaviour:
     attribute: {fileID: 0}
     profile: {fileID: 0}
     nation: {fileID: 0}
-  outcomes: []
+  outcomes:
+  - effect: {fileID: 11400000, guid: b49d9d1d33f53ba49973f513f31e10c0, type: 2}
+    durationDaysOverride: 0

@@ -30,3 +30,4 @@ MonoBehaviour:
   citizenId: 418-3302-56
   debt: 212000
   employer: ruhr_colliery
+  pulls: []

@@ -23,3 +23,10 @@ MonoBehaviour:
     nation: {fileID: 0}
     profile: {fileID: 11400000, guid: 6e8a9876a0223c64e8d90c33c5898bff, type: 2}
     category: 0
+  - type: 26
+    stringParam: government/theocracy
+    floatParam: 2
+    attribute: {fileID: 0}
+    nation: {fileID: 0}
+    profile: {fileID: 0}
+    category: 0
