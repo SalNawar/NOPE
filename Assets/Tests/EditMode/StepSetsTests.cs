@@ -21,14 +21,6 @@ public class StepSetsTests
     /// <summary>The forms of today's blueprints: the displaced's three, the rich tourist's two, the poor tourist's four more (phase 8) and the labourer's contract (phase 9).</summary>
     private static readonly string[] FormsToday = { "TC-610", "TC-620", "TC-630", "TC-101", "TC-230", "TC-310", "TC-415", "TC-416", "TC-417", "TC-520" };
 
-    private static StepSource Source(string id, string when, string link = "PrimaryName", string hint = null) => new StepSource
-    {
-        id = id,
-        when = when,
-        jump = hint == null ? new StepJumpSource { link = link } : new StepJumpSource(),
-        hint = hint
-    };
-
     private static StepSpec Spec(string id, StepWhen when) => new StepSpec { id = id, when = when, link = StepLink.Tab, tab = AppTab.Rules };
 
     private static StepSetData Data(params StepSet[] sets) => new StepSetData { sets = sets.ToList() };
