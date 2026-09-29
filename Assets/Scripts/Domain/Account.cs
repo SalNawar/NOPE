@@ -19,7 +19,7 @@ public sealed class AccountDay
     /// <summary>The shift's pay (ShiftLedger.TotalPay).</summary>
     public int wages;
 
-    /// <summary>The shift's wrong-decision penalties (ShiftLedger.TotalPenalties; a stranding fines nothing).</summary>
+    /// <summary>The shift's fines (ShiftLedger.TotalFines: the wrong-decision penalties and the stranding fines).</summary>
     public int fines;
 
     /// <summary>The Debt Relief instalment taken from the pay, or Account.Unknown.</summary>
@@ -206,8 +206,8 @@ public static class Account
 
     /// <summary>
     /// Writes the shift's part of <paramref name="day"/>'s row (a replayed
-    /// shift replaces it): the ledger's pay, its wrong-decision penalties as
-    /// the FINES cell, the source's instalment, wallet and debt, and the
+    /// shift replaces it): the ledger's pay, its fines (the wrong-decision
+    /// penalties and the stranding fines) as the FINES cell, the source's instalment, wallet and debt, and the
     /// day's orders so far (<paramref name="purchases"/>: the Orders app's,
     /// paid during the shift) as its purchases; Home's household starts empty.
     /// </summary>
@@ -217,7 +217,7 @@ public static class Account
         if (row == null)
             return null;
         row.wages = ledger != null ? ledger.TotalPay : 0;
-        row.fines = ledger != null ? ledger.TotalPenalties : 0;
+        row.fines = ledger != null ? ledger.TotalFines : 0;
         row.debtRelief = source != null ? source.ShiftInstalment : Unknown;
         row.household = 0;
         row.purchases = purchases;

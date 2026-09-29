@@ -55,6 +55,7 @@ public class SeedsTests
         { "forms", Seeds.ForForms },
         { "faults", Seeds.ForFaults },
         { "personality", Seeds.ForPersonality },
+        { "waiverSign", Seeds.ForWaiverSign },
     };
 
     [TestCase("lie")]
@@ -65,6 +66,7 @@ public class SeedsTests
     [TestCase("forms")]
     [TestCase("faults")]
     [TestCase("personality")]
+    [TestCase("waiverSign")]
     public void TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream(string name)
     {
         Assert.AreEqual(TravellerStreams.Count, typeof(SeedsTests).GetMethod(nameof(TravellerStream_IsDeterministic_OnePerTraveller_AndApartFromEveryOtherStream))
@@ -92,6 +94,19 @@ public class SeedsTests
         CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "violator"), Seeds.ForViolators(daySeed));
     }
 
+    /// <summary>The endings and strandings spec §6.1: the fates draw on their own day stream, apart from the stranding roll's (so who is stranded never moves) and every other stream.</summary>
+    [Test]
+    public void StrandingFateStream_IsDeterministic_AndApartFromTheRollAndEveryOtherStream()
+    {
+        Assert.AreEqual(0x46415445, Seeds.StrandingFateSalt, "\"FATE\"");
+        Assert.AreEqual(0x5349474E, Seeds.WaiverSignSalt, "\"SIGN\"");
+        int daySeed = Seeds.Day(12345, 2);
+        Assert.AreEqual(Seeds.ForStrandingFates(daySeed), Seeds.ForStrandingFates(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "fates"), Seeds.ForStrandingFates(daySeed));
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, "stranding"), Seeds.ForStrandings(daySeed));
+        CollectionAssert.AreNotEqual(TenDraws(Seeds.ForStrandings(daySeed)), TenDraws(Seeds.ForStrandingFates(daySeed)));
+    }
+
     /// <summary>Audit R3-010 (phase 9): the day's event placements draw from their own salted stream, apart from the day's raw seed and every other stream.</summary>
     [Test]
     public void EventStream_IsDeterministic_AndApartFromEveryOtherStream()
@@ -106,7 +121,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.SlipSalt, Seeds.RecoverySalt, Seeds.BreakInSalt, Seeds.StrandingFateSalt, Seeds.WaiverSignSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -319,6 +334,10 @@ public class SeedsTests
             streams.Add(Seeds.ForRecovery(daySeed));
         if (except != "breakins")
             streams.Add(Seeds.ForBreakIns(daySeed));
+        if (except != "stranding")
+            streams.Add(Seeds.ForStrandings(daySeed));
+        if (except != "fates")
+            streams.Add(Seeds.ForStrandingFates(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
         {
             streams.Add(caseSeed);

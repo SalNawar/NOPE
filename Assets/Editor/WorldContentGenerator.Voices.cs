@@ -51,7 +51,7 @@ public static partial class WorldContentGenerator
             for (int i = 0; i < rows.Length; i++)
                 if (rows[i] != null)
                     Names($"interview.voices.{list} row {i + 1}", rows[i].kinds, rows[i].variant, rows[i], list == "reactions");
-        foreach ((string list, VoiceRowData[] rows) in new[] { ("reactions", iv.reactions ?? Array.Empty<VoiceRowData>()), ("slips", iv.slips ?? Array.Empty<VoiceRowData>()) })
+        foreach ((string list, VoiceRowData[] rows) in new[] { ("reactions", iv.reactions ?? Array.Empty<VoiceRowData>()), ("slips", iv.slips ?? Array.Empty<VoiceRowData>()), ("waiverPad.replies", iv.waiverPad?.replies ?? Array.Empty<VoiceRowData>()) })
             for (int i = 0; i < rows.Length; i++)
                 if (rows[i] != null)
                     Names($"interview.{list} row {i + 1}", rows[i].kinds, null, rows[i], list == "reactions");
@@ -61,7 +61,7 @@ public static partial class WorldContentGenerator
                 Names($"interview.kindSmallTalk row {i + 1}", kindTalk[i].kinds, null);
 
         InterviewLines built = BuildLines(iv);
-        foreach ((string list, List<VoiceLine> rows) in BookLists(built.voices).Concat(new[] { ("default reactions", built.reactions), ("default slips", built.slips) }))
+        foreach ((string list, List<VoiceLine> rows) in BookLists(built.voices).Concat(new[] { ("default reactions", built.reactions), ("default slips", built.slips), ("default waiver-pad replies", built.waiverPad.replies) }))
             foreach (VoiceLine row in rows.Where(r => r != null))
             {
                 id(row.line.id, $"the {list} row of '{VoiceOf(row)}'");
@@ -76,6 +76,14 @@ public static partial class WorldContentGenerator
         {
             id(row.line.id, "the kinds' small talk");
             ascii(row.line.id, row.line.text);
+        }
+        if (iv.waiverPad != null)
+        {
+            id(built.waiverPad.prompt.id, "the waiver pad's prompt");
+            ascii(built.waiverPad.prompt.id, built.waiverPad.prompt.text);
+            ascii(InterviewLineId("waiverPad.label"), built.waiverPad.label);
+            if (string.IsNullOrWhiteSpace(built.waiverPad.label) || string.IsNullOrWhiteSpace(built.waiverPad.prompt.text))
+                errors.Add("interview.waiverPad needs a label (the entry) and a prompt (the desk's words).");
         }
 
         var eraNames = src.eras.ToDictionary(e => e.id, e => e.displayName);
@@ -105,6 +113,8 @@ public static partial class WorldContentGenerator
             Employers = (src.agency?.employers ?? Array.Empty<Employer>()).Where(e => e != null).Select(e => e.name).ToList(),
             DefaultReactions = built.reactions,
             DefaultSlips = built.slips,
+            DefaultPadReplies = built.waiverPad.replies,
+            PadOffered = InterviewScript.OffersPad(kindForms.SelectMany(k => k.Askable ?? Array.Empty<AskableForm>()).ToList(), built),
             SlipChances = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).Select(d => (d.day, d.slipChance)).ToList(),
             PremadeIntents = PremadeIntents(src),
             DisplacedPremades = (src.premades ?? Array.Empty<PremadeData>()).Where(m => m != null && (string.IsNullOrEmpty(m.kind) || m.kind == "None" || m.kind == nameof(TravellerKind.Displaced))).Select(m => m.id).ToList()
@@ -148,7 +158,10 @@ public static partial class WorldContentGenerator
 
     /// <summary>The cast as the library holds it (null rows kept, so the rules report them).</summary>
     private static List<Personality> BuildCast(PersonalityData[] cast) =>
-        (cast ?? Array.Empty<PersonalityData>()).Select(p => p == null ? null : new Personality { id = p.id, name = p.name, weight = p.weight, note = p.note ?? string.Empty }).ToList();
+        (cast ?? Array.Empty<PersonalityData>()).Select(p => p == null ? null : new Personality
+        {
+            id = p.id, name = p.name, weight = p.weight, note = p.note ?? string.Empty, waiverRefusal = p.waiverRefusal, strandingFate = p.strandingFate ?? string.Empty
+        }).ToList();
 
     /// <summary>Writes the cast into the library's personalities (field by field: the list holds plain rows).</summary>
     private static void WireCast(ContentLibrarySO lib, PersonalityData[] cast)
@@ -164,6 +177,8 @@ public static partial class WorldContentGenerator
             row.FindPropertyRelative("name").stringValue = built[i].name;
             row.FindPropertyRelative("weight").floatValue = built[i].weight;
             row.FindPropertyRelative("note").stringValue = built[i].note;
+            row.FindPropertyRelative("waiverRefusal").floatValue = built[i].waiverRefusal;
+            row.FindPropertyRelative("strandingFate").stringValue = built[i].strandingFate;
         }
         so.ApplyModifiedProperties();
         EditorUtility.SetDirty(lib);
@@ -182,7 +197,8 @@ public static partial class WorldContentGenerator
             answers = VoiceRows("answers", v.answers, r => r.question),
             smallTalk = VoiceRows("smallTalk", v.smallTalk, r => null),
             reactions = VoiceRows("reactions", v.reactions, r => null),
-            slips = VoiceRows("slips", v.slips, r => null)
+            slips = VoiceRows("slips", v.slips, r => null),
+            waiverPad = VoiceRows("waiverPad", v.waiverPad, r => r.reply)
         };
     }
 
@@ -255,6 +271,7 @@ public static partial class WorldContentGenerator
         yield return ("smallTalk", v.smallTalk ?? Array.Empty<VoiceRowData>());
         yield return ("reactions", v.reactions ?? Array.Empty<VoiceRowData>());
         yield return ("slips", v.slips ?? Array.Empty<VoiceRowData>());
+        yield return ("waiverPad", v.waiverPad ?? Array.Empty<VoiceRowData>());
     }
 
     private static IEnumerable<(string list, List<VoiceLine> rows)> BookLists(VoiceBook b)
@@ -267,6 +284,7 @@ public static partial class WorldContentGenerator
         yield return ("smallTalk", b.smallTalk);
         yield return ("reactions", b.reactions);
         yield return ("slips", b.slips);
+        yield return ("waiverPad", b.waiverPad);
     }
 
     // -----------------------------
@@ -274,7 +292,7 @@ public static partial class WorldContentGenerator
     // -----------------------------
 
     /// <summary>A personality of the cast (world_source.json "personalities").</summary>
-    [Serializable] private sealed class PersonalityData { public string id; public string name; public float weight; public string note; }
+    [Serializable] private sealed class PersonalityData { public string id; public string name; public float weight; public string note; public float waiverRefusal; public string strandingFate; }
 
     /// <summary>interview.smallTalkWeights.</summary>
     [Serializable] private sealed class SmallTalkWeightsData { public float personality; public float home; public float kind; }
@@ -294,6 +312,7 @@ public static partial class WorldContentGenerator
         public string intent;
         public string reason;
         public string lie;
+        public string reply;
         public string[] kinds;
         public string era;
         public string text;
@@ -311,5 +330,6 @@ public static partial class WorldContentGenerator
         public VoiceRowData[] smallTalk;
         public VoiceRowData[] reactions;
         public VoiceRowData[] slips;
+        public VoiceRowData[] waiverPad;
     }
 }

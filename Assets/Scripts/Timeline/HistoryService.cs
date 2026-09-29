@@ -4,7 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// History glue: records liar carries and costume-error panics at accept and
-/// strandings at the shift's end, and at night latches the timeline leader,
+/// a stranding's carry at the shift's end, and at night latches the timeline leader,
 /// promotes carries and reports panics and strandings. Every decision is a
 /// Domain call (Influence, ScoreRanking, NationLeader, Carries, History,
 /// Strandings); this class reads the content, writes WorldState.history,
@@ -54,52 +54,49 @@ public static class HistoryService
     }
 
     /// <summary>
-    /// At the shift's end: a stranded traveller (traveller types S2) carries
-    /// the present's fact (GameConfigSO.carryCategory) into the destination
-    /// through the carries, as a liar does (Carries.Make from the present's
-    /// row of today's facts), and is kept for the next morning's news
-    /// (ReportStrandings). Without a present or a config only the news is
-    /// recorded.
+    /// At the shift's end, for a stranded traveller whose fate is to bring 2150
+    /// technology (StrandingFate.Carry; the endings and strandings spec §6.2):
+    /// the present's fact (GameConfigSO.carryCategory) heads for the
+    /// destination through the carries, as a liar's does (Carries.Make from
+    /// the present's row of today's facts). False when no carry can be made
+    /// (no present, config or claim, or the place already reads the present's
+    /// value): the fate then falls back to the news.
     /// </summary>
-    public static void RecordStranding(WorldState world, CaseInstance inst, TodaysWorld today, GameConfigSO config)
+    public static bool RecordStrandingCarry(WorldState world, CaseInstance inst, TodaysWorld today, GameConfigSO config)
     {
         if (world == null || inst == null)
-            return;
-
-        world.history.pendingStrandings ??= new List<StrandingRecord>();
-        world.history.pendingStrandings.Add(new StrandingRecord { travellerName = inst.visitorDisplayName, placeLabel = inst.originLabel, day = world.day });
+            return false;
 
         PresentPlace present = today?.Present;
         if (present == null || config == null || inst.claimedNation == null || inst.claimedEra == null)
         {
-            Debug.LogWarning($"[HistoryService] Stranding of '{inst.visitorDisplayName}' recorded for the news, but no present, config or claim to carry from: nothing reaches {inst.originLabel}.");
-            return;
+            Debug.LogWarning($"[HistoryService] Stranding of '{inst.visitorDisplayName}': no present, config or claim to carry from, so nothing reaches {inst.originLabel}.");
+            return false;
         }
 
         CarryRecord record = Carries.Make(present.NationId, present.EraId, inst.claimedNation.id, inst.claimedEra.id, config.carryCategory, today.Facts, world.day);
         if (record == null)
-            return;
+            return false;
 
         world.history.pendingCarries.Add(record);
         Debug.Log($"[HistoryService] Stranding carry recorded: '{record.value}' ({record.category}) from {present.Label} to {inst.originLabel}.");
+        return true;
     }
 
     /// <summary>
-    /// At night: one news line per traveller stranded today (Strandings.Lines
-    /// over news.stranded), then the record is cleared. A blank line warns and
-    /// reports nothing.
+    /// At night: each traveller stranded today's paper line (Strandings.Lines:
+    /// the fate's line composed at the shift's end; a forgotten traveller makes
+    /// none, Q12), then the day's record is cleared (the run's stranding log
+    /// keeps them).
     /// </summary>
-    public static void ReportStrandings(WorldState world, ContentLibrarySO lib, List<string> news)
+    public static void ReportStrandings(WorldState world, List<string> news)
     {
         List<StrandingRecord> strandings = world.history.pendingStrandings;
         if (strandings == null || strandings.Count == 0)
             return;
 
-        List<string> lines = Strandings.Lines(lib.News.stranded, strandings);
-        if (lines.Count == 0)
-            Debug.LogWarning("[HistoryService] Strandings were recorded but the content library has no stranding line. Run Tools > TimeDesk > Generate World.");
-        news.AddRange(lines);
-        Debug.Log($"[HistoryService] {strandings.Count} stranding(s) reported: {string.Join("; ", strandings.Select(s => $"'{s.travellerName}' in {s.placeLabel}"))}.");
+        news.AddRange(Strandings.Lines(strandings));
+        Debug.Log($"[HistoryService] {strandings.Count} stranding(s) reported: {string.Join("; ", strandings.Select(s => $"'{s.travellerName}' in {s.placeLabel} ({s.fate})"))}.");
         strandings.Clear();
     }
 

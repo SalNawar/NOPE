@@ -79,6 +79,9 @@ public sealed class VoiceBook
 
     /// <summary>A liar's slip after small talk, optionally by lie kind ({place}; T9-T11).</summary>
     public List<VoiceLine> slips = new List<VoiceLine>();
+
+    /// <summary>The answer to the desk's waiver pad, by reply (the row's key: a WaiverPadReply's name; {place}; the endings and strandings spec §7.3).</summary>
+    public List<VoiceLine> waiverPad = new List<VoiceLine>();
 }
 
 /// <summary>How small talk picks its source (world_source.json interview.smallTalkWeights; the personalities spec's V5): the personality's lines, the home's, the kind's.</summary>
@@ -169,6 +172,9 @@ public static class VoiceKeys
 
     /// <summary>The reaction to <paramref name="verdict"/> with <paramref name="intent"/>.</summary>
     public static string Reaction(ReactionVerdict verdict, ReactionIntent intent) => $"reaction:{verdict}:{intent}";
+
+    /// <summary>The answer to the waiver pad with <paramref name="reply"/>.</summary>
+    public static string WaiverPad(WaiverPadReply reply) => "waiverpad:" + reply;
 }
 
 /// <summary>
@@ -291,7 +297,7 @@ public static class Voices
         };
         sources.RemoveAll(s => s.lines.Count == 0);
         double u = (uint)Seeds.Mix(voice.Seed, Seeds.OfKey(VoiceKeys.SmallTalkSource)) / 4294967296.0;
-        (float weight, IReadOnlyList<LineText> lines) source = WeightedRandom.Pick(sources, s => s.weight, new FixedValue((float)u));
+        (float weight, IReadOnlyList<LineText> lines) source = WeightedRandom.Pick(sources, s => s.weight, new FixedRandom((float)u));
         return source.lines != null ? source.lines[Pick(voice.Seed, VoiceKeys.SmallTalk, source.lines.Count)] : null;
     }
 
@@ -322,6 +328,20 @@ public static class Voices
         string name = lie.HasValue ? lie.Value.ToString() : string.Empty;
         int Key(VoiceLine r) => string.IsNullOrEmpty(r.lie) ? 0 : r.lie == name ? NamedKeyScore : ContextMatch.NoMatch;
         return Row(Pool(Book(lines).slips, voice, context, Key), Defaults(lines?.slips, context, Key), voice, VoiceKeys.Slip)?.line;
+    }
+
+    /// <summary>
+    /// The traveller's answer to the desk's waiver pad (the endings and
+    /// strandings spec §7.3): the voice's waiverPad rows keyed by
+    /// <paramref name="reply"/>'s name, else the defaults
+    /// (interview.waiverPad.replies) the same way; one line as a value of
+    /// "waiverpad:{reply}". Null when neither has one.
+    /// </summary>
+    public static LineText WaiverPad(InterviewLines lines, Voice voice, VoiceContext context, WaiverPadReply reply)
+    {
+        string name = reply.ToString();
+        int Key(VoiceLine r) => r.key == name ? 0 : ContextMatch.NoMatch;
+        return Row(Pool(Book(lines).waiverPad, voice, context, Key), Defaults(lines?.waiverPad?.replies, context, Key), voice, VoiceKeys.WaiverPad(reply))?.line;
     }
 
     /// <summary>One row of the voice's pool, else of the defaults' pool, as a value of <paramref name="slotKey"/>; null when both are empty.</summary>
@@ -393,16 +413,4 @@ public static class Voices
     }
 
     private static VoiceBook Book(InterviewLines lines) => lines?.voices ?? new VoiceBook();
-
-    /// <summary>A random source that answers one value: WeightedRandom.Pick's roll made a value of the seed (a pick, never a draw).</summary>
-    private sealed class FixedValue : IRandomSource
-    {
-        private readonly float _value;
-
-        public FixedValue(float value) => _value = value;
-
-        public int Range(int minInclusive, int maxExclusive) => maxExclusive <= minInclusive ? minInclusive : minInclusive + (int)(_value * (maxExclusive - minInclusive));
-
-        public float Value() => _value;
-    }
 }

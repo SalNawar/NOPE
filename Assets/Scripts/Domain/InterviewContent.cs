@@ -304,6 +304,9 @@ public sealed class InterviewLines
 
     /// <summary>The default slips (interview.slips, by lie kind; one with a blank lie is required; the personalities spec's T10).</summary>
     public List<VoiceLine> slips = new List<VoiceLine>();
+
+    /// <summary>The desk's waiver pad (interview.waiverPad: the entry, the desk's words, the default replies; the endings and strandings spec §7.3).</summary>
+    public WaiverPadWording waiverPad = new WaiverPadWording();
 }
 
 /// <summary>

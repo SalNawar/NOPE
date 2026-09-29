@@ -73,6 +73,23 @@ public static class ContentSheetMap
                     Int("amountMax").Note("an amount proof's most value in cr (0 for a number)"),
                     Text("prefix").Note("a number proof's prefix (TI gives TI-551902); blank for an amount")).Note("the proofs of means a Standard account may hold, one per proof form"),
                 Num("strandChance").Note("the chance an accepted traveller on an Economy transponder is stranded at the shift's end (0.08 = 8%)"),
+                Rows("agencyStrandingFates", "strandingFates", Key("id", "strandingFate"),
+                    Text("id").Required(),
+                    Text("fate").OneOf(System.Enum.GetNames(typeof(StrandingFate))).Note("what the fate does: Forgotten (Mail only), News (the paper), Carry (2150 technology), Tremor (stability), Police (the Time Police)"),
+                    Num("weightWaivered").Note("its weight when a valid signed waiver was on file (never shown to the player)"),
+                    Num("weightUnwaivered").Note("its weight when none was"),
+                    Num("stability").Omit().Note("a tremor's loss: the percent of where stability stands (blank for every other fate)"),
+                    Text("status").Note("the failure report's last line"),
+                    Rows("strandingFateLines", "lines",
+                        Text("era").Omit().Ref("eras").Note("the destination's era (blank: any)"),
+                        Text("text").Note("the morning paper's line: {place} required, {name} optional")).OmitEmpty().Note("a fate's paper lines (none for Forgotten; none elsewhere prints news.stranded)"))
+                    .Note("what becomes of a stranded traveller: one fate per stranding, weighted by the waiver (the endings and strandings spec §6)"),
+                Single("agencyStrandingReport", "strandingReport",
+                    Text("unit").Note("the failure report's unit line: {unit}, {place}"),
+                    Text("traveller").Note("{name}, {id}"),
+                    Text("waivered").Note("a valid signed waiver on file: {waiver}, {debt}"),
+                    Text("unwaivered").Note("no valid signed waiver on file"),
+                    Text("fine").Note("the stranding fine charged: {fine}")).Note("the agency's transponder failure report, Mail's message for every stranding"),
                 Rows("agencyEmployers", "employers", Key("id"),
                     Text("id").Required(),
                     Text("era").Ref("eras").Note("the era the employer hires for"),
@@ -322,7 +339,17 @@ public static class ContentSheetMap
                 },
                 Text("then").Omit().Note("an optional second line")),
             VoiceSheet("voiceSlips", "voices.slips", "a liar's slip in a voice ({place}; never a checkable value)",
-                Text("lie").Omit().Note("a lie kind (blank: any)"))).Note("the interview's wording");
+                Text("lie").Omit().Note("a lie kind (blank: any)")),
+            VoiceSheet("voiceWaiverPad", "voices.waiverPad", "the answer to the desk's waiver pad in a voice ({place}): every personality signs and refuses in its own words",
+                Text("reply").Required().OneOf(System.Enum.GetNames(typeof(WaiverPadReply)))),
+            Single("waiverPad", "waiverPad",
+                Text("label").Note("the entry every traveller of a day whose papers menu holds the waiver is offered"),
+                Text("prompt").Note("what the desk says as it slides a blank across"),
+                Rows("waiverPadReplies", "replies",
+                    Text("reply").Required().OneOf(System.Enum.GetNames(typeof(WaiverPadReply))),
+                    List("kinds").Omit().Note("the kinds it is for (blank: any)"),
+                    Text("era").Omit().Ref("eras").Note("the claimed era (blank: any)"),
+                    Text("text")).Note("the default replies: one base row per reply is required")).Note("the desk's waiver pad (the endings and strandings spec §7.3)")).Note("the interview's wording");
 
     /// <summary>The cast (world_source.json "personalities"; the personalities spec's PS1-PS2).</summary>
     private static SheetSpec PersonalitiesSheet() =>
@@ -330,7 +357,9 @@ public static class ContentSheetMap
             Text("id").Required(),
             Text("name"),
             Num("weight").Note("its weight in the draw, the same for every kind (0 benches it)"),
-            Text("note").Note("for authors: the tone in one line (never shown in the game)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
+            Text("note").Note("for authors: the tone in one line (never shown in the game)"),
+            Num("waiverRefusal").Note("the chance they refuse the desk's waiver pad, in character (0 to 1; never shown)"),
+            Text("strandingFate").Omit().OneOf(System.Enum.GetNames(typeof(StrandingFate))).Note("the stranding fate their tilt multiplies (blank: none)")).Note("the cast: every generated traveller is one of them; the premades speak their own lines");
 
     /// <summary>One voice slot's sheet (interview.voices.{list}; the personalities spec's §9.1): the voice (a personality or a premade, exactly one), the slot's keys, the kinds and era it is for, the line.</summary>
     private static SheetSpec VoiceSheet(string sheet, string path, string note, params ColumnSpec[] keys) =>

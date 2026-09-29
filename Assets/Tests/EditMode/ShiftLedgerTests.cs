@@ -82,9 +82,9 @@ public class ShiftLedgerTests
         Assert.AreEqual(0, ledger.strandedCount);
     }
 
-    /// <summary>Redesign phase 23 (one penalty for any mistake): a stranding is a world consequence, never a fine, so the net line is the pay, the penalties and the instalment alone.</summary>
+    /// <summary>Saleh's Q10 = D (2026-09-30): a stranding costs money only through the stranding fine charged when no valid signed waiver was on file; it joins the penalties as the shift's fines and the net line.</summary>
     [Test]
-    public void NetMoney_AStrandingMovesNoMoney()
+    public void NetMoney_TheStrandingFinesJoinThePenalties()
     {
         var ledger = new ShiftLedger();
         ledger.verdicts.Add(Verdict(true, pay: 220));
@@ -92,8 +92,21 @@ public class ShiftLedgerTests
         ledger.debtInstalment = 55;
         ledger.strandedCount = 2;
 
-        Assert.AreEqual(15, ledger.TotalPenalties, "the one wrong-decision penalty");
-        Assert.AreEqual(150, ledger.NetMoney, "the wallet's change: 220 - 15 - 55, the two strandings costing nothing");
+        Assert.AreEqual(150, ledger.NetMoney, "two strandings with waivers on file cost nothing: 220 - 15 - 55");
+
+        ledger.strandingFines = 100;
+        Assert.AreEqual(15, ledger.TotalPenalties, "the one wrong-decision penalty stays apart");
+        Assert.AreEqual(115, ledger.TotalFines);
+        Assert.AreEqual(50, ledger.NetMoney, "220 - 15 - 100 - 55");
+    }
+
+    [Test]
+    public void TotalStabilityDelta_CountsTheStrandingsTremors()
+    {
+        var ledger = new ShiftLedger();
+        ledger.verdicts.Add(new CaseVerdict { stabilityDelta = -0.5f });
+        ledger.strandingStabilityDelta = -0.99f;
+        Assert.AreEqual(-1.49f, ledger.TotalStabilityDelta, 1e-4f);
     }
 
     [Test]

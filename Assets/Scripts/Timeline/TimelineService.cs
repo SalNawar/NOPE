@@ -141,7 +141,7 @@ public static class TimelineService
         EvaluateTriggers(world, lib, tomorrow, news, desk);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
-        HistoryService.ReportStrandings(world, lib, news);
+        HistoryService.ReportStrandings(world, news);
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
         BuildTomorrowPackage(world, lib, news, desk);
