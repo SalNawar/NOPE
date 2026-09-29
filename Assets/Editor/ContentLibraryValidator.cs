@@ -501,6 +501,15 @@ public static partial class ContentLibraryValidator
     private static int CheckTriggers(ContentLibrarySO lib)
     {
         int issues = 0;
+        IEnumerable<string> forcedKeys = lib.DayPlans.Where(p => p != null).SelectMany(p => p.ForcedCases).Where(f => f != null)
+            .SelectMany(f => f.conditions ?? new List<TriggerCondition>()).Where(c => c != null).Select(c => c.key);
+        var historyRules = lib.Triggers.Where(t => t != null && t.id != null && t.id.StartsWith(FlagKeys.HistoryRuleTriggerId(string.Empty), StringComparison.Ordinal))
+            .Select(t => (t.id.Substring(FlagKeys.HistoryRuleTriggerId(string.Empty).Length), t.section));
+        foreach (string warning in HistoryChecks.ReturnProblems(historyRules, forcedKeys))
+        {
+            Debug.LogWarning($"[ContentLibraryValidator] {warning}", lib);
+            issues++;
+        }
         var premadeIds = new HashSet<string>(lib.Legendaries.Where(l => l != null).Select(l => l.id));
         foreach (TimelineTriggerSO t in lib.Triggers)
         {

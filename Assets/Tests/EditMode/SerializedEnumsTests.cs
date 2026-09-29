@@ -109,6 +109,16 @@ public class SerializedEnumsTests
         Assert.AreEqual(9, System.Enum.GetValues(typeof(PlannedDirective)).Length, "a new member is appended here too");
     }
 
+    /// <summary>StorySection: stored in TimelineTriggerSO.section (world_source.json history.rules[].section; days 7-15 B10, Saleh's Q9).</summary>
+    [Test]
+    public void StorySection_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)StorySection.News);
+        Assert.AreEqual(1, (int)StorySection.Desk);
+        Assert.AreEqual(2, (int)StorySection.Return);
+        Assert.AreEqual(3, System.Enum.GetValues(typeof(StorySection)).Length, "a new member is appended here too");
+    }
+
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>
     [Test]
     public void MissingFormVariant_KeepsItsSerializedInts()

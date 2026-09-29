@@ -388,6 +388,8 @@ public static partial class WorldContentGenerator
             }
 
             CheckConditions(r.conditions, owner, false, authored, src, errors);
+            if (!string.IsNullOrEmpty(r.section) && !ParseEnum(r.section, out StorySection _))
+                errors.Add($"{owner} has unknown section '{r.section}' ({string.Join(", ", Enum.GetNames(typeof(StorySection)))}; blank: News).");
             errors.AddRange(HistoryChecks.RuleProblems(r.id, r.edits?.Length ?? 0, !string.IsNullOrWhiteSpace(r.news), r.conditions?.Length ?? 0,
                                                        (r.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key), r.stability, premadeIds));
             foreach (EditData e in r.edits ?? Array.Empty<EditData>())
@@ -407,6 +409,11 @@ public static partial class WorldContentGenerator
 
         foreach (string problem in HistoryChecks.Problems(edits, baseWorld))
             errors.Add(problem);
+
+        // A Return rule's consequence reaches the player only through an appearance that reads it (days 7-15 Q9).
+        IEnumerable<string> forcedKeys = src.days.SelectMany(d => d.forced ?? Array.Empty<ForcedData>()).SelectMany(f => f.conditions ?? Array.Empty<ConditionData>()).Select(c => c.key);
+        foreach (string warning in HistoryChecks.ReturnProblems((h.rules ?? Array.Empty<HistoryRuleData>()).Select(r => (r.id, ParseEnum(r.section, out StorySection s) ? s : StorySection.News)), forcedKeys))
+            Debug.LogWarning($"[WorldContentGenerator] {warning}");
     }
 
     /// <summary>
@@ -1401,11 +1408,12 @@ public static partial class WorldContentGenerator
     private static TimelineTriggerSO MakeHistoryTrigger(HistoryRuleData r, EffectSO effect, ConditionRefs refs, HashSet<string> written)
     {
         TimelineTriggerSO t = LoadOrCreate<TimelineTriggerSO>($"{HistoryFolder}/Trigger_History_{r.id}.asset", written);
-        t.id = $"history_{r.id}";
+        t.id = FlagKeys.HistoryRuleTriggerId(r.id);
         t.displayName = r.name;
         t.description = "Generated from world_source.json history.rules.";
         t.oneShot = true;
         t.newsLineOnFire = r.news;
+        t.section = ParseEnum(r.section, out StorySection section) ? section : StorySection.News;
         t.conditions = Conditions(r.conditions, refs).ToList();
         t.outcomes = effect != null ? new List<TriggerOutcome> { new TriggerOutcome { effect = effect, durationDaysOverride = 0 } } : new List<TriggerOutcome>();
         EditorUtility.SetDirty(t);
@@ -2409,7 +2417,7 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; }
 
     /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits, moves stability by its percent (missing: 0) and prints its news line; with no edit it is a story rule (days 7-15 B10).</summary>
-    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; }
+    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; public string section; }
 
     /// <summary>A fact edit: place ("{country}_{era}"), category and the new value.</summary>
     [Serializable] private sealed class EditData { public string place; public string category; public string value; }

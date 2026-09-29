@@ -349,7 +349,8 @@ public static class ContentSheetMap
                     Text("place").Ref("places"),
                     Text("category"),
                     Text("value")),
-                Num("stability").Omit().Note("a change of stability the night the rule fires, a percent of where it stands (-3 takes 3%); blank: none")).Note("history rules: when their conditions pass at night they rewrite a place's fact; a rule with no edit is a story rule, which prints its news line"));
+                Num("stability").Omit().Note("a change of stability the night the rule fires, a percent of where it stands (-3 takes 3%); blank: none"),
+                Text("section").Omit().OneOf("News", "Desk", "Return").Note("where the line goes: the paper's news (blank), the paper's desk section, or nowhere until the character returns (its fired flag, trig:history_{id}:fired)")).Note("history rules: when their conditions pass at night they rewrite a place's fact; a rule with no edit is a story rule, which prints its news line"));
 
     /// <summary>The PC block: the steps checklist's sets, the Internet's sites, the Static sites' authored pages, the Lineage Archive's people and relations, and Mail's authored messages.</summary>
     private static SheetSpec Pc() =>

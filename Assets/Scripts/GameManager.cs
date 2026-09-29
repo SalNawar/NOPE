@@ -218,7 +218,8 @@ public sealed class GameManager : MonoBehaviour
 
         // The morning paper is printed: its lines go to the News site's back issues (the night rebuilds them, so they are kept now).
         if (desktopConfig != null)
-            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues);
+            NewsArchive.Record(_worldState.newsArchive, _worldState.day, _worldState.tomorrow.briefingLines, _worldState.tomorrow.newsLines, desktopConfig.newsArchiveIssues,
+                               _worldState.tomorrow.deskLines);
         else
             Debug.LogWarning("[GameManager] No DesktopConfigSO wired: today's paper is not kept for the News site. Run Tools > TimeDesk > Build Office UI.");
 

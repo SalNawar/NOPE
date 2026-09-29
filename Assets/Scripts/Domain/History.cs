@@ -1,6 +1,27 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// How a story rule's consequence reaches the player (days 7-15 B10, Saleh's
+/// Q9: "all 3 can be a possibility depending on the story"): the morning
+/// paper's news, the paper's own section for the desk's stories, or only the
+/// character's return (never printed: the rule's fired flag is read by the
+/// returning character's appearance). Serialized in TimelineTriggerSO.section
+/// (world_source.json history.rules[].section): append only
+/// (SerializedEnumsTests pins every value).
+/// </summary>
+public enum StorySection
+{
+    /// <summary>The morning paper's news (the default; every trigger's before days 7-15).</summary>
+    News,
+
+    /// <summary>The morning paper's own section for the desk's stories ("FROM DESK 3"), after the news.</summary>
+    Desk,
+
+    /// <summary>Never printed: the consequence waits for the character's return (FlagKeys.HistoryRuleFired).</summary>
+    Return
+}
+
 /// <summary>Why a fact changed. Serialized as ints in saves: append only.</summary>
 public enum EditCause
 {

@@ -9582,6 +9582,12 @@
         "tier": "Flavour"
       },
       {
+        "key": "briefing.deskHeader",
+        "text": "FROM DESK 3",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "wallet.credits",
         "text": "Credits",
         "gloss": "None",
@@ -10292,6 +10298,12 @@
       {
         "key": "site.news.world",
         "text": "WORLD",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "site.news.desk",
+        "text": "From Desk 3",
         "gloss": "None",
         "tier": "Full"
       },

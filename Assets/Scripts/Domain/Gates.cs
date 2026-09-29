@@ -276,6 +276,12 @@ public static class FlagKeys
     /// <summary>Set after a one-shot timeline trigger fires ("trig:{id}:fired", the format saves already hold).</summary>
     public static string TriggerFired(string triggerId) => $"trig:{triggerId}:fired";
 
+    /// <summary>The trigger id Generate World gives a history rule ("history_{id}").</summary>
+    public static string HistoryRuleTriggerId(string ruleId) => $"history_{ruleId}";
+
+    /// <summary>Set the night a history rule fires ("trig:history_{id}:fired"): a Return story rule's consequence, read by the character's return (days 7-15 Q9).</summary>
+    public static string HistoryRuleFired(string ruleId) => TriggerFired(HistoryRuleTriggerId(ruleId));
+
     /// <summary>Set at the end of the shift that completed a one-shot narrative dialog ("dlg:{id}:done").</summary>
     public static string DialogDone(string dialogId) => $"dlg:{dialogId}:done";
 

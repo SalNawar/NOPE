@@ -133,17 +133,18 @@ public static class TimelineService
 
         int tomorrow = world.day + 1;
         var news = new List<string>();
+        var desk = new List<string>();
 
         RecomputeDominance(world, lib, config, news, TomorrowPlaces(world, lib));
         RebuildTierEffects(world, lib, tomorrow);
         int historyLines = HistoryService.LatchLeader(world, lib, config, tomorrow, news);
-        EvaluateTriggers(world, lib, tomorrow, news);
+        EvaluateTriggers(world, lib, tomorrow, news, desk);
         HistoryService.PromoteCarries(world, lib, config, tomorrow, news, historyLines);
         HistoryService.ReportPanics(world, lib, news);
         HistoryService.ReportStrandings(world, lib, news);
         AddDebtLine(world, lib, tomorrow, news);
         ExpireEffects(world, tomorrow);
-        BuildTomorrowPackage(world, lib, news);
+        BuildTomorrowPackage(world, lib, news, desk);
 
         Debug.Log($"[TimelineService] <<< Exiting NightlyResolve (activeEffects={world.timeline.activeEffects.Count}, dominant={world.timeline.dominantKeys.Count}, supporting={world.timeline.supportingKeys.Count}, briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count}).");
     }
@@ -287,9 +288,11 @@ public static class TimelineService
         world.timeline.activeEffects.RemoveAll(e => e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(sourcePrefix, System.StringComparison.Ordinal));
 
     /// <summary>
-    /// Evaluates all triggers; fires those whose conditions all pass.
+    /// Evaluates all triggers; fires those whose conditions all pass. A fired
+    /// trigger's line goes where its section says (days 7-15 Q9): the news,
+    /// the paper's <paramref name="desk"/> section, or nowhere (Return).
     /// </summary>
-    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news)
+    private static void EvaluateTriggers(WorldState world, ContentLibrarySO lib, int startDay, List<string> news, List<string> desk)
     {
         int total = lib.Triggers != null ? lib.Triggers.Count : 0;
         int fired = 0;
@@ -313,8 +316,8 @@ public static class TimelineService
             Debug.Log($"[Timeline] Trigger fired: {trigger.displayName}");
             fired++;
 
-            if (!string.IsNullOrEmpty(trigger.newsLineOnFire))
-                news.Add(trigger.newsLineOnFire);
+            if (!string.IsNullOrEmpty(trigger.newsLineOnFire) && trigger.section != StorySection.Return)
+                (trigger.section == StorySection.Desk ? desk : news).Add(trigger.newsLineOnFire);
 
             foreach (TriggerOutcome outcome in trigger.outcomes)
             {
@@ -613,16 +616,19 @@ public static class TimelineService
 
     /// <summary>
     /// Builds the deterministic tomorrow package: dominance, history and
-    /// trigger news plus briefing/news lines contributed by effects active tomorrow.
+    /// trigger news, the desk's own stories (<paramref name="desk"/>), plus
+    /// briefing/news lines contributed by effects active tomorrow.
     /// </summary>
-    private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news)
+    private static void BuildTomorrowPackage(WorldState world, ContentLibrarySO lib, List<string> news, List<string> desk)
     {
         Debug.Log("[TimelineService] >>> Entering BuildTomorrowPackage.");
 
         world.tomorrow.briefingLines.Clear();
         world.tomorrow.newsLines.Clear();
+        world.tomorrow.deskLines.Clear();
 
         world.tomorrow.newsLines.AddRange(news);
+        world.tomorrow.deskLines.AddRange(desk);
 
         // Lines from active effects (note: world.day is still "today" here, but
         // expiry has already removed everything not active tomorrow).

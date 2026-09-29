@@ -82,6 +82,17 @@ public class NewsPagesTests
         Assert.IsFalse(Sites.Page(w, "chronet://times.tc/day-x").Found);
     }
 
+    /// <summary>The paper's own section for the desk's stories (days 7-15, Q9): under its heading, after the news; none on a day without one.</summary>
+    [Test]
+    public void AnIssue_PrintsTheDesksOwnSection()
+    {
+        SiteWorld w = SiteFixture.World();
+        SitePage day2 = Open(w, "chronet://times.tc/day-2");
+        CollectionAssert.AreEqual(new[] { "site.news.desk" }, Texts(day2, PageBlockKind.Heading));
+        CollectionAssert.AreEqual(new[] { "Desk 4 is closed for the Drive." }, Texts(day2, PageBlockKind.Paragraph));
+        Assert.IsFalse(Open(w, "chronet://times.tc/day-3").Blocks.Any(b => b.Text == "site.news.desk"), "day 3 had no desk story");
+    }
+
     [Test]
     public void Archive_ListsEarlierIssues_NewestFirst()
     {

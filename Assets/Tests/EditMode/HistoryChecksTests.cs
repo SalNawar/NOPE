@@ -118,6 +118,18 @@ public class HistoryChecksTests
         Assert.AreEqual(expected, HistoryChecks.RuleProblems("rook_complaint", 0, true, 2, new string[0], stability, Premades).Count);
     }
 
+    /// <summary>A Return rule (days 7-15 Q9) is never printed: its consequence reaches the player only through an appearance that reads its fired flag.</summary>
+    [Test]
+    public void ReturnProblems_AReturnRuleNoAppearanceReads_IsAWarning()
+    {
+        var rules = new[] { ("pell_turned_away", StorySection.Return), ("desk4_closes", StorySection.Desk), ("drive_begins", StorySection.News) };
+        CollectionAssert.IsEmpty(HistoryChecks.ReturnProblems(rules, new[] { FlagKeys.HistoryRuleFired("pell_turned_away"), "premade:pell:accepted" }));
+        List<string> warnings = HistoryChecks.ReturnProblems(rules, new[] { "premade:pell:denied" });
+        Assert.AreEqual(1, warnings.Count);
+        StringAssert.Contains("'pell_turned_away'", warnings[0]);
+        CollectionAssert.IsEmpty(HistoryChecks.ReturnProblems(null, null));
+    }
+
     [Test]
     public void NullInputs_AreSafe()
     {

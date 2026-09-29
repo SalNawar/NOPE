@@ -209,6 +209,8 @@ public class GatesTests
         Assert.AreEqual("trig:x:fired", FlagKeys.TriggerFired("x"));
         Assert.AreEqual("dlg:x:done", FlagKeys.DialogDone("x"));
         Assert.AreEqual("premade:x:met", FlagKeys.PremadeMet("x"));
+        Assert.AreEqual("history_pell_turned_away", FlagKeys.HistoryRuleTriggerId("pell_turned_away"));
+        Assert.AreEqual("trig:history_pell_turned_away:fired", FlagKeys.HistoryRuleFired("pell_turned_away"), "a Return rule's consequence, read by the character's return");
     }
 
     [Test]

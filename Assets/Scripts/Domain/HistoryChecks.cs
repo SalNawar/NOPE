@@ -10,6 +10,24 @@ using System.Collections.Generic;
 /// </summary>
 public static class HistoryChecks
 {
+    /// <summary>
+    /// The Return rules nobody reads (days 7-15 Q9, V8's warning): a rule of
+    /// <paramref name="rules"/> in StorySection.Return is never printed, so its
+    /// consequence reaches the player only through an appearance whose
+    /// condition reads its fired flag (FlagKeys.HistoryRuleFired, among
+    /// <paramref name="conditionKeys"/>: the forced entries' conditions); one
+    /// warning per Return rule none reads. Empty when every one is read.
+    /// </summary>
+    public static List<string> ReturnProblems(IEnumerable<(string rule, StorySection section)> rules, IEnumerable<string> conditionKeys)
+    {
+        var read = new HashSet<string>(conditionKeys ?? Array.Empty<string>());
+        var problems = new List<string>();
+        foreach ((string rule, StorySection section) in rules ?? Array.Empty<(string, StorySection)>())
+            if (section == StorySection.Return && !read.Contains(FlagKeys.HistoryRuleFired(rule)))
+                problems.Add($"History rule '{rule}' is never printed (section Return), but no forced entry's condition reads '{FlagKeys.HistoryRuleFired(rule)}', so its consequence never reaches the player.");
+        return problems;
+    }
+
     /// <summary>The largest stability change a rule may carry, either way (a percent of where stability stands).</summary>
     public const float MaxStabilityChange = 100f;
 
