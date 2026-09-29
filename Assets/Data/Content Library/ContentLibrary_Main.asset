@@ -426,7 +426,7 @@ MonoBehaviour:
           link: 3
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 4
         - id: questions
           when: 6
           categories: []
@@ -457,7 +457,7 @@ MonoBehaviour:
           link: 4
           tab: 0
           hint: 
-          fromDay: 1
+          fromDay: 2
       - type: Displaced
         inherit: 
         dataOnly: 0
