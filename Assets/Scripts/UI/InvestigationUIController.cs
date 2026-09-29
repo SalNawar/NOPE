@@ -328,8 +328,9 @@ public sealed class InvestigationUIController : MonoBehaviour
     /// A case on the desk: the claim in the app's header and the office's tag
     /// (one text), the app on Documents with its badges cleared, today's
     /// directives, the papers presented, the interview started, the reference
-    /// books built the first time and turned to the claim, the steps of the
-    /// traveller's kind listed (the papers handed over on arrival received),
+    /// books built the first time and turned to the claim, the steps listed
+    /// (the default set until the arrival paper is read, then the kind's; the
+    /// papers handed over on arrival received),
     /// the compare cleared. No window opens or closes.
     /// </summary>
     private void ShowRich(CaseInstance inst, ContentLibrarySO lib)

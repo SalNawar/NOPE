@@ -6,8 +6,11 @@ using UnityEngine;
 /// <summary>
 /// The Investigation app's optional steps checklist, the sidebar's Steps
 /// section (the PC redesign ST1-ST4; redesign phase 21). While a traveller is
-/// at the desk it lists their kind's steps (CaseSteps.Resolve over the
-/// library's pc.steps), each with its tick and, with parts, its progress
+/// at the desk it lists the default steps until a paper handed over on arrival
+/// has been read (lifted into the hand, or its scanned copy seen), then their
+/// kind's (CaseSteps.SetName and Resolve over the library's pc.steps; the
+/// personalities spec's B5: the papers name the kind first, never the list;
+/// progress is kept by step id), each with its tick and, with parts, its progress
 /// ("Read every paper (1/3)"); between travellers it says steps show then. A
 /// step ticks when the player made the check, never on what the check found
 /// (CaseProgress, fed by the façade with the case's events and here with what
@@ -54,6 +57,10 @@ public sealed class StepsPanel : MonoBehaviour
     private IReadOnlyList<StepSpec> _steps = Array.Empty<StepSpec>();
     private List<StepState> _states = new List<StepState>();
     private CaseProgress _progress;
+    private StepSetData _sets;
+    private string _kind = string.Empty;
+    private int _day;
+    private string _setName = string.Empty;
     private bool _wired;
     private readonly List<int> _copies = new List<int>();
 
@@ -73,17 +80,21 @@ public sealed class StepsPanel : MonoBehaviour
     }
 
     /// <summary>
-    /// A traveller is presented: their kind's steps on <paramref name="day"/>
-    /// from <paramref name="sets"/>, counted over their papers, today's
-    /// question categories and the books' categories; nothing done yet.
+    /// A traveller is presented: the default steps on <paramref name="day"/>
+    /// from <paramref name="sets"/> (their <paramref name="kind"/>'s once a
+    /// paper handed over on arrival is read), counted over their papers,
+    /// today's question categories and the books' categories; nothing done yet.
     /// </summary>
     public void BeginCase(StepSetData sets, TravellerKind kind, int day, IReadOnlyList<StepPaper> papers, IEnumerable<ClueCategory> questions,
                           IEnumerable<ClueCategory> books)
     {
         Wire();
-        _steps = CaseSteps.Resolve(sets, kind.ToString(), day);
+        _sets = sets;
+        _kind = kind.ToString();
+        _day = day;
         _progress = new CaseProgress(papers, questions, books);
-        BuildRows();
+        _setName = string.Empty;
+        ResolveSet();
         Redraw();
     }
 
@@ -92,6 +103,8 @@ public sealed class StepsPanel : MonoBehaviour
     {
         Wire();
         _progress = null;
+        _sets = null;
+        _setName = string.Empty;
         _steps = Array.Empty<StepSpec>();
         _states.Clear();
         BuildRows();
@@ -152,8 +165,21 @@ public sealed class StepsPanel : MonoBehaviour
 
     private void Changed(bool changed)
     {
-        if (changed)
-            Redraw();
+        if (!changed)
+            return;
+        ResolveSet();
+        Redraw();
+    }
+
+    /// <summary>The set for what has been read (the default until an arrival paper is read, then the kind's): resolved again, its rows rebuilt, when it changes.</summary>
+    private void ResolveSet()
+    {
+        string name = CaseSteps.SetName(_kind, _progress != null && _progress.ArrivalRead);
+        if (name == _setName)
+            return;
+        _setName = name;
+        _steps = CaseSteps.Resolve(_sets, name, _day);
+        BuildRows();
     }
 
     /// <summary>A row per resolved step (the rows of the last case go).</summary>
