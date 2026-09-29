@@ -221,7 +221,7 @@ public static class BalanceSimulation
                 break;
             }
 
-            // Home: the bill and the family's drift; the simulation buys nothing, treats no one and spins nothing.
+            // Home: the bill and the family's drift; the simulation orders nothing (the night's DayCycle step would deliver it), treats no one and spins nothing.
             HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, config, Seeds.Day(seed, day));
             ClerkAccountSource.RecordHome(world, bill.total, 0, lib, config);
             r.Household += bill.total;
@@ -292,7 +292,7 @@ public static class BalanceSimulation
     private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no shop, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({ShiftPace} travellers a shift, BalanceSimulation.ShiftPace: the rest go home when the clock closes).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no care, no slot machine, no dialog choices; once on the whole queue and once at the shift clock's pace ({ShiftPace} travellers a shift, BalanceSimulation.ShiftPace: the rest go home when the clock closes).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
