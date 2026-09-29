@@ -117,6 +117,18 @@ public static class LayerPlaceholder
     /// <summary>The mouth's height (canvas pixels from the top).</summary>
     private const float MouthY = 392f;
 
+    /// <summary>The brows' height at their outer ends (canvas pixels from the top).</summary>
+    private const float BrowY = 312f;
+
+    /// <summary>The hands' ovals: their radii, their centres' height, and their centres' distance from the middle, so the outer edge reaches LookCanvas.ArmReach (where TravellerView's hit zone ends).</summary>
+    private const float HandRx = 32f, HandRy = 35f, HandY = 950f, HandX = LookCanvas.ArmReach - HandRx;
+
+    /// <summary>The hat's crown (half width, top, bottom) and brim (half width, top, bottom), canvas pixels.</summary>
+    private const float CrownHalfWidth = 58f, CrownTop = 150f, CrownBottom = 275f, BrimHalfWidth = 96f, BrimTop = 255f, BrimBottom = 282f;
+
+    /// <summary>The hair behind the head: its crown oval (centre height, radii) and how far down the hair falls, canvas pixels.</summary>
+    private const float HairCy = 330f, HairRx = 78f, HairRy = 95f, HairBottom = 620f;
+
     /// <summary>
     /// Renders a region with a fill, an inner border (stripes for a whole
     /// figure) in the accent, and a mark in the accent on the head.
@@ -159,8 +171,8 @@ public static class LayerPlaceholder
         switch (region)
         {
             case PlaceholderRegion.HairBehind:
-                return PixelShapes.InEllipse(CX, 330f, 78f, 95f, px, py) ||
-                       (px >= CX - 78 && px <= CX + 78 && py >= 330f && py <= 620f);
+                return PixelShapes.InEllipse(CX, HairCy, HairRx, HairRy, px, py) ||
+                       (px >= CX - HairRx && px <= CX + HairRx && py >= HairCy && py <= HairBottom);
             case PlaceholderRegion.Body:
                 return InBody(px, py);
             case PlaceholderRegion.Clothes:
@@ -172,8 +184,8 @@ public static class LayerPlaceholder
             case PlaceholderRegion.HairCap:
                 return py <= HeadCy - 18f && PixelShapes.InEllipse(CX, HeadCy - 6f, HeadRx + 8f, HeadRy + 8f, px, py);
             case PlaceholderRegion.Hat:
-                return (px >= CX - 58 && px <= CX + 58 && py >= 150f && py <= 275f) ||
-                       (px >= CX - 96 && px <= CX + 96 && py >= 255f && py <= 282f);
+                return (px >= CX - CrownHalfWidth && px <= CX + CrownHalfWidth && py >= CrownTop && py <= CrownBottom) ||
+                       (px >= CX - BrimHalfWidth && px <= CX + BrimHalfWidth && py >= BrimTop && py <= BrimBottom);
             case PlaceholderRegion.Collar:
                 return PixelShapes.InEllipse(CX, S + 18f, 128f, 62f, px, py) && !PixelShapes.InEllipse(CX, S - 12f, 64f, 40f, px, py);
             default:
@@ -188,7 +200,7 @@ public static class LayerPlaceholder
             return true;
         if (PixelShapes.InPolygon(Torso, px, py) || PixelShapes.InPolygon(Arms[0], px, py) || PixelShapes.InPolygon(Arms[1], px, py))
             return true;
-        if (PixelShapes.InEllipse(CX - 200, 950, 32, 35, px, py) || PixelShapes.InEllipse(CX + 200, 950, 32, 35, px, py))
+        if (PixelShapes.InEllipse(CX - HandX, HandY, HandRx, HandRy, px, py) || PixelShapes.InEllipse(CX + HandX, HandY, HandRx, HandRy, px, py))
             return true;
         return py <= Ankle + 60 && (PixelShapes.InPolygon(Legs[0], px, py) || PixelShapes.InPolygon(Legs[1], px, py));
     }
@@ -213,7 +225,7 @@ public static class LayerPlaceholder
         float slope = mark == PlaceholderMark.Angry ? 0.35f : -0.35f;
         for (float dx = 10f; dx <= 36f; dx += 1f)
         {
-            float y = 312f - slope * (36f - dx);
+            float y = BrowY - slope * (36f - dx);
             foreach ((int x, int y) p in Dot(CX - dx, y))
                 yield return p;
             foreach ((int x, int y) p in Dot(CX + dx, y))

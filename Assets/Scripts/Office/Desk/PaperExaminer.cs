@@ -17,8 +17,12 @@ using UnityEngine;
 /// pose moves, and re-poses when the screen's size, the camera's pose or its
 /// field of view, or the open frame's edge changes. DeskController holds and
 /// releases; BoothCoordinator sets the mode; the office binder hands it the
-/// camera.
+/// camera. Its script order (200) puts its LateUpdate after the
+/// CinemachineBrain's (100), so the papers are posed against the camera the
+/// brain placed this frame and never trail a camera blend by a frame (audit
+/// R5-003).
 /// </summary>
+[DefaultExecutionOrder(200)]
 public sealed class PaperExaminer : MonoBehaviour
 {
     /// <summary>The desk tuning (the examine knobs, the paper's size).</summary>
@@ -99,16 +103,8 @@ public sealed class PaperExaminer : MonoBehaviour
             return default;
 
         bool right = entry.Slot == ExamineSlot.Right;
-        return ScreenRect.Enclosing(Pixels(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, false, config.examine)),
-                                    Pixels(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, true, config.examine)));
-    }
-
-    /// <summary>A box in screen heights as a rectangle in pixels.</summary>
-    private ScreenRect Pixels(ScreenBox box)
-    {
-        float h = Screen.height, halfWidth = Screen.width / 2f, w = box.Height * PaperAspect;
-        return new ScreenRect(halfWidth + (box.CentreX - w / 2f) * h, (box.CentreY - box.Height / 2f) * h,
-                              halfWidth + (box.CentreX + w / 2f) * h, (box.CentreY + box.Height / 2f) * h);
+        return ScreenRect.Enclosing(ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, false, config.examine).InPixels(PaperAspect, Screen.width, Screen.height),
+                                    ExamineLayout.OfficeSlot(right, PaperAspect, ScreenAspect, true, config.examine).InPixels(PaperAspect, Screen.width, Screen.height));
     }
 
     /// <summary>Takes a paper into the hand at <paramref name="slot"/>: its sheet rises to the slot (a paper on its way back turns round).</summary>
@@ -365,7 +361,6 @@ public sealed class PaperExaminer : MonoBehaviour
         bool any = false;
         if (_frameOpen)
         {
-            float h = Screen.height, halfWidth = Screen.width / 2f;
             foreach (Entry entry in _entries)
             {
                 if (entry.Releasing)
@@ -373,11 +368,11 @@ public sealed class PaperExaminer : MonoBehaviour
                 ScreenBox box = BoxOf(entry, out bool beside);
                 if (!beside)
                     continue; // the papers do not fit beside the frame: they wait behind it
-                float w = box.Height * PaperAspect;
-                xMin = Mathf.Min(xMin, halfWidth + (box.CentreX - w / 2f) * h);
-                xMax = Mathf.Max(xMax, halfWidth + (box.CentreX + w / 2f) * h);
-                yMin = Mathf.Min(yMin, (box.CentreY - box.Height / 2f) * h);
-                yMax = Mathf.Max(yMax, (box.CentreY + box.Height / 2f) * h);
+                ScreenRect r = box.InPixels(PaperAspect, Screen.width, Screen.height);
+                xMin = Mathf.Min(xMin, r.XMin);
+                xMax = Mathf.Max(xMax, r.XMax);
+                yMin = Mathf.Min(yMin, r.YMin);
+                yMax = Mathf.Max(yMax, r.YMax);
                 any = true;
             }
         }
@@ -416,11 +411,7 @@ public sealed class PaperExaminer : MonoBehaviour
     private bool Covers(ScreenBox box, Vector3 world)
     {
         Vector3 screen = _camera.WorldToScreenPoint(world);
-        if (screen.z <= 0f || Screen.height <= 0)
-            return false;
-        float h = Screen.height, halfWidth = Screen.width / 2f, w = box.Height * PaperAspect;
-        float x = (screen.x - halfWidth) / h, y = screen.y / h;
-        return Mathf.Abs(x - box.CentreX) <= w / 2f && Mathf.Abs(y - box.CentreY) <= box.Height / 2f;
+        return screen.z > 0f && box.Covers(PaperAspect, Screen.width, Screen.height, screen.x, screen.y);
     }
 
     private Entry Find(DeskDocument paper)

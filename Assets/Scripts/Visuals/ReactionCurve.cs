@@ -50,6 +50,12 @@ public readonly struct ReactionPose
 /// <summary>The click reactions' curves: every kind starts and ends at rest (DeskReaction plays them).</summary>
 public static class ReactionCurve
 {
+    /// <summary>The wobble's turn per unit of amplitude at its peak, in degrees.</summary>
+    private const double WobbleDegrees = 30.0;
+
+    /// <summary>The wobble's half-cycles over the reaction (3: left, right, left, dying out).</summary>
+    private const double WobbleHalfCycles = 3.0;
+
     /// <summary>
     /// The pose at time <paramref name="t"/> (clamped to 0..1) with amplitude a,
     /// where s = sin(pi t): Squash (1 + a s, 1 - a s); Pulse (1 + a s, 1 + a s);
@@ -70,7 +76,7 @@ public static class ReactionCurve
             case ReactionKind.Nudge:
                 return new ReactionPose(1f, 1f, 0f, -amplitude * s);
             case ReactionKind.Wobble:
-                return new ReactionPose(1f, 1f, (float)(amplitude * 30.0 * Math.Sin(3.0 * Math.PI * c) * (1.0 - c)), 0f);
+                return new ReactionPose(1f, 1f, (float)(amplitude * WobbleDegrees * Math.Sin(WobbleHalfCycles * Math.PI * c) * (1.0 - c)), 0f);
             default:
                 return ReactionPose.Identity;
         }

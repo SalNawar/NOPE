@@ -20,18 +20,13 @@ public static class HomeRules
 
     /// <summary>
     /// Whether the member at <paramref name="memberIndex"/> worsens tonight:
-    /// one draw from System.Random seeded by the day seed and the member's
-    /// place in the family (seed × 397 XOR (index + 1) × 104729), below
-    /// <paramref name="chance"/>. Deterministic for a run and day; its own
-    /// hash, not a Seeds stream (audit R2-008 would move it to one, a
-    /// deliberate change of every night's drift).
+    /// the first Value() of the member's seed (Seeds.ForFamily of the day seed,
+    /// mixed with the member's place in the family, index + 1) below
+    /// <paramref name="chance"/>. Deterministic for a run and night, and apart
+    /// from every other stream (audit R2-008: the drift used its own hash over
+    /// System.Random); each member draws alone, so the family's size never
+    /// moves another member's roll.
     /// </summary>
-    public static bool Worsens(int daySeed, int memberIndex, float chance)
-    {
-        unchecked
-        {
-            int memberSeed = daySeed * 397 ^ (memberIndex + 1) * 104729;
-            return new Random(memberSeed).NextDouble() < chance;
-        }
-    }
+    public static bool Worsens(int daySeed, int memberIndex, float chance) =>
+        new SeededRandom(Seeds.Mix(Seeds.ForFamily(daySeed), memberIndex + 1)).Value() < chance;
 }

@@ -282,10 +282,15 @@ public static class TimelineService
     /// One idempotent-rebuild step: an effect family (dominance tiers, the
     /// timeline leader) removes its own active entries, whose source label
     /// starts with <paramref name="sourcePrefix"/>, before re-activating.
-    /// Returns how many were removed.
+    /// Returns how many were removed (any: RunManager.EffectsChanged).
     /// </summary>
-    internal static int RemoveEffectsFrom(WorldState world, string sourcePrefix) =>
-        world.timeline.activeEffects.RemoveAll(e => e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(sourcePrefix, System.StringComparison.Ordinal));
+    internal static int RemoveEffectsFrom(WorldState world, string sourcePrefix)
+    {
+        int removed = world.timeline.activeEffects.RemoveAll(e => e != null && e.sourceLabel != null && e.sourceLabel.StartsWith(sourcePrefix, System.StringComparison.Ordinal));
+        if (removed > 0)
+            RunManager.NotifyEffectsChanged();
+        return removed;
+    }
 
     /// <summary>
     /// Evaluates all triggers; fires those whose conditions all pass. A fired
@@ -536,7 +541,8 @@ public static class TimelineService
 
     /// <summary>
     /// Activates an effect: applies its instant ops (optionally) and registers
-    /// it in the stacked active-effect list. Effects from any source coexist.
+    /// it in the stacked active-effect list (RunManager.EffectsChanged). Effects
+    /// from any source coexist.
     /// </summary>
     public static void ActivateEffect(
         WorldState world, EffectSO effect, string sourceLabel,
@@ -587,6 +593,7 @@ public static class TimelineService
             startDay = startDay,
             durationDays = durationDays
         });
+        RunManager.NotifyEffectsChanged();
 
         Debug.Log($"[TimelineService] ActivateEffect: effectId='{effect.name}', sourceLabel='{sourceLabel}', startDay={startDay}, durationDays={durationDays}, applyInstantOps={applyInstantOps}.");
     }
@@ -602,14 +609,16 @@ public static class TimelineService
             news.Add(count);
     }
 
-    /// <summary>Removes effects that are no longer active on the given day.</summary>
+    /// <summary>Removes the effects that have ended by the given day (one that starts later is kept).</summary>
     private static void ExpireEffects(WorldState world, int day)
     {
         int before = world.timeline.activeEffects.Count;
 
-        world.timeline.activeEffects.RemoveAll(e => e == null || !e.IsActiveOnDay(day));
+        world.timeline.activeEffects.RemoveAll(e => e == null || e.HasEndedBy(day));
 
         int removed = before - world.timeline.activeEffects.Count;
+        if (removed > 0)
+            RunManager.NotifyEffectsChanged();
 
         Debug.Log($"[TimelineService] ExpireEffects (day {day}): removed {removed} effect(s), {world.timeline.activeEffects.Count} remain active.");
     }
@@ -630,10 +639,10 @@ public static class TimelineService
         world.tomorrow.newsLines.AddRange(news);
         world.tomorrow.deskLines.AddRange(desk);
 
-        // Lines from active effects (note: world.day is still "today" here, but
-        // expiry has already removed everything not active tomorrow).
-        world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine));
-        world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine));
+        // Lines from the effects in force tomorrow (world.day is still "today" here).
+        int tomorrow = world.day + 1;
+        world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine, tomorrow));
+        world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine, tomorrow));
 
         Debug.Log($"[TimelineService] <<< Exiting BuildTomorrowPackage (briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count} [{news.Count} from dominance/triggers]).");
     }

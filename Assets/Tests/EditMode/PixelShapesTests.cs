@@ -5,8 +5,8 @@ public class PixelShapesTests
 {
     private static readonly (float x, float y)[] Square = { (0, 0), (10, 0), (10, 10), (0, 10) };
 
-    /// <summary>The builder's placeholder arrow cursor.</summary>
-    private static readonly (float x, float y)[] Arrow = { (0, 0), (0, 22), (5, 17), (9, 26), (12, 25), (8, 16), (15, 16) };
+    /// <summary>The builder's placeholder arrow cursor (the shape it draws, not a copy).</summary>
+    private static readonly (float x, float y)[] Arrow = PlaceholderCursors.Arrow;
 
     [TestCase(5f, 5f, true)]
     [TestCase(0.5f, 9.5f, true)]

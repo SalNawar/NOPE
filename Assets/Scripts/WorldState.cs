@@ -301,9 +301,11 @@ public sealed class ActiveEffectEntry
     /// <summary>Duration in days. -1 = permanent until removed.</summary>
     public int durationDays = -1;
 
-    /// <summary>Returns true if the effect is still active on the given day.</summary>
-    public bool IsActiveOnDay(int dayNumber) =>
-        durationDays < 0 || dayNumber < startDay + durationDays;
+    /// <summary>True when the effect is in force on the given day: from its start day, for its duration (EffectWindow; an effect that starts tomorrow is not in force today).</summary>
+    public bool IsActiveOnDay(int dayNumber) => EffectWindow.IsActive(startDay, durationDays, dayNumber);
+
+    /// <summary>True once the effect's last day is behind the given day (EffectWindow; one that has not started yet has not ended).</summary>
+    public bool HasEndedBy(int dayNumber) => EffectWindow.HasEnded(startDay, durationDays, dayNumber);
 }
 
 /// <summary>Household state (expenses pressure). Fleshed out in Phase 4.</summary>

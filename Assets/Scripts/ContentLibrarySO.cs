@@ -280,8 +280,8 @@ public sealed class ContentLibrarySO : ScriptableObject
     public int FirstDayOf(TravelRuleSO rule) =>
         Directives.FirstDay(DayPlans.Where(p => p != null && p.ActiveTravelRules.Contains(rule)).Select(p => p.DayNumber));
 
-    /// <summary>Public read-only access to eras.</summary>
-    public IReadOnlyList<EraSO> Eras => eras;
+    /// <summary>Public read-only access to eras (empty, never null, like the other lists).</summary>
+    public IReadOnlyList<EraSO> Eras => eras ?? System.Array.Empty<EraSO>();
 
     /// <summary>Public read-only access to the premade characters.</summary>
     public IReadOnlyList<LegendarySO> Legendaries => legendaries ?? System.Array.Empty<LegendarySO>();

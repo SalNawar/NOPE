@@ -17,11 +17,13 @@ public sealed class LookSpriteStack : MonoBehaviour
     private TravellerLook _look;
     private CharacterArt _art;
 
+    /// <summary>Checks the wiring and starts empty, unless a look was shown before the first activation (the desk paper's photo slot is built inactive and shown as it wakes; audit R2-024).</summary>
     private void Awake()
     {
         if (layers == null || layers.Length != System.Enum.GetValues(typeof(LookLayer)).Length)
             Debug.LogWarning($"[LookSpriteStack] '{name}' has {(layers != null ? layers.Length : 0)} layer renderers, not one per LookLayer; rebuild the scene (Tools > TimeDesk > Build Office UI).", this);
-        Clear();
+        if (_look == null)
+            Clear();
     }
 
     /// <summary>Shows a look; a null look or art clears the stack.</summary>

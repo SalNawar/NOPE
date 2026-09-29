@@ -248,6 +248,10 @@ public static class Looks
         }
     }
 
+    /// <summary>True when a slot's item is drawn in the traveller's hair colour: facial hair always, hair (and its back) unless it is a wig, nothing else. Compose draws by it and LookKeys.Required lists the keys by it.</summary>
+    public static bool TakesHairColour(LookSlot slot, LookItem item) =>
+        slot == LookSlot.FacialHair || (slot == LookSlot.Hair && item != null && !item.wig);
+
     /// <summary>The layer a slot's item is drawn on.</summary>
     public static LookLayer LayerOf(LookSlot slot)
     {
@@ -426,7 +430,7 @@ public static class Looks
         // --- Draws (fixed order) ---
         TravellerGender g = gender;
         if (g == TravellerGender.Unknown)
-            g = rng.Value() < 0.5f ? TravellerGender.Male : TravellerGender.Female;
+            g = rng.Value() < UnknownGenderMaleChance ? TravellerGender.Male : TravellerGender.Female;
 
         int skin = PickSkin(weights, rng);
         bool ageKnown = BirthDates.TryAgeAt(coverBirthDate, claimYear, out int age);
@@ -473,17 +477,18 @@ public static class Looks
 
         // --- Parts, bottom first ---
         var parts = new List<LookPart>();
-        bool hairDrawn = items.TryGetValue(LookSlot.Hair, out (LookItem item, LookSource source) hairItem);
-        string hairColour = hairDrawn && hairItem.item.wig ? null : colour;
-        if (hairDrawn && hairItem.item.back)
-            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hairItem.item.ArtNation(hairItem.source.NationId), hairItem.source.EraId, hairColour, hairItem.item.artVariant), garmentIndex[LookSlot.Hair]));
+        if (items.TryGetValue(LookSlot.Hair, out (LookItem item, LookSource source) hairItem) && hairItem.item.back)
+        {
+            string backColour = TakesHairColour(LookSlot.Hair, hairItem.item) ? colour : null;
+            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hairItem.item.ArtNation(hairItem.source.NationId), hairItem.source.EraId, backColour, hairItem.item.artVariant), garmentIndex[LookSlot.Hair]));
+        }
         parts.Add(new LookPart(LookLayer.Body, LookKeys.Body(g, skin), -1));
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Outfit, g, null);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Outfit, g, colour);
         parts.Add(new LookPart(LookLayer.Head, LookKeys.Head(g, skin, face), -1));
         AddGarmentPart(parts, items, garmentIndex, LookSlot.FacialHair, g, colour);
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Hair, g, hairColour);
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Headwear, g, null);
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Accessory, g, null);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Hair, g, colour);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Headwear, g, colour);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Accessory, g, colour);
 
         return new TravellerLook(parts, garments, null, g, skin, face, colour);
     }
@@ -519,14 +524,21 @@ public static class Looks
     /// <summary>The skin tone of a look with no weights to draw from.</summary>
     private const int DefaultSkin = 3;
 
-    /// <summary>Adds a garment slot's part when its item is drawn (its key uses the item's art nation and its source's era).</summary>
+    /// <summary>The face of a look whose rules author no face band.</summary>
+    private const string DefaultFace = "a";
+
+    /// <summary>The chance that a traveller of unknown gender is drawn male (an even coin: structure, not a tuning knob).</summary>
+    private const float UnknownGenderMaleChance = 0.5f;
+
+    /// <summary>Adds a garment slot's part when its item is drawn (its key uses the item's art nation, its source's era, and the hair colour when TakesHairColour says so).</summary>
     private static void AddGarmentPart(List<LookPart> parts, Dictionary<LookSlot, (LookItem item, LookSource source)> items,
-                                       Dictionary<LookSlot, int> garmentIndex, LookSlot slot, TravellerGender g, string colour)
+                                       Dictionary<LookSlot, int> garmentIndex, LookSlot slot, TravellerGender g, string hairColour)
     {
         if (!items.TryGetValue(slot, out (LookItem item, LookSource source) worn))
             return;
 
         LookLayer layer = LayerOf(slot);
+        string colour = TakesHairColour(slot, worn.item) ? hairColour : null;
         parts.Add(new LookPart(layer, LookKeys.Garment(layer, g, worn.item.ArtNation(worn.source.NationId), worn.source.EraId, colour, worn.item.artVariant), garmentIndex[slot]));
     }
 
@@ -534,15 +546,28 @@ public static class Looks
     private static string ArtName(LookSlot slot, TravellerGender gender, LookItem item, LookSource source) =>
         LookKeys.Garment(LayerOf(slot), gender, item.ArtNation(source.NationId), source.EraId, null, item.artVariant).Name;
 
-    /// <summary>One weighted pick of a skin tone (1..5); 3 with no draw when every weight is 0 or missing.</summary>
+    /// <summary>The skin tones' indices 0..SkinTones-1 (tone = index + 1), built once for PickSkin.</summary>
+    private static readonly int[] ToneIndices = Enumerable.Range(0, LookKeys.SkinTones).ToArray();
+
+    /// <summary>One weighted pick of a skin tone (1..5); 3 with no draw when none of the five tones has a weight (a weight past the fifth names no tone).</summary>
     private static int PickSkin(LookWeights weights, IRandomSource rng)
     {
         float[] skin = weights != null ? weights.skin : null;
-        if (skin == null || skin.All(w => w <= 0f))
+        if (!AnyToneWeighted(skin))
             return DefaultSkin;
 
-        var tones = Enumerable.Range(0, LookKeys.SkinTones).ToList();
-        return 1 + WeightedRandom.Pick(tones, i => i < skin.Length ? skin[i] : 0f, rng);
+        return 1 + WeightedRandom.Pick(ToneIndices, i => i < skin.Length ? skin[i] : 0f, rng);
+    }
+
+    /// <summary>True when one of the first SkinTones weights is positive.</summary>
+    private static bool AnyToneWeighted(float[] skin)
+    {
+        if (skin == null)
+            return false;
+        for (int i = 0; i < skin.Length && i < LookKeys.SkinTones; i++)
+            if (skin[i] > 0f)
+                return true;
+        return false;
     }
 
     /// <summary>The last band whose minimum age the traveller reached (the first band when the age is unknown or below every band).</summary>
@@ -561,10 +586,10 @@ public static class Looks
         return band;
     }
 
-    /// <summary>The first face of the first band ("a" when none is authored).</summary>
+    /// <summary>The first face of the first band (DefaultFace when none is authored).</summary>
     private static string FirstFace(LookRules rules)
     {
         FaceBand first = rules.faceBands != null && rules.faceBands.Count > 0 ? rules.faceBands[0] : null;
-        return first != null && first.faces != null && first.faces.Count > 0 ? first.faces[0] : "a";
+        return first != null && first.faces != null && first.faces.Count > 0 ? first.faces[0] : DefaultFace;
     }
 }

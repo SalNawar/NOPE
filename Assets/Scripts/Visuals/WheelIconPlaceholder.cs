@@ -13,6 +13,13 @@ public static class WheelIconPlaceholder
     /// <summary>The icon's side in pixels (a placeholder resolution, not a gameplay knob).</summary>
     public const int Size = 32;
 
+    // The glyphs' polygons (pixels, y up), built once: In runs for every pixel of an icon.
+    private static readonly (float x, float y)[] BackHead = { (5f, 16f), (15f, 26f), (15f, 6f) };
+    private static readonly (float x, float y)[] RequestSheet = { (8f, 4f), (24f, 4f), (24f, 21f), (17f, 28f), (8f, 28f) };
+    private static readonly (float x, float y)[] QuestionTail = { (9f, 12f), (15f, 10f), (6f, 4f) };
+    private static readonly (float x, float y)[] DialogFrontTail = { (22f, 8f), (26f, 8f), (28f, 3f) };
+    private static readonly (float x, float y)[] DialogBackTail = { (7f, 16f), (11f, 15f), (4f, 10f) };
+
     /// <summary>The icon for <paramref name="iconName"/>, or null for a name with no glyph.</summary>
     public static byte[] Render(string iconName)
     {
@@ -61,15 +68,15 @@ public static class WheelIconPlaceholder
                 return PixelShapes.InEllipse(16f, 16f, 6f, 6f, px, py);
 
             case "wheel_back":
-                return PixelShapes.InPolygon(new (float x, float y)[] { (5f, 16f), (15f, 26f), (15f, 6f) }, px, py) ||
+                return PixelShapes.InPolygon(BackHead, px, py) ||
                        (px >= 14f && px <= 27f && py >= 13f && py <= 19f);
 
             case "wheel_request":
-                return PixelShapes.InPolygon(new (float x, float y)[] { (8f, 4f), (24f, 4f), (24f, 21f), (17f, 28f), (8f, 28f) }, px, py);
+                return PixelShapes.InPolygon(RequestSheet, px, py);
 
             case "wheel_question":
                 return PixelShapes.InEllipse(16f, 18f, 12f, 9f, px, py) ||
-                       PixelShapes.InPolygon(new (float x, float y)[] { (9f, 12f), (15f, 10f), (6f, 4f) }, px, py);
+                       PixelShapes.InPolygon(QuestionTail, px, py);
 
             case "wheel_look":
             {
@@ -84,13 +91,13 @@ public static class WheelIconPlaceholder
             {
                 // Two balloons, the front one (lower right) parted from the back one by a clear gap.
                 bool front = PixelShapes.InEllipse(21f, 12f, 8f, 6f, px, py) ||
-                             PixelShapes.InPolygon(new (float x, float y)[] { (22f, 8f), (26f, 8f), (28f, 3f) }, px, py);
+                             PixelShapes.InPolygon(DialogFrontTail, px, py);
                 if (front)
                     return true;
 
                 bool gap = PixelShapes.InEllipse(21f, 12f, 10f, 8f, px, py);
                 bool back = PixelShapes.InEllipse(12f, 20f, 9f, 7f, px, py) ||
-                            PixelShapes.InPolygon(new (float x, float y)[] { (7f, 16f), (11f, 15f), (4f, 10f) }, px, py);
+                            PixelShapes.InPolygon(DialogBackTail, px, py);
                 return back && !gap;
             }
         }

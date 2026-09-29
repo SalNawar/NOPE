@@ -80,6 +80,18 @@ public sealed class RunManager : MonoBehaviour
     // -----------------------------
 
     /// <summary>
+    /// Raised when the running world's effects change: an effect activated,
+    /// removed or expired (TimelineService), or a new or continued run. Cue
+    /// receivers listen to it, so an effect that lands mid-scene (a Home
+    /// purchase, a dev cheat) shows at once, not at the next scene's start
+    /// (audit R3-040).
+    /// </summary>
+    public static event System.Action EffectsChanged;
+
+    /// <summary>Raises <see cref="EffectsChanged"/> (TimelineService after it changes a world's effects; NewRun and ContinueRun).</summary>
+    public static void NotifyEffectsChanged() => EffectsChanged?.Invoke();
+
+    /// <summary>
     /// Starts a brand-new run: deletes the save and builds a fresh WorldState.
     /// </summary>
     public void NewRun()
@@ -95,6 +107,7 @@ public sealed class RunManager : MonoBehaviour
             : Random.Range(int.MinValue, int.MaxValue));
 
         Debug.Log($"[RunManager] New run started (day {World.day}, seed {World.runSeed}).");
+        NotifyEffectsChanged();
     }
 
     /// <summary>
@@ -120,6 +133,7 @@ public sealed class RunManager : MonoBehaviour
         if (Library != null)
             HistoryService.RebuildLeaderEffect(World, Library, World.day);
         Debug.Log($"[RunManager] Continued run (day {World.day}).");
+        NotifyEffectsChanged();
         return true;
     }
 

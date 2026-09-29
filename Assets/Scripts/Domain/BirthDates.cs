@@ -75,19 +75,28 @@ public static class BirthDates
         return true;
     }
 
-    /// <summary>A date with a year in [yearMin, yearMax] (bounds may be reversed), never year 0.</summary>
+    /// <summary>
+    /// A date with a year drawn evenly from [yearMin, yearMax] (bounds may be
+    /// reversed), never year 0: one Range draw, an index into the range's
+    /// years other than 0 in ascending order (audit R1-005: year 0 used to
+    /// fold onto 1 CE, drawing that year twice as often); a range holding only
+    /// year 0 gives 1 BCE. Then a day and a month, one draw each.
+    /// </summary>
     public static string Generate(int yearMin, int yearMax, IRandomSource rng)
     {
         if (yearMax < yearMin)
             (yearMin, yearMax) = (yearMax, yearMin);
 
-        int year = rng.Range(yearMin, yearMax + 1);
-        if (year == 0)
-            year = yearMax >= 1 ? 1 : -1;
+        bool spansZero = yearMin <= 0 && 0 <= yearMax;
+        long count = (long)yearMax - yearMin + 1 - (spansZero ? 1 : 0);
+        long index = rng.Range(0, (int)Math.Max(1L, Math.Min(count, int.MaxValue)));
+        long year = count > 0 ? yearMin + index : -1;
+        if (count > 0 && spansZero && year >= 0)
+            year++; // step over year 0
 
         int day = rng.Range(1, 29);
         int month = rng.Range(0, Months.Length);
-        return Format(day, month, year);
+        return Format(day, month, (int)year);
     }
 
     /// <summary>

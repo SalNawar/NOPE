@@ -45,23 +45,22 @@ public class HomeRulesTests
         Assert.AreEqual(expected, HomeRules.Worsened(condition, cap));
     }
 
-    // The rolls drawn today (System.Random seeded by seed*397 ^ (index+1)*104729):
-    // seed 12345: member 0 -> 0.42260, member 1 -> 0.97087, member 2 -> 0.88092;
-    // seed 1: member 0 -> 0.32441, member 1 -> 0.29055; seed 0: member 0 -> 0.80697.
-    [TestCase(12345, 0, 0.5f, true)]
-    [TestCase(12345, 0, 0.42f, false)]
-    [TestCase(12345, 0, 0.43f, true)]
-    [TestCase(12345, 1, 0.97f, false)]
-    [TestCase(12345, 1, 0.98f, true)]
-    [TestCase(12345, 2, 0.88f, false)]
-    [TestCase(12345, 2, 0.89f, true)]
-    [TestCase(1, 0, 0.33f, true)]
-    [TestCase(1, 0, 0.32f, false)]
-    [TestCase(1, 1, 0.30f, true)]
-    [TestCase(1, 1, 0.29f, false)]
-    [TestCase(0, 0, 0.81f, true)]
-    [TestCase(0, 0, 0.80f, false)]
-    public void Worsens_DrawsTheSameRollAsBefore(int seed, int memberIndex, float chance, bool expected)
+    // The rolls of the family's stream (audit R2-008): SeededRandom(Seeds.Mix(Seeds.ForFamily(daySeed), index + 1)).Value();
+    // seed 12345: member 0 -> 0.87719, member 1 -> 0.96399, member 2 -> 0.44680;
+    // seed 1: member 0 -> 0.01161, member 1 -> 0.17987; seed 0: member 0 -> 0.38002.
+    [TestCase(12345, 0, 0.87f, false)]
+    [TestCase(12345, 0, 0.88f, true)]
+    [TestCase(12345, 1, 0.96f, false)]
+    [TestCase(12345, 1, 0.97f, true)]
+    [TestCase(12345, 2, 0.44f, false)]
+    [TestCase(12345, 2, 0.45f, true)]
+    [TestCase(1, 0, 0.01f, false)]
+    [TestCase(1, 0, 0.02f, true)]
+    [TestCase(1, 1, 0.17f, false)]
+    [TestCase(1, 1, 0.18f, true)]
+    [TestCase(0, 0, 0.38f, false)]
+    [TestCase(0, 0, 0.39f, true)]
+    public void Worsens_DrawsFromTheFamilysStream(int seed, int memberIndex, float chance, bool expected)
     {
         Assert.AreEqual(expected, HomeRules.Worsens(seed, memberIndex, chance));
     }

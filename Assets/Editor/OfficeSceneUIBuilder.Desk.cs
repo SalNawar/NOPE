@@ -359,15 +359,32 @@ public static partial class OfficeSceneUIBuilder
     // -----------------------------
 
     /// <summary>
+    /// The PC's device ink (the brand plate): the neutral theme's DiegeticDevice
+    /// ink, #5E5446 in world_source.json, the one source of that colour (audit
+    /// R6-005: the builder drew its own #6B614D beside it, and the theme never
+    /// recolours a diegetic role, so the drawn colour and the checked one
+    /// differed). A missing entry is an error; the text then draws black.
+    /// </summary>
+    private static Color DeviceInk(ContentLibrarySO library)
+    {
+        PaletteEntry device = library != null && library.NeutralTheme != null ? library.NeutralTheme.Get(ThemeRoleId.DiegeticDevice) : null;
+        if (device != null && device.hasInk)
+            return device.ink;
+
+        Debug.LogError("[TimeDesk] The neutral theme has no DiegeticDevice ink for the PC's brand plate. Run Tools > TimeDesk > Generate World, then build again.");
+        return Color.black;
+    }
+
+    /// <summary>
     /// The PC frame on the office overlay canvas, rebuilt each run: an
     /// always-active host with the PcFrame; its Root (inactive until opened)
     /// holds the full-screen exit catcher (a click outside the frame closes
     /// it), the bezel (placeholder art; clicks on it do nothing), the Glass the
     /// frame camera draws into (4:3; the catcher and the bezel let clicks
     /// through there), the red close X, the power button and LED, and the
-    /// brand plate. Returns the power LED and button through out parameters.
+    /// brand plate, in the neutral theme's DiegeticDevice ink. Returns the power LED and button through out parameters.
     /// </summary>
-    private static PcFrame BuildPcFrame(Transform overlay, Camera frameCamera, OfficeViewController view, out Image powerLed, out Button powerButton)
+    private static PcFrame BuildPcFrame(Transform overlay, Camera frameCamera, OfficeViewController view, ContentLibrarySO library, out Image powerLed, out Button powerButton)
     {
         DestroyChildIfPresent(overlay, "PcFrame");
         Transform host = Panel(overlay, "PcFrame", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -428,7 +445,7 @@ public static partial class OfficeSceneUIBuilder
         powerLed.sprite = EnsureOfficeShape("crt_led", 8, 8, Center, LedPixel);
         powerLed.raycastTarget = false;
 
-        TMP_Text brand = Text(frame, "Brand", "CHRONODESK 2150", 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), new Color(0.42f, 0.38f, 0.3f, 1f),
+        TMP_Text brand = Text(frame, "Brand", "CHRONODESK 2150", 34, TextAlignmentOptions.Center, new Vector2(0.3f, 0f), new Vector2(0.7f, 0f), DeviceInk(library),
                               ThemeRoleId.DiegeticDevice, style: FontStyles.Bold);
         var brandRect = (RectTransform)brand.transform;
         brandRect.sizeDelta = new Vector2(0f, 60f);

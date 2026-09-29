@@ -10,17 +10,21 @@ using UnityEngine;
 public static class TimelineEffects
 {
     /// <summary>
-    /// Enumerates active effects resolved to their EffectSO assets.
-    /// Entries whose assets are missing are skipped (with a warning).
+    /// Enumerates the effects in force today (world.day) resolved to their
+    /// EffectSO assets. Entries whose assets are missing are skipped (with a warning).
     /// </summary>
-    public static IEnumerable<(ActiveEffectEntry entry, EffectSO effect)> Active(WorldState world, ContentLibrarySO lib)
+    public static IEnumerable<(ActiveEffectEntry entry, EffectSO effect)> Active(WorldState world, ContentLibrarySO lib) =>
+        world != null ? Active(world, lib, world.day) : System.Linq.Enumerable.Empty<(ActiveEffectEntry, EffectSO)>();
+
+    /// <summary>The effects in force on <paramref name="day"/> (ActiveEffectEntry.IsActiveOnDay), resolved to their assets.</summary>
+    private static IEnumerable<(ActiveEffectEntry entry, EffectSO effect)> Active(WorldState world, ContentLibrarySO lib, int day)
     {
         if (world == null || lib == null)
             yield break;
 
         foreach (ActiveEffectEntry entry in world.timeline.activeEffects)
         {
-            if (entry == null || !entry.IsActiveOnDay(world.day))
+            if (entry == null || !entry.IsActiveOnDay(day))
                 continue;
 
             EffectSO effect = lib.GetEffectByAssetName(entry.effectId);
@@ -138,13 +142,15 @@ public static class TimelineEffects
     }
 
     /// <summary>
-    /// All text lines of a given type (BriefingLine / NewsLine) from active effects.
+    /// All text lines of a given type (BriefingLine / NewsLine) from the
+    /// effects in force on <paramref name="day"/> (the nightly resolve asks for
+    /// tomorrow's before the day turns).
     /// </summary>
-    public static List<string> GetLines(WorldState world, ContentLibrarySO lib, EffectOpType lineType)
+    public static List<string> GetLines(WorldState world, ContentLibrarySO lib, EffectOpType lineType, int day)
     {
         var lines = new List<string>();
 
-        foreach (var (_, effect) in Active(world, lib))
+        foreach (var (_, effect) in Active(world, lib, day))
             foreach (EffectOp op in effect.ops)
                 if (op != null && op.type == lineType && !string.IsNullOrEmpty(op.stringParam))
                     lines.Add(op.stringParam);
