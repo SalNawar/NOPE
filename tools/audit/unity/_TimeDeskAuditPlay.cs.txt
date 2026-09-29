@@ -1,19 +1,36 @@
 // Audit baseline automation (kept as text in tools/audit/unity; copied into Assets/Editor as .cs only to run it, never committed there): the Phase 0 scripted
 // play-through golden master. Title -> New Run (fixed seed 12345) -> days 1-6
-// in the art office with the gameplay layer, Home between them, up to day 7's
-// morning paper. Every traveller: the READY sign, the interview (every request,
-// every question; slot 1 also runs its first dialog to the end), the evidence
-// for each tell through the real compare path (a place tell against the book
-// row or the record; a record tell against the traveller's own record row;
-// two papers that disagree through the cross proof first), then a scripted
-// verdict (the right one, except four planned mistakes: an honest traveller
-// denied on day 1, a deviation fault accepted on day 2, one denied without
-// evidence on day 3, a closed destination accepted on day 4). Home: treat any family member at condition 2+,
-// buy Interview Protocols, then the Near East Speech translator, when there is
-// money for it (never the slot machine: its draw is unseeded). Driven by direct
-// calls from EditorApplication.update in the persistent editor (job runner);
-// never exits the editor. The transcript holds only deterministic content:
-// <out root>/<tag>/play_transcript.txt (+ saves/ and a report; see Root).
+// in the art office RunConfig names (the anime hall) with the gameplay layer,
+// Home between them, up to day 7's morning paper. Every traveller: the READY
+// sign, the interview (every request, the papers menu and its request groups
+// included, so a rich tourist gives the honest missing-form replies and a poor
+// tourist hands over the waiver and the proof; every question of the ask menu;
+// slot 1 also runs its first dialog to the end), the evidence for each tell of
+// a deviation fault through the real compare path (two papers that disagree
+// through the cross proof first; a place tell against the claimed place's book
+// row, else the row it really belongs to (the present's for a smuggler or a
+// fake displaced person); a record tell against the traveller's own record
+// row; a worn tell through Look against the Costume Guide), then a scripted
+// verdict: the right one (deny a deviation fault with its evidence, deny a
+// directive fault (a closed destination, a wrong departure date, an expired
+// paper) without, accept the rest), except four planned mistakes (an honest
+// traveller denied on day 1, a deviation fault accepted on day 2, one denied
+// without evidence on day 3, a directive fault accepted on day 4). Home: treat
+// any family member at condition 2+, buy Interview Protocols when there is
+// money to spare, and the Near East Speech translator only from the night
+// before foreign speech starts (translation.fromDay - 1), when it is in force
+// the next morning (never the slot machine: kept out of the golden run).
+// RunShots plays the same run and also takes the screenshots of the redesign's
+// states at 1920x1080 and 1280x720 (<tag>/shots/: each day's paper and shift
+// report, each traveller kind's papers held and wheel, the app's tabs, the
+// two panes and one, search, the steps, each lie kind caught in the dock and
+// on the office strip, each citation reason, and after the transcript's END a
+// shots-only day 7 with the Auto-Feed and Analysis scanners set on the desk);
+// its transcript must equal RunA's (screenshots never change the run).
+// Driven by direct calls from EditorApplication.update in the persistent
+// editor (job runner); never exits the editor. The transcript holds only
+// deterministic content: <out root>/<tag>/play_transcript.txt (+ saves/ and a
+// report; see Root).
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,12 +72,14 @@ public static class _TimeDeskAuditPlay
 
     private const string StepKey = "AuditPlay.Step";
     private const string TagKey = "AuditPlay.Tag";
+    private const string ShotsKey = "AuditPlay.Shots";
     private const string FailsKey = "AuditPlay.Fails";
     private const string HadSaveKey = "AuditPlay.HadSave";
     private const string SceneKey = "AuditPlay.Scene";
     private const string SeedKey = "AuditPlay.SeedBefore";
     private const string PrefKey = "AuditPlay.UiLanguage";
     private const string MotionKey = "AuditPlay.Motion";
+    private const string DesktopPrefsKey = "AuditPlay.DesktopPrefs";
     private const string ViewWidthKey = "AuditPlay.ViewWidth";
     private const string ViewHeightKey = "AuditPlay.ViewHeight";
     private const string UiLanguagePref = "TimeDesk.UiLanguage";
@@ -71,9 +90,14 @@ public static class _TimeDeskAuditPlay
 
     private static readonly Stack<IEnumerator> Script = new Stack<IEnumerator>();
     private static readonly HashSet<string> MistakesMade = new HashSet<string>();
+    private static readonly HashSet<string> Seen = new HashSet<string>();
+    private static readonly SortedDictionary<string, int> Tally = new SortedDictionary<string, int>(StringComparer.Ordinal);
     private static bool _ended;
+    private static bool _frameOpen;
 
+    private static bool ShotsOn => SessionState.GetBool(ShotsKey, false);
     private static string Dir => Path.Combine(Root, SessionState.GetString(TagKey, "playX"));
+    private static string ShotsDir => Path.Combine(Dir, "shots");
     private static string TranscriptPath => Path.Combine(Dir, "play_transcript.txt");
     private static string ReportPath => Path.Combine(Dir, "play_report.txt");
     private static string WarningsPath => Path.Combine(Dir, "play_warnings.txt");
@@ -88,16 +112,22 @@ public static class _TimeDeskAuditPlay
         Application.logMessageReceived += OnLog;
     }
 
-    public static void RunA() => Begin("playA");
-    public static void RunB() => Begin("playB");
+    public static void RunA() => Begin("playA", false);
+    public static void RunB() => Begin("playB", false);
 
-    private static void Begin(string tag)
+    /// <summary>The same play with the screenshots of the redesign's states (tag playShots); its transcript must equal RunA's up to END.</summary>
+    public static void RunShots() => Begin("playShots", true);
+
+    private static void Begin(string tag, bool shots)
     {
         SessionState.SetString(TagKey, tag);
+        SessionState.SetBool(ShotsKey, shots);
         Directory.CreateDirectory(Path.Combine(Dir, "saves"));
         foreach (string f in Directory.GetFiles(Dir, "*", SearchOption.AllDirectories))
             File.Delete(f);
-        File.WriteAllText(ReportPath, $"start {DateTime.Now:s}\n");
+        if (shots)
+            Directory.CreateDirectory(ShotsDir);
+        File.WriteAllText(ReportPath, $"start {DateTime.Now:s} tag={tag} shots={shots}\n");
         File.WriteAllText(TranscriptPath, string.Empty);
         File.WriteAllText(WarningsPath, string.Empty);
 
@@ -117,6 +147,15 @@ public static class _TimeDeskAuditPlay
         PlayerPrefs.DeleteKey(UiLanguagePref);
         PlayerPrefs.DeleteKey(MotionPref);
 
+        // The desktop's per-player preferences (icons, split, tab order, zoom, sidebar, steps) start at their defaults and are restored at the end.
+        var desktop = new List<string>();
+        foreach (string key in DesktopPrefKeys())
+        {
+            desktop.Add(key + "\u0001" + (PlayerPrefs.HasKey(key) ? PlayerPrefs.GetString(key) : "<absent>"));
+            PlayerPrefs.DeleteKey(key);
+        }
+        SessionState.SetString(DesktopPrefsKey, string.Join("\u0002", desktop));
+
         // The fixed seed is set on the run's config in play mode (in memory only, never saved; restored at the end).
         SessionState.SetInt(SeedKey, Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath).fixedRunSeed);
 
@@ -133,6 +172,13 @@ public static class _TimeDeskAuditPlay
         Application.logMessageReceived += OnLog;
         EditorApplication.EnterPlaymode();
     }
+
+    /// <summary>The PlayerPrefs keys of the desktop's preferences (DesktopPreferences' key constants).</summary>
+    private static IEnumerable<string> DesktopPrefKeys() =>
+        typeof(DesktopPreferences).GetFields(BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public)
+            .Where(f => f.IsLiteral && f.FieldType == typeof(string))
+            .Select(f => (string)f.GetRawConstantValue())
+            .Where(v => v.StartsWith("TimeDesk."));
 
     private static void Tick()
     {
@@ -170,6 +216,8 @@ public static class _TimeDeskAuditPlay
         catch (Exception e)
         {
             Check(false, $"exception: {e}");
+            if (ShotsOn)
+                try { ScreenCapture.CaptureScreenshot(Path.Combine(ShotsDir, $"diag_exception_{SessionState.GetInt(FailsKey, 0)}.png")); } catch { }
             Script.Clear();
             EndPlay();
         }
@@ -188,6 +236,8 @@ public static class _TimeDeskAuditPlay
     private static IEnumerator Play()
     {
         MistakesMade.Clear();
+        Seen.Clear();
+        Tally.Clear();
         _ended = false;
         yield return Until(() => Object.FindFirstObjectByType<TitleSceneController>() != null && RunManager.HasInstance, 60f, "the title scene");
         RunManager.Instance.Config.fixedRunSeed = Seed;
@@ -212,6 +262,15 @@ public static class _TimeDeskAuditPlay
             RecordWorld();
         }
         Line("END");
+
+        // The run's coverage (report only): the four planned mistakes, each kind, lie and fault met.
+        Check(MistakesMade.Count == 4, $"the four planned mistakes were made [{string.Join(", ", MistakesMade)}]");
+        Check(!_ended, "the run reaches day 7's morning without an ending");
+        foreach (KeyValuePair<string, int> t in Tally)
+            Report($"COVER {t.Key}: {t.Value}");
+
+        if (ShotsOn && !_ended)
+            yield return ScannerDayShots();
     }
 
     private static IEnumerator OfficeLoads(int day)
@@ -219,8 +278,8 @@ public static class _TimeDeskAuditPlay
         yield return Until(() => Office.Loaded() && RunManager.Instance.World.day == day && Office.Briefing() != null && Office.Briefing().activeInHierarchy, 90f, $"day {day}'s office and briefing");
         yield return Frames(3);
         Scene art = OfficeScenes.ArtScene, gameplay = SceneManager.GetSceneByName(OfficeScenes.GameplaySceneName);
-        Check(art.IsValid() && gameplay.IsValid() && gameplay.isLoaded && SceneManager.GetActiveScene() == art,
-              $"day {day}: the art office ({art.path}) is active with the gameplay layer ({gameplay.path})");
+        Check(art.IsValid() && gameplay.IsValid() && gameplay.isLoaded && SceneManager.GetActiveScene() == art && art.name == RunManager.Instance.Config.officeSceneName,
+              $"day {day}: the art office RunConfig names ({art.path}) is active with the gameplay layer ({gameplay.path})");
     }
 
     private static IEnumerator OfficeDay(int day)
@@ -230,6 +289,8 @@ public static class _TimeDeskAuditPlay
         Line($"== DAY {day}");
         RecordBriefing();
         RecordWorld();
+        if (ShotsOn)
+            yield return Shots($"d{day}_briefing");
         o.StartShift.onClick.Invoke();
 
         int presented = 0;
@@ -257,11 +318,16 @@ public static class _TimeDeskAuditPlay
         ShiftLedger ledger = o.Game.Ledger;
         Line($"   ledger: {ledger.verdicts.Count} verdicts, correct {ledger.CorrectCount}, wrong {ledger.WrongCount}, pay {ledger.TotalPay}, penalties {ledger.TotalPenalties}, stability {ledger.TotalStabilityDelta.ToString("0.###", System.Globalization.CultureInfo.InvariantCulture)}, unproven {ledger.UnprovenDenialCount}");
         Line($"   debt relief: instalment {ledger.debtInstalment}, owed {ledger.debtOwed}, paid so far {RunManager.Instance.World.clerkDebtPaid}");
+        Line($"   strandings: {ledger.strandedCount} stranded");
         foreach (DialogOutcome d in ledger.dialogOutcomes)
             Line($"   dialog outcome: {JsonUtility.ToJson(d)}");
         Check(ledger.verdicts.Count == RunManager.Instance.GetCurrentDayPlan().VisitorsCount,
               $"day {day}: every traveller in the queue was decided before closing ({ledger.verdicts.Count}/{RunManager.Instance.GetCurrentDayPlan().VisitorsCount})");
+        if (ledger.strandedCount > 0)
+            Count("stranded");
         RecordSave($"day{day}_shift");
+        if (ShotsOn)
+            yield return Shots($"d{day}_shift_report");
         o.GoHome.onClick.Invoke();
     }
 
@@ -274,10 +340,22 @@ public static class _TimeDeskAuditPlay
             .Concat(c.answers.Where(a => a.isTell).Select(a => $"{a.category}/Answer"))
             .Concat(c.look != null ? c.look.Garments.Where(g => g.IsTell).Select(g => $"{g.Slot}/Dress") : Enumerable.Empty<string>()));
         string recordTells = string.Join(",", c.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} home='{c.HomeLabel}' directive={c.directiveFault} fault='{c.FaultReason}' shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}] recordTells=[{recordTells}]");
-        Line($"   papers: {string.Join(" ; ", c.documents.Select(d => (d.template != null ? d.template.displayName : "?") + ": " + string.Join(", ", d.fields.Select(f => $"{f.label}={f.value}{(f.isAnachronism ? "[TELL]" : "")}"))))}");
+        CitizenAccount a = c.account;
+        Line($"-- d{day} slot {slot}: '{c.visitorDisplayName}' kind={c.kind} claims '{c.originLabel}' role={(c.archetype != null ? c.archetype.displayName : "-")} gender={c.gender} liar={c.IsLiar} lie={(c.lie.HasValue ? c.lie.Value.ToString() : "-")} home='{c.HomeLabel}' costume={c.costumeFault} directive={c.directiveFault} fault='{c.FaultReason}' shouldAccept={c.ShouldAccept} premade={(c.legendarySource != null ? c.legendarySource.id : "none")} tells=[{tells}] recordTells=[{recordTells}]");
+        if (a != null)
+            Line($"   account: {a.CitizenId} {a.Status} debt {a.Debt} transponder '{a.Transponder}' {a.TransponderClass} waiver {a.WaiverNo ?? "none"} proof {a.ProofForm ?? "none"}");
+        Line($"   papers: {string.Join(" ; ", c.documents.Select(d => (d.template != null ? d.template.formNumber + " " + d.template.displayName : "?") + ": " + string.Join(", ", d.fields.Select(f => $"{f.label}={f.value}{(f.isAnachronism ? "[TELL]" : "")}"))))}");
         if (c.look != null)
             Line($"   look: {c.look.Describe()} | {string.Join("; ", c.look.Garments.Select(g => $"{g.Slot}:{g.Label}{(g.IsTell ? "[TELL]" : "")}"))}");
+        Count($"kind {c.kind}");
+        if (c.lie.HasValue)
+            Count($"lie {c.lie.Value}");
+        if (c.costumeFault != CostumeError.None)
+            Count($"costume {c.costumeFault}");
+        if (c.HasDirectiveFault)
+            Count($"directive {c.directiveFault}");
+        if (c.legendarySource != null)
+            Count("premade");
 
         // The decision (planned mistakes first).
         string plan;
@@ -303,7 +381,7 @@ public static class _TimeDeskAuditPlay
         }
         else if (day == 4 && c.HasDirectiveFault && Once("d4-accept-violator"))
         {
-            plan = "MISTAKE accept a closed destination";
+            plan = $"MISTAKE accept a directive fault ({c.directiveFault})";
             accept = true;
             gatherEvidence = false;
         }
@@ -315,16 +393,25 @@ public static class _TimeDeskAuditPlay
         }
         else
         {
-            plan = c.ShouldAccept ? "accept" : "deny (a travel rule)";
+            plan = c.ShouldAccept ? "accept" : $"deny (a directive: {c.directiveFault})";
             accept = c.ShouldAccept;
             gatherEvidence = false;
         }
 
         // The interview: every request, every question (slot 1 also runs its first dialog).
         yield return Interview(o, c, slot == 1);
+        if (ShotsOn)
+            yield return KindShots(o, c, day);
 
         if (gatherEvidence)
-            yield return Evidence(o, c);
+        {
+            yield return Evidence(o, c, day, slot);
+            if (ShotsOn)
+                yield return CaughtShots(o, c);
+        }
+        ((CompareController)Field(o.Ui, "compareController")).Clear();
+        if (ShotsOn && c.HasDirectiveFault && First($"rules {c.directiveFault}"))
+            yield return AppShots(o, c, $"rules_{c.directiveFault}", AppTab.Rules, AppTab.Documents);
 
         var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
         foreach (DialogLine l in runner.Transcript)
@@ -333,6 +420,8 @@ public static class _TimeDeskAuditPlay
         foreach (Discrepancy d in log.Items)
             Line($"   evidence: {d.category} {d.provedBy} from {d.source} value='{d.documentValue}' expected='{d.expectedValue}' origin='{d.actualOrigin}' | {UiText.Deviation(d)}");
         Line($"   evidence count {o.Ui.EvidenceCount}; plan: {plan}");
+        if (gatherEvidence)
+            Check(o.Ui.EvidenceCount > 0, $"d{day} slot {slot}: a deviation fault ({FaultKey(c)}) is proven before its denial ({o.Ui.EvidenceCount} logged)");
 
         // Odd slots decide at the stamp tray, even ones on the PC.
         int before = o.Game.Ledger.verdicts.Count;
@@ -352,6 +441,8 @@ public static class _TimeDeskAuditPlay
         Check(o.Game.Ledger.verdicts.Count == before + 1, $"d{day} slot {slot}: the decision recorded one verdict");
         CaseVerdict v = o.Game.Ledger.verdicts.Last();
         Line($"   verdict: {JsonUtility.ToJson(v)}");
+        bool mistake = plan.StartsWith("MISTAKE");
+        Check(v.correct != mistake, $"d{day} slot {slot}: the verdict is {(mistake ? "the planned mistake" : "right")} ({plan}; correct={v.correct}, fault '{v.faultReason}', unproven={v.unprovenDenial})");
         WorldState w = RunManager.Instance.World;
         Line($"   world: money={w.money} stability={F(w.timelineStability)} citationsToday={w.citationsToday} ending='{w.endingId}'");
         yield return Frames(2);
@@ -364,6 +455,8 @@ public static class _TimeDeskAuditPlay
         if (o.CitationPanel.activeInHierarchy)
         {
             Line($"   citation slip: {((TMP_Text)Field(o.OfficeUi, "citationText")).text.Replace("\n", " / ")}");
+            if (ShotsOn && First($"citation {v.faultReason}/{v.unprovenDenial}/{v.accepted}"))
+                yield return Shots($"citation_{(v.accepted ? "accepted" : "denied")}_{(string.IsNullOrEmpty(v.faultReason) ? "honest" : v.faultReason)}{(v.unprovenDenial ? "_unproven" : "")}");
             ((Button)Field(o.OfficeUi, "citationContinueButton")).onClick.Invoke();
             yield return Frames(2);
         }
@@ -372,7 +465,15 @@ public static class _TimeDeskAuditPlay
 
     private static bool Once(string key) => MistakesMade.Add(key);
 
-    /// <summary>Every request at the hub and in the papers menu, then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
+    private static bool First(string key) => Seen.Add(key);
+
+    private static void Count(string key) => Tally[key] = Tally.TryGetValue(key, out int n) ? n + 1 : 1;
+
+    /// <summary>The fault a deviation fault carries, for the reports: the lie, a record lie, or the costume error.</summary>
+    private static string FaultKey(CaseInstance c) =>
+        c.lie.HasValue ? c.lie.Value.ToString() : c.IsForger ? "record lie" : c.costumeFault != CostumeError.None ? "costume " + c.costumeFault : "?";
+
+    /// <summary>Every request at the hub and in the papers menu (a request group as one entry; a form the traveller does not carry gets its missing-form reply), then every question in the ask menu; with <paramref name="dialog"/> also the hub's first dialog, its first choice at each step, to its end.</summary>
     private static IEnumerator Interview(Office o, CaseInstance c, bool dialog)
     {
         var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
@@ -384,7 +485,7 @@ public static class _TimeDeskAuditPlay
         }
 
         // Every request, in the papers menu ("Request papers >", phase 3) too: out of it by "< Back" once its forms are handed over.
-        for (int guard = 0; guard < 16; guard++)
+        for (int guard = 0; guard < 24; guard++)
         {
             DialogChoice request = runner.Choices.FirstOrDefault(x => x.Kind == DialogChoiceKind.Request && !chosen.Contains(x.Id));
             if (request == null)
@@ -435,21 +536,29 @@ public static class _TimeDeskAuditPlay
         yield return Frames(2);
     }
 
-    /// <summary>Proves each of a liar's tells through the real compare path: two papers that disagree first (the cross proof, one pair per category), then each tell picked against the claimed place's book row (or the traveller's own record row for a record category); a dress tell is picked through the wheel's Look menu.</summary>
-    private static IEnumerator Evidence(Office o, CaseInstance c)
+    /// <summary>The traveller's record in today's registry (by the registered name).</summary>
+    private static CitizenRecord RecordOf(Office o, CaseInstance c)
+    {
+        var registry = (CitizenRegistry)Field(Field(o.Ui, "_reference"), "_registry");
+        return registry?.Records.FirstOrDefault(r => r.FullName == c.visitorGivenName);
+    }
+
+    /// <summary>Proves each of a deviation fault's tells through the real compare path: two papers that disagree first (the cross proof, one pair per category), then each tell picked against the claimed place's book row, else the row its value belongs to (or the traveller's own record row for a record category); a dress tell is picked through the wheel's Look menu. A category already documented is not proven twice.</summary>
+    private static IEnumerator Evidence(Office o, CaseInstance c, int day, int slot)
     {
         var compare = (CompareController)Field(o.Ui, "compareController");
         var tr = (CaseTranslation)Field(Field(o.Ui, "_interview"), "_caseTranslation");
-        var facts = (FactTable)Field(Field(Field(o.Ui, "_reference"), "_books"), "_facts");
-        var registry = (CitizenRegistry)Field(Field(o.Ui, "recordsWindow"), "_registry");
+        var facts = (FactTable)Field(Field(o.Ui, "_reference"), "_facts");
         var runner = (DialogRunner)Field(Field(o.Ui, "_interview"), "_runner");
+        var log = (DiscrepancyLog)Field(Field(o.Ui, "_evidence"), "_discrepancies");
         ContentLibrarySO lib = RunManager.Instance.Library;
+        bool Documented(ClueCategory category) => log.Items.Any(d => d.category == category);
 
         ComparePick? Proof(ClueCategory category, string tellValue, bool home)
         {
             if (Forgery.IsRecordCategory(category) || category == ClueCategory.Name)
             {
-                CitizenRecord rec = registry.Find(c.visitorGivenName);
+                CitizenRecord rec = RecordOf(o, c);
                 RecordRow? recordRow = rec?.Groups.SelectMany(g => g.Rows).Where(r => r.IsEvidence && r.Category == category).Cast<RecordRow?>().FirstOrDefault();
                 return rec != null && recordRow.HasValue ? EvidencePicks.ForRecord(rec, recordRow.Value) : (ComparePick?)null;
             }
@@ -471,6 +580,11 @@ public static class _TimeDeskAuditPlay
 
         IEnumerator Pair(string what, Func<ComparePick?> tell, ClueCategory category, string tellValue)
         {
+            if (Documented(category))
+            {
+                Line($"   {what}: already documented");
+                yield break;
+            }
             int before = o.Ui.EvidenceCount;
             foreach (bool home in new[] { false, true })
             {
@@ -487,6 +601,7 @@ public static class _TimeDeskAuditPlay
                     yield break;
             }
             Line($"   evidence FAILED for {what}");
+            Check(false, $"d{day} slot {slot}: the {what} tell is proven through the compare path");
         }
 
         // Two papers that disagree (a borrowed manifest, a doctored ID): the cross proof, one pair per category.
@@ -501,7 +616,10 @@ public static class _TimeDeskAuditPlay
             compare.Select(EvidencePicks.ForField(x.DocumentB, new DocumentRow(x.FieldB, c.documents[x.DocumentB].fields[x.FieldB]), c.documents[x.DocumentB].DisplayName), null);
             yield return Frames(1);
             if (o.Ui.EvidenceCount == before)
+            {
                 Line($"   evidence FAILED for the cross proof of {x.Category}");
+                Check(false, $"d{day} slot {slot}: the cross proof of {x.Category} logs a deviation");
+            }
         }
 
         // Papers: the first tell field of each category not yet documented.
@@ -532,6 +650,7 @@ public static class _TimeDeskAuditPlay
             if (i < 0)
             {
                 Line($"   evidence FAILED: no {a.category} tell line in the transcript");
+                Check(false, $"d{day} slot {slot}: the {a.category} answer tell was spoken (its question asked)");
                 continue;
             }
             DialogLine line = runner.Transcript[i];
@@ -564,13 +683,19 @@ public static class _TimeDeskAuditPlay
                         Call(Field(o.Ui, "_interview"), "Choose", back.Id);
                     return null;
                 }
-                yield return PairDress(o, compare, LookAt, () => Proof(Looks.EvidenceCategory, garment.Value, false), () => Proof(Looks.EvidenceCategory, garment.Value, true), $"dress {garment.Slot}");
+                if (Documented(Looks.EvidenceCategory))
+                {
+                    Line($"   dress {garment.Slot}: already documented");
+                    continue;
+                }
+                yield return PairDress(o, compare, LookAt, () => Proof(Looks.EvidenceCategory, garment.Value, false), () => Proof(Looks.EvidenceCategory, garment.Value, true), $"dress {garment.Slot}", day, slot);
             }
         }
-        compare.Clear();
+        foreach (Discrepancy dsc in log.Items)
+            Count($"proof {dsc.provedBy}");
     }
 
-    private static IEnumerator PairDress(Office o, CompareController compare, Func<ComparePick?> look, Func<ComparePick?> claimed, Func<ComparePick?> home, string what)
+    private static IEnumerator PairDress(Office o, CompareController compare, Func<ComparePick?> look, Func<ComparePick?> claimed, Func<ComparePick?> home, string what, int day, int slot)
     {
         int before = o.Ui.EvidenceCount;
         foreach (Func<ComparePick?> proof in new[] { claimed, home })
@@ -585,6 +710,280 @@ public static class _TimeDeskAuditPlay
                 yield break;
         }
         Line($"   evidence FAILED for {what}");
+        Check(false, $"d{day} slot {slot}: the {what} tell is proven through Look and the Costume Guide");
+    }
+
+    // =====================================================================
+    // Screenshots (RunShots only; nothing here writes the transcript)
+    // =====================================================================
+
+    /// <summary>A traveller kind's first appearance (and each form number's first): the papers on the desk and held, the wheel, every paper scanned, the app's tabs, the two panes and one, search and the steps.</summary>
+    private static IEnumerator KindShots(Office o, CaseInstance c, int day)
+    {
+        string kind = c.kind.ToString();
+        bool firstKind = First($"kind {kind}");
+        bool firstOfDay = First($"day {day}");
+        var forms = new List<int>();
+        for (int i = 0; i < c.documents.Count; i++)
+            if (c.documents[i].template != null && First($"form {c.documents[i].template.formNumber}"))
+                forms.Add(i);
+        bool firstPremade = c.legendarySource != null && First("premade");
+        if (!firstKind && !firstOfDay && !firstPremade && forms.Count == 0)
+            yield break;
+
+        yield return Seconds(1.2f);
+        if (firstPremade)
+            yield return Shots($"premade_{c.legendarySource.id}_desk");
+        if (firstKind)
+        {
+            yield return Shots($"kind_{kind}_desk");
+            o.Wheel.Open();
+            yield return Frames(4);
+            yield return Shots($"kind_{kind}_wheel");
+            o.Wheel.Close();
+            yield return Frames(2);
+        }
+        foreach (int i in forms)
+        {
+            DeskDocument paper = o.Paper(i);
+            if (paper == null)
+            {
+                Report($"   shots: form {c.documents[i].template.formNumber} is not on the desk (paper {i})");
+                continue;
+            }
+            yield return Until(() => !paper.IsSliding, 6f, $"paper {i} at rest");
+            Call(o.Desk, "Examine", paper);
+            yield return Seconds(0.6f);
+            yield return Shots($"form_{c.documents[i].template.formNumber}_held_{kind}");
+            Call(o.Desk, "PutBackAll", true);
+            yield return Frames(3);
+        }
+
+        // Every paper scanned (the documents presenter's scan, as the desk scanner reports it), then the app.
+        var papers = ((CaseDocumentsPresenter)Field(o.Ui, "_documents")).Papers;
+        for (int i = 0; i < c.documents.Count; i++)
+            if (papers.State(i) == PaperState.OnDesk)
+                Call(Field(o.Ui, "_documents"), "Scan", i);
+        yield return Frames(3);
+        Report($"   shots: {c.visitorGivenName} ({kind}) scanned {papers.Scanned} of {papers.Count}");
+        if (firstKind)
+        {
+            yield return AppShots(o, c, $"app_{kind}_documents", AppTab.Documents, AppTab.Reference);
+            yield return AppShots(o, c, $"app_{kind}_records", AppTab.Records, AppTab.Transcript);
+        }
+        if (firstOfDay)
+        {
+            yield return AppShots(o, c, $"app_d{day}_rules_steps", AppTab.Rules, AppTab.Documents);
+            yield return SearchShots(o, c, $"search_d{day}", c.visitorGivenName.Split(' ')[0]);
+        }
+        if (First("one pane"))
+            yield return OnePaneShots(o, c);
+    }
+
+    /// <summary>A deviation fault's tells proven: the first of each fault kind, on the office strip and in the app (the Report tab, the dock's verdict).</summary>
+    private static IEnumerator CaughtShots(Office o, CaseInstance c)
+    {
+        string key = FaultKey(c).Replace(' ', '_');
+        var log = (DiscrepancyLog)Field(Field(o.Ui, "_evidence"), "_discrepancies");
+        bool cross = log.Items.Any(d => d.provedBy == DiscrepancyProof.CrossMismatch) && First("caught cross");
+        if (!First($"caught {key}") && !cross)
+            yield break;
+        if (cross)
+            key += "_cross";
+        yield return Shots($"caught_{key}_office");
+        yield return AppShots(o, c, $"caught_{key}_report", AppTab.Report, AppTab.Transcript);
+    }
+
+    /// <summary>The PC frame open on the Investigation app, the left pane on <paramref name="left"/> (a record looked up on Records), the right on <paramref name="right"/>; shot, then the office again.</summary>
+    private static IEnumerator AppShots(Office o, CaseInstance c, string name, AppTab left, AppTab right)
+    {
+        yield return OpenApp(o);
+        AppPane l = o.LeftPane, r = o.RightPane;
+        if (left == AppTab.Records)
+            l.Go(LinkTarget.ToRecords(c.visitorGivenName));
+        else
+            l.Show(left);
+        if (r != null && r.gameObject.activeInHierarchy)
+            r.Show(right);
+        yield return Frames(4);
+        yield return Shots(name);
+        yield return CloseApp(o);
+    }
+
+    /// <summary>A search typed into the app's toolbar field: the results panel over the panes; closed and cleared after.</summary>
+    private static IEnumerator SearchShots(Office o, CaseInstance c, string name, string query)
+    {
+        yield return OpenApp(o);
+        var box = (SearchBox)Field(o.App, "searchBox");
+        var field = (TMP_InputField)Field(box, "field");
+        field.text = query;
+        yield return Seconds(0.6f);
+        Report($"   shots: search '{query}': results open {o.App.ResultsOpen}");
+        yield return Shots(name);
+        o.App.CloseResults();
+        field.text = string.Empty;
+        yield return Frames(2);
+        yield return CloseApp(o);
+    }
+
+    /// <summary>The app with one pane (Split off), then two again.</summary>
+    private static IEnumerator OnePaneShots(Office o, CaseInstance c)
+    {
+        yield return OpenApp(o);
+        o.App.Run(AppCommand.ToggleSplit);
+        yield return Frames(4);
+        yield return Shots("app_one_pane");
+        o.App.Run(AppCommand.ToggleSplit);
+        yield return Frames(3);
+        yield return CloseApp(o);
+    }
+
+    private static IEnumerator OpenApp(Office o)
+    {
+        if (o.View.Current != OfficeView.MonitorFocus)
+            o.View.FocusMonitor();
+        yield return Until(() => o.View.Current == OfficeView.MonitorFocus, 5f, "the PC frame");
+        o.Apps.OpenApp(DesktopAppIds.Investigation);
+        _frameOpen = true;
+        yield return Frames(3);
+    }
+
+    private static IEnumerator CloseApp(Office o)
+    {
+        o.View.FocusOffice();
+        _frameOpen = false;
+        yield return Until(() => o.View.Current == OfficeView.OfficeFocus, 5f, "the office view");
+        yield return Seconds(0.3f);
+    }
+
+    /// <summary>Shots only, after the transcript's END: day 7 with the Auto-Feed and Analysis scanners set on the desk (not bought): the first traveller's papers fed by themselves, then one scanned by hand for the analysis.</summary>
+    private static IEnumerator ScannerDayShots()
+    {
+        var o = new Office();
+        o.Desk.BeginDay(RunManager.Instance.World.day, new ScannerDay(true, true));
+        Report("SHOTS ONLY: day 7 with the Auto-Feed and Analysis scanners set on the desk (DeskController.BeginDay; nothing bought, after the transcript's END)");
+        o.StartShift.onClick.Invoke();
+        yield return Until(() => o.ReadyArmed, 30f, "READY on day 7");
+        ExecuteEvents.Execute(o.Ready.gameObject, new PointerEventData(EventSystem.current), ExecuteEvents.pointerClickHandler);
+        yield return Until(() => Field(o.Ui, "_currentCase") != null && (bool)Field(o.Game, "_travellerAtDesk"), 10f, "the traveller at the desk");
+        var c = (CaseInstance)Field(o.Ui, "_currentCase");
+        yield return Interview(o, c, false);
+        var papers = ((CaseDocumentsPresenter)Field(o.Ui, "_documents")).Papers;
+        yield return Seconds(1f);
+        yield return Shots("scanner_autofeed_running");
+        yield return Until(() => papers.Scanned == papers.Received, 40f, "the Auto-Feed scanning every paper");
+        Check(papers.Scanned == papers.Count, $"scanners: the Auto-Feed scanned every paper by itself ({papers.Scanned} of {papers.Count})");
+        yield return Seconds(1.5f);
+        yield return Shots("scanner_autofeed_done");
+
+        // A scan by hand: paper 0 dragged onto the scanner, the analysis pass.
+        int finished = -1;
+        bool analysed = false;
+        Action<int, bool> onScan = (i, a) => { finished = i; analysed = a; };
+        o.Desk.ScanFinished += onScan;
+        DeskDocument paper = o.Paper(0);
+        yield return Until(() => paper != null && !paper.IsSliding, 6f, "paper 0 at rest");
+        DragOnto(paper, ((DeskScanner)Field(o.Desk, "scanner")).BedPoint);
+        yield return Until(() => finished == 0, 15f, "the hand scan of paper 0");
+        o.Desk.ScanFinished -= onScan;
+        Check(analysed, "scanners: a scan by hand with the Analysis Scanner is an analysis pass");
+        yield return AppShots(o, c, "scanner_analysed", AppTab.Documents, AppTab.Reference);
+        Report("END shots");
+    }
+
+    /// <summary>A drag through the EventSystem's handlers: begin on the paper, move to the target's screen point, release there.</summary>
+    private static void DragOnto(DeskDocument paper, Vector3 target)
+    {
+        Camera cam = Cam();
+        Vector2 at = cam.WorldToScreenPoint(paper.Sheet.position);
+        var results = new List<RaycastResult>();
+        var data = new PointerEventData(EventSystem.current) { position = at, button = PointerEventData.InputButton.Left };
+        Physics.SyncTransforms();
+        EventSystem.current.RaycastAll(data, results);
+        GameObject handler = results.Count > 0 ? ExecuteEvents.GetEventHandler<IBeginDragHandler>(results[0].gameObject) : null;
+        if (handler != paper.gameObject)
+            throw new InvalidOperationException($"the drag on paper {paper.Index}: the top drag handler at {at} is {(handler != null ? handler.name : "none")}");
+        data.pointerCurrentRaycast = results[0];
+        data.pointerPressRaycast = results[0];
+        data.pressPosition = at;
+        data.pointerDrag = handler;
+        ExecuteEvents.Execute(handler, data, ExecuteEvents.beginDragHandler);
+        data.position = cam.WorldToScreenPoint(target);
+        ExecuteEvents.Execute(handler, data, ExecuteEvents.dragHandler);
+        ExecuteEvents.Execute(handler, data, ExecuteEvents.endDragHandler);
+    }
+
+    /// <summary>The office camera (the anime hall's is not tagged MainCamera): the enabled one drawing to the screen with the highest depth.</summary>
+    private static Camera Cam() =>
+        Camera.main != null ? Camera.main : Object.FindObjectsByType<Camera>(FindObjectsSortMode.None).Where(c => c.enabled && c.targetTexture == null).OrderByDescending(c => c.depth).First();
+
+    private static IEnumerator Shots(string name)
+    {
+        yield return Shot($"{name}_1080.png");
+        yield return Resolution(1280, 720);
+        yield return Shot($"{name}_720.png");
+        yield return Resolution(1920, 1080);
+    }
+
+    private static IEnumerator Shot(string file)
+    {
+        string path = Path.Combine(ShotsDir, file);
+        if (File.Exists(path))
+            File.Delete(path);
+        yield return Frames(2);
+        float compiling = Time.realtimeSinceStartup + 60f;
+        while (ShaderUtil.anythingCompiling && Time.realtimeSinceStartup < compiling)
+            yield return null;
+        yield return Frames(2);
+        ScreenCapture.CaptureScreenshot(path);
+        float end = Time.realtimeSinceStartup + 10f;
+        while (!File.Exists(path) && Time.realtimeSinceStartup < end)
+            yield return null;
+        Report($"screenshot {file} (screen {UnityEngine.Screen.width}x{UnityEngine.Screen.height}){(File.Exists(path) ? "" : " NOT WRITTEN")}");
+        if (_frameOpen)
+            ShotDesktop("desktop_" + file);
+    }
+
+    /// <summary>The PC desktop as the frame's glass should show it: the desktop camera rendered to a texture the screen's height tall at the desktop's 4:3 aspect, saved beside the screenshot (the screen capture of the open frame is kept too, so what the glass really shows stays on record).</summary>
+    private static void ShotDesktop(string file)
+    {
+        int mask = 1 << OfficeLayers.PcDesktopLayer;
+        Camera cam = Object.FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            .Where(c => (c.cullingMask & mask) != 0).OrderBy(c => c.targetTexture != null ? 1 : 0).FirstOrDefault();
+        if (cam == null)
+        {
+            Report($"   no desktop camera for {file}");
+            return;
+        }
+        int height = UnityEngine.Screen.height, width = Mathf.RoundToInt(height * 4f / 3f);
+        RenderTexture rt = RenderTexture.GetTemporary(width, height, 24);
+        RenderTexture old = cam.targetTexture;
+        Rect rect = cam.rect;
+        bool wasEnabled = cam.enabled;
+        cam.targetTexture = rt;
+        cam.rect = new Rect(0f, 0f, 1f, 1f);
+        cam.enabled = true;
+        cam.Render();
+        cam.targetTexture = old;
+        cam.rect = rect;
+        cam.enabled = wasEnabled;
+        RenderTexture active = RenderTexture.active;
+        RenderTexture.active = rt;
+        var tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        tex.Apply();
+        RenderTexture.active = active;
+        File.WriteAllBytes(Path.Combine(ShotsDir, file), tex.EncodeToPNG());
+        Object.Destroy(tex);
+        RenderTexture.ReleaseTemporary(rt);
+        Report($"desktop {file} ({width}x{height}, camera {cam.name})");
+    }
+
+    private static IEnumerator Resolution(int width, int height)
+    {
+        PlayModeWindow.SetCustomRenderingResolution((uint)width, (uint)height, ViewName);
+        yield return Until(() => UnityEngine.Screen.width == width && UnityEngine.Screen.height == height, 10f, $"a {width}x{height} game view");
+        yield return Frames(5);
     }
 
     // =====================================================================
@@ -617,10 +1016,14 @@ public static class _TimeDeskAuditPlay
         ((Button)Field(ui, "expensesContinueButton")).onClick.Invoke();
         yield return Frames(3);
         ContentLibrarySO lib = RunManager.Instance.Library;
+        // Interview Protocols (the birth-date question) first; the Near East Speech translator only from the night before foreign speech starts, when it is in force the next morning.
+        int translatorNight = lib.Translation.rules != null ? lib.Translation.rules.fromDay - 1 : int.MaxValue;
         foreach (string id in new[] { "interview_protocols", "tr_near_east_spoken" })
         {
+            if (id == "tr_near_east_spoken" && day < translatorNight)
+                continue;
             UpgradeSO upgrade = lib.GetUpgradeById(id);
-            if (upgrade == null || w.HasUpgrade(id) || w.money < upgrade.cost + 20)
+            if (upgrade == null || w.HasUpgrade(id) || w.money < HomeEconomy.UpgradeCost(w, lib, upgrade, out _) + 20)
                 continue;
             Call(manager, "HandleBuyUpgrade", upgrade);
             Line($"   bought {id}: owned={w.HasUpgrade(id)} money={w.money}");
@@ -661,6 +1064,7 @@ public static class _TimeDeskAuditPlay
         WorldState w = RunManager.Instance.World;
         Line($"   world: day={w.day} runSeed={w.runSeed} daySeed={RunManager.Instance.GetDaySeed()} money={w.money} stability={F(w.timelineStability)} leader='{w.history.leaderId}' upgrades=[{string.Join(",", w.unlockedUpgradeIds)}] phase={w.phase}");
         Line($"   plan: {RunManager.Instance.GetCurrentDayPlan().name} visitors={RunManager.Instance.GetCurrentDayPlan().VisitorsCount}");
+        Line($"   rules: {string.Join(" | ", RunManager.Instance.GetCurrentDayPlan().ActiveTravelRules.Where(r => r != null).Select(r => r.Summary()))}");
     }
 
     private static void RecordSave(string name)
@@ -734,6 +1138,10 @@ public static class _TimeDeskAuditPlay
         public readonly InvestigationUIController Ui = One<InvestigationUIController>();
         public readonly OfficeUIController OfficeUi = One<OfficeUIController>();
         public readonly BoothCoordinator Coordinator = One<BoothCoordinator>();
+        public readonly OfficeViewController View = One<OfficeViewController>();
+        public readonly DeskController Desk = One<DeskController>();
+        public readonly TravellerWheel Wheel = One<TravellerWheel>();
+        public readonly DesktopApps Apps = One<DesktopApps>();
 
         public DayFlowUIController DayFlow() => One<DayFlowUIController>();
         public Clickable Ready => (Clickable)Field(Game, "readySign");
@@ -743,6 +1151,11 @@ public static class _TimeDeskAuditPlay
         public Button StartShift => (Button)Field(DayFlow(), "startShiftButton");
         public Button GoHome => (Button)Field(DayFlow(), "goHomeButton");
         public GameObject CitationPanel => (GameObject)Field(OfficeUi, "citationPanel");
+        public InvestigationApp App => (InvestigationApp)Field(Ui, "app");
+        public AppPane LeftPane => (AppPane)Field(App, "leftPane");
+        public AppPane RightPane => (AppPane)Field(App, "rightPane");
+        public List<DeskDocument> Papers() => ((Transform)Field(Desk, "paperRoot")).GetComponentsInChildren<DeskDocument>().ToList();
+        public DeskDocument Paper(int index) => Papers().FirstOrDefault(p => p.Index == index);
     }
 
     // =====================================================================
@@ -799,8 +1212,23 @@ public static class _TimeDeskAuditPlay
             else
                 PlayerPrefs.SetString(pref, value);
         }
+        foreach (string entry in SessionState.GetString(DesktopPrefsKey, string.Empty).Split('\u0002').Where(e => e.Length > 0))
+        {
+            string[] kv = entry.Split('\u0001');
+            if (kv.Length != 2)
+                continue;
+            if (kv[1] == "<absent>")
+                PlayerPrefs.DeleteKey(kv[0]);
+            else
+                PlayerPrefs.SetString(kv[0], kv[1]);
+        }
         PlayerPrefs.Save();
         Resources.Load<RunConfigSO>(RunManager.ConfigResourcePath).fixedRunSeed = SessionState.GetInt(SeedKey, 0);
+
+        // Errors and exceptions logged during the play are failures (the warnings file keeps them all).
+        string[] logged = File.Exists(WarningsPath) ? File.ReadAllLines(WarningsPath) : new string[0];
+        int errors = logged.Count(l => l.StartsWith("[Error]") || l.StartsWith("[Exception]") || l.StartsWith("[Assert]"));
+        Check(errors == 0, $"the log holds no error or exception ({errors} of {logged.Length} lines)");
 
         Report($"fails={SessionState.GetInt(FailsKey, 0)}");
         SessionState.SetInt(StepKey, 0);
@@ -809,6 +1237,8 @@ public static class _TimeDeskAuditPlay
         string scene = SessionState.GetString(SceneKey, string.Empty);
         if (!string.IsNullOrEmpty(scene) && File.Exists(scene))
             EditorSceneManager.OpenScene(scene, OpenSceneMode.Single);
+        else
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         Report($"done {DateTime.Now:s}");
     }
 

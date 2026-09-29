@@ -38,7 +38,10 @@ public static class _TimeDeskAuditStatic
         }
     }
     private const string LibraryPath = "Assets/Data/Content Library/ContentLibrary_Main.asset";
-    private const string ArtScene = "Assets/Scenes/OfficeScene.unity";
+    /// <summary>The art office the game plays (RunConfig.officeSceneName, ArtOfficeScene: the anime hall today); the contract report reads it.</summary>
+    private static string ArtScene => ArtOfficeScene.Path;
+    /// <summary>Both art offices (the anime hall and the 3D room): the builders must leave each byte-unchanged.</summary>
+    private static readonly string[] ArtScenes = { "Assets/Art/Office/AnimeHallLayers/AnimeHall.unity", "Assets/Scenes/OfficeScene.unity" };
     private const string GameplayScene = "Assets/Scenes/OfficeGameplay.unity";
     private const string HomeScene = "Assets/Scenes/HomeScene.unity";
     private const string TitleScene = "Assets/Scenes/TitleScene.unity";
@@ -175,7 +178,7 @@ public static class _TimeDeskAuditStatic
                 for (int i = 0; i < cases.Count; i++)
                 {
                     CaseInstance c = cases[i];
-                    CitizenRecord record = registry.Find(c.visitorGivenName);
+                    CitizenRecord record = registry.Records.FirstOrDefault(r => r.FullName == c.visitorGivenName);
                     string rec = record != null ? string.Join("|", record.Groups.SelectMany(g => g.Rows).Select(r => r.Value)) : "none";
                     lines.Add(CaseLine(seed, day, leader, i + 1, c, violators.TryGetValue(i + 1, out NationEraProfileSO v) ? v.id : null) + $" | record={rec}");
                 }
@@ -250,9 +253,9 @@ public static class _TimeDeskAuditStatic
 
     private static void Scenes()
     {
-        string artHash = FileHash(ArtScene);
+        Dictionary<string, string> artHashes = ArtScenes.Where(File.Exists).ToDictionary(p => p, FileHash);
         var hashes = new List<string>();
-        foreach (string path in new[] { GameplayScene, HomeScene, TitleScene, ArtScene })
+        foreach (string path in new[] { GameplayScene, HomeScene, TitleScene }.Concat(ArtScenes))
             hashes.Add($"{FileHash(path)} {path}");
 
         // The committed scenes as they are.
@@ -305,7 +308,8 @@ public static class _TimeDeskAuditStatic
         Compare("TitleScene", title1, title2, "rebuilt vs rebuilt again");
         summary.Add($"build errors: office {b1.Concat(b2).Count(IsError)}, home {hb1.Concat(hb2).Count(IsError)}, title {tb1.Concat(tb2).Count(IsError)}");
         summary.Add($"build warnings: office {b1.Concat(b2).Count(l => l.StartsWith("[Warning]"))}, home {hb1.Concat(hb2).Count(l => l.StartsWith("[Warning]"))}, title {tb1.Concat(tb2).Count(l => l.StartsWith("[Warning]"))}");
-        summary.Add($"art office byte-unchanged by the builders: {FileHash(ArtScene) == artHash}");
+        foreach (KeyValuePair<string, string> hashed in artHashes)
+            summary.Add($"art office {hashed.Key} byte-unchanged by the builders: {FileHash(hashed.Key) == hashed.Value}");
         summary.Add("committed scene file hashes: " + string.Join("; ", hashes));
         summary.Add("build settings: " + string.Join(", ", EditorBuildSettings.scenes.Select(s => s.path + (s.enabled ? "" : "(off)"))));
 
@@ -313,7 +317,7 @@ public static class _TimeDeskAuditStatic
         var art = EditorSceneManager.OpenScene(ArtScene, OpenSceneMode.Single);
         string contract = OfficeSceneContractTools.Report(art);
         File.WriteAllText(Path.Combine(_out, "contract.txt"), contract);
-        summary.Add($"contract report written; art dirty after it: {art.isDirty}; art still byte-unchanged: {FileHash(ArtScene) == artHash}");
+        summary.Add($"contract report on {ArtScene} written; art dirty after it: {art.isDirty}; art still byte-unchanged: {!artHashes.ContainsKey(ArtScene) || FileHash(ArtScene) == artHashes[ArtScene]}");
         EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
         File.WriteAllLines(Path.Combine(_out, "scenes_summary.txt"), summary);
