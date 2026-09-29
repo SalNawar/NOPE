@@ -18,12 +18,16 @@ MonoBehaviour:
     label: Capital
     prompt:
       id: q_capital.prompt
-      text: What is the capital of your land?
+      text: Which city in {place} are you headed for?
     answer:
       id: q_capital.answer
-      text: Our capital is {value}.
-    overrides: []
-    kinds: 03000000
+      text: '{value}, like the brochure says.'
+    overrides:
+    - eraId: 
+      kinds: 03000000
+      answer:
+        id: q_capital.overrides.1.answer
+        text: Our capital is {value}.
   conditions:
   - type: 8
     key: 

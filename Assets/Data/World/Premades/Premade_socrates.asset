@@ -26,3 +26,8 @@ MonoBehaviour:
   recordNote: Philosopher. Known to question officials at length.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

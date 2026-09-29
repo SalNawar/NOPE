@@ -20,6 +20,7 @@ MonoBehaviour:
   newsLineOnFire: Budget cuts close the interpreter pool. From tomorrow, the displaced
     reach the desk speaking their own tongues, untranslated but for their key words;
     Speech translators are sold at Home tonight. Papers are still filled in English.
+  section: 0
   conditions:
   - type: 8
     key: 

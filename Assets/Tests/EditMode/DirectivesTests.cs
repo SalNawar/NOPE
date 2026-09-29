@@ -97,10 +97,112 @@ public class DirectivesTests
     }
 
     [Test]
-    public void IsRolled_ThePaperSetTheDebtStandingAndThePapersDates()
+    public void IsRolled_ThePaperSetTheDebtStandingThePapersDatesAndTheRecall()
     {
-        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding, TravelRuleType.PaperDates },
+        CollectionAssert.AreEquivalent(new[] { TravelRuleType.PaperSet, TravelRuleType.DebtStanding, TravelRuleType.PaperDates, TravelRuleType.TransponderRecall },
                                        System.Enum.GetValues(typeof(TravelRuleType)).Cast<TravelRuleType>().Where(Directives.IsRolled).ToList());
+    }
+
+    [Test]
+    public void HasMaker_AndIsRolled_IncludeTheRecall()
+    {
+        Assert.IsTrue(Directives.HasMaker(TravelRuleType.TransponderRecall));
+        Assert.IsTrue(Directives.IsRolled(TravelRuleType.TransponderRecall));
+    }
+
+    [TestCase(10, 10, true)]
+    [TestCase(11, 10, false)]
+    [TestCase(15, 10, false)]
+    public void Guarantees_TheRecallOnItsFirstDayOnly(int today, int firstDay, bool expected)
+    {
+        Assert.AreEqual(expected, Directives.Guarantees(TravelRuleType.TransponderRecall, today, firstDay));
+    }
+
+    // ---- the Driftbox 3 recall (days 7-15 §6) ----
+
+    private static readonly Directive Recall = new Directive(TravelRuleType.TransponderRecall, new[] { TravellerKind.PoorTourist, TravellerKind.Labourer }, transponder: "driftbox3");
+
+    private static CaseFacts OnUnit(TravellerKind kind, string modelId)
+    {
+        CaseFacts facts = Honest(kind, SetOf(kind));
+        facts.ManifestModelId = modelId;
+        return facts;
+    }
+
+    [Test]
+    public void Breaks_TransponderRecall_ARecalledModelOnTheManifest()
+    {
+        Assert.IsTrue(Directives.Breaks(Recall, OnUnit(TravellerKind.PoorTourist, "driftbox3")));
+        Assert.AreEqual(DirectiveFault.RecalledTransponder, Directives.Fault(new[] { Recall }, OnUnit(TravellerKind.Labourer, "driftbox3")));
+    }
+
+    [Test]
+    public void Breaks_TransponderRecall_AnotherModel()
+    {
+        Assert.IsFalse(Directives.Breaks(Recall, OnUnit(TravellerKind.PoorTourist, "ticktock")));
+        Assert.AreEqual(DirectiveFault.None, Directives.Fault(new[] { Recall }, OnUnit(TravellerKind.RichTourist, "driftbox3")), "the rule is read for the Economy kinds only");
+    }
+
+    [Test]
+    public void Breaks_TransponderRecall_NoManifestBreaksNothing()
+    {
+        Assert.IsFalse(Directives.Breaks(Recall, OnUnit(TravellerKind.PoorTourist, null)), "no manifest: the paper set catches it");
+        Assert.IsFalse(Directives.Breaks(new Directive(TravelRuleType.TransponderRecall, null), OnUnit(TravellerKind.PoorTourist, "driftbox3")), "a recall naming no model recalls nothing");
+    }
+
+    [Test]
+    public void FaultOf_TransponderRecall_IsRecalledTransponder()
+    {
+        Assert.AreEqual(DirectiveFault.RecalledTransponder, Directives.FaultOf(TravelRuleType.TransponderRecall));
+    }
+
+    [Test]
+    public void CanBreak_TheRecall_AnEconomyKindCarryingAManifest()
+    {
+        Assert.IsTrue(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.PoorTourist, PoorSet));
+        Assert.IsTrue(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.Labourer, LabourSet));
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.RichTourist, RichSet), "a Premium account travels Premium");
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.Displaced, DisplacedSet));
+        Assert.IsFalse(Directives.CanBreak(TravelRuleType.TransponderRecall, TravellerKind.PoorTourist, new[] { Directives.Visa }), "no manifest to print the unit on");
+    }
+
+    [Test]
+    public void RecallMaker_SwapsTheModelWithAFreshSerial()
+    {
+        var driftbox = new TransponderModel { id = "driftbox3", model = "Driftbox 3", prefix = "DB", transponderClass = TransponderClass.Economy, weight = 1f };
+        var taken = new HashSet<string> { "DB-00412" };
+        var rng = Script(R(412), R(413));
+        Assert.AreEqual("Driftbox 3 · DB-00413", Directives.RecalledUnit(driftbox, taken, rng), "a serial nobody holds today");
+        Assert.IsTrue(rng.Done);
+        CollectionAssert.Contains(taken, "DB-00413");
+    }
+
+    [Test]
+    public void Unrecalled_LeavesOutTheRecalledModels_KeepingTheRestInOrder()
+    {
+        var models = new List<TransponderModel>
+        {
+            new TransponderModel { id = "ticktock", transponderClass = TransponderClass.Economy },
+            new TransponderModel { id = "driftbox3", transponderClass = TransponderClass.Economy },
+            new TransponderModel { id = "hopper2", transponderClass = TransponderClass.Premium }
+        };
+        CollectionAssert.AreEqual(new[] { "ticktock", "hopper2" }, Directives.Unrecalled(models, new[] { "driftbox3" }).Select(m => m.id).ToArray());
+        CollectionAssert.AreEqual(new[] { "ticktock", "driftbox3", "hopper2" }, Directives.Unrecalled(models, new string[0]).Select(m => m.id).ToArray(), "no recall today: every model");
+        CollectionAssert.IsEmpty(Directives.Unrecalled(null, new[] { "x" }));
+    }
+
+    [Test]
+    public void ModelIdOf_ReadsThePrintedModel()
+    {
+        var models = new List<TransponderModel>
+        {
+            new TransponderModel { id = "driftbox3", model = "Driftbox 3", prefix = "DB", transponderClass = TransponderClass.Economy },
+            new TransponderModel { id = "skiplite", model = "Skip Lite", prefix = "SL", transponderClass = TransponderClass.Economy }
+        };
+        Assert.AreEqual("driftbox3", RecordLies.ModelIdOf("Driftbox 3 · DB-00412", models));
+        Assert.AreEqual("skiplite", RecordLies.ModelIdOf("Skip Lite · SL-99999", models));
+        Assert.IsNull(RecordLies.ModelIdOf("TransponderId:none", models));
+        Assert.IsNull(RecordLies.ModelIdOf(null, models));
     }
 
     [TestCase(TravelRuleType.EraForbidden, DirectiveFault.ClosedDestination)]
@@ -409,7 +511,6 @@ public class DirectivesTests
     [Test]
     public void RuleProblems_NameEachBrokenShape()
     {
-        StringAssert.Contains("lists none", Directives.RuleProblems("R", TravelRuleType.EraForbidden, Tourists, true, true).Single());
         List<string> procedure = Directives.RuleProblems("R", TravelRuleType.PaperSet, null, true, false);
         Assert.AreEqual(3, procedure.Count);
         StringAssert.Contains("names a country or era", procedure[0]);
@@ -417,6 +518,73 @@ public class DirectivesTests
         StringAssert.Contains("lists no kinds", procedure[2]);
         StringAssert.Contains("lists no kinds", Directives.RuleProblems("R", TravelRuleType.DebtStanding, new TravellerKind[0], false, true).Single());
         CollectionAssert.IsEmpty(Directives.RuleProblems("R", TravelRuleType.DressForDestination, new TravellerKind[0], false, true), "dress is read for every 2150 citizen by its own rule");
+    }
+
+    private static readonly List<TransponderModel> Units = new List<TransponderModel>
+    {
+        new TransponderModel { id = "hopper2", transponderClass = TransponderClass.Premium, model = "Hopper Mk II", prefix = "HP", weight = 1f },
+        new TransponderModel { id = "ticktock", transponderClass = TransponderClass.Economy, model = "Tick-Tock Basic", prefix = "TT", weight = 3f },
+        new TransponderModel { id = "driftbox3", transponderClass = TransponderClass.Economy, model = "Driftbox 3", prefix = "DB", weight = 1f }
+    };
+
+    private static readonly TravellerKind[] EconomyKinds = { TravellerKind.PoorTourist, TravellerKind.Labourer };
+
+    /// <summary>The Economy range limit (days 7-15 §6.1, Q3 C): a closure may list the kinds it closes for.</summary>
+    [Test]
+    public void RuleProblems_AClosureMayListItsKinds()
+    {
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_NoEconomyAncient", TravelRuleType.EraForbidden, EconomyKinds, true, true));
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_NoAncientEgypt", TravelRuleType.NationEraForbidden, null, true, true), "a closure with no kinds closes for everyone");
+    }
+
+    [Test]
+    public void Fault_AClosureForSomeKindsSparesTheOthers()
+    {
+        var range = new Directive(TravelRuleType.EraForbidden, EconomyKinds, null, "ancient");
+        CaseFacts poor = Honest(TravellerKind.PoorTourist, PoorSet);
+        poor.ClosedDestination = true;
+        Assert.AreEqual(DirectiveFault.ClosedDestination, Directives.Fault(new[] { range }, poor), "a poor tourist bound for the Ancient era");
+        CaseFacts rich = Honest(TravellerKind.RichTourist, RichSet);
+        Assert.AreEqual(DirectiveFault.None, Directives.Fault(new[] { range }, rich), "a rich tourist travels Premium: the range limit is not read for them");
+        Assert.IsTrue(range.AppliesTo(TravellerKind.Labourer));
+        Assert.IsFalse(range.AppliesTo(TravellerKind.Displaced));
+    }
+
+    [Test]
+    public void DayProblems_AClosureForKindsTheDayDoesNotWeigh()
+    {
+        var active = new List<Directives.RuleEntry> { new Directives.RuleEntry("Rule_NoEconomyAncient", TravelRuleType.EraForbidden, EconomyKinds, 13) };
+        var richOnly = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.RichTourist, RichSet) };
+        StringAssert.Contains("'Rule_NoEconomyAncient'", Directives.DayProblems("D", 13, active, richOnly).Single(), "its guaranteed violator could never be drawn");
+        var poor = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.PoorTourist, PoorSet) };
+        CollectionAssert.IsEmpty(Directives.DayProblems("D", 13, active, poor));
+    }
+
+    [Test]
+    public void RuleProblems_TheRecallAsShipped_HasNone()
+    {
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_DriftboxRecall", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "driftbox3", Units));
+    }
+
+    [Test]
+    public void RuleProblems_TheRecallsModelKindsAndLine()
+    {
+        StringAssert.Contains("'nowhere'", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "nowhere", Units).Single(), "an unknown model");
+        StringAssert.Contains("Premium", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "hopper2", Units).Single(), "a Premium model: no Economy traveller holds one");
+        StringAssert.Contains("names no model", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "", Units).Single());
+        StringAssert.Contains("RichTourist", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, new[] { TravellerKind.RichTourist, TravellerKind.PoorTourist }, false, true, "driftbox3", Units).Single(), "a kind without an Economy unit");
+        StringAssert.Contains("lists no kinds", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, null, false, true, "driftbox3", Units).Single());
+        StringAssert.Contains("only a recall", Directives.RuleProblems("R", TravelRuleType.PaperSet, Tourists, false, true, "driftbox3", Units).Single());
+    }
+
+    [Test]
+    public void DayProblems_EveryEconomyModelRecalledOnADay()
+    {
+        var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.PoorTourist, PoorSet) };
+        var one = new List<Directives.RuleEntry> { new Directives.RuleEntry("Rule_DriftboxRecall", TravelRuleType.TransponderRecall, EconomyKinds, 10, "driftbox3") };
+        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day10", 10, one, kinds, Units));
+        var both = new List<Directives.RuleEntry>(one) { new Directives.RuleEntry("Rule_TickTockRecall", TravelRuleType.TransponderRecall, EconomyKinds, 10, "ticktock") };
+        StringAssert.Contains("every Economy model", Directives.DayProblems("D", 10, both, kinds, Units).Single(), "nobody could travel Economy at all");
     }
 
     private static List<(TravellerKind kind, IReadOnlyCollection<string> forms)> Day3Kinds() => new List<(TravellerKind, IReadOnlyCollection<string>)>
@@ -518,6 +686,87 @@ public class DirectivesTests
 
         plan = Directives.PlanDateFault(true, 0, Script(R(0)));
         Assert.AreEqual(PaperDateFault.Departure, plan.Fault);
+    }
+
+    [Test]
+    public void Closes_EachClosureType_ByIds()
+    {
+        Assert.IsTrue(new Directive(TravelRuleType.EraForbidden, null, null, "modern").Closes("japan", "modern"));
+        Assert.IsFalse(new Directive(TravelRuleType.EraForbidden, null, null, "modern").Closes("japan", "industrial"));
+        Assert.IsTrue(new Directive(TravelRuleType.NationForbidden, null, "japan", null).Closes("japan", "ancient"));
+        Assert.IsFalse(new Directive(TravelRuleType.NationForbidden, null, "japan", null).Closes("china", "ancient"));
+        Assert.IsTrue(new Directive(TravelRuleType.NationEraForbidden, null, "egypt", "ancient").Closes("egypt", "ancient"));
+        Assert.IsFalse(new Directive(TravelRuleType.NationEraForbidden, null, "egypt", "ancient").Closes("egypt", "medieval"));
+        Assert.IsFalse(new Directive(TravelRuleType.PaperSet, null, "egypt", "ancient").Closes("egypt", "ancient"), "a procedure closes nothing");
+    }
+
+    [Test]
+    public void Plan_MapsEachPlannedDirectiveToItsRuleAndVariant()
+    {
+        (PlannedDirective planned, TravelRuleType rule, PaperSetBreak paper, PaperDateFault date)[] table =
+        {
+            (PlannedDirective.EconomyManifest, TravelRuleType.PaperSet, PaperSetBreak.EconomyManifest, PaperDateFault.None),
+            (PlannedDirective.WaiverMissing, TravelRuleType.PaperSet, PaperSetBreak.WaiverMissing, PaperDateFault.None),
+            (PlannedDirective.WaiverUnsigned, TravelRuleType.PaperSet, PaperSetBreak.WaiverUnsigned, PaperDateFault.None),
+            (PlannedDirective.ProofMissing, TravelRuleType.PaperSet, PaperSetBreak.ProofMissing, PaperDateFault.None),
+            (PlannedDirective.Frozen, TravelRuleType.DebtStanding, PaperSetBreak.None, PaperDateFault.None),
+            (PlannedDirective.DepartureDate, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Departure),
+            (PlannedDirective.Expired, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Expiry),
+            (PlannedDirective.Recalled, TravelRuleType.TransponderRecall, PaperSetBreak.None, PaperDateFault.None)
+        };
+        foreach ((PlannedDirective planned, TravelRuleType rule, PaperSetBreak paper, PaperDateFault date) in table)
+        {
+            DirectivePlan plan = Directives.Plan(planned);
+            Assert.IsTrue(plan.IsFault, planned.ToString());
+            Assert.AreEqual(rule, plan.Rule, planned.ToString());
+            Assert.AreEqual(paper, plan.PaperBreak, planned.ToString());
+            Assert.AreEqual(date, plan.DateFault, planned.ToString());
+            Assert.IsTrue(Directives.IsRolled(plan.Rule), $"{planned}: its rule has a maker the pinned variant drives");
+        }
+    }
+
+    [Test]
+    public void Plan_NoneIsNoFault()
+    {
+        DirectivePlan plan = Directives.Plan(PlannedDirective.None);
+        Assert.IsFalse(plan.IsFault);
+        Assert.AreEqual(PaperSetBreak.None, plan.PaperBreak);
+        Assert.AreEqual(PaperDateFault.None, plan.DateFault);
+    }
+
+    [Test]
+    public void PickPaperSetBreak_APinnedVariantDrawsNothing()
+    {
+        var rng = new ScriptedRandom();
+        Assert.AreEqual(PaperSetBreak.WaiverUnsigned, Directives.PickPaperSetBreak(TravellerKind.PoorTourist, PoorSet, rng, PaperSetBreak.WaiverUnsigned));
+        Assert.IsTrue(rng.Done, "the slot's authoring chose it: no draw");
+    }
+
+    [Test]
+    public void PickPaperSetBreak_APinnedVariantThatCannotShowIsNone()
+    {
+        var rng = new ScriptedRandom();
+        Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.RichTourist, RichSet, rng, PaperSetBreak.WaiverUnsigned), "a rich tourist carries no waiver");
+        Assert.AreEqual(PaperSetBreak.None, Directives.PickPaperSetBreak(TravellerKind.Labourer, LabourSet, rng, PaperSetBreak.ProofMissing), "a labourer carries no proof of means");
+        Assert.IsTrue(rng.Done);
+    }
+
+    [Test]
+    public void PlanDateFault_APinnedDepartureDrawsNothing()
+    {
+        var rng = Script();
+        PaperDatePlan plan = Directives.PlanDateFault(true, 2, rng, PaperDateFault.Departure);
+        Assert.AreEqual((PaperDateFault.Departure, -1), (plan.Fault, plan.ExpiryIndex));
+        Assert.IsTrue(rng.Done);
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(false, 2, Script(), PaperDateFault.Departure).Fault, "no departure printed: nothing to falsify");
+    }
+
+    [Test]
+    public void PlanDateFault_APinnedExpiryDrawsOnlyTheForm()
+    {
+        PaperDatePlan plan = Directives.PlanDateFault(true, 2, Script(R(1)), PaperDateFault.Expiry);
+        Assert.AreEqual((PaperDateFault.Expiry, 1), (plan.Fault, plan.ExpiryIndex), "the draw is over the expiring forms only, never the departure");
+        Assert.AreEqual(PaperDateFault.None, Directives.PlanDateFault(true, 0, Script(), PaperDateFault.Expiry).Fault, "nothing expires: nothing to falsify");
     }
 
     [Test]

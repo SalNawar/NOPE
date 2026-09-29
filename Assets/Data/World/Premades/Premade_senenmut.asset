@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Steward of the Pharaoh's household and architect of her temple.
   dialogId: dlg_senenmut
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

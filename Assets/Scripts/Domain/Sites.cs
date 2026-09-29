@@ -218,7 +218,7 @@ public static class Sites
     public static readonly string[] WordKeys =
     {
         "site.portal.title", "site.portal.masthead", "site.portal.intro", "site.notFound.title", "site.notFound.body", "site.home",
-        "site.news.masthead", "site.news.issueTitle", "site.news.backIssue", "site.news.world", "site.news.notices", "site.news.noNotices",
+        "site.news.masthead", "site.news.issueTitle", "site.news.backIssue", "site.news.world", "site.news.desk", "site.news.notices", "site.news.noNotices",
         "site.news.standings", "site.news.standing", "site.news.noStandings", "site.news.archive", "site.news.issueLink", "site.news.allIssues",
         "site.news.today", "site.news.archiveTitle", "site.news.archiveRow", "site.news.noBackIssues", "site.news.quiet",
         "site.history.intro", "site.history.present", "site.history.revisions", "site.history.country", "site.history.none", "site.history.subtitle",

@@ -61,7 +61,7 @@ public enum ThemeRoleId
     /// <summary>The runtime text-fallback panel.</summary>
     Panel,
 
-    /// <summary>The claim strip and the claim banner.</summary>
+    /// <summary>The Investigation app's case header band (it held the claim until the personalities spec's B1 removed every printed claim; the value is serialized, so the name stays).</summary>
     ClaimStrip,
 
     /// <summary>The citation slip and its text.</summary>

@@ -23,6 +23,17 @@ public class NewsArchiveTests
         Assert.IsNull(NewsArchive.Find(null, 1));
     }
 
+    /// <summary>The desk's own section (days 7-15, Q9) is kept with its issue.</summary>
+    [Test]
+    public void Record_KeepsTheDesksSection()
+    {
+        var archive = new List<NewsIssue>();
+        NewsArchive.Record(archive, 9, null, new[] { "Lead" }, 30, new[] { "Desk 4 is closed for the Drive.", "" });
+        CollectionAssert.AreEqual(new[] { "Desk 4 is closed for the Drive." }, archive.Single().desk);
+        NewsArchive.Record(archive, 10, null, null, 30);
+        CollectionAssert.IsEmpty(NewsArchive.Find(archive, 10).desk, "no desk lines: an empty section");
+    }
+
     [Test]
     public void Record_AReplayedDayReplacesItsIssue_AndKeepsDayOrder()
     {

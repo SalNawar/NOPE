@@ -18,6 +18,7 @@ MonoBehaviour:
   oneShot: 1
   newsLineOnFire: 'HISTORY: Florentine printers set type the Chinese way, years before
     Gutenberg.'
+  section: 0
   conditions:
   - type: 11
     key: 

@@ -25,3 +25,8 @@ MonoBehaviour:
   recordNote: Goldsmith of Mainz. Business in Strasbourg undisclosed.
   dialogId: 
   oncePerRun: 1
+  kind: 3
+  family: {fileID: 0}
+  citizenId: 
+  debt: 0
+  employer: 

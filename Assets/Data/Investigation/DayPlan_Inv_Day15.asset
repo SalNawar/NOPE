@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceffdf2085ba5d54684633fc38a393f9, type: 3}
+  m_Name: DayPlan_Inv_Day15
+  m_EditorClassIdentifier: Assembly-CSharp::DayPlanSO
+  dayNumber: 15
+  visitorsCount: 18
+  kinds:
+  - blueprint: {fileID: 11400000, guid: 8916fc6ed0ad4bcbad607de19e7e5f55, type: 2}
+    weight: 3
+    honest: 0
+  - blueprint: {fileID: 11400000, guid: 008d4e5dfc4a491396679dcae81673aa, type: 2}
+    weight: 2
+    honest: 0
+  - blueprint: {fileID: 11400000, guid: baa4a99b576b463cb6e604fe113a409c, type: 2}
+    weight: 4
+    honest: 0
+  - blueprint: {fileID: 11400000, guid: fa83cd422b2f8da4a8f7a743254e4841, type: 2}
+    weight: 2
+    honest: 0
+  eraWeights:
+  - era: {fileID: 11400000, guid: 6db8f4bed3a6f0a4d9fee6165cc1480b, type: 2}
+    weight: 2
+  - era: {fileID: 11400000, guid: 608e9cc2a9fd5cc43b236074d533c9d2, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 60c423261dd27af4ca801245a0f6a575, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 0e5c4378358ccb24baebd1d2c0097b3c, type: 2}
+    weight: 1
+  - era: {fileID: 11400000, guid: 53195805380d2f14f8d312b4a1fdb8be, type: 2}
+    weight: 1
+  allowedNations: []
+  legendaryBaseChance: 0.05
+  availableLegendaries:
+  - {fileID: 11400000, guid: 9a74835bfec10844a8df891819216d78, type: 2}
+  - {fileID: 11400000, guid: 648429545fd20aa478ab7b55117a4317, type: 2}
+  - {fileID: 11400000, guid: 9af7d7293cc4baf44b7ac5d782044b33, type: 2}
+  - {fileID: 11400000, guid: 9e40be27ae9f65e488f8d9608c405a56, type: 2}
+  - {fileID: 11400000, guid: 4f2df5576f140214e87d6c7e87bf90ac, type: 2}
+  - {fileID: 11400000, guid: 88437c24d8867914b96ce52a6a6f607f, type: 2}
+  - {fileID: 11400000, guid: 53b38ac9eb320194fb2ef99ca982b312, type: 2}
+  - {fileID: 11400000, guid: 23701454c292cd7459bd2a2774f7cff1, type: 2}
+  - {fileID: 11400000, guid: 99eaeeca4c1051241918113a32ab7256, type: 2}
+  - {fileID: 11400000, guid: 3493007bf4998db4e809fd90a977ab75, type: 2}
+  - {fileID: 11400000, guid: 7b3797395c6bf1c4ab2010fa7b858e5f, type: 2}
+  - {fileID: 11400000, guid: d0357069710fe1744bd0228970fa1341, type: 2}
+  - {fileID: 11400000, guid: 1c8c6e552007f2e4e902697ca0e5131c, type: 2}
+  - {fileID: 11400000, guid: 994c774aeaa0ec84f9c7a9c1d29d742d, type: 2}
+  - {fileID: 11400000, guid: 518f2d7d697b9c346ac1b51f6188f07d, type: 2}
+  - {fileID: 11400000, guid: 2546e7e5d93f43a49a3f4c7476fe65c6, type: 2}
+  - {fileID: 11400000, guid: fe0258a60478d084284a6d18023a0ca4, type: 2}
+  - {fileID: 11400000, guid: 61ad2f31d886dba4dabfff1a76d7d87a, type: 2}
+  - {fileID: 11400000, guid: d36ae86c106217c449ca2e7cc6c8ddc7, type: 2}
+  - {fileID: 11400000, guid: 050c1e3bba096ac41adc70495a9874f4, type: 2}
+  tellCount: 1
+  tellChannels: 000000000100000002000000
+  costumeErrorChance: 0.05
+  lieKinds: 010000000200000007000000050000000600000008000000000000000300000004000000
+  violationChance: 0.08
+  activeTravelRules:
+  - {fileID: 11400000, guid: 715dc87bb156a1644811671799952619, type: 2}
+  - {fileID: 11400000, guid: a450618c1ab42a64f9962c60774c598c, type: 2}
+  - {fileID: 11400000, guid: 4f2fad0bf98cc0f48975ec34e2e9bb1d, type: 2}
+  - {fileID: 11400000, guid: cdf64919fd7237a4c9e7ee2afcf5fa80, type: 2}
+  - {fileID: 11400000, guid: b271c2d47a8059545988115228811f21, type: 2}
+  - {fileID: 11400000, guid: 473af0261224cf94ea046c8d14737e83, type: 2}
+  - {fileID: 11400000, guid: 24ebbb63f9ddc6e43841a09977251d12, type: 2}
+  - {fileID: 11400000, guid: 6fe2ccd969585c34791101858a869596, type: 2}
+  - {fileID: 11400000, guid: 8e74e84dec4262c4489b76922a9bf03b, type: 2}
+  - {fileID: 11400000, guid: b082ca992a5d9284c972f79be957e335, type: 2}
+  - {fileID: 11400000, guid: 790f58e093f5e4842a8a706ca0d1cf69, type: 2}
+  - {fileID: 11400000, guid: b602c20a1789b29499c9167a6fe79b80, type: 2}
+  - {fileID: 11400000, guid: ecff6c6a25ba0d648aa6289bee8e60ef, type: 2}
+  guaranteeRuleViolators: 1
+  forcedCases:
+  - caseIndex1Based: 7
+    id: pell_3
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: dlg_pell_3
+    introLine: Next! ...Ms Quimby. Of course it is.
+    conditions:
+    - type: 1
+      key: trig:history_pell_turned_away:fired
+      threshold: 0
+      attribute: {fileID: 0}
+      profile: {fileID: 0}
+      nation: {fileID: 0}
+    - type: 2
+      key: premade:pell:accepted
+      threshold: 0
+      attribute: {fileID: 0}
+      profile: {fileID: 0}
+      nation: {fileID: 0}
+  - caseIndex1Based: 7
+    id: pell_3_first
+    caseBlueprint: {fileID: 0}
+    legendary: {fileID: 11400000, guid: 6aeaf57f8061d8b498aaefb6f30413e8, type: 2}
+    hasLie: 0
+    lie: 0
+    directive: 0
+    dialogId: dlg_pell_1
+    introLine: 
+    conditions:
+    - type: 2
+      key: premade:pell:accepted
+      threshold: 0
+      attribute: {fileID: 0}
+      profile: {fileID: 0}
+      nation: {fileID: 0}
+  eventRules: []

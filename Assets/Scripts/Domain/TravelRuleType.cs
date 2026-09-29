@@ -79,5 +79,15 @@ public enum TravelRuleType
     /// (Directives.Breaks, DirectiveFault.FrozenAccount); on its first day
     /// one frozen debtor is guaranteed in the first half of the queue.
     /// </summary>
-    DebtStanding
+    DebtStanding,
+
+    /// <summary>
+    /// A transponder recall (days 7-15 §6, from day 10): every unit of the
+    /// recalled model (TravelRuleSO.transponder, an agency.transponders id) is
+    /// grounded, read from the model printed on the manifest (Directives.Breaks,
+    /// DirectiveFault.RecalledTransponder); on its first day one traveller on a
+    /// recalled unit is guaranteed in the first half of the queue, and on any
+    /// day it stands the violation roll may make one.
+    /// </summary>
+    TransponderRecall
 }

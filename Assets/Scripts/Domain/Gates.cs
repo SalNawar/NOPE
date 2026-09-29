@@ -254,15 +254,85 @@ public readonly struct Gated<T>
     }
 }
 
+/// <summary>What a premade flag of the run records (FlagKeys.TryParsePremade).</summary>
+public enum PremadeFlag
+{
+    /// <summary>The once-per-run premade was presented ("premade:{id}:met").</summary>
+    Met,
+
+    /// <summary>The premade's latest verdict was an accept ("premade:{id}:accepted").</summary>
+    Accepted,
+
+    /// <summary>The premade's latest verdict was a deny ("premade:{id}:denied").</summary>
+    Denied
+}
+
 /// <summary>Flag names the run writes into WorldState.flags; one home for the format.</summary>
 public static class FlagKeys
 {
+    /// <summary>The premade flags' prefix ("premade:{id}:{what}").</summary>
+    private const string PremadePrefix = "premade:";
+
     /// <summary>Set after a one-shot timeline trigger fires ("trig:{id}:fired", the format saves already hold).</summary>
     public static string TriggerFired(string triggerId) => $"trig:{triggerId}:fired";
+
+    /// <summary>The trigger id Generate World gives a history rule ("history_{id}").</summary>
+    public static string HistoryRuleTriggerId(string ruleId) => $"history_{ruleId}";
+
+    /// <summary>Set the night a history rule fires ("trig:history_{id}:fired"): a Return story rule's consequence, read by the character's return (days 7-15 Q9).</summary>
+    public static string HistoryRuleFired(string ruleId) => TriggerFired(HistoryRuleTriggerId(ruleId));
 
     /// <summary>Set at the end of the shift that completed a one-shot narrative dialog ("dlg:{id}:done").</summary>
     public static string DialogDone(string dialogId) => $"dlg:{dialogId}:done";
 
     /// <summary>Set when a once-per-run premade is presented ("premade:{id}:met"); a met premade never rolls again, and a forced slot for them holds an ordinary traveller.</summary>
-    public static string PremadeMet(string premadeId) => $"premade:{premadeId}:met";
+    public static string PremadeMet(string premadeId) => $"{PremadePrefix}{premadeId}:met";
+
+    /// <summary>
+    /// The run's memory of a premade's latest verdict (days 7-15 B8, the
+    /// verdict memory Saleh asked for): "premade:{id}:accepted" or
+    /// "premade:{id}:denied". Forced slots' conditions and story rules read it.
+    /// </summary>
+    public static string PremadeVerdict(string premadeId, bool accepted) => $"{PremadePrefix}{premadeId}:{(accepted ? "accepted" : "denied")}";
+
+    /// <summary>What a verdict on a premade writes: the flag it sets and the other verdict's flag it clears, so the latest decision wins.</summary>
+    public static (string set, string clear) PremadeVerdictChange(string premadeId, bool accepted) =>
+        (PremadeVerdict(premadeId, accepted), PremadeVerdict(premadeId, !accepted));
+
+    /// <summary>
+    /// Reads a premade flag of the grammar above ("premade:{id}:met",
+    /// ":accepted" or ":denied", the id not blank); false, with a null id,
+    /// for any other key. The content checks use it to find the premade a
+    /// condition names.
+    /// </summary>
+    public static bool TryParsePremade(string key, out string premadeId, out PremadeFlag flag)
+    {
+        premadeId = null;
+        flag = PremadeFlag.Met;
+        if (string.IsNullOrEmpty(key) || !key.StartsWith(PremadePrefix, System.StringComparison.Ordinal))
+            return false;
+
+        string rest = key.Substring(PremadePrefix.Length);
+        int colon = rest.LastIndexOf(':');
+        if (colon <= 0)
+            return false;
+
+        switch (rest.Substring(colon + 1))
+        {
+            case "met":
+                flag = PremadeFlag.Met;
+                break;
+            case "accepted":
+                flag = PremadeFlag.Accepted;
+                break;
+            case "denied":
+                flag = PremadeFlag.Denied;
+                break;
+            default:
+                return false;
+        }
+
+        premadeId = rest.Substring(0, colon);
+        return true;
+    }
 }

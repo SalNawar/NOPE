@@ -15,8 +15,8 @@ public sealed class InterviewAnswer
 
 /// <summary>
 /// The interview's wording and answer rules, pure so they are tested
-/// headless: what a traveller answers, the desk's opener, the claim sentence,
-/// the small-talk pick, and the token fills and checks (with the worst-case
+/// headless: what a traveller answers, the desk's opener, the claim lines per
+/// kind, and the token fills and checks (with the worst-case
 /// length the generator checks lines against).
 /// </summary>
 public static class Interview
@@ -69,26 +69,6 @@ public static class Interview
             return Fill(lines.openerLegendary != null ? lines.openerLegendary.text : null, NameToken, legendaryName);
 
         return Fill(lines.opener != null ? lines.opener.text : null, HonorificToken, Honorific(gender, lines));
-    }
-
-    /// <summary>The hub entry that opens the ask menu for a traveller of <paramref name="kind"/> (traveller types §8): a 2150 citizen's "Ask about the trip >" (tripAskLabel; the home label when it is blank), the displaced's "Ask about home >" (askLabel); "" for null lines.</summary>
-    public static string AskLabel(InterviewLines lines, TravellerKind kind)
-    {
-        if (lines == null)
-            return string.Empty;
-
-        return TravellerKinds.IsCitizen(kind) && !string.IsNullOrWhiteSpace(lines.tripAskLabel) ? lines.tripAskLabel : lines.askLabel ?? string.Empty;
-    }
-
-    /// <summary>A traveller's claim sentence for a place label, in their kind's words; the bare label when the kind has no line (the banner never goes empty).</summary>
-    public static string Claim(InterviewLines lines, TravellerKind kind, string placeLabel) => Fill(ClaimTemplate(lines, kind), PlaceToken, placeLabel);
-
-    /// <summary>The claim's template for a kind: its authored line, or "{place}" alone when it has none or it is blank (the claim's key-word spans are taken over it).</summary>
-    public static string ClaimTemplate(InterviewLines lines, TravellerKind kind)
-    {
-        LineText line = ClaimLine(lines, kind);
-        string template = line != null ? line.text : null;
-        return string.IsNullOrWhiteSpace(template) ? Placeholder(PlaceToken) : template;
     }
 
     /// <summary>The missing-form reply of <paramref name="kind"/> asked for <paramref name="request"/> (a form number or a group id, FormRequests.IdOf) for <paramref name="variant"/> (null entries skipped), or null when none is authored.</summary>
@@ -149,20 +129,6 @@ public static class Interview
                 problems.Add($"interview.claims: {kind} has no claim line, but a blueprint makes that kind.");
 
         return problems;
-    }
-
-    /// <summary>
-    /// A traveller's small talk: from their claimed place's lines, or its
-    /// era's when the place has none. One Range draw when there is a line;
-    /// null, with no draw, when there is none or <paramref name="rng"/> is null.
-    /// </summary>
-    public static LineText PickSmallTalk(IReadOnlyList<LineText> placeLines, IReadOnlyList<LineText> eraLines, IRandomSource rng)
-    {
-        IReadOnlyList<LineText> pool = placeLines != null && placeLines.Count > 0 ? placeLines : eraLines;
-        if (rng == null || pool == null || pool.Count == 0)
-            return null;
-
-        return pool[rng.Range(0, pool.Count)];
     }
 
     /// <summary>The template's length with every {token} filled by a value <paramref name="longestValue"/> characters long (0 for null).</summary>

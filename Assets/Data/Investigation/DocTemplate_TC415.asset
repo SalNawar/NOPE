@@ -29,7 +29,6 @@ MonoBehaviour:
     label: Valid Until
   handOver: 0
   showsPhoto: 0
-  askableBy: 000000000100000002000000
   askGroup: proof
   form:
     formNumber: 

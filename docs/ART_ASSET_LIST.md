@@ -181,6 +181,32 @@ A traveller hands over Temporal Customs forms (the TC forms of the redesign). Ea
 
 About 880 files (50 bases, 759 garments, 31 Future outfits, 40 premade expressions) from about 406 ChatGPT images, at `Assets/Art/Characters/Resources/Characters/<key>.png`, 1024 × 1536. Tier 1: the game loads each by key at run time and draws a 256 × 384 placeholder until it lands. Status: missing (the folder does not exist yet). Everything else is in the character brief and `coverage.json`.
 
+A premade (a character drawn whole) shows its picture once its neutral image is in the folder; until then the game draws it as a generated traveller in its place's costume, the same face at every appearance (days 7-15 B4), never the flat placeholder.
+
+### Premades of days 7-15 (by-name slots)
+
+Sixteen new whole-figure characters, four expressions each (`neutral`, `happy`, `angry`, `worried`): 64 files, Tier 1 drop-in at `Assets/Art/Characters/Resources/Characters/premade_<id>_<expression>.png`. Each is drawn once, in the costume of the one place they claim; the character brief's batch 9 has the prompt. The six story characters come first (they stand in the second week's beats); the ten famous are pooled from day 7.
+
+| Character (`id`) | Place and look | Files | Now | Deliver | Tier | Status |
+|---|---|---|---|---|---|---|
+| `pell`: Pell Quimby (2150 story character, days 7, 10, 15) | Periclean Athens, 430 BCE: a cheerful woman of 26 in a cheap tourist's copy of an Athenian chiton and himation, a straw sun hat, a battered transponder on her wrist | `premade_pell_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `ines`: Ines Varga (2150 story character, day 8) | Victorian Britain, 1843: a tired woman of 51 in a Victorian mill worker's dress and apron, a Temporal Customs lanyard tucked into her collar | `premade_ines_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `rook`: Rook Danner (2150 story character, day 11) | Victorian Britain, 1843: a grinning man of 33 in a too-clean Victorian workman's jacket and flat cap | `premade_rook_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `ada`: "Ada Lovelace" (a 2150 enthusiast posing as her, day 12) | Victorian Britain, 1843: a woman of about 28 in a slightly-too-new Victorian day dress and bonnet, a little too pleased with it | `premade_ada_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `hollis`: Marek Hollis (2150 story character, day 13) | Wilhelmine Germany, 1899: a gaunt man of 32 in a Wilhelmine collier's jacket and cap | `premade_hollis_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `auditor`: Quill Ferreira, the Directorate's auditor (day 14) | Republican Rome, 50 BCE: a sharp man of 48 in a Roman toga worn over very good 2150 shoes | `premade_auditor_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `tahtawi`: Rifa'a al-Tahtawi (famous, pooled) | Khedivate of Egypt, 1869: an Egyptian scholar of 67 in a turban and a scholar's robe over a kaftan | `premade_tahtawi_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `kulthum`: Umm Kulthum (famous, pooled) | Nasser's Egypt, 1962: an Egyptian singer of 58 in an elegant long evening dress, dark glasses, a handkerchief in her hand | `premade_kulthum_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `malaika`: Nazik al-Mala'ika (famous, pooled) | Kingdom of Iraq, 1956: an Iraqi poet of 33 in a 1950s skirt suit, a book under her arm | `premade_malaika_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `sayyab`: Badr Shakir al-Sayyab (famous, pooled) | Kingdom of Iraq, 1956: a slight Iraqi poet of 29 in a 1950s suit, a notebook in his hand | `premade_sayyab_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `elytis`: Odysseas Elytis (famous, pooled) | Metapolitefsi Athens, 1975: a Greek poet of 63 in a jacket and an open-collared shirt, glasses | `premade_elytis_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `fellini`: Federico Fellini (famous, pooled) | Dolce Vita Rome, 1960: an Italian film director of 40 in a dark suit and a hat, a scarf | `premade_fellini_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `hezehui`: He Zehui (famous, pooled) | Beijing, People's Republic, 1972: a Chinese physicist of 58 in a plain Zhongshan-style jacket, short hair, glasses | `premade_hezehui_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `toyoda`: Sakichi Toyoda (famous, pooled) | Meiji Nagoya, 1899: a Japanese inventor of 32 in a Meiji kimono with a work apron over it | `premade_toyoda_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `turing`: Alan Turing (famous, pooled) | Post-war Britain, 1950: a British mathematician of 38 in a tweed jacket and a crooked tie, a runner's build | `premade_turing_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+| `meitner`: Lise Meitner (famous, pooled) | Weimar Berlin, 1926: a physicist of 48 in a dark 1920s dress and jacket, her hair in a bun | `premade_meitner_neutral.png`, `_happy`, `_angry`, `_worried` | a generated look in the place's costume | 1024 × 1536, whole figure | 1 | missing |
+
+
 ## Totals
 
 New 2D files (the Blender scanner and the characters are counted apart):
