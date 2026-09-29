@@ -54,6 +54,25 @@ public class PlayPolicyTests
         Assert.IsTrue(policy.Decide(false, true).Documented, "only one a day");
     }
 
+    /// <summary>Days 7-15 X3 (Q11): at the shift clock's pace the simulation reaches the first cap slots of the queue; the rest go home.</summary>
+    [Test]
+    public void Reaches_OnlyTheFirstCapSlots()
+    {
+        Assert.IsTrue(PlayPolicy.Reaches(1, 10));
+        Assert.IsTrue(PlayPolicy.Reaches(10, 10));
+        Assert.IsFalse(PlayPolicy.Reaches(11, 10));
+        Assert.IsFalse(PlayPolicy.Reaches(18, 10));
+        Assert.IsTrue(PlayPolicy.Reaches(7, 10), "the beats stand in slots 4-7, inside the cap");
+    }
+
+    [Test]
+    public void Reaches_ACapOfZeroReachesEverySlot()
+    {
+        for (int slot = 1; slot <= 18; slot++)
+            Assert.IsTrue(PlayPolicy.Reaches(slot, 0), $"slot {slot}: no cap, the whole queue");
+        Assert.IsTrue(PlayPolicy.Reaches(3, -1), "a negative cap reads as none");
+    }
+
     [Test]
     public void Careless_BothMistakes_EveryDay()
     {
