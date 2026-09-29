@@ -8,8 +8,11 @@ using UnityEngine;
 /// the toolbar's search field (SearchBox; the keys' SearchFieldChip hands a
 /// pasted untranslated line in through SetChip, and their Ctrl+F focuses the
 /// field) and its results panel (the Escape chain's CloseResults closes it
-/// before the field is cleared). A chosen hit jumps as a pin does
-/// (SmartLinks.ForEntry, then the active pane's one navigation: the item
+/// before the field is cleared). ↓ in the field takes the focus ring into
+/// the hits (the Results region; ↑ on the first goes back to the field).
+/// A chosen hit jumps as a pin does (in the other pane while split for a
+/// Ctrl+click or Ctrl+Enter, as a row's link does; phase 18)
+/// (SmartLinks.ForEntry, then that pane's one navigation: the item
 /// shown, a filter that hides the row lifted, a form's box scrolled to the
 /// middle, the row marked found, the place recorded in the pane's history),
 /// goes first in Recent and takes the focus ring (Space picks it next).
@@ -28,11 +31,16 @@ public sealed partial class InvestigationApp
     /// <summary>True while the results panel shows (Escape closes it before it clears the field).</summary>
     public bool ResultsOpen => searchBox != null && searchBox.ResultsOpen;
 
-    /// <summary>Escape's CloseResults: the results panel closes; the field keeps its text and the keyboard.</summary>
+    /// <summary>True while the results panel lists hits (↓ in the field goes into them; Tab visits them).</summary>
+    public bool ResultsListed => searchBox != null && searchBox.HitRows.Count > 0;
+
+    /// <summary>Escape's CloseResults: the results panel closes; the field keeps its text and the keyboard (the ring on a hit goes back to it).</summary>
     public void CloseResults()
     {
         if (searchBox != null)
             searchBox.CloseResults();
+        if (_region == AppRegion.Results)
+            SetRegion(AppRegion.Search, 0, _ringOn);
     }
 
     /// <summary>Searches with a pasted foreign clip (null removes it): only equal untranslated lines of its tongue match (SE5; the search field's chip).</summary>
@@ -68,12 +76,13 @@ public sealed partial class InvestigationApp
     }
 
     /// <summary>
-    /// A result was opened (SE4): its place in the active pane, as a pin's
-    /// jump goes there (a rule or a deviation, which have no row yet, opens
-    /// its tab), the hit first in Recent, the focus ring on its row; a hit
-    /// whose item is gone says so.
+    /// A result was opened (SE4): its place in the active pane, or the other
+    /// one while split (<paramref name="otherPane"/>: Ctrl+click, Ctrl+Enter;
+    /// it becomes the active one), as a pin's jump goes there (a rule or a
+    /// deviation, which have no row yet, opens its tab), the hit first in
+    /// Recent, the focus ring on its row; a hit whose item is gone says so.
     /// </summary>
-    private void Jump(SearchHit hit)
+    private void Jump(SearchHit hit, bool otherPane)
     {
         IndexEntry e = hit.Entry;
         if (window != null)
@@ -81,7 +90,10 @@ public sealed partial class InvestigationApp
         LinkTarget target = SmartLinks.ForEntry(e.Key, _papers);
         if (target.IsNone)
             target = LinkTarget.ToTab(e.Source);
-        if (!ActivePane.Go(target))
+        AppPane pane = otherPane && _split ? Other(ActivePane) : ActivePane;
+        bool there = pane.Go(target);
+        Activate(pane);
+        if (!there)
         {
             Notice(UiText.Get("app.jump.gone"));
             return;

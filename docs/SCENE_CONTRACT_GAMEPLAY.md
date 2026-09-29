@@ -100,7 +100,7 @@ it; a click box, its hover outline and its reaction cover that part):
 | `Calculator`, `PenPot`, `Stapler` | `Clean_Calculator__DeskClean_Case`, `Clean_PenPot__DeskClean_ABS`, `Clean_Stapler__DeskClean_Case` | |
 | `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `GameplayAnchors/DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | world-space TextMeshPro texts on the boards' display faces (the calendar's paper, the stability monitor's and the clock's glass, the till's display, the NEXT sign's glass), where the static `Preview display — 01 / 100% / 09:00 / NEXT` TextMeshes stood (deleted): dark ink (the art's `211F26`) on the calendar's paper, light digits (its `FFF2D9` ivory) on the dark glasses. `GameplayAnchors` is the scene's **first root**, so these are found before the preserved desk's empty meshes of the same names (copies of the room's texts without their TextMeshPro component), which stay; deleting those would drop the reliance on root order |
 | `Scanner`, `Traveller`, `HandOver` | `GameplayAnchors/Anchor_Scanner`, `Anchor_Traveller`, `Anchor_HandOver` | at the room's defaults (the same desk layout), for the art side to move |
-| `OfficeCamera` | `Anime hall player preview` | tagged `MainCamera`, with a `CinemachineBrain` (so it follows `OfficeVCam`: move that to move the view), culled to layer 29, no AudioListener: the binder adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
+| `OfficeCamera` | `Anime hall player preview` | tagged `MainCamera`, with a `CinemachineBrain` (so it follows `OfficeVCam`: move that to move the view), depth 100, culled to layer 29, no AudioListener: the binder orders the PC frame's camera after it and the clone's before it, and adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
 | `OfficeVCam` | `Cameras/OfficeVCam` | a CinemachineCamera at the camera's pose, its lens copied (55°, 0.05 to 400 m), as the room's: the desk view works |
 
 What the hall carries for the game to be whole since 2026-09-29 (`Add Anime
@@ -179,7 +179,11 @@ Other art-side fixes found by the move:
   the traveller still draws in front of them. Art sprites stay on `Default`.
 - The office camera is the art's, but at load the binder adds the gameplay's
   layers (`Default`, `Interactable`) to its culling mask, removes `PCDesktop`,
-  and adds an `AudioListener` when no loaded scene has one.
+  and adds an `AudioListener` when no loaded scene has one. It also orders the
+  desktop's two cameras around it: the PC frame's camera right after it (depth
+  + 1, so the office's clear never covers the desktop in the frame's glass) and
+  the clone camera right before it (depth − 1), so the art may give its camera
+  any depth (the hall's is 100, the room's −1).
 - Nothing from the gameplay layer is parented into the art scene; the binder
   places gameplay objects by world position.
 - The art's own colliders are ignored by input (they are not on `Interactable`).

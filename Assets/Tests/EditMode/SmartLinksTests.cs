@@ -248,10 +248,42 @@ public class SmartLinksTests
     }
 
     [Test]
-    public void ANarrowStrip_CollapsesItsInactiveTabs()
+    public void ANarrowStrip_CollapsesItsInactiveTabs_WhenEveryNameAtItsSizeDoesNotFit()
     {
-        Assert.IsTrue(AppPanes.TabsNarrow(578f, 6, 110f), "a split pane");
-        Assert.IsFalse(AppPanes.TabsNarrow(1162f, 6, 110f), "one maximised pane");
-        Assert.IsFalse(AppPanes.TabsNarrow(660f, 6, 110f));
+        // The six name tabs as measured in play (the name at the 26 u label size, the plate's 18 u padding either side, the badge's 6 + 12 u),
+        // with the strip's 8 u padding either side and five 3 u gaps: 935 + 16 + 15 = 966 u.
+        float[] names = { 186f, 151f, 175f, 170f, 132f, 121f };
+        Assert.IsTrue(AppPanes.TabsNarrow(578f, names, 16f, 3f), "a split pane");
+        Assert.IsTrue(AppPanes.TabsNarrow(842f, names, 16f, 3f), "the restored window: its names would shrink to about 20 u, so it collapses too");
+        Assert.IsFalse(AppPanes.TabsNarrow(1162f, names, 16f, 3f), "one maximised pane");
+        Assert.IsFalse(AppPanes.TabsNarrow(966f, names, 16f, 3f), "every name just fits at its size");
+        Assert.IsTrue(AppPanes.TabsNarrow(965.5f, names, 16f, 3f));
+        Assert.IsFalse(AppPanes.TabsNarrow(10f, new float[0], 16f, 3f), "no tab: nothing to collapse");
+    }
+
+    [Test]
+    public void RevealOffset_ShowsTheChipWhole_MovingAsLittleAsItCan()
+    {
+        // A 300 u window on a 1000 u row.
+        Assert.AreEqual(100f, AppPanes.RevealOffset(100f, 300f, 1000f, 150f, 250f), "already whole in view: no move");
+        Assert.AreEqual(250f, AppPanes.RevealOffset(100f, 300f, 1000f, 450f, 550f), "past the right edge: its end at the window's right");
+        Assert.AreEqual(30f, AppPanes.RevealOffset(100f, 300f, 1000f, 30f, 130f), "past the left edge: its start at the window's left");
+        Assert.AreEqual(380f, AppPanes.RevealOffset(0f, 300f, 1000f, 380f, 800f), "wider than the window: its start shows");
+        Assert.AreEqual(700f, AppPanes.RevealOffset(0f, 300f, 1000f, 900f, 1000f), "the last chip: the row's end");
+        Assert.AreEqual(0f, AppPanes.RevealOffset(0f, 300f, 250f, 100f, 250f), "a row that fits never scrolls");
+        Assert.AreEqual(700f, AppPanes.RevealOffset(900f, 300f, 1000f, 950f, 990f), "an offset past the end is clamped");
+    }
+
+    [Test]
+    public void NextHidden_IsTheChipAnArrowBringsIntoView()
+    {
+        float[] starts = { 0f, 103f, 206f, 309f }, ends = { 100f, 203f, 306f, 409f };
+        Assert.AreEqual(2, AppPanes.NextHidden(starts, ends, 0f, 250f, 1), "the first chip cut by the right edge");
+        Assert.AreEqual(-1, AppPanes.NextHidden(starts, ends, 0f, 250f, -1), "at the start: nothing to the left (that arrow greys)");
+        Assert.AreEqual(1, AppPanes.NextHidden(starts, ends, 150f, 250f, -1), "the last chip cut by the left edge");
+        Assert.AreEqual(3, AppPanes.NextHidden(starts, ends, 150f, 250f, 1));
+        Assert.AreEqual(-1, AppPanes.NextHidden(starts, ends, 159f, 250f, 1), "at the end: nothing to the right");
+        Assert.AreEqual(-1, AppPanes.NextHidden(starts, ends, 0f, 409.2f, 1), "every chip shows (within half a unit)");
+        Assert.AreEqual(-1, AppPanes.NextHidden(new float[0], new float[0], 0f, 250f, 1));
     }
 }
