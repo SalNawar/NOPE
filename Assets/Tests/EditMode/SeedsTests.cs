@@ -106,7 +106,7 @@ public class SeedsTests
     [Test]
     public void Salts_AreDistinct_TheRetiredClueSaltIncluded()
     {
-        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt };
+        var salts = new[] { Seeds.CaseSalt, Seeds.ViolatorSalt, Seeds.ClueSalt, Seeds.LieSalt, Seeds.DialogSalt, Seeds.LookSalt, Seeds.LegendarySalt, Seeds.SlotSalt, Seeds.AccountSalt, Seeds.FormsSalt, Seeds.DebtNewsSalt, Seeds.FaultSalt, Seeds.EventSalt, Seeds.StrandingSalt, Seeds.FamilySalt, Seeds.PersonalitySalt, Seeds.PremadeLookSalt, Seeds.RecoverySalt, Seeds.BreakInSalt };
         CollectionAssert.AllItemsAreUnique(salts);
     }
 
@@ -142,6 +142,10 @@ public class SeedsTests
         Assert.AreEqual(0x53545244, Seeds.StrandingSalt, "\"STRD\"");
         Assert.AreEqual(-288322321, Seeds.ForFamily(daySeed));
         Assert.AreEqual(0x464D4C59, Seeds.FamilySalt, "\"FMLY\"");
+        Assert.AreEqual(1986888608, Seeds.ForRecovery(daySeed));
+        Assert.AreEqual(0x52435652, Seeds.RecoverySalt, "\"RCVR\"");
+        Assert.AreEqual(-1690349512, Seeds.ForBreakIns(daySeed));
+        Assert.AreEqual(0x42524B4E, Seeds.BreakInSalt, "\"BRKN\"");
     }
 
     /// <summary>
@@ -254,6 +258,21 @@ public class SeedsTests
         Assert.AreNotEqual(slot, Seeds.ForSlot(Seeds.Day(999, 2)), "each run its own spins");
     }
 
+    /// <summary>The house upgrades' night draws (the Home upgrades spec HU6, HU7): the break-in roll and each member's recovery roll are the night's own salted streams, apart from every other stream, the family's drift included.</summary>
+    [TestCase("recovery")]
+    [TestCase("breakins")]
+    public void HouseStreams_AreDeterministic_AndApartFromEveryOtherStream_NightByNight(string name)
+    {
+        Func<int, int> stream = name == "recovery" ? (Func<int, int>)Seeds.ForRecovery : Seeds.ForBreakIns;
+        int daySeed = Seeds.Day(12345, 2);
+        int seed = stream(daySeed);
+        Assert.AreEqual(seed, stream(daySeed), "the same run and night give the same draws");
+        CollectionAssert.DoesNotContain(EveryOtherStream(daySeed, name), seed);
+        CollectionAssert.AreNotEqual(TenDraws(daySeed), TenDraws(seed), "the raw day stream");
+        CollectionAssert.AllItemsAreUnique(Enumerable.Range(1, 30).Select(night => stream(Seeds.Day(12345, night))).ToList(), "each night its own draws");
+        Assert.AreNotEqual(seed, stream(Seeds.Day(999, 2)), "each run its own draws");
+    }
+
     /// <summary>
     /// Audit R2-008: the night's family drift drew from its own hash of the day
     /// seed over System.Random. It is the day's own salted stream now (one
@@ -289,6 +308,10 @@ public class SeedsTests
             streams.Add(Seeds.ForFamily(daySeed));
         if (except != "events")
             streams.Add(Seeds.ForEvents(daySeed));
+        if (except != "recovery")
+            streams.Add(Seeds.ForRecovery(daySeed));
+        if (except != "breakins")
+            streams.Add(Seeds.ForBreakIns(daySeed));
         foreach (int caseSeed in Enumerable.Range(1, 20).Select(slotIndex => Seeds.ForCase(daySeed, slotIndex)))
         {
             streams.Add(caseSeed);

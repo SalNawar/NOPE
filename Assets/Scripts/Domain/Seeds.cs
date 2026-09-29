@@ -205,6 +205,27 @@ public static class Seeds
     /// </summary>
     public static int ForPersonality(int caseSeed) => Mix(caseSeed, PersonalitySalt);
 
+    /// <summary>Salt for the night's recovery rolls at Home ("RCVR").</summary>
+    public const int RecoverySalt = 0x52435652;
+
+    /// <summary>
+    /// Seed for the night's recovery rolls at Home (HomeRules.Recovers: one
+    /// seed per member, mixed from this one; the Home upgrades spec HU7),
+    /// apart from the family's drift and every other stream, so the house's
+    /// mood never moves who worsens.
+    /// </summary>
+    public static int ForRecovery(int daySeed) => Mix(daySeed, RecoverySalt);
+
+    /// <summary>Salt for the night's break-in roll at Home ("BRKN").</summary>
+    public const int BreakInSalt = 0x42524B4E;
+
+    /// <summary>
+    /// Seed for the night's break-in roll at Home (HomeRules.BreakIn; the Home
+    /// upgrades spec HU6), apart from every other stream, so a lock bought
+    /// never moves the family's rolls or the slot machine's spins.
+    /// </summary>
+    public static int ForBreakIns(int daySeed) => Mix(daySeed, BreakInSalt);
+
     /// <summary>Where <see cref="OfKey"/> starts ("KEYS"): the value of an empty key.</summary>
     public const int KeyStart = 0x4B455953;
 
