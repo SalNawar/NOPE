@@ -576,12 +576,12 @@ public static class TimelineService
             news.Add(count);
     }
 
-    /// <summary>Removes effects that are no longer active on the given day.</summary>
+    /// <summary>Removes the effects that have ended by the given day (one that starts later is kept).</summary>
     private static void ExpireEffects(WorldState world, int day)
     {
         int before = world.timeline.activeEffects.Count;
 
-        world.timeline.activeEffects.RemoveAll(e => e == null || !e.IsActiveOnDay(day));
+        world.timeline.activeEffects.RemoveAll(e => e == null || e.HasEndedBy(day));
 
         int removed = before - world.timeline.activeEffects.Count;
 
@@ -601,10 +601,10 @@ public static class TimelineService
 
         world.tomorrow.newsLines.AddRange(news);
 
-        // Lines from active effects (note: world.day is still "today" here, but
-        // expiry has already removed everything not active tomorrow).
-        world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine));
-        world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine));
+        // Lines from the effects in force tomorrow (world.day is still "today" here).
+        int tomorrow = world.day + 1;
+        world.tomorrow.briefingLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.BriefingLine, tomorrow));
+        world.tomorrow.newsLines.AddRange(TimelineEffects.GetLines(world, lib, EffectOpType.NewsLine, tomorrow));
 
         Debug.Log($"[TimelineService] <<< Exiting BuildTomorrowPackage (briefingLines={world.tomorrow.briefingLines.Count}, newsLines={world.tomorrow.newsLines.Count} [{news.Count} from dominance/triggers]).");
     }
