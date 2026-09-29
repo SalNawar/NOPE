@@ -9,8 +9,10 @@ using UnityEngine.UI;
 /// spec's AP2-AP4, AP9, LK2, CM3): a pane (AppPane) with its tab strip (the
 /// six tabs of OfficeSceneUIBuilder.App's BuildTab, each with its glyph for a
 /// narrow strip, a tooltip naming it and the handle that drags it or opens
-/// its menu), its chip row (BuildChipTemplate), its content with a view per
-/// tab and the no-case state, and its 3 u accent frame; the ↗ (a drawn glyph
+/// its menu), its chip row (BuildChipRow: a sideways scroll with an arrow at
+/// each end, around BuildChipTemplate's chips), its content with a view per
+/// tab and the no-case state (its words wrapping and shrinking to fit a split
+/// pane), and its 3 u accent frame; the ↗ (a drawn glyph
 /// in the link ink, 28 u, with its hover hint) and the found outline, which
 /// the forms' FormView clones; and the small hover hints of the toolbar and
 /// the tabs. Rebuilt fresh with the app (its one convergence
@@ -21,6 +23,12 @@ public static partial class OfficeSceneUIBuilder
 {
     /// <summary>The active pane's accent frame's width.</summary>
     private const float AppFrameWidth = 3f;
+
+    /// <summary>The chip row's arrows' width, and the gap between chips.</summary>
+    private const float ChipArrowWidth = 24f, ChipGap = 6f;
+
+    /// <summary>The no-case state's words: their size, and the least they shrink to (wrapping onto a second line first) in a split pane.</summary>
+    private const float NoCaseText = 80f, NoCaseTextMin = 40f;
 
     /// <summary>The found mark's outline width.</summary>
     private const float FoundFrameWidth = 2f;
@@ -100,15 +108,8 @@ public static partial class OfficeSceneUIBuilder
 
         Transform header = Panel(paneRoot, "PaneHeader", new Vector2(0f, 1f), Vector2.one, new Vector2(0f, -(stripHeight + rowHeight / 2f)),
                                  new Vector2(0f, rowHeight), Paper, ThemeRoleId.WindowBody);
-        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(header.gameObject);
-        row.padding = new RectOffset(8, 8, 6, 8);
-        row.spacing = 6f;
-        row.childAlignment = TextAnchor.MiddleLeft;
-        row.childControlWidth = true;
-        row.childControlHeight = true;
-        row.childForceExpandWidth = false;
-        row.childForceExpandHeight = true;
-        Button chip = BuildChipTemplate(header, config);
+        ChipRow chipRow = BuildChipRow(header, config, out RectTransform chips);
+        Button chip = BuildChipTemplate(chips, config);
         Transform rule = Panel(header, "Rule", Vector2.zero, new Vector2(1f, 0f), new Vector2(0f, AppPaneRuleHeight / 2f), new Vector2(0f, AppPaneRuleHeight),
                                XpBlue, ThemeRoleId.TabStrip);
         rule.GetComponent<Image>().raycastTarget = false;
@@ -130,10 +131,14 @@ public static partial class OfficeSceneUIBuilder
 
         Transform noCase = Panel(content, "NoCase", new Vector2(0.03f, 0.38f), new Vector2(0.97f, 0.62f), Vector2.zero, Vector2.zero, ScreenStripColor, ThemeRoleId.ScreenStrip);
         noCase.GetComponent<Image>().raycastTarget = false;
-        TMP_Text noCaseText = Text(noCase, "Text", null, 80, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
-                                   ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading, true);
+        TMP_Text noCaseText = Text(noCase, "Text", null, Mathf.RoundToInt(NoCaseText), TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Color.white,
+                                   ThemeRoleId.ScreenStrip, "idle.waiting", FontStyles.Bold, ThemeTextKind.Heading);
         SetAnchors(noCaseText.transform, new Vector2(0.02f, 0f), new Vector2(0.98f, 1f));
         noCaseText.raycastTarget = false;
+        noCaseText.textWrappingMode = TextWrappingModes.Normal;
+        noCaseText.enableAutoSizing = true;
+        noCaseText.fontSizeMax = NoCaseText;
+        noCaseText.fontSizeMin = NoCaseTextMin;
         noCase.gameObject.SetActive(false);
 
         Transform frame = BuildFrame(paneRoot, "ActiveFrame", AppFrameWidth, AccentInk, ThemeRoleId.FocusRing);
@@ -147,7 +152,8 @@ public static partial class OfficeSceneUIBuilder
         SerializedArrays.Set(so, "tabGlyphs", tabGlyphs);
         Wire(so, "tabStrip", strip);
         SerializedArrays.Set(so, "views", new Object[] { documents, views.Records, views.Reference, views.Transcript, views.Report, views.Rules });
-        Wire(so, "chipStrip", header);
+        Wire(so, "chipStrip", chips);
+        Wire(so, "chipRow", chipRow);
         Wire(so, "chipTemplate", chip);
         Wire(so, "noCase", noCase.gameObject);
         Wire(so, "activeFrame", frame.gameObject);
@@ -155,6 +161,76 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "config", config);
         so.ApplyModifiedProperties();
         return pane;
+    }
+
+    /// <summary>
+    /// The pane header's chip row (Saleh 2026-09-29, "Scroll the row";
+    /// ChipRow): the chip area (inside the header's old row padding; the Pin
+    /// button, BuildPinButton, insets its right end), a sideways ScrollRect
+    /// whose viewport cuts the chips and whose content, <paramref name="chips"/>,
+    /// lays them out at their preferred width (a ContentSizeFitter, so no chip
+    /// is squeezed), and a small "&lt;" and "&gt;" at the area's ends, hidden
+    /// until the chips overflow it.
+    /// </summary>
+    private static ChipRow BuildChipRow(Transform header, DesktopConfigSO config, out RectTransform chips)
+    {
+        Transform area = Panel(header, "ChipArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        PlaceRect(area, Vector2.zero, Vector2.one, new Vector2(8f, 8f), new Vector2(-8f, -6f));
+
+        Transform viewport = Panel(area, "Viewport", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
+        viewport.gameObject.AddComponent<RectMask2D>();
+
+        Transform content = Panel(viewport, "Chips", Vector2.zero, new Vector2(0f, 1f), Vector2.zero, Vector2.zero, null);
+        ((RectTransform)content).pivot = new Vector2(0f, 0.5f);
+        HorizontalLayoutGroup row = GetOrAdd<HorizontalLayoutGroup>(content.gameObject);
+        row.spacing = ChipGap;
+        row.childAlignment = TextAnchor.MiddleLeft;
+        row.childControlWidth = true;
+        row.childControlHeight = true;
+        row.childForceExpandWidth = false;
+        row.childForceExpandHeight = true;
+        ContentSizeFitter fit = GetOrAdd<ContentSizeFitter>(content.gameObject);
+        fit.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fit.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+
+        ScrollRect scroll = GetOrAdd<ScrollRect>(area.gameObject);
+        scroll.viewport = (RectTransform)viewport;
+        scroll.content = (RectTransform)content;
+        scroll.horizontal = true;
+        scroll.vertical = false;
+        scroll.movementType = ScrollRect.MovementType.Clamped;
+        scroll.inertia = false;
+        scroll.scrollSensitivity = ChipArrowWidth;
+
+        Button left = ChipArrow(area, "ScrollLeft", "<", 0f, config);
+        Button right = ChipArrow(area, "ScrollRight", ">", 1f, config);
+
+        ChipRow chipRow = GetOrAdd<ChipRow>(area.gameObject);
+        var so = new SerializedObject(chipRow);
+        Wire(so, "scroll", scroll);
+        Wire(so, "viewport", viewport);
+        Wire(so, "content", content);
+        Wire(so, "left", left);
+        Wire(so, "right", right);
+        so.FindProperty("arrowWidth").floatValue = ChipArrowWidth;
+        so.ApplyModifiedProperties();
+        chips = (RectTransform)content;
+        return chipRow;
+    }
+
+    /// <summary>One of the chip row's arrows: a small button at the area's left (<paramref name="side"/> 0) or right (1) end, its glyph at the chip size, hidden.</summary>
+    private static Button ChipArrow(Transform area, string name, string glyph, float side, DesktopConfigSO config)
+    {
+        Button arrow = MakeButton(area, name, glyph, new Vector2(side, 0f), new Vector2(side, 1f), null, ThemeRoleId.Button);
+        var rect = (RectTransform)arrow.transform;
+        rect.pivot = new Vector2(side, 0.5f);
+        rect.sizeDelta = new Vector2(ChipArrowWidth, 0f);
+        rect.anchoredPosition = Vector2.zero;
+        TMP_Text label = arrow.transform.Find("Label").GetComponent<TMP_Text>();
+        label.fontSize = config.chipLabelSize;
+        label.raycastTarget = false;
+        arrow.gameObject.SetActive(false);
+        return arrow;
     }
 
     /// <summary>

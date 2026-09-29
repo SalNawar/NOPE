@@ -663,6 +663,11 @@ public sealed partial class InvestigationApp
                 }
         if (_region == AppRegion.Results && target != null)
             clip = RevealInView(target, null);
+        if (_region == AppRegion.PaneHeader && target != null && ActivePane.Chips != null && target.IsChildOf(ActivePane.Chips.transform))
+        {
+            ActivePane.Chips.Reveal(target);
+            clip = ActivePane.Chips.Viewport;
+        }
         focusRing.Show(target, clip);
     }
 
