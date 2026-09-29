@@ -19747,7 +19747,7 @@
     "upgrades": [
       {
         "id": "house_rations_b",
-        "name": "Ration Card, Tier B",
+        "name": "Tier B Rations",
         "category": "Food",
         "cost": 40,
         "upkeep": 2,
@@ -19851,7 +19851,7 @@
       },
       {
         "id": "house_corner_flat",
-        "name": "The Corner Flat",
+        "name": "Corner Flat",
         "category": "Housing",
         "cost": 320,
         "upkeep": 0,
@@ -19869,7 +19869,7 @@
       },
       {
         "id": "house_second_lock",
-        "name": "A Second Lock",
+        "name": "Second Lock",
         "category": "Security",
         "cost": 35,
         "upkeep": 0,
@@ -19971,7 +19971,7 @@
       },
       {
         "id": "house_clinic",
-        "name": "Clinic Membership",
+        "name": "Clinic Pass",
         "category": "Health",
         "cost": 200,
         "upkeep": 4,
@@ -19989,7 +19989,7 @@
       },
       {
         "id": "house_plant",
-        "name": "A Plastic Plant",
+        "name": "Plastic Plant",
         "category": "Comfort",
         "cost": 15,
         "upkeep": 0,
@@ -20005,7 +20005,7 @@
       },
       {
         "id": "house_radio",
-        "name": "A Radio",
+        "name": "Radio",
         "category": "Comfort",
         "cost": 45,
         "upkeep": 1,
@@ -20023,7 +20023,7 @@
       },
       {
         "id": "house_better_bed",
-        "name": "A Better Bed",
+        "name": "Better Bed",
         "category": "Comfort",
         "cost": 110,
         "upkeep": 0,
@@ -20041,7 +20041,7 @@
       },
       {
         "id": "house_photo",
-        "name": "A Framed Photograph",
+        "name": "Framed Photo",
         "category": "Comfort",
         "cost": 25,
         "upkeep": 0,

@@ -29,6 +29,7 @@ public static class HomeSceneBuilder
     {
         // --- Canvas + EventSystem ---
         Canvas canvas = SceneUiKit.EnsureCanvasAndEventSystem();
+        EnsureScaler(canvas);
         Transform root = canvas.transform;
 
         // --- HomeManager (logic) + HomeUIController (UI) ---
@@ -68,16 +69,16 @@ public static class HomeSceneBuilder
             Vector2.zero, HousePanelSize, withBackground: true, bgColor: new Color(0.12f, 0.16f, 0.1f, 0.97f));
 
         TMP_Text shopTitle = FindOrCreateText(shop, "TitleText", "House", 34,
-            TextAlignmentOptions.Center, new Vector2(0.05f, 0.91f), new Vector2(0.95f, 0.99f));
+            TextAlignmentOptions.Center, new Vector2(0.05f, 0.895f), new Vector2(0.95f, 0.955f));
         TMP_Text shopBody = FindOrCreateText(shop, "BodyText", "...", 22,
-            TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.85f), new Vector2(0.97f, 0.9f));
+            TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.85f), new Vector2(0.97f, 0.89f));
         RectTransform houseTree = FindOrCreateArea(shop, "HouseTree");
-        TMP_Text houseDetail = FindOrCreateText(shop, "DetailText", "...", 22,
-            TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.11f), new Vector2(0.8f, 0.3f));
+        TMP_Text houseDetail = FindOrCreateText(shop, "DetailText", "...", 24,
+            TextAlignmentOptions.TopLeft, new Vector2(0.03f, 0.115f), new Vector2(0.8f, 0.285f));
         Button houseBuy = FindOrCreateButton(shop, "BuyButton", "Buy",
-            new Vector2(0.83f, 0.16f), new Vector2(0.97f, 0.26f));
+            new Vector2(0.83f, 0.15f), new Vector2(0.97f, 0.25f));
         Button shopContinue = FindOrCreateButton(shop, "ContinueButton", "Continue to Slots",
-            new Vector2(0.4f, 0.02f), new Vector2(0.6f, 0.09f));
+            new Vector2(0.4f, 0.02f), new Vector2(0.6f, 0.085f));
         LayOutHouse(shop, shopTitle, shopBody, houseTree, houseDetail, houseBuy, shopContinue);
 
         // --- Slot panel ---
@@ -161,8 +162,29 @@ public static class HomeSceneBuilder
     /// <summary>The expenses panel's size (reference px): tall enough for the evening's lines (the break-in, the bill, the mood, tonight's changes) over the family rows.</summary>
     private static readonly Vector2 ExpensesPanelSize = new Vector2(900f, 780f);
 
-    /// <summary>The House panel's size (reference px): five category columns of cards, four rows deep, over the detail strip; clear of the HUD strip.</summary>
-    private static readonly Vector2 HousePanelSize = new Vector2(1720f, 900f);
+    /// <summary>The House panel's size (reference px): five category columns of cards, four rows deep, over the detail strip.</summary>
+    private static readonly Vector2 HousePanelSize = new Vector2(1840f, 920f);
+
+    /// <summary>The House panel's offset (reference px): lowered so its top clears the HUD strip.</summary>
+    private static readonly Vector2 HousePanelOffset = new Vector2(0f, -30f);
+
+    /// <summary>
+    /// Re-applies the canvas's scaling on every build: Scale With Screen Size
+    /// from 1920 x 1080, as SceneUiKit makes a new canvas and as the Title's
+    /// is, so the Home panels (the House is 1840 x 920) shrink with a 720p
+    /// screen instead of spilling off it (the scene's hand-made canvas kept a
+    /// constant pixel size from its first 800 x 600 layout).
+    /// </summary>
+    private static void EnsureScaler(Canvas canvas)
+    {
+        CanvasScaler scaler = canvas.GetComponent<CanvasScaler>();
+        if (scaler == null)
+            scaler = Undo.AddComponent<CanvasScaler>(canvas.gameObject);
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = 0f;
+    }
 
     /// <summary>Re-applies the expenses panel's layout (its size and its parts' anchors) on every build.</summary>
     private static void LayOutExpenses(Transform panel, TMP_Text title, TMP_Text body, Transform rows, Button next)
@@ -184,16 +206,17 @@ public static class HomeSceneBuilder
     private static void LayOutHouse(Transform panel, TMP_Text title, TMP_Text body, RectTransform tree, TMP_Text detail, Button buy, Button next)
     {
         ((RectTransform)panel).sizeDelta = HousePanelSize;
-        Stretch(title.rectTransform, new Vector2(0.05f, 0.91f), new Vector2(0.95f, 0.99f));
+        ((RectTransform)panel).anchoredPosition = HousePanelOffset;
+        Stretch(title.rectTransform, new Vector2(0.05f, 0.895f), new Vector2(0.95f, 0.955f));
         title.text = "House";
-        Stretch(body.rectTransform, new Vector2(0.03f, 0.85f), new Vector2(0.97f, 0.9f));
-        Stretch(tree, new Vector2(0.025f, 0.32f), new Vector2(0.975f, 0.845f));
-        Stretch(detail.rectTransform, new Vector2(0.03f, 0.11f), new Vector2(0.8f, 0.3f));
+        Stretch(body.rectTransform, new Vector2(0.03f, 0.85f), new Vector2(0.97f, 0.89f));
+        Stretch(tree, new Vector2(0.025f, 0.3f), new Vector2(0.975f, 0.845f));
+        Stretch(detail.rectTransform, new Vector2(0.03f, 0.115f), new Vector2(0.8f, 0.285f));
         detail.color = body.color;
-        detail.fontSize = 22;
+        detail.fontSize = 24;
         detail.textWrappingMode = TextWrappingModes.Normal;
-        Stretch((RectTransform)buy.transform, new Vector2(0.83f, 0.16f), new Vector2(0.97f, 0.26f));
-        Stretch((RectTransform)next.transform, new Vector2(0.4f, 0.02f), new Vector2(0.6f, 0.09f));
+        Stretch((RectTransform)buy.transform, new Vector2(0.83f, 0.15f), new Vector2(0.97f, 0.25f));
+        Stretch((RectTransform)next.transform, new Vector2(0.4f, 0.02f), new Vector2(0.6f, 0.085f));
 
         Transform oldRows = panel.Find("ShopRows");
         if (oldRows != null)

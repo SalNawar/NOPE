@@ -549,7 +549,7 @@ public sealed class HomeUIController : MonoBehaviour
         rt.sizeDelta = size;
     }
 
-    /// <summary>An untargeted text at <paramref name="topLeft"/> of <paramref name="parent"/> (y down), shrinking rather than overflowing (UiText.FitLabel).</summary>
+    /// <summary>An untargeted text at <paramref name="topLeft"/> of <paramref name="parent"/> (y down), shrinking rather than overflowing (UiText.FitLabel), never below the House's floor (20 reference px: 13 px at 720p; past it an ellipsis).</summary>
     private static GameObject HouseText(Transform parent, string name, string text, float size, FontStyles style, Color ink, TextAlignmentOptions alignment, Vector2 topLeft, Vector2 box)
     {
         var go = new GameObject(name, typeof(RectTransform));
@@ -563,6 +563,8 @@ public sealed class HomeUIController : MonoBehaviour
         label.alignment = alignment;
         label.raycastTarget = false;
         UiText.FitLabel(label);
+        label.fontSizeMin = Mathf.Max(label.fontSizeMin, HouseMinFontSize);
+        label.overflowMode = TextOverflowModes.Ellipsis;
         return go;
     }
 
@@ -695,15 +697,16 @@ public sealed class HomeUIController : MonoBehaviour
     private static readonly Color RowButtonInk = Color.black;
 
     // The House's layout (reference px) and colours: opaque plates under dark ink.
-    private const float HouseHeadHeight = 40f;
-    private const float HouseHeadFontSize = 22f;
-    private const float HouseCardHeight = 84f;
-    private const float HouseCardMaxWidth = 280f;
+    private const float HouseHeadHeight = 36f;
+    private const float HouseHeadFontSize = 24f;
+    private const float HouseCardHeight = 96f;
+    private const float HouseCardMaxWidth = 300f;
     private const float HouseCardPadding = 10f;
-    private const float HouseIconSize = 56f;
-    private const float HouseNameFontSize = 24f;
-    private const float HouseStateFontSize = 22f;
-    private const float HouseRowGap = 30f;
+    private const float HouseIconSize = 64f;
+    private const float HouseNameFontSize = 26f;
+    private const float HouseStateFontSize = 24f;
+    private const float HouseMinFontSize = 20f;
+    private const float HouseRowGap = 26f;
     private const float HouseSlotGap = 14f;
     private const float HouseBandGap = 36f;
     private const float HouseLinkWidth = 4f;

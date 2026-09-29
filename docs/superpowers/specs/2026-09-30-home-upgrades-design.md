@@ -44,24 +44,24 @@ Prices are set against phase 23's economy: perfect play at the shift clock's pac
 
 | Category | Upgrade (id) | Price | Upkeep a night | Effects (ops) | Needs | Blurb (tone: small, humane, absurd) |
 |---|---|---|---|---|---|---|
-| Food | Ration Card, Tier B (`house_rations_b`) | 40 | 2 | SicknessChance -0.02, Mood +1 | - | "Tier B paste comes in two colours. The kid prefers the green." |
-| Food | Vegetable Box (`house_veg_box`) | 90 | 4 | SicknessChance -0.04, Mood +1 | Ration Card | "Real vegetables, by drone, once a week. The carrots are small, but they are carrots." |
+| Food | Tier B Rations (`house_rations_b`) | 40 | 2 | SicknessChance -0.02, Mood +1 | - | "Tier B paste comes in two colours. The kid prefers the green." |
+| Food | Vegetable Box (`house_veg_box`) | 90 | 4 | SicknessChance -0.04, Mood +1 | Tier B Rations | "Real vegetables, by drone, once a week. The carrots are small, but they are carrots." |
 | Food | Hen Share (`house_hen_share`) | 160 | 5 | SicknessChance -0.03, Mood +2 | Vegetable Box | "A twelfth of a cooperative hen called Directive Seven. Eggs on Sundays." |
 | Housing | Draught Seals (`house_draught_seals`) | 30 | - | HouseholdExpense -1 | - | "Foam strips for the window. The wind now whistles in a lower key." |
 | Housing | Wall Insulation (`house_insulation`) | 150 | - | HouseholdExpense -4, SicknessChance -0.02 | Draught Seals | "Recycled padding from decommissioned transponder crates. Warmer, faintly humming." |
 | Housing | One Floor Up (`house_floor_up`) | 220 | - | HouseholdExpense +12, SicknessChance -0.03, Mood +2 | Wall Insulation | "The same flat, one floor further from the damp. The rent noticed." |
-| Housing | The Corner Flat (`house_corner_flat`) | 320 | - | HouseholdExpense +10, SicknessChance -0.03, Mood +3 | One Floor Up | "Two windows. A door for the kid's room. The landlord calls it 'aspirational'." |
-| Security | A Second Lock (`house_second_lock`) | 35 | - | BreakInChance -0.03 | - | "Two locks: one for thieves, one for the landlord." |
-| Security | Floor Strongbox (`house_strongbox`) | 80 | - | BreakInShare -0.15 | A Second Lock | "Under the loose board. Everyone in the building has one under the loose board." |
+| Housing | Corner Flat (`house_corner_flat`) | 320 | - | HouseholdExpense +10, SicknessChance -0.03, Mood +3 | One Floor Up | "Two windows. A door for the kid's room. The landlord calls it 'aspirational'." |
+| Security | Second Lock (`house_second_lock`) | 35 | - | BreakInChance -0.03 | - | "Two locks: one for thieves, one for the landlord." |
+| Security | Floor Strongbox (`house_strongbox`) | 80 | - | BreakInShare -0.15 | Second Lock | "Under the loose board. Everyone in the building has one under the loose board." |
 | Security | Alarm Service (`house_alarm`) | 120 | 3 | BreakInChance -0.04 | Floor Strongbox | "A subscription alarm. It calls a number that calls another number." |
 | Health | Air Filter (`house_air_filter`) | 90 | 1 | SicknessChance -0.05 | - | "Cartridges sold separately, by the same company, at a loss to you." |
 | Health | Water Purifier (`house_water_purifier`) | 150 | - | SicknessChance -0.05 | Air Filter | "The tap water now tastes of nothing, which is a first." |
 | Health | Medicine Cabinet (`house_medicine_cabinet`) | 100 | - | CareCost -3 | - | "Stocked at wholesale. The labels are in a language the pharmacist also cannot read." |
-| Health | Clinic Membership (`house_clinic`) | 200 | 4 | MedicalDrain -1, CareCost -2 | Medicine Cabinet | "Priority queueing: you are now fourth in a line of three thousand." |
-| Comfort | A Plastic Plant (`house_plant`) | 15 | - | Mood +1 | - | "It is plastic. It is still a plant." |
-| Comfort | A Radio (`house_radio`) | 45 | 1 | Mood +1 (the sleep panel reads a radio line, §5) | A Framed Photograph | "The Directorate's station, and music on public holidays." |
-| Comfort | A Better Bed (`house_better_bed`) | 110 | - | Mood +2 | A Radio | "A mattress with fewer than one spring showing." |
-| Comfort | A Framed Photograph (`house_photo`) | 25 | - | Mood +1 | A Plastic Plant | "The family at the seaside in 2139, before the sea was privatised." |
+| Health | Clinic Pass (`house_clinic`) | 200 | 4 | MedicalDrain -1, CareCost -2 | Medicine Cabinet | "Priority queueing: you are now fourth in a line of three thousand." |
+| Comfort | Plastic Plant (`house_plant`) | 15 | - | Mood +1 | - | "It is plastic. It is still a plant." |
+| Comfort | Radio (`house_radio`) | 45 | 1 | Mood +1 (the sleep panel reads a radio line, §5) | Framed Photo | "The Directorate's station, and music on public holidays." |
+| Comfort | Better Bed (`house_better_bed`) | 110 | - | Mood +2 | Radio | "A mattress with fewer than one spring showing." |
+| Comfort | Framed Photo (`house_photo`) | 25 | - | Mood +1 | Plastic Plant | "The family at the seaside in 2139, before the sea was privatised." |
 
 With everything owned: the worsen chance 0.25 falls to 0 (never below it), rent 30 rises to 47, upkeep is 20 cr a night, care costs 3, the medical drain 0 a point, the mood 14 (recovery 0.5, the cap), break-ins 0.01 a night for at most 10 % of the wallet. Owning all costs 1,980 cr: a run's worth of perfect play cannot buy the whole tree, which is the point of a money sink.
 
@@ -102,10 +102,10 @@ The statement (TC-960): household costs = the bill including the break-in, plus 
 └──────────────────────────────────────────────────── [ Continue to Slots ]┘
 ```
 
-- Panel 1640 × 880, centred under the HUD strip; five columns of 300 px; cards 280 × 84 (indented 24 px a depth), opaque plates: Owned (tick, darker plate), Buyable (the price), Too dear (the price in the alert ink, "Not enough cr"), Locked (grey plate, "Needs: …"); the selected card outlined; the upgrade icon slot (`Home/upgrade_<id>.png`, 56 px) when its art exists.
+- Panel 1840 × 920 (the Home canvas scales from 1920 × 1080, so 720p draws it at two thirds), lowered 30 px under the HUD strip; one column per category, its chains running down it (a second chain beside the first); cards up to 300 × 96, opaque plates: Owned (tick, darker plate), Buyable (the price), Too dear (the price in the alert ink, "Not enough cr"), Locked (grey plate, "Needs: …"); the selected card outlined; the upgrade icon slot (`Home/upgrade_<id>.png`, 56 px) when its art exists.
 - Connectors: 3 px lines from a card's left edge down to each dependant's middle (one `Graphic` drawing every segment).
 - Detail strip: title with price and upkeep, the blurb, the effects in words (`HomeRules`' names, one line), Needs, Buy (disabled unless Buyable).
-- Every text 22 px or more (card names 24), dark ink on the cream plates, contrast checked by `UiContrastCheck` at build and measured on screen at 720p.
+- Every text 20 reference px or more (card names 26, their states 24, shrinking to fit no lower than 20: 13 px at 720p), dark ink on the cream plates, contrast checked by `UiContrastCheck` at build and measured on screen at 720p.
 
 ## 7. Saves
 
