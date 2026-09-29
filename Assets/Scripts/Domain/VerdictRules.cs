@@ -1,3 +1,5 @@
+using System;
+
 /// <summary>
 /// The accept/deny decision table (traveller types P1, P2, §5.2): who should
 /// be accepted, and when a right denial still earns a citation because
@@ -22,4 +24,24 @@ public static class VerdictRules
     /// </summary>
     public static bool IsUnprovenDenial(bool requireEvidence, int evidenceCount, bool accepted, bool hasDeviationFault, bool hasDirectiveFault) =>
         requireEvidence && evidenceCount == 0 && !accepted && hasDeviationFault && !hasDirectiveFault;
+
+    /// <summary>
+    /// True while the day's free warnings last: the day's
+    /// <paramref name="citationNumberToday"/>-th citation (1-based) is at or
+    /// under <paramref name="freeWarningsPerDay"/> (GameConfigSO).
+    /// </summary>
+    public static bool IsFreeWarning(int citationNumberToday, int freeWarningsPerDay) => citationNumberToday <= freeWarningsPerDay;
+
+    /// <summary>
+    /// The one penalty for a wrong decision (redesign phase 23; Saleh: "clerk
+    /// is fined for any mistake on application the same either approval or
+    /// rejection. we dont penalize based on the type of mistake"): a wrong
+    /// accept, a wrong deny and an unproven denial all cost
+    /// <paramref name="penalty"/> (GameConfigSO.wrongDecisionPenalty), whatever
+    /// the fault and however many came before; 0 while the day's free warnings
+    /// last (<see cref="IsFreeWarning"/>); never below 0. Nothing else fines
+    /// the clerk (a stranding is a world consequence, not a fine).
+    /// </summary>
+    public static int WrongDecisionPenalty(int citationNumberToday, int freeWarningsPerDay, int penalty) =>
+        IsFreeWarning(citationNumberToday, freeWarningsPerDay) ? 0 : Math.Max(0, penalty);
 }

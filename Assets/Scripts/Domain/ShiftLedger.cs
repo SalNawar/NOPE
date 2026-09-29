@@ -45,11 +45,8 @@ public sealed class ShiftLedger
     /// <summary>How many of this shift's accepted travellers were stranded at its end (Strandings.Roll; the traveller-types spec's S1).</summary>
     public int strandedCount;
 
-    /// <summary>The stranding fines taken from the wallet at the shift's end (Strandings.Fine, one per stranded traveller let through without a valid signed waiver; S3).</summary>
-    public int strandingFines;
-
-    /// <summary>Net money change for the shift: the pay less the citation penalties, the stranding fines and the Debt Relief instalment.</summary>
-    public int NetMoney => TotalPay - TotalPenalties - strandingFines - debtInstalment;
+    /// <summary>Net money change for the shift: the pay less the wrong-decision penalties and the Debt Relief instalment (a stranding fines nothing; redesign phase 23).</summary>
+    public int NetMoney => TotalPay - TotalPenalties - debtInstalment;
 
     /// <summary>Number of correct sends.</summary>
     public int CorrectCount

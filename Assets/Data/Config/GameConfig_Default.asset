@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameConfigSO
   basePayPerCorrect: 10
   legendaryBonusPay: 15
-  freeWarningsPerDay: 1
-  citationPenalties: 050000000a00000014000000
+  freeWarningsPerDay: 0
+  wrongDecisionPenalty: 10
   stabilityLossPerWrong: 5
   extraStabilityLossLegendary: 10
   stabilityGainPerCorrect: 0

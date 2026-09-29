@@ -72,7 +72,7 @@ public static class ShiftScoring
         return verdict;
     }
 
-    /// <summary>Citation + stability loss for a wrong accept/deny decision (the mistake line is the verdict's MistakeKey: the fault's reason for a wrong accept).</summary>
+    /// <summary>Citation + stability loss for a wrong accept/deny decision (the mistake line is the verdict's MistakeKey: the fault's reason for a wrong accept); the money is the one penalty for any mistake (VerdictRules.WrongDecisionPenalty).</summary>
     private static void ApplyWrongDecision(CaseVerdict v, WorldState world, GameConfigSO config)
     {
         world.citationsToday++;
@@ -88,15 +88,14 @@ public static class ShiftScoring
 
         string mistake = UiText.Format(v.MistakeKey, v.destinationLabel);
 
-        if (world.citationsToday <= config.freeWarningsPerDay)
+        if (VerdictRules.IsFreeWarning(world.citationsToday, config.freeWarningsPerDay))
         {
             v.wasFreeWarning = true;
             v.citationText = Citation(mistake, UiText.Format("citation.warning", world.citationsToday, config.freeWarningsPerDay), v.stabilityDelta);
         }
         else
         {
-            int penalizedIndex = world.citationsToday - config.freeWarningsPerDay;
-            v.moneyPenalty = config.GetCitationPenalty(penalizedIndex);
+            v.moneyPenalty = VerdictRules.WrongDecisionPenalty(world.citationsToday, config.freeWarningsPerDay, config.wrongDecisionPenalty);
             world.money -= v.moneyPenalty;
             v.citationText = Citation(mistake, UiText.Format("citation.penalty", v.moneyPenalty, UiText.Currency(UiText.WalletForm.Inline)), v.stabilityDelta);
         }

@@ -146,16 +146,6 @@ public sealed class CaseInstance
     /// </summary>
     public DirectiveFault directiveFault;
 
-    /// <summary>
-    /// What the desk saw of the traveller's Stranding Waiver (TC-310;
-    /// Strandings.Standing), read when the shift ends: a stranded traveller
-    /// let through at anything but Signed costs the clerk the fine (traveller
-    /// types S3; ShiftStrandings). None until a Stranding Waiver (TC-310) is
-    /// handed over: the hand-over reads its Signature and Waiver No. boxes
-    /// against the account (Strandings.StandingOf, phase 8).
-    /// </summary>
-    public WaiverStanding waiverStanding;
-
     /// <summary>True when the Directives forbid the traveller's claim or papers (a directive fault).</summary>
     public bool HasDirectiveFault => directiveFault != DirectiveFault.None;
 

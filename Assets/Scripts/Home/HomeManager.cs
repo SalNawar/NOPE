@@ -56,8 +56,7 @@ public sealed class HomeManager : MonoBehaviour
 
         // Bill today's living costs and let untreated conditions drift,
         // deterministically seeded by the day so it's stable on reload.
-        _expenseReport = HomeEconomy.ApplyDailyExpenses(_world, _config);
-        HomeEconomy.AdvanceFamilyConditions(_world, _config, run.GetDaySeed());
+        _expenseReport = DayCycle.OpenHome(_world, _config, run.GetDaySeed());
         _slotRandom = new SeededRandom(Seeds.ForSlot(run.GetDaySeed()));
         _household = _expenseReport.total;
         RecordStatement();
