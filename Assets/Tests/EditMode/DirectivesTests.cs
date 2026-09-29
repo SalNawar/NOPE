@@ -511,7 +511,6 @@ public class DirectivesTests
     [Test]
     public void RuleProblems_NameEachBrokenShape()
     {
-        StringAssert.Contains("lists none", Directives.RuleProblems("R", TravelRuleType.EraForbidden, Tourists, true, true).Single());
         List<string> procedure = Directives.RuleProblems("R", TravelRuleType.PaperSet, null, true, false);
         Assert.AreEqual(3, procedure.Count);
         StringAssert.Contains("names a country or era", procedure[0]);
@@ -529,6 +528,37 @@ public class DirectivesTests
     };
 
     private static readonly TravellerKind[] EconomyKinds = { TravellerKind.PoorTourist, TravellerKind.Labourer };
+
+    /// <summary>The Economy range limit (days 7-15 §6.1, Q3 C): a closure may list the kinds it closes for.</summary>
+    [Test]
+    public void RuleProblems_AClosureMayListItsKinds()
+    {
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_NoEconomyAncient", TravelRuleType.EraForbidden, EconomyKinds, true, true));
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_NoAncientEgypt", TravelRuleType.NationEraForbidden, null, true, true), "a closure with no kinds closes for everyone");
+    }
+
+    [Test]
+    public void Fault_AClosureForSomeKindsSparesTheOthers()
+    {
+        var range = new Directive(TravelRuleType.EraForbidden, EconomyKinds, null, "ancient");
+        CaseFacts poor = Honest(TravellerKind.PoorTourist, PoorSet);
+        poor.ClosedDestination = true;
+        Assert.AreEqual(DirectiveFault.ClosedDestination, Directives.Fault(new[] { range }, poor), "a poor tourist bound for the Ancient era");
+        CaseFacts rich = Honest(TravellerKind.RichTourist, RichSet);
+        Assert.AreEqual(DirectiveFault.None, Directives.Fault(new[] { range }, rich), "a rich tourist travels Premium: the range limit is not read for them");
+        Assert.IsTrue(range.AppliesTo(TravellerKind.Labourer));
+        Assert.IsFalse(range.AppliesTo(TravellerKind.Displaced));
+    }
+
+    [Test]
+    public void DayProblems_AClosureForKindsTheDayDoesNotWeigh()
+    {
+        var active = new List<Directives.RuleEntry> { new Directives.RuleEntry("Rule_NoEconomyAncient", TravelRuleType.EraForbidden, EconomyKinds, 13) };
+        var richOnly = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.RichTourist, RichSet) };
+        StringAssert.Contains("'Rule_NoEconomyAncient'", Directives.DayProblems("D", 13, active, richOnly).Single(), "its guaranteed violator could never be drawn");
+        var poor = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.PoorTourist, PoorSet) };
+        CollectionAssert.IsEmpty(Directives.DayProblems("D", 13, active, poor));
+    }
 
     [Test]
     public void RuleProblems_TheRecallAsShipped_HasNone()

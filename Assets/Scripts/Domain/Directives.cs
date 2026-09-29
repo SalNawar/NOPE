@@ -607,9 +607,9 @@ public static class Directives
 
     /// <summary>
     /// What Generate World and the validator refuse of one rule (R6-006): a
-    /// procedure names no country or era and has its line; a closure names
-    /// no kinds (it closes a destination for everyone) and no line is
-    /// needed; a paper set or debt standing lists at least one kind, since
+    /// procedure names no country or era and has its line; a closure needs
+    /// no line and may list the kinds it closes for (none: every kind; the
+    /// Economy range limit, days 7-15 §6.1); a paper set or debt standing lists at least one kind, since
     /// each has a kind's paper set to read; a transponder recall (days 7-15
     /// V9) names an Economy model of <paramref name="transponders"/> and lists
     /// only kinds that travel on an Economy unit; only a recall names a
@@ -623,11 +623,7 @@ public static class Directives
         if (type != TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(transponder))
             problems.Add($"Rule '{asset}' ({type}) names the transponder '{transponder}'; only a recall (TransponderRecall) names one.");
         if (IsClosure(type))
-        {
-            if (kinds.Count > 0)
-                problems.Add($"Rule '{asset}' is a closure ({type}): it closes a destination for every kind and lists none.");
             return problems;
-        }
 
         if (hasPlace)
             problems.Add($"Rule '{asset}' is a standing procedure ({type}), but names a country or era; a procedure names none.");
@@ -659,7 +655,9 @@ public static class Directives
     /// it; and a procedure guaranteed a breaker today (<see cref="Guarantees"/>,
     /// its first day) that no kind of the day can break, so its guarantee
     /// would plan nobody (the return home and no 2150 goods have their own
-    /// checks, the day's displaced and lies); and recalls that ground every
+    /// checks, the day's displaced and lies); a closure listing kinds none of
+    /// the day's kinds is (its guaranteed violator could never be drawn); and
+    /// recalls that ground every
     /// Economy model of <paramref name="transponders"/> (days 7-15 V9: nobody
     /// could travel Economy). Empty when sound.
     /// </summary>
@@ -679,6 +677,8 @@ public static class Directives
                 problems.Add($"Day '{day}' lists the rule '{rule.Asset}' ({rule.Type}), which none of its kinds can break: no traveller could ever test it.");
             else if (rule.Type == TravelRuleType.DressForDestination && Guarantees(rule.Type, today, rule.FirstDay) && !Breakable(rule))
                 problems.Add($"Day '{day}' is the first day of the rule '{rule.Asset}' ({rule.Type}), which guarantees a breaker none of its kinds can be: list a 2150 citizen kind.");
+            else if (IsClosure(rule.Type) && rule.Kinds.Count > 0 && !kinds.Any(k => rule.Kinds.Contains(k.kind)))
+                problems.Add($"Day '{day}' lists the closure '{rule.Asset}' for [{string.Join(", ", rule.Kinds)}], none of which the day weights: its guaranteed violator could never be drawn.");
         }
 
         List<string> recalled = active.Where(r => r.Type == TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(r.Transponder)).Select(r => r.Transponder).ToList();

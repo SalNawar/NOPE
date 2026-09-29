@@ -27,7 +27,7 @@ public sealed class TravelRuleSO : ScriptableObject
     /// <summary>Optional custom briefing line; auto-generated if blank (a standing procedure's is authored).</summary>
     [TextArea] public string description;
 
-    /// <summary>The kinds a standing procedure is read for (traveller types §5.3; written by Generate World from rules[].kinds); empty for every kind, and always empty for a closure.</summary>
+    /// <summary>The kinds the rule is read for (traveller types §5.3; written by Generate World from rules[].kinds); empty for every kind; on a closure, the kinds it closes for (the Economy range limit, days 7-15 §6.1).</summary>
     public TravellerKind[] kinds;
 
     /// <summary>The model a transponder recall grounds (rules[].transponder, an agency.transponders id; days 7-15 §6); blank for every other rule.</summary>

@@ -1160,7 +1160,7 @@ public static partial class ContentLibraryValidator
                     Forms = (blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList(),
                     HasTruePlace = f.legendary != null && f.legendary.truePlace != null,
                     OncePerRun = f.legendary != null && f.legendary.oncePerRun,
-                    ClosedPlace = f.legendary != null && !plan.ClaimAllowed(f.legendary.nation, f.legendary.trueEra),
+                    ClosedPlace = f.legendary != null && !plan.ClaimAllowed(f.legendary.nation, f.legendary.trueEra, kind),
                     Lie = f.hasLie ? f.lie : (LieKind?)null,
                     Directive = f.directive,
                     Dialog = f.dialogId,

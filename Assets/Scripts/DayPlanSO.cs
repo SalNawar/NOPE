@@ -192,15 +192,18 @@ public sealed class DayPlanSO : ScriptableObject
     }
 
     /// <summary>
-    /// Returns true if every active rule permits travel to the claimed nation+era.
+    /// Returns true if every active rule read for a traveller of
+    /// <paramref name="kind"/> permits travel to the claimed nation+era (a
+    /// closure listing kinds closes only for them: the Economy range limit,
+    /// days 7-15 §6.1).
     /// </summary>
-    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra)
+    public bool ClaimAllowed(NationSO claimNation, EraSO claimEra, TravellerKind kind)
     {
         if (activeTravelRules == null)
             return true;
 
         foreach (TravelRuleSO rule in activeTravelRules)
-            if (rule != null && !rule.Allows(claimNation, claimEra))
+            if (rule != null && rule.AppliesTo(kind) && !rule.Allows(claimNation, claimEra))
                 return false;
 
         return true;

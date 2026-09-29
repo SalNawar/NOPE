@@ -135,6 +135,9 @@ public sealed class CaseFactory
     /// <summary>Guaranteed rule violators for the day being generated (a closure's: the place they are bound for), by 1-based slot.</summary>
     private Dictionary<int, NationEraProfileSO> _violators = new Dictionary<int, NationEraProfileSO>();
 
+    /// <summary>The closure each guaranteed violator breaks, by 1-based slot: its kinds are the only ones the slot draws (a closure listing kinds, the Economy range limit).</summary>
+    private Dictionary<int, TravelRuleSO> _violatorRules = new Dictionary<int, TravelRuleSO>();
+
     /// <summary>Guaranteed procedure breakers for the day being generated (the paper set, the debt standing, the papers' dates or dress on its first day: the rule they break, PlanViolation), by 1-based slot.</summary>
     private Dictionary<int, TravelRuleSO> _plannedRules = new Dictionary<int, TravelRuleSO>();
 
@@ -224,7 +227,7 @@ public sealed class CaseFactory
         if (_todays.Count == 0)
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
 
-        _violators = PlanViolators(plan, total, daySeed, out _plannedLiars, out _plannedRules);
+        _violators = PlanViolators(plan, total, daySeed, out _plannedLiars, out _plannedRules, out _violatorRules);
 
         Debug.Log($"[CaseFactory] Generating {total} case(s) for day {state.day} from {_todays.Count} place(s); guaranteed violators in slot(s) [{string.Join(", ", _violators.Keys)}], guaranteed liars in slot(s) [{string.Join(", ", _plannedLiars.Select(l => $"{l.Key}:{l.Value}"))}], guaranteed breakers in slot(s) [{string.Join(", ", _plannedRules.Select(r => $"{r.Key}:{r.Value.name}"))}].");
 
@@ -271,11 +274,13 @@ public sealed class CaseFactory
     /// with smuggling disabled or a procedure none of the day's kinds can
     /// break cannot be tested and is skipped with a warning.
     /// </summary>
-    private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed, out Dictionary<int, LieKind> liars, out Dictionary<int, TravelRuleSO> rules)
+    private Dictionary<int, NationEraProfileSO> PlanViolators(DayPlanSO plan, int total, int daySeed, out Dictionary<int, LieKind> liars, out Dictionary<int, TravelRuleSO> rules,
+                                                             out Dictionary<int, TravelRuleSO> closures)
     {
         var violators = new Dictionary<int, NationEraProfileSO>();
         liars = new Dictionary<int, LieKind>();
         rules = new Dictionary<int, TravelRuleSO>();
+        closures = new Dictionary<int, TravelRuleSO>();
         if (!plan.GuaranteeRuleViolators)
             return violators;
 
@@ -295,6 +300,11 @@ public sealed class CaseFactory
                 if (breakers.Count == 0)
                 {
                     Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' forbids none of day {plan.DayNumber}'s places, so no traveller can break it.");
+                    continue;
+                }
+                if (!plan.Kinds.Any(k => k != null && k.blueprint != null && k.weight > 0f && rule.AppliesTo(k.blueprint.Kind)))
+                {
+                    Debug.LogWarning($"[CaseFactory] Rule '{rule.name}' closes for kinds day {plan.DayNumber} does not weight, so no traveller can break it. Check world_source.json days[].kinds and rules[].kinds.");
                     continue;
                 }
 
@@ -330,7 +340,10 @@ public sealed class CaseFactory
         {
             List<NationEraProfileSO> breakers = breakersPerRule[i];
             if (breakers != null)
+            {
                 violators[slots[i]] = breakers[rng.Range(0, breakers.Count)];
+                closures[slots[i]] = planned[i];
+            }
             else if (planned[i].type == TravelRuleType.ReturnHome)
                 liars[slots[i]] = Lies.Roll(1f, placeLies, rng).Value;
             else if (planned[i].type == TravelRuleType.NoPresentGoods)
@@ -367,6 +380,7 @@ public sealed class CaseFactory
         // 2.5) A planned faulty traveller stands in this slot (never a premade's: see ResolvePremade): a closure's violator
         //      claims its place; a planned liar's slot is read at the lie roll; a planned procedure's breaker is made below.
         _violators.TryGetValue(caseIndex1Based, out NationEraProfileSO violatorPlace);
+        _violatorRules.TryGetValue(caseIndex1Based, out TravelRuleSO violatorRule);
         _plannedRules.TryGetValue(caseIndex1Based, out TravelRuleSO plannedRule);
 
         // 3) Decide the claimed era (the traveller's stated home and destination).
@@ -385,6 +399,7 @@ public sealed class CaseFactory
             : (TravellerKind?)null;
         KindWeight entry = forcedBlueprint != null ? null :
             WeightedRandom.Pick(plan.Kinds, k => k != null && k.blueprint != null && (plannedRule == null || (!k.honest && CanBreak(plannedRule, k.blueprint)))
+                                                 && (violatorRule == null || violatorRule.AppliesTo(k.blueprint.Kind))
                 ? TravellerKinds.PickWeight(k.blueprint.Kind, k.weight, onlyKind) * TimelineEffects.GetBlueprintWeightMultiplier(state, _lib, k.blueprint.name)
                 : 0f, _rng);
         CaseBlueprintSO blueprint = forcedBlueprint != null ? forcedBlueprint : entry?.blueprint;
@@ -396,7 +411,7 @@ public sealed class CaseFactory
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
         NationEraProfileSO place = violatorPlace != null ? violatorPlace
-            : PickPlace(legendary, claimedEra, _plannedLiars.ContainsKey(caseIndex1Based) || plannedRule != null ? plan : null);
+            : PickPlace(legendary, claimedEra, _plannedLiars.ContainsKey(caseIndex1Based) || plannedRule != null ? plan : null, blueprint != null ? blueprint.Kind : default);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
         string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
         string givenName = ResolveGivenName(legendary, forcedPremade, citizen ? _citizenNames.All : place != null ? place.AllNames : null, caseIndex1Based);
@@ -443,7 +458,7 @@ public sealed class CaseFactory
         _answerTellCategories = _interview != null ? _interview.AnswerTellCategoriesFor(inst.kind) : System.Array.Empty<ClueCategory>();
 
         // 4.6) The directive fault (traveller types P1): a closed destination, read against today's Directives.
-        inst.directiveFault = plan.ClaimAllowed(nation, claimedEra) ? DirectiveFault.None : DirectiveFault.ClosedDestination;
+        inst.directiveFault = plan.ClaimAllowed(nation, claimedEra, inst.kind) ? DirectiveFault.None : DirectiveFault.ClosedDestination;
 
         // 4.65) The slot's authored fault (days 7-15 B6), the appearance's authoring: a lie, or a directive fault whose
         //       rule is active today for the kind (its maker's variant pinned). Either skips every roll (K5, FaultOrder).
@@ -651,7 +666,7 @@ public sealed class CaseFactory
         return new CaseFacts
         {
             Kind = inst.kind,
-            ClosedDestination = !plan.ClaimAllowed(inst.claimedNation, inst.claimedEra),
+            ClosedDestination = !plan.ClaimAllowed(inst.claimedNation, inst.claimedEra, inst.kind),
             VisaClass = System.Enum.TryParse(FieldValue(inst, Directives.Visa, ClueCategory.AccountStatus), out CitizenStatus visa) ? visa : (CitizenStatus?)null,
             ManifestClass = System.Enum.TryParse(FieldValue(inst, Directives.Manifest, ClueCategory.TransponderClass), out TransponderClass manifest) ? manifest : (TransponderClass?)null,
             ManifestModelId = RecordLies.ModelIdOf(FieldValue(inst, Directives.Manifest, ClueCategory.TransponderId), _lib.Agency.transponders),
@@ -958,7 +973,7 @@ public sealed class CaseFactory
             TakenToday = _agencyNumbers,
             PosedStatus = kind == LieKind.DebtorPosingAsTourist && AccountMaker.StatusOf(inst.kind, out CitizenStatus posed) ? posed : (CitizenStatus?)null,
             Employers = _lib.Agency.EmployersOf(inst.claimedEra != null ? inst.claimedEra.id : null),
-            OpenPlaces = _todays.Where(p => p != place && plan.ClaimAllowed(p.nation, p.era)).Select(PlaceLabel).ToList(),
+            OpenPlaces = _todays.Where(p => p != place && plan.ClaimAllowed(p.nation, p.era, inst.kind)).Select(PlaceLabel).ToList(),
             WaiverPrefix = _lib.Agency.accounts != null ? _lib.Agency.accounts.waiverPrefix : null,
             Proofs = _lib.Agency.proofs
         };
@@ -1278,7 +1293,7 @@ public sealed class CaseFactory
     /// (K5: one fault per traveller, so no closure beside the planned fault),
     /// all of the era's when none is open; the same one draw either way.
     /// </summary>
-    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra, DayPlanSO openOn)
+    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra, DayPlanSO openOn, TravellerKind kind)
     {
         if (legendary != null && legendary.nation != null)
         {
@@ -1292,8 +1307,8 @@ public sealed class CaseFactory
             return null;
 
         var candidates = _todays.Where(p => p.era == claimedEra).ToList();
-        if (openOn != null && candidates.Any(p => openOn.ClaimAllowed(p.nation, p.era)))
-            candidates = candidates.Where(p => openOn.ClaimAllowed(p.nation, p.era)).ToList();
+        if (openOn != null && candidates.Any(p => openOn.ClaimAllowed(p.nation, p.era, kind)))
+            candidates = candidates.Where(p => openOn.ClaimAllowed(p.nation, p.era, kind)).ToList();
         return candidates.Count == 0 ? null : candidates[_rng.Range(0, candidates.Count)];
     }
 
