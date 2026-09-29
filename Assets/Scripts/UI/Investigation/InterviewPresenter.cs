@@ -142,7 +142,7 @@ public sealed class InterviewPresenter
 
     /// <summary>
     /// Starts the traveller's interview: the wheel takes the case's translation;
-    /// the hub has a request per form or group the kind may be asked for, "Look >"
+    /// the hub has a request per form or group of the day's papers menu, "Look >"
     /// (the traveller's garments) when garments can be compared, and, when the
     /// interview is reachable, today's questions (the same for every
     /// traveller, the personalities spec's W3), small talk and offered
@@ -216,7 +216,7 @@ public sealed class InterviewPresenter
         }
     }
 
-    /// <summary>The traveller as the interview script reads them: the forms their kind may be asked for (today's), small talk only when the interview is reachable, the garments only when the look is.</summary>
+    /// <summary>The traveller as the interview script reads them: the day's papers menu (the same for everyone), small talk only when the interview is reachable, the garments only when the look is.</summary>
     private InterviewCase CaseFor(CaseInstance inst, IReadOnlyList<CaseDocument> documents, bool interviewReachable, bool appearanceReachable) =>
         new InterviewCase
         {
@@ -226,7 +226,7 @@ public sealed class InterviewPresenter
             keyWords = _keyWords,
             claimedEraId = inst != null && inst.claimedEra != null ? inst.claimedEra.id : null,
             documents = documents,
-            askable = inst != null ? _day.AskableForms(inst.kind) : null,
+            askable = inst != null ? _day.AskableForms : null,
             missingVariant = inst != null ? inst.missingFormVariant : MissingFormVariant.Honest,
             answers = inst != null ? inst.answers : null,
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,

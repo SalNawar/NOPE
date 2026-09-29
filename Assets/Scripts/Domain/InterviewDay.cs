@@ -24,8 +24,8 @@ public sealed class InterviewDay
     /// Decides today's interview once, from the day-start snapshot.
     /// <paramref name="premadeDialogIds"/> are the dialogs premades name
     /// (LegendarySO.dialogId): each is offered only while its premade is at the desk.
-    /// <paramref name="forms"/> are the day's agency forms (the blueprints'
-    /// templates): AskableForms lists those a kind may be asked for.
+    /// <paramref name="forms"/> are the day's papers menu (every on-request
+    /// form of the days so far, FormRequests.MetSoFar), offered to every traveller.
     /// </summary>
     public InterviewDay(InterviewLines lines, IReadOnlyList<Gated<InterviewQuestion>> questions,
                         IReadOnlyList<Gated<AuthoredDialog>> dialogs, GateSnapshot snapshot, ShiftLedger ledger,
@@ -74,8 +74,8 @@ public sealed class InterviewDay
     /// <summary>The interview's fixed wording and layout limits.</summary>
     public InterviewLines Lines { get; }
 
-    /// <summary>The forms the desk may ask a traveller of <paramref name="kind"/> for (FormRequests.For over the day's forms), in template order.</summary>
-    public IReadOnlyList<AskableForm> AskableForms(TravellerKind kind) => FormRequests.For(kind, _forms);
+    /// <summary>The day's papers menu (the personalities spec's W4): the forms the desk may ask every traveller of the day for, in first-appearance order.</summary>
+    public IReadOnlyList<AskableForm> AskableForms => _forms;
 
     /// <summary>Today's askable questions, in library order: every traveller of the day is asked each, in the same words (the personalities spec's W3).</summary>
     public IReadOnlyList<InterviewQuestion> Questions => _questions;

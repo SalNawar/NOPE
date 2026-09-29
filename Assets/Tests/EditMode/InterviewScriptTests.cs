@@ -61,16 +61,12 @@ public class InterviewScriptTests
     private static CaseDocument Doc(string name, DocumentHandOver handOver = DocumentHandOver.OnRequest, string formNumber = null, string askGroup = null) =>
         new CaseDocument { name = name, handOver = handOver, formNumber = formNumber, askGroup = askGroup };
 
-    private static readonly TravellerKind[] Citizens = { TravellerKind.RichTourist, TravellerKind.PoorTourist, TravellerKind.Labourer };
-
-    /// <summary>The 2150 citizens' forms the desk may ask for (traveller types I2): the manifest, the waiver and the three proofs of means in the proof group.</summary>
+    /// <summary>The papers menu of days 1-4 (the personalities spec's W4): the manifest, the waiver and the proof of means (its group's first form).</summary>
     private static AskableForm[] CitizenAskable() => new[]
     {
-        new AskableForm("TC-230", "Departure Manifest", "", true, Citizens),
-        new AskableForm("TC-310", "Stranding Waiver", "", true, Citizens),
-        new AskableForm("TC-415", "Holiday Credit Agreement", AccountMaker.ProofGroup, true, Citizens),
-        new AskableForm("TC-416", "Proof of Funds", AccountMaker.ProofGroup, true, Citizens),
-        new AskableForm("TC-417", "Travel Insurance Certificate", AccountMaker.ProofGroup, true, Citizens)
+        new AskableForm("TC-230", "Departure Manifest", "", true),
+        new AskableForm("TC-310", "Stranding Waiver", "", true),
+        new AskableForm("TC-415", "Holiday Credit Agreement", AccountMaker.ProofGroup, true)
     };
 
     /// <summary>A poor tourist's four papers: the visa on arrival, the manifest, the waiver and the Proof of Funds they hold.</summary>
@@ -324,7 +320,7 @@ public class InterviewScriptTests
     public void Hub_OneAskableRequest_IsADirectEntry_EvenWhenNotCarried()
     {
         InterviewCase c = Citizen(TravellerKind.RichTourist, new[] { Doc("Leisure Departure Visa", DocumentHandOver.OnArrival, "TC-101") });
-        c.askable = new[] { new AskableForm("TC-310", "Stranding Waiver", "", true, Citizens) };
+        c.askable = new[] { new AskableForm("TC-310", "Stranding Waiver", "", true) };
         DialogNode hub = Build(c, lines: LinesWithGroups()).Node(InterviewScript.HubNodeId);
         Assert.AreEqual("missing:TC-310", hub.Choices[0].Id);
         Assert.AreEqual("Request Stranding Waiver", hub.Choices[0].Label);
@@ -333,7 +329,7 @@ public class InterviewScriptTests
     [Test]
     public void TheWheelsWorstCase_StaysEight_WithThreeRequestsForACitizen()
     {
-        int requests = FormRequests.Count(FormRequests.For(TravellerKind.PoorTourist, CitizenAskable()));
+        int requests = FormRequests.Count(CitizenAskable());
         Assert.AreEqual(3, requests, "Manifest, Waiver, Proof of means");
         CollectionAssert.IsEmpty(DialogChecks.MenuProblems(6, true, requests, spokenRequests: 2, dialogs: 2, premadeDialogs: 1, maxChoices: 8),
                                  "the papers menu + 2 spoken requests + ask + look + 2 dialogs + one premade's dialog = 8");

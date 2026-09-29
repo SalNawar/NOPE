@@ -21,7 +21,7 @@ public sealed class InterviewCase
     /// <summary>The traveller's documents in paper order; only those handed over on request get a hub request.</summary>
     public IReadOnlyList<CaseDocument> documents;
 
-    /// <summary>The forms the desk may ask this traveller's kind for (InterviewDay.AskableForms: on request, askable by the kind), in template order; null: only the carried papers can be asked for.</summary>
+    /// <summary>The day's papers menu, the same for every traveller (InterviewDay.AskableForms: every on-request form of the days so far, the personalities spec's W4); null: only the carried papers can be asked for.</summary>
     public IReadOnlyList<AskableForm> askable;
 
     /// <summary>Why this traveller lacks a form they are asked for (the reply they give): Honest unless a paper-set fault left it out.</summary>
@@ -42,9 +42,9 @@ public sealed class InterviewCase
 /// "Request papers >" for two or more, the spoken requests, "Ask about home
 /// >" or a citizen's "Ask about the trip >" (Interview.AskLabel), "Look >",
 /// today's narrative dialogs), the papers menu ("&lt; Back"
-/// first, then one request per form or request group the desk may ask the
-/// kind for, FormRequests.Build: a carried paper is handed over, a missing
-/// one answered with the kind's line), the ask menu ("&lt; Back" first,
+/// first, then one request per form or request group of the day's menu,
+/// the same for everyone, FormRequests.Build: a carried paper is handed
+/// over, a missing one answered with the kind's line), the ask menu ("&lt; Back" first,
 /// then the kind's questions and small talk), the look menu ("&lt; Back" first, then
 /// one choice per visible garment) and every authored dialog's nodes. Every traveller line carries its key-word spans
 /// (KeyWords.Spans over its template and fills, InterviewCase.keyWords): the

@@ -370,29 +370,46 @@ public static class TimelineService
             if (premade != null && !string.IsNullOrWhiteSpace(premade.dialogId))
                 premadeDialogs.Add(premade.dialogId);
 
-        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib));
+        return new InterviewDay(lib.Interview, questions, dialogs, Snapshot(world, conditions), ledger, premadeDialogs, AgencyForms(lib, world != null ? world.day : 1));
     }
 
     /// <summary>
-    /// The agency forms of the library's day plans (every blueprint's
-    /// templates, each once, in first-appearance order) as the interview's
-    /// requests see them (traveller types I2): the papers menu lists those a
-    /// kind may be asked for.
+    /// The papers menu of <paramref name="day"/> (the personalities spec's
+    /// W4): every on-request form of the day plans of days 1 to
+    /// <paramref name="day"/>, in first-appearance order, a request group once
+    /// (FormRequests.MetSoFar over DayForms). Every traveller of the day is
+    /// offered it.
     /// </summary>
-    public static List<AskableForm> AgencyForms(ContentLibrarySO lib)
+    public static List<AskableForm> AgencyForms(ContentLibrarySO lib, int day) => FormRequests.MetSoFar(DayForms(lib, day), day);
+
+    /// <summary>
+    /// Each day's agency forms from day 1 to <paramref name="lastDay"/>, in day
+    /// order (item i is day i + 1's: the plan GetDayPlan picks for it, its
+    /// kinds' and forced blueprints' templates, each once, in order), one
+    /// AskableForm per template across the days. A day without a plan lists none.
+    /// </summary>
+    public static List<IReadOnlyList<AskableForm>> DayForms(ContentLibrarySO lib, int lastDay)
     {
-        var forms = new List<AskableForm>();
-        var seen = new HashSet<DocumentTemplateSO>();
-        foreach (DayPlanSO plan in lib != null ? lib.DayPlans : System.Array.Empty<DayPlanSO>())
+        var byTemplate = new Dictionary<DocumentTemplateSO, AskableForm>();
+        var days = new List<IReadOnlyList<AskableForm>>();
+        for (int d = 1; d <= lastDay; d++)
         {
-            if (plan == null)
-                continue;
-            foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
-                foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
-                    if (t != null && seen.Add(t))
-                        forms.Add(new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? System.Array.Empty<TravellerKind>()));
+            var forms = new List<AskableForm>();
+            DayPlanSO plan = lib != null ? lib.GetDayPlan(d) : null;
+            if (plan != null)
+                foreach (CaseBlueprintSO blueprint in plan.PossibleBlueprints.Concat(plan.ForcedBlueprints))
+                    foreach (DocumentTemplateSO t in blueprint != null && blueprint.DocumentTemplates != null ? blueprint.DocumentTemplates : System.Array.Empty<DocumentTemplateSO>())
+                    {
+                        if (t == null)
+                            continue;
+                        if (!byTemplate.TryGetValue(t, out AskableForm form))
+                            byTemplate[t] = form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver));
+                        if (!forms.Contains(form))
+                            forms.Add(form);
+                    }
+            days.Add(forms);
         }
-        return forms;
+        return days;
     }
 
     /// <summary>

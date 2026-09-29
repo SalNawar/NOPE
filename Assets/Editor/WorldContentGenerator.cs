@@ -522,7 +522,7 @@ public static partial class WorldContentGenerator
             Ascii(MissingReplyLineId(r.kind, r.request, r.variant), r.text);
             Id(MissingReplyLineId(r.kind, r.request, r.variant), $"missing-form reply {r.kind} / '{r.request}' / {r.variant}");
         }
-        List<KindForms> kindForms = KindForms(authored, out List<AskableForm> agencyForms);
+        List<KindForms> kindForms = KindForms(src, authored, out List<AskableForm> agencyForms);
         errors.AddRange(FormRequests.GroupProblems(agencyForms, BuildLines(iv).askGroups));
         errors.AddRange(FormRequests.ReplyProblems(BuildReplies(replies), agencyForms, kindForms));
 
@@ -1727,29 +1727,58 @@ public static partial class WorldContentGenerator
             .Where(r => r != null)
             .ToList();
 
-    /// <summary>The day plans' forms as the interview's requests see them (every wired or forced blueprint's templates, each once), and each kind's askable and carried forms (FormRequests' rules).</summary>
-    private static List<KindForms> KindForms(Authored authored, out List<AskableForm> forms)
+    /// <summary>
+    /// The papers menus as the source's days build them (the personalities
+    /// spec's W4): each day's forms (its kinds' and its forced blueprints'
+    /// templates, each once; a day without its own entry the latest earlier
+    /// one's), the menu of the days so far (FormRequests.MetSoFar, as
+    /// TimelineService.AgencyForms builds it from the plans), and each kind in
+    /// play that day with that menu and its blueprints' carried forms
+    /// (FormRequests.ReplyProblems' input). <paramref name="forms"/> is every
+    /// wired or forced blueprint's form, each once.
+    /// </summary>
+    private static List<KindForms> KindForms(WorldSource src, Authored authored, out List<AskableForm> forms)
     {
         var byTemplate = new Dictionary<DocumentTemplateSO, AskableForm>();
-        forms = new List<AskableForm>();
-        foreach (DocumentTemplateSO t in DocumentTemplates(authored))
+        AskableForm FormOf(DocumentTemplateSO t)
         {
-            if (byTemplate.ContainsKey(t))
-                continue;
-            var form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver), t.askableBy ?? Array.Empty<TravellerKind>());
-            byTemplate[t] = form;
-            forms.Add(form);
+            if (!byTemplate.TryGetValue(t, out AskableForm form))
+                byTemplate[t] = form = new AskableForm(t.formNumber, t.displayName, t.askGroup, DocumentHandOvers.IsRequested(t.handOver));
+            return form;
         }
-        List<AskableForm> all = forms;
-        return Blueprints(authored)
-            .GroupBy(b => b.Kind)
-            .Select(g => new KindForms
-            {
-                Kind = g.Key,
-                Askable = FormRequests.For(g.Key, all),
-                Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => byTemplate[t]).ToList()
-            })
-            .ToList();
+
+        forms = DocumentTemplates(authored).Select(FormOf).Distinct().ToList();
+        DayData[] sorted = (src.days ?? Array.Empty<DayData>()).Where(d => d != null).OrderBy(d => d.day).ToArray();
+        int lastDay = sorted.Select(d => d.day).DefaultIfEmpty(0).Max();
+        var dayForms = new List<IReadOnlyList<AskableForm>>();
+        var dayBlueprints = new List<List<CaseBlueprintSO>>();
+        for (int n = 1; n <= lastDay; n++)
+        {
+            DayData d = sorted.LastOrDefault(x => x.day <= n);
+            var blueprints = new List<CaseBlueprintSO>();
+            foreach (KindWeightData k in d?.kinds ?? Array.Empty<KindWeightData>())
+                if (k != null && ParseEnum(k.kind, out TravellerKind kind) && authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) && b != null && !blueprints.Contains(b))
+                    blueprints.Add(b);
+            foreach (ForcedData f in d?.forced ?? Array.Empty<ForcedData>())
+                if (f != null && !string.IsNullOrEmpty(f.blueprint) && authored.forcedBlueprints.TryGetValue(f.blueprint, out CaseBlueprintSO b) && b != null && !blueprints.Contains(b))
+                    blueprints.Add(b);
+            dayBlueprints.Add(blueprints);
+            dayForms.Add(blueprints.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(FormOf).Distinct().ToList());
+        }
+
+        var kinds = new List<KindForms>();
+        for (int n = 1; n <= lastDay; n++)
+        {
+            List<AskableForm> menu = FormRequests.MetSoFar(dayForms, n);
+            foreach (IGrouping<TravellerKind, CaseBlueprintSO> g in dayBlueprints[n - 1].GroupBy(b => b.Kind))
+                kinds.Add(new KindForms
+                {
+                    Kind = g.Key,
+                    Askable = menu,
+                    Carried = g.SelectMany(b => b.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(FormOf).ToList()
+                });
+        }
+        return kinds;
     }
 
     /// <summary>A question with generated line ids ("{id}.prompt", "{id}.answer", "{id}.overrides.{n}.answer"), asked of every traveller (CheckInterview parsed its category first).</summary>

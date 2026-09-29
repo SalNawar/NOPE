@@ -16,9 +16,8 @@ public static partial class ContentLibraryValidator
 
     /// <summary>
     /// Reports, over every blueprint a traveller can come from: a form whose
-    /// number is not "TC-nnn" or is shared with another form; a form handed
-    /// over on request that its blueprint's kind may not be asked for
-    /// (DocumentTemplateSO.askableBy); and a kind with no claim line, or a
+    /// number is not "TC-nnn" or is shared with another form; and a kind with
+    /// no claim line, or a
     /// broken claim line (Interview.ClaimProblems, the rule Generate World
     /// also checks). Returns the issue count.
     /// </summary>
@@ -37,9 +36,6 @@ public static partial class ContentLibraryValidator
         {
             foreach (DocumentTemplateSO form in (blueprint.DocumentTemplates ?? new DocumentTemplateSO[0]).Where(t => t != null))
             {
-                if (form.handOver == DocumentHandOver.OnRequest && !form.IsAskableBy(blueprint.Kind))
-                    Error($"Blueprint '{blueprint.name}' ({blueprint.Kind}) hands '{form.name}' over on request, but the form's askableBy does not list {blueprint.Kind}.", form);
-
                 if (numbers.TryGetValue(form.formNumber ?? string.Empty, out DocumentTemplateSO first))
                 {
                     if (first != form)
