@@ -138,7 +138,7 @@ public static partial class WorldContentGenerator
         UpgradeSO[] translators = (src.translation.packs ?? Array.Empty<PackData>())
             .Select(p => MakeTranslator(p, src.translation, written))
             .ToArray();
-        TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, written);
+        TimelineTriggerSO[] notices = MakeTranslationNotice(src.translation, TranslatorOrders(CatalogueNodes(authored, src.translation), src.translation), written);
 
         WireMail(authored.library, mail);
 

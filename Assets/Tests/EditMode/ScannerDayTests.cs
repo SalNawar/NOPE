@@ -1,13 +1,13 @@
 using NUnit.Framework;
 
 /// <summary>
-/// The day's scanner upgrades (the PC redesign SC1, SC2): read from the
-/// day-start snapshot, so a scanner bought tonight works from the next office
-/// day; each is its own flag, and they combine.
+/// The day's scanner upgrade (the PC redesign SC1): read from the upgrades in
+/// force at the day's start (only the installed scanner: InstallsTests); each
+/// is its own flag.
 /// </summary>
 public class ScannerDayTests
 {
-    private static GateSnapshot Owning(params string[] upgrades) => new GateSnapshot(2, 100f, null, upgrades, null, null, null, null);
+    private static string[] Owning(params string[] upgrades) => upgrades;
 
     [Test]
     public void TheIds_AreTheShopsUpgradeIds()
@@ -17,7 +17,7 @@ public class ScannerDayTests
     }
 
     [Test]
-    public void From_ReadsEachUpgrade_AndTheyCombine()
+    public void From_ReadsEachUpgrade()
     {
         ScannerDay none = ScannerDay.From(Owning("diplo_contacts"));
         Assert.IsFalse(none.AutoFeed);
@@ -31,16 +31,7 @@ public class ScannerDayTests
         Assert.IsFalse(analysis.AutoFeed);
         Assert.IsTrue(analysis.Analysis);
 
-        ScannerDay both = ScannerDay.From(Owning(ScannerDay.AnalysisUpgradeId, "diplo_contacts", ScannerDay.AutoFeedUpgradeId));
-        Assert.IsTrue(both.AutoFeed);
-        Assert.IsTrue(both.Analysis);
-    }
-
-    [Test]
-    public void TheRetiredFlag_IsNotOwnership()
-    {
-        var flagOnly = new GateSnapshot(2, 100f, new[] { "upgrade:adv_scanner" }, null, null, null, null, null);
-        Assert.IsFalse(ScannerDay.From(flagOnly).Analysis, "the retired Effect_Upgrade_ScannerBoost set this flag; only the owned upgrade counts");
+        Assert.IsFalse(ScannerDay.From(Owning("upgrade:adv_scanner")).Analysis, "the retired Effect_Upgrade_ScannerBoost's flag is no upgrade id");
     }
 
     [Test]
@@ -61,7 +52,7 @@ public class ScannerDayTests
     }
 
     [Test]
-    public void NoSnapshot_NoUpgrades()
+    public void NoUpgrades_NoScanner()
     {
         ScannerDay day = ScannerDay.From(null);
         Assert.IsFalse(day.AutoFeed);
