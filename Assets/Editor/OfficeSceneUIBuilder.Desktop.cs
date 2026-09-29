@@ -24,6 +24,7 @@ public static partial class OfficeSceneUIBuilder
     private static readonly Dictionary<string, string> AppLabelKeys = new Dictionary<string, string>
     {
         { DesktopAppIds.Investigation, "icon.investigation" },
+        { DesktopAppIds.Portals, "icon.portals" },
         { DesktopAppIds.Internet, "icon.internet" },
         { DesktopAppIds.Mail, "icon.mail" },
         { DesktopAppIds.CitizenAccount, "icon.account" },

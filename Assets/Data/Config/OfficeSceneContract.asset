@@ -163,6 +163,12 @@ MonoBehaviour:
     hasDefault: 0
     defaultPosition: {x: 0, y: 0, z: 0}
     defaultYaw: 0
+  - id: 23
+    fallbacks:
+    - 16 Departure board blank display
+    hasDefault: 0
+    defaultPosition: {x: 0, y: 0, z: 0}
+    defaultYaw: 0
   legacyRoots:
   - GameManager
   - DaySystem

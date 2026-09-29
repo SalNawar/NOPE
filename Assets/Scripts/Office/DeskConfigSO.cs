@@ -147,7 +147,79 @@ public sealed class DeskConfigSO : ScriptableObject
     /// <summary>The evening blend (0 morning to 1 full evening: the hall's SetTime) from which the calendar takes its evening ink: where its paper reads as well under either ink, near a luminance of 0.18 on screen (the project draws in linear colour); measured in the hall, both inks read 4.5:1 or better only from 0.548 to 0.562 of the blend.</summary>
     [Range(0f, 1f)] public float hallCalendarEveningInkFrom = 0.555f;
 
+    [Header("Anime hall: the Departure Board and the portal rings (the portals spec v3 BD2, VX1-VX7)")]
+    /// <summary>The board's rows' ink (FFF2D9, the ivory of the hall's other glasses; the text is unlit, the display darkens with the evening, so its contrast only rises).</summary>
+    public Color hallBoardInk = new Color(1f, 0.949f, 0.851f, 1f);
+
+    /// <summary>The ink of the board's state words (CLOSED, UNDER MAINTENANCE, NO ROUTE): an amber-red (5.9:1 on the display by day as drawn, more as the evening darkens it).</summary>
+    public Color hallBoardStateInk = new Color(1f, 0.62f, 0.4f, 1f);
+
+    /// <summary>The share of the display's width and height the rows keep clear on each side (so they stay below the claim strip).</summary>
+    [Range(0f, 0.45f)] public float hallBoardInset = 0.08f;
+
+    /// <summary>Each portal's art layers by their ids in the hall's AnimeHallPresentation (a renamed or renumbered layer is an edit here): the secure bay (its order less one is the effect's), the metal ring (tinted; its opaque rect places the effect) and the painted glass.</summary>
+    public HallPortalLayers[] hallPortalLayers =
+    {
+        new HallPortalLayers(1, "38 Portal 01 front secure bay", "39 Portal 01 front metal ring", "53 Portal 01 front painted glass"),
+        new HallPortalLayers(2, "40 Portal 02 rear left secure bay", "41 Portal 02 rear left metal ring", "54 Portal 02 rear left painted glass"),
+        new HallPortalLayers(3, "42 Portal 03 rear right secure bay", "43 Portal 03 rear right metal ring", "55 Portal 03 rear right painted glass"),
+        new HallPortalLayers(4, "44 Portal 04 upper left secure bay", "45 Portal 04 upper left metal ring", "56 Portal 04 upper left painted glass"),
+        new HallPortalLayers(5, "46 Portal 05 upper right secure bay", "47 Portal 05 upper right metal ring", "57 Portal 05 upper right painted glass"),
+    };
+
+    /// <summary>A ring under maintenance: its metal ring's tint (a 45 % grey, multiplied with the art's own lighting, so the evening still darkens it).</summary>
+    public Color hallPortalIdleTint = new Color(0.45f, 0.45f, 0.45f, 1f);
+
+    /// <summary>An open departure ring's glow (an unlit tint, brightened by the PortalGlow material: a pale cyan).</summary>
+    public Color hallPortalGlowTint = new Color(0.35f, 0.85f, 1f, 0.9f);
+
+    /// <summary>The Return Gate's spiral (an unlit tint, brightened by the PortalGlow material: an amber).</summary>
+    public Color hallReturnGateTint = new Color(1f, 0.6f, 0.15f, 0.95f);
+
+    /// <summary>The effect's diameter as a share of its ring's opaque width, so its edge hides under the frame.</summary>
+    [Range(0.1f, 1f)] public float hallPortalGlowSize = 0.85f;
+
+    /// <summary>How fast a glow turns (degrees a second; still with reduced motion).</summary>
+    public float hallPortalSpinDegrees = 12f;
+
+    /// <summary>A departure's flare: the effect's scale at its peak.</summary>
+    [Min(1f)] public float hallPortalPulseScale = 1.3f;
+
+    /// <summary>A departure's flare: seconds, up and down (with reduced motion: one step up, then down at its end).</summary>
+    [Min(0.05f)] public float hallPortalPulseSeconds = 0.8f;
+
     [Header("READY sign")]
     /// <summary>The caption the game writes on the READY sign's label (the art's NEXT sign): a UI string key (world_source.json ui.strings).</summary>
     public string readyCaptionKey = "desk.readyCaption";
+}
+
+/// <summary>One portal's art layers in the anime hall (DeskConfigSO.hallPortalLayers), by their AnimeHallPresentation ids.</summary>
+[System.Serializable]
+public sealed class HallPortalLayers
+{
+    /// <summary>The portal's number (agency.portals[].number).</summary>
+    public int portal;
+
+    /// <summary>The secure bay's layer (its fence and panels stand in front of the ring's lower half); the effect draws at its order less one.</summary>
+    public string bay;
+
+    /// <summary>The metal ring's layer (the gate frame): tinted under maintenance; its opaque rect places the effect.</summary>
+    public string ring;
+
+    /// <summary>The painted glass's layer (drawn over the effect; listed so a renamed layer is one edit here).</summary>
+    public string glass;
+
+    /// <summary>An empty entry (for the serializer and the inspector).</summary>
+    public HallPortalLayers()
+    {
+    }
+
+    /// <summary>A portal's layers.</summary>
+    public HallPortalLayers(int portal, string bay, string ring, string glass)
+    {
+        this.portal = portal;
+        this.bay = bay;
+        this.ring = ring;
+        this.glass = glass;
+    }
 }

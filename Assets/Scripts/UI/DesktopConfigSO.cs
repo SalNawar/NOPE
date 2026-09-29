@@ -96,6 +96,9 @@ public sealed class DesktopConfigSO : ScriptableObject
     /// <summary>The Settings window's size.</summary>
     public Vector2 settingsWindowSize = new Vector2(640f, 720f);
 
+    /// <summary>The Portals window's size (the portals spec v3 PA3: 880 x 600 u, restored; it can be maximised).</summary>
+    public Vector2 portalsWindowSize = new Vector2(880f, 600f);
+
     /// <summary>The Orders window's restored size (it opens maximised, the tree needs room; the portals spec v3 OR9).</summary>
     public Vector2 ordersWindowSize = new Vector2(1120f, 820f);
 

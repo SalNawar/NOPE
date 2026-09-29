@@ -1210,6 +1210,38 @@
         "era": "modern",
         "name": "Showa Shipyard Group"
       }
+    ],
+    "portals": [
+      {
+        "number": 1,
+        "name": "Front",
+        "role": "Departures",
+        "fromDay": 1
+      },
+      {
+        "number": 2,
+        "name": "Rear left",
+        "role": "Departures",
+        "repair": "repair_portal_02"
+      },
+      {
+        "number": 3,
+        "name": "Rear right",
+        "role": "Returns",
+        "repair": "repair_return_gate"
+      },
+      {
+        "number": 4,
+        "name": "Upper left",
+        "role": "Departures",
+        "repair": "repair_portal_04"
+      },
+      {
+        "number": 5,
+        "name": "Upper right",
+        "role": "Departures",
+        "repair": "repair_portal_05"
+      }
     ]
   },
   "eras": [
@@ -6842,7 +6874,29 @@
       "premadeChance": 0.0,
       "costumeErrorChance": 0.0,
       "slipChance": 0.15,
-      "violationChance": 0.0
+      "violationChance": 0.0,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "italy",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "egypt",
+          "era": "ancient"
+        },
+        {
+          "portal": 5,
+          "country": "iraq",
+          "era": "ancient"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day2",
@@ -6898,7 +6952,29 @@
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "egypt",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "italy",
+          "era": "medieval"
+        },
+        {
+          "portal": 5,
+          "country": "britain",
+          "era": "medieval"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day3",
@@ -6961,7 +7037,29 @@
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "britain",
+          "era": "earlymodern"
+        },
+        {
+          "portal": 2,
+          "country": "china",
+          "era": "medieval"
+        },
+        {
+          "portal": 4,
+          "country": "iraq",
+          "era": "medieval"
+        },
+        {
+          "portal": 5,
+          "country": "china",
+          "era": "earlymodern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day4",
@@ -7030,7 +7128,29 @@
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "germany",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "medieval"
+        },
+        {
+          "portal": 5,
+          "country": "egypt",
+          "era": "earlymodern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day5",
@@ -7112,7 +7232,29 @@
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "britain",
+          "era": "modern"
+        },
+        {
+          "portal": 2,
+          "country": "china",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "germany",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "iraq",
+          "era": "ancient"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day6",
@@ -7213,7 +7355,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "earlymodern"
+        },
+        {
+          "portal": 5,
+          "country": "japan",
+          "era": "modern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day7",
@@ -7324,7 +7488,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "china",
+          "era": "earlymodern"
+        },
+        {
+          "portal": 5,
+          "country": "japan",
+          "era": "modern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day8",
@@ -7433,7 +7619,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "germany",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "germany",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "iraq",
+          "era": "medieval"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day9",
@@ -7543,7 +7751,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.05
+      "violationChance": 0.05,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "egypt",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "greece",
+          "era": "medieval"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "italy",
+          "era": "ancient"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day10",
@@ -7683,7 +7913,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.06
+      "violationChance": 0.06,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "iraq",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "china",
+          "era": "industrial"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day11",
@@ -7793,7 +8045,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.06
+      "violationChance": 0.06,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "modern"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "italy",
+          "era": "modern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day12",
@@ -7904,7 +8178,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.06
+      "violationChance": 0.06,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "germany",
+          "era": "modern"
+        },
+        {
+          "portal": 2,
+          "country": "italy",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "china",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "japan",
+          "era": "earlymodern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day13",
@@ -8016,7 +8312,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.08
+      "violationChance": 0.08,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "germany",
+          "era": "industrial"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "modern"
+        },
+        {
+          "portal": 4,
+          "country": "greece",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "germany",
+          "era": "modern"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day14",
@@ -8140,7 +8458,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.08
+      "violationChance": 0.08,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "italy",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 4,
+          "country": "japan",
+          "era": "modern"
+        },
+        {
+          "portal": 5,
+          "country": "egypt",
+          "era": "industrial"
+        }
+      ]
     },
     {
       "asset": "DayPlan_Inv_Day15",
@@ -8280,7 +8620,29 @@
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
       "slipChance": 0.15,
-      "violationChance": 0.08
+      "violationChance": 0.08,
+      "portals": [
+        {
+          "portal": 1,
+          "country": "greece",
+          "era": "ancient"
+        },
+        {
+          "portal": 2,
+          "country": "italy",
+          "era": "ancient"
+        },
+        {
+          "portal": 4,
+          "country": "britain",
+          "era": "industrial"
+        },
+        {
+          "portal": 5,
+          "country": "iraq",
+          "era": "ancient"
+        }
+      ]
     }
   ],
   "personalities": [
@@ -13826,7 +14188,7 @@
       {
         "id": "desk4_closes",
         "name": "Desk 4 closes",
-        "news": "Desk 4 is closed for the Drive. From today its queue joins Desk 3.",
+        "news": "Desk 4 is closed for the Drive. From today its queue joins Desk 3, and its portal (05, upper right) is Desk 3's, still under maintenance.",
         "conditions": [
           {
             "type": "DayAtLeast",
@@ -18685,6 +19047,150 @@
         "text": "SIGNATURE",
         "gloss": "None",
         "tier": "Full"
+      },
+      {
+        "key": "icon.portals",
+        "text": "Portals",
+        "gloss": "None",
+        "tier": "Flavour"
+      },
+      {
+        "key": "window.portals",
+        "text": "Portals",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.returnGate",
+        "text": "RETURN GATE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.closed",
+        "text": "CLOSED",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.maintenance",
+        "text": "UNDER MAINTENANCE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.noRoute",
+        "text": "NO ROUTE",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.title",
+        "text": "DEPARTURE BOARD",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.route",
+        "text": "{0} {1}: {2}, {3}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.closed",
+        "text": "{0} {1}: {2}, {3}: CLOSED today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.returnGate",
+        "text": "{0} {1}: Return Gate",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.returnGateMaintenance",
+        "text": "{0} {1}: Return Gate, under maintenance",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.maintenance",
+        "text": "{0} {1}: under maintenance",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "board.tooltip.noRoute",
+        "text": "{0} {1}: no route today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.date",
+        "text": "Routes for {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.returnGate",
+        "text": "Return Gate",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.none",
+        "text": "–",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.inService",
+        "text": "In service",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.noRoute",
+        "text": "In service · no route today",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.closed",
+        "text": "CLOSED today: {0}",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.underMaintenance",
+        "text": "Under maintenance",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.maintenance",
+        "text": "Under maintenance · repair it in Orders ({0})",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.locked",
+        "text": "Under maintenance · locked: repair {0} first",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.state.transit",
+        "text": "Under maintenance · repair in transit, in service tomorrow",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
+        "key": "portals.footer",
+        "text": "Routes are set by the Directorate. Until the Return Gate is repaired, the displaced leave through Portal {0}.",
+        "gloss": "None",
+        "tier": "Full"
       }
     ],
     "languages": [
@@ -18807,6 +19313,10 @@
           {
             "key": "briefing.newsHeader",
             "text": "— أخبار الخط الزمني —"
+          },
+          {
+            "key": "icon.portals",
+            "text": "البوابات"
           }
         ]
       },
@@ -18929,6 +19439,10 @@
           {
             "key": "briefing.newsHeader",
             "text": "— ΕΙΔΗΣΕΙΣ ΧΡΟΝΟΓΡΑΜΜΗΣ —"
+          },
+          {
+            "key": "icon.portals",
+            "text": "Πύλες"
           }
         ]
       },
@@ -19051,6 +19565,10 @@
           {
             "key": "briefing.newsHeader",
             "text": "— NOTIZIE DELLA LINEA TEMPORALE —"
+          },
+          {
+            "key": "icon.portals",
+            "text": "Portali"
           }
         ]
       },
@@ -19173,6 +19691,10 @@
           {
             "key": "briefing.newsHeader",
             "text": "— ZEITLINIEN-NACHRICHTEN —"
+          },
+          {
+            "key": "icon.portals",
+            "text": "Portale"
           }
         ]
       },
@@ -19295,6 +19817,10 @@
           {
             "key": "briefing.newsHeader",
             "text": "— 时间线新闻 —"
+          },
+          {
+            "key": "icon.portals",
+            "text": "传送门"
           }
         ]
       },
@@ -19417,6 +19943,10 @@
           {
             "key": "briefing.newsHeader",
             "text": "— 時間線ニュース —"
+          },
+          {
+            "key": "icon.portals",
+            "text": "ポータル"
           }
         ]
       }

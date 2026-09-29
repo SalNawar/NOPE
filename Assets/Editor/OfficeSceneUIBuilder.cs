@@ -200,6 +200,7 @@ public static partial class OfficeSceneUIBuilder
         BuildBubbleInput(speechBubble, wheel);
         InteractionPanelController interaction = wheel.transform.Find("Catcher/Ring").GetComponent<InteractionPanelController>();
         OverlayCallout deskTooltip = BuildOverlayCallout(officeCanvas.transform, "DeskTooltip", new Vector2(360f, 60f), Tooltip, ThemeRoleId.Tooltip, false);
+        OverlayCallout boardTooltip = BuildOverlayCallout(officeCanvas.transform, "BoardTooltip", BoardTooltipSize, Tooltip, ThemeRoleId.Tooltip, false, true);
         StampTray stampTray = BuildStampTray(officeCanvas.transform, deskConfig);
 
         // Verdict line (result text) on a strip that shows only while the line has text (piece 6 R18): top centre, the case HUD's compare strip's place (they never show together).
@@ -299,7 +300,7 @@ public static partial class OfficeSceneUIBuilder
         // The Office root: every click box, the desk, the traveller, the readouts,
         // the input rules and the binder that puts them on the art office at load.
         BoothCoordinator booth = BuildOffice(officeView, monitorScreen, framePower, deskConfig, contract, wheel,
-                                             new[] { speechBubble, deskTooltip }, deskTooltip, trayClockText, shiftClock, library,
+                                             new[] { speechBubble, deskTooltip, boardTooltip }, deskTooltip, boardTooltip, gameManager, trayClockText, shiftClock, library,
                                              fallbackHud, pcFrame, stampTray, caseHud, deskViewBack, out Clickable readySign);
 
         // The Tier-2 images' art slots (OfficeSceneUIBuilder.Art.cs, redesign phase 27), before the desktop's layer is applied to its covers.
@@ -1183,6 +1184,7 @@ public static partial class OfficeSceneUIBuilder
         var windows = new Dictionary<string, DesktopWindow>
         {
             { DesktopAppIds.Investigation, app.Window },
+            { DesktopAppIds.Portals, BuildPortalsWindow(windowLayer, config, game) },
             { DesktopAppIds.Internet, internet },
             { DesktopAppIds.Mail, BuildMailWindow(windowLayer, config, feed, apps, internet.GetComponent<BrowserWindow>(), app.App) },
             { DesktopAppIds.CitizenAccount, BuildAccountWindow(windowLayer, config) },

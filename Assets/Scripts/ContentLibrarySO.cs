@@ -172,16 +172,31 @@ public sealed class ContentLibrarySO : ScriptableObject
     /// then the present's row (the leader's Future place or the neutral
     /// present; Present.AddRow, so every book lists it from day 1), so case
     /// generation and the reference books share one list and one table; and
-    /// the present itself.
+    /// the present itself; and the day's portals (PortalSchedule.Resolve:
+    /// the agency's portals, in service by their first day or a repair
+    /// <paramref name="world"/> owns at the day's start, running the plan's
+    /// Directorate routes, CLOSED where a closure forbids them), which the
+    /// board, the rings, the Portals app and the departures read all day.
     /// </summary>
-    public TodaysWorld BuildToday(DayPlanSO plan, HistoryState history)
+    public TodaysWorld BuildToday(DayPlanSO plan, WorldState world)
     {
+        HistoryState history = world != null ? world.history : null;
         List<NationEraProfileSO> places = TodaysProfiles(plan);
         var table = new FactTable();
         FillFacts(table, places, history);
         PresentPlace now = BuildPresent(history);
         global::Present.AddRow(table, now);
-        return new TodaysWorld(places, table, now);
+        return new TodaysWorld(places, table, now, BuildPortalDay(plan, world));
+    }
+
+    /// <summary>The day's portals (the portals spec v3 RT2, RT3): the agency's portals on <paramref name="world"/>'s day and owned repairs, over <paramref name="plan"/>'s Directorate routes and closures; none without a plan or portals.</summary>
+    private PortalDay BuildPortalDay(DayPlanSO plan, WorldState world)
+    {
+        List<PortalSpec> portals = Agency.portals;
+        if (plan == null || world == null || portals == null || portals.Count == 0)
+            return PortalDay.None;
+        return PortalSchedule.Resolve(portals, world.day, world.HasUpgrade, plan.PortalRequests(),
+                                      place => plan.ClosureOf(GetNationById(place.NationId), GetEraById(place.EraId)));
     }
 
     /// <summary>
@@ -467,6 +482,15 @@ public sealed class ContentLibrarySO : ScriptableObject
 
         EnsureLookups();
         return _profileById.TryGetValue(id, out NationEraProfileSO profile) ? profile : null;
+    }
+
+    /// <summary>The place of <paramref name="place"/>'s nation and era ids (a portal's route), or null.</summary>
+    public NationEraProfileSO GetProfile(PlaceRef place)
+    {
+        foreach (NationEraProfileSO p in Profiles)
+            if (p != null && p.nation != null && p.era != null && p.nation.id == place.NationId && p.era.id == place.EraId)
+                return p;
+        return null;
     }
 
     /// <summary>The theme of a culture id ("neutral" or a nation id), or null for an unknown or blank id.</summary>

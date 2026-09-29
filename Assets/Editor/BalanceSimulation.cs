@@ -215,7 +215,7 @@ public static class BalanceSimulation
             DayPlanSO plan = lib.GetDayPlan(day);
             var ledger = new ShiftLedger();
             InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, ledger);
-            TodaysWorld today = lib.BuildToday(plan, world.history);
+            TodaysWorld today = lib.BuildToday(plan, world);
             List<CaseInstance> cases = new CaseFactory(lib, today).GenerateDayCases(plan, world, Seeds.Day(seed, day), interview, true);
             r.DialogsOffered.Add($"day {day}: [{string.Join(", ", interview.OfferedDialogs(null).Select(d => d.id))}]");
             policy.StartDay(day);

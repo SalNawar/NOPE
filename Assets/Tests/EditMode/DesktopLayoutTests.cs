@@ -15,7 +15,7 @@ public class DesktopLayoutTests
     /// <summary>The spec's grid: a 1440 x 988 icon area, 120 x 132 cells from (20, 20), a 132 column step and a 140 row step.</summary>
     private static IconGrid Grid(float areaHeight = 988f) => new IconGrid(1440f, areaHeight, 120f, 132f, 20f, 20f, 132f, 140f);
 
-    private static readonly string[] Seven = DesktopAppIds.DefaultOrder.ToArray();
+    private static readonly string[] Eight = DesktopAppIds.DefaultOrder.ToArray();
 
     private static IconPlace At(IReadOnlyList<IconPlace> places, string id) => places.Single(p => p.Id == id);
 
@@ -26,37 +26,39 @@ public class DesktopLayoutTests
     }
 
     [Test]
-    public void TheDefaultOrder_IsTheSevenApps()
+    public void TheDefaultOrder_IsTheEightApps()
     {
-        // Orders (Saleh 2026-09-29: the upgrade tree moves to the PC) sits after the account it spends from.
-        CollectionAssert.AreEqual(new[] { "investigation", "internet", "mail", "citizen_account", "orders", "notes", "settings" }, Seven);
+        // Portals (the portals spec v3 PA1) after Investigation; Orders (Saleh 2026-09-29: the upgrade tree moves to the PC) after the account it spends from.
+        CollectionAssert.AreEqual(new[] { "investigation", "portals", "internet", "mail", "citizen_account", "orders", "notes", "settings" }, Eight);
     }
 
     [Test]
-    public void Arrange_PutsTheSevenInColumns_FromTheOrigin_InOrder()
+    public void Arrange_PutsTheEightInColumns_FromTheOrigin_InOrder()
     {
-        IReadOnlyList<IconPlace> places = DesktopLayout.Arrange(Seven, Grid());
-        CollectionAssert.AreEqual(Seven, places.Select(p => p.Id).ToArray());
+        IReadOnlyList<IconPlace> places = DesktopLayout.Arrange(Eight, Grid());
+        CollectionAssert.AreEqual(Eight, places.Select(p => p.Id).ToArray());
         for (int i = 0; i < 6; i++)
             AssertAt(places[i], 20f, 20f + 140f * i);
-        // A seventh row would end at 860 + 132 = 992, past the 988 u icon area: Settings heads the next column.
+        // A seventh row would end at 860 + 132 = 992, past the 988 u icon area: Notes heads the next column, Settings under it.
         AssertAt(places[6], 152f, 20f);
+        AssertAt(places[7], 152f, 160f);
     }
 
     [Test]
     public void Arrange_WrapsIntoTheNextColumn_WhenTheAreaIsShort()
     {
         // 500 tall: rows at 20, 160 and 300 fit (300 + 132 <= 500); 440 does not.
-        IReadOnlyList<IconPlace> places = DesktopLayout.Arrange(Seven, Grid(500f));
+        IReadOnlyList<IconPlace> places = DesktopLayout.Arrange(Eight, Grid(500f));
         AssertAt(places[2], 20f, 300f);
         AssertAt(places[3], 152f, 20f);
         AssertAt(places[5], 152f, 300f);
+        AssertAt(places[6], 284f, 20f);
     }
 
     [Test]
     public void ADrop_OnEmptyDesktop_StaysExactlyWhereItWasDropped()
     {
-        IReadOnlyList<IconPlace> others = DesktopLayout.Arrange(Seven, Grid()).Where(p => p.Id != "mail").ToList();
+        IReadOnlyList<IconPlace> others = DesktopLayout.Arrange(Eight, Grid()).Where(p => p.Id != "mail").ToList();
         AssertAt(DesktopLayout.Drop("mail", 700.5f, 333.25f, others, Grid(), 0.25f), 700.5f, 333.25f);
     }
 
@@ -71,16 +73,16 @@ public class DesktopLayoutTests
     [Test]
     public void ADrop_CoveringMoreThanTheShareOfAnotherCell_MovesToTheNearestFreeSpot()
     {
-        IReadOnlyList<IconPlace> others = DesktopLayout.Arrange(Seven, Grid()).Where(p => p.Id != "settings").ToList();
-        // Right on top of Internet's cell (20, 160): the next column's (152, 160) is the nearest free spot (the first column is full).
+        IReadOnlyList<IconPlace> others = DesktopLayout.Arrange(Eight, Grid()).Where(p => p.Id != "settings").ToList();
+        // Right on top of Portals' cell (20, 160): the next column's (152, 160) is the nearest free spot (the first column is full).
         AssertAt(DesktopLayout.Drop("settings", 20f, 160f, others, Grid(), 0.25f), 152f, 160f);
     }
 
     [Test]
     public void ADrop_CoveringLessThanTheShare_StaysPut()
     {
-        IReadOnlyList<IconPlace> others = DesktopLayout.Arrange(Seven, Grid()).Where(p => p.Id != "settings").ToList();
-        // 100 to the right of Internet: 20 of its 120 wide cell overlap (1/6 < 25 %).
+        IReadOnlyList<IconPlace> others = DesktopLayout.Arrange(Eight, Grid()).Where(p => p.Id != "settings").ToList();
+        // 100 to the right of Portals: 20 of its 120 wide cell overlap (1/6 < 25 %).
         AssertAt(DesktopLayout.Drop("settings", 120f, 160f, others, Grid(), 0.25f), 120f, 160f);
     }
 
@@ -96,44 +98,58 @@ public class DesktopLayoutTests
     [Test]
     public void Restore_OfNothing_IsTheArrangement()
     {
-        IReadOnlyList<IconPlace> arranged = DesktopLayout.Arrange(Seven, Grid());
-        CollectionAssert.AreEqual(arranged, DesktopLayout.Restore(null, Seven, Grid()));
-        CollectionAssert.AreEqual(arranged, DesktopLayout.Restore("", Seven, Grid()));
+        IReadOnlyList<IconPlace> arranged = DesktopLayout.Arrange(Eight, Grid());
+        CollectionAssert.AreEqual(arranged, DesktopLayout.Restore(null, Eight, Grid()));
+        CollectionAssert.AreEqual(arranged, DesktopLayout.Restore("", Eight, Grid()));
     }
 
     [Test]
     public void Restore_KeepsSavedPlaces_DropsUnknownIds_PlacesNewOnes_AndClamps()
     {
         string saved = "mail:700,300;lexicon:5,5;investigation:-40,2000;junk;notes:1,x";
-        IReadOnlyList<IconPlace> places = DesktopLayout.Restore(saved, Seven, Grid());
+        IReadOnlyList<IconPlace> places = DesktopLayout.Restore(saved, Eight, Grid());
 
-        CollectionAssert.AreEqual(Seven, places.Select(p => p.Id).ToArray(), "every known id once, in the order");
+        CollectionAssert.AreEqual(Eight, places.Select(p => p.Id).ToArray(), "every known id once, in the order");
         AssertAt(At(places, "mail"), 700f, 300f);
         AssertAt(At(places, "investigation"), 0f, 988f - 132f);
-        // The five without a (valid) saved place take the first free arrange spots: (20, 20) is free, (20, 160) is free...
-        AssertAt(At(places, "internet"), 20f, 20f);
-        AssertAt(At(places, "citizen_account"), 20f, 160f);
-        AssertAt(At(places, "orders"), 20f, 300f);
-        AssertAt(At(places, "notes"), 20f, 440f);
-        AssertAt(At(places, "settings"), 20f, 580f);
+        // The six without a (valid) saved place take the first free arrange spots: (20, 20) is free, (20, 160) is free...
+        AssertAt(At(places, "portals"), 20f, 20f);
+        AssertAt(At(places, "internet"), 20f, 160f);
+        AssertAt(At(places, "citizen_account"), 20f, 300f);
+        AssertAt(At(places, "orders"), 20f, 440f);
+        AssertAt(At(places, "notes"), 20f, 580f);
+        AssertAt(At(places, "settings"), 20f, 720f);
     }
 
     [Test]
-    public void Restore_ASixIconLayout_GainsOrdersInTheFirstFreeSpot()
+    public void Restore_ASixIconLayout_GainsPortalsAndOrdersInTheFirstFreeSpots()
     {
-        // A layout saved before the Orders icon: the six in their column.
+        // A layout saved before the Portals and Orders icons: the six in their column; the new two in the default order.
         string saved = "investigation:20,20;internet:20,160;mail:20,300;citizen_account:20,440;notes:20,580;settings:20,720";
-        IReadOnlyList<IconPlace> places = DesktopLayout.Restore(saved, Seven, Grid());
+        IReadOnlyList<IconPlace> places = DesktopLayout.Restore(saved, Eight, Grid());
 
         AssertAt(At(places, "settings"), 20f, 720f);
-        AssertAt(At(places, "orders"), 152f, 20f);
+        AssertAt(At(places, "portals"), 152f, 20f);
+        AssertAt(At(places, "orders"), 152f, 160f);
+    }
+
+    [Test]
+    public void Restore_ASevenIconLayout_GainsPortalsInTheFirstFreeSpot()
+    {
+        // A layout saved with Orders, before the Portals icon (the portals spec v3 PA1).
+        string saved = "investigation:20,20;internet:20,160;mail:20,300;citizen_account:20,440;orders:20,580;notes:20,720;settings:152,20";
+        IReadOnlyList<IconPlace> places = DesktopLayout.Restore(saved, Eight, Grid());
+
+        AssertAt(At(places, "settings"), 152f, 20f);
+        AssertAt(At(places, "portals"), 152f, 160f);
     }
 
     [Test]
     public void Restore_ANewId_SkipsSpotsTakenBySavedIcons()
     {
-        IReadOnlyList<IconPlace> places = DesktopLayout.Restore("investigation:20,20;internet:25,165", Seven, Grid());
-        AssertAt(At(places, "mail"), 20f, 300f);
+        IReadOnlyList<IconPlace> places = DesktopLayout.Restore("investigation:20,20;internet:25,165", Eight, Grid());
+        AssertAt(At(places, "portals"), 20f, 300f);
+        AssertAt(At(places, "mail"), 20f, 440f);
     }
 
     [Test]
@@ -141,14 +157,14 @@ public class DesktopLayoutTests
     {
         var places = new List<IconPlace>
         {
-            new IconPlace("investigation", 12.5f, 40.25f), new IconPlace("internet", 700f, 300.75f), new IconPlace("mail", 0f, 0f),
+            new IconPlace("investigation", 12.5f, 40.25f), new IconPlace("portals", 900f, 40f), new IconPlace("internet", 700f, 300.75f), new IconPlace("mail", 0f, 0f),
             new IconPlace("citizen_account", 1320f, 856f), new IconPlace("orders", 250f, 250f), new IconPlace("notes", 400.5f, 600f),
             new IconPlace("settings", 99f, 101f)
         };
         string saved = DesktopLayout.Save(places);
         StringAssert.DoesNotContain(" ", saved);
-        Assert.AreEqual("investigation:12.5,40.25;internet:700,300.75;mail:0,0;citizen_account:1320,856;orders:250,250;notes:400.5,600;settings:99,101", saved);
-        CollectionAssert.AreEqual(places, DesktopLayout.Restore(saved, Seven, Grid()));
+        Assert.AreEqual("investigation:12.5,40.25;portals:900,40;internet:700,300.75;mail:0,0;citizen_account:1320,856;orders:250,250;notes:400.5,600;settings:99,101", saved);
+        CollectionAssert.AreEqual(places, DesktopLayout.Restore(saved, Eight, Grid()));
     }
 
     [Test]
@@ -171,10 +187,10 @@ public class DesktopLayoutTests
     [Test]
     public void Nearest_IsNull_WithNothingThatWay_OrAnUnknownStart()
     {
-        IReadOnlyList<IconPlace> column = DesktopLayout.Arrange(Seven.Take(6).ToArray(), Grid());
+        IReadOnlyList<IconPlace> column = DesktopLayout.Arrange(Eight.Take(6).ToArray(), Grid());
         Assert.IsNull(DesktopLayout.Nearest("investigation", 0, -1, column));
         Assert.IsNull(DesktopLayout.Nearest("investigation", 1, 0, column));
-        Assert.AreEqual("internet", DesktopLayout.Nearest("investigation", 0, 1, column));
+        Assert.AreEqual("portals", DesktopLayout.Nearest("investigation", 0, 1, column));
         Assert.IsNull(DesktopLayout.Nearest("lexicon", 0, 1, column));
     }
 

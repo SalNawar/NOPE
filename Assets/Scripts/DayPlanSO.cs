@@ -123,6 +123,9 @@ public sealed class DayPlanSO : ScriptableObject
     /// <summary>Event rules (fixed or random placement).</summary>
     [SerializeField] private List<DayEventRule> eventRules = new();
 
+    /// <summary>The Directorate's route for each departure portal today (the portals spec v3 RT2; written by Generate World from days[].portals, the place by reference so a renamed place cannot dangle).</summary>
+    [SerializeField] private DirectorateRoute[] directorateRoutes;
+
     /// <summary>Public read-only day number.</summary>
     public int DayNumber => dayNumber;
 
@@ -226,6 +229,34 @@ public sealed class DayPlanSO : ScriptableObject
                 return false;
 
         return true;
+    }
+
+    /// <summary>The Directorate's routes as authored (the validator checks each names a place).</summary>
+    public IReadOnlyList<DirectorateRoute> DirectorateRoutes => directorateRoutes ?? Array.Empty<DirectorateRoute>();
+
+    /// <summary>The Directorate's routes as the schedule's requests (PortalSchedule.Resolve), in authored order; a route whose place is missing is left out.</summary>
+    public List<PortalRequest> PortalRequests()
+    {
+        var requests = new List<PortalRequest>();
+        foreach (DirectorateRoute route in directorateRoutes ?? Array.Empty<DirectorateRoute>())
+            if (route != null && route.place != null && route.place.nation != null && route.place.era != null)
+                requests.Add(new PortalRequest(route.portal, new PlaceRef(route.place.nation.id, route.place.era.id)));
+        return requests;
+    }
+
+    /// <summary>
+    /// The line of today's first closure that forbids <paramref name="nation"/>
+    /// in <paramref name="era"/> for every traveller (a portal's route it
+    /// forbids shows CLOSED; the portals spec v3 RT2), or null when none does.
+    /// A closure listing kinds (the Economy range limit) closes no portal: it
+    /// only turns some travellers away.
+    /// </summary>
+    public string ClosureOf(NationSO nation, EraSO era)
+    {
+        foreach (TravelRuleSO rule in ActiveTravelRules)
+            if (rule != null && rule.IsClosure && (rule.kinds == null || rule.kinds.Length == 0) && !rule.Allows(nation, era))
+                return rule.Summary();
+        return null;
     }
 
     /// <summary>
@@ -384,6 +415,17 @@ public sealed class KindWeight
 
     /// <summary>True when a traveller drawn from this entry is honest: every fault roll is skipped with no draw (traveller types K5; FaultOrder; day 1's poor tourists). Written by Generate World from days[].kinds[].honest.</summary>
     public bool honest;
+}
+
+/// <summary>The Directorate's route for one departure portal on a day (days[].portals[]).</summary>
+[Serializable]
+public sealed class DirectorateRoute
+{
+    /// <summary>The portal's number (agency.portals[].number).</summary>
+    public int portal;
+
+    /// <summary>The place it runs to today.</summary>
+    public NationEraProfileSO place;
 }
 
 /// <summary>

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 /// <summary>
 /// Draws the PC's placeholder glyphs (the PC redesign DK2, until the asset
 /// list's art lands): a white glyph on transparent per app id, shapes only,
-/// never letters: a magnifying glass (investigation), a globe (internet), an
+/// never letters: a magnifying glass (investigation), a portal ring on its
+/// base (portals), a globe (internet), an
 /// envelope (mail), an ID card (citizen_account), a parcel with a tick
 /// (orders), a ruled sheet with a folded corner (notes) and a gear
 /// (settings) for Assets/Art/UI/Resources/Desktop/icon_&lt;id&gt;.png; and the
@@ -62,6 +63,7 @@ public static class DesktopIconPlaceholder
         switch (appId)
         {
             case "investigation":
+            case "portals":
             case "internet":
             case "mail":
             case "citizen_account":
@@ -89,6 +91,10 @@ public static class DesktopIconPlaceholder
             case "investigation":
                 // A lens ring and a handle down to the right.
                 return Ring(26f, 38f, 17f, 11f, px, py) || NearSegment(38f, 26f, 55f, 9f, 4.5f, px, py);
+
+            case "portals":
+                // A portal: a thick ring standing on a base, joined by a short neck.
+                return Ring(32f, 36f, 22f, 16f, px, py) || (px >= 10f && px <= 54f && py >= 6f && py <= 10f) || (px >= 28f && px <= 36f && py > 10f && py <= 15f);
 
             case "internet":
             {

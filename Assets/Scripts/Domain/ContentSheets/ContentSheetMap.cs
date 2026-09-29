@@ -76,7 +76,13 @@ public static class ContentSheetMap
                 Rows("agencyEmployers", "employers", Key("id"),
                     Text("id").Required(),
                     Text("era").Ref("eras").Note("the era the employer hires for"),
-                    Text("name").Note("the printed name on a labourer's contract")).Note("the Debt Relief programme's employers: a labourer's contract names one of the worksite's era")),
+                    Text("name").Note("the printed name on a labourer's contract")).Note("the Debt Relief programme's employers: a labourer's contract names one of the worksite's era"),
+                Rows("agencyPortals", "portals", Key("number"),
+                    Int("number").Required().Note("the ring's number as the art numbers it (01 front ... 05 upper right)"),
+                    Text("name").Note("the ring's name, printed in the Portals app and the board's tooltip"),
+                    Text("role").OneOf("Departures", "Returns").Note("Departures run the Directorate's route each day; Returns is the Return Gate, the displaced's way home"),
+                    Int("fromDay").Omit().Note("the day it enters service by itself; blank: only by its repair"),
+                    Text("repair").Omit().Note("the upgrade id whose delivery puts it in service (an Orders node)")).OmitEmpty().Note("the hall's portals: one row per ring")),
             Rows("eras", "eras", Key("id", "era"),
                 Text("id").Required(),
                 Text("displayName"),
@@ -235,7 +241,11 @@ public static class ContentSheetMap
             Float("premadeChance"),
             Float("costumeErrorChance").Note("chance per 2150 citizen of a costume error (0 before the dress rule's first day)"),
             Float("slipChance").Note("chance per generated liar of a slip after small talk (the personalities spec's T9; 0 never)"),
-            Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"));
+            Float("violationChance").Note("chance per honest traveller of breaking a rolled procedure, the paper set or the debt standing (0 before their first day)"),
+            Rows("dayPortals", "portals",
+                Int("portal").Required().Ref("agencyPortals"),
+                Text("country").Ref("countries"),
+                Text("era").Ref("eras")).OmitEmpty().Note("the Directorate's route for each departure portal that day (a place of the day's world; a route a closure forbids shows CLOSED)"));
 
     private static SheetSpec Interview() =>
         Single("interview", "interview",

@@ -9,13 +9,17 @@ using System.Collections.Generic;
 /// </summary>
 public sealed class TodaysWorld
 {
-    /// <summary>Creates today's world from its places (book order), their facts and the present (null when the content has none).</summary>
-    public TodaysWorld(IReadOnlyList<NationEraProfileSO> places, FactTable facts, PresentPlace present)
+    /// <summary>Creates today's world from its places (book order), their facts, the present (null when the content has none) and the day's portals (null: none).</summary>
+    public TodaysWorld(IReadOnlyList<NationEraProfileSO> places, FactTable facts, PresentPlace present, PortalDay portals)
     {
         Places = places ?? new List<NationEraProfileSO>();
         Facts = facts ?? new FactTable();
         Present = present;
+        Portals = portals ?? PortalDay.None;
     }
+
+    /// <summary>The day's portals, fixed at the day's start (the portals spec v3 RT3): the board, the rings, the Portals app and the departures read it; case generation never does.</summary>
+    public PortalDay Portals { get; }
 
     /// <summary>Today's places (the destinations) in book order: the plan's eras and countries, never a Future place (History.IsDestination).</summary>
     public IReadOnlyList<NationEraProfileSO> Places { get; }

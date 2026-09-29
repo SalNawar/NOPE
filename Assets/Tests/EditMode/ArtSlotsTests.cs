@@ -64,8 +64,9 @@ public class ArtSlotsTests
         var slots = new HashSet<string>();
         foreach (string id in DesktopAppIds.DefaultOrder)
             Assert.IsTrue(slots.Add(ArtSlots.DesktopIcon(id)), id);
-        Assert.AreEqual(7, slots.Count);
+        Assert.AreEqual(8, slots.Count);
         Assert.AreEqual("Desktop/icon_orders", ArtSlots.DesktopIcon(DesktopAppIds.Orders));
+        Assert.AreEqual("Desktop/icon_portals", ArtSlots.DesktopIcon(DesktopAppIds.Portals));
     }
 
     [TestCase("adv_scanner", "Orders/upgrade_adv_scanner")]

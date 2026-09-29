@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 
-/// <summary>A place by its ids (nation, era).</summary>
-public readonly struct PlaceRef
+/// <summary>A place by its ids (nation, era); equal by both ids (a portal's route compares with a traveller's destination by it).</summary>
+public readonly struct PlaceRef : IEquatable<PlaceRef>
 {
     /// <summary>The place's nation id.</summary>
     public readonly string NationId;
@@ -16,6 +16,24 @@ public readonly struct PlaceRef
         NationId = nationId;
         EraId = eraId;
     }
+
+    /// <summary>True when both ids match (ordinal).</summary>
+    public bool Equals(PlaceRef other) => string.Equals(NationId, other.NationId, StringComparison.Ordinal) && string.Equals(EraId, other.EraId, StringComparison.Ordinal);
+
+    /// <summary>True for an equal PlaceRef.</summary>
+    public override bool Equals(object obj) => obj is PlaceRef other && Equals(other);
+
+    /// <summary>A hash of both ids.</summary>
+    public override int GetHashCode() => ((NationId ?? string.Empty).GetHashCode() * 397) ^ (EraId ?? string.Empty).GetHashCode();
+
+    /// <summary>The place as "nation:era" (the content checks' messages name a route by it).</summary>
+    public override string ToString() => NationId + ":" + EraId;
+
+    /// <summary>Equal by both ids.</summary>
+    public static bool operator ==(PlaceRef a, PlaceRef b) => a.Equals(b);
+
+    /// <summary>Not equal by either id.</summary>
+    public static bool operator !=(PlaceRef a, PlaceRef b) => !a.Equals(b);
 }
 
 /// <summary>

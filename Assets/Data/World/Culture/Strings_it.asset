@@ -131,3 +131,7 @@ MonoBehaviour:
     text: "\u2014 NOTIZIE DELLA LINEA TEMPORALE \u2014"
     gloss: 0
     tier: 0
+  - key: icon.portals
+    text: Portali
+    gloss: 0
+    tier: 0

@@ -17,7 +17,7 @@ MonoBehaviour:
   description: Generated from world_source.json history.rules.
   oneShot: 1
   newsLineOnFire: Desk 4 is closed for the Drive. From today its queue joins Desk
-    3.
+    3, and its portal (05, upper right) is Desk 3's, still under maintenance.
   section: 1
   conditions:
   - type: 8
