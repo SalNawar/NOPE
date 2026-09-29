@@ -7,7 +7,9 @@ using UnityEngine.UI;
 /// The office builder's Orders app (Saleh 2026-09-29: the upgrade tree moves
 /// to the PC; the portals spec v3 OR3, OR9, §6.2): the Orders window, opening
 /// maximised, with the wallet line at the top, the tree's canvas on the left
-/// (a scroll both ways over a sidebar-toned plate, a vertical scrollbar at its right, holding the inactive
+/// (a TreeScrollRect both ways over a sidebar-toned plate: it scrolls, pans
+/// and zooms; a vertical scrollbar at its right; the zoom bar, − the level +,
+/// on an opaque plate over its top-right corner; holding the inactive
 /// templates OrdersWindow clones: a band head with its glyph and name, a node
 /// card in the input-field role with its glyph, name, state line, state badge
 /// and selection frame, and a link segment dim and lit), and on the right the
@@ -24,6 +26,9 @@ public static partial class OfficeSceneUIBuilder
 
     /// <summary>The wallet line's height and the action button's height (desktop units).</summary>
     private const float OrdersHeader = 48f, OrdersActionHeight = 52f;
+
+    /// <summary>The zoom bar's height, its buttons' width and its level's width (desktop units).</summary>
+    private const float OrdersZoomHeight = 40f, OrdersZoomButton = 44f, OrdersZoomLevel = 84f;
 
     /// <summary>The Orders window (see the class summary).</summary>
     private static DesktopWindow BuildOrdersWindow(Transform windowLayer, DesktopConfigSO config)
@@ -50,7 +55,7 @@ public static partial class OfficeSceneUIBuilder
         GetOrAdd<RectMask2D>(viewport.gameObject);
         var content = (RectTransform)Panel(viewport, "Content", new Vector2(0f, 1f), new Vector2(0f, 1f), Vector2.zero, new Vector2(100f, 100f), null);
         content.pivot = new Vector2(0f, 1f);
-        ScrollRect scroll = GetOrAdd<ScrollRect>(area.gameObject);
+        TreeScrollRect scroll = GetOrAdd<TreeScrollRect>(area.gameObject);
         scroll.content = content;
         scroll.viewport = (RectTransform)viewport;
         scroll.horizontal = true;
@@ -60,6 +65,7 @@ public static partial class OfficeSceneUIBuilder
         Scrollbar bar = BuildScrollbar(area, DocScrollbar, Color.white, ThemeRoleId.InputField, new Color(0.13f, 0.34f, 0.86f, 1f), ThemeRoleId.TitleBar);
         scroll.verticalScrollbar = bar;
         scroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
+        BuildOrdersZoom(area, out Button zoomOut, out TMP_Text zoomLevel, out Button zoomIn);
 
         RectTransform band = BuildOrdersBand(content, config);
         Button node = BuildOrdersNode(content, config);
@@ -90,6 +96,10 @@ public static partial class OfficeSceneUIBuilder
         Wire(so, "config", config);
         Wire(so, "window", chrome);
         Wire(so, "walletText", wallet);
+        Wire(so, "view", scroll);
+        Wire(so, "zoomOutButton", zoomOut);
+        Wire(so, "zoomInButton", zoomIn);
+        Wire(so, "zoomText", zoomLevel);
         Wire(so, "treeContent", content);
         Wire(so, "bandTemplate", band);
         Wire(so, "nodeTemplate", node);
@@ -110,6 +120,24 @@ public static partial class OfficeSceneUIBuilder
         action.gameObject.SetActive(false);
         win.gameObject.SetActive(false);
         return chrome;
+    }
+
+    /// <summary>The tree's zoom bar over its top-right corner, inside the viewport: an opaque plate in the sidebar's role with the − button, the level ("100 %", written by OrdersWindow) and the + button.</summary>
+    private static void BuildOrdersZoom(Transform area, out Button zoomOut, out TMP_Text level, out Button zoomIn)
+    {
+        float width = 2f * OrdersZoomButton + OrdersZoomLevel + 4f * DocGap, right = 12f + DocScrollbar + DocGap;
+        Transform bar = Panel(area, "ZoomBar", Vector2.one, Vector2.one, Vector2.zero, Vector2.zero, new Color(0.85f, 0.87f, 0.9f, 1f), ThemeRoleId.Sidebar);
+        PlaceRect(bar, Vector2.one, Vector2.one, new Vector2(-(right + width), -(12f + OrdersZoomHeight)), new Vector2(-right, -12f));
+        float inner = OrdersZoomHeight - 2f * DocGap;
+        zoomOut = MakeButton(bar, "ZoomOut", null, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), null, ThemeRoleId.Button, "app.orders.zoomOut");
+        PlaceRect(zoomOut.transform, new Vector2(0f, 0.5f), new Vector2(0f, 0.5f), new Vector2(DocGap, -inner / 2f), new Vector2(DocGap + OrdersZoomButton, inner / 2f));
+        FitLabel(zoomOut, 24f);
+        level = Text(bar, "Level", "100 %", 20, TextAlignmentOptions.Center, Vector2.zero, Vector2.one, Ink, ThemeRoleId.Sidebar, style: FontStyles.Bold);
+        PlaceRect(level.transform, Vector2.zero, Vector2.one, new Vector2(2f * DocGap + OrdersZoomButton, 0f), new Vector2(-(2f * DocGap + OrdersZoomButton), 0f));
+        level.raycastTarget = false;
+        zoomIn = MakeButton(bar, "ZoomIn", null, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), null, ThemeRoleId.Button, "app.orders.zoomIn");
+        PlaceRect(zoomIn.transform, new Vector2(1f, 0.5f), new Vector2(1f, 0.5f), new Vector2(-(DocGap + OrdersZoomButton), -inner / 2f), new Vector2(-DocGap, inner / 2f));
+        FitLabel(zoomIn, 24f);
     }
 
     /// <summary>A band head's template: a plate in the sidebar's role with the band's glyph (the role's ink) and its bold name.</summary>

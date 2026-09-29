@@ -168,6 +168,18 @@ MonoBehaviour:
     text: None
     gloss: 0
     tier: 0
+  - key: app.orders.zoom
+    text: '{0} %'
+    gloss: 0
+    tier: 0
+  - key: app.orders.zoomOut
+    text: "\u2212"
+    gloss: 0
+    tier: 0
+  - key: app.orders.zoomIn
+    text: +
+    gloss: 0
+    tier: 0
   - key: app.orders.branch.desk
     text: Desk equipment
     gloss: 0
@@ -1130,7 +1142,8 @@ MonoBehaviour:
     gloss: 0
     tier: 0
   - key: keys.zoom
-    text: Zoom the panes in, out, or back to Settings' Text size
+    text: 'Zoom the panes in, out, or back to Settings'' Text size (the Orders tree:
+      in, out, or back to 100 %)'
     gloss: 0
     tier: 0
   - key: app.copyRow
