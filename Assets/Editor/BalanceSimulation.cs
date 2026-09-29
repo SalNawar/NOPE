@@ -390,15 +390,30 @@ public static class BalanceSimulation
         List<CaseRecord> authored = runs.SelectMany(r => r.Records).Where(c => c.Source != "random").ToList();
         if (authored.Count == 0)
             sb.AppendLine("none stood in these runs");
-        foreach (IGrouping<string, CaseRecord> g in authored.GroupBy(c => c.Source == "forced" ? $"day {c.Day} slot {c.Slot} forced {(c.Premade.Length > 0 ? $"premade '{c.Premade}'" : c.Kind)}" : $"day {c.Day} pooled premade '{c.Premade}'").OrderBy(g => g.Key))
-        {
-            List<CaseRecord> all = g.ToList();
-            string reasons = string.Join(", ", all.Where(c => c.Faulty).GroupBy(c => c.Reason).Select(r => $"'{r.Key}' {r.Count()}"));
-            sb.AppendLine($"{g.Key}: stood {all.Count} times, faulty {all.Count(c => c.Faulty)}{(reasons.Length > 0 ? $" ({reasons})" : "")}, accepted {all.Count(c => c.Accepted)}, the right call {all.Count(c => c.Correct)}");
-        }
+        foreach (IGrouping<string, CaseRecord> g in authored.Where(c => c.Source == "forced")
+                     .GroupBy(c => $"forced {(c.Premade.Length > 0 ? $"premade '{c.Premade}'" : c.Kind)} in slot {c.Slot}").OrderBy(g => g.Key))
+            sb.AppendLine($"{g.Key}, days {DayRange(g)}: {Judged(g.ToList())}");
+        List<CaseRecord> pooled = authored.Where(c => c.Source == "premade").ToList();
+        if (pooled.Count > 0)
+            sb.AppendLine($"premades drawn from the days' pools, days {DayRange(pooled)} ({string.Join(", ", pooled.GroupBy(c => c.Premade).OrderBy(g => g.Key).Select(g => $"{g.Key} {g.Count()}"))}): {Judged(pooled)}");
         RunResult example = runs.FirstOrDefault();
         if (example != null)
             sb.AppendLine($"dialogs offered to drawn travellers (run seed {example.Seed}; the simulation makes no dialog choice, so a dialog's effect is not in these numbers): {string.Join("; ", example.DialogsOffered)}");
+    }
+
+    /// <summary>The days the records stood on, as a range when they run on ("6-15") or a list.</summary>
+    private static string DayRange(IEnumerable<CaseRecord> records)
+    {
+        List<int> days = records.Select(c => c.Day).Distinct().OrderBy(d => d).ToList();
+        bool contiguous = days.Count > 1 && days.Last() - days.First() == days.Count - 1;
+        return contiguous ? $"{days.First()}-{days.Last()}" : string.Join(",", days);
+    }
+
+    /// <summary>How often the records stood, were faulty (and why), were accepted and were judged right.</summary>
+    private static string Judged(List<CaseRecord> all)
+    {
+        string reasons = string.Join(", ", all.Where(c => c.Faulty).GroupBy(c => c.Reason).Select(r => $"'{r.Key}' {r.Count()}"));
+        return $"stood {all.Count} times, faulty {all.Count(c => c.Faulty)}{(reasons.Length > 0 ? $" ({reasons})" : "")}, accepted {all.Count(c => c.Accepted)}, the right call {all.Count(c => c.Correct)}";
     }
 
     private static string Curve(List<RunResult> runs, Func<RunResult, List<int>> values, string prefix) =>
