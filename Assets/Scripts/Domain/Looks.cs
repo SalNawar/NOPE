@@ -430,7 +430,7 @@ public static class Looks
         // --- Draws (fixed order) ---
         TravellerGender g = gender;
         if (g == TravellerGender.Unknown)
-            g = rng.Value() < 0.5f ? TravellerGender.Male : TravellerGender.Female;
+            g = rng.Value() < UnknownGenderMaleChance ? TravellerGender.Male : TravellerGender.Female;
 
         int skin = PickSkin(weights, rng);
         bool ageKnown = BirthDates.TryAgeAt(coverBirthDate, claimYear, out int age);
@@ -524,6 +524,12 @@ public static class Looks
     /// <summary>The skin tone of a look with no weights to draw from.</summary>
     private const int DefaultSkin = 3;
 
+    /// <summary>The face of a look whose rules author no face band.</summary>
+    private const string DefaultFace = "a";
+
+    /// <summary>The chance that a traveller of unknown gender is drawn male (an even coin: structure, not a tuning knob).</summary>
+    private const float UnknownGenderMaleChance = 0.5f;
+
     /// <summary>Adds a garment slot's part when its item is drawn (its key uses the item's art nation, its source's era, and the hair colour when TakesHairColour says so).</summary>
     private static void AddGarmentPart(List<LookPart> parts, Dictionary<LookSlot, (LookItem item, LookSource source)> items,
                                        Dictionary<LookSlot, int> garmentIndex, LookSlot slot, TravellerGender g, string hairColour)
@@ -580,10 +586,10 @@ public static class Looks
         return band;
     }
 
-    /// <summary>The first face of the first band ("a" when none is authored).</summary>
+    /// <summary>The first face of the first band (DefaultFace when none is authored).</summary>
     private static string FirstFace(LookRules rules)
     {
         FaceBand first = rules.faceBands != null && rules.faceBands.Count > 0 ? rules.faceBands[0] : null;
-        return first != null && first.faces != null && first.faces.Count > 0 ? first.faces[0] : "a";
+        return first != null && first.faces != null && first.faces.Count > 0 ? first.faces[0] : DefaultFace;
     }
 }
