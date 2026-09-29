@@ -1267,8 +1267,10 @@ public static partial class ContentLibraryValidator
 
     /// <summary>
     /// Reports premades with missing era, archetype or nation references, an
-    /// id that is not a key token, a blank name, an unreadable birth date or
-    /// one outside the claimed place's birth years, a true place equal to the
+    /// id that is not a key token, a blank name, an unreadable birth date or,
+    /// for the famous, one outside the claimed place's birth years (a 2150
+    /// story character is born in the present's, CheckPremadeRows, days 7-15
+    /// V6), a true place equal to the
     /// claim, or a record note too long for the Records box.
     /// </summary>
     private static int CheckLegendaryReferences(ContentLibrarySO lib)
@@ -1314,7 +1316,7 @@ public static partial class ContentLibraryValidator
             NationEraProfileSO claim = legend.nation != null && legend.trueEra != null ? lib.GetProfile(legend.nation, legend.trueEra) : null;
             if (!BirthDates.TryParse(legend.birthDate, out _, out _, out int year))
                 Error($"has an unreadable birth date '{legend.birthDate}'");
-            else if (claim != null && (year < claim.birthYearMin || year > claim.birthYearMax))
+            else if (claim != null && Premades.IsFamous(legend.kind) && (year < claim.birthYearMin || year > claim.birthYearMax))
                 Error($"is born in {year}, outside '{claim.name}''s birth years {claim.birthYearMin}..{claim.birthYearMax}");
 
             if (legend.truePlace != null && legend.truePlace == claim)

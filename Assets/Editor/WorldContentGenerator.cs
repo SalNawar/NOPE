@@ -706,7 +706,9 @@ public static partial class WorldContentGenerator
         // --- Menus: the traveller wheel must show every choice ---
         bool anySmallTalk = src.eras.Any(e => e.smallTalk != null && e.smallTalk.Length > 0) ||
                             src.places.Any(p => p.smallTalk != null && p.smallTalk.Length > 0);
-        var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog));
+        // A premade's dialog and a forced slot's (days 7-15 B7) are offered only while that appearance stands at the desk (TimelineService.PremadeDialogIds).
+        var premadeDialogs = new HashSet<string>((src.premades ?? Array.Empty<PremadeData>()).Where(m => !string.IsNullOrEmpty(m.dialog)).Select(m => m.dialog)
+            .Concat(src.days.SelectMany(day => day.forced ?? Array.Empty<ForcedData>()).Where(f => !string.IsNullOrEmpty(f.dialog)).Select(f => f.dialog)));
         foreach (string problem in DialogChecks.MenuProblems(InterviewQuestions.MostForOneKind(built), anySmallTalk, kindForms.Select(k => FormRequests.Count(k.Askable)).DefaultIfEmpty(0).Max(), requests.Length,
                                                              dialogs.Count(d => !premadeDialogs.Contains(d.id)), dialogs.Count(d => premadeDialogs.Contains(d.id)), iv.menuCapacity))
             errors.Add(problem);
