@@ -202,6 +202,15 @@ public class SerializedEnumsTests
         Assert.AreEqual(6, System.Enum.GetValues(typeof(DialogChoiceKind)).Length, "a new member is appended here too");
     }
 
+    /// <summary>PortalRole: stored in the content library's agency block (agency.portals[].role, the portals spec v3 PO2); append only.</summary>
+    [Test]
+    public void PortalRole_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)PortalRole.Departures);
+        Assert.AreEqual(1, (int)PortalRole.Returns);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(PortalRole)).Length, "a new member is appended here too");
+    }
+
     /// <summary>The steps checklist's enums (redesign phase 21): stored in the content library's step sets (ContentLibrarySO.Pc.steps).</summary>
     [Test]
     public void StepEnums_KeepTheirSerializedInts()
