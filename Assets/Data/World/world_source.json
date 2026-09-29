@@ -10586,6 +10586,12 @@
         "tier": "Full"
       },
       {
+        "key": "keys.intoResults",
+        "text": "From the search field into its results: the arrows walk the hits, Enter opens one",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "keys.escape",
         "text": "Close a menu, this card or the search; clear the search; leave a text field; close the Start menu or cancel a drag. With none of those, leave the PC",
         "gloss": "None",
@@ -10677,7 +10683,7 @@
       },
       {
         "key": "keys.followOther",
-        "text": "Follow a row's link in the other pane",
+        "text": "Follow a row's link, or open the focused search result, in the other pane",
         "gloss": "None",
         "tier": "Full"
       },

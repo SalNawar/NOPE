@@ -13,9 +13,11 @@ using UnityEngine.UI;
 /// search field; Ctrl+1…6 show the tab at that position, Ctrl+Tab and
 /// Ctrl+Shift+Tab (and ← → on the tab strip) the next or previous one;
 /// Ctrl+B hides or shows the sidebar (the pane widens; saved per player).
-/// Tab and Shift+Tab walk the regions (AppFocus: search, the tab strip, the
-/// pane header, the pane's content, the sidebar, the dock, Accept/Deny) with
-/// the focus ring; inside a region the arrows, Home, End, PgUp and PgDn move
+/// Tab and Shift+Tab walk the regions (AppFocus: search, its results' hits,
+/// the tab strip, the pane header, the pane's content, the sidebar, the
+/// dock, Accept/Deny) with the focus ring; ↓ in the search field takes it to
+/// the first hit, ↑ on the first hit back to the field, Enter opens the
+/// focused hit (Ctrl+Enter: in the other pane); inside a region the arrows, Home, End, PgUp and PgDn move
 /// the ring over its items (the content's rows in reading order, turning the
 /// page at a page's end), Enter presses the focused item (a chip, the pin
 /// button, a pin or recent item, the dock's clear, Accept or Deny), Space
@@ -186,6 +188,9 @@ public sealed partial class InvestigationApp
         {
             case AppCommand.FocusSearch:
                 FocusSearch();
+                break;
+            case AppCommand.IntoResults:
+                SetRegion(AppRegion.Results, 0, true);
                 break;
             case AppCommand.Tab1:
             case AppCommand.Tab2:
@@ -412,8 +417,8 @@ public sealed partial class InvestigationApp
     private void MoveRegion(int direction)
     {
         AppRegion next = _ringOn
-            ? AppFocus.Next(_region, _split, _sidebarShown, _caseOn, direction)
-            : direction > 0 ? AppRegion.Search : AppFocus.Next(AppRegion.Search, _split, _sidebarShown, _caseOn, -1);
+            ? AppFocus.Next(_region, _split, _sidebarShown, _caseOn, direction, ResultsListed)
+            : direction > 0 ? AppRegion.Search : AppFocus.Next(AppRegion.Search, _split, _sidebarShown, _caseOn, -1, ResultsListed);
         SetRegion(next, -1, true);
     }
 
@@ -463,9 +468,14 @@ public sealed partial class InvestigationApp
             SetRegion(_region, _region == AppRegion.TabStrip ? -1 : 0, true);
     }
 
-    /// <summary>The ring moves by <paramref name="delta"/> items (the rows scroll into view as it goes).</summary>
+    /// <summary>The ring moves by <paramref name="delta"/> items (the rows scroll into view as it goes); ↑ on the first hit goes back to the search field.</summary>
     private void MoveItem(int delta)
     {
+        if (_region == AppRegion.Results && _item == 0 && delta < 0)
+        {
+            SetRegion(AppRegion.Search, 0, true);
+            return;
+        }
         Collect();
         _item = Mathf.Clamp(_item + delta, 0, Mathf.Max(0, _targets.Count - 1));
         ShowRing();
@@ -492,12 +502,18 @@ public sealed partial class InvestigationApp
         return false;
     }
 
-    /// <summary>Enter: presses the focused item (a chip, the pin button, a pin or recent item, the dock's clear, Accept or Deny) or follows the focused row's smart link in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>
+    /// <summary>Enter: presses the focused item (a chip, the pin button, a pin or recent item, the dock's clear, Accept or Deny), opens the focused search hit, or follows the focused row's smart link, in its own pane (<paramref name="samePane"/>) or the other one (Ctrl+Enter).</summary>
     private void PressFocused(bool samePane)
     {
         Collect();
         if (_item >= _targets.Count)
             return;
+        if (_region == AppRegion.Results)
+        {
+            if (searchBox != null)
+                searchBox.OpenRow(_targets[_item], !samePane);
+            return;
+        }
         if (IsContent(_region))
         {
             AppRow row = _targets[_item].GetComponent<AppRow>();
@@ -573,6 +589,11 @@ public sealed partial class InvestigationApp
             case AppRegion.Search:
                 Add(searchField);
                 break;
+            case AppRegion.Results:
+                if (searchBox != null)
+                    foreach (Button hit in searchBox.HitRows)
+                        Add(hit);
+                break;
             case AppRegion.TabStrip:
                 foreach (AppTab tab in _order.Tabs)
                     Add(ActivePane.TabButton(tab));
@@ -637,22 +658,25 @@ public sealed partial class InvestigationApp
             foreach (PaneZoom zoom in zooms)
                 if (zoom != null && target != zoom.transform && target.IsChildOf(zoom.transform))
                 {
-                    clip = RevealInView(target, zoom);
+                    clip = RevealInView(target, (RectTransform)zoom.transform);
                     zoom.Reveal(target);
                 }
+        if (_region == AppRegion.Results && target != null)
+            clip = RevealInView(target, null);
         focusRing.Show(target, clip);
     }
 
     /// <summary>
-    /// A row inside a view's own scroll (a scanned copy's page) is scrolled
-    /// into that scroll's viewport, which then cuts the ring; else the pane's
-    /// viewport does. Returns the viewport that cuts the ring.
+    /// A row inside a scroll of its own (a scanned copy's page, the search
+    /// results' list) is scrolled into that scroll's viewport, which then cuts
+    /// the ring; else <paramref name="outer"/> (the pane's viewport) does.
+    /// Returns the viewport that cuts the ring.
     /// </summary>
-    private static RectTransform RevealInView(RectTransform target, PaneZoom zoom)
+    private static RectTransform RevealInView(RectTransform target, RectTransform outer)
     {
         ScrollRect inner = target.GetComponentInParent<ScrollRect>();
-        if (inner == null || inner.transform == zoom.transform || inner.content == null)
-            return (RectTransform)zoom.transform;
+        if (inner == null || inner.transform == outer || inner.content == null)
+            return outer;
         RectTransform viewport = inner.viewport != null ? inner.viewport : (RectTransform)inner.transform;
         Bounds b = RectTransformUtility.CalculateRelativeRectTransformBounds(viewport, target);
         Rect view = viewport.rect;
