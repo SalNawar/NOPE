@@ -15,7 +15,7 @@ using UnityEngine;
 /// </summary>
 public sealed class DayOrchestrator : MonoBehaviour
 {
-    /// <summary>Runs scripted events (cutscenes, rule changes, etc.).</summary>
+    /// <summary>Runs scripted events (cutscenes, rule changes, etc.). Optional (Saleh, audit R3-013): no event type is authored yet, so without it the day runs and a scheduled event is skipped with a warning.</summary>
     [SerializeField] private DayEventDirector eventDirector;
 
     /// <summary>Designer-authored plan for the current day.</summary>
@@ -79,19 +79,13 @@ public sealed class DayOrchestrator : MonoBehaviour
             return;
         }
 
-        if (eventDirector == null)
-        {
-            Debug.LogError("DayOrchestrator is missing a DayEventDirector reference.");
-            return;
-        }
-
         _slots = new DaySlotSequencer(dayPlan.VisitorsCount);
 
         // Resolve random placements once. This keeps the runtime loop simple and debuggable.
-        _resolvedSchedule = dayPlan != null ? dayPlan.ResolveSchedule(seed) : null;
+        _resolvedSchedule = dayPlan.ResolveSchedule(seed);
 
-        // Initialize event context for all events.
-        if (eventDirector != null && _worldState != null)
+        // Initialize event context for all events (the director is optional).
+        if (eventDirector != null)
             eventDirector.Init(new DayEventContext(this, _worldState));
 
         Debug.Log($"[DayOrchestrator] Day {_worldState.day} starts: plan '{dayPlan.name}', a queue of {_slots.TotalSlots}, seed {seed}.");
@@ -240,13 +234,19 @@ public sealed class DayOrchestrator : MonoBehaviour
     /// </summary>
     private IEnumerator RunScheduledEvents(DayEventTrigger trigger, int slotIndex1Based)
     {
-        if (_resolvedSchedule == null || eventDirector == null)
+        if (_resolvedSchedule == null)
             yield break;
 
         var events = _resolvedSchedule.Get(trigger, slotIndex1Based);
 
         if (events == null || events.Count == 0)
             yield break;
+
+        if (eventDirector == null)
+        {
+            Debug.LogWarning($"[DayOrchestrator] {events.Count} event(s) are scheduled for trigger={trigger}, slot={slotIndex1Based}, but no DayEventDirector is wired: they are skipped. Wire one on the day system (Build Office UI).");
+            yield break;
+        }
 
         Debug.Log($"[DayOrchestrator] Running {events.Count} scheduled event(s) for trigger={trigger}, slot={slotIndex1Based}: {string.Join(", ", events.Select(e => e != null ? e.name : "<null>"))}.");
 
