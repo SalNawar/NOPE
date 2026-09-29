@@ -376,7 +376,8 @@ public sealed class CaseFactory
 
         // 4.5) Timeline identity: archetype, place, visitor identity.
         ArchetypeSO archetype = PickArchetype(blueprint, legendary, state);
-        NationEraProfileSO place = violatorPlace != null ? violatorPlace : PickPlace(legendary, claimedEra);
+        NationEraProfileSO place = violatorPlace != null ? violatorPlace
+            : PickPlace(legendary, claimedEra, _plannedLiars.ContainsKey(caseIndex1Based) || plannedRule != null ? plan : null);
         NationSO nation = legendary != null && legendary.nation != null ? legendary.nation : place != null ? place.nation : null;
         string originLabel = place != null ? PlaceLabel(place) : FallbackOriginLabel(nation, claimedEra);
         string givenName = ResolveGivenName(legendary, forcedPremade, citizen ? _citizenNames.All : place != null ? place.AllNames : null, caseIndex1Based);
@@ -1198,8 +1199,12 @@ public sealed class CaseFactory
     /// <summary>
     /// Picks the traveller's place: the premade's claimed place (if authored) >
     /// uniform pick among today's places in the claimed era > null (no place).
+    /// A planned faulty traveller's slot (a planned liar or procedure breaker,
+    /// <paramref name="openOn"/>) picks among the places open on that plan
+    /// (K5: one fault per traveller, so no closure beside the planned fault),
+    /// all of the era's when none is open; the same one draw either way.
     /// </summary>
-    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra)
+    private NationEraProfileSO PickPlace(LegendarySO legendary, EraSO claimedEra, DayPlanSO openOn)
     {
         if (legendary != null && legendary.nation != null)
         {
@@ -1213,6 +1218,8 @@ public sealed class CaseFactory
             return null;
 
         var candidates = _todays.Where(p => p.era == claimedEra).ToList();
+        if (openOn != null && candidates.Any(p => openOn.ClaimAllowed(p.nation, p.era)))
+            candidates = candidates.Where(p => openOn.ClaimAllowed(p.nation, p.era)).ToList();
         return candidates.Count == 0 ? null : candidates[_rng.Range(0, candidates.Count)];
     }
 
