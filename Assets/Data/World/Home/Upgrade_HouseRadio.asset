@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HouseRadio
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_radio
-  displayName: A Radio
+  displayName: Radio
   description: The Directorate's station, and music on public holidays.
   cost: 45
   unlockEffect: {fileID: 11400000, guid: 35d5522d8ec44ac4799fa6dace94a01d, type: 2}

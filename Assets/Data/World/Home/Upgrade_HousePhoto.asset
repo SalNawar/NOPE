@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HousePhoto
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_photo
-  displayName: A Framed Photograph
+  displayName: Framed Photo
   description: The family at the seaside in 2139, before the sea was privatised.
   cost: 25
   unlockEffect: {fileID: 11400000, guid: beff12f0f8935c145a4bc01d116fa012, type: 2}

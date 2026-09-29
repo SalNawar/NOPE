@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HouseSecondLock
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_second_lock
-  displayName: A Second Lock
+  displayName: Second Lock
   description: 'Two locks: one for thieves, one for the landlord.'
   cost: 35
   unlockEffect: {fileID: 11400000, guid: 747739f00e886144da9d3c7806d24682, type: 2}

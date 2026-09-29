@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0cc60a29baede43870d511f5fc52e4, type: 3}
   m_Name: Effect_HouseClinic
   m_EditorClassIdentifier: Assembly-CSharp::EffectSO
-  displayName: Clinic Membership
+  displayName: Clinic Pass
   channel: 0
   defaultDurationDays: -1
   ops:

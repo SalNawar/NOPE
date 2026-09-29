@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HousePlant
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_plant
-  displayName: A Plastic Plant
+  displayName: Plastic Plant
   description: It is plastic. It is still a plant.
   cost: 15
   unlockEffect: {fileID: 11400000, guid: 675cedb2db5ae5f41a57f653fc8c9bbb, type: 2}

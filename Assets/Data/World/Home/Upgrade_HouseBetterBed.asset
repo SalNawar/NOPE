@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HouseBetterBed
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_better_bed
-  displayName: A Better Bed
+  displayName: Better Bed
   description: A mattress with fewer than one spring showing.
   cost: 110
   unlockEffect: {fileID: 11400000, guid: bb269c4cf1a32604ab47774dbd05d4fe, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HouseRationsB
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_rations_b
-  displayName: Ration Card, Tier B
+  displayName: Tier B Rations
   description: Tier B paste comes in two colours. The kid prefers the green.
   cost: 40
   unlockEffect: {fileID: 11400000, guid: fd8ce618535191b429a73ced9ae06277, type: 2}

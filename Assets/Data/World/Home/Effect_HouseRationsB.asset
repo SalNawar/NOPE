@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0cc60a29baede43870d511f5fc52e4, type: 3}
   m_Name: Effect_HouseRationsB
   m_EditorClassIdentifier: Assembly-CSharp::EffectSO
-  displayName: Ration Card, Tier B
+  displayName: Tier B Rations
   channel: 0
   defaultDurationDays: -1
   ops:

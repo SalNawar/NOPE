@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Upgrade_HouseClinic
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
   id: house_clinic
-  displayName: Clinic Membership
+  displayName: Clinic Pass
   description: 'Priority queueing: you are now fourth in a line of three thousand.'
   cost: 200
   unlockEffect: {fileID: 11400000, guid: 8ce466279f2951b40ab8c51fab818512, type: 2}

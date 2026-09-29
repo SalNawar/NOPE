@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c0cc60a29baede43870d511f5fc52e4, type: 3}
   m_Name: Effect_HouseSecondLock
   m_EditorClassIdentifier: Assembly-CSharp::EffectSO
-  displayName: A Second Lock
+  displayName: Second Lock
   channel: 0
   defaultDurationDays: -1
   ops:
