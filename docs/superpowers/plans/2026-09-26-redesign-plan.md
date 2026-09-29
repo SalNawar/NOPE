@@ -798,6 +798,7 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
     | Imperfect (one mistake a day) | all 50 survive; wallet lowest 43; stability 68.41-73.80 % at the end (amber below 70) | all survive; lowest 43; 61.55-70.16 % |
     | Careless (two a day) | all fail: 33 bankrupt (days 5-10), 17 fired (days 11-14) | all fired (days 9-12); wallet down to -51 |
 
+  - **Sensitivity to the pace (the assumption to check in playtest):** with these values at 8 travellers a shift, perfect play's wallet dips to 36 and imperfect play's to -23 (every run survives), and careless play goes bankrupt on days 4-7. A clerk slower than about 8 a shift who also makes a mistake a day will go bankrupt; the knobs that ease it are `baseDailyExpense`, `expensePerFamilyMember` and `basePayPerCorrect` (Inspector, `GameConfig_Default`), and `BalanceSimulation.ShiftPace` re-reads the thresholds for another pace.
   - **Not tuned here:** the fault shares of days 2-3 stay above half, because each rule's first day guarantees a breaker in the first half of the queue (phase 9's `Directives.Guarantees`, closures through `guaranteeRuleViolators`): content, not a chance; the queue sizes (a longer queue would dilute the guarantees, but the clock already stops a careful clerk at about 10); what the Home shop costs (an upgrade is 200-300 cr against perfect play's few hundred a run, so buying one is a real choice); the forced premades repeating from day 7 (days 7-15 are being designed separately).
 
 ### Phase 24 — Internet (L)
