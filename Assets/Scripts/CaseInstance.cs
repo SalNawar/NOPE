@@ -170,6 +170,9 @@ public sealed class CaseInstance
     /// <summary>What the traveller says when asked small talk (Voices.SmallTalk: their personality's, their home's or their kind's line; null when none is authored).</summary>
     public LineText smallTalk;
 
+    /// <summary>The liar's slip, said once after their small-talk reply (the personalities spec's T9-T11: a generated liar who rolled under the day's slipChance, or a liar premade with a slip line; Voices.Slip); null for none. Never evidence.</summary>
+    public LineText slip;
+
     /// <summary>The traveller's personality (Personality.id), drawn at generation on its own stream (Seeds.ForPersonality); blank for a premade, who speaks its own lines, and for an empty cast. Never printed (the personalities spec's PS4).</summary>
     public string personality = string.Empty;
 

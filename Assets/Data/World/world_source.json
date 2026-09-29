@@ -6873,6 +6873,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.0,
+      "slipChance": 0.15,
       "violationChance": 0.0,
       "portals": [
         {
@@ -6950,6 +6951,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7034,6 +7036,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7124,6 +7127,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7227,6 +7231,7 @@
       "forced": [],
       "premadeChance": 0.0,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7349,6 +7354,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7481,6 +7487,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7611,6 +7618,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7742,6 +7750,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.05,
       "portals": [
         {
@@ -7903,6 +7912,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.06,
       "portals": [
         {
@@ -8034,6 +8044,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.06,
       "portals": [
         {
@@ -8166,6 +8177,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.06,
       "portals": [
         {
@@ -8299,6 +8311,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.08,
       "portals": [
         {
@@ -8444,6 +8457,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.08,
       "portals": [
         {
@@ -8605,6 +8619,7 @@
       ],
       "premadeChance": 0.05,
       "costumeErrorChance": 0.05,
+      "slipChance": 0.15,
       "violationChance": 0.08,
       "portals": [
         {
@@ -8937,6 +8952,181 @@
         {
           "premade": "socrates",
           "text": "Send me home to {place}. But first: what is a home?"
+        },
+        {
+          "personality": "chatty",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Debt Relief to {place}! Mum did it, Gran did it. Tradition!"
+        },
+        {
+          "personality": "curt",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "{place}. Debt Relief. Contract's signed."
+        },
+        {
+          "personality": "anxious",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Debt Relief to {place}. It's safe. The small print says so."
+        },
+        {
+          "personality": "anxious",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Home to {place}? Now? Is it still there? Say it's there."
+        },
+        {
+          "personality": "sunny",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "{place}! Two weeks of sun and history! I bought the hat!"
+        },
+        {
+          "personality": "sunny",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Home to {place}! What an adventure! Can't wait to tell everyone!"
+        },
+        {
+          "personality": "grand",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "{place}, under contract. A temporary arrangement, naturally."
+        },
+        {
+          "personality": "stickler",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Debt Relief to {place}, per clause one. I've read the rest."
+        },
+        {
+          "personality": "stickler",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Return to {place}, per the displacement regulations."
+        },
+        {
+          "personality": "glum",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist"
+          ],
+          "text": "{place}. A holiday. Apparently I'm owed one."
+        },
+        {
+          "personality": "glum",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Home to {place}. If it's still there. Things usually aren't."
+        },
+        {
+          "premade": "aspasia",
+          "text": "Home to {place}, please. There are speeches to write."
+        },
+        {
+          "premade": "banzhao",
+          "text": "Home to {place}, please. The history will not finish itself."
+        },
+        {
+          "premade": "arib",
+          "text": "Home to {place}, please. The court will want a new song."
+        },
+        {
+          "premade": "khwarizmi",
+          "text": "Home to {place}, please. I left an equation unbalanced."
+        },
+        {
+          "premade": "gutenberg",
+          "text": "Home to {place}. Quickly. I have letters to set."
+        },
+        {
+          "premade": "leonardo",
+          "text": "Home to {place}, please. I have a very large horse to finish."
+        },
+        {
+          "premade": "lanyer",
+          "text": "Home to {place}, please. I have a book to see through the press."
+        },
+        {
+          "premade": "gallerani",
+          "text": "Home to {place}, please. The court will wonder where I went."
+        },
+        {
+          "premade": "tahtawi",
+          "text": "Home to {place}, please. A school and a book are waiting."
+        },
+        {
+          "premade": "kulthum",
+          "text": "Home to {place}, please. It is almost Thursday."
+        },
+        {
+          "premade": "malaika",
+          "text": "Home to {place}, please. I left a poem without its final line."
+        },
+        {
+          "premade": "sayyab",
+          "text": "Home to {place}, please. The rain will not wait for me."
+        },
+        {
+          "premade": "elytis",
+          "text": "Home to {place}, please. The light there needs a witness."
+        },
+        {
+          "premade": "fellini",
+          "text": "Home to {place}, please. My actors are standing in a fountain."
+        },
+        {
+          "premade": "hezehui",
+          "text": "Home to {place}, please. My counters will not read themselves."
+        },
+        {
+          "premade": "toyoda",
+          "text": "Home to {place}, please. My loom has a problem only I can hear."
+        },
+        {
+          "premade": "turing",
+          "text": "Home to {place}, please. I have a machine to ask a question."
+        },
+        {
+          "premade": "meitner",
+          "text": "Home to {place}, please. My colleagues are wrong again."
+        },
+        {
+          "premade": "ada",
+          "text": "Home to {place}, please! An engine needs my notes!"
+        },
+        {
+          "premade": "pell",
+          "text": "One honeymoon to {place}, please! Just me and the brochure!"
+        },
+        {
+          "premade": "ines",
+          "text": "Debt Relief to {place}. Never done this from this side."
+        },
+        {
+          "premade": "rook",
+          "text": "{place}, under contract. The best the mills ever wrote."
+        },
+        {
+          "premade": "hollis",
+          "text": "Debt Relief to {place}. The colliery. It's still open?"
+        },
+        {
+          "premade": "auditor",
+          "text": "One Premium leisure departure to {place}, as worded."
         }
       ],
       "handOver": [
@@ -8947,6 +9137,130 @@
         {
           "personality": "stickler",
           "text": "Face up, top edge first, as the sign above you requires."
+        },
+        {
+          "personality": "chatty",
+          "text": "Here you go! Sorry about the crease, I sat on it. Twice."
+        },
+        {
+          "personality": "anxious",
+          "text": "Here. Is it the right one? It's the right one. Is it?"
+        },
+        {
+          "personality": "sunny",
+          "text": "Here you go! Isn't paperwork fun? Everything in its box!"
+        },
+        {
+          "personality": "grand",
+          "text": "Take it. Mind the fingerprints; they're mine."
+        },
+        {
+          "personality": "glum",
+          "text": "Here. It's probably wrong."
+        },
+        {
+          "premade": "senenmut",
+          "text": "Here. Handle it like a plan: by the edges, with respect."
+        },
+        {
+          "premade": "socrates",
+          "text": "Take it. But ask yourself first: what is a paper?"
+        },
+        {
+          "premade": "aspasia",
+          "text": "Here. Read it aloud, if you like. Everything sounds better aloud."
+        },
+        {
+          "premade": "banzhao",
+          "text": "Here. Every record deserves care. Even this one."
+        },
+        {
+          "premade": "arib",
+          "text": "Here. Take it gently, as you would a lute."
+        },
+        {
+          "premade": "khwarizmi",
+          "text": "Here. I checked each figure. Twice, and then by another method."
+        },
+        {
+          "premade": "gutenberg",
+          "text": "Here. Careful. Paper matters. More than people think."
+        },
+        {
+          "premade": "leonardo",
+          "text": "Here. Forgive the drawings in the margin. I cannot help it."
+        },
+        {
+          "premade": "lanyer",
+          "text": "Here. Mind the pages; they are my own verse, in a way."
+        },
+        {
+          "premade": "gallerani",
+          "text": "Here. Please don't smudge it. I was painted once; I know about smudges."
+        },
+        {
+          "premade": "tahtawi",
+          "text": "Here. I have translated worse forms than this. Much worse."
+        },
+        {
+          "premade": "kulthum",
+          "text": "Here. Take it carefully. People queue for my signature."
+        },
+        {
+          "premade": "malaika",
+          "text": "Here. Your forms rhyme too much. Everything in boxes."
+        },
+        {
+          "premade": "sayyab",
+          "text": "Here. Forgive it; it has been rained on in my thoughts."
+        },
+        {
+          "premade": "elytis",
+          "text": "Here. Hold it to the light. Everything is better in light."
+        },
+        {
+          "premade": "fellini",
+          "text": "Here. Like a script. Please do not change the ending."
+        },
+        {
+          "premade": "hezehui",
+          "text": "Here. I measured the margins. They are even."
+        },
+        {
+          "premade": "toyoda",
+          "text": "Here. Folded along the grain."
+        },
+        {
+          "premade": "turing",
+          "text": "Here. The procedure seems quite mechanical. I like that."
+        },
+        {
+          "premade": "meitner",
+          "text": "Here. Signed, as ever, with my full title."
+        },
+        {
+          "premade": "ada",
+          "text": "Here! In my own hand! I do love a form. So many little boxes!"
+        },
+        {
+          "premade": "pell",
+          "text": "Here you go! I laminated it! Well, I meant to!"
+        },
+        {
+          "premade": "ines",
+          "text": "Here. You know the drill. So did I."
+        },
+        {
+          "premade": "rook",
+          "text": "Here. Read it slowly. Or quickly. Whatever suits a busy clerk."
+        },
+        {
+          "premade": "hollis",
+          "text": "Here. Is it all there? I counted twice. Three times."
+        },
+        {
+          "premade": "auditor",
+          "text": "Here. Take your time. I always do."
         }
       ],
       "missingForms": [
@@ -8994,6 +9308,1004 @@
             "RichTourist"
           ],
           "text": "Premium units are exempt from the {document}. It's on the back of the form."
+        },
+        {
+          "personality": "chatty",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Proof of means? Look at my shoes. They're on a payment plan, but look at them."
+        },
+        {
+          "personality": "chatty",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Means? Debt Relief is paying! That's the whole point, isn't it? Isn't it?"
+        },
+        {
+          "personality": "chatty",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A manifest? I had a basket once. The goat ate it."
+        },
+        {
+          "personality": "chatty",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A waiver? Nobody waived anything. The sky just opened. Rude, honestly."
+        },
+        {
+          "personality": "chatty",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Means? I have a goat. Well, I had a goat. Back home. Long story!"
+        },
+        {
+          "personality": "chatty",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Oh, the waiver! I meant to, then my sister rang, and then..."
+        },
+        {
+          "personality": "chatty",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Proof? I had it this morning. Then I had breakfast. Different pocket?"
+        },
+        {
+          "personality": "chatty",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Intake? No, no, I'm going. Out. Away. Big difference!"
+        },
+        {
+          "personality": "chatty",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A return order? I've got a return booking! Is that one of those? It's pink."
+        },
+        {
+          "personality": "curt",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Premium. No."
+        },
+        {
+          "personality": "curt",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "I pay. Proof enough."
+        },
+        {
+          "personality": "curt",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Relief pays. Next."
+        },
+        {
+          "personality": "curt",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Manifest. Didn't pack. Sky opened."
+        },
+        {
+          "personality": "curt",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Waiver. Never signed one. Never asked."
+        },
+        {
+          "personality": "curt",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Means. Pockets. That's it."
+        },
+        {
+          "personality": "curt",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Forgot it. Next question."
+        },
+        {
+          "personality": "curt",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Left it at home. Move on."
+        },
+        {
+          "personality": "curt",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Leaving. Not arriving."
+        },
+        {
+          "personality": "curt",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Got a return booking. Same thing."
+        },
+        {
+          "personality": "anxious",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Proof of means? Do Premiums need one? Nobody told me. Did they tell you?"
+        },
+        {
+          "personality": "anxious",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Means? Debt Relief pays. They said. Did they say? I'm sure they said."
+        },
+        {
+          "personality": "anxious",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A manifest? Was I meant to pack? Nobody said the sky packs you."
+        },
+        {
+          "personality": "anxious",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A waiver? Did I sign something? I don't remember signing. Is that bad?"
+        },
+        {
+          "personality": "anxious",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Means? I have a spoon. It was in my pocket. Is a spoon enough?"
+        },
+        {
+          "personality": "anxious",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "The waiver. Oh no. Oh no. It's on the kitchen table. Isn't it."
+        },
+        {
+          "personality": "anxious",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Proof? I had it. I had it! Did I have it?"
+        },
+        {
+          "personality": "anxious",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "An intake declaration? Am I arriving? I thought I was leaving. Am I?"
+        },
+        {
+          "personality": "anxious",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A return order? I have a return booking. Is that worse? Is it better?"
+        },
+        {
+          "personality": "sunny",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "A waiver? Oh, it's Premium! Like the advert: travel without a care!"
+        },
+        {
+          "personality": "sunny",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Proof of means? I have the means to be happy! And a card!"
+        },
+        {
+          "personality": "sunny",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Means? Debt Relief pays! That's the fresh start part!"
+        },
+        {
+          "personality": "sunny",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A manifest? I came with nothing! Travelling light! Very modern!"
+        },
+        {
+          "personality": "sunny",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A waiver? I never waive anything! I say yes to everything!"
+        },
+        {
+          "personality": "sunny",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Oops! Left it at home! Home's lovely, though!"
+        },
+        {
+          "personality": "sunny",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Oh! I must have left it! Silly me! Silly, happy me!"
+        },
+        {
+          "personality": "sunny",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "An intake declaration? I'm going out, not in! Out is the fun way!"
+        },
+        {
+          "personality": "sunny",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A return order? I've got a return booking! Round trip! The best kind!"
+        },
+        {
+          "personality": "grand",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Proof of means? My means have means."
+        },
+        {
+          "personality": "grand",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Means? The Relief is paying. I allowed it."
+        },
+        {
+          "personality": "grand",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A manifest? I travel with staff. The staff did not come."
+        },
+        {
+          "personality": "grand",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A waiver? I waive nothing. I am waved through."
+        },
+        {
+          "personality": "grand",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Means? At home I have a house with two doors. Two."
+        },
+        {
+          "personality": "grand",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A waiver? My secretary handles those. I am between secretaries."
+        },
+        {
+          "personality": "grand",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Proof? I left it with my other coat."
+        },
+        {
+          "personality": "grand",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "An intake declaration? I don't arrive. I make an entrance, and this is an exit."
+        },
+        {
+          "personality": "grand",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A return order? I shall return when I choose. I have a booking for that."
+        },
+        {
+          "personality": "stickler",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Premium units are exempt from proof of means. Page four, footnote two."
+        },
+        {
+          "personality": "stickler",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "A labourer's means are the Relief's, not mine. It's in the leaflet."
+        },
+        {
+          "personality": "stickler",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "The displaced are not required to carry a manifest. I checked. Twice."
+        },
+        {
+          "personality": "stickler",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "No waiver: none was offered at the time of displacement. Note that."
+        },
+        {
+          "personality": "stickler",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Proof of means is waived for the displaced. The sign behind you says so."
+        },
+        {
+          "personality": "stickler",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "I don't have it. I know. I've already filed a complaint about myself."
+        },
+        {
+          "personality": "stickler",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Absent. An oversight. I'll be writing to myself about it."
+        },
+        {
+          "personality": "stickler",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Intake declarations are for arrivals. I am a departure. Section one."
+        },
+        {
+          "personality": "stickler",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A return order is issued on return. I have not yet returned."
+        },
+        {
+          "personality": "glum",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Premium unit. They never fail, I'm told. I'm told a lot of things."
+        },
+        {
+          "personality": "glum",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist"
+          ],
+          "text": "Proof of means? Means are mostly a feeling."
+        },
+        {
+          "personality": "glum",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Labourer"
+          ],
+          "text": "Means? That's why I'm going."
+        },
+        {
+          "personality": "glum",
+          "request": "TC-230",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "A manifest? The sky didn't give me time to pack. Nothing does."
+        },
+        {
+          "personality": "glum",
+          "request": "TC-310",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "No waiver. Nobody asked. Nobody ever asks."
+        },
+        {
+          "personality": "glum",
+          "request": "proof",
+          "variant": "Honest",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Means. I had some once. Different life."
+        },
+        {
+          "personality": "glum",
+          "request": "TC-310",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Didn't bring it. Of course I didn't."
+        },
+        {
+          "personality": "glum",
+          "request": "proof",
+          "variant": "Missing",
+          "kinds": [
+            "PoorTourist"
+          ],
+          "text": "Left it somewhere. Along with my hopes."
+        },
+        {
+          "personality": "glum",
+          "request": "TC-620",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Intake? I'm leaving. Leaving's the one thing I'm good at."
+        },
+        {
+          "personality": "glum",
+          "request": "TC-630",
+          "variant": "Honest",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "A return order? I've got a return booking. We'll see."
+        },
+        {
+          "premade": "senenmut",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I brought my plans in my head. Nothing else survived the sky."
+        },
+        {
+          "premade": "senenmut",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign nothing without an overseer present."
+        },
+        {
+          "premade": "senenmut",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? I have a royal favour. It does not fit in a pocket."
+        },
+        {
+          "premade": "socrates",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest lists what one carries. I carry only questions."
+        },
+        {
+          "premade": "socrates",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Can one waive what one never had?"
+        },
+        {
+          "premade": "socrates",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? I own nothing, and I am rich in it."
+        },
+        {
+          "premade": "aspasia",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I left with a thought half-finished. Nothing else."
+        },
+        {
+          "premade": "aspasia",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? At home a promise is spoken, not signed."
+        },
+        {
+          "premade": "aspasia",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? My means are my words. You have heard some."
+        },
+        {
+          "premade": "banzhao",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I was carried off mid-sentence. I carried nothing."
+        },
+        {
+          "premade": "banzhao",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? No one asked my consent. I have made a note of it."
+        },
+        {
+          "premade": "banzhao",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? I have a brush and a good memory. The brush is at home."
+        },
+        {
+          "premade": "arib",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? My songs are all in my head. That is where I pack them."
+        },
+        {
+          "premade": "arib",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? The sky did not stop to ask a singer's leave."
+        },
+        {
+          "premade": "arib",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A voice. It has kept me well so far."
+        },
+        {
+          "premade": "khwarizmi",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? What I carry is on no list. It is a method."
+        },
+        {
+          "premade": "khwarizmi",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? One cannot waive a quantity one never had."
+        },
+        {
+          "premade": "khwarizmi",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? Mostly ink. And a very good idea about nothing at all."
+        },
+        {
+          "premade": "gutenberg",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I had tools. Did I have tools? I had tools."
+        },
+        {
+          "premade": "gutenberg",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I signed nothing. I sign nothing. Lawyers everywhere."
+        },
+        {
+          "premade": "gutenberg",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? My means are invested. In an idea. Please don't ask which."
+        },
+        {
+          "premade": "leonardo",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I carry notebooks. They were in my other coat."
+        },
+        {
+          "premade": "leonardo",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I have sketched many machines. None for signing things."
+        },
+        {
+          "premade": "leonardo",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? My means are commissions. Most of them unfinished."
+        },
+        {
+          "premade": "lanyer",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? My only luggage was a manuscript, and the sky kept it."
+        },
+        {
+          "premade": "lanyer",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I waive nothing. I have had to fight for every line."
+        },
+        {
+          "premade": "lanyer",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? My pen, and a patroness who may remember me."
+        },
+        {
+          "premade": "gallerani",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I was holding a small animal. That was all."
+        },
+        {
+          "premade": "gallerani",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? At court we sign poems, not waivers."
+        },
+        {
+          "premade": "gallerani",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? The court provides. Usually."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I travel with notebooks. The sky took the notebooks."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I read every word before I sign. There was nothing to read."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A scholar's stipend, and a great deal of curiosity."
+        },
+        {
+          "premade": "kulthum",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? My orchestra carries everything. My orchestra is not here."
+        },
+        {
+          "premade": "kulthum",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I waive nothing. Ask any concert promoter."
+        },
+        {
+          "premade": "kulthum",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A voice. It fills halls. It will fill this form, if you like."
+        },
+        {
+          "premade": "malaika",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? My luggage was a poem. It is still in my head."
+        },
+        {
+          "premade": "malaika",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I have signed petitions. Never waivers."
+        },
+        {
+          "premade": "malaika",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A teacher's salary and a restless pen."
+        },
+        {
+          "premade": "sayyab",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I carried a poem about rain. It is still wet."
+        },
+        {
+          "premade": "sayyab",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? The rain never asks. Neither did the sky."
+        },
+        {
+          "premade": "sayyab",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A teacher's wage and a great deal of weather."
+        },
+        {
+          "premade": "elytis",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I carried a little sea salt. The sky shook it out."
+        },
+        {
+          "premade": "elytis",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign poems. Waivers do not scan."
+        },
+        {
+          "premade": "elytis",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A great deal of blue."
+        },
+        {
+          "premade": "fellini",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I travel with a crew. The crew stayed."
+        },
+        {
+          "premade": "fellini",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Actors sign those. I only shout."
+        },
+        {
+          "premade": "fellini",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A producer. Somewhere. He owes me."
+        },
+        {
+          "premade": "hezehui",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I had my notebook. The sky did not let me finish the page."
+        },
+        {
+          "premade": "hezehui",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign only after reading the method."
+        },
+        {
+          "premade": "hezehui",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A research post and a great many particles."
+        },
+        {
+          "premade": "toyoda",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? My tools are at home. My hands came with me."
+        },
+        {
+          "premade": "toyoda",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I sign patents. Never waivers."
+        },
+        {
+          "premade": "toyoda",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A workshop, and a loom that stops when the thread breaks."
+        },
+        {
+          "premade": "turing",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? I carried a pencil and a problem. Both are gone."
+        },
+        {
+          "premade": "turing",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? Logically, I never agreed to anything."
+        },
+        {
+          "premade": "turing",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A university post and a bicycle. The bicycle is at home."
+        },
+        {
+          "premade": "meitner",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? My instruments stayed in the laboratory."
+        },
+        {
+          "premade": "meitner",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? I read the small print. There was none."
+        },
+        {
+          "premade": "meitner",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? A professor's salary. Earned twice over."
+        },
+        {
+          "premade": "ada",
+          "request": "TC-230",
+          "variant": "Honest",
+          "text": "A manifest? Heavens, no. I came as I was. As one does."
+        },
+        {
+          "premade": "ada",
+          "request": "TC-310",
+          "variant": "Honest",
+          "text": "A waiver? No one asked me to sign anything. How rude of the sky."
+        },
+        {
+          "premade": "ada",
+          "request": "proof",
+          "variant": "Honest",
+          "text": "Means? My mother handles all that. She's very strict."
         }
       ],
       "spoken": [
@@ -9006,6 +10318,326 @@
           "personality": "grand",
           "request": "step_closer",
           "text": "I don't step. I proceed."
+        },
+        {
+          "personality": "chatty",
+          "request": "step_closer",
+          "text": "Closer? Ooh, like a secret. I love a secret."
+        },
+        {
+          "personality": "chatty",
+          "request": "speak_up",
+          "text": "SORRY. Is this better? My mum says I mumble. She mumbles too."
+        },
+        {
+          "personality": "curt",
+          "request": "step_closer",
+          "text": "Closer. Fine."
+        },
+        {
+          "personality": "anxious",
+          "request": "step_closer",
+          "text": "Closer? Is that the line? I don't want to cross the line."
+        },
+        {
+          "personality": "anxious",
+          "request": "speak_up",
+          "text": "Sorry! Sorry. Is this too loud now? Tell me if it's too loud."
+        },
+        {
+          "personality": "sunny",
+          "request": "step_closer",
+          "text": "Closer! Love a bit of closeness!"
+        },
+        {
+          "personality": "sunny",
+          "request": "speak_up",
+          "text": "HELLO! Is this better? I love being heard!"
+        },
+        {
+          "personality": "grand",
+          "request": "speak_up",
+          "text": "I do not raise my voice. People lean in."
+        },
+        {
+          "personality": "stickler",
+          "request": "step_closer",
+          "text": "The yellow line is here. I'm on the yellow line. Exactly on it."
+        },
+        {
+          "personality": "stickler",
+          "request": "speak_up",
+          "text": "Speaking at the regulation volume. As posted."
+        },
+        {
+          "personality": "glum",
+          "request": "step_closer",
+          "text": "Closer. Right. Here's closer."
+        },
+        {
+          "personality": "glum",
+          "request": "speak_up",
+          "text": "Sorry. I'll try to be louder. It won't help."
+        },
+        {
+          "premade": "senenmut",
+          "request": "step_closer",
+          "text": "Closer. As a builder approaches a good stone."
+        },
+        {
+          "premade": "senenmut",
+          "request": "speak_up",
+          "text": "I have shouted across quarries. Forgive me for whispering."
+        },
+        {
+          "premade": "socrates",
+          "request": "step_closer",
+          "text": "Closer? Then tell me: is the truth nearer here?"
+        },
+        {
+          "premade": "socrates",
+          "request": "speak_up",
+          "text": "I speak softly so that you must listen. It is a method."
+        },
+        {
+          "premade": "aspasia",
+          "request": "step_closer",
+          "text": "Closer. Good. A conversation needs no shouting."
+        },
+        {
+          "premade": "aspasia",
+          "request": "speak_up",
+          "text": "Better? I have taught orators. I can be heard across a market."
+        },
+        {
+          "premade": "banzhao",
+          "request": "step_closer",
+          "text": "Closer. Yes. A scholar should not be afraid of a desk."
+        },
+        {
+          "premade": "banzhao",
+          "request": "speak_up",
+          "text": "Forgive me. At court, the quiet voice is the one they remember."
+        },
+        {
+          "premade": "arib",
+          "request": "step_closer",
+          "text": "Closer? Singers always find the best spot in the room."
+        },
+        {
+          "premade": "arib",
+          "request": "speak_up",
+          "text": "Louder? I have filled palace halls. This is my speaking voice."
+        },
+        {
+          "premade": "khwarizmi",
+          "request": "step_closer",
+          "text": "Closer. The distance was not a problem. It was only a question."
+        },
+        {
+          "premade": "khwarizmi",
+          "request": "speak_up",
+          "text": "Better? I usually speak to students, and they sleep."
+        },
+        {
+          "premade": "gutenberg",
+          "request": "step_closer",
+          "text": "Closer? Is something wrong? Nothing is wrong. Is it?"
+        },
+        {
+          "premade": "gutenberg",
+          "request": "speak_up",
+          "text": "Louder? Sorry. I am used to talking to metal."
+        },
+        {
+          "premade": "leonardo",
+          "request": "step_closer",
+          "text": "Closer. Ah, now the light falls better. Hold still."
+        },
+        {
+          "premade": "leonardo",
+          "request": "speak_up",
+          "text": "Forgive me. I was sketching your ceiling in my head."
+        },
+        {
+          "premade": "lanyer",
+          "request": "step_closer",
+          "text": "Closer. Good. Poets prefer an audience within reach."
+        },
+        {
+          "premade": "lanyer",
+          "request": "speak_up",
+          "text": "Better? I am used to reading to ladies in quiet rooms."
+        },
+        {
+          "premade": "gallerani",
+          "request": "step_closer",
+          "text": "Closer? I am used to holding still for painters. This is easy."
+        },
+        {
+          "premade": "gallerani",
+          "request": "speak_up",
+          "text": "Better? At court one learns to speak just loud enough."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "step_closer",
+          "text": "Closer. A translator always leans in."
+        },
+        {
+          "premade": "tahtawi",
+          "request": "speak_up",
+          "text": "Forgive me. I was translating your sign in my head."
+        },
+        {
+          "premade": "kulthum",
+          "request": "step_closer",
+          "text": "Closer? The front row. Very well."
+        },
+        {
+          "premade": "kulthum",
+          "request": "speak_up",
+          "text": "Louder? Habibi, I have not yet begun."
+        },
+        {
+          "premade": "malaika",
+          "request": "step_closer",
+          "text": "Closer. The old metres kept us apart too. I broke them."
+        },
+        {
+          "premade": "malaika",
+          "request": "speak_up",
+          "text": "Better? A poem should be heard, not shouted."
+        },
+        {
+          "premade": "sayyab",
+          "request": "step_closer",
+          "text": "Closer. Yes. Like rain, a little at a time."
+        },
+        {
+          "premade": "sayyab",
+          "request": "speak_up",
+          "text": "Better? I speak softly, like rain on palms."
+        },
+        {
+          "premade": "elytis",
+          "request": "step_closer",
+          "text": "Closer. Out of the shadow, then."
+        },
+        {
+          "premade": "elytis",
+          "request": "speak_up",
+          "text": "Better? I usually speak to the sea, and it hears everything."
+        },
+        {
+          "premade": "fellini",
+          "request": "step_closer",
+          "text": "Closer. Yes! The close-up. Magnificent."
+        },
+        {
+          "premade": "fellini",
+          "request": "speak_up",
+          "text": "Louder? On set I have a megaphone. I left it on set."
+        },
+        {
+          "premade": "hezehui",
+          "request": "step_closer",
+          "text": "Closer. Carefully. Distance matters in my work."
+        },
+        {
+          "premade": "hezehui",
+          "request": "speak_up",
+          "text": "Louder? In the laboratory we whisper around the equipment."
+        },
+        {
+          "premade": "toyoda",
+          "request": "step_closer",
+          "text": "Closer. Like a carpenter checking a joint."
+        },
+        {
+          "premade": "toyoda",
+          "request": "speak_up",
+          "text": "Forgive me. The looms at home are louder than I am."
+        },
+        {
+          "premade": "turing",
+          "request": "step_closer",
+          "text": "Closer. Interesting. Do you ask everyone that?"
+        },
+        {
+          "premade": "turing",
+          "request": "speak_up",
+          "text": "Sorry. I was thinking. It happens a lot."
+        },
+        {
+          "premade": "meitner",
+          "request": "step_closer",
+          "text": "Closer. I am used to being overlooked. Not today."
+        },
+        {
+          "premade": "meitner",
+          "request": "speak_up",
+          "text": "Louder? I will be heard. I always am, eventually."
+        },
+        {
+          "premade": "ada",
+          "request": "step_closer",
+          "text": "Closer? Delightful! Like a demonstration!"
+        },
+        {
+          "premade": "ada",
+          "request": "speak_up",
+          "text": "Louder? Of course! Drawing rooms, you know. Very echoey."
+        },
+        {
+          "premade": "pell",
+          "request": "step_closer",
+          "text": "Closer! Love it! Like a photo booth!"
+        },
+        {
+          "premade": "pell",
+          "request": "speak_up",
+          "text": "HELLO! Sorry! Honeymoon nerves!"
+        },
+        {
+          "premade": "ines",
+          "request": "step_closer",
+          "text": "Closer. I know where the yellow line is, believe me."
+        },
+        {
+          "premade": "ines",
+          "request": "speak_up",
+          "text": "Sorry. I'm used to being the one who says speak up."
+        },
+        {
+          "premade": "rook",
+          "request": "step_closer",
+          "text": "Closer? Happy to. Let's be friends."
+        },
+        {
+          "premade": "rook",
+          "request": "speak_up",
+          "text": "Better? I can be very persuasive at any volume."
+        },
+        {
+          "premade": "hollis",
+          "request": "step_closer",
+          "text": "Closer? Is something wrong? Something's wrong."
+        },
+        {
+          "premade": "hollis",
+          "request": "speak_up",
+          "text": "Sorry. Sorry. Is this better? I don't want to be trouble."
+        },
+        {
+          "premade": "auditor",
+          "request": "step_closer",
+          "text": "Closer. Exactly to the line. Observe."
+        },
+        {
+          "premade": "auditor",
+          "request": "speak_up",
+          "text": "Speaking at the posted volume. You'll find it's regulation."
         }
       ],
       "answers": [
@@ -9053,6 +10685,977 @@
           "premade": "senenmut",
           "question": "q_ruler",
           "text": "{value}. May she live forever, and read my plans."
+        },
+        {
+          "personality": "chatty",
+          "question": "q_currency",
+          "text": "{value}. Don't ask how much. Well, you can ask."
+        },
+        {
+          "personality": "chatty",
+          "question": "q_language",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "{value}! I learned it off a tape. Mostly the menu bits."
+        },
+        {
+          "personality": "chatty",
+          "question": "q_language",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "{value}, of course! I talk it all day. Ask anyone. Ask the goat."
+        },
+        {
+          "personality": "chatty",
+          "question": "q_device",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "{value}. Every day. I'd show you, but it's back home with the goat."
+        },
+        {
+          "personality": "chatty",
+          "question": "q_capital",
+          "text": "{value}! Or near it. Near-ish. Is near-ish allowed?"
+        },
+        {
+          "personality": "chatty",
+          "question": "q_ruler",
+          "text": "{value}. Lovely person, I hear. I hear a lot of things."
+        },
+        {
+          "personality": "chatty",
+          "question": "q_born",
+          "text": "{value}. Write that down, people always forget my birthday."
+        },
+        {
+          "personality": "curt",
+          "question": "q_currency",
+          "text": "{value}. Next."
+        },
+        {
+          "personality": "curt",
+          "question": "q_language",
+          "text": "{value}. Fluent enough."
+        },
+        {
+          "personality": "curt",
+          "question": "q_device",
+          "text": "{value}. Standard."
+        },
+        {
+          "personality": "curt",
+          "question": "q_capital",
+          "text": "{value}. Where else."
+        },
+        {
+          "personality": "curt",
+          "question": "q_ruler",
+          "text": "{value}. Allegedly."
+        },
+        {
+          "personality": "curt",
+          "question": "q_born",
+          "text": "{value}. It's on the visa."
+        },
+        {
+          "personality": "anxious",
+          "question": "q_born",
+          "text": "{value}. At least, that's what my mother told me."
+        },
+        {
+          "personality": "sunny",
+          "question": "q_currency",
+          "text": "{value}! Isn't money pretty?"
+        },
+        {
+          "personality": "sunny",
+          "question": "q_language",
+          "text": "{value}! What a lovely thing to say out loud!"
+        },
+        {
+          "personality": "sunny",
+          "question": "q_device",
+          "text": "{value}! It does everything! Nearly!"
+        },
+        {
+          "personality": "sunny",
+          "question": "q_capital",
+          "text": "{value}! Gorgeous this time of year!"
+        },
+        {
+          "personality": "sunny",
+          "question": "q_ruler",
+          "text": "{value}! I'm sure they're doing their best!"
+        },
+        {
+          "personality": "sunny",
+          "question": "q_born",
+          "text": "{value}! A happy day, I'm told!"
+        },
+        {
+          "personality": "grand",
+          "question": "q_currency",
+          "text": "{value}. I have people who carry it."
+        },
+        {
+          "personality": "grand",
+          "question": "q_language",
+          "text": "{value}. I speak it beautifully."
+        },
+        {
+          "personality": "grand",
+          "question": "q_device",
+          "text": "{value}. The finest available."
+        },
+        {
+          "personality": "grand",
+          "question": "q_capital",
+          "text": "{value}. I know the best people there."
+        },
+        {
+          "personality": "grand",
+          "question": "q_ruler",
+          "text": "{value}. We've met. Well, I've waved."
+        },
+        {
+          "personality": "grand",
+          "question": "q_born",
+          "text": "{value}. A holiday, in some circles."
+        },
+        {
+          "personality": "stickler",
+          "question": "q_currency",
+          "text": "{value}. Exchanged at the posted rate."
+        },
+        {
+          "personality": "stickler",
+          "question": "q_language",
+          "text": "{value}. Correctly pronounced."
+        },
+        {
+          "personality": "stickler",
+          "question": "q_device",
+          "text": "{value}. On the approved list, item by item."
+        },
+        {
+          "personality": "stickler",
+          "question": "q_capital",
+          "text": "{value}. Spelled as on the form."
+        },
+        {
+          "personality": "stickler",
+          "question": "q_ruler",
+          "text": "{value}. As of the last bulletin."
+        },
+        {
+          "personality": "stickler",
+          "question": "q_born",
+          "text": "{value}. As recorded."
+        },
+        {
+          "personality": "glum",
+          "question": "q_language",
+          "text": "{value}. For all the good it does."
+        },
+        {
+          "personality": "glum",
+          "question": "q_device",
+          "text": "{value}. It works. Mostly. On good days."
+        },
+        {
+          "personality": "glum",
+          "question": "q_capital",
+          "text": "{value}. Where everything happens. To other people."
+        },
+        {
+          "personality": "glum",
+          "question": "q_ruler",
+          "text": "{value}. Not that anyone asked me."
+        },
+        {
+          "personality": "glum",
+          "question": "q_born",
+          "text": "{value}. It seemed like a good idea at the time."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_currency",
+          "text": "{value}. Weighed honestly, as the gods watch."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_language",
+          "text": "{value}, as the scribes write it."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_device",
+          "text": "{value}. No temple rises without one."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_capital",
+          "text": "{value}. Where the great works are."
+        },
+        {
+          "premade": "senenmut",
+          "question": "q_born",
+          "text": "{value}. The scribes wrote it down, so it is so."
+        },
+        {
+          "premade": "socrates",
+          "question": "q_currency",
+          "text": "{value}. But what is money, if not a promise?"
+        },
+        {
+          "premade": "socrates",
+          "question": "q_language",
+          "text": "{value}. Though I prefer questions to words."
+        },
+        {
+          "premade": "socrates",
+          "question": "q_device",
+          "text": "{value}. A tool. Do tools know they are tools?"
+        },
+        {
+          "premade": "socrates",
+          "question": "q_capital",
+          "text": "{value}. A city is its people, is it not?"
+        },
+        {
+          "premade": "socrates",
+          "question": "q_ruler",
+          "text": "{value}. And who rules the ruler?"
+        },
+        {
+          "premade": "socrates",
+          "question": "q_born",
+          "text": "{value}. Or so I have been told. Who told me?"
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_currency",
+          "text": "{value}. Spent mostly on scrolls."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_language",
+          "text": "{value}, spoken well, as it should be."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_device",
+          "text": "{value}. Every household has one."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_capital",
+          "text": "{value}. The finest city, and it knows it."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_ruler",
+          "text": "{value}. I may have helped with some of the speeches."
+        },
+        {
+          "premade": "aspasia",
+          "question": "q_born",
+          "text": "{value}. Write it neatly."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_currency",
+          "text": "{value}. Counted twice, as my brother taught me."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_language",
+          "text": "{value}. I write it every day."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_device",
+          "text": "{value}. A scholar's companion."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_capital",
+          "text": "{value}, where the archives are."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_ruler",
+          "text": "{value}. May the reign be long and well recorded."
+        },
+        {
+          "premade": "banzhao",
+          "question": "q_born",
+          "text": "{value}. It is in the family records."
+        },
+        {
+          "premade": "arib",
+          "question": "q_currency",
+          "text": "{value}. A song pays better, some nights."
+        },
+        {
+          "premade": "arib",
+          "question": "q_language",
+          "text": "{value}. Poetry sounds best in it."
+        },
+        {
+          "premade": "arib",
+          "question": "q_device",
+          "text": "{value}. Almost as useful as a lute."
+        },
+        {
+          "premade": "arib",
+          "question": "q_capital",
+          "text": "{value}. The city of songs."
+        },
+        {
+          "premade": "arib",
+          "question": "q_ruler",
+          "text": "{value}. The court likes my singing. Most days."
+        },
+        {
+          "premade": "arib",
+          "question": "q_born",
+          "text": "{value}. Ask any poet; I have told them all."
+        },
+        {
+          "premade": "khwarizmi",
+          "question": "q_currency",
+          "text": "{value}. I can calculate your change, if you like."
+        },
+        {
+          "premade": "khwarizmi",
+          "question": "q_language",
+          "text": "{value}. The best tongue for numbers."
+        },
+        {
+          "premade": "khwarizmi",
+          "question": "q_device",
+          "text": "{value}. A useful instrument, carefully used."
+        },
+        {
+          "premade": "khwarizmi",
+          "question": "q_capital",
+          "text": "{value}. The house of learning is there."
+        },
+        {
+          "premade": "khwarizmi",
+          "question": "q_ruler",
+          "text": "{value}. A patron of learning, thank heaven."
+        },
+        {
+          "premade": "khwarizmi",
+          "question": "q_born",
+          "text": "{value}. By my own reckoning, which is reliable."
+        },
+        {
+          "premade": "gutenberg",
+          "question": "q_currency",
+          "text": "{value}. Not enough. Never enough. The investors..."
+        },
+        {
+          "premade": "gutenberg",
+          "question": "q_language",
+          "text": "{value}. Every letter of it."
+        },
+        {
+          "premade": "gutenberg",
+          "question": "q_device",
+          "text": "{value}. Please don't copy it. People copy things."
+        },
+        {
+          "premade": "gutenberg",
+          "question": "q_capital",
+          "text": "{value}. Or near it. Near enough, I hope."
+        },
+        {
+          "premade": "gutenberg",
+          "question": "q_ruler",
+          "text": "{value}. I hope they like books. They will like books."
+        },
+        {
+          "premade": "gutenberg",
+          "question": "q_born",
+          "text": "{value}. Please don't write it down twice."
+        },
+        {
+          "premade": "leonardo",
+          "question": "q_currency",
+          "text": "{value}. My patrons pay late, but they pay."
+        },
+        {
+          "premade": "leonardo",
+          "question": "q_language",
+          "text": "{value}. I write it backwards, but I speak it forwards."
+        },
+        {
+          "premade": "leonardo",
+          "question": "q_device",
+          "text": "{value}. I would improve it, given a week."
+        },
+        {
+          "premade": "leonardo",
+          "question": "q_capital",
+          "text": "{value}. Full of commissions, most unfinished."
+        },
+        {
+          "premade": "leonardo",
+          "question": "q_ruler",
+          "text": "{value}. A generous patron, when reminded."
+        },
+        {
+          "premade": "leonardo",
+          "question": "q_born",
+          "text": "{value}. My notebooks say so, mirrored."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_currency",
+          "text": "{value}. Poetry pays in praise, mostly."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_language",
+          "text": "{value}, and some of it in verse."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_device",
+          "text": "{value}. Useful, if not beautiful."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_capital",
+          "text": "{value}, where the printers are."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_ruler",
+          "text": "{value}. Long may the reign last."
+        },
+        {
+          "premade": "lanyer",
+          "question": "q_born",
+          "text": "{value}. A modest date for a modest poet."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_currency",
+          "text": "{value}. The court pays for most things."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_language",
+          "text": "{value}. And a little verse on the side."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_device",
+          "text": "{value}. Every lady of the court has one."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_capital",
+          "text": "{value}. Where the court is."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_ruler",
+          "text": "{value}. A great patron. Of mine, especially."
+        },
+        {
+          "premade": "gallerani",
+          "question": "q_born",
+          "text": "{value}. Write it kindly."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_currency",
+          "text": "{value}. I note every price. For the book."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_language",
+          "text": "{value}. And several others, professionally."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_device",
+          "text": "{value}. I shall describe it for my readers."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_capital",
+          "text": "{value}. My school is there."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_ruler",
+          "text": "{value}. A reformer, and my employer."
+        },
+        {
+          "premade": "tahtawi",
+          "question": "q_born",
+          "text": "{value}. Please spell the month carefully."
+        },
+        {
+          "premade": "kulthum",
+          "question": "q_currency",
+          "text": "{value}. Concerts are not cheap to give."
+        },
+        {
+          "premade": "kulthum",
+          "question": "q_language",
+          "text": "{value}. Sung slowly, it takes hours."
+        },
+        {
+          "premade": "kulthum",
+          "question": "q_device",
+          "text": "{value}. I prefer an orchestra."
+        },
+        {
+          "premade": "kulthum",
+          "question": "q_capital",
+          "text": "{value}. The whole city listens on Thursday."
+        },
+        {
+          "premade": "kulthum",
+          "question": "q_ruler",
+          "text": "{value}. Who also listens on Thursday."
+        },
+        {
+          "premade": "kulthum",
+          "question": "q_born",
+          "text": "{value}. Write it large."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_currency",
+          "text": "{value}. Poets are rarely asked about money."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_language",
+          "text": "{value}, set free of its old metres."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_device",
+          "text": "{value}. A good tool; it does not rhyme."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_capital",
+          "text": "{value}. A city of rivers and readers."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_ruler",
+          "text": "{value}. Not a subject for my poems."
+        },
+        {
+          "premade": "malaika",
+          "question": "q_born",
+          "text": "{value}. In free verse it would be longer."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_currency",
+          "text": "{value}. Never enough for a poet."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_language",
+          "text": "{value}. The language of rain."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_device",
+          "text": "{value}. It does not know the rain."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_capital",
+          "text": "{value}. My heart is in the south, but yes."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_ruler",
+          "text": "{value}. Poets watch rulers. Rulers rarely watch poets."
+        },
+        {
+          "premade": "sayyab",
+          "question": "q_born",
+          "text": "{value}. In a village of palms."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_currency",
+          "text": "{value}. Enough for bread and a view."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_language",
+          "text": "{value}. Every word of it is sunlight."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_device",
+          "text": "{value}. It works best by a window."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_capital",
+          "text": "{value}. Whitewashed and shining."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_ruler",
+          "text": "{value}. I leave politics to the waves."
+        },
+        {
+          "premade": "elytis",
+          "question": "q_born",
+          "text": "{value}. On an island, facing east."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_currency",
+          "text": "{value}. Producers never have enough."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_language",
+          "text": "{value}. But really I speak in pictures."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_device",
+          "text": "{value}. I would film it, if it held still."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_capital",
+          "text": "{value}. A film set with bad parking."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_ruler",
+          "text": "{value}. Not in my picture, I'm afraid."
+        },
+        {
+          "premade": "fellini",
+          "question": "q_born",
+          "text": "{value}. A dream, then a birth. The usual order."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_currency",
+          "text": "{value}. Laboratories are expensive."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_language",
+          "text": "{value}. And the language of numbers."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_device",
+          "text": "{value}. Calibrated."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_capital",
+          "text": "{value}. My laboratory is there."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_ruler",
+          "text": "{value}. I keep to my experiments."
+        },
+        {
+          "premade": "hezehui",
+          "question": "q_born",
+          "text": "{value}. Precisely."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_currency",
+          "text": "{value}. Every coin goes into the next loom."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_language",
+          "text": "{value}. Plainly spoken, like good wood."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_device",
+          "text": "{value}. I would add a small wheel here."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_capital",
+          "text": "{value}. Far from my workshop."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_ruler",
+          "text": "{value}. May the country keep weaving."
+        },
+        {
+          "premade": "toyoda",
+          "question": "q_born",
+          "text": "{value}. A carpenter's son."
+        },
+        {
+          "premade": "turing",
+          "question": "q_currency",
+          "text": "{value}. I'd rather count something interesting."
+        },
+        {
+          "premade": "turing",
+          "question": "q_language",
+          "text": "{value}. Though I prefer logic."
+        },
+        {
+          "premade": "turing",
+          "question": "q_device",
+          "text": "{value}. Could it think, do you suppose?"
+        },
+        {
+          "premade": "turing",
+          "question": "q_capital",
+          "text": "{value}. I run there, sometimes. Long distances."
+        },
+        {
+          "premade": "turing",
+          "question": "q_ruler",
+          "text": "{value}, I believe."
+        },
+        {
+          "premade": "turing",
+          "question": "q_born",
+          "text": "{value}. A computable date."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_currency",
+          "text": "{value}. Research is never paid well."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_language",
+          "text": "{value}. Precisely spoken."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_device",
+          "text": "{value}. I have taken one apart."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_capital",
+          "text": "{value}. My institute is there."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_ruler",
+          "text": "{value}. I keep to physics."
+        },
+        {
+          "premade": "meitner",
+          "question": "q_born",
+          "text": "{value}. Correct to the day."
+        },
+        {
+          "premade": "ada",
+          "question": "q_currency",
+          "text": "{value}! Terribly pretty, isn't it?"
+        },
+        {
+          "premade": "ada",
+          "question": "q_language",
+          "text": "{value}, naturally! I speak it all day."
+        },
+        {
+          "premade": "ada",
+          "question": "q_device",
+          "text": "{value}. Every day! Can't do without it!"
+        },
+        {
+          "premade": "ada",
+          "question": "q_capital",
+          "text": "{value}! Such a lovely city!"
+        },
+        {
+          "premade": "ada",
+          "question": "q_ruler",
+          "text": "{value}! Long may they reign!"
+        },
+        {
+          "premade": "ada",
+          "question": "q_born",
+          "text": "{value}! A winter baby. Very mathematical."
+        },
+        {
+          "premade": "pell",
+          "question": "q_currency",
+          "text": "{value}! I practised counting it on the maglev!"
+        },
+        {
+          "premade": "pell",
+          "question": "q_language",
+          "text": "{value}! I know how to say table for one!"
+        },
+        {
+          "premade": "pell",
+          "question": "q_device",
+          "text": "{value}! Brand new! Well, new to me!"
+        },
+        {
+          "premade": "pell",
+          "question": "q_capital",
+          "text": "{value}! The brochure has a map!"
+        },
+        {
+          "premade": "pell",
+          "question": "q_ruler",
+          "text": "{value}! I've heard they're lovely!"
+        },
+        {
+          "premade": "pell",
+          "question": "q_born",
+          "text": "{value}! A summer baby!"
+        },
+        {
+          "premade": "ines",
+          "question": "q_currency",
+          "text": "{value}. I've converted it for others often enough."
+        },
+        {
+          "premade": "ines",
+          "question": "q_language",
+          "text": "{value}. I've heard it asked often enough."
+        },
+        {
+          "premade": "ines",
+          "question": "q_device",
+          "text": "{value}. The approved kit. I approved plenty."
+        },
+        {
+          "premade": "ines",
+          "question": "q_capital",
+          "text": "{value}. Same as on every form I ever read."
+        },
+        {
+          "premade": "ines",
+          "question": "q_ruler",
+          "text": "{value}. Not that it matters from the mill."
+        },
+        {
+          "premade": "ines",
+          "question": "q_born",
+          "text": "{value}. Check it twice. We always did at Desk 4."
+        },
+        {
+          "premade": "rook",
+          "question": "q_currency",
+          "text": "{value}. Plenty of it. More where that came from."
+        },
+        {
+          "premade": "rook",
+          "question": "q_language",
+          "text": "{value}. I pick things up fast."
+        },
+        {
+          "premade": "rook",
+          "question": "q_device",
+          "text": "{value}. Top of the line."
+        },
+        {
+          "premade": "rook",
+          "question": "q_capital",
+          "text": "{value}. I'll be running the place within a year."
+        },
+        {
+          "premade": "rook",
+          "question": "q_ruler",
+          "text": "{value}. We'll get on."
+        },
+        {
+          "premade": "rook",
+          "question": "q_born",
+          "text": "{value}. A lucky day, all round."
+        },
+        {
+          "premade": "hollis",
+          "question": "q_currency",
+          "text": "{value}. Is that right? It has to be right."
+        },
+        {
+          "premade": "hollis",
+          "question": "q_language",
+          "text": "{value}. I've been practising. Every night."
+        },
+        {
+          "premade": "hollis",
+          "question": "q_device",
+          "text": "{value}. The approved one. I checked."
+        },
+        {
+          "premade": "hollis",
+          "question": "q_capital",
+          "text": "{value}. That's where the office is. They said."
+        },
+        {
+          "premade": "hollis",
+          "question": "q_ruler",
+          "text": "{value}. I think. Is it?"
+        },
+        {
+          "premade": "hollis",
+          "question": "q_born",
+          "text": "{value}. My father kept the record."
+        },
+        {
+          "premade": "auditor",
+          "question": "q_currency",
+          "text": "{value}. Exchanged at the posted rate, receipt kept."
+        },
+        {
+          "premade": "auditor",
+          "question": "q_language",
+          "text": "{value}. Adequately."
+        },
+        {
+          "premade": "auditor",
+          "question": "q_device",
+          "text": "{value}. Every item declared."
+        },
+        {
+          "premade": "auditor",
+          "question": "q_capital",
+          "text": "{value}. As the brochure spells it."
+        },
+        {
+          "premade": "auditor",
+          "question": "q_ruler",
+          "text": "{value}. As of the last bulletin."
+        },
+        {
+          "premade": "auditor",
+          "question": "q_born",
+          "text": "{value}. As it says."
         }
       ],
       "smallTalk": [
@@ -9093,9 +11696,1017 @@
         {
           "premade": "gutenberg",
           "text": "My business in Strasbourg is private. It involves letters. Movable ones."
+        },
+        {
+          "personality": "chatty",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "My neighbour went to the past last year. Came back with a tan and a curse."
+        },
+        {
+          "personality": "chatty",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "The man next to me in the intake hall snores in three tongues."
+        },
+        {
+          "personality": "curt",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Queue's billed by the minute. This is costing us both."
+        },
+        {
+          "personality": "curt",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "Four days in the intake hall. Food's grey. Chairs are grey."
+        },
+        {
+          "personality": "anxious",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "The intake hall has no windows. Is the sky still up there? Is it staying up?"
+        },
+        {
+          "personality": "sunny",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "The intake hall has free soup! Grey soup, but free!"
+        },
+        {
+          "personality": "grand",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "The maglev had no first class. I stood. Like a statue. A noble one."
+        },
+        {
+          "personality": "grand",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "In the intake hall they gave me a number. I am not a number. I am a name."
+        },
+        {
+          "personality": "stickler",
+          "kinds": [
+            "RichTourist",
+            "PoorTourist",
+            "Labourer"
+          ],
+          "text": "Your queue sign has a typo. I've reported it. I report all the typos."
+        },
+        {
+          "personality": "glum",
+          "kinds": [
+            "Displaced"
+          ],
+          "text": "The intake hall's got a clock. It's wrong. It's the only thing I trust."
+        },
+        {
+          "premade": "senenmut",
+          "text": "Your hall has fine columns. Too thin. But fine."
+        },
+        {
+          "premade": "socrates",
+          "text": "Your queue is a fine place to think. Everyone here is waiting for an answer."
+        },
+        {
+          "premade": "aspasia",
+          "text": "In my city we argue in the open air. Here you argue with forms."
+        },
+        {
+          "premade": "banzhao",
+          "text": "Your records live in glowing boxes. Who copies them when the light goes out?"
+        },
+        {
+          "premade": "arib",
+          "text": "Your hall hums one note all day. It needs a chorus."
+        },
+        {
+          "premade": "khwarizmi",
+          "text": "Your queue grows by a constant each minute. I could write the rule for it."
+        },
+        {
+          "premade": "leonardo",
+          "text": "Your stamp moves on a lever. Have you thought of adding wings?"
+        },
+        {
+          "premade": "lanyer",
+          "text": "Your hall is full of women working. I shall write about that."
+        },
+        {
+          "premade": "gallerani",
+          "text": "I once held a small animal still for four hours. Your queue is nothing."
+        },
+        {
+          "premade": "tahtawi",
+          "text": "In a foreign city I write down everything. Your queue will be chapter four."
+        },
+        {
+          "premade": "kulthum",
+          "text": "Your hall is quiet. On a Thursday at home, the streets would be quieter."
+        },
+        {
+          "premade": "malaika",
+          "text": "Your queue has a rhythm. Irregular. I approve."
+        },
+        {
+          "premade": "sayyab",
+          "text": "Does it rain here? No? Then what do you listen to?"
+        },
+        {
+          "premade": "elytis",
+          "text": "Your hall has no windows. How do you know it is day?"
+        },
+        {
+          "premade": "fellini",
+          "text": "This queue is a wonderful scene. Nobody knows why they are in it."
+        },
+        {
+          "premade": "hezehui",
+          "text": "Your scanner hums at a steady pitch. I would like to open it."
+        },
+        {
+          "premade": "toyoda",
+          "text": "Your stamp would work better with a stop on it. May I?"
+        },
+        {
+          "premade": "turing",
+          "text": "Are you following a list of instructions? A machine could do that. Sorry."
+        },
+        {
+          "premade": "meitner",
+          "text": "Your scanner has a shield? Good. Most people forget."
+        },
+        {
+          "premade": "ada",
+          "text": "An engine could weave numbers the way a loom weaves silk. Isn't that thrilling?"
+        },
+        {
+          "premade": "pell",
+          "text": "The honeymoon suite's just for one now. More room for the hat!"
+        },
+        {
+          "premade": "ines",
+          "text": "Desk 4's chair squeaks on the left. Tell whoever gets it. They won't listen."
+        },
+        {
+          "premade": "rook",
+          "text": "A clerk like you deserves a better chair. Just saying. Friends notice things."
+        },
+        {
+          "premade": "hollis",
+          "text": "My father went through a desk like this once. He was fine. He was fine at first."
+        },
+        {
+          "premade": "auditor",
+          "text": "Your desk sign is four millimetres off centre. Just an observation."
+        }
+      ],
+      "reactions": [
+        {
+          "personality": "chatty",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you! I'll bring you something back.",
+          "then": "Not a plague. Something nice."
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Oh, lovely! I knew we'd get on.",
+          "then": "I'll tell everyone how thorough you were."
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? But I told you everything!",
+          "then": "My whole life story, and for what?"
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Fair enough. You're good at this.",
+          "then": "Don't tell my cousin."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Good.",
+          "then": "Finally."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Right.",
+          "then": "Moving on."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Unbelievable.",
+          "then": "And I paid for the queue."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Fine.",
+          "then": "Worth the queue fee to try."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Oh, thank goodness.",
+          "then": "Now I can worry about the actual trip."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Really? Oh. Oh good.",
+          "then": "I'm going to go before you change your mind."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied? What did I do? What did I do?",
+          "then": "Is it on my record now? It's on my record."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "I knew it. I knew you'd know.",
+          "then": "I'm so sorry. Is sorry allowed?"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Approved! Best day ever!",
+          "then": "Just like the brochure said!"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Approved! See? Positive thinking works!",
+          "then": "Tell your friends!"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied! That's fine!",
+          "then": "Every no is a yes I haven't paid for yet!"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Caught! Ha! Fair's fair!",
+          "then": "I'll try again tomorrow! Fresh start!"
+        },
+        {
+          "personality": "grand",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Naturally.",
+          "then": "Do carry on with the peasants."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "As it should be.",
+          "then": "I shall mention you to someone important."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "You'll hear from my lawyer.",
+          "then": "Well, my lawyer's lawyer. We share one."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "How very dull of you.",
+          "then": "I shall be back with a better story."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Stamped at a slight angle.",
+          "then": "I'll allow it. This once."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Correct procedure. Well done.",
+          "then": "Most clerks miss the second stamp."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "On what grounds? Cite the regulation.",
+          "then": "I'll be filing a complaint. In triplicate."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Hm. Good catch.",
+          "then": "I missed that section too."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Approved. Great.",
+          "then": "Now the hard part: everything else."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Oh. Approved.",
+          "then": "First time for everything."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Of course.",
+          "then": "Of course it is."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Figures.",
+          "then": "Same time tomorrow, then."
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "closed",
+          "text": "Closed? How exciting!",
+          "then": "Like a secret!"
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "panic",
+          "text": "What's wrong with my outfit?",
+          "then": "Is it the hat? It's the hat, isn't it."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "reason": "smuggled",
+          "text": "Fine. Keep it.",
+          "then": "I have three more at home."
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "wrongDate",
+          "text": "Wrong day? I've been telling everyone it's today!",
+          "then": "I'll have to tell them all again."
+        },
+        {
+          "personality": "chatty",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "reason": "forged",
+          "text": "Forged? That's such a strong word.",
+          "then": "I'd say decorated."
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "closed",
+          "text": "Closed. Brilliant.",
+          "then": "Refund?"
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "frozen",
+          "text": "Frozen. Of course.",
+          "then": "Who do I bill?"
+        },
+        {
+          "personality": "curt",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "reason": "smuggled",
+          "text": "Keep it, then.",
+          "then": "Was a gift anyway."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "closed",
+          "text": "Closed? Is it dangerous? Is that why?",
+          "then": "I knew it was dangerous."
+        },
+        {
+          "personality": "anxious",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "expired",
+          "text": "Expired? When? Just now? Things expire just now?",
+          "then": "What else has expired?"
+        },
+        {
+          "personality": "sunny",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "frozen",
+          "text": "Frozen? Like ice cream!",
+          "then": "I'll wait for it to thaw!"
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "closed",
+          "text": "Closed? To me?",
+          "then": "Reopen it."
+        },
+        {
+          "personality": "grand",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "incomplete",
+          "text": "Incomplete? I am complete.",
+          "then": "The papers are your problem."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "wrongDate",
+          "text": "Wrong date? Impossible. I checked the calendar.",
+          "then": "I'll be checking the calendar."
+        },
+        {
+          "personality": "stickler",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "expired",
+          "text": "Expired by how much?",
+          "then": "I want it in writing."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "frozen",
+          "text": "Frozen. Naturally.",
+          "then": "Like everything else."
+        },
+        {
+          "personality": "glum",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "reason": "closed",
+          "text": "Closed. Of course it's closed.",
+          "then": "Everything's closed."
+        },
+        {
+          "premade": "senenmut",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "May your granaries never empty.",
+          "then": "And your columns never lean."
+        },
+        {
+          "premade": "senenmut",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Then the temple waits.",
+          "then": "It is good at waiting. I am not."
+        },
+        {
+          "premade": "socrates",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Well reasoned.",
+          "then": "You did not ask enough questions."
+        },
+        {
+          "premade": "socrates",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "You ask good questions.",
+          "then": "I taught you that."
+        },
+        {
+          "premade": "aspasia",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. You would have made a fine citizen.",
+          "then": "Well, a fine resident."
+        },
+        {
+          "premade": "aspasia",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "A poor argument, clerk.",
+          "then": "But I have lost to worse."
+        },
+        {
+          "premade": "banzhao",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. I shall write that you were fair.",
+          "then": "In a footnote. A kind one."
+        },
+        {
+          "premade": "banzhao",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "I see.",
+          "then": "History will record this. I will make sure of it."
+        },
+        {
+          "premade": "arib",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you! You shall have a verse.",
+          "then": "A short one. You are busy."
+        },
+        {
+          "premade": "arib",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "A pity.",
+          "then": "I would have sung about you kindly."
+        },
+        {
+          "premade": "khwarizmi",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. The sum comes out.",
+          "then": "I do love it when the sum comes out."
+        },
+        {
+          "premade": "khwarizmi",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Then something does not balance.",
+          "then": "I shall find it. I always do."
+        },
+        {
+          "premade": "gutenberg",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Thank you. Now, quickly.",
+          "then": "Before anyone else thinks of it."
+        },
+        {
+          "premade": "gutenberg",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "No? No. Of course.",
+          "then": "Someone else will do it first. They always do."
+        },
+        {
+          "premade": "leonardo",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Grazie. You have a painter's eye.",
+          "then": "For stamps, at least."
+        },
+        {
+          "premade": "leonardo",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "No? A pity.",
+          "then": "I would have drawn you. Kindly."
+        },
+        {
+          "premade": "lanyer",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. You shall be in the dedication.",
+          "then": "In a small way. The margin, perhaps."
+        },
+        {
+          "premade": "lanyer",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Denied.",
+          "then": "Eve was blamed for less. I shall manage."
+        },
+        {
+          "premade": "gallerani",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Grazie. You were most gracious.",
+          "then": "The painter would have liked your face."
+        },
+        {
+          "premade": "gallerani",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "How disappointing.",
+          "then": "The court will hear of it. Politely."
+        },
+        {
+          "premade": "tahtawi",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. You have been a courteous host.",
+          "then": "I will say so in print."
+        },
+        {
+          "premade": "tahtawi",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "I see.",
+          "then": "I shall translate this into patience."
+        },
+        {
+          "premade": "kulthum",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Come to a concert.",
+          "then": "Bring a chair. It will be a long one."
+        },
+        {
+          "premade": "kulthum",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Then I will sing about this.",
+          "then": "Slowly. For an hour."
+        },
+        {
+          "premade": "malaika",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you.",
+          "then": "You bent the form for me. I understand."
+        },
+        {
+          "premade": "malaika",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "So the old metre wins today.",
+          "then": "Not for long."
+        },
+        {
+          "premade": "sayyab",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Rain, rain.",
+          "then": "It will rain on the way home."
+        },
+        {
+          "premade": "sayyab",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "So the drought goes on.",
+          "then": "I will write about it."
+        },
+        {
+          "premade": "elytis",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Go and find a window.",
+          "then": "You look as if you need one."
+        },
+        {
+          "premade": "elytis",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Then I wait in the shade.",
+          "then": "The light will keep."
+        },
+        {
+          "premade": "fellini",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Grazie! Cut! Print it!",
+          "then": "Perfect take."
+        },
+        {
+          "premade": "fellini",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Cut.",
+          "then": "We will do it again tomorrow."
+        },
+        {
+          "premade": "hezehui",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. A clean result.",
+          "then": "I like a clean result."
+        },
+        {
+          "premade": "hezehui",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Unexpected.",
+          "then": "I shall repeat the experiment."
+        },
+        {
+          "premade": "toyoda",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Good work, like a good loom.",
+          "then": "It stops when something is wrong."
+        },
+        {
+          "premade": "toyoda",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "So the thread breaks.",
+          "then": "Then I tie it again."
+        },
+        {
+          "premade": "turing",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. A sensible outcome.",
+          "then": "Quite predictable, in the end."
+        },
+        {
+          "premade": "turing",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Hm. An unexpected output.",
+          "then": "I should like to see the rules."
+        },
+        {
+          "premade": "meitner",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Correctly done.",
+          "then": "It is nice to be recognised."
+        },
+        {
+          "premade": "meitner",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Hm.",
+          "then": "They will see I was right. They always do, later."
+        },
+        {
+          "premade": "ada",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Oh, splendid! Thank you!",
+          "then": "I shall write to everyone!"
+        },
+        {
+          "premade": "ada",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Oh. Oh, bother.",
+          "then": "It was such a good bonnet, too."
+        },
+        {
+          "premade": "pell",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Yes! Honeymoon! Wish me luck!",
+          "then": "Well, wish me me!"
+        },
+        {
+          "premade": "pell",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "That's fine! I'll try again!",
+          "then": "The past isn't going anywhere! It's very old!"
+        },
+        {
+          "premade": "ines",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Stamped. Right.",
+          "then": "Keep the queue moving. That's all they want."
+        },
+        {
+          "premade": "ines",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "Of course.",
+          "then": "I'd have done the same. Probably."
+        },
+        {
+          "premade": "rook",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Pleasure doing business.",
+          "then": "You'll go far. I'll see to it."
+        },
+        {
+          "premade": "rook",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Shame.",
+          "then": "You'll wish you'd been friendlier."
+        },
+        {
+          "premade": "hollis",
+          "verdict": "Accepted",
+          "intent": "Honest",
+          "text": "Thank you. Thank you.",
+          "then": "I'll pay it all back. I will."
+        },
+        {
+          "premade": "hollis",
+          "verdict": "Denied",
+          "intent": "Honest",
+          "text": "I know. I know.",
+          "then": "I just hoped. That's all."
+        },
+        {
+          "premade": "auditor",
+          "verdict": "Accepted",
+          "intent": "Lying",
+          "text": "Approved. Thank you.",
+          "then": "Noted."
+        },
+        {
+          "premade": "auditor",
+          "verdict": "Denied",
+          "intent": "Lying",
+          "text": "Correct.",
+          "then": "Very correct. I'll make a note of that."
+        }
+      ],
+      "slips": [
+        {
+          "personality": "chatty",
+          "lie": "Smuggling",
+          "text": "Nothing in the bag but socks! Lots of socks. Don't open the socks."
+        },
+        {
+          "personality": "chatty",
+          "text": "I've practised this bit. I mean, I haven't. Why would I?"
+        },
+        {
+          "personality": "curt",
+          "text": "Everything's in order. Don't check."
+        },
+        {
+          "personality": "curt",
+          "lie": "PoorPosingAsRich",
+          "text": "Premium. Obviously. Next question."
+        },
+        {
+          "personality": "anxious",
+          "text": "Is it normal to sweat this much when everything is completely legal?"
+        },
+        {
+          "personality": "anxious",
+          "lie": "DoctoredIdentity",
+          "text": "My birthday? It's... the one on the visa. Obviously."
+        },
+        {
+          "personality": "sunny",
+          "lie": "PoorPosingAsRich",
+          "text": "Premium, like the advert! Well, like the advert for the credit card."
+        },
+        {
+          "personality": "sunny",
+          "text": "I'm not nervous! This is just my happy face. It's stuck."
+        },
+        {
+          "personality": "grand",
+          "lie": "PoorPosingAsRich",
+          "text": "Premium, naturally. I simply enjoy queueing with ordinary people."
+        },
+        {
+          "personality": "grand",
+          "text": "I have nothing to declare. Except my genius. And perhaps a trifle."
+        },
+        {
+          "personality": "stickler",
+          "lie": "DoctoredIdentity",
+          "text": "Every detail on that visa is correct. I corrected them myself."
+        },
+        {
+          "personality": "stickler",
+          "text": "I have read the penalties section. Purely out of interest."
+        },
+        {
+          "personality": "glum",
+          "text": "If this goes wrong, tell my creditors I tried."
+        },
+        {
+          "personality": "glum",
+          "lie": "Smuggling",
+          "text": "My luggage is exactly as boring as it looks. Please don't look."
+        },
+        {
+          "premade": "socrates",
+          "text": "I know that I know nothing. Especially about where I was born."
         }
       ]
-    }
+    },
+    "reactions": [
+      {
+        "verdict": "Accepted",
+        "intent": "Honest",
+        "text": "Thank you!"
+      },
+      {
+        "verdict": "Accepted",
+        "intent": "Honest",
+        "kinds": [
+          "Displaced"
+        ],
+        "text": "Thank you. Home, at last."
+      },
+      {
+        "verdict": "Denied",
+        "intent": "Honest",
+        "text": "But... I did everything right."
+      },
+      {
+        "verdict": "Denied",
+        "intent": "Honest",
+        "kinds": [
+          "Displaced"
+        ],
+        "text": "Then how do I get home?"
+      },
+      {
+        "verdict": "Accepted",
+        "intent": "Lying",
+        "text": "Thank you. Thank you very much."
+      },
+      {
+        "verdict": "Denied",
+        "intent": "Lying",
+        "text": "Worth a try."
+      }
+    ],
+    "slips": [
+      {
+        "text": "Nothing to see here. I mean, everything to see. It's all fine."
+      },
+      {
+        "lie": "Smuggling",
+        "text": "Nothing from home in my luggage. Home meaning here. Obviously."
+      },
+      {
+        "lie": "PoorPosingAsRich",
+        "text": "Premium, yes. We Premiums always... what is it we always do?"
+      },
+      {
+        "lie": "DoctoredIdentity",
+        "text": "My details? It's all on the visa. That visa. The one you're holding."
+      },
+      {
+        "lie": "FalseOrigin",
+        "text": "Home. Yes. {place}. I say it every morning so I don't forget."
+      },
+      {
+        "lie": "FakeDisplaced",
+        "text": "The sky opened and took me from the past. The very old past. Ancient-ish."
+      }
+    ]
   },
   "questions": [
     {

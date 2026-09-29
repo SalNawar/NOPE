@@ -45,4 +45,5 @@ MonoBehaviour:
   bubbleCharsPerSecond: 40
   bubbleMinSeconds: 1.5
   bubbleOffset: {x: 0, y: 290}
+  reactionSeconds: 2.5
   readyCaptionKey: desk.readyCaption

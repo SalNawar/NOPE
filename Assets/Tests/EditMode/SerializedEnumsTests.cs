@@ -292,4 +292,22 @@ public class SerializedEnumsTests
         Assert.AreEqual(4, (int)StepLink.CostumeClaimed);
         Assert.AreEqual(5, System.Enum.GetValues(typeof(StepLink)).Length, "a new member is appended here too");
     }
+
+    /// <summary>ReactionVerdict: stored in the reactions' rows (interview.reactions, interview.voices.reactions; the personalities spec's R2).</summary>
+    [Test]
+    public void ReactionVerdict_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)ReactionVerdict.Accepted);
+        Assert.AreEqual(1, (int)ReactionVerdict.Denied);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(ReactionVerdict)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>ReactionIntent: stored in the reactions' rows (the personalities spec's R2).</summary>
+    [Test]
+    public void ReactionIntent_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)ReactionIntent.Honest);
+        Assert.AreEqual(1, (int)ReactionIntent.Lying);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(ReactionIntent)).Length, "a new member is appended here too");
+    }
 }

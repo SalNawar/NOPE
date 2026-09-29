@@ -65,9 +65,59 @@ public sealed class TravellerView : MonoBehaviour
         }
     }
 
-    /// <summary>Shows the traveller's look (presentation); a null look or art shows nobody.</summary>
+    /// <summary>The pending leave (Leave), or null.</summary>
+    private Coroutine _leaving;
+
+    /// <summary>What runs when the traveller has left (Leave), or null.</summary>
+    private System.Action _left;
+
+    /// <summary>
+    /// The traveller leaves after <paramref name="seconds"/> (their reaction's
+    /// linger, the personalities spec's R4): the figure clears and
+    /// <paramref name="left"/> runs; at once for 0 or less (or while this view
+    /// is inactive). Showing the next traveller ends the linger at once.
+    /// </summary>
+    public void Leave(float seconds, System.Action left)
+    {
+        EndLinger();
+        if (seconds <= 0f || !isActiveAndEnabled)
+        {
+            Clear();
+            left?.Invoke();
+            return;
+        }
+        _left = left;
+        _leaving = StartCoroutine(LeaveAfter(seconds));
+    }
+
+    private System.Collections.IEnumerator LeaveAfter(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        _leaving = null;
+        EndLinger();
+    }
+
+    /// <summary>Ends a pending leave now: the figure clears and its callback runs (nothing when none is pending).</summary>
+    public void EndLinger()
+    {
+        if (_leaving != null)
+        {
+            StopCoroutine(_leaving);
+            _leaving = null;
+        }
+        System.Action left = _left;
+        _left = null;
+        if (left != null)
+        {
+            Clear();
+            left();
+        }
+    }
+
+    /// <summary>Shows the traveller's look (presentation), ending a previous traveller's linger first; a null look or art shows nobody.</summary>
     public void Show(TravellerLook look, CharacterArt art)
     {
+        EndLinger();
         if (figure != null)
             figure.Show(look, art);
     }

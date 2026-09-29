@@ -353,4 +353,166 @@ public class VoicesTests
         Assert.AreEqual("smalltalk:source", VoiceKeys.SmallTalkSource);
         Assert.AreEqual("smalltalk", VoiceKeys.SmallTalk);
     }
+
+    // ---- The reaction's intent (the personalities spec's R2) ----
+
+    [Test]
+    public void Intent_OfAPlaceLieSmugglingOrARecordLieIsLying()
+    {
+        Assert.AreEqual(ReactionIntent.Lying, ReactionIntents.Of(true, false), "a place lie, smuggling included (IsLiar)");
+        Assert.AreEqual(ReactionIntent.Lying, ReactionIntents.Of(false, true), "a record lie (IsForger)");
+        Assert.AreEqual(ReactionIntent.Lying, ReactionIntents.Of(true, true));
+    }
+
+    [Test]
+    public void Intent_OfADirectiveFaultACostumeErrorOrNoFaultIsHonest()
+    {
+        Assert.AreEqual(ReactionIntent.Honest, ReactionIntents.Of(false, false), "no lie: a directive fault, a costume error or no fault at all");
+    }
+
+    // ---- The reaction (R1-R3, §6) ----
+
+    private static VoiceLine React(string text, string personality, ReactionVerdict verdict, ReactionIntent intent, string reason = null, string then = null,
+                                   string premade = null, params TravellerKind[] kinds)
+    {
+        VoiceLine row = Row(text, personality, premade, kinds: kinds);
+        row.verdict = verdict;
+        row.intent = intent;
+        row.reason = reason ?? string.Empty;
+        row.then = new LineText("row." + text + ".then", then);
+        return row;
+    }
+
+    private static InterviewLines ReactionLines()
+    {
+        InterviewLines lines = Lines();
+        foreach (ReactionVerdict verdict in new[] { ReactionVerdict.Accepted, ReactionVerdict.Denied })
+            foreach (ReactionIntent intent in new[] { ReactionIntent.Honest, ReactionIntent.Lying })
+                lines.reactions.Add(React($"Default {verdict} {intent}.", null, verdict, intent));
+        return lines;
+    }
+
+    [Test]
+    public void Reaction_APremadesOwnPairComesFirst()
+    {
+        InterviewLines lines = ReactionLines();
+        lines.voices.reactions.Add(React("You ask good questions.", null, ReactionVerdict.Denied, ReactionIntent.Lying, then: "I taught you that.", premade: "socrates"));
+        lines.voices.reactions.Add(React("Figures.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying));
+
+        Assert.AreEqual("You ask good questions.", Voices.Reaction(lines, new Voice(null, "socrates", Seed), DisplacedAncient, ReactionVerdict.Denied, ReactionIntent.Lying, "forged").line.text);
+        Assert.AreEqual("Default Denied Lying.", Voices.Reaction(lines, new Voice(null, "aspasia", Seed), DisplacedAncient, ReactionVerdict.Denied, ReactionIntent.Lying, "forged").line.text);
+    }
+
+    [Test]
+    public void Reaction_ANamedReasonBeatsNamedKinds()
+    {
+        InterviewLines lines = ReactionLines();
+        lines.voices.reactions.Add(React("Fine. Keep it.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying, reason: "smuggled"));
+        lines.voices.reactions.Add(React("Rich people problems.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying, kinds: TravellerKind.RichTourist));
+
+        Assert.AreEqual("Fine. Keep it.", Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Lying, "smuggled").line.text);
+        Assert.AreEqual("Rich people problems.", Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Lying, "forged").line.text);
+    }
+
+    [Test]
+    public void Reaction_ARowOfAnotherReasonNeverMatches()
+    {
+        InterviewLines lines = ReactionLines();
+        lines.voices.reactions.Add(React("Fine. Keep it.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying, reason: "smuggled"));
+
+        Assert.AreEqual("Default Denied Lying.", Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Lying, "forged").line.text);
+        Assert.AreEqual("Default Denied Lying.", Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Lying, string.Empty).line.text);
+    }
+
+    [Test]
+    public void Reaction_FallsBackToTheDefaults()
+    {
+        InterviewLines lines = ReactionLines();
+        lines.reactions.Add(React("Then how do I get home?", null, ReactionVerdict.Denied, ReactionIntent.Honest, kinds: TravellerKind.Displaced));
+
+        Assert.AreEqual("Then how do I get home?", Voices.Reaction(lines, Curt, DisplacedAncient, ReactionVerdict.Denied, ReactionIntent.Honest, "closed").line.text, "the defaults tier the same way");
+        Assert.AreEqual("Default Denied Honest.", Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Honest, "closed").line.text);
+        Assert.IsNull(Voices.Reaction(Lines(), Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Honest, null), "no row at all: none");
+    }
+
+    [Test]
+    public void Reaction_TheFourDefaultsCoverEveryVerdictAndIntent()
+    {
+        InterviewLines lines = ReactionLines();
+        foreach (ReactionVerdict verdict in new[] { ReactionVerdict.Accepted, ReactionVerdict.Denied })
+            foreach (ReactionIntent intent in new[] { ReactionIntent.Honest, ReactionIntent.Lying })
+                Assert.AreEqual($"Default {verdict} {intent}.", Voices.Reaction(lines, Voice.None, RichAncient, verdict, intent, null).line.text);
+    }
+
+    [Test]
+    public void Reaction_KeepsItsThenLine()
+    {
+        InterviewLines lines = ReactionLines();
+        lines.voices.reactions.Add(React("Figures.", "curt", ReactionVerdict.Denied, ReactionIntent.Lying, then: "Same time tomorrow, then."));
+
+        VoiceLine row = Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Denied, ReactionIntent.Lying, "forged");
+        Assert.AreEqual(("Figures.", "Same time tomorrow, then."), (row.line.text, row.then.text));
+    }
+
+    [Test]
+    public void Reaction_PickIsAValueOfItsKey()
+    {
+        InterviewLines lines = ReactionLines();
+        for (int i = 0; i < 5; i++)
+            lines.voices.reactions.Add(React($"Line {i}.", "curt", ReactionVerdict.Accepted, ReactionIntent.Honest));
+
+        int index = Voices.Pick(Seed, VoiceKeys.Reaction(ReactionVerdict.Accepted, ReactionIntent.Honest), 5);
+        Assert.AreEqual($"Line {index}.", Voices.Reaction(lines, Curt, RichAncient, ReactionVerdict.Accepted, ReactionIntent.Honest, null).line.text);
+        Assert.AreEqual("reaction:Accepted:Honest", VoiceKeys.Reaction(ReactionVerdict.Accepted, ReactionIntent.Honest));
+    }
+
+    // ---- The slip's line (T10) ----
+
+    private static VoiceLine SlipRow(string text, string personality, string lie = null, string premade = null)
+    {
+        VoiceLine row = Row(text, personality, premade);
+        row.lie = lie ?? string.Empty;
+        return row;
+    }
+
+    [Test]
+    public void Slip_ALieKindRowBeatsABlankOne()
+    {
+        InterviewLines lines = Lines();
+        lines.voices.slips.Add(SlipRow("Everything's in order. Don't check.", "curt"));
+        lines.voices.slips.Add(SlipRow("Premium. Obviously. Next question.", "curt", "PoorPosingAsRich"));
+
+        Assert.AreEqual("Premium. Obviously. Next question.", Voices.Slip(lines, Curt, RichAncient, LieKind.PoorPosingAsRich).text);
+        Assert.AreEqual("Everything's in order. Don't check.", Voices.Slip(lines, Curt, RichAncient, LieKind.Smuggling).text, "another lie kind's row never matches");
+    }
+
+    [Test]
+    public void Slip_APremadesOwnRow()
+    {
+        InterviewLines lines = Lines();
+        lines.slips.Add(SlipRow("Default slip.", null));
+        lines.voices.slips.Add(SlipRow("I know that I know nothing. Especially about where I was born.", null, premade: "socrates"));
+
+        Assert.AreEqual("I know that I know nothing. Especially about where I was born.", Voices.Slip(lines, new Voice(null, "socrates", Seed), DisplacedAncient, LieKind.FalseOrigin).text);
+    }
+
+    [Test]
+    public void Slip_FallsBackToTheDefaultsByLieKind()
+    {
+        InterviewLines lines = Lines();
+        lines.slips.Add(SlipRow("Default slip.", null));
+        lines.slips.Add(SlipRow("Nothing from home in my luggage.", null, "Smuggling"));
+
+        Assert.AreEqual("Nothing from home in my luggage.", Voices.Slip(lines, Curt, RichAncient, LieKind.Smuggling).text);
+        Assert.AreEqual("Default slip.", Voices.Slip(lines, Curt, RichAncient, LieKind.DoctoredIdentity).text);
+    }
+
+    [Test]
+    public void Slip_PickIsAValueOfItsKey()
+    {
+        InterviewLines lines = Lines();
+        for (int i = 0; i < 4; i++)
+            lines.voices.slips.Add(SlipRow($"Slip {i}.", "curt"));
+        Assert.AreEqual($"Slip {Voices.Pick(Seed, VoiceKeys.Slip, 4)}.", Voices.Slip(lines, Curt, RichAncient, LieKind.Smuggling).text);
+    }
 }

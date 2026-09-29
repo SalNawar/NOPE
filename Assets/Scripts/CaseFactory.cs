@@ -90,6 +90,9 @@ public sealed class CaseFactory
     /// <summary>The current traveller's personality stream (Seeds.ForPersonality): one draw for a generated traveller, which reads nothing else.</summary>
     private IRandomSource _personalityRng = new SeededRandom(0);
 
+    /// <summary>The current traveller's slip stream (Seeds.ForSlip): one roll for a generated liar, which reads nothing but the chance.</summary>
+    private IRandomSource _slipRng = new SeededRandom(0);
+
     /// <summary>The current traveller's look stream (Seeds.ForLooks): gender when unknown, skin, face, hair colour.</summary>
     private IRandomSource _looksRng = new SeededRandom(0);
 
@@ -243,6 +246,7 @@ public sealed class CaseFactory
             _lieRng = new SeededRandom(Seeds.ForLies(caseSeed));
             _dialogSeed = Seeds.ForDialog(caseSeed);
             _personalityRng = new SeededRandom(Seeds.ForPersonality(caseSeed));
+            _slipRng = new SeededRandom(Seeds.ForSlip(caseSeed));
             _looksRng = new SeededRandom(Seeds.ForLooks(caseSeed));
             _legendaryRng = new SeededRandom(Seeds.ForLegendary(caseSeed));
             _accountRng = new SeededRandom(Seeds.ForAccount(caseSeed));
@@ -546,11 +550,20 @@ public sealed class CaseFactory
         if (broken != null && !inst.HasDirectiveFault)
             Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: was to break '{broken.name}' ({broken.type}), but the finished papers read no fault. Check the kind's templates and the account ranges.");
 
+        // 8.5) The slip (the personalities spec's T9-T10): a generated liar rolls once on their own stream against the day's
+        //      slipChance, after the lie is planned; a liar premade slips when their line is authored; the honest never do.
+        ReactionIntent intent = ReactionIntents.Of(inst.IsLiar, inst.IsForger);
+        var slipContext = new VoiceContext(inst.kind, claimedEra != null ? claimedEra.id : null);
+        bool slips = legendary != null
+            ? Slips.PremadeSlips(intent, _lib.Interview.voices.slips.Exists(r => r != null && r.premade == legendary.id))
+            : Slips.Rolls(intent, false) && Slips.Roll(plan.SlipChance, _slipRng);
+        inst.slip = slips ? Voices.Slip(_lib.Interview, inst.Voice, slipContext, inst.lie) : null;
+
         string archetypeName = archetype != null ? archetype.displayName : string.Empty;
         string tells = lie != null ? string.Join(", ", lie.Tells.Select(t => $"{t}/{lie.ChannelOf(t)}")) : string.Empty;
         string look = inst.look != null ? inst.look.Describe() : "none";
         string recordTells = string.Join(", ", inst.recordTells.Select(t => $"{t.Category}@{t.Document}"));
-        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
+        Debug.Log($"[CaseFactory] Case {caseIndex1Based}: blueprint='{blueprint.name}', kind={inst.kind}, honestEntry={honest}, account={inst.account?.CitizenId ?? "none"}, place='{originLabel}', archetype='{archetypeName}', premade={(legendary != null ? legendary.id : "none")}, personality={(string.IsNullOrEmpty(inst.personality) ? "none" : inst.personality)}, slip={(inst.slip != null ? inst.slip.id : "none")}, visitor='{visitorName}', born='{birthDate}', lie={(lieKind.HasValue ? lieKind.Value.ToString() : "none")}, liar={inst.IsLiar}, home='{inst.HomeLabel}', tells=[{tells}], recordTells=[{recordTells}], answers={inst.answers.Count}, gender={inst.gender}, look={look}, costume={inst.costumeFault}, broken={(broken != null ? broken.name : "none")}, paperSet={paperBreak}, standing={inst.account?.Standing.ToString() ?? "none"}, directive={inst.directiveFault}, shouldAccept={inst.ShouldAccept}.");
 
         return inst;
     }

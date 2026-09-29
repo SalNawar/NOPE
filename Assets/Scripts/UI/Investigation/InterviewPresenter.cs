@@ -231,6 +231,7 @@ public sealed class InterviewPresenter
             answers = inst != null ? inst.answers : null,
             smallTalk = interviewReachable && inst != null ? inst.smallTalk : null,
             voice = inst != null ? inst.Voice : null,
+            slip = interviewReachable && inst != null ? inst.slip : null,
             garments = appearanceReachable && inst != null && inst.look != null ? inst.look.Garments : null
         };
 
@@ -313,6 +314,30 @@ public sealed class InterviewPresenter
             _day.Complete(choice.DialogId, choice.EffectName);
 
         RefreshChoices();
+    }
+
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1, §6):
+    /// one or two lines in their voice (InterviewScript.Reaction by the
+    /// verdict, the intent and the case's fault reason) appended to the
+    /// transcript (the Transcript tab shows them and search indexes them).
+    /// Returns them for the bubble; empty before any interview.
+    /// </summary>
+    public IReadOnlyList<DialogLine> React(CaseInstance inst, ReactionVerdict verdict, ReactionIntent intent)
+    {
+        if (_runner == null || _day == null || inst == null)
+            return Array.Empty<DialogLine>();
+
+        IReadOnlyList<DialogLine> lines = InterviewScript.Reaction(_day.Lines, CaseFor(inst, null, false, false), verdict, intent, inst.FaultReason);
+        int before = _runner.Transcript.Count;
+        _runner.Append(lines);
+        foreach (TranscriptView transcript in _transcripts)
+            if (transcript != null)
+                transcript.Refresh();
+        IndexLines(before);
+        if (_runner.Transcript.Count > before)
+            _spoke();
+        return lines;
     }
 
     /// <summary>

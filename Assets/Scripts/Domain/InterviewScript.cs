@@ -36,6 +36,9 @@ public sealed class InterviewCase
     /// <summary>Who speaks (CaseInstance's personality or premade and dialog seed): every reply is resolved in their voice (Voices); null says the defaults.</summary>
     public Voice voice;
 
+    /// <summary>The liar's slip (CaseInstance.slip, resolved at generation: Voices.Slip; {place} filled here), said once right after their small-talk reply; null for none (the personalities spec's T9-T10).</summary>
+    public LineText slip;
+
     /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
     public IReadOnlyList<Garment> garments;
 }
@@ -270,6 +273,10 @@ public static class InterviewScript
             });
         }
 
+        // The slip (T10): a plain traveller line after the small-talk reply, never an answer.
+        if (c != null && c.smallTalk != null && c.slip != null && !string.IsNullOrWhiteSpace(c.slip.text))
+            ask.Choices[ask.Choices.Count - 1].Lines.Add(Say(c.slip, c, null));
+
         if (ask.Choices.Count > 1)
             hub.Choices.Add(new DialogChoice { Id = "ask", Label = lines.askLabel, Next = AskNodeId, Kind = DialogChoiceKind.Question });
 
@@ -340,6 +347,26 @@ public static class InterviewScript
         }
 
         return choice;
+    }
+
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1, §6):
+    /// one or two traveller lines in their voice (Voices.Reaction by
+    /// <paramref name="verdict"/>, <paramref name="intent"/> and the case's
+    /// fault <paramref name="reason"/>: the row's line, then its then line when
+    /// it has one), {place} filled, with their key-word spans. Empty when no
+    /// row matches.
+    /// </summary>
+    public static IReadOnlyList<DialogLine> Reaction(InterviewLines lines, InterviewCase c, ReactionVerdict verdict, ReactionIntent intent, string reason)
+    {
+        var said = new List<DialogLine>();
+        VoiceLine row = Voices.Reaction(lines, c?.voice, Context(c), verdict, intent, reason);
+        if (row == null || row.line == null || string.IsNullOrWhiteSpace(row.line.text))
+            return said;
+        said.Add(Say(row.line, c, null));
+        if (row.then != null && !string.IsNullOrWhiteSpace(row.then.text))
+            said.Add(Say(row.then, c, null));
+        return said;
     }
 
     /// <summary>A traveller's reply in their voice: <paramref name="line"/>'s template with {place} (the claimed place) and {document} (<paramref name="document"/>) filled, carrying its key-word spans over the template and its fills.</summary>

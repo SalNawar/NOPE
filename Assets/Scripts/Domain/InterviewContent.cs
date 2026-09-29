@@ -298,6 +298,12 @@ public sealed class InterviewLines
 
     /// <summary>The personalities' and premades' own lines, one list per slot (interview.voices); a voice with no matching row says the defaults above (Voices).</summary>
     public VoiceBook voices = new VoiceBook();
+
+    /// <summary>The default reactions to the stamp (interview.reactions: verdict, intent, an optional reason, kinds and era, a line and an optional then line; the personalities spec's R1-R3): the four base rows are required.</summary>
+    public List<VoiceLine> reactions = new List<VoiceLine>();
+
+    /// <summary>The default slips (interview.slips, by lie kind; one with a blank lie is required; the personalities spec's T10).</summary>
+    public List<VoiceLine> slips = new List<VoiceLine>();
 }
 
 /// <summary>
