@@ -44,6 +44,9 @@ public sealed class AgencyContent
     /// <summary>The Debt Relief programme's employers (agency.employers: one per row, each of one era; a labourer's contract names one of the worksite's era, AccountMaker.Make).</summary>
     public List<Employer> employers = new List<Employer>();
 
+    /// <summary>The hall's portals (agency.portals: one per ring of the art; the portals spec v3 PO1-PO3; PortalSchedule.PortalProblems checks them), in authored order.</summary>
+    public List<PortalSpec> portals = new List<PortalSpec>();
+
     /// <summary>The printed names of the employers of <paramref name="eraId"/>, in authored order.</summary>
     public List<string> EmployersOf(string eraId) =>
         (employers ?? new List<Employer>()).Where(e => e != null && e.era == eraId).Select(e => e.name).ToList();

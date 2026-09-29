@@ -76,6 +76,7 @@ public static partial class WorldContentGenerator
         CulturePlan culture = PlanCulture(src, errors);
         CheckTranslation(src, authored, errors);
         CheckAgency(src, errors);
+        CheckPortals(src, authored, errors);
         CheckDayKinds(src, authored, errors);
         CheckPresent(src, errors);
         CheckNews(src, errors);
@@ -122,7 +123,7 @@ public static partial class WorldContentGenerator
 
         WireBlueprints(authored);
 
-        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById, refs)).ToArray();
+        DayPlanSO[] days = src.days.Select(d => MakeDay(d, src.content.dayPlanFolder, authored, eras, nations, rules, premadesById, refs, placesById)).ToArray();
 
         // --- Interview: questions, dialogs, unlock announcements ---
         QuestionData[] questionData = src.questions ?? Array.Empty<QuestionData>();
@@ -1747,7 +1748,7 @@ public static partial class WorldContentGenerator
     /// </summary>
     private static DayPlanSO MakeDay(DayData d, string folder, Authored authored, Dictionary<string, EraSO> eras,
                                      Dictionary<string, NationSO> nations, Dictionary<string, TravelRuleSO> rules,
-                                     Dictionary<string, LegendarySO> premades, ConditionRefs refs)
+                                     Dictionary<string, LegendarySO> premades, ConditionRefs refs, Dictionary<string, NationEraProfileSO> places)
     {
         DayPlanSO plan = LoadOrCreate<DayPlanSO>($"{folder}/{d.asset}.asset", null);
         var so = new SerializedObject(plan);
@@ -1800,6 +1801,7 @@ public static partial class WorldContentGenerator
             el.FindPropertyRelative("weight").floatValue = weightsData[i].weight;
         }
 
+        WriteRoutes(so, d, places);
         so.ApplyModifiedProperties();
 
         // The appearances' conditions (object references resolved like a dialog's), in the forced slots' order.
@@ -2378,6 +2380,8 @@ public static partial class WorldContentGenerator
         public float costumeErrorChance;
         /// <summary>Chance per honest traveller of breaking a rolled procedure (0..1; traveller types P4).</summary>
         public float violationChance;
+        /// <summary>The Directorate's route for each departure portal this day (the portals spec v3 RT2).</summary>
+        public DayPortalData[] portals;
     }
 
     /// <summary>The interview's wording and spoken requests (plain strings; ids are generated) and its two layout limits (menuCapacity is written to the library; maxLineChars only bounds CheckInterview's line-length check).</summary>

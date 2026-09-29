@@ -175,11 +175,12 @@ public class UiStringsTests
         ui.Get("strings").Items.Where(e => e.Get("tier").Text == "Flavour").Select(e => e.Get("key").Text).ToList();
 
     [Test]
-    public void TodaysFlavourLabels_AreThe28OfThePcRedesign()
+    public void TodaysFlavourLabels_AreThePcRedesignsAndThePortals()
     {
+        // The PC redesign's 28 (TH3), then the portals spec v3's Portals icon.
         List<string> flavour = FlavourKeys(TodaysUi());
-        Assert.AreEqual(28, flavour.Count, string.Join(", ", flavour));
-        foreach (string added in new[] { "icon.investigation", "icon.mail", "icon.account", "icon.settings" })
+        Assert.AreEqual(29, flavour.Count, string.Join(", ", flavour));
+        foreach (string added in new[] { "icon.investigation", "icon.mail", "icon.account", "icon.settings", "icon.portals" })
             CollectionAssert.Contains(flavour, added);
         foreach (string gone in new[] { "icon.directives", "icon.scanner", "icon.records", "icon.lexicon", "icon.dialect", "icon.material", "icon.clueLog", "window.directives", "window.scanner", "records.title" })
             CollectionAssert.DoesNotContain(flavour, gone);

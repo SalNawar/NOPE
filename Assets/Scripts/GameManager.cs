@@ -168,7 +168,7 @@ public sealed class GameManager : MonoBehaviour
         // Today's world (places and facts, history applied): one snapshot shared
         // by the case factory and the books, so papers and reference books can
         // never disagree during the day.
-        _today = contentLibrary.BuildToday(dayPlan, _worldState.history);
+        _today = contentLibrary.BuildToday(dayPlan, _worldState);
         _caseFactory = new CaseFactory(contentLibrary, _today);
         _characterArt = new CharacterArt(contentLibrary);
 

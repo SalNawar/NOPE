@@ -148,7 +148,7 @@ public static class _TimeDeskAuditStatic
             DayPlanSO plan = lib.GetDayPlan(day);
             WorldState world = World(day, leader);
             InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
-            TodaysWorld today = lib.BuildToday(plan, world.history);
+            TodaysWorld today = lib.BuildToday(plan, world);
             string head = $"WORLD day={day} leader={leader}";
             lines.Add($"{head} plan='{plan.name}' visitors={plan.VisitorsCount} tellCount={plan.TellCount} channels=[{string.Join(",", plan.TellChannels)}] violators={plan.GuaranteeRuleViolators} legendaryChance={plan.LegendaryBaseChance.ToString("0.###", Inv)}");
             lines.Add($"{head} places=[{string.Join(", ", today.Places.Select(p => p != null ? p.id : "null"))}]");
@@ -168,7 +168,7 @@ public static class _TimeDeskAuditStatic
                 DayPlanSO plan = lib.GetDayPlan(day);
                 WorldState world = World(day, leader);
                 InterviewDay interview = TimelineService.BuildInterviewDay(lib, world, new ShiftLedger());
-                var factory = new CaseFactory(lib, lib.BuildToday(plan, world.history));
+                var factory = new CaseFactory(lib, lib.BuildToday(plan, world));
                 List<CaseInstance> cases = factory.GenerateDayCases(plan, world, Seeds.Day(seed, day), interview, true);
                 var violators = (Dictionary<int, NationEraProfileSO>)violatorsField.GetValue(factory);
                 CitizenRegistry registry = CaseFactory.BuildRegistry(cases);

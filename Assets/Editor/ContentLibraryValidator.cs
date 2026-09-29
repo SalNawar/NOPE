@@ -132,6 +132,9 @@ public static partial class ContentLibraryValidator
         // --- The agency block (redesign phase 2) ---
         issues += CheckAgency(lib);
 
+        // --- The hall's portals and the Directorate's routes (the portals spec v3; ContentLibraryValidator.Portals.cs) ---
+        issues += CheckPortals(lib);
+
         // --- The morning paper's debt lines (redesign phase 13; ContentLibraryValidator.News.cs) ---
         issues += CheckNews(lib);
 
