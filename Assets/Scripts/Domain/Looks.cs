@@ -248,6 +248,10 @@ public static class Looks
         }
     }
 
+    /// <summary>True when a slot's item is drawn in the traveller's hair colour: facial hair always, hair (and its back) unless it is a wig, nothing else. Compose draws by it and LookKeys.Required lists the keys by it.</summary>
+    public static bool TakesHairColour(LookSlot slot, LookItem item) =>
+        slot == LookSlot.FacialHair || (slot == LookSlot.Hair && item != null && !item.wig);
+
     /// <summary>The layer a slot's item is drawn on.</summary>
     public static LookLayer LayerOf(LookSlot slot)
     {
@@ -473,17 +477,18 @@ public static class Looks
 
         // --- Parts, bottom first ---
         var parts = new List<LookPart>();
-        bool hairDrawn = items.TryGetValue(LookSlot.Hair, out (LookItem item, LookSource source) hairItem);
-        string hairColour = hairDrawn && hairItem.item.wig ? null : colour;
-        if (hairDrawn && hairItem.item.back)
-            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hairItem.item.ArtNation(hairItem.source.NationId), hairItem.source.EraId, hairColour, hairItem.item.artVariant), garmentIndex[LookSlot.Hair]));
+        if (items.TryGetValue(LookSlot.Hair, out (LookItem item, LookSource source) hairItem) && hairItem.item.back)
+        {
+            string backColour = TakesHairColour(LookSlot.Hair, hairItem.item) ? colour : null;
+            parts.Add(new LookPart(LookLayer.HairBack, LookKeys.Garment(LookLayer.HairBack, g, hairItem.item.ArtNation(hairItem.source.NationId), hairItem.source.EraId, backColour, hairItem.item.artVariant), garmentIndex[LookSlot.Hair]));
+        }
         parts.Add(new LookPart(LookLayer.Body, LookKeys.Body(g, skin), -1));
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Outfit, g, null);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Outfit, g, colour);
         parts.Add(new LookPart(LookLayer.Head, LookKeys.Head(g, skin, face), -1));
         AddGarmentPart(parts, items, garmentIndex, LookSlot.FacialHair, g, colour);
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Hair, g, hairColour);
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Headwear, g, null);
-        AddGarmentPart(parts, items, garmentIndex, LookSlot.Accessory, g, null);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Hair, g, colour);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Headwear, g, colour);
+        AddGarmentPart(parts, items, garmentIndex, LookSlot.Accessory, g, colour);
 
         return new TravellerLook(parts, garments, null, g, skin, face, colour);
     }
@@ -519,14 +524,15 @@ public static class Looks
     /// <summary>The skin tone of a look with no weights to draw from.</summary>
     private const int DefaultSkin = 3;
 
-    /// <summary>Adds a garment slot's part when its item is drawn (its key uses the item's art nation and its source's era).</summary>
+    /// <summary>Adds a garment slot's part when its item is drawn (its key uses the item's art nation, its source's era, and the hair colour when TakesHairColour says so).</summary>
     private static void AddGarmentPart(List<LookPart> parts, Dictionary<LookSlot, (LookItem item, LookSource source)> items,
-                                       Dictionary<LookSlot, int> garmentIndex, LookSlot slot, TravellerGender g, string colour)
+                                       Dictionary<LookSlot, int> garmentIndex, LookSlot slot, TravellerGender g, string hairColour)
     {
         if (!items.TryGetValue(slot, out (LookItem item, LookSource source) worn))
             return;
 
         LookLayer layer = LayerOf(slot);
+        string colour = TakesHairColour(slot, worn.item) ? hairColour : null;
         parts.Add(new LookPart(layer, LookKeys.Garment(layer, g, worn.item.ArtNation(worn.source.NationId), worn.source.EraId, colour, worn.item.artVariant), garmentIndex[slot]));
     }
 

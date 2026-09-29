@@ -109,8 +109,7 @@ public static class LookKeys
                     continue;
 
                 LookLayer layer = Looks.LayerOf(slot);
-                bool coloured = slot == LookSlot.FacialHair || (slot == LookSlot.Hair && !item.wig);
-                foreach (string colour in coloured ? HairColours : new string[] { null })
+                foreach (string colour in Looks.TakesHairColour(slot, item) ? HairColours : new string[] { null })
                 {
                     if (slot == LookSlot.Hair && item.back)
                         yield return Garment(LookLayer.HairBack, gender, item.ArtNation(nationId), eraId, colour, item.artVariant).Name;

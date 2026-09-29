@@ -159,6 +159,18 @@ public class LooksTests
             Assert.IsTrue(required.Contains(part.Key.Name), part.Key.Name);
     }
 
+    [TestCase(LookSlot.FacialHair, false, true)]
+    [TestCase(LookSlot.FacialHair, true, true)]
+    [TestCase(LookSlot.Hair, false, true)]
+    [TestCase(LookSlot.Hair, true, false)]
+    [TestCase(LookSlot.Outfit, false, false)]
+    [TestCase(LookSlot.Headwear, false, false)]
+    [TestCase(LookSlot.Accessory, false, false)]
+    public void TakesHairColour_FacialHairAlways_HairUnlessAWig_NothingElse(LookSlot slot, bool wig, bool expected)
+    {
+        Assert.AreEqual(expected, Looks.TakesHairColour(slot, new LookItem { label = "x", wig = wig }));
+    }
+
     [Test]
     public void AnArtNationItem_IsDrawnUnderIt_WithTheTravellersColour_AndEveryKeyIsRequired()
     {
