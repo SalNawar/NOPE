@@ -342,6 +342,26 @@ public static class InterviewScript
         return choice;
     }
 
+    /// <summary>
+    /// The traveller's reaction to the stamp (the personalities spec's R1, §6):
+    /// one or two traveller lines in their voice (Voices.Reaction by
+    /// <paramref name="verdict"/>, <paramref name="intent"/> and the case's
+    /// fault <paramref name="reason"/>: the row's line, then its then line when
+    /// it has one), {place} filled, with their key-word spans. Empty when no
+    /// row matches.
+    /// </summary>
+    public static IReadOnlyList<DialogLine> Reaction(InterviewLines lines, InterviewCase c, ReactionVerdict verdict, ReactionIntent intent, string reason)
+    {
+        var said = new List<DialogLine>();
+        VoiceLine row = Voices.Reaction(lines, c?.voice, Context(c), verdict, intent, reason);
+        if (row == null || row.line == null || string.IsNullOrWhiteSpace(row.line.text))
+            return said;
+        said.Add(Say(row.line, c, null));
+        if (row.then != null && !string.IsNullOrWhiteSpace(row.then.text))
+            said.Add(Say(row.then, c, null));
+        return said;
+    }
+
     /// <summary>A traveller's reply in their voice: <paramref name="line"/>'s template with {place} (the claimed place) and {document} (<paramref name="document"/>) filled, carrying its key-word spans over the template and its fills.</summary>
     private static DialogLine Say(LineText line, InterviewCase c, string document)
     {
