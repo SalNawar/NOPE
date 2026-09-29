@@ -171,11 +171,15 @@ public sealed class HomeUIController : MonoBehaviour
     // =========================================================
 
     /// <summary>
-    /// Shows today's expense breakdown and one row per family member with a
-    /// Treat button (calls onTreat with the member's index). Invokes
-    /// onContinue when the player moves on to the shop (or immediately if unwired).
+    /// Shows tonight's evening: a break-in first when there was one, the
+    /// expense breakdown (rent and utilities, family upkeep, medical drain,
+    /// the house's upkeep), the household's mood with its recovery chance,
+    /// who got worse or better overnight, and one row per family member with
+    /// a Treat button at <paramref name="careCost"/> (calls onTreat with the
+    /// member's index). Invokes onContinue when the player moves on to the
+    /// House (or immediately if unwired).
     /// </summary>
-    public void ShowExpenses(WorldState world, HomeEconomy.ExpenseReport report, GameConfigSO config, Action<int> onTreat, Action onContinue)
+    public void ShowExpenses(WorldState world, HomeEconomy.Evening evening, GameConfigSO config, int careCost, Action<int> onTreat, Action onContinue)
     {
         if (!HasExpensesPanel || world == null)
         {
@@ -189,39 +193,57 @@ public sealed class HomeUIController : MonoBehaviour
             expensesTitleText.text = $"Day {world.day} — Home";
 
         if (expensesBodyText != null)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("Today's expenses:");
-            sb.AppendLine($"  Rent & utilities: -{report.baseAmount}");
+            expensesBodyText.text = ExpensesText(world, evening ?? new HomeEconomy.Evening());
 
-            if (report.memberCount > 0)
-                sb.AppendLine($"  Family upkeep ({report.memberCount}): -{report.memberAmount}");
-
-            if (report.conditionAmount > 0)
-                sb.AppendLine($"  Medical drain: -{report.conditionAmount}");
-
-            sb.AppendLine($"Total: -{report.total} {UiText.Currency(UiText.WalletForm.Inline)}   (Balance: {world.money})");
-
-            if (world.money < 0)
-                sb.AppendLine("\nYou are in debt. Find a way to make ends meet.");
-
-            expensesBodyText.text = sb.ToString();
-        }
-
-        BuildFamilyRows(world, config, onTreat);
+        BuildFamilyRows(world, config, careCost, onTreat);
 
         expensesPanel.SetActive(true);
     }
 
-    /// <summary>Rebuilds the family member rows (the member's portrait for their condition when its art exists, ArtSlots.FamilyPortrait; name, condition, Treat button).</summary>
-    private void BuildFamilyRows(WorldState world, GameConfigSO config, Action<int> onTreat)
+    /// <summary>The expenses panel's body: the break-in, the bill's lines and total, the mood, and tonight's changes in the family.</summary>
+    private static string ExpensesText(WorldState world, HomeEconomy.Evening evening)
+    {
+        HomeEconomy.ExpenseReport report = evening.bill;
+        var sb = new StringBuilder();
+        if (report.breakInLoss > 0)
+            sb.AppendLine($"Someone broke in while you were at work: -{report.breakInLoss}");
+
+        sb.AppendLine("Tonight's expenses:");
+        sb.AppendLine($"  Rent & utilities: -{report.baseAmount}");
+
+        if (report.memberCount > 0)
+            sb.AppendLine($"  Family upkeep ({report.memberCount}): -{report.memberAmount}");
+
+        if (report.conditionAmount > 0)
+            sb.AppendLine($"  Medical drain: -{report.conditionAmount}");
+
+        if (report.upkeepAmount > 0)
+            sb.AppendLine($"  House upkeep: -{report.upkeepAmount}");
+
+        sb.AppendLine($"Total: -{report.total} {UiText.Currency(UiText.WalletForm.Inline)}   (Balance: {world.money})");
+
+        if (evening.mood > 0f)
+            sb.AppendLine($"Household mood: {evening.mood:0.#} (a sick member recovers {evening.recoveryChance * 100f:0}% of nights)");
+
+        if (evening.worse.Count > 0)
+            sb.AppendLine($"Worse tonight: {string.Join(", ", evening.worse)}.");
+
+        if (evening.better.Count > 0)
+            sb.AppendLine($"Feeling better: {string.Join(", ", evening.better)}.");
+
+        if (world.money < 0)
+            sb.AppendLine("You are in debt. Find a way to make ends meet.");
+
+        return sb.ToString();
+    }
+
+    /// <summary>Rebuilds the family member rows (the member's portrait for their condition when its art exists, ArtSlots.FamilyPortrait; name, condition, Treat button at <paramref name="careCost"/>).</summary>
+    private void BuildFamilyRows(WorldState world, GameConfigSO config, int careCost, Action<int> onTreat)
     {
         if (familyRowsRoot == null)
             return;
 
         ClearRows(_familyRows);
-
-        int careCost = HomeEconomy.GetCareCost(config);
 
         for (int i = 0; i < world.family.members.Count; i++)
         {

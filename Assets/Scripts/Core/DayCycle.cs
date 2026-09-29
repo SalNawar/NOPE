@@ -107,15 +107,20 @@ public static class DayCycle
     }
 
     /// <summary>
-    /// Home's arrival: bills the day's living costs (HomeEconomy) and lets the
-    /// family's untreated conditions drift on <paramref name="daySeed"/> (so a
-    /// reload bills and drifts the same); returns the bill.
+    /// Home's arrival (the Home upgrades spec §5), in this order on
+    /// <paramref name="daySeed"/> so a reload replays it: tonight's break-in
+    /// (it happened while the clerk was at work), the day's living costs and
+    /// the house's upkeep (HomeEconomy, with the house upgrades' effects), then
+    /// the family's night (drift and recovery). Returns the evening: the bill,
+    /// the break-in included, who got worse or better, and the mood.
     /// </summary>
-    public static HomeEconomy.ExpenseReport OpenHome(WorldState world, GameConfigSO config, int daySeed)
+    public static HomeEconomy.Evening OpenHome(WorldState world, ContentLibrarySO lib, GameConfigSO config, int daySeed)
     {
-        HomeEconomy.ExpenseReport bill = HomeEconomy.ApplyDailyExpenses(world, config);
-        HomeEconomy.AdvanceFamilyConditions(world, config, daySeed);
-        return bill;
+        var evening = new HomeEconomy.Evening();
+        int breakIn = HomeEconomy.RollBreakIn(world, lib, config, daySeed);
+        evening.bill = HomeEconomy.ApplyDailyExpenses(world, lib, config, breakIn);
+        HomeEconomy.AdvanceFamilyConditions(world, lib, config, daySeed, evening);
+        return evening;
     }
 
     /// <summary>

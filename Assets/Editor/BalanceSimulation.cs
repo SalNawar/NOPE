@@ -222,7 +222,7 @@ public static class BalanceSimulation
             }
 
             // Home: the bill and the family's drift; the simulation buys nothing, treats no one and spins nothing.
-            HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, config, Seeds.Day(seed, day));
+            HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, Seeds.Day(seed, day)).bill;
             ClerkAccountSource.RecordHome(world, bill.total, 0, lib, config);
             r.Household += bill.total;
             r.MoneyAtNight.Add(world.money);

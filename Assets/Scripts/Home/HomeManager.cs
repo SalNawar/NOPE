@@ -23,8 +23,8 @@ public sealed class HomeManager : MonoBehaviour
     /// <summary>Gameplay tuning (expenses, slot cost).</summary>
     private GameConfigSO _config;
 
-    /// <summary>Today's expense breakdown, kept for re-showing the panel after a Treat.</summary>
-    private HomeEconomy.ExpenseReport _expenseReport;
+    /// <summary>Tonight's evening (the bill, the break-in, the family's night, the mood), kept for re-showing the panel after a Treat.</summary>
+    private HomeEconomy.Evening _evening;
 
     /// <summary>Tonight's slot spins, drawn in turn from the run's own stream for the day (Seeds.ForSlot): a run replays, and Continue (Home again from the save made before it) cannot reroll a spin.</summary>
     private IRandomSource _slotRandom;
@@ -54,11 +54,11 @@ public sealed class HomeManager : MonoBehaviour
 
         Debug.Log($"[HomeManager] Day {_world.day} home phase starting: money={_world.money}, stability={_world.timelineStability:0.00}, familyMembers={_world.family.members.Count}.");
 
-        // Bill today's living costs and let untreated conditions drift,
-        // deterministically seeded by the day so it's stable on reload.
-        _expenseReport = DayCycle.OpenHome(_world, _config, run.GetDaySeed());
+        // The break-in, the bill and the family's night, deterministically
+        // seeded by the day so it's stable on reload.
+        _evening = DayCycle.OpenHome(_world, _lib, _config, run.GetDaySeed());
         _slotRandom = new SeededRandom(Seeds.ForSlot(run.GetDaySeed()));
-        _household = _expenseReport.total;
+        _household = _evening.bill.total;
         RecordStatement();
 
         RefreshHud();
@@ -74,7 +74,7 @@ public sealed class HomeManager : MonoBehaviour
         Debug.Log("[HomeManager] >>> Entering ShowExpenses.");
 
         if (homeUI != null && homeUI.HasExpensesPanel)
-            homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
+            homeUI.ShowExpenses(_world, _evening, _config, HomeEconomy.GetCareCost(_world, _lib, _config), HandleTreatFamilyMember, ShowShop);
         else
         {
             Debug.Log("[HomeManager] ShowExpenses: no expenses panel, skipping to Shop.");
@@ -87,15 +87,16 @@ public sealed class HomeManager : MonoBehaviour
     {
         Debug.Log($"[HomeManager] >>> Entering HandleTreatFamilyMember (memberIndex={memberIndex}).");
 
-        if (HomeEconomy.TreatFamilyMember(_world, _config, memberIndex))
+        int careCost = HomeEconomy.GetCareCost(_world, _lib, _config);
+        if (HomeEconomy.TreatFamilyMember(_world, _lib, _config, memberIndex))
         {
-            _household += HomeEconomy.GetCareCost(_config);
+            _household += careCost;
             RecordStatement();
             RefreshHud();
 
             // Refresh the panel in place (report numbers don't change; rows do).
             if (homeUI != null && homeUI.HasExpensesPanel)
-                homeUI.ShowExpenses(_world, _expenseReport, _config, HandleTreatFamilyMember, ShowShop);
+                homeUI.ShowExpenses(_world, _evening, _config, careCost, HandleTreatFamilyMember, ShowShop);
 
             Debug.Log($"[HomeManager] <<< Exiting HandleTreatFamilyMember (treated, money={_world.money}).");
         }
