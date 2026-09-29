@@ -419,6 +419,24 @@ public static class WorldPulls
         return lead.IsSplit ? Fill(splitLine, Name(lead.outcome), Name(lead.split)) : Name(lead.outcome);
     }
 
+    /// <summary>The separator of <see cref="OpKey"/>.</summary>
+    private const char OpKeySeparator = '/';
+
+    /// <summary>An outcome as an effect op names it (EffectOpType.PullOutcome's stringParam): "{factor}/{outcome}".</summary>
+    public static string OpKey(string factor, string outcome) => $"{factor}{OpKeySeparator}{outcome}";
+
+    /// <summary>Reads <see cref="OpKey"/>: false unless it holds a non-blank factor and outcome.</summary>
+    public static bool TryParseOpKey(string key, out string factor, out string outcome)
+    {
+        factor = outcome = null;
+        int at = key != null ? key.IndexOf(OpKeySeparator) : -1;
+        if (at <= 0 || at >= key.Length - 1)
+            return false;
+        factor = key.Substring(0, at).Trim();
+        outcome = key.Substring(at + 1).Trim();
+        return factor.Length > 0 && outcome.Length > 0 && outcome.IndexOf(OpKeySeparator) < 0;
+    }
+
     /// <summary>The split token of the first half.</summary>
     public const string SplitA = "{a}";
 

@@ -66,4 +66,7 @@ public sealed class LegendarySO : ScriptableObject
 
     /// <summary>A labourer story character's employer (premades[].employer, an agency.employers id; blank: drawn among its worksite era's).</summary>
     public string employer;
+
+    /// <summary>A famous traveller's pull on the world when accepted (premades[].pulls; the endings spec §4.1): stands instead of their role's pull and is not scaled by their kind (WorldPulls.ForAccept); none: the role's pull.</summary>
+    public System.Collections.Generic.List<OutcomePull> pulls = new();
 }

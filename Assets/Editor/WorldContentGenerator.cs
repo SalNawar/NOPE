@@ -1386,11 +1386,12 @@ public static partial class WorldContentGenerator
         return fx;
     }
 
-    /// <summary>Writes History/Effect_History_{id}.asset: one SetFact op per edit of the rule (latched when its trigger fires).</summary>
+    /// <summary>Writes History/Effect_History_{id}.asset: one SetFact op per edit of the rule (latched when its trigger fires), its stability change, and one PullOutcome op per pull on the world (the endings spec §4.1).</summary>
     private static EffectSO MakeHistoryEffect(HistoryRuleData r, ConditionRefs refs, HashSet<string> written)
     {
         EditData[] editData = r.edits ?? Array.Empty<EditData>();
-        if (editData.Length == 0 && r.stability == 0f)
+        OutcomePull[] pulls = r.pulls ?? Array.Empty<OutcomePull>();
+        if (editData.Length == 0 && r.stability == 0f && pulls.Length == 0)
             return null; // a story rule that only prints its line has no effect
 
         EffectSO fx = LoadOrCreate<EffectSO>($"{HistoryFolder}/Effect_History_{r.id}.asset", written);
@@ -1406,6 +1407,7 @@ public static partial class WorldContentGenerator
         }).ToList();
         if (r.stability != 0f)
             fx.ops.Add(new EffectOp { type = EffectOpType.AddStability, floatParam = r.stability });
+        fx.ops.AddRange(pulls.Select(p => new EffectOp { type = EffectOpType.PullOutcome, stringParam = WorldPulls.OpKey(p.factor, p.outcome), floatParam = p.amount }));
         EditorUtility.SetDirty(fx);
         return fx;
     }
@@ -1447,6 +1449,7 @@ public static partial class WorldContentGenerator
         place.era = era;
         place.year = p.year;
         place.moment = p.moment ?? string.Empty;
+        place.leanings = (p.leanings ?? Array.Empty<OutcomeRef>()).ToList();
         place.tongue = p.tongue;
         (place.birthYearMin, place.birthYearMax) = BirthYears(p, ageMin, ageMax);
         place.maleNames = p.maleNames ?? Array.Empty<string>();
@@ -1561,6 +1564,7 @@ public static partial class WorldContentGenerator
         premade.citizenId = m.citizenId ?? string.Empty;
         premade.debt = m.debt;
         premade.employer = m.employer ?? string.Empty;
+        premade.pulls = (m.pulls ?? Array.Empty<OutcomePull>()).ToList();
         premade.authoredImpacts = (m.impacts ?? Array.Empty<ImpactData>()).Select(i => new TimelineImpact
         {
             attribute = attributes[i.attribute],
@@ -2301,6 +2305,8 @@ public static partial class WorldContentGenerator
         public string citizenId;
         public int debt;
         public string employer;
+        /// <summary>A famous traveller's authored pulls on the world when accepted (the endings spec §4.1); missing: the role's.</summary>
+        public OutcomePull[] pulls;
     }
 
     /// <summary>A premade's timeline impact; a missing skipNationScore means the delta also moves the nation's score.</summary>
@@ -2358,6 +2364,8 @@ public static partial class WorldContentGenerator
         public string[] smallTalk;
         public WardrobeData wardrobe;
         public LooksWeightData looks;
+        /// <summary>The place's leanings on the world factors (the endings spec §4.2); missing: none.</summary>
+        public OutcomeRef[] leanings;
     }
 
     /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set, debt standing or recall, the kinds it is read for; a recall the model it grounds ("transponder", an agency.transponders id; days 7-15).</summary>
@@ -2474,7 +2482,7 @@ public static partial class WorldContentGenerator
     [Serializable] private sealed class HistoryLinesData { public string leaderGained; public string leaderLost; public string carry; public string dominant; public string panic; }
 
     /// <summary>A history rule: when its conditions pass at night it fires once, latches its edits, moves stability by its percent (missing: 0) and prints its news line; with no edit it is a story rule (days 7-15 B10).</summary>
-    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; public string section; }
+    [Serializable] private sealed class HistoryRuleData { public string id; public string name; public string news; public ConditionData[] conditions; public EditData[] edits; public float stability; public string section; public OutcomePull[] pulls; }
 
     /// <summary>A fact edit: place ("{country}_{era}"), category and the new value.</summary>
     [Serializable] private sealed class EditData { public string place; public string category; public string value; }

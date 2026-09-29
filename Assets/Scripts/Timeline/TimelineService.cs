@@ -599,6 +599,11 @@ public static class TimelineService
                             History.Latch(world.history, new FactEdit(op.profile.nation.id, op.profile.era.id, op.category, op.stringParam,
                                                                       startDay, EditCause.Rule, sourceLabel));
                         break;
+                    case EffectOpType.PullOutcome:
+                        // An authored pull on the world (a story rule's, a dialog choice's): the next latch reads it.
+                        if (WorldPulls.TryParseOpKey(op.stringParam, out string factor, out string outcome))
+                            WorldPulls.Add(world.pulls, factor, outcome, op.floatParam);
+                        break;
                 }
             }
         }

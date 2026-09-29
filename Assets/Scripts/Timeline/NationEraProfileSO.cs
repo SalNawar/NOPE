@@ -65,6 +65,9 @@ public sealed class NationEraProfileSO : ScriptableObject
     /// <summary>Baseline attribute scores + tier effects for this profile.</summary>
     public List<AttributeBaseline> baselines = new();
 
+    /// <summary>Where an idea has roots here (world_source.json places[].leanings; the endings spec §4.2): per world factor, the outcome an accepted traveller sent here pulls it toward (WorldPulls.ForAccept); a factor not listed is pulled nowhere.</summary>
+    public List<OutcomeRef> leanings = new();
+
     /// <summary>Label used in books, claims and Citizen Records: "Abbasid Baghdad (Medieval)".</summary>
     public string OriginLabel => OriginLabels.Format(displayName, era != null ? era.displayName : null);
 
