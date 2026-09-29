@@ -134,14 +134,17 @@ public class InterviewTests
         Assert.AreEqual(string.Empty, Interview.Opener(null, TravellerGender.Male, null, null));
     }
 
+    /// <summary>A traveller of <paramref name="kind"/> claiming Babylonia (Ancient), with no voice.</summary>
+    private static InterviewCase ClaimCase(TravellerKind kind) => new InterviewCase { kind = kind, claimPlace = "Babylonia (Ancient)", claimedEraId = "ancient" };
+
     [Test]
     public void Claim_FillsTheKindsLine_OrGivesTheBareLabelWhenTheKindHasNone()
     {
-        Assert.AreEqual("Please. Send me home to Babylonia (Ancient).", Interview.Claim(Lines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
-        Assert.AreEqual("One leisure departure to Babylonia (Ancient), please.", Interview.Claim(Lines(), TravellerKind.RichTourist, "Babylonia (Ancient)"), "each kind its own line");
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(Lines(), TravellerKind.Labourer, "Babylonia (Ancient)"), "no line for the kind");
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(new InterviewLines(), TravellerKind.Displaced, "Babylonia (Ancient)"));
-        Assert.AreEqual("Babylonia (Ancient)", Interview.Claim(null, TravellerKind.Displaced, "Babylonia (Ancient)"));
+        Assert.AreEqual("Please. Send me home to Babylonia (Ancient).", InterviewScript.Claim(Lines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("One leisure departure to Babylonia (Ancient), please.", InterviewScript.Claim(Lines(), ClaimCase(TravellerKind.RichTourist)), "each kind its own line");
+        Assert.AreEqual("Babylonia (Ancient)", InterviewScript.Claim(Lines(), ClaimCase(TravellerKind.Labourer)), "no line for the kind");
+        Assert.AreEqual("Babylonia (Ancient)", InterviewScript.Claim(new InterviewLines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("Babylonia (Ancient)", InterviewScript.Claim(null, ClaimCase(TravellerKind.Displaced)));
     }
 
     // ---- The answer by kind and era (the personalities spec's W3, V3: one question per category, asked of everyone) ----
@@ -243,16 +246,16 @@ public class InterviewTests
     [Test]
     public void ClaimTemplate_IsTheKindsAuthoredClaim_OrThePlaceAloneWhenBlank()
     {
-        Assert.AreEqual("Please. Send me home to {place}.", Interview.ClaimTemplate(Lines(), TravellerKind.Displaced));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(Lines(), TravellerKind.PoorTourist));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(new InterviewLines(), TravellerKind.Displaced));
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(null, TravellerKind.Displaced));
+        Assert.AreEqual("Please. Send me home to {place}.", InterviewScript.ClaimTemplate(Lines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(Lines(), ClaimCase(TravellerKind.PoorTourist)));
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(new InterviewLines(), ClaimCase(TravellerKind.Displaced)));
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(null, ClaimCase(TravellerKind.Displaced)));
 
         InterviewLines blank = Lines();
         blank.claims[1].line.text = " ";
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(blank, TravellerKind.Displaced), "a blank line counts as none");
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(blank, ClaimCase(TravellerKind.Displaced)), "a blank line counts as none");
         blank.claims.Insert(0, null);
-        Assert.AreEqual("{place}", Interview.ClaimTemplate(blank, TravellerKind.Displaced), "a null entry is skipped");
+        Assert.AreEqual("{place}", InterviewScript.ClaimTemplate(blank, ClaimCase(TravellerKind.Displaced)), "a null entry is skipped");
     }
 
     [Test]

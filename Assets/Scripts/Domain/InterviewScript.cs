@@ -30,8 +30,11 @@ public sealed class InterviewCase
     /// <summary>The traveller's answers to today's askable questions (CaseInstance.answers).</summary>
     public IReadOnlyList<InterviewAnswer> answers;
 
-    /// <summary>The traveller's small-talk line; null means no small talk.</summary>
+    /// <summary>The traveller's small-talk line, resolved at generation (Voices.SmallTalk; {place} filled here); null means no small talk.</summary>
     public LineText smallTalk;
+
+    /// <summary>Who speaks (CaseInstance's personality or premade and dialog seed): every reply is resolved in their voice (Voices); null says the defaults.</summary>
+    public Voice voice;
 
     /// <summary>The traveller's visible garments (TravellerLook.Garments); none means no look menu.</summary>
     public IReadOnlyList<Garment> garments;
@@ -81,7 +84,7 @@ public static class InterviewScript
     /// <summary>
     /// The transcript's first lines: the desk's opener (<see cref="IntroLineId"/>,
     /// skipped when blank), then the traveller's claim (<see cref="ClaimLineId"/>:
-    /// Interview.Claim of the claimed place in their kind's words, with its key-word spans).
+    /// <see cref="Claim"/>, with its key-word spans taken over its template).
     /// </summary>
     public static IReadOnlyList<DialogLine> Opening(InterviewLines wording, InterviewCase c)
     {
@@ -91,11 +94,29 @@ public static class InterviewScript
 
         if (!string.IsNullOrWhiteSpace(c.introLine))
             lines.Add(new DialogLine(IntroLineId, DialogSpeaker.Desk, c.introLine));
+        string template = ClaimTemplate(wording, c);
         var fills = new Dictionary<string, string> { { Interview.PlaceToken, c.claimPlace } };
-        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Claim(wording, c.kind, c.claimPlace), null,
-                                 KeyWords.Spans(Interview.ClaimTemplate(wording, c.kind), fills, c.keyWords)));
+        lines.Add(new DialogLine(ClaimLineId, DialogSpeaker.Traveller, Interview.Fill(template, Interview.PlaceToken, c.claimPlace), null,
+                                 KeyWords.Spans(template, fills, c.keyWords)));
         return lines;
     }
+
+    /// <summary>
+    /// The traveller's claim template (the only claim: nothing prints it, the
+    /// personalities spec's B3): their voice's (Voices.Claim), else their
+    /// kind's (interview.claims), or "{place}" alone when that is missing or blank.
+    /// </summary>
+    public static string ClaimTemplate(InterviewLines wording, InterviewCase c)
+    {
+        LineText line = c != null ? Voices.Claim(wording, c.voice, Context(c)) : null;
+        return string.IsNullOrWhiteSpace(line?.text) ? Interview.Placeholder(Interview.PlaceToken) : line.text;
+    }
+
+    /// <summary>The traveller's claim sentence (<see cref="ClaimTemplate"/> with the claimed place's label): what they say as they step up.</summary>
+    public static string Claim(InterviewLines wording, InterviewCase c) => Interview.Fill(ClaimTemplate(wording, c), Interview.PlaceToken, c?.claimPlace);
+
+    /// <summary>What a line may depend on before the stamp (VoiceContext, T2): the kind and the claimed era.</summary>
+    private static VoiceContext Context(InterviewCase c) => new VoiceContext(c != null ? c.kind : default, c?.claimedEraId);
 
     /// <summary>The desk asking <paramref name="q"/>, in the question's own words for every traveller (the personalities spec's W3), the claimed place's label filling {place} ("What will you pay with in {place}?").</summary>
     public static DialogLine PromptLine(InterviewQuestion q, string placeLabel = null)
@@ -104,13 +125,20 @@ public static class InterviewScript
         return new DialogLine(prompt.id, DialogSpeaker.Desk, Interview.Fill(prompt.text, Interview.PlaceToken, placeLabel));
     }
 
-    /// <summary>The traveller's answer line: the template for their <paramref name="kind"/> and claimed <paramref name="eraId"/> (InterviewQuestion.AnswerFor) with the canonical value, carrying the answer's fact and its key-word spans under <paramref name="keyWords"/> (null: none).</summary>
-    public static DialogLine AnswerLine(InterviewQuestion q, string eraId, TravellerKind kind, InterviewAnswer a, KeyWordRule keyWords = null)
+    /// <summary>
+    /// The traveller's answer line: the template in their voice for their kind
+    /// and claimed era (Voices.Answer: the voice's row, else the question's
+    /// override, else its answer) with the canonical value and the claimed
+    /// place, carrying the answer's fact (the sentence around a tell's value is
+    /// the honest sentence, T3) and its key-word spans.
+    /// </summary>
+    public static DialogLine AnswerLine(InterviewLines lines, InterviewQuestion q, InterviewCase c, InterviewAnswer a)
     {
-        LineText answer = q.AnswerFor(eraId, kind);
+        LineText answer = Voices.Answer(lines, c?.voice, Context(c), q);
         string value = a != null ? a.value : null;
-        var fills = new Dictionary<string, string> { { Interview.ValueToken, value } };
-        return DialogLine.Answer(answer.id, Interview.Fill(answer.text, Interview.ValueToken, value), a, KeyWords.Spans(answer.text, fills, keyWords));
+        var fills = new Dictionary<string, string> { { Interview.ValueToken, value }, { Interview.PlaceToken, c?.claimPlace } };
+        string text = Interview.Fill(Interview.Fill(answer.text, Interview.ValueToken, value), Interview.PlaceToken, c?.claimPlace);
+        return DialogLine.Answer(answer.id, text, a, KeyWords.Spans(answer.text, fills, c?.keyWords));
     }
 
     /// <summary>
@@ -197,7 +225,7 @@ public static class InterviewScript
                     Lines =
                     {
                         new DialogLine(Id(r.prompt), DialogSpeaker.Desk, Text(r.prompt)),
-                        Said(Id(r.reply), Text(r.reply), null, keyWords)
+                        Say(Voices.Spoken(lines, c?.voice, Context(c), r), c, null)
                     },
                     OneShot = true,
                     Kind = DialogChoiceKind.Request
@@ -207,7 +235,6 @@ public static class InterviewScript
 
         ask.Choices.Add(new DialogChoice { Id = "back", Label = lines.backLabel, Next = HubNodeId, Kind = DialogChoiceKind.Back });
 
-        string eraId = c != null ? c.claimedEraId : null;
         if (questions != null)
         {
             foreach (InterviewQuestion q in questions)
@@ -220,7 +247,7 @@ public static class InterviewScript
                 {
                     Id = $"q:{q.id}",
                     Label = q.label,
-                    Lines = { PromptLine(q, c != null ? c.claimPlace : null), AnswerLine(q, eraId, c != null ? c.kind : default, a, keyWords) },
+                    Lines = { PromptLine(q, c != null ? c.claimPlace : null), AnswerLine(lines, q, c, a) },
                     OneShot = true,
                     Kind = DialogChoiceKind.Question
                 });
@@ -236,7 +263,7 @@ public static class InterviewScript
                 Lines =
                 {
                     new DialogLine(Id(lines.smallTalkPrompt), DialogSpeaker.Desk, Text(lines.smallTalkPrompt)),
-                    Said(c.smallTalk.id, c.smallTalk.text, null, keyWords)
+                    Say(c.smallTalk, c, null)
                 },
                 OneShot = true,
                 Kind = DialogChoiceKind.Question
@@ -280,14 +307,13 @@ public static class InterviewScript
     /// <summary>
     /// A request entry (one-shot, staying where it was chosen): the desk's
     /// prompt naming the request, then, for a carried paper, the traveller's
-    /// reply and the hand-over, or, for a request the
-    /// traveller carries no form of, their kind's missing-form line
-    /// (Interview.MissingFormReply for the case's variant; only the prompt
-    /// when none is authored) and no action. Its id is "request:{id}" either
-    /// way, so the menu is the same for every traveller (W1). A Missing
-    /// variant with no line of its own for the request (a form the kind never
-    /// carries) says the kind's Honest line: only a form they should carry
-    /// was left out.
+    /// reply in their voice (Voices.HandOver) and the hand-over, or, for a
+    /// request the traveller carries no form of, their refusal in their voice
+    /// for the case's variant (Voices.Missing: a voice row, else the kind's
+    /// line; a Missing variant with no line for the request says the Honest
+    /// one; only the prompt when none is authored) and no action. {document}
+    /// is the request's label, {place} the claimed place. Its id is
+    /// "request:{id}" either way, so the menu is the same for every traveller (W1).
     /// </summary>
     private static DialogChoice Request(InterviewLines lines, FormRequest request, string label, InterviewCase c, KeyWordRule keyWords)
     {
@@ -302,21 +328,28 @@ public static class InterviewScript
 
         if (request.Carried)
         {
-            choice.Lines.Add(Said(Id(lines.requestReply), Text(lines.requestReply), null, keyWords));
+            choice.Lines.Add(Say(Voices.HandOver(lines, c?.voice, Context(c), request.Id), c, request.Label));
             choice.Action = DialogAction.HandOverDocument;
             choice.DocumentIndex = request.Document;
         }
         else
         {
-            TravellerKind kind = c != null ? c.kind : default;
-            MissingFormVariant variant = c != null ? c.missingVariant : MissingFormVariant.Honest;
-            LineText reply = Interview.MissingFormReply(lines, kind, request.Id, variant)
-                             ?? (variant != MissingFormVariant.Honest ? Interview.MissingFormReply(lines, kind, request.Id, MissingFormVariant.Honest) : null);
+            LineText reply = Voices.Missing(lines, c?.voice, Context(c), request.Id, c != null ? c.missingVariant : MissingFormVariant.Honest);
             if (reply != null)
-                choice.Lines.Add(Said(reply.id, reply.text, null, keyWords));
+                choice.Lines.Add(Say(reply, c, request.Label));
         }
 
         return choice;
+    }
+
+    /// <summary>A traveller's reply in their voice: <paramref name="line"/>'s template with {place} (the claimed place) and {document} (<paramref name="document"/>) filled, carrying its key-word spans over the template and its fills.</summary>
+    private static DialogLine Say(LineText line, InterviewCase c, string document)
+    {
+        string template = line != null ? line.text : null;
+        string place = c != null ? c.claimPlace : null;
+        var fills = new Dictionary<string, string> { { Interview.PlaceToken, place }, { Interview.DocumentToken, document } };
+        string text = Interview.Fill(Interview.Fill(template, Interview.PlaceToken, place), Interview.DocumentToken, document);
+        return new DialogLine(line != null ? line.id : null, DialogSpeaker.Traveller, text, null, KeyWords.Spans(template, fills, c != null ? c.keyWords : null));
     }
 
     /// <summary>An authored node as a runtime node: namespaced ids, the desk speaking each choice's label, the traveller's lines with their key-word spans.</summary>

@@ -181,6 +181,145 @@ public class InterviewScriptTests
         InterviewScript.Build(lines ?? Lines(), questions ?? Questions(), dialogs ?? new[] { Rumour() }, c ?? Case());
 
     // -----------------------------
+    // The voice (the personalities spec's V1, V3, T2-T3)
+    // -----------------------------
+
+    /// <summary>A row of curt's for a slot.</summary>
+    private static VoiceLine V(string text, string key = null, MissingFormVariant variant = MissingFormVariant.Honest, params TravellerKind[] kinds) =>
+        new VoiceLine { personality = "curt", kinds = kinds.ToList(), key = key ?? string.Empty, variant = variant, line = new LineText("interview.voices.x.curt." + text.Length, text) };
+
+    /// <summary>The wording with the groups, the spoken requests and curt's rows: a displaced claim, a hand-over, a rich tourist's waiver refusal, "Speak up", the currency and capital answers.</summary>
+    private static InterviewLines VoicedLines()
+    {
+        InterviewLines lines = LinesWithGroups();
+        lines.requests.Add(Spoken("step_closer", "Step closer", "Step closer to the glass, please.", "Like this?"));
+        lines.requests.Add(Spoken("speak_up", "Speak up", "Speak up, please.", "Sorry. Is this better?"));
+        lines.voices.claims.Add(V("{place}. Home. Now.", kinds: TravellerKind.Displaced));
+        lines.voices.handOver.Add(V("Here."));
+        lines.voices.missingForms.Add(V("Premium units are exempt from the {document}.", "TC-310", kinds: TravellerKind.RichTourist));
+        lines.voices.spoken.Add(V("Said it once. That was billed.", "speak_up"));
+        lines.voices.answers.Add(V("{value}. Not that it'll be enough.", "q_currency"));
+        lines.voices.answers.Add(V("{value}, I'm sure.", "q_capital"));
+        return lines;
+    }
+
+    private static InterviewCase Voiced(InterviewCase c)
+    {
+        c.voice = new Voice("curt", null, 7);
+        return c;
+    }
+
+    [Test]
+    public void Opening_SaysTheVoicesClaim()
+    {
+        IReadOnlyList<DialogLine> opening = InterviewScript.Opening(VoicedLines(), Voiced(Case()));
+        Assert.AreEqual((InterviewScript.ClaimLineId, DialogSpeaker.Traveller, "New Kingdom Egypt (Ancient). Home. Now."), (opening[1].Id, opening[1].Speaker, opening[1].Text));
+        Assert.AreEqual(opening[1].Text, InterviewScript.Claim(VoicedLines(), Voiced(Case())));
+    }
+
+    [Test]
+    public void Opening_ClaimKeyWordsAreTakenOverItsTemplate()
+    {
+        DialogLine claim = InterviewScript.Opening(VoicedLines(), Voiced(Case(keyWords: KeyWordRule())))[1];
+        Assert.AreEqual("New Kingdom Egypt (Ancient)|Home", English(claim), "the place's fill and the key word of the voice's own template");
+    }
+
+    [Test]
+    public void Opening_NoVoiceSaysTheKindsClaim()
+    {
+        Assert.AreEqual("Please. Send me home to New Kingdom Egypt (Ancient).", InterviewScript.Opening(VoicedLines(), Case())[1].Text);
+        InterviewCase chatty = Case();
+        chatty.voice = new Voice("chatty", null, 7);
+        Assert.AreEqual("Please. Send me home to New Kingdom Egypt (Ancient).", InterviewScript.Opening(VoicedLines(), chatty)[1].Text, "a personality with no row: the default");
+    }
+
+    [Test]
+    public void Build_TheHandOverInTheVoicesWords()
+    {
+        DialogChoice order = Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.PapersNodeId).Choices.First(x => x.Id == "request:TC-630");
+        Assert.AreEqual(DialogAction.HandOverDocument, order.Action);
+        Assert.AreEqual("Your Return Order, please.", order.Lines[0].Text, "the desk's words are everyone's");
+        Assert.AreEqual("Here.", order.Lines[1].Text);
+        Assert.AreEqual("Here you are.", Build(Case(), lines: VoicedLines()).Node(InterviewScript.PapersNodeId).Choices.First(x => x.Id == "request:TC-630").Lines[1].Text);
+    }
+
+    [Test]
+    public void Build_ARefusalByKindVariantAndVoice()
+    {
+        DialogNode rich = Build(Voiced(Citizen(TravellerKind.RichTourist, RichForms())), lines: VoicedLines()).Node(InterviewScript.PapersNodeId);
+        Assert.AreEqual("Premium units are exempt from the Stranding Waiver.", rich.Choices.First(x => x.Id == "request:TC-310").Lines[1].Text, "{document} is the request's label");
+        Assert.AreEqual("I pay my own way.", rich.Choices.First(x => x.Id == "request:proof").Lines[1].Text, "no row for the proof: the kind's default");
+
+        DialogNode poor = Build(Voiced(Citizen(TravellerKind.PoorTourist, PoorForms().Take(3).ToArray(), MissingFormVariant.Missing)), lines: VoicedLines()).Node(InterviewScript.PapersNodeId);
+        Assert.AreEqual("I... didn't get round to that one.", poor.Choices.First(x => x.Id == "request:proof").Lines[1].Text, "the Missing variant: the rich tourist's row is not theirs");
+    }
+
+    [Test]
+    public void Build_ASpokenRequestsReply()
+    {
+        DialogNode hub = Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.HubNodeId);
+        Assert.AreEqual("Said it once. That was billed.", hub.Choices.First(x => x.Id == "act:speak_up").Lines[1].Text);
+        Assert.AreEqual("Like this?", hub.Choices.First(x => x.Id == "act:step_closer").Lines[1].Text, "no row for Step closer: its reply");
+        Assert.AreEqual("Step closer to the glass, please.", hub.Choices.First(x => x.Id == "act:step_closer").Lines[0].Text);
+    }
+
+    [Test]
+    public void Build_AnAnswerKeepsItsCanonicalValueAndFact()
+    {
+        DialogLine answer = Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.AskNodeId).Choices.First(x => x.Id == "q:q_currency").Lines[1];
+        Assert.AreEqual("Deben. Not that it'll be enough.", answer.Text);
+        Assert.IsTrue(answer.IsAnswer);
+        Assert.AreEqual((ClueCategory.Currency, "Deben", false), (answer.Category, answer.Value, answer.IsTell), "the value and the fact are the answer's, whatever the voice");
+        Assert.AreEqual("About Currency?", Build(Voiced(Case()), lines: VoicedLines()).Node(InterviewScript.AskNodeId).Choices.First(x => x.Id == "q:q_currency").Lines[0].Text, "the desk's prompt is everyone's");
+    }
+
+    [Test]
+    public void Build_ATellsSentenceIsTheHonestSentence()
+    {
+        // The personalities spec's T3: two travellers alike but for one answer's tell say the same sentence around the value,
+        // and the same claim, replies and small talk.
+        InterviewCase honest = Voiced(Case()), liar = Voiced(Case());
+        honest.answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "Deben" }, new InterviewAnswer { category = ClueCategory.Geography, value = "Thebes" } };
+        liar.answers = new[] { new InterviewAnswer { category = ClueCategory.Currency, value = "Deben" }, new InterviewAnswer { category = ClueCategory.Geography, value = "Babylon", isTell = true } };
+
+        List<string> a = Walk(honest), b = Walk(liar);
+        Assert.AreEqual(a.Count, b.Count);
+        for (int i = 0; i < a.Count; i++)
+            Assert.AreEqual(a[i].Replace("Thebes", "{value}"), b[i].Replace("Babylon", "{value}"), $"line {i}");
+        CollectionAssert.Contains(a, "Thebes, I'm sure.");
+        CollectionAssert.Contains(b, "Babylon, I'm sure.");
+    }
+
+    [Test]
+    public void Build_NoVoiceSaysTodaysLines()
+    {
+        CollectionAssert.AreEqual(new[]
+        {
+            "Next! Step forward, sir.", "Please. Send me home to New Kingdom Egypt (Ancient).",
+            "Your Intake Declaration, please.", "Here you are.", "Your Return Order, please.", "Here you are.",
+            "Step closer to the glass, please.", "Like this?", "Speak up, please.", "Sorry. Is this better?",
+            "About Currency?", "We trade with Deben.", "About Capital?", "Our capital is Babylon.",
+            "How is life back home?", "The Nile rose right on time."
+        }, Walk(Case()), "no voice: every line is today's, whatever rows the voices have");
+    }
+
+    /// <summary>Every line of a walk through the hub's requests, the papers menu, the spoken requests and the ask menu, in order.</summary>
+    private static List<string> Walk(InterviewCase c)
+    {
+        var runner = new DialogRunner(Build(c, dialogs: new AuthoredDialog[0], lines: VoicedLines()), InterviewScript.Opening(VoicedLines(), c));
+        runner.Choose("papers");
+        foreach (string id in Ids(runner.Choices).Where(id => id.StartsWith("request:")).ToList())
+            runner.Choose(id);
+        runner.Choose("back");
+        runner.Choose("act:step_closer");
+        runner.Choose("act:speak_up");
+        runner.Choose("ask");
+        foreach (string id in Ids(runner.Choices).Where(id => id != "back").ToList())
+            runner.Choose(id);
+        return runner.Transcript.Select(l => l.Text).ToList();
+    }
+
+    // -----------------------------
     // The one wheel (the personalities spec's W1-W6)
     // -----------------------------
 
@@ -665,7 +804,7 @@ public class InterviewScriptTests
         InterviewLines blank = Lines();
         blank.claims = null;
         Assert.AreEqual("New Kingdom Egypt (Ancient)", InterviewScript.Opening(blank, Case())[1].Text);
-        Assert.AreEqual(Interview.Claim(Lines(), TravellerKind.Displaced, "New Kingdom Egypt (Ancient)"), InterviewScript.Opening(Lines(), Case())[1].Text, "the banner's text");
+        Assert.AreEqual(InterviewScript.Claim(Lines(), Case()), InterviewScript.Opening(Lines(), Case())[1].Text, "the claim's one text");
 
         InterviewCase tourist = Case();
         tourist.kind = TravellerKind.RichTourist;

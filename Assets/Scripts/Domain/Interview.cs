@@ -71,17 +71,6 @@ public static class Interview
         return Fill(lines.opener != null ? lines.opener.text : null, HonorificToken, Honorific(gender, lines));
     }
 
-    /// <summary>A traveller's claim sentence for a place label, in their kind's words; the bare label when the kind has no line (the banner never goes empty).</summary>
-    public static string Claim(InterviewLines lines, TravellerKind kind, string placeLabel) => Fill(ClaimTemplate(lines, kind), PlaceToken, placeLabel);
-
-    /// <summary>The claim's template for a kind: its authored line, or "{place}" alone when it has none or it is blank (the claim's key-word spans are taken over it).</summary>
-    public static string ClaimTemplate(InterviewLines lines, TravellerKind kind)
-    {
-        LineText line = ClaimLine(lines, kind);
-        string template = line != null ? line.text : null;
-        return string.IsNullOrWhiteSpace(template) ? Placeholder(PlaceToken) : template;
-    }
-
     /// <summary>The missing-form reply of <paramref name="kind"/> asked for <paramref name="request"/> (a form number or a group id, FormRequests.IdOf) for <paramref name="variant"/> (null entries skipped), or null when none is authored.</summary>
     public static LineText MissingFormReply(InterviewLines lines, TravellerKind kind, string request, MissingFormVariant variant)
     {
