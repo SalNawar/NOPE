@@ -11260,8 +11260,8 @@
         "tier": "Full"
       },
       {
-        "key": "form.report.officer",
-        "text": "Desk officer, day {0}",
+        "key": "form.report.caseLine",
+        "text": "{0} · {1}",
         "gloss": "None",
         "tier": "Full"
       },

@@ -8,7 +8,7 @@ using UnityEngine.UI;
 /// the PC spec's AP5, AP7, FO9, §2.5-§2.9): each tab of a pane draws its page
 /// kind on a FormPage (OfficeSceneUIBuilder.PcForms: a scroll whose content
 /// is a FormView at the pane's width) under the view's own strip: Records
-/// (the lookup field and LOOK UP over the Record Extract, Form_RecordExtract),
+/// (the lookup field and SEARCH over the Record Extract, Form_RecordExtract),
 /// Reference ("Claimed place only" and the chosen book's cover over a
 /// register page template, Form_Register, cloned per book by ReferenceView),
 /// Transcript ("Answers only" and the "New line" pill over the Interview
@@ -45,7 +45,7 @@ public static partial class OfficeSceneUIBuilder
         return page;
     }
 
-    /// <summary>The Records tab (§2.5): the lookup (a name or a number, LOOK UP) over the Record Extract; its evidence boxes pick into <paramref name="compare"/>.</summary>
+    /// <summary>The Records tab (§2.5): the lookup (a name or a number, SEARCH) over the Record Extract; its evidence boxes pick into <paramref name="compare"/>.</summary>
     private static RecordsView BuildRecordsView(Transform content, CompareController compare)
     {
         Transform root = ViewRoot(content, "RecordsView", Paper, ThemeRoleId.WindowBody);

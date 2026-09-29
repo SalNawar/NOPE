@@ -4,13 +4,14 @@ using UnityEngine;
 /// <summary>
 /// The Investigation app's Report tab (the PC redesign AP5, FO9, §2.8, CM5):
 /// the case's Deviation Report (Form_DeviationReport, TC-930, on a FormPage
-/// at the pane's width): the case line (the claim banner's text), a table
+/// at the pane's width): the case line (the day's date and the claim
+/// banner's text), a table
 /// row per documented deviation (NO., CATEGORY, STATEMENT, CONTRADICTED BY,
 /// PROOF: ReportPage), each side's cell with a ↗ back to where it was
 /// picked (SmartLinks.ForKey through the app: a paper's field, a transcript
 /// line, a book row, a record row; a held paper links nowhere), the tail
-/// (nothing documented yet, or the count), the desk officer's sign-off and
-/// the stamp area. Nothing on it picks. A case source. A logged deviation
+/// (nothing documented yet, or the count), the desk officer's sign-off (the
+/// clerk's name over "Desk officer") and the stamp area. Nothing on it picks. A case source. A logged deviation
 /// badges the tab; nothing opens it. Each pane has one; EvidencePresenter
 /// writes them all.
 /// </summary>
@@ -48,9 +49,9 @@ public sealed class ReportView : AppView
 
     /// <summary>
     /// Draws the report: <paramref name="entries"/> (the case's documented
-    /// deviations with their sides, in order) under <paramref name="caseLine"/>,
-    /// headed with <paramref name="agency"/>'s block, signed for
-    /// <paramref name="day"/>; with none, the tail says what to compare.
+    /// deviations with their sides, in order) under <paramref name="caseLine"/>
+    /// dated <paramref name="day"/>, headed with <paramref name="agency"/>'s
+    /// block and signed by its clerk; with none, the tail says what to compare.
     /// </summary>
     public void Show(IReadOnlyList<ReportEntry> entries, string caseLine, AgencyContent agency, int day)
     {
@@ -58,11 +59,12 @@ public sealed class ReportView : AppView
         if (page == null || Form == null || reportForm == null)
             return;
         FormData data = reportForm.Page(agency);
+        string date = agency != null ? AgencyCalendar.Today(agency.firstDate, day) : null;
         data.Text = new Dictionary<string, string>
         {
-            { ReportPage.CaseLineSlot, caseLine ?? string.Empty },
+            { ReportPage.CaseLineSlot, date != null ? UiText.Format("form.report.caseLine", date, caseLine ?? string.Empty) : caseLine ?? string.Empty },
             { ReportPage.TailSlot, _entries.Count == 0 ? UiText.Get("scanner.idle") : UiText.Format("scanner.summary", _entries.Count) },
-            { ReportPage.SignatureSlot, UiText.Format("form.report.officer", day) }
+            { ReportPage.SignatureSlot, agency != null && agency.clerk != null ? agency.clerk.name : string.Empty }
         };
         data.Rows = new Dictionary<string, IReadOnlyList<string[]>> { { ReportPage.RowsSlot, ReportPage.Rows(_entries, UiText.Category, Proof) } };
         page.Show(reportForm.form, data, _ => false, null, CellLinkHint);

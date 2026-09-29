@@ -44,11 +44,11 @@ MonoBehaviour:
       - 'Contradicted by'
       - 'Proof'
       shares:
-      - 0.07
-      - 0.15
-      - 0.3
-      - 0.3
-      - 0.18
+      - 0.08
+      - 0.17
+      - 0.28
+      - 0.28
+      - 0.19
       options: []
       field: -1
       slot: 'rows'

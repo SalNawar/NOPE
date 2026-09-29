@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// The Investigation app's Records tab (the PC redesign AP5, FO9, §2.5):
-/// Citizen Records. Type a name or an agency number, and LOOK UP (or Enter)
+/// Citizen Records. Type a name or an agency number, and SEARCH (or Enter)
 /// opens the agency's record: the search index scoped to Records opens its
 /// best hit (redesign phase 19, SE6: one matcher, so search and the lookup
 /// find the same records; a whole number or name ranks first). The record
@@ -66,7 +66,7 @@ public sealed class RecordsView : AppView, IAppItems
     /// <summary>The lookup shown (trimmed; null: none).</summary>
     public string Query { get; private set; }
 
-    /// <summary>Raised when the player runs a lookup (LOOK UP or Enter), not when a link runs one.</summary>
+    /// <summary>Raised when the player runs a lookup (SEARCH or Enter), not when a link runs one.</summary>
     public event Action Searched;
 
     /// <summary>Raised after a lookup (a record shown, or none on file).</summary>
