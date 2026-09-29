@@ -15,7 +15,7 @@ MonoBehaviour:
   id: house_clinic
   displayName: Clinic Pass
   description: 'Priority queueing: you are now fourth in a line of three thousand.'
-  cost: 200
+  cost: 220
   unlockEffect: {fileID: 11400000, guid: 8ce466279f2951b40ab8c51fab818512, type: 2}
   venue: 1
   branch: 7

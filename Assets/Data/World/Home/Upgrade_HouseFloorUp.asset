@@ -15,7 +15,7 @@ MonoBehaviour:
   id: house_floor_up
   displayName: One Floor Up
   description: The same flat, one floor further from the damp. The rent noticed.
-  cost: 220
+  cost: 170
   unlockEffect: {fileID: 11400000, guid: cab2c282c94a3c94fa66103cf8f33b91, type: 2}
   venue: 1
   branch: 5

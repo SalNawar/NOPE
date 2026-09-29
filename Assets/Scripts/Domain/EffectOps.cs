@@ -82,7 +82,7 @@ public enum EffectOpType
     /// <summary>floatParam = cr added to the medical drain per condition point (negative lowers), never below 0 in all</summary>
     MedicalDrain,
 
-    /// <summary>floatParam = the household's mood points (a sick member's nightly recovery chance, HomeRules.RecoveryChance)</summary>
+    /// <summary>floatParam = the household's mood points (a member's nightly chance to get worse lowered and a sick member's to recover raised, HomeRules.MoodShare; never shown to the player as a number)</summary>
     Mood,
 
     /// <summary>floatParam = +chance (negative lowers) of a break-in at Home a night, never below 0 in all</summary>

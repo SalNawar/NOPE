@@ -19,7 +19,9 @@ using UnityEngine;
 /// writes a summary (Logs/Balance/balance_summary.txt): each knob's value and
 /// where it is edited, the endings, the money, the world the runs leave
 /// (the outcomes under END OF DEMO, a distribution, never a target), the queue's faults by day and kind, and the
-/// authored travellers (forced slots, premades, dialogs) apart from the random draws.
+/// authored travellers (forced slots, premades, dialogs) apart from the random draws;
+/// and the House's shoppers (the cheapest-first buyer and the climber, each
+/// refusing and taking the bribes; Saleh's Q6 of the Home upgrades spec).
 /// </summary>
 public static class BalanceSimulation
 {
@@ -44,8 +46,25 @@ public static class BalanceSimulation
     /// <summary>The pace this run plays at (BalanceSimSettingsSO.travellersPerShift, read at Run; <see cref="ShiftPace"/> without the asset).</summary>
     private static int _pace = ShiftPace;
 
-    /// <summary>The House buyer's reserve and care threshold (BalanceSimSettingsSO, read at Run; the asset's defaults without it).</summary>
-    private static int _houseReserve = 60, _careThreshold = 3;
+    /// <summary>The House buyer's reserve and care threshold, and the price from which a house upgrade is top tier (BalanceSimSettingsSO, read at Run; the asset's defaults without it).</summary>
+    private static int _houseReserve = 60, _careThreshold = 3, _topTierPrice = 150;
+
+    /// <summary>Who shops at Home in a run: nobody (the plain runs), the cheapest-first buyer (HousePolicy.Purchase) or the climber (HousePolicy.Climb).</summary>
+    private enum Shopper
+    {
+        None,
+        Buyer,
+        Climber
+    }
+
+    /// <summary>The House's variants, each played per style and pace next to the plain runs: its label, its shopper and whether the clerk takes the bribes offered (BribePolicy).</summary>
+    private static readonly (string label, Shopper shopper, bool bribes)[] Variants =
+    {
+        ("buyer", Shopper.Buyer, false),
+        ("buyer, takes bribes", Shopper.Buyer, true),
+        ("climber", Shopper.Climber, false),
+        ("climber, takes bribes", Shopper.Climber, true),
+    };
 
     /// <summary>The folder the summary and the example dumps go to (project-relative; Logs/ is not in git).</summary>
     public const string ReportFolder = "Logs/Balance";
@@ -95,6 +114,7 @@ public static class BalanceSimulation
         _pace = settings != null ? settings.travellersPerShift : ShiftPace;
         _houseReserve = settings != null ? settings.houseReserve : 60;
         _careThreshold = settings != null ? settings.careThreshold : 3;
+        _topTierPrice = settings != null ? settings.topTierPrice : 150;
 
         string dir = Path.IsPathRooted(folder) ? folder : Path.Combine(Directory.GetCurrentDirectory(), folder);
         Directory.CreateDirectory(dir);
@@ -113,8 +133,8 @@ public static class BalanceSimulation
         try
         {
             var results = new Dictionary<(PlayStyle, int), List<RunResult>>();
-            var buyers = new Dictionary<(PlayStyle, int), List<RunResult>>();
-            int step = 0, steps = Styles.Length * (2 * Paces.Length * Runs + 2);
+            var shoppers = new Dictionary<(PlayStyle, int, int), List<RunResult>>();
+            int step = 0, steps = Styles.Length * ((1 + Variants.Length) * Paces.Length * Runs + 2);
             foreach (PlayStyle style in Styles)
             {
                 foreach (int pace in Paces)
@@ -123,29 +143,32 @@ public static class BalanceSimulation
                     for (int i = 1; i <= Runs; i++)
                     {
                         EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
-                        runs.Add(Play(run, lib, config, i * SeedStep, style, pace, false));
+                        runs.Add(Play(run, lib, config, i * SeedStep, style, pace, Shopper.None, false));
                     }
                     results[(style, pace)] = runs;
 
-                    var bought = new List<RunResult>();
-                    for (int i = 1; i <= Runs; i++)
+                    for (int v = 0; v < Variants.Length; v++)
                     {
-                        EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play and the House buyer, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
-                        bought.Add(Play(run, lib, config, i * SeedStep, style, pace, true));
+                        var shopped = new List<RunResult>();
+                        for (int i = 1; i <= Runs; i++)
+                        {
+                            EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, the House's {Variants[v].label}, {PaceLabel(pace)}, run {i} of {Runs}", (float)step++ / steps);
+                            shopped.Add(Play(run, lib, config, i * SeedStep, style, pace, Variants[v].shopper, Variants[v].bribes));
+                        }
+                        shoppers[(style, pace, v)] = shopped;
                     }
-                    buyers[(style, pace)] = bought;
                 }
 
                 EditorUtility.DisplayProgressBar("Balance simulation", $"{style} play, seed {ExampleSeed} twice", (float)step / steps);
-                RunResult a = Play(run, lib, config, ExampleSeed, style, 0, false);
-                RunResult b = Play(run, lib, config, ExampleSeed, style, 0, false);
+                RunResult a = Play(run, lib, config, ExampleSeed, style, 0, Shopper.None, false);
+                RunResult b = Play(run, lib, config, ExampleSeed, style, 0, Shopper.None, false);
                 step += 2;
                 File.WriteAllText(Path.Combine(dir, $"balance_seed{ExampleSeed}_{style.ToString().ToLowerInvariant()}.txt"), a.Dump.ToString());
                 if (a.Fingerprint != b.Fingerprint || a.Dump.ToString() != b.Dump.ToString())
                     errors.Add($"{style} play: seed {ExampleSeed} played twice gave two different runs (the simulation is not deterministic).");
             }
 
-            Write(summary, run, lib, config, results, buyers, errors);
+            Write(summary, run, lib, config, results, shoppers, errors);
         }
         finally
         {
@@ -180,6 +203,12 @@ public static class BalanceSimulation
         /// <summary>The house upgrades the buyer bought, with the day of each.</summary>
         public readonly List<(int day, string id)> Bought = new List<(int, string)>();
 
+        /// <summary>The bribes the clerk took (BribePolicy) and what they paid, in cr.</summary>
+        public int BribesTaken, BribeMoney;
+
+        /// <summary>The top-tier house upgrades bought (priced at the top-tier price or more), with the day of each.</summary>
+        public readonly List<(int day, string id)> TopTier = new List<(int, string)>();
+
         /// <summary>The strandings and the carries of each day played (days 7-15 X5).</summary>
         public readonly List<int> StrandedByDay = new List<int>(), CarriesByDay = new List<int>();
 
@@ -200,8 +229,8 @@ public static class BalanceSimulation
         public float StabilityDelta;
     }
 
-    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue); with <paramref name="buyer"/>, each night at Home the House buyer treats and buys (<see cref="BuyerNight"/>).</summary>
-    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, bool buyer)
+    /// <summary>A run of <see cref="Days"/> days from <paramref name="seed"/> under <paramref name="style"/>, through the game's own steps, <paramref name="pace"/> travellers a shift (0: the whole queue); with a <paramref name="shopper"/>, each night at Home it treats and buys (<see cref="ShopperNight"/>); with <paramref name="bribes"/>, the clerk takes every bribe a traveller at the desk offers (BribePolicy, applied at the shift's close as the game applies a dialog's effect).</summary>
+    private static RunResult Play(RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, int seed, PlayStyle style, int pace, Shopper shopper, bool bribes)
     {
         DevToolsState.ResetAll();
         var r = new RunResult { Seed = seed };
@@ -227,6 +256,13 @@ public static class BalanceSimulation
                 CaseInstance inst = cases[i];
                 // The traveller comes to the desk: a once-per-run premade is met (days 7-15 X1, the game's own step).
                 DayCycle.Present(world, inst);
+                if (bribes)
+                    foreach ((string dialogId, string effect) in BribePolicy.Take(interview.OfferedDialogs(inst.premadeDialogId), e => Pays(lib, e)))
+                        if (interview.Complete(dialogId, effect))
+                        {
+                            r.BribesTaken++;
+                            r.BribeMoney += Mathf.RoundToInt(Pays(lib, effect));
+                        }
                 PlayDecision decision = policy.Decide(inst.ShouldAccept, inst.HasDeviationFault);
                 int carries = world.history.pendingCarries.Count;
                 CaseVerdict verdict = DayCycle.Decide(inst, decision.Accept, i + 1, decision.Documented ? 1 : 0, world, today, ledger, lib, config);
@@ -258,10 +294,10 @@ public static class BalanceSimulation
                 break;
             }
 
-            // Home: the break-in, the bill and the family's night; the House buyer then treats and buys (the plain runs
+            // Home: the break-in, the bill and the family's night; the shopper then treats and buys (the plain runs
             // treat no one and buy nothing); no run spins the slot machine or orders at the PC.
             HomeEconomy.ExpenseReport bill = DayCycle.OpenHome(world, lib, config, Seeds.Day(seed, day)).bill;
-            (int care, int bought) = buyer ? BuyerNight(world, lib, config, r, day) : (0, 0);
+            (int care, int bought) = shopper != Shopper.None ? ShopperNight(world, lib, config, r, day, shopper) : (0, 0);
             ClerkAccountSource.RecordHome(world, bill.total + care, bought, lib, config);
             r.Household += bill.total + care;
             r.Upkeep += bill.upkeepAmount;
@@ -290,15 +326,24 @@ public static class BalanceSimulation
         return r;
     }
 
+    /// <summary>What a dialog effect pays the clerk: its AddMoney ops summed (0 for an unknown effect).</summary>
+    private static float Pays(ContentLibrarySO lib, string effect)
+    {
+        EffectSO so = lib.GetEffectByAssetName(effect);
+        return so != null ? so.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam) : 0f;
+    }
+
     /// <summary>
-    /// The House buyer's night (Domain HousePolicy through the game's own
-    /// purchase paths): care first, a point at a time for the sickest member
-    /// at the care threshold while the wallet keeps the reserve
-    /// (HomeEconomy.TreatFamilyMember), then at most one house upgrade, the
-    /// cheapest buyable one that keeps the reserve (HomeEconomy.BuyHouseUpgrade).
-    /// Returns the care and the purchase paid.
+    /// A shopper's night (Domain HousePolicy through the game's own purchase
+    /// paths): care first, a point at a time for the sickest member at the
+    /// care threshold while the wallet keeps the reserve
+    /// (HomeEconomy.TreatFamilyMember); then the buyer buys at most one house
+    /// upgrade, the cheapest buyable one that keeps the reserve, and the
+    /// climber buys every step of the cheapest top-tier path once the wallet
+    /// covers it all and keeps the reserve (HomeEconomy.BuyHouseUpgrade).
+    /// Returns the care and the purchases paid.
     /// </summary>
-    private static (int care, int bought) BuyerNight(WorldState world, ContentLibrarySO lib, GameConfigSO config, RunResult r, int day)
+    private static (int care, int bought) ShopperNight(WorldState world, ContentLibrarySO lib, GameConfigSO config, RunResult r, int day, Shopper shopper)
     {
         int care = 0;
         while (true)
@@ -311,13 +356,25 @@ public static class BalanceSimulation
         }
 
         List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
-        string pick = HousePolicy.Purchase(house.Select(u => new HouseOffer(u.id, OrderBook.Price(world, lib, u), world.HasUpgrade(u.id), UpgradeTree.Unlocked(u.Node, world.HasUpgrade))).ToList(),
-                                           world.money, _houseReserve);
-        int paid = pick != null ? HomeEconomy.BuyHouseUpgrade(world, lib, house.First(u => u.id == pick)) : -1;
-        if (paid < 0)
-            return (care, 0);
-        r.Bought.Add((day, pick));
-        return (care, paid);
+        int spent = 0;
+        while (true)
+        {
+            List<HouseOffer> offers = house.Select(u => new HouseOffer(u.id, OrderBook.Price(world, lib, u), world.HasUpgrade(u.id), UpgradeTree.Unlocked(u.Node, world.HasUpgrade), u.Node.Requires)).ToList();
+            string pick = shopper == Shopper.Climber
+                ? HousePolicy.Climb(offers, world.money, _houseReserve, _topTierPrice)
+                : HousePolicy.Purchase(offers, world.money, _houseReserve);
+            UpgradeSO upgrade = pick != null ? house.First(u => u.id == pick) : null;
+            int paid = upgrade != null ? HomeEconomy.BuyHouseUpgrade(world, lib, upgrade) : -1;
+            if (paid < 0)
+                break;
+            spent += paid;
+            r.Bought.Add((day, pick));
+            if (upgrade.cost >= _topTierPrice)
+                r.TopTier.Add((day, pick));
+            if (shopper == Shopper.Buyer)
+                break;
+        }
+        return (care, spent);
     }
 
     private static void End(RunResult r, string ending, int day)
@@ -380,10 +437,10 @@ public static class BalanceSimulation
     // ------------------------------------------------------------------
 
     private static void Write(StringBuilder sb, RunConfigSO run, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results,
-                              Dictionary<(PlayStyle, int), List<RunResult>> buyers, List<string> errors)
+                              Dictionary<(PlayStyle, int, int), List<RunResult>> shoppers, List<string> errors)
     {
         sb.AppendLine($"BALANCE SIMULATION  {DateTime.Now:yyyy-MM-dd HH:mm}  ({Runs} runs x {Days} days per play style and pace; Tools > TimeDesk > Balance > Run 50-Run Simulation)");
-        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no slot machine, no dialog choices, and no care or house upgrade except in the House buyer's runs (its own section below); once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
+        sb.AppendLine($"Each run plays each day through the game's own steps (DayCycle), with no scene: no orders, no slot machine, no dialog choices (but the bribes in the House's bribe-taking variants), and no care or house upgrade except in the House's variants (their own section below); once on the whole queue and once at the shift clock's pace ({_pace} travellers a shift, {BalanceSimSettingsSO.AssetPath} travellersPerShift: the rest go home when the clock closes, PlayPolicy.Reaches).");
         sb.AppendLine("Perfect: every call right. Imperfect: one wrong call a day (odd days the first faulty traveller let through, even days the first deviation denial left unproven). Careless: both every day.");
         sb.AppendLine();
         Knobs(sb, run, lib, config);
@@ -397,7 +454,7 @@ public static class BalanceSimulation
         Beats(sb, results);
         Contamination(sb, results);
         Bribe(sb, lib);
-        House(sb, lib, config, results, buyers);
+        House(sb, lib, config, results, shoppers);
 
         sb.AppendLine();
         sb.AppendLine("== Checks ==");
@@ -416,8 +473,8 @@ public static class BalanceSimulation
                       $"stabilityChangeRate {config.stabilityChangeRate.ToString("0.####", Inv)}, stabilityLossPerWrong {F(config.stabilityLossPerWrong)}, extraStabilityLossLegendary {F(config.extraStabilityLossLegendary)}, stabilityGainPerCorrect {F(config.stabilityGainPerCorrect)}, firedAtStability {F(config.firedAtStability)}, stabilityWarningMargin {F(config.stabilityWarningMargin)}, stabilityCriticalMargin {F(config.stabilityCriticalMargin)}, bankruptcyMoneyThreshold {config.bankruptcyMoneyThreshold}, " +
                       $"baseDailyExpense {config.baseDailyExpense}, expensePerFamilyMember {config.expensePerFamilyMember}, expensePerConditionPoint {config.expensePerConditionPoint}, conditionWorsenChance {F(config.conditionWorsenChance)}");
         sb.AppendLine($"  {AssetDatabase.GetAssetPath(run)}: startingMoney {run.startingMoney}, startingStability {F(run.startingStability)}, startingFamilyMembers {run.startingFamilyMembers?.Count ?? 0}");
-        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve}, careThreshold {_careThreshold} (the House buyer)");
-        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home): conditionCareCost {config.conditionCareCost}, maxFamilyCondition {config.maxFamilyCondition}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, " +
+        sb.AppendLine($"  {BalanceSimSettingsSO.AssetPath}: travellersPerShift {_pace} (the simulation's cap, days 7-15 X3), houseReserve {_houseReserve}, careThreshold {_careThreshold} (the House's shoppers), topTierPrice {_topTierPrice} (the climber's target and the top tier counted below)");
+        sb.AppendLine($"  {AssetDatabase.GetAssetPath(config)} (Home): conditionCareCost {config.conditionCareCost}, maxFamilyCondition {config.maxFamilyCondition}, recoveryPerMood {F(config.recoveryPerMood)}, maxRecoveryChance {F(config.maxRecoveryChance)}, sicknessPerMood {F(config.sicknessPerMood)}, maxMoodSicknessCut {F(config.maxMoodSicknessCut)}, " +
                       $"breakInFromDay {config.breakInFromDay}, breakInChance {F(config.breakInChance)}, breakInShare {F(config.breakInShare)}, breakInMaxLoss {config.breakInMaxLoss}");
         EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
         if (bribe != null)
@@ -591,42 +648,68 @@ public static class BalanceSimulation
     }
 
     /// <summary>
-    /// The House (the Home upgrades spec §9): per pace and style, the plain
-    /// runs (no care, no purchase) against the House buyer's: the endings,
-    /// the wallet, the household, upkeep, break-ins, care, what the house
-    /// upgrades cost and which were bought when; and the tree's prices from
-    /// the content spreadsheet.
+    /// The House (the Home upgrades spec §9, §12): per pace and style, the
+    /// plain runs (no care, no purchase) against the House's variants (the
+    /// cheapest-first buyer and the climber, each refusing and taking the
+    /// bribes): the endings, the wallet, the household, upkeep, break-ins,
+    /// care, the bribes, what the house upgrades cost and which were bought
+    /// when, and the top tier reached; then Saleh's Q6 in one table (the top
+    /// tier by day 15, careful against bribe-taking); and the tree's prices
+    /// from the content spreadsheet.
     /// </summary>
-    private static void House(StringBuilder sb, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, Dictionary<(PlayStyle, int), List<RunResult>> buyers)
+    private static void House(StringBuilder sb, ContentLibrarySO lib, GameConfigSO config, Dictionary<(PlayStyle, int), List<RunResult>> results, Dictionary<(PlayStyle, int, int), List<RunResult>> shoppers)
     {
         List<UpgradeSO> house = lib.Upgrades.Where(u => u != null && u.venue == UpgradeVenue.Home).ToList();
         sb.AppendLine();
-        sb.AppendLine($"== The House: the plain runs against the House buyer (reserve {_houseReserve} cr, care at condition {_careThreshold}) ==");
+        sb.AppendLine($"== The House: the plain runs against its shoppers (reserve {_houseReserve} cr, care at condition {_careThreshold}; the top tier from {_topTierPrice} cr) ==");
         sb.AppendLine($"the tree (content spreadsheet, homeUpgrades): {house.Count} upgrades, {house.Sum(u => u.cost)} cr in all: {string.Join(", ", house.OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");
+        sb.AppendLine($"the top tier: {string.Join(", ", house.Where(u => u.cost >= _topTierPrice).OrderBy(u => u.cost).Select(u => $"{u.id} {u.cost}"))}");
+        sb.AppendLine("the buyer buys the cheapest upgrade it may each night; the climber buys nothing but the cheapest top-tier path, all of it on the night the wallet covers it and keeps the reserve (HousePolicy); a bribe-taking clerk takes every bribe offered at the desk (BribePolicy).");
         foreach (int pace in Paces)
             foreach (PlayStyle style in Styles)
             {
                 sb.AppendLine($"{style}, {PaceLabel(pace)}:");
-                foreach ((string label, List<RunResult> runs) in new[] { ("plain", results[(style, pace)]), ("buyer", buyers[(style, pace)]) })
+                var rows = new List<(string label, List<RunResult> runs)> { ("plain", results[(style, pace)]) };
+                rows.AddRange(Variants.Select((v, i) => (v.label, shoppers[(style, pace, i)])));
+                foreach ((string label, List<RunResult> runs) in rows)
                 {
                     sb.AppendLine($"  {label}: endings {string.Join(", ", runs.GroupBy(r => r.Ending).OrderByDescending(g => g.Count()).Select(g => $"{g.Key} x{g.Count()}"))}; " +
-                                  $"wallet lowest mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))} min {runs.Min(r => r.MinMoney)}, at the end mean {F(BalanceStats.Mean(runs.Select(r => (float)r.World.money)))}; " +
-                                  $"per run cr: household {M(runs, r => r.Household)} (upkeep {M(runs, r => r.Upkeep)}, break-ins {M(runs, r => r.BreakIns)} taking {M(runs, r => r.BreakInLoss)}, care {M(runs, r => r.Care)}), house upgrades {M(runs, r => r.HousePurchases)} ({M(runs, r => r.Bought.Count)} bought)");
-                    if (label == "buyer")
+                                  $"wallet lowest mean {F(BalanceStats.Mean(runs.Select(r => (float)r.MinMoney)))} min {runs.Min(r => r.MinMoney)}, at the end mean {F(BalanceStats.Mean(runs.Select(r => (float)r.World.money)))} min {runs.Min(r => r.World.money)} max {runs.Max(r => r.World.money)}; " +
+                                  $"per run cr: household {M(runs, r => r.Household)} (upkeep {M(runs, r => r.Upkeep)}, break-ins {M(runs, r => r.BreakIns)} taking {M(runs, r => r.BreakInLoss)}, care {M(runs, r => r.Care)}), bribes {M(runs, r => r.BribeMoney)} ({M(runs, r => r.BribesTaken)} taken), " +
+                                  $"house upgrades {M(runs, r => r.HousePurchases)} ({M(runs, r => r.Bought.Count)} bought); {TopTier(runs)}");
+                    if (label != "plain")
                         sb.AppendLine("    bought (runs, mean day): " + string.Join(", ", runs.SelectMany(r => r.Bought).GroupBy(b => b.id).OrderBy(g => g.Average(b => b.day))
                                           .Select(g => $"{g.Key} {g.Count()} d{g.Average(b => b.day).ToString("0.#", Inv)}")));
                 }
             }
+
+        sb.AppendLine();
+        sb.AppendLine($"Saleh's Q6 (\"balance so you can buy one or two if you take bribes\"): top-tier upgrades owned by day {Days}'s night, careful against bribe-taking, per style at each pace:");
+        sb.AppendLine("  style, pace | buyer: careful / takes bribes | climber: careful / takes bribes");
+        foreach (int pace in Paces)
+            foreach (PlayStyle style in Styles)
+            {
+                string Cell(int v) => $"{M(shoppers[(style, pace, v)], r => r.TopTier.Count)} ({shoppers[(style, pace, v)].Count(r => r.TopTier.Count > 0)}/{Runs} runs)";
+                sb.AppendLine($"  {style}, {PaceLabel(pace)} | {Cell(0)} / {Cell(1)} | {Cell(2)} / {Cell(3)}");
+            }
     }
 
-    /// <summary>Days 7-15 X6: the bribe is a dialog choice, which the simulation never makes; its amount is reported apart.</summary>
+    /// <summary>The runs' top tier: the mean bought, the runs with one and with two or more, and the mean day of the first.</summary>
+    private static string TopTier(List<RunResult> runs)
+    {
+        List<RunResult> reached = runs.Where(r => r.TopTier.Count > 0).ToList();
+        string first = reached.Count > 0 ? $", the first on day {reached.Average(r => r.TopTier[0].day).ToString("0.#", Inv)}" : "";
+        return $"top tier {M(runs, r => r.TopTier.Count)} a run (one in {runs.Count(r => r.TopTier.Count == 1)} runs, two or more in {runs.Count(r => r.TopTier.Count >= 2)}{first})";
+    }
+
+    /// <summary>Days 7-15 X6: the bribe is a dialog choice, which only the House's bribe-taking variants make; its amount is reported here.</summary>
     private static void Bribe(StringBuilder sb, ContentLibrarySO lib)
     {
         EffectSO bribe = lib.GetEffectByAssetName(BribeEffect);
         float amount = bribe != null ? bribe.ops.Where(o => o != null && o.type == EffectOpType.AddMoney).Sum(o => o.floatParam) : 0f;
         sb.AppendLine();
         sb.AppendLine($"== The bribe (day 11, dlg_rook) ==");
-        sb.AppendLine($"not in these numbers: the simulation makes no dialog choice. Taken, it adds {F(amount)} cr once at day 11's close ({BribeEffect}); its consequences are a story rule's 3 % of stability (rook_complaint if Rook is denied, audit_rook on day 14's night if he is approved).");
+        sb.AppendLine($"not in the plain runs' numbers: only the House's bribe-taking variants take it (below). Taken, it adds {F(amount)} cr once at day 11's close ({BribeEffect}); its consequences are a story rule's 3 % of stability (rook_complaint if Rook is denied, audit_rook on day 14's night if he is approved).");
     }
 
     /// <summary>The days the records stood on, as a range when they run on ("6-15") or a list.</summary>

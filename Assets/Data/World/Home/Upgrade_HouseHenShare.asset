@@ -15,7 +15,7 @@ MonoBehaviour:
   id: house_hen_share
   displayName: Hen Share
   description: A twelfth of a cooperative hen called Directive Seven. Eggs on Sundays.
-  cost: 160
+  cost: 190
   unlockEffect: {fileID: 11400000, guid: af0951d53916f294ba841a55fd07b908, type: 2}
   venue: 1
   branch: 4

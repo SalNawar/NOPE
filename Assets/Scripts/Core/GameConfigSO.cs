@@ -183,18 +183,26 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int maxFamilyCondition = 10;
 
-    /// <summary>A sick member's nightly chance to get one point better per point of the household's mood (the house upgrades' Mood ops; HomeRules.RecoveryChance). Provisional (Saleh's Q3, option A).</summary>
+    /// <summary>A sick member's nightly chance to get one point better per point of the household's mood (the house upgrades' Mood ops; HomeRules.MoodShare). Saleh's Q3 (2026-09-29): mood both heals and keeps the family well, each a little weaker than recovery alone was (0.04); never shown to the player as a number.</summary>
     [Range(0f, 1f)]
-    public float recoveryPerMood = 0.04f;
+    public float recoveryPerMood = 0.03f;
 
     /// <summary>The highest nightly recovery chance any mood gives.</summary>
     [Range(0f, 1f)]
-    public float maxRecoveryChance = 0.5f;
+    public float maxRecoveryChance = 0.4f;
+
+    /// <summary>How much each point of the household's mood lowers a member's nightly chance to get worse (HomeRules.WorsenChance; Saleh's Q3).</summary>
+    [Range(0f, 1f)]
+    public float sicknessPerMood = 0.01f;
+
+    /// <summary>The most the mood takes off a member's nightly chance to get worse.</summary>
+    [Range(0f, 1f)]
+    public float maxMoodSicknessCut = 0.1f;
 
     [Header("Home / Break-ins")]
-    /// <summary>The first night someone may break in while the clerk is at work (HomeRules.BreakIn). Provisional (Saleh's Q2, option A).</summary>
+    /// <summary>The first night someone may break in while the clerk is at work (HomeRules.BreakIn). Saleh's Q2 (2026-09-29): "it will start mid second week": day 11, the middle of days 8-14 when week one is days 1-7.</summary>
     [Min(1)]
-    public int breakInFromDay = 2;
+    public int breakInFromDay = 11;
 
     /// <summary>The nightly chance of a break-in, before the house's locks and alarm (BreakInChance ops).</summary>
     [Range(0f, 1f)]

@@ -48,6 +48,10 @@ public static class HomeSceneBuilder
             new Vector2(0.4f, 0f), new Vector2(0.6f, 1f));
         TMP_Text stabilityText = FindOrCreateText(hud, "StabilityText", "Stability: 100%", 28, TextAlignmentOptions.Right,
             new Vector2(0.8f, 0f), new Vector2(1f, 1f));
+        // The wallet and stability read the leading culture's labels (UiText): themed like the office tray's, so the
+        // culture's font draws them (an Arabic label in LiberationSans drew boxes); the Tray ink is white on this dark strip.
+        Tag(moneyText, ThemeRoleId.Tray, ThemePart.Ink, fit: true);
+        Tag(stabilityText, ThemeRoleId.Tray, ThemePart.Ink, fit: true);
         EnsureHudBacking(hud);
 
         // --- Expenses panel ---
