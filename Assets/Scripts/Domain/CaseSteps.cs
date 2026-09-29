@@ -295,13 +295,16 @@ public static class CaseSteps
     /// <summary>
     /// Each listed step's state this case (a step with no parts is left out):
     /// its parts checked and needed, ticked when all are (or as set by hand,
-    /// which holds).
+    /// which holds). Written into <paramref name="into"/> (cleared first; the
+    /// steps panel reuses one list) or a new list, which is returned.
     /// </summary>
-    public static List<StepState> Evaluate(IReadOnlyList<StepSpec> steps, CaseProgress progress)
+    public static List<StepState> Evaluate(IReadOnlyList<StepSpec> steps, CaseProgress progress, List<StepState> into = null)
     {
-        var states = new List<StepState>();
-        foreach (StepSpec step in steps)
+        List<StepState> states = into ?? new List<StepState>();
+        states.Clear();
+        for (int i = 0; i < steps.Count; i++)
         {
+            StepSpec step = steps[i];
             Count(step, progress, out int have, out int need);
             if (need == 0)
                 continue;

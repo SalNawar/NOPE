@@ -6,9 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// The office builder's search (redesign phase 19; the PC spec's SE1, SE4,
 /// §2.3): on the Investigation app's window, the toolbar's search field gets
-/// its SearchBox; the results panel drops down under it over the panes (last
-/// in the window, so it draws over the body): a header with the source chips'
-/// row and Close, the scrolling list with its inactive templates (a group's
+/// its SearchBox; the results panel drops down under it over the panes to the
+/// window's bottom (last in the window, so it draws over the body): a header
+/// with the source chips' row and Close, the scrolling list with its
+/// scrollbar (shown when the groups outgrow the list) and inactive templates (a group's
 /// heading, a hit with its glyph, title and snippet, "Show all"), the line
 /// shown when nothing matches and the footer's hint (a hit's row carries phase
 /// 18's found mark, as a link's target does). The field's chip for a pasted
@@ -19,8 +20,11 @@ using UnityEngine.UI;
 /// </summary>
 public static partial class OfficeSceneUIBuilder
 {
-    /// <summary>The results panel's height under the toolbar.</summary>
-    private const float SearchPanelHeight = 520f;
+    /// <summary>The gap between the results panel's bottom and the window's: the panel takes the panes' height, so a search's groups show whole (it was 520 u, which cut the third group at 1080p).</summary>
+    private const float SearchPanelMargin = 8f;
+
+    /// <summary>The results list's scrollbar width (shown only when the groups outgrow the list).</summary>
+    private const float SearchScrollbar = 16f;
 
     /// <summary>The panel's header (the chips and Close) height.</summary>
     private const float SearchHeaderHeight = 48f;
@@ -69,11 +73,9 @@ public static partial class OfficeSceneUIBuilder
     private static SearchResultsView BuildSearchResults(Transform win, float top)
     {
         DestroyChildIfPresent(win, "SearchResults");
-        Transform panel = Panel(win, "SearchResults", new Vector2(0.1f, 1f), new Vector2(0.7f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.WindowBody);
-        var rt = (RectTransform)panel;
-        rt.pivot = new Vector2(0.5f, 1f);
-        rt.anchoredPosition = new Vector2(0f, -top);
-        rt.sizeDelta = new Vector2(0f, SearchPanelHeight);
+        Transform panel = Panel(win, "SearchResults", new Vector2(0.1f, 0f), new Vector2(0.7f, 1f), Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.WindowBody);
+        ((RectTransform)panel).pivot = new Vector2(0.5f, 1f);
+        PlaceRect(panel, new Vector2(0.1f, 0f), new Vector2(0.7f, 1f), new Vector2(0f, SearchPanelMargin), new Vector2(0f, -top));
         panel.SetAsLastSibling();
 
         Transform header = Panel(panel, "Header", new Vector2(0f, 1f), Vector2.one, Vector2.zero, Vector2.zero, null);
@@ -107,6 +109,12 @@ public static partial class OfficeSceneUIBuilder
         RectTransform list = BuildScrollList(panel, "List", Vector2.zero, Vector2.one, 2f, Color.white, ThemeRoleId.WindowBody);
         Transform box = list.parent.parent;
         PlaceRect(box, Vector2.zero, Vector2.one, new Vector2(6f, SearchFooterHeight), new Vector2(-6f, -SearchHeaderHeight));
+        PlaceRect(list.parent, Vector2.zero, Vector2.one, new Vector2(4f, 4f), new Vector2(-(SearchScrollbar + 6f), -4f));
+        Scrollbar bar = BuildScrollbar(box, SearchScrollbar, XpFace, ThemeRoleId.WindowBody, XpBlue, ThemeRoleId.TitleBar);
+        PlaceRect(bar.transform, new Vector2(1f, 0f), Vector2.one, new Vector2(-(SearchScrollbar + 2f), 4f), new Vector2(-2f, -4f));
+        ScrollRect listScroll = box.GetComponent<ScrollRect>();
+        listScroll.verticalScrollbar = bar;
+        listScroll.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHide;
 
         TMP_Text heading = Text(list, "HeadingTemplate", "REFERENCE", 18, TextAlignmentOptions.BottomLeft, Vector2.zero, Vector2.one, Ink,
                                 ThemeRoleId.WindowBody, style: FontStyles.Bold, kind: ThemeTextKind.Heading);

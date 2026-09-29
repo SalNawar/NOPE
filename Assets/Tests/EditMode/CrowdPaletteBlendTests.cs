@@ -73,4 +73,17 @@ public class CrowdPaletteBlendTests
         Assert.IsTrue(clock.IsClosed);
         Assert.AreEqual(1f, CrowdPaletteBlend.Evening(clock.Progress01, StartsAt, FullAt), "17:00, closing");
     }
+
+    [Test]
+    public void TheHallsCalendar_TakesItsEveningInkFromItsPointOfTheBlend_TheDayInkBefore()
+    {
+        const float from = 0.555f;
+        Assert.IsFalse(CrowdPaletteBlend.LightInk(0f, from), "morning: the day ink");
+        Assert.IsFalse(CrowdPaletteBlend.LightInk(0.554f, from), "just before the point");
+        Assert.IsTrue(CrowdPaletteBlend.LightInk(from, from), "at the point: the evening ink");
+        Assert.IsTrue(CrowdPaletteBlend.LightInk(1f, from), "full evening");
+        Assert.IsFalse(CrowdPaletteBlend.LightInk(float.NaN, from), "a blend that is not a number: the day ink");
+        Assert.IsTrue(CrowdPaletteBlend.LightInk(0f, 0f), "a point at 0: the evening ink all day");
+        Assert.IsFalse(CrowdPaletteBlend.LightInk(1f, 1.01f), "a point past full evening: never");
+    }
 }
