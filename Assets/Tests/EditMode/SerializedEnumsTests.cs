@@ -180,6 +180,26 @@ public class SerializedEnumsTests
         Assert.AreEqual(23, System.Enum.GetValues(typeof(OfficeAnchorId)).Length, "a new member is appended here too");
     }
 
+    /// <summary>UpgradeVenue: stored in UpgradeSO.venue (the Orders app or Home; Saleh 2026-09-29, the portals spec v3 OR1).</summary>
+    [Test]
+    public void UpgradeVenue_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)UpgradeVenue.Orders);
+        Assert.AreEqual(1, (int)UpgradeVenue.Home);
+        Assert.AreEqual(2, System.Enum.GetValues(typeof(UpgradeVenue)).Length, "a new member is appended here too");
+    }
+
+    /// <summary>UpgradeBranch: stored in UpgradeSO.branch (the Orders tree's bands; the portals spec v3 OR2).</summary>
+    [Test]
+    public void UpgradeBranch_KeepsItsSerializedInts()
+    {
+        Assert.AreEqual(0, (int)UpgradeBranch.Desk);
+        Assert.AreEqual(1, (int)UpgradeBranch.Interview);
+        Assert.AreEqual(2, (int)UpgradeBranch.Portals);
+        Assert.AreEqual(3, (int)UpgradeBranch.Contacts);
+        Assert.AreEqual(4, System.Enum.GetValues(typeof(UpgradeBranch)).Length, "a new member is appended here too");
+    }
+
     /// <summary>DialogSpeaker: stored in ScriptLine.speaker.</summary>
     [Test]
     public void DialogSpeaker_KeepsItsSerializedInts()
