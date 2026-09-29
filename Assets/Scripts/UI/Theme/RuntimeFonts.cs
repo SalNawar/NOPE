@@ -64,8 +64,8 @@ public sealed class RuntimeFonts : IDisposable
         _latinSource = latinSource;
     }
 
-    /// <summary>The theme's font: none for a theme without runtime fonts; else its candidates resolved under its culture id.</summary>
-    public Result Resolve(ThemeSO theme, string sample)
+    /// <summary>The theme's font: none for a theme without runtime fonts; else its candidates resolved under its culture id (<paramref name="sample"/> is built only when the culture is not cached yet).</summary>
+    public Result Resolve(ThemeSO theme, Func<string> sample)
     {
         if (theme == null || !theme.runtimeFont)
             return new Result(null, "default", true, string.Empty, string.Empty);
@@ -76,10 +76,12 @@ public sealed class RuntimeFonts : IDisposable
     /// The font for a key (a culture id, or "script:{id}" for a translation
     /// script): the first candidate that loads (with the runtime Latin asset as
     /// its fallback), or the Latin asset itself; then whether it draws
-    /// <paramref name="sample"/> (which also prewarms its atlas). Cached per key,
-    /// so the first sample for a key must hold everything it will draw.
+    /// <paramref name="sample"/>'s text (which also prewarms its atlas). Cached
+    /// per key, so the first sample for a key must hold everything it will draw;
+    /// the sample is built only on that first call (audit R4-018: building it
+    /// on every theme refresh cost a string table's worth of work each time).
     /// </summary>
-    public Result Resolve(string key, IReadOnlyList<FontCandidate> candidates, string sample)
+    public Result Resolve(string key, IReadOnlyList<FontCandidate> candidates, Func<string> sample)
     {
         key ??= string.Empty;
         if (_cache.TryGetValue(key, out Result cached))
@@ -135,7 +137,7 @@ public sealed class RuntimeFonts : IDisposable
         string missing = "(no font)";
         if (asset != null)
         {
-            covers = asset.HasCharacters(sample ?? string.Empty, out uint[] missingCodes, true, true);
+            covers = asset.HasCharacters(sample?.Invoke() ?? string.Empty, out uint[] missingCodes, true, true);
             missing = missingCodes == null ? string.Empty : string.Join(" ", missingCodes.Select(u => $"U+{u:X4}"));
         }
 

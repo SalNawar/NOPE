@@ -116,7 +116,7 @@ public sealed class CultureThemeService : TimelineCueReceiver
         UiStringTableSO reading = ReadingTable();
         UiStringTableSO cultureTable = ActiveTheme.language != ui.readingLanguage ? Library.GetStringTable(ActiveTheme.language) : null;
 
-        RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, Sample(reading, cultureTable, ui.glossPercent));
+        RuntimeFonts.Result font = _fonts.Resolve(ActiveTheme, () => Sample(reading, cultureTable, ui.glossPercent));
         Language = CultureChoice.Language(ActiveTheme.language, ui.readingLanguage, cultureTable != null, UiLanguagePreference.AlwaysEnglish, font.Covers);
         if (Language == LabelLanguage.EnglishNoFont)
             WarnOnce("font:" + ActiveTheme.cultureId, $"[CultureThemeService] No installed font draws the '{ActiveTheme.cultureId}' labels (missing {font.Missing}; tried {font.Tried}); the desk shows English labels in its colours.");
