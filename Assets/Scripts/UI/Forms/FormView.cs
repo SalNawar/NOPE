@@ -238,7 +238,15 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
         if (fills != null)
             fills.Set(_quads, FormPaintLayer.Fill);
         DrawLines();
+        ArmSlots(pickable, linkHint, cellLinkHint);
+        MarkFound(-1);
+        Relight();
+        return _form;
+    }
 
+    /// <summary>Arms the placed form's slots: a button over each slot <paramref name="pickable"/> accepts (every slot when null), a ↗ on each <paramref name="linkHint"/> hints and on each table cell <paramref name="cellLinkHint"/> hints; the pooled parts left over hide.</summary>
+    private void ArmSlots(Func<FormSlot, bool> pickable, Func<FormSlot, string> linkHint, Func<FormSlot, int, string> cellLinkHint)
+    {
         int parts = 0, links = 0;
         for (int s = 0; s < _form.Slots.Count; s++)
         {
@@ -265,9 +273,6 @@ public sealed class FormView : MonoBehaviour, IPointerMoveHandler, IPointerExitH
             _parts[i].Button.gameObject.SetActive(false);
         for (int i = links; i < _links.Count; i++)
             _links[i].Button.gameObject.SetActive(false);
-        MarkFound(-1);
-        Relight();
-        return _form;
     }
 
     /// <summary>Outlines slot <paramref name="slot"/>'s box (the one a link went to); -1 hides the mark.</summary>
