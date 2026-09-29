@@ -91,7 +91,7 @@ public static partial class OfficeSceneUIBuilder
     private const string GameplayScenePath = "Assets/Scenes/OfficeGameplay.unity";
 
     /// <summary>The gameplay layer's scene name (RunConfig.officeGameplaySceneName).</summary>
-    private const string GameplaySceneName = "OfficeGameplay";
+    private const string GameplaySceneName = RunConfigSO.DefaultOfficeGameplaySceneName;
 
     /// <summary>The art office the gameplay layer loads on (the art side's scene RunConfig.officeSceneName names, ArtOfficeScene; the builder never opens it).</summary>
     private static string ArtScenePath => ArtOfficeScene.Path;
