@@ -83,6 +83,7 @@ public sealed partial class AppPane : MonoBehaviour
     private readonly List<Button> _chips = new List<Button>();
     private readonly List<float> _middles = new List<float>();
     private readonly List<float> _nameTabs = new List<float>();
+    private readonly Dictionary<AppTab, float> _nameWidths = new Dictionary<AppTab, float>();
     private NavHistory<LinkTarget> _history;
     private AppTab _active;
     private bool _caseOn;
@@ -391,9 +392,12 @@ public sealed partial class AppPane : MonoBehaviour
     /// <summary>
     /// The tab's width with its name at the label size (the name's preferred
     /// width, a fitting label's largest; the plate's padding either side; the
-    /// gap and the badge's slot), never under the plate's narrowest; 0 without
-    /// a button. The plate's padding and narrowest width are read once, before
-    /// the first collapse.
+    /// gap and the badge's slot), never under the plate's narrowest; 0 while
+    /// it is not known. It is measured whenever TextMeshPro has set the label
+    /// up (a label never shown yet has no material to measure with: every
+    /// name shows when the pane first does), and the last measure stands while
+    /// the tab shows its glyph. The plate's padding and narrowest width are
+    /// read once, before the first collapse.
     /// </summary>
     private float NameTabWidth(AppTab tab)
     {
@@ -407,8 +411,12 @@ public sealed partial class AppPane : MonoBehaviour
             _tabMinWidth = size.minWidth;
             _tabPadding = plate.padding.left;
         }
-        float slot = badge != null && badge.transform.parent is RectTransform room ? LayoutUtility.GetPreferredWidth(room) + plate.spacing : 0f;
-        return Mathf.Max(_tabMinWidth, 2f * _tabPadding + name.GetPreferredValues(name.text).x + slot);
+        if (name.fontSharedMaterial != null)
+        {
+            float slot = badge != null && badge.transform.parent is RectTransform room ? LayoutUtility.GetPreferredWidth(room) + plate.spacing : 0f;
+            _nameWidths[tab] = 2f * _tabPadding + name.GetPreferredValues(name.text).x + slot;
+        }
+        return _nameWidths.TryGetValue(tab, out float width) ? Mathf.Max(_tabMinWidth, width) : 0f;
     }
 
     /// <summary>The active view's chips (none while the no-case state shows): the chosen one wears its accent look and is scrolled into view (ChipRow), an unavailable one is dimmed.</summary>
