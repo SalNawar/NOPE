@@ -194,7 +194,7 @@ public static partial class OfficeSceneUIBuilder
         FallbackHud fallbackHud = BuildFallbackHud(officeCanvas.transform);
         OfficeCaseHud caseHud = BuildOfficeCaseHud(officeCanvas.transform, out GameObject officeCompareStrip, out TMP_Text officeCompareText);
         Button deskViewBack = BuildDeskViewBack(officeCanvas.transform);
-        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, out Image powerLed, out Button framePower);
+        PcFrame pcFrame = BuildPcFrame(officeCanvas.transform, frameCamera, officeView, library, out Image powerLed, out Button framePower);
         OverlayCallout speechBubble = BuildOverlayCallout(officeCanvas.transform, "SpeechBubble", new Vector2(420f, 110f), new Color(0.98f, 0.97f, 0.93f, 0.97f), ThemeRoleId.DiegeticBubble, true);
         TravellerWheel wheel = BuildTravellerWheel(officeCanvas.transform, deskConfig, speechBubble);
         BuildBubbleInput(speechBubble, wheel);
