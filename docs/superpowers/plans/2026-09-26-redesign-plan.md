@@ -730,6 +730,8 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
 - **FEATURES:** 12.
 - **Audit absorbed:** R2-010 and R3-021 (the rest of the rule literals), R3-032 (if the simulation needs `ShiftClockDriver`'s defaults in edit mode).
 - **Depends on:** 22.
+- **Saleh's direction (2026-09-29), part 1, built before the tuning (branch `redesign/p23-balance`, main `d8d46a4` = phase 8; the tuning waits for phase 9):**
+  - **One penalty for any mistake** ("clerk is fined for any mistake on application the same either approval or rejection. we dont penalize based on the type of mistake"). The audit of what moved the wallet on a verdict: `ShiftScoring`'s citation (free warnings, then the escalating `citationPenalties` 5, 10, 20 cr by the day's count, the same for an accept or a deny); an unproven denial (the same citation); phase 13b's stranding fine (150 cr per stranded traveller let through without a signed waiver). The verdict impacts move attributes only; dialog and trigger effects (`AddMoney`) and Home do not hang on a verdict. Now: `VerdictRules.WrongDecisionPenalty` (Domain, tested), one knob `GameConfigSO.wrongDecisionPenalty` (10 cr, a first value for the tuning) replaces the escalation, and `freeWarningsPerDay` goes from 1 to 0 so every mistake is fined (a knob Saleh may set back). The stability loss stays as it was (5 a wrong decision, 10 more when the traveller is a premade): it moves stability, not money.
 
 ### Phase 24 — Internet (L)
 

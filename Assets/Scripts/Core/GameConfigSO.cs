@@ -17,16 +17,18 @@ public sealed class GameConfigSO : ScriptableObject
     [Min(0)]
     public int legendaryBonusPay = 15;
 
-    [Header("Citations (per day)")]
-    /// <summary>Wrong sends per day forgiven with a warning only (no money penalty).</summary>
+    [Header("Citations (one penalty per wrong decision)")]
+    /// <summary>Wrong decisions per day forgiven with a warning only (no money penalty); 0 fines every mistake (Saleh, 2026-09-29).</summary>
     [Min(0)]
-    public int freeWarningsPerDay = 1;
+    public int freeWarningsPerDay = 0;
 
     /// <summary>
-    /// Escalating money penalties after free warnings are used.
-    /// Index 0 = first penalized citation of the day; past the end, the last value repeats.
+    /// The one money penalty for a wrong decision past the free warnings: a
+    /// wrong accept, a wrong deny or an unproven denial, whatever the fault,
+    /// the same every time (VerdictRules.WrongDecisionPenalty; redesign phase 23).
     /// </summary>
-    public int[] citationPenalties = { 5, 10, 20 };
+    [Min(0)]
+    public int wrongDecisionPenalty = 10;
 
     [Header("Evidence (deny gating)")]
     /// <summary>
@@ -141,17 +143,5 @@ public sealed class GameConfigSO : ScriptableObject
             Debug.LogWarning($"[GameConfigSO] '{name}': carryCategory {carryCategory} is not a category history may edit, so carries would silently never record.", this);
         if (leaderKeepFloor > leaderFloor)
             Debug.LogWarning($"[GameConfigSO] '{name}': leaderKeepFloor {leaderKeepFloor} is above leaderFloor {leaderFloor} and counts as the floor (no hysteresis at the floor).", this);
-    }
-
-    /// <summary>
-    /// Returns the money penalty for the Nth penalized citation of the day (1-based).
-    /// </summary>
-    public int GetCitationPenalty(int penalizedCitationIndex1Based)
-    {
-        if (citationPenalties == null || citationPenalties.Length == 0)
-            return 0;
-
-        int idx = Mathf.Clamp(penalizedCitationIndex1Based - 1, 0, citationPenalties.Length - 1);
-        return Mathf.Max(0, citationPenalties[idx]);
     }
 }

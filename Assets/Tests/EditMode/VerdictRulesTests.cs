@@ -25,4 +25,29 @@ public class VerdictRulesTests
     {
         Assert.AreEqual(expected, VerdictRules.IsUnprovenDenial(requireEvidence, evidenceCount, accepted, deviation, directive));
     }
+
+    /// <summary>
+    /// Redesign phase 23 (Saleh, 2026-09-29: "clerk is fined for any mistake on application the same either approval or rejection"):
+    /// every wrong decision past the day's free warnings costs the one penalty, the fifth as much as the first.
+    /// </summary>
+    [TestCase(1, 0, 10, 10, Description = "no free warnings: the first mistake is fined")]
+    [TestCase(5, 0, 10, 10, Description = "no escalation: the fifth costs what the first did")]
+    [TestCase(1, 1, 10, 0, Description = "a free warning costs nothing")]
+    [TestCase(2, 1, 10, 10, Description = "the warnings used, the one penalty")]
+    [TestCase(9, 1, 10, 10)]
+    [TestCase(3, 0, 0, 0, Description = "a penalty of 0 fines nothing")]
+    [TestCase(3, 0, -5, 0, Description = "never below 0")]
+    public void WrongDecisionPenalty_TheOnePenaltyPastTheFreeWarnings(int citationNumberToday, int freeWarnings, int penalty, int expected)
+    {
+        Assert.AreEqual(expected, VerdictRules.WrongDecisionPenalty(citationNumberToday, freeWarnings, penalty));
+    }
+
+    [TestCase(1, 0, false)]
+    [TestCase(1, 1, true)]
+    [TestCase(2, 1, false)]
+    [TestCase(2, 2, true)]
+    public void IsFreeWarning_WhileTheDaysWarningsLast(int citationNumberToday, int freeWarnings, bool expected)
+    {
+        Assert.AreEqual(expected, VerdictRules.IsFreeWarning(citationNumberToday, freeWarnings));
+    }
 }
