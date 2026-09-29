@@ -993,16 +993,17 @@ public static partial class ContentLibraryValidator
             // The Directives (phase 9; the rule Generate World checks its source with): each rule's shape, and the day's
             // rolled procedures and guarantees against the kinds of the day (Directives.RuleProblems, DayProblems).
             foreach (TravelRuleSO rule in plan.ActiveTravelRules.Where(r => r != null).Distinct())
-                foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description)))
+                foreach (string problem in Directives.RuleProblems(rule.name, rule.type, rule.kinds, rule.nation != null || rule.era != null, !string.IsNullOrWhiteSpace(rule.description),
+                                                                   rule.transponder, lib.Agency.transponders))
                 {
                     Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", rule);
                     issues++;
                 }
-            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds, lib.FirstDayOf(r))).ToList();
+            List<Directives.RuleEntry> active = plan.ActiveTravelRules.Where(r => r != null).Select(r => new Directives.RuleEntry(r.name, r.type, r.kinds, lib.FirstDayOf(r), r.transponder)).ToList();
             var kinds = plan.Kinds.Where(k => k != null && k.blueprint != null && k.weight > 0f)
                 .Select(k => (k.blueprint.Kind, (IReadOnlyCollection<string>)(k.blueprint.DocumentTemplates ?? Array.Empty<DocumentTemplateSO>()).Where(t => t != null).Select(t => t.formNumber).ToList()))
                 .ToList();
-            foreach (string problem in Directives.DayProblems(plan.name, plan.DayNumber, active, kinds))
+            foreach (string problem in Directives.DayProblems(plan.name, plan.DayNumber, active, kinds, lib.Agency.transponders))
             {
                 Debug.LogError($"[ContentLibraryValidator] {problem} (run Tools > TimeDesk > Generate World)", plan);
                 issues++;

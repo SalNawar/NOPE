@@ -591,13 +591,17 @@ public static class Directives
         /// <summary>The first day a plan lists it (0: none).</summary>
         public readonly int FirstDay;
 
+        /// <summary>The model a recall grounds (an agency.transponders id); null for every other rule.</summary>
+        public readonly string Transponder;
+
         /// <summary>Creates an entry.</summary>
-        public RuleEntry(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds, int firstDay)
+        public RuleEntry(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds, int firstDay, string transponder = null)
         {
             Asset = asset;
             Type = type;
             Kinds = kinds ?? new TravellerKind[0];
             FirstDay = firstDay;
+            Transponder = transponder;
         }
     }
 
@@ -606,12 +610,18 @@ public static class Directives
     /// procedure names no country or era and has its line; a closure names
     /// no kinds (it closes a destination for everyone) and no line is
     /// needed; a paper set or debt standing lists at least one kind, since
-    /// each has a kind's paper set to read. Empty when sound.
+    /// each has a kind's paper set to read; a transponder recall (days 7-15
+    /// V9) names an Economy model of <paramref name="transponders"/> and lists
+    /// only kinds that travel on an Economy unit; only a recall names a
+    /// <paramref name="transponder"/>. Empty when sound.
     /// </summary>
-    public static List<string> RuleProblems(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds, bool hasPlace, bool hasLine)
+    public static List<string> RuleProblems(string asset, TravelRuleType type, IReadOnlyList<TravellerKind> kinds, bool hasPlace, bool hasLine,
+                                            string transponder = null, IReadOnlyList<TransponderModel> transponders = null)
     {
         var problems = new List<string>();
         kinds = kinds ?? new TravellerKind[0];
+        if (type != TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(transponder))
+            problems.Add($"Rule '{asset}' ({type}) names the transponder '{transponder}'; only a recall (TransponderRecall) names one.");
         if (IsClosure(type))
         {
             if (kinds.Count > 0)
@@ -623,8 +633,20 @@ public static class Directives
             problems.Add($"Rule '{asset}' is a standing procedure ({type}), but names a country or era; a procedure names none.");
         if (!hasLine)
             problems.Add($"Rule '{asset}' is a standing procedure ({type}): it needs its directive line (\"description\").");
-        if ((type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding) && kinds.Count == 0)
-            problems.Add($"Rule '{asset}' ({type}) lists no kinds; a paper set or debt standing names the kinds it is read for.");
+        if ((type == TravelRuleType.PaperSet || type == TravelRuleType.DebtStanding || type == TravelRuleType.TransponderRecall) && kinds.Count == 0)
+            problems.Add($"Rule '{asset}' ({type}) lists no kinds; a paper set, debt standing or recall names the kinds it is read for.");
+        if (type == TravelRuleType.TransponderRecall)
+        {
+            TransponderModel model = (transponders ?? new TransponderModel[0]).FirstOrDefault(t => t != null && t.id == transponder);
+            if (string.IsNullOrWhiteSpace(transponder))
+                problems.Add($"Rule '{asset}' is a recall that names no model (\"transponder\", an agency.transponders id).");
+            else if (model == null)
+                problems.Add($"Rule '{asset}' recalls the model '{transponder}', which agency.transponders does not have.");
+            else if (model.transponderClass != TransponderClass.Economy)
+                problems.Add($"Rule '{asset}' recalls '{transponder}', a {model.transponderClass} model; a recall grounds an Economy model, the unit its kinds travel on.");
+            foreach (TravellerKind kind in kinds.Where(k => !(AccountMaker.StatusOf(k, out CitizenStatus status) && AccountMaker.ClassOf(status) == TransponderClass.Economy)))
+                problems.Add($"Rule '{asset}' lists the kind {kind}, which travels on no Economy unit, so the recall could never ground it.");
+        }
         return problems;
     }
 
@@ -637,9 +659,12 @@ public static class Directives
     /// it; and a procedure guaranteed a breaker today (<see cref="Guarantees"/>,
     /// its first day) that no kind of the day can break, so its guarantee
     /// would plan nobody (the return home and no 2150 goods have their own
-    /// checks, the day's displaced and lies). Empty when sound.
+    /// checks, the day's displaced and lies); and recalls that ground every
+    /// Economy model of <paramref name="transponders"/> (days 7-15 V9: nobody
+    /// could travel Economy). Empty when sound.
     /// </summary>
-    public static List<string> DayProblems(string day, int today, IReadOnlyList<RuleEntry> active, IReadOnlyList<(TravellerKind kind, IReadOnlyCollection<string> forms)> kinds)
+    public static List<string> DayProblems(string day, int today, IReadOnlyList<RuleEntry> active, IReadOnlyList<(TravellerKind kind, IReadOnlyCollection<string> forms)> kinds,
+                                           IReadOnlyList<TransponderModel> transponders = null)
     {
         var problems = new List<string>();
         active = active ?? new RuleEntry[0];
@@ -655,6 +680,11 @@ public static class Directives
             else if (rule.Type == TravelRuleType.DressForDestination && Guarantees(rule.Type, today, rule.FirstDay) && !Breakable(rule))
                 problems.Add($"Day '{day}' is the first day of the rule '{rule.Asset}' ({rule.Type}), which guarantees a breaker none of its kinds can be: list a 2150 citizen kind.");
         }
+
+        List<string> recalled = active.Where(r => r.Type == TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(r.Transponder)).Select(r => r.Transponder).ToList();
+        if (recalled.Count > 0 && transponders != null && transponders.Any(t => t != null && t.transponderClass == TransponderClass.Economy) &&
+            !Unrecalled(transponders, recalled).Any(t => t.transponderClass == TransponderClass.Economy))
+            problems.Add($"Day '{day}' recalls every Economy model ({string.Join(", ", recalled)}): nobody could travel Economy. Leave one unrecalled.");
 
         return problems;
     }

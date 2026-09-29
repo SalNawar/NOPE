@@ -12270,6 +12270,12 @@
         "tier": "Full"
       },
       {
+        "key": "citation.acceptedWrong.recalled",
+        "text": "Approved a recalled transponder.",
+        "gloss": "None",
+        "tier": "Full"
+      },
+      {
         "key": "category.Employer",
         "text": "EMPLOYER",
         "gloss": "None",

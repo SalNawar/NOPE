@@ -521,6 +521,42 @@ public class DirectivesTests
         CollectionAssert.IsEmpty(Directives.RuleProblems("R", TravelRuleType.DressForDestination, new TravellerKind[0], false, true), "dress is read for every 2150 citizen by its own rule");
     }
 
+    private static readonly List<TransponderModel> Units = new List<TransponderModel>
+    {
+        new TransponderModel { id = "hopper2", transponderClass = TransponderClass.Premium, model = "Hopper Mk II", prefix = "HP", weight = 1f },
+        new TransponderModel { id = "ticktock", transponderClass = TransponderClass.Economy, model = "Tick-Tock Basic", prefix = "TT", weight = 3f },
+        new TransponderModel { id = "driftbox3", transponderClass = TransponderClass.Economy, model = "Driftbox 3", prefix = "DB", weight = 1f }
+    };
+
+    private static readonly TravellerKind[] EconomyKinds = { TravellerKind.PoorTourist, TravellerKind.Labourer };
+
+    [Test]
+    public void RuleProblems_TheRecallAsShipped_HasNone()
+    {
+        CollectionAssert.IsEmpty(Directives.RuleProblems("Rule_DriftboxRecall", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "driftbox3", Units));
+    }
+
+    [Test]
+    public void RuleProblems_TheRecallsModelKindsAndLine()
+    {
+        StringAssert.Contains("'nowhere'", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "nowhere", Units).Single(), "an unknown model");
+        StringAssert.Contains("Premium", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "hopper2", Units).Single(), "a Premium model: no Economy traveller holds one");
+        StringAssert.Contains("names no model", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, EconomyKinds, false, true, "", Units).Single());
+        StringAssert.Contains("RichTourist", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, new[] { TravellerKind.RichTourist, TravellerKind.PoorTourist }, false, true, "driftbox3", Units).Single(), "a kind without an Economy unit");
+        StringAssert.Contains("lists no kinds", Directives.RuleProblems("R", TravelRuleType.TransponderRecall, null, false, true, "driftbox3", Units).Single());
+        StringAssert.Contains("only a recall", Directives.RuleProblems("R", TravelRuleType.PaperSet, Tourists, false, true, "driftbox3", Units).Single());
+    }
+
+    [Test]
+    public void DayProblems_EveryEconomyModelRecalledOnADay()
+    {
+        var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)> { (TravellerKind.PoorTourist, PoorSet) };
+        var one = new List<Directives.RuleEntry> { new Directives.RuleEntry("Rule_DriftboxRecall", TravelRuleType.TransponderRecall, EconomyKinds, 10, "driftbox3") };
+        CollectionAssert.IsEmpty(Directives.DayProblems("DayPlan_Inv_Day10", 10, one, kinds, Units));
+        var both = new List<Directives.RuleEntry>(one) { new Directives.RuleEntry("Rule_TickTockRecall", TravelRuleType.TransponderRecall, EconomyKinds, 10, "ticktock") };
+        StringAssert.Contains("every Economy model", Directives.DayProblems("D", 10, both, kinds, Units).Single(), "nobody could travel Economy at all");
+    }
+
     private static List<(TravellerKind kind, IReadOnlyCollection<string> forms)> Day3Kinds() => new List<(TravellerKind, IReadOnlyCollection<string>)>
     {
         (TravellerKind.RichTourist, RichSet),

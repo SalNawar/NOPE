@@ -271,7 +271,8 @@ public static partial class WorldContentGenerator
                 if (!ParseEnum(kind, out TravellerKind _))
                     errors.Add($"Rule '{r.asset}' lists '{kind}', which is not a traveller kind ({string.Join(", ", Enum.GetNames(typeof(TravellerKind)))}).");
             if (ParseEnum(r.type, out type))
-                errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description)));
+                errors.AddRange(Directives.RuleProblems(r.asset, type, RuleKinds(r), !string.IsNullOrEmpty(r.country) || !string.IsNullOrEmpty(r.era), !string.IsNullOrWhiteSpace(r.description),
+                                                        r.transponder, src.agency != null ? BuildAgency(src.agency).transponders : null));
         }
 
         var futureIds = new HashSet<string>(src.eras.Where(e => e.future).Select(e => e.id));
@@ -1565,6 +1566,7 @@ public static partial class WorldContentGenerator
         rule.era = !string.IsNullOrEmpty(r.era) ? eras[r.era] : null;
         rule.description = r.description;
         rule.kinds = RuleKinds(r).ToArray();
+        rule.transponder = r.transponder ?? string.Empty;
         EditorUtility.SetDirty(rule);
         return rule;
     }
@@ -1587,14 +1589,14 @@ public static partial class WorldContentGenerator
         var active = new List<Directives.RuleEntry>();
         foreach (string name in d.rules ?? Array.Empty<string>())
             if (byAsset.TryGetValue(name ?? string.Empty, out RuleData r) && ParseEnum(r.type, out TravelRuleType type))
-                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r), Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day))));
+                active.Add(new Directives.RuleEntry(r.asset, type, RuleKinds(r), Directives.FirstDay(src.days.Where(x => (x.rules ?? Array.Empty<string>()).Contains(name)).Select(x => x.day)), r.transponder));
 
         var kinds = new List<(TravellerKind kind, IReadOnlyCollection<string> forms)>();
         foreach (KindWeightData k in d.kinds ?? Array.Empty<KindWeightData>())
             if (k != null && k.weight > 0f && ParseEnum(k.kind, out TravellerKind kind))
                 kinds.Add((kind, authored.blueprints.TryGetValue(kind, out CaseBlueprintSO b) ? FormNumbers(b) : new string[0]));
 
-        errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds));
+        errors.AddRange(Directives.DayProblems(d.asset, d.day, active, kinds, src.agency != null ? BuildAgency(src.agency).transponders : null));
     }
 
     /// <summary>
@@ -2306,8 +2308,8 @@ public static partial class WorldContentGenerator
         public LooksWeightData looks;
     }
 
-    /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set or debt standing, the kinds it is read for.</summary>
-    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; }
+    /// <summary>One travel rule as authored ("rules"): a closure names its country and/or era; a standing procedure its line and, for a paper set, debt standing or recall, the kinds it is read for; a recall the model it grounds ("transponder", an agency.transponders id; days 7-15).</summary>
+    [Serializable] private sealed class RuleData { public string asset; public string type; public string country; public string era; public string description; public string[] kinds; public string transponder; }
 
     [Serializable] private sealed class EraWeightData { public string era; public float weight; }
 
