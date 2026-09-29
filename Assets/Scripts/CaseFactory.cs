@@ -1062,7 +1062,9 @@ public sealed class CaseFactory
         };
 
     /// <summary>
-    /// How the traveller looks: a premade's whole picture; otherwise the
+    /// How the traveller looks: a premade's whole picture once its neutral
+    /// art is delivered (CharacterArt.HasFinalArt), else its generated
+    /// stand-in (days 7-15 B4, PremadeStandIn); otherwise the
     /// claimed place's layers (Looks.Compose on the look stream), with one
     /// garment of the tell source (TellSource, a false origin's true home)
     /// for a dress tell, or the costume error's
@@ -1078,7 +1080,9 @@ public sealed class CaseFactory
                                       (LookSource source, bool whole) costume, int caseIndex1Based)
     {
         if (legendary != null)
-            return Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules);
+            return CharacterArt.HasFinalArt(LookKeys.Premade(legendary.id, LookKeys.NeutralExpression, null, null).Name)
+                ? Looks.Whole(legendary.id, place != null ? SourceOf(place) : null, _lib.LookRules)
+                : PremadeStandIn(inst, place, legendary, family);
 
         if (place == null)
         {
@@ -1093,6 +1097,23 @@ public sealed class CaseFactory
         int year = family != null && _present != null ? _present.Year : place.year;
         LookWeights weights = family != null ? family.looks : place.looks;
         return Looks.Compose(SourceOf(place), leak, inst.gender, inst.trueBirthDate, year, weights, _lib.LookRules, _looksRng, costume.whole);
+    }
+
+    /// <summary>
+    /// A premade's generated stand-in until its art lands (days 7-15 B4, Saleh:
+    /// "premades with drawn art", a generated look meanwhile): its claimed
+    /// place's dress (Looks.Compose, no leak: premades roll no costume error)
+    /// over a story character's family country's looks and the present's year
+    /// (<paramref name="family"/>), or the place's own looks and year for the
+    /// famous, drawn on the premade's own stream (Seeds.ForPremadeLook), so the
+    /// same face comes back at every appearance and no other draw moves.
+    /// </summary>
+    private TravellerLook PremadeStandIn(CaseInstance inst, NationEraProfileSO place, LegendarySO legendary, NationEraProfileSO family)
+    {
+        var rng = new SeededRandom(Seeds.ForPremadeLook(legendary.id));
+        int year = family != null && _present != null ? _present.Year : place != null ? place.year : 0;
+        LookWeights weights = family != null ? family.looks : place != null ? place.looks : null;
+        return Looks.Compose(place != null ? SourceOf(place) : null, null, inst.gender, inst.trueBirthDate, year, weights, _lib.LookRules, rng);
     }
 
     /// <summary>
