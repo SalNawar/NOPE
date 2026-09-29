@@ -56,7 +56,10 @@ public enum PlannedDirective
     DepartureDate,
 
     /// <summary>The papers' dates: a Valid Until that has passed (a kind whose papers print one).</summary>
-    Expired
+    Expired,
+
+    /// <summary>A transponder recall: the traveller's unit is the recalled model (an Economy kind, on a day a recall stands).</summary>
+    Recalled
 }
 
 /// <summary>What an authored directive fault makes (Directives.Plan): the rule it breaks and the maker's variant, pinned instead of drawn.</summary>
@@ -519,6 +522,8 @@ public static class Directives
                 return new DirectivePlan(true, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Departure);
             case PlannedDirective.Expired:
                 return new DirectivePlan(true, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Expiry);
+            case PlannedDirective.Recalled:
+                return new DirectivePlan(true, TravelRuleType.TransponderRecall, PaperSetBreak.None, PaperDateFault.None);
             default:
                 return new DirectivePlan(false, TravelRuleType.EraForbidden, PaperSetBreak.None, PaperDateFault.None);
         }
@@ -712,6 +717,25 @@ public static class Directives
         int offset = pick < DepartureOffsetMaxDays ? pick - DepartureOffsetMaxDays : pick - DepartureOffsetMaxDays + 1;
         return today.AddDays(offset);
     }
+
+    /// <summary>
+    /// The recall's maker (days 7-15 §6): the traveller's unit becomes the
+    /// recalled <paramref name="model"/> with a serial nobody holds today
+    /// (AgencyNumbers.TakeUnique over AccountMaker.Serial, which joins
+    /// <paramref name="takenToday"/>), printed honestly on the manifest and the
+    /// waiver: one draw per attempt.
+    /// </summary>
+    public static string RecalledUnit(TransponderModel model, ISet<string> takenToday, IRandomSource rng) =>
+        AccountMaker.TransponderName(model.model, AgencyNumbers.TakeUnique(takenToday, () => AccountMaker.Serial(model.prefix, rng)));
+
+    /// <summary>
+    /// The transponder models a unit may be drawn from while recalls stand
+    /// (days 7-15 §6, K5): <paramref name="models"/> without the recalled ids,
+    /// in order, so nobody holds a recalled unit except through the recall's
+    /// maker and every pick stays one draw. Empty for null models.
+    /// </summary>
+    public static List<TransponderModel> Unrecalled(IReadOnlyList<TransponderModel> models, ICollection<string> recalledIds) =>
+        (models ?? new TransponderModel[0]).Where(m => m != null && (recalledIds == null || !recalledIds.Contains(m.id))).ToList();
 
     /// <summary>A Valid Until 1 to <see cref="ExpiredMaxDays"/> days before <paramref name="today"/>: one draw (AgencyNumbers.DaysAgo).</summary>
     public static DateTime ExpiredValidUntil(DateTime today, IRandomSource rng) => AgencyNumbers.DaysAgo(today, ExpiredMaxDays, rng);

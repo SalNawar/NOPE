@@ -151,6 +151,27 @@ public class AccountMakerTests
         Assert.AreEqual(420, account.Wage);
     }
 
+    /// <summary>While a recall stands (days 7-15 §6), a citizen's unit is drawn from the models left after it (Directives.Unrecalled): a recalled model is never drawn, and the pick stays one draw.</summary>
+    [Test]
+    public void Make_ARecalledModelIsNeverDrawn_AndTheRecallKeepsOneDrawPerModel()
+    {
+        var models = new List<TransponderModel>
+        {
+            new TransponderModel { id = "tick", transponderClass = TransponderClass.Economy, model = "Tick-Tock Basic", prefix = "TT", weight = 1f },
+            new TransponderModel { id = "driftbox3", transponderClass = TransponderClass.Economy, model = "Driftbox 3", prefix = "DB", weight = 5f }
+        };
+        List<TransponderModel> left = Directives.Unrecalled(models, new[] { "driftbox3" });
+        for (int seed = 0; seed < 100; seed++)
+            StringAssert.StartsWith("Tick-Tock Basic", AccountMaker.Make(Request(CitizenStatus.Eligible), Ranges(), left, Proofs(), Today, new HashSet<string>(), new SeededRandom(seed)).Transponder, $"seed {seed}");
+
+        var rng = new ScriptedRandom(
+            ScriptStep.Range(418), ScriptStep.Range(937), ScriptStep.Range(52), ScriptStep.Range(1000),
+            ScriptStep.Value(0.99f), ScriptStep.Range(7),                       // one Value draw picks among the models left
+            ScriptStep.Range(204817), ScriptStep.Range(0), ScriptStep.Range(0), ScriptStep.Range(0));
+        Assert.AreEqual("Tick-Tock Basic · TT-00007", AccountMaker.Make(Request(CitizenStatus.Eligible), Ranges(), left, Proofs(), Today, new HashSet<string>(), rng).Transponder);
+        Assert.IsTrue(rng.Done);
+    }
+
     [Test]
     public void Make_WithoutAContract_OrWithoutEmployers_DrawsNothingForIt()
     {

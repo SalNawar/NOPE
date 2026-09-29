@@ -347,10 +347,10 @@ public static class Premades
                     DirectivePlan plan = Directives.Plan(f.Directive);
                     if (!(day.Rules ?? new Directive[0]).Any(r => r.Type == plan.Rule && r.AppliesTo(f.Kind)))
                         errors.Add($"{entry} authors {f.Directive}, but no {plan.Rule} rule stands that day for a {f.Kind}.");
-                    if (plan.PaperBreak != PaperSetBreak.None && !Directives.PaperSetBreaks(f.Kind, f.Forms).Contains(plan.PaperBreak))
+                    if (!Directives.CanBreak(plan.Rule, f.Kind, f.Forms))
+                        errors.Add($"{entry} authors {f.Directive}, but a {f.Kind} cannot break a {plan.Rule} rule (Directives.CanBreak: no account to freeze, no Economy unit to recall, no paper to leave out).");
+                    else if (plan.PaperBreak != PaperSetBreak.None && !Directives.PaperSetBreaks(f.Kind, f.Forms).Contains(plan.PaperBreak))
                         errors.Add($"{entry} authors {f.Directive}, which a {f.Kind}'s papers cannot show.");
-                    if (plan.Rule == TravelRuleType.DebtStanding && !TravellerKinds.IsCitizen(f.Kind))
-                        errors.Add($"{entry} authors {f.Directive}, but a {f.Kind} holds no Citizen Account to freeze.");
                 }
 
                 if (!string.IsNullOrEmpty(f.Dialog) && (dialogIds == null || !dialogIds.Contains(f.Dialog)))

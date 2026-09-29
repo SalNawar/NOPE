@@ -105,7 +105,8 @@ public class SerializedEnumsTests
         Assert.AreEqual(5, (int)PlannedDirective.Frozen);
         Assert.AreEqual(6, (int)PlannedDirective.DepartureDate);
         Assert.AreEqual(7, (int)PlannedDirective.Expired);
-        Assert.AreEqual(8, System.Enum.GetValues(typeof(PlannedDirective)).Length, "a new member is appended here too");
+        Assert.AreEqual(8, (int)PlannedDirective.Recalled);
+        Assert.AreEqual(9, System.Enum.GetValues(typeof(PlannedDirective)).Length, "a new member is appended here too");
     }
 
     /// <summary>MissingFormVariant: stored in the content library's missing-form replies (interview.missingFormReplies).</summary>

@@ -99,6 +99,9 @@ public sealed class CaseFactory
     /// <summary>The current traveller's fault stream (Seeds.ForFaults): the violation roll, its rule and variant (a planned procedure's maker draws here too), then the costume roll, its variant and its source.</summary>
     private IRandomSource _faultRng = new SeededRandom(0);
 
+    /// <summary>The transponder models a unit may be drawn from today (Directives.Unrecalled: the agency's, minus every model a recall standing today grounds; days 7-15 §6).</summary>
+    private List<TransponderModel> _transponders = new List<TransponderModel>();
+
     /// <summary>Whether a garment can be looked at and compared today (a costume error, like a dress tell, needs it).</summary>
     private bool _appearanceReachable;
 
@@ -202,6 +205,8 @@ public sealed class CaseFactory
         // which also keeps them out of the day's random roll.
         _roster = new NameRoster();
         _appearances = Appearances(plan, state);
+        _transponders = Directives.Unrecalled(_lib.Agency.transponders,
+            plan.ActiveTravelRules.Where(r => r != null && r.type == TravelRuleType.TransponderRecall && !string.IsNullOrWhiteSpace(r.transponder)).Select(r => r.transponder).ToList());
         _agencyNumbers = new HashSet<string>();
         string clerkId = _lib.Agency.clerk != null ? _lib.Agency.clerk.citizenId : null;
         if (!string.IsNullOrWhiteSpace(clerkId))
@@ -461,7 +466,7 @@ public sealed class CaseFactory
             inst.displacement = AgencyNumbers.Displaced(_today.Value, _lib.Agency.displaced, _agencyNumbers, _accountRng);
         else if (citizen && _today != null && AccountMaker.StatusOf(inst.kind, out CitizenStatus status))
             inst.account = AccountMaker.Make(AccountRequestFor(LieKinds.TrueStatus(lieKind, status), family, blueprint, claimedEra, lieKind == LieKind.DebtorPosingAsTourist, legendary),
-                                             _lib.Agency.accounts, _lib.Agency.transponders, _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
+                                             _lib.Agency.accounts, _transponders, _lib.Agency.proofs, _today.Value, _agencyNumbers, _accountRng);
 
         // 4.9) The violation (K5: after the lie roll, before the costume roll): the slot's authored directive fault or a
         //      guaranteed procedure's maker, or the roll on the fault stream for an honest traveller (never a premade's);
@@ -534,9 +539,10 @@ public sealed class CaseFactory
     /// (Directives.Roll on the fault stream). Then the maker's account side,
     /// on the same stream: a Premium citizen's Economy unit
     /// (RecordLies.FalseTransponder, the paper set's <paramref name="paperBreak"/>
-    /// drawn first, Directives.PickPaperSetBreak, or pinned) or a Frozen
+    /// drawn first, Directives.PickPaperSetBreak, or pinned), a Frozen
     /// standing since a day within agency.accounts.frozenWithinDays
-    /// (AgencyNumbers.DaysAgo). The paper side follows the printing
+    /// (AgencyNumbers.DaysAgo), or a recall's grounded model with a fresh
+    /// serial (Directives.RecalledUnit, days 7-15 §6). The paper side follows the printing
     /// (BreakPapers, FalsifyDate). Null when honest (no draw for a traveller
     /// who can break nothing, or who rolls no fault: an honest kind entry,
     /// FaultOrder.MayRoll).
@@ -570,7 +576,7 @@ public sealed class CaseFactory
                     Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: the slot's authored {authored.PaperBreak} cannot show on a {inst.kind}'s papers, so the traveller stays honest. Check world_source.json days[].forced[].directive.");
                 if (paperBreak == PaperSetBreak.EconomyManifest)
                 {
-                    string unit = RecordLies.FalseTransponder(TransponderClass.Economy, inst.account.Transponder, _lib.Agency.transponders, _agencyNumbers, _faultRng);
+                    string unit = RecordLies.FalseTransponder(TransponderClass.Economy, inst.account.Transponder, _transponders, _agencyNumbers, _faultRng);
                     if (unit == null)
                         Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: was to travel on an Economy unit, but agency.transponders has no Economy model. Run Tools > TimeDesk > Generate World.");
                     else
@@ -585,6 +591,17 @@ public sealed class CaseFactory
                     return null;
                 inst.account.Standing = AccountStanding.Frozen;
                 inst.account.FrozenSince = _today != null ? AgencyCalendar.Write(AgencyNumbers.DaysAgo(_today.Value, _lib.Agency.accounts.frozenWithinDays, _faultRng)) : null;
+                break;
+            case TravelRuleType.TransponderRecall:
+                TransponderModel recalled = (_lib.Agency.transponders ?? new List<TransponderModel>()).FirstOrDefault(t => t != null && t.id == broken.transponder);
+                if (inst.account == null || recalled == null)
+                {
+                    if (recalled == null)
+                        Debug.LogWarning($"[CaseFactory] Case {caseIndex1Based}: was to travel on the model '{broken.name}' recalls ('{broken.transponder}'), which agency.transponders does not have. Run Tools > TimeDesk > Generate World.");
+                    return null;
+                }
+                inst.account.Transponder = Directives.RecalledUnit(recalled, _agencyNumbers, _faultRng);
+                inst.account.TransponderClass = recalled.transponderClass;
                 break;
         }
 
@@ -937,7 +954,7 @@ public sealed class CaseFactory
             CoverBirthDate = inst.trueBirthDate,
             BirthYearMin = _present != null ? _present.BirthYearMin : 0,
             BirthYearMax = _present != null ? _present.BirthYearMax : 0,
-            Transponders = _lib.Agency.transponders,
+            Transponders = _transponders,
             TakenToday = _agencyNumbers,
             PosedStatus = kind == LieKind.DebtorPosingAsTourist && AccountMaker.StatusOf(inst.kind, out CitizenStatus posed) ? posed : (CitizenStatus?)null,
             Employers = _lib.Agency.EmployersOf(inst.claimedEra != null ? inst.claimedEra.id : null),

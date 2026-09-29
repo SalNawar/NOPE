@@ -167,6 +167,31 @@ public class DirectivesTests
     }
 
     [Test]
+    public void RecallMaker_SwapsTheModelWithAFreshSerial()
+    {
+        var driftbox = new TransponderModel { id = "driftbox3", model = "Driftbox 3", prefix = "DB", transponderClass = TransponderClass.Economy, weight = 1f };
+        var taken = new HashSet<string> { "DB-00412" };
+        var rng = Script(R(412), R(413));
+        Assert.AreEqual("Driftbox 3 · DB-00413", Directives.RecalledUnit(driftbox, taken, rng), "a serial nobody holds today");
+        Assert.IsTrue(rng.Done);
+        CollectionAssert.Contains(taken, "DB-00413");
+    }
+
+    [Test]
+    public void Unrecalled_LeavesOutTheRecalledModels_KeepingTheRestInOrder()
+    {
+        var models = new List<TransponderModel>
+        {
+            new TransponderModel { id = "ticktock", transponderClass = TransponderClass.Economy },
+            new TransponderModel { id = "driftbox3", transponderClass = TransponderClass.Economy },
+            new TransponderModel { id = "hopper2", transponderClass = TransponderClass.Premium }
+        };
+        CollectionAssert.AreEqual(new[] { "ticktock", "hopper2" }, Directives.Unrecalled(models, new[] { "driftbox3" }).Select(m => m.id).ToArray());
+        CollectionAssert.AreEqual(new[] { "ticktock", "driftbox3", "hopper2" }, Directives.Unrecalled(models, new string[0]).Select(m => m.id).ToArray(), "no recall today: every model");
+        CollectionAssert.IsEmpty(Directives.Unrecalled(null, new[] { "x" }));
+    }
+
+    [Test]
     public void ModelIdOf_ReadsThePrintedModel()
     {
         var models = new List<TransponderModel>
@@ -620,7 +645,8 @@ public class DirectivesTests
             (PlannedDirective.ProofMissing, TravelRuleType.PaperSet, PaperSetBreak.ProofMissing, PaperDateFault.None),
             (PlannedDirective.Frozen, TravelRuleType.DebtStanding, PaperSetBreak.None, PaperDateFault.None),
             (PlannedDirective.DepartureDate, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Departure),
-            (PlannedDirective.Expired, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Expiry)
+            (PlannedDirective.Expired, TravelRuleType.PaperDates, PaperSetBreak.None, PaperDateFault.Expiry),
+            (PlannedDirective.Recalled, TravelRuleType.TransponderRecall, PaperSetBreak.None, PaperDateFault.None)
         };
         foreach ((PlannedDirective planned, TravelRuleType rule, PaperSetBreak paper, PaperDateFault date) in table)
         {
