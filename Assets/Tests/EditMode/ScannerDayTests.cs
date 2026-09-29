@@ -44,6 +44,23 @@ public class ScannerDayTests
     }
 
     [Test]
+    public void TheAnalysis_TakesAScanByHand_OncePerDocument()
+    {
+        var analysis = new ScannerDay(false, true);
+        Assert.AreEqual(ScanPass.Analysis, analysis.PassFor(true, false), "a scan by hand of a paper not analysed yet: the analysis pass");
+        Assert.AreEqual(ScanPass.AlreadyAnalysed, analysis.PassFor(true, true), "Saleh 2026-09-29: it only works once per document");
+        Assert.AreEqual(ScanPass.Plain, analysis.PassFor(false, false), "the scanner's own feed is never an analysis");
+        Assert.AreEqual(ScanPass.Plain, analysis.PassFor(false, true));
+
+        foreach (ScannerDay plain in new[] { default(ScannerDay), new ScannerDay(true, false) })
+        {
+            Assert.AreEqual(ScanPass.Plain, plain.PassFor(true, false), "without the Analysis Scanner a scan by hand is plain");
+            Assert.AreEqual(ScanPass.Plain, plain.PassFor(true, true));
+            Assert.AreEqual(ScanPass.Plain, plain.PassFor(false, false));
+        }
+    }
+
+    [Test]
     public void NoSnapshot_NoUpgrades()
     {
         ScannerDay day = ScannerDay.From(null);

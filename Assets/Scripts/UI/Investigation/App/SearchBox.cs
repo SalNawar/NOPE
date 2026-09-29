@@ -2,13 +2,15 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// The Investigation app's search field (the PC redesign SE1, SE3, SE5): as
 /// the player types, the results update after a short pause
 /// (DesktopConfigSO's debounce) from two characters or one digit, grouped by
 /// source in the tab order, each group capped (a chip or "Show all" filters
-/// to one source); Enter opens the first hit. A pasted foreign clip is a chip
+/// to one source); Enter opens the first hit (Ctrl+Enter: in the other pane),
+/// and the keys' focus ring opens the hit it is on (OpenRow). A pasted foreign clip is a chip
 /// (SetChip, from the keys' SearchFieldChip on the same field) that matches
 /// only equal untranslated lines of its tongue. It reads the app's index
 /// (CaseIndex) and fills the results panel (SearchResultsView); a chosen hit
@@ -33,11 +35,21 @@ public sealed class SearchBox : MonoBehaviour
     private float _due = -1f;
     private bool _wired;
 
-    /// <summary>Raised when the player opens a hit (a click, or Enter on the first).</summary>
-    public event Action<SearchHit> Opened;
+    /// <summary>Raised when the player opens a hit (a click, Enter on the first or on the focused one): the hit, and true to open it in the other pane (Ctrl held).</summary>
+    public event Action<SearchHit, bool> Opened;
 
     /// <summary>True while the results panel shows.</summary>
     public bool ResultsOpen => results != null && results.IsOpen;
+
+    /// <summary>The listed hits' rows (none while the panel is closed): the keys' Results region.</summary>
+    public IReadOnlyList<Button> HitRows => results != null && results.IsOpen ? results.HitRows : (IReadOnlyList<Button>)Array.Empty<Button>();
+
+    /// <summary>Opens the hit of <paramref name="row"/> (the focus ring's), in the other pane when <paramref name="otherPane"/>.</summary>
+    public void OpenRow(Component row, bool otherPane)
+    {
+        if (results != null)
+            results.Choose(row, otherPane);
+    }
 
     /// <summary>Searches <paramref name="index"/> (the app's); wires the field and the panel once.</summary>
     public void Bind(CaseIndex index)
@@ -129,20 +141,20 @@ public sealed class SearchBox : MonoBehaviour
         results.Show(typed, _chip.HasValue, all, shown, _only, _script);
     }
 
-    /// <summary>Enter: a pending search runs, then its first hit opens.</summary>
+    /// <summary>Enter: a pending search runs, then its first hit opens (Ctrl+Enter: in the other pane).</summary>
     private void OpenFirst()
     {
         if (_due >= 0f)
             Run();
         if (results != null && results.IsOpen && results.TryFirst(out SearchHit hit))
-            Open(hit);
+            Open(hit, SearchResultsView.CtrlHeld());
     }
 
-    /// <summary>A hit is opened: the panel closes and the app jumps there.</summary>
-    private void Open(SearchHit hit)
+    /// <summary>A hit is opened: the panel closes and the app jumps there (in the other pane when <paramref name="otherPane"/>).</summary>
+    private void Open(SearchHit hit, bool otherPane)
     {
         if (results != null)
             results.Hide();
-        Opened?.Invoke(hit);
+        Opened?.Invoke(hit, otherPane);
     }
 }

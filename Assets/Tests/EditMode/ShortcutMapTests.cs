@@ -19,6 +19,10 @@ public class ShortcutMapTests
     /// <summary>The app's focus ring is on its tab strip.</summary>
     private static readonly ShortcutContext AppTabs = new ShortcutContext(frameOpen: true, appFocused: true, tabStripFocused: true);
 
+    /// <summary>The app's search field has the keyboard and its results panel lists hits.</summary>
+    private static readonly ShortcutContext SearchWithResults =
+        new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, searchFocused: true, resultsShown: true);
+
     /// <summary>No window has the focus; an icon is selected.</summary>
     private static readonly ShortcutContext Icons = new ShortcutContext(frameOpen: true, desktopFocused: true, iconSelected: true);
 
@@ -206,6 +210,32 @@ public class ShortcutMapTests
     }
 
     [Test]
+    public void DownFromTheSearchField_GoesIntoTheResults()
+    {
+        Assert.AreEqual(AppCommand.IntoResults, Resolve(K(ShortcutKey.Down), SearchWithResults));
+        var noResults = new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, searchFocused: true);
+        Assert.IsNull(Resolve(K(ShortcutKey.Down), noResults), "no hit listed: the field keeps its arrow");
+        var otherField = new ShortcutContext(frameOpen: true, appFocused: true, textFieldFocused: true, resultsShown: true);
+        Assert.IsNull(Resolve(K(ShortcutKey.Down), otherField), "another field keeps its arrows");
+        Assert.IsNull(Resolve(K(ShortcutKey.Down, ctrl: true), SearchWithResults));
+        Assert.IsNull(Resolve(K(ShortcutKey.Down, shift: true), SearchWithResults), "Shift+Down selects in the field");
+        Assert.IsNull(Resolve(K(ShortcutKey.Up), SearchWithResults), "the field keeps Up");
+        Assert.IsNull(Resolve(K(ShortcutKey.Enter), SearchWithResults), "the field's own Enter opens the first hit");
+    }
+
+    [Test]
+    public void InTheResults_TheArrowsWalkTheHits_EnterOpens_CtrlEnterInTheOtherPane()
+    {
+        var results = new ShortcutContext(frameOpen: true, appFocused: true, listFocused: true, resultsShown: true);
+        Assert.AreEqual(AppCommand.RowDown, Resolve(K(ShortcutKey.Down), results));
+        Assert.AreEqual(AppCommand.RowUp, Resolve(K(ShortcutKey.Up), results));
+        Assert.AreEqual(AppCommand.Follow, Resolve(K(ShortcutKey.Enter), results));
+        Assert.AreEqual(AppCommand.FollowOther, Resolve(K(ShortcutKey.Enter, ctrl: true), results));
+        Assert.IsNull(Resolve(K(ShortcutKey.Down), new ShortcutContext(frameOpen: false, appFocused: true, textFieldFocused: true, searchFocused: true, resultsShown: true)),
+                      "nothing while the frame is closed");
+    }
+
+    [Test]
     public void TheCard_ListsEveryCommandOnce()
     {
         var seen = new List<AppCommand>();
@@ -231,7 +261,7 @@ public class ShortcutMapTests
     {
         ShortcutContext[] contexts =
         {
-            App, AppList, AppTabs, Icons, new ShortcutContext(frameOpen: true, notesFocused: true)
+            App, AppList, AppTabs, Icons, SearchWithResults, new ShortcutContext(frameOpen: true, notesFocused: true)
         };
         var reached = new HashSet<AppCommand>();
         foreach (ShortcutKey key in Enum.GetValues(typeof(ShortcutKey)))

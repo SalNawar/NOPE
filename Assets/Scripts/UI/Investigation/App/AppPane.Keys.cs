@@ -14,4 +14,7 @@ public sealed partial class AppPane
 
     /// <summary>The active view's chips as drawn, left to right.</summary>
     public IReadOnlyList<Button> ChipButtons => _chips;
+
+    /// <summary>The header's chip row (the focus ring scrolls its chip into view; null without one).</summary>
+    public ChipRow Chips => chipRow;
 }

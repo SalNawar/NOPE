@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 /// <summary>
@@ -14,8 +15,10 @@ using UnityEngine.UI;
 /// the snippet with the matched text marked; an untranslated line's snippet
 /// shows its glyphs in the script's font, unmarked) and "Show all n in
 /// Reference" when the group has more; with no hit, one line says nothing
-/// matches. A click on a hit chooses it (the app jumps there); ✕ closes the
-/// panel. SearchBox fills it; its rows are clones of inactive templates.
+/// matches. A click on a hit chooses it (the app jumps there; Ctrl+click: in
+/// the other pane), and so does Enter on the hit the keys' focus ring is on
+/// (Choose; Ctrl+Enter: the other pane); ✕ closes the panel. SearchBox fills
+/// it; its rows are clones of inactive templates.
 /// </summary>
 public sealed class SearchResultsView : MonoBehaviour
 {
@@ -47,12 +50,12 @@ public sealed class SearchResultsView : MonoBehaviour
     [SerializeField] private Color chosenTint = new Color(0.72f, 0.72f, 0.72f, 1f);
 
     private readonly List<GameObject> _rows = new List<GameObject>();
-    private SearchHit _first;
-    private bool _hasFirst;
+    private readonly List<Button> _hitRows = new List<Button>();
+    private readonly List<SearchHit> _hits = new List<SearchHit>();
     private bool _wired;
 
-    /// <summary>Raised when a hit is clicked.</summary>
-    public event Action<SearchHit> Chosen;
+    /// <summary>Raised when a hit is chosen: the hit, and true to open it in the other pane (Ctrl+click, Ctrl+Enter).</summary>
+    public event Action<SearchHit, bool> Chosen;
 
     /// <summary>Raised when a chip or "Show all" filters to a source (null: All).</summary>
     public event Action<AppTab?> Filtered;
@@ -60,11 +63,24 @@ public sealed class SearchResultsView : MonoBehaviour
     /// <summary>True while the panel shows (not while its window is down: a minimised app's stale panel takes no Escape).</summary>
     public bool IsOpen => gameObject.activeInHierarchy;
 
-    /// <summary>The first hit listed (Enter opens it); false when none is.</summary>
+    /// <summary>The hits' rows, in the order listed (the keys' focus ring walks them).</summary>
+    public IReadOnlyList<Button> HitRows => _hitRows;
+
+    /// <summary>The first hit listed (Enter in the field opens it); false when none is.</summary>
     public bool TryFirst(out SearchHit hit)
     {
-        hit = _first;
-        return _hasFirst;
+        hit = _hits.Count > 0 ? _hits[0] : default;
+        return _hits.Count > 0;
+    }
+
+    /// <summary>Chooses the hit of <paramref name="row"/> (one of HitRows: Enter on the focused hit), in the other pane when <paramref name="otherPane"/>; false for another row.</summary>
+    public bool Choose(Component row, bool otherPane)
+    {
+        int i = row != null ? _hitRows.IndexOf(row.GetComponent<Button>()) : -1;
+        if (i < 0)
+            return false;
+        Chosen?.Invoke(_hits[i], otherPane);
+        return true;
     }
 
     /// <summary>
@@ -132,15 +148,15 @@ public sealed class SearchResultsView : MonoBehaviour
                 template.gameObject.SetActive(false);
     }
 
-    /// <summary>The rows and chips go; no first hit.</summary>
+    /// <summary>The rows and chips go; no hit.</summary>
     private void Clear()
     {
         foreach (GameObject row in _rows)
             if (row != null)
                 Destroy(row);
         _rows.Clear();
-        _hasFirst = false;
-        _first = default;
+        _hitRows.Clear();
+        _hits.Clear();
     }
 
     /// <summary>A header chip reading <paramref name="label"/>, pressed when <paramref name="chosen"/>; a click filters to <paramref name="source"/>.</summary>
@@ -182,12 +198,16 @@ public sealed class SearchResultsView : MonoBehaviour
             }
         }
         SearchHit chosen = hit;
-        row.onClick.AddListener(() => Chosen?.Invoke(chosen));
-        if (!_hasFirst)
-        {
-            _first = hit;
-            _hasFirst = true;
-        }
+        row.onClick.AddListener(() => Chosen?.Invoke(chosen, CtrlHeld()));
+        _hitRows.Add(row);
+        _hits.Add(hit);
+    }
+
+    /// <summary>True while Ctrl is held (a Ctrl+click opens the hit in the other pane, as a row's Ctrl+click on a link stays: phase 18's other-pane path).</summary>
+    public static bool CtrlHeld()
+    {
+        Keyboard keys = Keyboard.current;
+        return keys != null && keys.ctrlKey.isPressed;
     }
 
     /// <summary>An active clone of a template in the list.</summary>

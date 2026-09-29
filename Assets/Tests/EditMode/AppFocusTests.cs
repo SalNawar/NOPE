@@ -5,14 +5,14 @@ using NUnit.Framework;
 public class AppFocusTests
 {
     /// <summary>The regions Tab visits from Search, once round.</summary>
-    private static List<AppRegion> Walk(bool split, bool sidebar, bool caseOn, int direction)
+    private static List<AppRegion> Walk(bool split, bool sidebar, bool caseOn, int direction, bool results = false)
     {
         var seen = new List<AppRegion>();
         AppRegion at = AppRegion.Search;
         do
         {
             seen.Add(at);
-            at = AppFocus.Next(at, split, sidebar, caseOn, direction);
+            at = AppFocus.Next(at, split, sidebar, caseOn, direction, results);
         }
         while (at != AppRegion.Search && seen.Count < 20);
         return seen;
@@ -23,6 +23,18 @@ public class AppFocusTests
         CollectionAssert.AreEqual(new[] { AppRegion.Search, AppRegion.TabStrip, AppRegion.PaneHeader, AppRegion.PaneContent, AppRegion.OtherPane,
                                           AppRegion.Sidebar, AppRegion.Dock, AppRegion.Decision },
                                   Walk(true, true, true, 1));
+
+    [Test]
+    public void TheResults_FollowTheSearchField_WhileTheyListHits()
+    {
+        CollectionAssert.AreEqual(new[] { AppRegion.Search, AppRegion.Results, AppRegion.TabStrip, AppRegion.PaneHeader, AppRegion.PaneContent, AppRegion.OtherPane,
+                                          AppRegion.Sidebar, AppRegion.Dock, AppRegion.Decision },
+                                  Walk(true, true, true, 1, true));
+        CollectionAssert.DoesNotContain(Walk(true, true, true, 1), AppRegion.Results, "no hits listed: Tab skips them");
+        Assert.AreEqual(AppRegion.Search, AppFocus.Next(AppRegion.Results, false, true, true, -1, true));
+        Assert.IsTrue(AppFocus.Available(AppRegion.Results, false, false, false, true));
+        Assert.IsFalse(AppFocus.Available(AppRegion.Results, true, true, true, false));
+    }
 
     [Test]
     public void OnePane_SkipsTheOtherPane() =>

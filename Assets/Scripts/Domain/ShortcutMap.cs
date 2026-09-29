@@ -86,7 +86,9 @@ public enum AppCommand
     /// <summary>PgUp in a focused list: a page up.</summary>
     PageUp,
     /// <summary>PgDn in a focused list: a page down.</summary>
-    PageDown
+    PageDown,
+    /// <summary>↓ in the search field while its results list hits: the focus ring goes to the first hit (the PC redesign SE4).</summary>
+    IntoResults
 }
 
 /// <summary>The keys the desktop's shortcuts use (DesktopKeyboard maps the Input System's keys onto these; the numpad's Enter, plus and minus count as Enter, = and -).</summary>
@@ -215,10 +217,13 @@ public readonly struct ShortcutContext
     /// <summary>The app's focus ring is on its tab strip.</summary>
     public readonly bool TabStripFocused;
 
+    /// <summary>The search results panel lists hits (↓ in the search field goes into them).</summary>
+    public readonly bool ResultsShown;
+
     /// <summary>A context.</summary>
     public ShortcutContext(bool frameOpen = false, bool desktopFocused = false, bool iconSelected = false, bool appFocused = false, bool notesFocused = false,
                            bool textFieldFocused = false, bool searchFocused = false, bool menuOpen = false, bool listFocused = false,
-                           bool tabStripFocused = false)
+                           bool tabStripFocused = false, bool resultsShown = false)
     {
         FrameOpen = frameOpen;
         DesktopFocused = desktopFocused;
@@ -230,6 +235,7 @@ public readonly struct ShortcutContext
         MenuOpen = menuOpen;
         ListFocused = listFocused;
         TabStripFocused = tabStripFocused;
+        ResultsShown = resultsShown;
     }
 }
 
@@ -262,7 +268,9 @@ public sealed class ShortcutCardRow
 /// field has the keyboard only the chords that cannot be typing pass (Ctrl+F,
 /// Ctrl+1…6, F6, Ctrl+\, Ctrl+B, Esc, F1; the field keeps its own
 /// Ctrl+C/V/X/A, arrows and Enter), and in the app's search field Tab and
-/// Shift+Tab (the next region: KB4's order starts there). The icons take the arrows and Enter
+/// Shift+Tab (the next region: KB4's order starts there) and, while the
+/// results list hits, ↓ into them (the ring then walks the hits: Enter opens
+/// one, Ctrl+Enter in the other pane). The icons take the arrows and Enter
 /// while no window has the focus; the app's chords need the app focused, its
 /// row keys a focused list, ← → the focused tab strip; Ctrl+V adds a
 /// clipping with Notes focused. Card is the F1 card: every command once.
@@ -274,6 +282,7 @@ public static class ShortcutMap
     public static readonly IReadOnlyList<ShortcutCardRow> Card = new[]
     {
         new ShortcutCardRow("Ctrl+F", "keys.focusSearch", AppCommand.FocusSearch),
+        new ShortcutCardRow("↓", "keys.intoResults", AppCommand.IntoResults),
         new ShortcutCardRow("Esc", "keys.escape", AppCommand.Escape),
         new ShortcutCardRow("F1", "keys.help", AppCommand.Help),
         new ShortcutCardRow("Enter", "keys.openIcon", AppCommand.OpenIcon),
@@ -311,7 +320,7 @@ public static class ShortcutMap
         if (context.MenuOpen && found != AppCommand.Escape)
             return false;
         if (context.TextFieldFocused && !PassesInField(found) &&
-            !(context.SearchFocused && (found == AppCommand.NextRegion || found == AppCommand.PrevRegion)))
+            !(context.SearchFocused && (found == AppCommand.NextRegion || found == AppCommand.PrevRegion || found == AppCommand.IntoResults)))
             return false;
         command = found;
         return true;
@@ -342,6 +351,8 @@ public static class ShortcutMap
             return Is(AppCommand.Paste, out command);
         if (!c.AppFocused)
             return None(out command);
+        if (c.SearchFocused && c.ResultsShown && plain && k.Key == ShortcutKey.Down)
+            return Is(AppCommand.IntoResults, out command);
 
         if (ctrl && App(k.Key, out command))
             return true;
