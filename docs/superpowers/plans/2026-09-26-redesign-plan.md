@@ -666,6 +666,7 @@ Phases 14-15 do not depend on the traveller phases; if an agent is free they can
   - SE4's two pulses are not built: phase 18's found mark is the one found mechanism (a steady outline), and a second, pulsing outline over it would be a second mechanism; the branch's `FoundMark`/`FoundFlash` and the `FormStyleSO.found` colour were dropped when phase 18 landed.
   - An untranslated hit's snippet is drawn by setting the script's font on the snippet text (what `TextFlip.Write` does for a whole foreign line), not through `TextFlip.Write`, which needs the line's `Reveal`: the index keeps only what shows.
   - Not bound: ↓ from the field into the hits (a row for phase 20's table) and Ctrl+Enter / Ctrl+click on a hit into the other pane (a hit opens in the active pane; phase 18's Ctrl on a row's ↗ is the rows').
+  - Bound since (the fix track, 2026-09-29, Saleh's answer): ↓ from the field takes the focus ring into the hits (`AppCommand.IntoResults`, `AppRegion.Results`), Enter opens the focused hit, and Ctrl+Enter or Ctrl+click opens a hit in the other pane (phase 18's other-pane path).
   - The plan's day-5 displaced traveller is phase 12's; today the displaced speak their tongue from day 2, so the untranslated probes run on day 2.
 
 ### Phase 20 — Keys, clipboard, pins (L)

@@ -188,12 +188,16 @@ public sealed class CaseDocumentsPresenter
         PapersChanged?.Invoke();
     }
 
-    /// <summary>The desk's scan finished: the copy reaches the PC (once per paper); an analysis pass (the Analysis Scanner, a scan by hand) then reads the scanned papers.</summary>
-    private void HandleScanFinished(int index, bool analysed)
+    /// <summary>The desk's scan finished: the copy reaches the PC (once per paper); an analysis pass (the Analysis Scanner, a scan by hand) then reads the scanned papers; a re-scan of a paper analysed already only says so on its strip (its marks stay).</summary>
+    private void HandleScanFinished(int index, ScanPass pass)
     {
         Scan(index);
-        if (analysed)
+        if (pass == ScanPass.Analysis)
             Analyse(index);
+        else if (pass == ScanPass.AlreadyAnalysed)
+            foreach (DocumentsView view in _views)
+                if (view != null)
+                    view.MarkAlreadyAnalysed(index);
     }
 
     /// <summary>

@@ -6,7 +6,9 @@ using UnityEngine;
 /// (TimeDesk/PlanarScreen) puts it on the PC's glass, fitted at the desktop's
 /// 4:3 inside the glass (the glass's own UVs are not used, so any CRT works).
 /// While the screen is off, the glass shows the art's own material again. The
-/// office binder hands it the glass renderer (the contract's PCScreen anchor).
+/// office binder hands it the glass renderer (the contract's PCScreen anchor)
+/// and the office camera: the clone camera draws right before it, whatever
+/// depth the art gave it, so the glass shows this frame's desktop.
 /// </summary>
 public sealed class PcScreenClone : MonoBehaviour
 {
@@ -44,10 +46,11 @@ public sealed class PcScreenClone : MonoBehaviour
     /// <summary>
     /// Puts the clone on submesh <paramref name="submesh"/> of <paramref name="glass"/>:
     /// the projection runs across the glass's two widest local axes, turned so
-    /// the picture reads upright from <paramref name="viewer"/> (the office
-    /// camera; GlassFrame). A glass without a mesh filter is ignored with a warning.
+    /// the picture reads upright from <paramref name="office"/> (the office
+    /// camera; GlassFrame), and the clone camera draws right before that
+    /// camera. A glass without a mesh filter is ignored with a warning.
     /// </summary>
-    public void Bind(Renderer glass, int submesh, Vector3 viewer)
+    public void Bind(Renderer glass, int submesh, Camera office)
     {
         MeshFilter filter = glass != null ? glass.GetComponent<MeshFilter>() : null;
         if (filter == null || filter.sharedMesh == null || cloneMaterial == null || cloneCamera == null)
@@ -59,7 +62,8 @@ public sealed class PcScreenClone : MonoBehaviour
         Mesh mesh = filter.sharedMesh;
         submesh = Mathf.Clamp(submesh, 0, mesh.subMeshCount - 1);
         Bounds local = mesh.GetSubMesh(submesh).bounds;
-        GlassFrame frame = GlassFrame.Measure(glass.transform, local, viewer);
+        GlassFrame frame = GlassFrame.Measure(glass.transform, local, office.transform.position);
+        cloneCamera.depth = office.depth - 1f;
         Frame = frame;
         (float fitU, float fitV) = ScreenMapping.Fit(frame.Size.x, frame.Size.y, DesktopAspect);
         float fill = config != null ? config.cloneFill : 1f;

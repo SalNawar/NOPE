@@ -101,6 +101,13 @@ public sealed class DocumentsView : AppView, IAppItems
             _pages[index].MarkAnalysed(contradiction);
     }
 
+    /// <summary>Paper <paramref name="index"/> was scanned by hand again after its analysis pass (the pass works once per document): its strip says it was analysed already; its marks stay.</summary>
+    public void MarkAlreadyAnalysed(int index)
+    {
+        if (index >= 0 && index < _pages.Count && _pages[index] != null)
+            _pages[index].MarkAlreadyAnalysed();
+    }
+
     /// <summary>The case's analysis marks (every pair marked so far): each copy draws the dashed outline on its marked fields (the PC redesign SC4, SC5).</summary>
     public void ShowMarks(IReadOnlyList<AnalysisMark> marks)
     {

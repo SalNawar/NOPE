@@ -7,7 +7,11 @@ using UnityEngine;
 /// desktop itself shows inside its glass through the frame camera, which
 /// renders only the desktop's layer into the glass's screen rectangle and is
 /// the desktop canvas's event camera, so clicks, dragging and text fields
-/// work as on any canvas. OfficeViewController opens and closes it. Papers
+/// work as on any canvas. The frame camera draws right after the art office's
+/// camera (DrawAfter, set by the office binder at load), whatever depth the
+/// art gave its camera: a base camera drawn before the office's is covered
+/// by the office's clear (the anime hall's camera draws at depth 100, the
+/// room's at -1). OfficeViewController opens and closes it. Papers
 /// held in the hand sit right of it while it is open (piece 10), their rows
 /// clickable through a second hole in its click-outside catcher (the examine
 /// hole, sized by PaperExaminer).
@@ -63,6 +67,13 @@ public sealed class PcFrame : MonoBehaviour
 
     /// <summary>The frame starts closed.</summary>
     private void Awake() => SetOpen(false);
+
+    /// <summary>Orders the frame camera right after <paramref name="office"/> (the art office's camera), so the desktop draws over the office in the glass and nothing draws over it.</summary>
+    public void DrawAfter(Camera office)
+    {
+        if (frameCamera != null && office != null)
+            frameCamera.depth = office.depth + 1f;
+    }
 
     /// <summary>Opens the frame (fitting the frame camera to the glass) or closes it.</summary>
     public void SetOpen(bool open)
