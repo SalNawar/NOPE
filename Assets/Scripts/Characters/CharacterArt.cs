@@ -67,7 +67,7 @@ public sealed class CharacterArt : IDisposable
             if (nations[i] != null && !string.IsNullOrEmpty(nations[i].id))
                 _nationHue[nations[i].id] = i / (float)Math.Max(1, nations.Count);
 
-        foreach (EraSO era in library.Eras ?? Array.Empty<EraSO>())
+        foreach (EraSO era in library.Eras)
             if (era != null && !string.IsNullOrEmpty(era.id))
                 _eraOrder[era.id] = era.order;
     }
