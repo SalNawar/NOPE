@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 633ce1469e2ac064aa273d138f70aebc, type: 3}
+  m_Name: Upgrade_HouseDraughtSeals
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeSO
+  id: house_draught_seals
+  displayName: Draught Seals
+  description: Foam strips for the window. The wind now whistles in a lower key.
+  cost: 30
+  unlockEffect: {fileID: 11400000, guid: 8b30071808458b940a818d14424f0956, type: 2}
+  venue: 1
+  branch: 5
+  requires: []
+  installSlot: 
