@@ -120,24 +120,7 @@ public static partial class OfficeSceneUIBuilder
         panelTemplate.gameObject.SetActive(false);
 
         // The scrollbar beside the page.
-        Transform track = Panel(area, "Scrollbar", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpFace, ThemeRoleId.WindowBody);
-        PlaceRect(track, new Vector2(1f, 0f), Vector2.one, new Vector2(-BrowserScrollbarWidth, 0f), Vector2.zero);
-        Transform slide = Panel(track, "SlidingArea", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        SetAnchors(slide, Vector2.zero, Vector2.one);
-        Transform handle = Panel(slide, "Handle", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, XpBlue, ThemeRoleId.TitleBar);
-        SetAnchors(handle, Vector2.zero, Vector2.one);
-        // Set through the serialized fields, not the setters: a setter drives the handle's anchors at once (even under the
-        // closed window), and a driven RectTransform is saved zeroed, so the saved scene would differ from the built one.
-        // The scrollbar drives the handle itself when the window opens; until then the handle keeps the anchors above
-        // (a page that fits: the handle fills the track).
-        Scrollbar scrollbar = track.gameObject.AddComponent<Scrollbar>();
-        var soBar = new SerializedObject(scrollbar);
-        soBar.FindProperty("m_Direction").enumValueIndex = (int)Scrollbar.Direction.BottomToTop;
-        soBar.FindProperty("m_HandleRect").objectReferenceValue = handle;
-        soBar.FindProperty("m_TargetGraphic").objectReferenceValue = handle.GetComponent<Image>();
-        soBar.FindProperty("m_Size").floatValue = 1f;
-        soBar.FindProperty("m_Value").floatValue = 0f;
-        soBar.ApplyModifiedProperties();
+        Scrollbar scrollbar = BuildScrollbar(area, BrowserScrollbarWidth, XpFace, ThemeRoleId.WindowBody, XpBlue, ThemeRoleId.TitleBar);
 
         ScrollRect scroll = area.gameObject.AddComponent<ScrollRect>();
         scroll.content = (RectTransform)content;

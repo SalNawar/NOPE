@@ -12,14 +12,16 @@ using UnityEngine.UI;
 /// transcript. An answer's row is marked in NO. and is compare-clickable (the
 /// same pick as the bubble's answer: EvidencePicks.ForAnswer, keyed by the
 /// line's index), lit while its key is picked (CM3); an answer with a smart
-/// link (SmartLinks.ForAnswer) has a ↗ that follows it through the pane. The
+/// link (SmartLinks.ForAnswer) has a ↗ that follows it through the pane, after
+/// its text (the Statement column leaves the ↗'s room). The
 /// other rows are read only. "Answers only" hides them. The table follows the
 /// newest line while the view is at the bottom; scrolled up, a "New line"
 /// pill shows instead and a click on it goes to the bottom. Statements show
 /// through DisplayText: from translation's first day the traveller's lines are
 /// in their claimed place's tongue and show in English only with the region's
-/// Speech translator (settled, never animated; TextFlip.Write sets the
-/// script's font on the printed cell); an untranslated answer shows in the
+/// Speech translator (settled, never animated; the form measures and prints
+/// such a statement in the script's font, DisplayText.FontFor, so its row is
+/// as tall as its glyphs); an untranslated answer shows in the
 /// dock as the placeholder, while its evidence stays the canonical value. A
 /// case source: between travellers the pane shows the no-case state. A new
 /// line badges the tab; nothing opens it. A dock side reveals its line
@@ -45,7 +47,19 @@ public sealed class TranscriptView : AppView, IAppItems
     [SerializeField] private Button newLineButton;
 
     private readonly List<(FormSlot slot, Button button)> _armed = new List<(FormSlot, Button)>();
-    private readonly List<TextMeshProUGUI> _texts = new List<TextMeshProUGUI>();
+
+    /// <summary>The statements this draw shows in their tongue's script (as shown): each is measured and printed in the script's font (ScriptOf), as DisplayText.FontFor decides for it.</summary>
+    private readonly HashSet<string> _scriptLines = new HashSet<string>();
+
+    /// <summary>
+    /// The characters only those statements draw: their shown text's, less
+    /// every character of the transcript's English. A word of a statement the
+    /// layout measures on its own is measured in the script's font when it
+    /// holds one (an English key word, or a word the script shares with
+    /// English, measures in the form's font: the same letters); an English
+    /// text never holds one.
+    /// </summary>
+    private readonly HashSet<char> _scriptGlyphs = new HashSet<char>();
     private readonly List<int> _lineOfRow = new List<int>();
     private IReadOnlyList<DialogLine> _lines = System.Array.Empty<DialogLine>();
     private string _deskName = string.Empty;
@@ -171,8 +185,20 @@ public sealed class TranscriptView : AppView, IAppItems
         {
             { InterviewPage.RowsSlot, InterviewPage.Rows(_lines, answersOnly != null && answersOnly.isOn, _deskName, _travellerName, Shown, UiText.Get("form.interview.answerMark"), _lineOfRow) }
         };
+        _scriptLines.Clear();
+        _scriptGlyphs.Clear();
+        SpeechTranslation speech = _translation.Speech;
+        foreach (DialogLine line in _lines)
+            if (DisplayText.FontFor(line.Text, _translation.Line(line), speech.Timing, speech.ReducedMotion, _translation.Font, null) != null)
+            {
+                string shown = Shown(line);
+                _scriptLines.Add(shown);
+                _scriptGlyphs.UnionWith(shown);
+            }
+        foreach (DialogLine line in _lines)
+            _scriptGlyphs.ExceptWith(line.Text ?? string.Empty);
         Form.Bind(_compare, slot => TryLine(slot, out int line) && _lines[line].IsAnswer ? PickKeys.Line(line) : null);
-        page.Show(interviewForm.form, data, slot => TryLine(slot, out _), LinkHint);
+        page.Show(interviewForm.form, data, slot => TryLine(slot, out _), LinkHint, null, ScriptOf);
         MarkRows();
         if (follow)
         {
@@ -186,6 +212,19 @@ public sealed class TranscriptView : AppView, IAppItems
     {
         SpeechTranslation speech = _translation.Speech;
         return DisplayText.For(line.Text, _translation.Line(line), speech.Timing, speech.ReducedMotion);
+    }
+
+    /// <summary>The font the form measures and prints <paramref name="text"/> in: the script's for a statement shown in its tongue or a text holding one of the script's own glyphs (a word of such a statement), else none (the form's own).</summary>
+    private TMP_FontAsset ScriptOf(string text)
+    {
+        if (_scriptLines.Count == 0 || string.IsNullOrEmpty(text))
+            return null;
+        if (_scriptLines.Contains(text))
+            return _translation.Font;
+        foreach (char c in text)
+            if (_scriptGlyphs.Contains(c))
+                return _translation.Font;
+        return null;
     }
 
     /// <summary>The transcript line a slot's row shows; false for any other slot.</summary>
@@ -220,9 +259,8 @@ public sealed class TranscriptView : AppView, IAppItems
     /// <summary>
     /// Marks each row with its line key and title ("Nikias · line 7") for the
     /// keys, the copy and the pins (only an answer's button picks; an
-    /// untranslated line keeps its tongue), writes each foreign statement in
-    /// its script (TextFlip.Write), and outlines the row a link went to;
-    /// again after every redraw.
+    /// untranslated line keeps its tongue), and outlines the row a link went
+    /// to; again after every redraw.
     /// </summary>
     private void MarkRows()
     {
@@ -241,12 +279,7 @@ public sealed class TranscriptView : AppView, IAppItems
             AppRow marked = AppRow.Mark(button.gameObject, AppTab.Transcript, key, UiText.Format("app.row.line", speaker, line + 1), speaker, Shown(dialog), button);
             marked.SetLink(Link(slot));
             if (_translation.Untranslated(dialog))
-            {
                 marked.MarkUntranslated(_translation.TongueId, _translation.TongueName, dialog.Text);
-                Form.TextsOf(slot.Index, _texts);
-                if (_texts.Count > 2)
-                    TextFlip.Write(_texts[2], Form.Font, Form.FontMaterial, dialog.Text, _translation.Line(dialog), _translation);
-            }
             if (dialog.IsAnswer && key == _foundKey)
                 found = slot.Index;
         }

@@ -15,7 +15,7 @@ MonoBehaviour:
   basePayPerCorrect: 10
   legendaryBonusPay: 15
   freeWarningsPerDay: 1
-  wrongDecisionPenalty: 10
+  wrongDecisionPenalty: 25
   stabilityChangeRate: 0.005
   stabilityLossPerWrong: 5
   extraStabilityLossLegendary: 10
@@ -29,3 +29,5 @@ MonoBehaviour:
   carryThreshold: 1
   carryCategory: 3
   maxHistoryNewsPerNight: 3
+  baseDailyExpense: 30
+  expensePerFamilyMember: 15

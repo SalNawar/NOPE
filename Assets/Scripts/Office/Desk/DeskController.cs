@@ -172,7 +172,7 @@ public sealed class DeskController : MonoBehaviour
             return;
 
         // It goes back to where it lay once scanned, as a dragged paper goes back to where it was picked up.
-        _papers[next].GetComponent<DeskDraggable>().RememberPosition();
+        _papers[next].Drag.RememberPosition();
         Slide(_papers[next], scanner.BedPoint);
         _stack.BringToFront(next);
         ApplyStack();

@@ -422,10 +422,15 @@ public static class FormLayout
     /// heights, H = width / aspect (width × aspect on a landscape page): the
     /// wider the page, the larger its print. A document copy on the PC takes
     /// 542 u (H = 708 u); a page kind in a pane takes the pane's width, so its
-    /// table cells reach 13 px at 720p from about 564 u.
+    /// table cells reach 13 px at 720p from about 564 u. A page whose table
+    /// rows carry a smart link's ↗ at their top right (FormView) passes the
+    /// ↗'s side, <paramref name="rowLinkRoom"/>, in the caller's units: each
+    /// table's last column then wraps its text that much short of the row's
+    /// right edge (its padding counted), so the ↗ sits after the text, never
+    /// over it; 0 (a document, the desk paper) keeps every column whole.
     /// </summary>
-    public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure) =>
-        new Placer(spec, data, width, m, measure, null).Run();
+    public static PlacedForm Layout(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, float rowLinkRoom = 0f) =>
+        new Placer(spec, data, width, m, measure, null, rowLinkRoom).Run();
 
     /// <summary>The slot whose box holds the point (form space), or -1: a margin, a gutter, the header, the photo, off the page, or no form.</summary>
     public static int SlotAt(PlacedForm form, float x, float y)
@@ -523,6 +528,9 @@ public static class FormLayout
         private readonly float _left;
         private readonly float _content;
         private readonly float _column;
+
+        /// <summary>The room a row's ↗ takes at a table row's top right (Layout's rowLinkRoom; 0: none).</summary>
+        private readonly float _rowLinkRoom;
         private readonly List<FormItem> _items = new List<FormItem>();
         private readonly List<FormSlot> _slots = new List<FormSlot>();
         private readonly List<float> _pageTops = new List<float> { 0f };
@@ -547,8 +555,9 @@ public static class FormLayout
             public int Slot;
         }
 
-        public Placer(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, List<string> problems)
+        public Placer(FormSpec spec, FormData data, float width, FormMetrics m, ITextMeasure measure, List<string> problems, float rowLinkRoom = 0f)
         {
+            _rowLinkRoom = Math.Max(0f, rowLinkRoom);
             _spec = spec ?? new FormSpec();
             _data = data ?? new FormData();
             _m = m ?? new FormMetrics();
@@ -928,6 +937,9 @@ public static class FormLayout
 
             IReadOnlyList<string[]> rows = !string.IsNullOrEmpty(b.slot) && _data.Rows != null && _data.Rows.TryGetValue(b.slot, out IReadOnlyList<string[]> r) ? r : Array.Empty<string[]>();
             var sizes = new float[n];
+            var textWidths = new float[n];
+            for (int i = 0; i < n; i++)
+                textWidths[i] = widths[i] - 2f * pad - (i == n - 1 ? LinkReserve(widths[i], pad) : 0f);
             for (int row = 0; row < rows.Count; row++)
             {
                 string[] cells = rows[row] ?? new string[0];
@@ -940,15 +952,15 @@ public static class FormLayout
                 for (int i = 0; i < n; i++)
                 {
                     string cell = i < cells.Length ? cells[i] : string.Empty;
-                    sizes[i] = CellSize(cell, FormTextRole.Cell, widths[i] - 2f * pad);
-                    height = Math.Max(height, Measure(cell, FormTextRole.Cell, sizes[i], widths[i] - 2f * pad));
+                    sizes[i] = CellSize(cell, FormTextRole.Cell, textWidths[i]);
+                    height = Math.Max(height, Measure(cell, FormTextRole.Cell, sizes[i], textWidths[i]));
                 }
                 var rect = FaceRect.FromTop(_left, _y, _content, height + 2f * pad);
                 int slot = AddSlot(-1, row, b.slot, rect);
                 x = _left;
                 for (int i = 0; i < n; i++)
                 {
-                    Text(FormTextRole.Cell, i < cells.Length ? cells[i] : string.Empty, x + pad, _y + pad, widths[i] - 2f * pad, sizes[i], slot);
+                    Text(FormTextRole.Cell, i < cells.Length ? cells[i] : string.Empty, x + pad, _y + pad, textWidths[i], sizes[i], slot);
                     x += widths[i];
                 }
                 Add(FormItemKind.Rule, FaceRect.FromTop(_left, rect.YMax - G(_m.ruleWidth), _content, G(_m.ruleWidth)), slot);
@@ -956,6 +968,10 @@ public static class FormLayout
             }
             _y += G(_m.blockGap);
         }
+
+        /// <summary>How much more than its padding a table's last cell leaves at its right for a row's ↗ (the room less the padding, at most half the cell's text width).</summary>
+        private float LinkReserve(float columnWidth, float pad) =>
+            _rowLinkRoom > pad ? Math.Min(_rowLinkRoom - pad, (columnWidth - 2f * pad) / 2f) : 0f;
 
         /// <summary>
         /// A table cell's size in a column <paramref name="width"/> wide: the
