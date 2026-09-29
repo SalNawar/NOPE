@@ -21,7 +21,9 @@ using UnityEngine.SceneManagement;
 /// the art carries one, and readies the office camera (a PhysicsRaycaster on
 /// the Interactable layer, the gameplay's layers drawn and the desktop's
 /// culled, an AudioListener when no scene has one, its Cinemachine camera on
-/// top). Runs before
+/// top) and orders the desktop's cameras around it (the PC frame's right
+/// after it, the clone's right before it, whatever depth the art gave its
+/// camera). Runs before
 /// every other gameplay component (execution order -1000). An anchor found
 /// by a fallback path is logged; one on its default pose or missing is
 /// warned about once, naming the tool that adds anchors.
@@ -68,6 +70,9 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     [Header("PC")]
     /// <summary>The desktop's clone on the PC's glass.</summary>
     [SerializeField] private PcScreenClone screenClone;
+
+    /// <summary>The PC frame (its camera draws the desktop into the glass right after the office camera).</summary>
+    [SerializeField] private PcFrame frame;
 
     /// <summary>The PC's click (opens the frame); its box is fitted to the PC.</summary>
     [SerializeField] private Clickable pc;
@@ -216,9 +221,11 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             examiner.SetCamera(office);
         if (stampTray != null)
             stampTray.SetCamera(office);
+        if (frame != null)
+            frame.DrawAfter(office);
 
         Vector3 viewer = office.transform.position;
-        BindPc(viewer);
+        BindPc(office);
         float deskTop = BindDesk(viewer);
         BindTraveller(viewer, deskTop);
         BindReadySign();
@@ -271,13 +278,13 @@ public sealed class OfficeSceneBinder : MonoBehaviour
     // PC
     // -----------------------------
 
-    /// <summary>The desktop's clone on the PC's glass, the PC's click box and the power knob's.</summary>
-    private void BindPc(Vector3 viewer)
+    /// <summary>The desktop's clone on the PC's glass (drawn before <paramref name="office"/>, the office camera), the PC's click box and the power knob's.</summary>
+    private void BindPc(Camera office)
     {
         ResolvedAnchor anchor = At(OfficeAnchorId.PCScreen);
         (Renderer glass, int submesh) = anchor.Transform != null ? OfficeAnchors.FindGlass(anchor.Transform) : (null, 0);
         if (glass != null && screenClone != null)
-            screenClone.Bind(glass, submesh, viewer);
+            screenClone.Bind(glass, submesh, office);
         else if (anchor.Transform != null)
             Debug.LogWarning($"[OfficeSceneBinder] The PC ('{anchor.Path}') has no renderer or material named Glass or Screen: its screen shows no desktop. See docs/SCENE_CONTRACT_GAMEPLAY.md.", this);
 
@@ -303,7 +310,7 @@ public sealed class OfficeSceneBinder : MonoBehaviour
             pcPower.gameObject.SetActive(false);
             return;
         }
-        InFrontOf(pcPower.transform, pcBox, viewer);
+        InFrontOf(pcPower.transform, pcBox, office.transform.position);
     }
 
     /// <summary>

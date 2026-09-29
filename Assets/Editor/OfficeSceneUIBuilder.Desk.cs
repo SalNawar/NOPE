@@ -325,7 +325,7 @@ public static partial class OfficeSceneUIBuilder
         return screen;
     }
 
-    /// <summary>An orthographic camera looking at the desktop that draws only its layer (no post-processing, no shadows). Idempotent.</summary>
+    /// <summary>An orthographic camera looking at the desktop that draws only its layer (no post-processing, no shadows); its built <paramref name="depth"/> is a placeholder the binder reorders around the art's camera at load (PcFrame.DrawAfter, PcScreenClone.Bind). Idempotent.</summary>
     private static Camera EnsureDesktopCamera(Transform root, string name, float orthoSize, float depth)
     {
         Transform t = EnsureChild(root, name);
@@ -690,6 +690,7 @@ public static partial class OfficeSceneUIBuilder
         SetRef(soBinder, "matCatcher", desk.transform.Find("ViewCatcher").GetComponent<BoxCollider>());
         SetRef(soBinder, "deskView", deskView);
         SetRef(soBinder, "screenClone", screen.GetComponent<PcScreenClone>());
+        SetRef(soBinder, "frame", pcFrame);
         SetRef(soBinder, "pc", pc);
         SetRef(soBinder, "pcPower", pcPower);
         SetRef(soBinder, "surface", desk.GetComponent<DeskSurface>());

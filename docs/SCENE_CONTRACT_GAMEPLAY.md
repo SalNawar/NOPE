@@ -90,7 +90,7 @@ it; a click box, its hover outline and its reaction cover that part):
 | `Calculator`, `PenPot`, `Stapler` | `Clean_Calculator__DeskClean_Case`, `Clean_PenPot__DeskClean_ABS`, `Clean_Stapler__DeskClean_Case` | |
 | `ReadoutDay`, `ReadoutStability`, `ReadoutCredits`, `ReadoutClock`, `ReadoutNext` | `DayNumber`, `StabilityPercent`, `CreditsNumber`, `ShiftClockDisplay`, `NextLabel` | found, **but they are empty meshes without a TextMeshPro component**, so the game shows its fallback HUD and the boards keep the static `Preview display — 09:00 / 01 / 100% / NEXT` TextMeshes |
 | `Scanner`, `Traveller`, `HandOver` | **default** poses | the same desk layout as the room, so the room's defaults hold |
-| `OfficeCamera` | `Anime hall player preview` | untagged, culled to layer 29, no AudioListener, no Cinemachine brain: the binder adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
+| `OfficeCamera` | `Anime hall player preview` | untagged, depth 100, culled to layer 29, no AudioListener, no Cinemachine brain: the binder orders the PC frame's camera after it and the clone's before it, and adds the gameplay's layers to its culling mask (`OfficeLayers.GameplayMask`) and an AudioListener when no scene has one |
 | `OfficeVCam` | **missing** | the desk view stays off (a warning at load) |
 
 What the hall must carry for the game to be whole (the art side, in
@@ -174,7 +174,11 @@ Other art-side fixes found by the move:
   the traveller still draws in front of them. Art sprites stay on `Default`.
 - The office camera is the art's, but at load the binder adds the gameplay's
   layers (`Default`, `Interactable`) to its culling mask, removes `PCDesktop`,
-  and adds an `AudioListener` when no loaded scene has one.
+  and adds an `AudioListener` when no loaded scene has one. It also orders the
+  desktop's two cameras around it: the PC frame's camera right after it (depth
+  + 1, so the office's clear never covers the desktop in the frame's glass) and
+  the clone camera right before it (depth − 1), so the art may give its camera
+  any depth (the hall's is 100, the room's −1).
 - Nothing from the gameplay layer is parented into the art scene; the binder
   places gameplay objects by world position.
 - The art's own colliders are ignored by input (they are not on `Interactable`).
