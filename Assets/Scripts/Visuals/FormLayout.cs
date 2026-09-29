@@ -148,6 +148,9 @@ public sealed class FormMetrics
     /// <summary>A table cell's and a checkbox option's size.</summary>
     public float cellSize = 0.034f;
 
+    /// <summary>The smallest size a table cell (or a column head) shrinks to so that its longest word keeps one line in its column; a word wider than that breaks.</summary>
+    public float cellFloor = 0.026f;
+
     /// <summary>A paragraph's size.</summary>
     public float paragraphSize = 0.034f;
 
@@ -638,6 +641,9 @@ public static class FormLayout
         /// <summary>How many lines a measured height is.</summary>
         private int Lines(float height, FormTextRole role, float size) => Math.Max(1, (int)Math.Round(height / Line(role, size)));
 
+        /// <summary>A one-line fit is judged at this share of the width: a bold line TextMeshPro measures as just fitting can still wrap when drawn (the title of a narrow page).</summary>
+        private const float OneLineGuard = 0.96f;
+
         /// <summary>The size a text keeps on one line, from <paramref name="max"/> down to <paramref name="min"/> (H), in the caller's units.</summary>
         private float OneLine(string text, FormTextRole role, float max, float min, float width)
         {
@@ -645,7 +651,7 @@ public static class FormLayout
             for (int i = 0; i < steps; i++)
             {
                 float size = G(max - (max - min) * i / steps);
-                if (Lines(Measure(text, role, size, width), role, size) <= 1)
+                if (Lines(Measure(text, role, size, width * OneLineGuard), role, size) <= 1)
                     return size;
             }
             return G(min);
@@ -903,21 +909,25 @@ public static class FormLayout
             for (int i = 0; i < n; i++)
                 widths[i] = total > 0f && b.shares != null && i < b.shares.Length && b.shares[i] > 0f ? _content * b.shares[i] / total : _content / n;
 
-            float headHeight = 0f, headSize = G(_m.cellSize);
+            float headHeight = 0f;
+            var headSizes = new float[n];
             for (int i = 0; i < n; i++)
-                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, headSize, widths[i] - 2f * pad));
+            {
+                headSizes[i] = CellSize(heads[i], FormTextRole.Label, widths[i] - 2f * pad);
+                headHeight = Math.Max(headHeight, Height(heads[i], FormTextRole.Label, headSizes[i], widths[i] - 2f * pad));
+            }
             var band = FaceRect.FromTop(_left, _y, _content, headHeight + 2f * pad);
             Add(FormItemKind.RowBand, band);
             float x = _left;
             for (int i = 0; i < n; i++)
             {
-                Text(FormTextRole.Label, heads[i], x + pad, _y + pad, widths[i] - 2f * pad, headSize);
+                Text(FormTextRole.Label, heads[i], x + pad, _y + pad, widths[i] - 2f * pad, headSizes[i]);
                 x += widths[i];
             }
             _y = band.YMax;
 
             IReadOnlyList<string[]> rows = !string.IsNullOrEmpty(b.slot) && _data.Rows != null && _data.Rows.TryGetValue(b.slot, out IReadOnlyList<string[]> r) ? r : Array.Empty<string[]>();
-            float size = G(_m.cellSize);
+            var sizes = new float[n];
             for (int row = 0; row < rows.Count; row++)
             {
                 string[] cells = rows[row] ?? new string[0];
@@ -928,19 +938,42 @@ public static class FormLayout
                 }
                 float height = 0f;
                 for (int i = 0; i < n; i++)
-                    height = Math.Max(height, Measure(i < cells.Length ? cells[i] : string.Empty, FormTextRole.Cell, size, widths[i] - 2f * pad));
+                {
+                    string cell = i < cells.Length ? cells[i] : string.Empty;
+                    sizes[i] = CellSize(cell, FormTextRole.Cell, widths[i] - 2f * pad);
+                    height = Math.Max(height, Measure(cell, FormTextRole.Cell, sizes[i], widths[i] - 2f * pad));
+                }
                 var rect = FaceRect.FromTop(_left, _y, _content, height + 2f * pad);
                 int slot = AddSlot(-1, row, b.slot, rect);
                 x = _left;
                 for (int i = 0; i < n; i++)
                 {
-                    Text(FormTextRole.Cell, i < cells.Length ? cells[i] : string.Empty, x + pad, _y + pad, widths[i] - 2f * pad, size, slot);
+                    Text(FormTextRole.Cell, i < cells.Length ? cells[i] : string.Empty, x + pad, _y + pad, widths[i] - 2f * pad, sizes[i], slot);
                     x += widths[i];
                 }
                 Add(FormItemKind.Rule, FaceRect.FromTop(_left, rect.YMax - G(_m.ruleWidth), _content, G(_m.ruleWidth)), slot);
                 _y = rect.YMax;
             }
             _y += G(_m.blockGap);
+        }
+
+        /// <summary>
+        /// A table cell's size in a column <paramref name="width"/> wide: the
+        /// cell size, else the largest size down to the cell floor at which the
+        /// text's widest word keeps one line (OneLine per word; a text that
+        /// fits one line at the cell size needs no word checked), so a narrow
+        /// column never breaks a word while the floor holds it.
+        /// </summary>
+        private float CellSize(string text, FormTextRole role, float width)
+        {
+            float full = G(_m.cellSize);
+            if (string.IsNullOrEmpty(text) || Lines(Measure(text, role, full, width * OneLineGuard), role, full) <= 1)
+                return full;
+            float size = full;
+            foreach (string word in text.Split(' '))
+                if (word.Length > 0)
+                    size = Math.Min(size, OneLine(word, role, _m.cellSize, _m.cellFloor, width));
+            return size;
         }
 
         /// <summary>A heading row across a table (an era's name in a register): its text in section capitals on a band, no slot.</summary>

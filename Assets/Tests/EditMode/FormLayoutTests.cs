@@ -699,6 +699,38 @@ public class FormLayoutTests
     }
 
     [Test]
+    public void ATableCell_WhoseWordDoesNotFitItsColumn_PrintsSmaller_DownToTheFloor_SoNoWordBreaks()
+    {
+        var spec = new FormSpec
+        {
+            fixedPage = false,
+            blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "No.", "Place", "Contradicted by" }, shares = new[] { 0.1f, 0.2f, 0.7f }, slot = "rows" } }
+        };
+        var data = new FormData
+        {
+            Rows = new Dictionary<string, IReadOnlyList<string[]>>
+            {
+                { "rows", new List<string[]> { new[] { "1", "Florence", "Oil lamp and a long line that wraps at its spaces across the wide column" }, new[] { "Transponder", "Rome", "x" } } }
+            }
+        };
+        PlacedForm f = Pc(spec, data);
+        float h = f.PageHeight, full = M.cellSize * h, floor = M.cellFloor * h;
+        FormItem Cell(string text) => f.Items.First(i => i.Text == text);
+
+        Assert.AreEqual(full, Cell("1").Size, 0.01f, "a word that fits keeps the cell size");
+        Assert.Less(Cell("Florence").Size, full - 0.01f, "a word wider than its column prints smaller");
+        Assert.GreaterOrEqual(Cell("Florence").Size, floor - 0.01f);
+        FormItem florence = Cell("Florence");
+        Assert.AreEqual(1, (int)System.Math.Round(florence.Rect.Height / (florence.Size * 1.15f)), "and keeps one line: the word does not break");
+        FormItem wide = f.Items.First(i => i.Text.StartsWith("Oil lamp"));
+        Assert.AreEqual(full, wide.Size, 0.01f, "a long text of short words wraps at its spaces at the cell size");
+        Assert.Less(Cell("No.").Size, full - 0.01f, "a head is sized the same way");
+        Assert.GreaterOrEqual(Cell("No.").Size, floor - 0.01f);
+        Assert.AreEqual(full, Cell("Contradicted by").Size, 0.01f, "a head that fits keeps the cell size");
+        Assert.AreEqual(floor, Cell("Transponder").Size, 0.01f, "a word that does not fit even at the floor prints at the floor");
+    }
+
+    [Test]
     public void APageKindAtAPaneWidth_PrintsLarger_TheWidthIsTheCallers()
     {
         var spec = new FormSpec { fixedPage = false, blocks = new[] { new FormBlock { kind = FormBlockKind.Table, columns = new[] { "PLACE", "VALUE" }, slot = "rows" } } };

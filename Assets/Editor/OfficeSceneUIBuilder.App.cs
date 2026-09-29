@@ -20,13 +20,13 @@ using UnityEngine.UI;
 /// with an ink bar, its badge an accent dot in a slot reserved after the
 /// label; BuildChipTemplate, a chip as wide as its label, the chosen one on
 /// an accent plate; the left pane starts on Documents, the right one on
-/// Reference, and is hidden until the app splits). Each pane's views host
-/// today's page components (the scanned copy on FormView, Citizen Records, a
-/// book's register, the transcript, the report's and the rules' texts), each
-/// behind IAppView, so FormView replaces one view at a time; the rows of the
-/// registers, Records and the transcript light by key and carry the found
-/// mark (the transcript's answers their ↗); the scan toast goes on the
-/// investigation host above the window layer. Rebuilt fresh on each run (the
+/// Reference, and is hidden until the app splits). Each pane's views are
+/// forms (the scanned copy, and OfficeSceneUIBuilder.AppViews' Record Extract,
+/// registers, Interview Record, Deviation Report and Directive Memo, each on
+/// a FormPage), each behind IAppView; their rows light by key and carry the
+/// found mark on the form (the answers and the report's sides their ↗); the
+/// scan toast goes on the investigation host above the window layer.
+/// Rebuilt fresh on each run (the
 /// one convergence policy of
 /// this partial, audit R6-008); every reference it wires is checked (Wire,
 /// audit R6-004). Part of <see cref="OfficeSceneUIBuilder"/>; Build() calls
@@ -70,12 +70,6 @@ public static partial class OfficeSceneUIBuilder
     /// <summary>The room at each end of a chip's label.</summary>
     private const int AppChipPadding = 12;
 
-    /// <summary>Rows per page of the lists the tabs page through until they scroll (phase 5's forms): the restored window's smallest pane fits these.</summary>
-    private const int AppBookRowsPerPage = 10;
-
-    /// <summary>Rows per page of Citizen Records (under the lookup).</summary>
-    private const int AppRecordRowsPerPage = 8;
-
     /// <summary>The scan toast's size, and its gap above the compare dock.</summary>
     private static readonly Vector2 AppToastSize = new Vector2(640f, 56f);
 
@@ -98,11 +92,11 @@ public static partial class OfficeSceneUIBuilder
         public Button Accept;
         public Button Deny;
         public DocumentsView[] Documents;
-        public CitizenRecordsWindowController[] Records;
+        public RecordsView[] Records;
         public ReferenceView[] Reference;
-        public TranscriptWindowController[] Transcript;
-        public TMP_Text[] ReportText;
-        public TMP_Text[] RulesText;
+        public TranscriptView[] Transcript;
+        public ReportView[] Report;
+        public RulesView[] Rules;
         public StepsPanel Steps;
     }
 
@@ -155,8 +149,8 @@ public static partial class OfficeSceneUIBuilder
         parts.Records = new[] { leftViews.Records, rightViews.Records };
         parts.Reference = new[] { leftViews.Reference, rightViews.Reference };
         parts.Transcript = new[] { leftViews.Transcript, rightViews.Transcript };
-        parts.ReportText = new[] { leftViews.ReportText, rightViews.ReportText };
-        parts.RulesText = new[] { leftViews.RulesText, rightViews.RulesText };
+        parts.Report = new[] { leftViews.Report, rightViews.Report };
+        parts.Rules = new[] { leftViews.Rules, rightViews.Rules };
 
         AppToast toast = BuildAppToast(investHost, config);
 
@@ -403,63 +397,6 @@ public static partial class OfficeSceneUIBuilder
         return documents;
     }
 
-    /// <summary>The Reference tab (§2.6): "Claimed place only" at its top right, and a book's register page (its title, rows, Prev/Next), cloned per book by ReferenceView.</summary>
-    private static ReferenceView BuildReferenceView(Transform content)
-    {
-        Transform root = ViewRoot(content, "ReferenceView", Paper, ThemeRoleId.WindowBody);
-        Toggle claimedOnly = BuildToggle(root, "ClaimedOnly", "app.ref.claimedOnly", new Vector2(0.62f, 0.915f), new Vector2(0.98f, 0.985f));
-
-        Transform page = Panel(root, "PageTemplate", Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero, null);
-        TMP_Text title = Text(page, "TitleText", UiText.Get("book.untitled"), 22, TextAlignmentOptions.MidlineLeft, new Vector2(0.03f, 0.915f),
-                              new Vector2(0.6f, 0.985f), Ink, ThemeRoleId.WindowBody, style: FontStyles.Bold);
-        PagedBody paged = BuildPagedBody(page, new Vector2(0.03f, 0.12f), new Vector2(0.97f, 0.9f), ThemeRoleId.WindowBody, ThemeRoleId.DiegeticBookRow, true);
-        DecorateAppRow(paged.rowTemplate, false);
-        ReferenceBookWindowController register = page.gameObject.AddComponent<ReferenceBookWindowController>();
-        var so = new SerializedObject(register);
-        Wire(so, "titleText", title);
-        WirePaging(so, paged, AppBookRowsPerPage);
-        so.ApplyModifiedProperties();
-        page.gameObject.SetActive(false);
-
-        ReferenceView reference = root.gameObject.AddComponent<ReferenceView>();
-        var soView = new SerializedObject(reference);
-        Wire(soView, "pageTemplate", register);
-        Wire(soView, "claimedOnly", claimedOnly);
-        soView.ApplyModifiedProperties();
-        return reference;
-    }
-
-    /// <summary>The Transcript tab (§2.7): the interview's rows (the speaker column, the sentence wrapping; an answer's ↗ at the row's end) and Prev/Next.</summary>
-    private static TranscriptWindowController BuildTranscriptView(Transform content, out AppView view)
-    {
-        Transform root = ViewRoot(content, "TranscriptView", Paper, ThemeRoleId.WindowBody);
-        PagedBody paged = BuildPagedBody(root, new Vector2(0.03f, 0.12f), new Vector2(0.97f, 0.97f), ThemeRoleId.WindowBody, ThemeRoleId.DiegeticRow, false);
-        ApplyTranscriptRowLayout(paged.rowTemplate);
-        DecorateAppRow(paged.rowTemplate, true);
-        TranscriptWindowController transcript = root.gameObject.AddComponent<TranscriptWindowController>();
-        var so = new SerializedObject(transcript);
-        WirePaging(so, paged, AppBookRowsPerPage);
-        so.ApplyModifiedProperties();
-        TranscriptView transcriptView = root.gameObject.AddComponent<TranscriptView>();
-        var soView = new SerializedObject(transcriptView);
-        Wire(soView, "transcript", transcript);
-        soView.ApplyModifiedProperties();
-        view = transcriptView;
-        return transcript;
-    }
-
-    /// <summary>A text tab (the Report, the Rules): one wrapping text on the page, keyed <paramref name="sampleKey"/> until its presenter writes it.</summary>
-    private static TMP_Text BuildTextView<T>(Transform content, string name, string sampleKey, out AppView view) where T : AppView
-    {
-        Transform root = ViewRoot(content, name, Paper, ThemeRoleId.WindowBody);
-        TMP_Text body = Text(root, "BodyText", UiText.Get(sampleKey), 20, TextAlignmentOptions.TopLeft, new Vector2(0.04f, 0.04f), new Vector2(0.96f, 0.96f),
-                             Ink, ThemeRoleId.WindowBody);
-        body.textWrappingMode = TextWrappingModes.Normal;
-        body.overflowMode = TextOverflowModes.Truncate;
-        view = root.gameObject.AddComponent<T>();
-        return body;
-    }
-
     /// <summary>A labelled checkbox (a Toggle on a Button-role plate: the box, its check, the keyed label), on by default.</summary>
     private static Toggle BuildToggle(Transform parent, string name, string labelKey, Vector2 aMin, Vector2 aMax)
     {
@@ -477,17 +414,6 @@ public static partial class OfficeSceneUIBuilder
         toggle.graphic = check.GetComponent<Image>();
         toggle.isOn = true;
         return toggle;
-    }
-
-    /// <summary>Wires a paged list's shared fields (PagedRowsWindow) and its rows per page.</summary>
-    private static void WirePaging(SerializedObject so, PagedBody paged, int rowsPerPage)
-    {
-        Wire(so, "pageText", paged.page);
-        Wire(so, "prevButton", paged.prev);
-        Wire(so, "nextButton", paged.next);
-        Wire(so, "entryRowsRoot", paged.rowsRoot);
-        Wire(so, "entryRowTemplate", paged.rowTemplate);
-        so.FindProperty("entriesPerPage").intValue = rowsPerPage;
     }
 
     /// <summary>The scan toast (WN5) on the investigation host, above the window layer: centred right above the compare dock, its line and Open, hidden.</summary>

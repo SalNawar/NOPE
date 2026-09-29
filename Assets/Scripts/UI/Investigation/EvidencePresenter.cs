@@ -1,44 +1,50 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using TMPro;
 
 /// <summary>
 /// The investigation's evidence (the PC redesign RF1): the current case's
-/// discrepancy log, the Deviation Report's text and the compare's verdict
-/// after a proof. When the compare pairs two values while a case is on the
-/// desk, a true contradiction (DiscrepancyLog.Prove) is logged once per
-/// category: the report is rewritten, the compare reads DEVIATION LOGGED and
-/// the app hears of it (the Report tab's badge; nothing opens: CM5) and it
-/// joins search's case layer (redesign phase 19); a second
-/// proof of a logged category only reads ALREADY DOCUMENTED. The report is
-/// written into each pane's Report tab. The log clears
-/// with each case. It subscribes to the
+/// discrepancy log, the Deviation Report and the compare's verdict after a
+/// proof. When the compare pairs two values while a case is on the desk, a
+/// true contradiction (DiscrepancyLog.Prove) is logged once per category
+/// with the two picks that proved it (ReportEntry): the report is drawn
+/// again, the compare reads DEVIATION LOGGED and the app hears of it (the
+/// Report tab's badge; nothing opens: CM5) and it joins search's case layer
+/// (redesign phase 19); a second proof of a logged category only reads
+/// ALREADY DOCUMENTED. The report is drawn into each pane's Report tab (its
+/// form: ReportView). The log clears with each case. It subscribes to the
 /// compare it was given and unsubscribes from that same instance (audit
 /// R4-003). Plain C#; InvestigationUIController owns it.
 /// </summary>
 public sealed class EvidencePresenter
 {
     private readonly CompareController _compare;
-    private readonly IReadOnlyList<TMP_Text> _reportTexts;
+    private readonly IReadOnlyList<ReportView> _reports;
     private readonly Action _logged;
     private readonly Func<CaseInstance> _currentCase;
+    private readonly Func<AgencyContent> _agency;
+    private readonly Func<int> _day;
     private readonly CaseIndex _index;
 
     /// <summary>Documented contradictions for the current case.</summary>
     private readonly DiscrepancyLog _discrepancies = new DiscrepancyLog();
 
+    /// <summary>The report's lines: each documented contradiction with the pair that proved it, in order.</summary>
+    private readonly List<ReportEntry> _entries = new List<ReportEntry>();
+
     /// <summary>The compare whose pairs this listens to (null while detached).</summary>
     private CompareController _listening;
 
-    /// <summary>The compare and the Deviation Report's texts (one per pane; either may be missing), what a new deviation tells (the app's Report tab), the façade's current case (null between cases) and search's index (null: nothing indexed).</summary>
-    public EvidencePresenter(CompareController compare, IReadOnlyList<TMP_Text> reportTexts, Action logged, Func<CaseInstance> currentCase, CaseIndex index)
+    /// <summary>The compare and the Deviation Report's views (one per pane; either may be missing), what a new deviation tells (the app's Report tab), the façade's current case (null between cases), search's index (null: nothing indexed), and the agency block and day the report is headed and signed with.</summary>
+    public EvidencePresenter(CompareController compare, IReadOnlyList<ReportView> reports, Action logged, Func<CaseInstance> currentCase, CaseIndex index,
+                             Func<AgencyContent> agency, Func<int> day)
     {
         _index = index;
         _compare = compare;
-        _reportTexts = reportTexts ?? Array.Empty<TMP_Text>();
+        _reports = reports ?? Array.Empty<ReportView>();
         _logged = logged ?? throw new ArgumentNullException(nameof(logged));
         _currentCase = currentCase ?? throw new ArgumentNullException(nameof(currentCase));
+        _agency = agency ?? throw new ArgumentNullException(nameof(agency));
+        _day = day ?? throw new ArgumentNullException(nameof(day));
     }
 
     /// <summary>Number of discrepancies documented for the current case.</summary>
@@ -69,13 +75,15 @@ public sealed class EvidencePresenter
     public void BeginCase()
     {
         _discrepancies.Clear();
+        _entries.Clear();
         RefreshReport();
     }
 
     /// <summary>
     /// Documents a true contradiction when the player compares a liar's tell
-    /// against the reference entry or record that disproves it; proving an
-    /// already documented category again only says so in the compare bar.
+    /// against the reference entry or record that disproves it (the pair's
+    /// two picks kept for the report's links); proving an already documented
+    /// category again only says so in the compare bar.
     /// </summary>
     private void HandlePairCompared(CompareEvidence a, CompareEvidence b)
     {
@@ -97,6 +105,7 @@ public sealed class EvidencePresenter
             return;
         }
 
+        _entries.Add(ReportEntry.From(proof, _compare.SideA, _compare.SideB));
         RefreshReport();
         if (_index != null)
         {
@@ -111,27 +120,13 @@ public sealed class EvidencePresenter
         _logged();
     }
 
-    /// <summary>Rewrites the Deviation Report's body from the discrepancy log, in every pane.</summary>
+    /// <summary>Draws the Deviation Report from the log, in every pane: the case line (the claim banner's text), the entries, the agency block and the day.</summary>
     private void RefreshReport()
     {
-        string report;
-        if (_discrepancies.Count == 0)
-        {
-            report = UiText.Get("scanner.idle");
-        }
-        else
-        {
-            var sb = new StringBuilder();
-            foreach (Discrepancy d in _discrepancies.Items)
-                sb.AppendLine(UiText.Format("list.bullet", UiText.Deviation(d)));
-
-            sb.AppendLine();
-            sb.AppendLine(UiText.Format("scanner.summary", _discrepancies.Count));
-            report = sb.ToString();
-        }
-
-        foreach (TMP_Text text in _reportTexts)
-            if (text != null)
-                text.text = report;
+        CaseInstance current = _currentCase();
+        string caseLine = current != null ? UiText.Format("claim.banner", current.visitorDisplayName, current.claimLine) : string.Empty;
+        foreach (ReportView view in _reports)
+            if (view != null)
+                view.Show(_entries, caseLine, _agency(), _day());
     }
 }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 /// desk paper's row, the speech bubble. CompareController shows it in the
 /// theme's highlight colour while its side is picked and hides it when the
 /// comparison clears. Each implementation restores its own colour and is
-/// null-safe for a graphic destroyed meanwhile (a page flipped, a paper gone
+/// null-safe for a graphic destroyed meanwhile (a form redrawn, a paper gone
 /// at the decision).
 /// </summary>
 public interface ICompareHighlight

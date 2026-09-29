@@ -34,6 +34,7 @@ MonoBehaviour:
     valueFloor: 0.042
     maxValueLines: 2
     cellSize: 0.034
+    cellFloor: 0.026
     paragraphSize: 0.034
     captionSize: 0.024
     finePrintSize: 0.02
