@@ -17,8 +17,12 @@ using UnityEngine;
 /// pose moves, and re-poses when the screen's size, the camera's pose or its
 /// field of view, or the open frame's edge changes. DeskController holds and
 /// releases; BoothCoordinator sets the mode; the office binder hands it the
-/// camera.
+/// camera. Its script order (200) puts its LateUpdate after the
+/// CinemachineBrain's (100), so the papers are posed against the camera the
+/// brain placed this frame and never trail a camera blend by a frame (audit
+/// R5-003).
 /// </summary>
+[DefaultExecutionOrder(200)]
 public sealed class PaperExaminer : MonoBehaviour
 {
     /// <summary>The desk tuning (the examine knobs, the paper's size).</summary>
