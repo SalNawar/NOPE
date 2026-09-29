@@ -126,6 +126,9 @@ public sealed class CaseFactory
     /// <summary>Categories with a reference book (only these can carry a place-fact tell).</summary>
     private readonly HashSet<ClueCategory> _bookCategories;
 
+    /// <summary>The forced appearance standing in each slot today (days 7-15 B9: a slot's entries tried in order at the day's start, the first standing wins), by 1-based slot.</summary>
+    private Dictionary<int, ForcedCaseSlot> _appearances = new Dictionary<int, ForcedCaseSlot>();
+
     /// <summary>Guaranteed rule violators for the day being generated (a closure's: the place they are bound for), by 1-based slot.</summary>
     private Dictionary<int, NationEraProfileSO> _violators = new Dictionary<int, NationEraProfileSO>();
 
@@ -155,8 +158,10 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Generates the full list of cases for a day, based on the DayPlan.
-    /// Forced cases override procedural blueprint selection per slot, and a
-    /// forced premade (not met yet this run) stands in its slot. Each slot
+    /// Each forced slot's appearance is picked once at the day's start
+    /// (Appearances: its entries tried in order, the first whose conditions
+    /// pass on the world as it stands and whose premade is not met wins); its
+    /// blueprint overrides the day's pick and its premade stands. Each slot
     /// draws from its own streams (Seeds.ForCase and its salted streams), so
     /// one traveller's draws never shift the next one's. Every traveller
     /// answers each of their kind's askable questions
@@ -196,6 +201,7 @@ public sealed class CaseFactory
         // match). The forced premades who will stand today are reserved first,
         // which also keeps them out of the day's random roll.
         _roster = new NameRoster();
+        _appearances = Appearances(plan, state);
         _agencyNumbers = new HashSet<string>();
         string clerkId = _lib.Agency.clerk != null ? _lib.Agency.clerk.citizenId : null;
         if (!string.IsNullOrWhiteSpace(clerkId))
@@ -203,9 +209,9 @@ public sealed class CaseFactory
         _today = AgencyCalendar.TryToday(_lib.Agency.firstDate, state.day, out System.DateTime today) ? today : (System.DateTime?)null;
         if (_today == null)
             Debug.LogError($"[CaseFactory] Day {state.day}: the agency calendar cannot count from agency.firstDate '{_lib.Agency.firstDate}', so the displaced's numbers and dates print placeholders. Run Tools > TimeDesk > Generate World.");
-        foreach (ForcedCaseSlot forced in plan.ForcedCases)
-            if (forced != null && forced.legendary != null && !IsMet(state, forced.legendary) && !_roster.Reserve(forced.legendary.displayName))
-                Debug.LogError($"[CaseFactory] Day {plan.DayNumber}: premade '{forced.legendary.displayName}' is forced twice, or shares a name with another forced premade. Check world_source.json days[].forced.");
+        foreach (ForcedCaseSlot forced in _appearances.Values)
+            if (forced.legendary != null && !_roster.Reserve(forced.legendary.displayName))
+                Debug.LogError($"[CaseFactory] Day {plan.DayNumber}: premade '{forced.legendary.displayName}' stands in two forced slots today, or shares a name with another forced premade. Check world_source.json days[].forced.");
 
         if (_todays.Count == 0)
             Debug.LogWarning($"[CaseFactory] Day {plan.DayNumber} has no places (its eras x allowed nations match no profile). Run Tools > TimeDesk > Generate World.");
@@ -238,8 +244,9 @@ public sealed class CaseFactory
     /// Places one faulty traveller per guaranteeing rule (Directives.Guarantees:
     /// each active closure; the displaced's return home, no 2150 goods and
     /// the papers' dates each on its first day) in the first half of the
-    /// queue (DayPlanSO.GuaranteeRuleViolators), never in a forced premade's
-    /// slot, drawn from the day's own violator stream (the slots, then each
+    /// queue (DayPlanSO.GuaranteeRuleViolators), never in the slot of a forced
+    /// premade who stands today (a met premade's slot, or one whose appearance
+    /// failed its conditions, is free), drawn from the day's own violator stream (the slots, then each
     /// rule's maker in plan order) so the travellers' streams are untouched.
     /// A closure's maker draws a place it forbids; the return home's draws the
     /// place lie (Lies.Roll among the day's place lies the displaced may
@@ -307,7 +314,7 @@ public sealed class CaseFactory
         if (breakersPerRule.Count == 0)
             return violators;
 
-        var premadeSlots = new HashSet<int>(plan.ForcedCases.Where(f => f != null && f.legendary != null).Select(f => f.caseIndex1Based));
+        var premadeSlots = new HashSet<int>(_appearances.Where(a => a.Value.legendary != null).Select(a => a.Key));
         var rng = new SeededRandom(Seeds.ForViolators(daySeed));
         int[] slots = ViolatorSlots.Pick(total, breakersPerRule.Count, rng, premadeSlots);
         for (int i = 0; i < slots.Length; i++)
@@ -331,8 +338,8 @@ public sealed class CaseFactory
 
     /// <summary>
     /// Generates one case:
-    /// - Forced blueprint for this slot (if defined)
-    /// - A premade: the slot's forced one (unless met), else maybe one from the pool (never on a violator's slot)
+    /// - The slot's standing forced appearance (Appearances): its blueprint, if it names one
+    /// - A premade: the appearance's (a slot a premade is forced into with no standing appearance holds an ordinary traveller), else maybe one from the pool (never on a violator's slot)
     /// - A planned faulty traveller's place (a closure's) or rule (a procedure's) for this slot
     /// - Otherwise pick the claimed era from day weights and a place in it
     /// - If blueprint not forced, pick from the day's kinds (a planned procedure's among the kinds it reads)
@@ -341,11 +348,12 @@ public sealed class CaseFactory
     /// </summary>
     private CaseInstance GenerateSingleCase(DayPlanSO plan, WorldState state, int index0Based, int caseIndex1Based)
     {
-        // 1) Forced blueprint if present.
-        plan.TryGetForcedCase(caseIndex1Based, out CaseBlueprintSO forcedBlueprint);
+        // 1) The slot's standing forced appearance (its blueprint, if it names one).
+        _appearances.TryGetValue(caseIndex1Based, out ForcedCaseSlot appearance);
+        CaseBlueprintSO forcedBlueprint = appearance != null ? appearance.caseBlueprint : null;
 
-        // 2) A premade (forced here, or rolled from the day's pool on the premade stream).
-        LegendarySO legendary = ResolvePremade(plan, state, caseIndex1Based, out bool forcedPremade);
+        // 2) A premade (the appearance's, or rolled from the day's pool on the premade stream).
+        LegendarySO legendary = ResolvePremade(plan, state, caseIndex1Based, appearance, out bool forcedPremade);
 
         // 2.5) A planned faulty traveller stands in this slot (never a premade's: see ResolvePremade): a closure's violator
         //      claims its place; a planned liar's slot is read at the lie roll; a planned procedure's breaker is made below.
@@ -400,6 +408,7 @@ public sealed class CaseFactory
             claimedEra = claimedEra,
             isLegendary = legendary != null,
             legendarySource = legendary,
+            forcedAppearance = appearance,
             archetype = archetype,
             originLabel = originLabel,
             tongueId = !citizen && place != null && place.tongue != null ? place.tongue : string.Empty,
@@ -1381,31 +1390,66 @@ public sealed class CaseFactory
     }
 
     /// <summary>
-    /// The slot's premade (Premades.SlotSource): the forced premade when not
-    /// met yet this run (<paramref name="forced"/> true); none when the forced
-    /// one was met (an ordinary traveller stands there) or the slot is a
-    /// planned violator's or planned liar's; otherwise a roll from the day's
-    /// pool.
+    /// The slot's premade (Premades.SlotSource): the standing appearance's
+    /// premade (<paramref name="forced"/> true); none when a premade is forced
+    /// here but no appearance with a premade stands (met, or its conditions
+    /// failed: an ordinary traveller stands there) or the slot is a planned
+    /// violator's or planned liar's; otherwise a roll from the day's pool.
     /// </summary>
-    private LegendarySO ResolvePremade(DayPlanSO plan, WorldState state, int caseIndex1Based, out bool forced)
+    private LegendarySO ResolvePremade(DayPlanSO plan, WorldState state, int caseIndex1Based, ForcedCaseSlot appearance, out bool forced)
     {
         forced = false;
-        bool forcedHere = plan.TryGetForcedPremade(caseIndex1Based, out LegendarySO forcedPremade);
-        bool forcedMet = forcedHere && IsMet(state, forcedPremade);
+        bool forcedHere = plan.ForcedAt(caseIndex1Based).Any(f => f.legendary != null);
+        LegendarySO standing = appearance != null ? appearance.legendary : null;
 
-        switch (Premades.SlotSource(forcedHere, forcedMet, _violators.ContainsKey(caseIndex1Based) || _plannedLiars.ContainsKey(caseIndex1Based) || _plannedRules.ContainsKey(caseIndex1Based)))
+        switch (Premades.SlotSource(forcedHere, standing != null, _violators.ContainsKey(caseIndex1Based) || _plannedLiars.ContainsKey(caseIndex1Based) || _plannedRules.ContainsKey(caseIndex1Based)))
         {
             case PremadeSlot.Forced:
                 forced = true;
-                return forcedPremade;
+                return standing;
             case PremadeSlot.None:
-                if (forcedMet)
-                    Debug.Log($"[CaseFactory] Case {caseIndex1Based}: forced premade '{forcedPremade.displayName}' was already met this run; the slot holds an ordinary traveller.");
+                if (forcedHere)
+                    Debug.Log($"[CaseFactory] Case {caseIndex1Based}: no forced premade stands here today (met this run, or the conditions failed); the slot holds an ordinary traveller.");
                 return null;
             default:
                 return RollPremade(plan, state);
         }
     }
+
+    /// <summary>
+    /// Each forced slot's appearance today (days 7-15 B9): its entries in the
+    /// authored order (DayPlanSO.ForcedAt), the first that stands
+    /// (Premades.Stands: its conditions pass on the world as it stands at the
+    /// day's start, TimelineService.ConditionsPass, and its premade is not a
+    /// once-per-run premade already met) wins (Premades.Appearance). A slot
+    /// where none stands is left out, with a log line (a failed condition is
+    /// the story's choice, never a warning).
+    /// </summary>
+    private static Dictionary<int, ForcedCaseSlot> Appearances(DayPlanSO plan, WorldState state)
+    {
+        var appearances = new Dictionary<int, ForcedCaseSlot>();
+        foreach (int slot in plan.ForcedCases.Where(f => f != null).Select(f => f.caseIndex1Based).Distinct())
+        {
+            List<ForcedCaseSlot> entries = plan.ForcedAt(slot).ToList();
+            List<bool> standing = entries.Select(e => Premades.Stands(e.legendary != null && e.legendary.oncePerRun, IsMet(state, e.legendary),
+                                                                      TimelineService.ConditionsPass(e.conditions, state))).ToList();
+            int pick = Premades.Appearance(standing);
+            if (pick >= 0)
+                appearances[slot] = entries[pick];
+            else
+                Debug.Log($"[CaseFactory] Day {plan.DayNumber} slot {slot}: none of its forced entries stands today ([{string.Join(", ", entries.Select(Describe))}]: met this run, or their conditions failed); an ordinary traveller stands there.");
+        }
+
+        return appearances;
+    }
+
+    /// <summary>A forced entry as the logs name it: its id, else its premade's or blueprint's name.</summary>
+    public static string Describe(ForcedCaseSlot entry) =>
+        entry == null ? "none"
+        : !string.IsNullOrWhiteSpace(entry.id) ? entry.id
+        : entry.legendary != null ? entry.legendary.displayName
+        : entry.caseBlueprint != null ? entry.caseBlueprint.name
+        : "empty";
 
     /// <summary>
     /// Rolls the day's pool on the slot's premade stream (Premades.Roll): the

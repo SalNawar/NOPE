@@ -453,7 +453,7 @@ public sealed class GameManager : MonoBehaviour
         if (booth != null)
             booth.SetPhase(BoothPhase.NoTraveller);
 
-        orchestrator.StartDay(_worldState, plan, daySeed);
+        orchestrator.StartDay(_worldState, plan, daySeed, _dayCases);
 
         if (shiftClock != null)
             shiftClock.StartShift();

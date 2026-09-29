@@ -35,6 +35,9 @@ public sealed class CaseInstance
     /// <summary>The premade's asset (null for a generated traveller).</summary>
     public LegendarySO legendarySource;
 
+    /// <summary>The forced entry that stands in this slot today (DayPlanSO forced cases, days 7-15 B9: its premade or blueprint, its fault and its voice); null for a traveller the day drew.</summary>
+    public ForcedCaseSlot forcedAppearance;
+
     /// <summary>Visitor archetype (drives default timeline impacts + tags).</summary>
     public ArchetypeSO archetype;
 

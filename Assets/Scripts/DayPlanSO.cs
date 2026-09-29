@@ -10,7 +10,7 @@ using UnityEngine;
 /// - How many travellers queue that day (visitorsCount; the shift clock may close first)
 /// - Procedural generation knobs (the kinds' blueprints and weights, eras, the premade pool and chance)
 /// - Which lies today's liars may tell (lie kinds), and where a place lie may leak tells (tell count and tell channels)
-/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut")
+/// - Forced slots (a blueprint, a premade or both: "3rd case on day 1 is Senenmut"; a slot may list alternatives, the first standing wins)
 /// - Event rules (fixed or random placement, including "random but after N cases")
 /// </summary>
 [CreateAssetMenu(menuName = "TimeDesk/Day/Day Plan", fileName = "DayPlan_")]
@@ -101,7 +101,7 @@ public sealed class DayPlanSO : ScriptableObject
     /// </summary>
     [SerializeField] private bool guaranteeRuleViolators = true;
 
-    /// <summary>Forced slots (1-based): a blueprint, a premade or both (written by Generate World from days[].forced).</summary>
+    /// <summary>Forced slots (1-based): a blueprint, a premade or both, and a slot's alternatives in the order they are tried (written by Generate World from days[].forced).</summary>
     [SerializeField] private List<ForcedCaseSlot> forcedCases = new();
 
     /// <summary>Event rules (fixed or random placement).</summary>
@@ -207,44 +207,15 @@ public sealed class DayPlanSO : ScriptableObject
     }
 
     /// <summary>
-    /// Tries to get a forced blueprint for the given case slot (1-based).
-    /// Returns true if a forced case exists for that slot.
+    /// The forced entries of a case slot (1-based), in the authored order: a
+    /// slot's alternatives (days 7-15 B9), tried in this order at the day's
+    /// start (Premades.Appearance). Empty when nothing is forced there.
     /// </summary>
-    public bool TryGetForcedCase(int caseIndex1Based, out CaseBlueprintSO blueprint)
+    public IEnumerable<ForcedCaseSlot> ForcedAt(int caseIndex1Based)
     {
         foreach (ForcedCaseSlot slot in forcedCases)
-        {
-            if (slot == null)
-                continue;
-
-            if (slot.caseIndex1Based == caseIndex1Based && slot.caseBlueprint != null)
-            {
-                blueprint = slot.caseBlueprint;
-                return true;
-            }
-        }
-
-        blueprint = null;
-        return false;
-    }
-
-    /// <summary>
-    /// Tries to get the premade forced into the given case slot (1-based).
-    /// Returns true if the slot names a premade.
-    /// </summary>
-    public bool TryGetForcedPremade(int caseIndex1Based, out LegendarySO premade)
-    {
-        foreach (ForcedCaseSlot slot in forcedCases)
-        {
-            if (slot != null && slot.caseIndex1Based == caseIndex1Based && slot.legendary != null)
-            {
-                premade = slot.legendary;
-                return true;
-            }
-        }
-
-        premade = null;
-        return false;
+            if (slot != null && slot.caseIndex1Based == caseIndex1Based)
+                yield return slot;
     }
 
     /// <summary>
@@ -337,7 +308,9 @@ public sealed class DayPlanSO : ScriptableObject
 /// <summary>
 /// Forces a blueprint, a premade or both into a case slot (1-based), written
 /// by Generate World from world_source.json days[].forced. Example: "case 3
-/// of day 1 is Senenmut".
+/// of day 1 is Senenmut". One entry is one appearance (days 7-15 B9): it
+/// stands when its conditions pass at the day's start and its premade is not
+/// met; a slot may list several, the first standing wins.
 /// </summary>
 [Serializable]
 public sealed class ForcedCaseSlot
@@ -345,11 +318,17 @@ public sealed class ForcedCaseSlot
     /// <summary>1-based case slot index.</summary>
     [Min(1)] public int caseIndex1Based = 1;
 
+    /// <summary>The appearance's name (days[].forced[].id; blank: none), unique in the day: a slot's alternatives are told apart by it in the logs and the content sheet.</summary>
+    public string id = string.Empty;
+
     /// <summary>The case blueprint that must appear in this slot (null = the day's pick).</summary>
     public CaseBlueprintSO caseBlueprint;
 
     /// <summary>A premade who stands in this slot (null = none); the slot is never a rule violator's.</summary>
     public LegendarySO legendary;
+
+    /// <summary>When this appearance stands (all must pass on the day-start snapshot; none: always): the verdict memory's flags, dialog flags, the day (days 7-15 B9).</summary>
+    public List<TriggerCondition> conditions = new();
 }
 
 /// <summary>

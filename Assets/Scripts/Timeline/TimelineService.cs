@@ -407,12 +407,20 @@ public static class TimelineService
     public static ScannerDay BuildScannerDay(WorldState world) => ScannerDay.From(Snapshot(world, null));
 
     /// <summary>
-    /// Returns true if every condition on the trigger passes (Gates.AllPass):
+    /// Returns true if every condition on the trigger passes (ConditionsPass):
     /// one snapshot per trigger, so a trigger sees the flags that earlier
     /// triggers set tonight.
     /// </summary>
-    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) =>
-        Gates.AllPass(ToGates(trigger.conditions), Snapshot(world, trigger.conditions));
+    private static bool AllConditionsPass(TimelineTriggerSO trigger, WorldState world) => ConditionsPass(trigger.conditions, world);
+
+    /// <summary>
+    /// True when every condition passes on the world as it stands now
+    /// (Gates.AllPass over one snapshot of it; a null or empty list passes):
+    /// the nightly triggers', and a forced slot's appearance at the day's
+    /// start (CaseFactory; days 7-15 B9), read the same way.
+    /// </summary>
+    public static bool ConditionsPass(IReadOnlyList<TriggerCondition> conditions, WorldState world) =>
+        Gates.AllPass(ToGates(conditions), Snapshot(world, conditions));
 
     /// <summary>
     /// A condition as the Domain gates read it: its type, threshold and plain
