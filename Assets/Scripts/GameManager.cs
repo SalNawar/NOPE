@@ -524,7 +524,7 @@ public sealed class GameManager : MonoBehaviour
     /// <summary>
     /// Presents a case via the investigation UI: keeps only this traveller's
     /// art, shows them in the booth, and marks a once-per-run premade as met
-    /// (FlagKeys.PremadeMet: they never come back this run). Without the
+    /// (DayCycle.Present: they never come back this run). Without the
     /// investigation UI no case can be shown: an error, and the slot resolves.
     /// </summary>
     private void ShowActiveCase(CaseInstance inst)
@@ -532,8 +532,7 @@ public sealed class GameManager : MonoBehaviour
         _characterArt?.Retain(inst.look != null ? inst.look.Keys : null);
         SetTravellerAtDesk(true, inst.look);
 
-        if (inst.isLegendary && inst.legendarySource != null && inst.legendarySource.oncePerRun)
-            _worldState.SetFlag(FlagKeys.PremadeMet(inst.legendarySource.id));
+        DayCycle.Present(_worldState, inst);
 
         if (investigationUI == null)
         {

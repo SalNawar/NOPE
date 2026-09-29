@@ -211,6 +211,54 @@ public class GatesTests
         Assert.AreEqual("premade:x:met", FlagKeys.PremadeMet("x"));
     }
 
+    [Test]
+    public void PremadeVerdict_FormatsAcceptedAndDenied()
+    {
+        Assert.AreEqual("premade:pell:accepted", FlagKeys.PremadeVerdict("pell", true));
+        Assert.AreEqual("premade:pell:denied", FlagKeys.PremadeVerdict("pell", false));
+    }
+
+    [Test]
+    public void PremadeVerdictChange_TheLatestWinsAndClearsTheOther()
+    {
+        (string set, string clear) accepted = FlagKeys.PremadeVerdictChange("rook", true);
+        Assert.AreEqual("premade:rook:accepted", accepted.set);
+        Assert.AreEqual("premade:rook:denied", accepted.clear);
+
+        (string set, string clear) denied = FlagKeys.PremadeVerdictChange("rook", false);
+        Assert.AreEqual("premade:rook:denied", denied.set);
+        Assert.AreEqual("premade:rook:accepted", denied.clear);
+    }
+
+    [Test]
+    public void TryParsePremade_ReadsAcceptedDeniedAndMet()
+    {
+        Assert.IsTrue(FlagKeys.TryParsePremade("premade:pell:accepted", out string id, out PremadeFlag flag));
+        Assert.AreEqual("pell", id);
+        Assert.AreEqual(PremadeFlag.Accepted, flag);
+
+        Assert.IsTrue(FlagKeys.TryParsePremade(FlagKeys.PremadeVerdict("auditor", false), out id, out flag));
+        Assert.AreEqual("auditor", id);
+        Assert.AreEqual(PremadeFlag.Denied, flag);
+
+        Assert.IsTrue(FlagKeys.TryParsePremade(FlagKeys.PremadeMet("senenmut"), out id, out flag));
+        Assert.AreEqual("senenmut", id);
+        Assert.AreEqual(PremadeFlag.Met, flag);
+    }
+
+    [TestCase("bribe:rook:taken")]
+    [TestCase("premade:pell:happy")]
+    [TestCase("premade::accepted")]
+    [TestCase("premade:pell")]
+    [TestCase("trig:pell:fired")]
+    [TestCase("")]
+    [TestCase(null)]
+    public void TryParsePremade_RefusesAnotherKey(string key)
+    {
+        Assert.IsFalse(FlagKeys.TryParsePremade(key, out string id, out _));
+        Assert.IsNull(id);
+    }
+
     private static GateSnapshot LeaderSnap(string leaderId) => new GateSnapshot(
         3, 40f, null, null, null,
         new[] { new KeyValuePair<string, float>("attrTotal:art", 20f), new KeyValuePair<string, float>("attrTotal:democracy", -6f) },
