@@ -1123,8 +1123,9 @@ public static partial class ContentLibraryValidator
     /// <summary>
     /// Reports the day plans' identity and size problems (DayPlans.Problems,
     /// the rule Generate World checks its source with: a blank or repeated
-    /// asset name, a day below 1 or planned twice, a queue below 1) and gaps
-    /// in the day sequence.
+    /// asset name, a day below 1 or planned twice, a queue below 1), gaps in
+    /// the day sequence and an unplanned tail up to the run's last day
+    /// (DayPlans.Unplanned, days 7-15 V1).
     /// </summary>
     private static int CheckDayPlanEntries(ContentLibrarySO lib)
     {
@@ -1136,7 +1137,8 @@ public static partial class ContentLibraryValidator
             Debug.LogError($"[ContentLibraryValidator] {problem} ('{lib.name}')", lib);
         int issues = problems.Count;
 
-        foreach (string gap in DayPlans.Gaps(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber)))
+        foreach (string gap in DayPlans.Gaps(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber))
+                         .Concat(DayPlans.Unplanned(lib.DayPlans.Where(p => p != null).Select(p => p.DayNumber), lib.LastDay)))
         {
             Debug.LogWarning($"[ContentLibraryValidator] {gap} ('{lib.name}')", lib);
             issues++;

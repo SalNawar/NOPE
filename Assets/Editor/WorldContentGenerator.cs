@@ -304,6 +304,9 @@ public static partial class WorldContentGenerator
         }
 
         errors.AddRange(DayPlans.Problems(src.days.Select(d => new DayPlanEntry(d.asset, d.day, d.queue)).ToList()));
+        if (authored.library != null)
+            foreach (string warning in DayPlans.Unplanned(src.days.Select(d => d.day), authored.library.LastDay))
+                Debug.LogWarning($"[WorldContentGenerator] {warning}");
         string ages = BirthDates.AgeRangeProblem(src.travellerAgeMin, src.travellerAgeMax);
         if (ages != null)
             errors.Add(ages);
